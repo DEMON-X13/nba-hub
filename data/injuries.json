@@ -1,4 +1,659 @@
 {
  "date": "2026-09-20",
- "teams": {}
+ "teams": {
+  "ATL": [
+   {
+    "id": "",
+    "name": "Mouhamed Gueye",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Gueye underwent surgery Tuesday to repair a fractured left foot that he suffered during a workout last week  Brad Rowland of the Locked On Podcast Network reports.",
+    "date": "2026-07-19"
+   },
+   {
+    "id": "",
+    "name": "Keshon Gilbert",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Gilbert (hip) won't play in Saturday's Las Vegas Summer League game against the Wizards  Brad Rowland of the Locked On Podcast Network reports.",
+    "date": "2026-07-18"
+   },
+   {
+    "id": "",
+    "name": "RayJ Dennis",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Dennis (Achilles) has been ruled out for Saturday's Summer League game against the Wizards  Brad Rowland of the Locked On Podcast Network reports.",
+    "date": "2026-07-18"
+   }
+  ],
+  "BOS": [
+   {
+    "id": "",
+    "name": "Jayson Tatum",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Tatum (knee) should once again serve as the unquestioned centerpiece of Boston's offense after the Celtics traded Jaylen Brown for Paul George  John Schuhmann of NBA.com reports.",
+    "date": "2026-07-27"
+   }
+  ],
+  "BKN": [
+   {
+    "id": "",
+    "name": "Nolan Traore",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Brooklyn general manager Sean Marks announced Monday that Traore underwent right knee surgery and won't play in Summer League  C.J. Holmes of the New York Daily News reports.",
+    "date": "2026-06-30"
+   }
+  ],
+  "CHA": [
+   {
+    "id": "",
+    "name": "Brandon Miller",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Miller (shoulder) provided an update on his rehab after surgery in comments to Roderick Boone of The Charlotte Observer on Tuesday.",
+    "date": "2026-08-25"
+   },
+   {
+    "id": "",
+    "name": "PJ Hall",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "The Hornets announced Thursday that Hall underwent a procedure to address a fractured right ankle and will miss the remainder of the 2025-26 campaign.",
+    "date": "2026-06-16"
+   }
+  ],
+  "CHI": [
+   {
+    "id": "",
+    "name": "Dailyn Swain",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Swain is out for Friday's Summer League game against the Cavaliers due to right wrist soreness  per K.C. Johnson of Chicago Sports Network.",
+    "date": "2026-07-17"
+   },
+   {
+    "id": "",
+    "name": "Zach Collins",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Collins (toe) agreed to a two-year  $17 million extension with Chicago on Tuesday  Shams Charania of ESPN reports.",
+    "date": "2026-07-01"
+   },
+   {
+    "id": "",
+    "name": "Josh Giddey",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Giddey (ankle) could benefit from the selections of Caleb Wilson and Dailyn Swain as well as Chicago's acquisition of Nic Claxton (finger) in 2026-27.",
+    "date": "2026-06-24"
+   },
+   {
+    "id": "",
+    "name": "Rob Dillingham",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Dillingham recently underwent successful minor surgery to have a ganglion cyst removed from his right wrist  the Bulls announced Wednesday.",
+    "date": "2026-06-16"
+   }
+  ],
+  "DAL": [
+   {
+    "id": "",
+    "name": "Kyrie Irving",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Irving (knee) has been playing in pickup games this offseason in an effort to ramp up toward his return to the court in 2026-27  Tim MacMahon of ESPN reports.",
+    "date": "2026-09-10"
+   },
+   {
+    "id": "",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Aldama (knee) is expected to be ready in time for training camp  according to NBA reporter Marc Stein.",
+    "date": "2026-08-19"
+   },
+   {
+    "id": "",
+    "name": "Dereck Lively II",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Lively (foot) still hasn't progressed to running yet  per Christian Clark of The Athletic.",
+    "date": "2026-06-26"
+   }
+  ],
+  "DEN": [
+   {
+    "id": "",
+    "name": "Trevon Brazile",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Brazile is out for Sunday's Summer League finale for undisclosed reasons  Ryan Blackburn of MileHighSports.com reports.",
+    "date": "2026-07-19"
+   }
+  ],
+  "GSW": [
+   {
+    "id": "",
+    "name": "Jimmy Butler III",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Butler (knee) is still in the relatively early stages of his recovery and has only recently begun getting back on the court  according to Danny Emerman of SFStandard.com.",
+    "date": "2026-08-24"
+   },
+   {
+    "id": "",
+    "name": "Moses Moody",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Moody has been diagnosed with a torn patellar tendon in his left knee  Shams Charania of ESPN reports.",
+    "date": "2026-03-24"
+   }
+  ],
+  "HOU": [
+   {
+    "id": "",
+    "name": "Fred VanVleet",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Head coach Ime Udoka said Friday that VanVleet (knee) is ramping up his rehab work  Lachard Binkley of SI.com reports.",
+    "date": "2026-09-11"
+   },
+   {
+    "id": "",
+    "name": "Kevin Durant",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Durant (ankle) averaged 26.0 points per game during his first season with Houston and continued to cement his place among the NBA's all-time great scorers  moving into the top five on the league's career 30-point games list.",
+    "date": "2026-08-05"
+   },
+   {
+    "id": "",
+    "name": "Steven Adams",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "The Rockets announced Wednesday that Adams has undergone season-ending left ankle surgery  per Shams Charania of ESPN.",
+    "date": "2026-06-16"
+   }
+  ],
+  "IND": [
+   {
+    "id": "",
+    "name": "Tyrese Haliburton",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "The Pacers may opt to slowly bring Haliburton back up to speed as he aims to return from a torn Achilles suffered in Game 7 of the 2025 NBA Finals  Jamal Collier of ESPN reports.",
+    "date": "2026-09-09"
+   },
+   {
+    "id": "",
+    "name": "Johnny Furphy",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Furphy was diagnosed with a torn right ACL on Monday and will miss the remainder of the season  Michael Scotto of USA Today reports.",
+    "date": "2026-02-09"
+   }
+  ],
+  "LAC": [
+   {
+    "id": "",
+    "name": "Brandon Ingram",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "The Clippers and Raptors both agreed Monday to finalize the trade sending Leonard to Toronto for Brandon Ingram (heel)  Gradey Dick  two unprotected first-round picks  one first-round pick swap and two second-rounders  Shams Charania of ESPN reports.",
+    "date": "2026-09-14"
+   },
+   {
+    "id": "",
+    "name": "Jordan Miller",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Miller underwent surgery Wednesday to repair a torn left rotator cuff and will be re-evaluated in six months  per Law Murray of The Athletic.",
+    "date": "2026-08-26"
+   },
+   {
+    "id": "",
+    "name": "Bradley Beal",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Beal (hip) agreed to a two-year  $13.2 million contract with Los Angeles on Thursday  Shams Charania of ESPN reports.",
+    "date": "2026-08-14"
+   },
+   {
+    "id": "",
+    "name": "Yanic Konan Niederhauser",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Niederhauser has been diagnosed with a Lisfranc injury in his right foot and will require surgery. He's been ruled out for the remainder of the 2025-26 season  Joey Linn of SI.com reports.",
+    "date": "2026-06-16"
+   }
+  ],
+  "MEM": [
+   {
+    "id": "",
+    "name": "Scotty Pippen Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Pippen (toe) has a chance to begin the new year as Memphis' starting point guard after Portland acquired Ja Morant in a trade with the Grizzlies earlier this offseason.",
+    "date": "2026-07-27"
+   },
+   {
+    "id": "",
+    "name": "Walter Clayton Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Clayton (knee) won't play in Sunday's Summer League title game against the Warriors  Drew Hill of The Daily Memphian reports.",
+    "date": "2026-07-20"
+   },
+   {
+    "id": "",
+    "name": "Karim Lopez",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Lopez (undisclosed) is out for Sunday's Summer League championship game against the Warriors  Drew Hill of The Daily Memphian reports.",
+    "date": "2026-07-20"
+   },
+   {
+    "id": "",
+    "name": "Richie Saunders",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Saunders was selected by the Grizzlies with the No. 32 overall pick in the 2026 NBA Draft.",
+    "date": "2026-06-25"
+   },
+   {
+    "id": "",
+    "name": "Jaylen Wells",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Wells (toe) should continue competing for rotation minutes on the wing despite Memphis adding Cameron Boozer with the No. 3 overall pick.",
+    "date": "2026-06-24"
+   },
+   {
+    "id": "",
+    "name": "Zach Edey",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Edey's (ankle  elbow) role becomes more intriguing following Memphis' addition of Cameron Boozer.",
+    "date": "2026-06-24"
+   }
+  ],
+  "MIA": [
+   {
+    "id": "",
+    "name": "Giannis Antetokounmpo",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Antetokounmpo (knee) did not participate in Greece's latest FIBA World Cup qualifying window as he focused on preparing for the 2026-27 NBA season.",
+    "date": "2026-09-02"
+   },
+   {
+    "id": "",
+    "name": "Bam Adebayo",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Adebayo's (back) fantasy outlook should remain strong after Miami acquired Giannis Antetokounmpo  though his offensive role could shift alongside another high-usage frontcourt star  Ira Winderman of the South Florida Sentinel opines.",
+    "date": "2026-07-28"
+   },
+   {
+    "id": "",
+    "name": "Trevor Keels",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Keels (knee) didn't play in Friday's 101-87 Summer League win over the Pistons.",
+    "date": "2026-07-18"
+   },
+   {
+    "id": "",
+    "name": "Ryan Conwell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Conwell (hip) won't play again during the Las Vegas Summer League  per Tim Reynolds of Associated Press.",
+    "date": "2026-07-15"
+   },
+   {
+    "id": "",
+    "name": "Myron Gardner",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Gardner (ankle) won't participate in the Las Vegas Summer League  per Ira Winderman of the South Florida Sun Sentinel.",
+    "date": "2026-07-08"
+   }
+  ],
+  "MIL": [
+   {
+    "id": "",
+    "name": "Kevin Porter Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Porter exercised his $5.39 million player option for the 2026-27 campaign Thursday  Michael Scotto of USA Today reports.",
+    "date": "2026-06-26"
+   }
+  ],
+  "MIN": [
+   {
+    "id": "",
+    "name": "Donte DiVincenzo",
+    "pos": "G",
+    "status": "Out",
+    "detail": "DiVincenzo will undergo surgery Sunday to repair a ruptured right Achilles tendon that he suffered during the Timberwolves Game 4 win over the Nuggets on Saturday.",
+    "date": "2026-04-26"
+   }
+  ],
+  "NOP": [
+   {
+    "id": "",
+    "name": "Bryce McGowens",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "McGowens (toe) is out for Sunday's game against the Timberwolves.",
+    "date": "2026-06-16"
+   }
+  ],
+  "NYK": [
+   {
+    "id": "",
+    "name": "Jalen Brunson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Brunson (wrist) is expected to be ready for training camp  ESPN's Vincent Goodwill reports.",
+    "date": "2026-09-18"
+   },
+   {
+    "id": "",
+    "name": "Mohamed Diawara",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Diawara (finger) didn't play in Friday's 110-88 Summer League loss to the Mavericks.",
+    "date": "2026-07-18"
+   }
+  ],
+  "OKC": [
+   {
+    "id": "",
+    "name": "Isaiah Hartenstein",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hartenstein (ankle) participated in an offseason workout with the Thunder on Monday  Clemente Almanza of USA Today reports.",
+    "date": "2026-09-07"
+   },
+   {
+    "id": "",
+    "name": "Ajay Mitchell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "According to Bryan Toporek of Forbes  Oklahoma City's offseason roster shakeup opened additional opportunities in the backcourt after the departures of Isaiah Joe  Aaron Wiggins and Luguentz Dort.",
+    "date": "2026-07-30"
+   },
+   {
+    "id": "",
+    "name": "Otega Oweh",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Oweh (lower leg) didn't play in Sunday's 108-90 Summer League loss to the Nets.",
+    "date": "2026-07-19"
+   },
+   {
+    "id": "",
+    "name": "Thomas Sorber",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Sorber underwent a successful minor arthroscopic procedure on his right knee Wednesday and will return to full basketball activities in approximately four weeks  Clemente Almanza of USA Today reports.",
+    "date": "2026-07-01"
+   },
+   {
+    "id": "",
+    "name": "Jalen Williams",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Williams (hamstring) has been ruled out for Saturday's Game 7 of the Western Conference Finals against the Spurs.",
+    "date": "2026-06-16"
+   },
+   {
+    "id": "",
+    "name": "Nikola Topic",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Topic (back) underwent surgery Saturday and is expected to be ready for the start of training camp  Justin Martinez of The Oklahoman reports.",
+    "date": "2026-06-16"
+   }
+  ],
+  "ORL": [
+   {
+    "id": "",
+    "name": "Franz Wagner",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Wagner (calf) did not participate in Germany's latest FIBA World Cup qualifying window as he focuses on preparing for the 2026-27 NBA season.",
+    "date": "2026-09-02"
+   },
+   {
+    "id": "",
+    "name": "Izaiyah Nelson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "The Magic announced Monday that Nelson will undergo surgery to repair a fracture in his left ankle  and he's expected to return to basketball activities in 3-4 months.",
+    "date": "2026-07-13"
+   },
+   {
+    "id": "",
+    "name": "Jonathan Isaac",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Isaac (knee) will return to the Magic on a one-year deal  Jason Beede of the Orlando Sentinel reports.",
+    "date": "2026-07-01"
+   }
+  ],
+  "PHI": [
+   {
+    "id": "",
+    "name": "Adem Bona",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Bona (foot) will be re-evaluated at the start of training camp  Derek Bodner of AllPHLY.com reports.",
+    "date": "2026-09-17"
+   },
+   {
+    "id": "",
+    "name": "Kentavious Caldwell-Pope",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Caldwell-Pope (finger) agreed to a buyout with the Grizzlies on Saturday and plans to sign a one-year  $3.9 million contract with the 76ers  Shams Charania of ESPN reports.",
+    "date": "2026-07-25"
+   }
+  ],
+  "PHX": [
+   {
+    "id": "",
+    "name": "Duop Reath",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Reath (foot) agreed to a one-year veteran minimum contract with the Suns on Wednesday  John Gambadoro of Arizona Sports 98.7 FM reports.",
+    "date": "2026-09-17"
+   },
+   {
+    "id": "",
+    "name": "Mark Williams",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Williams underwent surgery Thursday to repair a torn labrum in his left shoulder and will miss an extended period of time  Shams Charania of ESPN reports.",
+    "date": "2026-09-11"
+   },
+   {
+    "id": "",
+    "name": "CJ Huntley",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Huntley (hamstring) is out for Saturday's Las Vegas Summer League finale versus the Spurs  Duane Rankin of The Arizona Republic reports.",
+    "date": "2026-07-19"
+   }
+  ],
+  "POR": [
+   {
+    "id": "",
+    "name": "Ja Morant",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Morant is set to share the playmaking duties with Damian Lillard in Portland's starting backcourt after being traded from Memphis.",
+    "date": "2026-09-04"
+   },
+   {
+    "id": "",
+    "name": "Shaedon Sharpe",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Sharpe suffered a torn meniscus in his knee and is expected to miss six months  per Shams Charania of ESPN.",
+    "date": "2026-08-24"
+   },
+   {
+    "id": "",
+    "name": "Damian Lillard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Lillard (Achilles) defeated Devin Booker and Kon Knueppel in the final round of Saturday's 2026 State Farm 3-Point Contest  taking home his third title.",
+    "date": "2026-06-16"
+   }
+  ],
+  "SAC": [
+   {
+    "id": "",
+    "name": "Domantas Sabonis",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Sabonis (knee) did not participate in Lithuania's latest FIBA World Cup qualifying window as he turned his attention toward preparing for the 2026-27 NBA season.",
+    "date": "2026-09-02"
+   },
+   {
+    "id": "",
+    "name": "Keegan Murray",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Murray (ankle) is projected to start at power forward for the Kings in 2026-27  according to Kings beat writer Chris Watkins.",
+    "date": "2026-07-31"
+   },
+   {
+    "id": "",
+    "name": "Zach LaVine",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "LaVine (hand) exercised his $49 million player option for 2026-27 on Monday  Shams Charania of ESPN reports.",
+    "date": "2026-06-29"
+   },
+   {
+    "id": "",
+    "name": "De'Andre Hunter",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hunter (eye) has a major competitor for usage after the Kings took Darius Acuff in the 2026 WNBA Draft.",
+    "date": "2026-06-25"
+   }
+  ],
+  "SAS": [
+   {
+    "id": "",
+    "name": "David Jones Garcia",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Jones Garcia (ankle) agreed to a two-way contract with the Spurs on Wednesday  per Michael Scotto of HoopsHype.com.",
+    "date": "2026-07-22"
+   },
+   {
+    "id": "",
+    "name": "Jayden Quaintance",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Quaintance underwent right knee surgery Wednesday and has no timetable for a return  Brett Siegel of ClutchPoints.com reports.",
+    "date": "2026-07-19"
+   }
+  ],
+  "TOR": [
+   {
+    "id": "",
+    "name": "Nate Bittle",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Bittle (lower leg) was spotted in a walking boot Wednesday  Esfandiar Baraheni of The Athletic reports.",
+    "date": "2026-09-10"
+   },
+   {
+    "id": "",
+    "name": "Alijah Martin",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Martin (knee) won't play in Sunday's Summer League game against the Nuggets  Zulfi Sheikh of Sportsnet reports.",
+    "date": "2026-07-19"
+   },
+   {
+    "id": "",
+    "name": "Chucky Hepburn",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hepburn (knee) won't play in Sunday's Summer League game against the Nuggets  Zulfi Sheikh of Sportsnet reports.",
+    "date": "2026-07-19"
+   },
+   {
+    "id": "",
+    "name": "Collin Murray-Boyles",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Murray-Boyles (finger) won't play in Sunday's Summer League game against the Nuggets  Zulfi Sheikh of sportsnet reports.",
+    "date": "2026-07-19"
+   }
+  ],
+  "UTA": [
+   {
+    "id": "",
+    "name": "Jaren Jackson Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "With Walker Kessler now in Los Angeles  Jackson (knee) figures to be an even more essential piece for the Jazz in 2026-27  per ESPN's Tim MacMahon.",
+    "date": "2026-09-10"
+   },
+   {
+    "id": "",
+    "name": "Trey Alexander",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Alexander (rib) is out for Friday's Summer League game against Portland  per Ben Anderson of KSL News Salt Lake City.",
+    "date": "2026-07-17"
+   }
+  ],
+  "WAS": [
+   {
+    "id": "",
+    "name": "Jamir Watkins",
+    "pos": "G",
+    "status": "Out",
+    "detail": "The Wizards announced Thursday that Watkins has undergone surgery for a torn ACL.",
+    "date": "2026-07-30"
+   },
+   {
+    "id": "",
+    "name": "Alex Sarr",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Washington's selection of AJ Dybantsa likely won't significantly alter Sarr's role heading into his third NBA season",
+    "date": "2026-06-24"
+   },
+   {
+    "id": "",
+    "name": "Anthony Davis",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "The Wizards selected AJ Dybantsa with the No. 1 overall pick in the 2026 NBA Draft  adding another high-usage scorer to the roster.",
+    "date": "2026-06-24"
+   },
+   {
+    "id": "",
+    "name": "Trae Young",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Young (quadriceps) plans to sign a four-year  $212 million deal with the Wizards  Shams Charania of ESPN reports.",
+    "date": "2026-06-22"
+   }
+  ]
+ }
 }

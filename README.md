@@ -87,25 +87,64 @@ roster from the roster feed. Pace is a running average of each team's possession
 is the two expected efficiencies times the expected pace. The final win chance blends in a tenth of
 the team model's difference.
 
-Fit on 2023-2024 by coordinate search on log loss with the lineup known and minutes projected;
-2022 warms up; holdout 2025-2026 (2,642 games). The same holdout games, four ways:
+Fit on 2023-2025 by coordinate search on log loss with the lineup known and minutes projected;
+2022 warms up; 2026 held out (1,322 games). Every knob has an off value the search can choose, so
+the fit decides what to use. What it kept: efficiency surprises clipped at 20, moving a full-time
+player 0.5 Elo per point; a win update of 6 Elo on the result beside the efficiency one; the update
+falling on players by the square root of their minutes share (so bench players move relatively
+more); playoff updates at half weight; season carry 0.7 for players; rookies start at -80; RAPTOR
+priors scaled by 1.25; a tenth of the team model's difference blended in. What it turned off: each
+player's own plus-minus (not robust across seasons), shrinkage toward the prior, recency weighting of
+minutes. The coach term fits to zero; it is kept at 0.05 per point of margin surprise so the coach
+table means something, at no measurable cost (0.0002 of log loss on the fit seasons, and slightly
+better on 2026 cold).
+
+The 2026 holdout, four ways:
 
 | | Log loss | Straight up | Spread error |
 |---|---|---|---|
-| Team model | 0.606 | 67.2% | 11.31 |
-| Player model, previous game's lineup (no report) | 0.603 | 67.3% | 11.30 |
-| Player model, lineup known, minutes projected (a good report) | 0.597 | 67.6% | 11.21 |
-| Player model, actual minutes (perfect lineup knowledge) | 0.594 | 68.3% | 11.18 |
+| Team model | 0.602 | 68.4% | 11.51 |
+| Player model, previous game's lineup (no report) | 0.602 | 68.3% | 11.45 |
+| Player model, lineup known, minutes projected (a good report) | 0.591 | 69.4% | 11.30 |
+| Player model, actual minutes (perfect lineup knowledge) | 0.589 | 69.4% | 11.26 |
 
-So knowing who plays is worth about a point of accuracy, and the player ratings are worth a little
-on their own. Totals: 15.1 points of error. What it found: efficiency surprises clipped at 30 and
-moving a full-time player 0.4 Elo per point; coach 0.05 per point of margin surprise; season carry
-0.6 for players and 0.5 for coaches; rookies start at -60; RAPTOR priors scaled by 1.25.
+Totals: 15.3 points of error.
 
-What the ratings say after the 2026 Finals: Gilgeous-Alexander first, then Leonard, Jokić, Brunson,
-Hart, Towns; Jokić the best offence, Gilgeous-Alexander and Gobert the best defence; Daigneault,
-Mitch Johnson and Bickerstaff the top coaches; the Knicks the strongest team and the Wizards the
-weakest.
+### Walk-forward test (`node nba-hub/tools/players.js research`, writes `research.json`)
+
+One holdout can flatter a model, so each season from 2024 on is also scored cold: the parameters are
+searched again on only the seasons before it, then that season is played through once. Log loss /
+straight up / spread error:
+
+| Season scored | Team model | Player model, no report | Player model, lineup known | Player model, actual minutes |
+|---|---|---|---|---|
+| 2024 | 0.609 / 66.4% / 11.07 | 0.617 / 67.0% | 0.615 / 66.6% / 11.28 | 0.612 / 67.0% |
+| 2025 | 0.611 / 65.9% / 11.12 | 0.604 / 68.0% | 0.593 / 67.9% / 10.95 | 0.591 / 69.1% |
+| 2026 | 0.602 / 68.4% / 11.51 | 0.602 / 68.0% | 0.591 / 69.4% / 11.34 | 0.589 / 69.4% |
+
+With one season to learn from (2024) the player model is not yet ahead of the team model. With two
+or three it is clearly ahead, by about two points of accuracy and 0.01 to 0.02 of log loss, and the
+gap between "no report" and "lineup known" is the injury report's worth: about a point and a half.
+
+### What each piece is worth (2026 cold, parameters fitted on 2023-2025, one piece switched off)
+
+| Switched off | Log loss | Straight up | Change |
+|---|---|---|---|
+| nothing (the model) | 0.5913 | 69.4% | |
+| rookies start at zero instead of below average | 0.5995 | 68.8% | +0.0082 |
+| no RAPTOR priors | 0.5928 | 68.7% | +0.0015 |
+| no win update, efficiency only | 0.5934 | 69.3% | +0.0021 |
+| no blend with the team model | 0.5914 | 69.2% | +0.0001 |
+| update by minutes share, not its square root | 0.5913 | 69.2% | +0.0000 |
+| playoffs updated at full weight | 0.5911 | 69.2% | -0.0002 |
+
+The priors carry the most: a rookie really is below average, and last season's RAPTOR is a better
+start than zero. The rest are small and real. Adding a signal that does not survive the walk-forward
+is how a model gets weaker while looking stronger, so plus-minus stays off until it does.
+
+What the ratings say after the 2026 Finals: Gilgeous-Alexander first, then Jokić and Leonard;
+Daigneault, Mitch Johnson and Bickerstaff the top coaches; with the 2026-27 rosters, Oklahoma City,
+San Antonio and New York the strongest teams and the Wizards the weakest.
 
 ## Runs
 

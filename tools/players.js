@@ -407,4 +407,4 @@ function main() {
   L.log(`players.json ${same ? 'unchanged' : 'written'}, ${Object.keys(R.upcoming).length} upcoming`);
 }
 if (require.main === module) main();
-module.exports = { replay, score };
+module.exports = { replay, score, fit, research, loadBoxes, loadTeamBoxes, loadCoaches, loadRaptor, makeLiveLineup, DEFAULT, FIRST, WARM_TO, FIT_TO };

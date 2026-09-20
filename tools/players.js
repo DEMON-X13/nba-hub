@@ -24,7 +24,8 @@
  * is worth), with who played and projected minutes (what a good injury report gets), and with the
  * previous game's lineup (no report at all), beside the team Elo on the same games.
  *
- * Seasons: box scores start in 2022. 2022 warms up, 2023-2024 fit, 2025 on hold out.
+ * Seasons: box scores start in 2022. 2022 warms up, 2023-2025 fit, 2026 held out; "research" walks forward
+ * season by season (fit on the seasons before, score the season cold) and writes nba-hub/research.json.
  */
 'use strict';
 const fs = require('fs');
@@ -35,18 +36,26 @@ const E = require('./elo');
 const DATA = path.join(L.ROOT, 'nba-hub', 'data');
 const OUT = path.join(L.ROOT, 'nba-hub', 'players.json');
 const MODEL = path.join(L.ROOT, 'nba-hub', 'model.json');
-const FIRST = 2022, WARM_TO = 2022, FIT_TO = 2024;
-const DEFAULT = { ke: 1, kc: 0.2, carryP: 0.6, carryC: 0.8, prior: 1.25, rookie: -60, clip: 15, minGames: 10, blend: 0 };
+const FIRST = 2022, WARM_TO = 2022, FIT_TO = 2025;
+const DEFAULT = { ke: 0.4, kc: 0.05, carryP: 0.6, carryC: 0.5, prior: 1.25, rookie: -60, clip: 30, minGames: 8, blend: 0.1,
+  pm: 0, pmClip: 15, winK: 0, shrink: 0, recency: 0, postMult: 1, wexp: 1 };
 const GRID = {
-  ke: [0.3, 0.4, 0.5, 0.6, 0.75, 0.9, 1, 1.25, 1.5, 2],
-  kc: [0, 0.05, 0.1, 0.2, 0.3, 0.5, 1],
-  carryP: [0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
-  carryC: [0.5, 0.7, 0.8, 0.9, 1],
-  prior: [0.5, 0.75, 1, 1.25, 1.5, 2],
+  ke: [0.2, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.25],
+  kc: [0, 0.05, 0.1, 0.2, 0.3, 0.5],
+  carryP: [0.4, 0.5, 0.6, 0.7, 0.8, 0.9],
+  carryC: [0.5, 0.7, 0.9, 1],
+  prior: [0.75, 1, 1.25, 1.5, 2],
   rookie: [-100, -80, -60, -40, -20],
-  clip: [5, 8, 10, 12, 15, 20, 30],
+  clip: [10, 15, 20, 30, 40],
   minGames: [5, 8, 10, 15],
-  blend: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6],           // share of the team Elo's difference in the final number
+  blend: [0, 0.1, 0.2, 0.3, 0.4, 0.5],           // share of the team Elo's difference in the final number
+  pm: [0, 0.25, 0.5, 0.75, 1, 1.5, 2],            // Elo per point of a player's own plus-minus above his share of the margin
+  pmClip: [8, 12, 15, 20, 30],
+  winK: [0, 2, 4, 6, 8, 12],                      // an Elo update on the result itself, beside the efficiency one
+  shrink: [0, 0.002, 0.005, 0.01, 0.02],          // per-game pull toward the player's prior
+  recency: [0, 0.1, 0.2, 0.3],                    // minutes projection: weight decay per game back (0 = plain mean)
+  postMult: [0.5, 0.75, 1, 1.25, 1.5],            // the efficiency update in the playoffs, times this
+  wexp: [0.5, 0.75, 1, 1.25, 1.5],                // the update falls on players by minutes share to this power
 };
 const PCOLS = ['game_id', 'date', 'team', 'opp', 'home', 'player_id', 'name', 'pos', 'starter', 'min', 'fgm', 'fga', 'tpm', 'tpa', 'ftm', 'fta', 'orb', 'drb', 'ast', 'stl', 'blk', 'tov', 'pf', 'pm', 'pts', 'dnp'];
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\b(jr|sr|ii|iii|iv)\b/g, '').replace(/[^a-z]/g, '');
@@ -61,6 +70,7 @@ function loadBoxes() {
       const v = l.split(','); const r = {}; PCOLS.forEach((c, i) => { r[c] = v[i] === undefined ? '' : v[i]; });
       r.min = +r.min || 0; r.dnp = +r.dnp; r.starter = +r.starter;
       for (const k of ['fga', 'fta', 'orb', 'tov', 'pts']) r[k] = r[k] === '' ? 0 : +r[k];
+      r.pm = r.pm === '' ? '' : +r.pm;
       (byGame[r.game_id] = byGame[r.game_id] || {})[r.team] = ((byGame[r.game_id] || {})[r.team] || []).concat([r]);
     }
   }
@@ -120,7 +130,8 @@ function replay(P, ctx, mode, collect) {
     if (!p) {
       const rp = raptor[norm(r.name)];
       const usePrior = rp && rp.season < season + 1 && rp.mp >= 500;
-      p = players[r.player_id] = { name: r.name, pos: r.pos, o: usePrior ? rp.o * P.prior * situP.scale : P.rookie / 2, d: usePrior ? rp.d * P.prior * situP.scale : P.rookie / 2,
+      const o0 = usePrior ? rp.o * P.prior * situP.scale : P.rookie / 2, d0 = usePrior ? rp.d * P.prior * situP.scale : P.rookie / 2;
+      p = players[r.player_id] = { name: r.name, pos: r.pos, o: o0, d: d0, o0, d0,
         n: 0, mins: [], team: r.team, last: '', season, prior: usePrior ? 'raptor' : 'rookie' };
     }
     if (p.season !== season) { p.o *= P.carryP; p.d *= P.carryP; p.season = season; p.mins = p.mins.slice(-5); }
@@ -136,10 +147,17 @@ function replay(P, ctx, mode, collect) {
   const strength = list => {
     const tot = list.reduce((s, x) => s + x[1], 0) || 1;
     let O = 0, D = 0, W2 = 0; const ws = [];
-    for (const [p, m] of list) { const w = m / tot * 5; ws.push([p, w]); O += w * p.o; D += w * p.d; W2 += w * w; }
-    return { O, D, W2, ws };
+    for (const [p, m] of list) { const w = m / tot * 5; const u = Math.pow(w, P.wexp); ws.push([p, w, u]); O += w * p.o; D += w * p.d; W2 += w * u; }
+    return { O, D, W2, ws };                        // W2 = sum of w*u, so a team-wide surprise of x moves the team's sum by exactly x
   };
-  const projected = (p, starter) => p.mins.length ? mean(p.mins.slice(-P.minGames)) : (starter ? 26 : 12);
+  const projected = (p, starter) => {
+    if (!p.mins.length) return starter ? 26 : 12;
+    const m = p.mins.slice(-P.minGames);
+    if (!P.recency) return mean(m);
+    let sw = 0, sm = 0;
+    for (let i = 0; i < m.length; i++) { const w = Math.pow(1 - P.recency, m.length - 1 - i); sw += w; sm += w * m[i]; }
+    return sm / sw;
+  };
   const lineupFor = (team, rows, how, season) => {
     /* rows: this game's box rows for the team (with min); how: actual | known | naive | live */
     if (how === 'actual') return rows.filter(r => r.min > 0).map(r => [getP(r, season), r.min]);
@@ -191,9 +209,26 @@ function replay(P, ctx, mode, collect) {
     const eh = lg + (H.O - A.D) / situP.scale + (sh - sa) / (2 * situP.scale), ea = lg + (A.O - H.D) / situP.scale - (sh - sa) / (2 * situP.scale);
     const clip = x => Math.max(-P.clip, Math.min(P.clip, x));
     const surH = clip(oh - eh), surA = clip(oa - ea);
-    for (const [p, w] of H.ws) { p.o += P.ke * surH * w / H.W2; p.d -= P.ke * surA * w / H.W2; }
-    for (const [p, w] of A.ws) { p.o += P.ke * surA * w / A.W2; p.d -= P.ke * surH * w / A.W2; }
+    const ke = P.ke * (g.type === 'POST' ? P.postMult : 1);
+    /* the result itself, beside the efficiency: the win surprise in Elo, split over both sides of the ball */
+    const mov = +g.home_score - +g.away_score;
+    const dH = (E.MEAN + ch.c + H.O + H.D + sh) - (E.MEAN + ca.c + A.O + A.D + sa);
+    const winSur = P.winK ? P.winK * ((mov > 0 ? 1 : 0) - E.prob(dH)) : 0;
+    for (const [p, w, u] of H.ws) { p.o += (ke * surH + winSur / 2) * u / H.W2; p.d += (-ke * surA + winSur / 2) * u / H.W2; }
+    for (const [p, w, u] of A.ws) { p.o += (ke * surA - winSur / 2) * u / A.W2; p.d += (-ke * surH - winSur / 2) * u / A.W2; }
     ch.c += P.kc * (surH - surA); ca.c -= P.kc * (surH - surA); ch.n++; ca.n++;
+    /* each player's own plus-minus against his share of the team's margin: tells teammates apart */
+    if (P.pm) for (const [t, rows, sign] of [[g.home, box[g.home], 1], [g.away, box[g.away], -1]]) {
+      const M = sign * mov;
+      const tot = rows.reduce((s, r) => s + r.min, 0) || 240;
+      for (const r of rows) {
+        if (r.min <= 0 || r.pm === '' || r.pm === undefined) continue;
+        const p = getP(r, g.season);
+        const s = Math.max(-P.pmClip, Math.min(P.pmClip, (+r.pm || 0) - M * r.min / (tot / 5)));
+        p.o += P.pm * s / 2; p.d += P.pm * s / 2;
+      }
+    }
+    if (P.shrink) for (const rows of [box[g.home], box[g.away]]) for (const r of rows) { if (r.min <= 0) continue; const p = getP(r, g.season); p.o += P.shrink * (p.o0 - p.o); p.d += P.shrink * (p.d0 - p.d); }
     lg += 0.005 * ((oh + oa) / 2 - lg);
     pace[g.home] += 0.1 * (th.poss * 240 / th.min - pace[g.home]); pace[g.away] += 0.1 * (ta.poss * 240 / ta.min - pace[g.away]);
     for (const [t, rows] of [[g.home, box[g.home]], [g.away, box[g.away]]]) {
@@ -254,11 +289,11 @@ function makeLiveLineup(ctx) {
   };
 }
 
-function fit(ctx) {
-  let P = { ...DEFAULT };
-  const lossOf = p => score(replay(p, ctx, 'known', true).recs, WARM_TO, FIT_TO, ctx.situP.scale).logloss;
+function fit(ctx, from = WARM_TO, to = FIT_TO, start = DEFAULT, passes = 5) {
+  let P = { ...start };
+  const lossOf = p => score(replay(p, ctx, 'known', true).recs, from, to, ctx.situP.scale).logloss;
   let best = lossOf(P), moved = true, pass = 0;
-  while (moved && pass < 5) {
+  while (moved && pass < passes) {
     moved = false; pass++;
     for (const k of Object.keys(GRID)) for (const v of GRID[k]) {
       if (v === P[k]) continue;
@@ -268,6 +303,33 @@ function fit(ctx) {
     L.log(`fit pass ${pass}: logloss ${best.toFixed(5)} ${JSON.stringify(P)}`);
   }
   return P;
+}
+
+/* Walk forward: for each season from 2024 on, fit on the seasons before it and score it cold. Then the
+   ablations: the params fitted on everything but the last season, with each feature switched off in turn. */
+function research(ctx) {
+  const seasons = [...new Set(ctx.games.filter(g => g.status === 'final' && ctx.boxes[g.game_id]).map(g => g.season))].sort();
+  const folds = [];
+  for (const S of seasons) {
+    if (S <= WARM_TO + 1) continue;
+    L.log(`fold ${S}: fitting on ${WARM_TO + 1}-${S - 1}`);
+    const P = fit(ctx, WARM_TO, S - 1, DEFAULT, 3);
+    const fold = { season: S, params: P };
+    for (const mode of ['actual', 'known', 'naive']) fold[mode] = score(replay(P, ctx, mode, true).recs, S - 1, S, ctx.situP.scale);
+    fold.teamElo = score(ctx.teamRecs.filter(r => r.season === S), S - 1, S, ctx.situP.scale); delete fold.teamElo.totalMae;
+    folds.push(fold);
+    L.log(`fold ${S}: team Elo ${fold.teamElo.logloss} / ${(fold.teamElo.acc * 100).toFixed(1)}% | known ${fold.known.logloss} / ${(fold.known.acc * 100).toFixed(1)}% / ${fold.known.mae}`);
+  }
+  const last = seasons[seasons.length - 1];
+  const P = fit(ctx, WARM_TO, last - 1, DEFAULT, 4);
+  const base = score(replay(P, ctx, 'known', true).recs, last - 1, last, ctx.situP.scale);
+  const ablations = { full: base };
+  const off = { pm: 0, winK: 0, shrink: 0, recency: 0, postMult: 1, wexp: 1, kc: 0, blend: 0, prior: 0, rookie: 0 };
+  for (const [k, v] of Object.entries(off)) {
+    if (P[k] === v) { ablations['without ' + k] = 'not used'; continue; }
+    ablations['without ' + k] = score(replay({ ...P, [k]: v }, ctx, 'known', true).recs, last - 1, last, ctx.situP.scale);
+  }
+  return { folds, finalFit: `${WARM_TO + 1}-${last - 1}`, finalParams: P, ablationsOn: last, ablations };
 }
 
 function main() {
@@ -281,6 +343,7 @@ function main() {
   const everything = L.readGames().filter(g => g.status === 'final' || g.status === 'scheduled' || g.status === 'live');
   everything.forEach(g => { g.season = +g.season; g.neutral = +g.neutral; });
   const TE = E.replay(situP, everything, true);
+  ctx.teamRecs = TE.recs.map(r => ({ ...r, total: 0, expTotal: 0 }));
   for (const r of TE.recs) ctx.teamDiff[`${r.season}_${r.date.replace(/-/g, '')}_${r.away}_${r.home}`] = r.d;
   for (const [id, u] of Object.entries(TE.upcoming)) ctx.teamDiff[id] = -u.spread * situP.scale;
   const withBox = games.filter(g => g.status === 'final' && ctx.boxes[g.game_id]).length;
@@ -288,6 +351,11 @@ function main() {
   if (!withBox) { L.log('no box scores yet: nothing to do'); return; }
   const prev = fs.existsSync(OUT) ? JSON.parse(fs.readFileSync(OUT, 'utf8')) : null;
   let P = prev ? { ...DEFAULT, ...prev.params } : { ...DEFAULT };
+  if (process.argv[2] === 'research') {
+    const R = research(ctx);
+    fs.writeFileSync(path.join(L.ROOT, 'nba-hub', 'research.json'), JSON.stringify(R, null, 1) + '\n');
+    L.log('research.json written'); P = R.finalParams;
+  }
   if (process.argv[2] === 'fit') P = fit(ctx);
 
   const report = {};

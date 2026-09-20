@@ -9,71 +9,78 @@
   "rookie": -60,
   "clip": 30,
   "minGames": 8,
-  "blend": 0.1
+  "blend": 0.1,
+  "pm": 0,
+  "pmClip": 15,
+  "winK": 0,
+  "shrink": 0,
+  "recency": 0,
+  "postMult": 1,
+  "wexp": 1
  },
- "fitSeasons": "2023-2024",
- "holdoutSeasons": "2025-2026",
+ "fitSeasons": "2023-2025",
+ "holdoutSeasons": "2026-2026",
  "report": {
   "actual": {
    "fit": {
-    "games": 2634,
-    "logloss": 0.61115,
-    "acc": 0.6659,
-    "mae": 10.43,
-    "totalMae": 14.66
+    "games": 3954,
+    "logloss": 0.60541,
+    "acc": 0.6677,
+    "mae": 10.6,
+    "totalMae": 14.74
    },
    "holdout": {
-    "games": 2642,
-    "logloss": 0.59367,
-    "acc": 0.6828,
-    "mae": 11.18,
-    "totalMae": 15.1
+    "games": 1322,
+    "logloss": 0.59341,
+    "acc": 0.6944,
+    "mae": 11.41,
+    "totalMae": 15.3
    }
   },
   "known": {
    "fit": {
-    "games": 2634,
-    "logloss": 0.61135,
-    "acc": 0.6667,
-    "mae": 10.43,
-    "totalMae": 14.67
+    "games": 3954,
+    "logloss": 0.60689,
+    "acc": 0.6659,
+    "mae": 10.62,
+    "totalMae": 14.75
    },
    "holdout": {
-    "games": 2642,
-    "logloss": 0.5966,
-    "acc": 0.676,
-    "mae": 11.21,
-    "totalMae": 15.1
+    "games": 1322,
+    "logloss": 0.59521,
+    "acc": 0.6876,
+    "mae": 11.43,
+    "totalMae": 15.3
    }
   },
   "naive": {
    "fit": {
-    "games": 2634,
-    "logloss": 0.62305,
-    "acc": 0.6519,
-    "mae": 10.54,
-    "totalMae": 14.71
+    "games": 3954,
+    "logloss": 0.6166,
+    "acc": 0.6583,
+    "mae": 10.72,
+    "totalMae": 14.78
    },
    "holdout": {
-    "games": 2642,
-    "logloss": 0.60303,
-    "acc": 0.6726,
-    "mae": 11.3,
-    "totalMae": 15.12
+    "games": 1322,
+    "logloss": 0.60233,
+    "acc": 0.674,
+    "mae": 11.53,
+    "totalMae": 15.32
    }
   },
   "teamElo": {
    "fit": {
-    "games": 2634,
-    "logloss": 0.62746,
-    "acc": 0.653,
-    "mae": 10.63
+    "games": 3954,
+    "logloss": 0.62179,
+    "acc": 0.655,
+    "mae": 10.79
    },
    "holdout": {
-    "games": 2642,
-    "logloss": 0.60611,
-    "acc": 0.6715,
-    "mae": 11.31
+    "games": 1322,
+    "logloss": 0.60174,
+    "acc": 0.6838,
+    "mae": 11.51
    }
   }
  },
@@ -7696,5 +7703,5 @@
   }
  },
  "upcoming": {},
- "generated": "2026-09-20T05:09Z"
+ "generated": "2026-09-20T05:14Z"
 }

@@ -186,8 +186,13 @@ async function injuries() {
     const list = [];
     for (const inj of t.injuries || []) {
       const a = inj.athlete || {};
-      const row = { id: String(a.id || inj.athleteId || ''), name: clean(a.displayName || a.fullName || inj.displayName), pos: clean(a.position && (a.position.abbreviation || a.position.name)),
-        status: clean(inj.status || (inj.type && inj.type.description)), detail: clean(inj.shortComment || (inj.details && (inj.details.detail || inj.details.type)) || ''), date: inj.date ? String(inj.date).slice(0, 10) : '' };
+      /* the feed gives no athlete id field; the id is in the player's page link (…/player/_/id/4712863/…) */
+      const href = ((a.links || [])[0] || {}).href || (a.headshot && a.headshot.href) || '';
+      const m = /\/id\/(\d+)/.exec(href) || /\/(\d+)\.png/.exec(href);
+      const d = inj.details || {};
+      const row = { id: String(a.id || (m && m[1]) || ''), name: clean(a.displayName || a.fullName || inj.displayName), pos: clean(a.position && (a.position.abbreviation || a.position.name)),
+        status: clean(inj.status || (inj.type && inj.type.description)), detail: clean([d.type, d.detail].filter(Boolean).join(' ') || inj.shortComment || ''), date: inj.date ? String(inj.date).slice(0, 10) : '',
+        returns: d.returnDate ? String(d.returnDate).slice(0, 10) : '' };
       list.push(row);
       lines.push([today, ab, row.id, row.name, row.status].join(','));
     }

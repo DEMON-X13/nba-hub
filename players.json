@@ -164,13 +164,16 @@
    "out": []
   },
   "GSW": {
-   "strength": 1567.4,
-   "offence": 41.2,
-   "defence": 31.3,
+   "strength": 1533.4,
+   "offence": 24.8,
+   "defence": 13.7,
    "coach": "Steve Kerr",
    "coachElo": -5,
    "pace": 98.7,
-   "out": []
+   "out": [
+    "Jimmy Butler III (Out)",
+    "Moses Moody (Out)"
+   ]
   },
   "HOU": {
    "strength": 1637.1,
@@ -182,22 +185,26 @@
    "out": []
   },
   "IND": {
-   "strength": 1452.4,
-   "offence": 2,
-   "defence": -36.9,
+   "strength": 1465.8,
+   "offence": 11.5,
+   "defence": -33,
    "coach": "Rick Carlisle",
    "coachElo": -12.7,
    "pace": 103.2,
-   "out": []
+   "out": [
+    "Johnny Furphy (Out)"
+   ]
   },
   "LAC": {
-   "strength": 1561.2,
-   "offence": 46.3,
-   "defence": 12,
+   "strength": 1564.5,
+   "offence": 47.6,
+   "defence": 13.8,
    "coach": "Tyronn Lue",
    "coachElo": 3,
    "pace": 99.4,
-   "out": []
+   "out": [
+    "Jordan Miller (Out)"
+   ]
   },
   "LAL": {
    "strength": 1549.2,
@@ -236,13 +243,15 @@
    "out": []
   },
   "MIN": {
-   "strength": 1532.6,
-   "offence": 3.3,
-   "defence": 23,
+   "strength": 1522.3,
+   "offence": 0.2,
+   "defence": 15.9,
    "coach": "Chris Finch",
    "coachElo": 6.3,
    "pace": 103.9,
-   "out": []
+   "out": [
+    "Donte DiVincenzo (Out)"
+   ]
   },
   "NOP": {
    "strength": 1431,
@@ -290,22 +299,26 @@
    "out": []
   },
   "PHX": {
-   "strength": 1542.7,
-   "offence": 7,
-   "defence": 30,
+   "strength": 1550.6,
+   "offence": 13.9,
+   "defence": 30.9,
    "coach": "Jordan Ott",
    "coachElo": 5.7,
    "pace": 98.8,
-   "out": []
+   "out": [
+    "Mark Williams (Out)"
+   ]
   },
   "POR": {
-   "strength": 1539.5,
-   "offence": 4.7,
-   "defence": 34.8,
+   "strength": 1543.9,
+   "offence": 7.5,
+   "defence": 36.5,
    "coach": "Tiago Splitter",
    "coachElo": -0.1,
    "pace": 100.6,
-   "out": []
+   "out": [
+    "Shaedon Sharpe (Out)"
+   ]
   },
   "SAC": {
    "strength": 1357.5,
@@ -344,13 +357,15 @@
    "out": []
   },
   "WAS": {
-   "strength": 1288.2,
-   "offence": -70.4,
-   "defence": -112.5,
+   "strength": 1307.1,
+   "offence": -60.7,
+   "defence": -103.3,
    "coach": "Brian Keefe",
    "coachElo": -28.9,
    "pace": 105.3,
-   "out": []
+   "out": [
+    "Jamir Watkins (Out)"
+   ]
   }
  },
  "coaches": {
@@ -7681,5 +7696,5 @@
   }
  },
  "upcoming": {},
- "generated": "2026-09-20T05:07Z"
+ "generated": "2026-09-20T05:09Z"
 }

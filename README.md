@@ -170,7 +170,7 @@ node nba-hub/tools/players.js      # player model replay; add "fit" to refit
 
 ## The site
 
-`nba-hub/index.html`, its own look: dark, one card per game. Tabs:
+`nba-hub/index.html`, its own look: paper and ink, a serif for the figures, hairline rules, team colours as a thin underline; one card per game. Tabs:
 
 - **Tonight**: a day strip from yesterday to ten days out. Each card has the two teams (tap a badge to
   make it your pick), the model's win chance and a probability bar, the spread and total, the market

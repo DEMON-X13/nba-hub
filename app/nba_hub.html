@@ -6,171 +6,167 @@
 <title>NBA Hub</title>
 <meta name="description" content="Tonight's NBA slate priced by a player-level Elo model: win chances, spreads, totals, lineups and who is out.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0A0A0F; --bg-2:#111119; --panel:#16161F; --panel-2:#1C1C27; --panel-3:#23232F;
-  --ink:#F4F4F8; --ink-2:#B8B9C7; --muted:#7C7E92; --line:#262633; --line-2:#33344A;
-  --hot:#FF6A1F; --hot-2:#FF8C4A; --hot-soft:rgba(255,106,31,.14);
-  --lime:#CDFF4F; --lime-soft:rgba(205,255,79,.14);
-  --ice:#5FD4FF; --ice-soft:rgba(95,212,255,.14);
-  --rose:#FF3D6B; --rose-soft:rgba(255,61,107,.14);
-  --gold:#FFD166;
-  --display:"Unbounded",ui-sans-serif,system-ui,sans-serif;
-  --body:"Manrope",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
-  --r:18px; --r-sm:11px;
+  --paper:#F6F3EC; --paper-2:#FBF9F4; --panel:#FFFFFF; --panel-2:#F3F0E8;
+  --ink:#16171B; --ink-2:#4A4C55; --muted:#8A8C96; --rule:#E2DDD2; --rule-2:#CFC9BB;
+  --accent:#1F5C4B; --accent-soft:#E3EFE9; --accent-ink:#164536;
+  --warn:#8A2A2A; --warn-soft:#F5E6E4;
+  --gold:#A8843B;
+  --serif:"Fraunces",Georgia,"Times New Roman",serif;
+  --sans:"Inter",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
   --ease:cubic-bezier(.2,.7,.2,1);
 }
 *{box-sizing:border-box}
-html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:14.5px;line-height:1.45;-webkit-font-smoothing:antialiased}
-body{background:
-  radial-gradient(900px 520px at 12% -8%,rgba(255,106,31,.22),transparent 60%),
-  radial-gradient(700px 420px at 92% 0%,rgba(95,212,255,.10),transparent 60%),
-  linear-gradient(180deg,#0D0D14 0%,var(--bg) 40%);background-attachment:fixed;min-height:100vh}
-::selection{background:var(--hot);color:#000}
+html,body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum" 1,"cv11" 1}
+body{background:linear-gradient(180deg,var(--paper-2) 0%,var(--paper) 320px)}
+::selection{background:var(--accent-soft);color:var(--accent-ink)}
 button,input,select{font:inherit;color:inherit}
-a{color:var(--ice)}
+a{color:var(--accent)}
 [hidden]{display:none!important}
+.court{display:none}
 
-/* ---------- court lines ---------- */
-.court{position:fixed;inset:0;pointer-events:none;opacity:.07;background-image:
-  linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px);background-size:64px 64px;
-  mask-image:radial-gradient(800px 500px at 50% 0%,#000 20%,transparent 75%);-webkit-mask-image:radial-gradient(800px 500px at 50% 0%,#000 20%,transparent 75%)}
-
-/* ---------- header ---------- */
-header{padding:26px 22px 0;max-width:1240px;margin:0 auto;position:relative}
-.brand{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap}
-.wordmark{font-family:var(--display);font-weight:900;font-size:clamp(34px,6vw,54px);letter-spacing:-.02em;line-height:.95;margin:0;text-transform:uppercase}
-.wordmark em{font-style:normal;color:var(--hot);position:relative}
-.wordmark .ball{display:inline-block;width:.42em;height:.42em;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFB27A,var(--hot) 60%,#B33F00);box-shadow:0 0 28px rgba(255,106,31,.75);margin-left:.14em;vertical-align:.08em;position:relative}
-.wordmark .ball::after{content:"";position:absolute;inset:0;border-radius:50%;background:linear-gradient(90deg,transparent 46%,rgba(0,0,0,.35) 48%,rgba(0,0,0,.35) 52%,transparent 54%),linear-gradient(0deg,transparent 46%,rgba(0,0,0,.35) 48%,rgba(0,0,0,.35) 52%,transparent 54%)}
-.tagline{color:var(--ink-2);font-size:13px;margin:8px 0 0;max-width:520px}
-.stamp{font-size:12px;color:var(--muted);text-align:right;line-height:1.5}
-.stamp b{color:var(--ink-2);font-weight:600;display:block}
-nav{display:flex;gap:6px;margin:22px 0 0;overflow-x:auto;padding:4px 0 10px;scrollbar-width:none}
+/* ---------- masthead ---------- */
+header{max-width:1180px;margin:0 auto;padding:34px 28px 0}
+.brand{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;padding-bottom:18px;border-bottom:1px solid var(--ink)}
+.wordmark{font-family:var(--serif);font-weight:400;font-size:clamp(34px,5vw,50px);letter-spacing:-.02em;line-height:1;margin:0;font-variation-settings:"opsz" 144}
+.wordmark em{font-style:italic;font-weight:300;color:var(--ink)}
+.wordmark .ball{display:none}
+.tagline{color:var(--ink-2);font-size:13.5px;margin:10px 0 0;max-width:560px;line-height:1.55}
+.stamp{font-size:12px;color:var(--muted);text-align:right;line-height:1.6;letter-spacing:.01em}
+.stamp b{color:var(--ink);font-weight:500;display:block;font-size:13px}
+nav{display:flex;gap:2px;margin:0;overflow-x:auto;padding:0;border-bottom:1px solid var(--rule);scrollbar-width:none}
 nav::-webkit-scrollbar{display:none}
-nav button{flex:none;background:var(--panel);border:1px solid var(--line);color:var(--ink-2);padding:10px 16px;border-radius:999px;font-weight:700;font-size:13px;letter-spacing:.02em;cursor:pointer;transition:all .18s var(--ease)}
-nav button:hover{color:var(--ink);border-color:var(--line-2);transform:translateY(-1px)}
-nav button[aria-selected=true]{background:var(--ink);color:#0A0A0F;border-color:var(--ink)}
-nav button .n{display:inline-block;margin-left:7px;font-size:11px;padding:1px 7px;border-radius:999px;background:var(--hot);color:#000;font-weight:800}
-main{max-width:1240px;margin:0 auto;padding:18px 22px 90px}
+nav button{flex:none;background:transparent;border:0;border-bottom:2px solid transparent;margin-bottom:-1px;color:var(--ink-2);padding:14px 14px 12px;font-weight:500;font-size:13.5px;letter-spacing:.01em;cursor:pointer;transition:color .15s var(--ease),border-color .15s var(--ease)}
+nav button:hover{color:var(--ink)}
+nav button[aria-selected=true]{color:var(--ink);border-bottom-color:var(--ink);font-weight:600}
+nav button .n{display:inline-block;margin-left:7px;font-size:11px;padding:0 6px;border-radius:999px;background:var(--ink);color:var(--paper);font-weight:600;line-height:17px;vertical-align:1px}
+main{max-width:1180px;margin:0 auto;padding:26px 28px 90px}
 section[hidden]{display:none}
-h2{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.01em;margin:0 0 14px}
-h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13px;margin-left:10px;letter-spacing:0}
-.muted{color:var(--muted)} .hot{color:var(--hot)} .lime{color:var(--lime)} .rose{color:var(--rose)} .ice{color:var(--ice)}
+h2{font-family:var(--serif);font-weight:500;font-size:24px;letter-spacing:-.015em;margin:0 0 16px;line-height:1.15;font-variation-settings:"opsz" 60}
+h2 small{font-family:var(--sans);font-weight:400;color:var(--muted);font-size:13px;margin-left:12px;letter-spacing:0}
+.muted{color:var(--muted)} .hot{color:var(--accent)} .lime{color:var(--accent)} .rose{color:var(--warn)} .ice{color:var(--ink-2)}
 .num{font-variant-numeric:tabular-nums}
 
 /* ---------- day strip ---------- */
-.days{display:flex;gap:8px;overflow-x:auto;padding:2px 0 14px;scrollbar-width:none}
+.days{display:flex;gap:0;overflow-x:auto;padding:0 0 22px;scrollbar-width:none;border-bottom:1px solid var(--rule);margin-bottom:22px}
 .days::-webkit-scrollbar{display:none}
-.day{flex:none;min-width:86px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:10px 12px;cursor:pointer;text-align:left;transition:all .18s var(--ease)}
-.day:hover{border-color:var(--line-2);transform:translateY(-1px)}
-.day.on{border-color:var(--hot);background:var(--hot-soft)}
-.day .dw{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.08em;text-transform:uppercase}
-.day .dn{font-family:var(--display);font-weight:700;font-size:20px;line-height:1.1;margin-top:2px}
-.day .dc{font-size:11px;color:var(--ink-2);margin-top:3px}
-.day.on .dc{color:var(--hot-2)}
+.day{flex:none;min-width:96px;background:transparent;border:0;border-right:1px solid var(--rule);padding:4px 18px 4px 0;margin-right:18px;cursor:pointer;text-align:left;transition:color .15s var(--ease)}
+.day:last-child{border-right:0}
+.day .dw{font-size:11px;color:var(--muted);font-weight:500;letter-spacing:.1em;text-transform:uppercase}
+.day .dn{font-family:var(--serif);font-weight:500;font-size:22px;line-height:1.1;margin-top:3px;color:var(--ink-2);font-variation-settings:"opsz" 60}
+.day.on .dn{color:var(--ink)} .day.on .dw{color:var(--accent)}
+.day .dc{font-size:12px;color:var(--muted);margin-top:3px}
 
 /* ---------- game cards ---------- */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(360px,1fr));gap:14px}
-@media(max-width:420px){.grid{grid-template-columns:1fr}}
-.card{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:var(--r);padding:16px 16px 14px;position:relative;overflow:hidden;transition:transform .2s var(--ease),border-color .2s var(--ease),box-shadow .2s var(--ease)}
-.card:hover{transform:translateY(-2px);border-color:var(--line-2);box-shadow:0 18px 40px -24px rgba(0,0,0,.9)}
-.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--hot),transparent)}
-.card.final::before{background:linear-gradient(180deg,var(--muted),transparent)}
-.card .top{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);margin-bottom:12px}
-.card .top b{color:var(--ink-2);font-weight:700}
-.tags{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
-.tag{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--panel-3);color:var(--ink-2);white-space:nowrap}
-.tag.hot{background:var(--hot-soft);color:var(--hot-2)} .tag.lime{background:var(--lime-soft);color:var(--lime)} .tag.rose{background:var(--rose-soft);color:var(--rose)} .tag.ice{background:var(--ice-soft);color:var(--ice)}
-.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
-.team{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:18px}
+@media(max-width:440px){.grid{grid-template-columns:1fr}}
+.card{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:20px 22px 16px;position:relative;transition:border-color .2s var(--ease),box-shadow .2s var(--ease)}
+.card:hover{border-color:var(--rule-2);box-shadow:0 10px 30px -22px rgba(22,23,27,.35)}
+.card::before{display:none}
+.card .top{display:flex;align-items:baseline;justify-content:space-between;gap:10px;font-size:12px;color:var(--muted);margin-bottom:14px;letter-spacing:.02em}
+.card .top b{color:var(--ink);font-weight:500}
+.tags{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.tag{font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);white-space:nowrap}
+.tag.hot,.tag.lime{color:var(--accent)} .tag.rose{color:var(--warn)} .tag.ice{color:var(--ink-2)}
+.teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:12px}
+.team{display:flex;flex-direction:column;align-items:flex-start;gap:5px;min-width:0}
 .team.home{align-items:flex-end;text-align:right}
-.badge{font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:-.01em;line-height:1;padding:8px 10px;border-radius:12px;border:2px solid var(--tc,#888);color:var(--tc,#888);background:rgba(255,255,255,.02);cursor:pointer;transition:all .15s var(--ease);user-select:none;position:relative}
-.badge:hover{background:rgba(255,255,255,.06);transform:translateY(-1px)}
-.badge.pick{background:var(--tc,#888);color:#0A0A0F;box-shadow:0 0 22px -4px var(--tc,#888)}
-.badge.mine::after{content:"YOU";position:absolute;top:-9px;right:-8px;font-family:var(--body);font-size:9px;font-weight:800;letter-spacing:.08em;background:var(--lime);color:#000;padding:2px 5px;border-radius:999px}
-.team .nm{font-size:12px;color:var(--ink-2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
-.team .sc{font-family:var(--display);font-size:30px;font-weight:700;line-height:1}
-.team .sc.lose{color:var(--muted)}
-.vs{font-family:var(--display);font-size:11px;color:var(--muted);text-align:center;line-height:1.3}
-.vs b{display:block;font-size:22px;color:var(--ink);font-weight:900}
-.prob{margin:14px 0 8px;height:10px;border-radius:999px;background:var(--panel-3);overflow:hidden;display:flex}
-.prob i{display:block;height:100%;background:var(--ac,#888);transition:width .5s var(--ease)}
-.prob i.h{margin-left:auto;background:var(--hc,#888)}
-.pline{display:flex;justify-content:space-between;font-size:12px;color:var(--ink-2);font-weight:700}
-.pline b{color:var(--ink);font-family:var(--display);font-size:13px}
-.chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
-.chip{background:var(--panel-3);border:1px solid var(--line);border-radius:10px;padding:6px 9px;font-size:12px;color:var(--ink-2);display:inline-flex;gap:6px;align-items:baseline;white-space:nowrap}
-.chip b{color:var(--ink);font-family:var(--display);font-size:13px;font-weight:700}
-.chip.edge{border-color:rgba(205,255,79,.5);background:var(--lime-soft)} .chip.edge b{color:var(--lime)}
-.chip.fade{border-color:rgba(255,61,107,.5);background:var(--rose-soft)} .chip.fade b{color:var(--rose)}
-.out{margin-top:10px;font-size:12px;color:var(--ink-2);display:flex;flex-direction:column;gap:3px}
+.badge{font-family:var(--serif);font-weight:500;font-size:30px;letter-spacing:-.01em;line-height:1;padding:2px 0 6px;border:0;border-bottom:3px solid var(--tc,#888);color:var(--ink);background:transparent;cursor:pointer;transition:color .15s var(--ease),opacity .15s var(--ease);user-select:none;position:relative;font-variation-settings:"opsz" 60}
+.badge:hover{color:var(--accent)}
+.badge.pick{color:var(--ink)}
+.team .badge:not(.pick){color:var(--ink-2);font-weight:300}
+.team .you{font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.team .nm{font-size:12.5px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+.team .sc{font-family:var(--serif);font-size:28px;font-weight:500;line-height:1;margin-top:2px;font-variation-settings:"opsz" 60}
+.team .sc.lose{color:var(--muted);font-weight:300}
+.vs{font-size:11px;color:var(--muted);text-align:center;line-height:1.3;letter-spacing:.06em;text-transform:uppercase}
+.vs b{display:block;font-family:var(--serif);font-size:26px;color:var(--ink);font-weight:500;letter-spacing:-.01em;text-transform:none;margin-bottom:2px;font-variation-settings:"opsz" 60}
+.prob{margin:16px 0 6px;height:3px;border-radius:0;background:var(--rule);overflow:hidden;display:flex}
+.prob i{display:block;height:100%;background:var(--ink-2)}
+.prob i.h{margin-left:auto;background:var(--ink)}
+.pline{display:flex;justify-content:space-between;font-size:12px;color:var(--muted)}
+.pline b{color:var(--ink);font-weight:500}
+.chips{display:flex;gap:0;flex-wrap:wrap;margin-top:14px;border-top:1px solid var(--rule);padding-top:10px}
+.chip{background:transparent;border:0;border-right:1px solid var(--rule);padding:2px 14px 2px 0;margin-right:14px;font-size:11px;color:var(--muted);display:inline-flex;flex-direction:column;gap:1px;white-space:nowrap;letter-spacing:.06em;text-transform:uppercase}
+.chip:last-child{border-right:0}
+.chip b{color:var(--ink);font-family:var(--sans);font-size:14px;font-weight:500;letter-spacing:0;text-transform:none}
+.chip span{font-size:11px;letter-spacing:0;text-transform:none;color:var(--muted)}
+.chip.edge b{color:var(--accent)} .chip.edge span{color:var(--accent)}
+.chip .lime{color:var(--accent)} .chip .muted{color:var(--muted)}
+.out{margin-top:12px;font-size:12.5px;color:var(--ink-2);display:flex;flex-direction:column;gap:2px;border-top:1px solid var(--rule);padding-top:10px}
 .out span{display:flex;justify-content:space-between;gap:8px}
-.out .who{color:var(--rose);font-weight:700} .out .cost{color:var(--muted);font-variant-numeric:tabular-nums}
-.foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;flex-wrap:wrap}
-.btn{background:var(--panel-3);border:1px solid var(--line-2);color:var(--ink);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700;font-size:12.5px;transition:all .15s var(--ease)}
-.btn:hover{border-color:var(--ink-2);transform:translateY(-1px)}
-.btn.hot{background:var(--hot);border-color:var(--hot);color:#000} .btn.hot:hover{background:var(--hot-2)}
-.btn.lime{background:var(--lime);border-color:var(--lime);color:#000}
-.btn.ghost{background:transparent}
-.btn:disabled{opacity:.45;cursor:default;transform:none}
-.drawer{margin-top:12px;border-top:1px dashed var(--line-2);padding-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px}
-.drawer h4{margin:0 0 6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.drawer ul{list-style:none;margin:0;padding:0} .drawer li{display:flex;justify-content:space-between;gap:6px;padding:2px 0;border-bottom:1px solid var(--line)}
+.out .who{color:var(--ink);font-weight:500} .out .who .muted{font-weight:400}
+.out .cost{color:var(--muted);font-variant-numeric:tabular-nums}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:14px;gap:8px;flex-wrap:wrap}
+.btn{background:transparent;border:1px solid var(--rule-2);color:var(--ink);padding:7px 12px;border-radius:999px;cursor:pointer;font-weight:500;font-size:12.5px;transition:all .15s var(--ease)}
+.btn:hover{border-color:var(--ink);background:var(--panel)}
+.btn.hot{background:var(--ink);border-color:var(--ink);color:var(--paper)} .btn.hot:hover{background:#000}
+.btn.lime{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn.ghost{border-color:transparent;color:var(--ink-2);padding-left:0} .btn.ghost:hover{background:transparent;color:var(--ink);border-color:transparent;text-decoration:underline;text-underline-offset:3px}
+.btn:disabled{opacity:.45;cursor:default}
+.drawer{margin-top:12px;border-top:1px solid var(--rule);padding-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:16px;font-size:12.5px}
+.drawer h4{margin:0 0 6px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:500}
+.drawer ul{list-style:none;margin:0;padding:0} .drawer li{display:flex;justify-content:space-between;gap:6px;padding:3px 0;border-bottom:1px solid var(--rule)}
 .drawer li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.drawer li .m{color:var(--muted);flex:none;width:34px;text-align:right} .drawer li .v{flex:none;width:44px;text-align:right;font-weight:700}
-.drawer li .v.pos{color:var(--lime)} .drawer li .v.neg{color:var(--rose)}
-.drawer .coach{color:var(--ink-2);margin-top:6px}
-.empty{background:var(--panel);border:1px dashed var(--line-2);border-radius:var(--r);padding:34px 24px;text-align:center;color:var(--ink-2)}
-.empty b{display:block;font-family:var(--display);font-size:24px;color:var(--ink);margin-bottom:6px}
-.countdown{font-family:var(--display);font-size:clamp(40px,9vw,88px);font-weight:900;color:var(--hot);line-height:1;letter-spacing:-.03em;margin:8px 0 4px}
+.drawer li .m{color:var(--muted);flex:none;width:34px;text-align:right} .drawer li .v{flex:none;width:44px;text-align:right;font-weight:500}
+.drawer li .v.pos{color:var(--accent)} .drawer li .v.neg{color:var(--warn)}
+.drawer .coach{color:var(--muted);margin-top:8px} .drawer .coach b{color:var(--ink);font-weight:500}
+.empty{background:transparent;border:1px solid var(--rule);border-radius:6px;padding:44px 24px;text-align:center;color:var(--ink-2)}
+.empty b{display:block;font-family:var(--serif);font-size:26px;font-weight:500;color:var(--ink);margin-bottom:6px;letter-spacing:-.01em;font-variation-settings:"opsz" 60}
+.countdown{font-family:var(--serif);font-size:clamp(56px,10vw,110px);font-weight:300;color:var(--ink);line-height:1;letter-spacing:-.04em;margin:10px 0 2px;font-variation-settings:"opsz" 144}
+.empty .chip{flex-direction:row;align-items:baseline;gap:8px;text-transform:none;letter-spacing:0;border:0;margin:0 10px}
 
 /* ---------- stat strip + tables ---------- */
-.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin-bottom:18px}
-.stat{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px 16px;position:relative;overflow:hidden}
-.stat::after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:radial-gradient(circle,rgba(255,106,31,.25),transparent 70%)}
-.stat b{font-family:var(--display);font-size:30px;font-weight:900;display:block;line-height:1;letter-spacing:-.02em}
-.stat span{color:var(--muted);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;display:block;margin-top:6px}
-.tbl{width:100%;border-collapse:separate;border-spacing:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden}
-.tbl th,.tbl td{padding:10px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:middle}
-.tbl th{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);background:var(--panel-2);cursor:pointer;white-space:nowrap;user-select:none}
-.tbl th.on{color:var(--hot-2)}
-.tbl tr:last-child td{border-bottom:0}
-.tbl tbody tr:hover{background:rgba(255,255,255,.025)}
+.strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:0;margin-bottom:24px;border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+.stat{background:transparent;border:0;border-right:1px solid var(--rule);border-radius:0;padding:16px 18px 14px 0;margin-right:18px;position:relative}
+.stat:last-child{border-right:0}
+.stat::after{display:none}
+.stat b{font-family:var(--serif);font-size:34px;font-weight:400;display:block;line-height:1;letter-spacing:-.02em;font-variation-settings:"opsz" 96}
+.stat span{color:var(--muted);font-size:11px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;display:block;margin-top:8px}
+.tbl{width:100%;border-collapse:separate;border-spacing:0;background:transparent;border:0;border-top:1px solid var(--ink)}
+.tbl th,.tbl td{padding:11px 12px 11px 0;text-align:left;border-bottom:1px solid var(--rule);vertical-align:middle}
+.tbl th{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);background:transparent;cursor:pointer;white-space:nowrap;user-select:none;font-weight:500}
+.tbl th.on{color:var(--ink)}
+.tbl tr:last-child td{border-bottom:1px solid var(--rule)}
+.tbl tbody tr:hover{background:rgba(22,23,27,.025)}
 .tbl td.num,.tbl th.num{text-align:right;font-variant-numeric:tabular-nums}
-.tbl .rk{color:var(--muted);width:30px}
-.tbl .big{font-family:var(--display);font-weight:700}
-.pill{display:inline-block;font-family:var(--display);font-weight:900;font-size:12px;padding:3px 7px;border-radius:7px;border:1.5px solid var(--tc,#888);color:var(--tc,#888);line-height:1}
-.bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-bottom:14px}
+.tbl .rk{color:var(--muted);width:30px;font-variant-numeric:tabular-nums}
+.tbl .big{font-family:var(--serif);font-weight:500;font-size:16px;font-variation-settings:"opsz" 60}
+.tbl b{font-weight:500}
+.pill{display:inline-block;font-weight:600;font-size:11.5px;letter-spacing:.04em;padding:0 0 1px;border-bottom:2px solid var(--tc,#888);color:var(--ink);line-height:1.2}
+.bar{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-bottom:16px}
 .bar .grow{flex:1}
-input[type=text],input[type=number],select{background:var(--panel);border:1px solid var(--line-2);border-radius:10px;padding:9px 12px;color:var(--ink);min-width:0}
+input[type=text],input[type=number],select{background:var(--panel);border:1px solid var(--rule-2);border-radius:4px;padding:8px 11px;color:var(--ink);min-width:0}
+input[type=text]:focus,input[type=number]:focus,select:focus{outline:none;border-color:var(--ink)}
 input[type=number]{width:92px;text-align:right}
-.wrap{overflow-x:auto;border-radius:14px}
-.meter{height:6px;border-radius:999px;background:var(--panel-3);overflow:hidden;min-width:80px}
-.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--hot),var(--lime))}
-.meter.neg i{background:linear-gradient(90deg,var(--rose),var(--hot))}
-.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.wrap{overflow-x:auto}
+.meter{height:3px;background:var(--rule);overflow:hidden;min-width:80px}
+.meter i{display:block;height:100%;background:var(--ink)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:28px}
 @media(max-width:820px){.two{grid-template-columns:1fr}}
 
 /* ---------- parlay ---------- */
-.ticket{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;position:relative}
-.ticket::before,.ticket::after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:var(--bg);border:1px solid var(--line);top:50%;transform:translateY(-50%)}
-.ticket::before{left:-12px} .ticket::after{right:-12px}
+.ticket{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:20px 22px;position:relative}
+.ticket::before,.ticket::after{display:none}
 .legs{list-style:none;margin:0;padding:0}
-.legs li{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line-2)}
-.legs li .l b{font-family:var(--display);font-size:13px} .legs li .l>span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
-.x{background:transparent;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px} .x:hover{color:var(--rose)}
-.tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:14px}
-.tot div{background:var(--panel-2);border-radius:12px;padding:10px 12px} .tot b{font-family:var(--display);font-size:20px;font-weight:900;display:block;line-height:1.1} .tot span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
+.legs li{display:grid;grid-template-columns:1fr auto auto auto;gap:14px;align-items:center;padding:12px 0;border-bottom:1px solid var(--rule)}
+.legs li .l b{font-family:var(--serif);font-size:16px;font-weight:500;font-variation-settings:"opsz" 60} .legs li .l>span{display:block;font-size:12px;color:var(--muted);margin-top:3px}
+.legs .num b{font-weight:500}
+.x{background:transparent;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px} .x:hover{color:var(--warn)}
+.tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:0;margin-top:18px;border-top:1px solid var(--ink)}
+.tot div{background:transparent;border-right:1px solid var(--rule);border-radius:0;padding:12px 12px 10px 0;margin-right:12px} .tot div:last-child{border-right:0}
+.tot b{font-family:var(--serif);font-size:24px;font-weight:400;display:block;line-height:1.1;letter-spacing:-.01em;font-variation-settings:"opsz" 60} .tot span{font-size:10.5px;color:var(--muted);text-transform:uppercase;letter-spacing:.1em;font-weight:500}
 .saved{margin-top:16px}
-.saved .ticket{margin-bottom:10px}
-.res{font-size:11px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:999px}
-.res.won{background:var(--lime-soft);color:var(--lime)} .res.lost{background:var(--rose-soft);color:var(--rose)} .res.open{background:var(--panel-3);color:var(--ink-2)} .res.push{background:var(--ice-soft);color:var(--ice)}
-.about p{max-width:760px;color:var(--ink-2)} .about h3{font-family:var(--display);font-size:15px;margin:22px 0 8px}
-.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#000;padding:10px 16px;border-radius:999px;font-weight:800;font-size:13px;opacity:0;transition:all .25s var(--ease);pointer-events:none;z-index:9}
+.saved .ticket{margin-bottom:12px}
+.res{font-size:10.5px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:2px 0;border-bottom:2px solid currentColor}
+.res.won{color:var(--accent)} .res.lost{color:var(--warn)} .res.open{color:var(--muted)} .res.push{color:var(--ink-2)}
+.about p{max-width:720px;color:var(--ink-2);font-size:15px;line-height:1.65} .about h3{font-family:var(--serif);font-size:19px;font-weight:500;margin:26px 0 8px;letter-spacing:-.01em;font-variation-settings:"opsz" 60}
+.toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:var(--paper);padding:10px 18px;border-radius:999px;font-weight:500;font-size:13px;opacity:0;transition:all .25s var(--ease);pointer-events:none;z-index:9}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
-footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);font-size:12px}
+footer{max-width:1180px;margin:0 auto;padding:0 28px 48px;color:var(--muted);font-size:12px;border-top:1px solid var(--rule);padding-top:16px}
+pre{background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:14px;overflow:auto;max-height:60vh;font-size:12px}
 </style>
 </head>
 <body>
@@ -178,8 +174,8 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
 <header>
   <div class="brand">
     <div>
-      <h1 class="wordmark">NBA <em>HUB</em><span class="ball"></span></h1>
-      <p class="tagline">Every game priced from who is actually on the floor: a player-level Elo model with offence, defence, coaches, rest and pace.</p>
+      <h1 class="wordmark">NBA <em>Hub</em><span class="ball"></span></h1>
+      <p class="tagline">Every game priced from who is on the floor. A player-level rating model with offence and defence, coaches, rest and pace, graded in public.</p>
     </div>
     <div class="stamp" id="stamp"><b>Loading…</b></div>
   </div>
@@ -206,7 +202,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
   <section id="tab-about" hidden class="about"></section>
   <section id="tab-data" hidden></section>
 </main>
-<footer>Model files rebuilt every morning by the hub's job. Your picks and parlays live only in this browser. Nothing here is advice; the market is very good at this.</footer>
+<footer>Rebuilt every morning from the previous night's box scores and the day's injury report. Your picks and tickets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
 <div class="toast" id="toast"></div>
 <script>
 'use strict';
@@ -294,7 +290,7 @@ render.slate = function () {
     const daysTo = Math.round((Date.parse(OPENING) - Date.parse(S.today)) / 86400000);
     const board = Object.entries(S.teams).sort((a, b) => b[1].strength - a[1].strength).slice(0, 5);
     $('#slate').innerHTML = `<div class="empty"><b>No games on the board</b>${daysTo > 0 ? `<div class="countdown">${daysTo}</div>days to opening night, ${dayNum(OPENING)}` : 'The schedule shows up here about ten days out.'}
-      <p style="margin:18px 0 6px;color:var(--muted);font-size:12px;letter-spacing:.08em;text-transform:uppercase;font-weight:800">Preseason board</p>
+      <p style="margin:22px 0 8px;color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500">Preseason board</p>
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">${board.map(([t, v], i) => `<span class="chip"><span class="pill" style="--tc:${TEAMS[t][2]}">${t}</span><b>${v.strength.toFixed(0)}</b></span>`).join('')}</div></div>`;
     return;
   }
@@ -314,33 +310,33 @@ function card(g) {
   const outRows = ['away', 'home'].flatMap(side => outs(side).map(o => { const pts = -o.costs / S.params.team.scale; return `<span><span class="who">${esc(o.name)} <span class="muted">${side === 'away' ? g.away : g.home} · ${esc(o.status)}</span></span><span class="cost">${pts > 0 ? '+' : ''}${pts.toFixed(1)} pts</span></span>`; }));
   let chips = '';
   if (m) {
-    chips += `<span class="chip">Spread <b>${pick} ${fmtSp(pick === g.home ? m.spread : -m.spread)}</b></span>`;
-    chips += `<span class="chip">Total <b>${m.total ? m.total.toFixed(1) : '—'}</b></span>`;
+    chips += `<span class="chip">Spread<b>${pick} ${fmtSp(pick === g.home ? m.spread : -m.spread)}</b></span>`;
+    chips += `<span class="chip">Total<b>${m.total ? m.total.toFixed(1) : '—'}</b></span>`;
     if (g.line !== null) {
       const diff = -m.spread - (-g.line);                            // model home margin minus market home margin
       const big = Math.abs(diff) >= 3, some = Math.abs(diff) >= 1.5;
-      chips += `<span class="chip${big ? ' edge' : ''}">Market <b>${g.home} ${fmtSp(g.line)}</b>${some ? `<span class="${big ? 'lime' : 'muted'}">edge ${diff > 0 ? g.home : g.away} ${Math.abs(diff).toFixed(1)}</span>` : ''}</span>`;
+      chips += `<span class="chip${big ? ' edge' : ''}">Market<b>${g.home} ${fmtSp(g.line)}</b>${some ? `<span class="${big ? 'lime' : 'muted'}">edge ${diff > 0 ? g.home : g.away} ${Math.abs(diff).toFixed(1)}</span>` : ''}</span>`;
     }
-    if (g.totalLine !== null && m.total) { const td = m.total - g.totalLine; chips += `<span class="chip${Math.abs(td) >= 4 ? ' edge' : ''}">O/U <b>${g.totalLine}</b>${Math.abs(td) >= 2 ? `<span class="${Math.abs(td) >= 4 ? 'lime' : 'muted'}">${td > 0 ? 'over' : 'under'} by ${Math.abs(td).toFixed(1)}</span>` : ''}</span>`; }
-    if (S.params && g.team && Math.abs(g.team.pHome - m.pHome) >= 0.1) chips += `<span class="chip">Team Elo says <b>${g.team.pHome >= 0.5 ? g.home : g.away} ${fmtPct(Math.max(g.team.pHome, 1 - g.team.pHome))}</b></span>`;
+    if (g.totalLine !== null && m.total) { const td = m.total - g.totalLine; chips += `<span class="chip${Math.abs(td) >= 4 ? ' edge' : ''}">Over/under<b>${g.totalLine}</b>${Math.abs(td) >= 2 ? `<span class="${Math.abs(td) >= 4 ? 'lime' : 'muted'}">${td > 0 ? 'over' : 'under'} by ${Math.abs(td).toFixed(1)}</span>` : ''}</span>`; }
+    if (S.params && g.team && Math.abs(g.team.pHome - m.pHome) >= 0.1) chips += `<span class="chip">Team model<b>${g.team.pHome >= 0.5 ? g.home : g.away} ${fmtPct(Math.max(g.team.pHome, 1 - g.team.pHome))}</b></span>`;
   }
   const line = side => { const s = m && m[side]; return s ? s.lineup.slice(0, 8) : []; };
   const drawer = m && m.home && m.home.lineup ? `<div class="drawer" id="dr-${g.id}" hidden>${['away', 'home'].map(side => `<div><h4>${side === 'away' ? g.away : g.home} · projected</h4><ul>${line(side).map(p => `<li><span>${esc(p.name)}</span><span class="m">${p.min}'</span><span class="v ${p.adds >= 0 ? 'pos' : 'neg'}">${(p.adds / S.params.team.scale * 1).toFixed(1)}</span></li>`).join('')}</ul><div class="coach">Coach ${esc(m[side].coach.name)} <span class="muted">${m[side].coach.elo >= 0 ? '+' : ''}${m[side].coach.elo.toFixed(0)}</span> · strength <b>${m[side].strength.toFixed(0)}</b></div></div>`).join('')}</div>` : '';
   return `<article class="card${fin ? ' final' : ''}" data-id="${g.id}">
     <div class="top"><span><b>${tipTime(g.tip) || dayNum(g.date)}</b>${g.tip ? ` · ${dayNum(g.date)}` : ''}</span><span class="tags">${tags.join('')}</span></div>
     <div class="teams">
-      <div class="team away" style="--tc:${A[2]}"><span class="badge${pick === g.away ? ' pick' : ''}${mine === g.away ? ' mine' : ''}" data-act="pick" data-side="${g.away}" title="Pick ${A[1]}">${g.away}</span><span class="nm">${A[1]}</span>${fin ? `<span class="sc${win === g.home ? ' lose' : ''}">${g.awayScore}</span>` : ''}</div>
-      <div class="vs">${m ? `<b>${fmtPct(Math.max(m.pHome, 1 - m.pHome))}</b>${pick}` : 'no number yet'}</div>
-      <div class="team home" style="--tc:${H[2]}"><span class="badge${pick === g.home ? ' pick' : ''}${mine === g.home ? ' mine' : ''}" data-act="pick" data-side="${g.home}" title="Pick ${H[1]}">${g.home}</span><span class="nm">${H[1]}</span>${fin ? `<span class="sc${win === g.away ? ' lose' : ''}">${g.homeScore}</span>` : ''}</div>
+      <div class="team away" style="--tc:${A[2]}"><span class="badge${pick === g.away ? ' pick' : ''}${mine === g.away ? ' mine' : ''}" data-act="pick" data-side="${g.away}" title="Pick ${A[1]}">${g.away}</span><span class="nm">${A[1]}</span>${mine === g.away ? '<span class="you">Your pick</span>' : ''}${fin ? `<span class="sc${win === g.home ? ' lose' : ''}">${g.awayScore}</span>` : ''}</div>
+      <div class="vs">${m ? `<b>${fmtPct(Math.max(m.pHome, 1 - m.pHome))}</b>${pick}` : 'no number'}</div>
+      <div class="team home" style="--tc:${H[2]}"><span class="badge${pick === g.home ? ' pick' : ''}${mine === g.home ? ' mine' : ''}" data-act="pick" data-side="${g.home}" title="Pick ${H[1]}">${g.home}</span><span class="nm">${H[1]}</span>${mine === g.home ? '<span class="you">Your pick</span>' : ''}${fin ? `<span class="sc${win === g.away ? ' lose' : ''}">${g.homeScore}</span>` : ''}</div>
     </div>
-    ${m ? `<div class="prob" style="--ac:${A[2]};--hc:${H[2]}"><i style="width:${(1 - m.pHome) * 100}%"></i><i class="h" style="width:${m.pHome * 100}%"></i></div>
+    ${m ? `<div class="prob"><i style="width:${(1 - m.pHome) * 100}%"></i><i class="h" style="width:${m.pHome * 100}%"></i></div>
     <div class="pline"><span>${g.away} <b>${fmtPct(1 - m.pHome)}</b></span><span><b>${fmtPct(m.pHome)}</b> ${g.home}</span></div>` : ''}
     <div class="chips">${chips}</div>
     ${outRows.length ? `<div class="out">${outRows.join('')}</div>` : ''}
     ${drawer}
     <div class="foot">
-      <span>${drawer ? `<button class="btn ghost" data-act="drawer">Lineups</button>` : ''}</span>
-      <span style="display:flex;gap:6px">${m && !fin ? `<button class="btn" data-act="leg" data-kind="ml">+ ${pick} ML</button><button class="btn" data-act="leg" data-kind="spread">+ ${pick} ${fmtSp(pick === g.home ? m.spread : -m.spread)}</button>` : ''}</span>
+      <span>${drawer ? `<button class="btn ghost" data-act="drawer">Lineups & coaches</button>` : ''}</span>
+      <span style="display:flex;gap:6px">${m && !fin ? `<button class="btn" data-act="leg" data-kind="ml">Ticket: ${pick} to win</button><button class="btn" data-act="leg" data-kind="spread">Ticket: ${pick} ${fmtSp(pick === g.home ? m.spread : -m.spread)}</button>` : ''}</span>
     </div></article>`;
 }
 function act(e) {
@@ -375,7 +371,7 @@ const signed = v => v === null || v === undefined ? '—' : `<span class="${v > 
 render.teams = function () {
   const rows = Object.entries(S.teams).map(([t, v]) => ({ t, name: TEAMS[t] ? TEAMS[t][0] + ' ' + TEAMS[t][1] : t, ...v, outN: v.out.length, outList: v.out.join(', ') }));
   const el = $('#tab-teams');
-  el.innerHTML = `<h2>Team strength <small>player model, with today's injuries; the team Elo beside it</small></h2><div id="teamsT"></div>`;
+  el.innerHTML = `<h2>Teams <small>strength from the player model with today's injuries; the plain team rating beside it</small></h2><div id="teamsT"></div>`;
   table($('#teamsT'), [
     { key: 'strength', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
     { key: 't', label: 'Team', fmt: (v, r) => `${pill(v)} <span style="margin-left:8px">${esc(r.name)}</span>` },
@@ -391,7 +387,7 @@ render.teams = function () {
 render.players = function () {
   const el = $('#tab-players');
   if (!el.dataset.ready) {
-    el.innerHTML = `<h2>Players <small>offence and defence in Elo points, for a player on the floor all game</small></h2>
+    el.innerHTML = `<h2>Players <small>offence and defence in rating points, for a player on the floor all game</small></h2>
       <div class="bar"><input type="text" id="pq" placeholder="Search a player"><select id="pt"><option value="">All teams</option>${Object.keys(TEAMS).map(t => `<option>${t}</option>`).join('')}</select><label class="muted"><input type="checkbox" id="pall"> show everyone</label><span class="grow"></span><span class="muted" id="pn"></span></div><div id="playersT"></div>`;
     el.dataset.ready = 1;
     ['#pq', '#pt', '#pall'].forEach(s => $(s).oninput = render.players);
@@ -409,11 +405,11 @@ render.players = function () {
     { key: 'd', label: 'Defence', num: true, fmt: signed },
     { key: 'min', label: 'Min', num: true, fmt: v => v.toFixed(0) },
     { key: 'games', label: 'GP', num: true },
-    { key: 'prior', label: 'Start', fmt: v => `<span class="muted">${v === 'raptor' ? 'RAPTOR' : 'rookie'}</span>` },
+    { key: 'prior', label: 'Prior', fmt: v => `<span class="muted">${v === 'raptor' ? 'RAPTOR' : 'rookie'}</span>` },
   ], rows, 'elo');
 };
 render.coaches = function () {
-  $('#tab-coaches').innerHTML = `<h2>Coaches <small>moves with the margin surprise; travels with the coach</small></h2><div id="coachT"></div>`;
+  $('#tab-coaches').innerHTML = `<h2>Coaches <small>moves with each game's surprise; follows the coach between teams</small></h2><div id="coachT"></div>`;
   table($('#coachT'), [
     { key: 'elo', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
     { key: 'name', label: 'Coach', fmt: v => `<b>${esc(v)}</b>` },
@@ -429,7 +425,7 @@ render.record = function () {
   const months = {}; for (const g of R) { const m = g.date.slice(0, 7); (months[m] = months[m] || []).push(g); }
   const mrows = Object.entries(months).sort((a, b) => b[0] < a[0] ? -1 : 1).map(([m, gs]) => ({ m, n: gs.length, su: rec(gs, 'su').s, ats: rec(gs.filter(g => g.line !== null), 'ats').s, ou: rec(gs.filter(g => g.totalLine !== null), 'ou').s }));
   const f = x => x ? `${x.logloss.toFixed(3)} · ${(x.acc * 100).toFixed(1)}% · ${x.mae.toFixed(1)} pts` : '—';
-  $('#tab-record').innerHTML = `<h2>Season record <small>what the site said before each game, graded</small></h2>
+  $('#tab-record').innerHTML = `<h2>Record <small>every number this site published before tip-off, graded</small></h2>
     <div class="strip"><div class="stat"><b>${su.s}</b><span>Straight up${su.pct !== null ? ' · ' + fmtPct(su.pct) : ''}</span></div><div class="stat"><b>${ats.s}</b><span>Against the spread${ats.pct !== null ? ' · ' + fmtPct(ats.pct) : ''}</span></div><div class="stat"><b>${ou.s}</b><span>Totals${ou.pct !== null ? ' · ' + fmtPct(ou.pct) : ''}</span></div><div class="stat"><b>${R.length}</b><span>Games graded</span></div></div>
     ${R.length ? `<div class="two"><div><h2>By month</h2><div class="wrap"><table class="tbl"><thead><tr><th>Month</th><th class="num">Games</th><th class="num">SU</th><th class="num">ATS</th><th class="num">O/U</th></tr></thead><tbody>${mrows.map(r => `<tr><td>${r.m}</td><td class="num">${r.n}</td><td class="num">${r.su}</td><td class="num">${r.ats}</td><td class="num">${r.ou}</td></tr>`).join('')}</tbody></table></div></div>
       <div><h2>Latest</h2><div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>Pick</th><th class="num">Said</th><th>Result</th></tr></thead><tbody>${[...R].sort((a, b) => b.date < a.date ? -1 : 1).slice(0, 40).map(g => `<tr><td class="muted">${dayNum(g.date)}</td><td>${pill(g.away)} <span class="muted">@</span> ${pill(g.home)} <span class="muted num">${g.awayScore}-${g.homeScore}</span></td><td>${pill(g.pick)} <span class="muted">${fmtSp(g.pick === g.home ? g.spread : -g.spread)}</span></td><td class="num">${fmtPct(g.pick === g.home ? g.pHome : 1 - g.pHome)}</td><td><span class="res ${g.su === null ? 'push' : g.su ? 'won' : 'lost'}">${g.su === null ? 'tie' : g.su ? 'hit' : 'miss'}</span>${g.ats !== null ? ` <span class="res ${g.ats ? 'won' : 'lost'}">ATS</span>` : ''}</td></tr>`).join('')}</tbody></table></div></div></div>` : `<div class="empty"><b>Nothing graded yet</b>The record starts on opening night. Every morning the job publishes a number on each game; once the game is final it is graded here against that number, never against a replay.</div>`}
@@ -445,7 +441,7 @@ render.mine = function () {
   const games = ids.map(id => ({ id, side: M.picks[id], g: gameById(id) })).filter(x => x.g).sort((a, b) => a.g.date < b.g.date ? 1 : -1);
   const graded = games.map(x => ({ su: x.g.homeScore === null ? undefined : winner(x.g) === null ? null : winner(x.g) === x.side }));
   const r = rec(graded, 'su');
-  $('#tab-mine').innerHTML = `<h2>My picks <small>tap a team on any card to pick it; kept in this browser only</small></h2>
+  $('#tab-mine').innerHTML = `<h2>My picks <small>select a team on any card; kept in this browser only</small></h2>
     <div class="strip"><div class="stat"><b>${r.s}</b><span>Your record${r.pct !== null ? ' · ' + fmtPct(r.pct) : ''}</span></div><div class="stat"><b>${games.filter(x => x.g.homeScore === null).length}</b><span>Open</span></div><div class="stat"><b>${games.filter(x => x.side === pickOf(x.g)).length}/${games.length}</b><span>With the model</span></div></div>
     ${games.length ? `<div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>You</th><th>Model</th><th>Result</th><th></th></tr></thead><tbody>${games.map(x => { const w = winner(x.g), fin = x.g.homeScore !== null; return `<tr><td class="muted">${dayNum(x.g.date)}</td><td>${pill(x.g.away)} <span class="muted">@</span> ${pill(x.g.home)}${fin ? ` <span class="muted num">${x.g.awayScore}-${x.g.homeScore}</span>` : ''}</td><td>${pill(x.side)}</td><td>${pickOf(x.g) ? `${pill(pickOf(x.g))} <span class="muted">${fmtPct(Math.max(x.g.model.pHome, 1 - x.g.model.pHome))}</span>` : '—'}</td><td>${fin ? `<span class="res ${w === null ? 'push' : w === x.side ? 'won' : 'lost'}">${w === null ? 'tie' : w === x.side ? 'won' : 'lost'}</span>` : '<span class="res open">open</span>'}</td><td>${fin ? '' : `<button class="btn ghost" data-un="${x.id}">remove</button>`}</td></tr>`; }).join('')}</tbody></table></div>` : `<div class="empty"><b>No picks yet</b>Open Tonight and tap a team badge.</div>`}`;
   $$('#tab-mine [data-un]').forEach(b => b.onclick = () => { delete M.picks[b.dataset.un]; saveMine(); badges(); render.mine(); });
@@ -461,7 +457,7 @@ render.parlay = function () {
   const saved = M.tickets.map(t => { const rs = t.legs.map(legResult); const res = rs.includes('lost') ? 'lost' : rs.includes('open') ? 'open' : rs.every(r => r === 'push') ? 'push' : 'won'; return { ...t, res, rs }; });
   const won = saved.filter(t => t.res === 'won'), settled = saved.filter(t => t.res === 'won' || t.res === 'lost');
   const net = settled.reduce((a, t) => a + (t.res === 'won' ? t.stake * t.dec - t.stake : -t.stake), 0);
-  el.innerHTML = `<h2>Parlay builder <small>legs are independent games, so the fair price is the product of the model's chances</small></h2>
+  el.innerHTML = `<h2>Ticket <small>legs are independent games, so the fair price is the product of the model's chances</small></h2>
     <div class="two"><div class="ticket">${legs.length ? `<ul class="legs">${legs.map((l, i) => `<li><div class="l"><b>${legLabel(l)}</b><span>${pill(gameById(l.id).away)} @ ${pill(gameById(l.id).home)} · ${dayNum(gameById(l.id).date)}</span></div><span class="num">model <b>${l.p === null ? '—' : fmtPct(l.p)}</b><br><span class="muted">fair ${l.p === null ? '—' : fmtAm(probToAm(l.p))}</span></span><label class="num"><span class="muted" style="font-size:11px">book</span><br><input type="number" step="5" value="${l.odds}" data-odds="${i}"></label><button class="x" data-rm="${i}" title="remove">×</button></li>`).join('')}</ul>
       <div class="bar" style="margin:14px 0 0"><label>Stake $ <input type="number" id="stake" value="${stake}" min="1" step="5"></label><span class="grow"></span><button class="btn hot" id="saveT">Save ticket</button><button class="btn ghost" id="clearT">Clear</button></div>
       <div class="tot"><div><b>${fmtPct(fair)}</b><span>Fair chance</span></div><div><b>${fmtAm(probToAm(fair))}</b><span>Fair odds</span></div><div><b>${fmtAm(dec > 1 ? (dec >= 2 ? (dec - 1) * 100 : -100 / (dec - 1)) : null)}</b><span>Book parlay</span></div><div><b>$${(stake * dec).toFixed(0)}</b><span>Pays</span></div><div><b class="${ev >= 0 ? 'lime' : 'rose'}">${ev >= 0 ? '+' : ''}$${ev.toFixed(2)}</b><span>Expected</span></div></div>`

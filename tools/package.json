@@ -1,0 +1,8 @@
+{
+  "name": "nba-hub-tools",
+  "private": true,
+  "description": "jsdom for the viewer smoke test; the job's own tools need nothing",
+  "devDependencies": {
+    "jsdom": "^26.1.0"
+  }
+}

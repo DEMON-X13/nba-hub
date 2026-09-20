@@ -1,6 +1,6 @@
 # NBA Hub
 
-The NBA half of the hub: a team model, a player, coach and matchup model, a daily job, and (next) a betting page like `betting/`.
+The NBA half of the hub: a team model, a player, coach and matchup model, a daily job, and the site.
 The NBA has no weeks, so the unit is the slate, one Eastern calendar day. Ratings update after every
 final, the job runs every morning, and the page will show today's and tomorrow's games.
 
@@ -22,9 +22,13 @@ final, the job runs every morning, and the page will show today's and tomorrow's
 | `tools/fetch.js` | Daily pull of finals, the coming slate and its lines |
 | `tools/fetch_box.js` | Daily pull of box scores, the injury report, the coaches and the rosters |
 | `tools/elo.js` | The team model: replay, fit, report |
-| `tools/players.js` | The player, coach and matchup model: replay, fit, report, tonight's lineups |
+| `tools/players.js` | The player, coach and matchup model: replay, fit, report, tonight's lineups; logs the day's numbers to `data/predictions.csv` |
+| `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
+| `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players, coaches, the backtest |
+| `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, a pick, a parlay ticket and its grading |
 
-No dependencies: Node 22 and its built-in fetch.
+No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke test needs jsdom (`npm ci` in `tools/`).
 
 ## Data
 
@@ -164,16 +168,34 @@ node nba-hub/tools/elo.js          # team model replay; add "fit" to refit
 node nba-hub/tools/players.js      # player model replay; add "fit" to refit
 ```
 
+## The site
+
+`nba-hub/index.html`, its own look: dark, one card per game. Tabs:
+
+- **Tonight**: a day strip from yesterday to ten days out. Each card has the two teams (tap a badge to
+  make it your pick), the model's win chance and a probability bar, the spread and total, the market
+  line with an edge chip when the model is three or more points away, who is out on each side and what
+  it costs in points, a lineups drawer with projected minutes and each player's contribution and the
+  coach, and two buttons that put the model's side on a parlay ticket (moneyline or spread). Finals
+  show the score and whether the model hit. Before the schedule appears the tab counts down to
+  opening night over the preseason board.
+- **Teams, Players, Coaches**: sortable tables of the ratings; players searchable and filterable by team.
+- **Record**: the season graded straight up, against the spread and on totals, by month and game, from
+  `predictions.csv`; and the backtest table.
+- **My Picks**: the visitor's picks, graded against the published finals; browser only.
+- **Parlay**: the ticket. Legs are independent games, so the fair chance is the product of the model's
+  chances; spread and total legs use a normal margin with a 12.5-point spread around the model's number.
+  The book's odds go on each leg; the ticket shows fair odds, what the book pays and the expected
+  value. Saved tickets grade themselves as the games go final.
+- **How it works**: the model in plain words with the fitted numbers.
+
+Nothing a visitor does reaches the published files. The job runs `publish.js`, `build.js` and the
+smoke test after the models, and commits `state.json` and both pages.
+
 ## What comes next, in order
 
-1. **The page**: `nba-hub/index.html` and `nba-hub/admin.html` built the way `betting/` builds them,
-   reading the published files: today's and tomorrow's slate with the model's pick, chance, spread
-   and total beside the line, each side's lineup with who is out and what it costs, the ratings tabs
-   (teams, players by offence and defence, coaches), a record by day and month, picks kept in the
-   browser and graded against the published finals, and a Parlay Builder whose legs are independent
-   games, so a team parlay's fair price is the product of the model's chances.
-2. **Style matchups**: the four factors each team forces and allows (shooting, turnovers, rebounding,
+1. **Style matchups**: the four factors each team forces and allows (shooting, turnovers, rebounding,
    free throws) as a fitted term on the residual, on top of pace and efficiency.
-3. **Player props on the same page**: projections are minutes times a per-minute rate, so they reuse
+2. **Player props on the same page**: projections are minutes times a per-minute rate, so they reuse
    the projected minutes and the injury report. Fair lines first, book prices only where credits
    allow; same-game legs priced with a correlation table like the NFL props model's.

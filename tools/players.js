@@ -399,6 +399,7 @@ function main() {
   out.generated = same ? prev.generated : new Date().toISOString().slice(0, 16) + 'Z';
   const body = JSON.stringify(out, null, 1) + '\n';
   if (!prev || body !== fs.readFileSync(OUT, 'utf8')) fs.writeFileSync(OUT, body);
+  logPredictions(games, R.upcoming, ctx);
   const f = m => `${m.logloss} / ${(m.acc * 100).toFixed(1)}% / ${m.mae}`;
   L.log(`holdout (logloss / straight up / spread error): team Elo ${f(report.teamElo.holdout)} | actual minutes ${f(report.actual.holdout)} | known lineup ${f(report.known.holdout)} | previous lineup ${f(report.naive.holdout)} | totals error ${report.known.holdout.totalMae}`);
   const top = Object.values(playersOut).sort((a, b) => b.elo - a.elo).slice(0, 8).map(p => `${p.name} ${p.elo}`).join(', ');
@@ -406,5 +407,34 @@ function main() {
   L.log('top coaches: ' + Object.entries(coachesOut).sort((a, b) => b[1].elo - a[1].elo).slice(0, 5).map(([n, c]) => `${n} ${c.elo}`).join(', '));
   L.log(`players.json ${same ? 'unchanged' : 'written'}, ${Object.keys(R.upcoming).length} upcoming`);
 }
+/* nba-hub/data/predictions.csv: the model's number on each game as published before it was played,
+   so the record is what the site showed and not a replay. A game not yet final is rewritten each run
+   (the last pre-game number wins); a final's row is left alone. The market line stored is the one the
+   games table carried at the time. */
+function logPredictions(games, upcoming, ctx) {
+  const f = path.join(DATA, 'predictions.csv');
+  const head = 'game_id,date,away,home,pHome,spread,total,team_pHome,home_line,total_line,logged';
+  const rows = new Map();
+  if (fs.existsSync(f)) for (const l of fs.readFileSync(f, 'utf8').trim().split('\n').slice(1)) { if (l) rows.set(l.split(',')[0], l); }
+  const final = new Set(games.filter(g => g.status === 'final').map(g => g.game_id));
+  const stamp = new Date().toISOString().slice(0, 16) + 'Z';
+  let n = 0;
+  for (const g of games) {
+    if (final.has(g.game_id) || !upcoming[g.game_id]) continue;
+    const u = upcoming[g.game_id];
+    const td = ctx.teamDiff[g.game_id];
+    const teamP = td === undefined ? '' : E.prob(td).toFixed(4);
+    const old = rows.get(g.game_id);
+    const line = [g.game_id, g.date, g.away, g.home, u.pHome, u.spread, u.total, teamP, g.home_line || '', g.total || '', stamp].join(',');
+    /* unchanged numbers keep their old stamp, so a quiet rerun rewrites nothing */
+    if (old && old.split(',').slice(0, 10).join(',') === line.split(',').slice(0, 10).join(',')) continue;
+    rows.set(g.game_id, line); n++;
+  }
+  const bodyOut = [head].concat([...rows.values()].sort()).join('\n') + '\n';
+  const before = fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : '';
+  if (bodyOut !== before) fs.writeFileSync(f, bodyOut);
+  L.log(`predictions.csv: ${rows.size} rows, ${n} written this run`);
+}
+
 if (require.main === module) main();
 module.exports = { replay, score, fit, research, loadBoxes, loadTeamBoxes, loadCoaches, loadRaptor, makeLiveLineup, DEFAULT, FIRST, WARM_TO, FIT_TO };

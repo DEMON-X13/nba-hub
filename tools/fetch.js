@@ -52,7 +52,7 @@ function parseDay(j) {
     rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 2 ? 'REG' : 'POST', away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
-      home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || '') });
+      home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });
   }
   return rows;
 }
@@ -66,7 +66,7 @@ function merge(have, date, fresh) {
     if (old && old.source !== 'espn' && old.status === 'final') continue;   // history already has this final
     /* ESPN carries odds only before tip-off, so a final arrives without them: keep the last line seen,
        the morning-of line from the day's earlier pull */
-    if (old) { if (!r.home_line && old.home_line) r.home_line = old.home_line; if (!r.total && old.total) r.total = old.total; }
+    if (old) { if (!r.home_line && old.home_line) r.home_line = old.home_line; if (!r.total && old.total) r.total = old.total; if (!r.tip && old.tip) r.tip = old.tip; }
     byId.set(r.game_id, r);
   }
   return [...byId.values()];

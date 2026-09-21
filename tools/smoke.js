@@ -1,6 +1,6 @@
 /* Smoke test for the built viewer.
  *
- *   node tools/smoke.js        (needs jsdom: npm install in nba-hub/tools)
+ *   node tools/smoke.js        (needs jsdom: npm install in tools/)
  *
  * Loads index.html in jsdom with fetch stubbed to serve state.json plus one fabricated
  * game for tonight, and checks: the update stamp shows, every tab renders without a script error, a
@@ -24,7 +24,7 @@ const withGames = (fin) => ({ ...state, slate: [fake('t1', state.today, fin), fa
 function load(page, st, mine) {
   const html = fs.readFileSync(path.join(ROOT, page), 'utf8').replace(/<link[^>]*fonts[^>]*>/g, '');
   const errors = [];
-  const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/nba-hub/',
+  const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/',
     beforeParse(w) {
       w.fetch = async url => ({ ok: /state\.json/.test(String(url)), status: 200, json: async () => st });
       w.scrollTo = () => {}; w.URL.createObjectURL = () => 'blob:x';

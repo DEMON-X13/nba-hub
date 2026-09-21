@@ -1,8 +1,8 @@
 /* Smoke test for the built viewer.
  *
- *   node nba-hub/tools/smoke.js        (needs jsdom: npm install in nba-hub/tools)
+ *   node tools/smoke.js        (needs jsdom: npm install in nba-hub/tools)
  *
- * Loads nba-hub/index.html in jsdom with fetch stubbed to serve nba-hub/state.json plus one fabricated
+ * Loads index.html in jsdom with fetch stubbed to serve state.json plus one fabricated
  * game for tonight, and checks: the update stamp shows, every tab renders without a script error, a
  * visitor's pick is kept in their own storage and shows on My Picks, a parlay leg reaches the ticket
  * and a saved ticket grades once the game is final, and the Data tab is only on the admin page.
@@ -11,18 +11,18 @@
 const fs = require('fs');
 const path = require('path');
 const { JSDOM } = require('jsdom');
-const ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(__dirname, '..');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let fails = 0; const check = (c, m) => { if (!c) { fails++; console.log('  FAIL', m); } else console.log('  ok  ', m); };
 
-const state = JSON.parse(fs.readFileSync(path.join(ROOT, 'nba-hub', 'state.json'), 'utf8'));
+const state = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'));
 const side = t => ({ team: t, strength: 1500, offence: 0, defence: 0, coach: { name: 'Coach', elo: 0 }, lineup: [{ id: '1', name: 'Some Guard', pos: 'G', min: 34, o: 20, d: 10, adds: 21 }], out: [{ id: '2', name: 'Some Star', status: 'Out', min: 33, costs: 60 }] });
 const fake = (id, date, fin) => ({ id, date, tip: date + 'T23:30:00Z', type: 'REG', away: 'BOS', home: 'NYK', neutral: false, status: fin ? 'final' : 'scheduled', awayScore: fin ? 98 : null, homeScore: fin ? 105 : null,
   line: -2.5, totalLine: 220, model: { pHome: 0.61, spread: -3.5, total: 224.5, pace: 99, home: side('NYK'), away: side('BOS') }, team: { pHome: 0.55, spread: -1.5 }, published: null });
 const withGames = (fin) => ({ ...state, slate: [fake('t1', state.today, fin), fake('t0', state.today.slice(0, 8) + '01', true)] });
 
 function load(page, st, mine) {
-  const html = fs.readFileSync(path.join(ROOT, 'nba-hub', page), 'utf8').replace(/<link[^>]*fonts[^>]*>/g, '');
+  const html = fs.readFileSync(path.join(ROOT, page), 'utf8').replace(/<link[^>]*fonts[^>]*>/g, '');
   const errors = [];
   const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/nba-hub/',
     beforeParse(w) {

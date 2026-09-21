@@ -1,8 +1,8 @@
 /* The NBA game model: Elo with margin of victory, home court, rest and altitude.
  *
- *   node nba-hub/tools/elo.js          replay nba-hub/data/games.csv with the params in nba-hub/model.json,
+ *   node tools/elo.js          replay data/games.csv with the params in model.json,
  *                                  write ratings, the holdout report and the upcoming slate's numbers
- *   node nba-hub/tools/elo.js fit      search the params on the fit seasons, then do the same
+ *   node tools/elo.js fit      search the params on the fit seasons, then do the same
  *
  * Every team starts a season carried part way back to the mean. Before a game each side's rating is
  * adjusted for home court (none at a neutral site), altitude (Denver, Utah at home), a back to back
@@ -19,7 +19,7 @@ const fs = require('fs');
 const path = require('path');
 const L = require('./lib');
 
-const MODEL = path.join(L.ROOT, 'nba-hub', 'model.json');
+const MODEL = path.join(L.ROOT, 'model.json');
 const MEAN = 1500;
 const WARM_TO = 2007, FIT_TO = 2022;               // seasons <= WARM_TO warm up; WARM_TO < s <= FIT_TO fit; later = holdout
 const ALT = new Set(['DEN', 'UTA']);

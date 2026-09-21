@@ -1,6 +1,8 @@
-# NBA Hub
+# nba-hub
 
-The NBA half of the hub: a team model, a player, coach and matchup model, a daily job, and the site.
+One repo, one scheduled job, one site. The job pulls last night's box scores and today's injury report,
+replays a team model and a player, coach and matchup model, prices the slate, and commits the page.
+GitHub Pages serves the repo root: `index.html` is the site, `admin.html` the same page with a Data tab.
 The NBA has no weeks, so the unit is the slate, one Eastern calendar day. Ratings update after every
 final, the job runs every morning, and the page will show today's and tomorrow's games.
 
@@ -114,7 +116,7 @@ The 2026 holdout, four ways:
 
 Totals: 15.3 points of error.
 
-### Walk-forward test (`node nba-hub/tools/players.js research`, writes `research.json`)
+### Walk-forward test (`node tools/players.js research`, writes `research.json`)
 
 One holdout can flatter a model, so each season from 2024 on is also scored cold: the parameters are
 searched again on only the seasons before it, then that season is played through once. Log loss /
@@ -152,25 +154,25 @@ San Antonio and New York the strongest teams and the Wizards the weakest.
 
 ## Runs
 
-`.github/workflows/nba.yml` runs every morning at 7am Eastern: the days since the last final plus ten
+`.github/workflows/update.yml` runs every morning at 7am Eastern: the days since the last final plus ten
 days ahead, the new box scores, the injury report, the coaches and rosters, then both models. It
 commits the data folder and the two model files only if they changed. On demand it takes a date
-range and a refit switch. A push that changes `nba-hub/tools/*.js` runs it once (on a `claude/`
+range and a refit switch. A push that changes the tools or the app runs it once (on a `claude/`
 branch too, committing there; the schedule only fires from `main`).
 
 Local:
 
 ```
-node nba-hub/tools/history.js      # once; downloads the history file (or --file path/to/nba_elo.csv)
-node nba-hub/tools/fetch.js        # needs ESPN reachable; --from / --to for a range
-node nba-hub/tools/fetch_box.js    # needs ESPN reachable; --from / --to for seasons, --budget minutes
-node nba-hub/tools/elo.js          # team model replay; add "fit" to refit
-node nba-hub/tools/players.js      # player model replay; add "fit" to refit
+node tools/history.js      # once; downloads the history file (or --file path/to/nba_elo.csv)
+node tools/fetch.js        # needs ESPN reachable; --from / --to for a range
+node tools/fetch_box.js    # needs ESPN reachable; --from / --to for seasons, --budget minutes
+node tools/elo.js          # team model replay; add "fit" to refit
+node tools/players.js      # player model replay; add "fit" to refit
 ```
 
 ## The site
 
-`nba-hub/index.html`, its own look: graphite blue with an orange accent, bold display type, faint court lines, team-coloured badges, cards like tickets; one card per game. Tabs:
+`index.html`, its own look: graphite blue with an orange accent, bold display type, faint court lines, team-coloured badges, cards like tickets; one card per game. Tabs:
 
 - **Tonight**: a day strip from yesterday to ten days out. Each card has the two teams (tap a badge to
   make it your pick), the model's win chance and a probability bar, the spread and total, the market

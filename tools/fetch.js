@@ -1,8 +1,8 @@
 /* Daily pull of NBA results, the coming slate and its lines from ESPN's public scoreboard feed.
  *
- *   node nba-hub/tools/fetch.js                      every day from the last final in games.csv to ten days out
- *   node nba-hub/tools/fetch.js --from 2025-03-18 --to 2025-06-30
- *   node nba-hub/tools/fetch.js --offline data.json  parse one saved scoreboard payload (for tests)
+ *   node tools/fetch.js                      every day from the last final in games.csv to ten days out
+ *   node tools/fetch.js --from 2025-03-18 --to 2025-06-30
+ *   node tools/fetch.js --offline data.json  parse one saved scoreboard payload (for tests)
  *
  * One request per calendar day (Eastern). A day already complete in games.csv (every game final) is not
  * asked for again, and July to September are skipped, so a rerun costs a handful of requests. Games are

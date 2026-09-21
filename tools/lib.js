@@ -3,8 +3,8 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..', '..');
-const GAMES = path.join(ROOT, 'nba-hub', 'data', 'games.csv');
+const ROOT = path.resolve(__dirname, '..');
+const GAMES = path.join(ROOT, 'data', 'games.csv');
 const COLS = ['game_id', 'season', 'date', 'type', 'away', 'home', 'away_score', 'home_score', 'neutral', 'status', 'home_line', 'total', 'source', 'espn_id', 'tip'];
 
 /* The 30 codes this site uses. Both sources are mapped onto them. */
@@ -40,7 +40,7 @@ function writeGames(rows) {
 }
 
 /* ESPN refuses some header sets from some networks; try a few. Plain UA works from GitHub's runners (news tracker, checked 2026-09-15). */
-const HEADER_SETS = [{ 'User-Agent': 'nfl-hub-nba/1.0 (+https://github.com/DEMON-X13/nfl-hub)', 'Accept': 'application/json' }, {}, { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', 'Accept': 'application/json' }];
+const HEADER_SETS = [{ 'User-Agent': 'nba-hub/1.0 (+https://github.com/DEMON-X13/nba-hub)', 'Accept': 'application/json' }, {}, { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', 'Accept': 'application/json' }];
 async function fetchRetry(url) {
   let last;
   for (let i = 0; i < HEADER_SETS.length; i++) {

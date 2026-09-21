@@ -1,6 +1,6 @@
-/* Write nba-hub/state.json, the one file the site loads.
+/* Write state.json, the one file the site loads.
  *
- *   node nba-hub/tools/publish.js
+ *   node tools/publish.js
  *
  * From the games table, both models' files, the predictions log and the injury report:
  *   slate     every game from yesterday to ten days out, with the model's numbers, the lineups, who is
@@ -18,9 +18,9 @@ const fs = require('fs');
 const path = require('path');
 const L = require('./lib');
 
-const DATA = path.join(L.ROOT, 'nba-hub', 'data');
-const OUT = path.join(L.ROOT, 'nba-hub', 'state.json');
-const read = f => JSON.parse(fs.readFileSync(path.join(L.ROOT, 'nba-hub', f), 'utf8'));
+const DATA = path.join(L.ROOT, 'data');
+const OUT = path.join(L.ROOT, 'state.json');
+const read = f => JSON.parse(fs.readFileSync(path.join(L.ROOT, f), 'utf8'));
 const csv = f => { const p = path.join(DATA, f); if (!fs.existsSync(p)) return []; const lines = fs.readFileSync(p, 'utf8').trim().split('\n'); const h = lines.shift().split(','); return lines.filter(Boolean).map(l => { const v = l.split(','); const o = {}; h.forEach((k, i) => { o[k] = v[i] === undefined ? '' : v[i]; }); return o; }); };
 const num = v => v === '' || v === undefined ? null : +v;
 

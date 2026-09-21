@@ -1,27 +1,27 @@
 /* Box scores, the injury report and the coaches, from ESPN's public feeds.
  *
- *   node nba-hub/tools/fetch_box.js                 every final from the 2022 season on that has no box score yet,
+ *   node tools/fetch_box.js                 every final from the 2022 season on that has no box score yet,
  *                                               then today's injury report and each team's coach
- *   node nba-hub/tools/fetch_box.js --from 2022 --to 2026 --budget 300   (seasons, minutes)
- *   node nba-hub/tools/fetch_box.js --offline summary.json                (parse one saved payload, for tests)
+ *   node tools/fetch_box.js --from 2022 --to 2026 --budget 300   (seasons, minutes)
+ *   node tools/fetch_box.js --offline summary.json                (parse one saved payload, for tests)
  *
- * Writes, per season, nba-hub/data/box_<season>.csv (one row per player per game: minutes and the box line)
- * and nba-hub/data/teambox_<season>.jsonl (one line per team per game: every team statistic the feed gives).
+ * Writes, per season, data/box_<season>.csv (one row per player per game: minutes and the box line)
+ * and data/teambox_<season>.jsonl (one line per team per game: every team statistic the feed gives).
  * A game's ESPN id comes from the games table when the daily fetch stored it, else from the scoreboard
  * for that day (one request per day, so a season of history costs about 1,500 requests). The first
- * payload read is saved as nba-hub/data/sample_summary.json for inspection. A game whose payload cannot be
+ * payload read is saved as data/sample_summary.json for inspection. A game whose payload cannot be
  * parsed is logged and skipped; the run fails only if nothing at all could be read.
  *
- * nba-hub/data/injuries.json is today's report (status per player per team) and nba-hub/data/injuries_log.csv
- * keeps one line per player per day so availability can be replayed later. nba-hub/data/coaches_espn.json
- * is each team's head coach as the roster feed lists them today, and nba-hub/data/rosters_espn.json the roster.
+ * data/injuries.json is today's report (status per player per team) and data/injuries_log.csv
+ * keeps one line per player per day so availability can be replayed later. data/coaches_espn.json
+ * is each team's head coach as the roster feed lists them today, and data/rosters_espn.json the roster.
  */
 'use strict';
 const fs = require('fs');
 const path = require('path');
 const L = require('./lib');
 
-const DATA = path.join(L.ROOT, 'nba-hub', 'data');
+const DATA = path.join(L.ROOT, 'data');
 const BASE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/';
 const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };

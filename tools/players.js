@@ -1,8 +1,8 @@
 /* The player, coach and matchup model.
  *
- *   node nba-hub/tools/players.js          replay the box scores with the params in nba-hub/players.json,
+ *   node tools/players.js          replay the box scores with the params in players.json,
  *                                      write ratings, the report and tonight's numbers
- *   node nba-hub/tools/players.js fit      search the params on the fit seasons first
+ *   node tools/players.js fit      search the params on the fit seasons first
  *
  * Every player carries two ratings, offence and defence, in Elo points for a player on the floor all
  * game. A team's strength for a game is 1500 plus the coach plus each player's ratings weighted by his
@@ -25,7 +25,7 @@
  * previous game's lineup (no report at all), beside the team Elo on the same games.
  *
  * Seasons: box scores start in 2022. 2022 warms up, 2023-2025 fit, 2026 held out; "research" walks forward
- * season by season (fit on the seasons before, score the season cold) and writes nba-hub/research.json.
+ * season by season (fit on the seasons before, score the season cold) and writes research.json.
  */
 'use strict';
 const fs = require('fs');
@@ -33,9 +33,9 @@ const path = require('path');
 const L = require('./lib');
 const E = require('./elo');
 
-const DATA = path.join(L.ROOT, 'nba-hub', 'data');
-const OUT = path.join(L.ROOT, 'nba-hub', 'players.json');
-const MODEL = path.join(L.ROOT, 'nba-hub', 'model.json');
+const DATA = path.join(L.ROOT, 'data');
+const OUT = path.join(L.ROOT, 'players.json');
+const MODEL = path.join(L.ROOT, 'model.json');
 const FIRST = 2022, WARM_TO = 2022, FIT_TO = 2025;
 const DEFAULT = { ke: 0.4, kc: 0.05, carryP: 0.6, carryC: 0.5, prior: 1.25, rookie: -60, clip: 30, minGames: 8, blend: 0.1,
   pm: 0, pmClip: 15, winK: 0, shrink: 0, recency: 0, postMult: 1, wexp: 1 };
@@ -353,7 +353,7 @@ function main() {
   let P = prev ? { ...DEFAULT, ...prev.params } : { ...DEFAULT };
   if (process.argv[2] === 'research') {
     const R = research(ctx);
-    fs.writeFileSync(path.join(L.ROOT, 'nba-hub', 'research.json'), JSON.stringify(R, null, 1) + '\n');
+    fs.writeFileSync(path.join(L.ROOT, 'research.json'), JSON.stringify(R, null, 1) + '\n');
     L.log('research.json written'); P = R.finalParams;
   }
   if (process.argv[2] === 'fit') P = fit(ctx);
@@ -407,7 +407,7 @@ function main() {
   L.log('top coaches: ' + Object.entries(coachesOut).sort((a, b) => b[1].elo - a[1].elo).slice(0, 5).map(([n, c]) => `${n} ${c.elo}`).join(', '));
   L.log(`players.json ${same ? 'unchanged' : 'written'}, ${Object.keys(R.upcoming).length} upcoming`);
 }
-/* nba-hub/data/predictions.csv: the model's number on each game as published before it was played,
+/* data/predictions.csv: the model's number on each game as published before it was played,
    so the record is what the site showed and not a replay. A game not yet final is rewritten each run
    (the last pre-game number wins); a final's row is left alone. The market line stored is the one the
    games table carried at the time. */

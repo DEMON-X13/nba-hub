@@ -1,6 +1,6 @@
 /* One-time import of the game history the model is fitted on.
  *
- *   node nba-hub/tools/history.js [--file path/to/nba_elo.csv]
+ *   node tools/history.js [--file path/to/nba_elo.csv]
  *
  * Source: Neil Paine's continuation of the FiveThirtyEight NBA Elo file (every game since 1946,
  * one row per team per game), https://github.com/Neil-Paine-1/NBA-elo. Seasons from 2005 on are

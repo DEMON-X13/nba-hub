@@ -1,5 +1,5 @@
 {
- "date": "2026-09-21",
+ "date": "2026-09-22",
  "teams": {
   "ATL": [
    {
@@ -119,7 +119,7 @@
     "name": "Henri Veesaar",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397183",
@@ -2777,7 +2777,7 @@
     "name": "Jalen Williams",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432823",
@@ -3985,7 +3985,7 @@
     "name": "Trae Young",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ]
  }

@@ -1,7 +1,16 @@
 {
- "date": "2026-09-21",
+ "date": "2026-09-22",
  "teams": {
   "ATL": [
+   {
+    "id": "5105571",
+    "name": "Henri Veesaar",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee",
+    "date": "2026-09-21",
+    "returns": "2027-07-01"
+   },
    {
     "id": "4712863",
     "name": "Mouhamed Gueye",
@@ -415,6 +424,15 @@
   ],
   "OKC": [
    {
+    "id": "4593803",
+    "name": "Jalen Williams",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Strain",
+    "date": "2026-09-21",
+    "returns": "2026-10-01"
+   },
+   {
     "id": "4222252",
     "name": "Isaiah Hartenstein",
     "pos": "C",
@@ -448,15 +466,6 @@
     "status": "Day-To-Day",
     "detail": "Knee Surgery",
     "date": "2026-07-01",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4593803",
-    "name": "Jalen Williams",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Strain",
-    "date": "2026-06-16",
     "returns": "2026-10-01"
    },
    {
@@ -694,6 +703,15 @@
   ],
   "WAS": [
    {
+    "id": "4277905",
+    "name": "Trae Young",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Quadriceps Bruise",
+    "date": "2026-09-21",
+    "returns": "2026-10-01"
+   },
+   {
     "id": "4606840",
     "name": "Jamir Watkins",
     "pos": "G",
@@ -718,15 +736,6 @@
     "status": "Day-To-Day",
     "detail": "Finger Sprain",
     "date": "2026-06-24",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4277905",
-    "name": "Trae Young",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Quadriceps Bruise",
-    "date": "2026-06-22",
     "returns": "2026-10-01"
    }
   ]

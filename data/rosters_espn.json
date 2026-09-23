@@ -1,5 +1,5 @@
 {
- "date": "2026-09-22",
+ "date": "2026-09-23",
  "teams": {
   "ATL": [
    {
@@ -38,6 +38,13 @@
     "injured": false
    },
    {
+    "id": "2578185",
+    "name": "Dorian Finney-Smith",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "5149077",
     "name": "Kingston Flemings",
     "pos": "G",
@@ -57,13 +64,6 @@
     "pos": "F",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "2990984",
-    "name": "Buddy Hield",
-    "pos": "G",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "4701230",
@@ -89,13 +89,6 @@
    {
     "id": "2490149",
     "name": "CJ McCollum",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4433629",
-    "name": "Ryan Nembhard",
     "pos": "G",
     "status": "active",
     "injured": false
@@ -415,16 +408,16 @@
     "injured": false
    },
    {
-    "id": "2578185",
-    "name": "Dorian Finney-Smith",
-    "pos": "F",
+    "id": "4701225",
+    "name": "PJ Hall",
+    "pos": "C",
     "status": "active",
     "injured": false
    },
    {
-    "id": "4701225",
-    "name": "PJ Hall",
-    "pos": "C",
+    "id": "2990984",
+    "name": "Buddy Hield",
+    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -462,6 +455,13 @@
     "pos": "F",
     "status": "active",
     "injured": true
+   },
+   {
+    "id": "4433629",
+    "name": "Ryan Nembhard",
+    "pos": "G",
+    "status": "active",
+    "injured": false
    },
    {
     "id": "2583632",
@@ -1427,7 +1427,7 @@
     "name": "Fred VanVleet",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "IND": [
@@ -2093,6 +2093,13 @@
    {
     "id": "4601025",
     "name": "Pelle Larsson",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4898237",
+    "name": "Bez Mbeng",
     "pos": "G",
     "status": "active",
     "injured": false
@@ -3807,13 +3814,6 @@
     "id": "4066336",
     "name": "Lauri Markkanen",
     "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4898237",
-    "name": "Bez Mbeng",
-    "pos": "G",
     "status": "active",
     "injured": false
    },

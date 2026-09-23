@@ -90,9 +90,9 @@
  "games": 6599,
  "teams": {
   "ATL": {
-   "strength": 1525.5,
-   "offence": -2.6,
-   "defence": 27.2,
+   "strength": 1559,
+   "offence": 10.7,
+   "defence": 47.3,
    "coach": "Quin Snyder",
    "coachElo": 0.9,
    "pace": 101,
@@ -117,9 +117,9 @@
    "out": []
   },
   "CHA": {
-   "strength": 1529.2,
-   "offence": 4.2,
-   "defence": 14.9,
+   "strength": 1511.2,
+   "offence": -2.7,
+   "defence": 3.7,
    "coach": "Charles Lee",
    "coachElo": 10.1,
    "pace": 99.3,
@@ -232,9 +232,9 @@
    "out": []
   },
   "MIA": {
-   "strength": 1572.7,
-   "offence": 41,
-   "defence": 24.8,
+   "strength": 1534.5,
+   "offence": 21.6,
+   "defence": 6,
    "coach": "Erik Spoelstra",
    "coachElo": 6.9,
    "pace": 103,
@@ -355,9 +355,9 @@
    "out": []
   },
   "UTA": {
-   "strength": 1326,
-   "offence": -63.1,
-   "defence": -97.8,
+   "strength": 1351.6,
+   "offence": -48.5,
+   "defence": -86.7,
    "coach": "Will Hardy",
    "coachElo": -13.2,
    "pace": 107.5,
@@ -7703,5 +7703,5 @@
   }
  },
  "upcoming": {},
- "generated": "2026-09-20T05:20Z"
+ "generated": "2026-09-23T15:15Z"
 }

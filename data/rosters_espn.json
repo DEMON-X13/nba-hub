@@ -1,5 +1,5 @@
 {
- "date": "2026-09-23",
+ "date": "2026-09-24",
  "teams": {
   "ATL": [
    {
@@ -69,6 +69,13 @@
     "id": "4701230",
     "name": "Jalen Johnson",
     "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4432192",
+    "name": "Keon Johnson",
+    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -852,7 +859,7 @@
     "name": "Dereck Lively II",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278594",
@@ -1315,7 +1322,7 @@
     "name": "Steven Adams",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3037789",
@@ -1357,7 +1364,7 @@
     "name": "Kevin Durant",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433192",
@@ -2887,6 +2894,13 @@
     "injured": true
    },
    {
+    "id": "4278075",
+    "name": "Kevin Knox II",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4593034",
     "name": "Alex Morales",
     "pos": "G",
@@ -3445,7 +3459,7 @@
     "name": "Domantas Sabonis",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5106058",
@@ -3964,7 +3978,7 @@
     "name": "Alex Sarr",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4997537",

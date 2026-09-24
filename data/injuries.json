@@ -1,5 +1,5 @@
 {
- "date": "2026-09-23",
+ "date": "2026-09-24",
  "teams": {
   "ATL": [
    {
@@ -121,6 +121,15 @@
   ],
   "DAL": [
    {
+    "id": "4683688",
+    "name": "Dereck Lively II",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Foot Surgery",
+    "date": "2026-09-24",
+    "returns": "2026-10-09"
+   },
+   {
     "id": "6442",
     "name": "Kyrie Irving",
     "pos": "G",
@@ -136,15 +145,6 @@
     "status": "Day-To-Day",
     "detail": "Knee Surgery",
     "date": "2026-08-19",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4683688",
-    "name": "Dereck Lively II",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot Surgery",
-    "date": "2026-06-26",
     "returns": "2026-10-01"
    }
   ],
@@ -181,21 +181,12 @@
   ],
   "HOU": [
    {
-    "id": "3202",
-    "name": "Kevin Durant",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-08-05",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "2991235",
     "name": "Steven Adams",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Ankle Surgery",
-    "date": "2026-06-16",
+    "date": "2026-09-23",
     "returns": "2026-10-01"
    }
   ],
@@ -226,7 +217,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Heel Surgery",
-    "date": "2026-09-14",
+    "date": "2026-09-23",
     "returns": "2026-10-01"
    },
    {
@@ -578,15 +569,6 @@
   ],
   "SAC": [
    {
-    "id": "3155942",
-    "name": "Domantas Sabonis",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-09-02",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "4594327",
     "name": "Keegan Murray",
     "pos": "F",
@@ -694,6 +676,15 @@
   ],
   "WAS": [
    {
+    "id": "5160992",
+    "name": "Alex Sarr",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Foot Surgery",
+    "date": "2026-09-24",
+    "returns": "2026-10-01"
+   },
+   {
     "id": "4277905",
     "name": "Trae Young",
     "pos": "G",
@@ -710,15 +701,6 @@
     "detail": "Knee",
     "date": "2026-07-30",
     "returns": "2027-04-01"
-   },
-   {
-    "id": "5160992",
-    "name": "Alex Sarr",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot Surgery",
-    "date": "2026-06-24",
-    "returns": "2026-10-01"
    },
    {
     "id": "6583",

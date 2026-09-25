@@ -90,9 +90,9 @@
  "games": 6599,
  "teams": {
   "ATL": {
-   "strength": 1529.5,
-   "offence": -11.9,
-   "defence": 40.5,
+   "strength": 1559,
+   "offence": 10.7,
+   "defence": 47.3,
    "coach": "Quin Snyder",
    "coachElo": 0.9,
    "pace": 101,
@@ -144,9 +144,9 @@
    "out": []
   },
   "DAL": {
-   "strength": 1450.5,
-   "offence": -33.3,
-   "defence": -10.4,
+   "strength": 1458,
+   "offence": -28.7,
+   "defence": -7.5,
    "coach": "Jason Kidd",
    "coachElo": -5.9,
    "pace": 104.8,
@@ -261,9 +261,9 @@
    ]
   },
   "NOP": {
-   "strength": 1425.5,
-   "offence": -17,
-   "defence": -63.6,
+   "strength": 1398.3,
+   "offence": -31.1,
+   "defence": -76.8,
    "coach": "James Borrego",
    "coachElo": 6.2,
    "pace": 105.1,
@@ -7703,5 +7703,5 @@
   }
  },
  "upcoming": {},
- "generated": "2026-09-24T15:40Z"
+ "generated": "2026-09-25T15:42Z"
 }

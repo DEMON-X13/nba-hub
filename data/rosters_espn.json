@@ -1,5 +1,5 @@
 {
- "date": "2026-09-24",
+ "date": "2026-09-25",
  "teams": {
   "ATL": [
    {
@@ -69,13 +69,6 @@
     "id": "4701230",
     "name": "Jalen Johnson",
     "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4432192",
-    "name": "Keon Johnson",
-    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -226,7 +219,7 @@
     "name": "Jayson Tatum",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683689",
@@ -883,6 +876,13 @@
     "injured": false
    },
    {
+    "id": "2531367",
+    "name": "Dwight Powell",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "5211175",
     "name": "Zaccharie Risacher",
     "pos": "F",
@@ -1457,7 +1457,7 @@
     "name": "Tyrese Haliburton",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4065731",
@@ -1565,13 +1565,6 @@
     "pos": "G",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "4433569",
-    "name": "Johni Broome",
-    "pos": "F",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "4845363",
@@ -2559,6 +2552,13 @@
     "injured": false
    },
    {
+    "id": "4683742",
+    "name": "Julian Reese",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4431675",
     "name": "Trendon Watford",
     "pos": "F",
@@ -2600,7 +2600,7 @@
     "name": "Jalen Brunson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2528426",
@@ -2777,7 +2777,7 @@
     "name": "Nikola Topic",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683692",
@@ -2791,7 +2791,7 @@
     "name": "Jalen Williams",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432823",
@@ -3915,7 +3915,7 @@
     "name": "Anthony Davis",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5142718",

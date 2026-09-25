@@ -1,5 +1,5 @@
 {
- "date": "2026-09-24",
+ "date": "2026-09-25",
  "teams": {
   "ATL": [
    {
@@ -36,17 +36,6 @@
     "status": "Day-To-Day",
     "detail": "Achilles Not Specified",
     "date": "2026-07-18",
-    "returns": "2026-10-01"
-   }
-  ],
-  "BOS": [
-   {
-    "id": "4065648",
-    "name": "Jayson Tatum",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-07-27",
     "returns": "2026-10-01"
    }
   ],
@@ -121,22 +110,22 @@
   ],
   "DAL": [
    {
+    "id": "6442",
+    "name": "Kyrie Irving",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-09-25",
+    "returns": "2026-10-09"
+   },
+   {
     "id": "4683688",
     "name": "Dereck Lively II",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Surgery",
-    "date": "2026-09-24",
+    "date": "2026-09-25",
     "returns": "2026-10-09"
-   },
-   {
-    "id": "6442",
-    "name": "Kyrie Irving",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-09-10",
-    "returns": "2026-10-01"
    },
    {
     "id": "4593125",
@@ -191,15 +180,6 @@
    }
   ],
   "IND": [
-   {
-    "id": "4396993",
-    "name": "Tyrese Haliburton",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Achilles Surgery",
-    "date": "2026-09-09",
-    "returns": "2026-10-01"
-   },
    {
     "id": "5157066",
     "name": "Johnny Furphy",
@@ -386,15 +366,6 @@
   ],
   "NYK": [
    {
-    "id": "3934672",
-    "name": "Jalen Brunson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Wrist Surgery",
-    "date": "2026-09-18",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "5289900",
     "name": "Mohamed Diawara",
     "pos": "F",
@@ -406,12 +377,30 @@
   ],
   "OKC": [
    {
-    "id": "4593803",
-    "name": "Jalen Williams",
+    "id": "4900671",
+    "name": "Ajay Mitchell",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Hamstring Strain",
-    "date": "2026-09-21",
+    "detail": "Calf Strain",
+    "date": "2026-09-24",
+    "returns": "2026-10-01"
+   },
+   {
+    "id": "5061603",
+    "name": "Thomas Sorber",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee Surgery",
+    "date": "2026-09-24",
+    "returns": "2026-10-01"
+   },
+   {
+    "id": "5159925",
+    "name": "Nikola Topic",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back Surgery",
+    "date": "2026-09-24",
     "returns": "2026-10-01"
    },
    {
@@ -424,39 +413,12 @@
     "returns": "2026-10-01"
    },
    {
-    "id": "4900671",
-    "name": "Ajay Mitchell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-07-30",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "5106270",
     "name": "Otega Oweh",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Lower Leg Not Specified",
     "date": "2026-07-19",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "5061603",
-    "name": "Thomas Sorber",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-07-01",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "5159925",
-    "name": "Nikola Topic",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Surgery",
-    "date": "2026-06-16",
     "returns": "2026-10-01"
    }
   ],
@@ -676,6 +638,15 @@
   ],
   "WAS": [
    {
+    "id": "6583",
+    "name": "Anthony Davis",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Finger Sprain",
+    "date": "2026-09-24",
+    "returns": "2026-10-01"
+   },
+   {
     "id": "5160992",
     "name": "Alex Sarr",
     "pos": "C",
@@ -701,15 +672,6 @@
     "detail": "Knee",
     "date": "2026-07-30",
     "returns": "2027-04-01"
-   },
-   {
-    "id": "6583",
-    "name": "Anthony Davis",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger Sprain",
-    "date": "2026-06-24",
-    "returns": "2026-10-01"
    }
   ]
  }

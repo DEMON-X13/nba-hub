@@ -1,5 +1,5 @@
 {
- "date": "2026-09-25",
+ "date": "2026-09-26",
  "teams": {
   "ATL": [
    {
@@ -51,6 +51,24 @@
    }
   ],
   "CHA": [
+   {
+    "id": "5061575",
+    "name": "Kon Knueppel",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-09-25",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4066218",
+    "name": "Grant Williams",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-09-25",
+    "returns": "2026-10-21"
+   },
    {
     "id": "4433287",
     "name": "Brandon Miller",
@@ -105,6 +123,17 @@
     "status": "Day-To-Day",
     "detail": "Wrist Surgery",
     "date": "2026-06-16",
+    "returns": "2026-10-01"
+   }
+  ],
+  "CLE": [
+   {
+    "id": "4576087",
+    "name": "Peyton Watson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Strain",
+    "date": "2026-09-25",
     "returns": "2026-10-01"
    }
   ],
@@ -518,15 +547,6 @@
     "detail": "Knee Surgery",
     "date": "2026-08-24",
     "returns": "2027-03-01"
-   },
-   {
-    "id": "6606",
-    "name": "Damian Lillard",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Achilles Surgery",
-    "date": "2026-06-16",
-    "returns": "2026-10-01"
    }
   ],
   "SAC": [

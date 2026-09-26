@@ -1,5 +1,5 @@
 {
- "date": "2026-09-25",
+ "date": "2026-09-26",
  "teams": {
   "ATL": [
    {
@@ -440,7 +440,7 @@
     "name": "Kon Knueppel",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5239590",
@@ -510,7 +510,7 @@
     "name": "Grant Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "CHI": [

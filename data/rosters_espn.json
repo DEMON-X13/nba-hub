@@ -1,5 +1,5 @@
 {
- "date": "2026-09-26",
+ "date": "2026-09-27",
  "teams": {
   "ATL": [
    {
@@ -408,16 +408,16 @@
     "injured": false
    },
    {
+    "id": "4684275",
+    "name": "Rob Dillingham",
+    "pos": "G",
+    "status": "active",
+    "injured": true
+   },
+   {
     "id": "4701225",
     "name": "PJ Hall",
     "pos": "C",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "2990984",
-    "name": "Buddy Hield",
-    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -543,13 +543,6 @@
     "injured": true
    },
    {
-    "id": "4684275",
-    "name": "Rob Dillingham",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "5242496",
     "name": "Noa Essengue",
     "pos": "F",
@@ -559,6 +552,13 @@
    {
     "id": "4871145",
     "name": "Josh Giddey",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "2990984",
+    "name": "Buddy Hield",
     "pos": "G",
     "status": "active",
     "injured": false
@@ -853,6 +853,13 @@
     "pos": "C",
     "status": "active",
     "injured": true
+   },
+   {
+    "id": "4431775",
+    "name": "Seth Lundy",
+    "pos": "G",
+    "status": "active",
+    "injured": false
    },
    {
     "id": "4278594",
@@ -1679,13 +1686,6 @@
     "injured": false
    },
    {
-    "id": "4897696",
-    "name": "Jamarion Sharp",
-    "pos": "C",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4065778",
     "name": "Max Strus",
     "pos": "G",
@@ -1886,6 +1886,13 @@
     "injured": false
    },
    {
+    "id": "5105589",
+    "name": "Brendan Hausen",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4683750",
     "name": "Jordan Hawkins",
     "pos": "G",
@@ -1959,13 +1966,6 @@
     "id": "4595400",
     "name": "Olivier-Maxence Prosper",
     "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "3136776",
-    "name": "D'Angelo Russell",
-    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -2143,13 +2143,6 @@
     "id": "3059319",
     "name": "Andrew Wiggins",
     "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4433133",
-    "name": "Jahmir Young",
-    "pos": "G",
     "status": "active",
     "injured": false
    }
@@ -2892,13 +2885,6 @@
     "pos": "F",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "4278075",
-    "name": "Kevin Knox II",
-    "pos": "F",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "4593034",

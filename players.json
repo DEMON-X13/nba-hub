@@ -117,18 +117,18 @@
    "out": []
   },
   "CHA": {
-   "strength": 1511.2,
-   "offence": -2.7,
-   "defence": 3.7,
+   "strength": 1501.8,
+   "offence": -8.5,
+   "defence": 0.2,
    "coach": "Charles Lee",
    "coachElo": 10.1,
    "pace": 99.3,
    "out": []
   },
   "CHI": {
-   "strength": 1390.8,
-   "offence": -57.1,
-   "defence": -36.3,
+   "strength": 1405.9,
+   "offence": -48.8,
+   "defence": -29.4,
    "coach": "Billy Donovan",
    "coachElo": -15.8,
    "pace": 108,
@@ -7703,5 +7703,5 @@
   }
  },
  "upcoming": {},
- "generated": "2026-09-25T15:42Z"
+ "generated": "2026-09-27T15:29Z"
 }

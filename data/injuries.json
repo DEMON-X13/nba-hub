@@ -1,5 +1,5 @@
 {
- "date": "2026-09-26",
+ "date": "2026-09-27",
  "teams": {
   "ATL": [
    {
@@ -51,6 +51,15 @@
    }
   ],
   "CHA": [
+   {
+    "id": "4684275",
+    "name": "Rob Dillingham",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Wrist Surgery",
+    "date": "2026-09-26",
+    "returns": "2026-10-01"
+   },
    {
     "id": "5061575",
     "name": "Kon Knueppel",
@@ -115,15 +124,6 @@
     "detail": "Ankle Not Specified",
     "date": "2026-06-24",
     "returns": "2026-10-01"
-   },
-   {
-    "id": "4684275",
-    "name": "Rob Dillingham",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Wrist Surgery",
-    "date": "2026-06-16",
-    "returns": "2026-10-01"
    }
   ],
   "CLE": [
@@ -138,6 +138,15 @@
    }
   ],
   "DAL": [
+   {
+    "id": "4593125",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Surgery",
+    "date": "2026-09-26",
+    "returns": "2026-10-01"
+   },
    {
     "id": "6442",
     "name": "Kyrie Irving",
@@ -155,15 +164,6 @@
     "detail": "Foot Surgery",
     "date": "2026-09-25",
     "returns": "2026-10-09"
-   },
-   {
-    "id": "4593125",
-    "name": "Santi Aldama",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-08-19",
-    "returns": "2026-10-01"
    }
   ],
   "DEN": [
@@ -204,8 +204,8 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Ankle Surgery",
-    "date": "2026-09-23",
-    "returns": "2026-10-01"
+    "date": "2026-09-27",
+    "returns": "2026-10-09"
    }
   ],
   "IND": [

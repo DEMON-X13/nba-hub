@@ -1,5 +1,5 @@
 {
- "date": "2026-09-27",
+ "date": "2026-09-28",
  "teams": {
   "ATL": [
    {
@@ -41,16 +41,25 @@
   ],
   "BKN": [
    {
-    "id": "5279130",
-    "name": "Nolan Traore",
+    "id": "5101761",
+    "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-06-30",
-    "returns": "2026-10-01"
+    "detail": "Ankle",
+    "date": "2026-09-28",
+    "returns": "2026-10-06"
    }
   ],
   "CHA": [
+   {
+    "id": "5061575",
+    "name": "Kon Knueppel",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-09-28",
+    "returns": "2026-10-21"
+   },
    {
     "id": "4684275",
     "name": "Rob Dillingham",
@@ -61,15 +70,6 @@
     "returns": "2026-10-01"
    },
    {
-    "id": "5061575",
-    "name": "Kon Knueppel",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-09-25",
-    "returns": "2026-10-21"
-   },
-   {
     "id": "4066218",
     "name": "Grant Williams",
     "pos": "F",
@@ -77,15 +77,6 @@
     "detail": "Hamstring",
     "date": "2026-09-25",
     "returns": "2026-10-21"
-   },
-   {
-    "id": "4433287",
-    "name": "Brandon Miller",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Shoulder Surgery",
-    "date": "2026-08-25",
-    "returns": "2026-10-01"
    },
    {
     "id": "4701225",
@@ -179,12 +170,21 @@
   ],
   "GSW": [
    {
+    "id": "3102531",
+    "name": "Kristaps Porzingis",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-09-28",
+    "returns": "2026-10-13"
+   },
+   {
     "id": "6430",
     "name": "Jimmy Butler III",
     "pos": "F",
     "status": "Out",
     "detail": "Knee Surgery",
-    "date": "2026-08-24",
+    "date": "2026-09-28",
     "returns": "2026-12-01"
    },
    {
@@ -193,7 +193,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Knee Surgery",
-    "date": "2026-03-24",
+    "date": "2026-09-28",
     "returns": "2026-12-01"
    }
   ],
@@ -221,13 +221,31 @@
   ],
   "LAC": [
    {
+    "id": "6580",
+    "name": "Bradley Beal",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee Inflammation",
+    "date": "2026-09-28",
+    "returns": "2026-10-04"
+   },
+   {
+    "id": "5108024",
+    "name": "Yanic Konan Niederhauser",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot Surgery",
+    "date": "2026-09-28",
+    "returns": "2026-11-01"
+   },
+   {
     "id": "3913176",
     "name": "Brandon Ingram",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Heel Surgery",
-    "date": "2026-09-23",
-    "returns": "2026-10-01"
+    "status": "Out",
+    "detail": "Achilles Surgery",
+    "date": "2026-09-28",
+    "returns": "2026-11-01"
    },
    {
     "id": "4396818",
@@ -237,27 +255,27 @@
     "detail": "Shoulder Surgery",
     "date": "2026-08-26",
     "returns": "2027-03-01"
-   },
-   {
-    "id": "6580",
-    "name": "Bradley Beal",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hip Surgery",
-    "date": "2026-08-14",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "5108024",
-    "name": "Yanic Konan Niederhauser",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot Surgery",
-    "date": "2026-06-16",
-    "returns": "2026-10-01"
    }
   ],
   "MEM": [
+   {
+    "id": "4432185",
+    "name": "Micah Peavy",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-09-28",
+    "returns": "2026-10-05"
+   },
+   {
+    "id": "4600663",
+    "name": "Zach Edey",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Ankle Surgery",
+    "date": "2026-09-28",
+    "returns": "2026-10-05"
+   },
    {
     "id": "4431785",
     "name": "Scotty Pippen Jr.",
@@ -302,15 +320,6 @@
     "detail": "Toe Surgery",
     "date": "2026-06-24",
     "returns": "2026-10-01"
-   },
-   {
-    "id": "4600663",
-    "name": "Zach Edey",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle Surgery",
-    "date": "2026-06-24",
-    "returns": "2026-10-01"
    }
   ],
   "MIA": [
@@ -330,15 +339,6 @@
     "status": "Day-To-Day",
     "detail": "Back Not Specified",
     "date": "2026-07-28",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4432645",
-    "name": "Trevor Keels",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Sprain",
-    "date": "2026-07-18",
     "returns": "2026-10-01"
    },
    {
@@ -378,7 +378,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Achilles Surgery",
-    "date": "2026-04-26",
+    "date": "2026-09-28",
     "returns": "2027-04-01"
    }
   ],
@@ -453,21 +453,12 @@
   ],
   "ORL": [
    {
-    "id": "4566434",
-    "name": "Franz Wagner",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-09-02",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "5107251",
     "name": "Izaiyah Nelson",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Surgery",
-    "date": "2026-07-13",
+    "date": "2026-09-28",
     "returns": "2026-11-01"
    },
    {
@@ -476,7 +467,16 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Knee Sprain",
-    "date": "2026-07-01",
+    "date": "2026-09-28",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "4566434",
+    "name": "Franz Wagner",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Calf Strain",
+    "date": "2026-09-02",
     "returns": "2026-10-01"
    }
   ],
@@ -531,15 +531,6 @@
   ],
   "POR": [
    {
-    "id": "4279888",
-    "name": "Ja Morant",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Elbow Sprain",
-    "date": "2026-09-04",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "4914336",
     "name": "Shaedon Sharpe",
     "pos": "G",
@@ -555,9 +546,9 @@
     "name": "Keegan Murray",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
+    "detail": "Murray (ankle) is projected to start at power forward for the Kings in 2026-27  according to Kings beat writer Chris Watkins.",
     "date": "2026-07-31",
-    "returns": "2026-10-01"
+    "returns": ""
    },
    {
     "id": "3064440",
@@ -623,15 +614,6 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-07-19",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "5093267",
-    "name": "Collin Murray-Boyles",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger Sprain",
     "date": "2026-07-19",
     "returns": "2026-10-01"
    }

@@ -1,5 +1,5 @@
 {
- "date": "2026-09-28",
+ "date": "2026-09-29",
  "teams": {
   "ATL": [
    {
@@ -61,15 +61,6 @@
     "returns": "2026-10-21"
    },
    {
-    "id": "4684275",
-    "name": "Rob Dillingham",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Wrist Surgery",
-    "date": "2026-09-26",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "4066218",
     "name": "Grant Williams",
     "pos": "F",
@@ -90,30 +81,21 @@
   ],
   "CHI": [
    {
+    "id": "4066650",
+    "name": "Zach Collins",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Toe Surgery",
+    "date": "2026-09-28",
+    "returns": "2026-10-07"
+   },
+   {
     "id": "4848625",
     "name": "Dailyn Swain",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Wrist",
     "date": "2026-07-17",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4066650",
-    "name": "Zach Collins",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Toe Surgery",
-    "date": "2026-07-01",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4871145",
-    "name": "Josh Giddey",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle Not Specified",
-    "date": "2026-06-24",
     "returns": "2026-10-01"
    }
   ],
@@ -130,11 +112,20 @@
   ],
   "DAL": [
    {
+    "id": "4873153",
+    "name": "Morez Johnson Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-09-28",
+    "returns": "2026-10-09"
+   },
+   {
     "id": "4593125",
     "name": "Santi Aldama",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Knee Surgery",
+    "detail": "Undisclosed",
     "date": "2026-09-26",
     "returns": "2026-10-01"
    },
@@ -195,6 +186,15 @@
     "detail": "Knee Surgery",
     "date": "2026-09-28",
     "returns": "2026-12-01"
+   },
+   {
+    "id": "5170949",
+    "name": "Alex Toohey",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Surgery",
+    "date": "2026-09-10",
+    "returns": "2026-10-01"
    }
   ],
   "HOU": [
@@ -304,15 +304,6 @@
     "returns": "2026-10-01"
    },
    {
-    "id": "5105462",
-    "name": "Richie Saunders",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-06-25",
-    "returns": "2026-12-01"
-   },
-   {
     "id": "5112087",
     "name": "Jaylen Wells",
     "pos": "F",
@@ -395,6 +386,24 @@
   ],
   "NYK": [
    {
+    "id": "4592401",
+    "name": "N'Faly Dante",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-09-27",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "3914285",
+    "name": "Drew Eubanks",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Thumb Surgery",
+    "date": "2026-09-16",
+    "returns": "2026-10-01"
+   },
+   {
     "id": "5289900",
     "name": "Mohamed Diawara",
     "pos": "F",
@@ -456,7 +465,7 @@
     "id": "5107251",
     "name": "Izaiyah Nelson",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Surgery",
     "date": "2026-09-28",
     "returns": "2026-11-01"
@@ -469,15 +478,6 @@
     "detail": "Knee Sprain",
     "date": "2026-09-28",
     "returns": "2026-10-07"
-   },
-   {
-    "id": "4566434",
-    "name": "Franz Wagner",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-09-02",
-    "returns": "2026-10-01"
    }
   ],
   "PHI": [
@@ -517,7 +517,7 @@
     "status": "Out",
     "detail": "Shoulder Surgery",
     "date": "2026-09-11",
-    "returns": "2027-02-01"
+    "returns": "2027-02-03"
    },
    {
     "id": "4702602",
@@ -537,36 +537,7 @@
     "status": "Out",
     "detail": "Knee Surgery",
     "date": "2026-08-24",
-    "returns": "2027-03-01"
-   }
-  ],
-  "SAC": [
-   {
-    "id": "4594327",
-    "name": "Keegan Murray",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Murray (ankle) is projected to start at power forward for the Kings in 2026-27  according to Kings beat writer Chris Watkins.",
-    "date": "2026-07-31",
-    "returns": ""
-   },
-   {
-    "id": "3064440",
-    "name": "Zach LaVine",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hand Surgery",
-    "date": "2026-06-29",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4065732",
-    "name": "De'Andre Hunter",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Eye Surgery",
-    "date": "2026-06-25",
-    "returns": "2026-10-01"
+    "returns": "2027-03-02"
    }
   ],
   "SAS": [

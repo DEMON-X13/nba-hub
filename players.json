@@ -108,18 +108,18 @@
    "out": []
   },
   "BKN": {
-   "strength": 1277.5,
-   "offence": -115.8,
-   "defence": -91.5,
+   "strength": 1270,
+   "offence": -120,
+   "defence": -94.7,
    "coach": "Jordi Fernandez",
    "coachElo": -15.3,
    "pace": 100.1,
    "out": []
   },
   "CHA": {
-   "strength": 1501.8,
-   "offence": -8.5,
-   "defence": 0.2,
+   "strength": 1529.2,
+   "offence": 4.2,
+   "defence": 14.9,
    "coach": "Charles Lee",
    "coachElo": 10.1,
    "pace": 99.3,
@@ -153,8 +153,8 @@
    "out": []
   },
   "DEN": {
-   "strength": 1562.1,
-   "offence": 114.2,
+   "strength": 1568.9,
+   "offence": 121,
    "defence": -48.1,
    "coach": "David Adelman",
    "coachElo": -4,
@@ -162,18 +162,18 @@
    "out": []
   },
   "DET": {
-   "strength": 1615,
-   "offence": 24.1,
-   "defence": 72.2,
+   "strength": 1627.2,
+   "offence": 29.8,
+   "defence": 78.6,
    "coach": "J.B. Bickerstaff",
    "coachElo": 18.8,
    "pace": 97.5,
    "out": []
   },
   "GSW": {
-   "strength": 1528.1,
-   "offence": 22.6,
-   "defence": 12.5,
+   "strength": 1515.5,
+   "offence": 10.6,
+   "defence": 11.9,
    "coach": "Steve Kerr",
    "coachElo": -7,
    "pace": 98.7,
@@ -183,9 +183,9 @@
    ]
   },
   "HOU": {
-   "strength": 1676,
-   "offence": 79.9,
-   "defence": 88.2,
+   "strength": 1650.3,
+   "offence": 68.9,
+   "defence": 73.4,
    "coach": "Ime Udoka",
    "coachElo": 7.9,
    "pace": 97.7,
@@ -203,9 +203,9 @@
    ]
   },
   "LAC": {
-   "strength": 1564.2,
-   "offence": 52.9,
-   "defence": 11.7,
+   "strength": 1555,
+   "offence": 47.5,
+   "defence": 7.9,
    "coach": "Tyronn Lue",
    "coachElo": -0.5,
    "pace": 99.4,
@@ -243,9 +243,9 @@
    "out": []
   },
   "MIL": {
-   "strength": 1357.2,
-   "offence": -45.1,
-   "defence": -77,
+   "strength": 1340.7,
+   "offence": -52.3,
+   "defence": -86.2,
    "coach": "Doc Rivers",
    "coachElo": -20.7,
    "pace": 99.8,
@@ -272,13 +272,15 @@
    "out": []
   },
   "NYK": {
-   "strength": 1754.3,
-   "offence": 115.9,
-   "defence": 121,
+   "strength": 1691.8,
+   "offence": 80.7,
+   "defence": 93.7,
    "coach": "Mike Brown",
    "coachElo": 17.4,
    "pace": 98.4,
-   "out": []
+   "out": [
+    "N'Faly Dante (Out)"
+   ]
   },
   "OKC": {
    "strength": 1796.1,
@@ -308,9 +310,9 @@
    "out": []
   },
   "PHX": {
-   "strength": 1585.5,
-   "offence": 29.4,
-   "defence": 50.1,
+   "strength": 1558.5,
+   "offence": 17.7,
+   "defence": 34.7,
    "coach": "Jordan Ott",
    "coachElo": 6,
    "pace": 98.8,
@@ -330,18 +332,18 @@
    ]
   },
   "SAC": {
-   "strength": 1351.2,
-   "offence": -61.1,
-   "defence": -74.8,
+   "strength": 1308.7,
+   "offence": -106.2,
+   "defence": -72.2,
    "coach": "Doug Christie",
    "coachElo": -12.9,
    "pace": 100,
    "out": []
   },
   "SAS": {
-   "strength": 1778.8,
-   "offence": 109.9,
-   "defence": 141.6,
+   "strength": 1727,
+   "offence": 84.8,
+   "defence": 114.9,
    "coach": "Mitch Johnson",
    "coachElo": 27.4,
    "pace": 99.1,
@@ -7705,5 +7707,5 @@
   }
  },
  "upcoming": {},
- "generated": "2026-09-28T18:21Z"
+ "generated": "2026-09-29T16:43Z"
 }

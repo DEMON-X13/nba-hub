@@ -1,5 +1,5 @@
 {
- "date": "2026-09-29",
+ "date": "2026-09-30",
  "teams": {
   "ATL": [
    {
@@ -694,7 +694,7 @@
     "name": "Dailyn Swain",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431687",
@@ -1171,7 +1171,7 @@
     "name": "Jalen Duren",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2596112",
@@ -1441,7 +1441,7 @@
     "name": "Steven Adams",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3037789",
@@ -1625,7 +1625,7 @@
     "name": "Larry Nance Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395712",
@@ -2151,14 +2151,14 @@
     "name": "Bam Adebayo",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3032977",
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107157",
@@ -2248,6 +2248,13 @@
     "id": "3064482",
     "name": "Bobby Portis",
     "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4431720",
+    "name": "Lester Quinones",
+    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -3052,7 +3059,7 @@
     "name": "Anthony Black",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4565201",
@@ -3136,7 +3143,7 @@
     "name": "Noah Penda",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5239561",
@@ -3447,6 +3454,13 @@
     "id": "4592714",
     "name": "Pat Spencer",
     "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4909710",
+    "name": "Phillip Wheeler",
+    "pos": "F",
     "status": "active",
     "injured": false
    },

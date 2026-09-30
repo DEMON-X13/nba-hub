@@ -1,5 +1,5 @@
 {
- "date": "2026-09-29",
+ "date": "2026-09-30",
  "teams": {
   "ATL": [
    {
@@ -88,15 +88,6 @@
     "detail": "Toe Surgery",
     "date": "2026-09-28",
     "returns": "2026-10-07"
-   },
-   {
-    "id": "4848625",
-    "name": "Dailyn Swain",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Wrist",
-    "date": "2026-07-17",
-    "returns": "2026-10-01"
    }
   ],
   "CLE": [
@@ -159,6 +150,17 @@
     "returns": "2026-10-01"
    }
   ],
+  "DET": [
+   {
+    "id": "4433621",
+    "name": "Jalen Duren",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-09-29",
+    "returns": "2026-10-05"
+   }
+  ],
   "GSW": [
    {
     "id": "3102531",
@@ -197,18 +199,16 @@
     "returns": "2026-10-01"
    }
   ],
-  "HOU": [
-   {
-    "id": "2991235",
-    "name": "Steven Adams",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle Surgery",
-    "date": "2026-09-27",
-    "returns": "2026-10-09"
-   }
-  ],
   "IND": [
+   {
+    "id": "2580365",
+    "name": "Larry Nance Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-09-29",
+    "returns": "2026-10-07"
+   },
    {
     "id": "5157066",
     "name": "Johnny Furphy",
@@ -315,24 +315,6 @@
   ],
   "MIA": [
    {
-    "id": "3032977",
-    "name": "Giannis Antetokounmpo",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Bruise",
-    "date": "2026-09-02",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4066261",
-    "name": "Bam Adebayo",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Back Not Specified",
-    "date": "2026-07-28",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "5107157",
     "name": "Ryan Conwell",
     "pos": "G",
@@ -391,7 +373,7 @@
     "pos": "C",
     "status": "Out",
     "detail": "Knee Surgery",
-    "date": "2026-09-27",
+    "date": "2026-09-30",
     "returns": "2026-11-02"
    },
    {
@@ -461,6 +443,24 @@
    }
   ],
   "ORL": [
+   {
+    "id": "5214637",
+    "name": "Noah Penda",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-09-30",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "4712849",
+    "name": "Anthony Black",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-09-30",
+    "returns": "2026-10-07"
+   },
    {
     "id": "5107251",
     "name": "Izaiyah Nelson",

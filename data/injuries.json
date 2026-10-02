@@ -1,5 +1,5 @@
 {
- "date": "2026-09-30",
+ "date": "2026-10-02",
  "teams": {
   "ATL": [
    {
@@ -27,7 +27,7 @@
     "status": "Day-To-Day",
     "detail": "Hip",
     "date": "2026-07-18",
-    "returns": "2026-10-01"
+    "returns": "2026-10-05"
    },
    {
     "id": "4431941",
@@ -36,7 +36,7 @@
     "status": "Day-To-Day",
     "detail": "Achilles Not Specified",
     "date": "2026-07-18",
-    "returns": "2026-10-01"
+    "returns": "2026-10-05"
    }
   ],
   "BKN": [
@@ -46,7 +46,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-09-28",
+    "date": "2026-10-02",
     "returns": "2026-10-06"
    }
   ],
@@ -76,7 +76,7 @@
     "status": "Day-To-Day",
     "detail": "Ankle Surgery",
     "date": "2026-06-16",
-    "returns": "2026-10-01"
+    "returns": "2026-10-06"
    }
   ],
   "CHI": [
@@ -98,7 +98,7 @@
     "status": "Day-To-Day",
     "detail": "Hamstring Strain",
     "date": "2026-09-25",
-    "returns": "2026-10-01"
+    "returns": "2026-10-08"
    }
   ],
   "DAL": [
@@ -107,8 +107,8 @@
     "name": "Morez Johnson Jr.",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-09-28",
+    "detail": "Lower Leg Soreness",
+    "date": "2026-10-01",
     "returns": "2026-10-09"
    },
    {
@@ -118,7 +118,7 @@
     "status": "Day-To-Day",
     "detail": "Undisclosed",
     "date": "2026-09-26",
-    "returns": "2026-10-01"
+    "returns": "2026-10-09"
    },
    {
     "id": "6442",
@@ -147,18 +147,7 @@
     "status": "Day-To-Day",
     "detail": "Undisclosed",
     "date": "2026-07-19",
-    "returns": "2026-10-01"
-   }
-  ],
-  "DET": [
-   {
-    "id": "4433621",
-    "name": "Jalen Duren",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Not Injury Related",
-    "date": "2026-09-29",
-    "returns": "2026-10-05"
+    "returns": "2026-10-04"
    }
   ],
   "GSW": [
@@ -196,7 +185,7 @@
     "status": "Day-To-Day",
     "detail": "Knee Surgery",
     "date": "2026-09-10",
-    "returns": "2026-10-01"
+    "returns": "2026-10-04"
    }
   ],
   "IND": [
@@ -277,51 +266,24 @@
     "returns": "2026-10-05"
    },
    {
-    "id": "4431785",
-    "name": "Scotty Pippen Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Toe Surgery",
-    "date": "2026-07-27",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4896372",
-    "name": "Walter Clayton Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Sprain",
-    "date": "2026-07-20",
-    "returns": "2026-10-01"
-   },
-   {
     "id": "5231919",
     "name": "Karim Lopez",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
     "date": "2026-07-20",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "5112087",
-    "name": "Jaylen Wells",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Toe Surgery",
-    "date": "2026-06-24",
-    "returns": "2026-10-01"
+    "returns": "2026-10-05"
    }
   ],
   "MIA": [
    {
-    "id": "5107157",
-    "name": "Ryan Conwell",
+    "id": "4066993",
+    "name": "Dru Smith",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Hip Not Specified",
-    "date": "2026-07-15",
-    "returns": "2026-10-01"
+    "detail": "Calf Strain",
+    "date": "2026-10-01",
+    "returns": "2026-10-16"
    },
    {
     "id": "4431772",
@@ -330,18 +292,7 @@
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
     "date": "2026-07-08",
-    "returns": "2026-10-01"
-   }
-  ],
-  "MIL": [
-   {
-    "id": "4397140",
-    "name": "Kevin Porter Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-06-26",
-    "returns": "2026-10-01"
+    "returns": "2026-10-03"
    }
   ],
   "MIN": [
@@ -363,19 +314,10 @@
     "status": "Day-To-Day",
     "detail": "Toe Fracture",
     "date": "2026-06-16",
-    "returns": "2026-10-01"
+    "returns": "2026-10-06"
    }
   ],
   "NYK": [
-   {
-    "id": "4592401",
-    "name": "N'Faly Dante",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-09-30",
-    "returns": "2026-11-02"
-   },
    {
     "id": "3914285",
     "name": "Drew Eubanks",
@@ -383,7 +325,7 @@
     "status": "Day-To-Day",
     "detail": "Thumb Surgery",
     "date": "2026-09-16",
-    "returns": "2026-10-01"
+    "returns": "2026-10-05"
    },
    {
     "id": "5289900",
@@ -392,19 +334,10 @@
     "status": "Day-To-Day",
     "detail": "Finger",
     "date": "2026-07-18",
-    "returns": "2026-10-01"
+    "returns": "2026-10-05"
    }
   ],
   "OKC": [
-   {
-    "id": "4900671",
-    "name": "Ajay Mitchell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-09-24",
-    "returns": "2026-10-01"
-   },
    {
     "id": "5061603",
     "name": "Thomas Sorber",
@@ -412,7 +345,7 @@
     "status": "Day-To-Day",
     "detail": "Knee Surgery",
     "date": "2026-09-24",
-    "returns": "2026-10-01"
+    "returns": "2026-10-06"
    },
    {
     "id": "5159925",
@@ -421,16 +354,7 @@
     "status": "Day-To-Day",
     "detail": "Back Surgery",
     "date": "2026-09-24",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4222252",
-    "name": "Isaiah Hartenstein",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-09-07",
-    "returns": "2026-10-01"
+    "returns": "2026-10-06"
    },
    {
     "id": "5106270",
@@ -439,7 +363,7 @@
     "status": "Day-To-Day",
     "detail": "Lower Leg Not Specified",
     "date": "2026-07-19",
-    "returns": "2026-10-01"
+    "returns": "2026-10-06"
    }
   ],
   "ORL": [
@@ -482,22 +406,22 @@
   ],
   "PHI": [
    {
+    "id": "3904625",
+    "name": "Tacko Fall",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-10-01",
+    "returns": "2026-10-16"
+   },
+   {
     "id": "5105637",
     "name": "Adem Bona",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Sprain",
-    "date": "2026-09-17",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "2581018",
-    "name": "Kentavious Caldwell-Pope",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Finger Surgery",
-    "date": "2026-07-25",
-    "returns": "2026-10-01"
+    "date": "2026-10-01",
+    "returns": "2026-10-05"
    }
   ],
   "PHX": [
@@ -508,7 +432,7 @@
     "status": "Day-To-Day",
     "detail": "Foot Surgery",
     "date": "2026-09-17",
-    "returns": "2026-10-01"
+    "returns": "2026-10-05"
    },
    {
     "id": "4701232",
@@ -526,7 +450,7 @@
     "status": "Day-To-Day",
     "detail": "Hamstring Not Specified",
     "date": "2026-07-19",
-    "returns": "2026-10-01"
+    "returns": "2026-10-05"
    }
   ],
   "POR": [
@@ -548,7 +472,7 @@
     "status": "Day-To-Day",
     "detail": "Ankle Surgery",
     "date": "2026-07-22",
-    "returns": "2026-10-01"
+    "returns": "2026-10-08"
    },
    {
     "id": "5101845",
@@ -562,13 +486,40 @@
   ],
   "TOR": [
    {
+    "id": "4431893",
+    "name": "Jamison Battle",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back Not Specified",
+    "date": "2026-10-01",
+    "returns": "2026-10-03"
+   },
+   {
+    "id": "2993874",
+    "name": "Kyle Anderson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Bruise",
+    "date": "2026-10-01",
+    "returns": "2026-10-03"
+   },
+   {
+    "id": "5149115",
+    "name": "Allen Graves",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin Not Specified",
+    "date": "2026-10-01",
+    "returns": "2026-10-03"
+   },
+   {
     "id": "4432586",
     "name": "Nate Bittle",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Lower Leg",
     "date": "2026-09-10",
-    "returns": "2026-10-01"
+    "returns": "2026-10-03"
    },
    {
     "id": "4702656",
@@ -577,7 +528,7 @@
     "status": "Day-To-Day",
     "detail": "Knee Inflammation",
     "date": "2026-07-19",
-    "returns": "2026-10-01"
+    "returns": "2026-10-03"
    },
    {
     "id": "4590360",
@@ -586,19 +537,10 @@
     "status": "Day-To-Day",
     "detail": "Knee",
     "date": "2026-07-19",
-    "returns": "2026-10-01"
+    "returns": "2026-10-03"
    }
   ],
   "UTA": [
-   {
-    "id": "4277961",
-    "name": "Jaren Jackson Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-09-10",
-    "returns": "2026-10-01"
-   },
    {
     "id": "4433268",
     "name": "Trey Alexander",
@@ -606,18 +548,18 @@
     "status": "Day-To-Day",
     "detail": "Ribs Bruise",
     "date": "2026-07-17",
-    "returns": "2026-10-01"
+    "returns": "2026-10-04"
    }
   ],
   "WAS": [
    {
-    "id": "6583",
-    "name": "Anthony Davis",
+    "id": "4997537",
+    "name": "Tristan Vukcevic",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger Sprain",
-    "date": "2026-09-24",
-    "returns": "2026-10-01"
+    "status": "Out",
+    "detail": "Hip",
+    "date": "2026-10-01",
+    "returns": "2026-11-02"
    },
    {
     "id": "5160992",
@@ -626,16 +568,7 @@
     "status": "Day-To-Day",
     "detail": "Foot Surgery",
     "date": "2026-09-24",
-    "returns": "2026-10-01"
-   },
-   {
-    "id": "4277905",
-    "name": "Trae Young",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Quadriceps Bruise",
-    "date": "2026-09-21",
-    "returns": "2026-10-01"
+    "returns": "2026-10-08"
    },
    {
     "id": "4606840",

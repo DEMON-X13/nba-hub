@@ -153,9 +153,9 @@
    "out": []
   },
   "DEN": {
-   "strength": 1568.9,
-   "offence": 121,
-   "defence": -48.1,
+   "strength": 1541.9,
+   "offence": 103.9,
+   "defence": -57.9,
    "coach": "David Adelman",
    "coachElo": -4,
    "pace": 101.5,
@@ -272,15 +272,13 @@
    "out": []
   },
   "NYK": {
-   "strength": 1691.8,
-   "offence": 80.7,
-   "defence": 93.7,
+   "strength": 1702.6,
+   "offence": 87.2,
+   "defence": 98.1,
    "coach": "Mike Brown",
    "coachElo": 17.4,
    "pace": 98.4,
-   "out": [
-    "N'Faly Dante (Out)"
-   ]
+   "out": []
   },
   "OKC": {
    "strength": 1796.1,
@@ -375,6 +373,7 @@
    "coachElo": -16.5,
    "pace": 105.3,
    "out": [
+    "Tristan Vukcevic (Out)",
     "Jamir Watkins (Out)"
    ]
   }
@@ -7707,5 +7706,5 @@
   }
  },
  "upcoming": {},
- "generated": "2026-09-30T16:37Z"
+ "generated": "2026-10-02T14:32Z"
 }

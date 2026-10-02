@@ -19,7 +19,9 @@ const state = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'))
 const side = t => ({ team: t, strength: 1500, offence: 0, defence: 0, coach: { name: 'Coach', elo: 0 }, lineup: [{ id: '1', name: 'Some Guard', pos: 'G', min: 34, o: 20, d: 10, adds: 21 }], out: [{ id: '2', name: 'Some Star', status: 'Out', min: 33, costs: 60 }] });
 const fake = (id, date, fin) => ({ id, date, tip: date + 'T23:30:00Z', type: 'REG', away: 'BOS', home: 'NYK', neutral: false, status: fin ? 'final' : 'scheduled', awayScore: fin ? 98 : null, homeScore: fin ? 105 : null,
   line: -2.5, totalLine: 220, model: { pHome: 0.61, spread: -3.5, total: 224.5, pace: 99, home: side('NYK'), away: side('BOS') }, team: { pHome: 0.55, spread: -1.5 }, published: null });
-const withGames = (fin) => ({ ...state, slate: [fake('t1', state.today, fin), fake('t0', state.today.slice(0, 8) + '01', true)] });
+/* the second game is yesterday's final: always a different day from today, including on the 1st of a month */
+const yesterday = (() => { const d = new Date(state.today + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - 1); return d.toISOString().slice(0, 10); })();
+const withGames = (fin) => ({ ...state, slate: [fake('t1', state.today, fin), fake('t0', yesterday, true)] });
 
 function load(page, st, mine) {
   const html = fs.readFileSync(path.join(ROOT, page), 'utf8').replace(/<link[^>]*fonts[^>]*>/g, '');

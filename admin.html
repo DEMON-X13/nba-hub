@@ -288,14 +288,14 @@ let day = null;
 render.slate = function () {
   const dates = [...new Set(S.slate.map(g => g.date))].sort();
   const counts = {}; for (const g of S.slate) counts[g.date] = (counts[g.date] || 0) + 1;
-  if (!day || !dates.includes(day)) day = dates.includes(S.today) ? S.today : dates.find(d => d > S.today) || dates[dates.length - 1] || null;
-  $('#days').innerHTML = dates.map(d => `<button class="day${d === day ? ' on' : ''}" data-d="${d}"><div class="dw">${d === S.today ? 'Today' : d === addDays(S.today, 1) ? 'Tomorrow' : dayName(d)}</div><div class="dn">${dayNum(d)}</div><div class="dc">${counts[d]} game${counts[d] === 1 ? '' : 's'}</div></button>`).join('');
+  if (!day || !dates.includes(day)) day = dates.includes(TODAY) ? TODAY : dates.find(d => d > TODAY) || dates[dates.length - 1] || null;
+  $('#days').innerHTML = dates.map(d => `<button class="day${d === day ? ' on' : ''}" data-d="${d}"><div class="dw">${d === TODAY ? 'Today' : d === addDays(TODAY, 1) ? 'Tomorrow' : dayName(d)}</div><div class="dn">${dayNum(d)}</div><div class="dc">${counts[d]} game${counts[d] === 1 ? '' : 's'}</div></button>`).join('');
   $$('#days .day').forEach(b => b.onclick = () => { day = b.dataset.d; render.slate(); });
   const games = S.slate.filter(g => g.date === day);
-  const n = S.slate.filter(g => g.date === S.today).length; $('#nSlate').hidden = !n; $('#nSlate').textContent = n;
+  const n = S.slate.filter(g => g.date === TODAY).length; $('#nSlate').hidden = !n; $('#nSlate').textContent = n;
   if (!games.length) {
     const OPENING = S.opening || OPENING_FALLBACK;
-    const daysTo = Math.round((Date.parse(OPENING) - Date.parse(S.today)) / 86400000);
+    const daysTo = Math.round((Date.parse(OPENING) - Date.parse(TODAY)) / 86400000);
     const board = Object.entries(S.teams).sort((a, b) => b[1].strength - a[1].strength).slice(0, 5);
     $('#slate').innerHTML = `<div class="empty"><b>No games on the board</b>${daysTo > 0 ? `<div class="countdown">${daysTo}</div>days to opening night, ${dayNum(OPENING)}` : 'The schedule shows up here about ten days out.'}
       <p style="margin:22px 0 8px;color:var(--muted);font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:500">Preseason board</p>
@@ -303,7 +303,7 @@ render.slate = function () {
     return;
   }
   const pre = games.some(g => g.type === 'PRE');
-  const opening = S.opening ? `Opening night is ${dayName(S.opening)} ${dayNum(S.opening)}${S.opening > S.today ? `, ${Math.round((Date.parse(S.opening) - Date.parse(S.today)) / 86400000)} days away` : ''}.` : '';
+  const opening = S.opening ? `Opening night is ${dayName(S.opening)} ${dayNum(S.opening)}${S.opening > TODAY ? `, ${Math.round((Date.parse(S.opening) - Date.parse(TODAY)) / 86400000)} days away` : ''}.` : '';
   $('#slate').innerHTML = (pre ? `<div class="note"><b>Preseason.</b> Rotations are experimental and starters often sit, so these numbers assume each team's regular rotation. They are shown for fun and never graded, and the ratings don't learn from them. ${opening}</div>` : '')
     + `<div class="grid">${games.map(card).join('')}</div>`;
   $('#slate').querySelectorAll('[data-act]').forEach(el => el.onclick = act);
@@ -501,6 +501,8 @@ render.data = function () {
   $('#exp').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(M)], { type: 'application/json' })); a.download = `nba-hub-backup-${S.today}.json`; a.click(); };
   $('#imp').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { try { const v = JSON.parse(t); M = { picks: v.picks || {}, tickets: v.tickets || [], legs: v.legs || [] }; saveMine(); badges(); toast('Backup restored'); } catch (x) { toast('Not a backup file'); } }); };
 };
+/* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's */
+const TODAY = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
 
 /* ---------- boot ---------- */

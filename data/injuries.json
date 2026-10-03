@@ -1,5 +1,5 @@
 {
- "date": "2026-10-02",
+ "date": "2026-10-03",
  "teams": {
   "ATL": [
    {
@@ -140,6 +140,15 @@
    }
   ],
   "DEN": [
+   {
+    "id": "4592427",
+    "name": "Spencer Jones",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-03",
+    "returns": "2026-10-04"
+   },
    {
     "id": "4698719",
     "name": "Trevon Brazile",

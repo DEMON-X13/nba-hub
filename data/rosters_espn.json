@@ -1,5 +1,5 @@
 {
- "date": "2026-10-02",
+ "date": "2026-10-03",
  "teams": {
   "ATL": [
    {
@@ -1085,7 +1085,7 @@
     "name": "Spencer Jones",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3135046",

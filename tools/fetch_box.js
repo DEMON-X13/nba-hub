@@ -98,7 +98,7 @@ function writeBox(season, rows, teamLines) {
 
 async function boxes(games) {
   const started = Date.now();
-  const need = games.filter(g => g.status === 'final' && +g.season >= FROM && +g.season <= TO);
+  const need = games.filter(g => g.status === 'final' && g.type !== 'PRE' && +g.season >= FROM && +g.season <= TO);   // preseason minutes would spoil the projections
   const bySeason = {};
   for (const g of need) (bySeason[g.season] = bySeason[g.season] || []).push(g);
   let read = 0, failed = 0, skipped = 0, idLookups = 0;

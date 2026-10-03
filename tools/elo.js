@@ -111,7 +111,8 @@ function fit(games) {
 }
 
 function main() {
-  const games = L.readGames().filter(g => g.status === 'final' || g.status === 'scheduled' || g.status === 'live');
+  /* a preseason final teaches nothing (rotations are experiments); a preseason game still to play is priced */
+  const games = L.readGames().filter(g => (g.status === 'final' && g.type !== 'PRE') || g.status === 'scheduled' || g.status === 'live');
   games.forEach(g => { g.season = +g.season; g.neutral = +g.neutral; });
   const prev = fs.existsSync(MODEL) ? JSON.parse(fs.readFileSync(MODEL, 'utf8')) : null;
   let P = prev ? { ...DEFAULT, ...prev.params } : { ...DEFAULT };

@@ -9,7 +9,9 @@
  * upserted by id: a day's ESPN rows are replaced by what the feed says now, so a postponed game leaves
  * its old date and appears on the new one. Rows from the history file are kept unless the feed has a
  * final for the same game. ESPN carries a line only before tip-off, so the line a final keeps is the last
- * one seen on it, the morning-of line from the day's earlier pull. Preseason games are ignored. Exit 1 if ESPN could not be read at all, so a
+ * one seen on it, the morning-of line from the day's earlier pull. Preseason games are kept, typed PRE:
+ * the page shows them, but neither model learns from them, no box score is pulled and the record skips them.
+ * The pull looks thirty days ahead so opening night is known from the schedule. Exit 1 if ESPN could not be read at all, so a
  * network block shows as a failed run and not as a quiet day with no games.
  */
 'use strict';
@@ -17,7 +19,7 @@ const fs = require('fs');
 const L = require('./lib');
 
 const SB = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?limit=100&dates=';
-const AHEAD = 10;
+const AHEAD = 30;                                  // far enough to see opening night from the preseason; the page shows ten days
 const args = process.argv.slice(2);
 const opt = k => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
@@ -38,7 +40,6 @@ function parseDay(j) {
     const c = e.competitions && e.competitions[0];
     if (!c) continue;
     const type = e.season && e.season.type;
-    if (type === 1) continue;                                      // preseason
     const home = c.competitors.find(x => x.homeAway === 'home'), away = c.competitors.find(x => x.homeAway === 'away');
     if (!home || !away) continue;
     const H = L.fromEspn(home.team.abbreviation), A = L.fromEspn(away.team.abbreviation);
@@ -49,7 +50,7 @@ function parseDay(j) {
     const date = L.etDate(e.date);
     const season = (e.season && e.season.year) || L.seasonOf(date);
     const odds = (c.odds || [])[0];
-    rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 2 ? 'REG' : 'POST', away: A, home: H,
+    rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 2 ? 'REG' : 'POST', away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
       home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });

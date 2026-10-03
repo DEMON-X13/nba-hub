@@ -44,7 +44,7 @@ function main() {
   });
 
   /* the season's record: only games the site had a number on before tip-off */
-  const record = games.filter(g => g.status === 'final' && +g.season === season && preds[g.game_id]).map(g => {
+  const record = games.filter(g => g.status === 'final' && g.type !== 'PRE' && +g.season === season && preds[g.game_id]).map(g => {
     const p = preds[g.game_id];
     const mov = +g.home_score - +g.away_score;
     const pick = +p.pHome >= 0.5 ? g.home : g.away;
@@ -69,7 +69,9 @@ function main() {
   const names = {};
   for (const p of plist) names[p.id] = p.name;
 
-  const state = { season, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
+  /* opening night: the first regular-season game on or after today, once the schedule shows it */
+  const opener = games.filter(g => g.type === 'REG' && g.date >= today).map(g => g.date).sort()[0] || null;
+  const state = { season, opening: opener, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
     slate, record, teams, players: plist, coaches, names,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };
@@ -80,4 +82,4 @@ function main() {
   if (strip(body) !== strip(before)) fs.writeFileSync(OUT, body);
   L.log(`state.json: ${slate.length} games on the slate ${from}..${to}, ${record.length} graded this season, ${plist.length} players, ${coaches.length} coaches, ${(body.length / 1024).toFixed(0)} KB, ${strip(body) !== strip(before) ? 'written' : 'unchanged'}`);
 }
-main();
+if (require.main === module) main();

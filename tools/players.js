@@ -182,6 +182,10 @@ function replay(P, ctx, mode, collect) {
 
     if (g.status !== 'final') {
       if (!collect) continue;
+      /* the first game of a new season rolls every player over once, as a final would have done one by one:
+         carried part way toward zero, minutes history trimmed. Without it the opening slate would be priced on
+         last June's ratings; done before any lineup is chosen, so a card and the Teams tab see the same players */
+      for (const p of Object.values(players)) if (p.season < g.season) { p.o *= P.carryP; p.d *= P.carryP; p.season = g.season; p.mins = p.mins.slice(-5); }
       const live = ctx.liveLineup(g, players, projected);
       const H = strength(live.home.list), A = strength(live.away.list);
       const own = (ch.c + H.O + H.D + sh) - (ca.c + A.O + A.D + sa);
@@ -282,7 +286,11 @@ function makeLiveLineup(ctx) {
         if (m) list.push([p, m]);
       }
       list.sort((a, b) => b[1] - a[1]);
-      const top = list.slice(0, 13);                              // a rotation is at most thirteen deep
+      /* fill the game's 240 minutes in rotation order: each player gets his projected minutes until they run
+         out, so the starters keep their real workload and a long summer roster's end of bench drops off
+         (spreading 240 over thirteen projections squeezed a 36-minute star to 25) */
+      const top = []; let left = 240;
+      for (const [p, m] of list) { if (left <= 0) break; const give = Math.min(m, left); if (give >= 4) top.push([p, give]); left -= give; }
       return { list: top, out, coach: ctx.coachOf(g.season, team, g.date) };
     };
     return { home: side(g.home), away: side(g.away) };
@@ -335,12 +343,12 @@ function research(ctx) {
 function main() {
   const model = JSON.parse(fs.readFileSync(MODEL, 'utf8'));
   const situP = model.params;
-  const games = L.readGames().filter(g => +g.season >= FIRST && (g.status === 'final' || g.status === 'scheduled' || g.status === 'live'));
+  const games = L.readGames().filter(g => +g.season >= FIRST && ((g.status === 'final' && g.type !== 'PRE') || g.status === 'scheduled' || g.status === 'live'));
   games.forEach(g => { g.season = +g.season; g.neutral = +g.neutral; });
   const ctx = { games, boxes: loadBoxes(), teamStats: loadTeamBoxes(), coachOf: loadCoaches(), raptor: loadRaptor(), situP, teamDiff: {} };
   ctx.liveLineup = makeLiveLineup(ctx);
   /* the team Elo's own pre-game difference for every game, finals and the slate, for the blend and the comparison */
-  const everything = L.readGames().filter(g => g.status === 'final' || g.status === 'scheduled' || g.status === 'live');
+  const everything = L.readGames().filter(g => (g.status === 'final' && g.type !== 'PRE') || g.status === 'scheduled' || g.status === 'live');
   everything.forEach(g => { g.season = +g.season; g.neutral = +g.neutral; });
   const TE = E.replay(situP, everything, true);
   ctx.teamRecs = TE.recs.map(r => ({ ...r, total: 0, expTotal: 0 }));
@@ -377,7 +385,17 @@ function main() {
      amount changes no prediction, since both lineups carry five shares) */
   { let so = 0, sd = 0, sw = 0;
     for (const p of Object.values(R.players)) if (p.last >= L.addDays(asOf, -400) && p.mins.length) { const w = mean(p.mins.slice(-P.minGames)) * p.mins.length; so += w * p.o; sd += w * p.d; sw += w; }
-    if (sw) for (const p of Object.values(R.players)) { p.o -= so / sw; p.d -= sd / sw; } }
+    if (sw) {
+      const mo = so / sw, md = sd / sw;
+      for (const p of Object.values(R.players)) { p.o -= mo; p.d -= md; }
+      /* the slate was priced before this shift: move its displayed levels by the same amount so a card and the
+         Teams tab agree (a difference between two sides, and so every chance and spread, is unchanged) */
+      for (const u of Object.values(R.upcoming)) for (const side of [u.home, u.away]) {
+        side.offence = +(side.offence - 5 * mo).toFixed(1); side.defence = +(side.defence - 5 * md).toFixed(1); side.strength = +(side.strength - 5 * (mo + md)).toFixed(1);
+        for (const x of side.lineup) { const w = x.min / 48; x.o = Math.round(x.o - mo); x.d = Math.round(x.d - md); x.adds = +(x.adds - w * (mo + md)).toFixed(1); }
+        for (const x of side.out) x.costs = +(x.costs - x.min / 48 * (mo + md)).toFixed(1);
+      }
+    } }
   const playersOut = {};
   for (const [id, p] of Object.entries(R.players)) if (p.n >= 5 && p.last >= L.addDays(asOf, -400))
     playersOut[id] = { name: p.name, pos: p.pos, team: p.team, o: +p.o.toFixed(1), d: +p.d.toFixed(1), elo: +(p.o + p.d).toFixed(1), min: +mean(p.mins.slice(-P.minGames)).toFixed(1), games: p.n, last: p.last, prior: p.prior };
@@ -385,7 +403,8 @@ function main() {
   for (const [name, c] of Object.entries(R.coaches)) if (c.n >= 10) coachesOut[name] = { team: c.team, elo: +c.c.toFixed(1), games: c.n };
   const teams = {};
   for (const t of L.TEAMS) {
-    const g = { season: season + (asOf < `${season}-07-01` ? 0 : 1), home: t, away: t, date: asOf, neutral: 0 };
+    const today = L.etDate(new Date());
+    const g = { season: L.seasonOf(today), home: t, away: t, date: today, neutral: 0 };   // today's coach and roster, the season the slate is in
     const live = ctx.liveLineup(g, R.players, (p) => p.mins.length ? mean(p.mins.slice(-P.minGames)) : 0);
     const tot = live.home.list.reduce((s, x) => s + x[1], 0) || 1;
     let O = 0, D = 0; for (const [p, m] of live.home.list) { O += m / tot * 5 * p.o; D += m / tot * 5 * p.d; }
@@ -420,7 +439,7 @@ function logPredictions(games, upcoming, ctx) {
   const stamp = new Date().toISOString().slice(0, 16) + 'Z';
   let n = 0;
   for (const g of games) {
-    if (final.has(g.game_id) || !upcoming[g.game_id]) continue;
+    if (final.has(g.game_id) || !upcoming[g.game_id] || g.type === 'PRE') continue;      // preseason is shown, never graded
     const u = upcoming[g.game_id];
     const td = ctx.teamDiff[g.game_id];
     const teamP = td === undefined ? '' : E.prob(td).toFixed(4);

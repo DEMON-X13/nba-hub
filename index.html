@@ -122,6 +122,8 @@ h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13
 .drawer li .m{color:var(--muted);flex:none;width:34px;text-align:right} .drawer li .v{flex:none;width:44px;text-align:right;font-weight:700}
 .drawer li .v.pos{color:var(--lime)} .drawer li .v.neg{color:var(--rose)}
 .drawer .coach{color:var(--ink-2);margin-top:6px}
+.note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--hot);border-radius:12px;padding:12px 16px;margin:0 0 16px;color:var(--ink-2);font-size:13px;line-height:1.5}
+.note b{color:var(--ink)}
 .empty{background:var(--panel);border:1px dashed var(--line-2);border-radius:var(--r);padding:34px 24px;text-align:center;color:var(--ink-2)}
 .empty b{display:block;font-family:var(--display);font-size:24px;color:var(--ink);margin-bottom:6px}
 .countdown{font-family:var(--display);font-size:clamp(40px,9vw,88px);font-weight:900;color:var(--hot);line-height:1;letter-spacing:-.03em;margin:8px 0 4px}
@@ -220,7 +222,7 @@ const TEAMS = {
   SAC:['Sacramento','Kings','#9B6BFF'], SAS:['San Antonio','Spurs','#C4CED4'], TOR:['Toronto','Raptors','#E4262B'], UTA:['Utah','Jazz','#F9A01B'], WAS:['Washington','Wizards','#E63C5C'] };
 const KEY = 'nba_hub_2027';
 const SIGMA = 12.5;                                                  // points: the spread of a game's margin around the model's number
-const OPENING = '2026-10-20';
+const OPENING_FALLBACK = '2026-10-20';                        // until the schedule in state.json shows the opener
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const fmtPct = p => Math.round(p * 100) + '%';
 const fmtSp = s => s === null || s === undefined ? '—' : (s > 0 ? '+' : '') + s.toFixed(1).replace('.0', '');
@@ -291,6 +293,7 @@ render.slate = function () {
   const games = S.slate.filter(g => g.date === day);
   const n = S.slate.filter(g => g.date === S.today).length; $('#nSlate').hidden = !n; $('#nSlate').textContent = n;
   if (!games.length) {
+    const OPENING = S.opening || OPENING_FALLBACK;
     const daysTo = Math.round((Date.parse(OPENING) - Date.parse(S.today)) / 86400000);
     const board = Object.entries(S.teams).sort((a, b) => b[1].strength - a[1].strength).slice(0, 5);
     $('#slate').innerHTML = `<div class="empty"><b>No games on the board</b>${daysTo > 0 ? `<div class="countdown">${daysTo}</div>days to opening night, ${dayNum(OPENING)}` : 'The schedule shows up here about ten days out.'}
@@ -298,7 +301,10 @@ render.slate = function () {
       <div style="display:flex;gap:8px;justify-content:center;flex-wrap:wrap">${board.map(([t, v], i) => `<span class="chip"><span class="pill" style="--tc:${TEAMS[t][2]}">${t}</span><b>${v.strength.toFixed(0)}</b></span>`).join('')}</div></div>`;
     return;
   }
-  $('#slate').innerHTML = `<div class="grid">${games.map(card).join('')}</div>`;
+  const pre = games.some(g => g.type === 'PRE');
+  const opening = S.opening ? `Opening night is ${dayName(S.opening)} ${dayNum(S.opening)}${S.opening > S.today ? `, ${Math.round((Date.parse(S.opening) - Date.parse(S.today)) / 86400000)} days away` : ''}.` : '';
+  $('#slate').innerHTML = (pre ? `<div class="note"><b>Preseason.</b> Rotations are experimental and starters often sit, so these numbers assume each team's regular rotation. They are shown for fun and never graded, and the ratings don't learn from them. ${opening}</div>` : '')
+    + `<div class="grid">${games.map(card).join('')}</div>`;
   $('#slate').querySelectorAll('[data-act]').forEach(el => el.onclick = act);
 };
 function card(g) {
@@ -309,6 +315,7 @@ function card(g) {
   if (mine) tags.push(`<span class="tag hot">Your pick · ${mine}</span>`);
   if (fin) tags.push(`<span class="tag">Final</span>`); else if (g.status === 'live') tags.push(`<span class="tag hot">Live</span>`);
   if (g.type === 'POST') tags.push(`<span class="tag ice">Playoffs</span>`);
+  if (g.type === 'PRE') tags.push(`<span class="tag">Preseason</span>`);
   if (g.neutral) tags.push(`<span class="tag">Neutral</span>`);
   if (fin && pick) tags.push(win ? `<span class="tag ${win === pick ? 'lime' : 'rose'}">Model ${win === pick ? 'hit' : 'missed'}</span>` : '');
   const outs = side => m && m[side] && m[side].out && m[side].out.length ? m[side].out : [];
@@ -334,7 +341,7 @@ function card(g) {
       <div class="vs">${m ? `<b>${fmtPct(Math.max(m.pHome, 1 - m.pHome))}</b>${pick}` : 'no number'}</div>
       <div class="team home" style="--tc:${H[2]}"><span class="badge${pick === g.home ? ' pick' : ''}${mine === g.home ? ' mine' : ''}" data-act="pick" data-side="${g.home}" title="Pick ${H[1]}">${g.home}</span><span class="nm">${H[1]}</span>${fin ? `<span class="sc${win === g.away ? ' lose' : ''}">${g.homeScore}</span>` : ''}</div>
     </div>
-    ${m ? `<div class="prob"><i style="width:${(1 - m.pHome) * 100}%"></i><i class="h" style="width:${m.pHome * 100}%"></i></div>
+    ${m ? `<div class="prob" style="--ac:${A[2]};--hc:${H[2]}"><i style="width:${(1 - m.pHome) * 100}%"></i><i class="h" style="width:${m.pHome * 100}%"></i></div>
     <div class="pline"><span>${g.away} <b>${fmtPct(1 - m.pHome)}</b></span><span><b>${fmtPct(m.pHome)}</b> ${g.home}</span></div>` : ''}
     <div class="chips">${chips}</div>
     ${outRows.length ? `<div class="out">${outRows.join('')}</div>` : ''}

@@ -40,8 +40,12 @@ No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke t
   franchises into their current team (Sonics into OKC, Nets into BKN, the two Hornets into NOP and CHA).
 - **From 2025-03-18 on**: ESPN's public scoreboard feed, the one the season tracker already uses,
   one request per day. It gives finals, the schedule about ten days out, the neutral-site flag (the
-  Cup final), and a consensus line and total on games not yet played. Preseason and postponed games
-  are dropped. The NBA's own stats site blocks cloud runners and is not used.
+  Cup final), and a consensus line and total on games not yet played. It looks thirty days ahead so
+  opening night is known from the schedule; the page shows ten. Postponed games are dropped.
+  **Preseason** games are kept, typed `PRE`: the page shows them with a Preseason tag and a note, but
+  neither model learns from them, no box score is pulled for them and the record leaves them out,
+  because preseason rotations are experiments. The NBA's own stats site blocks cloud runners and is
+  not used.
 - **Box scores**: ESPN's game summary feed, one request per game, from the 2021-22 season on
   (about 6,600 games; the one-time backfill took the job fifty minutes, a morning now takes a minute).
   Six games in five seasons could not be matched to an ESPN id and have no box score.
@@ -88,8 +92,10 @@ first rating is his last RAPTOR (2020-2022, matched by name; 249 of the current 
 with none starts as a rookie, below average. Ratings carry part way toward zero each season.
 
 Tonight's strength uses projected minutes: each available player's average over his last eight
-appearances, scaled to 240, with the injury report's Out and Doubtful players removed and the
-roster from the roster feed. Pace is a running average of each team's possessions per 48; the total
+appearances, filled into the game's 240 minutes in rotation order (starters keep their workload, the
+end of a long roster drops off), with the injury report's Out and Doubtful players removed and the
+roster from the roster feed. The first game of a new season rolls every player over once, carried
+part way toward zero, so the opening slate is not priced on last June's ratings. Pace is a running average of each team's possessions per 48; the total
 is the two expected efficiencies times the expected pace. The final win chance blends in a tenth of
 the team model's difference.
 

@@ -5,7 +5,8 @@
  * Loads index.html in jsdom with fetch stubbed to serve state.json plus one fabricated
  * game for tonight, and checks: the update stamp shows, every tab renders without a script error, a
  * visitor's pick is kept in their own storage and shows on My Picks, a parlay leg reaches the ticket
- * and a saved ticket grades once the game is final, and the Data tab is only on the admin page.
+ * and a saved ticket grades once the game is final, the Data tab is only on the admin page, and a preseason
+ * game shows with its tag and the not-graded note.
  */
 'use strict';
 const fs = require('fs');
@@ -85,6 +86,17 @@ function load(page, st, mine) {
   check(w.document.getElementById('dataTabBtn').hidden === false, 'Data tab on admin');
   w.document.querySelector('#nav button[data-tab=data]').click(); await sleep(30);
   check(/generated/.test(w.document.getElementById('tab-data').textContent), 'Data tab renders');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  console.log('5. a preseason night');
+  const preDay = { ...state, opening: '2099-01-01', slate: [{ ...fake('p1', state.today, false), type: 'PRE' }] };
+  ({ w, errors } = load('index.html', preDay));
+  await sleep(250);
+  const d5 = w.document;
+  check(d5.querySelectorAll('.card').length === 1, 'the preseason game has a card');
+  check(/Preseason/.test(d5.querySelector('.card .tags').textContent), 'it is tagged Preseason');
+  check(/Preseason\./.test(d5.querySelector('#slate .note').textContent) && /never graded/.test(d5.querySelector('#slate .note').textContent), 'the preseason note explains it is not graded');
+  check(/Opening night/.test(d5.querySelector('#slate .note').textContent), 'the note gives opening night');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   console.log(fails ? `${fails} FAILED` : 'all good');

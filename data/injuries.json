@@ -152,6 +152,15 @@
   ],
   "GSW": [
    {
+    "id": "6430",
+    "name": "Jimmy Butler III",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-10-02",
+    "returns": "2027-01-02"
+   },
+   {
     "id": "3102531",
     "name": "Kristaps Porzingis",
     "pos": "C",
@@ -159,15 +168,6 @@
     "detail": "Undisclosed",
     "date": "2026-09-28",
     "returns": "2026-10-13"
-   },
-   {
-    "id": "6430",
-    "name": "Jimmy Butler III",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-09-28",
-    "returns": "2026-12-01"
    },
    {
     "id": "4432171",
@@ -248,20 +248,20 @@
   ],
   "MEM": [
    {
-    "id": "4432185",
-    "name": "Micah Peavy",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-09-28",
-    "returns": "2026-10-05"
-   },
-   {
     "id": "4600663",
     "name": "Zach Edey",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Ankle Surgery",
+    "date": "2026-10-02",
+    "returns": "2026-10-05"
+   },
+   {
+    "id": "4432185",
+    "name": "Micah Peavy",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
     "date": "2026-09-28",
     "returns": "2026-10-05"
    },
@@ -276,6 +276,15 @@
    }
   ],
   "MIA": [
+   {
+    "id": "4431786",
+    "name": "Keshad Johnson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Hamstring",
+    "date": "2026-10-02",
+    "returns": "2026-10-26"
+   },
    {
     "id": "4066993",
     "name": "Dru Smith",
@@ -373,7 +382,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-09-30",
+    "date": "2026-10-02",
     "returns": "2026-10-07"
    },
    {
@@ -382,7 +391,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-09-30",
+    "date": "2026-10-02",
     "returns": "2026-10-07"
    },
    {

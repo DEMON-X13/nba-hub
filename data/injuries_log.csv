@@ -800,8 +800,8 @@ date,team,player_id,name,status
 2026-10-02,DAL,6442,Kyrie Irving,Day-To-Day
 2026-10-02,DAL,4683688,Dereck Lively II,Day-To-Day
 2026-10-02,DEN,4698719,Trevon Brazile,Day-To-Day
-2026-10-02,GSW,3102531,Kristaps Porzingis,Day-To-Day
 2026-10-02,GSW,6430,Jimmy Butler III,Out
+2026-10-02,GSW,3102531,Kristaps Porzingis,Day-To-Day
 2026-10-02,GSW,4432171,Moses Moody,Out
 2026-10-02,GSW,5170949,Alex Toohey,Day-To-Day
 2026-10-02,IND,2580365,Larry Nance Jr.,Day-To-Day
@@ -810,9 +810,10 @@ date,team,player_id,name,status
 2026-10-02,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-10-02,LAC,3913176,Brandon Ingram,Out
 2026-10-02,LAC,4396818,Jordan Miller,Out
-2026-10-02,MEM,4432185,Micah Peavy,Day-To-Day
 2026-10-02,MEM,4600663,Zach Edey,Day-To-Day
+2026-10-02,MEM,4432185,Micah Peavy,Day-To-Day
 2026-10-02,MEM,5231919,Karim Lopez,Day-To-Day
+2026-10-02,MIA,4431786,Keshad Johnson,Out
 2026-10-02,MIA,4066993,Dru Smith,Day-To-Day
 2026-10-02,MIA,4431772,Myron Gardner,Day-To-Day
 2026-10-02,MIN,3934673,Donte DiVincenzo,Out

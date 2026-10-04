@@ -1,5 +1,5 @@
 {
- "date": "2026-10-03",
+ "date": "2026-10-04",
  "teams": {
   "ATL": [
    {
@@ -159,6 +159,17 @@
     "returns": "2026-10-04"
    }
   ],
+  "DET": [
+   {
+    "id": "4433621",
+    "name": "Jalen Duren",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-03",
+    "returns": "2026-10-05"
+   }
+  ],
   "GSW": [
    {
     "id": "6430",
@@ -199,12 +210,30 @@
   ],
   "IND": [
    {
+    "id": "4592829",
+    "name": "Quenton Jackson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-04",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "2530530",
+    "name": "T.J. McConnell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-04",
+    "returns": "2026-10-07"
+   },
+   {
     "id": "2580365",
     "name": "Larry Nance Jr.",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-09-29",
+    "date": "2026-10-04",
     "returns": "2026-10-07"
    },
    {
@@ -218,6 +247,15 @@
    }
   ],
   "LAC": [
+   {
+    "id": "4702352",
+    "name": "Kobe Sanders",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-10-03",
+    "returns": "2026-10-10"
+   },
    {
     "id": "6580",
     "name": "Bradley Beal",
@@ -302,15 +340,6 @@
     "detail": "Calf Strain",
     "date": "2026-10-01",
     "returns": "2026-10-16"
-   },
-   {
-    "id": "4431772",
-    "name": "Myron Gardner",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-07-08",
-    "returns": "2026-10-03"
    }
   ],
   "MIN": [
@@ -343,15 +372,6 @@
     "status": "Day-To-Day",
     "detail": "Thumb Surgery",
     "date": "2026-09-16",
-    "returns": "2026-10-05"
-   },
-   {
-    "id": "5289900",
-    "name": "Mohamed Diawara",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger",
-    "date": "2026-07-18",
     "returns": "2026-10-05"
    }
   ],
@@ -444,15 +464,6 @@
   ],
   "PHX": [
    {
-    "id": "4066268",
-    "name": "Duop Reath",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot Surgery",
-    "date": "2026-09-17",
-    "returns": "2026-10-05"
-   },
-   {
     "id": "4701232",
     "name": "Mark Williams",
     "pos": "C",
@@ -460,15 +471,6 @@
     "detail": "Shoulder Surgery",
     "date": "2026-09-11",
     "returns": "2027-02-03"
-   },
-   {
-    "id": "4702602",
-    "name": "CJ Huntley",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Not Specified",
-    "date": "2026-07-19",
-    "returns": "2026-10-05"
    }
   ],
   "POR": [
@@ -504,40 +506,13 @@
   ],
   "TOR": [
    {
-    "id": "4431893",
-    "name": "Jamison Battle",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back Not Specified",
-    "date": "2026-10-01",
-    "returns": "2026-10-03"
-   },
-   {
-    "id": "2993874",
-    "name": "Kyle Anderson",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Bruise",
-    "date": "2026-10-01",
-    "returns": "2026-10-03"
-   },
-   {
-    "id": "5149115",
-    "name": "Allen Graves",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin Not Specified",
-    "date": "2026-10-01",
-    "returns": "2026-10-03"
-   },
-   {
     "id": "4432586",
     "name": "Nate Bittle",
     "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Lower Leg",
-    "date": "2026-09-10",
-    "returns": "2026-10-03"
+    "detail": "Foot",
+    "date": "2026-10-04",
+    "returns": "2026-10-10"
    },
    {
     "id": "4702656",
@@ -545,17 +520,53 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Knee Inflammation",
-    "date": "2026-07-19",
-    "returns": "2026-10-03"
+    "date": "2026-10-04",
+    "returns": "2026-10-10"
    },
    {
-    "id": "4590360",
-    "name": "Chucky Hepburn",
-    "pos": "G",
+    "id": "4431684",
+    "name": "Trayce Jackson-Davis",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-07-19",
-    "returns": "2026-10-03"
+    "detail": "Undisclosed",
+    "date": "2026-10-03",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4431893",
+    "name": "Jamison Battle",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back Not Specified",
+    "date": "2026-10-03",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "2993874",
+    "name": "Kyle Anderson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Bruise",
+    "date": "2026-10-03",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "5149115",
+    "name": "Allen Graves",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin Not Specified",
+    "date": "2026-10-03",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "6450",
+    "name": "Kawhi Leonard",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-10-03",
+    "returns": "2026-10-10"
    }
   ],
   "UTA": [
@@ -571,6 +582,15 @@
   ],
   "WAS": [
    {
+    "id": "5160992",
+    "name": "Alex Sarr",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Foot Surgery",
+    "date": "2026-10-03",
+    "returns": "2026-10-08"
+   },
+   {
     "id": "4997537",
     "name": "Tristan Vukcevic",
     "pos": "F",
@@ -578,15 +598,6 @@
     "detail": "Hip",
     "date": "2026-10-01",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "5160992",
-    "name": "Alex Sarr",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot Surgery",
-    "date": "2026-09-24",
-    "returns": "2026-10-08"
    },
    {
     "id": "4606840",

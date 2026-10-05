@@ -1,5 +1,5 @@
 {
- "date": "2026-10-04",
+ "date": "2026-10-05",
  "teams": {
   "ATL": [
    {
@@ -18,7 +18,7 @@
     "status": "Day-To-Day",
     "detail": "Foot Fracture",
     "date": "2026-07-19",
-    "returns": "2026-10-15"
+    "returns": "2026-10-21"
    },
    {
     "id": "4585618",
@@ -41,13 +41,22 @@
   ],
   "BKN": [
    {
+    "id": "4870564",
+    "name": "Joshua Jefferson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-05",
+    "returns": "2026-10-08"
+   },
+   {
     "id": "5101761",
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-02",
-    "returns": "2026-10-06"
+    "date": "2026-10-05",
+    "returns": "2026-10-08"
    }
   ],
   "CHA": [
@@ -80,6 +89,15 @@
    }
   ],
   "CHI": [
+   {
+    "id": "4278067",
+    "name": "Nic Claxton",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-05",
+    "returns": "2026-10-21"
+   },
    {
     "id": "4066650",
     "name": "Zach Collins",
@@ -146,17 +164,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-10-03",
-    "returns": "2026-10-04"
+    "date": "2026-10-04",
+    "returns": "2026-10-06"
    },
    {
-    "id": "4698719",
-    "name": "Trevon Brazile",
-    "pos": "F",
+    "id": "3936299",
+    "name": "Jamal Murray",
+    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-07-19",
-    "returns": "2026-10-04"
+    "detail": "Personal",
+    "date": "2026-10-04",
+    "returns": "2026-10-06"
    }
   ],
   "DET": [
@@ -166,7 +184,7 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-03",
+    "date": "2026-10-05",
     "returns": "2026-10-05"
    }
   ],
@@ -197,15 +215,6 @@
     "detail": "Knee Surgery",
     "date": "2026-09-28",
     "returns": "2026-12-01"
-   },
-   {
-    "id": "5170949",
-    "name": "Alex Toohey",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-09-10",
-    "returns": "2026-10-04"
    }
   ],
   "IND": [
@@ -248,6 +257,15 @@
   ],
   "LAC": [
    {
+    "id": "4065778",
+    "name": "Max Strus",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-10-04",
+    "returns": "2026-10-10"
+   },
+   {
     "id": "4702352",
     "name": "Kobe Sanders",
     "pos": "G",
@@ -263,7 +281,7 @@
     "status": "Day-To-Day",
     "detail": "Knee Inflammation",
     "date": "2026-09-28",
-    "returns": "2026-10-04"
+    "returns": "2026-10-10"
    },
    {
     "id": "5108024",
@@ -382,8 +400,8 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Knee Surgery",
-    "date": "2026-09-24",
-    "returns": "2026-10-06"
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
    },
    {
     "id": "5159925",
@@ -391,8 +409,62 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Back Surgery",
-    "date": "2026-09-24",
-    "returns": "2026-10-06"
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "4683692",
+    "name": "Cason Wallace",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "2991350",
+    "name": "Alex Caruso",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "4433255",
+    "name": "Chet Holmgren",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "4222252",
+    "name": "Isaiah Hartenstein",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "4593803",
+    "name": "Jalen Williams",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
+   },
+   {
+    "id": "4278073",
+    "name": "Shai Gilgeous-Alexander",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
    },
    {
     "id": "5106270",
@@ -406,12 +478,21 @@
   ],
   "ORL": [
    {
+    "id": "4432165",
+    "name": "Jalen Suggs",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-10-05",
+    "returns": "2026-10-07"
+   },
+   {
     "id": "5214637",
     "name": "Noah Penda",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-10-02",
+    "date": "2026-10-04",
     "returns": "2026-10-07"
    },
    {
@@ -420,7 +501,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-02",
+    "date": "2026-10-04",
     "returns": "2026-10-07"
    },
    {
@@ -444,13 +525,22 @@
   ],
   "PHI": [
    {
-    "id": "3904625",
-    "name": "Tacko Fall",
-    "pos": "C",
+    "id": "4351851",
+    "name": "Anfernee Simons",
+    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Hip",
-    "date": "2026-10-01",
-    "returns": "2026-10-16"
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-08"
+   },
+   {
+    "id": "4870562",
+    "name": "Dominick Barlow",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-08"
    },
    {
     "id": "5105637",
@@ -458,8 +548,44 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Sprain",
+    "date": "2026-10-05",
+    "returns": "2026-10-08"
+   },
+   {
+    "id": "4431678",
+    "name": "Tyrese Maxey",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-08"
+   },
+   {
+    "id": "1966",
+    "name": "LeBron James",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-08"
+   },
+   {
+    "id": "3059318",
+    "name": "Joel Embiid",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-05",
+    "returns": "2026-10-08"
+   },
+   {
+    "id": "3904625",
+    "name": "Tacko Fall",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip",
     "date": "2026-10-01",
-    "returns": "2026-10-05"
+    "returns": "2026-10-16"
    }
   ],
   "PHX": [
@@ -484,7 +610,27 @@
     "returns": "2027-03-02"
    }
   ],
+  "SAC": [
+   {
+    "id": "3907387",
+    "name": "Ben Simmons",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-05",
+    "returns": "2026-10-05"
+   }
+  ],
   "SAS": [
+   {
+    "id": "6440",
+    "name": "Tobias Harris",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Calf Strain",
+    "date": "2026-10-05",
+    "returns": "2026-10-20"
+   },
    {
     "id": "4713010",
     "name": "David Jones Garcia",
@@ -505,6 +651,24 @@
    }
   ],
   "TOR": [
+   {
+    "id": "4433134",
+    "name": "Scottie Barnes",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-05",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "6450",
+    "name": "Kawhi Leonard",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-10-05",
+    "returns": "2026-10-10"
+   },
    {
     "id": "4432586",
     "name": "Nate Bittle",
@@ -558,26 +722,35 @@
     "detail": "Groin Not Specified",
     "date": "2026-10-03",
     "returns": "2026-10-10"
-   },
-   {
-    "id": "6450",
-    "name": "Kawhi Leonard",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Not Injury Related",
-    "date": "2026-10-03",
-    "returns": "2026-10-10"
    }
   ],
   "UTA": [
    {
-    "id": "4433268",
-    "name": "Trey Alexander",
+    "id": "4432811",
+    "name": "Josh Green",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Ribs Bruise",
-    "date": "2026-07-17",
-    "returns": "2026-10-04"
+    "detail": "Knee",
+    "date": "2026-10-04",
+    "returns": "2026-10-06"
+   },
+   {
+    "id": "5105839",
+    "name": "Brice Sensabaugh",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-10-04",
+    "returns": "2026-10-06"
+   },
+   {
+    "id": "4684793",
+    "name": "Kyle Filipowski",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-04",
+    "returns": "2026-10-06"
    }
   ],
   "WAS": [
@@ -587,7 +760,7 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Surgery",
-    "date": "2026-10-03",
+    "date": "2026-10-05",
     "returns": "2026-10-08"
    },
    {

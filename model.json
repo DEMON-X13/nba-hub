@@ -181,18 +181,6 @@
   }
  },
  "upcoming": {
-  "2027_20261004_GSW_LAC": {
-   "pHome": 0.5937,
-   "spread": -2.5,
-   "eloHome": 1519.2,
-   "eloAway": 1453.3
-  },
-  "2027_20261004_UTA_DEN": {
-   "pHome": 0.8897,
-   "spread": -13.8,
-   "eloHome": 1567.3,
-   "eloAway": 1324.7
-  },
   "2027_20261005_LAL_SAC": {
    "pHome": 0.3242,
    "spread": 4.9,
@@ -1212,7 +1200,91 @@
    "spread": -11.6,
    "eloHome": 1543.8,
    "eloAway": 1299.1
+  },
+  "2027_20261104_ATL_WAS": {
+   "pHome": 0.2794,
+   "spread": 6.3,
+   "eloHome": 1299.1,
+   "eloAway": 1523.7
+  },
+  "2027_20261104_CHA_BKN": {
+   "pHome": 0.2409,
+   "spread": 7.6,
+   "eloHome": 1329,
+   "eloAway": 1588.3
+  },
+  "2027_20261104_CHI_NYK": {
+   "pHome": 0.8979,
+   "spread": -14.4,
+   "eloHome": 1706.9,
+   "eloAway": 1389.2
+  },
+  "2027_20261104_CLE_OKC": {
+   "pHome": 0.7175,
+   "spread": -6.2,
+   "eloHome": 1671,
+   "eloAway": 1569.1
+  },
+  "2027_20261104_DAL_SAS": {
+   "pHome": 0.8803,
+   "spread": -13.2,
+   "eloHome": 1685.8,
+   "eloAway": 1399.1
+  },
+  "2027_20261104_IND_MEM": {
+   "pHome": 0.5305,
+   "spread": -0.8,
+   "eloHome": 1344.4,
+   "eloAway": 1383.2
+  },
+  "2027_20261104_LAL_SAC": {
+   "pHome": 0.3242,
+   "spread": 4.9,
+   "eloHome": 1377.4,
+   "eloAway": 1565
+  },
+  "2027_20261104_MIA_LAC": {
+   "pHome": 0.5915,
+   "spread": -2.5,
+   "eloHome": 1519.2,
+   "eloAway": 1514.9
+  },
+  "2027_20261104_MIL_BOS": {
+   "pHome": 0.8243,
+   "spread": -10.2,
+   "eloHome": 1598.5,
+   "eloAway": 1390
+  },
+  "2027_20261104_MIN_HOU": {
+   "pHome": 0.6087,
+   "spread": -2.9,
+   "eloHome": 1567.7,
+   "eloAway": 1550.9
+  },
+  "2027_20261104_PHI_DET": {
+   "pHome": 0.6848,
+   "spread": -5.1,
+   "eloHome": 1603,
+   "eloAway": 1528.2
+  },
+  "2027_20261104_POR_PHX": {
+   "pHome": 0.5941,
+   "spread": -2.5,
+   "eloHome": 1522,
+   "eloAway": 1515.8
+  },
+  "2027_20261104_TOR_DEN": {
+   "pHome": 0.7024,
+   "spread": -5.7,
+   "eloHome": 1567.3,
+   "eloAway": 1538.1
+  },
+  "2027_20261104_UTA_NOP": {
+   "pHome": 0.7234,
+   "spread": -6.4,
+   "eloHome": 1431.6,
+   "eloAway": 1324.7
   }
  },
- "generated": "2026-10-04T15:36Z"
+ "generated": "2026-10-05T19:28Z"
 }

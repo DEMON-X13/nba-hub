@@ -1,5 +1,5 @@
 {
- "date": "2026-10-06",
+ "date": "2026-10-07",
  "teams": {
   "ATL": [
    {
@@ -440,7 +440,7 @@
     "name": "Christian Anderson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4684269",
@@ -517,7 +517,7 @@
     "name": "Brandon Miller",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2583632",
@@ -1106,7 +1106,7 @@
     "name": "Jamal Murray",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433629",
@@ -1306,21 +1306,21 @@
     "name": "Stephen Curry",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6589",
     "name": "Draymond Green",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3213",
     "name": "Al Horford",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4703396",
@@ -1341,7 +1341,7 @@
     "name": "Yaxel Lendeborg",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4897449",
@@ -1355,7 +1355,7 @@
     "name": "De'Anthony Melton",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432171",
@@ -1369,21 +1369,21 @@
     "name": "Georges Niang",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3134903",
     "name": "Gary Payton II",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4709138",
     "name": "Brandin Podziemski",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3102531",
@@ -1404,7 +1404,7 @@
     "name": "Gui Santos",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433159",
@@ -1763,13 +1763,6 @@
     "injured": false
    },
    {
-    "id": "5105853",
-    "name": "Fletcher Loyer",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "5105832",
     "name": "Nick Martinelli",
     "pos": "F",
@@ -1846,7 +1839,7 @@
     "name": "Luka Doncic",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397014",
@@ -1965,7 +1958,7 @@
     "name": "Matisse Thybulle",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278077",
@@ -1979,7 +1972,7 @@
     "name": "Ziaire Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "MEM": [
@@ -2941,13 +2934,6 @@
     "injured": false
    },
    {
-    "id": "4685802",
-    "name": "Robert McCray V",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4900671",
     "name": "Ajay Mitchell",
     "pos": "G",
@@ -2957,6 +2943,13 @@
    {
     "id": "5106270",
     "name": "Otega Oweh",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4897155",
+    "name": "Anthony Pritchard",
     "pos": "G",
     "status": "active",
     "injured": false
@@ -3015,7 +3008,7 @@
     "name": "Jaylin Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133626",
@@ -4056,13 +4049,6 @@
     "injured": false
    },
    {
-    "id": "4395997",
-    "name": "Terrell Brown Jr.",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4683766",
     "name": "Isaiah Collier",
     "pos": "G",
@@ -4077,6 +4063,13 @@
     "injured": true
    },
    {
+    "id": "4278395",
+    "name": "Taylor Funk",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4433627",
     "name": "Keyonte George",
     "pos": "G",
@@ -4088,7 +4081,7 @@
     "name": "Josh Green",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397077",
@@ -4123,7 +4116,7 @@
     "name": "Lauri Markkanen",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133602",

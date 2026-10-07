@@ -181,30 +181,6 @@
   }
  },
  "upcoming": {
-  "2027_20261006_BKN_CHA": {
-   "pHome": 0.8627,
-   "spread": -12.2,
-   "eloHome": 1588.3,
-   "eloAway": 1329
-  },
-  "2027_20261006_DEN_UTA": {
-   "pHome": 0.3305,
-   "spread": 4.7,
-   "eloHome": 1324.7,
-   "eloAway": 1567.3
-  },
-  "2027_20261006_LAL_GSW": {
-   "pHome": 0.4261,
-   "spread": 2,
-   "eloHome": 1453.3,
-   "eloAway": 1565
-  },
-  "2027_20261006_NOP_OKC": {
-   "pHome": 0.7986,
-   "spread": -9.1,
-   "eloHome": 1671,
-   "eloAway": 1431.6
-  },
   "2027_20261007_GSW_POR": {
    "pHome": 0.6694,
    "spread": -4.7,
@@ -1266,7 +1242,61 @@
    "spread": -1.5,
    "eloHome": 1522,
    "eloAway": 1543.8
+  },
+  "2027_20261106_BOS_CHA": {
+   "pHome": 0.5713,
+   "spread": -1.9,
+   "eloHome": 1588.3,
+   "eloAway": 1598.5
+  },
+  "2027_20261106_MIN_NOP": {
+   "pHome": 0.4155,
+   "spread": 2.3,
+   "eloHome": 1431.6,
+   "eloAway": 1550.9
+  },
+  "2027_20261106_OKC_MEM": {
+   "pHome": 0.1773,
+   "spread": 10.2,
+   "eloHome": 1344.4,
+   "eloAway": 1671
+  },
+  "2027_20261106_PHI_CLE": {
+   "pHome": 0.6412,
+   "spread": -3.8,
+   "eloHome": 1569.1,
+   "eloAway": 1528.2
+  },
+  "2027_20261106_POR_LAL": {
+   "pHome": 0.6522,
+   "spread": -4.2,
+   "eloHome": 1565,
+   "eloAway": 1515.8
+  },
+  "2027_20261106_SAS_SAC": {
+   "pHome": 0.1932,
+   "spread": 9.5,
+   "eloHome": 1377.4,
+   "eloAway": 1685.8
+  },
+  "2027_20261106_TOR_MIL": {
+   "pHome": 0.3758,
+   "spread": 3.4,
+   "eloHome": 1390,
+   "eloAway": 1538.1
+  },
+  "2027_20261106_UTA_DAL": {
+   "pHome": 0.6844,
+   "spread": -5.1,
+   "eloHome": 1399.1,
+   "eloAway": 1324.7
+  },
+  "2027_20261106_WAS_ATL": {
+   "pHome": 0.8373,
+   "spread": -10.8,
+   "eloHome": 1523.7,
+   "eloAway": 1299.1
   }
  },
- "generated": "2026-10-06T17:02Z"
+ "generated": "2026-10-07T17:38Z"
 }

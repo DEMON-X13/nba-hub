@@ -1,5 +1,5 @@
 {
- "date": "2026-10-06",
+ "date": "2026-10-07",
  "teams": {
   "ATL": [
    {
@@ -70,6 +70,24 @@
   ],
   "CHA": [
    {
+    "id": "4433287",
+    "name": "Brandon Miller",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Leg Bruise",
+    "date": "2026-10-06",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "5060701",
+    "name": "Christian Anderson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-06",
+    "returns": "2026-10-11"
+   },
+   {
     "id": "4684269",
     "name": "Kylan Boswell",
     "pos": "G",
@@ -104,18 +122,18 @@
     "detail": "Hamstring",
     "date": "2026-09-25",
     "returns": "2026-10-21"
-   },
-   {
-    "id": "4701225",
-    "name": "PJ Hall",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle Surgery",
-    "date": "2026-06-16",
-    "returns": "2026-10-06"
    }
   ],
   "CHI": [
+   {
+    "id": "4066650",
+    "name": "Zach Collins",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Toe Surgery",
+    "date": "2026-10-06",
+    "returns": "2026-10-07"
+   },
    {
     "id": "4278067",
     "name": "Nic Claxton",
@@ -124,15 +142,6 @@
     "detail": "Hamstring",
     "date": "2026-10-05",
     "returns": "2026-10-21"
-   },
-   {
-    "id": "4066650",
-    "name": "Zach Collins",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Toe Surgery",
-    "date": "2026-09-28",
-    "returns": "2026-10-07"
    }
   ],
   "CLE": [
@@ -182,17 +191,8 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-10-04",
-    "returns": "2026-10-06"
-   },
-   {
-    "id": "3936299",
-    "name": "Jamal Murray",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Personal",
-    "date": "2026-10-04",
-    "returns": "2026-10-06"
+    "date": "2026-10-07",
+    "returns": "2026-10-11"
    }
   ],
   "DET": [
@@ -208,13 +208,85 @@
   ],
   "GSW": [
    {
-    "id": "6430",
-    "name": "Jimmy Butler III",
+    "id": "4997536",
+    "name": "Gui Santos",
     "pos": "F",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-10-02",
-    "returns": "2027-01-02"
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4709138",
+    "name": "Brandin Podziemski",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "3134903",
+    "name": "Gary Payton II",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "2990969",
+    "name": "Georges Niang",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4066436",
+    "name": "De'Anthony Melton",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "5175737",
+    "name": "Yaxel Lendeborg",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "3975",
+    "name": "Stephen Curry",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "6589",
+    "name": "Draymond Green",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "3213",
+    "name": "Al Horford",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-10"
    },
    {
     "id": "3102531",
@@ -222,8 +294,17 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-09-28",
+    "date": "2026-10-06",
     "returns": "2026-10-13"
+   },
+   {
+    "id": "6430",
+    "name": "Jimmy Butler III",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-10-02",
+    "returns": "2027-01-02"
    },
    {
     "id": "4432171",
@@ -336,8 +417,8 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Lower Body Not Specified",
-    "date": "2026-10-06",
-    "returns": "2026-10-06"
+    "date": "2026-10-07",
+    "returns": "2026-10-08"
    },
    {
     "id": "4277811",
@@ -345,17 +426,17 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Lower Body",
-    "date": "2026-10-06",
-    "returns": "2026-10-06"
+    "date": "2026-10-07",
+    "returns": "2026-10-08"
    },
    {
-    "id": "4066457",
-    "name": "Austin Reaves",
-    "pos": "G",
+    "id": "4433137",
+    "name": "Ziaire Williams",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Ankle Not Specified",
-    "date": "2026-10-06",
-    "returns": "2026-10-06"
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-08"
    },
    {
     "id": "4433136",
@@ -363,8 +444,35 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Finger",
-    "date": "2026-10-06",
-    "returns": "2026-10-06"
+    "date": "2026-10-07",
+    "returns": "2026-10-08"
+   },
+   {
+    "id": "3945274",
+    "name": "Luka Doncic",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-07",
+    "returns": "2026-10-08"
+   },
+   {
+    "id": "3907498",
+    "name": "Matisse Thybulle",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-07",
+    "returns": "2026-10-08"
+   },
+   {
+    "id": "4066457",
+    "name": "Austin Reaves",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Not Specified",
+    "date": "2026-10-07",
+    "returns": "2026-10-08"
    }
   ],
   "MEM": [
@@ -427,17 +535,6 @@
     "returns": "2027-04-01"
    }
   ],
-  "NOP": [
-   {
-    "id": "4576086",
-    "name": "Bryce McGowens",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Toe Fracture",
-    "date": "2026-06-16",
-    "returns": "2026-10-06"
-   }
-  ],
   "NYK": [
    {
     "id": "4277869",
@@ -450,6 +547,15 @@
    }
   ],
   "OKC": [
+   {
+    "id": "4432823",
+    "name": "Jaylin Williams",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Heel",
+    "date": "2026-10-06",
+    "returns": "2026-10-07"
+   },
    {
     "id": "5061603",
     "name": "Thomas Sorber",
@@ -572,13 +678,13 @@
   ],
   "PHI": [
    {
-    "id": "4871141",
-    "name": "Ariel Hukporti",
-    "pos": "C",
+    "id": "4870562",
+    "name": "Dominick Barlow",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Lower Leg Not Specified",
-    "date": "2026-10-06",
-    "returns": "2026-10-08"
+    "detail": "Back",
+    "date": "2026-10-07",
+    "returns": "2026-10-16"
    },
    {
     "id": "4351851",
@@ -586,17 +692,8 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
-   },
-   {
-    "id": "4870562",
-    "name": "Dominick Barlow",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
+    "date": "2026-10-07",
+    "returns": "2026-10-16"
    },
    {
     "id": "5105637",
@@ -604,8 +701,17 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Sprain",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
+    "date": "2026-10-07",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4871141",
+    "name": "Ariel Hukporti",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Achilles Ruptured",
+    "date": "2026-10-06",
+    "returns": "2027-10-01"
    },
    {
     "id": "4431678",
@@ -773,31 +879,13 @@
   ],
   "UTA": [
    {
-    "id": "3102530",
-    "name": "Jusuf Nurkic",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-10-05",
-    "returns": "2026-10-06"
-   },
-   {
-    "id": "4684793",
-    "name": "Kyle Filipowski",
+    "id": "4066336",
+    "name": "Lauri Markkanen",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-05",
-    "returns": "2026-10-06"
-   },
-   {
-    "id": "4432811",
-    "name": "Josh Green",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-10-04",
-    "returns": "2026-10-06"
+    "detail": "Neck Soreness",
+    "date": "2026-10-07",
+    "returns": "2026-10-12"
    },
    {
     "id": "5105839",
@@ -805,8 +893,26 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hip",
-    "date": "2026-10-04",
-    "returns": "2026-10-06"
+    "date": "2026-10-07",
+    "returns": "2026-10-12"
+   },
+   {
+    "id": "3102530",
+    "name": "Jusuf Nurkic",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-10-07",
+    "returns": "2026-10-12"
+   },
+   {
+    "id": "4684793",
+    "name": "Kyle Filipowski",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-07",
+    "returns": "2026-10-12"
    }
   ],
   "WAS": [

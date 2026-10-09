@@ -1,15 +1,15 @@
 {
- "date": "2026-10-08",
+ "date": "2026-10-09",
  "teams": {
   "ATL": [
    {
-    "id": "4397183",
-    "name": "Aaron Wiggins",
+    "id": "4585618",
+    "name": "Keshon Gilbert",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Lips Laceration",
-    "date": "2026-10-06",
-    "returns": "2026-10-08"
+    "detail": "Knee Tendinitis",
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
    },
    {
     "id": "4397020",
@@ -17,17 +17,17 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Knee Bruise",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
    },
    {
-    "id": "2490149",
-    "name": "CJ McCollum",
-    "pos": "G",
+    "id": "4701230",
+    "name": "Jalen Johnson",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Nose Bruise",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
+    "detail": "Rest",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
    },
    {
     "id": "5105571",
@@ -46,6 +46,80 @@
     "detail": "Foot Fracture",
     "date": "2026-07-19",
     "returns": "2026-10-21"
+   }
+  ],
+  "BOS": [
+   {
+    "id": "4065804",
+    "name": "Sam Hauser",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4397251",
+    "name": "Ron Harper Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Shoulder",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4066354",
+    "name": "Payton Pritchard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4351852",
+    "name": "Mitchell Robinson",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4397424",
+    "name": "Neemias Queta",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4251",
+    "name": "Paul George",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4065648",
+    "name": "Jayson Tatum",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "3078576",
+    "name": "Derrick White",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
    }
   ],
   "BKN": [
@@ -182,33 +256,60 @@
   ],
   "CLE": [
    {
-    "id": "4576087",
-    "name": "Peyton Watson",
+    "id": "4997530",
+    "name": "Khalifa Diop",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-08",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "5106268",
+    "name": "Nae'Qwan Tomlin",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-08",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "3992",
+    "name": "James Harden",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Hamstring Strain",
-    "date": "2026-09-25",
-    "returns": "2026-10-08"
+    "detail": "Ankle Soreness",
+    "date": "2026-10-08",
+    "returns": "2026-10-11"
    }
   ],
   "DAL": [
    {
-    "id": "4873153",
-    "name": "Morez Johnson Jr.",
-    "pos": "F",
+    "id": "4432107",
+    "name": "Marcus Sasser",
+    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Lower Leg Soreness",
-    "date": "2026-10-07",
-    "returns": "2026-10-09"
+    "detail": "Hip",
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
    },
    {
-    "id": "4593125",
-    "name": "Santi Aldama",
+    "id": "4278078",
+    "name": "P.J. Washington",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-09-26",
-    "returns": "2026-10-09"
+    "detail": "Ankle Sprain",
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "3138160",
+    "name": "Caleb Martin",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
    },
    {
     "id": "4683688",
@@ -216,8 +317,17 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Surgery",
-    "date": "2026-09-25",
-    "returns": "2026-10-09"
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "4593125",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
    }
   ],
   "DEN": [
@@ -227,7 +337,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-10-07",
+    "date": "2026-10-08",
     "returns": "2026-10-11"
    }
   ],
@@ -243,15 +353,6 @@
    }
   ],
   "GSW": [
-   {
-    "id": "3213",
-    "name": "Al Horford",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-07",
-    "returns": "2026-10-10"
-   },
    {
     "id": "4997536",
     "name": "Gui Santos",
@@ -352,6 +453,17 @@
     "returns": "2026-12-01"
    }
   ],
+  "HOU": [
+   {
+    "id": "3202",
+    "name": "Kevin Durant",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-10-09",
+    "returns": "2026-10-15"
+   }
+  ],
   "IND": [
    {
     "id": "2580365",
@@ -439,31 +551,13 @@
   ],
   "LAL": [
    {
-    "id": "4433599",
-    "name": "Arthur Kaluma",
+    "id": "4897943",
+    "name": "Dalton Knecht",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Lower Body Not Specified",
-    "date": "2026-10-07",
-    "returns": "2026-10-08"
-   },
-   {
-    "id": "4277811",
-    "name": "Collin Sexton",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Lower Body",
-    "date": "2026-10-07",
-    "returns": "2026-10-08"
-   },
-   {
-    "id": "4433137",
-    "name": "Ziaire Williams",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-07",
-    "returns": "2026-10-08"
+    "detail": "Undisclosed Bruise",
+    "date": "2026-10-09",
+    "returns": "2026-10-13"
    },
    {
     "id": "4433136",
@@ -471,35 +565,44 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Finger",
-    "date": "2026-10-07",
-    "returns": "2026-10-08"
+    "date": "2026-10-09",
+    "returns": "2026-10-13"
    },
    {
-    "id": "3945274",
-    "name": "Luka Doncic",
+    "id": "4277811",
+    "name": "Collin Sexton",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-10-07",
-    "returns": "2026-10-08"
+    "detail": "Lower Body",
+    "date": "2026-10-09",
+    "returns": "2026-10-13"
    },
    {
-    "id": "3907498",
-    "name": "Matisse Thybulle",
-    "pos": "G",
+    "id": "4433599",
+    "name": "Arthur Kaluma",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-07",
-    "returns": "2026-10-08"
+    "detail": "Lower Body Not Specified",
+    "date": "2026-10-09",
+    "returns": "2026-10-13"
    },
    {
-    "id": "4066457",
-    "name": "Austin Reaves",
+    "id": "4433137",
+    "name": "Ziaire Williams",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed Soreness",
+    "date": "2026-10-09",
+    "returns": "2026-10-13"
+   },
+   {
+    "id": "5113969",
+    "name": "Cameron Carr",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Ankle Not Specified",
-    "date": "2026-10-07",
-    "returns": "2026-10-08"
+    "detail": "Undisclosed Bruise",
+    "date": "2026-10-09",
+    "returns": "2026-10-13"
    }
   ],
   "MEM": [
@@ -524,13 +627,13 @@
   ],
   "MIA": [
    {
-    "id": "4431786",
-    "name": "Keshad Johnson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Hamstring",
-    "date": "2026-10-07",
-    "returns": "2026-10-26"
+    "id": "3950760",
+    "name": "Kylor Kelley",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Calf Strain",
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
    },
    {
     "id": "4601025",
@@ -538,17 +641,17 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-10-07",
-    "returns": "2026-10-08"
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
    },
    {
-    "id": "3059319",
-    "name": "Andrew Wiggins",
+    "id": "4431786",
+    "name": "Keshad Johnson",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
+    "status": "Out",
+    "detail": "Hamstring",
     "date": "2026-10-07",
-    "returns": "2026-10-08"
+    "returns": "2026-10-26"
    },
    {
     "id": "4066993",
@@ -582,15 +685,53 @@
     "returns": "2027-04-01"
    }
   ],
-  "NYK": [
+  "NOP": [
    {
-    "id": "4277869",
-    "name": "Jose Alvarado",
+    "id": "3907497",
+    "name": "Dejounte Murray",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Knee Bruise",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
+    "detail": "Toe Bruise",
+    "date": "2026-10-08",
+    "returns": "2026-10-14"
+   }
+  ],
+  "NYK": [
+   {
+    "id": "4411057",
+    "name": "Kevin McCullar Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Coach's Decision",
+    "date": "2026-10-08",
+    "returns": "2026-10-12"
+   },
+   {
+    "id": "4065673",
+    "name": "Tony Bradley",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Coach's Decision",
+    "date": "2026-10-08",
+    "returns": "2026-10-12"
+   },
+   {
+    "id": "4397018",
+    "name": "Ochai Agbaji",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Coach's Decision",
+    "date": "2026-10-08",
+    "returns": "2026-10-12"
+   },
+   {
+    "id": "3914285",
+    "name": "Drew Eubanks",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Coach's Decision",
+    "date": "2026-10-08",
+    "returns": "2026-10-12"
    }
   ],
   "OKC": [
@@ -725,33 +866,6 @@
     "returns": "2027-10-01"
    },
    {
-    "id": "4431678",
-    "name": "Tyrese Maxey",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
-   },
-   {
-    "id": "1966",
-    "name": "LeBron James",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
-   },
-   {
-    "id": "3059318",
-    "name": "Joel Embiid",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
-   },
-   {
     "id": "3904625",
     "name": "Tacko Fall",
     "pos": "C",
@@ -794,13 +908,31 @@
   ],
   "SAC": [
    {
+    "id": "4395650",
+    "name": "Leaky Black",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Face Not Specified",
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "3155942",
+    "name": "Domantas Sabonis",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
+   },
+   {
     "id": "4594327",
     "name": "Keegan Murray",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-06",
-    "returns": "2026-10-08"
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
    },
    {
     "id": "4066262",
@@ -808,8 +940,8 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-06",
-    "returns": "2026-10-08"
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
    },
    {
     "id": "3907387",
@@ -817,11 +949,29 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-06",
-    "returns": "2026-10-08"
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
    }
   ],
   "SAS": [
+   {
+    "id": "4277880",
+    "name": "Malik Williams",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4066259",
+    "name": "De'Aaron Fox",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed Soreness",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
    {
     "id": "5105337",
     "name": "Maliq Brown",
@@ -942,8 +1092,17 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Surgery",
-    "date": "2026-10-05",
-    "returns": "2026-10-08"
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "6609",
+    "name": "Khris Middleton",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-08",
+    "returns": "2026-10-10"
    },
    {
     "id": "4997537",

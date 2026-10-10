@@ -1,5 +1,5 @@
 {
- "date": "2026-10-09",
+ "date": "2026-10-10",
  "teams": {
   "ATL": [
    {
@@ -596,7 +596,7 @@
     "name": "Matas Buzelis",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278067",
@@ -694,7 +694,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432117",
@@ -1856,6 +1856,13 @@
     "injured": true
    },
    {
+    "id": "4684443",
+    "name": "Rafael Castro",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "3945274",
     "name": "Luka Doncic",
     "pos": "G",
@@ -1903,13 +1910,6 @@
     "pos": "F",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "5107258",
-    "name": "William Kyle III",
-    "pos": "F",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "4592691",

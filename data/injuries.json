@@ -1,5 +1,5 @@
 {
- "date": "2026-10-09",
+ "date": "2026-10-10",
  "teams": {
   "ATL": [
    {
@@ -218,22 +218,13 @@
   ],
   "CHI": [
    {
-    "id": "4066650",
-    "name": "Zach Collins",
+    "id": "4711294",
+    "name": "Matas Buzelis",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Toe Surgery",
-    "date": "2026-10-07",
-    "returns": "2026-10-09"
-   },
-   {
-    "id": "4898010",
-    "name": "Jaylin Sellers",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-07",
-    "returns": "2026-10-09"
+    "detail": "Ankle",
+    "date": "2026-10-10",
+    "returns": "2026-10-11"
    },
    {
     "id": "4395626",
@@ -241,8 +232,35 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Hip",
-    "date": "2026-10-07",
-    "returns": "2026-10-09"
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Foot Soreness",
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "4066650",
+    "name": "Zach Collins",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Toe Surgery",
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "4898010",
+    "name": "Jaylin Sellers",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
    },
    {
     "id": "4278067",
@@ -354,18 +372,18 @@
   ],
   "GSW": [
    {
-    "id": "4997536",
-    "name": "Gui Santos",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-07",
-    "returns": "2026-10-10"
-   },
-   {
     "id": "4709138",
     "name": "Brandin Podziemski",
     "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-10",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "4997536",
+    "name": "Gui Santos",
+    "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
     "date": "2026-10-07",
@@ -471,7 +489,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-10-07",
+    "date": "2026-10-09",
     "returns": "2026-10-10"
    },
    {
@@ -612,17 +630,17 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-08",
-    "returns": "2026-10-09"
+    "date": "2026-10-10",
+    "returns": "2026-10-16"
    },
    {
     "id": "4432810",
     "name": "Isaiah Stewart",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle",
-    "date": "2026-10-07",
-    "returns": "2026-10-09"
+    "date": "2026-10-09",
+    "returns": "2026-10-23"
    }
   ],
   "MIA": [
@@ -783,20 +801,20 @@
   ],
   "ORL": [
    {
-    "id": "5214637",
-    "name": "Noah Penda",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-10-07",
-    "returns": "2026-10-11"
-   },
-   {
     "id": "4712849",
     "name": "Anthony Black",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
+    "date": "2026-10-09",
+    "returns": "2026-10-11"
+   },
+   {
+    "id": "5214637",
+    "name": "Noah Penda",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
     "date": "2026-10-07",
     "returns": "2026-10-11"
    },
@@ -882,7 +900,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-08",
+    "date": "2026-10-09",
     "returns": "2026-10-10"
    },
    {
@@ -1002,6 +1020,15 @@
   ],
   "TOR": [
    {
+    "id": "6450",
+    "name": "Kawhi Leonard",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-10-09",
+    "returns": "2026-10-13"
+   },
+   {
     "id": "4431684",
     "name": "Trayce Jackson-Davis",
     "pos": "F",
@@ -1025,15 +1052,6 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Groin Not Specified",
-    "date": "2026-10-05",
-    "returns": "2026-10-10"
-   },
-   {
-    "id": "6450",
-    "name": "Kawhi Leonard",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Not Injury Related",
     "date": "2026-10-05",
     "returns": "2026-10-10"
    },
@@ -1087,21 +1105,21 @@
   ],
   "WAS": [
    {
-    "id": "5160992",
-    "name": "Alex Sarr",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot Surgery",
-    "date": "2026-10-08",
-    "returns": "2026-10-10"
-   },
-   {
     "id": "6609",
     "name": "Khris Middleton",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-08",
+    "date": "2026-10-09",
+    "returns": "2026-10-10"
+   },
+   {
+    "id": "5160992",
+    "name": "Alex Sarr",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Foot Surgery",
+    "date": "2026-10-09",
     "returns": "2026-10-10"
    },
    {

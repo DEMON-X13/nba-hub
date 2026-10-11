@@ -187,59 +187,11 @@
    "eloHome": 1389.2,
    "eloAway": 1344.4
   },
-  "2027_20261010_ATL_IND": {
-   "pHome": 0.3862,
-   "spread": 3.1,
-   "eloHome": 1383.2,
-   "eloAway": 1523.7
-  },
-  "2027_20261010_DET_WAS": {
-   "pHome": 0.1972,
-   "spread": 9.3,
-   "eloHome": 1299.1,
-   "eloAway": 1603
-  },
-  "2027_20261010_LAC_TOR": {
-   "pHome": 0.6117,
-   "spread": -3,
-   "eloHome": 1538.1,
-   "eloAway": 1519.2
-  },
-  "2027_20261010_MIN_MIA": {
-   "pHome": 0.5344,
-   "spread": -0.9,
-   "eloHome": 1514.9,
-   "eloAway": 1550.9
-  },
-  "2027_20261010_PHI_BOS": {
-   "pHome": 0.6791,
-   "spread": -5,
-   "eloHome": 1598.5,
-   "eloAway": 1528.2
-  },
-  "2027_20261010_SAC_GSW": {
-   "pHome": 0.6861,
-   "spread": -5.2,
-   "eloHome": 1453.3,
-   "eloAway": 1377.4
-  },
-  "2027_20261010_SAS_PHX": {
-   "pHome": 0.3549,
-   "spread": 4,
-   "eloHome": 1522,
-   "eloAway": 1685.8
-  },
   "2027_20261011_CHI_DEN": {
    "pHome": 0.8476,
    "spread": -11.4,
    "eloHome": 1567.3,
    "eloAway": 1389.2
-  },
-  "2027_20261011_DAL_HOU": {
-   "pHome": 0.7252,
-   "spread": -6.4,
-   "eloHome": 1567.7,
-   "eloAway": 1399.1
   },
   "2027_20261011_MIL_CHA": {
    "pHome": 0.8157,
@@ -1356,7 +1308,43 @@
    "spread": -13.9,
    "eloHome": 1603,
    "eloAway": 1299.1
+  },
+  "2027_20261110_BOS_PHI": {
+   "pHome": 0.4853,
+   "spread": 0.4,
+   "eloHome": 1528.2,
+   "eloAway": 1598.5
+  },
+  "2027_20261110_LAC_PHX": {
+   "pHome": 0.5894,
+   "spread": -2.4,
+   "eloHome": 1522,
+   "eloAway": 1519.2
+  },
+  "2027_20261110_MIA_UTA": {
+   "pHome": 0.4003,
+   "spread": 2.7,
+   "eloHome": 1324.7,
+   "eloAway": 1514.9
+  },
+  "2027_20261110_MIL_NYK": {
+   "pHome": 0.8975,
+   "spread": -14.4,
+   "eloHome": 1706.9,
+   "eloAway": 1390
+  },
+  "2027_20261110_OKC_POR": {
+   "pHome": 0.3663,
+   "spread": 3.6,
+   "eloHome": 1515.8,
+   "eloAway": 1671
+  },
+  "2027_20261110_ORL_SAC": {
+   "pHome": 0.3515,
+   "spread": 4.1,
+   "eloHome": 1377.4,
+   "eloAway": 1543.8
   }
  },
- "generated": "2026-10-10T16:05Z"
+ "generated": "2026-10-11T16:29Z"
 }

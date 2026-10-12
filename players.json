@@ -337,13 +337,15 @@
    ]
   },
   "SAC": {
-   "strength": 1368.9,
-   "offence": -60.8,
-   "defence": -63.9,
+   "strength": 1361.2,
+   "offence": -91,
+   "defence": -41.3,
    "coach": "Doug Christie",
    "coachElo": -6.5,
    "pace": 100,
-   "out": []
+   "out": [
+    "Maxime Raynaud (Out)"
+   ]
   },
   "SAS": {
    "strength": 1703.8,
@@ -10061,15 +10063,15 @@
    }
   },
   "2027_20261013_POR_SAC": {
-   "pHome": 0.3026,
-   "spread": 5.5,
-   "total": 225.3,
+   "pHome": 0.2943,
+   "spread": 5.8,
+   "total": 223.3,
    "pace": 100.3,
    "home": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -10082,16 +10084,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -10146,9 +10139,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    },
    "away": {
     "team": "POR",
@@ -13479,9 +13498,9 @@
    }
   },
   "2027_20261016_SAC_SAS": {
-   "pHome": 0.9053,
-   "spread": -14.9,
-   "total": 222.2,
+   "pHome": 0.9086,
+   "spread": -15.1,
+   "total": 220.2,
    "pace": 99.6,
    "home": {
     "team": "SAS",
@@ -13561,9 +13580,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -13576,16 +13595,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -13640,9 +13650,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    }
   },
   "2027_20261016_TOR_DET": {
@@ -16476,9 +16512,9 @@
    }
   },
   "2027_20261021_SAC_LAC": {
-   "pHome": 0.7847,
-   "spread": -8.5,
-   "total": 224.6,
+   "pHome": 0.7913,
+   "spread": -8.8,
+   "total": 222.6,
    "pace": 99.7,
    "home": {
     "team": "LAC",
@@ -16623,9 +16659,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -16638,16 +16674,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -16702,9 +16729,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    }
   },
   "2027_20261021_UTA_MEM": {
@@ -19257,15 +19310,15 @@
    }
   },
   "2027_20261023_POR_SAC": {
-   "pHome": 0.3026,
-   "spread": 5.5,
-   "total": 225.3,
+   "pHome": 0.2943,
+   "spread": 5.8,
+   "total": 223.3,
    "pace": 100.3,
    "home": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -19278,16 +19331,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -19342,9 +19386,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    },
    "away": {
     "team": "POR",
@@ -21977,15 +22047,15 @@
    }
   },
   "2027_20261025_MEM_SAC": {
-   "pHome": 0.6107,
-   "spread": -3.1,
-   "total": 231.4,
+   "pHome": 0.6012,
+   "spread": -2.8,
+   "total": 229.4,
    "pace": 102.5,
    "home": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -21998,16 +22068,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -22062,9 +22123,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    },
    "away": {
     "team": "MEM",
@@ -24863,9 +24950,9 @@
    }
   },
   "2027_20261027_SAC_SAS": {
-   "pHome": 0.9053,
-   "spread": -14.9,
-   "total": 222.2,
+   "pHome": 0.9086,
+   "spread": -15.1,
+   "total": 220.2,
    "pace": 99.6,
    "home": {
     "team": "SAS",
@@ -24945,9 +25032,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -24960,16 +25047,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -25024,9 +25102,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    }
   },
   "2027_20261028_CHA_DET": {
@@ -27762,9 +27866,9 @@
    }
   },
   "2027_20261029_SAC_NOP": {
-   "pHome": 0.6658,
-   "spread": -4.7,
-   "total": 232.4,
+   "pHome": 0.6746,
+   "spread": -5,
+   "total": 230.3,
    "pace": 102.6,
    "home": {
     "team": "NOP",
@@ -27853,9 +27957,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -27868,16 +27972,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -27932,9 +28027,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    }
   },
   "2027_20261030_CHA_WAS": {
@@ -31002,9 +31123,9 @@
    }
   },
   "2027_20261031_SAC_MEM": {
-   "pHome": 0.5596,
-   "spread": -1.6,
-   "total": 231.4,
+   "pHome": 0.5693,
+   "spread": -1.9,
+   "total": 229.4,
    "pace": 102.5,
    "home": {
     "team": "MEM",
@@ -31110,9 +31231,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -31125,16 +31246,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -31189,9 +31301,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    }
   },
   "2027_20261101_BKN_IND": {
@@ -34102,9 +34240,9 @@
    }
   },
   "2027_20261102_SAC_DAL": {
-   "pHome": 0.7028,
-   "spread": -5.8,
-   "total": 229.2,
+   "pHome": 0.711,
+   "spread": -6.1,
+   "total": 227.2,
    "pace": 102.4,
    "home": {
     "team": "DAL",
@@ -34202,9 +34340,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -34217,16 +34355,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -34281,9 +34410,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    }
   },
   "2027_20261102_TOR_LAC": {
@@ -36089,15 +36244,15 @@
    }
   },
   "2027_20261104_LAL_SAC": {
-   "pHome": 0.3295,
-   "spread": 4.6,
-   "total": 221.3,
+   "pHome": 0.3208,
+   "spread": 4.9,
+   "total": 219.3,
    "pace": 98.4,
    "home": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -36110,16 +36265,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -36174,9 +36320,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    },
    "away": {
     "team": "LAL",
@@ -38959,15 +39131,15 @@
    }
   },
   "2027_20261106_SAS_SAC": {
-   "pHome": 0.1725,
-   "spread": 10.3,
-   "total": 222.2,
+   "pHome": 0.1669,
+   "spread": 10.6,
+   "total": 220.2,
    "pace": 99.6,
    "home": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -38980,16 +39152,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -39044,9 +39207,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    },
    "away": {
     "team": "SAS",
@@ -41608,15 +41797,15 @@
    }
   },
   "2027_20261108_MIA_SAC": {
-   "pHome": 0.3667,
-   "spread": 3.7,
-   "total": 227.8,
+   "pHome": 0.3575,
+   "spread": 3.9,
+   "total": 225.8,
    "pace": 101.5,
    "home": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -41629,16 +41818,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -41693,9 +41873,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    },
    "away": {
     "team": "MIA",
@@ -44946,15 +45152,15 @@
    }
   },
   "2027_20261110_ORL_SAC": {
-   "pHome": 0.297,
-   "spread": 5.7,
-   "total": 222.1,
+   "pHome": 0.2888,
+   "spread": 6,
+   "total": 220.1,
    "pace": 100.7,
    "home": {
     "team": "SAC",
-    "strength": 1368.9,
-    "offence": -60.8,
-    "defence": -63.9,
+    "strength": 1361.3,
+    "offence": -91,
+    "defence": -41.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -44967,16 +45173,7 @@
       "min": 38,
       "o": -25,
       "d": -30,
-      "adds": -43.9
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -27,
-      "d": -31,
-      "adds": -39.1
+      "adds": -43.8
      },
      {
       "id": "4279318",
@@ -45031,9 +45228,35 @@
       "o": 8,
       "d": -12,
       "adds": -2.1
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "pos": "C",
+      "min": 8,
+      "o": -19,
+      "d": -27,
+      "adds": -7.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -39.1
+     }
+    ]
    },
    "away": {
     "team": "ORL",
@@ -45120,7 +45343,1910 @@
     ],
     "out": []
    }
+  },
+  "2027_20261111_BKN_NOP": {
+   "pHome": 0.6843,
+   "spread": -5.3,
+   "total": 231.7,
+   "pace": 102.6,
+   "home": {
+    "team": "NOP",
+    "strength": 1429.1,
+    "offence": -6.5,
+    "defence": -65.2,
+    "coach": {
+     "name": "Jamahl Mosley",
+     "elo": 0.8
+    },
+    "lineup": [
+     {
+      "id": "5144091",
+      "name": "Jeremiah Fears",
+      "pos": "G",
+      "min": 39,
+      "o": -21,
+      "d": -22,
+      "adds": -35
+     },
+     {
+      "id": "4397688",
+      "name": "Trey Murphy III",
+      "pos": "F",
+      "min": 36,
+      "o": 6,
+      "d": 0,
+      "adds": 5.2
+     },
+     {
+      "id": "4683742",
+      "name": "Julian Reese",
+      "pos": "F",
+      "min": 35,
+      "o": -23,
+      "d": -26,
+      "adds": -35
+     },
+     {
+      "id": "4397136",
+      "name": "Saddiq Bey",
+      "pos": "G",
+      "min": 33,
+      "o": 11,
+      "d": -17,
+      "adds": -3.4
+     },
+     {
+      "id": "4869780",
+      "name": "Derik Queen",
+      "pos": "C",
+      "min": 33,
+      "o": -18,
+      "d": -20,
+      "adds": -25.6
+     },
+     {
+      "id": "3907497",
+      "name": "Dejounte Murray",
+      "pos": "G",
+      "min": 29,
+      "o": 17,
+      "d": -5,
+      "adds": 7.7
+     },
+     {
+      "id": "4395628",
+      "name": "Zion Williamson",
+      "pos": "F",
+      "min": 28,
+      "o": 31,
+      "d": 4,
+      "adds": 21.3
+     },
+     {
+      "id": "5061589",
+      "name": "Yves Missi",
+      "pos": "C",
+      "min": 7,
+      "o": -19,
+      "d": -25,
+      "adds": -6.8
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "BKN",
+    "strength": 1357.9,
+    "offence": -75.2,
+    "defence": -59.5,
+    "coach": {
+     "name": "Jordi Fernandez",
+     "elo": -7.6
+    },
+    "lineup": [
+     {
+      "id": "3064514",
+      "name": "Julius Randle",
+      "pos": "F",
+      "min": 31,
+      "o": 2,
+      "d": 7,
+      "adds": 6
+     },
+     {
+      "id": "5242502",
+      "name": "Ben Saraf",
+      "pos": "G",
+      "min": 31,
+      "o": -30,
+      "d": -26,
+      "adds": -36.7
+     },
+     {
+      "id": "4278104",
+      "name": "Michael Porter Jr.",
+      "pos": "F",
+      "min": 31,
+      "o": 5,
+      "d": -3,
+      "adds": 1.2
+     },
+     {
+      "id": "5037873",
+      "name": "Drake Powell",
+      "pos": "G",
+      "min": 29,
+      "o": -32,
+      "d": -24,
+      "adds": -32.9
+     },
+     {
+      "id": "5175643",
+      "name": "Egor Demin",
+      "pos": "G",
+      "min": 26,
+      "o": -28,
+      "d": -24,
+      "adds": -28.4
+     },
+     {
+      "id": "3907823",
+      "name": "Terance Mann",
+      "pos": "G",
+      "min": 23,
+      "o": -2,
+      "d": 2,
+      "adds": 0.4
+     },
+     {
+      "id": "5174655",
+      "name": "Chaney Johnson",
+      "pos": "F",
+      "min": 23,
+      "o": -29,
+      "d": -21,
+      "adds": -23.5
+     },
+     {
+      "id": "4687718",
+      "name": "Josh Minott",
+      "pos": "F",
+      "min": 22,
+      "o": 3,
+      "d": 1,
+      "adds": 2.1
+     },
+     {
+      "id": "5107173",
+      "name": "Danny Wolf",
+      "pos": "F",
+      "min": 22,
+      "o": -31,
+      "d": -21,
+      "adds": -23.5
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261111_BOS_TOR": {
+   "pHome": 0.4742,
+   "spread": 0.7,
+   "total": 221.4,
+   "pace": 98.8,
+   "home": {
+    "team": "TOR",
+    "strength": 1548.9,
+    "offence": 17.3,
+    "defence": 28.2,
+    "coach": {
+     "name": "Darko Rajakovic",
+     "elo": 3.3
+    },
+    "lineup": [
+     {
+      "id": "4395625",
+      "name": "RJ Barrett",
+      "pos": "F",
+      "min": 40,
+      "o": 20,
+      "d": 15,
+      "adds": 29.6
+     },
+     {
+      "id": "4433134",
+      "name": "Scottie Barnes",
+      "pos": "F",
+      "min": 40,
+      "o": 4,
+      "d": 23,
+      "adds": 22.5
+     },
+     {
+      "id": "4397784",
+      "name": "Malachi Smith",
+      "pos": "G",
+      "min": 35,
+      "o": -27,
+      "d": -20,
+      "adds": -34.9
+     },
+     {
+      "id": "4684272",
+      "name": "Ja'Kobe Walter",
+      "pos": "G",
+      "min": 34,
+      "o": -10,
+      "d": 1,
+      "adds": -5.7
+     },
+     {
+      "id": "6450",
+      "name": "Kawhi Leonard",
+      "pos": "F",
+      "min": 33,
+      "o": 62,
+      "d": 18,
+      "adds": 56.4
+     },
+     {
+      "id": "4432241",
+      "name": "Jamal Shead",
+      "pos": "G",
+      "min": 32,
+      "o": -13,
+      "d": 4,
+      "adds": -5.1
+     },
+     {
+      "id": "5093267",
+      "name": "Collin Murray-Boyles",
+      "pos": "F",
+      "min": 25,
+      "o": -24,
+      "d": -10,
+      "adds": -17.4
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "BOS",
+    "strength": 1628.9,
+    "offence": 65.4,
+    "defence": 56.9,
+    "coach": {
+     "name": "Joe Mazzulla",
+     "elo": 6.5
+    },
+    "lineup": [
+     {
+      "id": "4065648",
+      "name": "Jayson Tatum",
+      "pos": "F",
+      "min": 37,
+      "o": 36,
+      "d": 17,
+      "adds": 41.6
+     },
+     {
+      "id": "3078576",
+      "name": "Derrick White",
+      "pos": "G",
+      "min": 36,
+      "o": 21,
+      "d": 35,
+      "adds": 42.6
+     },
+     {
+      "id": "4251",
+      "name": "Paul George",
+      "pos": "F",
+      "min": 35,
+      "o": 10,
+      "d": 29,
+      "adds": 28.6
+     },
+     {
+      "id": "4066354",
+      "name": "Payton Pritchard",
+      "pos": "G",
+      "min": 34,
+      "o": 30,
+      "d": 18,
+      "adds": 34.3
+     },
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "pos": "G",
+      "min": 32,
+      "o": -12,
+      "d": -24,
+      "adds": -23.3
+     },
+     {
+      "id": "5176420",
+      "name": "Hayden Gray",
+      "pos": "G",
+      "min": 25,
+      "o": -21,
+      "d": -20,
+      "adds": -21.4
+     },
+     {
+      "id": "4065804",
+      "name": "Sam Hauser",
+      "pos": "F",
+      "min": 22,
+      "o": 17,
+      "d": 10,
+      "adds": 12.7
+     },
+     {
+      "id": "4397424",
+      "name": "Neemias Queta",
+      "pos": "C",
+      "min": 19,
+      "o": 7,
+      "d": 11,
+      "adds": 7.3
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261111_CLE_NYK": {
+   "pHome": 0.7513,
+   "spread": -7.2,
+   "total": 223.1,
+   "pace": 98.3,
+   "home": {
+    "team": "NYK",
+    "strength": 1705.5,
+    "offence": 105.4,
+    "defence": 91.4,
+    "coach": {
+     "name": "Mike Brown",
+     "elo": 8.7
+    },
+    "lineup": [
+     {
+      "id": "3934672",
+      "name": "Jalen Brunson",
+      "pos": "G",
+      "min": 39,
+      "o": 39,
+      "d": 19,
+      "adds": 47.7
+     },
+     {
+      "id": "3934719",
+      "name": "OG Anunoby",
+      "pos": "F",
+      "min": 36,
+      "o": 16,
+      "d": 24,
+      "adds": 30.6
+     },
+     {
+      "id": "3147657",
+      "name": "Mikal Bridges",
+      "pos": "G",
+      "min": 33,
+      "o": 23,
+      "d": 26,
+      "adds": 33.7
+     },
+     {
+      "id": "3136195",
+      "name": "Karl-Anthony Towns",
+      "pos": "C",
+      "min": 31,
+      "o": 37,
+      "d": 18,
+      "adds": 35.8
+     },
+     {
+      "id": "3062679",
+      "name": "Josh Hart",
+      "pos": "G",
+      "min": 30,
+      "o": 30,
+      "d": 25,
+      "adds": 34.8
+     },
+     {
+      "id": "3914044",
+      "name": "Landry Shamet",
+      "pos": "G",
+      "min": 24,
+      "o": 0,
+      "d": 21,
+      "adds": 10.8
+     },
+     {
+      "id": "4065670",
+      "name": "Bruce Brown",
+      "pos": "G",
+      "min": 19,
+      "o": 12,
+      "d": -7,
+      "adds": 2.2
+     },
+     {
+      "id": "4397018",
+      "name": "Ochai Agbaji",
+      "pos": "G",
+      "min": 16,
+      "o": -15,
+      "d": 6,
+      "adds": -2.6
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 12,
+      "o": 5,
+      "d": 10,
+      "adds": 3.8
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "CLE",
+    "strength": 1574,
+    "offence": 65.9,
+    "defence": 5.5,
+    "coach": {
+     "name": "Kenny Atkinson",
+     "elo": 2.5
+    },
+    "lineup": [
+     {
+      "id": "3992",
+      "name": "James Harden",
+      "pos": "G",
+      "min": 37,
+      "o": 27,
+      "d": -3,
+      "adds": 19.6
+     },
+     {
+      "id": "4432158",
+      "name": "Evan Mobley",
+      "pos": "C",
+      "min": 36,
+      "o": 1,
+      "d": 16,
+      "adds": 13.1
+     },
+     {
+      "id": "3908809",
+      "name": "Donovan Mitchell",
+      "pos": "G",
+      "min": 36,
+      "o": 45,
+      "d": 0,
+      "adds": 34.5
+     },
+     {
+      "id": "4066328",
+      "name": "Jarrett Allen",
+      "pos": "C",
+      "min": 30,
+      "o": 28,
+      "d": 34,
+      "adds": 38.9
+     },
+     {
+      "id": "4066757",
+      "name": "Sam Merrill",
+      "pos": "G",
+      "min": 24,
+      "o": 19,
+      "d": 4,
+      "adds": 11.8
+     },
+     {
+      "id": "4701845",
+      "name": "Kadary Richmond",
+      "pos": "G",
+      "min": 22,
+      "o": -21,
+      "d": -18,
+      "adds": -17.6
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 19,
+      "o": 12,
+      "d": -14,
+      "adds": -0.8
+     },
+     {
+      "id": "4898369",
+      "name": "Curtis Jones",
+      "pos": "G",
+      "min": 13,
+      "o": -18,
+      "d": -19,
+      "adds": -10.1
+     },
+     {
+      "id": "4431734",
+      "name": "Tristan Enaruna",
+      "pos": "F",
+      "min": 12,
+      "o": -18,
+      "d": -18,
+      "adds": -9.4
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 10,
+      "o": -20,
+      "d": -21,
+      "adds": -8.8
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261111_DEN_MEM": {
+   "pHome": 0.2794,
+   "spread": 6.5,
+   "total": 237.9,
+   "pace": 103.2,
+   "home": {
+    "team": "MEM",
+    "strength": 1352.2,
+    "offence": -52.9,
+    "defence": -91.9,
+    "coach": {
+     "name": "Tuomas Iisalo",
+     "elo": -3.1
+    },
+    "lineup": [
+     {
+      "id": "4432185",
+      "name": "Micah Peavy",
+      "pos": "G",
+      "min": 35,
+      "o": -23,
+      "d": -23,
+      "adds": -33.6
+     },
+     {
+      "id": "4683934",
+      "name": "Jahmai Mashack",
+      "pos": "G",
+      "min": 31,
+      "o": -20,
+      "d": -23,
+      "adds": -28
+     },
+     {
+      "id": "4600663",
+      "name": "Zach Edey",
+      "pos": "C",
+      "min": 29,
+      "o": -5,
+      "d": -4,
+      "adds": -4.7
+     },
+     {
+      "id": "4896372",
+      "name": "Walter Clayton Jr.",
+      "pos": "G",
+      "min": 25,
+      "o": -18,
+      "d": -38,
+      "adds": -29.1
+     },
+     {
+      "id": "4065733",
+      "name": "Ty Jerome",
+      "pos": "G",
+      "min": 25,
+      "o": 25,
+      "d": 3,
+      "adds": 14.5
+     },
+     {
+      "id": "4903027",
+      "name": "Cedric Coward",
+      "pos": "F",
+      "min": 24,
+      "o": -22,
+      "d": -25,
+      "adds": -23.2
+     },
+     {
+      "id": "4433083",
+      "name": "Cam Spencer",
+      "pos": "G",
+      "min": 24,
+      "o": -8,
+      "d": -16,
+      "adds": -11.4
+     },
+     {
+      "id": "4781746",
+      "name": "Javon Small",
+      "pos": "G",
+      "min": 24,
+      "o": -21,
+      "d": -27,
+      "adds": -23.5
+     },
+     {
+      "id": "5112087",
+      "name": "Jaylen Wells",
+      "pos": "F",
+      "min": 23,
+      "o": -1,
+      "d": -11,
+      "adds": -5.7
+     }
+    ],
+    "out": [
+     {
+      "id": "4432810",
+      "name": "Isaiah Stewart",
+      "status": "Out",
+      "min": 7,
+      "costs": 4.4
+     }
+    ]
+   },
+   "away": {
+    "team": "DEN",
+    "strength": 1577.1,
+    "offence": 103.5,
+    "defence": -24.5,
+    "coach": {
+     "name": "David Adelman",
+     "elo": -2
+    },
+    "lineup": [
+     {
+      "id": "3936299",
+      "name": "Jamal Murray",
+      "pos": "G",
+      "min": 40,
+      "o": 43,
+      "d": -18,
+      "adds": 20.9
+     },
+     {
+      "id": "3112335",
+      "name": "Nikola Jokic",
+      "pos": "C",
+      "min": 39,
+      "o": 70,
+      "d": 17,
+      "adds": 72.1
+     },
+     {
+      "id": "4277890",
+      "name": "Lonnie Walker IV",
+      "pos": "G",
+      "min": 34,
+      "o": -6,
+      "d": -10,
+      "adds": -10.6
+     },
+     {
+      "id": "3138196",
+      "name": "Cameron Johnson",
+      "pos": "F",
+      "min": 31,
+      "o": 15,
+      "d": 5,
+      "adds": 12.8
+     },
+     {
+      "id": "4431767",
+      "name": "Christian Braun",
+      "pos": "G",
+      "min": 30,
+      "o": 7,
+      "d": -8,
+      "adds": -0.4
+     },
+     {
+      "id": "4433629",
+      "name": "Ryan Nembhard",
+      "pos": "G",
+      "min": 30,
+      "o": -19,
+      "d": -22,
+      "adds": -24.8
+     },
+     {
+      "id": "3064290",
+      "name": "Aaron Gordon",
+      "pos": "F",
+      "min": 28,
+      "o": 12,
+      "d": 3,
+      "adds": 9
+     },
+     {
+      "id": "3978",
+      "name": "DeMar DeRozan",
+      "pos": "G",
+      "min": 8,
+      "o": 20,
+      "d": -21,
+      "adds": 0
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261111_GSW_HOU": {
+   "pHome": 0.7591,
+   "spread": -7.5,
+   "total": 220.5,
+   "pace": 98.2,
+   "home": {
+    "team": "HOU",
+    "strength": 1650.4,
+    "offence": 73,
+    "defence": 73.3,
+    "coach": {
+     "name": "Ime Udoka",
+     "elo": 4
+    },
+    "lineup": [
+     {
+      "id": "4684740",
+      "name": "Amen Thompson",
+      "pos": "G",
+      "min": 45,
+      "o": -3,
+      "d": 4,
+      "adds": 1.1
+     },
+     {
+      "id": "4432639",
+      "name": "Jabari Smith Jr.",
+      "pos": "F",
+      "min": 42,
+      "o": 6,
+      "d": 19,
+      "adds": 22.6
+     },
+     {
+      "id": "2991230",
+      "name": "Fred VanVleet",
+      "pos": "G",
+      "min": 40,
+      "o": 33,
+      "d": 30,
+      "adds": 52.8
+     },
+     {
+      "id": "4871144",
+      "name": "Alperen Sengun",
+      "pos": "C",
+      "min": 40,
+      "o": 13,
+      "d": 20,
+      "adds": 27.5
+     },
+     {
+      "id": "3202",
+      "name": "Kevin Durant",
+      "pos": "F",
+      "min": 39,
+      "o": 36,
+      "d": 5,
+      "adds": 33.7
+     },
+     {
+      "id": "4433192",
+      "name": "Tari Eason",
+      "pos": "F",
+      "min": 35,
+      "o": 2,
+      "d": 9,
+      "adds": 8.9
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "GSW",
+    "strength": 1508.1,
+    "offence": 10.1,
+    "defence": 1.3,
+    "coach": {
+     "name": "Steve Kerr",
+     "elo": -3.5
+    },
+    "lineup": [
+     {
+      "id": "4709138",
+      "name": "Brandin Podziemski",
+      "pos": "G",
+      "min": 31,
+      "o": -10,
+      "d": -9,
+      "adds": -12.3
+     },
+     {
+      "id": "3975",
+      "name": "Stephen Curry",
+      "pos": "G",
+      "min": 31,
+      "o": 46,
+      "d": 4,
+      "adds": 32.1
+     },
+     {
+      "id": "6589",
+      "name": "Draymond Green",
+      "pos": "F",
+      "min": 29,
+      "o": -4,
+      "d": 24,
+      "adds": 12.3
+     },
+     {
+      "id": "4997536",
+      "name": "Gui Santos",
+      "pos": "F",
+      "min": 28,
+      "o": -12,
+      "d": -10,
+      "adds": -12.4
+     },
+     {
+      "id": "4397040",
+      "name": "Brandon Williams",
+      "pos": "G",
+      "min": 25,
+      "o": -25,
+      "d": -6,
+      "adds": -16
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "pos": "C",
+      "min": 23,
+      "o": 12,
+      "d": 12,
+      "adds": 11.9
+     },
+     {
+      "id": "4066436",
+      "name": "De'Anthony Melton",
+      "pos": "G",
+      "min": 23,
+      "o": 9,
+      "d": 11,
+      "adds": 9.8
+     },
+     {
+      "id": "4433149",
+      "name": "LJ Cryer",
+      "pos": "G",
+      "min": 21,
+      "o": -21,
+      "d": -23,
+      "adds": -19.5
+     },
+     {
+      "id": "2990969",
+      "name": "Georges Niang",
+      "pos": "F",
+      "min": 21,
+      "o": 22,
+      "d": 2,
+      "adds": 10.8
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 9,
+      "o": -14,
+      "d": -15,
+      "adds": -5
+     }
+    ],
+    "out": [
+     {
+      "id": "4432171",
+      "name": "Moses Moody",
+      "status": "Out",
+      "min": 30,
+      "costs": -5.6
+     },
+     {
+      "id": "6430",
+      "name": "Jimmy Butler III",
+      "status": "Out",
+      "min": 27,
+      "costs": 27.8
+     }
+    ]
+   }
+  },
+  "2027_20261111_LAL_MIL": {
+   "pHome": 0.4008,
+   "spread": 2.6,
+   "total": 221.7,
+   "pace": 98.2,
+   "home": {
+    "team": "MIL",
+    "strength": 1427,
+    "offence": -27.8,
+    "defence": -48,
+    "coach": {
+     "name": "Taylor Jenkins",
+     "elo": 2.7
+    },
+    "lineup": [
+     {
+      "id": "4397475",
+      "name": "AJ Green",
+      "pos": "G",
+      "min": 35,
+      "o": -10,
+      "d": -23,
+      "adds": -23
+     },
+     {
+      "id": "4997526",
+      "name": "Ousmane Dieng",
+      "pos": "F",
+      "min": 34,
+      "o": 1,
+      "d": 2,
+      "adds": 2.4
+     },
+     {
+      "id": "4277922",
+      "name": "Jericho Sims",
+      "pos": "C",
+      "min": 33,
+      "o": -12,
+      "d": -3,
+      "adds": -10
+     },
+     {
+      "id": "4397114",
+      "name": "Cormac Ryan",
+      "pos": "G",
+      "min": 32,
+      "o": -23,
+      "d": -26,
+      "adds": -32
+     },
+     {
+      "id": "4591725",
+      "name": "Ryan Rollins",
+      "pos": "G",
+      "min": 31,
+      "o": -19,
+      "d": -28,
+      "adds": -31
+     },
+     {
+      "id": "4395725",
+      "name": "Tyler Herro",
+      "pos": "G",
+      "min": 31,
+      "o": 12,
+      "d": -7,
+      "adds": 3.7
+     },
+     {
+      "id": "4397140",
+      "name": "Kevin Porter Jr.",
+      "pos": "G",
+      "min": 31,
+      "o": 6,
+      "d": 11,
+      "adds": 11.6
+     },
+     {
+      "id": "4432848",
+      "name": "Jaime Jaquez Jr.",
+      "pos": "F",
+      "min": 14,
+      "o": 4,
+      "d": 5,
+      "adds": 2.7
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "LAL",
+    "strength": 1551.7,
+    "offence": 36.9,
+    "defence": 18.3,
+    "coach": {
+     "name": "JJ Redick",
+     "elo": -3.5
+    },
+    "lineup": [
+     {
+      "id": "4066457",
+      "name": "Austin Reaves",
+      "pos": "G",
+      "min": 38,
+      "o": 20,
+      "d": 16,
+      "adds": 28.2
+     },
+     {
+      "id": "3945274",
+      "name": "Luka Doncic",
+      "pos": "G",
+      "min": 36,
+      "o": 44,
+      "d": 7,
+      "adds": 39
+     },
+     {
+      "id": "4433136",
+      "name": "Walker Kessler",
+      "pos": "C",
+      "min": 31,
+      "o": -5,
+      "d": -7,
+      "adds": -7.8
+     },
+     {
+      "id": "4277811",
+      "name": "Collin Sexton",
+      "pos": "G",
+      "min": 30,
+      "o": 0,
+      "d": -9,
+      "adds": -5.2
+     },
+     {
+      "id": "4433137",
+      "name": "Ziaire Williams",
+      "pos": "F",
+      "min": 24,
+      "o": -20,
+      "d": 5,
+      "adds": -6.9
+     },
+     {
+      "id": "4397014",
+      "name": "Quentin Grimes",
+      "pos": "G",
+      "min": 23,
+      "o": 5,
+      "d": 18,
+      "adds": 11.3
+     },
+     {
+      "id": "4868423",
+      "name": "Jaden Hardy",
+      "pos": "G",
+      "min": 21,
+      "o": -4,
+      "d": -15,
+      "adds": -7.7
+     },
+     {
+      "id": "4397134",
+      "name": "Cole Swider",
+      "pos": "F",
+      "min": 20,
+      "o": -8,
+      "d": -3,
+      "adds": -4.3
+     },
+     {
+      "id": "3155535",
+      "name": "Kevon Looney",
+      "pos": "F",
+      "min": 17,
+      "o": 7,
+      "d": 18,
+      "adds": 8.7
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261111_OKC_POR": {
+   "pHome": 0.3813,
+   "spread": 3.2,
+   "total": 222.7,
+   "pace": 100,
+   "home": {
+    "team": "POR",
+    "strength": 1581.3,
+    "offence": 44.2,
+    "defence": 37,
+    "coach": {
+     "name": "Micah Nori",
+     "elo": 0
+    },
+    "lineup": [
+     {
+      "id": "3995",
+      "name": "Jrue Holiday",
+      "pos": "G",
+      "min": 39,
+      "o": 29,
+      "d": 20,
+      "adds": 40.2
+     },
+     {
+      "id": "4683021",
+      "name": "Deni Avdija",
+      "pos": "F",
+      "min": 35,
+      "o": 3,
+      "d": 26,
+      "adds": 21.6
+     },
+     {
+      "id": "4431736",
+      "name": "Toumani Camara",
+      "pos": "F",
+      "min": 33,
+      "o": -12,
+      "d": 8,
+      "adds": -2.6
+     },
+     {
+      "id": "4279888",
+      "name": "Ja Morant",
+      "pos": "G",
+      "min": 30,
+      "o": 27,
+      "d": 6,
+      "adds": 20.8
+     },
+     {
+      "id": "4683678",
+      "name": "Scoot Henderson",
+      "pos": "G",
+      "min": 29,
+      "o": -7,
+      "d": 5,
+      "adds": -0.8
+     },
+     {
+      "id": "6606",
+      "name": "Damian Lillard",
+      "pos": "G",
+      "min": 28,
+      "o": 34,
+      "d": -4,
+      "adds": 18
+     },
+     {
+      "id": "4066399",
+      "name": "Micah Potter",
+      "pos": "C",
+      "min": 27,
+      "o": -2,
+      "d": -4,
+      "adds": -3.2
+     },
+     {
+      "id": "4684737",
+      "name": "Jaylen Martin",
+      "pos": "G",
+      "min": 20,
+      "o": -17,
+      "d": -14,
+      "adds": -12.4
+     }
+    ],
+    "out": [
+     {
+      "id": "4914336",
+      "name": "Shaedon Sharpe",
+      "status": "Out",
+      "min": 14,
+      "costs": -0.9
+     }
+    ]
+   },
+   "away": {
+    "team": "OKC",
+    "strength": 1724.3,
+    "offence": 81.6,
+    "defence": 128.8,
+    "coach": {
+     "name": "Mark Daigneault",
+     "elo": 13.7
+    },
+    "lineup": [
+     {
+      "id": "4278073",
+      "name": "Shai Gilgeous-Alexander",
+      "pos": "G",
+      "min": 36,
+      "o": 51,
+      "d": 43,
+      "adds": 70.3
+     },
+     {
+      "id": "4900671",
+      "name": "Ajay Mitchell",
+      "pos": "G",
+      "min": 29,
+      "o": 3,
+      "d": 16,
+      "adds": 11.9
+     },
+     {
+      "id": "4433255",
+      "name": "Chet Holmgren",
+      "pos": "C",
+      "min": 29,
+      "o": 8,
+      "d": 25,
+      "adds": 20.3
+     },
+     {
+      "id": "4683692",
+      "name": "Cason Wallace",
+      "pos": "G",
+      "min": 28,
+      "o": 11,
+      "d": 25,
+      "adds": 21
+     },
+     {
+      "id": "4683778",
+      "name": "Jared McCain",
+      "pos": "G",
+      "min": 27,
+      "o": -16,
+      "d": -7,
+      "adds": -12.6
+     },
+     {
+      "id": "2991350",
+      "name": "Alex Caruso",
+      "pos": "G",
+      "min": 26,
+      "o": 11,
+      "d": 52,
+      "adds": 34
+     },
+     {
+      "id": "4432823",
+      "name": "Jaylin Williams",
+      "pos": "F",
+      "min": 23,
+      "o": 18,
+      "d": 22,
+      "adds": 19.6
+     },
+     {
+      "id": "4222252",
+      "name": "Isaiah Hartenstein",
+      "pos": "C",
+      "min": 22,
+      "o": 33,
+      "d": 34,
+      "adds": 31
+     },
+     {
+      "id": "4593803",
+      "name": "Jalen Williams",
+      "pos": "G",
+      "min": 22,
+      "o": 18,
+      "d": 17,
+      "adds": 15.7
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261111_ORL_UTA": {
+   "pHome": 0.3618,
+   "spread": 3.9,
+   "total": 232.7,
+   "pace": 104.5,
+   "home": {
+    "team": "UTA",
+    "strength": 1364.8,
+    "offence": -33.4,
+    "defence": -95.3,
+    "coach": {
+     "name": "Will Hardy",
+     "elo": -6.6
+    },
+    "lineup": [
+     {
+      "id": "4873138",
+      "name": "Ace Bailey",
+      "pos": "G",
+      "min": 31,
+      "o": -20,
+      "d": -34,
+      "adds": -35
+     },
+     {
+      "id": "5105839",
+      "name": "Brice Sensabaugh",
+      "pos": "F",
+      "min": 30,
+      "o": -9,
+      "d": -33,
+      "adds": -25.2
+     },
+     {
+      "id": "4684793",
+      "name": "Kyle Filipowski",
+      "pos": "F",
+      "min": 28,
+      "o": -13,
+      "d": -34,
+      "adds": -27.4
+     },
+     {
+      "id": "4277961",
+      "name": "Jaren Jackson Jr.",
+      "pos": "F",
+      "min": 27,
+      "o": -3,
+      "d": 29,
+      "adds": 14.7
+     },
+     {
+      "id": "4433627",
+      "name": "Keyonte George",
+      "pos": "G",
+      "min": 27,
+      "o": -5,
+      "d": -36,
+      "adds": -22.1
+     },
+     {
+      "id": "4683766",
+      "name": "Isaiah Collier",
+      "pos": "G",
+      "min": 26,
+      "o": -12,
+      "d": -32,
+      "adds": -23.9
+     },
+     {
+      "id": "4066336",
+      "name": "Lauri Markkanen",
+      "pos": "F",
+      "min": 26,
+      "o": 20,
+      "d": -6,
+      "adds": 7.9
+     },
+     {
+      "id": "4396963",
+      "name": "Blake Hinson",
+      "pos": "F",
+      "min": 21,
+      "o": -22,
+      "d": -19,
+      "adds": -17.3
+     },
+     {
+      "id": "4397077",
+      "name": "Jaxson Hayes",
+      "pos": "C",
+      "min": 17,
+      "o": 4,
+      "d": 0,
+      "adds": 1.5
+     },
+     {
+      "id": "3133602",
+      "name": "Svi Mykhailiuk",
+      "pos": "G",
+      "min": 8,
+      "o": -3,
+      "d": -9,
+      "adds": -1.7
+     }
+    ],
+    "out": [
+     {
+      "id": "3102530",
+      "name": "Jusuf Nurkic",
+      "status": "Out",
+      "min": 26,
+      "costs": 11.9
+     }
+    ]
+   },
+   "away": {
+    "team": "ORL",
+    "strength": 1583.3,
+    "offence": -7.7,
+    "defence": 90.9,
+    "coach": {
+     "name": "Sean Sweeney",
+     "elo": 0
+    },
+    "lineup": [
+     {
+      "id": "4432573",
+      "name": "Paolo Banchero",
+      "pos": "F",
+      "min": 40,
+      "o": -8,
+      "d": 5,
+      "adds": -1.4
+     },
+     {
+      "id": "4066320",
+      "name": "Desmond Bane",
+      "pos": "G",
+      "min": 37,
+      "o": 22,
+      "d": 11,
+      "adds": 25.4
+     },
+     {
+      "id": "4432165",
+      "name": "Jalen Suggs",
+      "pos": "G",
+      "min": 36,
+      "o": -18,
+      "d": 42,
+      "adds": 18.5
+     },
+     {
+      "id": "4277847",
+      "name": "Wendell Carter Jr.",
+      "pos": "C",
+      "min": 35,
+      "o": -4,
+      "d": 27,
+      "adds": 17.1
+     },
+     {
+      "id": "4712849",
+      "name": "Anthony Black",
+      "pos": "G",
+      "min": 30,
+      "o": -12,
+      "d": 7,
+      "adds": -2.5
+     },
+     {
+      "id": "4566434",
+      "name": "Franz Wagner",
+      "pos": "F",
+      "min": 29,
+      "o": 12,
+      "d": 38,
+      "adds": 31
+     },
+     {
+      "id": "4278572",
+      "name": "Jamal Cain",
+      "pos": "F",
+      "min": 21,
+      "o": -7,
+      "d": -8,
+      "adds": -6.7
+     },
+     {
+      "id": "6478",
+      "name": "Nikola Vucevic",
+      "pos": "C",
+      "min": 11,
+      "o": -4,
+      "d": 10,
+      "adds": 1.6
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261111_SAS_CHI": {
+   "pHome": 0.2242,
+   "spread": 8.5,
+   "total": 230.1,
+   "pace": 103.5,
+   "home": {
+    "team": "CHI",
+    "strength": 1430.5,
+    "offence": -44.7,
+    "defence": -24,
+    "coach": {
+     "name": "Tiago Splitter",
+     "elo": -0.8
+    },
+    "lineup": [
+     {
+      "id": "5044385",
+      "name": "Leonard Miller",
+      "pos": "F",
+      "min": 34,
+      "o": -7,
+      "d": -6,
+      "adds": -9.3
+     },
+     {
+      "id": "4871145",
+      "name": "Josh Giddey",
+      "pos": "G",
+      "min": 32,
+      "o": 5,
+      "d": 5,
+      "adds": 7.1
+     },
+     {
+      "id": "4431687",
+      "name": "Patrick Williams",
+      "pos": "F",
+      "min": 32,
+      "o": -21,
+      "d": -18,
+      "adds": -25
+     },
+     {
+      "id": "4711294",
+      "name": "Matas Buzelis",
+      "pos": "F",
+      "min": 29,
+      "o": -26,
+      "d": -29,
+      "adds": -32.7
+     },
+     {
+      "id": "4395626",
+      "name": "Tre Jones",
+      "pos": "G",
+      "min": 27,
+      "o": 3,
+      "d": 17,
+      "adds": 11.3
+     },
+     {
+      "id": "4432822",
+      "name": "Isaac Okoro",
+      "pos": "F",
+      "min": 26,
+      "o": -7,
+      "d": 5,
+      "adds": -0.5
+     },
+     {
+      "id": "4683750",
+      "name": "Jordan Hawkins",
+      "pos": "G",
+      "min": 25,
+      "o": -10,
+      "d": -24,
+      "adds": -17.5
+     },
+     {
+      "id": "4278067",
+      "name": "Nic Claxton",
+      "pos": "C",
+      "min": 23,
+      "o": -27,
+      "d": 13,
+      "adds": -6
+     },
+     {
+      "id": "2595516",
+      "name": "Norman Powell",
+      "pos": "G",
+      "min": 13,
+      "o": 15,
+      "d": 0,
+      "adds": 4.2
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "SAS",
+    "strength": 1703.9,
+    "offence": 80.7,
+    "defence": 109.3,
+    "coach": {
+     "name": "Mitch Johnson",
+     "elo": 13.7
+    },
+    "lineup": [
+     {
+      "id": "5104157",
+      "name": "Victor Wembanyama",
+      "pos": "F",
+      "min": 40,
+      "o": 9,
+      "d": 32,
+      "adds": 34.9
+     },
+     {
+      "id": "4395630",
+      "name": "Devin Vassell",
+      "pos": "G",
+      "min": 38,
+      "o": 24,
+      "d": 25,
+      "adds": 39.9
+     },
+     {
+      "id": "4066259",
+      "name": "De'Aaron Fox",
+      "pos": "G",
+      "min": 37,
+      "o": 37,
+      "d": 17,
+      "adds": 41.3
+     },
+     {
+      "id": "6440",
+      "name": "Tobias Harris",
+      "pos": "F",
+      "min": 32,
+      "o": 20,
+      "d": 28,
+      "adds": 32.8
+     },
+     {
+      "id": "4845367",
+      "name": "Stephon Castle",
+      "pos": "G",
+      "min": 32,
+      "o": 4,
+      "d": 13,
+      "adds": 11.7
+     },
+     {
+      "id": "4592479",
+      "name": "Julian Champagnie",
+      "pos": "F",
+      "min": 32,
+      "o": 16,
+      "d": 28,
+      "adds": 29.2
+     },
+     {
+      "id": "5037871",
+      "name": "Dylan Harper",
+      "pos": "G",
+      "min": 30,
+      "o": -5,
+      "d": 6,
+      "adds": 0.9
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261111_WAS_IND": {
+   "pHome": 0.7618,
+   "spread": -8,
+   "total": 235.6,
+   "pace": 104.3,
+   "home": {
+    "team": "IND",
+    "strength": 1502.4,
+    "offence": 25.5,
+    "defence": -19.2,
+    "coach": {
+     "name": "Rick Carlisle",
+     "elo": -4
+    },
+    "lineup": [
+     {
+      "id": "4395712",
+      "name": "Andrew Nembhard",
+      "pos": "G",
+      "min": 33,
+      "o": 4,
+      "d": -5,
+      "adds": -0.1
+     },
+     {
+      "id": "3133603",
+      "name": "Kelly Oubre Jr.",
+      "pos": "G",
+      "min": 32,
+      "o": 6,
+      "d": 1,
+      "adds": 5.3
+     },
+     {
+      "id": "4396909",
+      "name": "Aaron Nesmith",
+      "pos": "G",
+      "min": 31,
+      "o": -1,
+      "d": 7,
+      "adds": 4.2
+     },
+     {
+      "id": "3149673",
+      "name": "Pascal Siakam",
+      "pos": "F",
+      "min": 30,
+      "o": 9,
+      "d": -3,
+      "adds": 4.3
+     },
+     {
+      "id": "4431752",
+      "name": "Kobe Brown",
+      "pos": "G",
+      "min": 29,
+      "o": -12,
+      "d": -21,
+      "adds": -19.6
+     },
+     {
+      "id": "4398207",
+      "name": "Jalen Slawson",
+      "pos": "F",
+      "min": 28,
+      "o": -10,
+      "d": -12,
+      "adds": -12.4
+     },
+     {
+      "id": "4592829",
+      "name": "Quenton Jackson",
+      "pos": "G",
+      "min": 28,
+      "o": -11,
+      "d": -11,
+      "adds": -12
+     },
+     {
+      "id": "4396993",
+      "name": "Tyrese Haliburton",
+      "pos": "G",
+      "min": 28,
+      "o": 53,
+      "d": 10,
+      "adds": 36.3
+     }
+    ],
+    "out": [
+     {
+      "id": "5157066",
+      "name": "Johnny Furphy",
+      "status": "Out",
+      "min": 20,
+      "costs": -14.2
+     }
+    ]
+   },
+   "away": {
+    "team": "WAS",
+    "strength": 1354,
+    "offence": -67.6,
+    "defence": -70.3,
+    "coach": {
+     "name": "Brian Keefe",
+     "elo": -8.3
+    },
+    "lineup": [
+     {
+      "id": "5144126",
+      "name": "Will Riley",
+      "pos": "G",
+      "min": 33,
+      "o": -22,
+      "d": -36,
+      "adds": -39.4
+     },
+     {
+      "id": "2581184",
+      "name": "Anthony Gill",
+      "pos": "F",
+      "min": 32,
+      "o": -12,
+      "d": -25,
+      "adds": -24.5
+     },
+     {
+      "id": "6583",
+      "name": "Anthony Davis",
+      "pos": "F",
+      "min": 32,
+      "o": 7,
+      "d": 30,
+      "adds": 24.9
+     },
+     {
+      "id": "4845374",
+      "name": "Bub Carrington",
+      "pos": "G",
+      "min": 29,
+      "o": -26,
+      "d": -29,
+      "adds": -32.8
+     },
+     {
+      "id": "4432187",
+      "name": "Reece Beekman",
+      "pos": "G",
+      "min": 26,
+      "o": -28,
+      "d": -21,
+      "adds": -26.3
+     },
+     {
+      "id": "4278129",
+      "name": "Deandre Ayton",
+      "pos": "C",
+      "min": 25,
+      "o": 2,
+      "d": 8,
+      "adds": 5.5
+     },
+     {
+      "id": "4432907",
+      "name": "Justin Champagnie",
+      "pos": "F",
+      "min": 24,
+      "o": -7,
+      "d": -9,
+      "adds": -7.8
+     },
+     {
+      "id": "5238230",
+      "name": "Tre Johnson",
+      "pos": "G",
+      "min": 24,
+      "o": -21,
+      "d": -30,
+      "adds": -24.5
+     },
+     {
+      "id": "5104155",
+      "name": "Bilal Coulibaly",
+      "pos": "G",
+      "min": 15,
+      "o": -23,
+      "d": -19,
+      "adds": -12.8
+     }
+    ],
+    "out": [
+     {
+      "id": "4606840",
+      "name": "Jamir Watkins",
+      "status": "Out",
+      "min": 32,
+      "costs": -32.4
+     },
+     {
+      "id": "4997537",
+      "name": "Tristan Vukcevic",
+      "status": "Out",
+      "min": 16,
+      "costs": -10.5
+     }
+    ]
+   }
   }
  },
- "generated": "2026-10-11T16:29Z"
+ "generated": "2026-10-12T20:05Z"
 }

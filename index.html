@@ -153,6 +153,7 @@ sup{font-size:9px;font-weight:800;letter-spacing:.04em;color:var(--muted);margin
 .sugg-bet{display:flex;align-items:center;gap:8px;margin:0 0 10px} .sugg-bet input{width:84px}
 .sugg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
 .sugg-tier{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;border-top:3px solid var(--line-2)}
+.sugg-tier.value{border-style:dashed;border-top:3px dashed var(--ice)}
 .sugg-tier.safe{border-top-color:var(--lime)} .sugg-tier.med{border-top-color:var(--hot)} .sugg-tier.aggr{border-top-color:var(--rose)}
 .sugg-top{display:flex;align-items:center;gap:8px} .sugg-top .nm{font-family:var(--display);font-weight:700;font-size:15px} .sugg-top .grow{flex:1}
 .sugg-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}
@@ -545,33 +546,39 @@ const offOf = day => (M.bank.off[day] = M.bank.off[day] || {});
 const fixedOf = day => (M.bank.fixed[day] = M.bank.fixed[day] || {});
 const gameLabel = g => `${g.away} at ${g.home}`;
 
-/* ---------- suggested parlays: one core grown in three steps (the NFL hub's rule) ----------
-   Safe opens with the two likeliest legs and keeps adding while every leg landing stays at 50% or better;
-   Medium and Aggressive each add at least one more, down to 30% and 15%. The next leg is the one with the best
-   chance times payout. A leg's chance is the market's where there is one (the sharper number), else the model's.
-   Legs are different games, so chances and prices multiply. */
+/* ---------- suggested parlays ----------
+   Safe, Medium and Aggressive are one core grown in three steps, from legs the model and the market agree on: the
+   model's pick has to be the market's favourite too (where there is no market yet, the model's chance stands in).
+   Legs go in likeliest first: Safe takes the two likeliest and keeps adding while every leg landing stays at 50%
+   or better, Medium and Aggressive each add at least one more, down to 30% and 15%. A leg's chance is the
+   market's with the book's cut removed, the sharper number.
+   Ranking by chance times payout, the old rule, ranked nothing: with the chance taken from the same market as
+   the price, that product is the same for every leg up to the book's cut, so the added legs were close to random.
+   Value is separate and labelled: the model's picks whose chance beats the market's by VALUE_EDGE or more, biggest
+   edge first. Those are the model against or above the market, which is where a model is most often wrong; on the
+   NFL side picks against the market have won about 42% since 2021. Legs are different games, so chances and
+   prices multiply. */
 const BK_TIERS = [['safe', 'Safe', 0.50, 3], ['med', 'Medium', 0.30, 5], ['aggr', 'Aggressive', 0.15, 8]];
+const VALUE_EDGE = 0.05, VALUE_MAX = 4;
 function suggest(pool) {
-  const legs = pool.filter(x => x.tc !== 'coin' && x.px).map(x => ({ ...x, p: x.mp != null ? x.mp : x.conf, D: amToDec(x.px.am) }));
+  const priced = pool.filter(x => x.tc !== 'coin' && x.px).map(x => ({ ...x, p: x.mp != null ? x.mp : x.conf, D: amToDec(x.px.am) }));
+  const legs = priced.filter(x => x.mp == null || x.mp >= 0.5).sort((a, b) => b.p - a.p);
   const P = a => a.reduce((t, x) => t * x.p, 1), Dm = a => a.reduce((t, x) => t * x.D, 1);
-  const tiers = []; let cur = [];
+  const tiers = []; let cur = [], i = 0;
   for (const [id, label, floor, cap] of BK_TIERS) {
     const start = cur.length, must = id === 'safe' ? 2 : start + 1;
-    while (cur.length < cap) {
-      let best = null;
-      for (const c of legs) {
-        if (cur.includes(c)) continue;
-        const next = [...cur, c], p = P(next), forced = next.length <= must;
-        if (!forced && p < floor) continue;
-        const sc = (forced && id === 'safe') ? p : p * Dm(next);
-        if (!best || sc > best.sc) best = { c, sc };
-      }
-      if (!best) break; cur = [...cur, best.c];
+    while (cur.length < cap && i < legs.length) {
+      const next = [...cur, legs[i]];
+      if (next.length > must && P(next) < floor) break;
+      cur = next; i++;
     }
     if (cur.length < 2 || cur.length === start) continue;
     tiers.push({ id, label, legs: cur.slice(), p: P(cur), dec: Dm(cur), added: cur.length - start });
   }
-  return { tiers, pool: legs.length };
+  /* value: a real market price and the model clear of it by VALUE_EDGE; its chance shown is the market's */
+  const val = priced.filter(x => x.mp != null && x.px.est !== 'model' && x.conf - x.mp >= VALUE_EDGE).sort((a, b) => (b.conf - b.mp) - (a.conf - a.mp)).slice(0, VALUE_MAX);
+  const value = val.length >= 2 ? { id: 'value', label: 'Value', legs: val, p: P(val), pModel: val.reduce((t, x) => t * x.conf, 1), dec: Dm(val) } : null;
+  return { tiers, value, pool: legs.length, agreeing: legs.length, priced: priced.length };
 }
 
 /* ---------- the Bet Build ---------- */
@@ -607,27 +614,33 @@ function renderSuggest(day) {
   const head = `<div class="bar" style="margin:0 0 6px"><h2 style="margin:0">Suggested parlays</h2>${day ? `<span class="tag hot">${dayTitle(day)}</span>` : ''}<span class="grow"></span><button class="btn ghost" id="suggToggle" aria-expanded="${open}">${open ? 'Minimize' : 'Show'}</button></div>`;
   if (!open) { el.innerHTML = head; $('#suggToggle').onclick = () => { B.suggMin = false; saveMine(); render.parlay(); }; return; }
   const pool = day ? bkGames(day) : [];
-  const { tiers, pool: n } = suggest(pool);
+  const { tiers, value, pool: n } = suggest(pool);
   let body;
   if (!day) body = `<p class="muted" style="margin:0">No games left to bet in the next ten days. They show up here as the schedule fills in.</p>`;
   else if (!tiers.length) body = `<p class="muted" style="margin:0">${n < 2 ? 'A suggestion needs at least two picks in the chosen band with a price. Pick a wider band below, or another day.' : 'None of these picks combine into a parlay that clears 50%.'}</p>`;
   else body = `<div class="sugg-bet"><label for="suggStake">Bet $</label><input type="number" id="suggStake" step="1" min="0" value="${stake}"></div>
-    <p class="muted" style="margin:0 0 12px;font-size:12px">From ${dayTitle(day).toLowerCase() === 'tonight' ? "tonight's" : `${dayTitle(day)}'s`} picks in the band chosen below. Each leg is the model's pick. Its chance is the market's with the book's cut removed where a line is up, as the sharper of the two numbers, and the model's until then. The legs are different games, so a book multiplies the prices, and so does this.</p>
+    <p class="muted" style="margin:0 0 12px;font-size:12px">From ${dayTitle(day).toLowerCase() === 'tonight' ? "tonight's" : `${dayTitle(day)}'s`} picks in the band chosen below, where the model and the market agree on the winner. Legs go in likeliest first, and a leg's chance is the market's with the book's cut removed where a line is up (the sharper number), the model's until then. The legs are different games, so a book multiplies the prices, and so does this.</p>
     <div class="sugg-grid">${tiers.map((t, i) => `<div class="sugg-tier ${t.id}">
       <div class="sugg-top"><span class="nm">${t.label}</span><span class="muted">${t.legs.length} legs</span><span class="grow"></span>${i ? `<span class="muted">+${t.added} leg${t.added === 1 ? '' : 's'}</span>` : ''}</div>
       <div class="sugg-nums"><div><b>${Math.round(t.p * 100)}%</b><span>chance all land</span></div><div><b>${fmtAm(decToAm(t.dec))}</b><span>odds</span></div><div><b>${money(stake * t.dec)}</b><span>returns on ${money(stake)}</span></div></div>
       <ul class="sugg-legs">${t.legs.map(x => `<li>${pill(x.pick)}<span class="g">${gameLabel(x.g)}</span><span class="od">${fmtPx(x.px)}</span><span class="pc muted">${Math.round(x.p * 100)}%</span></li>`).join('')}</ul>
-      <div class="sugg-btns"><button class="btn hot" data-sugg-lock="${t.id}" ${stake > 0 ? '' : 'disabled'}>Lock in</button><button class="btn" data-sugg-load="${t.id}">Edit below</button></div></div>`).join('')}</div>`;
+      <div class="sugg-btns"><button class="btn hot" data-sugg-lock="${t.id}" ${stake > 0 ? '' : 'disabled'}>Lock in</button><button class="btn" data-sugg-load="${t.id}">Edit below</button></div></div>`).join('')}</div>`
+    + (value ? `<div class="sugg-tier value" style="margin-top:12px">
+      <div class="sugg-top"><span class="nm">Value</span><span class="muted">${value.legs.length} legs · the model above the market</span></div>
+      <p class="muted" style="margin:0;font-size:12px">Picks where the model's chance beats the market's by ${Math.round(VALUE_EDGE * 100)} points or more, biggest gap first. This is the model betting against the market's view, which is where a model is most often wrong: on the NFL side, picks against the market have won about 42%. Shown for interest, not as a suggestion.</p>
+      <div class="sugg-nums"><div><b>${(value.p * 100).toFixed(value.p < 0.01 ? 1 : 0)}%</b><span>market says all land</span></div><div><b>${(value.pModel * 100).toFixed(0)}%</b><span>model says</span></div><div><b>${fmtAm(decToAm(value.dec))}</b><span>odds</span></div></div>
+      <ul class="sugg-legs">${value.legs.map(x => `<li>${pill(x.pick)}<span class="g">${gameLabel(x.g)}</span><span class="od">${fmtPx(x.px)}</span><span class="pc muted" title="model / market">${Math.round(x.conf * 100)}/${Math.round(x.mp * 100)}</span></li>`).join('')}</ul>
+      <div class="sugg-btns"><button class="btn" data-sugg-lock="value" ${stake > 0 ? '' : 'disabled'}>Lock in anyway</button><button class="btn" data-sugg-load="value">Edit below</button></div></div>` : '');
   el.innerHTML = head + body;
   $('#suggToggle').onclick = () => { B.suggMin = true; saveMine(); render.parlay(); };
   const st = $('#suggStake'); if (st) st.onchange = () => { B.suggStake = Math.max(0, Math.round(+st.value || 0)); saveMine(); render.parlay(); };
   el.querySelectorAll('[data-sugg-load]').forEach(b => b.onclick = () => {
-    const t = tiers.find(x => x.id === b.dataset.suggLoad); if (!t) return;
+    const t = tiers.concat(value || []).find(x => x.id === b.dataset.suggLoad); if (!t) return;
     const keep = new Set(t.legs.map(x => x.g.id));
     B.off[day] = Object.fromEntries(bkGames(day).filter(x => !keep.has(x.g.id)).map(x => [x.g.id, true]));
     B.mode = 'parlay'; saveMine(); render.parlay(); $("#bkPlan").scrollIntoView?.({ behavior: 'smooth', block: 'start' }); });
   el.querySelectorAll('[data-sugg-lock]').forEach(b => b.onclick = () => {
-    const t = tiers.find(x => x.id === b.dataset.suggLock); if (!t || !(stake > 0)) return;
+    const t = tiers.concat(value || []).find(x => x.id === b.dataset.suggLock); if (!t || !(stake > 0)) return;
     bkMsg = lockBet('parlay', t.legs, stake) ? `${t.label} parlay added to the Bet Build below.` : `That ${t.label} parlay is already in the Bet Build.`;
     saveMine(); render.parlay(); });
 }
@@ -742,7 +755,7 @@ render.about = function () {
     <h3>After a game</h3><p>Each side's offensive efficiency, points per 100 possessions, is compared with what the ratings expected. The surprise moves the offence of the players who were on the floor, by their minutes, and the defence of the players they faced, the other way. A win update rides alongside. The coach moves with the margin surprise and carries his rating when he changes teams. Ratings carry ${Math.round(p.carryP * 100)}% of the way into a new season; rookies start at ${p.rookie}; a first rating comes from FiveThirtyEight's RAPTOR where there is one.</p>
     <h3>Before a game</h3><p>The home side gets the court (${t.hfa} Elo, about ${(t.hfa / t.scale).toFixed(1)} points), Denver and Utah more for altitude, and both sides are adjusted for a back to back (−${t.b2b}), three games in four nights and three days off. Tonight's lineup is the roster minus the injury report's Out and Doubtful players, with minutes projected from each player's last ${p.minGames} appearances. Pace is a running average of each team's possessions per 48 minutes, and the total is the two expected efficiencies times the expected pace. A tenth of the plain team Elo's opinion is blended in.</p>
     <h3>What the numbers are worth</h3><p>See Record for the held-out seasons. The model picks winners at about 69% with the lineup known. The market's closing line does a little better than that, because it also knows who is playing and a great deal more. Where this model and the market disagree by three points or more the card shows an edge chip; that is a place to look, not a bet.</p>
-    <h3>Parlay Builder</h3><p>It works like the NFL hub's. At the top, three suggested parlays for the day, Safe, Medium and Aggressive, grown from one core: the two likeliest legs first, then more while the chance that every leg lands stays above 50%, 30% and 15%, each new leg the one with the best chance times payout. Below, the day's plan: pick a day, a stake, a confidence band and straight bets or a parlay, then tick the games. Straight bets share the stake evenly unless you type an amount; a parlay shows its odds, its payout and the chance it hits. Lock in what you like and it goes to the Bet Build, which grades itself as the games go final. Each leg is the model's pick on the moneyline. Its price is the book's moneyline where one is published, and its chance in the suggestions is the market's with the book's cut taken out. Legs from different games are independent, so chances and prices multiply.</p>
+    <h3>Parlay Builder</h3><p>It works like the NFL hub's. At the top, three suggested parlays for the day, Safe, Medium and Aggressive, grown from one core out of the games where the model and the market pick the same winner. Legs go in likeliest first: Safe takes the two likeliest and keeps adding while the chance that every leg lands stays above 50%, Medium and Aggressive keep going down to 30% and 15%. A leg's chance is the market's, from the book's moneylines with its cut taken out, because the market is the sharper number. A separate Value card lists the model's picks whose chance beats the market's by 5 points or more; that is the model disagreeing with the market, which is where models are most often wrong, so it is shown for interest and not as a suggestion. Below, the day's plan: pick a day, a stake, a confidence band and straight bets or a parlay, then tick the games. Straight bets share the stake evenly unless you type an amount; a parlay shows its odds, its payout and the chance it hits. Lock in what you like and it goes to the Bet Build, which grades itself as the games go final. Each leg is the model's pick on the moneyline, priced at the book's moneyline where one is published. Legs from different games are independent, so chances and prices multiply.</p>
     <h3>What lives where</h3><p>The job pulls scores, box scores, injuries, coaches and rosters from ESPN's public feeds every morning, replays both models, logs the day's numbers and rebuilds this page. Your picks and tickets stay in this browser: clearing site data loses them.</p>`;
 };
 render.data = function () {

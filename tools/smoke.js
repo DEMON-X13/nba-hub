@@ -105,6 +105,10 @@ function load(page, st, mine) {
   const d3 = w.document;
   d3.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
   check(/Safe/.test(d3.getElementById('bkSuggest').textContent), 'a Safe parlay is suggested');
+  const safeTxt = d3.querySelector('#bkSuggest .sugg-tier.safe').textContent;
+  check(/NYK/.test(safeTxt) && /GSW/.test(safeTxt) && !/MIA/.test(safeTxt), 'Safe takes the two picks the market agrees with and leaves out MIA, where it does not');
+  check(!d3.querySelector('#bkSuggest .sugg-tier.med'), 'no Medium: the only leg left is one the market disagrees with');
+  check(!d3.querySelector('#bkSuggest .sugg-tier.value'), 'no Value card with a single qualifying leg');
   check(d3.querySelector('#bkPlan tr[data-gid="a3"] .vg.differs'), 'the Vegas pick is outlined where the market disagrees (MIA vs ORL)');
   d3.querySelector('#bkSuggest [data-sugg-lock="safe"]').click(); await sleep(30);
   let m3 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
@@ -129,6 +133,20 @@ function load(page, st, mine) {
   const st = JSON.parse(w.localStorage.getItem('nba_hub_2027')).build;
   check(/won/.test(bt) && /lost/.test(bt), 'NYK + GSW won; the three-leg parlay lost on MIA (ORL won 101-99)');
   check(/1-1/.test(bt), 'the Bet Build tallies 1-1');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  console.log('3d. a value parlay');
+  const val = three(false); val.slate[0] = { ...val.slate[0], model: { ...val.slate[0].model, pHome: 0.72 } };   // NYK 72% against the market's 56%
+  ({ w, errors } = load('index.html', val));
+  await sleep(250);
+  const d4 = w.document;
+  d4.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+  const vc = d4.querySelector('#bkSuggest .sugg-tier.value');
+  check(vc && /MIA/.test(vc.textContent) && /NYK/.test(vc.textContent) && !/GSW/.test(vc.textContent), 'the Value card holds the two picks the model rates 5+ points above the market');
+  check(vc && vc.querySelector('.sugg-legs li').textContent.includes('MIA'), 'biggest edge first (MIA 65 vs 39)');
+  vc.querySelector('[data-sugg-lock="value"]').click(); await sleep(30);
+  const m4 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
+  check(m4.build.length === 1 && m4.build[0].legs.length === 2, 'Lock in anyway puts it in the Bet Build');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   console.log('4. admin page');

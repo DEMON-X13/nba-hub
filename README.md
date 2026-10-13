@@ -193,15 +193,20 @@ node tools/players.js      # player model replay; add "fit" to refit
   `predictions.csv`; and the backtest table.
 - **My Picks**: the visitor's picks, graded against the published finals; browser only.
 - **Parlay Builder**: in the spirit of the NFL hub's. Suggested parlays at the top (Safe, Medium,
-  Aggressive), grown from one core: the two likeliest legs, then more while the chance every leg lands
-  stays above 50%, 30% and 15%, each new leg the best chance times payout. Below, a day's plan: day,
-  stake, confidence band (ALL, MED + HIGH, HIGH only), straight up or parlay, and a tickable table of the
-  model's picks with the market's pick (outlined red where it disagrees), the confidence band and the
-  price. Straight bets share the stake evenly unless an amount is typed; a parlay shows its odds, payout
-  and the chance it hits. Lock in sends bets to the Bet Build, which grades them as games go final, from
-  `finals` in `state.json` once a game has left the slate. Prices are the book's moneylines (ESPN's
-  odds object carries both sides); before a line is up they are estimated, from the spread or else the
-  model's chance, with a typical book cut, and marked est.
+  Aggressive), grown from one core out of the games where the model's pick is also the market's
+  favourite (the model's chance stands in where no line is up yet), likeliest first: the two likeliest,
+  then more while the chance every leg lands stays above 50%, 30% and 15%. A leg's chance is the
+  market's with the book's cut removed. (Ranking added legs by chance times payout, the first rule, ranked
+  nothing: with chance and price from the same market the product is the same for every leg up to the
+  book's cut.) A separate, labelled Value card lists the model's picks whose chance beats the market's by
+  5 points or more, biggest gap first, shown for interest. Below, a day's plan: day, stake, confidence
+  band (ALL, MED + HIGH, HIGH only), straight up or parlay, and a tickable table of the model's picks with
+  the market's pick (outlined red where it disagrees), the band and the price. Straight bets share the
+  stake evenly unless an amount is typed; a parlay shows its odds, payout and the chance it hits. Lock in
+  sends bets to the Bet Build, which grades them as games go final, from `finals` in `state.json` once a
+  game has left the slate. Prices are the book's moneylines (`moneyline.home.close.odds` on ESPN's odds
+  object, DraftKings'); before a line is up they are estimated, from the spread or else the model's
+  chance, with a typical book cut, and marked est.
 - **How it works**: the model in plain words with the fitted numbers.
 
 Nothing a visitor does reaches the published files. The job runs `publish.js`, `build.js` and the

@@ -33,12 +33,23 @@ function homeLine(odds, homeAb) {
   return String(L.fromEspn(m[1]) === homeAb ? n : -n);
 }
 
-/* the moneylines sit on the odds object as homeTeamOdds / awayTeamOdds (checked on a saved summary payload) */
+/* ESPN puts the moneylines in one of two places: homeTeamOdds.moneyLine (the older form, seen on a saved summary)
+   or moneyline.home.close.odds / .open.odds (the newer form). Read whichever is filled; the first odds object a
+   run sees is saved as data/sample_odds.json so the live shape can be checked. */
+const asMl = v => { if (v == null || v === '') return ''; if (/^(EVEN|PK)$/i.test(String(v))) return '100';
+  const n = parseInt(String(v).replace('+', ''), 10); return Number.isFinite(n) && Math.abs(n) >= 100 ? String(n) : ''; };
 function moneyline(odds, side) {
-  const o = odds && odds[side + 'TeamOdds']; if (!o) return '';
-  let v = o.moneyLine; if (v == null && o.current && o.current.moneyLine) v = o.current.moneyLine.american;
-  if (v == null) return ''; if (/^EVEN$/i.test(String(v))) return '100';
-  const n = parseInt(String(v).replace('+', ''), 10); return Number.isFinite(n) && Math.abs(n) >= 100 ? String(n) : '';
+  if (!odds) return '';
+  const o = odds[side + 'TeamOdds'];
+  if (o) { const v = asMl(o.moneyLine) || asMl(o.current && o.current.moneyLine && o.current.moneyLine.american); if (v) return v; }
+  const n = odds.moneyline && odds.moneyline[side];
+  if (n) { const v = asMl(n.close && n.close.odds) || asMl(n.current && n.current.odds) || asMl(n.open && n.open.odds) || asMl(n.odds); if (v) return v; }
+  return '';
+}
+let oddsSampled = false;
+function sampleOdds(odds) {
+  if (oddsSampled || !odds) return; oddsSampled = true;
+  try { require('fs').writeFileSync(require('path').join(L.ROOT, 'data', 'sample_odds.json'), JSON.stringify(odds, null, 1) + '\n'); } catch (e) {}
 }
 
 /* one scoreboard payload -> rows for the games table */
@@ -58,6 +69,7 @@ function parseDay(j) {
     const date = L.etDate(e.date);
     const season = (e.season && e.season.year) || L.seasonOf(date);
     const odds = (c.odds || [])[0];
+    if (!done) sampleOdds(odds);
     rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 2 ? 'REG' : 'POST', away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
@@ -97,7 +109,7 @@ async function main() {
   for (const r of have) (byDate[r.date] = byDate[r.date] || []).push(r);
   for (const [d, rs] of Object.entries(byDate)) if (d < today && rs.every(r => r.status === 'final')) complete.add(d);
 
-  let asked = 0, ok = 0, fails = 0, games = 0;
+  let asked = 0, ok = 0, fails = 0, games = 0, withMl = 0, withLine = 0;
   for (let d = from; d <= to; d = L.addDays(d, 1)) {
     const m = +d.slice(5, 7);
     if (m >= 7 && m <= 9) continue;                               // no NBA games in July, August, September
@@ -114,13 +126,13 @@ async function main() {
     ok++;
     if (ok === 1) L.log(`first day read: ${(j.events || []).length} events, season types ${[...new Set((j.events || []).map(e => e.season && e.season.type))].join('/') || 'none'}`);
     const rows = parseDay(j).filter(r => r.date === d);           // a late West Coast game lands on the day it tipped off, Eastern
-    games += rows.length;
+    games += rows.length; withMl += rows.filter(r => r.status !== 'final' && r.home_ml).length; withLine += rows.filter(r => r.status !== 'final' && r.home_line).length;
     have = merge(have, d, rows);
     if (rows.length) L.log(`${d}: ${rows.length} games, ${rows.filter(r => r.status === 'final').length} final`);
     await sleep(300);
   }
   const changed = L.writeGames(have);
-  L.log(`fetch ${from} to ${to}: ${asked} days asked, ${ok} read, ${fails} failed, ${games} games seen, games.csv ${changed ? 'written' : 'unchanged'}`);
+  L.log(`fetch ${from} to ${to}: ${asked} days asked, ${ok} read, ${fails} failed, ${games} games seen (${withLine} upcoming with a spread, ${withMl} with moneylines), games.csv ${changed ? 'written' : 'unchanged'}`);
   if (asked && !ok) process.exit(1);
 }
 

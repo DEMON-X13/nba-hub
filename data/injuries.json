@@ -1,5 +1,5 @@
 {
- "date": "2026-10-12",
+ "date": "2026-10-13",
  "teams": {
   "ATL": [
    {
@@ -8,26 +8,62 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Knee Tendinitis",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
+    "date": "2026-10-12",
+    "returns": "2026-10-16"
    },
    {
-    "id": "2578185",
-    "name": "Dorian Finney-Smith",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
-   },
-   {
-    "id": "4278039",
-    "name": "Nickeil Alexander-Walker",
+    "id": "4397183",
+    "name": "Aaron Wiggins",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
+    "date": "2026-10-12",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4431680",
+    "name": "Onyeka Okongwu",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-12",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "2490149",
+    "name": "CJ McCollum",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-12",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4397020",
+    "name": "Luguentz Dort",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-12",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4701230",
+    "name": "Jalen Johnson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-12",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4869342",
+    "name": "Dyson Daniels",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-12",
+    "returns": "2026-10-16"
    },
    {
     "id": "5105571",
@@ -510,20 +546,20 @@
   ],
   "MIA": [
    {
-    "id": "3950760",
-    "name": "Kylor Kelley",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-10-11",
-    "returns": "2026-10-14"
-   },
-   {
     "id": "4601025",
     "name": "Pelle Larsson",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Illness",
+    "date": "2026-10-12",
+    "returns": "2026-10-14"
+   },
+   {
+    "id": "3950760",
+    "name": "Kylor Kelley",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Calf Strain",
     "date": "2026-10-11",
     "returns": "2026-10-14"
    },
@@ -622,13 +658,22 @@
   ],
   "MIN": [
    {
-    "id": "4431671",
-    "name": "Jaden McDaniels",
-    "pos": "F",
+    "id": "5157587",
+    "name": "Rocco Zikarsky",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
+    "detail": "Undisclosed",
+    "date": "2026-10-12",
+    "returns": "2026-10-14"
+   },
+   {
+    "id": "4432847",
+    "name": "Terrence Shannon Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-12",
+    "returns": "2026-10-14"
    },
    {
     "id": "4433247",
@@ -636,44 +681,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
+    "date": "2026-10-12",
+    "returns": "2026-10-14"
    },
    {
-    "id": "4397002",
-    "name": "Ayo Dosunmu",
-    "pos": "G",
+    "id": "4592699",
+    "name": "Enrique Freeman",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
-   },
-   {
-    "id": "3032976",
-    "name": "Rudy Gobert",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
-   },
-   {
-    "id": "4594268",
-    "name": "Anthony Edwards",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
-   },
-   {
-    "id": "4432816",
-    "name": "LaMelo Ball",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
+    "detail": "Shoulder",
+    "date": "2026-10-12",
+    "returns": "2026-10-14"
    },
    {
     "id": "3934673",
@@ -694,6 +712,53 @@
     "detail": "Toe Bruise",
     "date": "2026-10-08",
     "returns": "2026-10-14"
+   }
+  ],
+  "NYK": [
+   {
+    "id": "3136195",
+    "name": "Karl-Anthony Towns",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
+   },
+   {
+    "id": "3147657",
+    "name": "Mikal Bridges",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
+   },
+   {
+    "id": "3062679",
+    "name": "Josh Hart",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
+   },
+   {
+    "id": "3934719",
+    "name": "OG Anunoby",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
+   },
+   {
+    "id": "3934672",
+    "name": "Jalen Brunson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
    }
   ],
   "OKC": [
@@ -1005,21 +1070,12 @@
   ],
   "SAC": [
    {
-    "id": "4898371",
-    "name": "Maxime Raynaud",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Dislocated",
-    "date": "2026-10-11",
-    "returns": "2026-10-25"
-   },
-   {
-    "id": "4433174",
-    "name": "Dylan Cardwell",
-    "pos": "C",
+    "id": "4066262",
+    "name": "Malik Monk",
+    "pos": "G",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-10",
+    "date": "2026-10-12",
     "returns": "2026-10-13"
    },
    {
@@ -1028,17 +1084,26 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-10",
+    "date": "2026-10-12",
     "returns": "2026-10-13"
    },
    {
-    "id": "4066262",
-    "name": "Malik Monk",
-    "pos": "G",
+    "id": "4433174",
+    "name": "Dylan Cardwell",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
+    "detail": "Calf",
+    "date": "2026-10-12",
     "returns": "2026-10-13"
+   },
+   {
+    "id": "4898371",
+    "name": "Maxime Raynaud",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee Dislocated",
+    "date": "2026-10-11",
+    "returns": "2026-10-25"
    }
   ],
   "SAS": [
@@ -1126,12 +1191,21 @@
   ],
   "TOR": [
    {
-    "id": "4590360",
-    "name": "Chucky Hepburn",
-    "pos": "G",
+    "id": "4431684",
+    "name": "Trayce Jackson-Davis",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-10-11",
+    "detail": "Teeth",
+    "date": "2026-10-12",
+    "returns": "2026-10-13"
+   },
+   {
+    "id": "5149115",
+    "name": "Allen Graves",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin Not Specified",
+    "date": "2026-10-12",
     "returns": "2026-10-13"
    },
    {
@@ -1151,27 +1225,18 @@
     "detail": "Foot",
     "date": "2026-10-10",
     "returns": "2026-10-13"
-   },
-   {
-    "id": "4431684",
-    "name": "Trayce Jackson-Davis",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Teeth",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "5149115",
-    "name": "Allen Graves",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin Not Specified",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
    }
   ],
   "UTA": [
+   {
+    "id": "4396963",
+    "name": "Blake Hinson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-10-13",
+    "returns": "2026-10-16"
+   },
    {
     "id": "4684793",
     "name": "Kyle Filipowski",
@@ -1189,24 +1254,6 @@
     "detail": "Foot",
     "date": "2026-10-07",
     "returns": "2026-11-04"
-   },
-   {
-    "id": "4066336",
-    "name": "Lauri Markkanen",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Neck Soreness",
-    "date": "2026-10-07",
-    "returns": "2026-10-12"
-   },
-   {
-    "id": "5105839",
-    "name": "Brice Sensabaugh",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hip",
-    "date": "2026-10-07",
-    "returns": "2026-10-12"
    }
   ],
   "WAS": [
@@ -1216,17 +1263,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-11",
-    "returns": "2026-10-12"
+    "date": "2026-10-13",
+    "returns": "2026-10-16"
    },
    {
-    "id": "4432819",
-    "name": "Tre Mann",
-    "pos": "G",
+    "id": "6583",
+    "name": "Anthony Davis",
+    "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-12"
+    "date": "2026-10-12",
+    "returns": "2026-10-16"
    },
    {
     "id": "4997537",

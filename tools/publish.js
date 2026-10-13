@@ -37,6 +37,7 @@ function main() {
     const u = players.upcoming[g.game_id] || null, t = model.upcoming[g.game_id] || null, p = preds[g.game_id] || null;
     return { id: g.game_id, date: g.date, tip: g.tip || '', type: g.type, away: g.away, home: g.home, neutral: +g.neutral === 1, status: g.status,
       awayScore: num(g.away_score), homeScore: num(g.home_score), line: num(g.home_line), totalLine: num(g.total),
+      ml: g.home_ml || g.away_ml ? { home: num(g.home_ml), away: num(g.away_ml) } : null,
       model: u ? { pHome: u.pHome, spread: u.spread, total: u.total, pace: u.pace, home: u.home, away: u.away }
         : p ? { pHome: +p.pHome, spread: +p.spread, total: +p.total } : null,
       team: t ? { pHome: t.pHome, spread: t.spread } : p && p.team_pHome ? { pHome: +p.team_pHome } : null,
@@ -71,7 +72,11 @@ function main() {
 
   /* opening night: the first regular-season game on or after today, once the schedule shows it */
   const opener = games.filter(g => g.type === 'REG' && g.date >= today).map(g => g.date).sort()[0] || null;
-  const state = { season, opening: opener, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
+  /* every final of the season the slate is in, preseason included: a visitor's pick or locked bet grades
+     from this once its game has left the ten-day slate. The id carries the date and teams. */
+  const finals = {};
+  for (const g of games) if (g.status === 'final' && +g.season === L.seasonOf(today)) finals[g.game_id] = [+g.away_score, +g.home_score];
+  const state = { season, opening: opener, finals, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
     slate, record, teams, players: plist, coaches, names,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };

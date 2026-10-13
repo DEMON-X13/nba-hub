@@ -160,7 +160,8 @@ San Antonio and New York the strongest teams and the Wizards the weakest.
 
 ## Runs
 
-`.github/workflows/update.yml` runs every morning at 7am Eastern: the days since the last final plus ten
+`.github/workflows/update.yml` runs every morning at 7am Eastern, and again at 5:17pm for the day's lines
+and injury report: the days since the last final plus ten
 days ahead, the new box scores, the injury report, the coaches and rosters, then both models. It
 commits the data folder and the two model files only if they changed. On demand it takes a date
 range and a refit switch. A push that changes the tools or the app runs it once (on a `claude/`
@@ -191,10 +192,16 @@ node tools/players.js      # player model replay; add "fit" to refit
 - **Record**: the season graded straight up, against the spread and on totals, by month and game, from
   `predictions.csv`; and the backtest table.
 - **My Picks**: the visitor's picks, graded against the published finals; browser only.
-- **Parlay**: the ticket. Legs are independent games, so the fair chance is the product of the model's
-  chances; spread and total legs use a normal margin with a 12.5-point spread around the model's number.
-  The book's odds go on each leg; the ticket shows fair odds, what the book pays and the expected
-  value. Saved tickets grade themselves as the games go final.
+- **Parlay Builder**: in the spirit of the NFL hub's. Suggested parlays at the top (Safe, Medium,
+  Aggressive), grown from one core: the two likeliest legs, then more while the chance every leg lands
+  stays above 50%, 30% and 15%, each new leg the best chance times payout. Below, a day's plan: day,
+  stake, confidence band (ALL, MED + HIGH, HIGH only), straight up or parlay, and a tickable table of the
+  model's picks with the market's pick (outlined red where it disagrees), the confidence band and the
+  price. Straight bets share the stake evenly unless an amount is typed; a parlay shows its odds, payout
+  and the chance it hits. Lock in sends bets to the Bet Build, which grades them as games go final, from
+  `finals` in `state.json` once a game has left the slate. Prices are the book's moneylines (ESPN's
+  odds object carries both sides); before a line is up they are estimated, from the spread or else the
+  model's chance, with a typical book cut, and marked est.
 - **How it works**: the model in plain words with the fitted numbers.
 
 Nothing a visitor does reaches the published files. The job runs `publish.js`, `build.js` and the

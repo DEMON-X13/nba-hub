@@ -124,6 +124,45 @@ h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13
 .drawer .coach{color:var(--ink-2);margin-top:6px}
 .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--hot);border-radius:12px;padding:12px 16px;margin:0 0 16px;color:var(--ink-2);font-size:13px;line-height:1.5}
 .note b{color:var(--ink)}
+/* ---------- Parlay Builder ---------- */
+.panel{background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:var(--r);padding:18px 20px;margin-bottom:16px}
+.panel h2{margin-bottom:12px}
+.seg{display:inline-flex;gap:2px;padding:3px;border:1px solid var(--line-2);border-radius:999px;background:var(--panel)}
+.seg button{border:0;background:transparent;color:var(--ink-2);font-weight:700;font-size:12.5px;padding:6px 13px;border-radius:999px;cursor:pointer;white-space:nowrap}
+.seg button:not(.on):hover{color:var(--ink);background:var(--panel-3)}
+.seg button.on{background:var(--ink);color:#1E2230}
+.bk-ctrl{display:flex;flex-wrap:wrap;align-items:flex-end;gap:14px 34px;margin:0 0 16px;padding:14px 18px;background:var(--panel-3);border:1px solid var(--line);border-radius:14px}
+.bk-ctrl .grp{display:flex;flex-direction:column;gap:6px}
+.bk-ctrl .lab{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.bk-ctrl .row{display:flex;align-items:center;gap:8px;height:36px}
+.bk-ctrl .row input{width:84px;height:34px;padding:0 8px}
+.bk-ctrl select{height:34px;padding:0 10px}
+.tbl.plan td,.tbl.plan th{padding:9px 12px}
+.tbl tr.dim td{opacity:.45}
+.tbl tr.totrow td{background:var(--panel-2)}
+.tbl tr.flash td{animation:flash 1.6s var(--ease)}
+@keyframes flash{0%{background:var(--hot-soft)}100%{background:transparent}}
+.stake-in{width:84px;text-align:right;padding:4px 7px;border-radius:8px}
+.stake-in.fixed{border-color:var(--hot);font-weight:800}
+.tierc{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:800;letter-spacing:.06em;padding:3px 9px 3px 8px;border-radius:999px;background:var(--panel-3);color:var(--ink-2);white-space:nowrap}
+.tierc::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.8}
+.tierc.high{background:var(--lime-soft);color:var(--lime)} .tierc.med{background:var(--hot-soft);color:var(--hot-2)} .tierc.low{background:var(--ice-soft);color:var(--ice)} .tierc.coin{background:var(--rose-soft);color:var(--rose)}
+.vg{display:inline-flex;align-items:center;gap:6px;padding:2px 6px 2px 2px;border-radius:9px;border:1.5px solid transparent}
+.vg.differs{border-color:var(--rose)}
+sup{font-size:9px;font-weight:800;letter-spacing:.04em;color:var(--muted);margin-left:2px;text-transform:uppercase}
+.sugg-bet{display:flex;align-items:center;gap:8px;margin:0 0 10px} .sugg-bet input{width:84px}
+.sugg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:12px}
+.sugg-tier{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;border-top:3px solid var(--line-2)}
+.sugg-tier.safe{border-top-color:var(--lime)} .sugg-tier.med{border-top-color:var(--hot)} .sugg-tier.aggr{border-top-color:var(--rose)}
+.sugg-top{display:flex;align-items:center;gap:8px} .sugg-top .nm{font-family:var(--display);font-weight:700;font-size:15px} .sugg-top .grow{flex:1}
+.sugg-nums{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;text-align:center}
+.sugg-nums b{display:block;font-family:var(--display);font-size:18px;font-weight:700;white-space:nowrap} .sugg-nums span{font-size:11px;color:var(--muted)}
+.sugg-legs{list-style:none;margin:0;padding:0;border-top:1px solid var(--line)}
+.sugg-legs li{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid var(--line);font-size:12.5px}
+.sugg-legs .g{flex:1;min-width:0;color:var(--ink-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis} .sugg-legs .od{width:62px;text-align:right;white-space:nowrap} .sugg-legs .pc{width:38px;text-align:right}
+.sugg-btns{display:flex;gap:8px;margin-top:auto} .sugg-btns .btn{flex:1}
+.bl{display:flex;align-items:center;gap:6px;margin:3px 0;white-space:nowrap}
+.okmsg{margin:12px 0 0;text-align:center;color:var(--lime);font-weight:700;font-size:13px}
 .empty{background:var(--panel);border:1px dashed var(--line-2);border-radius:var(--r);padding:34px 24px;text-align:center;color:var(--ink-2)}
 .empty b{display:block;font-family:var(--display);font-size:24px;color:var(--ink);margin-bottom:6px}
 .countdown{font-family:var(--display);font-size:clamp(40px,9vw,88px);font-weight:900;color:var(--hot);line-height:1;letter-spacing:-.03em;margin:8px 0 4px}
@@ -192,7 +231,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
     <button data-tab="coaches">Coaches</button>
     <button data-tab="record">Record</button>
     <button data-tab="mine">My Picks<span class="n" id="nMine" hidden></span></button>
-    <button data-tab="parlay">Parlay<span class="n" id="nLegs" hidden></span></button>
+    <button data-tab="parlay">Parlay Builder<span class="n" id="nLegs" hidden></span></button>
     <button data-tab="about">How it works</button>
     <button data-tab="data" id="dataTabBtn" hidden>Data</button>
   </nav>
@@ -208,7 +247,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
   <section id="tab-about" hidden class="about"></section>
   <section id="tab-data" hidden></section>
 </main>
-<footer>Rebuilt every morning from the previous night's box scores and the day's injury report. Your picks and tickets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
+<footer>Rebuilt every morning from the previous night's box scores, and again late afternoon for the day's lines and injury report. Your picks and bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
 <div class="toast" id="toast"></div>
 <script>
 'use strict';
@@ -239,26 +278,32 @@ const amToProb = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100);
 
 /* ---------- state ---------- */
 let S = null;                                                        // published
-let M = { picks: {}, tickets: [], legs: [] };                        // mine, this browser only
-function loadMine() { try { const v = JSON.parse(localStorage.getItem(KEY) || '{}'); M = { picks: v.picks || {}, tickets: v.tickets || [], legs: v.legs || [] }; } catch (e) { M = { picks: {}, tickets: [], legs: [] }; } }
+/* mine, this browser only: picks, the Parlay Builder's settings and the Bet Build. Tickets saved by the old
+   builder are carried into the Bet Build once. */
+const BANK0 = () => ({ filter: 'all', mode: 'straight', amt: 20, suggStake: 10, suggMin: false, sort: 'tip', sortDir: 'asc', day: null, off: {}, fixed: {} });
+let M = { picks: {}, bank: BANK0(), build: [] };
+function normMine(v) {
+  v = v || {};
+  const build = Array.isArray(v.build) ? v.build : (v.tickets || []).map(t => ({ id: 't' + t.id, day: (t.at || '').slice(0, 10), type: t.legs.length > 1 ? 'parlay' : 'single', stake: t.stake,
+    legs: t.legs.map(l => ({ id: l.id, kind: l.kind, side: l.side, line: l.line, odds: l.odds })) }));
+  return { picks: v.picks || {}, bank: Object.assign(BANK0(), v.bank || {}), build };
+}
+function loadMine() { try { M = normMine(JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { M = normMine({}); } }
 function saveMine() { try { localStorage.setItem(KEY, JSON.stringify(M)); } catch (e) {} }
 let toastT; function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 1600); }
 
 /* ---------- pricing helpers ---------- */
-const gameById = id => S.slate.find(g => g.id === id) || S.record.find(g => g.id === id) || null;
+const gameById = id => S.slate.find(g => g.id === id) || S.record.find(g => g.id === id) || fromFinal(id);
+/* the published finals carry only the score; the id carries the date and the teams */
+function fromFinal(id) {
+  const f = S.finals && S.finals[id]; if (!f) return null;
+  const [, d, away, home] = id.split('_'); if (!d || !away || !home) return null;
+  return { id, date: `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`, away, home, awayScore: f[0], homeScore: f[1], status: 'final', model: null, line: null, totalLine: null };
+}
 const pickOf = g => g.model ? (g.model.pHome >= 0.5 ? g.home : g.away) : null;
 const modelMargin = g => g.model ? -g.model.spread : null;          // home margin the model expects
-const pHomeCover = (g, line) => Phi((modelMargin(g) + line) / SIGMA);   // chance the home side covers a home line of `line`
-const pOver = (g, tl) => Phi((g.model.total - tl) / SIGMA * 0.9);
 const winner = g => g.homeScore === null ? null : g.homeScore > g.awayScore ? g.home : g.homeScore < g.awayScore ? g.away : null;
 /* one leg: {id, kind:'ml'|'spread'|'total', side, line, p} */
-function legProb(leg) {
-  const g = gameById(leg.id); if (!g || !g.model) return null;
-  if (leg.kind === 'ml') return leg.side === g.home ? g.model.pHome : 1 - g.model.pHome;
-  if (leg.kind === 'spread') { const ph = pHomeCover(g, leg.side === g.home ? leg.line : -leg.line); return leg.side === g.home ? ph : 1 - ph; }
-  if (leg.kind === 'total') { const po = pOver(g, leg.line); return leg.side === 'over' ? po : 1 - po; }
-  return null;
-}
 function legResult(leg) {
   const g = gameById(leg.id); if (!g || g.homeScore === null) return 'open';
   const mov = g.homeScore - g.awayScore, tot = g.homeScore + g.awayScore;
@@ -348,7 +393,7 @@ function card(g) {
     ${drawer}
     <div class="foot">
       <span>${drawer ? `<button class="btn ghost" data-act="drawer">Lineups</button>` : ''}</span>
-      <span style="display:flex;gap:6px">${m && !fin ? `<button class="btn" data-act="leg" data-kind="ml" title="Add to the parlay ticket">+ ${pick} to win</button><button class="btn" data-act="leg" data-kind="spread" title="Add to the parlay ticket">+ ${pick} ${fmtSp(pick === g.home ? m.spread : -m.spread)}</button>` : ''}</span>
+      <span style="display:flex;gap:6px">${m && g.status === 'scheduled' ? `<button class="btn" data-act="plan" title="Open this game in the Parlay Builder">Parlay Builder →</button>` : ''}</span>
     </div></article>`;
 }
 function act(e) {
@@ -359,14 +404,15 @@ function act(e) {
     M.picks[id] = M.picks[id] === b.dataset.side ? null : b.dataset.side; if (!M.picks[id]) delete M.picks[id];
     saveMine(); toast(M.picks[id] ? `You have ${TEAMS[b.dataset.side][1]}` : 'Pick removed'); render.slate(); badges(); return;
   }
-  if (b.dataset.act === 'leg') {
-    const pick = pickOf(g);
-    const leg = b.dataset.kind === 'ml' ? { id, kind: 'ml', side: pick, line: null } : { id, kind: 'spread', side: pick, line: +(pick === g.home ? g.model.spread : -g.model.spread).toFixed(1) };
-    if (M.legs.some(l => l.id === id)) M.legs = M.legs.filter(l => l.id !== id);
-    M.legs.push({ ...leg, odds: b.dataset.kind === 'ml' ? probToAm(legProb(leg)) : -110 }); saveMine(); badges(); toast('Leg added to the ticket');
+  if (b.dataset.act === 'plan') {
+    /* open the builder on that game's day with the game ticked, whatever band it is in */
+    const B = M.bank; B.day = g.date; if (B.off[g.date]) delete B.off[g.date][id];
+    const tc = band(pickChance(g))[0]; if (!bandWanted(tc)) B.filter = 'all';
+    saveMine(); show('parlay');
+    setTimeout(() => { const r = document.querySelector(`#bkPlan tr[data-gid="${id}"]`); if (r) { r.scrollIntoView?.({ behavior: 'smooth', block: 'center' }); r.classList.add('flash'); } }, 50);
   }
 }
-function badges() { const n = Object.keys(M.picks).length; $('#nMine').hidden = !n; $('#nMine').textContent = n; $('#nLegs').hidden = !M.legs.length; $('#nLegs').textContent = M.legs.length; }
+function badges() { const n = Object.keys(M.picks).length; $('#nMine').hidden = !n; $('#nMine').textContent = n; const open = M.build.filter(b => gradeBet(b).st === 'pending').length; $('#nLegs').hidden = !open; $('#nLegs').textContent = open; }
 
 /* ---------- tables ---------- */
 function table(el, cols, rows, sortKey, desc = true) {
@@ -458,31 +504,237 @@ render.mine = function () {
     ${games.length ? `<div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>You</th><th>Model</th><th>Result</th><th></th></tr></thead><tbody>${games.map(x => { const w = winner(x.g), fin = x.g.homeScore !== null; return `<tr><td class="muted">${dayNum(x.g.date)}</td><td>${pill(x.g.away)} <span class="muted">@</span> ${pill(x.g.home)}${fin ? ` <span class="muted num">${x.g.awayScore}-${x.g.homeScore}</span>` : ''}</td><td>${pill(x.side)}</td><td>${pickOf(x.g) ? `${pill(pickOf(x.g))} <span class="muted">${fmtPct(Math.max(x.g.model.pHome, 1 - x.g.model.pHome))}</span>` : '—'}</td><td>${fin ? `<span class="res ${w === null ? 'push' : w === x.side ? 'won' : 'lost'}">${w === null ? 'tie' : w === x.side ? 'won' : 'lost'}</span>` : '<span class="res open">open</span>'}</td><td>${fin ? '' : `<button class="btn ghost" data-un="${x.id}">remove</button>`}</td></tr>`; }).join('')}</tbody></table></div>` : `<div class="empty"><b>No picks yet</b>Open Tonight and tap a team badge.</div>`}`;
   $$('#tab-mine [data-un]').forEach(b => b.onclick = () => { delete M.picks[b.dataset.un]; saveMine(); badges(); render.mine(); });
 };
+/* ---------- Parlay Builder: in the spirit of the NFL hub's ----------
+   Suggested parlays (Safe, Medium, Aggressive), then a day's plan (stake, confidence band, straight up or parlay,
+   a tickable table of the model's picks with the market's pick and price), then the Bet Build, graded as games
+   go final. A day is the unit here, as a week is for the NFL. */
+const band = c => { const r = Math.round(c * 100) / 100; return r >= 0.75 ? ['high', 'HIGH'] : r >= 0.60 ? ['med', 'MED'] : r >= 0.55 ? ['low', 'LOW'] : ['coin', '50/50']; };
+const BK_FILTERS = [['all', 'ALL'], ['med', 'MED + HIGH'], ['high', 'HIGH only']];
+const bandWanted = tc => { const f = M.bank.filter; return f === 'high' ? tc === 'high' : f === 'med' ? (tc === 'med' || tc === 'high') : true; };
+const pickChance = g => g.model ? Math.max(g.model.pHome, 1 - g.model.pHome) : null;
+/* the market's chance for a side: the two moneylines with the book's cut taken out; failing those, the spread */
+function marketP(g, side) {
+  if (g.ml && g.ml.home != null && g.ml.away != null) { const h = 1 / amToDec(g.ml.home), a = 1 / amToDec(g.ml.away), ph = h / (h + a); return side === g.home ? ph : 1 - ph; }
+  if (g.line != null) { const ph = Phi(-g.line / SIGMA); return side === g.home ? ph : 1 - ph; }
+  return null;
+}
+/* the price on a side: the book's moneyline; failing that, an estimate with a typical book cut, from the spread
+   if there is one, else from the model's own chance (lines go up on game day; until then the model prices it) */
+function priceFor(g, side) {
+  const ml = g.ml ? (side === g.home ? g.ml.home : g.ml.away) : null;
+  if (ml != null) return { am: ml, est: false };
+  const mp = marketP(g, side);
+  const p = mp != null ? mp : g.model ? (side === g.home ? g.model.pHome : 1 - g.model.pHome) : null;
+  if (p == null) return null;
+  return { am: probToAm(Math.min(0.97, p * 1.045)), est: mp != null ? 'spread' : 'model' };
+}
+const fmtPx = px => px ? `${fmtAm(px.am)}${px.est ? `<sup title="No moneyline published yet: estimated from ${px.est === 'spread' ? 'the spread' : "the model's chance (no line posted yet)"} with a typical book cut">est</sup>` : ''}` : '<span class="muted">–</span>';
+const decToAm = d => d >= 2 ? Math.round((d - 1) * 100) : Math.round(-100 / (d - 1));
+const money = v => '$' + (Math.round(v * 100) / 100).toFixed(2);
+/* the days that still have games to bet, from today on */
+function bkDays() { return [...new Set(S.slate.filter(g => g.status === 'scheduled' && g.model && g.date >= TODAY).map(g => g.date))].sort(); }
+function bkDay() { const d = bkDays(); if (!d.includes(M.bank.day)) M.bank.day = d[0] || null; return M.bank.day; }
+/* the day's unplayed games in the chosen band, each with the model's pick, its band, the market and the price */
+function bkGames(day) {
+  return S.slate.filter(g => g.date === day && g.status === 'scheduled' && g.model)
+    .sort((a, b) => (a.tip || '').localeCompare(b.tip || ''))
+    .map(g => { const pick = pickOf(g), conf = pickChance(g); return { g, pick, conf, tc: band(conf)[0], px: priceFor(g, pick), mp: marketP(g, pick) }; })
+    .filter(x => bandWanted(x.tc));
+}
+const offOf = day => (M.bank.off[day] = M.bank.off[day] || {});
+const fixedOf = day => (M.bank.fixed[day] = M.bank.fixed[day] || {});
+const gameLabel = g => `${g.away} at ${g.home}`;
+
+/* ---------- suggested parlays: one core grown in three steps (the NFL hub's rule) ----------
+   Safe opens with the two likeliest legs and keeps adding while every leg landing stays at 50% or better;
+   Medium and Aggressive each add at least one more, down to 30% and 15%. The next leg is the one with the best
+   chance times payout. A leg's chance is the market's where there is one (the sharper number), else the model's.
+   Legs are different games, so chances and prices multiply. */
+const BK_TIERS = [['safe', 'Safe', 0.50, 3], ['med', 'Medium', 0.30, 5], ['aggr', 'Aggressive', 0.15, 8]];
+function suggest(pool) {
+  const legs = pool.filter(x => x.tc !== 'coin' && x.px).map(x => ({ ...x, p: x.mp != null ? x.mp : x.conf, D: amToDec(x.px.am) }));
+  const P = a => a.reduce((t, x) => t * x.p, 1), Dm = a => a.reduce((t, x) => t * x.D, 1);
+  const tiers = []; let cur = [];
+  for (const [id, label, floor, cap] of BK_TIERS) {
+    const start = cur.length, must = id === 'safe' ? 2 : start + 1;
+    while (cur.length < cap) {
+      let best = null;
+      for (const c of legs) {
+        if (cur.includes(c)) continue;
+        const next = [...cur, c], p = P(next), forced = next.length <= must;
+        if (!forced && p < floor) continue;
+        const sc = (forced && id === 'safe') ? p : p * Dm(next);
+        if (!best || sc > best.sc) best = { c, sc };
+      }
+      if (!best) break; cur = [...cur, best.c];
+    }
+    if (cur.length < 2 || cur.length === start) continue;
+    tiers.push({ id, label, legs: cur.slice(), p: P(cur), dec: Dm(cur), added: cur.length - start });
+  }
+  return { tiers, pool: legs.length };
+}
+
+/* ---------- the Bet Build ---------- */
+const betKey = (type, legs) => type + ':' + legs.map(l => l.id + ':' + l.side).sort().join('|');
+function lockBet(type, xs, stake) {
+  const legs = xs.map(x => ({ id: x.g.id, kind: 'ml', side: x.pick, odds: x.px.am, est: x.px.est }));
+  const k = betKey(type, legs);
+  if (M.build.some(b => betKey(b.type, b.legs) === k)) return 0;
+  M.build.push({ id: 'b' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6), day: M.bank.day, type, stake: Math.round(stake * 100) / 100, legs });
+  return 1;
+}
+const legOutcome = l => { const r = legResult(l); return r === 'open' ? 'pending' : r; };
+const betDec = b => b.legs.reduce((d, l) => d * amToDec(l.odds), 1);
+/* a tied or void leg drops out of a parlay; a tied straight bet is a push and the stake comes back */
+function gradeBet(b) {
+  const o = b.legs.map(legOutcome);
+  if (o.includes('lost')) return { st: 'lost', ret: 0 };
+  if (o.includes('pending')) return { st: 'pending', ret: null };
+  if (o.every(x => x === 'push')) return { st: 'push', ret: b.stake };
+  return { st: 'won', ret: b.stake * b.legs.reduce((d, l, i) => d * (o[i] === 'won' ? amToDec(l.odds) : 1), 1) };
+}
+
+let bkMsg = '';
 render.parlay = function () {
   const el = $('#tab-parlay');
-  M.legs = M.legs.filter(l => gameById(l.id));
-  const legs = M.legs.map(l => ({ ...l, p: legProb(l) }));
-  const fair = legs.reduce((a, l) => a * (l.p ?? 1), 1);
-  const dec = legs.reduce((a, l) => a * amToDec(l.odds), 1);
-  const stake = +(el.dataset.stake || 20);
-  const ev = legs.length ? fair * dec * stake - stake : 0;
-  const saved = M.tickets.map(t => { const rs = t.legs.map(legResult); const res = rs.includes('lost') ? 'lost' : rs.includes('open') ? 'open' : rs.every(r => r === 'push') ? 'push' : 'won'; return { ...t, res, rs }; });
-  const won = saved.filter(t => t.res === 'won'), settled = saved.filter(t => t.res === 'won' || t.res === 'lost');
-  const net = settled.reduce((a, t) => a + (t.res === 'won' ? t.stake * t.dec - t.stake : -t.stake), 0);
-  el.innerHTML = `<h2>Parlay builder <small>legs are independent games, so the fair price is the product of the model's chances</small></h2>
-    <div class="two"><div class="ticket">${legs.length ? `<ul class="legs">${legs.map((l, i) => `<li><div class="l"><b>${legLabel(l)}</b><span>${pill(gameById(l.id).away)} @ ${pill(gameById(l.id).home)} · ${dayNum(gameById(l.id).date)}</span></div><span class="num">model <b>${l.p === null ? '—' : fmtPct(l.p)}</b><br><span class="muted">fair ${l.p === null ? '—' : fmtAm(probToAm(l.p))}</span></span><label class="num"><span class="muted" style="font-size:11px">book</span><br><input type="number" step="5" value="${l.odds}" data-odds="${i}"></label><button class="x" data-rm="${i}" title="remove">×</button></li>`).join('')}</ul>
-      <div class="bar" style="margin:14px 0 0"><label>Stake $ <input type="number" id="stake" value="${stake}" min="1" step="5"></label><span class="grow"></span><button class="btn hot" id="saveT">Save ticket</button><button class="btn ghost" id="clearT">Clear</button></div>
-      <div class="tot"><div><b>${fmtPct(fair)}</b><span>Fair chance</span></div><div><b>${fmtAm(probToAm(fair))}</b><span>Fair odds</span></div><div><b>${fmtAm(dec > 1 ? (dec >= 2 ? (dec - 1) * 100 : -100 / (dec - 1)) : null)}</b><span>Book parlay</span></div><div><b>$${(stake * dec).toFixed(0)}</b><span>Pays</span></div><div><b class="${ev >= 0 ? 'lime' : 'rose'}">${ev >= 0 ? '+' : ''}$${ev.toFixed(2)}</b><span>Expected</span></div></div>`
-      : `<div class="empty"><b>Empty ticket</b>Add legs from the cards on Tonight: the model's side on the moneyline or the spread. Then put the book's price on each leg and the ticket prices itself.</div>`}</div>
-    <div><h2 style="font-size:16px">Saved tickets <small>${settled.length ? `${won.length}-${settled.length - won.length}, net ${net >= 0 ? '+' : ''}$${net.toFixed(0)}` : 'graded when the games go final'}</small></h2>
-      <div class="saved">${saved.length ? saved.slice().reverse().map(t => `<div class="ticket"><div class="bar" style="margin-bottom:8px"><span class="res ${t.res}">${t.res}</span><span class="muted">${dayNum(t.at.slice(0, 10))} · $${t.stake} to win $${(t.stake * t.dec - t.stake).toFixed(0)} · fair ${fmtPct(t.fair)}</span><span class="grow"></span><button class="x" data-del="${t.id}">×</button></div><ul class="legs">${t.legs.map((l, i) => `<li style="grid-template-columns:1fr auto"><div class="l"><b>${legLabel(l)}</b><span>${pill(gameById(l.id).away)} @ ${pill(gameById(l.id).home)}</span></div><span class="res ${t.rs[i]}">${t.rs[i]}</span></li>`).join('')}</ul></div>`).join('') : '<div class="empty muted">No saved tickets.</div>'}</div></div></div>`;
-  $$('#tab-parlay [data-odds]').forEach(i => i.onchange = () => { M.legs[+i.dataset.odds].odds = +i.value || -110; saveMine(); render.parlay(); });
-  $$('#tab-parlay [data-rm]').forEach(b => b.onclick = () => { M.legs.splice(+b.dataset.rm, 1); saveMine(); badges(); render.parlay(); });
-  $$('#tab-parlay [data-del]').forEach(b => b.onclick = () => { M.tickets = M.tickets.filter(t => t.id !== b.dataset.del); saveMine(); render.parlay(); });
-  const st = $('#stake'); if (st) st.onchange = () => { el.dataset.stake = +st.value || 20; render.parlay(); };
-  const sv = $('#saveT'); if (sv) sv.onclick = () => { if (!legs.length) return; M.tickets.push({ id: String(Date.now()), at: new Date().toISOString(), stake, fair, dec, legs: legs.map(l => ({ id: l.id, kind: l.kind, side: l.side, line: l.line, odds: l.odds })) }); M.legs = []; saveMine(); badges(); toast('Ticket saved'); render.parlay(); };
-  const cl = $('#clearT'); if (cl) cl.onclick = () => { M.legs = []; saveMine(); badges(); render.parlay(); };
+  const B = M.bank, day = bkDay();
+  if (!el.dataset.ready) { el.innerHTML = '<div class="panel" id="bkSuggest"></div><div class="panel" id="bkPlan"></div><div class="panel" id="bkBuild"></div>'; el.dataset.ready = 1; }
+  renderSuggest(day); renderPlan(day); renderBuild(); badges();
 };
+function dayTitle(d) { return d === TODAY ? 'Tonight' : d === addDays(TODAY, 1) ? 'Tomorrow' : `${dayName(d)} ${dayNum(d)}`; }
+function renderSuggest(day) {
+  const el = $('#bkSuggest'), B = M.bank, open = !B.suggMin, stake = +(B.suggStake ?? 10);
+  const head = `<div class="bar" style="margin:0 0 6px"><h2 style="margin:0">Suggested parlays</h2>${day ? `<span class="tag hot">${dayTitle(day)}</span>` : ''}<span class="grow"></span><button class="btn ghost" id="suggToggle" aria-expanded="${open}">${open ? 'Minimize' : 'Show'}</button></div>`;
+  if (!open) { el.innerHTML = head; $('#suggToggle').onclick = () => { B.suggMin = false; saveMine(); render.parlay(); }; return; }
+  const pool = day ? bkGames(day) : [];
+  const { tiers, pool: n } = suggest(pool);
+  let body;
+  if (!day) body = `<p class="muted" style="margin:0">No games left to bet in the next ten days. They show up here as the schedule fills in.</p>`;
+  else if (!tiers.length) body = `<p class="muted" style="margin:0">${n < 2 ? 'A suggestion needs at least two picks in the chosen band with a price. Pick a wider band below, or another day.' : 'None of these picks combine into a parlay that clears 50%.'}</p>`;
+  else body = `<div class="sugg-bet"><label for="suggStake">Bet $</label><input type="number" id="suggStake" step="1" min="0" value="${stake}"></div>
+    <p class="muted" style="margin:0 0 12px;font-size:12px">From ${dayTitle(day).toLowerCase() === 'tonight' ? "tonight's" : `${dayTitle(day)}'s`} picks in the band chosen below. Each leg is the model's pick. Its chance is the market's with the book's cut removed where a line is up, as the sharper of the two numbers, and the model's until then. The legs are different games, so a book multiplies the prices, and so does this.</p>
+    <div class="sugg-grid">${tiers.map((t, i) => `<div class="sugg-tier ${t.id}">
+      <div class="sugg-top"><span class="nm">${t.label}</span><span class="muted">${t.legs.length} legs</span><span class="grow"></span>${i ? `<span class="muted">+${t.added} leg${t.added === 1 ? '' : 's'}</span>` : ''}</div>
+      <div class="sugg-nums"><div><b>${Math.round(t.p * 100)}%</b><span>chance all land</span></div><div><b>${fmtAm(decToAm(t.dec))}</b><span>odds</span></div><div><b>${money(stake * t.dec)}</b><span>returns on ${money(stake)}</span></div></div>
+      <ul class="sugg-legs">${t.legs.map(x => `<li>${pill(x.pick)}<span class="g">${gameLabel(x.g)}</span><span class="od">${fmtPx(x.px)}</span><span class="pc muted">${Math.round(x.p * 100)}%</span></li>`).join('')}</ul>
+      <div class="sugg-btns"><button class="btn hot" data-sugg-lock="${t.id}" ${stake > 0 ? '' : 'disabled'}>Lock in</button><button class="btn" data-sugg-load="${t.id}">Edit below</button></div></div>`).join('')}</div>`;
+  el.innerHTML = head + body;
+  $('#suggToggle').onclick = () => { B.suggMin = true; saveMine(); render.parlay(); };
+  const st = $('#suggStake'); if (st) st.onchange = () => { B.suggStake = Math.max(0, Math.round(+st.value || 0)); saveMine(); render.parlay(); };
+  el.querySelectorAll('[data-sugg-load]').forEach(b => b.onclick = () => {
+    const t = tiers.find(x => x.id === b.dataset.suggLoad); if (!t) return;
+    const keep = new Set(t.legs.map(x => x.g.id));
+    B.off[day] = Object.fromEntries(bkGames(day).filter(x => !keep.has(x.g.id)).map(x => [x.g.id, true]));
+    B.mode = 'parlay'; saveMine(); render.parlay(); $("#bkPlan").scrollIntoView?.({ behavior: 'smooth', block: 'start' }); });
+  el.querySelectorAll('[data-sugg-lock]').forEach(b => b.onclick = () => {
+    const t = tiers.find(x => x.id === b.dataset.suggLock); if (!t || !(stake > 0)) return;
+    bkMsg = lockBet('parlay', t.legs, stake) ? `${t.label} parlay added to the Bet Build below.` : `That ${t.label} parlay is already in the Bet Build.`;
+    saveMine(); render.parlay(); });
+}
+function renderPlan(day) {
+  const el = $('#bkPlan'), B = M.bank; let html = '';
+  const days = bkDays();
+  const msg = bkMsg; bkMsg = '';
+  if (!day) { el.innerHTML = `<h2>Plan</h2><div class="empty"><b>Nothing to plan yet</b>Games show up here once the schedule reaches them.</div>`; return; }
+  const off = offOf(day), fixed = fixedOf(day), mode = B.mode === 'parlay' ? 'parlay' : 'straight', wr = +B.amt || 0;
+  const eligible = bkGames(day);
+  /* straight bets already in the build sit out of the split until removed */
+  const inBuild = new Set(M.build.filter(b => b.type === 'single').map(b => b.legs[0].id));
+  const avail = mode === 'straight' ? eligible.filter(x => !inBuild.has(x.g.id) && x.px) : eligible.filter(x => x.px);
+  const chosen = avail.filter(x => !off[x.g.id]);
+  for (const k of Object.keys(fixed)) if (off[k] || !chosen.some(x => x.g.id === k)) delete fixed[k];
+  const fixedIds = mode === 'straight' ? chosen.map(x => x.g.id).filter(k => fixed[k] != null) : [];
+  const fixedSum = fixedIds.reduce((t, k) => t + fixed[k], 0);
+  /* amounts you typed stay put; every untouched game shares what is left, to the cent */
+  const autoAmt = {}; { const ids = chosen.map(x => x.g.id).filter(k => fixed[k] == null);
+    const cents = Math.max(0, Math.round((wr - fixedSum) * 100)), base = ids.length ? Math.floor(cents / ids.length) : 0;
+    ids.forEach((k, i) => autoAmt[k] = (base + (i < cents - base * ids.length ? 1 : 0)) / 100); }
+  const stakeOf = id => fixed[id] != null ? fixed[id] : (autoAmt[id] ?? 0);
+  const seg = (attr, cur, opts) => `<div class="seg" role="group">${opts.map(([k, l]) => `<button class="${cur === k ? 'on' : ''}" data-${attr}="${k}" aria-pressed="${cur === k}">${l}</button>`).join('')}</div>`;
+  html += `<h2>${dayTitle(day)}'s plan</h2>
+    <div class="bk-ctrl">
+      <div class="grp"><span class="lab">Day</span><div class="row"><select id="bkDay">${days.map(d => `<option value="${d}" ${d === day ? 'selected' : ''}>${dayTitle(d)}</option>`).join('')}</select></div></div>
+      <div class="grp"><label class="lab" for="bkAmt">Stake</label><div class="row">$<input type="number" id="bkAmt" step="1" min="0" value="${B.amt}">${fixedIds.length ? '<button class="btn ghost" id="bkEven">Reset</button>' : ''}</div></div>
+      <div class="grp"><span class="lab">Confidence</span><div class="row">${seg('bkfilter', B.filter, BK_FILTERS)}</div></div>
+      <div class="grp"><span class="lab">Bet type</span><div class="row">${seg('bkmode', mode, [['straight', 'Straight up'], ['parlay', 'Parlay']])}</div></div>
+    </div>`;
+  const rows = (mode === 'straight' ? eligible : avail).map(x => { const id = x.g.id, locked = mode === 'straight' && inBuild.has(id), on = !locked && !off[id] && !!x.px;
+    const stake = mode === 'straight' && on ? stakeOf(id) : 0; return { x, on, locked, stake, fixed: fixed[id] != null, profit: stake > 0 && x.px ? stake * (amToDec(x.px.am) - 1) : null }; });
+  const SORTS = { tip: (a, b) => (a.x.g.tip || '').localeCompare(b.x.g.tip || ''), pick: (a, b) => a.x.pick.localeCompare(b.x.pick), conf: (a, b) => a.x.conf - b.x.conf,
+    vegas: (a, b) => (a.x.mp ?? -1) - (b.x.mp ?? -1), odds: (a, b) => (a.x.px ? amToDec(a.x.px.am) : -1) - (b.x.px ? amToDec(b.x.px.am) : -1), stake: (a, b) => a.stake - b.stake, profit: (a, b) => (a.profit ?? -1) - (b.profit ?? -1) };
+  const sk = SORTS[B.sort] ? B.sort : 'tip'; rows.sort(SORTS[sk]); if (B.sortDir === 'desc') rows.reverse();
+  const sh = (k, l, num) => `<th class="srt${num ? ' num' : ''}${sk === k ? ' on' : ''}" data-sort="${k}">${l}${sk === k ? (B.sortDir === 'desc' ? ' ▼' : ' ▲') : ''}</th>`;
+  const allOn = chosen.length === avail.length && avail.length > 0, noneOn = chosen.length === 0;
+  const vegasCell = x => { if (x.mp == null) return '<span class="muted">–</span>'; const fav = x.mp >= 0.5 ? x.pick : (x.pick === x.g.home ? x.g.away : x.g.home), p = Math.max(x.mp, 1 - x.mp);
+    return `<span class="vg${fav !== x.pick ? ' differs' : ''}" title="${fav !== x.pick ? `The market makes ${fav} the winner, so the model's pick disagrees with it.` : 'The market agrees with the model.'}">${pill(fav)} <span class="muted">${Math.round(p * 100)}%</span></span>`; };
+  const lead = r => `<td><input type="checkbox" data-bkg="${r.x.g.id}" ${r.on ? 'checked' : ''} ${r.locked || !r.x.px ? 'disabled' : ''} aria-label="Include ${gameLabel(r.x.g)}"></td>
+    <td><b>${gameLabel(r.x.g)}</b>${r.x.g.type === 'PRE' ? ' <span class="tag">Pre</span>' : ''}${r.locked ? ' <span class="tag lime">In build</span>' : ''}<div class="muted" style="font-size:11.5px">${tipTime(r.x.g.tip)}</div></td>
+    <td>${pill(r.x.pick)}</td><td>${vegasCell(r.x)}</td>
+    <td><span class="tierc ${r.x.tc}">${band(r.x.conf)[1]} ${Math.round(r.x.conf * 100)}%</span></td>
+    <td class="num">${fmtPx(r.x.px)}</td>`;
+  if (!eligible.length) html += `<div class="empty">No picks in that confidence band for ${dayTitle(day).toLowerCase()}. Pick a wider band above.</div>`;
+  else if (mode === 'straight') {
+    html += `<div class="bar" style="margin:0 0 10px"><span class="muted">${chosen.length} of ${avail.length} games in</span></div>
+      <div class="wrap"><table class="tbl plan"><thead><tr><th><input type="checkbox" id="bkAll" ${allOn ? 'checked' : ''}></th>${sh('tip', 'Game')}${sh('pick', 'Model pick')}${sh('vegas', 'Vegas pick')}${sh('conf', 'Confidence')}${sh('odds', 'Odds', 1)}${sh('stake', 'Stake', 1)}${sh('profit', 'Profit', 1)}</tr></thead><tbody>`
+      + rows.map(r => `<tr data-gid="${r.x.g.id}" class="${r.on ? '' : 'dim'}">${lead(r)}<td class="num">${r.on ? `$<input type="number" class="stake-in${r.fixed ? ' fixed' : ''}" data-stake="${r.x.g.id}" step="1" min="0" value="${r.stake.toFixed(2)}">` : '–'}</td><td class="num ${r.profit != null ? 'lime' : 'muted'}">${r.profit != null ? '+' + money(r.profit) : '–'}</td></tr>`).join('');
+    const placed = chosen.reduce((t, x) => t + stakeOf(x.g.id), 0), win = chosen.reduce((t, x) => t + stakeOf(x.g.id) * (amToDec(x.px.am) - 1), 0);
+    html += `<tr class="totrow"><td></td><td colspan="5"><b>If every pick hits</b></td><td class="num"><b>${money(placed)}</b></td><td class="num lime"><b>+${money(win)}</b></td></tr></tbody></table></div>`;
+    const lockable = chosen.filter(x => stakeOf(x.g.id) > 0), lockAmt = lockable.reduce((t, x) => t + stakeOf(x.g.id), 0);
+    html += `<div class="bar" style="margin:16px 0 0"><button class="btn hot" id="bkLock" ${lockable.length ? '' : 'disabled'}>Lock in ${lockable.length} bet${lockable.length === 1 ? '' : 's'} · ${money(lockAmt)}</button></div>`;
+    el._lock = () => { let n = 0; for (const x of lockable) n += lockBet('single', [x], stakeOf(x.g.id)); M.bank.fixed[day] = {}; bkMsg = n ? `Added ${n} straight bet${n === 1 ? '' : 's'} to the Bet Build below.` : 'Those bets are already in the Bet Build.'; };
+  } else {
+    const legs = chosen, two = legs.length >= 2, dec = legs.reduce((p, x) => p * amToDec(x.px.am), 1), modelP = legs.reduce((p, x) => p * x.conf, 1), mktP = legs.reduce((p, x) => p * (x.mp ?? x.conf), 1);
+    html += `<div class="bar" style="margin:0 0 10px"><span class="muted">${legs.length} of ${avail.length} legs in</span></div>
+      <div class="wrap"><table class="tbl plan"><thead><tr><th><input type="checkbox" id="bkAll" ${allOn ? 'checked' : ''}></th>${sh('tip', 'Game')}${sh('pick', 'Pick')}${sh('vegas', 'Vegas pick')}${sh('conf', 'Confidence')}${sh('odds', 'Odds', 1)}</tr></thead><tbody>`
+      + rows.map(r => `<tr data-gid="${r.x.g.id}" class="${r.on ? '' : 'dim'}">${lead(r)}</tr>`).join('') + '</tbody></table></div>';
+    html += `<div class="strip" style="margin:16px 0 0">
+      <div class="stat"><b>${legs.length}</b><span>leg${legs.length === 1 ? '' : 's'}</span></div>
+      <div class="stat"><b>${two ? fmtAm(decToAm(dec)) : '–'}</b><span>parlay odds${two ? ` · ${dec.toFixed(2)}x` : ''}</span></div>
+      <div class="stat"><b>${two ? money(wr * dec) : '$0.00'}</b><span>pays out on ${money(wr)}</span></div>
+      <div class="stat"><b class="${two ? 'lime' : 'muted'}">+${two ? money(wr * dec - wr) : '$0.00'}</b><span>profit if it hits</span></div>
+      <div class="stat"><b>${two ? (modelP * 100).toFixed(modelP < 0.01 ? 2 : 1) + '%' : '–'}</b><span>model says it hits${two && legs.every(x => x.mp != null) ? ` · market ${(mktP * 100).toFixed(mktP < 0.01 ? 2 : 1)}%` : ''}</span></div></div>`;
+    if (!two) html += `<p class="muted" style="margin:10px 0 0;text-align:center">${avail.length < 2 ? `Only ${avail.length} pick with a price in this band. A parlay needs at least two legs.` : 'Tick at least two legs to see a parlay payout.'}</p>`;
+    html += `<div class="bar" style="margin:16px 0 0"><button class="btn hot" id="bkLock" ${two && wr > 0 ? '' : 'disabled'}>Lock in parlay · ${money(wr)}</button></div>`;
+    el._lock = () => { if (!two || !(wr > 0)) return; bkMsg = lockBet('parlay', legs, wr) ? 'Parlay added to the Bet Build below.' : 'That parlay is already in the Bet Build.'; };
+  }
+  const dis = eligible.filter(x => x.mp != null && x.mp < 0.5).length;
+  if (dis) html += `<p class="muted" style="margin:10px 0 0;text-align:center">The model and the market pick different teams in <b>${dis}</b> of these game${dis === 1 ? '' : 's'}; the Vegas pick is outlined in red there.</p>`;
+  if (eligible.some(x => x.px && x.px.est)) html += `<p class="muted" style="margin:6px 0 0;text-align:center">Prices marked <sup>est</sup> have no moneyline published yet: they come from the spread, or from the model when no line is up, with a typical book cut. Lines usually post on game day; the site picks them up on its afternoon run.</p>`;
+  if (msg) html += `<p class="okmsg">${msg}</p>`;
+  el.innerHTML = html;
+  const rerender = () => { saveMine(); render.parlay(); };
+  $('#bkDay').onchange = e => { B.day = e.target.value; rerender(); };
+  $('#bkAmt').onchange = e => { B.amt = Math.max(0, Math.round(+e.target.value || 0)); const set = Object.entries(fixed).filter(([k]) => !off[k]).reduce((t, [, a]) => t + a, 0); if (set > B.amt) B.fixed[day] = {}; rerender(); };
+  const ev = $('#bkEven'); if (ev) ev.onclick = () => { B.fixed[day] = {}; rerender(); };
+  el.querySelectorAll('[data-bkfilter]').forEach(b => b.onclick = () => { B.filter = b.dataset.bkfilter; rerender(); });
+  el.querySelectorAll('[data-bkmode]').forEach(b => b.onclick = () => { B.mode = b.dataset.bkmode; rerender(); });
+  el.querySelectorAll('th.srt').forEach(th => th.onclick = () => { const k = th.dataset.sort; if (B.sort === k) B.sortDir = B.sortDir === 'desc' ? 'asc' : 'desc'; else { B.sort = k; B.sortDir = 'asc'; } rerender(); });
+  el.querySelectorAll('[data-bkg]').forEach(c => c.onchange = () => { if (c.checked) delete off[c.dataset.bkg]; else off[c.dataset.bkg] = true; rerender(); });
+  const all = $('#bkAll'); if (all) { all.indeterminate = !allOn && !noneOn; all.onchange = () => { for (const x of avail) { if (all.checked) delete off[x.g.id]; else off[x.g.id] = true; } rerender(); }; }
+  el.querySelectorAll('[data-stake]').forEach(inp => inp.onchange = () => {
+    const id = inp.dataset.stake, others = Object.entries(fixed).filter(([k]) => k !== id && !off[k]).reduce((t, [, a]) => t + a, 0);
+    fixed[id] = Math.max(0, Math.min(Math.round((+inp.value || 0) * 100) / 100, Math.round((wr - others) * 100) / 100)); rerender(); });
+  const lk = $('#bkLock'); if (lk) lk.onclick = () => { if (el._lock) el._lock(); rerender(); };
+}
+function renderBuild() {
+  const el = $('#bkBuild');
+  const bets = M.build.map(b => ({ b, gr: gradeBet(b), dec: betDec(b) }));
+  if (!bets.length) { el.innerHTML = `<h2>Bet Build</h2><p class="muted" style="margin:0">Bets you lock in land here and grade themselves as the games go final. They live in this browser only.</p>`; return; }
+  const settled = bets.filter(x => x.gr.st !== 'pending'), staked = bets.reduce((t, x) => t + x.b.stake, 0);
+  const back = settled.reduce((t, x) => t + x.gr.ret, 0), risked = settled.reduce((t, x) => t + x.b.stake, 0), net = back - risked;
+  const wl = `${settled.filter(x => x.gr.st === 'won').length}-${settled.filter(x => x.gr.st === 'lost').length}${settled.some(x => x.gr.st === 'push') ? '-' + settled.filter(x => x.gr.st === 'push').length : ''}`;
+  const legTxt = l => { const g = gameById(l.id); return `${pill(l.side)} <span class="muted">${g ? gameLabel(g) : l.id}${l.kind && l.kind !== 'ml' ? ' · ' + esc(legLabel(l)) : ''} · ${fmtAm(l.odds)}</span>`; };
+  const rows = bets.slice().reverse().map(({ b, gr, dec }) => `<tr><td class="muted">${b.day ? dayNum(b.day) : '–'}</td><td>${b.type === 'parlay' ? `Parlay · ${b.legs.length}` : 'Straight'}</td>
+    <td>${b.legs.map(l => `<div class="bl">${legTxt(l)} <span class="res ${legOutcome(l) === 'pending' ? 'open' : legOutcome(l)}">${legOutcome(l) === 'pending' ? 'open' : legOutcome(l)}</span></div>`).join('')}</td>
+    <td class="num">${fmtAm(decToAm(dec))}</td><td class="num">${money(b.stake)}</td><td class="num">${money(b.stake * dec - b.stake)}</td>
+    <td><span class="res ${gr.st === 'pending' ? 'open' : gr.st}">${gr.st === 'pending' ? 'open' : gr.st}</span></td><td class="num ${gr.ret == null ? 'muted' : gr.ret > b.stake ? 'lime' : gr.ret < b.stake ? 'rose' : ''}">${gr.ret == null ? '–' : money(gr.ret)}</td>
+    <td><button class="x" data-del="${b.id}" title="Remove from the build">×</button></td></tr>`).join('');
+  el.innerHTML = `<h2>Bet Build</h2>
+    <div class="strip"><div class="stat"><b>${bets.length}</b><span>bets · ${bets.filter(x => x.gr.st === 'pending').length} open</span></div><div class="stat"><b>${money(staked)}</b><span>staked</span></div>
+      <div class="stat"><b>${settled.length ? wl : '–'}</b><span>settled</span></div><div class="stat"><b class="${net > 0 ? 'lime' : net < 0 ? 'rose' : ''}">${settled.length ? (net >= 0 ? '+' : '−') + money(Math.abs(net)) : '–'}</b><span>net on settled</span></div></div>
+    <div class="wrap"><table class="tbl"><thead><tr><th>Day</th><th>Bet</th><th>Legs</th><th class="num">Odds</th><th class="num">Stake</th><th class="num">To win</th><th>Status</th><th class="num">Return</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
+  el.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { M.build = M.build.filter(x => x.id !== b.dataset.del); saveMine(); render.parlay(); });
+}
 render.about = function () {
   const p = S.params.player, t = S.params.team;
   $('#tab-about').innerHTML = `<h2>How it works</h2>
@@ -490,15 +742,15 @@ render.about = function () {
     <h3>After a game</h3><p>Each side's offensive efficiency, points per 100 possessions, is compared with what the ratings expected. The surprise moves the offence of the players who were on the floor, by their minutes, and the defence of the players they faced, the other way. A win update rides alongside. The coach moves with the margin surprise and carries his rating when he changes teams. Ratings carry ${Math.round(p.carryP * 100)}% of the way into a new season; rookies start at ${p.rookie}; a first rating comes from FiveThirtyEight's RAPTOR where there is one.</p>
     <h3>Before a game</h3><p>The home side gets the court (${t.hfa} Elo, about ${(t.hfa / t.scale).toFixed(1)} points), Denver and Utah more for altitude, and both sides are adjusted for a back to back (−${t.b2b}), three games in four nights and three days off. Tonight's lineup is the roster minus the injury report's Out and Doubtful players, with minutes projected from each player's last ${p.minGames} appearances. Pace is a running average of each team's possessions per 48 minutes, and the total is the two expected efficiencies times the expected pace. A tenth of the plain team Elo's opinion is blended in.</p>
     <h3>What the numbers are worth</h3><p>See Record for the held-out seasons. The model picks winners at about 69% with the lineup known. The market's closing line does a little better than that, because it also knows who is playing and a great deal more. Where this model and the market disagree by three points or more the card shows an edge chip; that is a place to look, not a bet.</p>
-    <h3>Parlays</h3><p>Legs from different games are independent, so a ticket's fair chance is the product of the legs' chances. Spread and total legs use a normal margin around the model's number with a spread of ${SIGMA} points. Put the book's odds on each leg and the ticket shows what it pays against what it should.</p>
+    <h3>Parlay Builder</h3><p>It works like the NFL hub's. At the top, three suggested parlays for the day, Safe, Medium and Aggressive, grown from one core: the two likeliest legs first, then more while the chance that every leg lands stays above 50%, 30% and 15%, each new leg the one with the best chance times payout. Below, the day's plan: pick a day, a stake, a confidence band and straight bets or a parlay, then tick the games. Straight bets share the stake evenly unless you type an amount; a parlay shows its odds, its payout and the chance it hits. Lock in what you like and it goes to the Bet Build, which grades itself as the games go final. Each leg is the model's pick on the moneyline. Its price is the book's moneyline where one is published, and its chance in the suggestions is the market's with the book's cut taken out. Legs from different games are independent, so chances and prices multiply.</p>
     <h3>What lives where</h3><p>The job pulls scores, box scores, injuries, coaches and rosters from ESPN's public feeds every morning, replays both models, logs the day's numbers and rebuilds this page. Your picks and tickets stay in this browser: clearing site data loses them.</p>`;
 };
 render.data = function () {
   const el = $('#tab-data');
-  el.innerHTML = `<h2>Data <small>the published file and this browser's own</small></h2><div class="bar"><button class="btn" id="exp">Save backup of my picks and tickets</button><label class="btn ghost">Import backup <input type="file" id="imp" accept="application/json" hidden></label><span class="grow"></span><span class="muted">state.json ${(JSON.stringify(S).length / 1024).toFixed(0)} KB · generated ${S.generated}</span></div>
+  el.innerHTML = `<h2>Data <small>the published file and this browser's own</small></h2><div class="bar"><button class="btn" id="exp">Save backup of my picks and bets</button><label class="btn ghost">Import backup <input type="file" id="imp" accept="application/json" hidden></label><span class="grow"></span><span class="muted">state.json ${(JSON.stringify(S).length / 1024).toFixed(0)} KB · generated ${S.generated}</span></div>
     <pre style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;overflow:auto;max-height:60vh;font-size:12px">${esc(JSON.stringify({ season: S.season, today: S.today, asOf: S.asOf, slate: S.slate.length, record: S.record.length, params: S.params, backtest: S.backtest }, null, 1))}</pre>`;
   $('#exp').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(M)], { type: 'application/json' })); a.download = `nba-hub-backup-${S.today}.json`; a.click(); };
-  $('#imp').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { try { const v = JSON.parse(t); M = { picks: v.picks || {}, tickets: v.tickets || [], legs: v.legs || [] }; saveMine(); badges(); toast('Backup restored'); } catch (x) { toast('Not a backup file'); } }); };
+  $('#imp').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { try { M = normMine(JSON.parse(t)); saveMine(); badges(); toast('Backup restored'); } catch (x) { toast('Not a backup file'); } }); };
 };
 /* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's */
 const TODAY = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());

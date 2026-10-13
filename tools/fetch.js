@@ -33,6 +33,14 @@ function homeLine(odds, homeAb) {
   return String(L.fromEspn(m[1]) === homeAb ? n : -n);
 }
 
+/* the moneylines sit on the odds object as homeTeamOdds / awayTeamOdds (checked on a saved summary payload) */
+function moneyline(odds, side) {
+  const o = odds && odds[side + 'TeamOdds']; if (!o) return '';
+  let v = o.moneyLine; if (v == null && o.current && o.current.moneyLine) v = o.current.moneyLine.american;
+  if (v == null) return ''; if (/^EVEN$/i.test(String(v))) return '100';
+  const n = parseInt(String(v).replace('+', ''), 10); return Number.isFinite(n) && Math.abs(n) >= 100 ? String(n) : '';
+}
+
 /* one scoreboard payload -> rows for the games table */
 function parseDay(j) {
   const rows = [];
@@ -53,7 +61,7 @@ function parseDay(j) {
     rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 2 ? 'REG' : 'POST', away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
-      home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });
+      home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), home_ml: moneyline(odds, 'home'), away_ml: moneyline(odds, 'away'), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });
   }
   return rows;
 }
@@ -67,7 +75,7 @@ function merge(have, date, fresh) {
     if (old && old.source !== 'espn' && old.status === 'final') continue;   // history already has this final
     /* ESPN carries odds only before tip-off, so a final arrives without them: keep the last line seen,
        the morning-of line from the day's earlier pull */
-    if (old) { if (!r.home_line && old.home_line) r.home_line = old.home_line; if (!r.total && old.total) r.total = old.total; if (!r.tip && old.tip) r.tip = old.tip; }
+    if (old) { if (!r.home_line && old.home_line) r.home_line = old.home_line; if (!r.total && old.total) r.total = old.total; if (!r.tip && old.tip) r.tip = old.tip; if (!r.home_ml && old.home_ml) { r.home_ml = old.home_ml; r.away_ml = old.away_ml; } }
     byId.set(r.game_id, r);
   }
   return [...byId.values()];
@@ -116,5 +124,5 @@ async function main() {
   if (asked && !ok) process.exit(1);
 }
 
-module.exports = { parseDay, merge, homeLine };
+module.exports = { parseDay, merge, homeLine, moneyline };
 if (require.main === module) main().catch(e => { console.error(e.message || e); process.exit(1); });

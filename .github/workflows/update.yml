@@ -6,6 +6,9 @@ on:
     # the later of the two is still hours after the last game). ESPN's public scoreboard only: no credits.
     # Off season and empty days cost a few requests and commit nothing.
     - cron: "0 11 * * *"
+    # late afternoon (5:17pm Eastern in the season): game-day lines and the injury report go up after the
+    # morning run. Off the hour: scheduled runs at :00 are the ones most often delayed or dropped.
+    - cron: "17 21 * * *"
   workflow_dispatch:
     inputs:
       from:

@@ -34,8 +34,8 @@ function homeLine(odds, homeAb) {
 }
 
 /* ESPN puts the moneylines in one of two places: homeTeamOdds.moneyLine (the older form, seen on a saved summary)
-   or moneyline.home.close.odds / .open.odds (the newer form). Read whichever is filled; the first odds object a
-   run sees is saved as data/sample_odds.json so the live shape can be checked. */
+   or moneyline.home.close.odds / .open.odds (the newer form, DraftKings' price, confirmed live on 2026-10-13).
+   Read whichever is filled. One live odds object is kept as data/sample_odds.json for reference. */
 const asMl = v => { if (v == null || v === '') return ''; if (/^(EVEN|PK)$/i.test(String(v))) return '100';
   const n = parseInt(String(v).replace('+', ''), 10); return Number.isFinite(n) && Math.abs(n) >= 100 ? String(n) : ''; };
 function moneyline(odds, side) {
@@ -49,7 +49,8 @@ function moneyline(odds, side) {
 let oddsSampled = false;
 function sampleOdds(odds) {
   if (oddsSampled || !odds) return; oddsSampled = true;
-  try { require('fs').writeFileSync(require('path').join(L.ROOT, 'data', 'sample_odds.json'), JSON.stringify(odds, null, 1) + '\n'); } catch (e) {}
+  const f = require('path').join(L.ROOT, 'data', 'sample_odds.json');
+  try { if (!require('fs').existsSync(f)) require('fs').writeFileSync(f, JSON.stringify(odds, null, 1) + '\n'); } catch (e) {}   // once: a daily rewrite would be commit noise
 }
 
 /* one scoreboard payload -> rows for the games table */

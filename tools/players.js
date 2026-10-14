@@ -124,6 +124,9 @@ function loadRaptor() {
 }
 
 /* ---------- the model ---------- */
+/* a new season's minutes start from a player's last five regular-season games: a playoff run's 42-48 minutes in a
+   seven-man rotation would price a contender's opening week as six players and no bench */
+const newSeasonMins = p => (p.reg && p.reg.length ? p.reg : p.mins).slice(-5);
 function replay(P, ctx, mode, collect) {
   const { games, boxes, teamStats, coachOf, raptor, situP } = ctx;
   const players = {}, coaches = {}, dates = {}, seasonOf = {}, pace = {}, lastLineup = {};
@@ -138,7 +141,7 @@ function replay(P, ctx, mode, collect) {
       p = players[r.player_id] = { name: r.name, pos: r.pos, o: o0, d: d0, o0, d0,
         n: 0, mins: [], team: r.team, last: '', season, prior: usePrior ? 'raptor' : 'rookie' };
     }
-    if (p.season !== season) { p.o *= P.carryP; p.d *= P.carryP; p.season = season; p.mins = p.mins.slice(-5); }
+    if (p.season !== season) { p.o *= P.carryP; p.d *= P.carryP; p.season = season; p.mins = newSeasonMins(p); }
     return p;
   };
   const getC = (name, season) => {
@@ -190,7 +193,7 @@ function replay(P, ctx, mode, collect) {
       /* the first game of a new season rolls every player over once, as a final would have done one by one:
          carried part way toward zero, minutes history trimmed. Without it the opening slate would be priced on
          last June's ratings; done before any lineup is chosen, so a card and the Teams tab see the same players */
-      for (const p of Object.values(players)) if (p.season < g.season) { p.o *= P.carryP; p.d *= P.carryP; p.season = g.season; p.mins = p.mins.slice(-5); }
+      for (const p of Object.values(players)) if (p.season < g.season) { p.o *= P.carryP; p.d *= P.carryP; p.season = g.season; p.mins = newSeasonMins(p); }
       const live = ctx.liveLineup(g, players, projected);
       const H = strength(live.home.list), A = strength(live.away.list);
       const own = (ch.c + H.O + H.D + sh) - (ca.c + A.O + A.D + sa);
@@ -246,7 +249,8 @@ function replay(P, ctx, mode, collect) {
       const lineup = [];
       for (const r of rows) {
         const p = getP(r, g.season); p.team = t; p.last = g.date; p.pos = r.pos || p.pos;
-        if (r.min > 0) { p.mins.push(r.min); if (p.mins.length > 15) p.mins.shift(); p.n++; lineup.push([p, r.starter]); }
+        if (r.min > 0) { p.mins.push(r.min); if (p.mins.length > 15) p.mins.shift(); p.n++; lineup.push([p, r.starter]);
+          if (g.type !== 'POST') { (p.reg = p.reg || []).push(r.min); if (p.reg.length > 15) p.reg.shift(); } }
       }
       lastLineup[t] = lineup;
       dates[t].push(g.date); if (dates[t].length > 4) dates[t].shift();

@@ -1,0 +1,625 @@
+{
+ "generated": "2026-10-14T04:03Z",
+ "seasons": {
+  "2024:known": {
+   "season": 2024,
+   "lineup": "known",
+   "games": 1314,
+   "priced": 1314,
+   "days": 207,
+   "straightUp": {
+    "model": 0.6659,
+    "market": 0.691
+   },
+   "logloss": {
+    "model": 0.6147,
+    "market": 0.5835
+   },
+   "brier": {
+    "model": 0.213,
+    "market": 0.1995
+   },
+   "modelPicks": {
+    "withMarket": {
+     "n": 1120,
+     "won": 793,
+     "rate": 0.708,
+     "units": -31.33
+    },
+    "againstMarket": {
+     "n": 186,
+     "won": 77,
+     "rate": 0.414,
+     "units": -12.49
+    },
+    "pickem": {
+     "n": 8,
+     "won": 5,
+     "rate": 0.625,
+     "units": 1.55
+    }
+   },
+   "providers": {
+    "DraftKings": {
+     "games": 1250,
+     "straightUnits": -36.62
+    },
+    "ESPN BET": {
+     "games": 64,
+     "straightUnits": -5.65
+    }
+   },
+   "ats": {
+    "n": 1291,
+    "won": 642,
+    "rate": 0.4973
+   },
+   "overUnder": {
+    "n": 1297,
+    "won": 676,
+    "rate": 0.5212
+   },
+   "straight": {
+    "bets": 1314,
+    "won": 875,
+    "units": -42.27,
+    "roi": -0.032
+   },
+   "parlays": {
+    "safe": {
+     "parlays": 174,
+     "won": 116,
+     "expMarket": 99.7,
+     "expModel": 76.7,
+     "units": 12.7,
+     "avgLegs": 2.34,
+     "roi": 0.073
+    },
+    "med": {
+     "parlays": 144,
+     "won": 66,
+     "expMarket": 53.7,
+     "expModel": 36,
+     "units": 4.69,
+     "avgLegs": 3.78,
+     "roi": 0.033
+    },
+    "aggr": {
+     "parlays": 119,
+     "won": 29,
+     "expMarket": 24.2,
+     "expModel": 15.6,
+     "units": -1.5,
+     "avgLegs": 5.29,
+     "roi": -0.013
+    },
+    "value": {
+     "parlays": 67,
+     "won": 20,
+     "expMarket": 13.5,
+     "expModel": 21.7,
+     "units": 23.33,
+     "avgLegs": 2.45,
+     "roi": 0.348
+    }
+   }
+  },
+  "2025:known": {
+   "season": 2025,
+   "lineup": "known",
+   "games": 1320,
+   "priced": 1320,
+   "days": 213,
+   "straightUp": {
+    "model": 0.6788,
+    "market": 0.6871
+   },
+   "logloss": {
+    "model": 0.5934,
+    "market": 0.5854
+   },
+   "brier": {
+    "model": 0.2043,
+    "market": 0.2009
+   },
+   "modelPicks": {
+    "withMarket": {
+     "n": 1175,
+     "won": 831,
+     "rate": 0.7072,
+     "units": -45.92
+    },
+    "againstMarket": {
+     "n": 130,
+     "won": 57,
+     "rate": 0.4385,
+     "units": -2.02
+    },
+    "pickem": {
+     "n": 15,
+     "won": 8,
+     "rate": 0.5333,
+     "units": 0.27
+    }
+   },
+   "providers": {
+    "ESPN BET": {
+     "games": 1320,
+     "straightUnits": -47.67
+    }
+   },
+   "ats": {
+    "n": 1319,
+    "won": 672,
+    "rate": 0.5095
+   },
+   "overUnder": {
+    "n": 1320,
+    "won": 628,
+    "rate": 0.4758
+   },
+   "straight": {
+    "bets": 1320,
+    "won": 896,
+    "units": -47.67,
+    "roi": -0.036
+   },
+   "parlays": {
+    "safe": {
+     "parlays": 176,
+     "won": 109,
+     "expMarket": 102.5,
+     "expModel": 94.6,
+     "units": -9.58,
+     "avgLegs": 2.45,
+     "roi": -0.054
+    },
+    "value": {
+     "parlays": 62,
+     "won": 21,
+     "expMarket": 17.6,
+     "expModel": 25.1,
+     "units": 1.29,
+     "avgLegs": 2.56,
+     "roi": 0.021
+    },
+    "med": {
+     "parlays": 153,
+     "won": 60,
+     "expMarket": 56.3,
+     "expModel": 50.6,
+     "units": -17.63,
+     "avgLegs": 3.87,
+     "roi": -0.115
+    },
+    "aggr": {
+     "parlays": 126,
+     "won": 28,
+     "expMarket": 25.6,
+     "expModel": 22.6,
+     "units": -16.18,
+     "avgLegs": 5.45,
+     "roi": -0.128
+    }
+   }
+  },
+  "2026:known": {
+   "season": 2026,
+   "lineup": "known",
+   "games": 1322,
+   "priced": 1315,
+   "days": 210,
+   "straightUp": {
+    "model": 0.6951,
+    "market": 0.6882
+   },
+   "logloss": {
+    "model": 0.5903,
+    "market": 0.5748
+   },
+   "brier": {
+    "model": 0.2021,
+    "market": 0.1966
+   },
+   "modelPicks": {
+    "withMarket": {
+     "n": 1168,
+     "won": 836,
+     "rate": 0.7158,
+     "units": -31.16
+    },
+    "againstMarket": {
+     "n": 144,
+     "won": 77,
+     "rate": 0.5347,
+     "units": 29.44
+    },
+    "pickem": {
+     "n": 3,
+     "won": 1,
+     "rate": 0.3333,
+     "units": -1.09
+    }
+   },
+   "providers": {
+    "ESPN BET": {
+     "games": 254,
+     "straightUnits": 9.39
+    },
+    "DraftKings": {
+     "games": 1061,
+     "straightUnits": -12.19
+    }
+   },
+   "ats": {
+    "n": 1315,
+    "won": 646,
+    "rate": 0.4913
+   },
+   "overUnder": {
+    "n": 1314,
+    "won": 655,
+    "rate": 0.4985
+   },
+   "straight": {
+    "bets": 1315,
+    "won": 914,
+    "units": -2.81,
+    "roi": -0.002
+   },
+   "parlays": {
+    "value": {
+     "parlays": 86,
+     "won": 22,
+     "expMarket": 21.3,
+     "expModel": 32.9,
+     "units": -5.77,
+     "avgLegs": 2.79,
+     "roi": -0.067
+    },
+    "safe": {
+     "parlays": 180,
+     "won": 115,
+     "expMarket": 106.1,
+     "expModel": 100.6,
+     "units": -6.48,
+     "avgLegs": 2.39,
+     "roi": -0.036
+    },
+    "med": {
+     "parlays": 155,
+     "won": 67,
+     "expMarket": 58.5,
+     "expModel": 54.5,
+     "units": -6.51,
+     "avgLegs": 3.85,
+     "roi": -0.042
+    },
+    "aggr": {
+     "parlays": 125,
+     "won": 37,
+     "expMarket": 25.6,
+     "expModel": 24,
+     "units": 19.36,
+     "avgLegs": 5.53,
+     "roi": 0.155
+    }
+   }
+  },
+  "2024:naive": {
+   "season": 2024,
+   "lineup": "naive",
+   "games": 1314,
+   "priced": 1314,
+   "days": 207,
+   "straightUp": {
+    "model": 0.6697,
+    "market": 0.691
+   },
+   "logloss": {
+    "model": 0.617,
+    "market": 0.5835
+   },
+   "brier": {
+    "model": 0.2141,
+    "market": 0.1995
+   },
+   "modelPicks": {
+    "withMarket": {
+     "n": 1107,
+     "won": 789,
+     "rate": 0.7127,
+     "units": -23.45
+    },
+    "againstMarket": {
+     "n": 199,
+     "won": 86,
+     "rate": 0.4322,
+     "units": -1.17
+    },
+    "pickem": {
+     "n": 8,
+     "won": 5,
+     "rate": 0.625,
+     "units": 1.55
+    }
+   },
+   "providers": {
+    "DraftKings": {
+     "games": 1250,
+     "straightUnits": -17.43
+    },
+    "ESPN BET": {
+     "games": 64,
+     "straightUnits": -5.65
+    }
+   },
+   "ats": {
+    "n": 1291,
+    "won": 646,
+    "rate": 0.5004
+   },
+   "overUnder": {
+    "n": 1297,
+    "won": 668,
+    "rate": 0.515
+   },
+   "straight": {
+    "bets": 1314,
+    "won": 880,
+    "units": -23.08,
+    "roi": -0.018
+   },
+   "parlays": {
+    "safe": {
+     "parlays": 172,
+     "won": 113,
+     "expMarket": 98.3,
+     "expModel": 74.5,
+     "units": 8.83,
+     "avgLegs": 2.35,
+     "roi": 0.051
+    },
+    "value": {
+     "parlays": 72,
+     "won": 20,
+     "expMarket": 14.1,
+     "expModel": 23.4,
+     "units": 13.55,
+     "avgLegs": 2.57,
+     "roi": 0.188
+    },
+    "med": {
+     "parlays": 141,
+     "won": 68,
+     "expMarket": 52.3,
+     "expModel": 34.9,
+     "units": 13.39,
+     "avgLegs": 3.79,
+     "roi": 0.095
+    },
+    "aggr": {
+     "parlays": 115,
+     "won": 29,
+     "expMarket": 23.4,
+     "expModel": 15.1,
+     "units": 2.01,
+     "avgLegs": 5.31,
+     "roi": 0.017
+    }
+   }
+  },
+  "2025:naive": {
+   "season": 2025,
+   "lineup": "naive",
+   "games": 1320,
+   "priced": 1320,
+   "days": 213,
+   "straightUp": {
+    "model": 0.6803,
+    "market": 0.6871
+   },
+   "logloss": {
+    "model": 0.6039,
+    "market": 0.5854
+   },
+   "brier": {
+    "model": 0.2089,
+    "market": 0.2009
+   },
+   "modelPicks": {
+    "withMarket": {
+     "n": 1149,
+     "won": 819,
+     "rate": 0.7128,
+     "units": -35.04
+    },
+    "againstMarket": {
+     "n": 156,
+     "won": 71,
+     "rate": 0.4551,
+     "units": 10.77
+    },
+    "pickem": {
+     "n": 15,
+     "won": 8,
+     "rate": 0.5333,
+     "units": 0.27
+    }
+   },
+   "providers": {
+    "ESPN BET": {
+     "games": 1320,
+     "straightUnits": -23.99
+    }
+   },
+   "ats": {
+    "n": 1319,
+    "won": 663,
+    "rate": 0.5027
+   },
+   "overUnder": {
+    "n": 1320,
+    "won": 633,
+    "rate": 0.4795
+   },
+   "straight": {
+    "bets": 1320,
+    "won": 898,
+    "units": -23.99,
+    "roi": -0.018
+   },
+   "parlays": {
+    "safe": {
+     "parlays": 174,
+     "won": 107,
+     "expMarket": 101.2,
+     "expModel": 92.9,
+     "units": -10.18,
+     "avgLegs": 2.43,
+     "roi": -0.059
+    },
+    "value": {
+     "parlays": 91,
+     "won": 26,
+     "expMarket": 24.1,
+     "expModel": 38.3,
+     "units": 0.33,
+     "avgLegs": 2.6,
+     "roi": 0.004
+    },
+    "med": {
+     "parlays": 149,
+     "won": 54,
+     "expMarket": 55.4,
+     "expModel": 50.2,
+     "units": -27.9,
+     "avgLegs": 3.85,
+     "roi": -0.187
+    },
+    "aggr": {
+     "parlays": 128,
+     "won": 27,
+     "expMarket": 26,
+     "expModel": 23.5,
+     "units": -20.52,
+     "avgLegs": 5.37,
+     "roi": -0.16
+    }
+   }
+  },
+  "2026:naive": {
+   "season": 2026,
+   "lineup": "naive",
+   "games": 1322,
+   "priced": 1315,
+   "days": 210,
+   "straightUp": {
+    "model": 0.6814,
+    "market": 0.6882
+   },
+   "logloss": {
+    "model": 0.6009,
+    "market": 0.5748
+   },
+   "brier": {
+    "model": 0.2069,
+    "market": 0.1966
+   },
+   "modelPicks": {
+    "withMarket": {
+     "n": 1126,
+     "won": 806,
+     "rate": 0.7158,
+     "units": -33.41
+    },
+    "againstMarket": {
+     "n": 186,
+     "won": 89,
+     "rate": 0.4785,
+     "units": 17.09
+    },
+    "pickem": {
+     "n": 3,
+     "won": 1,
+     "rate": 0.3333,
+     "units": -1.09
+    }
+   },
+   "providers": {
+    "ESPN BET": {
+     "games": 254,
+     "straightUnits": 0.7
+    },
+    "DraftKings": {
+     "games": 1061,
+     "straightUnits": -18.11
+    }
+   },
+   "ats": {
+    "n": 1315,
+    "won": 653,
+    "rate": 0.4966
+   },
+   "overUnder": {
+    "n": 1314,
+    "won": 655,
+    "rate": 0.4985
+   },
+   "straight": {
+    "bets": 1315,
+    "won": 896,
+    "units": -17.41,
+    "roi": -0.013
+   },
+   "parlays": {
+    "value": {
+     "parlays": 99,
+     "won": 19,
+     "expMarket": 23.6,
+     "expModel": 38.4,
+     "units": -31.37,
+     "avgLegs": 2.79,
+     "roi": -0.317
+    },
+    "safe": {
+     "parlays": 179,
+     "won": 112,
+     "expMarket": 105.5,
+     "expModel": 100.4,
+     "units": -10,
+     "avgLegs": 2.39,
+     "roi": -0.056
+    },
+    "med": {
+     "parlays": 151,
+     "won": 67,
+     "expMarket": 56.9,
+     "expModel": 53.1,
+     "units": 1.41,
+     "avgLegs": 3.85,
+     "roi": 0.009
+    },
+    "aggr": {
+     "parlays": 124,
+     "won": 35,
+     "expMarket": 25.6,
+     "expModel": 24.1,
+     "units": 10.58,
+     "avgLegs": 5.48,
+     "roi": 0.085
+    }
+   }
+  }
+ },
+ "notes": [
+  "4 games have no closing moneylines in data/odds_hist.csv and are left out: 2026_20260430_DEN_MIN 2026_20260507_CLE_DET 2026_20260513_CLE_DET 2026_20260523_NYK_CLE.",
+  "3 games carry only in-game prices (a live book) and are left out: 2026_20251124_CHI_NOP 2026_20251124_DET_IND 2026_20251124_MIN_SAC.",
+  "6 games have no usable spread (missing, or its favourite not the moneyline's) and are left out of ATS only: 2024_20231129_PHI_NOP 2024_20240402_LAC_SAC 2024_20240402_OKC_PHI 2024_20240422_ORL_CLE 2024_20240422_PHI_NYK 2025_20241104_UTA_CHI.",
+  "2 games have no usable total and are left out of the over/under only: 2024_20240422_PHI_NYK 2026_20251124_POR_MIL.",
+  "6 finals the model did not score (a side's box score is missing) are not counted: 2024_20231109_ORL_ATL 2024_20231207_LAL_NOP 2024_20231207_MIL_IND 2024_20240111_CLE_BKN 2024_20240317_SAS_BKN 2025_20241217_OKC_MIL.",
+  "A pick'em (equal moneylines) has no market side: the model's picks there are counted under modelPicks.pickem, not with or against the market.",
+  "The book changes within seasons: DraftKings for the 2024 regular season, ESPN BET for most of its playoffs, ESPN BET for all of 2025, ESPN BET to late November 2025 and DraftKings after. ESPN BET rounds to fives and takes about 1 point more margin on heavy favourites, so its seasons pay favourite-heavy parlays a little less. `providers` gives each season's games and straight-bet units by book.",
+  "The confidence bands are the page's own, on the chance rounded to the whole percent: 54.5% is 55%."
+ ]
+}

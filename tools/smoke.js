@@ -8,7 +8,9 @@
  * and a saved ticket grades once the game is final, the Data tab is only on the admin page, a preseason
  * game shows with its tag and the not-graded note, and a game that has tipped off (by its tip time, though the
  * published file still calls it scheduled) can no longer be picked, planned, suggested or locked in, including
- * from a page drawn before the tip.
+ * from a page drawn before the tip. Section 0 renders the real published state as it is and holds it to
+ * data/games.csv; section 6 covers a postponed game (void), a graded game's model pick once it has left the slate,
+ * the backup import, a day-old injury report and a suggested tier short of its aim.
  */
 'use strict';
 const fs = require('fs');
@@ -44,8 +46,37 @@ function load(page, st, mine) {
 }
 
 (async () => {
+  let w, errors;
+  console.log('0. the published state, as it is');
+  {
+    const real = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'));
+    const csvRows = fs.readFileSync(path.join(ROOT, 'data', 'games.csv'), 'utf8').trim().split('\n'); const head = csvRows.shift().split(',');
+    const rows = csvRows.map(l => { const v = l.split(','); const o = {}; head.forEach((k, i) => { o[k] = v[i] ?? ''; }); return o; });
+    const addD = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
+    const want = rows.filter(g => g.date >= addD(real.today, -1) && g.date <= addD(real.today, 10)).map(g => g.game_id).sort();
+    const have = real.slate.map(g => g.id).sort();
+    check(JSON.stringify(want) === JSON.stringify(have), `the slate is every game in games.csv from yesterday to ten days out (${have.length} of ${want.length})`);
+    const soon = real.slate.filter(g => g.status === 'scheduled' && g.type !== 'PRE' && g.tip && Date.parse(g.tip) > Date.now() && Date.parse(g.tip) - Date.now() < 24 * 3600e3);
+    check(soon.every(g => g.model && [g.model.pHome, g.model.spread, g.model.total].every(Number.isFinite)), `every regular-season game tipping in the next 24 hours has the model's numbers (${soon.length})`);
+    const nums = JSON.stringify(real).match(/:NaN|:null,"spread":null/g);
+    check(!nums, 'no NaN in the published state');
+    check(real.season >= Math.max(...rows.filter(g => g.status === 'final').map(g => +g.season)), "the published season is no older than the latest final's");
+    ({ w, errors } = load('index.html', real));
+    await sleep(300);
+    const d0 = w.document;
+    const shown = d0.querySelector('#days .day.on');
+    check(!real.slate.length || (shown && d0.querySelectorAll('#slate .card').length === real.slate.filter(g => g.date === shown.dataset.d).length), 'the board draws a card for every game of the day shown');
+    for (const tab of ['slate', 'teams', 'players', 'coaches', 'record', 'mine', 'parlay', 'about']) {
+      d0.querySelector(`#nav button[data-tab=${tab}]`).click(); await sleep(30);
+      const txt = d0.getElementById('tab-' + tab).textContent;
+      check(!/\bNaN\b|\bundefined\b/.test(txt), `the real ${tab} tab shows no NaN or undefined`);
+    }
+    if (real.slate.length) for (const b of [...d0.querySelectorAll('#days .day')]) { b.click(); await sleep(15); }
+    check(errors.length === 0, 'every day of the real slate draws without a script error: ' + errors.join(' | '));
+  }
+
   console.log('1. fresh visitor, tonight');
-  let { w, errors } = load('index.html', withGames(false));
+  ({ w, errors } = load('index.html', withGames(false)));
   await sleep(250);
   const d = w.document;
   check(/Updated/.test(d.getElementById('stamp').textContent), 'update stamp shown');
@@ -188,6 +219,63 @@ function load(page, st, mine) {
   check(!m6.build.length && /has tipped off, so it was not added/.test(d6.getElementById('bkPlan').textContent), 'a suggested parlay with a leg that has tipped is refused, and says why');
   check(!d6.querySelector('#bkSuggest .sugg-tier.safe'), 'the suggestions are redrawn without it');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  console.log('6. a postponed game, a graded game off the slate, the import, a stale injury report');
+  {
+    const ago = n => { const x = new Date(state.today + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() - n); return x.toISOString().slice(0, 10); };
+    const gid = (n, a, h) => `${state.season}_${ago(n).replace(/-/g, '')}_${a}_${h}`;
+    const pp = gid(3, 'BOS', 'NYK'), fresh = gid(1, 'MIA', 'ORL'), done = gid(4, 'LAL', 'GSW'), graded = gid(5, 'DEN', 'UTA');
+    const st6 = { ...state, slate: [], finals: { [done]: [100, 110] },
+      record: [{ id: graded, date: ago(5), away: 'DEN', home: 'UTA', awayScore: 120, homeScore: 101, pHome: 0.22, spread: 9.1, total: 231, line: 8.5, totalLine: 230, pick: 'DEN', su: true, ats: true, ou: false, teamPick: 'DEN' }] };
+    const mine6 = { picks: { [pp]: 'NYK', [fresh]: 'ORL', [graded]: 'DEN' }, build: [
+      { id: 'v1', day: ago(3), type: 'single', stake: 10, legs: [{ id: pp, kind: 'ml', side: 'NYK', odds: -140 }] },
+      { id: 'v2', day: ago(4), type: 'parlay', stake: 10, legs: [{ id: pp, kind: 'ml', side: 'NYK', odds: -140 }, { id: done, kind: 'ml', side: 'GSW', odds: 150 }] },
+      { id: 'v3', day: ago(1), type: 'single', stake: 10, legs: [{ id: fresh, kind: 'ml', side: 'ORL', odds: -120, est: 'model' }] }] };
+    ({ w, errors } = load('index.html', st6, mine6));
+    await sleep(250);
+    const d7 = w.document;
+    d7.querySelector('#nav button[data-tab=mine]').click(); await sleep(30);
+    const mt = d7.getElementById('tab-mine');
+    const rowOf = id => [...mt.querySelectorAll('tbody tr')].find(r => r.querySelector(`[data-un="${id}"]`) || r.textContent.includes(id.split('_')[2]));
+    check(/void/.test(mt.textContent), 'a pick on a game missing three days on reads void');
+    check(/>1<\/b><span>Open/.test(mt.innerHTML), 'only the game from yesterday is still open: a day is not enough to call it off');
+    check(/1\/3<\/b><span>With the model/.test(mt.innerHTML) && /DEN/.test(mt.textContent) && /78%/.test(mt.textContent), "a graded game off the slate keeps the model's pick (DEN 78%)");
+    d7.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
+    const bb = d7.getElementById('bkBuild');
+    const rowB = id => [...bb.querySelectorAll('tbody tr')].find(r => r.querySelector(`[data-del="${id}"]`));
+    check(/void/.test(rowB('v1').textContent) && /\$10\.00/.test(rowB('v1').lastElementChild.previousElementSibling.textContent), 'a straight bet on it is void, the stake back');
+    check(/won/.test(rowB('v2').textContent) && /\$25\.00/.test(rowB('v2').textContent), 'a parlay drops the void leg and pays on the rest: GSW +150 returns $25 on $10');
+    check(/open/.test(rowB('v3').textContent) && rowB('v3').querySelector('sup') && /est/.test(rowB('v3').querySelector('sup').textContent), 'an estimated price is marked est in the Bet Build');
+    check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+    const stale = { ...withGames(false), injuriesAsOf: ago(1) };
+    ({ w, errors } = load('index.html', stale));
+    await sleep(250);
+    check(/Injury report as of/.test(w.document.getElementById('slate').textContent), "a day-old injury report is said on the board");
+    ({ w, errors } = load('index.html', { ...withGames(false), injuriesAsOf: state.today }));
+    await sleep(250);
+    check(!/Injury report as of/.test(w.document.getElementById('slate').textContent), "today's is not");
+
+    ({ w, errors } = load('admin.html', withGames(false), { picks: { t1: 'BOS' }, build: [] }));
+    await sleep(250);
+    w.document.querySelector('#nav button[data-tab=data]').click(); await sleep(30);
+    const imp = txt => w.document.getElementById('imp').onchange({ target: { files: [{ text: async () => txt }] } });
+    for (const junk of ['{"season":2027,"slate":[]}', '[]', 'null', '{"picks":[1,2]}', 'not json']) { imp(junk); await sleep(20); }
+    let kept = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
+    check(kept.picks.t1 === 'BOS' && /Not a backup file/.test(w.document.getElementById('toast').textContent), 'an import that is not a backup is refused and the picks stay');
+    imp(JSON.stringify({ picks: { t1: 'NYK' }, bank: {}, build: [] })); await sleep(20);
+    kept = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
+    check(kept.picks.t1 === 'NYK', 'a real backup is restored');
+    check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  }
+  {
+    const three6 = { ...state, slate: [fake('s1', state.today, false), { ...fake('s2', state.today, false), away: 'LAL', home: 'GSW', ml: { home: -220, away: 180 }, model: { ...fake('s2', state.today, false).model, pHome: 0.70 } }] };
+    ({ w, errors } = load('index.html', three6));
+    await sleep(250);
+    w.document.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+    const sf = w.document.querySelector('#bkSuggest .sugg-tier.safe');
+    check(sf && /Under Safe's 50% aim/.test(sf.textContent), 'a Safe parlay under its 50% aim says so (NYK + GSW land about 37% together)');
+  }
 
   console.log('4. admin page');
   ({ w, errors } = load('admin.html', withGames(false)));

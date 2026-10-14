@@ -208,7 +208,7 @@ input[type=number]{width:92px;text-align:right}
 .saved{margin-top:16px}
 .saved .ticket{margin-bottom:10px}
 .res{font-size:11px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:999px}
-.res.won{background:var(--lime-soft);color:var(--lime)} .res.lost{background:var(--rose-soft);color:var(--rose)} .res.open{background:var(--panel-3);color:var(--ink-2)} .res.push{background:var(--ice-soft);color:var(--ice)}
+.res.won{background:var(--lime-soft);color:var(--lime)} .res.lost{background:var(--rose-soft);color:var(--rose)} .res.open{background:var(--panel-3);color:var(--ink-2)} .res.push,.res.void{background:var(--ice-soft);color:var(--ice)}
 .about p{max-width:760px;color:var(--ink-2)} .about h3{font-family:var(--display);font-size:15px;margin:22px 0 8px}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#1E2230;padding:10px 16px;border-radius:999px;font-weight:800;font-size:13px;opacity:0;transition:all .25s var(--ease);pointer-events:none;z-index:9}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
@@ -248,7 +248,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
   <section id="tab-about" hidden class="about"></section>
   <section id="tab-data" hidden></section>
 </main>
-<footer>Rebuilt every morning from the previous night's box scores, and again late afternoon for the day's lines and injury report. Your picks and bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
+<footer>Rebuilt in the morning from the previous night's box scores, and again through the afternoon for the day's lines and injury report. Your picks and bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
 <div class="toast" id="toast"></div>
 <script>
 'use strict';
@@ -294,7 +294,19 @@ function saveMine() { try { localStorage.setItem(KEY, JSON.stringify(M)); } catc
 let toastT; function toast(m) { const t = $('#toast'); t.textContent = m; t.classList.add('on'); clearTimeout(toastT); toastT = setTimeout(() => t.classList.remove('on'), 1600); }
 
 /* ---------- pricing helpers ---------- */
-const gameById = id => S.slate.find(g => g.id === id) || S.record.find(g => g.id === id) || fromFinal(id);
+const gameById = id => S.slate.find(g => g.id === id) || fromRecord(S.record.find(g => g.id === id)) || fromFinal(id) || offList(id);
+/* a graded game carries the number published before its tip; as a game it is final, with that number as its model */
+const fromRecord = r => r ? { ...r, status: 'final', model: { pHome: r.pHome, spread: r.spread, total: r.total } } : null;
+/* a game on no published list, from its id: a pick or bet on it still shows, as open. Once the published file is two
+   days past its date it was not played that day (ESPN drops a postponed game, and one rescheduled comes back under a
+   new id): a book voids a bet on it, and so does this. Void only for the seasons whose finals are published (this one
+   and the last), so a missing final is a missing game and not missing data */
+function offList(id) {
+  const [season, d, away, home] = String(id).split('_'); if (!d || d.length !== 8 || !away || !home || !S.finals) return null;
+  const date = `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
+  const gone = (+season === S.season || +season === S.season - 1) && addDays(date, 2) <= (S.today || '');
+  return { id, date, away, home, status: gone ? 'void' : 'unlisted', awayScore: null, homeScore: null, model: null, line: null, totalLine: null };
+}
 /* the published finals carry only the score; the id carries the date and the teams */
 function fromFinal(id) {
   const f = S.finals && S.finals[id]; if (!f) return null;
@@ -309,7 +321,7 @@ const modelMargin = g => g.model ? -g.model.spread : null;          // home marg
 const winner = g => g.homeScore === null ? null : g.homeScore > g.awayScore ? g.home : g.homeScore < g.awayScore ? g.away : null;
 /* one leg: {id, kind:'ml'|'spread'|'total', side, line, p} */
 function legResult(leg) {
-  const g = gameById(leg.id); if (!g || g.homeScore === null) return 'open';
+  const g = gameById(leg.id); if (!g || g.homeScore === null) return g && g.status === 'void' ? 'void' : 'open';
   const mov = g.homeScore - g.awayScore, tot = g.homeScore + g.awayScore;
   if (leg.kind === 'ml') return mov === 0 ? 'push' : (winner(g) === leg.side ? 'won' : 'lost');
   if (leg.kind === 'spread') { const m = leg.side === g.home ? mov + leg.line : -mov + leg.line; return m === 0 ? 'push' : m > 0 ? 'won' : 'lost'; }
@@ -352,7 +364,10 @@ render.slate = function () {
   }
   const pre = games.some(g => g.type === 'PRE');
   const opening = S.opening ? `Opening night is ${dayName(S.opening)} ${dayNum(S.opening)}${S.opening > TODAY ? `, ${Math.round((Date.parse(S.opening) - Date.parse(TODAY)) / 86400000)} days away` : ''}.` : '';
-  $('#slate').innerHTML = (pre ? `<div class="note"><b>Preseason.</b> Rotations are experimental and starters often sit, so these numbers assume each team's regular rotation. They are shown for fun and never graded, and the ratings don't learn from them. ${opening}</div>` : '')
+  /* the injury report the numbers use, when it is not today's: the morning's read failed and yesterday's stands */
+  const injOld = S.injuriesAsOf && S.injuriesAsOf < TODAY && games.some(g => !started(g));
+  $('#slate').innerHTML = (injOld ? `<div class="note"><b>Injury report as of ${dayName(S.injuriesAsOf)} ${dayNum(S.injuriesAsOf)}.</b> Today's could not be read yet, so the lineups below may still count a player who has since been ruled out.</div>` : '')
+    + (pre ? `<div class="note"><b>Preseason.</b> Rotations are experimental and starters often sit, so these numbers assume each team's regular rotation. They are shown for fun and never graded, and the ratings don't learn from them. ${opening}</div>` : '')
     + `<div class="grid">${games.map(card).join('')}</div>`;
   $('#slate').querySelectorAll('[data-act]').forEach(el => el.onclick = act);
 };
@@ -476,11 +491,14 @@ render.coaches = function () {
   table($('#coachT'), [
     { key: 'elo', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
     { key: 'name', label: 'Coach', fmt: v => `<b>${esc(v)}</b>` },
-    { key: 'team', label: 'Team', fmt: pill },
+    { key: 'team', label: 'Team', fmt: v => v ? pill(v) : '<span class="muted">–</span>' },
     { key: 'elo', label: 'Elo', num: true, cls: 'big', fmt: signed },
     { key: 'games', label: 'Games rated', num: true },
   ], S.coaches, 'elo');
 };
+/* seasons are named by the year they end in the data (2026 is 2025-26); the page writes them the NBA's way */
+const seasonName = y => `${+y - 1}-${String(y).slice(2)}`;
+const fmtSeasons = r => { const [a, b] = String(r || '').split('-'); if (!a) return ''; return !b || a === b ? `the ${seasonName(a)} season` : `${seasonName(a)} to ${seasonName(b)}`; };
 function rec(list, k) { let w = 0, l = 0, p = 0; for (const g of list) { if (g[k] === true) w++; else if (g[k] === false) l++; else if (g[k] === null && g[k] !== undefined) p++; } return { w, l, p, s: w + l ? `${w}-${l}${p ? '-' + p : ''}` : '—', pct: w + l ? w / (w + l) : null }; }
 render.record = function () {
   const R = S.record, su = rec(R, 'su'), ats = rec(R.filter(g => g.line !== null), 'ats'), ou = rec(R.filter(g => g.totalLine !== null), 'ou');
@@ -492,7 +510,7 @@ render.record = function () {
     <div class="strip"><div class="stat"><b>${su.s}</b><span>Straight up${su.pct !== null ? ' · ' + fmtPct(su.pct) : ''}</span></div><div class="stat"><b>${ats.s}</b><span>Against the spread${ats.pct !== null ? ' · ' + fmtPct(ats.pct) : ''}</span></div><div class="stat"><b>${ou.s}</b><span>Totals${ou.pct !== null ? ' · ' + fmtPct(ou.pct) : ''}</span></div><div class="stat"><b>${R.length}</b><span>Games graded</span></div></div>
     ${R.length ? `<div class="two"><div><h2>By month</h2><div class="wrap"><table class="tbl"><thead><tr><th>Month</th><th class="num">Games</th><th class="num">SU</th><th class="num">ATS</th><th class="num">O/U</th></tr></thead><tbody>${mrows.map(r => `<tr><td>${r.m}</td><td class="num">${r.n}</td><td class="num">${r.su}</td><td class="num">${r.ats}</td><td class="num">${r.ou}</td></tr>`).join('')}</tbody></table></div></div>
       <div><h2>Latest</h2><div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>Pick</th><th class="num">Said</th><th>Result</th></tr></thead><tbody>${[...R].sort((a, b) => b.date < a.date ? -1 : 1).slice(0, 40).map(g => `<tr><td class="muted">${dayNum(g.date)}</td><td>${pill(g.away)} <span class="muted">@</span> ${pill(g.home)} <span class="muted num">${g.awayScore}-${g.homeScore}</span></td><td>${pill(g.pick)} <span class="muted">${fmtSp(g.pick === g.home ? g.spread : -g.spread)}</span></td><td class="num">${fmtPct(g.pick === g.home ? g.pHome : 1 - g.pHome)}</td><td><span class="res ${g.su === null ? 'push' : g.su ? 'won' : 'lost'}">${g.su === null ? 'tie' : g.su ? 'hit' : 'miss'}</span>${g.ats !== null ? ` <span class="res ${g.ats ? 'won' : 'lost'}">ATS</span>` : ''}</td></tr>`).join('')}</tbody></table></div></div></div>` : `<div class="empty"><b>Nothing graded yet</b>The record starts on opening night. Every morning the job publishes a number on each game; once the game is final it is graded here against that number, never against a replay.</div>`}
-    <h2 style="margin-top:22px">Backtest <small>held out: ${String(bt.holdoutSeasons).replace(/^(\d{4})-\1$/, '$1')} season, fitted on ${bt.fitSeasons} · log loss · straight up · spread error</small></h2>
+    <h2 style="margin-top:22px">Backtest <small>held out: ${fmtSeasons(bt.holdoutSeasons)}, fitted on ${fmtSeasons(bt.fitSeasons)} · log loss · straight up · spread error</small></h2>
     <div class="wrap"><table class="tbl"><thead><tr><th>Model</th><th>Holdout</th></tr></thead><tbody>
       <tr><td>Team Elo</td><td class="num">${f(bt.player.teamElo.holdout)}</td></tr>
       <tr><td>Player model, previous game's lineup (no injury report)</td><td class="num">${f(bt.player.naive.holdout)}</td></tr>
@@ -503,10 +521,11 @@ render.mine = function () {
   const ids = Object.keys(M.picks);
   const games = ids.map(id => ({ id, side: M.picks[id], g: gameById(id) })).filter(x => x.g).sort((a, b) => a.g.date < b.g.date ? 1 : -1);
   const graded = games.map(x => ({ su: x.g.homeScore === null ? undefined : winner(x.g) === null ? null : winner(x.g) === x.side }));
+  const isVoid = x => x.g.status === 'void';
   const r = rec(graded, 'su');
   $('#tab-mine').innerHTML = `<h2>My picks <small>select a team on any card; kept in this browser only</small></h2>
-    <div class="strip"><div class="stat"><b>${r.s}</b><span>Your record${r.pct !== null ? ' · ' + fmtPct(r.pct) : ''}</span></div><div class="stat"><b>${games.filter(x => x.g.homeScore === null).length}</b><span>Open</span></div><div class="stat"><b>${games.filter(x => x.side === pickOf(x.g)).length}/${games.length}</b><span>With the model</span></div></div>
-    ${games.length ? `<div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>You</th><th>Model</th><th>Result</th><th></th></tr></thead><tbody>${games.map(x => { const w = winner(x.g), fin = x.g.homeScore !== null; return `<tr><td class="muted">${dayNum(x.g.date)}</td><td>${pill(x.g.away)} <span class="muted">@</span> ${pill(x.g.home)}${fin ? ` <span class="muted num">${x.g.awayScore}-${x.g.homeScore}</span>` : ''}</td><td>${pill(x.side)}</td><td>${pickOf(x.g) ? `${pill(pickOf(x.g))} <span class="muted">${fmtPct(Math.max(x.g.model.pHome, 1 - x.g.model.pHome))}</span>` : '—'}</td><td>${fin ? `<span class="res ${w === null ? 'push' : w === x.side ? 'won' : 'lost'}">${w === null ? 'tie' : w === x.side ? 'won' : 'lost'}</span>` : '<span class="res open">open</span>'}</td><td>${fin ? '' : `<button class="btn ghost" data-un="${x.id}">remove</button>`}</td></tr>`; }).join('')}</tbody></table></div>` : `<div class="empty"><b>No picks yet</b>Open Tonight and tap a team badge.</div>`}`;
+    <div class="strip"><div class="stat"><b>${r.s}</b><span>Your record${r.pct !== null ? ' · ' + fmtPct(r.pct) : ''}</span></div><div class="stat"><b>${games.filter(x => x.g.homeScore === null && !isVoid(x)).length}</b><span>Open</span></div><div class="stat"><b>${games.filter(x => x.side === pickOf(x.g)).length}/${games.length}</b><span>With the model</span></div></div>
+    ${games.length ? `<div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>You</th><th>Model</th><th>Result</th><th></th></tr></thead><tbody>${games.map(x => { const w = winner(x.g), fin = x.g.homeScore !== null; return `<tr><td class="muted">${dayNum(x.g.date)}</td><td>${pill(x.g.away)} <span class="muted">@</span> ${pill(x.g.home)}${fin ? ` <span class="muted num">${x.g.awayScore}-${x.g.homeScore}</span>` : ''}</td><td>${pill(x.side)}</td><td>${pickOf(x.g) ? `${pill(pickOf(x.g))} <span class="muted">${fmtPct(Math.max(x.g.model.pHome, 1 - x.g.model.pHome))}</span>` : '—'}</td><td>${fin ? `<span class="res ${w === null ? 'push' : w === x.side ? 'won' : 'lost'}">${w === null ? 'tie' : w === x.side ? 'won' : 'lost'}</span>` : isVoid(x) ? '<span class="res void" title="Not played on its date: a postponed game">void</span>' : '<span class="res open">open</span>'}</td><td>${fin ? '' : `<button class="btn ghost" data-un="${x.id}">remove</button>`}</td></tr>`; }).join('')}</tbody></table></div>` : `<div class="empty"><b>No picks yet</b>Open Tonight and tap a team badge.</div>`}`;
   $$('#tab-mine [data-un]').forEach(b => b.onclick = () => { delete M.picks[b.dataset.un]; saveMine(); badges(); render.mine(); });
 };
 /* ---------- Parlay Builder: in the spirit of the NFL hub's ----------
@@ -577,7 +596,7 @@ function suggest(pool) {
       cur = next; i++;
     }
     if (cur.length < 2 || cur.length === start) continue;
-    tiers.push({ id, label, legs: cur.slice(), p: P(cur), dec: Dm(cur), added: cur.length - start });
+    tiers.push({ id, label, legs: cur.slice(), p: P(cur), dec: Dm(cur), added: cur.length - start, floor, short: P(cur) < floor });
   }
   /* value: a real market price and the model clear of it by VALUE_EDGE; its chance shown is the market's */
   const val = priced.filter(x => x.mp != null && x.px.est !== 'model' && x.conf - x.mp >= VALUE_EDGE).sort((a, b) => (b.conf - b.mp) - (a.conf - a.mp)).slice(0, VALUE_MAX);
@@ -598,12 +617,14 @@ function lockBet(type, xs, stake) {
 }
 const legOutcome = l => { const r = legResult(l); return r === 'open' ? 'pending' : r; };
 const betDec = b => b.legs.reduce((d, l) => d * amToDec(l.odds), 1);
-/* a tied or void leg drops out of a parlay; a tied straight bet is a push and the stake comes back */
+/* a tied or void leg drops out of a parlay; a straight bet on a tie is a push and on a game not played is void, and
+   the stake comes back */
 function gradeBet(b) {
   const o = b.legs.map(legOutcome);
   if (o.includes('lost')) return { st: 'lost', ret: 0 };
   if (o.includes('pending')) return { st: 'pending', ret: null };
-  if (o.every(x => x === 'push')) return { st: 'push', ret: b.stake };
+  if (o.every(x => x === 'void')) return { st: 'void', ret: b.stake };
+  if (o.every(x => x === 'push' || x === 'void')) return { st: 'push', ret: b.stake };
   return { st: 'won', ret: b.stake * b.legs.reduce((d, l, i) => d * (o[i] === 'won' ? amToDec(l.odds) : 1), 1) };
 }
 
@@ -623,12 +644,13 @@ function renderSuggest(day) {
   const { tiers, value, pool: n } = suggest(pool);
   let body;
   if (!day) body = `<p class="muted" style="margin:0">No games left to bet in the next ten days. They show up here as the schedule fills in.</p>`;
-  else if (!tiers.length) body = `<p class="muted" style="margin:0">${n < 2 ? 'A suggestion needs at least two picks in the chosen band with a price. Pick a wider band below, or another day.' : 'None of these picks combine into a parlay that clears 50%.'}</p>`;
+  else if (!tiers.length) body = `<p class="muted" style="margin:0">A suggestion needs at least two picks the model and the market agree on, in the chosen band and with a price. Pick a wider band below, or another day.</p>`;
   else body = `<div class="sugg-bet"><label for="suggStake">Bet $</label><input type="number" id="suggStake" step="1" min="0" value="${stake}"></div>
     <p class="muted" style="margin:0 0 12px;font-size:12px">From ${dayTitle(day).toLowerCase() === 'tonight' ? "tonight's" : `${dayTitle(day)}'s`} picks in the band chosen below, where the model and the market agree on the winner. Legs go in likeliest first, and a leg's chance is the market's with the book's cut removed where a line is up (the sharper number), the model's until then. The legs are different games, so a book multiplies the prices, and so does this.</p>
     <div class="sugg-grid">${tiers.map((t, i) => `<div class="sugg-tier ${t.id}">
       <div class="sugg-top"><span class="nm">${t.label}</span><span class="muted">${t.legs.length} legs</span><span class="grow"></span>${i ? `<span class="muted">+${t.added} leg${t.added === 1 ? '' : 's'}</span>` : ''}</div>
       <div class="sugg-nums"><div><b>${Math.round(t.p * 100)}%</b><span>chance all land</span></div><div><b>${fmtAm(decToAm(t.dec))}</b><span>odds</span></div><div><b>${money(stake * t.dec)}</b><span>returns on ${money(stake)}</span></div></div>
+      ${t.short ? `<p class="muted sugg-short" style="margin:0 0 8px;font-size:12px">Under ${t.label}'s ${Math.round(t.floor * 100)}% aim: ${t.id === 'safe' ? `the two likeliest picks today` : `the likeliest leg left, added`} land ${Math.round(t.p * 100)}% of the time together.</p>` : ''}
       <ul class="sugg-legs">${t.legs.map(x => `<li>${pill(x.pick)}<span class="g">${gameLabel(x.g)}</span><span class="od">${fmtPx(x.px)}</span><span class="pc muted">${Math.round(x.p * 100)}%</span></li>`).join('')}</ul>
       <div class="sugg-btns"><button class="btn hot" data-sugg-lock="${t.id}" ${stake > 0 ? '' : 'disabled'}>Lock in</button><button class="btn" data-sugg-load="${t.id}">Edit below</button></div></div>`).join('')}</div>`
     + (value ? `<div class="sugg-tier value" style="margin-top:12px">
@@ -681,7 +703,7 @@ function renderPlan(day) {
   const rows = (mode === 'straight' ? eligible : avail).map(x => { const id = x.g.id, locked = mode === 'straight' && inBuild.has(id), on = !locked && !off[id] && !!x.px;
     const stake = mode === 'straight' && on ? stakeOf(id) : 0; return { x, on, locked, stake, fixed: fixed[id] != null, profit: stake > 0 && x.px ? stake * (amToDec(x.px.am) - 1) : null }; });
   const SORTS = { tip: (a, b) => (a.x.g.tip || '').localeCompare(b.x.g.tip || ''), pick: (a, b) => a.x.pick.localeCompare(b.x.pick), conf: (a, b) => a.x.conf - b.x.conf,
-    vegas: (a, b) => (a.x.mp ?? -1) - (b.x.mp ?? -1), odds: (a, b) => (a.x.px ? amToDec(a.x.px.am) : -1) - (b.x.px ? amToDec(b.x.px.am) : -1), stake: (a, b) => a.stake - b.stake, profit: (a, b) => (a.profit ?? -1) - (b.profit ?? -1) };
+    vegas: (a, b) => (a.x.mp == null ? -1 : Math.max(a.x.mp, 1 - a.x.mp)) - (b.x.mp == null ? -1 : Math.max(b.x.mp, 1 - b.x.mp)),  /* the favourite's chance, as the column shows */ odds: (a, b) => (a.x.px ? amToDec(a.x.px.am) : -1) - (b.x.px ? amToDec(b.x.px.am) : -1), stake: (a, b) => a.stake - b.stake, profit: (a, b) => (a.profit ?? -1) - (b.profit ?? -1) };
   const sk = SORTS[B.sort] ? B.sort : 'tip'; rows.sort(SORTS[sk]); if (B.sortDir === 'desc') rows.reverse();
   const sh = (k, l, num) => `<th class="srt${num ? ' num' : ''}${sk === k ? ' on' : ''}" data-sort="${k}">${l}${sk === k ? (B.sortDir === 'desc' ? ' ▼' : ' ▲') : ''}</th>`;
   const allOn = chosen.length === avail.length && avail.length > 0, noneOn = chosen.length === 0;
@@ -743,8 +765,9 @@ function renderBuild() {
   if (!bets.length) { el.innerHTML = `<h2>Bet Build</h2><p class="muted" style="margin:0">Bets you lock in land here and grade themselves as the games go final. They live in this browser only.</p>`; return; }
   const settled = bets.filter(x => x.gr.st !== 'pending'), staked = bets.reduce((t, x) => t + x.b.stake, 0);
   const back = settled.reduce((t, x) => t + x.gr.ret, 0), risked = settled.reduce((t, x) => t + x.b.stake, 0), net = back - risked;
-  const wl = `${settled.filter(x => x.gr.st === 'won').length}-${settled.filter(x => x.gr.st === 'lost').length}${settled.some(x => x.gr.st === 'push') ? '-' + settled.filter(x => x.gr.st === 'push').length : ''}`;
-  const legTxt = l => { const g = gameById(l.id); return `${pill(l.side)} <span class="muted">${g ? gameLabel(g) : l.id}${l.kind && l.kind !== 'ml' ? ' · ' + esc(legLabel(l)) : ''} · ${fmtAm(l.odds)}</span>`; };
+  const back0 = x => x.gr.st === 'push' || x.gr.st === 'void';
+  const wl = `${settled.filter(x => x.gr.st === 'won').length}-${settled.filter(x => x.gr.st === 'lost').length}${settled.some(back0) ? '-' + settled.filter(back0).length : ''}`;
+  const legTxt = l => { const g = gameById(l.id); return `${pill(l.side)} <span class="muted">${g ? gameLabel(g) : l.id}${l.kind && l.kind !== 'ml' ? ' · ' + esc(legLabel(l)) : ''} · ${fmtAm(l.odds)}${l.est ? '<sup title="No moneyline was published when this was locked in: the price is an estimate, and a book\'s may differ">est</sup>' : ''}</span>`; };
   const rows = bets.slice().reverse().map(({ b, gr, dec }) => `<tr><td class="muted">${b.day ? dayNum(b.day) : '–'}</td><td>${b.type === 'parlay' ? `Parlay · ${b.legs.length}` : 'Straight'}</td>
     <td>${b.legs.map(l => `<div class="bl">${legTxt(l)} <span class="res ${legOutcome(l) === 'pending' ? 'open' : legOutcome(l)}">${legOutcome(l) === 'pending' ? 'open' : legOutcome(l)}</span></div>`).join('')}</td>
     <td class="num">${fmtAm(decToAm(dec))}</td><td class="num">${money(b.stake)}</td><td class="num">${money(b.stake * dec - b.stake)}</td>
@@ -771,7 +794,15 @@ render.data = function () {
   el.innerHTML = `<h2>Data <small>the published file and this browser's own</small></h2><div class="bar"><button class="btn" id="exp">Save backup of my picks and bets</button><label class="btn ghost">Import backup <input type="file" id="imp" accept="application/json" hidden></label><span class="grow"></span><span class="muted">state.json ${(JSON.stringify(S).length / 1024).toFixed(0)} KB · generated ${S.generated}</span></div>
     <pre style="background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;overflow:auto;max-height:60vh;font-size:12px">${esc(JSON.stringify({ season: S.season, today: S.today, asOf: S.asOf, slate: S.slate.length, record: S.record.length, params: S.params, backtest: S.backtest }, null, 1))}</pre>`;
   $('#exp').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(M)], { type: 'application/json' })); a.download = `nba-hub-backup-${S.today}.json`; a.click(); };
-  $('#imp').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { try { M = normMine(JSON.parse(t)); saveMine(); badges(); toast('Backup restored'); } catch (x) { toast('Not a backup file'); } }); };
+  /* only a file this page saved: an object with picks as an object of team codes, a build as a list of bets with
+     legs, and nothing else in their place. Anything else is refused and the browser's own picks and bets stay */
+  const isBackup = v => v && typeof v === 'object' && !Array.isArray(v) && ('picks' in v || 'build' in v || 'tickets' in v)
+    && (v.picks === undefined || (v.picks && typeof v.picks === 'object' && !Array.isArray(v.picks) && Object.values(v.picks).every(x => typeof x === 'string')))
+    && (v.build === undefined || (Array.isArray(v.build) && v.build.every(b => b && typeof b === 'object' && Array.isArray(b.legs) && b.legs.every(l => l && typeof l.id === 'string' && typeof l.side === 'string') && Number.isFinite(+b.stake))))
+    && (v.bank === undefined || (v.bank && typeof v.bank === 'object' && !Array.isArray(v.bank)));
+  $('#imp').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { let v; try { v = JSON.parse(t); } catch (x) { v = null; }
+    if (!isBackup(v)) return toast('Not a backup file: nothing changed');
+    M = normMine(v); saveMine(); badges(); toast('Backup restored'); }); };
 };
 /* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's.
    It moves at midnight Eastern while the page is open (watch() below) */

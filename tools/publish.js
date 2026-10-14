@@ -29,17 +29,26 @@ function main() {
   const games = L.readGames();
   const preds = Object.fromEntries(csv('predictions.csv').map(r => [r.game_id, r]));
   const inj = fs.existsSync(path.join(DATA, 'injuries.json')) ? JSON.parse(fs.readFileSync(path.join(DATA, 'injuries.json'), 'utf8')) : { teams: {} };
-  const today = L.etDate(new Date());
-  const season = L.seasonOf(today);
+  const now = new Date(), nowIso = now.toISOString().slice(0, 16) + 'Z';
+  const today = L.etDate(now);
   const from = L.addDays(today, -1), to = L.addDays(today, 10);
+  /* the season in play is the latest one with a game on the slate's horizon, not the calendar's: on July 1 the
+     calendar turns to next season with no game in it, and the record, the finals visitors' bets grade from and the
+     Record tab would all go blank for the summer. It turns when the new schedule's first game is ten days off */
+  const season = Math.max(...games.filter(g => g.date <= to).map(g => +g.season), 0) || L.seasonOf(today);
 
   const slate = games.filter(g => g.date >= from && g.date <= to).map(g => {
     const u = players.upcoming[g.game_id] || null, t = model.upcoming[g.game_id] || null, p = preds[g.game_id] || null;
+    /* once a game has tipped (by status, or by its tip time while ESPN still calls it scheduled), its numbers are the
+       ones logged before tip-off, which the record grades: a run landing during the game would re-price it on news
+       from after the tip. The lineups shown stay the run's */
+    const started = g.status !== 'scheduled' || (g.tip && g.tip <= nowIso);
+    const frozen = started && p ? { pHome: +p.pHome, spread: +p.spread, total: +p.total, pace: u ? u.pace : undefined, home: u ? u.home : undefined, away: u ? u.away : undefined } : null;
     return { id: g.game_id, date: g.date, tip: g.tip || '', type: g.type, away: g.away, home: g.home, neutral: +g.neutral === 1, status: g.status,
       awayScore: num(g.away_score), homeScore: num(g.home_score), line: num(g.home_line), totalLine: num(g.total),
       ml: g.home_ml || g.away_ml ? { home: num(g.home_ml), away: num(g.away_ml) } : null,
-      model: u ? { pHome: u.pHome, spread: u.spread, total: u.total, pace: u.pace, home: u.home, away: u.away }
-        : p ? { pHome: +p.pHome, spread: +p.spread, total: +p.total } : null,
+      model: frozen || (u ? { pHome: u.pHome, spread: u.spread, total: u.total, pace: u.pace, home: u.home, away: u.away }
+        : p ? { pHome: +p.pHome, spread: +p.spread, total: +p.total } : null),
       team: t ? { pHome: t.pHome, spread: t.spread } : p && p.team_pHome ? { pHome: +p.team_pHome } : null,
       published: p ? { pHome: +p.pHome, spread: +p.spread, total: +p.total, line: num(p.home_line), totalLine: num(p.total_line), at: p.logged } : null };
   });
@@ -52,9 +61,10 @@ function main() {
     const su = mov === 0 ? null : (pick === g.home) === (mov > 0);
     const line = num(p.home_line);
     let ats = null;                                   // the model's side against the line, from the home side's spread
-    if (line !== null) { const modelHome = +p.spread < line; const cover = mov + line; ats = cover === 0 ? null : modelHome === (cover > 0); }
+    /* a model number equal to the line takes no side, so it is not graded either way */
+    if (line !== null && +p.spread !== line) { const modelHome = +p.spread < line; const cover = mov + line; ats = cover === 0 ? null : modelHome === (cover > 0); }
     const tl = num(p.total_line); let ou = null;
-    if (tl !== null) { const tot = +g.home_score + +g.away_score; ou = tot === tl ? null : (+p.total > tl) === (tot > tl); }
+    if (tl !== null && +p.total !== tl) { const tot = +g.home_score + +g.away_score; ou = tot === tl ? null : (+p.total > tl) === (tot > tl); }
     return { id: g.game_id, date: g.date, away: g.away, home: g.home, awayScore: +g.away_score, homeScore: +g.home_score, pHome: +p.pHome, spread: +p.spread, total: +p.total,
       line, totalLine: tl, pick, su, ats, ou, teamPick: p.team_pHome ? (+p.team_pHome >= 0.5 ? g.home : g.away) : null };
   });
@@ -65,18 +75,29 @@ function main() {
     teams[t] = { strength: pt.strength, offence: pt.offence, defence: pt.defence, coach: pt.coach, coachElo: pt.coachElo, pace: pt.pace, elo: mt.elo, out: pt.out || [],
       injuries: (inj.teams[t] || []).map(x => ({ id: x.id, name: x.name, pos: x.pos, status: x.status, detail: x.detail, returns: x.returns || '' })) };
   }
-  const plist = Object.entries(players.players).map(([id, p]) => ({ id, ...p })).sort((a, b) => b.elo - a.elo);
-  const coaches = Object.entries(players.coaches).map(([name, c]) => ({ name, ...c })).sort((a, b) => b.elo - a.elo);
+  /* a player's club is the one whose ESPN roster lists him today; the model only knows the last club he played for,
+     which is last season's for everyone who moved over the summer. With the rosters read, a player on none is FA */
+  const ros = fs.existsSync(path.join(DATA, 'rosters_espn.json')) ? JSON.parse(fs.readFileSync(path.join(DATA, 'rosters_espn.json'), 'utf8')) : { teams: {} };
+  const clubOf = {}; for (const [t, list] of Object.entries(ros.teams || {})) for (const a of list || []) if (a.id) clubOf[a.id] = t;
+  const rostersRead = Object.values(ros.teams || {}).filter(l => l && l.length >= 10).length >= 25;
+  const plist = Object.entries(players.players).map(([id, p]) => ({ id, ...p, team: clubOf[id] || (rostersRead ? 'FA' : p.team) })).sort((a, b) => b.elo - a.elo);
+  /* a coach's club is shown only while he coaches it; a club's new coach, with no game rated yet, is listed at 0 */
+  const current = Object.fromEntries(L.TEAMS.map(t => [t, (players.teams[t] || {}).coach]).filter(([, c]) => c));
+  const coachedBy = Object.fromEntries(Object.entries(current).map(([t, c]) => [c, t]));
+  const coaches = Object.entries(players.coaches).map(([name, c]) => ({ name, ...c, team: coachedBy[name] || '' }));
+  for (const [t, name] of Object.entries(current)) if (!players.coaches[name]) coaches.push({ name, team: t, elo: 0, games: 0 });
+  coaches.sort((a, b) => b.elo - a.elo);
   const names = {};
   for (const p of plist) names[p.id] = p.name;
 
   /* opening night: the first regular-season game on or after today, once the schedule shows it */
   const opener = games.filter(g => g.type === 'REG' && g.date >= today).map(g => g.date).sort()[0] || null;
-  /* every final of the season the slate is in, preseason included: a visitor's pick or locked bet grades
-     from this once its game has left the ten-day slate. The id carries the date and teams. */
+  /* every final of the season in play and the one before it, preseason included: a visitor's pick or locked bet
+     grades from this once its game has left the ten-day slate, through the summer and the new season's turn. The
+     id carries the date and teams */
   const finals = {};
-  for (const g of games) if (g.status === 'final' && +g.season === L.seasonOf(today)) finals[g.game_id] = [+g.away_score, +g.home_score];
-  const state = { season, opening: opener, finals, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
+  for (const g of games) if (g.status === 'final' && (+g.season === season || +g.season === season - 1)) finals[g.game_id] = [+g.away_score, +g.home_score];
+  const state = { season, opening: opener, finals, injuriesAsOf: inj.date || null, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
     slate, record, teams, players: plist, coaches, names,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };

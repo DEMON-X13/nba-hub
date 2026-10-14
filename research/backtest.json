@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-14T04:03Z",
+ "generated": "2026-10-14T04:05Z",
  "seasons": {
   "2024:known": {
    "season": 2024,
@@ -207,26 +207,26 @@
    "season": 2026,
    "lineup": "known",
    "games": 1322,
-   "priced": 1315,
+   "priced": 1318,
    "days": 210,
    "straightUp": {
-    "model": 0.6951,
-    "market": 0.6882
+    "model": 0.6942,
+    "market": 0.6874
    },
    "logloss": {
-    "model": 0.5903,
-    "market": 0.5748
+    "model": 0.5911,
+    "market": 0.5757
    },
    "brier": {
-    "model": 0.2021,
-    "market": 0.1966
+    "model": 0.2025,
+    "market": 0.197
    },
    "modelPicks": {
     "withMarket": {
-     "n": 1168,
-     "won": 836,
-     "rate": 0.7158,
-     "units": -31.16
+     "n": 1171,
+     "won": 837,
+     "rate": 0.7148,
+     "units": -32.98
     },
     "againstMarket": {
      "n": 144,
@@ -243,29 +243,33 @@
    },
    "providers": {
     "ESPN BET": {
-     "games": 254,
-     "straightUnits": 9.39
+     "games": 257,
+     "straightUnits": 7.57
     },
     "DraftKings": {
-     "games": 1061,
-     "straightUnits": -12.19
+     "games": 1060,
+     "straightUnits": -11.19
+    },
+    "Draft Kings": {
+     "games": 1,
+     "straightUnits": -1
     }
    },
    "ats": {
-    "n": 1315,
-    "won": 646,
-    "rate": 0.4913
+    "n": 1318,
+    "won": 649,
+    "rate": 0.4924
    },
    "overUnder": {
-    "n": 1314,
-    "won": 655,
-    "rate": 0.4985
+    "n": 1317,
+    "won": 656,
+    "rate": 0.4981
    },
    "straight": {
-    "bets": 1315,
-    "won": 914,
-    "units": -2.81,
-    "roi": -0.002
+    "bets": 1318,
+    "won": 915,
+    "units": -4.62,
+    "roi": -0.004
    },
    "parlays": {
     "value": {
@@ -279,30 +283,30 @@
     },
     "safe": {
      "parlays": 180,
-     "won": 115,
-     "expMarket": 106.1,
+     "won": 114,
+     "expMarket": 106.2,
      "expModel": 100.6,
-     "units": -6.48,
+     "units": -8.19,
      "avgLegs": 2.39,
-     "roi": -0.036
+     "roi": -0.045
     },
     "med": {
      "parlays": 155,
-     "won": 67,
+     "won": 66,
      "expMarket": 58.5,
-     "expModel": 54.5,
-     "units": -6.51,
-     "avgLegs": 3.85,
-     "roi": -0.042
+     "expModel": 54.3,
+     "units": -8.86,
+     "avgLegs": 3.86,
+     "roi": -0.057
     },
     "aggr": {
      "parlays": 125,
-     "won": 37,
-     "expMarket": 25.6,
-     "expModel": 24,
-     "units": 19.36,
-     "avgLegs": 5.53,
-     "roi": 0.155
+     "won": 36,
+     "expMarket": 25.5,
+     "expModel": 23.8,
+     "units": 16,
+     "avgLegs": 5.54,
+     "roi": 0.128
     }
    }
   },
@@ -512,26 +516,26 @@
    "season": 2026,
    "lineup": "naive",
    "games": 1322,
-   "priced": 1315,
+   "priced": 1318,
    "days": 210,
    "straightUp": {
-    "model": 0.6814,
-    "market": 0.6882
+    "model": 0.6806,
+    "market": 0.6874
    },
    "logloss": {
-    "model": 0.6009,
-    "market": 0.5748
+    "model": 0.602,
+    "market": 0.5757
    },
    "brier": {
-    "model": 0.2069,
-    "market": 0.1966
+    "model": 0.2073,
+    "market": 0.197
    },
    "modelPicks": {
     "withMarket": {
-     "n": 1126,
-     "won": 806,
-     "rate": 0.7158,
-     "units": -33.41
+     "n": 1129,
+     "won": 807,
+     "rate": 0.7148,
+     "units": -35.23
     },
     "againstMarket": {
      "n": 186,
@@ -548,73 +552,76 @@
    },
    "providers": {
     "ESPN BET": {
-     "games": 254,
-     "straightUnits": 0.7
+     "games": 257,
+     "straightUnits": -1.12
     },
     "DraftKings": {
-     "games": 1061,
-     "straightUnits": -18.11
+     "games": 1060,
+     "straightUnits": -17.11
+    },
+    "Draft Kings": {
+     "games": 1,
+     "straightUnits": -1
     }
    },
    "ats": {
-    "n": 1315,
-    "won": 653,
-    "rate": 0.4966
+    "n": 1318,
+    "won": 655,
+    "rate": 0.497
    },
    "overUnder": {
-    "n": 1314,
-    "won": 655,
-    "rate": 0.4985
+    "n": 1317,
+    "won": 656,
+    "rate": 0.4981
    },
    "straight": {
-    "bets": 1315,
-    "won": 896,
-    "units": -17.41,
-    "roi": -0.013
+    "bets": 1318,
+    "won": 897,
+    "units": -19.23,
+    "roi": -0.015
    },
    "parlays": {
     "value": {
      "parlays": 99,
      "won": 19,
-     "expMarket": 23.6,
-     "expModel": 38.4,
+     "expMarket": 23.4,
+     "expModel": 38.3,
      "units": -31.37,
-     "avgLegs": 2.79,
+     "avgLegs": 2.8,
      "roi": -0.317
     },
     "safe": {
      "parlays": 179,
-     "won": 112,
-     "expMarket": 105.5,
+     "won": 111,
+     "expMarket": 105.6,
      "expModel": 100.4,
-     "units": -10,
+     "units": -11.71,
      "avgLegs": 2.39,
-     "roi": -0.056
+     "roi": -0.065
     },
     "med": {
      "parlays": 151,
-     "won": 67,
+     "won": 66,
      "expMarket": 56.9,
-     "expModel": 53.1,
-     "units": 1.41,
+     "expModel": 52.9,
+     "units": -0.94,
      "avgLegs": 3.85,
-     "roi": 0.009
+     "roi": -0.006
     },
     "aggr": {
      "parlays": 124,
-     "won": 35,
-     "expMarket": 25.6,
-     "expModel": 24.1,
-     "units": 10.58,
-     "avgLegs": 5.48,
-     "roi": 0.085
+     "won": 34,
+     "expMarket": 25.5,
+     "expModel": 24,
+     "units": 7.21,
+     "avgLegs": 5.49,
+     "roi": 0.058
     }
    }
   }
  },
  "notes": [
   "4 games have no closing moneylines in data/odds_hist.csv and are left out: 2026_20260430_DEN_MIN 2026_20260507_CLE_DET 2026_20260513_CLE_DET 2026_20260523_NYK_CLE.",
-  "3 games carry only in-game prices (a live book) and are left out: 2026_20251124_CHI_NOP 2026_20251124_DET_IND 2026_20251124_MIN_SAC.",
   "6 games have no usable spread (missing, or its favourite not the moneyline's) and are left out of ATS only: 2024_20231129_PHI_NOP 2024_20240402_LAC_SAC 2024_20240402_OKC_PHI 2024_20240422_ORL_CLE 2024_20240422_PHI_NYK 2025_20241104_UTA_CHI.",
   "2 games have no usable total and are left out of the over/under only: 2024_20240422_PHI_NYK 2026_20251124_POR_MIL.",
   "6 finals the model did not score (a side's box score is missing) are not counted: 2024_20231109_ORL_ATL 2024_20231207_LAL_NOP 2024_20231207_MIL_IND 2024_20240111_CLE_BKN 2024_20240317_SAS_BKN 2025_20241217_OKC_MIL.",

@@ -54,18 +54,25 @@ function situ(P, dates, date, isHome, team, neutral) {
 /* Replay the table in date order. Returns ratings after the last final and, when collect is set, one
    record per final game with the pre-game numbers, plus the model's numbers for games not yet final. */
 function replay(P, games, collect) {
-  const elo = {}, dates = {}, seasonOf = {}, played = {}, lastDate = {};
+  /* ahead: the dates of a club's games still to play, so a game two days out sees tomorrow's back-to-back; a final's
+     rest terms read the finals alone */
+  const elo = {}, dates = {}, ahead = {}, seasonOf = {}, played = {}, lastDate = {};
   const recs = [], upcoming = {};
   for (const g of games) {
     for (const t of [g.home, g.away]) {
-      if (elo[t] === undefined) { elo[t] = MEAN; dates[t] = []; played[t] = 0; }
-      if (seasonOf[t] !== g.season) { seasonOf[t] = g.season; elo[t] = P.carry * elo[t] + (1 - P.carry) * MEAN; dates[t] = []; played[t] = 0; }
+      if (elo[t] === undefined) { elo[t] = MEAN; dates[t] = []; ahead[t] = []; played[t] = 0; }
+      if (seasonOf[t] !== g.season) { seasonOf[t] = g.season; elo[t] = P.carry * elo[t] + (1 - P.carry) * MEAN; dates[t] = []; ahead[t] = []; played[t] = 0; }
     }
     const neutral = g.neutral === 1 || g.neutral === '1';
-    const rh = elo[g.home] + situ(P, dates[g.home], g.date, true, g.home, neutral);
-    const ra = elo[g.away] + situ(P, dates[g.away], g.date, false, g.away, neutral);
+    const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).slice(-4);
+    const rh = elo[g.home] + situ(P, sd(g.home), g.date, true, g.home, neutral);
+    const ra = elo[g.away] + situ(P, sd(g.away), g.date, false, g.away, neutral);
     const d = rh - ra, pHome = prob(d);
-    if (g.status !== 'final') { upcoming[g.game_id] = { pHome: +pHome.toFixed(4), spread: +(-d / P.scale).toFixed(1), eloHome: +elo[g.home].toFixed(1), eloAway: +elo[g.away].toFixed(1) }; continue; }
+    if (g.status !== 'final') {
+      upcoming[g.game_id] = { pHome: +pHome.toFixed(4), spread: +(-d / P.scale).toFixed(1), eloHome: +elo[g.home].toFixed(1), eloAway: +elo[g.away].toFixed(1) };
+      if (g.type !== 'PRE') for (const t of [g.home, g.away]) ahead[t].push(g.date);
+      continue;
+    }
     const hs = +g.home_score, as = +g.away_score, mov = hs - as;
     if (collect) recs.push({ season: g.season, d, pHome, mov, home: g.home, away: g.away, date: g.date });
     const S = mov > 0 ? 1 : 0;

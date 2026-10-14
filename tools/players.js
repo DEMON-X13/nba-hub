@@ -18,8 +18,9 @@
  * Priors: a player's first rating is his last FiveThirtyEight RAPTOR (2020-2022, by name); a player
  * with none starts as a rookie, below average. Ratings carry part way toward zero each season.
  *
- * Tonight's strength uses projected minutes: each available player's average over his last ten
- * appearances, scaled to 240, with the injury report's Out and Doubtful players removed. The report
+ * Tonight's strength uses projected minutes: each available player's average over his last eight
+ * appearances, filled to 240 in rotation order, with the injury report's absences removed by their return
+ * dates (makeLiveLineup says the rule). The report
  * shows the model three ways on the holdout: with the actual minutes (what perfect lineup knowledge
  * is worth), with who played and projected minutes (what a good injury report gets), and with the
  * previous game's lineup (no report at all), beside the team Elo on the same games.
@@ -127,10 +128,14 @@ function loadRaptor() {
 /* a new season's minutes start from a player's last five regular-season games: a playoff run's 42-48 minutes in a
    seven-man rotation would price a contender's opening week as six players and no bench */
 const newSeasonMins = p => (p.reg && p.reg.length ? p.reg : p.mins).slice(-5);
+/* opening weeks run faster than the season before: the first three weeks' pace over the previous regular season's
+   was +1.6, +1.2 and +1.2 possessions in 2022-23 to 2024-25 (measured before the held-out 2025-26, which ran +1.9) */
+const EARLY_PACE = 1.3;
 function replay(P, ctx, mode, collect) {
   const { games, boxes, teamStats, coachOf, raptor, situP } = ctx;
-  const players = {}, coaches = {}, dates = {}, seasonOf = {}, pace = {}, lastLineup = {};
+  const players = {}, coaches = {}, dates = {}, ahead = {}, seasonOf = {}, pace = {}, lastLineup = {};   // ahead: games still to play (elo.js)
   let lg = 112, lgDay = 112, lgDate = '';         // lgDay: the league's efficiency as the day began, for scoring a final
+  let lgPace = 99;                                  // the league's regular-season pace, possessions per 48
   const recs = [], upcoming = {};
   const getP = (r, season) => {
     let p = players[r.player_id];
@@ -177,24 +182,29 @@ function replay(P, ctx, mode, collect) {
 
   for (const g of games) {
     if (g.date !== lgDate) { lgDay = lg; lgDate = g.date; }
+    /* a club's pace starts each season at the league's regular-season pace plus the opening weeks' bump: carried
+       over, it was the club's last ten games, a playoff run's slow games included, so a new season's totals came out
+       5 to 7 points under the actual totals and the posted lines */
     for (const t of [g.home, g.away]) {
-      if (seasonOf[t] !== g.season) { seasonOf[t] = g.season; dates[t] = []; }
       if (pace[t] === undefined) pace[t] = 99;
+      if (seasonOf[t] !== g.season) { if (seasonOf[t] !== undefined) pace[t] = lgPace + EARLY_PACE; seasonOf[t] = g.season; dates[t] = []; ahead[t] = []; }
     }
     const neutral = g.neutral === 1;
-    const sh = E.situ(situP, dates[g.home], g.date, true, g.home, neutral), sa = E.situ(situP, dates[g.away], g.date, false, g.away, neutral);
+    const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).slice(-4);
+    const sh = E.situ(situP, sd(g.home), g.date, true, g.home, neutral), sa = E.situ(situP, sd(g.away), g.date, false, g.away, neutral);
     const ch = getC(coachOf(g.season, g.home, g.date), g.season), ca = getC(coachOf(g.season, g.away, g.date), g.season);
     ch.team = g.home; ca.team = g.away;
     const box = boxes[g.game_id];
     const expPace = (pace[g.home] + pace[g.away]) / 2;
 
     if (g.status !== 'final') {
+      if (g.type !== 'PRE') for (const t of [g.home, g.away]) ahead[t].push(g.date);   // its rest terms are read above
       if (!collect) continue;
       /* the first game of a new season rolls every player over once, as a final would have done one by one:
          carried part way toward zero, minutes history trimmed. Without it the opening slate would be priced on
          last June's ratings; done before any lineup is chosen, so a card and the Teams tab see the same players */
       for (const p of Object.values(players)) if (p.season < g.season) { p.o *= P.carryP; p.d *= P.carryP; p.season = g.season; p.mins = newSeasonMins(p); }
-      const live = ctx.liveLineup(g, players, projected);
+      const live = ctx.liveLineup(g, players, projected, getP);
       const H = strength(live.home.list), A = strength(live.away.list);
       const own = (ch.c + H.O + H.D + sh) - (ca.c + A.O + A.D + sa);
       const td = ctx.teamDiff[g.game_id];
@@ -245,6 +255,7 @@ function replay(P, ctx, mode, collect) {
     if (P.shrink) for (const rows of [box[g.home], box[g.away]]) for (const r of rows) { if (r.min <= 0) continue; const p = getP(r, g.season); p.o += P.shrink * (p.o0 - p.o); p.d += P.shrink * (p.d0 - p.d); }
     lg += 0.005 * ((oh + oa) / 2 - lg);
     pace[g.home] += 0.1 * (th.poss * 240 / th.min - pace[g.home]); pace[g.away] += 0.1 * (ta.poss * 240 / ta.min - pace[g.away]);
+    if (g.type !== 'POST') lgPace += 0.005 * ((th.poss * 240 / th.min + ta.poss * 240 / ta.min) / 2 - lgPace);
     for (const [t, rows] of [[g.home, box[g.home]], [g.away, box[g.away]]]) {
       const lineup = [];
       for (const r of rows) {
@@ -256,7 +267,7 @@ function replay(P, ctx, mode, collect) {
       dates[t].push(g.date); if (dates[t].length > 4) dates[t].shift();
     }
   }
-  return { players, coaches, pace, lg, recs, upcoming };
+  return { players, coaches, pace, lg, recs, upcoming, getP };
 }
 function sideReport(team, S, coach, live) {
   return { team, strength: +(E.MEAN + coach.c + S.O + S.D).toFixed(1), offence: +S.O.toFixed(1), defence: +S.D.toFixed(1), coach: { name: live.coach || '', elo: +coach.c.toFixed(1) },
@@ -276,24 +287,38 @@ function score(recs, from, to, scale) {
   return n ? { games: n, logloss: +(ll / n).toFixed(5), acc: +(right / n).toFixed(4), mae: +(ae / n).toFixed(2), totalMae: +(at / n).toFixed(2) } : { games: 0 };
 }
 
-/* who is available tonight, with projected minutes */
+/* who is available for a game, with projected minutes.
+   ESPN's NBA report says only Out or Day-To-Day, with a return date, so a listed player is out for a game before his
+   return date, and an Out player for the report's own day whatever it says; with no return date, Out is out. A
+   suspension is out. A player on two clubs' rosters (one kept from an earlier read, see fetch_box.js) belongs to the
+   later read. A player on a roster with no game on record yet (a rookie, a signing from abroad) plays at his prior,
+   the rookie rating or RAPTOR's, for DEBUT_MIN minutes, as the backtested lineups do */
+const DEBUT_MIN = 12;
 function makeLiveLineup(ctx) {
   const inj = fs.existsSync(path.join(DATA, 'injuries.json')) ? JSON.parse(fs.readFileSync(path.join(DATA, 'injuries.json'), 'utf8')) : { teams: {} };
   const ros = fs.existsSync(path.join(DATA, 'rosters_espn.json')) ? JSON.parse(fs.readFileSync(path.join(DATA, 'rosters_espn.json'), 'utf8')) : null;
-  const OUT_RE = /^(out|doubtful|suspended|suspension)/i;
-  return (g, players, projected) => {
+  const OUT = /^out/i, SUSP = /^(suspended|suspension)/i;
+  const owner = {}, named = {};
+  if (ros) { const at = t => (ros.asOf && ros.asOf[t]) || ros.date || '';
+    for (const [t, list] of Object.entries(ros.teams || {})) for (const a of list || []) { if (!a.id) continue; named[a.id] = a; if (owner[a.id] === undefined || at(t) > at(owner[a.id])) owner[a.id] = t; } }
+  return (g, players, projected, getP) => {
+    const isOut = x => { const s = x.status || ''; if (SUSP.test(s)) return true;
+      return x.returns ? g.date < x.returns || (OUT.test(s) && g.date <= (inj.date || '')) : OUT.test(s); };
     const side = team => {
-      const status = {}; for (const x of (inj.teams[team] || [])) status[x.id] = x.status;
+      const status = {}; for (const x of (inj.teams[team] || [])) if (isOut(x)) status[x.id] = x.status;
       let ids;
-      if (ros && ros.teams[team] && ros.teams[team].length >= 10) ids = ros.teams[team].map(a => a.id);
+      if (ros && ros.teams[team] && ros.teams[team].length >= 10) ids = ros.teams[team].map(a => a.id).filter(id => owner[id] === team);
       else ids = Object.keys(players).filter(id => players[id].team === team);
       const list = [], out = [];
       for (const id of ids) {
-        const p = players[id];
-        if (!p) continue;                                           // no box score on record: not projected to play
+        let p = players[id];
+        if (!p && getP && named[id]) p = getP({ player_id: id, name: named[id].name, pos: named[id].pos, team }, g.season);
+        if (!p) continue;
         p.id = id;
-        const m = p.mins.length ? projected(p, false) : 0;        // a player with no minutes on record is not projected to play
-        if (OUT_RE.test(status[id] || '')) { if (m) out.push({ p, status: status[id], min: m }); continue; }
+        /* a player with minutes is projected from them; one with no game yet gets DEBUT_MIN; one on record who has
+           never played minutes is not projected to play */
+        const m = p.mins.length ? projected(p, false) : p.n === 0 ? DEBUT_MIN : 0;
+        if (status[id]) { if (m) out.push({ p, status: status[id], min: m }); continue; }
         if (m) list.push([p, m]);
       }
       list.sort((a, b) => b[1] - a[1]);
@@ -416,11 +441,11 @@ function main() {
   for (const t of L.TEAMS) {
     const today = L.etDate(new Date());
     const g = { season: L.seasonOf(today), home: t, away: t, date: today, neutral: 0 };   // today's coach and roster, the season the slate is in
-    const live = ctx.liveLineup(g, R.players, (p) => p.mins.length ? mean(p.mins.slice(-P.minGames)) : 0);
+    const live = ctx.liveLineup(g, R.players, (p) => p.mins.length ? mean(p.mins.slice(-P.minGames)) : 0, R.getP);
     const tot = live.home.list.reduce((s, x) => s + x[1], 0) || 1;
     let O = 0, D = 0; for (const [p, m] of live.home.list) { O += m / tot * 5 * p.o; D += m / tot * 5 * p.d; }
     const coach = R.coaches[live.home.coach] || { c: 0 };
-    teams[t] = { strength: +(E.MEAN + coach.c + O + D).toFixed(1), offence: +O.toFixed(1), defence: +D.toFixed(1), coach: live.home.coach, coachElo: +coach.c.toFixed(1), pace: +R.pace[t].toFixed(1),
+    teams[t] = { strength: +(E.MEAN + coach.c + O + D).toFixed(1), offence: +O.toFixed(1), defence: +D.toFixed(1), coach: live.home.coach, coachElo: +coach.c.toFixed(1), coachGames: coach.n || 0, pace: +R.pace[t].toFixed(1),
       out: live.home.out.map(x => `${x.p.name} (${x.status})`) };
   }
   const out = { name: 'NBA player model', params: P, fitSeasons: `${WARM_TO + 1}-${FIT_TO}`, holdoutSeasons: `${FIT_TO + 1}-${season}`, report, leagueEfficiency: +R.lg.toFixed(1),

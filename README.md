@@ -93,11 +93,19 @@ with none starts as a rookie, below average. Ratings carry part way toward zero 
 
 Tonight's strength uses projected minutes: each available player's average over his last eight
 appearances, filled into the game's 240 minutes in rotation order (starters keep their workload, the
-end of a long roster drops off), with the injury report's Out and Doubtful players removed and the
-roster from the roster feed. The first game of a new season rolls every player over once, carried
-part way toward zero, so the opening slate is not priced on last June's ratings. Pace is a running average of each team's possessions per 48; the total
-is the two expected efficiencies times the expected pace. The final win chance blends in a tenth of
-the team model's difference.
+end of a long roster drops off), from the club's roster on the roster feed. ESPN's injury report says
+only Out or Day-To-Day, with a return date: a listed player is out of every game before his return
+date, an Out player out of the report's own day whatever it says, and a suspended one out. A player on
+the roster with no game on record yet plays at his prior (the rookie rating or RAPTOR's) for twelve
+minutes. The first game of a new season rolls every player over once, carried part way toward zero,
+with his minutes taken from his last five regular-season games (a playoff run's 45 minutes in a short
+rotation would leave a contender's bench out), so the opening slate is not priced on last June's
+ratings. Pace is a running average of each team's possessions per 48, reset each season to the
+league's regular-season pace plus the 1.3 possessions opening weeks have run faster (carried over, a
+playoff team's slow games had new-season totals 5 to 7 points low); the total is the two expected
+efficiencies times the expected pace. A back to back, three in four and rest are read from the club's
+games still to play too, so a game two days out sees tomorrow's. The final win chance blends in a
+tenth of the team model's difference.
 
 Fit on 2023-2025 by coordinate search on log loss with the lineup known and minutes projected;
 2022 warms up; 2026 held out (1,322 games). Every knob has an off value the search can choose, so
@@ -154,6 +162,17 @@ The priors carry the most: a rookie really is below average, and last season's R
 start than zero. The rest are small and real. Adding a signal that does not survive the walk-forward
 is how a model gets weaker while looking stronger, so plus-minus stays off until it does.
 
+`research.json` and the tables above were produced before the October 2026 data fixes (a side's points
+from the final score, a new season's minutes from the regular season, the play-in typed as regular
+season). Rerun on them, the walk-forward's 2025 and 2026 folds pick slightly different parameters and
+the final fit turns plus-minus on (0.25), for about 0.0006 in log loss on 2026, which is within the
+noise. The live parameters in players.json change only on a refit (the job's `fit` switch); none was
+run before the 2026-27 opener, and a refit should be a deliberate choice with a new research.json.
+
+The "lineup known" rows are scored with who actually played: a perfect injury report, which the site
+does not have. What runs here, the roster minus the report's absences filled to 240, has not been
+scored on its own; it sits between "lineup known" and "no report".
+
 What the ratings say after the 2026 Finals: Gilgeous-Alexander first, then Jokić and Leonard;
 Daigneault, Mitch Johnson and Bickerstaff the top coaches; with the 2026-27 rosters, Oklahoma City,
 San Antonio and New York the strongest teams and the Wizards the weakest.
@@ -163,14 +182,23 @@ San Antonio and New York the strongest teams and the Wizards the weakest.
 `.github/workflows/update.yml` is queued at 07:17, 11:17 and 13:17 UTC. GitHub starts this repo's
 scheduled runs 3 to 9 hours late, so they land from the morning to the late afternoon Eastern: the first
 for last night's finals and box scores, the other two for the day's lines and injury report. Each run reads
-every day from the first with a game not yet final (three weeks back at most) to thirty days ahead, the new
-box scores, the injury report, the coaches and rosters, then both models, and publishes. A game's line and
-its logged number are frozen at its tip-off, so a run that lands during a game changes neither.
+from the earlier of the first day in the last three weeks with a game not final (today included) and the day
+after the last final, to thirty days ahead; then the new box scores, the injury report, the coaches and
+rosters, both models, and publishes. A game's line and its logged number are frozen at its tip-off, so a run
+that lands during a game changes neither.
 
-The tests (`tools/test_fetch.js`, then the page's smoke test) gate the built pages only: when they fail
-the run still commits the data folder, the model files and state.json, leaves index.html and admin.html as
-they were, and goes red. A club whose roster read fails keeps its last good roster, dated in
-`rosters_espn.json`'s `asOf`, and the page says when the injury report is not today's. On demand the job
+ESPN answering with no events at all for a day the table has games on, from yesterday to ten days out, is a
+failed read and the rows stay (a postponed game comes back as an event, so it leaves at once); ten failed days
+stop the run before anything is written. A run red on "answered with no games" for days on end means ESPN has
+stopped listing them, and needs a person to look. An injury report that answers with no list or under half the
+last one's players is refused, and the last report stands with its date; a club whose roster answers short or
+fails keeps its last good roster and coach, dated in `rosters_espn.json`'s `asOf`; `data/coaches.csv` takes the
+season's coaches from ESPN and a dated row when a club changes coach.
+
+After the pull, each step may fail on its own: the data folder and the model files are committed whenever the
+pull succeeded, and state.json and the pages only when publishing and the tests (`tools/test_fetch.js`,
+`tools/test_fetch_box.js`, then the page's smoke test on the new state) pass; the run is red when any step
+failed. The page says when the injury report is older than the file it came in. On demand the job
 takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
 `claude/` branch too, committing there and in its own queue; the schedule only fires from `main`).
 

@@ -84,9 +84,13 @@ function loadTeamBoxes() {
 }
 const pairN = v => { const m = /^\s*(\d+)\s*-\s*(\d+)/.exec(String(v || '')); return m ? [+m[1], +m[2]] : null; };
 /* possessions and points for one side of a game: the team totals when the feed gave them, else the players summed */
-function sideTotals(rows, stats) {
+/* a side's possessions, points and minutes in one game. The points are the final score where it is given: a
+   player ESPN lists with no id and no stats (a Chicago rookie in 43 games of 2025-26) would leave a sum of the
+   player rows short, by up to 9 points */
+function sideTotals(rows, stats, score) {
   let fga = 0, fta = 0, orb = 0, tov = 0, pts = 0, min = 0;
   for (const r of rows) { fga += r.fga; fta += r.fta; orb += r.orb; tov += r.tov; pts += r.pts; min += r.min; }
+  if (score !== '' && score != null && Number.isFinite(+score) && +score > 0) pts = +score;
   if (stats) {
     const fg = pairN(stats['fieldGoalsMade-fieldGoalsAttempted']), ft = pairN(stats['freeThrowsMade-freeThrowsAttempted']);
     if (fg) fga = fg[1]; if (ft) fta = ft[1];
@@ -123,7 +127,7 @@ function loadRaptor() {
 function replay(P, ctx, mode, collect) {
   const { games, boxes, teamStats, coachOf, raptor, situP } = ctx;
   const players = {}, coaches = {}, dates = {}, seasonOf = {}, pace = {}, lastLineup = {};
-  let lg = 112;
+  let lg = 112, lgDay = 112, lgDate = '';         // lgDay: the league's efficiency as the day began, for scoring a final
   const recs = [], upcoming = {};
   const getP = (r, season) => {
     let p = players[r.player_id];
@@ -169,6 +173,7 @@ function replay(P, ctx, mode, collect) {
   };
 
   for (const g of games) {
+    if (g.date !== lgDate) { lgDay = lg; lgDate = g.date; }
     for (const t of [g.home, g.away]) {
       if (seasonOf[t] !== g.season) { seasonOf[t] = g.season; dates[t] = []; }
       if (pace[t] === undefined) pace[t] = 99;
@@ -197,7 +202,7 @@ function replay(P, ctx, mode, collect) {
       continue;
     }
     if (!box || !box[g.home] || !box[g.away]) continue;      // no box score for it: nothing to learn, nothing to score
-    const th = sideTotals(box[g.home], teamStats[g.game_id + ':' + g.home]), ta = sideTotals(box[g.away], teamStats[g.game_id + ':' + g.away]);
+    const th = sideTotals(box[g.home], teamStats[g.game_id + ':' + g.home], g.home_score), ta = sideTotals(box[g.away], teamStats[g.game_id + ':' + g.away], g.away_score);
     const oh = 100 * th.pts / th.poss, oa = 100 * ta.pts / ta.poss;
 
     if (collect && g.season > WARM_TO) {
@@ -205,8 +210,10 @@ function replay(P, ctx, mode, collect) {
       const own = (ch.c + Hm.O + Hm.D + sh) - (ca.c + Am.O + Am.D + sa);
       const td = ctx.teamDiff[g.game_id];
       const diff = td === undefined ? own : (1 - P.blend) * own + P.blend * td;
-      const eh = lg + (Hm.O - Am.D) / situP.scale + (sh - sa) / (2 * situP.scale), ea = lg + (Am.O - Hm.D) / situP.scale - (sh - sa) / (2 * situP.scale);
-      recs.push({ season: g.season, d: diff, pHome: E.prob(diff), mov: +g.home_score - +g.away_score, total: +g.home_score + +g.away_score, expTotal: (eh + ea) * expPace / 100 });
+      /* the expected total is scored on the league's efficiency before the day's games: a same-day final earlier in
+         the list may have tipped later (win chances and spreads never read lg) */
+      const eh = lgDay + (Hm.O - Am.D) / situP.scale + (sh - sa) / (2 * situP.scale), ea = lgDay + (Am.O - Hm.D) / situP.scale - (sh - sa) / (2 * situP.scale);
+      recs.push({ season: g.season, d: diff, pHome: E.prob(diff), spread: -diff / situP.scale * expPace / 100, mov: +g.home_score - +g.away_score, total: +g.home_score + +g.away_score, expTotal: (eh + ea) * expPace / 100 });
     }
     /* update with what actually happened */
     const H = strength(lineupFor(g.home, box[g.home], 'actual', g.season)), A = strength(lineupFor(g.away, box[g.away], 'actual', g.season));

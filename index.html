@@ -303,8 +303,9 @@ const fromRecord = r => r ? { ...r, status: 'final', model: { pHome: r.pHome, sp
    and the last), so a missing final is a missing game and not missing data */
 function offList(id) {
   const [season, d, away, home] = String(id).split('_'); if (!d || d.length !== 8 || !away || !home || !S.finals) return null;
+  if (+season < S.season - 1) return null;                   // older than the published finals: not shown, as before
   const date = `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
-  const gone = (+season === S.season || +season === S.season - 1) && addDays(date, 2) <= (S.today || '');
+  const gone = !(S.pending || []).includes(id) && addDays(date, 2) <= (S.today || '');   // pending: played, its final not read yet
   return { id, date, away, home, status: gone ? 'void' : 'unlisted', awayScore: null, homeScore: null, model: null, line: null, totalLine: null };
 }
 /* the published finals carry only the score; the id carries the date and the teams */
@@ -364,9 +365,10 @@ render.slate = function () {
   }
   const pre = games.some(g => g.type === 'PRE');
   const opening = S.opening ? `Opening night is ${dayName(S.opening)} ${dayNum(S.opening)}${S.opening > TODAY ? `, ${Math.round((Date.parse(S.opening) - Date.parse(TODAY)) / 86400000)} days away` : ''}.` : '';
-  /* the injury report the numbers use, when it is not today's: the morning's read failed and yesterday's stands */
-  const injOld = S.injuriesAsOf && S.injuriesAsOf < TODAY && games.some(g => !started(g));
-  $('#slate').innerHTML = (injOld ? `<div class="note"><b>Injury report as of ${dayName(S.injuriesAsOf)} ${dayNum(S.injuriesAsOf)}.</b> Today's could not be read yet, so the lineups below may still count a player who has since been ruled out.</div>` : '')
+  /* the injury report the numbers use, when the job's own read failed: older than the file it was published in (a
+     file from last night, before the morning's run, is not a failure) */
+  const injOld = S.injuriesAsOf && S.today && S.injuriesAsOf < S.today && games.some(g => !started(g));
+  $('#slate').innerHTML = (injOld ? `<div class="note"><b>Injury report as of ${dayName(S.injuriesAsOf)} ${dayNum(S.injuriesAsOf)}.</b> The latest could not be read, so the lineups below may still count a player who has since been ruled out.</div>` : '')
     + (pre ? `<div class="note"><b>Preseason.</b> Rotations are experimental and starters often sit, so these numbers assume each team's regular rotation. They are shown for fun and never graded, and the ratings don't learn from them. ${opening}</div>` : '')
     + `<div class="grid">${games.map(card).join('')}</div>`;
   $('#slate').querySelectorAll('[data-act]').forEach(el => el.onclick = act);
@@ -514,7 +516,7 @@ render.record = function () {
     <div class="wrap"><table class="tbl"><thead><tr><th>Model</th><th>Holdout</th></tr></thead><tbody>
       <tr><td>Team Elo</td><td class="num">${f(bt.player.teamElo.holdout)}</td></tr>
       <tr><td>Player model, previous game's lineup (no injury report)</td><td class="num">${f(bt.player.naive.holdout)}</td></tr>
-      <tr><td><b>Player model, lineup known, minutes projected</b> <span class="muted">what runs here</span></td><td class="num"><b>${f(bt.player.known.holdout)}</b></td></tr>
+      <tr><td><b>Player model, lineup known, minutes projected</b> <span class="muted">a perfect injury report; what runs here is between this and no report</span></td><td class="num"><b>${f(bt.player.known.holdout)}</b></td></tr>
       <tr><td>Player model, actual minutes</td><td class="num">${f(bt.player.actual.holdout)}</td></tr></tbody></table></div>`;
 };
 render.mine = function () {
@@ -525,7 +527,7 @@ render.mine = function () {
   const r = rec(graded, 'su');
   $('#tab-mine').innerHTML = `<h2>My picks <small>select a team on any card; kept in this browser only</small></h2>
     <div class="strip"><div class="stat"><b>${r.s}</b><span>Your record${r.pct !== null ? ' · ' + fmtPct(r.pct) : ''}</span></div><div class="stat"><b>${games.filter(x => x.g.homeScore === null && !isVoid(x)).length}</b><span>Open</span></div><div class="stat"><b>${games.filter(x => x.side === pickOf(x.g)).length}/${games.length}</b><span>With the model</span></div></div>
-    ${games.length ? `<div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>You</th><th>Model</th><th>Result</th><th></th></tr></thead><tbody>${games.map(x => { const w = winner(x.g), fin = x.g.homeScore !== null; return `<tr><td class="muted">${dayNum(x.g.date)}</td><td>${pill(x.g.away)} <span class="muted">@</span> ${pill(x.g.home)}${fin ? ` <span class="muted num">${x.g.awayScore}-${x.g.homeScore}</span>` : ''}</td><td>${pill(x.side)}</td><td>${pickOf(x.g) ? `${pill(pickOf(x.g))} <span class="muted">${fmtPct(Math.max(x.g.model.pHome, 1 - x.g.model.pHome))}</span>` : '—'}</td><td>${fin ? `<span class="res ${w === null ? 'push' : w === x.side ? 'won' : 'lost'}">${w === null ? 'tie' : w === x.side ? 'won' : 'lost'}</span>` : isVoid(x) ? '<span class="res void" title="Not played on its date: a postponed game">void</span>' : '<span class="res open">open</span>'}</td><td>${fin ? '' : `<button class="btn ghost" data-un="${x.id}">remove</button>`}</td></tr>`; }).join('')}</tbody></table></div>` : `<div class="empty"><b>No picks yet</b>Open Tonight and tap a team badge.</div>`}`;
+    ${games.length ? `<div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>You</th><th>Model</th><th>Result</th><th></th></tr></thead><tbody>${games.map(x => { const w = winner(x.g), fin = x.g.homeScore !== null; return `<tr><td class="muted">${dayNum(x.g.date)}</td><td>${pill(x.g.away)} <span class="muted">@</span> ${pill(x.g.home)}${fin ? ` <span class="muted num">${x.g.awayScore}-${x.g.homeScore}</span>` : ''}</td><td>${pill(x.side)}</td><td>${pickOf(x.g) ? `${pill(pickOf(x.g))} <span class="muted">${fmtPct(Math.max(x.g.model.pHome, 1 - x.g.model.pHome))}</span>` : '—'}</td><td>${fin ? `<span class="res ${w === null ? 'push' : w === x.side ? 'won' : 'lost'}">${w === null ? 'tie' : w === x.side ? 'won' : 'lost'}</span>` : isVoid(x) ? '<span class="res void" title="Not played on its date: a postponed game">void</span>' : '<span class="res open">open</span>'}</td><td>${fin || (started(x.g) && !['void', 'unlisted'].includes(x.g.status)) ? '' : `<button class="btn ghost" data-un="${x.id}">remove</button>`}</td></tr>`; }).join('')}</tbody></table></div>` : `<div class="empty"><b>No picks yet</b>Open Tonight and tap a team badge.</div>`}`;
   $$('#tab-mine [data-un]').forEach(b => b.onclick = () => { delete M.picks[b.dataset.un]; saveMine(); badges(); render.mine(); });
 };
 /* ---------- Parlay Builder: in the spirit of the NFL hub's ----------
@@ -650,7 +652,7 @@ function renderSuggest(day) {
     <div class="sugg-grid">${tiers.map((t, i) => `<div class="sugg-tier ${t.id}">
       <div class="sugg-top"><span class="nm">${t.label}</span><span class="muted">${t.legs.length} legs</span><span class="grow"></span>${i ? `<span class="muted">+${t.added} leg${t.added === 1 ? '' : 's'}</span>` : ''}</div>
       <div class="sugg-nums"><div><b>${Math.round(t.p * 100)}%</b><span>chance all land</span></div><div><b>${fmtAm(decToAm(t.dec))}</b><span>odds</span></div><div><b>${money(stake * t.dec)}</b><span>returns on ${money(stake)}</span></div></div>
-      ${t.short ? `<p class="muted sugg-short" style="margin:0 0 8px;font-size:12px">Under ${t.label}'s ${Math.round(t.floor * 100)}% aim: ${t.id === 'safe' ? `the two likeliest picks today` : `the likeliest leg left, added`} land ${Math.round(t.p * 100)}% of the time together.</p>` : ''}
+      ${t.short ? `<p class="muted sugg-short" style="margin:0 0 8px;font-size:12px">Under ${t.label}'s ${Math.round(t.floor * 100)}% aim: ${t.id === 'safe' ? `the two likeliest picks` : `the likeliest leg left, added`} land ${Math.round(t.p * 100)}% of the time together.</p>` : ''}
       <ul class="sugg-legs">${t.legs.map(x => `<li>${pill(x.pick)}<span class="g">${gameLabel(x.g)}</span><span class="od">${fmtPx(x.px)}</span><span class="pc muted">${Math.round(x.p * 100)}%</span></li>`).join('')}</ul>
       <div class="sugg-btns"><button class="btn hot" data-sugg-lock="${t.id}" ${stake > 0 ? '' : 'disabled'}>Lock in</button><button class="btn" data-sugg-load="${t.id}">Edit below</button></div></div>`).join('')}</div>`
     + (value ? `<div class="sugg-tier value" style="margin-top:12px">
@@ -738,7 +740,7 @@ function renderPlan(day) {
       <div class="stat"><b>${two ? (modelP * 100).toFixed(modelP < 0.01 ? 2 : 1) + '%' : '–'}</b><span>model says it hits${two && legs.every(x => x.mp != null) ? ` · market ${(mktP * 100).toFixed(mktP < 0.01 ? 2 : 1)}%` : ''}</span></div></div>`;
     if (!two) html += `<p class="muted" style="margin:10px 0 0;text-align:center">${avail.length < 2 ? `Only ${avail.length} pick with a price in this band. A parlay needs at least two legs.` : 'Tick at least two legs to see a parlay payout.'}</p>`;
     html += `<div class="bar" style="margin:16px 0 0"><button class="btn hot" id="bkLock" ${two && wr > 0 ? '' : 'disabled'}>Lock in parlay · ${money(wr)}</button></div>`;
-    el._lock = () => { if (!two || !(wr > 0)) return; bkMsg = lockBet('parlay', legs, wr) ? 'Parlay added to the Bet Build below.' : 'That parlay is already in the Bet Build.'; };
+    el._lock = () => { if (!two || !(wr > 0)) return; const r = lockBet('parlay', legs, wr); bkMsg = r > 0 ? 'Parlay added to the Bet Build below.' : r < 0 ? 'A game in this parlay has tipped off, so it was not added. The plan is redrawn without it.' : 'That parlay is already in the Bet Build.'; };
   }
   const dis = eligible.filter(x => x.mp != null && x.mp < 0.5).length;
   if (dis) html += `<p class="muted" style="margin:10px 0 0;text-align:center">The model and the market pick different teams in <b>${dis}</b> of these game${dis === 1 ? '' : 's'}; the Vegas pick is outlined in red there.</p>`;
@@ -784,8 +786,8 @@ render.about = function () {
   $('#tab-about').innerHTML = `<h2>How it works</h2>
     <p><b>Every player carries two ratings, offence and defence,</b> in Elo points for a player on the floor all game. A team's strength for a game is 1500 plus its coach plus each player's ratings weighted by his share of the minutes, five shares in all. So a team is exactly the sum of who plays and how much, and a star sitting out changes the number by what he is worth times the minutes he would have played.</p>
     <h3>After a game</h3><p>Each side's offensive efficiency, points per 100 possessions, is compared with what the ratings expected. The surprise moves the offence of the players who were on the floor, by their minutes, and the defence of the players they faced, the other way. A win update rides alongside. The coach moves with the margin surprise and carries his rating when he changes teams. Ratings carry ${Math.round(p.carryP * 100)}% of the way into a new season; rookies start at ${p.rookie}; a first rating comes from FiveThirtyEight's RAPTOR where there is one.</p>
-    <h3>Before a game</h3><p>The home side gets the court (${t.hfa} Elo, about ${(t.hfa / t.scale).toFixed(1)} points), Denver and Utah more for altitude, and both sides are adjusted for a back to back (−${t.b2b}), three games in four nights and three days off. Tonight's lineup is the roster minus the injury report's Out and Doubtful players, with minutes projected from each player's last ${p.minGames} appearances. Pace is a running average of each team's possessions per 48 minutes, and the total is the two expected efficiencies times the expected pace. A tenth of the plain team Elo's opinion is blended in.</p>
-    <h3>What the numbers are worth</h3><p>See Record for the held-out seasons. The model picks winners at about 69% with the lineup known. The market's closing line does a little better than that, because it also knows who is playing and a great deal more. Where this model and the market disagree by three points or more the card shows an edge chip; that is a place to look, not a bet.</p>
+    <h3>Before a game</h3><p>The home side gets the court (${t.hfa} Elo, about ${(t.hfa / t.scale).toFixed(1)} points), Denver and Utah more for altitude, and both sides are adjusted for a back to back (−${t.b2b}), three games in four nights and three days off. Tonight's lineup is the roster minus the injury report's absences (ESPN gives a return date; a player is out of every game before it), with minutes projected from each player's last ${p.minGames} appearances, a newcomer with none at twelve, filled into the game's 240 minutes in rotation order. Pace is a running average of each team's possessions per 48 minutes, and the total is the two expected efficiencies times the expected pace. A tenth of the plain team Elo's opinion is blended in.</p>
+    <h3>What the numbers are worth</h3><p>See Record for the held-out seasons. The model picks winners at about 69% when it is told who played, which is more than the injury report tells it before a game. The market's closing line does a little better than that, because it also knows who is playing and a great deal more. Where this model and the market disagree by three points or more the card shows an edge chip; that is a place to look, not a bet.</p>
     <h3>Parlay Builder</h3><p>It works like the NFL hub's. At the top, three suggested parlays for the day, Safe, Medium and Aggressive, grown from one core out of the games where the model and the market pick the same winner. Legs go in likeliest first: Safe takes the two likeliest and keeps adding while the chance that every leg lands stays above 50%, Medium and Aggressive keep going down to 30% and 15%. A leg's chance is the market's, from the book's moneylines with its cut taken out, because the market is the sharper number. A separate Value card lists the model's picks whose chance beats the market's by 5 points or more; that is the model disagreeing with the market, which is where models are most often wrong, so it is shown for interest and not as a suggestion. Below, the day's plan: pick a day, a stake, a confidence band and straight bets or a parlay, then tick the games. Straight bets share the stake evenly unless you type an amount; a parlay shows its odds, its payout and the chance it hits. Lock in what you like and it goes to the Bet Build, which grades itself as the games go final. Each leg is the model's pick on the moneyline, priced at the book's moneyline where one is published. Legs from different games are independent, so chances and prices multiply.</p>
     <h3>What lives where</h3><p>The job pulls scores, box scores, injuries, coaches and rosters from ESPN's public feeds every morning, replays both models, logs the day's numbers and rebuilds this page. Your picks and tickets stay in this browser: clearing site data loses them.</p>`;
 };
@@ -799,10 +801,13 @@ render.data = function () {
   const isBackup = v => v && typeof v === 'object' && !Array.isArray(v) && ('picks' in v || 'build' in v || 'tickets' in v)
     && (v.picks === undefined || (v.picks && typeof v.picks === 'object' && !Array.isArray(v.picks) && Object.values(v.picks).every(x => typeof x === 'string')))
     && (v.build === undefined || (Array.isArray(v.build) && v.build.every(b => b && typeof b === 'object' && Array.isArray(b.legs) && b.legs.every(l => l && typeof l.id === 'string' && typeof l.side === 'string') && Number.isFinite(+b.stake))))
-    && (v.bank === undefined || (v.bank && typeof v.bank === 'object' && !Array.isArray(v.bank)));
+    && (v.tickets === undefined || (Array.isArray(v.tickets) && v.tickets.every(t => t && typeof t === 'object' && Array.isArray(t.legs))))
+    && (v.bank === undefined || (v.bank && typeof v.bank === 'object' && !Array.isArray(v.bank)
+      && ['off', 'fixed'].every(k => v.bank[k] === undefined || (v.bank[k] && typeof v.bank[k] === 'object' && !Array.isArray(v.bank[k])))));
   $('#imp').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { let v; try { v = JSON.parse(t); } catch (x) { v = null; }
-    if (!isBackup(v)) return toast('Not a backup file: nothing changed');
-    M = normMine(v); saveMine(); badges(); toast('Backup restored'); }); };
+    let next = null; try { next = isBackup(v) ? normMine(v) : null; } catch (x) { next = null; }
+    if (!next) return toast('Not a backup file: nothing changed');
+    M = next; saveMine(); badges(); toast('Backup restored'); }); };
 };
 /* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's.
    It moves at midnight Eastern while the page is open (watch() below) */
@@ -815,7 +820,8 @@ function watch() {
   if (!S || !S.slate) return;
   const sig = etToday() + '|' + S.slate.filter(started).map(g => g.id).join(',');
   if (sig === watchSig) return;
-  const first = !watchSig; watchSig = sig; TODAY = etToday();
+  const first = !watchSig, was = TODAY; watchSig = sig; TODAY = etToday();
+  if (TODAY !== was && day === was) day = null;              // a board left on Today moves to the new today
   if (first) return;
   const tab = ($$('#nav button').find(b => b.getAttribute('aria-selected') === 'true') || {}).dataset?.tab;
   if (tab && render[tab]) render[tab](); badges();

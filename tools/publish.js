@@ -78,14 +78,16 @@ function main() {
   /* a player's club is the one whose ESPN roster lists him today; the model only knows the last club he played for,
      which is last season's for everyone who moved over the summer. With the rosters read, a player on none is FA */
   const ros = fs.existsSync(path.join(DATA, 'rosters_espn.json')) ? JSON.parse(fs.readFileSync(path.join(DATA, 'rosters_espn.json'), 'utf8')) : { teams: {} };
-  const clubOf = {}; for (const [t, list] of Object.entries(ros.teams || {})) for (const a of list || []) if (a.id) clubOf[a.id] = t;
+  const at = t => (ros.asOf && ros.asOf[t]) || ros.date || '';   // a player on two rosters (one kept from an earlier read) is the later read's
+  const clubOf = {}; for (const [t, list] of Object.entries(ros.teams || {})) for (const a of list || []) if (a.id && (clubOf[a.id] === undefined || at(t) > at(clubOf[a.id]))) clubOf[a.id] = t;
   const rostersRead = Object.values(ros.teams || {}).filter(l => l && l.length >= 10).length >= 25;
   const plist = Object.entries(players.players).map(([id, p]) => ({ id, ...p, team: clubOf[id] || (rostersRead ? 'FA' : p.team) })).sort((a, b) => b.elo - a.elo);
-  /* a coach's club is shown only while he coaches it; a club's new coach, with no game rated yet, is listed at 0 */
+  /* a coach's club is shown only while he coaches it; a club's coach with under ten games rated (a new or interim
+     one) is listed at the rating the model prices his games with */
   const current = Object.fromEntries(L.TEAMS.map(t => [t, (players.teams[t] || {}).coach]).filter(([, c]) => c));
   const coachedBy = Object.fromEntries(Object.entries(current).map(([t, c]) => [c, t]));
   const coaches = Object.entries(players.coaches).map(([name, c]) => ({ name, ...c, team: coachedBy[name] || '' }));
-  for (const [t, name] of Object.entries(current)) if (!players.coaches[name]) coaches.push({ name, team: t, elo: 0, games: 0 });
+  for (const [t, name] of Object.entries(current)) if (!players.coaches[name]) coaches.push({ name, team: t, elo: players.teams[t].coachElo || 0, games: players.teams[t].coachGames || 0 });
   coaches.sort((a, b) => b.elo - a.elo);
   const names = {};
   for (const p of plist) names[p.id] = p.name;
@@ -97,7 +99,10 @@ function main() {
      id carries the date and teams */
   const finals = {};
   for (const g of games) if (g.status === 'final' && (+g.season === season || +g.season === season - 1)) finals[g.game_id] = [+g.away_score, +g.home_score];
-  const state = { season, opening: opener, finals, injuriesAsOf: inj.date || null, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
+  /* the season's past games the table holds and has not finished (a final not read yet): the page voids a bet only on
+     a game missing from every list, so these must not look missing */
+  const pending = games.filter(g => g.status !== 'final' && g.date < from && (+g.season === season || +g.season === season - 1)).map(g => g.game_id);
+  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
     slate, record, teams, players: plist, coaches, names,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };

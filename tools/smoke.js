@@ -197,6 +197,12 @@ function load(page, st, mine) {
   check(c1 && !c1.querySelector('[data-act=plan]'), 'it has no Parlay Builder button');
   c1.querySelector('.team.away .badge').click(); await sleep(30);
   check(!(JSON.parse(w.localStorage.getItem('nba_hub_2027') || '{}').picks || {}).x1, 'it cannot be picked');
+  ({ w, errors } = load('index.html', tipped(), { picks: { x1: 'NYK', x3: 'ORL' }, build: [] }));
+  await sleep(250);
+  w.document.querySelector('#nav button[data-tab=mine]').click(); await sleep(30);
+  check(!w.document.querySelector('#tab-mine [data-un="x1"]') && w.document.querySelector('#tab-mine [data-un="x3"]'), 'a pick cannot be removed once its game has tipped, and can before');
+  d6 = w.document;
+  d6.querySelector('#nav button[data-tab=slate]').click(); await sleep(30);
   d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
   check(!d6.querySelector('#bkPlan tr[data-gid="x1"]') && d6.querySelector('#bkPlan tr[data-gid="x2"]') && d6.querySelector('#bkPlan tr[data-gid="x3"]'), 'the builder leaves it out and keeps the two games to come');
   check(!/BOS/.test(d6.getElementById('bkSuggest').textContent), 'the suggestions leave it out');
@@ -219,15 +225,26 @@ function load(page, st, mine) {
   check(!m6.build.length && /has tipped off, so it was not added/.test(d6.getElementById('bkPlan').textContent), 'a suggested parlay with a leg that has tipped is refused, and says why');
   check(!d6.querySelector('#bkSuggest .sugg-tier.safe'), 'the suggestions are redrawn without it');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  ({ w, errors } = load('index.html', tipped(), { picks: {}, build: [], bank: { mode: 'parlay' } }));
+  await sleep(250);
+  d6 = w.document;
+  d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+  check(/2 of 2 legs in/.test(d6.getElementById('bkPlan').textContent), 'parlay mode offers the two games to come');
+  await sleep(1600);
+  d6.getElementById('bkLock').click(); await sleep(30);
+  m6 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
+  check(!m6.build.length && /has tipped off, so it was not added/.test(d6.getElementById('bkPlan').textContent), 'a parlay from the plan with a leg that has tipped is refused, and says so');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   console.log('6. a postponed game, a graded game off the slate, the import, a stale injury report');
   {
     const ago = n => { const x = new Date(state.today + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() - n); return x.toISOString().slice(0, 10); };
     const gid = (n, a, h) => `${state.season}_${ago(n).replace(/-/g, '')}_${a}_${h}`;
-    const pp = gid(3, 'BOS', 'NYK'), fresh = gid(1, 'MIA', 'ORL'), done = gid(4, 'LAL', 'GSW'), graded = gid(5, 'DEN', 'UTA');
-    const st6 = { ...state, slate: [], finals: { [done]: [100, 110] },
+    const pp = gid(3, 'BOS', 'NYK'), fresh = gid(1, 'MIA', 'ORL'), done = gid(4, 'LAL', 'GSW'), graded = gid(5, 'DEN', 'UTA'), waiting = gid(6, 'PHI', 'CHA');
+    const ancient = `${state.season - 2}_20241105_LAL_GSW`;
+    const st6 = { ...state, slate: [], finals: { [done]: [100, 110] }, pending: [waiting],
       record: [{ id: graded, date: ago(5), away: 'DEN', home: 'UTA', awayScore: 120, homeScore: 101, pHome: 0.22, spread: 9.1, total: 231, line: 8.5, totalLine: 230, pick: 'DEN', su: true, ats: true, ou: false, teamPick: 'DEN' }] };
-    const mine6 = { picks: { [pp]: 'NYK', [fresh]: 'ORL', [graded]: 'DEN' }, build: [
+    const mine6 = { picks: { [pp]: 'NYK', [fresh]: 'ORL', [graded]: 'DEN', [waiting]: 'PHI', [ancient]: 'GSW' }, build: [
       { id: 'v1', day: ago(3), type: 'single', stake: 10, legs: [{ id: pp, kind: 'ml', side: 'NYK', odds: -140 }] },
       { id: 'v2', day: ago(4), type: 'parlay', stake: 10, legs: [{ id: pp, kind: 'ml', side: 'NYK', odds: -140 }, { id: done, kind: 'ml', side: 'GSW', odds: 150 }] },
       { id: 'v3', day: ago(1), type: 'single', stake: 10, legs: [{ id: fresh, kind: 'ml', side: 'ORL', odds: -120, est: 'model' }] }] };
@@ -238,8 +255,10 @@ function load(page, st, mine) {
     const mt = d7.getElementById('tab-mine');
     const rowOf = id => [...mt.querySelectorAll('tbody tr')].find(r => r.querySelector(`[data-un="${id}"]`) || r.textContent.includes(id.split('_')[2]));
     check(/void/.test(mt.textContent), 'a pick on a game missing three days on reads void');
-    check(/>1<\/b><span>Open/.test(mt.innerHTML), 'only the game from yesterday is still open: a day is not enough to call it off');
-    check(/1\/3<\/b><span>With the model/.test(mt.innerHTML) && /DEN/.test(mt.textContent) && /78%/.test(mt.textContent), "a graded game off the slate keeps the model's pick (DEN 78%)");
+    check(/>2<\/b><span>Open/.test(mt.innerHTML), "open: yesterday's game (a day is not enough to call it off) and one played whose final is not read yet");
+    check(/PHI/.test(mt.textContent) && (mt.textContent.match(/void/g) || []).length === 1, 'the game awaiting its final is not void');
+    check(mt.querySelectorAll('tbody tr').length === 4 && ![...mt.querySelectorAll('tbody tr')].some(r => /LAL/.test(r.textContent) && /GSW/.test(r.textContent)), 'a pick from three seasons back is not shown (four of the five picks are)');
+    check(/1\/4<\/b><span>With the model/.test(mt.innerHTML) && /DEN/.test(mt.textContent) && /78%/.test(mt.textContent), "a graded game off the slate keeps the model's pick (DEN 78%)");
     d7.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
     const bb = d7.getElementById('bkBuild');
     const rowB = id => [...bb.querySelectorAll('tbody tr')].find(r => r.querySelector(`[data-del="${id}"]`));
@@ -255,6 +274,9 @@ function load(page, st, mine) {
     ({ w, errors } = load('index.html', { ...withGames(false), injuriesAsOf: state.today }));
     await sleep(250);
     check(!/Injury report as of/.test(w.document.getElementById('slate').textContent), "today's is not");
+    ({ w, errors } = load('index.html', { ...withGames(false), today: ago(1), injuriesAsOf: ago(1) }));
+    await sleep(250);
+    check(!/Injury report as of/.test(w.document.getElementById('slate').textContent), "nor last night's file before the morning run: the read did not fail");
 
     ({ w, errors } = load('admin.html', withGames(false), { picks: { t1: 'BOS' }, build: [] }));
     await sleep(250);

@@ -985,12 +985,30 @@
   ],
   "PHX": [
    {
-    "id": "3136193",
-    "name": "Devin Booker",
+    "id": "4601023",
+    "name": "Oso Ighodaro",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-14"
+   },
+   {
+    "id": "3155526",
+    "name": "Dillon Brooks",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-14"
+   },
+   {
+    "id": "4278585",
+    "name": "Collin Gillespie",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-11",
+    "date": "2026-10-14",
     "returns": "2026-10-14"
    },
    {
@@ -999,7 +1017,25 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-11",
+    "date": "2026-10-14",
+    "returns": "2026-10-14"
+   },
+   {
+    "id": "4437244",
+    "name": "Jalen Green",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-14"
+   },
+   {
+    "id": "3136193",
+    "name": "Devin Booker",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
     "returns": "2026-10-14"
    },
    {
@@ -1117,15 +1153,6 @@
   ],
   "SAS": [
    {
-    "id": "4277880",
-    "name": "Malik Williams",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-10-12",
-    "returns": "2026-10-14"
-   },
-   {
     "id": "5061568",
     "name": "Carter Bryant",
     "pos": "F",
@@ -1200,18 +1227,18 @@
   ],
   "TOR": [
    {
-    "id": "4395623",
-    "name": "Trey Jemison III",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
-   },
-   {
     "id": "4431893",
     "name": "Jamison Battle",
     "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-14",
+    "returns": "2026-10-15"
+   },
+   {
+    "id": "4395623",
+    "name": "Trey Jemison III",
+    "pos": "C",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
     "date": "2026-10-13",

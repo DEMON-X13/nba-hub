@@ -24,7 +24,7 @@
   "actual": {
    "fit": {
     "games": 3954,
-    "logloss": 0.60353,
+    "logloss": 0.60354,
     "acc": 0.6654,
     "mae": 10.56,
     "totalMae": 14.68
@@ -56,14 +56,14 @@
   "naive": {
    "fit": {
     "games": 3954,
-    "logloss": 0.61754,
+    "logloss": 0.61755,
     "acc": 0.6545,
     "mae": 10.7,
     "totalMae": 14.73
    },
    "holdout": {
     "games": 1322,
-    "logloss": 0.60149,
+    "logloss": 0.6015,
     "acc": 0.6755,
     "mae": 11.48,
     "totalMae": 15.16
@@ -91,7 +91,7 @@
  "games": 6599,
  "teams": {
   "ATL": {
-   "strength": 1394.2,
+   "strength": 1394.1,
    "offence": -57.8,
    "defence": -48.7,
    "coach": "Quin Snyder",
@@ -110,9 +110,9 @@
    ]
   },
   "BOS": {
-   "strength": 1622.1,
+   "strength": 1622.2,
    "offence": 62.9,
-   "defence": 52.6,
+   "defence": 52.7,
    "coach": "Joe Mazzulla",
    "coachElo": 6.6,
    "coachGames": 385,
@@ -158,7 +158,7 @@
   },
   "CLE": {
    "strength": 1560.7,
-   "offence": 57.6,
+   "offence": 57.7,
    "defence": 0.5,
    "coach": "Kenny Atkinson",
    "coachElo": 2.6,
@@ -180,7 +180,7 @@
    "out": []
   },
   "DEN": {
-   "strength": 1581.8,
+   "strength": 1581.9,
    "offence": 113.3,
    "defence": -29.5,
    "coach": "David Adelman",
@@ -279,7 +279,7 @@
    ]
   },
   "MEM": {
-   "strength": 1384.7,
+   "strength": 1384.6,
    "offence": -39.5,
    "defence": -72.5,
    "coach": "Tuomas Iisalo",
@@ -355,7 +355,7 @@
   "OKC": {
    "strength": 1569.4,
    "offence": 13.2,
-   "defence": 42.2,
+   "defence": 42.3,
    "coach": "Mark Daigneault",
    "coachElo": 14,
    "coachGames": 460,
@@ -369,7 +369,7 @@
   },
   "ORL": {
    "strength": 1543.9,
-   "offence": -17.5,
+   "offence": -17.6,
    "defence": 61.5,
    "coach": "Sean Sweeney",
    "coachElo": 0,
@@ -485,9 +485,9 @@
    ]
   },
   "WAS": {
-   "strength": 1302.1,
+   "strength": 1302,
    "offence": -88,
-   "defence": -101.3,
+   "defence": -101.4,
    "coach": "Brian Keefe",
    "coachElo": -8.6,
    "coachGames": 203,
@@ -848,7 +848,7 @@
    "team": "GSW",
    "o": 15.5,
    "d": 22.9,
-   "elo": 38.3,
+   "elo": 38.4,
    "min": 18,
    "games": 377,
    "last": "2026-04-17",
@@ -1028,7 +1028,7 @@
    "team": "SAS",
    "o": 0.9,
    "d": 15.8,
-   "elo": 16.7,
+   "elo": 16.6,
    "min": 5,
    "games": 212,
    "last": "2026-06-13",
@@ -1052,7 +1052,7 @@
    "team": "DET",
    "o": 20.9,
    "d": 28.4,
-   "elo": 49.2,
+   "elo": 49.3,
    "min": 20.6,
    "games": 403,
    "last": "2026-05-17",
@@ -1075,7 +1075,7 @@
    "pos": "C",
    "team": "CLE",
    "o": 2,
-   "d": 11.6,
+   "d": 11.5,
    "elo": 13.5,
    "min": 15.2,
    "games": 168,
@@ -1159,7 +1159,7 @@
    "pos": "C",
    "team": "PHI",
    "o": -7.9,
-   "d": 23.4,
+   "d": 23.5,
    "elo": 15.5,
    "min": 24.4,
    "games": 343,
@@ -1182,7 +1182,7 @@
    "name": "Damian Lillard",
    "pos": "G",
    "team": "POR",
-   "o": 35.7,
+   "o": 35.8,
    "d": -4.2,
    "elo": 31.5,
    "min": 35,
@@ -1242,7 +1242,7 @@
    "name": "CJ McCollum",
    "pos": "G",
    "team": "ATL",
-   "o": 22.8,
+   "o": 22.9,
    "d": 1.5,
    "elo": 24.4,
    "min": 30,
@@ -1279,7 +1279,7 @@
    "pos": "F",
    "team": "SAC",
    "o": 3.7,
-   "d": -22.1,
+   "d": -22.2,
    "elo": -18.4,
    "min": 19.6,
    "games": 261,
@@ -1544,7 +1544,7 @@
    "team": "OKC",
    "o": 12.1,
    "d": 52.6,
-   "elo": 64.6,
+   "elo": 64.7,
    "min": 16.2,
    "games": 334,
    "last": "2026-05-30",
@@ -1555,7 +1555,7 @@
    "pos": "F",
    "team": "MIN",
    "o": -7.3,
-   "d": 12.5,
+   "d": 12.6,
    "elo": 5.2,
    "min": 20.8,
    "games": 365,
@@ -1580,7 +1580,7 @@
    "team": "MIN",
    "o": 5.3,
    "d": 52.1,
-   "elo": 57.4,
+   "elo": 57.5,
    "min": 29.4,
    "games": 414,
    "last": "2026-05-15",
@@ -1616,7 +1616,7 @@
    "team": "CLE",
    "o": -7.3,
    "d": -5.7,
-   "elo": -12.9,
+   "elo": -13,
    "min": 20,
    "games": 394,
    "last": "2026-05-23",
@@ -1866,7 +1866,7 @@
    "name": "Nikola Jokic",
    "pos": "C",
    "team": "DEN",
-   "o": 72.2,
+   "o": 72.3,
    "d": 17.9,
    "elo": 90.1,
    "min": 33.8,
@@ -1880,7 +1880,7 @@
    "team": "UTA",
    "o": -3,
    "d": -8.7,
-   "elo": -11.7,
+   "elo": -11.8,
    "min": 16.8,
    "games": 226,
    "last": "2026-04-12",
@@ -1939,7 +1939,7 @@
    "pos": "G",
    "team": "GSW",
    "o": 8.4,
-   "d": 26.1,
+   "d": 26.2,
    "elo": 34.6,
    "min": 18.2,
    "games": 308,
@@ -2059,7 +2059,7 @@
    "pos": "F",
    "team": "HOU",
    "o": 14.9,
-   "d": 22,
+   "d": 22.1,
    "elo": 37,
    "min": 12.8,
    "games": 276,
@@ -2250,7 +2250,7 @@
    "name": "Matisse Thybulle",
    "pos": "G",
    "team": "POR",
-   "o": -15.8,
+   "o": -15.9,
    "d": 41.9,
    "elo": 26.1,
    "min": 19,
@@ -2370,7 +2370,7 @@
    "name": "Drew Eubanks",
    "pos": "F",
    "team": "SAC",
-   "o": -13.5,
+   "o": -13.6,
    "d": -7.4,
    "elo": -20.9,
    "min": 12.8,
@@ -2502,9 +2502,9 @@
    "name": "Luka Doncic",
    "pos": "G",
    "team": "LAL",
-   "o": 45.7,
+   "o": 45.8,
    "d": 7.6,
-   "elo": 53.3,
+   "elo": 53.4,
    "min": 35.2,
    "games": 357,
    "last": "2026-04-02",
@@ -2756,7 +2756,7 @@
    "team": "SAS",
    "o": 6.2,
    "d": 13.7,
-   "elo": 19.9,
+   "elo": 20,
    "min": 8.2,
    "games": 208,
    "last": "2026-06-13",
@@ -3007,7 +3007,7 @@
    "pos": "C",
    "team": "OKC",
    "o": 34.3,
-   "d": 34.8,
+   "d": 34.9,
    "elo": 69.1,
    "min": 18.6,
    "games": 393,
@@ -3066,7 +3066,7 @@
    "name": "Wendell Carter Jr.",
    "pos": "C",
    "team": "ORL",
-   "o": -3.6,
+   "o": -3.7,
    "d": 28.4,
    "elo": 24.8,
    "min": 27,
@@ -3080,7 +3080,7 @@
    "team": "DAL",
    "o": 0.9,
    "d": -3.7,
-   "elo": -2.8,
+   "elo": -2.9,
    "min": 21.6,
    "games": 234,
    "last": "2026-04-12",
@@ -3163,7 +3163,7 @@
    "pos": "G",
    "team": "NOP",
    "o": 1.2,
-   "d": -1.3,
+   "d": -1.4,
    "elo": -0.2,
    "min": 21.4,
    "games": 378,
@@ -3355,7 +3355,7 @@
    "pos": "C",
    "team": "LAL",
    "o": 2.9,
-   "d": 8.2,
+   "d": 8.3,
    "elo": 11.1,
    "min": 25.8,
    "games": 325,
@@ -3450,7 +3450,7 @@
    "name": "Naji Marshall",
    "pos": "F",
    "team": "DAL",
-   "o": -8,
+   "o": -8.1,
    "d": 8.2,
    "elo": 0.2,
    "min": 27.8,
@@ -3738,7 +3738,7 @@
    "name": "Immanuel Quickley",
    "pos": "G",
    "team": "TOR",
-   "o": 20.2,
+   "o": 20.3,
    "d": 23.7,
    "elo": 43.9,
    "min": 23.6,
@@ -3822,7 +3822,7 @@
    "name": "Tyrese Haliburton",
    "pos": "G",
    "team": "IND",
-   "o": 54.4,
+   "o": 54.5,
    "d": 9.9,
    "elo": 64.3,
    "min": 32.8,
@@ -4112,7 +4112,7 @@
    "team": "BKN",
    "o": -26.6,
    "d": -20.2,
-   "elo": -46.7,
+   "elo": -46.8,
    "min": 35.4,
    "games": 15,
    "last": "2026-04-12",
@@ -4146,7 +4146,7 @@
    "name": "Dalano Banton",
    "pos": "F",
    "team": "BOS",
-   "o": -7.6,
+   "o": -7.7,
    "d": 15.7,
    "elo": 8.1,
    "min": 11.6,
@@ -4219,7 +4219,7 @@
    "pos": "F",
    "team": "PHI",
    "o": -8.4,
-   "d": -16.6,
+   "d": -16.7,
    "elo": -25,
    "min": 10.4,
    "games": 274,
@@ -4280,7 +4280,7 @@
    "team": "CHI",
    "o": -19.4,
    "d": -17.4,
-   "elo": -36.8,
+   "elo": -36.9,
    "min": 31.6,
    "games": 285,
    "last": "2026-04-12",
@@ -4495,7 +4495,7 @@
    "pos": "C",
    "team": "CLE",
    "o": 1.4,
-   "d": 16.5,
+   "d": 16.6,
    "elo": 17.9,
    "min": 27.6,
    "games": 379,
@@ -4579,7 +4579,7 @@
    "pos": "G",
    "team": "MIL",
    "o": -5.5,
-   "d": -22.4,
+   "d": -22.5,
    "elo": -28,
    "min": 14.6,
    "games": 257,
@@ -4818,7 +4818,7 @@
    "name": "Josh Green",
    "pos": "G",
    "team": "CHA",
-   "o": 0,
+   "o": -0.1,
    "d": 27.4,
    "elo": 27.4,
    "min": 8.6,
@@ -5216,7 +5216,7 @@
    "team": "NOP",
    "o": -9.5,
    "d": -10.3,
-   "elo": -19.8,
+   "elo": -19.9,
    "min": 14.2,
    "games": 32,
    "last": "2026-04-12",
@@ -5911,7 +5911,7 @@
    "pos": "F",
    "team": "POR",
    "o": 3.4,
-   "d": 26.9,
+   "d": 27,
    "elo": 30.4,
    "min": 36.8,
    "games": 377,
@@ -6080,7 +6080,7 @@
    "team": "DET",
    "o": -0.7,
    "d": 11.4,
-   "elo": 10.6,
+   "elo": 10.7,
    "min": 20.4,
    "games": 173,
    "last": "2026-05-17",
@@ -6643,7 +6643,7 @@
    "pos": "F",
    "team": "BKN",
    "o": -20.7,
-   "d": -12.8,
+   "d": -12.9,
    "elo": -33.5,
    "min": 18.6,
    "games": 135,
@@ -6728,7 +6728,7 @@
    "team": "ATL",
    "o": 7.7,
    "d": 15.1,
-   "elo": 22.7,
+   "elo": 22.8,
    "min": 32.2,
    "games": 283,
    "last": "2026-04-30",
@@ -6944,7 +6944,7 @@
    "team": "SAC",
    "o": -26.2,
    "d": -30.6,
-   "elo": -56.7,
+   "elo": -56.8,
    "min": 32.8,
    "games": 74,
    "last": "2026-04-12",
@@ -7015,7 +7015,7 @@
    "pos": "F",
    "team": "MIA",
    "o": -1.5,
-   "d": 2.3,
+   "d": 2.4,
    "elo": 0.8,
    "min": 11,
    "games": 169,
@@ -7230,7 +7230,7 @@
    "name": "Victor Wembanyama",
    "pos": "F",
    "team": "SAS",
-   "o": 9.9,
+   "o": 10,
    "d": 32.7,
    "elo": 42.6,
    "min": 28.4,
@@ -7602,7 +7602,7 @@
    "name": "Kyshawn George",
    "pos": "F",
    "team": "WAS",
-   "o": -23.2,
+   "o": -23.3,
    "d": -19.8,
    "elo": -43.1,
    "min": 19,
@@ -7835,7 +7835,7 @@
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -8029,14 +8029,14 @@
    }
   },
   "2027_20261014_CHA_BOS": {
-   "pHome": 0.7357,
+   "pHome": 0.7358,
    "spread": -6.9,
    "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -8272,7 +8272,7 @@
    }
   },
   "2027_20261014_CHI_MIL": {
-   "pHome": 0.5411,
+   "pHome": 0.5412,
    "spread": -1.1,
    "total": 232.5,
    "pace": 103.1,
@@ -8365,7 +8365,7 @@
     "team": "CHI",
     "strength": 1448.6,
     "offence": -18.7,
-    "defence": -31.9,
+    "defence": -32,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -8905,7 +8905,7 @@
    }
   },
   "2027_20261014_NOP_DAL": {
-   "pHome": 0.6055,
+   "pHome": 0.6056,
    "spread": -2.9,
    "total": 233.1,
    "pace": 103.1,
@@ -8926,7 +8926,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -9097,7 +9097,7 @@
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -9382,9 +9382,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -9395,7 +9395,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -9494,13 +9494,13 @@
    }
   },
   "2027_20261015_TOR_NYK": {
-   "pHome": 0.7452,
+   "pHome": 0.7453,
    "spread": -7.2,
    "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -9515,7 +9515,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -9618,7 +9618,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -9709,7 +9709,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -9896,9 +9896,9 @@
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -9990,7 +9990,7 @@
    "away": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -10611,7 +10611,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -10645,7 +10645,7 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -10738,7 +10738,7 @@
    }
   },
   "2027_20261016_MIL_IND": {
-   "pHome": 0.6631,
+   "pHome": 0.6632,
    "spread": -4.5,
    "total": 233.9,
    "pace": 103.1,
@@ -10822,7 +10822,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -10930,7 +10930,7 @@
     "team": "CHI",
     "strength": 1448.6,
     "offence": -18.7,
-    "defence": -31.9,
+    "defence": -32,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -11255,8 +11255,8 @@
    "away": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -11286,7 +11286,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -11354,7 +11354,7 @@
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -11688,7 +11688,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -11758,7 +11758,7 @@
    }
   },
   "2027_20261016_UTA_PHX": {
-   "pHome": 0.8005,
+   "pHome": 0.8006,
    "spread": -9.3,
    "total": 232.2,
    "pace": 103.1,
@@ -11857,7 +11857,7 @@
    },
    "away": {
     "team": "UTA",
-    "strength": 1401.1,
+    "strength": 1401,
     "offence": -31.1,
     "defence": -61,
     "coach": {
@@ -11975,7 +11975,7 @@
    }
   },
   "2027_20261016_WAS_NOP": {
-   "pHome": 0.6731,
+   "pHome": 0.6732,
    "spread": -4.8,
    "total": 233.6,
    "pace": 103.1,
@@ -12067,7 +12067,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -12276,7 +12276,7 @@
    "away": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -12376,7 +12376,7 @@
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -12469,9 +12469,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -12482,7 +12482,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -12581,13 +12581,13 @@
    }
   },
   "2027_20261020_PHI_NYK": {
-   "pHome": 0.7404,
+   "pHome": 0.7405,
    "spread": -7,
    "total": 233.2,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -12602,7 +12602,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -12681,9 +12681,9 @@
    },
    "away": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -12858,7 +12858,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -13219,7 +13219,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -13291,7 +13291,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -13489,7 +13489,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -13955,7 +13955,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -13977,7 +13977,7 @@
    "home": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -14176,7 +14176,7 @@
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -14362,15 +14362,15 @@
    }
   },
   "2027_20261021_PHX_POR": {
-   "pHome": 0.5585,
+   "pHome": 0.5586,
    "spread": -1.6,
    "total": 231.2,
    "pace": 103.1,
    "home": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -14400,7 +14400,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -14554,7 +14554,7 @@
    }
   },
   "2027_20261021_SAC_LAC": {
-   "pHome": 0.7497,
+   "pHome": 0.7498,
    "spread": -7.4,
    "total": 230,
    "pace": 103.1,
@@ -14918,8 +14918,8 @@
    },
    "away": {
     "team": "UTA",
-    "strength": 1366.7,
-    "offence": -31.7,
+    "strength": 1366.6,
+    "offence": -31.8,
     "defence": -94.8,
     "coach": {
      "name": "Will Hardy",
@@ -15026,9 +15026,9 @@
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -15222,15 +15222,15 @@
    }
   },
   "2027_20261022_DEN_OKC": {
-   "pHome": 0.7186,
+   "pHome": 0.7187,
    "spread": -6.3,
    "total": 235.1,
    "pace": 103.1,
    "home": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -15241,7 +15241,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -15425,7 +15425,7 @@
    }
   },
   "2027_20261023_ATL_CHA": {
-   "pHome": 0.5279,
+   "pHome": 0.528,
    "spread": -0.8,
    "total": 229.6,
    "pace": 103.1,
@@ -15721,7 +15721,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -15897,7 +15897,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -15927,7 +15927,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -16006,13 +16006,13 @@
    }
   },
   "2027_20261023_DET_MIA": {
-   "pHome": 0.4882,
+   "pHome": 0.4883,
    "spread": 0.3,
    "total": 230.6,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -16206,7 +16206,7 @@
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -16927,7 +16927,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -17060,8 +17060,8 @@
    "pace": 103.1,
    "home": {
     "team": "UTA",
-    "strength": 1366.7,
-    "offence": -31.7,
+    "strength": 1366.6,
+    "offence": -31.8,
     "defence": -94.8,
     "coach": {
      "name": "Will Hardy",
@@ -17254,7 +17254,7 @@
    "home": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -17347,7 +17347,7 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -17362,7 +17362,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -17557,8 +17557,8 @@
    "away": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -17588,7 +17588,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -17656,7 +17656,7 @@
    "home": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -17788,7 +17788,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -18061,7 +18061,7 @@
    }
   },
   "2027_20261024_GSW_PHX": {
-   "pHome": 0.7666,
+   "pHome": 0.7667,
    "spread": -8,
    "total": 231.2,
    "pace": 103.1,
@@ -18572,7 +18572,7 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -18671,9 +18671,9 @@
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -19046,7 +19046,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -19126,7 +19126,7 @@
    "away": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -19219,7 +19219,7 @@
    }
   },
   "2027_20261024_WAS_CHI": {
-   "pHome": 0.6753,
+   "pHome": 0.6754,
    "spread": -4.9,
    "total": 230.7,
    "pace": 103.1,
@@ -19227,7 +19227,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -19320,7 +19320,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -19434,9 +19434,9 @@
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -19621,7 +19621,7 @@
    }
   },
   "2027_20261025_IND_BKN": {
-   "pHome": 0.3271,
+   "pHome": 0.3275,
    "spread": 4.8,
    "total": 232.7,
    "pace": 103.1,
@@ -19799,7 +19799,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -19820,9 +19820,9 @@
    "pace": 103.1,
    "home": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -19833,7 +19833,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -20079,8 +20079,8 @@
    "pace": 103.1,
    "home": {
     "team": "UTA",
-    "strength": 1366.7,
-    "offence": -31.7,
+    "strength": 1366.6,
+    "offence": -31.8,
     "defence": -94.8,
     "coach": {
      "name": "Will Hardy",
@@ -20283,7 +20283,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -20305,7 +20305,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -20474,7 +20474,7 @@
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -20489,7 +20489,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -20646,7 +20646,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -20803,7 +20803,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -21058,14 +21058,14 @@
    }
   },
   "2027_20261026_CHI_BOS": {
-   "pHome": 0.8012,
+   "pHome": 0.8013,
    "spread": -9.3,
    "total": 231,
    "pace": 103.1,
    "home": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -21160,7 +21160,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -21252,13 +21252,13 @@
    }
   },
   "2027_20261026_DAL_MIA": {
-   "pHome": 0.6563,
+   "pHome": 0.6564,
    "spread": -4.3,
    "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -21358,7 +21358,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -21437,7 +21437,7 @@
    }
   },
   "2027_20261026_GSW_DEN": {
-   "pHome": 0.7718,
+   "pHome": 0.7719,
    "spread": -8.2,
    "total": 236.8,
    "pace": 103.1,
@@ -21815,7 +21815,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -21830,14 +21830,14 @@
    }
   },
   "2027_20261026_MEM_UTA": {
-   "pHome": 0.6478,
+   "pHome": 0.6479,
    "spread": -4.1,
    "total": 234.7,
    "pace": 103.1,
    "home": {
     "team": "UTA",
-    "strength": 1366.7,
-    "offence": -31.7,
+    "strength": 1366.6,
+    "offence": -31.8,
     "defence": -94.8,
     "coach": {
      "name": "Will Hardy",
@@ -22032,7 +22032,7 @@
    }
   },
   "2027_20261026_MIN_CLE": {
-   "pHome": 0.6462,
+   "pHome": 0.6463,
    "spread": -4,
    "total": 233.6,
    "pace": 103.1,
@@ -22234,15 +22234,15 @@
    }
   },
   "2027_20261026_PHX_OKC": {
-   "pHome": 0.6569,
+   "pHome": 0.657,
    "spread": -4.4,
    "total": 229.4,
    "pace": 103.1,
    "home": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -22253,7 +22253,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -22445,7 +22445,7 @@
    }
   },
   "2027_20261026_WAS_CHA": {
-   "pHome": 0.8016,
+   "pHome": 0.8017,
    "spread": -9.4,
    "total": 230.9,
    "pace": 103.1,
@@ -22555,7 +22555,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -22663,14 +22663,14 @@
    }
   },
   "2027_20261027_BKN_BOS": {
-   "pHome": 0.8175,
+   "pHome": 0.8176,
    "spread": -10.1,
    "total": 231.2,
    "pace": 103.1,
    "home": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -22863,7 +22863,7 @@
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -22878,7 +22878,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -23152,8 +23152,8 @@
    "away": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -23183,7 +23183,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -23251,7 +23251,7 @@
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -23346,7 +23346,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -23368,7 +23368,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -23816,7 +23816,7 @@
    }
   },
   "2027_20261028_GSW_MIN": {
-   "pHome": 0.6738,
+   "pHome": 0.6739,
    "spread": -4.9,
    "total": 231.6,
    "pace": 103.1,
@@ -24550,7 +24550,7 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -24643,7 +24643,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -24735,7 +24735,7 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -24750,7 +24750,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -24829,7 +24829,7 @@
    }
   },
   "2027_20261028_OKC_DAL": {
-   "pHome": 0.2528,
+   "pHome": 0.2527,
    "spread": 7.3,
    "total": 229.1,
    "pace": 103.1,
@@ -24850,7 +24850,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -24929,9 +24929,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -24942,7 +24942,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -25071,7 +25071,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -25219,7 +25219,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -25337,7 +25337,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -25352,9 +25352,9 @@
    },
    "away": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -25446,13 +25446,13 @@
   },
   "2027_20261028_SAS_UTA": {
    "pHome": 0.2235,
-   "spread": 8.4,
+   "spread": 8.3,
    "total": 233.1,
    "pace": 103.1,
    "home": {
     "team": "UTA",
-    "strength": 1366.7,
-    "offence": -31.7,
+    "strength": 1366.6,
+    "offence": -31.8,
     "defence": -94.8,
     "coach": {
      "name": "Will Hardy",
@@ -25554,7 +25554,7 @@
    "away": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -25647,7 +25647,7 @@
    }
   },
   "2027_20261028_WAS_CLE": {
-   "pHome": 0.829,
+   "pHome": 0.8291,
    "spread": -10.6,
    "total": 233.5,
    "pace": 103.1,
@@ -25757,7 +25757,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -26075,8 +26075,8 @@
    "home": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -26106,7 +26106,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -26354,7 +26354,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -26376,7 +26376,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -26444,7 +26444,7 @@
    "home": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -26662,7 +26662,7 @@
    "home": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -26757,7 +26757,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -27248,7 +27248,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -27412,13 +27412,13 @@
    }
   },
   "2027_20261030_IND_MIA": {
-   "pHome": 0.6046,
+   "pHome": 0.6047,
    "spread": -2.8,
    "total": 233.3,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -27581,7 +27581,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -28060,9 +28060,9 @@
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -28153,7 +28153,7 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -28168,7 +28168,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -28277,7 +28277,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -28425,7 +28425,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -28845,7 +28845,7 @@
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -29122,9 +29122,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -29135,7 +29135,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -29343,9 +29343,9 @@
    },
    "away": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -29436,14 +29436,14 @@
    }
   },
   "2027_20261031_POR_UTA": {
-   "pHome": 0.342,
+   "pHome": 0.3419,
    "spread": 4.4,
    "total": 233.8,
    "pace": 103.1,
    "home": {
     "team": "UTA",
-    "strength": 1366.7,
-    "offence": -31.7,
+    "strength": 1366.6,
+    "offence": -31.8,
     "defence": -94.8,
     "coach": {
      "name": "Will Hardy",
@@ -29545,8 +29545,8 @@
    "away": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -29576,7 +29576,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -29739,7 +29739,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -29761,7 +29761,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -29906,7 +29906,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -30099,7 +30099,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -30134,7 +30134,7 @@
    "away": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -30593,7 +30593,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -30747,7 +30747,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -30862,7 +30862,7 @@
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -30877,7 +30877,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -31142,7 +31142,7 @@
    "away": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -31235,15 +31235,15 @@
    }
   },
   "2027_20261102_CHI_PHI": {
-   "pHome": 0.7345,
+   "pHome": 0.7346,
    "spread": -6.8,
    "total": 232.4,
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -31336,7 +31336,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -31428,7 +31428,7 @@
    }
   },
   "2027_20261102_DET_CHA": {
-   "pHome": 0.5093,
+   "pHome": 0.5094,
    "spread": -0.3,
    "total": 230,
    "pace": 103.1,
@@ -31731,7 +31731,7 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -32294,9 +32294,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -32307,7 +32307,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -32406,7 +32406,7 @@
    }
   },
   "2027_20261102_PHX_GSW": {
-   "pHome": 0.3378,
+   "pHome": 0.3379,
    "spread": 4.5,
    "total": 231.2,
    "pace": 103.1,
@@ -32715,8 +32715,8 @@
    "away": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -32746,7 +32746,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -32828,7 +32828,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -32909,7 +32909,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -32931,7 +32931,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -33124,7 +33124,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -33194,14 +33194,14 @@
    }
   },
   "2027_20261102_UTA_SAS": {
-   "pHome": 0.9095,
+   "pHome": 0.9096,
    "spread": -15.5,
    "total": 233.1,
    "pace": 103.1,
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -33294,8 +33294,8 @@
    },
    "away": {
     "team": "UTA",
-    "strength": 1366.7,
-    "offence": -31.7,
+    "strength": 1366.6,
+    "offence": -31.8,
     "defence": -94.8,
     "coach": {
      "name": "Will Hardy",
@@ -33480,7 +33480,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -33515,7 +33515,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -33623,7 +33623,7 @@
    "home": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -34027,7 +34027,7 @@
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -34042,7 +34042,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -34123,7 +34123,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -34221,9 +34221,9 @@
    "pace": 103.1,
    "home": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -34234,7 +34234,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -34443,7 +34443,7 @@
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -34551,7 +34551,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -34808,7 +34808,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -34831,7 +34831,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -34853,7 +34853,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -35116,7 +35116,7 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -35201,14 +35201,14 @@
    }
   },
   "2027_20261104_MIL_BOS": {
-   "pHome": 0.7928,
+   "pHome": 0.7929,
    "spread": -9,
    "total": 232.4,
    "pace": 103.1,
    "home": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -35386,7 +35386,7 @@
    }
   },
   "2027_20261104_MIN_HOU": {
-   "pHome": 0.6853,
+   "pHome": 0.6854,
    "spread": -5.2,
    "total": 231.5,
    "pace": 103.1,
@@ -35670,9 +35670,9 @@
    },
    "away": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -35763,7 +35763,7 @@
    }
   },
   "2027_20261104_POR_PHX": {
-   "pHome": 0.5698,
+   "pHome": 0.5699,
    "spread": -1.9,
    "total": 231.2,
    "pace": 103.1,
@@ -35863,8 +35863,8 @@
    "away": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -35894,7 +35894,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -35955,7 +35955,7 @@
    }
   },
   "2027_20261104_TOR_DEN": {
-   "pHome": 0.6663,
+   "pHome": 0.6664,
    "spread": -4.6,
    "total": 236.3,
    "pace": 103.1,
@@ -36070,7 +36070,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -36449,7 +36449,7 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -36711,7 +36711,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -36855,7 +36855,7 @@
    "away": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -37232,9 +37232,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -37245,7 +37245,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -37344,7 +37344,7 @@
    }
   },
   "2027_20261106_PHI_CLE": {
-   "pHome": 0.5709,
+   "pHome": 0.571,
    "spread": -1.9,
    "total": 235.2,
    "pace": 103.1,
@@ -37453,9 +37453,9 @@
    },
    "away": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -37647,8 +37647,8 @@
    "away": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -37678,7 +37678,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -37747,7 +37747,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -37769,7 +37769,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -37831,7 +37831,7 @@
    "away": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -38039,7 +38039,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -38109,7 +38109,7 @@
    }
   },
   "2027_20261106_UTA_DAL": {
-   "pHome": 0.6601,
+   "pHome": 0.6602,
    "spread": -4.5,
    "total": 233,
    "pace": 103.1,
@@ -38130,7 +38130,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -38404,7 +38404,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -38505,7 +38505,7 @@
    }
   },
   "2027_20261107_BKN_ATL": {
-   "pHome": 0.7584,
+   "pHome": 0.7585,
    "spread": -7.7,
    "total": 229.6,
    "pace": 103.1,
@@ -38699,7 +38699,7 @@
    }
   },
   "2027_20261107_DEN_IND": {
-   "pHome": 0.3851,
+   "pHome": 0.385,
    "spread": 3.1,
    "total": 238.6,
    "pace": 103.1,
@@ -38783,7 +38783,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -39067,7 +39067,7 @@
    }
   },
   "2027_20261107_NYK_CLE": {
-   "pHome": 0.3116,
+   "pHome": 0.3119,
    "spread": 5.3,
    "total": 233.5,
    "pace": 103.1,
@@ -39176,7 +39176,7 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -39191,7 +39191,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -39472,7 +39472,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -39513,8 +39513,8 @@
    "home": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -39544,7 +39544,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -39606,7 +39606,7 @@
    "away": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -39699,15 +39699,15 @@
    }
   },
   "2027_20261107_WAS_OKC": {
-   "pHome": 0.9058,
+   "pHome": 0.9059,
    "spread": -15.2,
    "total": 229.6,
    "pace": 103.1,
    "home": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -39718,7 +39718,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -39818,7 +39818,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -39940,7 +39940,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -40113,7 +40113,7 @@
    }
   },
   "2027_20261108_BOS_MIL": {
-   "pHome": 0.2985,
+   "pHome": 0.2984,
    "spread": 5.7,
    "total": 232.4,
    "pace": 103.1,
@@ -40205,7 +40205,7 @@
    "away": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -40298,7 +40298,7 @@
    }
   },
   "2027_20261108_LAL_DET": {
-   "pHome": 0.5968,
+   "pHome": 0.5969,
    "spread": -2.6,
    "total": 231.5,
    "pace": 103.1,
@@ -40500,7 +40500,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -40522,7 +40522,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -40583,7 +40583,7 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -40869,7 +40869,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -40961,9 +40961,9 @@
    },
    "away": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -41054,7 +41054,7 @@
    }
   },
   "2027_20261108_UTA_MIN": {
-   "pHome": 0.7796,
+   "pHome": 0.7797,
    "spread": -8.5,
    "total": 233.7,
    "pace": 103.1,
@@ -41656,7 +41656,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -41813,7 +41813,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -42022,7 +42022,7 @@
    }
   },
   "2027_20261109_MEM_TOR": {
-   "pHome": 0.8113,
+   "pHome": 0.8111,
    "spread": -9.8,
    "total": 231.9,
    "pace": 103.1,
@@ -42052,7 +42052,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -42525,7 +42525,7 @@
    "away": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -42618,7 +42618,7 @@
    }
   },
   "2027_20261109_WAS_DET": {
-   "pHome": 0.7952,
+   "pHome": 0.7953,
    "spread": -9.1,
    "total": 230.5,
    "pace": 103.1,
@@ -42719,7 +42719,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -42826,9 +42826,9 @@
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -42920,7 +42920,7 @@
    "away": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -43214,7 +43214,7 @@
    }
   },
   "2027_20261110_MIA_UTA": {
-   "pHome": 0.4523,
+   "pHome": 0.4522,
    "spread": 1.3,
    "total": 233.6,
    "pace": 103.1,
@@ -43314,7 +43314,7 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -43399,13 +43399,13 @@
    }
   },
   "2027_20261110_MIL_NYK": {
-   "pHome": 0.8732,
+   "pHome": 0.8733,
    "spread": -12.9,
    "total": 232.1,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -43420,7 +43420,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -43591,8 +43591,8 @@
    "home": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -43622,7 +43622,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -43683,9 +43683,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -43696,7 +43696,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -43803,7 +43803,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -43825,7 +43825,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -43964,7 +43964,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -44213,7 +44213,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -44284,7 +44284,7 @@
    "away": {
     "team": "BOS",
     "strength": 1622.2,
-    "offence": 62.8,
+    "offence": 62.9,
     "defence": 52.6,
     "coach": {
      "name": "Joe Mazzulla",
@@ -44377,13 +44377,13 @@
    }
   },
   "2027_20261111_CLE_NYK": {
-   "pHome": 0.6879,
+   "pHome": 0.6876,
    "spread": -5.3,
    "total": 233.5,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -44398,7 +44398,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -44765,7 +44765,7 @@
    }
   },
   "2027_20261111_GSW_HOU": {
-   "pHome": 0.7815,
+   "pHome": 0.7816,
    "spread": -8.5,
    "total": 231.4,
    "pace": 103.1,
@@ -45166,8 +45166,8 @@
    "home": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -45197,7 +45197,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -45258,9 +45258,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -45271,7 +45271,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -45548,7 +45548,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -45590,7 +45590,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -45683,7 +45683,7 @@
    "away": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -45776,7 +45776,7 @@
    }
   },
   "2027_20261111_WAS_IND": {
-   "pHome": 0.7533,
+   "pHome": 0.7534,
    "spread": -7.5,
    "total": 233.2,
    "pace": 103.1,
@@ -45860,7 +45860,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -45876,7 +45876,7 @@
    "away": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -45977,7 +45977,7 @@
    }
   },
   "2027_20261112_CHA_PHX": {
-   "pHome": 0.6096,
+   "pHome": 0.6097,
    "spread": -3,
    "total": 230.6,
    "pace": 103.1,
@@ -46179,7 +46179,7 @@
    }
   },
   "2027_20261112_DAL_MIN": {
-   "pHome": 0.7022,
+   "pHome": 0.7023,
    "spread": -5.8,
    "total": 231,
    "pace": 103.1,
@@ -46293,7 +46293,7 @@
       "min": 33,
       "o": -3,
       "d": 4,
-      "adds": 0.7
+      "adds": 0.6
      },
      {
       "id": "6442",
@@ -46379,7 +46379,7 @@
    "home": {
     "team": "WAS",
     "strength": 1355.6,
-    "offence": -66.6,
+    "offence": -66.7,
     "defence": -69.3,
     "coach": {
      "name": "Brian Keefe",
@@ -46580,9 +46580,9 @@
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1579.9,
+    "strength": 1580,
     "offence": 65,
-    "defence": 17.4,
+    "defence": 17.5,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -46697,7 +46697,7 @@
       "min": 33,
       "o": 64,
       "d": 18,
-      "adds": 57.3
+      "adds": 57.4
      },
      {
       "id": "4395625",
@@ -46775,7 +46775,7 @@
     "team": "CHI",
     "strength": 1437.3,
     "offence": -38.7,
-    "defence": -23.1,
+    "defence": -23.2,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -46967,7 +46967,7 @@
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.6,
+    "strength": 1529.7,
     "offence": 15.2,
     "defence": 11.1,
     "coach": {
@@ -47155,14 +47155,14 @@
    }
   },
   "2027_20261113_GSW_SAS": {
-   "pHome": 0.8379,
+   "pHome": 0.838,
    "spread": -11,
    "total": 230.8,
    "pace": 103.1,
    "home": {
     "team": "SAS",
     "strength": 1722.8,
-    "offence": 97.4,
+    "offence": 97.5,
     "defence": 111.5,
     "coach": {
      "name": "Mitch Johnson",
@@ -47642,7 +47642,7 @@
       "min": 17,
       "o": 4,
       "d": 6,
-      "adds": 3.6
+      "adds": 3.5
      },
      {
       "id": "4278572",
@@ -47761,7 +47761,7 @@
    }
   },
   "2027_20261113_NYK_IND": {
-   "pHome": 0.2814,
+   "pHome": 0.2813,
    "spread": 6.3,
    "total": 233.2,
    "pace": 103.1,
@@ -47845,7 +47845,7 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.4
+      "adds": -11.5
      }
     ],
     "out": [
@@ -47860,7 +47860,7 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.8,
+    "strength": 1712.9,
     "offence": 103.4,
     "defence": 100.5,
     "coach": {
@@ -47875,7 +47875,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.2
+      "adds": 43.3
      },
      {
       "id": "3934719",
@@ -48062,9 +48062,9 @@
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.7,
+    "strength": 1701.8,
     "offence": 72.2,
-    "defence": 115.4,
+    "defence": 115.5,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -48075,7 +48075,7 @@
       "name": "Shai Gilgeous-Alexander",
       "pos": "G",
       "min": 31,
-      "o": 52,
+      "o": 53,
       "d": 44,
       "adds": 62.1
      },
@@ -48182,7 +48182,7 @@
     "team": "SAC",
     "strength": 1370.3,
     "offence": -59.8,
-    "defence": -63.4,
+    "defence": -63.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -48204,7 +48204,7 @@
       "min": 33,
       "o": -26,
       "d": -31,
-      "adds": -38.7
+      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -48266,8 +48266,8 @@
    "away": {
     "team": "POR",
     "strength": 1594.2,
-    "offence": 48.6,
-    "defence": 45.4,
+    "offence": 48.7,
+    "defence": 45.5,
     "coach": {
      "name": "Micah Nori",
      "elo": 0
@@ -48297,7 +48297,7 @@
       "pos": "G",
       "min": 35,
       "o": 36,
-      "d": -4,
+      "d": -5,
       "adds": 23
      },
      {
@@ -48358,7 +48358,7 @@
    }
   },
   "2027_20261113_UTA_HOU": {
-   "pHome": 0.8599,
+   "pHome": 0.8597,
    "spread": -12.2,
    "total": 233.5,
    "pace": 103.1,
@@ -48543,5 +48543,5 @@
    }
   }
  },
- "generated": "2026-10-14T16:21Z"
+ "generated": "2026-10-14T18:00Z"
 }

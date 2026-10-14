@@ -28,7 +28,8 @@ const num = v => { const n = parseFloat(v); return Number.isFinite(n) ? String(n
 /* one provider's entry -> its numbers, from whichever form it uses (the older homeTeamOdds.moneyLine, the newer moneyline.home.close.odds) */
 function readEntry(e) {
   const side = s => { const o = e[s + 'TeamOdds'] || {}, n = (e.moneyline || {})[s] || {};
-    return { close: ml(o.moneyLine) || ml(o.current && o.current.moneyLine && o.current.moneyLine.american) || ml(n.close && n.close.odds) || ml(n.current && n.current.odds),
+    const am = x => x && (x.american ?? x.alternateDisplayValue ?? x.value);
+    return { close: ml(o.moneyLine) || ml(am(o.close && o.close.moneyLine)) || ml(am(o.current && o.current.moneyLine)) || ml(n.close && n.close.odds) || ml(n.current && n.current.odds),
              open: ml(o.open && o.open.moneyLine && (o.open.moneyLine.american ?? o.open.moneyLine.value)) || ml(n.open && n.open.odds) }; };
   const h = side('home'), a = side('away');
   const sp = e.pointSpread || {}, tot = e.total || {};
@@ -57,9 +58,25 @@ function writeOut(map) {
 async function main() {
   const started = Date.now();
   const have = readOut();
-  const games = L.readGames().filter(g => g.status === 'final' && g.type !== 'PRE' && +g.season >= FROM && +g.season <= TO && g.espn_id && !have.has(g.game_id));
+  /* a game already in the file with its moneylines is done; one written with none is asked again (the core feed below) */
+  const done = id => { const r = have.get(id); return r && r.home_ml && r.away_ml; };
+  const games = L.readGames().filter(g => g.status === 'final' && g.type !== 'PRE' && +g.season >= FROM && +g.season <= TO && g.espn_id && !done(g.game_id));
   L.log(`${games.length} games to read (${have.size} already in the file), seasons ${FROM}-${TO}`);
-  let read = 0, empty = 0, failed = 0, sampled = fs.existsSync(path.join(L.ROOT, 'data', 'sample_pickcenter.json'));
+  let read = 0, empty = 0, failed = 0, core = 0, sampled = fs.existsSync(path.join(L.ROOT, 'data', 'sample_pickcenter.json'));
+  let coreSampled = fs.existsSync(path.join(L.ROOT, 'data', 'sample_core_odds.json'));
+  /* the core feed lists the providers' odds; an item may be only a $ref to follow */
+  async function coreOdds(id) {
+    try {
+      const j = await L.getJSON(`https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/${id}/competitions/${id}/odds?limit=50`);
+      if (!coreSampled) { coreSampled = true; fs.writeFileSync(path.join(L.ROOT, 'data', 'sample_core_odds.json'), JSON.stringify(j, null, 1).slice(0, 200000) + '\n'); }
+      const out = [];
+      for (const it of (j.items || []).slice(0, 12)) {
+        if (it.provider || it.homeTeamOdds || it.details) out.push(it);
+        else if (it.$ref) { try { out.push(await L.getJSON(String(it.$ref).replace(/^http:/, 'https:'))); } catch (e) {} }
+      }
+      return out;
+    } catch (e) { return []; }
+  }
   const queue = games.slice();
   async function worker() {
     while (queue.length) {
@@ -67,9 +84,15 @@ async function main() {
       const g = queue.shift();
       try {
         const j = await L.getJSON(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${g.espn_id}`);
-        const pc = j.pickcenter || [];
+        let pc = j.pickcenter || [];
         if (!sampled && pc.length) { sampled = true; fs.writeFileSync(path.join(L.ROOT, 'data', 'sample_pickcenter.json'), JSON.stringify(pc, null, 1) + '\n'); }
-        const p = pick(pc);
+        let p = pick(pc);
+        /* the summary has no pickcenter for 2023-24, 2024-25 and the autumn of 2025: ESPN's core feed keeps each
+           event's odds from the providers, which may carry them */
+        if (!p || !p.home_ml) {
+          const items = await coreOdds(g.espn_id);
+          const q = pick(items); if (q && (q.home_ml || !p)) { p = q; pc = items; core++; }
+        }
         have.set(g.game_id, { game_id: g.game_id, season: g.season, date: g.date, type: g.type, n_providers: pc.length, ...(p || { provider: '' }) });
         if (p) read++; else empty++;
       } catch (e) { failed++; if (failed <= 10) L.log(`${g.game_id}: ${e.message}`); }
@@ -80,7 +103,7 @@ async function main() {
   await Promise.all([worker(), worker(), worker()]);
   writeOut(have);
   const left = queue.length;
-  L.log(`odds history: ${read} games with lines, ${empty} with none, ${failed} failed, ${left} left for the next run; ${have.size} in the file`);
+  L.log(`odds history: ${read} games with lines (${core} from the core feed), ${empty} with none, ${failed} failed, ${left} left for the next run; ${have.size} in the file`);
   if (!read && !empty && games.length) process.exit(1);
 }
 module.exports = { readEntry, pick };

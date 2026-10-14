@@ -42,7 +42,7 @@ jobs:
         run: |
           git config user.name "nba-hub bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data/odds_hist.csv data/sample_pickcenter.json 2>/dev/null || true
+          git add data/odds_hist.csv data/sample_pickcenter.json data/sample_core_odds.json 2>/dev/null || true
           if git diff --cached --quiet; then echo "nothing changed"; else
             git commit -m "odds history: $(date -u +'%Y-%m-%d %H:%M UTC')"
             ok=0

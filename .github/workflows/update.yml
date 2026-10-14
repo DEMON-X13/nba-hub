@@ -2,13 +2,17 @@ name: Update
 
 on:
   schedule:
-    # Once a morning after the last West Coast final (7am Eastern = 11:00 UTC in autumn, 12:00 in winter:
-    # the later of the two is still hours after the last game). ESPN's public scoreboard only: no credits.
-    # Off season and empty days cost a few requests and commit nothing.
-    - cron: "0 11 * * *"
-    # late afternoon (5:17pm Eastern in the season): game-day lines and the injury report go up after the
-    # morning run. Off the hour: scheduled runs at :00 are the ones most often delayed or dropped.
-    - cron: "17 21 * * *"
+    # GitHub starts this repo's scheduled runs hours late (5 to 7 hours in October 2026: the 11:00 slot landed between
+    # 16:05 and 20:05 UTC, the 21:17 one at 00:17, after the first tip-offs). So each slot is set by when it must land:
+    #   07:17  last night's finals and box scores, landing in the morning or early afternoon Eastern
+    #   11:17  the day's lines and injury report, landing by mid-afternoon Eastern
+    #   13:17  late lines and injury news, landing before the 7pm Eastern tip-offs on most days
+    # A run that does land after a tip-off changes nothing about that game's line or logged number: both are frozen
+    # at tip (fetch.js merge, players.js logPredictions). Off the hour: :00 is the minute most often dropped.
+    # ESPN's public scoreboard only: no credits. Empty days cost a few requests and commit nothing.
+    - cron: "17 7 * * *"
+    - cron: "17 11 * * *"
+    - cron: "17 13 * * *"
   workflow_dispatch:
     inputs:
       from:

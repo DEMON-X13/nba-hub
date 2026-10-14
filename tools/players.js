@@ -440,6 +440,9 @@ function logPredictions(games, upcoming, ctx) {
   let n = 0;
   for (const g of games) {
     if (final.has(g.game_id) || !upcoming[g.game_id] || g.type === 'PRE') continue;      // preseason is shown, never graded
+    /* frozen at tip-off: once a game has started (or its tip time has passed) its logged number is the record's and is
+       never rewritten, whenever a late run lands */
+    if (g.status !== 'scheduled' || (g.tip && g.tip <= stamp)) continue;
     const u = upcoming[g.game_id];
     const td = ctx.teamDiff[g.game_id];
     const teamP = td === undefined ? '' : E.prob(td).toFixed(4);

@@ -79,16 +79,25 @@ function parseDay(j) {
   return rows;
 }
 
-function merge(have, date, fresh) {
+/* The market a game keeps is the last one read before tip-off. Once a game has started (ESPN says live or final,
+   or its tip time has passed) a fresh read's lines are not taken: a run that lands during the game (scheduled runs
+   start hours late) would otherwise store an in-game line, and the record would grade against it. */
+const MARKET = ['home_line', 'total', 'home_ml', 'away_ml'];
+function merge(have, date, fresh, now = new Date()) {
   const prev = new Map(have.map(r => [r.game_id, r]));
   const keep = have.filter(r => !(r.date === date && r.source === 'espn'));
   const byId = new Map(keep.map(r => [r.game_id, r]));
+  const nowIso = now.toISOString();
   for (const r of fresh) {
     const old = prev.get(r.game_id);
     if (old && old.source !== 'espn' && old.status === 'final') continue;   // history already has this final
-    /* ESPN carries odds only before tip-off, so a final arrives without them: keep the last line seen,
-       the morning-of line from the day's earlier pull */
-    if (old) { if (!r.home_line && old.home_line) r.home_line = old.home_line; if (!r.total && old.total) r.total = old.total; if (!r.tip && old.tip) r.tip = old.tip; if (!r.home_ml && old.home_ml) { r.home_ml = old.home_ml; r.away_ml = old.away_ml; } }
+    if (old) {
+      if (!r.tip && old.tip) r.tip = old.tip;
+      const started = r.status !== 'scheduled' || (r.tip && r.tip <= nowIso);
+      if (started) for (const k of MARKET) r[k] = old[k] || '';                 // frozen at tip: the last pre-game read
+      else for (const k of MARKET) if (!r[k] && old[k]) r[k] = old[k];          // a read with no line keeps the last one
+      if (!r.home_ml !== !r.away_ml) { r.home_ml = old.home_ml || ''; r.away_ml = old.away_ml || ''; }   // both sides or neither
+    } else if (r.status !== 'scheduled' || (r.tip && r.tip <= nowIso)) for (const k of MARKET) r[k] = '';   // first seen after tip: no pre-game line
     byId.set(r.game_id, r);
   }
   return [...byId.values()];
@@ -103,7 +112,11 @@ async function main() {
   let have = L.readGames();
   const today = L.etDate(new Date());
   const lastFinal = have.filter(r => r.status === 'final').reduce((m, r) => r.date > m ? r.date : m, '');
-  const from = opt('--from') || (lastFinal ? L.addDays(lastFinal, 1) : '2025-03-18');
+  /* start from the day after the last final, or earlier where a past day still has a game not final: a run that
+     lands mid-slate finishes some of a night's games and not others, and those others must be read again */
+  const stale = have.filter(r => r.status !== 'final' && r.date < today && r.date >= L.addDays(today, -21)).map(r => r.date).sort()[0];
+  const from = opt('--from') || [stale, lastFinal ? L.addDays(lastFinal, 1) : '2025-03-18'].filter(Boolean).sort()[0];
+  if (stale) L.log(`re-reading from ${stale}: a past day still has a game not final`);
   const to = opt('--to') || L.addDays(today, AHEAD);
   const complete = new Set();
   const byDate = {};
@@ -137,5 +150,5 @@ async function main() {
   if (asked && !ok) process.exit(1);
 }
 
-module.exports = { parseDay, merge, homeLine, moneyline };
+module.exports = { parseDay, merge, homeLine, moneyline, MARKET };
 if (require.main === module) main().catch(e => { console.error(e.message || e); process.exit(1); });

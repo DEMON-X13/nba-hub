@@ -3662,7 +3662,7 @@
     "name": "Precious Achiuwa",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5142620",

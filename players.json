@@ -426,14 +426,15 @@
    ]
   },
   "SAC": {
-   "strength": 1300.7,
-   "offence": -128,
-   "defence": -64.9,
+   "strength": 1277.6,
+   "offence": -135.7,
+   "defence": -80.3,
    "coach": "Doug Christie",
    "coachElo": -6.4,
    "coachGames": 134,
    "pace": 103.1,
    "out": [
+    "Precious Achiuwa (Day-To-Day)",
     "Dylan Cardwell (Out)",
     "De'Andre Hunter (Day-To-Day)",
     "Zach LaVine (Day-To-Day)",
@@ -11345,9 +11346,9 @@
    }
   },
   "2027_20261016_SAC_SAS": {
-   "pHome": 0.9124,
-   "spread": -16,
-   "total": 228.6,
+   "pHome": 0.9108,
+   "spread": -15.9,
+   "total": 229.4,
    "pace": 103.1,
    "home": {
     "team": "SAS",
@@ -11453,9 +11454,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -87.6,
-    "defence": -35.7,
+    "strength": 1374.2,
+    "offence": -75.9,
+    "defence": -43.5,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.4
@@ -11498,15 +11499,6 @@
       "adds": 14.3
      },
      {
-      "id": "4431679",
-      "name": "Precious Achiuwa",
-      "pos": "PF",
-      "min": 28,
-      "o": -14,
-      "d": 10,
-      "adds": -2.1
-     },
-     {
       "id": "4594327",
       "name": "Keegan Murray",
       "pos": "F",
@@ -11537,10 +11529,19 @@
       "id": "4065732",
       "name": "De'Andre Hunter",
       "pos": "F",
-      "min": 8,
+      "min": 23,
       "o": -6,
       "d": 2,
-      "adds": -0.7
+      "adds": -1.8
+     },
+     {
+      "id": "4066262",
+      "name": "Malik Monk",
+      "pos": "G",
+      "min": 13,
+      "o": 20,
+      "d": -10,
+      "adds": 2.8
      }
     ],
     "out": [
@@ -11557,6 +11558,13 @@
       "status": "Out",
       "min": 24,
       "costs": -23.2
+     },
+     {
+      "id": "4431679",
+      "name": "Precious Achiuwa",
+      "status": "Day-To-Day",
+      "min": 28,
+      "costs": -2.1
      }
     ]
    }
@@ -48541,5 +48549,5 @@
    }
   }
  },
- "generated": "2026-10-14T09:29Z"
+ "generated": "2026-10-14T12:54Z"
 }

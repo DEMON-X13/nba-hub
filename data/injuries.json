@@ -567,24 +567,6 @@
     "detail": "Rest",
     "date": "2026-10-14",
     "returns": "2026-10-16"
-   },
-   {
-    "id": "4433599",
-    "name": "Arthur Kaluma",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Lower Body Not Specified",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4897943",
-    "name": "Dalton Knecht",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed Bruise",
-    "date": "2026-10-09",
-    "returns": "2026-10-13"
    }
   ],
   "MEM": [
@@ -1234,15 +1216,6 @@
     "detail": "Foot",
     "date": "2026-10-13",
     "returns": "2026-10-21"
-   },
-   {
-    "id": "4590360",
-    "name": "Chucky Hepburn",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-10-12",
-    "returns": "2026-11-06"
    }
   ],
   "UTA": [

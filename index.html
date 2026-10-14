@@ -302,6 +302,9 @@ function fromFinal(id) {
   return { id, date: `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`, away, home, awayScore: f[0], homeScore: f[1], status: 'final', model: null, line: null, totalLine: null };
 }
 const pickOf = g => g.model ? (g.model.pHome >= 0.5 ? g.home : g.away) : null;
+/* a game is off the board for picks and bets once it has tipped: by its status, or by its tip time on the viewer's
+   clock, since the published file is hours old by the evening and still calls tonight's games scheduled */
+const started = g => g.status !== 'scheduled' || (!!g.tip && Date.parse(g.tip) <= Date.now());
 const modelMargin = g => g.model ? -g.model.spread : null;          // home margin the model expects
 const winner = g => g.homeScore === null ? null : g.homeScore > g.awayScore ? g.home : g.homeScore < g.awayScore ? g.away : null;
 /* one leg: {id, kind:'ml'|'spread'|'total', side, line, p} */
@@ -359,7 +362,7 @@ function card(g) {
   const mine = M.picks[g.id] || null;
   const tags = [];
   if (mine) tags.push(`<span class="tag hot">Your pick · ${mine}</span>`);
-  if (fin) tags.push(`<span class="tag">Final</span>`); else if (g.status === 'live') tags.push(`<span class="tag hot">Live</span>`);
+  if (fin) tags.push(`<span class="tag">Final</span>`); else if (g.status === 'live') tags.push(`<span class="tag hot">Live</span>`); else if (started(g)) tags.push(`<span class="tag hot">Tipped off</span>`);
   if (g.type === 'POST') tags.push(`<span class="tag ice">Playoffs</span>`);
   if (g.type === 'PRE') tags.push(`<span class="tag">Preseason</span>`);
   if (g.neutral) tags.push(`<span class="tag">Neutral</span>`);
@@ -394,18 +397,19 @@ function card(g) {
     ${drawer}
     <div class="foot">
       <span>${drawer ? `<button class="btn ghost" data-act="drawer">Lineups</button>` : ''}</span>
-      <span style="display:flex;gap:6px">${m && g.status === 'scheduled' ? `<button class="btn" data-act="plan" title="Open this game in the Parlay Builder">Parlay Builder →</button>` : ''}</span>
+      <span style="display:flex;gap:6px">${m && !started(g) ? `<button class="btn" data-act="plan" title="Open this game in the Parlay Builder">Parlay Builder →</button>` : ''}</span>
     </div></article>`;
 }
 function act(e) {
   const b = e.currentTarget, id = b.closest('[data-id]').dataset.id, g = gameById(id);
   if (b.dataset.act === 'drawer') { const d = $('#dr-' + CSS.escape(id)); d.hidden = !d.hidden; return; }
   if (b.dataset.act === 'pick') {
-    if (g.status === 'final') return toast('That one is over');
+    if (started(g)) { render.slate(); return toast(g.status === 'final' ? 'That one is over' : 'That one has tipped off'); }
     M.picks[id] = M.picks[id] === b.dataset.side ? null : b.dataset.side; if (!M.picks[id]) delete M.picks[id];
     saveMine(); toast(M.picks[id] ? `You have ${TEAMS[b.dataset.side][1]}` : 'Pick removed'); render.slate(); badges(); return;
   }
   if (b.dataset.act === 'plan') {
+    if (started(g)) { render.slate(); return toast('That one has tipped off'); }
     /* open the builder on that game's day with the game ticked, whatever band it is in */
     const B = M.bank; B.day = g.date; if (B.off[g.date]) delete B.off[g.date][id];
     const tc = band(pickChance(g))[0]; if (!bandWanted(tc)) B.filter = 'all';
@@ -533,11 +537,11 @@ const fmtPx = px => px ? `${fmtAm(px.am)}${px.est ? `<sup title="No moneyline pu
 const decToAm = d => d >= 2 ? Math.round((d - 1) * 100) : Math.round(-100 / (d - 1));
 const money = v => '$' + (Math.round(v * 100) / 100).toFixed(2);
 /* the days that still have games to bet, from today on */
-function bkDays() { return [...new Set(S.slate.filter(g => g.status === 'scheduled' && g.model && g.date >= TODAY).map(g => g.date))].sort(); }
+function bkDays() { return [...new Set(S.slate.filter(g => !started(g) && g.model && g.date >= TODAY).map(g => g.date))].sort(); }
 function bkDay() { const d = bkDays(); if (!d.includes(M.bank.day)) M.bank.day = d[0] || null; return M.bank.day; }
 /* the day's unplayed games in the chosen band, each with the model's pick, its band, the market and the price */
 function bkGames(day) {
-  return S.slate.filter(g => g.date === day && g.status === 'scheduled' && g.model)
+  return S.slate.filter(g => g.date === day && !started(g) && g.model)
     .sort((a, b) => (a.tip || '').localeCompare(b.tip || ''))
     .map(g => { const pick = pickOf(g), conf = pickChance(g); return { g, pick, conf, tc: band(conf)[0], px: priceFor(g, pick), mp: marketP(g, pick) }; })
     .filter(x => bandWanted(x.tc));
@@ -583,7 +587,9 @@ function suggest(pool) {
 
 /* ---------- the Bet Build ---------- */
 const betKey = (type, legs) => type + ':' + legs.map(l => l.id + ':' + l.side).sort().join('|');
+/* 1 added, 0 already in the build, -1 refused: a leg's game has tipped since the list was drawn */
 function lockBet(type, xs, stake) {
+  if (xs.some(x => started(x.g))) return -1;
   const legs = xs.map(x => ({ id: x.g.id, kind: 'ml', side: x.pick, odds: x.px.am, est: x.px.est }));
   const k = betKey(type, legs);
   if (M.build.some(b => betKey(b.type, b.legs) === k)) return 0;
@@ -641,7 +647,8 @@ function renderSuggest(day) {
     B.mode = 'parlay'; saveMine(); render.parlay(); $("#bkPlan").scrollIntoView?.({ behavior: 'smooth', block: 'start' }); });
   el.querySelectorAll('[data-sugg-lock]').forEach(b => b.onclick = () => {
     const t = tiers.concat(value || []).find(x => x.id === b.dataset.suggLock); if (!t || !(stake > 0)) return;
-    bkMsg = lockBet('parlay', t.legs, stake) ? `${t.label} parlay added to the Bet Build below.` : `That ${t.label} parlay is already in the Bet Build.`;
+    const r = lockBet('parlay', t.legs, stake);
+    bkMsg = r > 0 ? `${t.label} parlay added to the Bet Build below.` : r < 0 ? `A game in that ${t.label} parlay has tipped off, so it was not added. The suggestions are redrawn without it.` : `That ${t.label} parlay is already in the Bet Build.`;
     saveMine(); render.parlay(); });
 }
 function renderPlan(day) {
@@ -694,7 +701,8 @@ function renderPlan(day) {
     html += `<tr class="totrow"><td></td><td colspan="5"><b>If every pick hits</b></td><td class="num"><b>${money(placed)}</b></td><td class="num lime"><b>+${money(win)}</b></td></tr></tbody></table></div>`;
     const lockable = chosen.filter(x => stakeOf(x.g.id) > 0), lockAmt = lockable.reduce((t, x) => t + stakeOf(x.g.id), 0);
     html += `<div class="bar" style="margin:16px 0 0"><button class="btn hot" id="bkLock" ${lockable.length ? '' : 'disabled'}>Lock in ${lockable.length} bet${lockable.length === 1 ? '' : 's'} · ${money(lockAmt)}</button></div>`;
-    el._lock = () => { let n = 0; for (const x of lockable) n += lockBet('single', [x], stakeOf(x.g.id)); M.bank.fixed[day] = {}; bkMsg = n ? `Added ${n} straight bet${n === 1 ? '' : 's'} to the Bet Build below.` : 'Those bets are already in the Bet Build.'; };
+    el._lock = () => { let n = 0, late = 0; for (const x of lockable) { const r = lockBet('single', [x], stakeOf(x.g.id)); if (r > 0) n++; else if (r < 0) late++; } M.bank.fixed[day] = {};
+      bkMsg = (n ? `Added ${n} straight bet${n === 1 ? '' : 's'} to the Bet Build below.` : late ? '' : 'Those bets are already in the Bet Build.') + (late ? `${n ? ' ' : ''}${late} game${late === 1 ? ' has' : 's have'} tipped off and ${late === 1 ? 'was' : 'were'} left out.` : ''); };
   } else {
     const legs = chosen, two = legs.length >= 2, dec = legs.reduce((p, x) => p * amToDec(x.px.am), 1), modelP = legs.reduce((p, x) => p * x.conf, 1), mktP = legs.reduce((p, x) => p * (x.mp ?? x.conf), 1);
     html += `<div class="bar" style="margin:0 0 10px"><span class="muted">${legs.length} of ${avail.length} legs in</span></div>
@@ -765,8 +773,22 @@ render.data = function () {
   $('#exp').onclick = () => { const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob([JSON.stringify(M)], { type: 'application/json' })); a.download = `nba-hub-backup-${S.today}.json`; a.click(); };
   $('#imp').onchange = e => { const f = e.target.files[0]; if (!f) return; f.text().then(t => { try { M = normMine(JSON.parse(t)); saveMine(); badges(); toast('Backup restored'); } catch (x) { toast('Not a backup file'); } }); };
 };
-/* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's */
-const TODAY = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+/* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's.
+   It moves at midnight Eastern while the page is open (watch() below) */
+const etToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+let TODAY = etToday();
+/* once a minute: a game that tips off leaves the board's buttons and the builder, and the day turns at midnight,
+   without a reload. Redraws only the tab in view and only when something changed */
+let watchSig = '';
+function watch() {
+  if (!S || !S.slate) return;
+  const sig = etToday() + '|' + S.slate.filter(started).map(g => g.id).join(',');
+  if (sig === watchSig) return;
+  const first = !watchSig; watchSig = sig; TODAY = etToday();
+  if (first) return;
+  const tab = ($$('#nav button').find(b => b.getAttribute('aria-selected') === 'true') || {}).dataset?.tab;
+  if (tab && render[tab]) render[tab](); badges();
+}
 const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
 
 /* ---------- boot ---------- */
@@ -782,6 +804,7 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
   let tab = 'slate'; try { tab = localStorage.getItem(KEY + ':tab') || 'slate'; } catch (e) {}
   if (tab === 'data' && !window.ADMIN) tab = 'slate';
   show(tab);
+  watch(); setInterval(watch, 60000);
 })();
 </script>
 </body>

@@ -5,8 +5,10 @@
  * Loads index.html in jsdom with fetch stubbed to serve state.json plus one fabricated
  * game for tonight, and checks: the update stamp shows, every tab renders without a script error, a
  * visitor's pick is kept in their own storage and shows on My Picks, a parlay leg reaches the ticket
- * and a saved ticket grades once the game is final, the Data tab is only on the admin page, and a preseason
- * game shows with its tag and the not-graded note.
+ * and a saved ticket grades once the game is final, the Data tab is only on the admin page, a preseason
+ * game shows with its tag and the not-graded note, and a game that has tipped off (by its tip time, though the
+ * published file still calls it scheduled) can no longer be picked, planned, suggested or locked in, including
+ * from a page drawn before the tip.
  */
 'use strict';
 const fs = require('fs');
@@ -20,7 +22,9 @@ const state = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'))
 /* the page labels days against the viewer's Eastern date, so the fixtures use that date too */
 state.today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
 const side = t => ({ team: t, strength: 1500, offence: 0, defence: 0, coach: { name: 'Coach', elo: 0 }, lineup: [{ id: '1', name: 'Some Guard', pos: 'G', min: 34, o: 20, d: 10, adds: 21 }], out: [{ id: '2', name: 'Some Star', status: 'Out', min: 33, costs: 60 }] });
-const fake = (id, date, fin) => ({ id, date, tip: date + 'T23:30:00Z', type: 'REG', away: 'BOS', home: 'NYK', neutral: false, status: fin ? 'final' : 'scheduled', awayScore: fin ? 98 : null, homeScore: fin ? 105 : null,
+/* a game to come tips three hours from now, whatever the hour the test runs */
+const tipIn = ms => new Date(Date.now() + ms).toISOString();
+const fake = (id, date, fin) => ({ id, date, tip: fin ? date + 'T23:30:00Z' : tipIn(3 * 3600e3), type: 'REG', away: 'BOS', home: 'NYK', neutral: false, status: fin ? 'final' : 'scheduled', awayScore: fin ? 98 : null, homeScore: fin ? 105 : null,
   line: -2.5, totalLine: 220, ml: { home: -140, away: 120 }, model: { pHome: 0.61, spread: -3.5, total: 224.5, pace: 99, home: side('NYK'), away: side('BOS') }, team: { pHome: 0.55, spread: -1.5 }, published: null });
 /* the second game is yesterday's final: always a different day from today, including on the 1st of a month */
 const yesterday = (() => { const d = new Date(state.today + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - 1); return d.toISOString().slice(0, 10); })();
@@ -147,6 +151,42 @@ function load(page, st, mine) {
   vc.querySelector('[data-sugg-lock="value"]').click(); await sleep(30);
   const m4 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
   check(m4.build.length === 1 && m4.build[0].legs.length === 2, 'Lock in anyway puts it in the Bet Build');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  console.log('3e. games that have tipped off');
+  const tipped = () => ({ ...state, slate: [
+    { ...fake('x1', state.today, false), tip: tipIn(-3600e3) },
+    { ...fake('x2', state.today, false), away: 'LAL', home: 'GSW', ml: { home: -220, away: 180 }, model: { ...fake('x2', state.today, false).model, pHome: 0.70 }, tip: tipIn(1500) },
+    { ...fake('x3', state.today, false), away: 'MIA', home: 'ORL', ml: { home: -175, away: 150 }, model: { ...fake('x3', state.today, false).model, pHome: 0.65 } } ] });
+  ({ w, errors } = load('index.html', tipped()));
+  await sleep(250);
+  let d6 = w.document;
+  const c1 = d6.querySelector('.card[data-id="x1"]');
+  check(c1 && /Tipped off/.test(c1.querySelector('.tags').textContent), 'a game past its tip time is tagged Tipped off');
+  check(c1 && !c1.querySelector('[data-act=plan]'), 'it has no Parlay Builder button');
+  c1.querySelector('.team.away .badge').click(); await sleep(30);
+  check(!(JSON.parse(w.localStorage.getItem('nba_hub_2027') || '{}').picks || {}).x1, 'it cannot be picked');
+  d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+  check(!d6.querySelector('#bkPlan tr[data-gid="x1"]') && d6.querySelector('#bkPlan tr[data-gid="x2"]') && d6.querySelector('#bkPlan tr[data-gid="x3"]'), 'the builder leaves it out and keeps the two games to come');
+  check(!/BOS/.test(d6.getElementById('bkSuggest').textContent), 'the suggestions leave it out');
+  await sleep(1600);                                                           // x2 tips while the page is open
+  d6.getElementById('bkLock').click(); await sleep(30);
+  let m6 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
+  check(m6.build.length === 1 && m6.build[0].legs[0].id === 'x3', 'a straight lock drawn before the tip adds only the game still to come');
+  check(/1 game has tipped off and was left out/.test(d6.getElementById('bkPlan').textContent), 'and says the other has tipped off');
+  check(!d6.querySelector('#bkPlan tr[data-gid="x2"]'), 'the redrawn plan no longer offers it');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  ({ w, errors } = load('index.html', tipped()));
+  await sleep(250);
+  d6 = w.document;
+  d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+  const safe6 = d6.querySelector('#bkSuggest .sugg-tier.safe');
+  check(safe6 && /GSW/.test(safe6.textContent) && /ORL/.test(safe6.textContent), 'Safe is GSW + ORL before the tip');
+  await sleep(1600);
+  safe6.querySelector('[data-sugg-lock="safe"]').click(); await sleep(30);
+  m6 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
+  check(!m6.build.length && /has tipped off, so it was not added/.test(d6.getElementById('bkPlan').textContent), 'a suggested parlay with a leg that has tipped is refused, and says why');
+  check(!d6.querySelector('#bkSuggest .sugg-tier.safe'), 'the suggestions are redrawn without it');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   console.log('4. admin page');

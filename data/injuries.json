@@ -191,20 +191,38 @@
   ],
   "CHI": [
    {
-    "id": "4898010",
-    "name": "Jaylin Sellers",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-12",
-    "returns": "2026-10-14"
-   },
-   {
     "id": "4066650",
     "name": "Zach Collins",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Toe Surgery",
+    "date": "2026-10-13",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "5105555",
+    "name": "Tobe Awaka",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-13",
+    "returns": "2026-10-14"
+   },
+   {
+    "id": "4432822",
+    "name": "Isaac Okoro",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-13",
+    "returns": "2026-10-14"
+   },
+   {
+    "id": "4898010",
+    "name": "Jaylin Sellers",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back",
     "date": "2026-10-12",
     "returns": "2026-10-14"
    },
@@ -225,8 +243,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Back",
-    "date": "2026-10-11",
-    "returns": "2026-10-13"
+    "date": "2026-10-13",
+    "returns": "2026-10-22"
+   },
+   {
+    "id": "4066757",
+    "name": "Sam Merrill",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Elbow Soreness",
+    "date": "2026-10-13",
+    "returns": "2026-10-22"
    },
    {
     "id": "4997530",
@@ -234,8 +261,8 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-10-11",
-    "returns": "2026-10-13"
+    "date": "2026-10-13",
+    "returns": "2026-10-22"
    }
   ],
   "DAL": [
@@ -283,8 +310,8 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-10-12",
-    "returns": "2026-10-14"
+    "date": "2026-10-13",
+    "returns": "2026-10-22"
    }
   ],
   "DET": [
@@ -384,15 +411,6 @@
    }
   ],
   "IND": [
-   {
-    "id": "4396993",
-    "name": "Tyrese Haliburton",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
-   },
    {
     "id": "2530530",
     "name": "T.J. McConnell",
@@ -763,67 +781,22 @@
   ],
   "OKC": [
    {
-    "id": "5061603",
-    "name": "Thomas Sorber",
-    "pos": "C",
+    "id": "4432823",
+    "name": "Jaylin Williams",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "5159925",
-    "name": "Nikola Topic",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Surgery",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
+    "detail": "Heel",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
    },
    {
     "id": "4433255",
     "name": "Chet Holmgren",
     "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Quadriceps",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4432823",
-    "name": "Jaylin Williams",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Heel",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "3133626",
-    "name": "Kenrich Williams",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "2991350",
-    "name": "Alex Caruso",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4683778",
-    "name": "Jared McCain",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
+    "detail": "Quadriceps Bruise",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
    },
    {
     "id": "4900671",
@@ -831,64 +804,37 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
    },
    {
-    "id": "4222252",
-    "name": "Isaiah Hartenstein",
+    "id": "5061603",
+    "name": "Thomas Sorber",
     "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
+    "detail": "Knee Surgery",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
    },
    {
-    "id": "4683692",
-    "name": "Cason Wallace",
+    "id": "5159925",
+    "name": "Nikola Topic",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4593803",
-    "name": "Jalen Williams",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4278073",
-    "name": "Shai Gilgeous-Alexander",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
+    "detail": "Back Surgery",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
    }
   ],
   "ORL": [
    {
-    "id": "4432165",
-    "name": "Jalen Suggs",
-    "pos": "G",
+    "id": "6478",
+    "name": "Nikola Vucevic",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Illness",
+    "detail": "Rest",
     "date": "2026-10-13",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4065654",
-    "name": "Jonathan Isaac",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Sprain",
-    "date": "2026-10-11",
-    "returns": "2026-10-13"
+    "returns": "2026-10-16"
    },
    {
     "id": "4712849",
@@ -896,17 +842,17 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-11",
-    "returns": "2026-10-13"
+    "date": "2026-10-13",
+    "returns": "2026-10-16"
    },
    {
-    "id": "4066320",
-    "name": "Desmond Bane",
-    "pos": "G",
+    "id": "4065654",
+    "name": "Jonathan Isaac",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-11",
-    "returns": "2026-10-13"
+    "detail": "Knee Sprain",
+    "date": "2026-10-13",
+    "returns": "2026-10-16"
    },
    {
     "id": "5107251",
@@ -1036,27 +982,9 @@
     "name": "Chris Youngblood",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Calf",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4066211",
-    "name": "Robert Williams III",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "6606",
-    "name": "Damian Lillard",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
+    "detail": "Calf Soreness",
+    "date": "2026-10-13",
+    "returns": "2026-10-16"
    },
    {
     "id": "4914336",
@@ -1069,6 +997,15 @@
    }
   ],
   "SAC": [
+   {
+    "id": "4433174",
+    "name": "Dylan Cardwell",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Calf Strain",
+    "date": "2026-10-13",
+    "returns": "2026-10-29"
+   },
    {
     "id": "4066262",
     "name": "Malik Monk",
@@ -1084,15 +1021,6 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4433174",
-    "name": "Dylan Cardwell",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Calf",
     "date": "2026-10-12",
     "returns": "2026-10-13"
    },
@@ -1191,31 +1119,22 @@
   ],
   "TOR": [
    {
-    "id": "4431684",
-    "name": "Trayce Jackson-Davis",
-    "pos": "F",
+    "id": "4395623",
+    "name": "Trey Jemison III",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Teeth",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
+    "detail": "Undisclosed",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
    },
    {
-    "id": "5149115",
-    "name": "Allen Graves",
+    "id": "4431893",
+    "name": "Jamison Battle",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Groin Not Specified",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "4702656",
-    "name": "Alijah Martin",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
+    "detail": "Undisclosed",
+    "date": "2026-10-13",
+    "returns": "2026-10-15"
    },
    {
     "id": "4432586",
@@ -1223,8 +1142,17 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
+    "date": "2026-10-13",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4590360",
+    "name": "Chucky Hepburn",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-12",
+    "returns": "2026-11-06"
    }
   ],
   "UTA": [

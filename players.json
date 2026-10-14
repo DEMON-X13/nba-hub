@@ -337,13 +337,14 @@
    ]
   },
   "SAC": {
-   "strength": 1361.2,
-   "offence": -91,
-   "defence": -41.3,
+   "strength": 1368.3,
+   "offence": -88.8,
+   "defence": -36.4,
    "coach": "Doug Christie",
    "coachElo": -6.5,
    "pace": 100,
    "out": [
+    "Dylan Cardwell (Out)",
     "Maxime Raynaud (Out)"
    ]
   },
@@ -9274,15 +9275,15 @@
    }
   },
   "2027_20261013_POR_SAC": {
-   "pHome": 0.2943,
-   "spread": 5.8,
-   "total": 223.3,
+   "pHome": 0.302,
+   "spread": 5.6,
+   "total": 223.2,
    "pace": 100.3,
    "home": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -9361,13 +9362,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -9377,6 +9378,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    },
@@ -12709,9 +12717,9 @@
    }
   },
   "2027_20261016_SAC_SAS": {
-   "pHome": 0.9086,
-   "spread": -15.1,
-   "total": 220.2,
+   "pHome": 0.9055,
+   "spread": -14.9,
+   "total": 220.1,
    "pace": 99.6,
    "home": {
     "team": "SAS",
@@ -12791,9 +12799,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -12872,13 +12880,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -12888,6 +12896,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    }
@@ -15723,9 +15738,9 @@
    }
   },
   "2027_20261021_SAC_LAC": {
-   "pHome": 0.7913,
-   "spread": -8.8,
-   "total": 222.6,
+   "pHome": 0.7852,
+   "spread": -8.6,
+   "total": 222.5,
    "pace": 99.7,
    "home": {
     "team": "LAC",
@@ -15870,9 +15885,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -15951,13 +15966,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -15967,6 +15982,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    }
@@ -18521,15 +18543,15 @@
    }
   },
   "2027_20261023_POR_SAC": {
-   "pHome": 0.2943,
-   "spread": 5.8,
-   "total": 223.3,
+   "pHome": 0.302,
+   "spread": 5.6,
+   "total": 223.2,
    "pace": 100.3,
    "home": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -18608,13 +18630,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -18624,6 +18646,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    },
@@ -21258,15 +21287,15 @@
    }
   },
   "2027_20261025_MEM_SAC": {
-   "pHome": 0.6012,
-   "spread": -2.8,
-   "total": 229.4,
+   "pHome": 0.61,
+   "spread": -3,
+   "total": 229.3,
    "pace": 102.5,
    "home": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -21345,13 +21374,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -21361,6 +21390,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    },
@@ -24161,9 +24197,9 @@
    }
   },
   "2027_20261027_SAC_SAS": {
-   "pHome": 0.9086,
-   "spread": -15.1,
-   "total": 220.2,
+   "pHome": 0.9055,
+   "spread": -14.9,
+   "total": 220.1,
    "pace": 99.6,
    "home": {
     "team": "SAS",
@@ -24243,9 +24279,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -24324,13 +24360,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -24340,6 +24376,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    }
@@ -27077,9 +27120,9 @@
    }
   },
   "2027_20261029_SAC_NOP": {
-   "pHome": 0.6746,
-   "spread": -5,
-   "total": 230.3,
+   "pHome": 0.6664,
+   "spread": -4.7,
+   "total": 230.2,
    "pace": 102.6,
    "home": {
     "team": "NOP",
@@ -27168,9 +27211,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -27249,13 +27292,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -27265,6 +27308,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    }
@@ -30334,9 +30384,9 @@
    }
   },
   "2027_20261031_SAC_MEM": {
-   "pHome": 0.5693,
-   "spread": -1.9,
-   "total": 229.4,
+   "pHome": 0.5603,
+   "spread": -1.6,
+   "total": 229.3,
    "pace": 102.5,
    "home": {
     "team": "MEM",
@@ -30442,9 +30492,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -30523,13 +30573,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -30539,6 +30589,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    }
@@ -33451,9 +33508,9 @@
    }
   },
   "2027_20261102_SAC_DAL": {
-   "pHome": 0.711,
-   "spread": -6.1,
-   "total": 227.2,
+   "pHome": 0.7034,
+   "spread": -5.9,
+   "total": 227.1,
    "pace": 102.4,
    "home": {
     "team": "DAL",
@@ -33551,9 +33608,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -33632,13 +33689,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -33648,6 +33705,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    }
@@ -35455,15 +35519,15 @@
    }
   },
   "2027_20261104_LAL_SAC": {
-   "pHome": 0.3208,
-   "spread": 4.9,
-   "total": 219.3,
+   "pHome": 0.3289,
+   "spread": 4.6,
+   "total": 219.2,
    "pace": 98.4,
    "home": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -35542,13 +35606,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -35558,6 +35622,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    },
@@ -38342,15 +38413,15 @@
    }
   },
   "2027_20261106_SAS_SAC": {
-   "pHome": 0.1669,
-   "spread": 10.6,
-   "total": 220.2,
+   "pHome": 0.1721,
+   "spread": 10.4,
+   "total": 220.1,
    "pace": 99.6,
    "home": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -38429,13 +38500,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -38445,6 +38516,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    },
@@ -41008,15 +41086,15 @@
    }
   },
   "2027_20261108_MIA_SAC": {
-   "pHome": 0.3575,
-   "spread": 3.9,
-   "total": 225.8,
+   "pHome": 0.366,
+   "spread": 3.7,
+   "total": 225.7,
    "pace": 101.5,
    "home": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -41095,13 +41173,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -41111,6 +41189,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    },
@@ -44363,15 +44448,15 @@
    }
   },
   "2027_20261110_ORL_SAC": {
-   "pHome": 0.2888,
-   "spread": 6,
-   "total": 220.1,
+   "pHome": 0.2964,
+   "spread": 5.8,
+   "total": 220,
    "pace": 100.7,
    "home": {
     "team": "SAC",
-    "strength": 1361.3,
-    "offence": -91,
-    "defence": -41.4,
+    "strength": 1368.3,
+    "offence": -88.9,
+    "defence": -36.4,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.5
@@ -44450,13 +44535,13 @@
       "adds": -39
      },
      {
-      "id": "4433174",
-      "name": "Dylan Cardwell",
-      "pos": "C",
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
       "min": 8,
-      "o": -19,
-      "d": -27,
-      "adds": -7.9
+      "o": -7,
+      "d": 2,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -44466,6 +44551,13 @@
       "status": "Out",
       "min": 33,
       "costs": -39.1
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.5
      }
     ]
    },
@@ -47220,5 +47312,5 @@
    }
   }
  },
- "generated": "2026-10-13T15:15Z"
+ "generated": "2026-10-14T00:17Z"
 }

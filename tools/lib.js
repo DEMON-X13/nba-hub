@@ -45,7 +45,8 @@ async function fetchRetry(url) {
   let last;
   for (let i = 0; i < HEADER_SETS.length; i++) {
     try {
-      const r = await fetch(url, { headers: HEADER_SETS[i], redirect: 'follow' });
+      /* 20 seconds an attempt, the body included: a feed that accepts and then stalls must not hold the job */
+      const r = await fetch(url, { headers: HEADER_SETS[i], redirect: 'follow', signal: AbortSignal.timeout(20000) });
       if (r.ok) return r;
       last = new Error('HTTP ' + r.status + ' ' + url);
       if (![403, 408, 429, 500, 502, 503, 504].includes(r.status)) break;

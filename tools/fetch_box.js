@@ -206,10 +206,15 @@ async function injuries() {
   L.log(`injuries: ${lines.length} players listed across ${Object.keys(teams).length} teams`);
 }
 
+/* each club's roster and head coach from its ESPN roster page. A club whose read fails keeps its last good roster
+   and coach, dated in `asOf`: dropping it would put the model back on whoever played for the club last season */
 async function coaches() {
   const today = L.etDate(new Date());
   const ids = await teamIds();
-  const out = {}, rosters = {};
+  const prev = f => { try { return JSON.parse(fs.readFileSync(path.join(DATA, f), 'utf8')); } catch (e) { return {}; } };
+  const oldC = prev('coaches_espn.json'), oldR = prev('rosters_espn.json');
+  const out = {}, rosters = {}, asOf = {};
+  let kept = 0;
   for (const { id, ab } of ids.list) {
     try {
       const r = await L.getJSON(BASE + `teams/${id}/roster`);
@@ -217,12 +222,18 @@ async function coaches() {
       out[ab] = c ? { id: String(c.id || ''), name: clean([c.firstName, c.lastName].filter(Boolean).join(' ')), experience: c.experience } : null;
       rosters[ab] = (r.athletes || []).map(a => ({ id: String(a.id || ''), name: clean(a.displayName || a.fullName), pos: clean(a.position && a.position.abbreviation),
         status: clean(a.status && a.status.type), injured: !!(a.injuries && a.injuries.length) }));
+      asOf[ab] = today;
       await sleep(200);
-    } catch (e) { out[ab] = null; L.log(`${ab} roster: ${e.message}`); }
+    } catch (e) {
+      const had = oldR.teams && oldR.teams[ab];
+      out[ab] = (oldC.teams && oldC.teams[ab]) || null;
+      if (had) { rosters[ab] = had; asOf[ab] = (oldR.asOf && oldR.asOf[ab]) || oldR.date || ''; kept++; }
+      L.log(`${ab} roster: ${e.message}${had ? `; the roster read on ${asOf[ab]} is kept` : ''}`);
+    }
   }
   fs.writeFileSync(path.join(DATA, 'coaches_espn.json'), JSON.stringify({ date: today, teams: out }, null, 1) + '\n');
-  fs.writeFileSync(path.join(DATA, 'rosters_espn.json'), JSON.stringify({ date: today, teams: rosters }, null, 1) + '\n');
-  L.log(`coaches: ${Object.values(out).filter(Boolean).length} of ${Object.keys(out).length} teams; rosters: ${Object.values(rosters).reduce((n, r) => n + r.length, 0)} players`);
+  fs.writeFileSync(path.join(DATA, 'rosters_espn.json'), JSON.stringify({ date: today, teams: rosters, asOf }, null, 1) + '\n');
+  L.log(`coaches: ${Object.values(out).filter(Boolean).length} of ${Object.keys(out).length} teams; rosters: ${Object.values(rosters).reduce((n, r) => n + r.length, 0)} players${kept ? `, ${kept} clubs on an earlier read` : ''}`);
 }
 
 async function main() {

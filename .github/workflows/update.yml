@@ -2,11 +2,13 @@ name: Update
 
 on:
   schedule:
-    # GitHub starts this repo's scheduled runs hours late (5 to 7 hours in October 2026: the 11:00 slot landed between
-    # 16:05 and 20:05 UTC, the 21:17 one at 00:17, after the first tip-offs). So each slot is set by when it must land:
+    # GitHub starts this repo's scheduled runs hours late (3 to 9 hours by the run history of September and October
+    # 2026: the 11:00 slot landed between 14:49 and 20:04 UTC, the 21:17 one at 00:17, after the first tip-offs). So
+    # each slot is set by when it must land:
     #   07:17  last night's finals and box scores, landing in the morning or early afternoon Eastern
-    #   11:17  the day's lines and injury report, landing by mid-afternoon Eastern
-    #   13:17  late lines and injury news, landing before the 7pm Eastern tip-offs on most days
+    #   11:17  the day's lines and injury report, landing by mid-afternoon Eastern at the latest
+    #   13:17  late lines and injury news, landing before the 7pm Eastern tip-offs (at 9 hours late, 6:17pm EDT and
+    #          5:17pm EST: a 5pm or 6pm weekend tip-off can be priced on the 11:17 run instead)
     # A run that does land after a tip-off changes nothing about that game's line or logged number: both are frozen
     # at tip (fetch.js merge, players.js logPredictions). Off the hour: :00 is the minute most often dropped.
     # ESPN's public scoreboard only: no credits. Empty days cost a few requests and commit nothing.
@@ -16,7 +18,7 @@ on:
   workflow_dispatch:
     inputs:
       from:
-        description: "First day to pull (YYYY-MM-DD). Blank = the day after the last final in games.csv"
+        description: "First day to pull (YYYY-MM-DD). Blank = the first day with a game not final (21 days back at most), else the day after the last final"
         type: string
         default: ""
       to:
@@ -37,12 +39,14 @@ permissions:
   contents: write
 
 concurrency:
-  group: ${{ github.workflow }}
+  # one queue per branch: a claude/ branch's run never takes the place of a pending scheduled run on main
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
   nba:
     runs-on: ubuntu-latest
+    timeout-minutes: 45
     steps:
       - uses: actions/checkout@v7
         with:
@@ -61,21 +65,34 @@ jobs:
         run: node tools/players.js ${{ inputs.fit && 'fit' || '' }}
       - name: Publish the state and build the pages
         run: node tools/publish.js && node tools/build.js
-      - run: npm ci
-        working-directory: tools
-      - name: Viewer smoke test
-        run: node tools/smoke.js
+      # The tests gate the built pages, not the data: a failed test (or npm registry) must not throw away the day's
+      # finals, lines, box scores and the numbers logged before tip-off, which are what the record grades.
+      - name: Tests (the pull's bookkeeping, then the viewer)
+        id: tests
+        continue-on-error: true
+        run: |
+          (cd tools && npm ci)
+          node tools/test_fetch.js
+          node tools/smoke.js
       - name: Commit if anything changed
         run: |
           git config user.name "nba-hub bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data model.json players.json state.json index.html admin.html
+          git add data model.json players.json state.json
+          if [ "${{ steps.tests.outcome }}" = "success" ]; then git add index.html admin.html
+          else echo "::warning::the tests failed: the data is committed, the pages are not"; git checkout -- index.html admin.html; fi
           if git diff --cached --quiet; then echo "nothing changed"; else
             git commit -m "update $(date -u +'%Y-%m-%d %H:%M UTC')"
             ok=0
             for i in 1 2 3; do
               if git pull --rebase && git push; then ok=1; break; fi
+              git rebase --abort 2>/dev/null || true          # a stopped rebase would make every retry fail at once
               echo "push raced another job, retrying ($i)"; sleep 15
             done
             [ "$ok" = 1 ]
           fi
+      - name: Fail the run when the tests failed
+        if: steps.tests.outcome != 'success'
+        run: |
+          echo "::error::the tests failed; the data was committed and the pages were left as they were"
+          exit 1

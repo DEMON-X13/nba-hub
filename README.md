@@ -160,12 +160,19 @@ San Antonio and New York the strongest teams and the Wizards the weakest.
 
 ## Runs
 
-`.github/workflows/update.yml` runs every morning at 7am Eastern, and again at 5:17pm for the day's lines
-and injury report: the days since the last final plus ten
-days ahead, the new box scores, the injury report, the coaches and rosters, then both models. It
-commits the data folder and the two model files only if they changed. On demand it takes a date
-range and a refit switch. A push that changes the tools or the app runs it once (on a `claude/`
-branch too, committing there; the schedule only fires from `main`).
+`.github/workflows/update.yml` is queued at 07:17, 11:17 and 13:17 UTC. GitHub starts this repo's
+scheduled runs 3 to 9 hours late, so they land from the morning to the late afternoon Eastern: the first
+for last night's finals and box scores, the other two for the day's lines and injury report. Each run reads
+every day from the first with a game not yet final (three weeks back at most) to thirty days ahead, the new
+box scores, the injury report, the coaches and rosters, then both models, and publishes. A game's line and
+its logged number are frozen at its tip-off, so a run that lands during a game changes neither.
+
+The tests (`tools/test_fetch.js`, then the page's smoke test) gate the built pages only: when they fail
+the run still commits the data folder, the model files and state.json, leaves index.html and admin.html as
+they were, and goes red. A club whose roster read fails keeps its last good roster, dated in
+`rosters_espn.json`'s `asOf`, and the page says when the injury report is not today's. On demand the job
+takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
+`claude/` branch too, committing there and in its own queue; the schedule only fires from `main`).
 
 Local:
 

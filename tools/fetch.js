@@ -1,6 +1,7 @@
 /* Daily pull of NBA results, the coming slate and its lines from ESPN's public scoreboard feed.
  *
- *   node tools/fetch.js                      every day from the last final in games.csv to ten days out
+ *   node tools/fetch.js                      every day from the first with a game not final (three weeks back at
+ *                                            most), else the day after the last final, to thirty days out
  *   node tools/fetch.js --from 2025-03-18 --to 2025-06-30
  *   node tools/fetch.js --offline data.json  parse one saved scoreboard payload (for tests)
  *
@@ -23,6 +24,7 @@ const AHEAD = 30;                                  // far enough to see opening 
 const args = process.argv.slice(2);
 const opt = k => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
 const sleep = ms => new Promise(r => setTimeout(r, ms));
+const PAUSE = process.env.NBA_FETCH_PAUSE_MS != null ? +process.env.NBA_FETCH_PAUSE_MS : 300;   // between days; the tests set 0
 
 /* the feed's odds line reads "BOS -6.5" or "EVEN"; the table keeps the home side's number */
 function homeLine(odds, homeAb) {
@@ -103,18 +105,19 @@ function merge(have, date, fresh, now = new Date()) {
   return [...byId.values()];
 }
 
-async function main() {
+async function main(now = new Date()) {
   const offline = opt('--offline');
   if (offline) {
     const rows = parseDay(JSON.parse(fs.readFileSync(offline, 'utf8')));
     console.log(JSON.stringify(rows, null, 1)); return;
   }
   let have = L.readGames();
-  const today = L.etDate(new Date());
+  const today = L.etDate(now);
   const lastFinal = have.filter(r => r.status === 'final').reduce((m, r) => r.date > m ? r.date : m, '');
-  /* start from the day after the last final, or earlier where a past day still has a game not final: a run that
-     lands mid-slate finishes some of a night's games and not others, and those others must be read again */
-  const stale = have.filter(r => r.status !== 'final' && r.date < today && r.date >= L.addDays(today, -21)).map(r => r.date).sort()[0];
+  /* start from the day after the last final, or earlier where a day up to today still has a game not final: a run
+     that lands mid-slate finishes some of a night's games and not others, and those others must be read again (an
+     afternoon final today would otherwise move the start to tomorrow and leave tonight's games unread) */
+  const stale = have.filter(r => r.status !== 'final' && r.date <= today && r.date >= L.addDays(today, -21)).map(r => r.date).sort()[0];
   const from = opt('--from') || [stale, lastFinal ? L.addDays(lastFinal, 1) : '2025-03-18'].filter(Boolean).sort()[0];
   if (stale) L.log(`re-reading from ${stale}: a past day still has a game not final`);
   const to = opt('--to') || L.addDays(today, AHEAD);
@@ -123,7 +126,7 @@ async function main() {
   for (const r of have) (byDate[r.date] = byDate[r.date] || []).push(r);
   for (const [d, rs] of Object.entries(byDate)) if (d < today && rs.every(r => r.status === 'final')) complete.add(d);
 
-  let asked = 0, ok = 0, fails = 0, games = 0, withMl = 0, withLine = 0;
+  let asked = 0, ok = 0, fails = 0, games = 0, withMl = 0, withLine = 0, empty = 0;
   for (let d = from; d <= to; d = L.addDays(d, 1)) {
     const m = +d.slice(5, 7);
     if (m >= 7 && m <= 9) continue;                               // no NBA games in July, August, September
@@ -137,18 +140,29 @@ async function main() {
       if (fails >= 10) throw new Error('too many failed days, stopping so a partial pull is not published');
       continue;
     }
+    const rows = parseDay(j).filter(r => r.date === d);           // a late West Coast game lands on the day it tipped off, Eastern
+    /* an answer with no games for a day the table has games on, from yesterday on, is a feed hiccup and not a
+       cleared day: taking it would drop the day's games from the slate and, read again after tip, lose their lines
+       for good. It is a failed read and the rows stay. Two days past, an empty day is taken: its games were not played
+       there (postponed games leave the feed) */
+    const had = have.filter(r => r.date === d && r.source === 'espn').length;
+    if (!rows.length && had && d >= L.addDays(today, -1)) {
+      empty++; fails++; L.log(`${d}: the feed answered with no games where the table has ${had}; kept as they were`);
+      if (ok === 0 && fails >= 3) throw new Error('ESPN scoreboard answered with no games three days in a row and nothing else: not publishing a cleared slate');
+      if (fails >= 10) throw new Error('too many failed days, stopping so a partial pull is not published');
+      continue;
+    }
     ok++;
     if (ok === 1) L.log(`first day read: ${(j.events || []).length} events, season types ${[...new Set((j.events || []).map(e => e.season && e.season.type))].join('/') || 'none'}`);
-    const rows = parseDay(j).filter(r => r.date === d);           // a late West Coast game lands on the day it tipped off, Eastern
     games += rows.length; withMl += rows.filter(r => r.status !== 'final' && r.home_ml).length; withLine += rows.filter(r => r.status !== 'final' && r.home_line).length;
-    have = merge(have, d, rows);
+    have = merge(have, d, rows, now);
     if (rows.length) L.log(`${d}: ${rows.length} games, ${rows.filter(r => r.status === 'final').length} final`);
-    await sleep(300);
+    await sleep(PAUSE);
   }
   const changed = L.writeGames(have);
-  L.log(`fetch ${from} to ${to}: ${asked} days asked, ${ok} read, ${fails} failed, ${games} games seen (${withLine} upcoming with a spread, ${withMl} with moneylines), games.csv ${changed ? 'written' : 'unchanged'}`);
+  L.log(`fetch ${from} to ${to}: ${asked} days asked, ${ok} read, ${fails} failed${empty ? ` (${empty} answered empty)` : ''}, ${games} games seen (${withLine} upcoming with a spread, ${withMl} with moneylines), games.csv ${changed ? 'written' : 'unchanged'}`);
   if (asked && !ok) process.exit(1);
 }
 
-module.exports = { parseDay, merge, homeLine, moneyline, MARKET };
+module.exports = { parseDay, merge, homeLine, moneyline, MARKET, main };
 if (require.main === module) main().catch(e => { console.error(e.message || e); process.exit(1); });

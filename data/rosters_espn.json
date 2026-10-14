@@ -1,5 +1,5 @@
 {
- "date": "2026-10-13",
+ "date": "2026-10-14",
  "teams": {
   "ATL": [
    {
@@ -106,13 +106,6 @@
     "pos": "G",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "4712845",
-    "name": "Isaac McKneely",
-    "pos": "G",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "4873201",
@@ -1330,6 +1323,13 @@
     "injured": false
    },
    {
+    "id": "4431914",
+    "name": "Tyler Burton",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "6430",
     "name": "Jimmy Butler III",
     "pos": "F",
@@ -1355,7 +1355,7 @@
     "name": "Draymond Green",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3213",
@@ -1945,6 +1945,13 @@
     "pos": "F",
     "status": "active",
     "injured": true
+   },
+   {
+    "id": "5107258",
+    "name": "William Kyle III",
+    "pos": "F",
+    "status": "active",
+    "injured": false
    },
    {
     "id": "4592691",
@@ -3022,7 +3029,7 @@
     "name": "Otega Oweh",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4897155",
@@ -3690,7 +3697,7 @@
     "name": "Darius Acuff Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395650",
@@ -3725,11 +3732,18 @@
     "name": "De'Andre Hunter",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4917149",
     "name": "Alex Karaban",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4701192",
+    "name": "Viktor Lakhin",
     "pos": "F",
     "status": "active",
     "injured": false
@@ -3756,6 +3770,13 @@
     "injured": true
    },
    {
+    "id": "4432916",
+    "name": "Damari Monsanto",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4594327",
     "name": "Keegan Murray",
     "pos": "F",
@@ -3765,6 +3786,13 @@
    {
     "id": "4592965",
     "name": "Tristen Newton",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "5182573",
+    "name": "Aaron Nkrumah",
     "pos": "G",
     "status": "active",
     "injured": false
@@ -3809,7 +3837,7 @@
     "name": "Ben Simmons",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "SAS": [
@@ -3845,13 +3873,6 @@
     "id": "4592479",
     "name": "Julian Champagnie",
     "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4433176",
-    "name": "RJ Davis",
-    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -4268,13 +4289,6 @@
    {
     "id": "5105839",
     "name": "Brice Sensabaugh",
-    "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "5106293",
-    "name": "Mohamed Wague",
     "pos": "F",
     "status": "active",
     "injured": false

@@ -1,5 +1,5 @@
 {
- "date": "2026-10-13",
+ "date": "2026-10-14",
  "teams": {
   "ATL": [
    {
@@ -335,6 +335,15 @@
    }
   ],
   "GSW": [
+   {
+    "id": "6589",
+    "name": "Draymond Green",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
    {
     "id": "3213",
     "name": "Al Horford",
@@ -817,6 +826,15 @@
   ],
   "OKC": [
    {
+    "id": "5106270",
+    "name": "Otega Oweh",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg",
+    "date": "2026-10-14",
+    "returns": "2026-10-15"
+   },
+   {
     "id": "4432823",
     "name": "Jaylin Williams",
     "pos": "F",
@@ -1034,13 +1052,31 @@
   ],
   "SAC": [
    {
-    "id": "4433174",
-    "name": "Dylan Cardwell",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Calf Strain",
-    "date": "2026-10-13",
-    "returns": "2026-10-29"
+    "id": "3907387",
+    "name": "Ben Simmons",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4065732",
+    "name": "De'Andre Hunter",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "5142620",
+    "name": "Darius Acuff Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
    },
    {
     "id": "4066262",
@@ -1048,8 +1084,8 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
    },
    {
     "id": "3155942",
@@ -1057,8 +1093,26 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-12",
-    "returns": "2026-10-13"
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "3064440",
+    "name": "Zach LaVine",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4433174",
+    "name": "Dylan Cardwell",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Calf Strain",
+    "date": "2026-10-13",
+    "returns": "2026-10-29"
    },
    {
     "id": "4898371",

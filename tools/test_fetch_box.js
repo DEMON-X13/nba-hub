@@ -13,6 +13,8 @@ const fs = require('fs'), path = require('path'), os = require('os');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-box-'));
 const L = require('./lib');
 for (const f of ['injuries.json', 'rosters_espn.json', 'coaches_espn.json', 'coaches.csv', 'injuries_log.csv']) fs.copyFileSync(path.join(L.ROOT, 'data', f), path.join(tmp, f));
+/* the season in play (2027 in the stubbed games) starts with no rows, as at its first read, whatever the real table holds */
+{ const cf = path.join(tmp, 'coaches.csv'); fs.writeFileSync(cf, fs.readFileSync(cf, 'utf8').split('\n').filter(l => !l.startsWith('2027,')).join('\n')); }
 process.env.NBA_DATA_DIR = tmp;
 const B = require('./fetch_box');
 

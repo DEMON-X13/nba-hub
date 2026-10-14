@@ -1,22 +1,22 @@
 {
- "generated": "2026-10-14T00:57Z",
- "snapshots": 29,
- "gradedGames": 40,
+ "generated": "2026-10-14T09:31Z",
+ "snapshots": 32,
+ "gradedGames": 45,
  "straightUp": {
-  "n": 40,
-  "won": 18
+  "n": 45,
+  "won": 21
  },
  "withMarket": {
-  "n": 31,
-  "won": 15
+  "n": 33,
+  "won": 17
  },
  "againstMarket": {
-  "n": 5,
-  "won": 1
+  "n": 8,
+  "won": 2
  },
  "ats": {
-  "n": 36,
-  "won": 16
+  "n": 41,
+  "won": 18
  },
  "games": [
   {
@@ -658,7 +658,129 @@
    "withMarket": false,
    "ats": false,
    "ml": null
+  },
+  {
+   "id": "2027_20261013_CLE_ORL",
+   "date": "2026-10-13",
+   "game": "CLE at ORL",
+   "score": "116-132",
+   "published": "2026-10-13T17:54Z",
+   "tip": "2026-10-13T23:00:00.000Z",
+   "pick": "ORL",
+   "conf": 0.594,
+   "won": true,
+   "line": 2.5,
+   "marketFav": "CLE",
+   "withMarket": false,
+   "ats": true,
+   "ml": {
+    "home": -102,
+    "away": -118
+   }
+  },
+  {
+   "id": "2027_20261013_GSW_LAL",
+   "date": "2026-10-13",
+   "game": "GSW at LAL",
+   "score": "101-89",
+   "published": "2026-10-14T01:02Z",
+   "tip": "2026-10-14T02:00:00.000Z",
+   "pick": "LAL",
+   "conf": 0.572,
+   "won": false,
+   "line": 2.5,
+   "marketFav": "GSW",
+   "withMarket": false,
+   "ats": false,
+   "ml": {
+    "home": 114,
+    "away": -135
+   }
+  },
+  {
+   "id": "2027_20261013_IND_OKC",
+   "date": "2026-10-13",
+   "game": "IND at OKC",
+   "score": "112-114",
+   "published": "2026-10-13T17:54Z",
+   "tip": "2026-10-14T00:00:00.000Z",
+   "pick": "OKC",
+   "conf": 0.84,
+   "won": true,
+   "line": -8.5,
+   "marketFav": "OKC",
+   "withMarket": true,
+   "ats": false,
+   "ml": {
+    "home": -310,
+    "away": 250
+   }
+  },
+  {
+   "id": "2027_20261013_NYK_TOR",
+   "date": "2026-10-13",
+   "game": "NYK at TOR",
+   "score": "98-148",
+   "published": "2026-10-13T17:54Z",
+   "tip": "2026-10-13T23:00:00.000Z",
+   "pick": "NYK",
+   "conf": 0.637,
+   "won": false,
+   "line": -10.5,
+   "marketFav": "TOR",
+   "withMarket": false,
+   "ats": false,
+   "ml": {
+    "home": -410,
+    "away": 320
+   }
+  },
+  {
+   "id": "2027_20261013_POR_SAC",
+   "date": "2026-10-13",
+   "game": "POR at SAC",
+   "score": "110-98",
+   "published": "2026-10-14T01:02Z",
+   "tip": "2026-10-14T02:00:00.000Z",
+   "pick": "POR",
+   "conf": 0.698,
+   "won": true,
+   "line": 3.5,
+   "marketFav": "POR",
+   "withMarket": true,
+   "ats": true,
+   "ml": {
+    "home": 136,
+    "away": -162
+   }
   }
  ],
- "parlays": []
+ "parlays": [
+  {
+   "day": "2026-10-13",
+   "published": "2026-10-13T17:54Z",
+   "tier": "safe",
+   "legs": [
+    "OKC (IND at OKC) -310",
+    "LAL (GSW at LAL) -162"
+   ],
+   "chance": 0.431,
+   "odds": 2.14,
+   "result": "lost"
+  },
+  {
+   "day": "2026-10-13",
+   "published": "2026-10-13T17:54Z",
+   "tier": "value",
+   "legs": [
+    "NYK (NYK at TOR) +320",
+    "POR (POR at SAC) +114",
+    "OKC (IND at OKC) -310",
+    "ORL (CLE at ORL) -102"
+   ],
+   "chance": 0.036,
+   "odds": 23.54,
+   "result": "lost"
+  }
+ ]
 }

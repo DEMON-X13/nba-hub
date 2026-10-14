@@ -306,8 +306,9 @@ function offList(id) {
   const [season, d, away, home] = String(id).split('_'); if (!d || d.length !== 8 || !away || !home || !S.finals) return null;
   if (+season < S.season - 1) return null;                   // older than the published finals: not shown, as before
   const date = `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`;
-  const gone = !(S.pending || []).includes(id) && addDays(date, 2) <= (S.today || '');   // pending: played, its final not read yet
-  return { id, date, away, home, status: gone ? 'void' : 'unlisted', awayScore: null, homeScore: null, model: null, line: null, totalLine: null };
+  const pending = (S.pending || []).includes(id);                  // played, its final not read yet
+  const gone = !pending && addDays(date, 2) <= (S.today || '');
+  return { id, date, away, home, status: gone ? 'void' : pending ? 'pending' : 'unlisted', awayScore: null, homeScore: null, model: null, line: null, totalLine: null };
 }
 /* the published finals carry only the score; the id carries the date and the teams */
 function fromFinal(id) {
@@ -368,7 +369,7 @@ render.slate = function () {
   const opening = S.opening ? `Opening night is ${dayName(S.opening)} ${dayNum(S.opening)}${S.opening > TODAY ? `, ${Math.round((Date.parse(S.opening) - Date.parse(TODAY)) / 86400000)} days away` : ''}.` : '';
   /* the injury report the numbers use, when the job's own read failed: older than the file it was published in (a
      file from last night, before the morning's run, is not a failure) */
-  const injOld = S.injuriesAsOf && S.today && S.injuriesAsOf < S.today && games.some(g => !started(g));
+  const injOld = S.injuriesAsOf && S.today && (S.injuriesAsOf < S.today || S.injuriesAsOf < addDays(TODAY, -1)) && games.some(g => !started(g));
   $('#slate').innerHTML = (injOld ? `<div class="note"><b>Injury report as of ${dayName(S.injuriesAsOf)} ${dayNum(S.injuriesAsOf)}.</b> The latest could not be read, so the lineups below may still count a player who has since been ruled out.</div>` : '')
     + (pre ? `<div class="note"><b>Preseason.</b> Rotations are experimental and starters often sit, so these numbers assume each team's regular rotation. They are shown for fun and never graded, and the ratings don't learn from them. ${opening}</div>` : '')
     + `<div class="grid">${games.map(card).join('')}</div>`;

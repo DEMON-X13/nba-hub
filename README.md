@@ -96,12 +96,13 @@ appearances, filled into the game's 240 minutes in rotation order (starters keep
 end of a long roster drops off), from the club's roster on the roster feed. ESPN's injury report says
 only Out or Day-To-Day, with a return date: a listed player is out of every game before his return
 date, an Out player out of the report's own day whatever it says, and a suspended one out. A player on
-the roster with no game on record yet plays at his prior (the rookie rating or RAPTOR's) for twelve
-minutes. The first game of a new season rolls every player over once, carried part way toward zero,
+the roster with no game on record yet is projected at his prior (the rookie rating or RAPTOR's) for twelve
+minutes, last in the rotation order: on a full roster the regulars' minutes reach 240 first, so a rookie
+counts only where a roster is short (the backtest's known lineups, which know who played, always count him). The first game of a new season rolls every player over once, carried part way toward zero,
 with his minutes taken from his last five regular-season games (a playoff run's 45 minutes in a short
 rotation would leave a contender's bench out), so the opening slate is not priced on last June's
 ratings. Pace is a running average of each team's possessions per 48, reset each season to the
-league's regular-season pace plus the 1.3 possessions opening weeks have run faster (carried over, a
+league's pace as the last regular season ended plus the 1.5 possessions opening weeks have run faster (carried over, a
 playoff team's slow games had new-season totals 5 to 7 points low); the total is the two expected
 efficiencies times the expected pace. A back to back, three in four and rest are read from the club's
 games still to play too, so a game two days out sees tomorrow's. The final win chance blends in a

@@ -64,7 +64,7 @@ function replay(P, games, collect) {
       if (seasonOf[t] !== g.season) { seasonOf[t] = g.season; elo[t] = P.carry * elo[t] + (1 - P.carry) * MEAN; dates[t] = []; ahead[t] = []; played[t] = 0; }
     }
     const neutral = g.neutral === 1 || g.neutral === '1';
-    const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).slice(-4);
+    const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).sort().slice(-4);   // sorted: a game stuck unfinished in the past is not the last one
     const rh = elo[g.home] + situ(P, sd(g.home), g.date, true, g.home, neutral);
     const ra = elo[g.away] + situ(P, sd(g.away), g.date, false, g.away, neutral);
     const d = rh - ra, pHome = prob(d);

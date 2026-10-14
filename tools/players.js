@@ -128,9 +128,10 @@ function loadRaptor() {
 /* a new season's minutes start from a player's last five regular-season games: a playoff run's 42-48 minutes in a
    seven-man rotation would price a contender's opening week as six players and no bench */
 const newSeasonMins = p => (p.reg && p.reg.length ? p.reg : p.mins).slice(-5);
-/* opening weeks run faster than the season before: the first three weeks' pace over the previous regular season's
-   was +1.6, +1.2 and +1.2 possessions in 2022-23 to 2024-25 (measured before the held-out 2025-26, which ran +1.9) */
-const EARLY_PACE = 1.3;
+/* opening weeks run faster than the season before: the first three weeks' pace over the league's pace as the season
+   before ended (lgPace, which weighs its last few hundred games) was +1.33, +1.17 and +1.96 possessions in 2022-23 to
+   2024-25, measured before the held-out 2025-26 (which ran +2.35) */
+const EARLY_PACE = 1.5;
 function replay(P, ctx, mode, collect) {
   const { games, boxes, teamStats, coachOf, raptor, situP } = ctx;
   const players = {}, coaches = {}, dates = {}, ahead = {}, seasonOf = {}, pace = {}, lastLineup = {};   // ahead: games still to play (elo.js)
@@ -190,7 +191,7 @@ function replay(P, ctx, mode, collect) {
       if (seasonOf[t] !== g.season) { if (seasonOf[t] !== undefined) pace[t] = lgPace + EARLY_PACE; seasonOf[t] = g.season; dates[t] = []; ahead[t] = []; }
     }
     const neutral = g.neutral === 1;
-    const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).slice(-4);
+    const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).sort().slice(-4);
     const sh = E.situ(situP, sd(g.home), g.date, true, g.home, neutral), sa = E.situ(situP, sd(g.away), g.date, false, g.away, neutral);
     const ch = getC(coachOf(g.season, g.home, g.date), g.season), ca = getC(coachOf(g.season, g.away, g.date), g.season);
     ch.team = g.home; ca.team = g.away;
@@ -315,10 +316,12 @@ function makeLiveLineup(ctx) {
         if (!p && getP && named[id]) p = getP({ player_id: id, name: named[id].name, pos: named[id].pos, team }, g.season);
         if (!p) continue;
         p.id = id;
-        /* a player with minutes is projected from them; one with no game yet gets DEBUT_MIN; one on record who has
-           never played minutes is not projected to play */
-        const m = p.mins.length ? projected(p, false) : p.n === 0 ? DEBUT_MIN : 0;
-        if (status[id]) { if (m) out.push({ p, status: status[id], min: m }); continue; }
+        /* a player with minutes is projected from them; one with no game on record yet gets DEBUT_MIN; one on record
+           with no minutes (only DNPs) is not projected to play. A debutant out is not listed among the absences: he
+           costs the side nothing it would have had */
+        const debut = !p.mins.length && !p.last;
+        const m = p.mins.length ? projected(p, false) : debut ? DEBUT_MIN : 0;
+        if (status[id]) { if (m && !debut) out.push({ p, status: status[id], min: m }); continue; }
         if (m) list.push([p, m]);
       }
       list.sort((a, b) => b[1] - a[1]);

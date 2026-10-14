@@ -76,7 +76,7 @@ function parseDay(j) {
     const season = (e.season && e.season.year) || L.seasonOf(date);
     const odds = (c.odds || [])[0];
     if (!done) sampleOdds(odds);
-    rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 3 ? 'POST' : 'REG',   // the play-in (5) is REG, as in the history away: A, home: H,
+    rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 3 ? 'POST' : 'REG', /* the play-in (5) is REG, as in the history */ away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
       home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), home_ml: moneyline(odds, 'home'), away_ml: moneyline(odds, 'away'), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });
@@ -151,7 +151,8 @@ async function main(now = new Date()) {
        none of them is kept (a postponed game comes back as an event, so a lone postponed game leaves the table at
        once). Two days past, or beyond the board, an empty day is taken */
     const had = have.filter(r => r.date === d && r.source === 'espn').length;
-    if (!(j.events || []).length && had && d >= L.addDays(today, -1) && d <= L.addDays(today, 10)) {
+    const noEvents = !(j.events || []).length;
+    if (noEvents && had && d >= L.addDays(today, -1) && d <= L.addDays(today, 10)) {
       empty++; fails++; L.log(`${d}: the feed answered with no games where the table has ${had}; kept as they were`);
       if (ok === 0 && fails >= 3) throw new Error('ESPN scoreboard answered with no games three days in a row and nothing else: not publishing a cleared slate');
       if (fails >= 10) throw new Error('too many failed days, stopping so a partial pull is not published');
@@ -160,6 +161,9 @@ async function main(now = new Date()) {
     ok++;
     if (ok === 1) L.log(`first day read: ${(j.events || []).length} events, season types ${[...new Set((j.events || []).map(e => e.season && e.season.type))].join('/') || 'none'}`);
     games += rows.length; withMl += rows.filter(r => r.status !== 'final' && r.home_ml).length; withLine += rows.filter(r => r.status !== 'final' && r.home_line).length;
+    /* an empty answer for a day further back, read again for a game still to finish, keeps the day's finals: only the
+       unfinished games go (not played that day) */
+    if (noEvents && had && d < L.addDays(today, -1)) rows.push(...have.filter(r => r.date === d && r.source === 'espn' && r.status === 'final').map(r => ({ ...r })));
     have = merge(have, d, rows, now);
     if (rows.length) L.log(`${d}: ${rows.length} games, ${rows.filter(r => r.status === 'final').length} final`);
     await sleep(PAUSE);

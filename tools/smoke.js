@@ -60,6 +60,7 @@ function load(page, st, mine) {
     check(soon.every(g => g.model && [g.model.pHome, g.model.spread, g.model.total].every(Number.isFinite)), `every regular-season game tipping in the next 24 hours has the model's numbers (${soon.length})`);
     const nums = JSON.stringify(real).match(/:NaN|:null,"spread":null/g);
     check(!nums, 'no NaN in the published state');
+    check(real.slate.every(g => g.away && g.home && g.away !== g.home), 'every game on the slate has both its teams');
     check(real.season >= Math.max(...rows.filter(g => g.status === 'final').map(g => +g.season)), "the published season is no older than the latest final's");
     ({ w, errors } = load('index.html', real));
     await sleep(300);

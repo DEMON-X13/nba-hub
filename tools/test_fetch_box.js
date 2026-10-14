@@ -41,6 +41,17 @@ async function withFeed(feed, fn) {
   r = await withFeed({ 'teams?limit': teamList(30), 'injuries': {} }, () => B.injuries());
   check(r.error && JSON.stringify(read('injuries.json')) === JSON.stringify(before), 'so is an answer with no list');
 
+  const save = (n, date) => fs.writeFileSync(path.join(tmp, 'injuries.json'), JSON.stringify({ date, teams: { BOS: Array.from({ length: n }, (_, i) => ({ id: 'b' + i, name: 'P' + i, status: 'Day-To-Day', returns: '' })) } }));
+  const answer = n => ({ injuries: [{ id: 2, displayName: 'BOS', injuries: Array.from({ length: n }, (_, i) => ({ athlete: { displayName: 'Q' + i, links: [{ href: '/id/' + (900 + i) + '/' }] }, status: 'Out' })) }] });
+  const today = L.etDate(new Date()), ago = n => new Date(Date.parse(today) - n * 86400000).toISOString().slice(0, 10);
+  save(139, ago(1)); r = await withFeed({ 'teams?limit': teamList(30), 'injuries': answer(60) }, () => B.injuries());
+  check(r.error && read('injuries.json').date === ago(1), 'a report under half of yesterday\'s is refused');
+  save(139, ago(2)); r = await withFeed({ 'teams?limit': teamList(30), 'injuries': answer(60) }, () => B.injuries());
+  check(!r.error && read('injuries.json').date === today && Object.values(read('injuries.json').teams).flat().length === 60, 'once the last report is two days old, the smaller one is taken: a hiccup costs a day, not a week');
+  save(139, ago(5)); r = await withFeed({ 'teams?limit': teamList(30), 'injuries': answer(0) }, () => B.injuries());
+  check(r.error && read('injuries.json').date === ago(5), 'a report with nobody on it is never taken');
+  fs.writeFileSync(path.join(tmp, 'injuries.json'), JSON.stringify(before));
+
   console.log('2. rosters and coaches');
   const oldR = read('rosters_espn.json');
   r = await withFeed({ 'teams?limit': teamList(30), '/roster': url => { const id = +url.match(/teams\/(\d+)\/roster/)[1]; const ab = Object.keys(ESPN_ID).find(k => ESPN_ID[k] === id);
@@ -66,6 +77,9 @@ async function withFeed(feed, fn) {
   const bad = JSON.parse(JSON.stringify(sample)); bad.boxscore.players[0].statistics[0].athletes[0].athlete.id = undefined;
   let lg; r = await withFeed({}, async () => { lg = B.parseSummary(bad, g); });
   check(lg && lg.players.length === n0 - 1 && lg.players.every(p => p.player_id) && r.logs.some(m => /no athlete id/.test(m)), 'it is left out, logged, and the game kept');
+  const side = JSON.parse(JSON.stringify(sample)); for (const a of side.boxscore.players[0].statistics[0].athletes) a.athlete.id = undefined;
+  let threw = null; try { B.parseSummary(side, g); } catch (e) { threw = e; }
+  check(threw && /under five box rows/.test(threw.message), "a box with one side's ids all missing is refused, so it is read again");
 
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log(fails ? `${fails} FAILED` : 'all good');

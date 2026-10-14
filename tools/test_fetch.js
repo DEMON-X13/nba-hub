@@ -69,6 +69,8 @@ async function run(now, table, feed, to) {
   const one = { ...before, home_ml: '-250', away_ml: '' };
   m = F.merge([before], D, [one], new Date('2026-10-21T15:00:00Z')).find(r => r.game_id === g);
   check(m.home_ml === '-140' && m.away_ml === '120', 'a read with one side only keeps the last pair, never a fresh price beside a stale one');
+  const parsed = F.parseDay(board([row({ game_id: g, date: D, tip: '2026-10-21T23:30Z', away: 'BOS', home: 'NYK' })]))[0];
+  check(parsed && parsed.away === 'BOS' && parsed.home === 'NYK' && parsed.game_id === g && parsed.date === D && parsed.status === 'scheduled', 'a parsed game carries its teams, id, date and status');
   const ev = board([row({ game_id: g, date: D, tip: '2026-10-21T23:30Z' })]); ev.events[0].season.type = 5;
   check(F.parseDay(ev)[0].type === 'REG', 'a play-in game (season type 5) is REG, as in the history');
   ev.events[0].season.type = 3;
@@ -82,6 +84,7 @@ async function run(now, table, feed, to) {
   let r = await run(new Date('2026-10-25T21:00:00Z'), day, { [T]: board(fresh) });
   check(r.asked.includes(T), 'the run asks for today although one of today\'s games is final');
   check(r.written && r.written.find(x => x.game_id === b).home_line === '-4.5', "tonight's game takes the new line");
+  check(r.written.every(x => x.away && x.home && L.TEAMS.includes(x.away) && L.TEAMS.includes(x.home)), 'every row the run writes has both teams');
 
   console.log('3. main: an empty answer for today keeps the slate');
   const tonight = [row({ game_id: b, date: T, espn_id: '12', tip: '2026-10-25T23:30Z', home_line: '-2.5', total: '220', home_ml: '-140', away_ml: '120' })];
@@ -114,6 +117,11 @@ async function run(now, table, feed, to) {
   r = await run(new Date('2026-10-23T15:00:00Z'), [gone, live], { '2026-10-23': board([live]) });
   check(r.asked.includes(P), 'the past day with a game not final is read again');
   check(r.written && !r.written.some(x => x.game_id === gone.game_id), 'three days on, an empty answer drops it: the game was not played that day');
+  const fin2 = row({ game_id: id('2026-11-02', 'BOS', 'NYK'), date: '2026-11-02', espn_id: '91', tip: '2026-11-02T23:30Z', status: 'final', away_score: 100, home_score: 104, home_line: '-3.5', home_ml: '-150', away_ml: '130' });
+  const stuck = row({ game_id: id('2026-11-02', 'MIA', 'ORL'), date: '2026-11-02', away: 'MIA', home: 'ORL', espn_id: '92', tip: '2026-11-02T23:30Z', status: 'live' });
+  r = await run(new Date('2026-11-05T15:00:00Z'), [fin2, stuck], { '2026-11-02': { events: [] } });
+  check(r.written && r.written.some(x => x.game_id === fin2.game_id && x.status === 'final' && x.home_line === '-3.5') && !r.written.some(x => x.game_id === stuck.game_id),
+    "an empty answer for a day further back drops the unfinished game and keeps the day's finals, lines and all");
   const back = row({ game_id: id('2026-10-15', 'DEN', 'UTA'), date: '2026-10-15', away: 'DEN', home: 'UTA', espn_id: '90', tip: '2026-10-15T23:00Z', status: 'live' });
   r = await run(new Date('2026-10-25T15:00:00Z'), [back], { '2026-10-15': board([{ ...back, status: 'final', away_score: 101, home_score: 99 }]) });
   check(r.asked[0] <= '2026-10-15' && r.written.find(x => x.game_id === back.game_id).status === 'final', 'a game left live ten days back is read again and finished');

@@ -80,6 +80,7 @@ function parseSummary(j, g) {
      score, and refusing the box would drop the game from the ratings altogether. A box whose points do not add up
      to the final is logged */
   const kept = players.filter(r => r.player_id);
+  for (const side of [g.away, g.home]) if (kept.filter(r => r.team === side).length < 5) throw new Error(`${side}: under five box rows with an athlete id`);   // retried on the next run
   if (kept.length < players.length) L.log(`${g.game_id}: ${players.length - kept.length} box row(s) with no athlete id left out (${players.filter(r => !r.player_id).map(r => r.name || '?').join(', ')})`);
   for (const side of [g.away, g.home]) {
     const fin = side === g.home ? g.home_score : g.away_score, pts = kept.filter(r => r.team === side).reduce((n, r) => n + (+r.pts || 0), 0);
@@ -213,7 +214,10 @@ async function injuries() {
      which the page shows when it is not today's */
   let prev = null; try { prev = JSON.parse(fs.readFileSync(path.join(DATA, 'injuries.json'), 'utf8')); } catch (e) {}
   const had = prev && prev.teams ? Object.values(prev.teams).reduce((n, l) => n + l.length, 0) : 0;
-  if (!Array.isArray(j.injuries) || (had >= 20 && lines.length < had / 2))
+  /* a real drop (preseason's day-to-day list clearing) is taken once the last report is two days old: a hiccup
+     costs a day, never a week. An answer with nobody at all is never taken */
+  const lastAge = prev && prev.date ? (Date.parse(today) - Date.parse(prev.date)) / 86400000 : 99;
+  if (!Array.isArray(j.injuries) || (had >= 20 && (lines.length === 0 || (lines.length < had / 2 && lastAge < 2))))
     throw new Error(`the injury report answered with ${lines.length} players where the last (${prev && prev.date}) had ${had}: the last is kept`);
   fs.writeFileSync(path.join(DATA, 'injuries.json'), JSON.stringify({ date: today, teams }, null, 1) + '\n');
   const logf = path.join(DATA, 'injuries_log.csv');

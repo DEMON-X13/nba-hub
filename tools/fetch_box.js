@@ -21,7 +21,7 @@ const fs = require('fs');
 const path = require('path');
 const L = require('./lib');
 
-const DATA = path.join(L.ROOT, 'data');
+const DATA = process.env.NBA_DATA_DIR || path.join(L.ROOT, 'data');   // the tests point it at a scratch copy
 const BASE = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/';
 const args = process.argv.slice(2);
 const opt = (k, d) => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : d; };
@@ -75,7 +75,17 @@ function parseSummary(j, g) {
     teams.push({ game_id: g.game_id, date: g.date, team: ab, opp: ab === g.home ? g.away : g.home, home: ab === g.home ? 1 : 0, stats });
   }
   if (players.length < 10) throw new Error('only ' + players.length + ' player rows');
-  return { players, teams };
+  /* a row ESPN gives with no athlete id cannot be rated or found again: it is left out (a Chicago rookie came this
+     way in 43 games of 2025-26, with no stats). The game is kept: the models take a side's points from the final
+     score, and refusing the box would drop the game from the ratings altogether. A box whose points do not add up
+     to the final is logged */
+  const kept = players.filter(r => r.player_id);
+  if (kept.length < players.length) L.log(`${g.game_id}: ${players.length - kept.length} box row(s) with no athlete id left out (${players.filter(r => !r.player_id).map(r => r.name || '?').join(', ')})`);
+  for (const side of [g.away, g.home]) {
+    const fin = side === g.home ? g.home_score : g.away_score, pts = kept.filter(r => r.team === side).reduce((n, r) => n + (+r.pts || 0), 0);
+    if (fin !== undefined && fin !== '' && pts !== +fin) L.log(`${g.game_id}: ${side}'s box points ${pts} against a final of ${fin}`);
+  }
+  return { players: kept, teams };
 }
 
 function readBox(season) {
@@ -198,6 +208,13 @@ async function injuries() {
     }
     if (ab) teams[ab] = list; else L.log(`injuries: team not recognised: ${JSON.stringify({ id: t.id, name: t.displayName })}`);
   }
+  /* an answer with no list, or one under half the players the last report had, is a feed hiccup and not a league
+     made well overnight: it would put every Out player back in the lineups. The last report stands, with its date,
+     which the page shows when it is not today's */
+  let prev = null; try { prev = JSON.parse(fs.readFileSync(path.join(DATA, 'injuries.json'), 'utf8')); } catch (e) {}
+  const had = prev && prev.teams ? Object.values(prev.teams).reduce((n, l) => n + l.length, 0) : 0;
+  if (!Array.isArray(j.injuries) || (had >= 20 && lines.length < had / 2))
+    throw new Error(`the injury report answered with ${lines.length} players where the last (${prev && prev.date}) had ${had}: the last is kept`);
   fs.writeFileSync(path.join(DATA, 'injuries.json'), JSON.stringify({ date: today, teams }, null, 1) + '\n');
   const logf = path.join(DATA, 'injuries_log.csv');
   let old = fs.existsSync(logf) ? fs.readFileSync(logf, 'utf8').trim().split('\n') : ['date,team,player_id,name,status'];
@@ -211,6 +228,7 @@ async function injuries() {
 async function coaches() {
   const today = L.etDate(new Date());
   const ids = await teamIds();
+  if (ids.list.length < 30) throw new Error(`ESPN's team list named ${ids.list.length} clubs: rosters and coaches are kept as they were`);
   const prev = f => { try { return JSON.parse(fs.readFileSync(path.join(DATA, f), 'utf8')); } catch (e) { return {}; } };
   const oldC = prev('coaches_espn.json'), oldR = prev('rosters_espn.json');
   const out = {}, rosters = {}, asOf = {};
@@ -218,6 +236,7 @@ async function coaches() {
   for (const { id, ab } of ids.list) {
     try {
       const r = await L.getJSON(BASE + `teams/${id}/roster`);
+      if (!Array.isArray(r.athletes) || r.athletes.length < 10) throw new Error(`the roster answered with ${(r.athletes || []).length} players`);
       const c = (r.coach || [])[0];
       out[ab] = c ? { id: String(c.id || ''), name: clean([c.firstName, c.lastName].filter(Boolean).join(' ')), experience: c.experience } : null;
       rosters[ab] = (r.athletes || []).map(a => ({ id: String(a.id || ''), name: clean(a.displayName || a.fullName), pos: clean(a.position && a.position.abbreviation),
@@ -232,8 +251,30 @@ async function coaches() {
     }
   }
   fs.writeFileSync(path.join(DATA, 'coaches_espn.json'), JSON.stringify({ date: today, teams: out }, null, 1) + '\n');
+  keepCoachesTable(out, today);
   fs.writeFileSync(path.join(DATA, 'rosters_espn.json'), JSON.stringify({ date: today, teams: rosters, asOf }, null, 1) + '\n');
   L.log(`coaches: ${Object.values(out).filter(Boolean).length} of ${Object.keys(out).length} teams; rosters: ${Object.values(rosters).reduce((n, r) => n + r.length, 0)} players${kept ? `, ${kept} clubs on an earlier read` : ''}`);
+}
+
+/* data/coaches.csv names each club's coach by season, with the date a new one took over. For the season in play it
+   is kept from ESPN's roster pages: the coach on the first read of the season for the whole season, then a row dated
+   today whenever ESPN names someone new. Without it every game of the season went to whoever ESPN names today, so a
+   firing handed the fired coach's games, and his rating's updates, to his successor */
+function keepCoachesTable(out, today) {
+  const games = L.readGames(), horizon = L.addDays(today, 10);
+  const season = Math.max(...games.filter(g => g.date <= horizon).map(g => +g.season), 0);
+  if (!season) return;
+  const cf = path.join(DATA, 'coaches.csv');
+  const lines = fs.readFileSync(cf, 'utf8').trim().split('\n');
+  const rows = lines.slice(1).map(l => { const [s, team, coach, from] = l.split(','); return { s: +s, team, coach, from: from || '' }; });
+  const add = [];
+  for (const [ab, c] of Object.entries(out)) {
+    if (!c || !c.name) continue;
+    const cur = rows.filter(r => r.s === season && r.team === ab).sort((a, b) => a.from < b.from ? 1 : -1)[0];
+    if (!cur) add.push(`${season},${ab},${c.name},`);
+    else if (cur.coach !== c.name) add.push(`${season},${ab},${c.name},${today}`);
+  }
+  if (add.length) { fs.writeFileSync(cf, lines.concat(add).join('\n') + '\n'); L.log(`coaches.csv: ${add.length} row(s) added for ${season}`); }
 }
 
 async function main() {
@@ -249,11 +290,12 @@ async function main() {
   for (const step of [injuries, coaches]) {
     try { await step(); extras++; } catch (e) { L.log(`${step.name}: ${e.message}`); }
   }
-  if (read === 0 && extras === 0 && games.some(g => g.status === 'final' && +g.season >= FROM)) {
-    const { have } = readBox(String(Math.max(...games.filter(g => g.status === 'final').map(g => +g.season))));
+  /* nothing read at all: a failure only if box scores were due (preseason finals have none) */
+  if (read === 0 && extras === 0 && games.some(g => g.status === 'final' && g.type !== 'PRE' && +g.season >= FROM)) {
+    const { have } = readBox(String(Math.max(...games.filter(g => g.status === 'final' && g.type !== 'PRE').map(g => +g.season))));
     if (!have.size) { console.error('nothing could be read from ESPN'); process.exit(1); }
   }
 }
 
-module.exports = { parseSummary };
+module.exports = { parseSummary, injuries, coaches, keepCoachesTable, _reset: () => { teamMap = null; } };
 if (require.main === module) main().catch(e => { console.error(e.message || e); process.exit(1); });

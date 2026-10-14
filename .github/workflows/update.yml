@@ -22,7 +22,7 @@ on:
         type: string
         default: ""
       to:
-        description: "Last day to pull (YYYY-MM-DD). Blank = ten days out"
+        description: "Last day to pull (YYYY-MM-DD). Blank = thirty days out"
         type: string
         default: ""
       fit:
@@ -55,32 +55,47 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: 22
+      # The pull is the one step the rest needs. After it, each step may fail on its own and the run goes on: whatever
+      # the pull, the box scores and the models wrote (finals, pre-tip lines, the numbers logged before tip-off, which
+      # the record grades) is committed all the same, and the run is red at the end.
       - name: Pull results and the coming slate from ESPN
+        id: fetch
         run: node tools/fetch.js ${{ inputs.from && format('--from {0}', inputs.from) || '' }} ${{ inputs.to && format('--to {0}', inputs.to) || '' }}
       - name: Pull box scores, the injury report and the coaches
-        run: node tools/fetch_box.js
+        id: box
+        continue-on-error: true
+        run: node tools/fetch_box.js --budget 25
       - name: Replay the ratings and price the slate
+        id: elo
+        continue-on-error: true
         run: node tools/elo.js ${{ inputs.fit && 'fit' || '' }}
       - name: Replay the player, coach and matchup model
+        id: players
+        continue-on-error: true
         run: node tools/players.js ${{ inputs.fit && 'fit' || '' }}
       - name: Publish the state and build the pages
+        id: publish
+        continue-on-error: true
         run: node tools/publish.js && node tools/build.js
-      # The tests gate the built pages, not the data: a failed test (or npm registry) must not throw away the day's
-      # finals, lines, box scores and the numbers logged before tip-off, which are what the record grades.
-      - name: Tests (the pull's bookkeeping, then the viewer)
+      # The tests gate what visitors see, state.json and the pages, and never the data: a failed test (or npm registry)
+      # must not throw away the day's finals, lines, box scores and pre-tip numbers.
+      - name: Tests (the pull's bookkeeping, the box scores, then the viewer on the new state)
         id: tests
+        if: steps.publish.outcome == 'success'
         continue-on-error: true
         run: |
           (cd tools && npm ci)
           node tools/test_fetch.js
+          node tools/test_fetch_box.js
           node tools/smoke.js
       - name: Commit if anything changed
+        if: always() && steps.fetch.outcome == 'success'
         run: |
           git config user.name "nba-hub bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data model.json players.json state.json
-          if [ "${{ steps.tests.outcome }}" = "success" ]; then git add index.html admin.html
-          else echo "::warning::the tests failed: the data is committed, the pages are not"; git checkout -- index.html admin.html; fi
+          git add data model.json players.json
+          if [ "${{ steps.publish.outcome }}" = "success" ] && [ "${{ steps.tests.outcome }}" = "success" ]; then git add state.json index.html admin.html
+          else echo "::warning::publishing or the tests failed: the data is committed, state.json and the pages are left as they were"; git checkout -- state.json index.html admin.html; fi
           if git diff --cached --quiet; then echo "nothing changed"; else
             git commit -m "update $(date -u +'%Y-%m-%d %H:%M UTC')"
             ok=0
@@ -91,8 +106,8 @@ jobs:
             done
             [ "$ok" = 1 ]
           fi
-      - name: Fail the run when the tests failed
-        if: steps.tests.outcome != 'success'
+      - name: Fail the run when a step failed
+        if: always() && (steps.fetch.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success')
         run: |
-          echo "::error::the tests failed; the data was committed and the pages were left as they were"
+          echo "::error::failed: pull ${{ steps.fetch.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}"
           exit 1

@@ -41,13 +41,14 @@ function writeGames(rows) {
 
 /* ESPN refuses some header sets from some networks; try a few. Plain UA works from GitHub's runners (news tracker, checked 2026-09-15). */
 const HEADER_SETS = [{ 'User-Agent': 'nba-hub/1.0 (+https://github.com/DEMON-X13/nba-hub)', 'Accept': 'application/json' }, {}, { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', 'Accept': 'application/json' }];
-async function fetchRetry(url) {
+/* each attempt reads the body too (parse), inside its 20 seconds: a feed that accepts and then stalls must not hold
+   the job, and a stalled body is retried like a stalled answer */
+async function fetchRetry(url, parse = r => r) {
   let last;
   for (let i = 0; i < HEADER_SETS.length; i++) {
     try {
-      /* 20 seconds an attempt, the body included: a feed that accepts and then stalls must not hold the job */
       const r = await fetch(url, { headers: HEADER_SETS[i], redirect: 'follow', signal: AbortSignal.timeout(20000) });
-      if (r.ok) return r;
+      if (r.ok) return await parse(r);
       last = new Error('HTTP ' + r.status + ' ' + url);
       if (![403, 408, 429, 500, 502, 503, 504].includes(r.status)) break;
     } catch (e) { last = e; }
@@ -55,7 +56,7 @@ async function fetchRetry(url) {
   }
   throw last;
 }
-const getJSON = async url => (await fetchRetry(url)).json();
-const getText = async url => (await fetchRetry(url)).text();
+const getJSON = url => fetchRetry(url, r => r.json());
+const getText = url => fetchRetry(url, r => r.text());
 
 module.exports = { ROOT, GAMES, COLS, TEAMS, fromHist, fromEspn, log, seasonOf, etDate, addDays, gameId, readGames, writeGames, getJSON, getText };

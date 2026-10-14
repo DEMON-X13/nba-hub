@@ -21,8 +21,7 @@ const L = require('./lib');
 
 const SB = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?limit=100&dates=';
 const AHEAD = 30;                                  // far enough to see opening night from the preseason; the page shows ten days
-const args = process.argv.slice(2);
-const opt = k => { const i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };
+const opt = k => { const args = process.argv.slice(2), i = args.indexOf(k); return i >= 0 ? args[i + 1] : null; };   // read at call time, so a test can set them
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const PAUSE = process.env.NBA_FETCH_PAUSE_MS != null ? +process.env.NBA_FETCH_PAUSE_MS : 300;   // between days; the tests set 0
 
@@ -45,7 +44,11 @@ function moneyline(odds, side) {
   const o = odds[side + 'TeamOdds'];
   if (o) { const v = asMl(o.moneyLine) || asMl(o.current && o.current.moneyLine && o.current.moneyLine.american); if (v) return v; }
   const n = odds.moneyline && odds.moneyline[side];
-  if (n) { const v = asMl(n.close && n.close.odds) || asMl(n.current && n.current.odds) || asMl(n.open && n.open.odds) || asMl(n.odds); if (v) return v; }
+  if (n) {
+    const close = n.close && n.close.odds;
+    if (close != null && close !== '') return asMl(close);         // 'OFF' is the book holding no price, never the opening one
+    const v = asMl(n.current && n.current.odds) || asMl(n.open && n.open.odds) || asMl(n.odds); if (v) return v;
+  }
   return '';
 }
 let oddsSampled = false;
@@ -73,7 +76,7 @@ function parseDay(j) {
     const season = (e.season && e.season.year) || L.seasonOf(date);
     const odds = (c.odds || [])[0];
     if (!done) sampleOdds(odds);
-    rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 2 ? 'REG' : 'POST', away: A, home: H,
+    rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 3 ? 'POST' : 'REG',   // the play-in (5) is REG, as in the history away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
       home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), home_ml: moneyline(odds, 'home'), away_ml: moneyline(odds, 'away'), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });
@@ -95,6 +98,7 @@ function merge(have, date, fresh, now = new Date()) {
     if (old && old.source !== 'espn' && old.status === 'final') continue;   // history already has this final
     if (old) {
       if (!r.tip && old.tip) r.tip = old.tip;
+      if (!r.home_ml !== !r.away_ml) { r.home_ml = ''; r.away_ml = ''; }   // a read with one side only is no price: a pair is never two reads
       const started = r.status !== 'scheduled' || (r.tip && r.tip <= nowIso);
       if (started) for (const k of MARKET) r[k] = old[k] || '';                 // frozen at tip: the last pre-game read
       else for (const k of MARKET) if (!r[k] && old[k]) r[k] = old[k];          // a read with no line keeps the last one
@@ -141,12 +145,13 @@ async function main(now = new Date()) {
       continue;
     }
     const rows = parseDay(j).filter(r => r.date === d);           // a late West Coast game lands on the day it tipped off, Eastern
-    /* an answer with no games for a day the table has games on, from yesterday on, is a feed hiccup and not a
-       cleared day: taking it would drop the day's games from the slate and, read again after tip, lose their lines
-       for good. It is a failed read and the rows stay. Two days past, an empty day is taken: its games were not played
-       there (postponed games leave the feed) */
+    /* an answer with no events at all for a day the table has games on, from yesterday to the board's ten days out,
+       is a feed hiccup and not a cleared day: taking it would drop the day's games from the slate and, read again after
+       tip, lose their lines for good. It is a failed read and the rows stay. An answer with events is a read, even if
+       none of them is kept (a postponed game comes back as an event, so a lone postponed game leaves the table at
+       once). Two days past, or beyond the board, an empty day is taken */
     const had = have.filter(r => r.date === d && r.source === 'espn').length;
-    if (!rows.length && had && d >= L.addDays(today, -1)) {
+    if (!(j.events || []).length && had && d >= L.addDays(today, -1) && d <= L.addDays(today, 10)) {
       empty++; fails++; L.log(`${d}: the feed answered with no games where the table has ${had}; kept as they were`);
       if (ok === 0 && fails >= 3) throw new Error('ESPN scoreboard answered with no games three days in a row and nothing else: not publishing a cleared slate');
       if (fails >= 10) throw new Error('too many failed days, stopping so a partial pull is not published');

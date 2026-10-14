@@ -1,5 +1,5 @@
 {
- "generated": "2026-10-14T09:28Z",
+ "generated": "2026-10-14T14:47Z",
  "seasons": {
   "2024:known": {
    "season": 2024,
@@ -12,15 +12,15 @@
     "market": 0.691
    },
    "logloss": {
-    "model": 0.6152,
+    "model": 0.6139,
     "market": 0.5835,
     "diff90": [
-     0.0206,
-     0.042
+     0.0195,
+     0.0407
     ]
    },
    "brier": {
-    "model": 0.2133,
+    "model": 0.2126,
     "market": 0.1995
    },
    "modelPicks": {
@@ -28,13 +28,13 @@
      "n": 1119,
      "won": 792,
      "rate": 0.7078,
-     "units": -31.91
+     "units": -32.26
     },
     "againstMarket": {
      "n": 187,
      "won": 77,
      "rate": 0.4118,
-     "units": -13.49
+     "units": -13.57
     },
     "pickem": {
      "n": 8,
@@ -46,85 +46,85 @@
    "providers": {
     "DraftKings": {
      "games": 1250,
-     "straightUnits": -38.19
+     "straightUnits": -36.79
     },
     "ESPN BET": {
      "games": 64,
-     "straightUnits": -5.65
+     "straightUnits": -7.49
     }
    },
    "ats": {
     "n": 1291,
-    "won": 642,
-    "rate": 0.4973
+    "won": 637,
+    "rate": 0.4934
    },
    "overUnder": {
     "n": 1297,
-    "won": 676,
-    "rate": 0.5212
+    "won": 677,
+    "rate": 0.522
    },
    "straight": {
     "bets": 1314,
     "won": 874,
-    "units": -43.85,
-    "roi": -0.033
+    "units": -44.28,
+    "roi": -0.034
    },
    "parlays": {
     "safe": {
-     "parlays": 174,
+     "parlays": 173,
      "won": 116,
-     "expMarket": 99.7,
-     "expMarketPower": 105.5,
-     "expModel": 76.6,
-     "units": 12.7,
+     "expMarket": 99.9,
+     "expMarketPower": 105.7,
+     "expModel": 75.2,
+     "units": 11.48,
      "avgLegs": 2.34,
      "units90": [
-      -5.81,
-      27.51
+      -7.95,
+      25.76
      ],
-     "roi": 0.073
+     "roi": 0.066
     },
     "med": {
-     "parlays": 144,
-     "won": 66,
-     "expMarket": 53.8,
-     "expMarketPower": 58.6,
-     "expModel": 36,
-     "units": 5.01,
-     "avgLegs": 3.77,
+     "parlays": 145,
+     "won": 68,
+     "expMarket": 54.1,
+     "expMarketPower": 59.1,
+     "expModel": 35.2,
+     "units": 9.6,
+     "avgLegs": 3.78,
      "units90": [
-      -16.25,
-      26.64
+      -13.09,
+      32.58
      ],
-     "roi": 0.035
+     "roi": 0.066
     },
     "aggr": {
-     "parlays": 118,
-     "won": 28,
-     "expMarket": 24,
-     "expMarketPower": 26.8,
-     "expModel": 15.4,
-     "units": -5.26,
-     "avgLegs": 5.29,
+     "parlays": 121,
+     "won": 29,
+     "expMarket": 24.8,
+     "expMarketPower": 27.7,
+     "expModel": 15.1,
+     "units": -5.89,
+     "avgLegs": 5.32,
      "units90": [
-      -30.26,
-      28.68
+      -31.89,
+      23.98
      ],
-     "roi": -0.045
+     "roi": -0.049
     },
     "value": {
-     "parlays": 69,
-     "won": 22,
-     "expMarket": 13.6,
-     "expMarketPower": 13.6,
-     "expModel": 22,
-     "units": 35.98,
-     "avgLegs": 2.46,
+     "parlays": 64,
+     "won": 19,
+     "expMarket": 13.7,
+     "expMarketPower": 13.7,
+     "expModel": 21.4,
+     "units": 17.95,
+     "avgLegs": 2.33,
      "units90": [
-      4.3,
-      75.2
+      -7.22,
+      46.8
      ],
-     "roi": 0.521
+     "roi": 0.28
     }
    },
    "baseline": {
@@ -153,29 +153,29 @@
     "market": 0.6871
    },
    "logloss": {
-    "model": 0.5932,
+    "model": 0.5917,
     "market": 0.5854,
     "diff90": [
-     -0.0004,
-     0.0146
+     -0.0011,
+     0.0128
     ]
    },
    "brier": {
-    "model": 0.2042,
+    "model": 0.2035,
     "market": 0.2009
    },
    "modelPicks": {
     "withMarket": {
-     "n": 1176,
-     "won": 832,
-     "rate": 0.7075,
-     "units": -45.16
+     "n": 1180,
+     "won": 834,
+     "rate": 0.7068,
+     "units": -46.6
     },
     "againstMarket": {
-     "n": 129,
-     "won": 57,
-     "rate": 0.4419,
-     "units": -1.02
+     "n": 125,
+     "won": 55,
+     "rate": 0.44,
+     "units": -2.52
     },
     "pickem": {
      "n": 15,
@@ -187,81 +187,81 @@
    "providers": {
     "ESPN BET": {
      "games": 1320,
-     "straightUnits": -45.91
+     "straightUnits": -48.85
     }
    },
    "ats": {
     "n": 1319,
-    "won": 669,
-    "rate": 0.5072
+    "won": 670,
+    "rate": 0.508
    },
    "overUnder": {
     "n": 1320,
-    "won": 633,
-    "rate": 0.4795
+    "won": 632,
+    "rate": 0.4788
    },
    "straight": {
     "bets": 1320,
     "won": 897,
-    "units": -45.91,
-    "roi": -0.035
+    "units": -48.85,
+    "roi": -0.037
    },
    "parlays": {
     "safe": {
-     "parlays": 176,
-     "won": 109,
-     "expMarket": 102.5,
-     "expMarketPower": 109.9,
-     "expModel": 94.4,
+     "parlays": 178,
+     "won": 110,
+     "expMarket": 103.3,
+     "expMarketPower": 110.8,
+     "expModel": 94.6,
      "units": -9.58,
-     "avgLegs": 2.45,
+     "avgLegs": 2.44,
      "units90": [
-      -22.03,
-      8.6
+      -26.37,
+      6.47
      ],
      "roi": -0.054
     },
     "value": {
-     "parlays": 60,
-     "won": 21,
-     "expMarket": 16.7,
-     "expMarketPower": 17.2,
-     "expModel": 23.9,
-     "units": 3.29,
-     "avgLegs": 2.6,
+     "parlays": 49,
+     "won": 17,
+     "expMarket": 14.5,
+     "expMarketPower": 14.8,
+     "expModel": 20.6,
+     "units": -0.98,
+     "avgLegs": 2.51,
      "units90": [
-      -15.67,
-      22.64
+      -17.21,
+      14.46
      ],
-     "roi": 0.055
+     "roi": -0.02
     },
     "med": {
      "parlays": 153,
-     "won": 60,
-     "expMarket": 56.3,
+     "won": 62,
+     "expMarket": 56.4,
      "expMarketPower": 62.3,
-     "expModel": 50.4,
-     "units": -17.63,
-     "avgLegs": 3.87,
+     "expModel": 50.1,
+     "units": -12.91,
+     "avgLegs": 3.88,
      "units90": [
-      -39.89,
-      4.31
+      -35.23,
+      8.77
      ],
-     "roi": -0.115
+     "roi": -0.084
     },
     "aggr": {
      "parlays": 126,
      "won": 28,
      "expMarket": 25.4,
-     "expMarketPower": 28.9,
-     "expModel": 22.4,
-     "units": -16.18,
-     "avgLegs": 5.46,
+     "expMarketPower": 28.8,
+     "expModel": 22,
+     "units": -18.27,
+     "avgLegs": 5.48,
      "units90": [
-      -45.59,
-      17.6
+      -46.61,
+      14.2
      ],
-     "roi": -0.128
+     "roi": -0.145
     }
    },
    "baseline": {
@@ -286,33 +286,33 @@
    "priced": 1318,
    "days": 210,
    "straightUp": {
-    "model": 0.6927,
+    "model": 0.6935,
     "market": 0.6874
    },
    "logloss": {
-    "model": 0.5914,
+    "model": 0.5906,
     "market": 0.5757,
     "diff90": [
      0.0078,
-     0.0228
+     0.0214
     ]
    },
    "brier": {
-    "model": 0.2026,
+    "model": 0.2023,
     "market": 0.197
    },
    "modelPicks": {
     "withMarket": {
-     "n": 1171,
-     "won": 836,
-     "rate": 0.7139,
-     "units": -34.85
+     "n": 1168,
+     "won": 835,
+     "rate": 0.7149,
+     "units": -33.38
     },
     "againstMarket": {
-     "n": 144,
-     "won": 76,
-     "rate": 0.5278,
-     "units": 27.19
+     "n": 147,
+     "won": 78,
+     "rate": 0.5306,
+     "units": 29.11
     },
     "pickem": {
      "n": 3,
@@ -324,11 +324,11 @@
    "providers": {
     "ESPN BET": {
      "games": 257,
-     "straightUnits": 3.45
+     "straightUnits": 6.09
     },
     "DraftKings": {
      "games": 1060,
-     "straightUnits": -11.19
+     "straightUnits": -10.44
     },
     "Draft Kings": {
      "games": 1,
@@ -337,76 +337,76 @@
    },
    "ats": {
     "n": 1318,
-    "won": 644,
-    "rate": 0.4886
+    "won": 651,
+    "rate": 0.4939
    },
    "overUnder": {
     "n": 1317,
-    "won": 672,
-    "rate": 0.5103
+    "won": 671,
+    "rate": 0.5095
    },
    "straight": {
     "bets": 1318,
-    "won": 913,
-    "units": -8.74,
-    "roi": -0.007
+    "won": 914,
+    "units": -5.35,
+    "roi": -0.004
    },
    "parlays": {
     "safe": {
-     "parlays": 180,
-     "won": 114,
-     "expMarket": 106.2,
-     "expMarketPower": 113,
-     "expModel": 100.4,
-     "units": -8.19,
+     "parlays": 181,
+     "won": 115,
+     "expMarket": 106.5,
+     "expMarketPower": 113.3,
+     "expModel": 99.5,
+     "units": -6.95,
      "avgLegs": 2.39,
      "units90": [
-      -26.58,
-      7.09
+      -21.89,
+      10.73
      ],
-     "roi": -0.045
+     "roi": -0.038
     },
     "med": {
-     "parlays": 155,
+     "parlays": 156,
      "won": 66,
-     "expMarket": 58.5,
-     "expMarketPower": 64.2,
-     "expModel": 54.2,
-     "units": -8.86,
-     "avgLegs": 3.86,
+     "expMarket": 58.9,
+     "expMarketPower": 64.7,
+     "expModel": 53.7,
+     "units": -10.21,
+     "avgLegs": 3.85,
      "units90": [
-      -28.55,
-      18.96
+      -35.41,
+      8.93
      ],
-     "roi": -0.057
+     "roi": -0.065
     },
     "aggr": {
-     "parlays": 125,
-     "won": 36,
-     "expMarket": 25.5,
-     "expMarketPower": 28.8,
-     "expModel": 23.8,
-     "units": 16,
-     "avgLegs": 5.54,
+     "parlays": 128,
+     "won": 35,
+     "expMarket": 26.1,
+     "expMarketPower": 29.5,
+     "expModel": 23.9,
+     "units": 7.56,
+     "avgLegs": 5.52,
      "units90": [
-      -19.41,
-      45.3
+      -26.48,
+      37.1
      ],
-     "roi": 0.128
+     "roi": 0.059
     },
     "value": {
-     "parlays": 83,
-     "won": 21,
-     "expMarket": 20.2,
-     "expMarketPower": 20.7,
-     "expModel": 31.5,
-     "units": -5.19,
-     "avgLegs": 2.81,
+     "parlays": 80,
+     "won": 19,
+     "expMarket": 20.8,
+     "expMarketPower": 21.2,
+     "expModel": 31.2,
+     "units": -21.62,
+     "avgLegs": 2.64,
      "units90": [
-      -32.07,
-      30.45
+      -40.99,
+      1.63
      ],
-     "roi": -0.063
+     "roi": -0.27
     }
    },
    "baseline": {
@@ -431,33 +431,33 @@
    "priced": 1314,
    "days": 207,
    "straightUp": {
-    "model": 0.6712,
+    "model": 0.675,
     "market": 0.691
    },
    "logloss": {
-    "model": 0.6174,
+    "model": 0.6161,
     "market": 0.5835,
     "diff90": [
-     0.0219,
-     0.0444
+     0.0207,
+     0.0429
     ]
    },
    "brier": {
-    "model": 0.2142,
+    "model": 0.2136,
     "market": 0.1995
    },
    "modelPicks": {
     "withMarket": {
-     "n": 1105,
-     "won": 789,
-     "rate": 0.714,
-     "units": -21.45
+     "n": 1118,
+     "won": 798,
+     "rate": 0.7138,
+     "units": -21.26
     },
     "againstMarket": {
-     "n": 201,
-     "won": 88,
-     "rate": 0.4378,
-     "units": 1.55
+     "n": 188,
+     "won": 84,
+     "rate": 0.4468,
+     "units": 3.38
     },
     "pickem": {
      "n": 8,
@@ -469,85 +469,85 @@
    "providers": {
     "DraftKings": {
      "games": 1250,
-     "straightUnits": -12.71
+     "straightUnits": -10.85
     },
     "ESPN BET": {
      "games": 64,
-     "straightUnits": -5.65
+     "straightUnits": -5.49
     }
    },
    "ats": {
     "n": 1291,
-    "won": 637,
-    "rate": 0.4934
+    "won": 643,
+    "rate": 0.4981
    },
    "overUnder": {
     "n": 1297,
-    "won": 660,
-    "rate": 0.5089
+    "won": 661,
+    "rate": 0.5096
    },
    "straight": {
     "bets": 1314,
-    "won": 882,
-    "units": -18.36,
-    "roi": -0.014
+    "won": 887,
+    "units": -16.34,
+    "roi": -0.012
    },
    "parlays": {
     "safe": {
-     "parlays": 172,
-     "won": 113,
-     "expMarket": 98.3,
-     "expMarketPower": 104.1,
-     "expModel": 74.4,
-     "units": 8.83,
+     "parlays": 170,
+     "won": 110,
+     "expMarket": 97.4,
+     "expMarketPower": 103.1,
+     "expModel": 73.2,
+     "units": 5.12,
      "avgLegs": 2.35,
      "units90": [
-      -12.72,
-      26.24
+      -14.88,
+      21.04
      ],
-     "roi": 0.051
+     "roi": 0.03
     },
     "value": {
-     "parlays": 73,
-     "won": 21,
-     "expMarket": 14.3,
-     "expMarketPower": 14.3,
-     "expModel": 23.8,
-     "units": 16.27,
-     "avgLegs": 2.56,
+     "parlays": 70,
+     "won": 18,
+     "expMarket": 14.1,
+     "expMarketPower": 14.2,
+     "expModel": 22.9,
+     "units": 1.42,
+     "avgLegs": 2.5,
      "units90": [
-      -12.08,
-      46.82
+      -23.97,
+      25.61
      ],
-     "roi": 0.223
+     "roi": 0.02
     },
     "med": {
-     "parlays": 141,
+     "parlays": 139,
      "won": 68,
-     "expMarket": 52.3,
-     "expMarketPower": 57.1,
-     "expModel": 34.8,
-     "units": 13.71,
-     "avgLegs": 3.79,
+     "expMarket": 51.3,
+     "expMarketPower": 56,
+     "expModel": 33.9,
+     "units": 16.82,
+     "avgLegs": 3.81,
      "units90": [
-      -6.84,
-      34.71
+      -4.13,
+      41.9
      ],
-     "roi": 0.097
+     "roi": 0.121
     },
     "aggr": {
-     "parlays": 115,
-     "won": 28,
-     "expMarket": 23.4,
-     "expMarketPower": 26.1,
-     "expModel": 15,
-     "units": -2.75,
-     "avgLegs": 5.31,
+     "parlays": 112,
+     "won": 27,
+     "expMarket": 22.5,
+     "expMarketPower": 25.2,
+     "expModel": 14.2,
+     "units": -2.05,
+     "avgLegs": 5.38,
      "units90": [
-      -33.68,
-      25.66
+      -30.92,
+      28.3
      ],
-     "roi": -0.024
+     "roi": -0.018
     }
    },
    "baseline": {
@@ -572,119 +572,119 @@
    "priced": 1320,
    "days": 213,
    "straightUp": {
-    "model": 0.6803,
+    "model": 0.6856,
     "market": 0.6871
    },
    "logloss": {
-    "model": 0.6038,
+    "model": 0.6025,
     "market": 0.5854,
     "diff90": [
-     0.0102,
-     0.0262
+     0.0091,
+     0.0247
     ]
    },
    "brier": {
-    "model": 0.2088,
+    "model": 0.2083,
     "market": 0.2009
    },
    "modelPicks": {
     "withMarket": {
-     "n": 1147,
-     "won": 818,
-     "rate": 0.7132,
-     "units": -34.66
+     "n": 1156,
+     "won": 825,
+     "rate": 0.7137,
+     "units": -32.26
     },
     "againstMarket": {
-     "n": 158,
-     "won": 72,
-     "rate": 0.4557,
-     "units": 11.42
+     "n": 149,
+     "won": 70,
+     "rate": 0.4698,
+     "units": 17.07
     },
     "pickem": {
      "n": 15,
-     "won": 8,
-     "rate": 0.5333,
-     "units": 0.27
+     "won": 10,
+     "rate": 0.6667,
+     "units": 4.09
     }
    },
    "providers": {
     "ESPN BET": {
      "games": 1320,
-     "straightUnits": -22.97
+     "straightUnits": -11.09
     }
    },
    "ats": {
     "n": 1319,
-    "won": 663,
-    "rate": 0.5027
+    "won": 667,
+    "rate": 0.5057
    },
    "overUnder": {
     "n": 1320,
-    "won": 637,
-    "rate": 0.4826
+    "won": 636,
+    "rate": 0.4818
    },
    "straight": {
     "bets": 1320,
-    "won": 898,
-    "units": -22.97,
-    "roi": -0.017
+    "won": 905,
+    "units": -11.09,
+    "roi": -0.008
    },
    "parlays": {
     "safe": {
      "parlays": 174,
-     "won": 107,
+     "won": 106,
      "expMarket": 101.2,
      "expMarketPower": 108.4,
-     "expModel": 92.7,
-     "units": -10.18,
-     "avgLegs": 2.43,
+     "expModel": 91.8,
+     "units": -12.73,
+     "avgLegs": 2.44,
      "units90": [
-      -23.53,
-      7.64
+      -26.25,
+      5.04
      ],
-     "roi": -0.059
+     "roi": -0.073
     },
     "value": {
-     "parlays": 91,
-     "won": 26,
-     "expMarket": 24,
-     "expMarketPower": 24.5,
-     "expModel": 38.3,
-     "units": -4.94,
-     "avgLegs": 2.59,
+     "parlays": 87,
+     "won": 24,
+     "expMarket": 23.7,
+     "expMarketPower": 24.3,
+     "expModel": 37.2,
+     "units": -8.31,
+     "avgLegs": 2.55,
      "units90": [
-      -35.54,
-      21.38
+      -37.49,
+      14.07
      ],
-     "roi": -0.054
+     "roi": -0.096
     },
     "med": {
-     "parlays": 149,
-     "won": 54,
-     "expMarket": 55.4,
-     "expMarketPower": 61.2,
-     "expModel": 50.1,
-     "units": -27.9,
-     "avgLegs": 3.85,
+     "parlays": 152,
+     "won": 55,
+     "expMarket": 56.2,
+     "expMarketPower": 62.1,
+     "expModel": 50,
+     "units": -29.53,
+     "avgLegs": 3.84,
      "units90": [
-      -51.45,
-      -6.66
+      -51.78,
+      -10.03
      ],
-     "roi": -0.187
+     "roi": -0.194
     },
     "aggr": {
-     "parlays": 128,
+     "parlays": 129,
      "won": 27,
-     "expMarket": 26,
-     "expMarketPower": 29.4,
-     "expModel": 23.5,
-     "units": -20.52,
-     "avgLegs": 5.37,
+     "expMarket": 26.1,
+     "expMarketPower": 29.5,
+     "expModel": 23.1,
+     "units": -23.51,
+     "avgLegs": 5.38,
      "units90": [
-      -50.15,
-      10.18
+      -55.56,
+      4.91
      ],
-     "roi": -0.16
+     "roi": -0.182
     }
    },
    "baseline": {
@@ -709,33 +709,33 @@
    "priced": 1318,
    "days": 210,
    "straightUp": {
-    "model": 0.6813,
+    "model": 0.6662,
     "market": 0.6874
    },
    "logloss": {
-    "model": 0.6023,
+    "model": 0.6018,
     "market": 0.5757,
     "diff90": [
-     0.0175,
-     0.0347
+     0.0169,
+     0.034
     ]
    },
    "brier": {
-    "model": 0.2075,
+    "model": 0.2074,
     "market": 0.197
    },
    "modelPicks": {
     "withMarket": {
-     "n": 1130,
-     "won": 808,
-     "rate": 0.715,
-     "units": -34.71
+     "n": 1138,
+     "won": 802,
+     "rate": 0.7047,
+     "units": -53.81
     },
     "againstMarket": {
-     "n": 185,
-     "won": 89,
-     "rate": 0.4811,
-     "units": 18.09
+     "n": 177,
+     "won": 75,
+     "rate": 0.4237,
+     "units": -3.62
     },
     "pickem": {
      "n": 3,
@@ -747,11 +747,11 @@
    "providers": {
     "ESPN BET": {
      "games": 257,
-     "straightUnits": -1.12
+     "straightUnits": -2.52
     },
     "DraftKings": {
      "games": 1060,
-     "straightUnits": -15.59
+     "straightUnits": -54.99
     },
     "Draft Kings": {
      "games": 1,
@@ -760,76 +760,76 @@
    },
    "ats": {
     "n": 1318,
-    "won": 651,
-    "rate": 0.4939
+    "won": 635,
+    "rate": 0.4818
    },
    "overUnder": {
     "n": 1317,
-    "won": 663,
-    "rate": 0.5034
+    "won": 662,
+    "rate": 0.5027
    },
    "straight": {
     "bets": 1318,
-    "won": 898,
-    "units": -17.71,
-    "roi": -0.013
+    "won": 878,
+    "units": -58.52,
+    "roi": -0.044
    },
    "parlays": {
     "value": {
-     "parlays": 99,
-     "won": 20,
-     "expMarket": 23.6,
-     "expMarketPower": 24.1,
-     "expModel": 38.3,
-     "units": -22.23,
-     "avgLegs": 2.79,
+     "parlays": 89,
+     "won": 12,
+     "expMarket": 20.7,
+     "expMarketPower": 21.1,
+     "expModel": 33.8,
+     "units": -42.28,
+     "avgLegs": 2.8,
      "units90": [
-      -56.06,
-      5.05
+      -71.66,
+      -13.17
      ],
-     "roi": -0.225
+     "roi": -0.475
     },
     "safe": {
-     "parlays": 179,
-     "won": 111,
-     "expMarket": 105.6,
-     "expMarketPower": 112.3,
-     "expModel": 100.2,
-     "units": -11.71,
-     "avgLegs": 2.39,
+     "parlays": 181,
+     "won": 113,
+     "expMarket": 106.4,
+     "expMarketPower": 113.2,
+     "expModel": 99.6,
+     "units": -10.26,
+     "avgLegs": 2.38,
      "units90": [
-      -28.2,
-      1.1
+      -30.6,
+      4.7
      ],
-     "roi": -0.065
+     "roi": -0.057
     },
     "med": {
-     "parlays": 151,
-     "won": 66,
-     "expMarket": 56.8,
-     "expMarketPower": 62.3,
-     "expModel": 52.9,
-     "units": -0.28,
-     "avgLegs": 3.85,
+     "parlays": 150,
+     "won": 65,
+     "expMarket": 56.3,
+     "expMarketPower": 61.8,
+     "expModel": 51.5,
+     "units": -3.04,
+     "avgLegs": 3.87,
      "units90": [
-      -25.82,
-      27.91
+      -27.27,
+      22.49
      ],
-     "roi": -0.002
+     "roi": -0.02
     },
     "aggr": {
-     "parlays": 123,
-     "won": 33,
+     "parlays": 124,
+     "won": 32,
      "expMarket": 25.2,
      "expMarketPower": 28.4,
-     "expModel": 23.7,
-     "units": 5.78,
+     "expModel": 23.1,
+     "units": 2.77,
      "avgLegs": 5.49,
      "units90": [
-      -25.69,
-      35.12
+      -31.34,
+      40.61
      ],
-     "roi": 0.047
+     "roi": 0.022
     }
    },
    "baseline": {

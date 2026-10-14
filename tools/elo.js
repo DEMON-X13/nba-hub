@@ -53,20 +53,26 @@ function situ(P, dates, date, isHome, team, neutral) {
 
 /* Replay the table in date order. Returns ratings after the last final and, when collect is set, one
    record per final game with the pre-game numbers, plus the model's numbers for games not yet final. */
+/* the home edge starts at P.hfa and is learned as the finals come, HFA_K of the way toward what each home margin
+   said: home teams win less than they did when P.hfa was fitted (2008-2022), and a fixed edge priced every home side
+   about three points of win chance too high in 2023-24 to 2025-26 */
+const HFA_K = 0.001;
 function replay(P, games, collect) {
   /* ahead: the dates of a club's games still to play, so a game two days out sees tomorrow's back-to-back; a final's
      rest terms read the finals alone */
   const elo = {}, dates = {}, ahead = {}, seasonOf = {}, played = {}, lastDate = {};
   const recs = [], upcoming = {};
+  let hfa = P.hfa;
   for (const g of games) {
+    const SP = { ...P, hfa };
     for (const t of [g.home, g.away]) {
       if (elo[t] === undefined) { elo[t] = MEAN; dates[t] = []; ahead[t] = []; played[t] = 0; }
       if (seasonOf[t] !== g.season) { seasonOf[t] = g.season; elo[t] = P.carry * elo[t] + (1 - P.carry) * MEAN; dates[t] = []; ahead[t] = []; played[t] = 0; }
     }
     const neutral = g.neutral === 1 || g.neutral === '1';
     const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).sort().slice(-4);   // sorted: a game stuck unfinished in the past is not the last one
-    const rh = elo[g.home] + situ(P, sd(g.home), g.date, true, g.home, neutral);
-    const ra = elo[g.away] + situ(P, sd(g.away), g.date, false, g.away, neutral);
+    const rh = elo[g.home] + situ(SP, sd(g.home), g.date, true, g.home, neutral);
+    const ra = elo[g.away] + situ(SP, sd(g.away), g.date, false, g.away, neutral);
     const d = rh - ra, pHome = prob(d);
     if (g.status !== 'final') {
       upcoming[g.game_id] = { pHome: +pHome.toFixed(4), spread: +(-d / P.scale).toFixed(1), eloHome: +elo[g.home].toFixed(1), eloAway: +elo[g.away].toFixed(1) };
@@ -80,9 +86,10 @@ function replay(P, games, collect) {
     const mult = Math.pow(Math.abs(mov) + 3, 0.8) / (7.5 + 0.006 * winDiff);
     const delta = P.K * mult * (S - pHome);
     elo[g.home] += delta; elo[g.away] -= delta;
+    if (!neutral) hfa += HFA_K * (mov * P.scale - d);
     for (const t of [g.home, g.away]) { dates[t].push(g.date); if (dates[t].length > 4) dates[t].shift(); played[t] += 1; lastDate[t] = g.date; }
   }
-  return { elo, played, lastDate, recs, upcoming };
+  return { elo, played, lastDate, hfa, recs, upcoming };
 }
 
 function score(recs, from, to) {

@@ -132,11 +132,17 @@ const newSeasonMins = p => (p.reg && p.reg.length ? p.reg : p.mins).slice(-5);
    before ended (lgPace, which weighs its last few hundred games) was +1.33, +1.17 and +1.96 possessions in 2022-23 to
    2024-25, measured before the held-out 2025-26 (which ran +2.35) */
 const EARLY_PACE = 1.5;
+/* the home edge is learned as the games come, not taken fixed from the team model (60 Elo, fitted on 2008-2022):
+   home teams win less than they did, and with 60 the model gave the home side 58% on average where it won 54.5-55.5%
+   and the market said 55%, and expected home margins of +2.5 where they were +1.8 to +2.3. After each final at a home
+   venue the edge moves HFA_K of the way toward what the margin said, about a season's worth of games deep */
+const HFA_K = 0.001;
 function replay(P, ctx, mode, collect) {
   const { games, boxes, teamStats, coachOf, raptor, situP } = ctx;
   const players = {}, coaches = {}, dates = {}, ahead = {}, seasonOf = {}, pace = {}, lastLineup = {};   // ahead: games still to play (elo.js)
   let lg = 112, lgDay = 112, lgDate = '';         // lgDay: the league's efficiency as the day began, for scoring a final
   let lgPace = 99;                                  // the league's regular-season pace, possessions per 48
+  let hfa = situP.hfa;                              // the home edge in Elo, learned (HFA_K)
   const recs = [], upcoming = {};
   const getP = (r, season) => {
     let p = players[r.player_id];
@@ -192,7 +198,8 @@ function replay(P, ctx, mode, collect) {
     }
     const neutral = g.neutral === 1;
     const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).sort().slice(-4);
-    const sh = E.situ(situP, sd(g.home), g.date, true, g.home, neutral), sa = E.situ(situP, sd(g.away), g.date, false, g.away, neutral);
+    const SP = { ...situP, hfa };
+    const sh = E.situ(SP, sd(g.home), g.date, true, g.home, neutral), sa = E.situ(SP, sd(g.away), g.date, false, g.away, neutral);
     const ch = getC(coachOf(g.season, g.home, g.date), g.season), ca = getC(coachOf(g.season, g.away, g.date), g.season);
     ch.team = g.home; ca.team = g.away;
     const box = boxes[g.game_id];
@@ -239,6 +246,7 @@ function replay(P, ctx, mode, collect) {
     const mov = +g.home_score - +g.away_score;
     const dH = (E.MEAN + ch.c + H.O + H.D + sh) - (E.MEAN + ca.c + A.O + A.D + sa);
     const winSur = P.winK ? P.winK * ((mov > 0 ? 1 : 0) - E.prob(dH)) : 0;
+    if (!neutral) hfa += HFA_K * (mov * situP.scale - dH);
     for (const [p, w, u] of H.ws) { p.o += (ke * surH + winSur / 2) * u / H.W2; p.d += (-ke * surA + winSur / 2) * u / H.W2; }
     for (const [p, w, u] of A.ws) { p.o += (ke * surA - winSur / 2) * u / A.W2; p.d += (-ke * surH - winSur / 2) * u / A.W2; }
     ch.c += P.kc * (surH - surA); ca.c -= P.kc * (surH - surA); ch.n++; ca.n++;
@@ -268,7 +276,7 @@ function replay(P, ctx, mode, collect) {
       dates[t].push(g.date); if (dates[t].length > 4) dates[t].shift();
     }
   }
-  return { players, coaches, pace, lg, recs, upcoming, getP };
+  return { players, coaches, pace, lg, hfa, recs, upcoming, getP };
 }
 function sideReport(team, S, coach, live) {
   return { team, strength: +(E.MEAN + coach.c + S.O + S.D).toFixed(1), offence: +S.O.toFixed(1), defence: +S.D.toFixed(1), coach: { name: live.coach || '', elo: +coach.c.toFixed(1) },
@@ -451,7 +459,7 @@ function main() {
     teams[t] = { strength: +(E.MEAN + coach.c + O + D).toFixed(1), offence: +O.toFixed(1), defence: +D.toFixed(1), coach: live.home.coach, coachElo: +coach.c.toFixed(1), coachGames: coach.n || 0, pace: +R.pace[t].toFixed(1),
       out: live.home.out.map(x => `${x.p.name} (${x.status})`) };
   }
-  const out = { name: 'NBA player model', params: P, fitSeasons: `${WARM_TO + 1}-${FIT_TO}`, holdoutSeasons: `${FIT_TO + 1}-${season}`, report, leagueEfficiency: +R.lg.toFixed(1),
+  const out = { name: 'NBA player model', params: P, fitSeasons: `${WARM_TO + 1}-${FIT_TO}`, holdoutSeasons: `${FIT_TO + 1}-${season}`, report, leagueEfficiency: +R.lg.toFixed(1), homeEdge: +R.hfa.toFixed(1),
     asOf, season, games: finals.length, teams, coaches: coachesOut, players: playersOut, upcoming: R.upcoming };
   const same = prev && JSON.stringify({ ...prev, generated: undefined }) === JSON.stringify({ ...out, generated: undefined });
   out.generated = same ? prev.generated : new Date().toISOString().slice(0, 16) + 'Z';

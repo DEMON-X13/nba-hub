@@ -66,7 +66,7 @@ ratings up). The fit is deterministic. What it found:
 | Parameter | Value | In points |
 |---|---|---|
 | K | 20 | |
-| home court | 60 Elo | 2.3 |
+| home court, to start | 60 Elo | 2.3 |
 | altitude, on top | 60 Elo | 2.3 |
 | back to back | -40 Elo | -1.5 |
 | three in four | -5 Elo | -0.2 |
@@ -74,15 +74,25 @@ ratings up). The fit is deterministic. What it found:
 | season carry | 0.70 | |
 | scale | 26.2 Elo per point | |
 
-Holdout (5,282 games): 66.2% straight up, log loss 0.617, spread error 10.9 points. That is what a
-public NBA Elo does. It picks winners; it does not know who is playing tonight.
+The home court is where the fit starts it; from there it is learned as the finals come, a thousandth of
+the way toward what each home margin said. Home teams win less than they did in the fit's seasons, and a
+fixed 60 priced every home side about three points of win chance too high in 2023-24 to 2025-26 (the
+model said 58% on average, home teams won 54.5-55.5% and the market said 55%); learned, it stood at 45
+Elo for the player model in October 2026.
+
+Holdout (5,282 games): 66.1% straight up, log loss 0.616 (0.617 with the home court fixed), spread error
+10.9 points. That is what a public NBA Elo does. It picks winners; it does not know who is playing tonight.
 
 ## The player, coach and matchup model
 
 Every player carries two ratings, offence and defence, in Elo points for a player on the floor all
 game. A team's strength for a game is 1500 plus its coach plus each player's ratings weighted by his
 share of the minutes, five shares in all, so a team is exactly the sum of who plays and how much.
-The situational terms (court, altitude, rest) are the team model's.
+The situational terms (court, altitude, rest) are the team model's, with the home court learned the same
+way and on its own (players.json's `homeEdge`); learning it lowered the walk-forward log loss in every
+backtested season and lineup mode (known lineups: 0.6152, 0.5932 and 0.5914 to 0.6139, 0.5917 and
+0.5906). Blending the model with the market's chance where a moneyline is posted was tested the same way
+and given no weight: fitted on the seasons before, the best blend was the market alone.
 
 After a final, each side's offensive efficiency (points per 100 possessions, possessions from the
 team box) is compared with what the ratings expected. The surprise moves the offence of the players
@@ -226,7 +236,9 @@ node tools/players.js      # player model replay; add "fit" to refit
   opening night over the preseason board.
 - **Teams, Players, Coaches**: sortable tables of the ratings; players searchable and filterable by team.
 - **Record**: the season graded straight up, against the spread and on totals, by month and game, from
-  `predictions.csv`; and the backtest table.
+  `predictions.csv`; the suggested parlays and the model's picks against the closing line, season by
+  season, from `research/backtest.json` (state.json's `vsMarket`, beside the two-biggest-favourites
+  baseline); and the backtest table.
 - **My Picks**: the visitor's picks, graded against the published finals; browser only.
 - **Parlay Builder**: in the spirit of the NFL hub's. Suggested parlays at the top (Safe, Medium,
   Aggressive), grown from one core out of the games where the model's pick is also the market's

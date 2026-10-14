@@ -102,7 +102,15 @@ function main() {
   /* the season's past games the table holds and has not finished (a final not read yet): the page voids a bet only on
      a game missing from every list, so these must not look missing */
   const pending = games.filter(g => g.status !== 'final' && g.date < from && (+g.season === season || +g.season === season - 1)).map(g => g.game_id);
-  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
+  /* the walk-forward backtest against the closing line (tools/backtest.js), with the lineups known: what the
+     model and the Parlay Builder's suggestions did on seasons the model never saw, beside what the market expected */
+  const btFile = path.join(L.ROOT, 'research', 'backtest.json');
+  const btm = fs.existsSync(btFile) ? JSON.parse(fs.readFileSync(btFile, 'utf8')) : null;
+  const tierOf = t => t && { parlays: t.parlays, won: t.won, exp: t.expMarketPower, units: t.units, units90: t.units90 };
+  const vsMarket = btm ? { generated: btm.generated, seasons: Object.values(btm.seasons).filter(x => x.lineup === 'known' && x.priced).sort((a, b) => a.season - b.season).map(x => ({
+    season: x.season, games: x.priced, logloss: x.logloss, straightUp: x.straightUp, against: x.modelPicks.againstMarket,
+    tiers: Object.fromEntries(['safe', 'med', 'aggr', 'value'].filter(k => x.parlays[k]).map(k => [k, tierOf(x.parlays[k])])), twoFav: tierOf(x.baseline && x.baseline.twoFavourites) })) } : null;
+  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
     slate, record, teams, players: plist, coaches, names,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };

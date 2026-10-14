@@ -72,6 +72,16 @@ function load(page, st, mine) {
       const txt = d0.getElementById('tab-' + tab).textContent;
       check(!/\bNaN\b|\bundefined\b/.test(txt), `the real ${tab} tab shows no NaN or undefined`);
     }
+    if (real.vsMarket && real.vsMarket.seasons.length) {
+      d0.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
+      const rt = d0.getElementById('tab-record');
+      const tbl = [...rt.querySelectorAll('h2')].find(h => /Against the market/.test(h.textContent));
+      const rowsT = tbl ? [...tbl.nextElementSibling.nextElementSibling.querySelectorAll('tbody tr')] : [];
+      const safe = rowsT.find(r => /^Safe/.test(r.textContent.trim()));
+      const sum = k => real.vsMarket.seasons.reduce((a, x) => a + (x.tiers.safe ? x.tiers.safe[k] : 0), 0);
+      check(tbl && rowsT.length === 7, 'the Record tab shows the suggested parlays against the market, four tiers, the baseline, the picks against the market and log loss');
+      check(safe && safe.lastElementChild.textContent.includes(`${sum('won')}/${sum('parlays')}`) && safe.lastElementChild.textContent.includes(`(${Math.round(sum('exp'))})`), "Safe's pooled cell is the seasons' sum, with the market's expectation");
+    }
     if (real.slate.length) for (const b of [...d0.querySelectorAll('#days .day')]) { b.click(); await sleep(15); }
     check(errors.length === 0, 'every day of the real slate draws without a script error: ' + errors.join(' | '));
   }
@@ -180,6 +190,7 @@ function load(page, st, mine) {
   const vc = d4.querySelector('#bkSuggest .sugg-tier.value');
   check(vc && /MIA/.test(vc.textContent) && /NYK/.test(vc.textContent) && !/GSW/.test(vc.textContent), 'the Value card holds the two picks the model rates 5+ points above the market');
   check(vc && vc.querySelector('.sugg-legs li').textContent.includes('MIA'), 'biggest edge first (MIA 65 vs 39)');
+  check(vc && (!state.vsMarket || /backtested on .* Value parlays won \d+ of \d+/.test(vc.textContent)) && !/NFL/.test(vc.textContent), "the Value card quotes this site's own backtest, not the NFL side's");
   vc.querySelector('[data-sugg-lock="value"]').click(); await sleep(30);
   const m4 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
   check(m4.build.length === 1 && m4.build[0].legs.length === 2, 'Lock in anyway puts it in the Bet Build');

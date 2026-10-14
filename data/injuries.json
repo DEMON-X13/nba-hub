@@ -417,8 +417,35 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-11",
-    "returns": "2026-10-13"
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "5106060",
+    "name": "Jarace Walker",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4396909",
+    "name": "Aaron Nesmith",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4395712",
+    "name": "Andrew Nembhard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
    },
    {
     "id": "5157066",
@@ -488,13 +515,31 @@
   ],
   "LAL": [
    {
-    "id": "4433136",
-    "name": "Walker Kessler",
-    "pos": "C",
+    "id": "5113969",
+    "name": "Cameron Carr",
+    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Finger",
-    "date": "2026-10-11",
-    "returns": "2026-10-13"
+    "detail": "Undisclosed Bruise",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4277811",
+    "name": "Collin Sexton",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "5060631",
+    "name": "Adou Thiero",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
    },
    {
     "id": "4433137",
@@ -502,8 +547,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Foot Bruise",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "3945274",
+    "name": "Luka Doncic",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-14",
+    "returns": "2026-10-16"
    },
    {
     "id": "4433599",
@@ -515,27 +569,9 @@
     "returns": "2026-10-13"
    },
    {
-    "id": "4277811",
-    "name": "Collin Sexton",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Lower Leg",
-    "date": "2026-10-10",
-    "returns": "2026-10-13"
-   },
-   {
     "id": "4897943",
     "name": "Dalton Knecht",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed Bruise",
-    "date": "2026-10-09",
-    "returns": "2026-10-13"
-   },
-   {
-    "id": "5113969",
-    "name": "Cameron Carr",
-    "pos": "G",
     "status": "Day-To-Day",
     "detail": "Undisclosed Bruise",
     "date": "2026-10-09",

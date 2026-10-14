@@ -1882,6 +1882,9 @@ date,team,player_id,name,status
 2026-10-13,HOU,2991230,Fred VanVleet,Day-To-Day
 2026-10-13,HOU,3202,Kevin Durant,Day-To-Day
 2026-10-13,IND,2530530,T.J. McConnell,Day-To-Day
+2026-10-13,IND,5106060,Jarace Walker,Day-To-Day
+2026-10-13,IND,4396909,Aaron Nesmith,Day-To-Day
+2026-10-13,IND,4395712,Andrew Nembhard,Day-To-Day
 2026-10-13,IND,5157066,Johnny Furphy,Out
 2026-10-13,LAC,4702352,Kobe Sanders,Day-To-Day
 2026-10-13,LAC,6580,Bradley Beal,Day-To-Day
@@ -1889,12 +1892,13 @@ date,team,player_id,name,status
 2026-10-13,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-10-13,LAC,3913176,Brandon Ingram,Out
 2026-10-13,LAC,4396818,Jordan Miller,Out
-2026-10-13,LAL,4433136,Walker Kessler,Day-To-Day
-2026-10-13,LAL,4433137,Ziaire Williams,Day-To-Day
-2026-10-13,LAL,4433599,Arthur Kaluma,Day-To-Day
-2026-10-13,LAL,4277811,Collin Sexton,Day-To-Day
-2026-10-13,LAL,4897943,Dalton Knecht,Day-To-Day
 2026-10-13,LAL,5113969,Cameron Carr,Day-To-Day
+2026-10-13,LAL,4277811,Collin Sexton,Day-To-Day
+2026-10-13,LAL,5060631,Adou Thiero,Day-To-Day
+2026-10-13,LAL,4433137,Ziaire Williams,Day-To-Day
+2026-10-13,LAL,3945274,Luka Doncic,Day-To-Day
+2026-10-13,LAL,4433599,Arthur Kaluma,Day-To-Day
+2026-10-13,LAL,4897943,Dalton Knecht,Day-To-Day
 2026-10-13,MEM,4432185,Micah Peavy,Day-To-Day
 2026-10-13,MEM,4432810,Isaiah Stewart,Out
 2026-10-13,MIA,4601025,Pelle Larsson,Day-To-Day

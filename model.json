@@ -181,30 +181,6 @@
   }
  },
  "upcoming": {
-  "2027_20261009_MEM_CHI": {
-   "pHome": 0.6464,
-   "spread": -4,
-   "eloHome": 1389.2,
-   "eloAway": 1344.4
-  },
-  "2027_20261011_CHI_DEN": {
-   "pHome": 0.8476,
-   "spread": -11.4,
-   "eloHome": 1567.3,
-   "eloAway": 1389.2
-  },
-  "2027_20261011_MIL_CHA": {
-   "pHome": 0.8157,
-   "spread": -9.9,
-   "eloHome": 1588.3,
-   "eloAway": 1390
-  },
-  "2027_20261011_ORL_CLE": {
-   "pHome": 0.6203,
-   "spread": -3.3,
-   "eloHome": 1569.1,
-   "eloAway": 1543.8
-  },
   "2027_20261013_CLE_ORL": {
    "pHome": 0.5498,
    "spread": -1.3,
@@ -1406,5 +1382,5 @@
    "eloAway": 1538.1
   }
  },
- "generated": "2026-10-13T15:15Z"
+ "generated": "2026-10-14T00:54Z"
 }

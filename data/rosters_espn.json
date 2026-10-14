@@ -1667,7 +1667,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133603",
@@ -1716,7 +1716,7 @@
     "name": "Jarace Walker",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4017837",
@@ -1902,7 +1902,7 @@
     "name": "Luka Doncic",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397014",
@@ -1937,7 +1937,7 @@
     "name": "Walker Kessler",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4897943",
@@ -2007,7 +2007,7 @@
     "name": "Adou Thiero",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3907498",

@@ -648,11 +648,13 @@ its game's tip, said once, on any tab.
 | Player legs | one a player a stat (a milestone is its stat's leg); two stats of one player; teammates, opponents, beside the side and the total | his stat beside a combo holding it (points with points + rebounds), two combos sharing a part (points + assists with points + rebounds), his double- with his triple-double |
 
 DraftKings publishes no list of what it takes on one same-game ticket that this build could find, so the builder is
-conservative: the refused pairs are `data/corr.json`'s, which `tools/corr.js` also leaves unpriced (a stat
-beside a sum holding it is not jointly gaussian at these lines: steals with blocks measure 0.07, steals + blocks with
-steals 0.90 and with blocks 0.78, three values no correlation matrix holds). Points with threes, and a double- or
-triple-double with points, rebounds or assists, are taken. A player leg on a preseason game is refused (no box score is
-pulled for one, so it could never be graded), and so is a second leg beside a player the hub cannot place on a club.
+conservative: the refused pairs are `data/corr.json`'s, which `tools/corr.js` also leaves unpriced (a stat beside a sum
+holding it is not jointly gaussian at these lines: steals with blocks measure 0.07, steals + blocks with steals 0.90 and
+with blocks 0.78, three values no correlation matrix holds). Points with threes, and a double- or triple-double with
+points, rebounds or assists, are taken. A player leg on a preseason game is refused (no box score is pulled for one, so
+it could never be graded), and so is a second leg of a game beside a player the hub places on neither of its clubs (no
+table names him, or the tables put him on another club, as after a trade they have not caught up with): priced as
+everyone's opponent, his sign with a side bet would be turned, so he goes alone in his game.
 
 **The price.** Different games: the legs' prices multiplied, as a book does. One game's legs, as the NFL hub prices a
 same-game parlay (`parlayDec`, `SGP_HOLD`): their joint chance J from each leg's implied chance (its price's own, the
@@ -770,56 +772,71 @@ legs, as it does on the NFL hub); one player's points Over and rebounds Under, h
 
 ### Live, 15 October 2026
 
-In Chromium against ESPN at 1280 and 390 wide (`nba-builder-props` screenshots; the second look, 19:10 UTC): one press
-read 57 games' lines and props (nothing read on load or on a reload; every request a plain GET with no header of its
-own), Celtics at Pistons on opening night had DraftKings' game lines with every betslip id, and its sheet offered 441 add
-controls, every one 44px or more. At 1280, 11 of the props answers came back without ESPN's CORS header (the same
-requests answer with it when asked again): the page read them as failed and said "11 could not be read", as it should.
-Two player props and the total went in:
+In Chromium against ESPN at 1280 and 390 wide (the third look, 20:05 UTC, after the review's fixes): one press read 57
+games' lines (20 with DraftKings' lines, 37 with none yet) and their player props (5 games with props posted, 166 main
+lines, 52 with none yet), nothing read on load or on a reload, every request a plain GET with no header of its own, none
+failed at either width. Celtics at Pistons on opening night had DraftKings' game lines with every betslip id, its sheet
+offered 441 add controls, every one 44px or more, and its six lined players were each placed on one of its clubs. (The
+second look's "11 could not be read" at 1280 was the test browser's, not a visitor's: ESPN answers HeadlessChrome's user
+agent with a 403 and no CORS header and a real browser's with the answer, so the desktop run now gives Chrome's own user
+agent.) Two Pistons' points and the total went in, and Cunningham's points + rebounds + assists beside his points was
+refused with its reason:
 
 | Leg | DraftKings | Fair chance |
 |---|---|---|
-| Derrick White, points Over 15.5 | -123 (Under -104) | 49.0% |
-| Jayson Tatum, points Over 26.5 | -112 (Under -114) | 46.7% |
+| Cade Cunningham, points Over 24.5 | -104 (Under -123) | 44.8% |
+| Jalen Duren, points Over 14.5 | -123 (Under -103) | 49.3% |
 | Total Over 221.5 | -115 (Under -105) | 51.1% |
-| The parlay | legs multiplied +542; same-game price +409 est. | 13.5% est. (11.7% multiplied) |
+| The parlay | legs multiplied +565; same-game price +427 est. | 13.0% est. (11.3% multiplied) |
 
-The two Celtics move apart a little (teammates' points -0.024) and each with the Over (0.13), so the three landing
-together is likelier than the product says, and the estimate pays less: $20 pays $101.81 where the product would pay
-$128.32. The page's numbers are Node's from `data/corr.json` and `tools/corr.js` (J 0.17601 of the implied chances, so
-0.896 / J = 5.0906; the fair chance 0.13483). The card opened the total on DraftKings' betslip
-(`?outcomes=0OU85841510O22150_1`) and named the two player legs to add by hand; storage held the three legs and nothing
-else of the read; a reload showed them at the prices they were added at, dated by their read, and asked ESPN for
-nothing; neither width scrolled sideways. (The first look, 14:02 UTC, had White at -113 and Tatum at -106: +441 est.
-where the legs multiplied paid +585.)
+The two teammates move apart a little (teammates' points -0.024) and each with the Over (0.13), so the three landing
+together is likelier than the product says, and the estimate pays less: $20 pays $105.30 where the product would pay
+$132.97. The page's numbers are Node's from `data/corr.json` and `tools/corr.js` (J 0.17018 of the implied chances, so
+0.896 / J = 5.2650, the page's 5.2650; the fair chance 0.13027 on both). The sheet's foot read "Your parlay: 3 legs,
++427 est."; the card opened the total on DraftKings' betslip (`?outcomes=0OU85841510O22150_1`) and named the two player
+legs to add by hand; Share link sent a title and a text, no url field; storage held the three legs and nothing else of
+the read; a reload showed them at the prices they were added at, dated by their read, and asked ESPN for nothing;
+neither width scrolled sideways. (The first look, 14:02 UTC, had Derrick White's points Over 15.5 at -113 and Jayson
+Tatum's Over 26.5 at -106 with the total: +441 est. where the legs multiplied paid +585; the second, 19:10 UTC, White at
+-123 and Tatum at -112: +409 est. against +542.)
 
 ### The checks
 
 `node tools/smoke.js` section 9 holds it all with rules of its own, on a stubbed ESPN (the recorded opening-night props
 and scoreboard answers, and made-up games in their shapes): nothing to add before a press; after one, every price an add
 control, 44px, named, in the tab order; the recorded game lines and ids read as ESPN has them, another book's odds, a
-spread on another number and ids in the wrong shape refused; every leg added stored with its read time and nothing else
-of the read; each refusal with its reason (a combo holding a stat, a milestone beside the main line, an Under beside the
-Over, a triple-double beside a double-double, two totals, the moneyline beside the spread or the other team's, a
-preseason player leg); the price, the fair chance and the model's chance of eight two-leg pairs of every kind worked out
-here exactly from `data/corr.json` and `tools/corr.js`, and of three legs by this file's own integration (to 0.02%),
-never above the product; the summary and the card leading with the fair chance, est., the price est. beside the legs
-multiplied, the why line, the model on trial or absent with its reason; the suggested parlays and the plan byte for byte
-the same with legs in and without; the card's legs, add-by-hand lines, betslip link and note, Share text, copy, Escape and
-focus; Lock in; a reload; a later press moving, dropping and repricing legs, a failed read keeping one, a none-posted read
-dropping one, said once; a tip; grading ten bets by its own sums (a void leg dropped and the same-game parlay repriced, a
-push, a milestone, a double-double, a triple-double short, an Under, a final with no box waiting, a leg three weeks old
-read from its season's box file, and a straight bet on every other stat: each combo, threes, steals and blocks, by
-its own sum of the parts), the grades written into the Bet Build and holding with the box scores gone; and the
-page's copies of `tools/corr.js` (`rhoFor`, `joint2`, `bvnUpper` and their pieces) and `tools/props.js` (`normCdf`,
-`normInv`) line for line. Section 0 holds `state.json`'s `boxes` to `games.csv` and the box files (today, and a full
-mid-season week through `publish.js`'s own `boxesState`) and its `corr` to `data/corr.json`. `node tools/test_corr.js`
-holds the table (the workflow's tests run it now). Each check was shown to fail on a planted break: `NBA_HTML=<copy>
-SMOKE_ONLY=9 node tools/smoke.js` runs section 9 on a broken copy of the page.
+spread on another number, a total on another number or with its Over and Under on two, and ids in the wrong shape
+refused; every leg added stored with its read time and nothing else of the read; the sheet's foot (a single leg at its
+price, two legs of one game at the same-game price worked out here and marked est., a leg in each of two games at their
+prices multiplied with no est.); each refusal with its reason (a combo holding a stat, a milestone beside the main line,
+an Under beside the Over, a triple-double beside a double-double, two totals, the moneyline beside the spread or the
+other team's, a preseason player leg, and another leg of the game beside a player no table names or one the tables put
+on another club, whichever comes first, each taken alone); the price, the fair chance and the model's chance of eight
+two-leg pairs of every kind worked out here exactly from `data/corr.json` and `tools/corr.js`, and of three legs by this
+file's own integration (to 0.02%), never above the product; the summary and the card leading with the fair chance, est.,
+the price est. beside the legs multiplied, the why line, the model on trial or absent with its reason; the suggested
+parlays and the plan byte for byte the same with legs in and without; the card's legs, add-by-hand lines, betslip link
+and note, Share text, copy, Escape and focus, and the note and Share text dated by the older read when the legs it opens
+were read at two presses; Lock in; a reload; a later press moving, dropping and repricing legs, a failed read keeping
+one, a none-posted read dropping one, said once; a tip; grading ten bets by its own sums (a void leg dropped and the
+same-game parlay repriced, a push, a milestone, a double-double, a triple-double short, an Under, a final with no box
+waiting, a leg three weeks old read from its season's box file, and a straight bet on every other stat: each combo,
+threes, steals and blocks, by its own sum of the parts); from the season's box file, two players' every stat and combo,
+each at a whole line at this file's own sum of the file's columns (every column a different number on a row, rebounds
+both boards), so only the exact value pushes, and their double- and triple-doubles; the grades written into the Bet
+Build and holding with the box scores gone; and the page's copies of `tools/corr.js` (`rhoFor`, `joint2`, `bvnUpper` and
+their pieces) and `tools/props.js` (`normCdf`, `normInv`) line for line. Section 0 holds `state.json`'s `boxes` to
+`games.csv` and the box files (today, and a full mid-season week through `publish.js`'s own `boxesState`) and its `corr`
+to `data/corr.json`. `node tools/test_corr.js` holds the table (the workflow's tests run it now). Each check was shown
+to fail on a planted break: `NBA_HTML=<copy> SMOKE_ONLY=9 node tools/smoke.js` runs section 9 on a broken copy of the
+page.
 
-The 52 breaks (47 in the page, 5 in `publish.js`, the latter run in a scratch copy of the repo: publish, then sections 0
+The 65 breaks (60 in the page, 5 in `publish.js`, the latter run in a scratch copy of the repo: publish, then sections 0
 and 9), each red. The second sweep's first run left one green, a combo graded without its rebounds: no check graded a
-combo, so the straight bets on every stat went in, and it and two more breaks of the same kind turned red:
+combo, so the straight bets on every stat went in, and it and two more breaks of the same kind turned red. A review then
+planted six that passed every check (the box file's rebounds and assists read from the wrong columns, the foot's price
+without its est., the card dated by the newest read, a total on another number offered, the unplaced player's refusal
+deleted); the checks above went in for them, and the third sweep, these 13 among the 65, left none green:
 
 | Planted break | What failed |
 |---|---|
@@ -870,6 +887,19 @@ combo, so the straight bets on every stat went in, and it and two more breaks of
 | steals graded from the blocks column | the straight bets on every stat |
 | threes graded from the steals column | the straight bets on every stat |
 | three legs of one game priced on the plain product | three legs against the integration |
+| the sheet's foot price not marked est. | the foot with two legs of one game, and after the reload |
+| the box file's rebounds from the defensive board alone | the box file's bets, and the grades holding |
+| the box file's assists from the steals column | the box file's bets, and the grades holding |
+| the box file's steals from the blocks column | the box file's bets, and the grades holding |
+| the box file's threes from the steals column | the box file's bets, and the grades holding |
+| the box file's points from field goals made | the ten bets, the box file's bets, the grades written and holding |
+| the card's note dated by the newest read | the two reads' card |
+| the card's note dated by the first leg's read | the two reads' card |
+| a total on another number than the line shown offered | the junk cases |
+| a total with its Over and Under on two numbers offered | the junk cases |
+| the refusal beside a player on neither club deleted | 6: the legs beside the unplaced players, each way |
+| a player the tables put on another club taken as placed | 5: the legs beside Moved Wing, each way |
+| only the leg being added checked for a club | 5: the legs added before the unplaced players' |
 | publish.js: rebounds from the defensive board alone | section 0: the mid-season box lines |
 | publish.js: players who did not play listed | section 0: the mid-season box lines |
 | publish.js: a six-day window | section 0: the published box lines, and the mid-season ones |

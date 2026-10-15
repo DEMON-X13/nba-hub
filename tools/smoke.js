@@ -747,7 +747,11 @@ async function builder() {
   const props9 = { onTrial: true, build: RP.build || '2026-10-15T09:09Z', asOf: RP.asOf || '2026-06-13', fitSeasons: '2023-2026', horizonGameDays: 5, minShown: 8, stats: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'],
     combos: COMBO, layout: LAY, dist: { kind: 'negative binomial', var: VAR }, fair: PJ.FAIR, ledger: RP.ledger || null, research: RP.research || null,
     games: { [q1.id]: { tip: q1.tip, away: 'BOS', home: 'DET', players: players1 }, [q2.id]: { tip: q2.tip, away: 'LAL', home: 'GSW', players: players2 } } };
-  const st9 = { ...state, generated: tipIn(-3600e3), injuriesAsOf: state.today, props: props9, corr: CORR, boxes: { from: state.today, days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: {} }, slate: [q1, q2, q3].map(g => JSON.parse(JSON.stringify(g))) };
+  /* Moved Wing: a rated player the hub's tables put on MIA, whom DraftKings prices in LAL at GSW (a trade the tables have
+     not caught up with); 9000099: an athlete no table names */
+  const movedWing = { id: '9000088', name: 'Moved Wing', pos: 'F', team: 'MIA', o: 0, d: 0, elo: 0, min: 20, games: 50, last: '2026-04-01', prior: 'raptor' };
+  const st9 = { ...state, generated: tipIn(-3600e3), injuriesAsOf: state.today, props: props9, corr: CORR, boxes: { from: state.today, days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: {} }, slate: [q1, q2, q3].map(g => JSON.parse(JSON.stringify(g))),
+    players: [...(state.players || []), movedWing] };
   /* the scoreboard: q1 is the recorded opening-night answer (DraftKings' moneylines, spread and total with their
      betslip links) moved to its tip; q2 and q3 made in the same shape */
   const gw = (ev, oc) => `https://sportsbook.draftkings.com/gateway?s=__s__&wpsrc=413&wpcrn=BetSlipDeepLink&preurl=${encodeURIComponent(`https://sportsbook.draftkings.com/event/${ev}${oc ? `?outcomes=${oc}` : ''}`)}`;
@@ -762,7 +766,8 @@ async function builder() {
   const ev3 = espnEvent(q3, null); ev3.id = '401900003'; ev3.season.type = 1; ev3.competitions[0].odds = [dkOdds({ ev: '34510098', mid: '85841598', details: 'CHA -1.5', total: 225.5, hl: -1.5, hml: '-120', aml: '+100', hsp: '-110', asp: '-110', ov: '-110', un: '-110' })];
   const sb = {}; for (const [g, e] of [[q1, ev1], [q2, ev2], [q3, ev3]]) (sb[ymd(g.date)] = sb[ymd(g.date)] || { events: [] }).events.push(e);
   const page9 = (items, i = 1, n = 1) => ({ count: items.length, pageIndex: i, pageSize: items.length, pageCount: n, items });
-  const q2Items = [ppItem(1, '9000001', 24.5, -115), ppItem(1, '9000001', 24.5, -105), ppItem(3, '9000002', 11.5, -110), ppItem(3, '9000002', 11.5, -110)];
+  const q2Items = [ppItem(1, '9000001', 24.5, -115), ppItem(1, '9000001', 24.5, -105), ppItem(3, '9000002', 11.5, -110), ppItem(3, '9000002', 11.5, -110),
+    ppItem(1, '9000099', 18.5, -110), ppItem(1, '9000099', 18.5, -110), ppItem(1, '9000088', 12.5, -105), ppItem(1, '9000088', 12.5, -115)];
   const q3Items = [ppItem(1, '7000001', 14.5, -110), ppItem(1, '7000001', 14.5, -110)];
   const propsAns = { '401909088': page9(rec.items), '401900002': page9(q2Items), '401900003': page9(q3Items) };
   let { w, errors, requests } = load('index.html', st9, { picks: {}, build: [], bank: { day: q1.date } }, espnStub(sb, () => 0, propsAns));
@@ -807,7 +812,13 @@ async function builder() {
     y.competitions[0].odds[0].moneyline.home.close.link.href = gw('34510070', '0ML85841510_3');
     const gy = G(y);
     check(G(x) === null && !gy.spread && gy.total && gy.total.over.id === null && gy.total.under.id === '0OU85841510U22150_3' && gy.ml.home.id === null && gy.ml.away.id === '0ML85841510_3',
-      "another book's odds give no game lines; a spread on another number than the line shown is not offered; a link off DraftKings or an id in the other side's shape gives no id"); }
+      "another book's odds give no game lines; a spread on another number than the line shown is not offered; a link off DraftKings or an id in the other side's shape gives no id");
+    /* a total on another number than the line shown (both sides), or its Over and Under on two numbers */
+    const z = JSON.parse(JSON.stringify(ev1)); z.competitions[0].odds[0].total.over.close.line = 'o222.5'; z.competitions[0].odds[0].total.under.close.line = 'u222.5';
+    const z2 = JSON.parse(JSON.stringify(ev1)); z2.competitions[0].odds[0].total.under.close.line = 'u222.5';
+    const gz = G(z), gz2 = G(z2);
+    check(gz && !gz.total && gz.ml && gz.spread && gz.spread.home.line === -1.5 && gz2 && !gz2.total && gz2.ml && gz2.spread,
+      "a total on another number than the line shown, or with its Over and Under on two numbers, is not offered; the game's moneylines and spread still are"); }
 
   /* adding: Tatum's points Over, then his rebounds Over (two stats of one player) */
   const tatPts = main('4065648', 'pts', 0); tatPts.focus(); tatPts.click(); await sleep(20);
@@ -816,9 +827,15 @@ async function builder() {
   check(legs.length === 1 && A.id === q1.id && A.kind === 'prop' && A.pid === '4065648' && A.name === 'Jayson Tatum' && A.team === 'BOS' && A.stat === 'pts' && A.mk === 'main' && A.line === 26.5 && A.side === 'over' && A.odds === -111 && A.other === -114 && A.at === e1.at && A.away === 'BOS' && A.home === 'DET',
     "a tap on Tatum's points Over puts that leg in your parlay, stored in the page's own key: the game, the player, his club, the stat, the line, the side, DraftKings' price as read (-111, the Under's -114 beside it) and the read's time");
   check(say() === 'Added: Jayson Tatum, Points Over 26.5 at -111.' && d.activeElement && d.activeElement.dataset.ppKey === tatPts.dataset.ppKey && d.activeElement.getAttribute('aria-pressed') === 'true', `the sheet says so ("${say()}"), and the control, redrawn pressed, keeps the focus`);
-  check(!d.getElementById('ppSlipBar').hidden && /Your parlay: 1 leg, -111/.test(d.getElementById('ppSlipSum').textContent), `the sheet's foot shows your parlay ("${d.getElementById('ppSlipSum').textContent}")`);
+  const foot = () => d.getElementById('ppSlipSum').textContent;
+  check(!d.getElementById('ppSlipBar').hidden && foot() === 'Your parlay: 1 leg, -111', `the sheet's foot shows your parlay, a single leg at DraftKings' price with no est. ("${foot()}")`);
   main('4065648', 'reb', 0).click(); await sleep(20);
   check(slip().length === 2 && slip()[1].stat === 'reb' && slip()[1].odds === -143, "his rebounds Over joins it: two stats of one player are allowed");
+  /* the foot's same-game price, by this file's own sums: min(the prices multiplied, the hold over the copula's joint
+     chance of the implied chances), marked est. */
+  { const pl = (stat, side) => ({ game: q1.id, kind: stat, player: '4065648', team: 'BOS', side, home: 'DET' });
+    const dec2 = Math.min(decOf(-111) * decOf(-143), HOLD / CJ.joint2(imp(-111), imp(-143), CJ.rhoFor(CT, pl('pts', 'over'), pl('reb', 'over'))));
+    check(foot() === `Your parlay: 2 legs, ${fmtA(amOfDec(dec2))} est.`, `with two legs of one game the foot's price is the same-game estimate, marked est. ("${foot()}")`); }
   const refuse = async (btn, re, what) => { const n0 = slip().length; btn.click(); await sleep(20); check(slip().length === n0 && re.test(say()), `${what} is refused with a plain reason ("${say()}")`); };
   await refuse(main('4065648', 'pra', 0), /^Not added: Jayson Tatum's points over 26\.5 and pts \+ reb \+ ast share a part: DraftKings publishes no list of what it takes on one same-game ticket, so the builder takes one of them\.$/, "his points + rebounds + assists (it holds his points)");
   await refuse(rung('4065648', 'pts', 25), /^Not added: One leg per player per stat: Jayson Tatum already has Points Over 26\.5\.$/, 'his points 25+ milestone (one leg per player per stat)');
@@ -841,9 +858,21 @@ async function builder() {
   shut(); open(q3); await sleep(20);
   await refuse(body().querySelector('[data-pp-player="7000001"] [data-pp-line="pts"] .pp-add'), /^Not added: Preseason games get no box score here, so a player leg on one could never be graded\.$/, 'a player leg on a preseason game');
   shut(); open(q2); await sleep(20);
+  /* a player the hub places on neither club of the game goes alone in it: no table names 9000099, and the tables put Moved
+     Wing on MIA. Each is taken on his own; another leg of the game beside him is refused, whichever comes first */
+  for (const [pid, name, team] of [['9000099', 'ESPN athlete 9000099', ''], ['9000088', 'Moved Wing', 'MIA']]) {
+    main(pid, 'pts', 0).click(); await sleep(20);
+    const l = slip()[slip().length - 1];
+    check(slip().length === 4 && l.id === q2.id && l.pid === pid && l.name === name && l.team === team && say() === `Added: ${name}, Points Over ${pid === '9000099' ? 18.5 : 12.5} at ${pid === '9000099' ? -110 : -105}.`,
+      `${name}${team ? `, whom the tables put on ${team},` : ', whom no table names,'} is taken alone in LAL at GSW ("${say()}")`);
+    await refuse(main('9000001', 'pts', 0), new RegExp(`^Not added: The hub cannot place ${name} on LAL or GSW, so his leg cannot be priced beside another of this game\\.$`), `Lal Guard's points beside ${name}`);
+    main(pid, 'pts', 0).click(); await sleep(20);
+  }
   main('9000001', 'pts', 0).click(); await sleep(20);
   legs = slip();
   check(legs.length === 4 && legs[3].id === q2.id && legs[3].odds === -115, "a leg of another game joins: Lal Guard's points Over");
+  for (const [pid, name] of [['9000099', 'ESPN athlete 9000099'], ['9000088', 'Moved Wing']])
+    await refuse(main(pid, 'pts', 0), new RegExp(`^Not added: The hub cannot place ${name} on LAL or GSW, so his leg cannot be priced beside another of this game\\.$`), `${name}'s points beside Lal Guard's`);
   shut();
 
   /* the price and the chances, worked out here */
@@ -912,7 +941,7 @@ async function builder() {
   w.eval(`M.slip.legs.splice(2, 0, ${JSON.stringify({ ...legs[0], kind: 'total', side: 'over', line: 221.5, odds: -115, other: -105, dk: '0OU85841510O22150_1', at: gl1.at, pid: undefined, name: undefined, team: undefined, stat: undefined, mk: undefined })}); saveMine(); render.parlay();`);
   /* nothing from the read is stored but the legs added */
   const store = JSON.parse(w.localStorage.getItem('nba_hub_2027')), sj = JSON.stringify(store);
-  check(store.slip.legs.length === 4 && !/4432166|Cunningham|mains|ladders|"yes"\s*:\s*\[|9000002|7000001/.test(sj) && Object.keys(w.localStorage).filter(k => !/^nba_hub_2027(:tab)?$/.test(k)).length === 0 && dump(w.sessionStorage) && !Object.keys(dump(w.sessionStorage)).length,
+  check(store.slip.legs.length === 4 && !/4432166|Cunningham|mains|ladders|"yes"\s*:\s*\[|9000002|7000001|9000099|9000088|Moved Wing/.test(sj) && Object.keys(w.localStorage).filter(k => !/^nba_hub_2027(:tab)?$/.test(k)).length === 0 && dump(w.sessionStorage) && !Object.keys(dump(w.sessionStorage)).length,
     'storage holds the four legs added and nothing else from the read (no other line, player or price), in the one key');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
@@ -944,6 +973,23 @@ async function builder() {
   pc.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20);
   check(pc.hidden && d.activeElement === d.getElementById('slFinish'), 'Escape closes it, the focus back on Finish');
   check(card && card.title === shared.title, 'the card the page holds is the one shared');
+  /* the betslip note is dated by the oldest read of the legs it opens: a parlay kept from two presses, as a reload finds
+     it (the total read at this press, the other game's moneyline at one two hours before, put second so that neither
+     the first leg's read nor the newest stands in for it) */
+  { const tOld = new Date(Date.parse(gl1.at) - 2 * 3600e3).toISOString();
+    const keepL = [{ id: q1.id, away: 'BOS', home: 'DET', date: q1.date, tip: q1.tip, kind: 'total', side: 'over', line: 221.5, odds: -115, other: -105, dk: '0OU85841510O22150_1', at: gl1.at },
+      { id: q2.id, away: 'LAL', home: 'GSW', date: q2.date, tip: q2.tip, kind: 'ml', side: 'GSW', line: null, odds: -140, other: 120, dk: '0ML85841599_1', at: tOld }];
+    const x = load('index.html', st9, { picks: {}, build: [], bank: { day: q1.date }, slip: { legs: keepL, stake: 20 } }, espnStub(sb, () => 0, propsAns));
+    await sleep(300); const xd = x.w.document;
+    xd.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+    xd.getElementById('slFinish').click(); await sleep(20);
+    let sh = null; x.w.navigator.share = async v => { sh = v; }; x.w.navigator.canShare = () => true;
+    xd.getElementById('pcShare').click(); await sleep(20);
+    const note = xd.getElementById('pcDkNote').textContent, opens = `opens the 2 legs as DraftKings had them at ${etT(tOld)}`;
+    check(etT(tOld) !== etT(gl1.at) && xd.getElementById('pcDk').getAttribute('href') === 'https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1+0ML85841599_1'
+      && note === `Open in DraftKings ${opens}. A line DraftKings has moved or pulled since will not be on the slip, so check each leg before you bet.` && sh && sh.text.split('\n').includes(`DraftKings betslip (${opens}):`) && !espnReqs(x.requests).length,
+      `two legs read at different presses: the card's note and the Share text date what the link opens by the older read, ${etT(tOld)}, not ${etT(gl1.at)} ("${note}")`);
+    check(x.errors.length === 0, 'no script errors: ' + x.errors.join(' | ')); }
 
   /* Lock in */
   d.getElementById('slLock').click(); await sleep(30);
@@ -964,7 +1010,7 @@ async function builder() {
   check(rr.length === 4 && rr[0].querySelector('.sl-px').textContent === '-111' && rr[0].querySelector('.sl-meta').textContent.startsWith(`as read ${w.eval(`oddsClock(${JSON.stringify(e1.at)})`)}`) && !espnReqs(requests).length && !Object.keys(w.NBA_PROPS.live()).length,
     'a reload keeps the legs at the prices they were added at, dated by their read, and reads nothing');
   open(q1); await sleep(20);
-  check(!body().querySelector('[data-sg-add]') && !d.getElementById('ppSlipBar').hidden && /Your parlay: 4 legs \(3 in this game\)/.test(d.getElementById('ppSlipSum').textContent), "the sheet offers nothing to add before a press, and its foot shows your parlay");
+  check(!body().querySelector('[data-sg-add]') && !d.getElementById('ppSlipBar').hidden && /^Your parlay: 4 legs \(3 in this game\), [+-]\d+ est\.$/.test(foot()), `the sheet offers nothing to add before a press, and its foot shows your parlay, its same-game price est. ("${foot()}")`);
   shut();
 
   /* a later press: Tatum's points line has moved, his rebounds line is gone, the total's price has moved; the other
@@ -986,6 +1032,10 @@ async function builder() {
   check(said2 === "Jayson Tatum, Points Over 26.5: moved to 27.5, so it left your parlay. Jayson Tatum, Rebounds Over 8.5: is not in DraftKings' lines at this read, so it left your parlay. BOS at DET, Total Over 221.5: now -120, was -115.",
     `and says so, once ("${said2}")`);
   check(/ Your parlay: 2 legs left it and 1 took a new price \(see the Parlay Builder\)\.$/.test(d.getElementById('propsSt').textContent), `the press's own status line says it in a word, on whatever tab ("${d.getElementById('propsSt').textContent}")`);
+  open(q1); await sleep(20);
+  { const dec = decOf(after[0].odds) * decOf(after[1].odds);
+    check(foot() === `Your parlay: 2 legs (1 in this game), ${fmtA(amOfDec(dec))}`, `a leg in each of two games: the foot's price is their prices multiplied, with no est. ("${foot()}")`); }
+  shut();
   d.querySelector('#bkSlip [data-sl-del]').click(); await sleep(20);
   check(d.getElementById('slSaid').textContent === '' && slip().length === 1, 'the next change clears what was said');
   /* a third press: DraftKings has taken down every player prop of the other game (ESPN's 404) */
@@ -1031,23 +1081,42 @@ async function builder() {
   const kindBets = kinds.map(([stat, side, line], i) => bet('k' + i, [P(f1, 'BOS', 'DET', { stat, side, line, odds: -110, other: -110 })]));
   const kindWant = Object.fromEntries(kinds.map(([stat, side, line], i) => { const v = PARTS[stat].reduce((t, j) => t + tat[j], 0);
     const r = v === line ? 'push' : (v > line) === (side === 'over') ? 'won' : 'lost'; return ['k' + i, [r, r === 'won' ? '$' + (10 * decOf(-110)).toFixed(2) : r === 'push' ? '$10.00' : '$0.00']]; }));
+  /* the season's box file for the final three weeks back: every stat column a different number from every other on a row
+     (Old Hand 31 points, 3 + 7 boards, 6 assists, 4 threes, 2 steals, 1 block; Old Big a triple-double), so a column read
+     from the wrong place grades wrong; Old Bench did not play */
+  const boxCsv = 'game_id,date,team,opp,home,player_id,name,pos,starter,min,fgm,fga,tpm,tpa,ftm,fta,orb,drb,ast,stl,blk,tov,pf,pm,pts,dnp\n'
+    + `${f3},${ago(20)},MIA,ORL,0,777,Old Hand,G,1,36,11,20,4,9,5,8,3,7,6,2,1,0,5,4,31,0\n${f3},${ago(20)},MIA,ORL,0,779,Old Big,C,1,33,7,14,1,5,3,6,4,9,11,3,2,8,0,-2,18,0\n`
+    + `${f3},${ago(20)},MIA,ORL,0,778,Old Bench,G,0,0,,,,,,,,,,,,,,,,1\n`;
+  FILES = [[new RegExp(`data/box_${state.season}\\.csv$`), boxCsv]];
+  /* the file's lines by this file's own reading of it (rebounds the offensive and defensive boards), and on each of Old
+     Hand and Old Big a straight bet on every stat at a whole line at its own sum, so only the exact value pushes, and
+     his double- and triple-double */
+  const csvLine = (() => { const ls = boxCsv.trim().split('\n'), h = ls.shift().split(','), o = {};
+    for (const ln of ls) { const v = ln.split(','), at = k => +v[h.indexOf(k)]; if (at('dnp') === 1) continue;
+      o[v[h.indexOf('player_id')]] = { pts: at('pts'), reb: at('orb') + at('drb'), ast: at('ast'), tpm: at('tpm'), stl: at('stl'), blk: at('blk') }; }
+    return o; })();
+  const fileBets = [], fileWant = {};
+  for (const [pid, name] of [['777', 'Old Hand'], ['779', 'Old Big']]) { const bx = csvLine[pid];
+    for (const k of ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb']) { const v = (COMBO[k] || [k]).reduce((t, x) => t + bx[x], 0), id = `f${pid}${k}`;
+      fileBets.push(bet(id, [P(f3, 'MIA', 'ORL', { pid, name, team: 'MIA', stat: k, line: v, odds: -110, other: -110 })])); fileWant[id] = ['push', '$10.00']; }
+    for (const [k, need, odds] of [['dd', 2, 150], ['td', 3, 900]]) { const won = ['pts', 'reb', 'ast', 'stl', 'blk'].filter(x => bx[x] >= 10).length >= need, id = `f${pid}${k}`;
+      fileBets.push(bet(id, [P(f3, 'MIA', 'ORL', { pid, name, team: 'MIA', stat: k, mk: 'yes', side: 'yes', odds, other: null, line: undefined })])); fileWant[id] = won ? ['won', '$' + (10 * decOf(odds)).toFixed(2)] : ['lost', '$0.00']; } }
   const mine10 = { picks: {}, slip: { legs: [], stake: 20 }, build: [
     bet('g1', [ptsO, cadeA, bosMl], { sg: true, dec: 9.99 }), bet('g2', [ptsO, reb10, tot], { sg: true, dec: 9.99 }), bet('g3', [pts30, dd], { sg: true, dec: 3.21 }),
-    bet('g4', [td]), bet('g5', [reb10]), bet('g6', [rebU]), bet('g7', [lal]), bet('g8', [old]), bet('g9', [ptsO, old]), bet('g10', [old2]), ...kindBets ] };
-  const boxCsv = 'game_id,date,team,opp,home,player_id,name,pos,starter,min,fgm,fga,tpm,tpa,ftm,fta,orb,drb,ast,stl,blk,tov,pf,pm,pts,dnp\n'
-    + `${f3},${ago(20)},MIA,ORL,0,777,Old Hand,G,1,36,11,20,3,8,6,7,1,4,5,1,0,2,2,4,31,0\n${f3},${ago(20)},MIA,ORL,0,778,Old Bench,G,0,0,,,,,,,,,,,,,,,,1\n`;
-  FILES = [[new RegExp(`data/box_${state.season}\\.csv$`), boxCsv]];
+    bet('g4', [td]), bet('g5', [reb10]), bet('g6', [rebU]), bet('g7', [lal]), bet('g8', [old]), bet('g9', [ptsO, old]), bet('g10', [old2]), ...kindBets, ...fileBets ] };
   ({ w, errors, requests } = load('index.html', st10, mine10));
   await sleep(300); d = w.document;
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(150);
   const row = id => [...d.querySelectorAll('#bkBuild tbody tr')].find(r => r.querySelector(`[data-del="${id}"]`));
   const st = id => { const r = row(id); return r ? r.children[6].textContent.trim() : '?'; }, ret = id => { const r = row(id); return r ? r.children[7].textContent.trim() : '?'; };
   const m2 = (a, b) => Math.min(decOf(a.odds) * decOf(b.odds), HOLD / CJ.joint2(imp(a.odds), imp(b.odds), rho(a, b)));
-  const want = { g1: ['won', '$' + (10 * m2(ptsO, bosMl)).toFixed(2)], g2: ['lost', '$0.00'], g3: ['won', '$32.10'], g4: ['lost', '$0.00'], g5: ['push', '$10.00'], g6: ['won', '$' + (10 * decOf(120)).toFixed(2)],
-    g7: ['open', '–'], g8: ['won', '$20.00'], g9: ['won', '$' + (10 * decOf(-111) * 2).toFixed(2)], g10: ['void', '$10.00'], ...kindWant };
+  const want0 = { g1: ['won', '$' + (10 * m2(ptsO, bosMl)).toFixed(2)], g2: ['lost', '$0.00'], g3: ['won', '$32.10'], g4: ['lost', '$0.00'], g5: ['push', '$10.00'], g6: ['won', '$' + (10 * decOf(120)).toFixed(2)],
+    g7: ['open', '–'], g8: ['won', '$20.00'], g9: ['won', '$' + (10 * decOf(-111) * 2).toFixed(2)], g10: ['void', '$10.00'], ...kindWant }, want = { ...want0, ...fileWant };
   const got = Object.fromEntries(Object.keys(want).map(k => [k, [st(k), ret(k)]]));
-  bad = Object.keys(want).filter(k => JSON.stringify(want[k]) !== JSON.stringify(got[k]));
+  bad = Object.keys(want0).filter(k => JSON.stringify(want[k]) !== JSON.stringify(got[k]));
   check(!bad.length, `each bet graded from the box scores by this file's sums: a void leg (Cunningham, not in the box) dropped and the same-game parlay priced again on the two left (${want.g1[1]}), a lost total, a push on a whole line, a milestone and a double-double at the price locked, a triple-double short, an Under, a final whose box is not read waiting, one from three weeks back read from its season's box file, and a straight bet on every other stat (${kinds.map(([k, s, l], i) => `${k} ${s} ${l} ${got['k' + i][0]}`).join(', ')})${bad.length ? ': ' + bad.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
+  const badF = Object.keys(fileWant).filter(k => JSON.stringify(want[k]) !== JSON.stringify(got[k]));
+  check(!badF.length, `from the season's box file, by this file's own reading of it: Old Hand's and Old Big's points, rebounds (both boards), assists, threes, steals, blocks and the five combos each push at their own sum, so each column is read from its own place, and their double- and triple-doubles (${Object.keys(fileWant).filter(k => /(dd|td)$/.test(k)).map(k => `${k.slice(1, 4)} ${k.slice(4)} ${got[k][0]}`).join(', ')})${badF.length ? ': ' + badF.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
   const csvReq = requests.filter(x => /data\/box_\d{4}\.csv/.test(x.url));
   check(csvReq.length === 1 && csvReq[0].opt && csvReq[0].opt.cache === 'no-store', `the season's box file is read once, no-store, for the legs older than the state's window (${csvReq.length})`);
   const lalTitle = row('g7').querySelector('[title]');

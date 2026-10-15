@@ -1881,7 +1881,10 @@ function slipWhy(legs, l) {
     const clash = mine.find(x => (S.corr.refused || []).includes('self|' + [x.stat, l.stat].sort().join('|')));
     if (clash) return `${l.name}'s ${slipWhat(clash).toLowerCase()} and ${(PP_NAMES[l.stat] || l.stat).toLowerCase()} ${[clash.stat, l.stat].sort().join('|') === 'dd|td' ? 'are one inside the other (a triple-double is a double-double)' : 'share a part'}: DraftKings publishes no list of what it takes on one same-game ticket, so the builder takes one of them.`;
   }
-  if ((l.kind === 'prop' && !l.team) || same.some(x => x.kind === 'prop' && !x.team)) return 'The hub cannot place this player on a club, so his leg cannot be priced beside another of this game.';
+  /* a player the hub places on neither club of the game (no table names him, or one names another club) would be priced
+     as everyone's opponent, his sign with a side bet turned: he goes alone in his game */
+  const unplaced = x => x.kind === 'prop' && x.team !== x.home && x.team !== x.away, lost = unplaced(l) ? l : same.find(unplaced);
+  if (lost) return `The hub cannot place ${lost.name} on ${l.away} or ${l.home}, so his leg cannot be priced beside another of this game.`;
   if (same.some(x => rhoFor(S.corr.rho, sgLeg(x), sgLeg(l)) == null)) return 'These two legs cannot go on one ticket.';
   return null;
 }

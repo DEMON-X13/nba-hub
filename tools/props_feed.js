@@ -140,16 +140,16 @@ function propFairOver(over, under) {
 }
 
 /* A "k+" rung's or a Yes market's fair chance, estimated from its one price (README "Player props"; the constants are
-   in state.json's props.fair, measured on the archive): a rung carries a margin about `a` points of chance over the
-   main line's fair Over, flat from 30% to 70% and scaled toward 0 and 1 beyond; a double- or triple-double's Yes price
-   is its fair chance times c. Both are estimates: the page marks them est. */
+   in state.json's props.fair): a rung carries a margin about `a` points of chance over the main line's fair Over
+   (measured on the archive), flat from 30% to 70% and scaled toward 0 and 1 beyond; a double- or triple-double, one Yes
+   price with nothing to measure its own margin from, is taken to carry the rungs'. Both are estimates: the page marks
+   them est. */
 function propFairRung(price, a) {
   if (price == null || !(a >= 0)) return null;
   const I = propImplied(price);
   const f = I < 0.3 ? I * (1 - a / 0.3) : I <= 0.7 ? I - a : 1 - (1 - I) * (1 + a / 0.3);
   return Math.min(1, Math.max(0, f));
 }
-function propFairYes(price, c) { return price == null || !(c > 0) ? null : Math.min(1, propImplied(price) / c); }
 
 /* Read one game's answer, every page, with getJSON(url) (it throws Error('HTTP <code> ...') on a refusal, as
    lib.getJSON does). Returns { status: 'ok', items } | { status: 'none' } (a 404: nothing posted) |
@@ -174,4 +174,4 @@ async function propRead(espnId, getJSON) {
   return { status: 'ok', items: propItems(pages) };
 }
 
-module.exports = { PROP_URL, PROP_MAIN, PROP_MILE, PROP_YES, PROP_STATS, propAmerican, propImplied, propAthlete, propLine, propTypeId, propPrice, propItems, propParse, propFairOver, propFairRung, propFairYes, propRead };
+module.exports = { PROP_URL, PROP_MAIN, PROP_MILE, PROP_YES, PROP_STATS, propAmerican, propImplied, propAthlete, propLine, propTypeId, propPrice, propItems, propParse, propFairOver, propFairRung, propRead };

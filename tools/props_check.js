@@ -7,7 +7,10 @@
  * last commit had them (so a broken ledger is never committed) and turns the run red. It fails when:
  *   - the bar is not the one registered (props_ledger.BAR), its numbers not lines 30000, edge 0.03, ci [0.05, 0.95],
  *     boot 10000, seed 0 (held here on their own, so an edit to BAR and the ledger together still fails), or not the last
- *     commit's, or registered after a call;
+ *     commit's, or registered after a call. One change of bar is allowed, a re-registration: a later registration time,
+ *     the bar BAR, while the last commit's ledger has nothing on record against its own (no call frozen or past its
+ *     tip-off, no graded line, no verdict), every call then made after the new registration (the 15 October 2026 bar was
+ *     re-registered so, when its numbers were written into it before any game had tipped);
  *   - a call was made at or after its tip-off, or names a fit the ledger does not hold;
  *   - a call the last commit had frozen, or whose tip-off has passed, is gone, open again or changed in any field (its
  *     tip, the time it was made, its fit, any player's numbers); the one change allowed is a rewrite by this run, made
@@ -56,7 +59,8 @@ function prevFiles() {
 }
 
 function check({ Lg, lineText, prev, games, boxes, now }) {
-  const bad = [];
+  const bad = [], notes = [];
+  bad.notes = notes;
   const nowIso = new Date(now).toISOString().slice(0, 16) + 'Z';
   const byId = new Map(games.map(g => [g.game_id, g]));
   /* the bar */
@@ -65,7 +69,13 @@ function check({ Lg, lineText, prev, games, boxes, now }) {
   { const b = Lg.bar || {};
     if (!(b.lines === 30000 && b.edge === 0.03 && Array.isArray(b.ci) && b.ci.length === 2 && b.ci[0] === 0.05 && b.ci[1] === 0.95 && b.boot === 10000 && b.seed === 0))
       bad.push(`the bar's numbers are not the registered ones (lines 30000, edge 0.03, ci [0.05, 0.95], boot 10000, seed 0): ${JSON.stringify({ lines: b.lines, edge: b.edge, ci: b.ci, boot: b.boot, seed: b.seed })}`); }
-  if (prev && (JSON.stringify(prev.ledger.bar) !== JSON.stringify(Lg.bar) || prev.ledger.bar_registered !== Lg.bar_registered)) bad.push('the bar or its registration time differs from the last commit\'s');
+  let rereg = false;
+  if (prev && (JSON.stringify(prev.ledger.bar) !== JSON.stringify(Lg.bar) || prev.ledger.bar_registered !== Lg.bar_registered)) {
+    /* a re-registration, allowed only while the old bar has nothing on record against it */
+    const onRecord = Object.values(prev.ledger.calls || {}).some(c => c.frozen || c.graded || c.tip <= nowIso) || (prev.lines || '').split('\n').filter(Boolean).length > 1 || !!prev.ledger.decision;
+    if (onRecord || !(Lg.bar_registered > (prev.ledger.bar_registered || ''))) bad.push('the bar or its registration time differs from the last commit\'s');
+    else { rereg = true; notes.push(`the bar re-registered at ${Lg.bar_registered} (the last commit's, ${prev.ledger.bar_registered}, had no call frozen or past its tip-off, no graded line and no verdict)`); }
+  }
   /* every call */
   for (const [gid, c] of Object.entries(Lg.calls)) {
     if (!(c.called_at < c.tip)) bad.push(`${gid}: called at ${c.called_at}, at or after its tip-off ${c.tip}`);
@@ -76,7 +86,8 @@ function check({ Lg, lineText, prev, games, boxes, now }) {
   }
   /* nothing frozen moved */
   if (prev) {
-    for (const [id, f] of Object.entries(prev.ledger.fits || {})) if (Lg.fits[id] && JSON.stringify(Lg.fits[id]) !== JSON.stringify(f)) bad.push(`fit ${id} changed`);
+    /* a fit once written never changes (on a re-registration no call was frozen with one, and the new ledger writes its own) */
+    if (!rereg) for (const [id, f] of Object.entries(prev.ledger.fits || {})) if (Lg.fits[id] && JSON.stringify(Lg.fits[id]) !== JSON.stringify(f)) bad.push(`fit ${id} changed`);
     for (const [gid, pc] of Object.entries(prev.ledger.calls || {})) {
       const tipped = pc.frozen || pc.tip <= nowIso;
       const c = Lg.calls[gid];
@@ -166,6 +177,7 @@ function main() {
   const games = L.readGames();
   const boxes = PM.loadBoxes(DATA);
   const bad = check({ Lg, lineText, prev, games, boxes, now });
+  for (const n of bad.notes || []) console.log('note', n);
   for (const b of bad) console.log('FAIL', b);
   console.log(`props check: ${bad.length} failures${prev ? '' : ' (no earlier ledger to hold it to)'}`);
   return bad.length ? 1 : 0;

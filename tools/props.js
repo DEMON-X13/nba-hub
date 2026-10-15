@@ -16,9 +16,10 @@
  *             weighted toward his last appearances (half-life min.h), blended with a prior worth min.w0 appearances,
  *             his whole previous regular season's average (when he played min.minN games of it; else his last 20
  *             regular-season appearances). Then the side's expected rotation is scaled toward a full game,
- *             m = b x (min.T / S)^min.alpha, S the sum of b over the side's available players projected min.floor
- *             minutes or more, so a side missing a starter hands his minutes to the rest; in the playoffs
- *             m + min.post x (m - 24) (starters play more, the bench less). At most 46.
+ *             m = b x (min.T / S)^min.alpha, S the sum of b over the side's ROT (10) players with the most (those at
+ *             min.floor or more), so a side missing a starter hands his minutes to the rest and one with more claims
+ *             than minutes shaves them; in the playoffs m + min.post x (m - 24) (starters play more, the bench less).
+ *             At most 46. The same rule in a backtest and live (sideScale), on the same kind of side (below).
  *   rate      each stat per minute, exponentially weighted over his appearances (half-life rate[k].h), shrunk toward
  *             his position's league rate (G, F or C) with rate[k].m pseudo-minutes.
  *   pace      x (the game's expected pace / the pace of the games he played lately)^gamma, a club's pace being the
@@ -33,12 +34,17 @@
  *   doubles   P(at least two, or three, of points, rebounds, assists, steals and blocks reach 10), the five
  *             distributions joined by a one-factor Gaussian copula whose correlation rho is fitted on the earlier
  *             seasons' double- and triple-doubles.
- * Who plays: in a backtest the players who played, and as the side's available rotation those who played or were
- * listed as not playing with b under 15 (CUT; ESPN lists a side's active players, a coach's decision at the end of the
- * bench among them; a rotation player listed as not playing is read as out, which the injury report would have said).
- * Live: the club's roster as ESPN lists it today minus the injury report's absences, by players.js's rule
- * (availability() below), its 13 with the most minutes counted toward the scale. A player with no game on record has no
- * projection. Projections are published for the next five game days, for players projected 8 minutes or more.
+ * Who plays. A side is the players who will dress, and its scale is worked from its ROT with the most minutes. In a
+ * backtest that is every player the box score lists (ESPN lists a side's active players, a coach's decision at the end
+ * of the bench among them, and not an inactive one), all counted as available: nobody is left out for not having
+ * played, so the backtest knows only who dressed, which live the roster less the report stands in for. Live: the
+ * club's roster as ESPN lists it today minus the injury report's absences, by players.js's rule (availability()
+ * below), and of those the LIVE_SIDE (13, the median a box score lists) with the most minutes dress, as the box's
+ * list does; a training-camp roster of 20 or a season's 15 and its two-way players carries bodies the box never
+ * lists, and counting only the top ROT toward the scale keeps them out of it (a backtest found 10 to 15 alike on the
+ * box's lists, 2024 fold: 4.823 to 4.830 minutes, so the smallest, the median number who play, is the one a longer
+ * roster moves least). A player with no game on record has no projection. Projections are published for the next five
+ * game days, for players projected 8 minutes or more.
  * Every constant is chosen on finished seasons only (fit), never on the season in progress.
  */
 'use strict';
@@ -60,13 +66,13 @@ const GRID = {
   post: [0, 0.1, 0.2, 0.3, 0.4, 0.5], rateM: [10, 25, 50, 100, 200, 400, 800, 1600], gamma: [0, 0.25, 0.5, 0.75, 1, 1.25],
   rho: [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.5, 0.6], opp: [0, 0.25, 0.5, 0.75, 1, 1.25],
 };
-const CUT = 15;                     // the backtest's reading of a listed player who did not play (see the header)
 const MAX_MIN = 46;
 const MIN_SHOWN = 8;                // projections published (and called in the ledger) for players projected this many minutes or more:
                                     // 98% of the players DraftKings lined in the archived playoffs were projected 8 or more
 const HORIZON = 5;                  // the games of the next five days with a game to come (DraftKings posts a game's props one to six days
                                     // ahead; counted in game days, so opening night is covered from the preseason)
-const LIVE_SIDE = 13;               // live, the side's available players counted toward its scale (liveProjections)
+const ROT = 10;                     // a side's scale is worked from its 10 players with the most minutes (the header)
+const LIVE_SIDE = 13;               // live, the side's dressed players: its 13 available with the most minutes (the header)
 const PCOLS = ['game_id', 'date', 'team', 'opp', 'home', 'player_id', 'name', 'pos', 'starter', 'min', 'fgm', 'fga', 'tpm', 'tpa', 'ftm', 'fta', 'orb', 'drb', 'ast', 'stl', 'blk', 'tov', 'pf', 'pm', 'pts', 'dnp'];
 /* the box writes a position as G, F or C, and for some players PG, SG, SF or PF */
 const posOf = p => { const s = String(p || '').toUpperCase(); return s === 'C' ? 'C' : s === 'F' || s === 'SF' || s === 'PF' ? 'F' : s === 'G' || s === 'PG' || s === 'SG' ? 'G' : ''; };
@@ -174,8 +180,8 @@ function replay(games, boxes, teamStats, opts = {}) {
       const expPace = (pace[g.home] + pace[g.away]) / 2;
       for (const [t, opp] of [[g.home, g.away], [g.away, g.home]]) {
         /* every player the box lists, those who played and those listed as not playing (ESPN lists a side's active
-           players: a coach's decision is listed, an inactive player is not), so the side's available rotation can be
-           read as the live roster minus the injury report reads it */
+           players: a coach's decision is listed, an inactive player is not): the side, as the live roster minus the
+           injury report stands in for it (the header's "Who plays") */
         for (const r of boxes[g.game_id][t]) {
           const p = players[r.id];
           if (!p || !p.n) continue;                 // no game on record: no projection
@@ -322,11 +328,15 @@ function doublesProb(mu, V, rho) {
 const ewMean = (arr, h) => { if (!arr.length) return [0, 0]; const d = Math.pow(0.5, 1 / h); let w = 0, s = 0, ww = 1; for (let i = arr.length - 1; i >= 0; i--) { s += ww * arr[i]; w += ww; ww *= d; } return [s / w, w]; };
 const priorMin = (f, minN) => f.prevN >= minN ? f.prevMean : f.last20 != null ? f.last20 : f.prevMean != null ? f.prevMean : 12;
 function baseMin(f, M) { const p = priorMin(f, M.minN); const [m, w] = ewMean(f.cur, M.h); return (w * m + M.w0 * p) / (w + M.w0); }
-/* one side's minutes: list of { b, avail } -> the scale every player's b is multiplied by */
-function sideScale(list, M) {
-  let S = 0; for (const x of list) if (x.avail && x.b >= M.floor) S += x.b;
-  return S > 0 ? Math.pow(M.T / S, M.alpha) : 1;
+/* one side's minutes: list of { b } (the side's players, as the header reads a side) -> the scale every player's b is
+   multiplied by, (T / S)^alpha, S the sum of b over its ROT with the most (those at min.floor or more). A backtest and
+   the live projections both call this, on their own kind of side */
+function sideS(list, M) {
+  const top = list.map(x => x.b).sort((a, b) => b - a).slice(0, ROT);
+  let S = 0; for (const b of top) if (b >= M.floor) S += b;
+  return S;
 }
+function sideScale(list, M) { const S = sideS(list, M); return S > 0 ? Math.pow(M.T / S, M.alpha) : 1; }
 function finalMin(b, scale, post, M) { let m = b * scale; if (post) m += M.post * (m - 24); return Math.max(0, Math.min(MAX_MIN, m)); }
 const rateOf = (f, k, R) => (f.acc[R.h].y[k] + R.m * f.posRate[k]) / (f.acc[R.h].m + R.m);
 const paceOf = (f, expPace, gamma) => f.pace && gamma ? Math.pow(expPace / f.pace, gamma) : 1;
@@ -340,12 +350,13 @@ function means(f, m, expPace, post, P, oppF) {
 
 /* ---------- applying a set of constants to the backtest rows ---------- */
 function sidesOf(rows) { const s = new Map(); rows.forEach((r, i) => { if (!s.has(r.sideKey)) s.set(r.sideKey, []); s.get(r.sideKey).push(i); }); return s; }
-/* every row's projected minutes under M: b, the side's scale from its available rotation, the playoff stretch */
+/* every row's projected minutes under M: b, the side's scale (every player the box lists: nobody is read as out for
+   not having played), the playoff stretch */
 function backtestMinutes(rows, sides, M, sel) {
   const out = new Float64Array(rows.length).fill(NaN);
   for (const idx of sides.values()) {
     if (sel && !sel(rows[idx[0]])) continue;
-    const list = idx.map(i => { const b = baseMin(rows[i].f, M); return { b, avail: rows[i].played || b < CUT }; });
+    const list = idx.map(i => ({ b: baseMin(rows[i].f, M) }));
     const sc = sideScale(list, M);
     idx.forEach((i, j) => { out[i] = finalMin(list[j].b, sc, rows[i].type === 'POST', M); });
   }
@@ -462,12 +473,14 @@ function score(rows, P, NV, sel) {
   const pr = project(rows, P, sel);
   const S = {}, N = { n: 0 };
   for (const k of ALL) S[k] = { n: 0, mae: 0, maeN: 0, bias: 0, ls: 0, lsN: 0, llLine: 0, llLineN: 0, brLine: 0, brLineN: 0, rn: 0, rmae: 0, rmaeN: 0 };
-  let minE = 0, minHub = 0, minN = 0, ddLL = 0, ddLLN = 0, tdLL = 0, tdLLN = 0, ddN = 0, ddHit = 0, ddP = 0, tdHit = 0, tdP = 0;
+  let minE = 0, minHub = 0, minN = 0, minU = 0, opE = 0, opHub = 0, opN = 0, ddLL = 0, ddLLN = 0, tdLL = 0, tdLLN = 0, ddN = 0, ddHit = 0, ddP = 0, tdHit = 0, tdP = 0;
   for (const [i, x] of pr) {
     const r = rows[i];
     if (naiveMean(r.f, 'pts') == null) continue;      // both scored on the same rows: a player with a game this season or last
     N.n++;
     minE += Math.abs(x.m - r.min); minHub += Math.abs((r.f.hub || 12) - r.min); minN++;
+    minU += Math.abs(finalMin(baseMin(r.f, P.min), 1, r.type === 'POST', P.min) - r.min);      // b alone, no side scale
+    if (r.f.nCur === 0 && r.type === 'REG') { opE += Math.abs(x.m - r.min); opHub += Math.abs((r.f.hub || 12) - r.min); opN++; }   // his season's first game
     for (const k of ALL) {
       const y = yOf(r.y, k), mu = x.mu[k], nv = naiveMean(r.f, k), s = S[k];
       const v = nbVar(mu, P.var[k]), vn = nbVar(nv, NV[k]);
@@ -486,7 +499,7 @@ function score(rows, P, NV, sel) {
     tdLL -= c >= 3 ? Math.log(clip(q.td)) : Math.log(1 - clip(q.td)); tdLLN -= c >= 3 ? Math.log(nt) : Math.log(1 - nt);
     ddN++; ddHit += c >= 2; ddP += q.dd; tdHit += c >= 3; tdP += q.td;
   }
-  const out = { players: N.n, minutes: { mae: r2(minE / minN), hubRule: r2(minHub / minN) }, stats: {},
+  const out = { players: N.n, minutes: { mae: r2(minE / minN), unscaled: r2(minU / minN), hubRule: r2(minHub / minN), openers: { n: opN, mae: r2(opE / opN), hubRule: r2(opHub / opN) } }, stats: {},
     doubles: { dd: { logloss: r4(ddLL / ddN), naive: r4(ddLLN / ddN), rate: r4(ddHit / ddN), said: r4(ddP / ddN) }, td: { logloss: r4(tdLL / ddN), naive: r4(tdLLN / ddN), rate: r4(tdHit / ddN), said: r4(tdP / ddN) } } };
   for (const k of ALL) { const s = S[k]; out.stats[k] = { n: s.n, mae: r2(s.mae / s.n), naiveMae: r2(s.maeN / s.n), bias: r2(s.bias / s.n), logScore: r4(s.ls / s.n), naiveLogScore: r4(s.lsN / s.n), lineLogloss: r4(s.llLine / s.n), naiveLineLogloss: r4(s.llLineN / s.n), lineBrier: r4(s.brLine / s.n), naiveLineBrier: r4(s.brLineN / s.n), rotation: { n: s.rn, mae: r2(s.rmae / s.rn), naiveMae: r2(s.rmaeN / s.rn) } }; }
   return out;
@@ -614,7 +627,7 @@ function research(log = L.log) {
     const mk = marketTest(R.rows, P, S, log, boxes);
     if (mk) fold.market = mk;
     folds.push(fold); last = fold;
-    log(`fold ${S}: minutes ${sc.minutes.mae} (game model's rule ${sc.minutes.hubRule}); points MAE ${sc.stats.pts.mae} (own average ${sc.stats.pts.naiveMae}), log score ${sc.stats.pts.logScore} (${sc.stats.pts.naiveLogScore})`);
+    log(`fold ${S}: minutes ${sc.minutes.mae} (unscaled ${sc.minutes.unscaled}, game model's rule ${sc.minutes.hubRule}; season openers ${sc.minutes.openers.mae} against ${sc.minutes.openers.hubRule}); points MAE ${sc.stats.pts.mae} (own average ${sc.stats.pts.naiveMae}), log score ${sc.stats.pts.logScore} (${sc.stats.pts.naiveLogScore})`);
   }
   const fair = [...new Set(folds.filter(f => f.market).map(f => f.season))].map(sn => fairMethods(sn, boxes)).filter(Boolean);
   const out = { generated: new Date().toISOString().slice(0, 16) + 'Z', what: 'tools/props.js research: each season scored cold by constants fitted only on the seasons before it (2022 warms up), against the naive own average; and against DraftKings\' archived closing lines where the hub has them, with the eight ways of taking the margin out of their prices', folds, fair };
@@ -644,6 +657,13 @@ function availability(dir = DATA) {
     return { ids: ids.filter(id => !out[id]), out: ids.filter(id => out[id]).map(id => ({ id, status: out[id] })) };
   };
 }
+/* the published means: each stat's to two decimals, and a combo's the sum of its parts as published (to two decimals),
+   so the page, which sums the parts it is given, prices a combo on the ledger's call to the digit */
+function publishedMeans(mu) {
+  const o = {}; for (const k of STATS) o[k] = r2(mu[k]);
+  for (const [c, parts] of Object.entries(COMBOS)) o[c] = r2(parts.reduce((s, k) => s + o[k], 0));
+  return o;
+}
 function liveProjections(R, P, games, now = new Date(), dir = DATA, horizon = HORIZON) {
   const today = L.etDate(now), nowIso = now.toISOString().slice(0, 16) + 'Z';
   const avail = availability(dir);
@@ -656,7 +676,7 @@ function liveProjections(R, P, games, now = new Date(), dir = DATA, horizon = HO
     const paceOfTeam = t => R.seasonOfTeam[t] === g.season ? R.pace[t] : R.lgPace + EARLY_PACE;
     const expPace = (paceOfTeam(g.home) + paceOfTeam(g.away)) / 2;
     const oppAllowed = t => { const a = R.allowed[t]; if (!a || a.season === g.season) return a; return { m: a.m * 0.5, y: Object.fromEntries(STATS.map(k => [k, a.y[k] * 0.5])) }; };
-    const sides = {};
+    const sides = {}, scale = {};
     for (const [t, opp] of [[g.home, g.away], [g.away, g.home]]) {
       const av = avail(g, t, R.players);
       const list = [];
@@ -665,19 +685,19 @@ function liveProjections(R, P, games, now = new Date(), dir = DATA, horizon = HO
         if (!p || !p.n) continue;                  // no game on record: no projection
         rollSeason(p, g.season);
         const f = features(p, R.lgPos);
-        list.push({ p, f, b: baseMin(f, P.min), avail: true });
+        list.push({ p, f, b: baseMin(f, P.min) });
       }
-      /* a side dresses about 13: the backtest's sides had 13 available at the median (11 to 15 nearly always), so the
-         live roster (training camp carries 20, a season roster 15 and its two-way players) counts its 13 with the most
-         projected minutes toward the scale, as a box score's list does */
+      /* the side that dresses: the LIVE_SIDE available with the most minutes (a box score lists 13 at the median, 12 to
+         15 nearly always), its scale from its ROT with the most, as a backtest's side (the header's "Who plays") */
       list.sort((a, b) => b.b - a.b);
-      const sc = sideScale(list.slice(0, LIVE_SIDE), P.min), oppF = oppFactor(oppAllowed(opp), R.lgAll);
-      sides[t] = list.map(x => { const m = finalMin(x.b, sc, post, P.min); const mu = means(x.f, m, expPace, post, P, oppF); const d = doublesProb(mu, P.var, P.rho);
-        return { id: x.p.id, name: x.p.name, pos: x.p.pos, min: r1(m), mu: Object.fromEntries(ALL.map(k => [k, r2(mu[k])])), dd: r4(d.dd), td: r4(d.td) }; })
+      const dressed = list.slice(0, LIVE_SIDE);
+      const sc = sideScale(dressed, P.min), oppF = oppFactor(oppAllowed(opp), R.lgAll);
+      scale[t] = r4(sc);
+      sides[t] = dressed.map(x => { const m = finalMin(x.b, sc, post, P.min); const mu = means(x.f, m, expPace, post, P, oppF); const d = doublesProb(mu, P.var, P.rho);
+        return { id: x.p.id, name: x.p.name, pos: x.p.pos, min: r1(m), mu: publishedMeans(mu), dd: r4(d.dd), td: r4(d.td) }; })
         .filter(x => x.min >= MIN_SHOWN).sort((a, b) => b.min - a.min);
-      sides[t + ':out'] = av.out;
     }
-    out[g.game_id] = { date: g.date, tip: g.tip || '', type: g.type, away: g.away, home: g.home, pace: r1(expPace),
+    out[g.game_id] = { date: g.date, tip: g.tip || '', type: g.type, away: g.away, home: g.home, pace: r1(expPace), scale,
       players: { [g.away]: sides[g.away], [g.home]: sides[g.home] } };
   }
   return out;
@@ -734,8 +754,10 @@ const FAIR = {
   rung: { form: 'fair = implied - a between 30% and 70%, scaled toward 0 below 30% (implied x (1 - a/0.3)) and toward 1 above 70% (1 - (1 - implied) x (1 + a/0.3))',
     a: { pts: 0.061, reb: 0.068, ast: 0.068, tpm: 0.067, stl: 0.069, blk: 0.068, pra: 0.069, pr: 0.069, pa: 0.069 },
     measured: 'the "k+" rung at line + 0.5 against the main line\'s fair Over: 8,055 archived rungs, a median gap of 6.8 points (6.1 on points) in every price band from 30% to 70%; 6.8 again on opening night\'s 146' },
-  yes: { form: 'fair = implied / c', c: { dd: 1.41, td: 2.0 },
-    measured: 'calibrated on the archived playoff prices\' results: 1,027 double-double prices (11.9% happened where their prices said 16.8%) and 328 triple-double prices (5 happened: very thin)' },
+  yes: { form: 'the rung rule (propFairRung) with a = the rung margin measured across the stats, 6.8 points: a double- or triple-double is one Yes price with no second side and no main line to measure its own margin from, so the rungs\' is assumed',
+    a: { dd: 0.068, td: 0.068 },
+    measured: 'nothing measured on these markets themselves: the margin is the rungs\' (8,055 archived rungs), assumed to hold here',
+    playoffs: 'on the archived 2026 play-in and playoff prices these markets ran far richer than the rungs: double-doubles happened 11.9% where 1,027 prices said 16.8% (16 to 17 points under the price from 30% implied up), triple-doubles 1.5% where 328 prices said 4.2% (5 hits); one playoff run cannot tell a bigger margin from the market misjudging the playoffs, so this fair chance may run high' },
   estimated: 'every fair chance but the main line\'s is an estimate from these measurements: mark it est.',
 };
 function summarizeResearch(rs) {
@@ -743,6 +765,6 @@ function summarizeResearch(rs) {
     stats: Object.fromEntries(Object.entries(f.stats).map(([k, v]) => [k, { mae: v.mae, naiveMae: v.naiveMae, bias: v.bias, logScore: v.logScore, naiveLogScore: v.naiveLogScore }])),
     market: f.market ? { lines: f.market.all.lines, games: f.market.all.games, logloss: f.market.all.logloss, brier: f.market.all.brier, flat: f.market.all.flat } : null })) };
 }
-module.exports = { fairMethods, HORIZON, LIVE_SIDE, availability, liveProjections, research, marketTest, marketScores, flatBets, gradeLine, bootCI, rng, oppFactor, FAIR, rollSeason, STATS, COMBOS, ALL, H_SET, GRID, CUT, MIN_SHOWN, posOf, loadBoxes, loadTeamBoxes, gamePace, loadGames, replay, features, nbVar, nbPmf, nbSf, pOver, nbLogPmf, lgamma, normCdf, normInv, doublesProb, baseMin, sideScale, finalMin, means, backtestMinutes, sidesOf, fit, fitVar, score, fitNaiveVar, project, yOf, doubles, FIRST, DATA, OUT, RESEARCH };
+module.exports = { fairMethods, HORIZON, LIVE_SIDE, ROT, sideS, publishedMeans, availability, liveProjections, research, marketTest, marketScores, flatBets, gradeLine, bootCI, rng, oppFactor, FAIR, rollSeason, STATS, COMBOS, ALL, H_SET, GRID, MIN_SHOWN, posOf, loadBoxes, loadTeamBoxes, gamePace, loadGames, replay, features, nbVar, nbPmf, nbSf, pOver, nbLogPmf, lgamma, normCdf, normInv, doublesProb, baseMin, sideScale, finalMin, means, backtestMinutes, sidesOf, fit, fitVar, score, fitNaiveVar, project, yOf, doubles, FIRST, DATA, OUT, RESEARCH };
 
 if (require.main === module) main().catch(e => { console.error(e.stack || e.message || e); process.exit(1); });

@@ -70,7 +70,9 @@ function sfOwn(k, mu, v) {
     const a = 0.068, rungs = [-1800, -400, -150, -110, 120, 250, 900].map(pr => F.propFairRung(pr, a));
     check(rungs.every((x, i) => x > 0 && x < 1 && (!i || x < rungs[i - 1])) && Math.abs(F.propFairRung(-110, a) - (110 / 210 - a)) < 1e-12 && Math.abs(F.propFairRung(900, a) - 0.1 * (1 - a / 0.3)) < 1e-12,
       'a rung\'s fair chance: its implied chance less the measured margin between 30% and 70%, scaled beyond, always between 0 and 1 and falling with the price');
-    check(Math.abs(F.propFairYes(940, 2) - (100 / 1040) / 2) < 1e-12 && F.propFairYes(-500, 1.41) <= 1, 'a Yes price\'s fair chance: its implied chance over the measured factor');
+    check(Math.abs(F.propFairRung(940, PM.FAIR.yes.a.td) - (100 / 1040) * (1 - 0.068 / 0.3)) < 1e-12 && Math.abs(F.propFairRung(-114, PM.FAIR.yes.a.dd) - (114 / 214 - 0.068)) < 1e-12 && PM.FAIR.yes.a.dd === PM.FAIR.yes.a.td,
+      'a double- or triple-double\'s fair chance is the rung rule on its one price, with the rungs\' measured margin (6.8 points): no result-fitted factor');
+    check(!('propFairYes' in F) && !('c' in PM.FAIR.yes) && /may run high/.test(PM.FAIR.yes.playoffs), 'the playoff calibration is said beside it, not passed off as DraftKings\' margin');
     /* the recorded answer: opening night, Celtics at Pistons (Cunningham and Tatum), read 15 October 2026 */
     const rec = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'propbets_401909088.json'), 'utf8'));
     const R = F.propParse(F.propItems([rec]));
@@ -101,6 +103,10 @@ function sfOwn(k, mu, v) {
     check(r.status === 'failed', 'so is an HTML body');
     r = await F.propRead('999', async () => ({ error: { message: 'No propBets found for eventId 999 and provider 100', code: 404 } }));
     check(r.status === 'none', 'a 404 body read as JSON is none too');
+    r = await F.propRead('999', async url => { if (/page=2/.test(url)) throw new Error('HTTP 404 https://x'); return page([item(1, '21', 10.5, '-110')], 1, 2); });
+    check(r.status === 'failed', 'a 404 on page 2 after page 1 answered is a failed read, asked again: never "none posted", which would keep page 1 alone for good');
+    r = await F.propRead('999', async url => /page=2/.test(url) ? { error: { message: 'No propBets found for eventId 999 and provider 100', code: 404 } } : page([item(1, '21', 10.5, '-110')], 1, 2));
+    check(r.status === 'failed', 'and so is ESPN\'s 404 body on page 2');
   }
 
   console.log('2. the record');
@@ -108,19 +114,25 @@ function sfOwn(k, mu, v) {
     fs.writeFileSync(path.join(tmp, 'games.csv'), '');
     const g = (id, status, type, espn, date) => ({ game_id: id, season: id.slice(0, 4), date, type, status, espn_id: espn, home: id.split('_')[3], away: id.split('_')[2] });
     const games = [g('2027_20261020_BOS_DET', 'final', 'REG', '401', '2026-10-20'), g('2027_20261020_OKC_SAS', 'final', 'REG', '402', '2026-10-20'), g('2027_20261020_PHI_NYK', 'live', 'REG', '403', '2026-10-20'),
-      g('2027_20261021_GSW_LAL', 'scheduled', 'REG', '404', '2026-10-21'), g('2027_20261016_MIA_ORL', 'final', 'PRE', '405', '2026-10-16'), g('2027_20261020_CHA_BKN', 'final', 'REG', '', '2026-10-20'), g('2027_20261020_ATL_ORL', 'final', 'REG', '406', '2026-10-20')];
-    const answers = { '401': page([item(1, '11', 20.5, '-115'), item(1, '11', 20.5, '-105'), item(3, '11', 6.5, '+110'), item(3, '11', 6.5, '-140')]), '402': 'HTTP 404', '406': 'HTTP 500' };
+      g('2027_20261021_GSW_LAL', 'scheduled', 'REG', '404', '2026-10-21'), g('2027_20261016_MIA_ORL', 'final', 'PRE', '405', '2026-10-16'), g('2027_20261020_CHA_BKN', 'final', 'REG', '', '2026-10-20'), g('2027_20261020_ATL_ORL', 'final', 'REG', '406', '2026-10-20'),
+      g('2027_20261020_MIL_IND', 'final', 'REG', '407', '2026-10-20')];
+    /* 407 answers page 1 of 2, and page 2 with a 404 on the first run only */
+    let p2fail = true;
+    const g407 = url => /page=2/.test(url) ? (p2fail ? 'HTTP 404' : page([item(3, '31', 4.5, '-110'), item(3, '31', 4.5, '-110')], 2, 2)) : page([item(1, '31', 12.5, '-110'), item(1, '31', 12.5, '-110')], 1, 2);
+    const answers = { '401': page([item(1, '11', 20.5, '-115'), item(1, '11', 20.5, '-105'), item(3, '11', 6.5, '+110'), item(3, '11', 6.5, '-140')]), '402': 'HTTP 404', '406': 'HTTP 500', '407': g407 };
     const asked = [];
-    const stub = async url => { const e = /events\/(\d+)\//.exec(url)[1]; asked.push(e); const a = answers[e]; if (typeof a === 'string') throw new Error(a + ' ' + url); return a; };
+    const stub = async url => { const e = /events\/(\d+)\//.exec(url)[1]; if (/page=1$/.test(url)) asked.push(e); let a = answers[e]; if (typeof a === 'function') a = a(url); if (typeof a === 'string') throw new Error(a + ' ' + url); return a; };
     const now = () => new Date('2026-10-21T15:00:00Z');
     await REC.recordClosing({ games, getJSON: stub, now, log: quiet });
-    check(JSON.stringify([...asked].sort()) === JSON.stringify(['401', '402', '406']), 'only finals of the regular season and playoffs with an ESPN id are asked for (not a live, scheduled or preseason game)');
+    check(JSON.stringify([...asked].sort()) === JSON.stringify(['401', '402', '406', '407']), 'only finals of the regular season and playoffs with an ESPN id are asked for (not a live, scheduled or preseason game)');
     const rows = REC.readRecord(2027), reads = REC.readReads();
     check(rows.length === 2 && rows[0].stat === 'pts' && rows[0].over === -115 && rows[1].stat === 'reb' && rows[1].under === -140, 'a read game\'s main lines are written, the first item the Over');
     check(reads['2027_20261020_BOS_DET'].status === 'ok' && reads['2027_20261020_OKC_SAS'].status === 'none' && reads['2027_20261020_ATL_ORL'].status === 'failed', 'each read is logged: ok, none (a 404), failed');
-    asked.length = 0;
+    check(reads['2027_20261020_MIL_IND'].status === 'failed' && !rows.some(r => r.game_id === '2027_20261020_MIL_IND'), 'a game whose page 2 answers 404 after page 1 is failed, and none of its lines is written');
+    asked.length = 0; p2fail = false;
     await REC.recordClosing({ games, getJSON: stub, now, log: quiet });
-    check(JSON.stringify(asked) === JSON.stringify(['406']), 'a game read ok or none is never asked for again; a failed one is');
+    check(JSON.stringify([...asked].sort()) === JSON.stringify(['406', '407']), 'a game read ok or none is never asked for again; a failed one is');
+    check(REC.readReads()['2027_20261020_MIL_IND'].status === 'ok' && REC.readRecord(2027).filter(r => r.game_id === '2027_20261020_MIL_IND').length === 2, 'and the game whose page 2 failed is read whole the next time, both pages');
     await REC.recordClosing({ games, getJSON: stub, now, log: quiet });
     check(REC.readReads()['2027_20261020_ATL_ORL'].status === 'gave_up', 'given up after three failures');
     asked.length = 0;
@@ -158,7 +170,8 @@ function sfOwn(k, mu, v) {
     if (!all.length) console.log('  --   no game to come in props.json: the published projections\' checks hold on nothing');
     check(!all.length || (all.length > 50 && Object.values(pj.upcoming).every(g => g.type !== 'PRE')), `the published projections: ${all.length} players on ${Object.keys(pj.upcoming).length} games to come, no preseason game`);
     check(all.every(p => typeof p.id === 'string' && p.min >= PM.MIN_SHOWN && p.min <= 46 && PM.ALL.every(k => Number.isFinite(p.mu[k]) && p.mu[k] >= 0) && p.dd >= p.td && p.td >= 0 && p.dd <= 1), 'each has minutes, the eleven means, a double-double at least as likely as a triple');
-    check(all.every(p => Object.entries(PM.COMBOS).every(([c, parts]) => Math.abs(p.mu[c] - parts.reduce((s, k) => s + p.mu[k], 0)) < 0.03)), 'a combo\'s mean is the sum of its parts\'');
+    const r2t = x => Math.round(x * 100) / 100;
+    check(all.every(p => Object.entries(PM.COMBOS).every(([c, parts]) => p.mu[c] === r2t(parts.reduce((s, k) => s + p.mu[k], 0)))), 'a combo\'s mean is exactly the sum of its published parts, to two decimals (as the page works it)');
     check(PM.ALL.every(k => Array.isArray(pj.params.var[k]) && pj.params.var[k].length === 2 && pj.params.var[k].every(Number.isFinite)), 'every stat\'s spread is published (A, B)');
     let ladders = true;
     for (const p of all.slice(0, 200)) for (const k of PM.ALL) { let prev = 1; for (let j = 0; j < 60; j++) { const q = PM.nbSf(j, p.mu[k], PM.nbVar(p.mu[k], pj.params.var[k])); if (q > prev + 1e-12) ladders = false; prev = q; } }
@@ -188,13 +201,71 @@ function sfOwn(k, mu, v) {
       'only the slate\'s games not yet started, each player on one of its two sides');
     check(!firstProps || (!ps.games[firstProps] && (Object.keys(pj.upcoming).length === 1 || Object.keys(ps.games).length > 0)), 'a game that has tipped since the job\'s run is left out');
     check(ps.ledger && ps.ledger.bar.lines === PL.BAR.lines && !(ps.ledger.decision) && !/pass/i.test(ps.ledger.summary.standing), 'the ledger\'s running numbers, no verdict and no word of passing before the bar is judged');
-    check(ps.fair && ps.fair.rung && PM.STATS.filter(k => k !== 'stl' && k !== 'blk').every(k => ps.fair.rung.a[k] > 0) && ps.fair.yes.c.dd > 1, 'the measured fair-chance constants for rungs and Yes markets');
+    check(ps.fair && ps.fair.rung && PM.STATS.filter(k => k !== 'stl' && k !== 'blk').every(k => ps.fair.rung.a[k] > 0) && ps.fair.yes.a.dd > 0 && ps.fair.yes.a.td > 0, 'the measured fair-chance constants for rungs and Yes markets');
+    /* the page prices a line on state.props; the ledger freezes its own copy: every number the page reads, the combos
+       worked the page's way, is the open call's, to the digit */
+    { const lg = JSON.parse(fs.readFileSync(path.join(REAL, 'props_shadow.json'), 'utf8')), lay = ps.layout, diff = [];
+      let n = 0;
+      for (const [gid, g] of Object.entries(ps.games)) { const c = lg.calls[gid]; if (!c || c.frozen) continue;
+        for (const [pid, a] of Object.entries(g.players)) { const call = c.players[pid]; if (!call) { diff.push(`${gid} ${pid}: no call`); continue; } n++;
+          const at = k => a[lay.indexOf(k)], page = k => k in ps.combos ? r2t(ps.combos[k].reduce((t, q) => t + at(q), 0)) : at(k);
+          for (const k of PL.CALL_LAYOUT) { const v = k === 'min' ? at('min') : page(k); if (v !== call[PL.CALL_LAYOUT.indexOf(k)]) diff.push(`${gid} ${pid} ${k}: page ${v}, call ${call[PL.CALL_LAYOUT.indexOf(k)]}`); } }
+        if (Object.keys(c.players).length !== Object.keys(g.players).length) diff.push(`${gid}: ${Object.keys(c.players).length} called, ${Object.keys(g.players).length} published`); }
+      /* once the bar has failed the ledger makes no call, and there is nothing to hold the page's numbers to */
+      const calling = !(lg.decision && lg.decision.verdict === 'FAIL');
+      check(!Object.keys(ps.games).length || !calling || (n > 0 && !diff.length), `every number the page prices a prop on is the shadow ledger's open call, combos included (${n} players${calling ? '' : '; the bar failed, so no call is open'})${diff.length ? ': ' + diff.slice(0, 3).join('; ') : ''}`); }
     /* the availability rule on a made-up report */
     const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-avail-'));
     fs.writeFileSync(path.join(dir, 'injuries.json'), JSON.stringify({ date: '2026-10-19', teams: { DET: [{ id: 'a', status: 'Out', returns: '' }, { id: 'b', status: 'Day-To-Day', returns: '2026-10-21' }, { id: 'c', status: 'Day-To-Day', returns: '2026-10-19' }, { id: 'd', status: 'Suspension', returns: '' }] } }));
     fs.writeFileSync(path.join(dir, 'rosters_espn.json'), JSON.stringify({ date: '2026-10-19', teams: { DET: 'abcdefghijkl'.split('').map(id => ({ id })), BOS: [{ id: 'f' }] }, asOf: { DET: '2026-10-18', BOS: '2026-10-19' } }));
     const av = PM.availability(dir)({ date: '2026-10-20' }, 'DET', {});
     check(JSON.stringify(av.out.map(x => x.id)) === '["a","b","d"]' && !av.ids.includes('f') && av.ids.includes('c'), 'out: Out, before the return date, suspended; back on his return date; a player on a later roster read belongs to that club');
+  }
+
+  console.log('3b. the live minutes: the backtest\'s rule, on the rosters and report of 15 October 2026');
+  {
+    /* the live projections, run on the history before 15 October 2026 and on that morning's rosters and injury report
+       (tools/fixtures/props_live_20261015.json), against the backtest's own sides (every player a box lists) under the
+       same constants, so a live rule that drifts from the backtested one (the first version scaled the roster's 13 with
+       the most minutes, which shaved a contender's starters by a tenth on opening night) fails here */
+    const pj = JSON.parse(fs.readFileSync(path.resolve(__dirname, '..', 'props.json'), 'utf8')), P = pj.params;
+    const FX = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'props_live_20261015.json'), 'utf8'));
+    const ldir = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-live-'));
+    fs.writeFileSync(path.join(ldir, 'rosters_espn.json'), JSON.stringify(FX.rosters)); fs.writeFileSync(path.join(ldir, 'injuries.json'), JSON.stringify(FX.injuries));
+    const all = PM.loadGames(), past = all.filter(g => g.date < '2026-10-15');
+    const gamesL = past.concat(all.filter(g => g.date >= '2026-10-15').map(g => ({ ...g, status: 'scheduled', home_score: '', away_score: '' })));
+    const boxes = PM.loadBoxes(REAL), tb = PM.loadTeamBoxes(REAL);
+    const live = PM.liveProjections(PM.replay(past, boxes, tb, {}), P, gamesL, new Date('2026-10-15T12:00:00Z'), ldir);
+    const Rb = PM.replay(past, boxes, tb, { collect: true, from: 2024 });
+    /* every regular-season side of 2024-2026, and each club's first game of a season (an opener, as the fixture's week is):
+       its scale and its rotation's projected minutes */
+    const bt = [], btSum = [], btOpen = [], btOpenSum = [], seen = new Set();
+    for (const idx of PM.sidesOf(Rb.rows).values()) { const r0 = Rb.rows[idx[0]]; if (r0.type !== 'REG') continue;
+      const list = idx.map(i => ({ b: PM.baseMin(Rb.rows[i].f, P.min) })), sc = PM.sideScale(list, P.min);
+      const rot = list.map(x => PM.finalMin(x.b, sc, false, P.min)).sort((a, b) => b - a).slice(0, PM.ROT).reduce((a, m) => a + m, 0);
+      bt.push(sc); btSum.push(rot); if (seen.has(r0.season + r0.team)) continue; seen.add(r0.season + r0.team); btOpen.push(sc); btOpenSum.push(rot); }
+    const q = (a, p) => { const b = [...a].sort((x, y) => x - y); return b[Math.floor(p * (b.length - 1))]; };
+    /* a side's rotation: its ROT with the most projected minutes (the players shown are the 13 who dress, each with his
+       minutes if he plays, where a box's list ends in players who seldom do, so the whole list's sums are not alike) */
+    const ls = Object.values(live).flatMap(g => [g.away, g.home].map(t => ({ date: g.date, t, sc: g.scale[t], n: g.players[t].length, sum: g.players[t].slice(0, PM.ROT).reduce((a, p) => a + p.min, 0) })));
+    const first = ls.map(x => x.date).sort()[0], night = ls.filter(x => x.date === first);
+    const f3 = x => x.toFixed(3);
+    check(ls.length >= 40 && ls.every(x => Number.isFinite(x.sc) && x.n <= PM.LIVE_SIDE), `the opening week projected (${ls.length} sides), its scale published, none showing more than the ${PM.LIVE_SIDE} who dress`);
+    const r2l = x => Math.round(x * 100) / 100, lp = Object.values(live).flatMap(g => Object.values(g.players).flat());
+    check(lp.length > 500 && lp.every(p => Object.entries(PM.COMBOS).every(([c, parts]) => p.mu[c] === r2l(parts.reduce((a, k) => a + p.mu[k], 0)))),
+      `each of the ${lp.length} live projections publishes a combo as the sum of its published parts, to two decimals: the number the page works and the ledger freezes`);
+    /* each side within the range the backtest's sides had; the week's median within its openers' 10th to 90th percentile
+       (the first version: opening night's median 0.91, under every opener's 10th percentile but one) */
+    const [o0, o1] = [Math.min(...bt), Math.max(...bt)], med = q(ls.map(x => x.sc), 0.5);
+    check(night.length >= 4 && ls.every(x => x.sc >= o0 && x.sc <= o1) && med >= q(btOpen, 0.1) && med <= q(btOpen, 0.9),
+      `every side's scale lies in the range the backtest's sides had (${f3(o0)} to ${f3(o1)}), the week's median (${f3(med)}) within its openers' 10th to 90th percentile (${f3(q(btOpen, 0.1))} to ${f3(q(btOpen, 0.9))}); opening night ${night.map(x => x.t + ' ' + f3(x.sc)).join(', ')}`);
+    const [s0, s1] = [Math.min(...btSum), Math.max(...btSum)], sm = q(ls.map(x => x.sum), 0.5);
+    check(ls.every(x => x.sum >= s0 && x.sum <= s1) && sm >= q(btOpenSum, 0.1) && sm <= q(btOpenSum, 0.9),
+      `each side's rotation (its ${PM.ROT} with the most minutes) is projected minutes in the backtest's range (${s0.toFixed(0)} to ${s1.toFixed(0)}), the week's median ${sm.toFixed(1)} within its openers' 10th to 90th percentile (${q(btOpenSum, 0.1).toFixed(1)} to ${q(btOpenSum, 0.9).toFixed(1)})`);
+    /* the rule itself on made-up sides: the bodies past the top ROT never move the scale, a missing starter raises it */
+    const M = { ...P.min, floor: 0 }, side = [36, 34, 33, 30, 28, 24, 22, 20, 18, 15].map(b => ({ b }));
+    const camp = side.concat([14, 12, 9, 6, 4, 3].map(b => ({ b })));
+    check(PM.sideScale(camp, M) === PM.sideScale(side, M) && PM.sideScale(side.slice(1), M) > PM.sideScale(side, M), `a side's scale is its top ${PM.ROT}'s: a camp roster's extra bodies leave it as it is, a missing starter hands his minutes on`);
   }
 
   console.log('4. the ledger');
@@ -244,6 +315,8 @@ function sfOwn(k, mu, v) {
         const b = checkAt('2026-10-20T23:45:00Z', prevOf(s2)); check(b.some(x => /changed after tip-off/.test(x)), `${what} fails the check${b.length ? '' : ' (it passed)'}`); };
       plant('a call open in the last commit frozen with a player\'s mean moved (called_at unchanged)', c => { c.players['101'][1] += 3; });
       plant('a call open in the last commit frozen with a new call stamped after its tip-off', (c, Lx) => { c.players['101'][1] += 3; c.called_at = Lx.run_at; });
+      /* the call open in the last commit, its tip passed, rewritten by this run as a delay would: a later tip, new numbers */
+      plant('a call open in the last commit and past its tip-off, rewritten by the run with a later tip and new numbers', (c, Lx) => { c.frozen = false; c.frozen_at = null; c.tip = '2026-10-21T01:00Z'; c.called_at = Lx.run_at; c.players['101'][1] += 3; });
       fs.writeFileSync(PL.LEDGER(), frozenText); }
     /* the final, its box score and its closing lines */
     games = games.map(g => g.game_id === G1 ? { ...g, status: 'final' } : g);
@@ -295,6 +368,46 @@ function sfOwn(k, mu, v) {
     tamperFile('a closing read rewritten', path.join(tmp, 'props_reads.json'), t => { const r = JSON.parse(t); r[G1].lines = 1; return JSON.stringify(r); }, /read changed|closing lines in the record/);
     restore();
     check(!checkAt('2026-10-21T18:00:00Z', prevOf(s4)).length, 'and the honest files pass again');
+
+    /* a re-registration of the bar: allowed while the old one has nothing on record against it, refused once it has */
+    {
+      const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-rereg-')), keep = [process.env.NBA_PROPS_LEDGER, process.env.NBA_PROPS_LINES];
+      process.env.NBA_PROPS_LEDGER = path.join(dir, 'props_shadow.json'); process.env.NBA_PROPS_LINES = path.join(dir, 'props_shadow_lines.csv');
+      const G3 = '2027_20261024_NYK_BOS', fid = PL.fitId(params);
+      const gamesR = [{ game_id: G3, season: 2027, date: '2026-10-24', type: 'REG', status: 'scheduled', tip: '2026-10-24T23:30Z', home: 'BOS', away: 'NYK', espn_id: '503' }];
+      const upR = { [G3]: { date: '2026-10-24', tip: '2026-10-24T23:30Z', type: 'REG', away: 'NYK', home: 'BOS', players: { NYK: [P('301', 35, 27, 4)], BOS: [P('302', 34, 24, 8)] } } };
+      /* the old ledger: the bar as first registered, before its numbers were written into it, and a call made after it */
+      const old = PL.newLedger(T('2026-10-15T09:08:00Z'));
+      old.bar = Object.fromEntries(Object.entries(PL.BAR).filter(([k]) => !['edge', 'ci', 'boot', 'seed'].includes(k)));
+      old.fits[fid] = { var: params.var, rho: params.rho, registered: '2026-10-15T09:09Z' };
+      old.calls[G3] = PL.callOf(upR[G3], fid, T('2026-10-15T09:09:00Z')); old.run_at = '2026-10-15T09:09Z';
+      old.summary = PL.summarize(old, [], { by: new Map(), reads: {} });
+      const prevR = Lx => ({ ledger: Lx, lines: '', reads: {}, record: {} });
+      /* the new one: BAR registered later (props_ledger.js init), then a run's calls */
+      const fresh = PL.newLedger(T('2026-10-15T11:30:00Z')); fresh.summary = PL.summarize(fresh, [], { by: new Map(), reads: {} }); fs.writeFileSync(PL.LEDGER(), PL.stringify(fresh));
+      PL.run({ upcoming: upR, params, games: gamesR, now: T('2026-10-15T11:31:00Z'), boxes: {}, log: quiet });
+      const ck = (prev, Lx = PL.readLedger()) => PC.check({ Lg: Lx, lineText: '', prev, games: gamesR, boxes: {}, now: T('2026-10-15T11:31:00Z') });
+      const refused = b => b.some(x => /bar or its registration time differs from the last commit/.test(x));
+      let b = ck(prevR(old));
+      check(!b.length && b.notes.some(n => /re-registered at 2026-10-15T11:30Z/.test(n)), 'the bar re-registered (with its numbers) before anything is on record against the old one passes, and the check says so' + (b.length ? ': ' + b.join('; ') : ''));
+      const edit = fn => { const x = JSON.parse(JSON.stringify(old)); fn(x); return prevR(x); };
+      check(refused(ck(edit(x => { x.calls[G3].frozen = true; x.calls[G3].frozen_at = '2026-10-15T10:00Z'; }))), 'refused once a call under the old bar was frozen');
+      check(refused(ck(edit(x => { x.calls[G3].tip = '2026-10-15T10:00Z'; }))), 'refused once a call under the old bar is past its tip-off');
+      check(refused(ck({ ...prevR(old), lines: PL.LINE_COLS.join(',') + '\n2027_20261020_BOS_DET,101,pts,0.5000,0.5000,25\n' })), 'refused once a line was graded under it');
+      check(refused(ck(edit(x => { x.decision = { verdict: 'FAIL', decided_at: '2026-10-15T10:00Z', lines: 30000 }; }))), 'refused once it has a verdict');
+      check(refused(ck(edit(x => { x.bar_registered = '2026-10-15T12:00Z'; }))), 'refused when the new registration is not later than the old');
+      const early = PL.readLedger(); early.calls[G3].called_at = '2026-10-15T11:00Z';
+      check(ck(prevR(old), early).some(x => /before the bar was registered/.test(x)), 'and a call made before the new registration fails it');
+      const other = PL.readLedger(); other.bar = { ...other.bar, edge: 0.02 };
+      check(ck(prevR(old), other).some(x => /not the one registered|numbers are not the registered ones/.test(x)), 'a re-registration to any bar but BAR fails');
+      if (keep[0] === undefined) delete process.env.NBA_PROPS_LEDGER; else process.env.NBA_PROPS_LEDGER = keep[0];
+      if (keep[1] === undefined) delete process.env.NBA_PROPS_LINES; else process.env.NBA_PROPS_LINES = keep[1];
+    }
+
+    /* the ledger the job keeps: its bar is BAR, numbers and all, and every call was made after it was registered */
+    { const real = JSON.parse(fs.readFileSync(path.join(REAL, 'props_shadow.json'), 'utf8'));
+      check(JSON.stringify(real.bar) === JSON.stringify(PL.BAR) && Object.values(real.calls).every(c => c.called_at >= real.bar_registered),
+        `data/props_shadow.json: its bar is BAR, every number written into it, and its ${Object.keys(real.calls).length} calls were all made at or after its registration (${real.bar_registered})`); }
   }
 
   console.log('5. the bar');

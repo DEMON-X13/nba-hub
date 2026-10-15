@@ -270,6 +270,8 @@ body.pp-lock{overflow:hidden}
 .pp-lt td{text-align:right;padding:3px 6px;border-top:1px solid var(--line)}
 .pp-proj{font-size:12.5px} .pp-proj td,.pp-proj th{padding:7px 9px}
 .pp-proj tr.pp-team td{background:var(--panel-2);font-weight:800;color:var(--ink-2)}
+.pp-optnote{display:none;margin:6px 0 0;font-size:12px}
+@media(max-width:520px){.pp-proj td,.pp-proj th{padding:7px 5px}.pp-proj .pp-opt{display:none}.pp-proj th{letter-spacing:.02em}.pp-optnote{display:block}}
 .pp-more{margin-top:12px} .pp-more summary{cursor:pointer;font-weight:700;color:var(--ink-2);min-height:36px;display:flex;align-items:center;list-style:none}
 @media(max-width:620px){.pp-back{padding:0}.pp-sheet{border-radius:0;max-height:none;height:100%;border:0}.pp-head{border-radius:0;padding:12px 16px 10px}.pp-body{padding:12px 16px 28px}}
 </style>
@@ -1212,16 +1214,16 @@ function propFairOver(over, under) {
 }
 
 /* A "k+" rung's or a Yes market's fair chance, estimated from its one price (README "Player props"; the constants are
-   in state.json's props.fair, measured on the archive): a rung carries a margin about `a` points of chance over the
-   main line's fair Over, flat from 30% to 70% and scaled toward 0 and 1 beyond; a double- or triple-double's Yes price
-   is its fair chance times c. Both are estimates: the page marks them est. */
+   in state.json's props.fair): a rung carries a margin about `a` points of chance over the main line's fair Over
+   (measured on the archive), flat from 30% to 70% and scaled toward 0 and 1 beyond; a double- or triple-double, one Yes
+   price with nothing to measure its own margin from, is taken to carry the rungs'. Both are estimates: the page marks
+   them est. */
 function propFairRung(price, a) {
   if (price == null || !(a >= 0)) return null;
   const I = propImplied(price);
   const f = I < 0.3 ? I * (1 - a / 0.3) : I <= 0.7 ? I - a : 1 - (1 - I) * (1 + a / 0.3);
   return Math.min(1, Math.max(0, f));
 }
-function propFairYes(price, c) { return price == null || !(c > 0) ? null : Math.min(1, propImplied(price) / c); }
 
 /* Read one game's answer, every page, with getJSON(url) (it throws Error('HTTP <code> ...') on a refusal, as
    lib.getJSON does). Returns { status: 'ok', items } | { status: 'none' } (a 404: nothing posted) |
@@ -1344,10 +1346,11 @@ const ppGame = gid => (S.props && S.props.games && S.props.games[gid]) || null;
 /* a player's numbers in a game, by ESPN athlete id: [name, team, pos, min, pts, reb, ast, tpm, stl, blk, dd, td] */
 const ppRow = (gid, pid) => { const g = ppGame(gid); return (g && g.players && g.players[pid]) || null; };
 const ppAt = (row, k) => row[S.props.layout.indexOf(k)];
-/* a combo's mean is the sum of its parts' (state.json's props.combos); its spread is its own fitted one */
+/* a combo's mean is the sum of its parts' (state.json's props.combos), to two decimals as the shadow ledger's call holds
+   it; its spread is its own fitted one */
 function ppMean(row, k) {
   if (!row || !S.props) return null;
-  const v = k in S.props.combos ? S.props.combos[k].reduce((t, s) => t + ppAt(row, s), 0) : ppAt(row, k);
+  const v = k in S.props.combos ? Math.round(S.props.combos[k].reduce((t, s) => t + ppAt(row, s), 0) * 100) / 100 : ppAt(row, k);
   return Number.isFinite(v) ? v : null;
 }
 function ppDist(row, k) { const mu = ppMean(row, k), ab = S.props && S.props.dist && S.props.dist.var ? S.props.dist.var[k] : null; return mu == null || !ab ? null : { mu, v: nbVar(mu, ab) }; }
@@ -1386,18 +1389,18 @@ function ppTrial() {
     <p>Beside each DraftKings line: the hub's projection and its chance of the Over, then DraftKings' fair chance of the Over, its two prices with the book's margin taken out (all of it on the Over, the way that scored best on DraftKings' archived closing lines). No prop goes into a suggested parlay, a pick or the plan because of the model, and player legs are not in the Parlay Builder yet.</p>
     <p>Walk-forward on 2024 to 2026 it beat each player's own average on every stat.${lost}</p>
     ${ppLedger() ? `<p>${ppLedger()}</p>` : ''}
-    <p>Milestone (k+) and double- and triple-double fair chances are estimates (est.): DraftKings gives one price there, and the margin taken out is the one measured on the archive.</p></details>`;
+    <p>Milestone (k+) fair chances are estimates (est.): DraftKings gives one price there, and the margin taken out is the one measured on the archive's milestones. Double- and triple-doubles take out the same margin, never measured on those markets: on the 2026 playoff prices they came in well below what that leaves, so their DraftKings figure is a high estimate.</p></details>`;
 }
 /* the model's projections for a game's expected players, a table a team */
 function ppProjTable(g, keep) {
   const pg = ppGame(g.id); if (!pg) return `<p class="muted" style="margin:0">${ppNoGame(g)}</p>`;
   const teams = [g.away, g.home].filter(t => ppTeam === 'all' || t === (ppTeam === 'away' ? g.away : g.home));
   const rows = Object.entries(pg.players).filter(([pid]) => !keep || keep(pid)).map(([pid, r]) => ({ pid, r }));
-  const cols = ['min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk'];
+  const cols = ['min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], opt = k => k === 'stl' || k === 'blk' ? ' pp-opt' : '';
   const body = teams.map(t => { const list = rows.filter(x => x.r[1] === t).sort((a, b) => b.r[3] - a.r[3]); if (!list.length) return '';
-    return `<tr class="pp-team"><td colspan="10">${pill(t)} ${esc((TEAMS[t] || [t, t])[1])}</td></tr>` + list.map(({ pid, r }) => `<tr data-pp-proj="${esc(pid)}"><td><b>${esc(r[0])}</b> <span class="muted">${esc(r[2])}</span></td>${cols.map(k => `<td class="num">${ppNumTxt(ppAt(r, k))}</td>`).join('')}<td class="num">${ppNumTxt(ppMean(r, 'pra'))}</td><td class="num">${ppPct(ppAt(r, 'dd'))}</td></tr>`).join(''); }).join('');
+    return `<tr class="pp-team"><td colspan="10">${pill(t)} ${esc((TEAMS[t] || [t, t])[1])}</td></tr>` + list.map(({ pid, r }) => `<tr data-pp-proj="${esc(pid)}"><td><b>${esc(r[0])}</b> <span class="muted">${esc(r[2])}</span></td>${cols.map(k => `<td class="num${opt(k)}">${ppNumTxt(ppAt(r, k))}</td>`).join('')}<td class="num">${ppNumTxt(ppMean(r, 'pra'))}</td><td class="num">${ppPct(ppAt(r, 'dd'))}</td></tr>`).join(''); }).join('');
   const outs = ppSides(g).filter(s => teams.includes(s.team)).flatMap(s => (s.out || []).map(o => `${esc(o.name)} <span class="muted">${s.team} · ${esc(o.status)}</span>`));
-  return body ? `<div class="wrap"><table class="tbl pp-proj"><thead><tr><th>Player</th><th class="num" title="minutes projected">Min</th><th class="num">Pts</th><th class="num">Reb</th><th class="num">Ast</th><th class="num" title="threes made">3PM</th><th class="num">Stl</th><th class="num">Blk</th><th class="num" title="points + rebounds + assists">PRA</th><th class="num" title="chance of a double-double">DD</th></tr></thead><tbody>${body}</tbody></table></div>`
+  return body ? `<div class="wrap"><table class="tbl pp-proj"><thead><tr><th>Player</th><th class="num" title="minutes projected">Min</th><th class="num">Pts</th><th class="num">Reb</th><th class="num">Ast</th><th class="num" title="threes made">3PM</th><th class="num pp-opt">Stl</th><th class="num pp-opt">Blk</th><th class="num" title="points + rebounds + assists">PRA</th><th class="num" title="chance of a double-double">DD</th></tr></thead><tbody>${body}</tbody></table></div><p class="muted pp-optnote">Steals and blocks are shown on a wider screen.</p>`
     + (outs.length ? `<p class="muted" style="margin:8px 0 0;font-size:12px">Not projected, on the injury report: ${outs.join(', ')}.</p>` : '') : `<p class="muted" style="margin:0">No player projected here.</p>`;
 }
 /* one player's DraftKings lines, each with the model beside it */
@@ -1410,9 +1413,10 @@ function ppPlayerHtml(g, pid, e) {
     + mains.map(m => { const fair = propFairOver(m.over, m.under), pm = row ? ppModelOver(row, m.stat, m.line) : null;
       return `<div class="pp-ln" data-pp-line="${m.stat}"><span class="st">${PP_NAMES[m.stat]}</span><span class="ln">${m.line}</span><span class="px"><i>O</i>${fmtAm(m.over)}</span><span class="px"><i>U</i>${fmtAm(m.under)}</span>`
         + `<span class="md">${row ? `projection ${ppNumTxt(ppMean(row, m.stat))} · model ${ppPct(pm)} · ` : ''}DraftKings ${ppPct(fair)}</span></div>`; }).join('') : '';
-  const estT = 'est.: DraftKings gives a single price here, so its margin is taken out as measured on the archive';
-  const yesH = yes.length ? `<div class="pp-yes">${yes.map(y => { const fair = propFairYes(y.price, F.yes && F.yes.c ? F.yes.c[y.market] : null), pm = row ? ppAt(row, y.market) : null;
-    return `<span data-pp-yes="${y.market}"><b>${PP_NAMES[y.market]}</b> ${fmtAm(y.price)} · ${row ? `model ${ppPct(pm)} · ` : ''}DraftKings ${ppPct(fair)} <span class="muted" title="${estT}">est.</span></span>`; }).join('')}</div>` : '';
+  const estT = 'est.: DraftKings gives a single price here, so its margin is taken out as measured on the archive\'s milestones';
+  const estY = 'est.: one price with no other side, so the margin measured on the milestones is taken out, never measured on this market itself; on the 2026 playoff prices double- and triple-doubles came in well below what that leaves, so read it as high';
+  const yesH = yes.length ? `<div class="pp-yes">${yes.map(y => { const fair = propFairRung(y.price, F.yes && F.yes.a ? F.yes.a[y.market] : null), pm = row ? ppAt(row, y.market) : null;
+    return `<span data-pp-yes="${y.market}"><b>${PP_NAMES[y.market]}</b> ${fmtAm(y.price)} · ${row ? `model ${ppPct(pm)} · ` : ''}DraftKings ${ppPct(fair)} <span class="muted" title="${estY}">est.</span></span>`; }).join('')}</div>` : '';
   const stats = PROP_STATS.filter(s => lads.some(l => l.stat === s));
   const ladH = lads.length ? `<details class="pp-lad" data-pp-lad><summary>Milestones (k+): ${lads.length} price${lads.length === 1 ? '' : 's'}</summary><div class="pp-lgrid">${stats.map(s => `<table class="pp-lt" data-pp-ladder="${s}"><thead><tr><th>${PP_NAMES[s]}</th><th>Price</th><th title="${estT}">DraftKings, est.</th>${row ? '<th>Model</th>' : ''}</tr></thead><tbody>`
     + lads.filter(l => l.stat === s).map(l => `<tr><td>${l.k}+</td><td>${fmtAm(l.price)}</td><td>${ppPct(propFairRung(l.price, F.rung && F.rung.a ? F.rung.a[s] : null))}</td>${row ? `<td>${ppPct(ppModelAtLeast(row, s, l.k))}</td>` : ''}</tr>`).join('') + '</tbody></table>').join('')}</div></details>` : '';
@@ -1491,7 +1495,7 @@ $('#ppBack').addEventListener('keydown', e => {
   else if (e.shiftKey && at === first) { e.preventDefault(); last.focus(); }
   else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
 });
-window.NBA_PROPS = { PROP_URL, PROP_MAIN, PROP_MILE, PROP_YES, PROP_STATS, propAmerican, propImplied, propAthlete, propLine, propTypeId, propPrice, propItems, propParse, propFairOver, propFairRung, propFairYes, propRead, nbVar, nbPmf, nbSf, pOver, live: () => PP_LIVE };
+window.NBA_PROPS = { PROP_URL, PROP_MAIN, PROP_MILE, PROP_YES, PROP_STATS, propAmerican, propImplied, propAthlete, propLine, propTypeId, propPrice, propItems, propParse, propFairOver, propFairRung, propRead, nbVar, nbPmf, nbSf, pOver, live: () => PP_LIVE };
 
 /* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's.
    It moves at midnight Eastern while the page is open (watch() below) */

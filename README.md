@@ -34,7 +34,7 @@ final, the job runs every morning, and the page will show today's and tomorrow's
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
 | `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, a pick, a parlay ticket and its grading, Refresh odds on a stubbed ESPN, and the player props view on a press (section 8, README "Player props") |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
-| `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s, and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to |
+| `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s, and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to; and that morning's rosters and injury report as the props model reads them (`props_live_20261015.json`), on which `test_props.js` holds the live minutes to the backtest's |
 
 No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke test needs jsdom (`npm ci` in `tools/`).
 
@@ -253,9 +253,14 @@ chance is that. One-sided prices are estimates, marked est. on the page (`state.
   outside 30-70% nothing was measured). Measured on the raw answers the scoping study read on 15 October 2026, which
   the repo does not keep: the record keeps main lines only, and archived rungs are too sparse and too often wrong to
   record (5.2% contradict their main line by 15 points or more).
-- A double-double's Yes price is its fair chance times 1.41 and a triple-double's times 2.0, calibrated on the archived
-  playoff prices' results (1,027 double-double prices: 11.9% happened where their prices said 16.8%; 328 triple-double
-  prices: 5 happened, very thin) (`propFairYes`).
+- A double-double or triple-double is one Yes price with no other side and no main line, so nothing can measure its own
+  margin: its fair chance is the rung rule (`propFairRung`) with the rungs' margin, 6.8 points, assumed to hold there
+  (`props.fair.yes`), marked est. and said to be an assumption. On the archived playoff prices these markets ran far richer
+  than that: double-doubles happened 11.9% where 1,027 prices said 16.8% (16 to 17 points under the price from 30% implied
+  up), triple-doubles 1.5% where 328 prices said 4.2% (5 hits). One playoff run cannot tell a bigger margin from the market
+  misjudging the playoffs, and a fair chance fitted to those results would be the results, not DraftKings' view (the first
+  version divided by 1.41 and 2.0 so, which put Tatum's double-double "level" with the model on opening night), so the page
+  says the figure may run high.
 
 ### The model (`tools/props.js`)
 
@@ -268,12 +273,26 @@ the season in progress.
   openers by 7.25 minutes against 6.00 for the whole previous season (Cade Cunningham projected 24 with a 33.9 season
   average and a 24.5 points line). The props rule: the player's minutes this season weighted toward his last
   appearances (half-life 2), with a prior worth a quarter of a game, his whole previous regular season (when he played
-  20 games of it; else his last 20 regular-season appearances), so an opener is last season's average. Then the side's
-  expected rotation is scaled toward a full game, m = b x (260 / S)^0.5, S the sum over the side's available players
-  (in a backtest those who played and those listed as not playing with b under 15, a coach's decision; live the
-  roster minus the injury report, its 13 with the most minutes, the median a backtested side had), and in the
-  playoffs m + 0.2 x (m - 24). It misses by 4.73-4.75 minutes a game, the game model's rule by 5.07-5.09. **The game
-  model's own minutes and lineups are not changed** (the owner's call): its opening-night rule is worth a look.
+  20 games of it; else his last 20 regular-season appearances), so an opener is last season's average. Then the side is
+  scaled toward a full game, m = b x (250 / S)^0.5, S the sum of b over the side's 10 with the most (`ROT`), and in the
+  playoffs m + 0.2 x (m - 24). **The side is the same kind of thing in the backtest and live**: in a backtest every player
+  the box score lists (who dressed), all counted, nobody left out for not having played; live the roster minus the injury
+  report, of which the 13 with the most minutes dress (a box lists 13 at the median) and are projected. Only the top 10 count
+  toward the scale because the live pool is a roster (training camp carries 20, a season 15 and its two-way players) where
+  the box lists the 13 who dress: the two agree on a side's top 10 and differ below it (on the box's lists 10 to 15 gave the
+  same error, 4.823 to 4.830 minutes on the 2024 fold, so the smallest, the median number who play, is the one a longer
+  roster moves least). The first version scaled the backtest's side by who had actually played (a listed player with b of
+  15 or more who sat was read as out) and the live side by its roster's 13 with the most minutes, so the backtest had
+  hindsight and the live sides summed far more minutes: opening night's scales came out 0.88 to 0.93 where the backtest's
+  openers sat at 0.998 at the median, and starters lost a tenth of their minutes (Maxey 38.1 to 33.6, Tatum 33.5 to 30.4).
+  On 15 October 2026's rosters and report the live scales now sit at 0.969 at the median (0.914 to 1.046; opening night
+  0.936 to 1.023), against the backtest's openers' 0.952 to 1.069 (10th to 90th percentile); Tatum is projected 32.6, Maxey
+  35.7, Cunningham 33.9 (`test_props.js` 3b holds this). It misses by 4.82-4.83 minutes a game (4.88-4.90 with no side
+  scale), the game model's rule by 5.07-5.09; on a player's first game of a season 5.83-6.17 against 7.07-7.38. The 13
+  shown live are each projected his minutes if he plays, so a side's whole list sums to more than a game (a median 302 on
+  that week, where a box's list, ending in players who seldom play, sums to 260 over its players projected 8 minutes or
+  more); its top 10 sum to 258 at the median, in the backtest's openers' range (233 to 263, 10th to 90th percentile).
+  **The game model's own minutes and lineups are not changed** (the owner's call): its opening-night rule is worth a look.
 - **Rate** per minute of each stat, exponentially weighted (half-lives 15 to 40 appearances), shrunk toward the
   position's league rate (G, F or C; the box writes PG, SG, SF and PF for some players) with 25 to 200 pseudo-minutes.
 - **Pace**: x (the game's expected pace / the pace of the games he played lately)^1, a club's pace by players.js's rule.
@@ -294,52 +313,55 @@ at a line where a book would hang it (the player's own average to the half point
 
 | Stat | 2024 (development) | 2025 (test) | 2026 (test) |
 |---|---|---|---|
-| Points | 4.45 / 4.63 · 2.998 / 3.170 · 0.672 / 0.723 | 4.51 / 4.71 · 3.009 / 3.164 · 0.671 / 0.723 | 4.47 / 4.70 · 3.011 / 3.160 · 0.664 / 0.720 |
-| Rebounds | 1.84 / 1.91 · 2.160 / 2.224 · 0.666 / 0.704 | 1.88 / 1.95 · 2.169 / 2.245 · 0.662 / 0.706 | 1.85 / 1.92 · 2.151 / 2.238 · 0.658 / 0.705 |
-| Assists | 1.31 / 1.36 · 1.739 / 1.819 · 0.655 / 0.701 | 1.31 / 1.35 · 1.739 / 1.817 · 0.652 / 0.702 | 1.31 / 1.36 · 1.741 / 1.825 · 0.652 / 0.702 |
-| Threes | 0.85 / 0.87 · 1.263 / 1.319 · 0.581 / 0.617 | 0.88 / 0.90 · 1.304 / 1.366 · 0.586 / 0.626 | 0.88 / 0.90 · 1.296 / 1.357 · 0.585 / 0.625 |
-| Steals | 0.66 / 0.68 · 1.067 / 1.136 · 0.625 / 0.675 | 0.70 / 0.72 · 1.125 / 1.195 · 0.634 / 0.684 | 0.71 / 0.73 · 1.132 / 1.203 · 0.633 / 0.683 |
-| Blocks | 0.52 / 0.53 · 0.828 / 0.883 · 0.550 / 0.593 | 0.52 / 0.52 · 0.810 / 0.864 · 0.543 / 0.586 | 0.51 / 0.51 · 0.798 / 0.849 · 0.538 / 0.579 |
-| Pts+reb+ast | 5.88 / 6.21 · 3.359 / 3.473 · 0.665 / 0.715 | 5.90 / 6.25 · 3.352 / 3.462 · 0.662 / 0.717 | 5.85 / 6.24 · 3.352 / 3.482 · 0.655 / 0.711 |
-| Pts+reb | 5.40 / 5.66 · 3.254 / 3.377 · 0.669 / 0.716 | 5.44 / 5.72 · 3.254 / 3.368 · 0.665 / 0.717 | 5.37 / 5.70 · 3.249 / 3.385 · 0.657 / 0.712 |
-| Pts+ast | 4.90 / 5.15 · 3.136 / 3.281 · 0.669 / 0.721 | 4.95 / 5.21 · 3.134 / 3.270 · 0.666 / 0.720 | 4.92 / 5.21 · 3.147 / 3.275 · 0.659 / 0.717 |
-| Ast+reb | 2.53 / 2.67 · 2.517 / 2.578 · 0.666 / 0.709 | 2.57 / 2.70 · 2.507 / 2.588 · 0.661 / 0.710 | 2.54 / 2.67 · 2.498 / 2.596 · 0.655 / 0.707 |
-| Stl+blk | 0.89 / 0.92 · 1.365 / 1.439 · 0.646 / 0.691 | 0.91 / 0.94 · 1.397 / 1.473 · 0.642 / 0.692 | 0.92 / 0.95 · 1.400 / 1.478 · 0.646 / 0.695 |
+| Points | 4.48 / 4.63 · 2.993 / 3.170 · 0.671 / 0.723 | 4.55 / 4.71 · 3.015 / 3.164 · 0.676 / 0.723 | 4.51 / 4.70 · 3.019 / 3.160 · 0.669 / 0.720 |
+| Rebounds | 1.85 / 1.91 · 2.152 / 2.224 · 0.665 / 0.704 | 1.89 / 1.95 · 2.174 / 2.245 · 0.667 / 0.706 | 1.86 / 1.92 · 2.157 / 2.238 · 0.661 / 0.705 |
+| Assists | 1.32 / 1.36 · 1.736 / 1.819 · 0.654 / 0.701 | 1.31 / 1.35 · 1.743 / 1.817 · 0.655 / 0.702 | 1.32 / 1.36 · 1.747 / 1.825 · 0.655 / 0.702 |
+| Threes | 0.85 / 0.87 · 1.261 / 1.319 · 0.579 / 0.617 | 0.88 / 0.90 · 1.307 / 1.366 · 0.588 / 0.626 | 0.88 / 0.90 · 1.299 / 1.357 · 0.587 / 0.625 |
+| Steals | 0.67 / 0.68 · 1.066 / 1.136 · 0.625 / 0.675 | 0.70 / 0.72 · 1.127 / 1.195 · 0.636 / 0.684 | 0.71 / 0.73 · 1.134 / 1.203 · 0.634 / 0.683 |
+| Blocks | 0.52 / 0.53 · 0.828 / 0.883 · 0.550 / 0.593 | 0.52 / 0.52 · 0.811 / 0.864 · 0.544 / 0.586 | 0.51 / 0.51 · 0.798 / 0.849 · 0.538 / 0.579 |
+| Pts+reb+ast | 5.92 / 6.21 · 3.350 / 3.473 · 0.666 / 0.715 | 5.96 / 6.25 · 3.362 / 3.462 · 0.669 / 0.717 | 5.92 / 6.24 · 3.363 / 3.482 · 0.661 / 0.711 |
+| Pts+reb | 5.44 / 5.66 · 3.246 / 3.377 · 0.669 / 0.716 | 5.48 / 5.72 · 3.262 / 3.368 · 0.671 / 0.717 | 5.43 / 5.70 · 3.260 / 3.385 · 0.663 / 0.712 |
+| Pts+ast | 4.93 / 5.15 · 3.128 / 3.281 · 0.667 / 0.721 | 4.99 / 5.21 · 3.169 / 3.270 · 0.671 / 0.720 | 4.97 / 5.21 · 3.149 / 3.275 · 0.664 / 0.717 |
+| Ast+reb | 2.55 / 2.67 · 2.503 / 2.578 · 0.665 / 0.709 | 2.59 / 2.70 · 2.515 / 2.588 · 0.665 / 0.710 | 2.56 / 2.67 · 2.505 / 2.596 · 0.658 / 0.707 |
+| Stl+blk | 0.89 / 0.92 · 1.364 / 1.439 · 0.644 / 0.691 | 0.91 / 0.94 · 1.399 / 1.473 · 0.644 / 0.692 | 0.92 / 0.95 · 1.402 / 1.478 · 0.648 / 0.695 |
 
 The model beats its own-average baseline on every stat in every season (27,872 to 28,463 player-games a season; on
-players projected 20+ minutes, points 5.11-5.20 against 5.33-5.40). Its points run 0.16 high in 2024, 0.00 and 0.01
-in 2025 and 2026. Double-doubles: log loss 0.182-0.192 against 0.287-0.298 for the player's own rate, said 7.8% in 2026
-where 7.2% happened; triple-doubles said 0.54% where 0.50% happened.
+players projected 20+ minutes, points 5.14-5.24 against 5.31-5.39). Its points run 0.20 high in 2024, 0.03 low and 0.05
+high in 2025 and 2026. Double-doubles: log loss 0.183-0.193 against 0.287-0.298 for the player's own rate, said 8.0% in
+2026 where 7.2% happened; triple-doubles said 0.60% where 0.50% happened.
 
-These folds score who played: a perfect injury report. Live, the roster minus ESPN's report is weaker, and has not
-been scored on its own.
+These folds know who dressed (the box's list): a perfect inactive list, though not who would sit, which the first
+version's backtest also knew and the live side never can. Live, the roster minus ESPN's report stands in for the box's
+list and is weaker; it has not been scored on its own, and the shadow ledger is where it will be.
 
 ### Against DraftKings' closing lines (2026 play-in and playoffs, the 2026 fold's model, fitted on 2023-2025)
 
-11,395 closing main lines on 83 games (80 lines on players who did not play are void, 222 on players with no game on
-record before have no projection). The model was fitted and frozen before it saw them; nothing was changed after.
+11,395 closing main lines on 83 games (302 more, on players the box score lists as not playing or not at all, are void,
+as DraftKings voids them). The model was fitted and frozen before it saw them, its minutes by the rule above (the side
+the box lists, nobody read as out for having sat); nothing was changed after.
 
 | | Model | DraftKings' fair chance | Difference [90%, resampling games] |
 |---|---|---|---|
-| Log loss | 0.6935 | 0.6788 | +0.0147 [+0.0084, +0.0213] |
-| Brier | 0.2493 | 0.2430 | +0.0063 [+0.0035, +0.0091] |
-| Chance of the Over (it happened 45.9%) | 43.3% | 45.6% | |
-| Guess of the stat (mean absolute error) | 3.18 | 3.11 (the line) | model 0.18 under the line |
+| Log loss | 0.6934 | 0.6788 | +0.0147 [+0.0083, +0.0214] |
+| Brier | 0.2495 | 0.2430 | +0.0064 [+0.0036, +0.0094] |
+| Chance of the Over (it happened 45.9%) | 44.6% | 45.6% | |
+| Guess of the stat (mean absolute error) | 3.19 | 3.11 (the line) | model 0.01 under the line |
 
 **It loses to DraftKings**, as the scoping baseline did (0.7095 there): better, but not good enough. By stat it is level
-on steals (0.6523 against 0.6539) and blocks (0.6352 against 0.6349), and furthest behind on points (0.7161 against
-0.6884) and the points combos. It runs low on the Over (43% where 46% happened). Flat one-unit bets at the closing
+on steals (0.6529 against 0.6539) and blocks (0.6345 against 0.6349), and furthest behind on points (0.7172 against
+0.6884) and the points combos. It runs low on the Over (45% where 46% happened). Flat one-unit bets at the closing
 price where the model's chance of a side beats the chance its price implies:
 
 | Edge bar | Overs: bets, won, units (return) | Unders: bets, won, units (return) |
 |---|---|---|
-| 3 points | 792, 356, -98.9 (-12.5%) | 4,942, 2,724, +145.8 (+3.0%) |
-| 5 points | 502, 214, -93.7 (-18.7%) | 3,899, 2,160, +149.9 (+3.8%) |
-| 8 points | 240, 102, -46.4 (-19.3%) | 2,573, 1,423, +105.2 (+4.1%) |
+| 3 points | 967, 442, -106.4 (-11.0%) | 4,271, 2,357, +135.3 (+3.2%) |
+| 5 points | 616, 269, -101.3 (-16.4%) | 3,279, 1,787, +65.5 (+2.0%) |
+| 8 points | 316, 121, -86.3 (-27.3%) | 2,063, 1,094, -6.8 (-0.3%) |
 
-The Unders made money and the Overs lost it: one playoff run, where every Under returned -0.7% and Overs were the side
-DraftKings shaded. It is no evidence of an edge, and is why the bar below is judged on the regular season, on lines the
-model has never seen, before anything moves. ESPN keeps no regular-season lines (none of 2025-26), so there is no
+The Unders made money at the low bars and the Overs lost it: one playoff run, where every Under returned -0.7% and Overs
+were the side DraftKings shaded. It is no evidence of an edge (at 8 points the Unders are level), and is why the bar below
+is judged on the regular season, on lines the model has never seen, before anything moves. (The first version's minutes,
+with the hindsight above, scored 0.6935 and 0.2493 here: the same loss.) ESPN keeps no regular-season lines (none of 2025-26), so there is no
 regular-season test set except the one the hub now keeps.
 
 ### The record (`tools/props_record.js`, in the job)
@@ -365,8 +387,11 @@ and appended to `data/props_shadow_lines.csv` in grading order: the model's chan
 DraftKings' fair chance (the whole margin on the Over), and the stat from the box score (a player who did not play is
 void; a line on a player with no call is counted, not graded).
 
-**The bar** (`BAR` in `props_ledger.js`, written into `data/props_shadow.json` at 2026-10-15T09:08Z, before the first
-call, and held there by the check):
+**The bar** (`BAR` in `props_ledger.js`, written into `data/props_shadow.json` at 2026-10-15T11:35Z, before the first
+call, and held there by the check, its numbers with it: lines 30000, edge 0.03, ci [0.05, 0.95], boot 10000, seed 0). It
+was first registered at 09:08Z without those numbers in it; they were written into `BAR` before any game had tipped, so
+the ledger was started again with the full bar and no call, and the calls made after it (the check allows that once, a
+re-registration, only while the old bar has no call frozen or past its tip-off, no graded line and no verdict):
 
 - **When**: decided once, at 30,000 graded lines that went over or under (about five weeks of the regular season at
   ~120 graded lines a game), on the first 30,000 in grading order, and never revisited.
@@ -381,8 +406,8 @@ call, and held there by the check):
 - **Before 30,000**: running numbers and how many are in, never a verdict or a word of passing.
 
 The check runs right after the job's props step and fails it (putting every props data file back as the last commit
-had it, and turning the run red) when the bar is not the registered one or the last commit's, or was registered after
-a call; a call was made at or after its tip-off; a call the last commit had frozen, or whose tip-off has passed, is
+had it, and turning the run red) when the bar is not the registered one or the last commit's (but for a re-registration
+as above), or was registered after a call; a call was made at or after its tip-off; a call the last commit had frozen, or whose tip-off has passed, is
 gone, open again or changed in any field (the one change allowed: this run's rewrite, before tip-off, of a call not yet
 frozen); a fit, a freeze time or a grade once written changed; the last commit's graded lines are not, byte for byte,
 the start of the file; a graded line is not what the frozen call, the fit, the closing line and the box score give; a
@@ -399,24 +424,26 @@ props: {
   stats: [pts, reb, ast, tpm, stl, blk, pra, pr, pa, ar, sb], combos: { pra: [pts, reb, ast], pr: [...], pa, ar, sb },
   layout: [name, team, pos, min, pts, reb, ast, tpm, stl, blk, dd, td],
   dist: { kind: "negative binomial", var: { pts: [A, B], ... every stat and combo }, rule },
-  fair: { main, mainWhy, rung: { form, a: { pts: 0.061, ... }, measured }, yes: { form, c: { dd: 1.41, td: 2.0 }, measured }, estimated },
+  fair: { main, mainWhy, rung: { form, a: { pts: 0.061, ... }, measured }, yes: { form, a: { dd: 0.068, td: 0.068 }, measured, playoffs }, estimated },
   games: { <game_id>: { tip, away, home, players: { <ESPN athlete id>: [ ...layout ] } } },   // the slate's games not yet started
   ledger: { registered, bar: { lines, passIf, otherwise, before }, decision, summary: { standing, gradedGames, lines, voids, scores, flat, toCome } },
   research: { folds: [...the walk-forward: minutes, points, rebounds, assists, pts+reb+ast], market: {...the archive test} }
 }
 ```
 
-A player's means are the six base stats; a combo's mean is the sum of its parts (`combos`). To price a DraftKings line
+A player's means are the six base stats; a combo's mean is the sum of its parts (`combos`), to two decimals, which is
+exactly the shadow ledger's call (`props.js` publishes a combo as that sum, so the page prices every line on the call
+the ledger freezes, to the digit). To price a DraftKings line
 L on stat k: mean mu, variance `A x mu^B` from `dist.var[k]`, P(over) = P(stat >= floor(L) + 1) for a negative binomial
 with that mean and variance (Poisson where the variance is not above the mean): `nbSf` and `nbVar` in
 `tools/props.js`, dependency-free for the page to copy. A real entry, opening night (`2027_20261020_BOS_DET`):
 
 ```
-"4432166": ["Cade Cunningham", "DET", "G", 31.5, 20.8, 4.48, 7.47, 2.08, 0.98, 0.58, 0.2551, 0.023]
+"4432166": ["Cade Cunningham", "DET", "G", 33.9, 22.19, 4.82, 7.21, 2.24, 1.05, 0.62, 0.2416, 0.026]
 ```
 
-31.5 minutes, 20.8 points, 4.5 rebounds, 7.5 assists, 2.1 threes, 1.0 steals, 0.6 blocks, a 25.5% double-double and
-2.3% triple-double (DraftKings' points line on him was 24.5; the page shows the two side by side, the model on trial).
+33.9 minutes, 22.2 points, 4.8 rebounds, 7.2 assists, 2.2 threes, 1.1 steals, 0.6 blocks, a 24.2% double-double and
+2.6% triple-double (DraftKings' points line on him was 24.5; the page shows the two side by side, the model on trial).
 A player DraftKings lines with no game on record has no projection, and is said so.
 
 ### On the page (`app/nba_hub.html`)
@@ -429,7 +456,9 @@ button that opened it. Nothing in it is saved, not even the team switch.
 **Before any press** the sheet says to press Refresh odds for DraftKings' props, with the button in it, and shows the
 model's projections for the players expected to play (each projected 8 minutes or more): minutes, points, rebounds,
 assists, threes, steals, blocks, points + rebounds + assists and the double-double chance, both teams or one, and who
-the injury report has out. A game the model does not project says why (preseason, or beyond the next five game days).
+the injury report has out (on a phone, 520px and under, steals and blocks are left out of the table, which says so, so
+points + rebounds + assists and the double-double chance stay on the screen). A game the model does not project says
+why (preseason, or beyond the next five game days).
 
 **The press.** Refresh odds reads DraftKings' player props with the lines, never on load or on a timer: once the
 scoreboard has answered, one request for each game still to come (a second only if an answer runs past a page), six at
@@ -450,9 +479,10 @@ Points   24.5   O -104   U -123   projection 20.8 · model 29% · DraftKings 45%
 ```
 
 the model's mean, its chance of the Over (`pOver` on the published mean and the fitted spread; a combo's mean the sum
-of its parts') and DraftKings' fair chance of the Over (the whole margin on the Over). Then his milestones (k+), folded,
-each with its price, DraftKings' fair chance (est.) and the model's chance of reaching it; and his double- and
-triple-double prices with the model's chance and DraftKings' (est.). A player with no projection says why (out on the
+of its parts', to two decimals, the ledger's call to the digit) and DraftKings' fair chance of the Over (the whole margin
+on the Over). Then his milestones (k+), folded, each with its price, DraftKings' fair chance (est.) and the model's chance
+of reaching it; and his double- and triple-double prices with the model's chance and DraftKings' (est., the rungs' margin
+taken out, its title saying that margin was never measured on these markets and the figure may run high). A player with no projection says why (out on the
 injury report, projected under 8 minutes or no game on record) and shows DraftKings' chance alone. The projected players
 DraftKings has no line on are listed under, folded.
 
@@ -464,44 +494,82 @@ comes, is said to move nothing by itself). Nothing in the view says "model says"
 parlays, the Value card, a pick, the plan or the Bet Build: the view is display only.
 
 The parse and the fair chances are `tools/props_feed.js`'s and the distribution `tools/props.js`'s (`propParse`,
-`propRead`, `propFairOver`, `propFairRung`, `propFairYes`, `nbVar`, `nbPmf`, `nbSf`, `pOver` and their pieces), copied
+`propRead`, `propFairOver`, `propFairRung`, `nbVar`, `nbPmf`, `nbSf`, `pOver` and their pieces), copied
 into the page line for line; the smoke holds the text and the results to the tools' own, so the two cannot drift.
 
-Live on 15 October 2026, in Chromium at 1280 and 390 wide: one press read 57 games, 52 answered 404 (nothing posted),
-the three opening-night games answered with 46, 50 and 71 main lines (167 in all, 1,220 milestone prices, 31 double- and
-triple-double prices) and two preseason games with no player market; nothing was read on load, nothing was stored, no
-page scrolled sideways, the page's parse equalled `props_feed.js`'s on all five answers, and each of the 46 lines on
-Celtics at Pistons read as Node works it out from `props.js`. Celtics at Pistons, as the sheet showed it:
+Live on 15 October 2026 (the second look, 11:53 UTC, after the minutes fix), in Chromium at 1280 and 390 wide: one press
+read 57 games, 52 answered 404 (nothing posted), the three opening-night games answered with 167 main lines in all and
+two preseason games with no player market; every answer carried `access-control-allow-origin: *`, every request was a
+plain GET with no header of its own, nothing was read on load, nothing was stored, no page or sheet scrolled sideways (at
+390 the projections table fits its 358px with PRA and DD on screen), the page's parse equalled `props_feed.js`'s on all
+five answers, and each of the 46 lines on Celtics at Pistons read as Node works it out from `props.js`; a reload asked
+ESPN for nothing and showed the published page. Celtics at Pistons, as the sheet showed it:
 
 | Player | Line | DraftKings | Projection · model · DraftKings |
 |---|---|---|---|
-| Jayson Tatum | points 26.5 | O -111, U -114 | 21.0 · 23% · 47% |
-| Jayson Tatum | rebounds 8.5 | O -143, U +109 | 8.7 · 49% · 52% |
-| Jayson Tatum | double-double | Yes -114 | model 38% · DraftKings 38% est. |
-| Cade Cunningham | points 24.5 | O -104, U -123 | 20.8 · 29% · 45% |
-| Cade Cunningham | assists 9.5 | O +109, U -144 | 7.5 · 24% · 41% |
-| Cade Cunningham | threes 1.5 | O -175, U +132 | 2.1 · 59% · 57% |
-| Derrick White | points 15.5 | O -106, U -121 | 12.8 · 30% · 45% |
+| Jayson Tatum | points 26.5 | O -111, U -114 | 22.4 · 29% · 47% |
+| Jayson Tatum | rebounds 8.5 | O -143, U +109 | 9.3 · 55% · 52% |
+| Jayson Tatum | double-double | Yes -114 | model 46% · DraftKings 46% est. |
+| Jayson Tatum | triple-double | Yes +940 | model 6% · DraftKings 7% est. |
+| Cade Cunningham | points 24.5 | O -104, U -123 | 22.2 · 35% · 45% |
+| Cade Cunningham | assists 9.5 | O +109, U -144 | 7.2 · 21% · 41% |
+| Cade Cunningham | threes 1.5 | O -175, U +132 | 2.2 · 62% · 57% |
+| Cade Cunningham | double-double | Yes -108 | model 24% · DraftKings 45% est. |
+| Derrick White | points 15.5 | O -106, U -121 | 13.9 · 36% · 45% |
+| Derrick White | pts + reb + ast 23.5 | O -107, U -122 | 21.6 · 37% · 45% |
 
-The model is well under DraftKings on opening night's points (Tatum 21.0 against a 26.5 line, Cunningham 20.8 against
-24.5). In the 2024 development fold openers were over-projected by 2.5 to 4 minutes, so nothing was adjusted for it: it
-is the kind of gap the shadow ledger will grade.
+The model is still under DraftKings on opening night's points (Tatum 22.4 against a 26.5 line, Cunningham 22.2 against
+24.5), less than before the minutes fix (21.0 and 20.8, when the live sides shaved starters' minutes by about a tenth).
+The rest of the gap is the rate, not the minutes (Tatum's 32.6 minutes are his last season's): it is the kind of gap the
+shadow ledger will grade, and nothing was tuned to close it. Tatum's double-double reading level with DraftKings is a
+coincidence of the two numbers (46.1% and 46.5%), where the first version made it level by its fitted divisor.
 
 ### The checks
 
-`node tools/test_props.js` holds the parse, the record, the model, the ledger and the bar (its header lists them), and
-`node tools/smoke.js` section 8 holds the page: the props view on a press against a stubbed ESPN (the recorded
-opening-night answer with made-up lines added, two pages, a 404, junk, a 503, a game ESPN has under way and one that
-tips while its props are read); every line, rung and Yes price the sheet shows worked out on its own from
+`node tools/test_props.js` holds the parse, the record, the model, the ledger and the bar (its header lists them),
+including: a 404 on page 2 after page 1 answered is a failed read, and the record asks for that game again and reads it
+whole; a double- or triple-double priced by the rung rule, the playoff calibration said beside it; every combo published
+as the sum of its published parts, and every number the page reads the open call's to the digit; the live minutes on the
+fixture of 15 October 2026 (3b: every side's scale in the backtest's range, the week's median within its openers' 10th to
+90th percentile, the rotation's minutes likewise, no side showing more than the 13 who dress, a camp roster's extra
+bodies leaving a scale as it is); a call open in the last commit and past its tip, rewritten with a later tip as a delay
+would, failing the check; a re-registration of the bar passing before anything is on record and refused once a call is
+frozen or past its tip, a line graded, a verdict written, its time not later, a call made before it or a bar not `BAR`;
+and the committed ledger's bar being `BAR`, every call made after its registration. `node tools/smoke.js` section 8 holds
+the page: the props view on a press against a stubbed ESPN (the recorded
+opening-night answer with made-up lines added, two pages, a 404, junk, a 503, a game ESPN has under way, one that
+tips while its props are read, one ESPN still calls scheduled with its own tip passed and the published one to come, and
+on a second press a game whose page 2 is a 404, which keeps its earlier read whole); every line, rung and Yes price the sheet shows worked out on its own from
 `props_feed.js`, `props.js` and the state's props block; the on-trial wording; nothing suggested (the Parlay Builder
 drawn with the props read is byte for byte the one drawn without them, and names no player); nothing read before a
 press (on load, opening a sheet, switching its team, on every timer and event the page sets); nothing stored; a reload
 returning to the published page; a sheet left open while its game tips; the ledger's running numbers on made-up
 summaries (no verdict before the bar, then a FAIL and a PASS); the page's copies held to the tools' text and results;
-and every game the real state projects opening without a NaN. Each check was shown to fail on a planted break, in a
-scratch copy: the job side's 24 (the Over read second, the rung cross-check removed, a 404 read as a failure, a game
-asked for again, rows rewritten, the negative binomial off by one, a frozen call recomputed, the bar's verdict a line
-early, a moved call unchecked, and the rest), and the page's 22:
+every game the real state projects opening without a NaN; the page's own means, combos included, the ledger's open calls
+to the digit; the phone table's dropped columns. Each check was shown to fail on a planted break, in a scratch copy: the
+job side's 24 (the Over read second, the rung cross-check removed, a 404 read as a failure, a game asked for again, rows
+rewritten, the negative binomial off by one, a frozen call recomputed, the bar's verdict a line early, a moved call
+unchecked, and the rest), the page's 22, and the review's fixes' 16:
+
+| Planted break (the review's fixes) | What failed |
+|---|---|
+| the ledger left with the bar as first registered | the committed bar is `BAR`; the page's numbers the open calls'; `props_check.js`: 2 failures |
+| a re-registration allowed with a call frozen / with no later time | refused once a call was frozen / refused when not later |
+| no re-registration at all | the re-registration passes; `props_check.js` against the last commit |
+| the live side scaled on its 13 who dress (the first version's sum) | every side's scale and the week's median (0.894) |
+| the live side showing the whole roster | none showing more than the 13 who dress |
+| a side's scale over every player, not its top 10 | a camp roster's extra bodies leave the scale as it is |
+| the check letting a call past its tip be rewritten when its tip moves later | the delayed rewrite fails the check |
+| a 404 on any page read as none posted (feed and page) | 4 in `test_props.js` (the read, the record twice, the reread); 3 in the smoke (the status line, the kept read, the page's read) |
+| a combo published as the rounded sum of unrounded parts | each live projection's combo the sum of its published parts |
+| the results-fitted factors back in `FAIR.yes` | the playoff calibration said beside it, not passed off |
+| the page dividing a double-double by 1.41 | the double- and triple-double prices by the rung rule |
+| the Yes prices' est. not saying it may run high | their est. and the on-trial note |
+| the page reading ESPN's status and not its tip | the requests a press makes, the status line, nothing taken |
+| the page summing a combo without rounding | the page's own means the ledger's open calls |
+| every column kept on a phone | the phone table drops Stl and Blk |
+
+The page's 22:
 
 | Planted break (the page) | What failed |
 |---|---|

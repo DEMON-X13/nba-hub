@@ -1,11 +1,18 @@
 {
- "date": "2026-10-14",
+ "date": "2026-10-15",
  "teams": {
   "ATL": [
    {
     "id": "4278039",
     "name": "Nickeil Alexander-Walker",
     "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4397003",
+    "name": "Giorgi Bezhanishvili",
+    "pos": "F",
     "status": "active",
     "injured": false
    },
@@ -177,7 +184,7 @@
     "name": "Luka Garza",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4251",
@@ -205,7 +212,7 @@
     "name": "Ron Harper Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4065804",
@@ -305,7 +312,7 @@
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4712896",
@@ -433,7 +440,7 @@
     "name": "Christian Anderson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4684269",
@@ -680,7 +687,7 @@
     "name": "Jaylin Sellers",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397189",
@@ -832,13 +839,6 @@
     "injured": false
    },
    {
-    "id": "4702528",
-    "name": "Jaxson Robinson",
-    "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "5041951",
     "name": "Meleek Thomas",
     "pos": "G",
@@ -908,7 +908,7 @@
     "name": "Moussa Cisse",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5279129",
@@ -918,32 +918,39 @@
     "injured": false
    },
    {
+    "id": "5105411",
+    "name": "Jorge Diaz Graham",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "5041939",
     "name": "Cooper Flagg",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278049",
     "name": "Daniel Gafford",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5105806",
     "name": "Jett Howard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6442",
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4873153",
@@ -1046,11 +1053,18 @@
     "injured": false
    },
    {
+    "id": "4588201",
+    "name": "Steven Crowl",
+    "pos": "C",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "3978",
     "name": "DeMar DeRozan",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4065813",
@@ -1155,6 +1169,13 @@
     "name": "Julian Strawther",
     "pos": "G",
     "status": "active",
+    "injured": true
+   },
+   {
+    "id": "4277890",
+    "name": "Lonnie Walker IV",
+    "pos": "G",
+    "status": "active",
     "injured": false
    },
    {
@@ -1178,14 +1199,14 @@
     "name": "Cade Cunningham",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433621",
     "name": "Jalen Duren",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2596112",
@@ -1732,7 +1753,7 @@
     "name": "Kris Dunn",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4396907",
@@ -1766,6 +1787,13 @@
     "id": "3936099",
     "name": "Derrick Jones Jr.",
     "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "5159895",
+    "name": "Yuki Kawamura",
+    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -1850,6 +1878,13 @@
     "id": "4683935",
     "name": "Blake Wesley",
     "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4397355",
+    "name": "DeAndre Williams",
+    "pos": "F",
     "status": "active",
     "injured": false
    }
@@ -1973,13 +2008,6 @@
     "pos": "G",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "4397134",
-    "name": "Cole Swider",
-    "pos": "F",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "5060631",
@@ -2165,7 +2193,7 @@
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107157",
@@ -2221,7 +2249,7 @@
     "name": "Keshad Johnson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4997528",
@@ -2263,7 +2291,7 @@
     "name": "Davion Mitchell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3064482",
@@ -2312,14 +2340,14 @@
     "name": "Klay Thompson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3059319",
     "name": "Andrew Wiggins",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "MIL": [
@@ -2342,7 +2370,7 @@
     "name": "Brayden Burries",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432588",
@@ -2363,28 +2391,28 @@
     "name": "AJ Green",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395725",
     "name": "Tyler Herro",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5214640",
     "name": "Kasparas Jakucionis",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432848",
     "name": "Jaime Jaquez Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4697268",
@@ -2398,7 +2426,7 @@
     "name": "Kyle Kuzma",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2991043",
@@ -2426,14 +2454,14 @@
     "name": "Kevin Porter Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4591725",
     "name": "Ryan Rollins",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397114",
@@ -2461,14 +2489,14 @@
     "name": "Gary Trent Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133628",
     "name": "Myles Turner",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5105623",
@@ -2554,7 +2582,7 @@
     "name": "Jonathan Kuminga",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3136196",
@@ -2603,7 +2631,7 @@
     "name": "Terrence Shannon Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431695",
@@ -2653,6 +2681,13 @@
     "id": "5144091",
     "name": "Jeremiah Fears",
     "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4433623",
+    "name": "Caleb Houstan",
+    "pos": "F",
     "status": "active",
     "injured": false
    },
@@ -2709,6 +2744,13 @@
     "id": "5061589",
     "name": "Yves Missi",
     "pos": "C",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4701819",
+    "name": "Jalon Moore",
+    "pos": "F",
     "status": "active",
     "injured": false
    },
@@ -3818,19 +3860,26 @@
     "name": "Carter Bryant",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4845367",
     "name": "Stephon Castle",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4592479",
     "name": "Julian Champagnie",
     "pos": "F",
+    "status": "active",
+    "injured": true
+   },
+   {
+    "id": "4433176",
+    "name": "RJ Davis",
+    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -3846,7 +3895,7 @@
     "name": "De'Aaron Fox",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107968",
@@ -3860,7 +3909,7 @@
     "name": "Dylan Harper",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6440",
@@ -3874,7 +3923,7 @@
     "name": "Keldon Johnson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4713010",
@@ -3888,18 +3937,11 @@
     "name": "Luke Kornet",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3134916",
     "name": "Jordan McLaughlin",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4703421",
-    "name": "Taelon Peter",
     "pos": "G",
     "status": "active",
     "injured": false
@@ -3919,23 +3961,23 @@
     "injured": false
    },
    {
+    "id": "4279815",
+    "name": "Terry Taylor",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4395630",
     "name": "Devin Vassell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5104157",
     "name": "Victor Wembanyama",
     "pos": "F",
-    "status": "active",
-    "injured": true
-   },
-   {
-    "id": "4277880",
-    "name": "Malik Williams",
-    "pos": "C",
     "status": "active",
     "injured": false
    }
@@ -3967,7 +4009,7 @@
     "name": "Jamison Battle",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432586",
@@ -4017,13 +4059,6 @@
     "pos": "F",
     "status": "active",
     "injured": false
-   },
-   {
-    "id": "4395623",
-    "name": "Trey Jemison III",
-    "pos": "C",
-    "status": "active",
-    "injured": true
    },
    {
     "id": "4279143",
@@ -4417,35 +4452,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-14",
-  "BOS": "2026-10-14",
-  "BKN": "2026-10-14",
-  "CHA": "2026-10-14",
-  "CHI": "2026-10-14",
-  "CLE": "2026-10-14",
-  "DAL": "2026-10-14",
-  "DEN": "2026-10-14",
-  "DET": "2026-10-14",
-  "GSW": "2026-10-14",
-  "HOU": "2026-10-14",
-  "IND": "2026-10-14",
-  "LAC": "2026-10-14",
-  "LAL": "2026-10-14",
-  "MEM": "2026-10-14",
-  "MIA": "2026-10-14",
-  "MIL": "2026-10-14",
-  "MIN": "2026-10-14",
-  "NOP": "2026-10-14",
-  "NYK": "2026-10-14",
-  "OKC": "2026-10-14",
-  "ORL": "2026-10-14",
-  "PHI": "2026-10-14",
-  "PHX": "2026-10-14",
-  "POR": "2026-10-14",
-  "SAC": "2026-10-14",
-  "SAS": "2026-10-14",
-  "TOR": "2026-10-14",
-  "UTA": "2026-10-14",
-  "WAS": "2026-10-14"
+  "ATL": "2026-10-15",
+  "BOS": "2026-10-15",
+  "BKN": "2026-10-15",
+  "CHA": "2026-10-15",
+  "CHI": "2026-10-15",
+  "CLE": "2026-10-15",
+  "DAL": "2026-10-15",
+  "DEN": "2026-10-15",
+  "DET": "2026-10-15",
+  "GSW": "2026-10-15",
+  "HOU": "2026-10-15",
+  "IND": "2026-10-15",
+  "LAC": "2026-10-15",
+  "LAL": "2026-10-15",
+  "MEM": "2026-10-15",
+  "MIA": "2026-10-15",
+  "MIL": "2026-10-15",
+  "MIN": "2026-10-15",
+  "NOP": "2026-10-15",
+  "NYK": "2026-10-15",
+  "OKC": "2026-10-15",
+  "ORL": "2026-10-15",
+  "PHI": "2026-10-15",
+  "PHX": "2026-10-15",
+  "POR": "2026-10-15",
+  "SAC": "2026-10-15",
+  "SAS": "2026-10-15",
+  "TOR": "2026-10-15",
+  "UTA": "2026-10-15",
+  "WAS": "2026-10-15"
  }
 }

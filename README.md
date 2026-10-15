@@ -28,7 +28,8 @@ final, the job runs every morning, and the page will show today's and tomorrow's
 | `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
 | `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players, coaches, the backtest |
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, a pick, a parlay ticket and its grading |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, a pick, a parlay ticket and its grading, and Refresh odds on a stubbed ESPN |
+| `tools/fixtures/` | ESPN scoreboard answers recorded on 2026-10-15 (finals, preseason lines, opening night's lines): the smoke holds the page's reading of them to `fetch.js`'s |
 
 No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke test needs jsdom (`npm ci` in `tools/`).
 
@@ -234,6 +235,17 @@ node tools/players.js      # player model replay; add "fit" to refit
   coach, and two buttons that put the model's side on a parlay ticket (moneyline or spread). Finals
   show the score and whether the model hit. Before the schedule appears the tab counts down to
   opening night over the preseason board.
+- **Refresh odds**, over Tonight and the Parlay Builder: the job's lines are as old as its last run, so a
+  press reads DraftKings' current lines from ESPN's public scoreboard in the browser (one request a day with a
+  game still to come; ESPN answers any page), taken exactly as `fetch.js` takes them (the page carries a copy of
+  its `parseDay` and of `merge` for a game not started, and the smoke holds both to the job's on the recorded
+  answers in `tools/fixtures/`). Only games not yet started (by the published tip, ESPN's status or ESPN's own
+  tip); one that tips while the read is out, a day that fails or answers junk, a game ESPN has no line for, and
+  a read older than the published one keep the lines they show (the published ones, or an earlier press's), and
+  the status line beside the button says how many, and which games have no line yet. Everything priced from the lines
+  follows: the edge chips, the market's chance and Vegas pick, the prices and est marks, the suggested parlays,
+  the plan and what Lock in records. It is held in memory only, never saved: a reload is the published state
+  again. Nothing is read on load or on a timer, only on a press.
 - **Teams, Players, Coaches**: sortable tables of the ratings; players searchable and filterable by team.
 - **Record**: the season graded straight up, against the spread and on totals, by month and game, from
   `predictions.csv`; the suggested parlays and the model's picks against the closing line, season by

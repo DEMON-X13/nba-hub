@@ -213,6 +213,16 @@ input[type=number]{width:92px;text-align:right}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#1E2230;padding:10px 16px;border-radius:999px;font-weight:800;font-size:13px;opacity:0;transition:all .25s var(--ease);pointer-events:none;z-index:9}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);font-size:12px}
+/* ---------- Refresh odds ---------- */
+.oddsbar{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin:0 0 14px}
+.oddsbar .btn{min-height:44px;padding:10px 16px;font-size:13px;display:inline-flex;align-items:center;gap:8px;flex:none}
+.oddsbar .btn svg{flex:none}
+.oddsbar .btn[aria-disabled=true]{opacity:.6;cursor:progress;transform:none}
+.oddsbar.busy .btn svg{animation:spin 1s linear infinite}
+@media(prefers-reduced-motion:reduce){.oddsbar.busy .btn svg{animation:none}}
+@keyframes spin{to{transform:rotate(360deg)}}
+.odds-st{flex:1 1 220px;min-width:0;font-size:12.5px;color:var(--ink-2);line-height:1.4}
+.chip sup.mv{color:var(--hot-2);margin-left:0}
 </style>
 </head>
 <body>
@@ -238,6 +248,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
   </nav>
 </header>
 <main>
+  <div class="oddsbar" id="oddsBar" hidden><button type="button" class="btn" id="oddsBtn" aria-describedby="oddsSt"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Refresh odds</button><span class="odds-st" id="oddsSt" role="status" aria-live="polite"></span></div>
   <section id="tab-slate"><div class="days" id="days"></div><div id="slate"></div></section>
   <section id="tab-teams" hidden></section>
   <section id="tab-players" hidden></section>
@@ -341,8 +352,10 @@ function show(tab) {
   $$('#nav button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false'));
   $$('main > section').forEach(s => { s.hidden = s.id !== 'tab-' + tab; });
   try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {}
+  oddsBarSync(tab);
   render[tab] && render[tab]();
 }
+const tabNow = () => ($$('#nav button').find(b => b.getAttribute('aria-selected') === 'true') || {}).dataset?.tab;
 
 /* ---------- renders ---------- */
 const render = {};
@@ -395,9 +408,9 @@ function card(g) {
       const diff = -m.spread - (-g.line);                            // model home margin minus market home margin
       const big = Math.abs(diff) >= 3, some = Math.abs(diff) >= 1.5;
       const P = vsMarketPooled(), why = P ? ` Over ${seasonName(P.from)} to ${seasonName(P.to)} the model's picks against the market won ${P.against.won} of ${P.against.n} (${Math.round(P.against.won / P.against.n * 100)}%): a place to look, not a bet.` : '';
-      chips += `<span class="chip${big ? ' edge' : ''}" title="The model's spread differs from the market's by this much, toward this side.${why}">Market <b>${g.home} ${fmtSp(g.line)}</b>${some ? `<span class="${big ? 'lime' : 'muted'}">model ${diff > 0 ? g.home : g.away} +${Math.abs(diff).toFixed(1)}</span>` : ''}</span>`;
+      chips += `<span class="chip${big ? ' edge' : ''}" title="The model's spread differs from the market's by this much, toward this side.${why}${oddsNote(g)}">Market <b>${g.home} ${fmtSp(g.line)}</b>${oddsMoved(g, 'line')}${some ? `<span class="${big ? 'lime' : 'muted'}">model ${diff > 0 ? g.home : g.away} +${Math.abs(diff).toFixed(1)}</span>` : ''}</span>`;
     }
-    if (g.totalLine !== null && m.total) { const td = m.total - g.totalLine; chips += `<span class="chip${Math.abs(td) >= 4 ? ' edge' : ''}">Over/under <b>${g.totalLine}</b>${Math.abs(td) >= 2 ? `<span class="${Math.abs(td) >= 4 ? 'lime' : 'muted'}">${td > 0 ? 'over' : 'under'} by ${Math.abs(td).toFixed(1)}</span>` : ''}</span>`; }
+    if (g.totalLine !== null && m.total) { const td = m.total - g.totalLine; chips += `<span class="chip${Math.abs(td) >= 4 ? ' edge' : ''}"${g.oddsAt ? ` title="${oddsNote(g).trim()}"` : ''}>Over/under <b>${g.totalLine}</b>${oddsMoved(g, 'totalLine')}${Math.abs(td) >= 2 ? `<span class="${Math.abs(td) >= 4 ? 'lime' : 'muted'}">${td > 0 ? 'over' : 'under'} by ${Math.abs(td).toFixed(1)}</span>` : ''}</span>`; }
     if (S.params && g.team && Math.abs(g.team.pHome - m.pHome) >= 0.1) chips += `<span class="chip">Team model <b>${g.team.pHome >= 0.5 ? g.home : g.away} ${fmtPct(Math.max(g.team.pHome, 1 - g.team.pHome))}</b></span>`;
   }
   const line = side => { const s = m && m[side]; return s ? s.lineup.slice(0, 8) : []; };
@@ -774,7 +787,7 @@ function renderPlan(day) {
   }
   const dis = eligible.filter(x => x.mp != null && x.mp < 0.5).length;
   if (dis) html += `<p class="muted" style="margin:10px 0 0;text-align:center">The model and the market pick different teams in <b>${dis}</b> of these game${dis === 1 ? '' : 's'}; the Vegas pick is outlined in red there.</p>`;
-  if (eligible.some(x => x.px && x.px.est)) html += `<p class="muted" style="margin:6px 0 0;text-align:center">Prices marked <sup>est</sup> have no moneyline published yet: they come from the spread, or from the model when no line is up, with a typical book cut. Lines usually post on game day; the site picks them up on its afternoon run.</p>`;
+  if (eligible.some(x => x.px && x.px.est)) html += `<p class="muted" style="margin:6px 0 0;text-align:center">Prices marked <sup>est</sup> have no moneyline published yet: they come from the spread, or from the model when no line is up, with a typical book cut. Lines usually post on game day; the site picks them up on its afternoon run, and Refresh odds above reads DraftKings' current ones from ESPN.</p>`;
   if (msg) html += `<p class="okmsg">${msg}</p>`;
   el.innerHTML = html;
   const rerender = () => { saveMine(); render.parlay(); };
@@ -819,7 +832,7 @@ render.about = function () {
     <h3>Before a game</h3><p>The home side gets the court (${t.hfa} Elo, about ${(t.hfa / t.scale).toFixed(1)} points), Denver and Utah more for altitude, and both sides are adjusted for a back to back (−${t.b2b}), three games in four nights and three days off. Tonight's lineup is the roster minus the injury report's absences (ESPN gives a return date; a player is out of every game before it), with minutes projected from each player's last ${p.minGames} appearances, a newcomer with none at twelve, filled into the game's 240 minutes in rotation order. Pace is a running average of each team's possessions per 48 minutes, and the total is the two expected efficiencies times the expected pace. A tenth of the plain team Elo's opinion is blended in.</p>
     <h3>What the numbers are worth</h3><p>See Record for the held-out seasons, and how the suggested parlays did there against the closing line: about what the market expected, less its cut. Where a moneyline is posted, the market's chance is the better one; the model's is its own view, for the games and days the market has not priced yet. The model picks winners at about 69% when it is told who played, which is more than the injury report tells it before a game. The market's closing line does a little better than that, because it also knows who is playing and a great deal more. Where the model's spread differs from the market's by a point and a half or more the card says by how much, highlighted from three; that is a place to look, not a bet.</p>
     <h3>Parlay Builder</h3><p>It works like the NFL hub's. At the top, three suggested parlays for the day, Safe, Medium and Aggressive, grown from one core out of the games where the model and the market pick the same winner. Legs go in likeliest first: Safe takes the two likeliest and keeps adding while the chance that every leg lands stays above 50%, Medium and Aggressive keep going down to 30% and 15%. A leg's chance is the market's, from the book's moneylines with its cut taken out, because the market is the sharper number. A separate Value card lists the model's picks whose chance beats the market's by 5 points or more; that is the model disagreeing with the market, which is where models are most often wrong, so it is shown for interest and not as a suggestion. Below, the day's plan: pick a day, a stake, a confidence band and straight bets or a parlay, then tick the games. Straight bets share the stake evenly unless you type an amount; a parlay shows its odds, its payout and the chance it hits. Lock in what you like and it goes to the Bet Build, which grades itself as the games go final. Each leg is the model's pick on the moneyline, priced at the book's moneyline where one is published. Legs from different games are independent, so chances and prices multiply.</p>
-    <h3>What lives where</h3><p>The job pulls scores, box scores, injuries, coaches and rosters from ESPN's public feeds every morning, replays both models, logs the day's numbers and rebuilds this page. Your picks and tickets stay in this browser: clearing site data loses them.</p>`;
+    <h3>What lives where</h3><p>The job pulls scores, box scores, injuries, coaches and rosters from ESPN's public feeds every morning, replays both models, logs the day's numbers and rebuilds this page. Refresh odds, over Tonight and the Parlay Builder, reads DraftKings' current lines from ESPN when you press it, for this visit only: a reload shows the published lines again. Your picks and tickets stay in this browser: clearing site data loses them.</p>`;
 };
 render.data = function () {
   const el = $('#tab-data');
@@ -839,6 +852,182 @@ render.data = function () {
     if (!next) return toast('Not a backup file: nothing changed');
     M = next; saveMine(); badges(); toast('Backup restored'); }); };
 };
+/* ---------- Refresh odds ----------
+   The job reads DraftKings' lines from ESPN's scoreboard only when it runs, so by tip-off they can be hours old. On a
+   press (never on load, never on a timer) the browser reads the same free scoreboard itself, one request for each day
+   with a game still to come on the board (ESPN answers any page: access-control-allow-origin *, and a plain GET with
+   no headers of its own needs no preflight), and takes each game's lines exactly as the job does: oddsParseDay below
+   is tools/fetch.js's parseDay with lib.js's pieces, line for line, and oddsTake is its merge() for a game not
+   started. The smoke holds both to the job's own on recorded answers, so the two cannot drift.
+   Only a game still to come is touched (by its published tip, ESPN's status and ESPN's own tip), and a game that tips
+   while the read is out is left as it was. A failed request, an answer that is not a scoreboard, a game missing from
+   the answer or one with no line keeps the lines it shows (the published ones, or an earlier press's), and so does a
+   read older than the published one; the status line says which. What is taken lives in S, in memory: nothing is
+   saved anywhere, and a reload is the published state again. Everything priced from a game's lines (the edge
+   chips, the market's chance and the Vegas pick, the prices and est marks, the suggested parlays, the plan and what
+   Lock in records) is worked from S on every draw, so a redraw is all it takes. This hub keeps no DraftKings ids. */
+const ODDS_SB = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?limit=100&dates=';
+const ODDS_TEAMS = ['ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'];
+const ODDS_ESPN_AB = { GS: 'GSW', NO: 'NOP', NY: 'NYK', SA: 'SAS', UTAH: 'UTA', WSH: 'WAS' };
+const oddsFromEspn = c => ODDS_ESPN_AB[c] || c;
+const oddsSeasonOf = iso => { const y = +iso.slice(0, 4), m = +iso.slice(5, 7); return m >= 7 ? y + 1 : y; };
+const oddsEtDate = d => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(d));
+const oddsGameId = (season, date, away, home) => `${season}_${date.replace(/-/g, '')}_${away}_${home}`;
+/* fetch.js homeLine: the feed's odds line reads "BOS -6.5" or "EVEN"; the table keeps the home side's number */
+function oddsHomeLine(odds, homeAb) {
+  if (!odds || !odds.details) return '';
+  const m = /^([A-Z]+)\s+([-+]?\d+(\.\d+)?)/.exec(odds.details.trim());
+  if (!m) return /EVEN|PK/i.test(odds.details) ? '0' : '';
+  const n = parseFloat(m[2]);
+  return String(oddsFromEspn(m[1]) === homeAb ? n : -n);
+}
+/* fetch.js asMl and moneyline: homeTeamOdds.moneyLine (the older form) or moneyline.home.close.odds (DraftKings');
+   a closing price marked OFF is no price, never the opening one */
+const oddsAsMl = v => { if (v == null || v === '') return ''; if (/^(EVEN|PK)$/i.test(String(v))) return '100';
+  const n = parseInt(String(v).replace('+', ''), 10); return Number.isFinite(n) && Math.abs(n) >= 100 ? String(n) : ''; };
+function oddsMoneyline(odds, side) {
+  if (!odds) return '';
+  const o = odds[side + 'TeamOdds'];
+  if (o) { const v = oddsAsMl(o.moneyLine) || oddsAsMl(o.current && o.current.moneyLine && o.current.moneyLine.american); if (v) return v; }
+  const n = odds.moneyline && odds.moneyline[side];
+  if (n) {
+    const close = n.close && n.close.odds;
+    if (close != null && close !== '') return oddsAsMl(close);
+    const v = oddsAsMl(n.current && n.current.odds) || oddsAsMl(n.open && n.open.odds) || oddsAsMl(n.odds); if (v) return v;
+  }
+  return '';
+}
+/* fetch.js parseDay: one scoreboard answer -> the games table's rows (its sampleOdds, a file write, is the job's alone) */
+function oddsParseDay(j) {
+  const rows = [];
+  for (const e of j.events || []) {
+    const c = e.competitions && e.competitions[0];
+    if (!c) continue;
+    const type = e.season && e.season.type;
+    const home = c.competitors.find(x => x.homeAway === 'home'), away = c.competitors.find(x => x.homeAway === 'away');
+    if (!home || !away) continue;
+    const H = oddsFromEspn(home.team.abbreviation), A = oddsFromEspn(away.team.abbreviation);
+    if (!ODDS_TEAMS.includes(H) || !ODDS_TEAMS.includes(A)) continue;
+    const st = (c.status && c.status.type && c.status.type.name) || '';
+    if (/POSTPONED|CANCELED/.test(st)) continue;
+    const done = !!(c.status && c.status.type && c.status.type.completed);
+    const date = oddsEtDate(e.date);
+    const season = (e.season && e.season.year) || oddsSeasonOf(date);
+    const odds = (c.odds || [])[0];
+    rows.push({ game_id: oddsGameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 3 ? 'POST' : 'REG', away: A, home: H,
+      away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
+      neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
+      home_line: oddsHomeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), home_ml: oddsMoneyline(odds, 'home'), away_ml: oddsMoneyline(odds, 'away'), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });
+  }
+  return rows;
+}
+/* fetch.js merge() for a game not started, onto the page's game: a read with no line keeps the last one, and the
+   moneylines are both sides or neither, never a fresh price beside a stale one; then publish.js's shape */
+const ODDS_MARKET = ['home_line', 'total', 'home_ml', 'away_ml'];
+function oddsTake(g, fresh) {
+  const s = v => v == null ? '' : String(v), num = v => v === '' || v === undefined ? null : +v;
+  const old = { home_line: s(g.line), total: s(g.totalLine), home_ml: g.ml ? s(g.ml.home) : '', away_ml: g.ml ? s(g.ml.away) : '' };
+  const r = {}; for (const k of ODDS_MARKET) r[k] = fresh[k];
+  if (!r.home_ml !== !r.away_ml) { r.home_ml = ''; r.away_ml = ''; }
+  for (const k of ODDS_MARKET) if (!r[k] && old[k]) r[k] = old[k];
+  if (!r.home_ml !== !r.away_ml) { r.home_ml = old.home_ml || ''; r.away_ml = old.away_ml || ''; }
+  return { line: num(r.home_line), totalLine: num(r.total), ml: r.home_ml || r.away_ml ? { home: num(r.home_ml), away: num(r.away_ml) } : null };
+}
+/* one day's answer: its rows, or null for a failed request or a body that is not a scoreboard. Nothing but the URL
+   goes out (no headers: no preflight), past any cache, and a read that hangs is dropped after 15 seconds */
+async function oddsReadDay(d) {
+  const ctl = typeof AbortController === 'function' ? new AbortController() : null;
+  const tm = ctl ? setTimeout(() => ctl.abort(), 15000) : null;
+  try {
+    const r = await fetch(ODDS_SB + d.replace(/-/g, '') + '&_=' + Date.now(), ctl ? { cache: 'no-store', signal: ctl.signal } : { cache: 'no-store' });
+    if (!r || !r.ok) return null;
+    const j = await r.json();
+    if (!j || typeof j !== 'object' || !Array.isArray(j.events)) return null;
+    return oddsParseDay(j).filter(x => x.date === d);       // a late West Coast game lands on the day it tipped off, Eastern
+  } catch (e) { return null; } finally { if (tm) clearTimeout(tm); }
+}
+const oddsClock = iso => new Date(iso).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' });
+const oddsMarket = g => ({ line: g.line, totalLine: g.totalLine, ml: g.ml ? { home: g.ml.home, away: g.ml.away } : null });
+/* the card says when a line was read and what was published, and marks one that has moved since */
+const oddsNote = g => g.oddsAt ? ` DraftKings' line from ESPN, read ${oddsClock(g.oddsAt)}; published ${g.home} ${fmtSp(g.oddsPub.line)}, total ${g.oddsPub.totalLine ?? '—'}${g.oddsPub.ml ? `, moneylines ${g.away} ${fmtAm(g.oddsPub.ml.away)} / ${g.home} ${fmtAm(g.oddsPub.ml.home)}` : ''}.` : '';
+const oddsMoved = (g, k) => g.oddsAt && g.oddsPub && g.oddsPub[k] !== g[k] ? `<sup class="mv">${g.oddsPub[k] == null ? 'new' : 'moved'}</sup>` : '';
+/* what a read did, worded as what the visitor now sees: a game left alone keeps the lines it shows, which are the
+   published ones or an earlier press's read, and a game with no line anywhere is said to have none yet */
+const oddsHasLine = g => g.line != null || g.totalLine != null || !!g.ml;
+const oddsAnd = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' and ' + a[a.length - 1] : a[0] || '';
+function oddsKept(gs) {
+  const reads = [...new Set(gs.map(g => g.oddsAt || ''))];
+  return reads.length === 1 && !reads[0] ? 'published lines' : reads.length === 1 ? `lines read at ${oddsClock(reads[0])}` : 'last lines (published, or read earlier)';
+}
+/* `gs` all left alone: "they keep their published lines", "it has no line yet", or "2 keep their ..., 1 has no line yet" */
+function oddsWhatStands(gs, all) {
+  const shown = gs.filter(oddsHasLine), bare = gs.length - shown.length, one = gs.length === 1;
+  const has = k => `${k === 1 ? 'has' : 'have'} no line yet`;
+  if (!bare) return `${all && !one ? `all ${gs.length} games keep` : all ? 'the game keeps' : one ? 'it keeps' : 'they keep'} ${one ? 'its' : 'their'} ${oddsKept(shown)}`;
+  if (!shown.length) return `${all && !one ? `the ${gs.length} games` : all ? 'the game' : one ? 'it' : 'they'} ${has(gs.length)}`;
+  return `${shown.length} keep${shown.length === 1 ? 's' : ''} ${shown.length === 1 ? 'its' : 'their'} ${oddsKept(shown)}, ${bare} ${has(bare)}`;
+}
+function oddsSaid(at, games, n, left, none) {
+  const t = oddsClock(at);
+  if (none) return `ESPN could not be read at ${t}: ${oddsWhatStands(games, true)}.`;
+  const bare = left.filter(x => x.why === 'noLine' && !oddsHasLine(x.g)), kept = left.filter(x => !bare.includes(x));
+  const k = w => kept.filter(x => x.why === w).length, noLine = k('noLine'), older = k('older');
+  const parts = [noLine && `${noLine} had no line at ESPN`, k('failed') && `${k('failed')} could not be read`, k('tipped') && `${k('tipped')} tipped off during the read`, older && `${older} ${older === 1 ? 'was' : 'were'} published after this read`].filter(Boolean);
+  return `DraftKings' lines from ESPN, read ${t}: ${n.taken ? `${n.taken} game${n.taken === 1 ? '' : 's'}, ${n.moved ? `${n.moved} moved` : 'none moved'}` : 'no game updated'}.`
+    + (bare.length ? ` ${bare.length} ${bare.length === 1 ? 'has' : 'have'} no line yet.` : '')
+    + (kept.length ? ` ${oddsAnd(parts)}: ${oddsWhatStands(kept.map(x => x.g), false)}.` : '');
+}
+let oddsBusy = false, oddsDone = null;
+function oddsIdle() { return `Lines as published ${new Date(S.generated).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}. Refresh odds reads DraftKings' current lines from ESPN, for this visit only.`; }
+/* the bar is on the board and the Parlay Builder, while a game is still to come */
+function oddsBarSync(tab) {
+  const bar = $('#oddsBar'); if (!bar || !S || !S.slate) return;
+  bar.hidden = !((tab === 'slate' || tab === 'parlay') && S.slate.some(g => !started(g)));
+  if (!oddsBusy && !oddsDone) $('#oddsSt').textContent = oddsIdle();
+}
+async function refreshOdds() {
+  if (oddsBusy || !S || !S.slate) return;                    // a press while a read is out does nothing
+  const games = S.slate.filter(g => !started(g));
+  const st = $('#oddsSt'), bar = $('#oddsBar'), btn = $('#oddsBtn');
+  if (!games.length) { st.textContent = 'No game still to come on the board: nothing to read.'; return; }
+  oddsBusy = true; bar.classList.add('busy'); btn.setAttribute('aria-disabled', 'true');
+  st.textContent = "Reading DraftKings' lines from ESPN…";
+  const days = [...new Set(games.map(g => g.date))].sort();
+  let answers;
+  try { answers = await Promise.all(days.map(oddsReadDay)); } catch (e) { answers = days.map(() => null); }
+  const readAt = new Date(), at = readAt.toISOString();
+  const n = { taken: 0, moved: 0, noLine: 0, failed: 0, tipped: 0, older: 0 }, left = [];
+  const leave = (g, why) => { n[why]++; left.push({ g, why }); };
+  games.forEach(g => {
+    if (started(g)) return leave(g, 'tipped');               // tipped while the read was out: left as it was
+    const rows = answers[days.indexOf(g.date)];
+    const r = rows && rows.find(x => x.game_id === g.id);
+    if (!r) return leave(g, 'failed');
+    if (r.status !== 'scheduled' || (r.tip && Date.parse(r.tip) <= readAt.getTime())) return leave(g, 'tipped');
+    if (ODDS_MARKET.every(k => !r[k])) return leave(g, 'noLine');
+    const last = Date.parse(g.oddsAt || S.generated);
+    if (Number.isFinite(last) && last >= readAt.getTime()) return leave(g, 'older');   // the published read is the newer
+    const was = oddsMarket(g), now = oddsTake(g, r);
+    if (!g.oddsPub) g.oddsPub = was;
+    n.taken++; if (JSON.stringify(was) !== JSON.stringify(now)) n.moved++;
+    Object.assign(g, now, { oddsAt: at });
+  });
+  st.textContent = oddsSaid(at, games, n, left, answers.every(a => !a));
+  oddsDone = at; oddsBusy = false; bar.classList.remove('busy'); btn.removeAttribute('aria-disabled');
+  /* redraw the tab in view where the visitor left it: the day, the open lineups, the scroll and the focus */
+  const tab = tabNow();
+  if (tab === 'slate' || tab === 'parlay') {
+    const y = window.scrollY || 0, open = $$('.drawer').filter(d => !d.hidden).map(d => d.id), focus = document.activeElement;
+    render[tab](); badges();
+    open.forEach(id => { const d = document.getElementById(id); if (d) d.hidden = false; });
+    if (focus && focus !== document.activeElement && document.contains(focus)) focus.focus({ preventScroll: true });
+    window.scrollTo(0, y);
+  }
+  oddsBarSync(tab);
+}
+$('#oddsBtn').addEventListener('click', refreshOdds);
+window.NBA_ODDS = { parseDay: oddsParseDay, take: oddsTake, teams: ODDS_TEAMS, espnAb: ODDS_ESPN_AB };
+
 /* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's.
    It moves at midnight Eastern while the page is open (watch() below) */
 const etToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
@@ -854,6 +1043,7 @@ function watch() {
   if (TODAY !== was && day === was) day = null;              // a board left on Today moves to the new today
   if (first) return;
   const tab = ($$('#nav button').find(b => b.getAttribute('aria-selected') === 'true') || {}).dataset?.tab;
+  oddsBarSync(tab);
   if (tab && render[tab]) render[tab](); badges();
 }
 const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };

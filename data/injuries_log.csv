@@ -2146,7 +2146,7 @@ date,team,player_id,name,status
 2026-10-15,DEN,4432181,Julian Strawther,Day-To-Day
 2026-10-15,DEN,3978,DeMar DeRozan,Day-To-Day
 2026-10-15,DEN,4592427,Spencer Jones,Day-To-Day
-2026-10-15,GSW,3102531,Kristaps Porzingis,Day-To-Day
+2026-10-15,GSW,3102531,Kristaps Porzingis,Out
 2026-10-15,GSW,6589,Draymond Green,Day-To-Day
 2026-10-15,GSW,3213,Al Horford,Day-To-Day
 2026-10-15,GSW,6430,Jimmy Butler III,Out
@@ -2206,9 +2206,9 @@ date,team,player_id,name,status
 2026-10-15,ORL,4712849,Anthony Black,Day-To-Day
 2026-10-15,ORL,6478,Nikola Vucevic,Day-To-Day
 2026-10-15,ORL,5107251,Izaiyah Nelson,Out
-2026-10-15,PHI,4870562,Dominick Barlow,Day-To-Day
-2026-10-15,PHI,5105637,Adem Bona,Day-To-Day
 2026-10-15,PHI,4351851,Anfernee Simons,Day-To-Day
+2026-10-15,PHI,5105637,Adem Bona,Day-To-Day
+2026-10-15,PHI,4870562,Dominick Barlow,Day-To-Day
 2026-10-15,PHI,1966,LeBron James,Day-To-Day
 2026-10-15,PHI,2581018,Kentavious Caldwell-Pope,Day-To-Day
 2026-10-15,PHI,3917376,Jaylen Brown,Day-To-Day

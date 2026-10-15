@@ -337,10 +337,10 @@
     "id": "3102531",
     "name": "Kristaps Porzingis",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Undisclosed",
-    "date": "2026-10-14",
-    "returns": "2026-10-21"
+    "date": "2026-10-15",
+    "returns": "2026-11-09"
    },
    {
     "id": "6589",
@@ -441,9 +441,9 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Rest",
+    "detail": "Hamstring",
     "date": "2026-10-14",
-    "returns": "2026-10-16"
+    "returns": "2026-10-21"
    },
    {
     "id": "4395712",
@@ -490,7 +490,7 @@
     "status": "Out",
     "detail": "Knee Inflammation",
     "date": "2026-10-15",
-    "returns": "2026-10-23"
+    "returns": "2026-11-08"
    },
    {
     "id": "4065778",
@@ -499,7 +499,7 @@
     "status": "Out",
     "detail": "Foot",
     "date": "2026-10-05",
-    "returns": "2026-11-02"
+    "returns": "2026-11-08"
    },
    {
     "id": "5108024",
@@ -508,7 +508,7 @@
     "status": "Out",
     "detail": "Foot Surgery",
     "date": "2026-09-28",
-    "returns": "2026-11-01"
+    "returns": "2026-11-08"
    },
    {
     "id": "3913176",
@@ -517,7 +517,7 @@
     "status": "Out",
     "detail": "Achilles Surgery",
     "date": "2026-09-28",
-    "returns": "2026-11-01"
+    "returns": "2026-11-08"
    },
    {
     "id": "4396818",
@@ -900,13 +900,13 @@
   ],
   "PHI": [
    {
-    "id": "4870562",
-    "name": "Dominick Barlow",
-    "pos": "F",
+    "id": "4351851",
+    "name": "Anfernee Simons",
+    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-13",
-    "returns": "2026-10-16"
+    "detail": "Hamstring",
+    "date": "2026-10-15",
+    "returns": "2026-10-20"
    },
    {
     "id": "5105637",
@@ -914,16 +914,16 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Sprain",
-    "date": "2026-10-12",
-    "returns": "2026-10-16"
+    "date": "2026-10-15",
+    "returns": "2026-10-20"
    },
    {
-    "id": "4351851",
-    "name": "Anfernee Simons",
-    "pos": "G",
+    "id": "4870562",
+    "name": "Dominick Barlow",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-10-12",
+    "detail": "Back",
+    "date": "2026-10-13",
     "returns": "2026-10-16"
    },
    {

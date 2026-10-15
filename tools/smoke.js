@@ -15,7 +15,11 @@
  * press taking fresh lines into everything priced from them, a started game (by its tip, ESPN's status or ESPN's own
  * tip), a failed day and a game with no line left as they were and the status line saying what stands (published, an
  * earlier press's read, or no line yet), nothing stored, and the page's parse held to fetch.js's on the answers
- * recorded in tools/fixtures/.
+ * recorded in tools/fixtures/. Section 8 is the player props view (README "Player props"): the props read on the same
+ * press (by ESPN's ids, only games still to come, two pages, a 404, junk, a refusal, a game that tips during its read),
+ * every line, rung and Yes price the sheet shows worked out here on its own, the model on trial and suggesting nothing,
+ * nothing read before a press, nothing stored, a reload, the shadow ledger's running numbers, and the page's copies of
+ * tools/props_feed.js and tools/props.js held to their text and results.
  */
 'use strict';
 const fs = require('fs');
@@ -87,8 +91,21 @@ const espnEvent = (g, odds, status = 'STATUS_SCHEDULED', tip = g.tip) => ({ id: 
     odds: odds ? [{ provider: { id: '100', name: 'Draft Kings' }, details: odds.details, overUnder: odds.total, moneyline: { displayName: 'Moneyline', home: { close: { odds: odds.hml } }, away: { close: { odds: odds.aml } } } }] : [],
     competitors: [{ homeAway: 'home', team: { abbreviation: ESPN_CODE[g.home] || g.home }, score: '0' }, { homeAway: 'away', team: { abbreviation: ESPN_CODE[g.away] || g.away }, score: '0' }] }] });
 /* ESPN for the tests: answers[YYYYMMDD] is a payload, 'junk', an HTTP status number or an Error; a day not listed
-   answers with no games. `slow` delays every answer */
-const espnStub = (answers, slow = () => 0) => async url => {
+   answers with no games. `slow` delays every answer. A propBets URL (section 8) is answered from props[eventId]: a
+   page, a list of pages, 'junk', an HTTP status number or an Error; an event not listed answers ESPN's 404 "No
+   propBets found". `slowProps(eventId)` delays a props answer */
+const PROPS_RE = /\/events\/(\d+)\/competitions\/\1\/odds\/100\/propBets\?lang=en&region=us&limit=1000&page=(\d+)/;
+const espnStub = (answers, slow = () => 0, props = {}, slowProps = () => 0) => async url => {
+  const pm = PROPS_RE.exec(url);
+  if (pm) {
+    const [, eid, page] = pm, wait = slowProps(eid); if (wait) await sleep(wait);
+    let a = props[eid]; if (Array.isArray(a)) a = a[+page - 1];
+    if (a instanceof Error) throw a;
+    if (typeof a === 'number') return { ok: false, status: a, json: async () => ({}) };
+    if (a === 'junk') return { ok: true, status: 200, json: async () => { throw new SyntaxError('Unexpected token < in JSON'); } };
+    if (!a) return { ok: false, status: 404, json: async () => ({ error: { message: `No propBets found for eventId ${eid} and provider 100`, code: 404 } }) };
+    return { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(a)) };
+  }
   const d = (/dates=(\d{8})/.exec(url) || [])[1]; if (slow()) await sleep(slow());
   const a = answers[d];
   if (a instanceof Error) throw a;
@@ -98,6 +115,7 @@ const espnStub = (answers, slow = () => 0) => async url => {
 };
 const ymd = date => date.replace(/-/g, '');
 const espnReqs = r => r.filter(x => /espn\.com/.test(x.url));
+const sbReqs = r => r.filter(x => /espn\.com/.test(x.url) && /\/scoreboard\?/.test(x.url));     // the lines' reads (the props' are section 8's)
 const dump = s => { const o = {}; for (let i = 0; i < s.length; i++) { const k = s.key(i); o[k] = s.getItem(k); } return o; };
 const stored = w => JSON.stringify([dump(w.localStorage), dump(w.sessionStorage)]);
 /* a game's chip on the board, its day chosen on the strip first (a game three hours off can be tomorrow's, Eastern) */
@@ -173,7 +191,7 @@ async function refreshOdds() {
   check(pressedBefore, 'the press landed before r8 tipped (else the machine is too slow for this case)');
   const drawer = d.getElementById('dr-' + r1.id);
   check(drawer && !drawer.hidden && d.activeElement === btn && scrolls[scrolls.length - 1] === 345 && d.querySelector('#days .day.on').dataset.d === r1.date, 'the board is redrawn where it was: on its day, the lineups left open, the focus on the button, the scroll kept');
-  const reqs = espnReqs(requests);
+  const reqs = sbReqs(requests);
   check(reqs.length === comingDays.length, `three presses while the read is out make one read: ${reqs.length} requests for ${comingDays.length} days`);
   check(JSON.stringify(reqs.map(x => (/dates=(\d{8})/.exec(x.url) || [])[1]).sort()) === JSON.stringify(comingDays), "it asks for exactly the days with a game still to come (the tipped game's day only if another game is on it)");
   check(reqs.every(x => /^https:\/\/site\.api\.espn\.com\/apis\/site\/v2\/sports\/basketball\/nba\/scoreboard\?limit=100&dates=\d{8}&_=\d+$/.test(x.url) && x.opt && x.opt.cache === 'no-store' && !x.opt.headers),
@@ -213,7 +231,7 @@ async function refreshOdds() {
   answers[ymd(r1.date)].events[0] = espnEvent(r1, r1Fresh);
   const days2 = new Set([r1, r2, r3, r5, r6, r7, r9, r10].map(g => ymd(g.date))).size;
   btn.click(); await idle();
-  check(espnReqs(requests).length === reqs.length + days2, `a second press after the first read reads again (${days2} days: r8 has tipped since)`);
+  check(sbReqs(requests).length === reqs.length + days2, `a second press after the first read reads again (${days2} days: r8 has tipped since)`);
   check(row(r1.id) && /-270/.test(row(r1.id).textContent), 'the Parlay Builder in view is redrawn with the newer price (-270)');
   d.querySelector('#bkSuggest [data-sugg-lock="safe"]').click(); await sleep(30);
   const b7 = JSON.parse(w.localStorage.getItem('nba_hub_2027')).build;
@@ -307,6 +325,375 @@ async function refreshOdds() {
     const page = { id: idF, ...P.take(asPage(old), { ...fresh }) };
     check(JSON.stringify(job) === JSON.stringify(page), `what the page takes is the job's merge, ${pn}, on ${mn}${JSON.stringify(job) === JSON.stringify(page) ? '' : `: job ${JSON.stringify(job)} page ${JSON.stringify(page)}`}`);
   }
+}
+
+/* ---------- 8. Player props ----------
+   DraftKings' player props on the Refresh odds press, and the props model on trial beside them (README "Player
+   props"). ESPN is the stub above: the scoreboard answers each game as scheduled with its published lines (so nothing
+   priced from the lines moves), and each game's propBets answer is the recorded opening-night one
+   (tools/fixtures/propbets_401909088.json, Tatum and Cunningham) with made-up items added, two pages, a 404, junk, a
+   500, a game ESPN has under way and one that tips while its props are being read. Every number the view shows is
+   worked out here on its own, from tools/props_feed.js and tools/props.js and the state's props block; the page's
+   copies of those two files' functions are held to theirs, text and results. */
+const PF = require('./props_feed');
+const PJ = require('./props');
+const ppItem = (type, pid, line, price) => ({ athlete: { $ref: `http://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/seasons/2027/athletes/${pid}?lang=en&region=us` },
+  type: { id: String(type), name: 'made up' }, odds: { american: { value: price == null ? null : String(price) } }, current: { target: { value: line } } });
+const ppPct = p => p == null || !Number.isFinite(p) ? '–' : p < 0.005 ? '<1%' : p > 0.995 ? '>99%' : Math.round(p * 100) + '%';
+const ppAm = a => (a > 0 ? '+' : '') + Math.round(a);
+/* the source text of a top-level function or const in a file: `function name(` to its closing brace, or `const name =`
+   to the end of its statement */
+function srcOf(text, name) {
+  const lines = text.split('\n');
+  const i = lines.findIndex(l => l.startsWith(`function ${name}(`) || l.startsWith(`async function ${name}(`) || l.startsWith(`const ${name} =`));
+  if (i < 0) return null;
+  let depth = 0, out = [];
+  for (let j = i; j < lines.length; j++) {
+    out.push(lines[j]);
+    for (const c of lines[j].replace(/'(?:\\.|[^'\\])*'|"(?:\\.|[^"\\])*"|`(?:\\.|[^`\\])*`|\/\*.*?\*\/|\/\/.*$/g, '')) { if ('{(['.includes(c)) depth++; else if ('})]'.includes(c)) depth--; }
+    if (depth <= 0 && /[;}]\s*$/.test(lines[j])) break;
+  }
+  return out.join('\n');
+}
+async function playerProps() {
+  console.log('8. Player props');
+  const FIX = path.join(ROOT, 'tools', 'fixtures');
+  const rec = JSON.parse(fs.readFileSync(path.join(FIX, 'propbets_401909088.json'), 'utf8'));
+  const real = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'));
+  check(real.props && real.props.games && real.props.layout && real.props.dist && real.props.dist.var && real.props.fair && real.props.ledger, "the published state carries the props model's block (games, layout, distribution, fair-chance rules, ledger)");
+  /* the tests' own props block: the published distribution and ledger where there are, made-up projections for the two
+     games (so the section holds on any morning's state, whichever games it projects), the fair-chance rules props.js
+     writes */
+  const RP = real.props || {};
+  const VAR0 = { pts: [7.2, 0.73], reb: [1.76, 0.88], ast: [1.3, 0.99], tpm: [1.23, 1.0], stl: [1.1, 0.98], blk: [1.25, 1.12], pra: [9.66, 0.67], pr: [8.17, 0.72], pa: [6.43, 0.78], ar: [2.7, 0.76], sb: [1.2, 0.97] };
+  const LEDGER0 = { registered: '2026-10-15T11:35Z', bar: { lines: 30000 }, decision: null, summary: { standing: '', gradedGames: 0, lines: 0, voids: 0, scores: null, flat: null, toCome: 0 } };
+  const bosDet = { players: {
+    '4065648': ['Jayson Tatum', 'BOS', 'F', 30.4, 21.04, 8.66, 5.07, 2.76, 1.1, 0.42, 0.3838, 0.0384], '4432166': ['Cade Cunningham', 'DET', 'G', 31.5, 20.8, 4.48, 7.47, 2.08, 0.98, 0.58, 0.2551, 0.023],
+    '3001': ['Bos Guard', 'BOS', 'G', 31.0, 12.8, 3.7, 4.0, 2.4, 1.0, 1.2, 0.03, 0], '3002': ['Bos Center', 'BOS', 'C', 23.0, 9.9, 8.1, 1.5, 0.1, 0.7, 1.4, 0.2, 0], '3003': ['Bos Bench', 'BOS', 'G', 12.1, 4.4, 1.6, 2.6, 1.1, 0.7, 0.2, 0.004, 0],
+    '3004': ['Det Center', 'DET', 'C', 26.2, 13.8, 8.4, 2.0, 0, 0.6, 0.8, 0.3, 0.001], '3005': ['Det Wing', 'DET', 'F', 25.4, 11.4, 2.5, 2.1, 2.8, 0.6, 0.2, 0.01, 0], '3006': ['Det Bench', 'DET', 'G', 9.2, 4.0, 2.7, 0.8, 0.1, 0.2, 0.2, 0.004, 0] } };
+  /* the games: p1 Celtics at Pistons (the recorded answer, plus a line on an absentee, id 2, Some Star on the Pistons'
+     report); p2 two pages, its ESPN id only from the scoreboard, with a player no file knows; p3 nothing posted (404);
+     p4 junk; p5 tipped an hour ago; p6 under way at ESPN; p7 a 500; p8 tips while its props read is out; p10 still
+     scheduled at ESPN with ESPN's own tip a minute before the press, its published tip later (a game ESPN moved earlier) */
+  const p1 = og('BOS', 'DET', 3 * 3600e3, { espn: '401909088' });
+  const p2 = og('LAL', 'GSW', 5 * 3600e3, { espn: '' });
+  const p3 = og('MIA', 'ORL', 3 * 3600e3, { espn: '401900003' });
+  const p4 = og('PHI', 'CHA', 3 * 3600e3, { espn: '401900004' });
+  const p5 = og('DEN', 'UTA', -3600e3, { espn: '401900005' });
+  const p6 = og('ATL', 'BKN', 3 * 3600e3, { espn: '401900006' });
+  const p7 = og('TOR', 'CLE', 3 * 3600e3, { espn: '401900007' });
+  const p8 = og('POR', 'HOU', 3600e3, { espn: '401900008' });          // its tip is moved to just after the press, below
+  const p10 = og('SAC', 'PHX', 30 * 60e3, { espn: '401900010' });      // ESPN's tip is set a minute before the press, below
+  const games = [p1, p2, p3, p4, p5, p6, p7, p8, p10];
+  const eid = { [p1.id]: '401909088', [p2.id]: '401900002', [p3.id]: '401900003', [p4.id]: '401900004', [p5.id]: '401900005', [p6.id]: '401900006', [p7.id]: '401900007', [p8.id]: '401900008', [p10.id]: '401900010' };
+  const lal = { '9000001': ['Lal Guard', 'LAL', 'G', 34.2, 25.3, 5.1, 6.2, 2.8, 1.1, 0.4, 0.21, 0.02], '9000002': ['Gsw Center', 'GSW', 'C', 30.0, 15.5, 11.8, 2.1, 0.2, 0.7, 1.9, 0.55, 0.01], '9000003': ['Gsw Wing', 'GSW', 'F', 22.0, 9.0, 4.0, 1.5, 1.4, 0.6, 0.3, 0.02, 0] };
+  const props8 = { onTrial: true, build: RP.build || '2026-10-15T09:09Z', asOf: RP.asOf || '2026-06-13', fitSeasons: RP.fitSeasons || '2023-2026', horizonGameDays: 5, minShown: 8,
+    stats: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'], combos: { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] },
+    layout: ['name', 'team', 'pos', 'min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'dd', 'td'], dist: { kind: 'negative binomial', var: RP.dist && RP.dist.var ? RP.dist.var : VAR0 },
+    fair: PJ.FAIR, ledger: RP.ledger || LEDGER0, research: RP.research || null };
+  props8.games = { [p1.id]: { tip: p1.tip, away: 'BOS', home: 'DET', players: JSON.parse(JSON.stringify(bosDet.players)) }, [p2.id]: { tip: p2.tip, away: 'LAL', home: 'GSW', players: lal } };
+  const st8 = { ...state, generated: tipIn(-3600e3), injuriesAsOf: state.today, props: props8, slate: games.map(g => JSON.parse(JSON.stringify(g))) };
+  /* the scoreboard: every game scheduled with the lines it was published with, p6 under way; its ids are ESPN's */
+  const sameOdds = g => ({ details: `${ESPN_CODE[g.home] || g.home} ${g.line}`, total: g.totalLine, hml: String(g.ml.home), aml: (g.ml.away > 0 ? '+' : '') + g.ml.away });
+  const sb = {};
+  for (const g of games) { const e = espnEvent(g, sameOdds(g), g === p6 ? 'STATUS_IN_PROGRESS' : 'STATUS_SCHEDULED'); e.id = eid[g.id]; (sb[ymd(g.date)] = sb[ymd(g.date)] || { events: [] }).events.push(e); }
+  /* the props answers */
+  const p1Items = rec.items.concat([ppItem(1, '2', 18.5, -120), ppItem(1, '2', 18.5, '-110')]);
+  const p2Items = [ppItem(1, '9000001', 24.5, -115), ppItem(1, '9000001', 24.5, -105), ppItem(3, '9000001', 5.5, 120), ppItem(3, '9000001', 5.5, -150),
+    ppItem(218, '9000001', 25, '+105'), ppItem(218, '9000001', 30, '+260'), ppItem(218, '9000001', 20, '-250'), ppItem(92, '9000001', null, '+400'),
+    ppItem(3, '9000002', 11.5, -110), ppItem(3, '9000002', 11.5, -110), ppItem(220, '9000002', 12, '+110'), ppItem(220, '9000002', 15, '+300'), ppItem(220, '9000002', 10, '-200'),
+    ppItem(90, '9000002', 29.5, -105), ppItem(90, '9000002', 29.5, -125), ppItem(92, '9000002', null, '-180'), ppItem(93, '9000002', null, '+2500'),
+    ppItem(1, '99999999', 7.5, '+100'), ppItem(1, '99999999', 7.5, -130)];
+  const page = (items, i, n) => ({ count: items.length, pageIndex: i, pageSize: Math.ceil(items.length / n), pageCount: n, items });
+  const half = 9;                                              // splits 9000002's rebounds pair across the two pages
+  let propsAns = { '401909088': page(p1Items, 1, 1), '401900002': [page(p2Items.slice(0, half), 1, 2), page(p2Items.slice(half), 2, 2)], '401900004': 'junk', '401900007': 503,
+    '401900006': page(rec.items, 1, 1), '401900008': page(rec.items, 1, 1), '401900005': page(rec.items, 1, 1), '401900010': page(rec.items, 1, 1) };
+  const slowProps = e => e === '401900008' ? Math.max(0, Date.parse(p8.tip) + 400 - Date.now()) : 0;
+  let { w, errors, requests, timers } = load('index.html', st8, { picks: {}, build: [], bank: { day: p1.date } }, espnStub(sb, () => 0, propsAns, slowProps));
+  await sleep(300);
+  let d = w.document;
+  const idle = async (win = w) => { await sleep(30); for (let i = 0; i < 1200 && win.document.getElementById('oddsBar').classList.contains('busy'); i++) await sleep(50); await sleep(50); };
+  const propsReqs = r => r.filter(x => PROPS_RE.test(x.url));
+  const sheet = () => d.getElementById('ppBack'), body = () => d.getElementById('ppBody');
+  const toDay = g => { const b = d.querySelector(`#days .day[data-d="${g.date}"]`); if (b && !b.classList.contains('on')) b.click(); };
+  const cardBtn = g => { d.querySelector('#nav button[data-tab=slate]').click(); toDay(g); return d.querySelector(`.card[data-id="${g.id}"] [data-props]`); };
+  const banned = t => /\bedge\b|model says/i.test(t);
+
+  /* before any press: the model's projections, and nothing read */
+  check(!sheet() || sheet().hidden, 'the props sheet is closed on load');
+  for (const g of [p1, p2, p3, p4, p6, p7, p8, p10]) { const b = cardBtn(g); check(b && b.tagName === 'BUTTON' && /^Player props$/.test(b.textContent.trim()) && b.getAttribute('aria-haspopup') === 'dialog', `${g.away} at ${g.home}'s card has a Player props button, a real button, before any press`); }
+  check(!cardBtn(p5), 'a game that has tipped off has none');
+  check(w.getComputedStyle(cardBtn(p1)).minHeight === '44px', 'it is 44px tall');
+  const storedNoTab = win => { const o = JSON.parse(stored(win)); delete o[0]['nba_hub_2027:tab']; return JSON.stringify(o); };
+  const before = storedNoTab(w);
+  const opener = cardBtn(p1); opener.focus(); opener.click(); await sleep(30);
+  check(!sheet().hidden && d.getElementById('ppSheet').getAttribute('role') === 'dialog' && d.getElementById('ppSheet').getAttribute('aria-modal') === 'true' && d.getElementById('ppSheet').getAttribute('aria-labelledby') === 'ppTitle', 'a tap opens a dialog over the page (role dialog, aria-modal, titled)');
+  check(d.activeElement === d.getElementById('ppClose') && w.getComputedStyle(d.getElementById('ppClose')).height === '44px' && /Close/.test(d.getElementById('ppClose').getAttribute('aria-label')), 'the focus moves to its 44px Close button');
+  let bt = body().textContent;
+  check(/Press Refresh odds for DraftKings' props/.test(bt) && body().querySelector('[data-pp-refresh]'), `before any press it says to press Refresh odds for DraftKings' props, with the button there ("${bt.slice(0, 90)}")`);
+  check(/Model on trial/.test(d.getElementById('ppSub').textContent) && /on trial: not yet shown to beat DraftKings, it suggests nothing/.test(bt), 'the model is labelled on trial, not yet shown to beat DraftKings, suggesting nothing');
+  const projRows = [...body().querySelectorAll('[data-pp-proj]')];
+  check(projRows.length === Object.keys(bosDet.players).length, `and shows the model's projections for every expected player (${projRows.length} of ${Object.keys(bosDet.players).length})`);
+  const L8 = props8.layout, at8 = (r, k) => r[L8.indexOf(k)];
+  const projOk = projRows.every(tr => { const r = bosDet.players[tr.dataset.ppProj], td = [...tr.querySelectorAll('td')].map(x => x.textContent.trim());
+    return r && td[0].startsWith(r[0]) && td[1] === r[3].toFixed(1) && td[2] === at8(r, 'pts').toFixed(1) && td[3] === at8(r, 'reb').toFixed(1) && td[4] === at8(r, 'ast').toFixed(1) && td[5] === at8(r, 'tpm').toFixed(1)
+      && td[8] === (at8(r, 'pts') + at8(r, 'reb') + at8(r, 'ast')).toFixed(1) && td[9] === ppPct(at8(r, 'dd')); });
+  check(projOk, "each row is the published projection: minutes, points, rebounds, assists, threes, PRA the sum, the double-double chance");
+  const order = projRows.map(tr => bosDet.players[tr.dataset.ppProj]);
+  check([...body().querySelectorAll('.pp-proj tr')].every(tr => w.getComputedStyle(tr).display === 'table-row') && body().querySelector('.pp-proj tr.pp-team td[colspan="10"]'), "every row of the table is laid out as a table row, each team's heading across it (no card style reaches it)");
+  /* on a phone the table drops steals and blocks (jsdom lays nothing out: the rule and the classes are held here, the fit
+     in a real browser at 390) so points + rebounds + assists and the double-double chance are on the screen */
+  { const ths = [...body().querySelectorAll('.pp-proj thead th')].map(th => [th.textContent.trim(), th.classList.contains('pp-opt')]), css = [...d.querySelectorAll('style')].map(x => x.textContent).join('\n');
+    const tr = body().querySelector('.pp-proj tr[data-pp-proj]'), opt = [...tr.children].map(td => td.classList.contains('pp-opt'));
+    check(JSON.stringify(ths.filter(x => x[1]).map(x => x[0])) === '["Stl","Blk"]' && JSON.stringify(opt) === '[false,false,false,false,false,false,true,true,false,false]'
+      && /@media\(max-width:520px\)\{[^@]*?\.pp-proj \.pp-opt\{display:none\}/.test(css) && body().querySelector('.pp-optnote'),
+      'on a phone (520px and under) the projections table drops Stl and Blk, and says so, keeping PRA and DD'); }
+  check(order.slice(0, order.findIndex(r => r[1] === 'DET')).every(r => r[1] === 'BOS') && order.every((r, i) => i === 0 || r[1] !== order[i - 1][1] || r[3] <= order[i - 1][3]), 'away team first, each team by projected minutes');
+  check(!banned(bt), 'the view says neither "edge" nor "model says"');
+  const teamBtn = d.querySelector('[data-pp-team="home"]'); teamBtn.focus(); teamBtn.click(); await sleep(20);
+  check([...body().querySelectorAll('[data-pp-proj]')].every(tr => bosDet.players[tr.dataset.ppProj][1] === 'DET') && d.activeElement && d.activeElement.dataset.ppTeam === 'home', 'the team switch shows the Pistons alone, the focus kept on it');
+  check(/Not projected, on the injury report: Some Star/.test(body().textContent), "who the injury report has out is said, not projected");
+  sheet().dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20);
+  check(sheet().hidden && d.activeElement === opener, 'Escape closes it and the focus goes back to the button that opened it');
+  cardBtn(p3).click(); await sleep(20);
+  sheet().click(); await sleep(20);
+  check(sheet().hidden, 'a click outside the sheet closes it');
+  d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
+  const mini = d.querySelector(`#bkPlan tr[data-gid="${p2.id}"] [data-props]`);
+  check(mini && /Player props/.test(mini.textContent), "each game in the Parlay Builder's plan has one too");
+  mini.click(); await sleep(20);
+  check(!sheet().hidden && /LAL/.test(d.getElementById('ppSub').textContent) && body().querySelectorAll('[data-pp-proj]').length === 3, "it opens that game's sheet, with its projections");
+  d.getElementById('ppClose').click(); await sleep(20);
+  const nT = timers.length;
+  await provoke(w, timers, errors);
+  check(espnReqs(requests).length === 0, `nothing is read before a press: not on load, opening a sheet, switching its team, closing it, nor on any timer or event (${nT} timers fired; ${espnReqs(requests).length} requests)`);
+  check(storedNoTab(w) === before, 'and nothing is stored (the tab in view, which the page has always remembered, aside)');
+  const planText = () => [...d.querySelectorAll('#bkPlan tbody tr')].map(r => { const c = r.cloneNode(true); c.querySelectorAll('[data-props]').forEach(b => b.remove()); return c.innerHTML; }).join('|');
+
+  /* the press, from the board */
+  d.querySelector('#nav button[data-tab=slate]').click(); await sleep(20);
+  /* p8 now tips 2.5 seconds after the press (ESPN still has it an hour later, as a game moved earlier after the job ran), and its props answer
+     is held until it has */
+  p8.tip = new Date(Date.now() + 2500).toISOString();
+  w.eval(`S.slate.find(g => g.id === ${JSON.stringify(p8.id)}).tip = ${JSON.stringify(p8.tip)}`);
+  sb[ymd(p8.date)].events.find(e => e.id === eid[p8.id]).date = new Date(Date.parse(p8.tip) + 3600e3).toISOString().slice(0, 16) + 'Z';
+  /* p10: ESPN still calls it scheduled, its own tip a minute ago; the published tip is still to come */
+  sb[ymd(p10.date)].events.find(e => e.id === eid[p10.id]).date = new Date(Date.now() - 60e3).toISOString().slice(0, 16) + 'Z';
+  const pressedAt = Date.now();
+  d.getElementById('oddsBtn').click(); await idle();
+  check(Date.now() > Date.parse(p8.tip) && pressedAt < Date.parse(p8.tip) - 1500, 'the press landed well before p8 tipped and ended after it (else the machine is too slow for this case)');
+  const pr = propsReqs(requests), sbr = sbReqs(requests);
+  const asked = pr.map(x => PROPS_RE.exec(x.url)[1] + ':' + PROPS_RE.exec(x.url)[2]).sort();
+  const want = ['401909088:1', '401900002:1', '401900002:2', '401900003:1', '401900004:1', '401900007:1', '401900008:1'].sort();
+  check(JSON.stringify(asked) === JSON.stringify(want), `one press asks for the props of exactly the games still to come, by ESPN's ids, the second page where there is one: not the game tipped before the press, the one ESPN has under way, nor the one whose tip ESPN has passed while still calling it scheduled (${asked.join(', ')})`);
+  check(pr.every(x => x.url === PF.PROP_URL(PROPS_RE.exec(x.url)[1], +PROPS_RE.exec(x.url)[2]) + x.url.slice(x.url.indexOf('&_=')) && /&_=\d+$/.test(x.url) && x.opt && x.opt.cache === 'no-store' && !x.opt.headers),
+    "each is a plain GET of tools/props_feed.js's address with a cache-buster, no-store and no headers of its own");
+  check(requests.findIndex(x => PROPS_RE.test(x.url)) > requests.findIndex(x => /\/scoreboard\?/.test(x.url)) && sbr.length >= 1, 'after the scoreboard, whose answer gives p2 its ESPN id');
+  const ps = d.getElementById('propsSt'), pst = ps.textContent;
+  const nMain1 = PF.propParse(p1Items).mains.length, nMain2 = PF.propParse(PF.propItems([page(p2Items.slice(0, half), 1, 2), page(p2Items.slice(half), 2, 2)])).mains.length;
+  check(!ps.hidden && ps.getAttribute('aria-live') === 'polite' && new RegExp(`^DraftKings' player props, read \\d{1,2}:\\d{2}[^:]*: 2 games, ${nMain1 + nMain2} main lines, under Player props on each game\\. 1 has none posted yet, 2 could not be read and 3 tipped off\\.$`).test(pst),
+    `the props status line says when, how many games and main lines, and what was not posted, not read or tipped ("${pst}")`);
+  check(/^DraftKings' lines from ESPN, read \d{1,2}:\d{2}[^:]*: \d+ games?, none moved\./.test(d.getElementById('oddsSt').textContent), `the lines' own status line is as before ("${d.getElementById('oddsSt').textContent}")`);
+  check(storedNoTab(w) === before, 'nothing is written to localStorage or sessionStorage by the press');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  check(cardBtn(p1) && cardBtn(p1).textContent.trim() === `Player props · ${nMain1} lines` && cardBtn(p1).classList.contains('has'), `p1's card button counts its main lines (${cardBtn(p1) && cardBtn(p1).textContent.trim()})`);
+  check(cardBtn(p3) && cardBtn(p3).textContent.trim() === 'Player props', 'a game with none posted shows no count');
+  check(!cardBtn(p8) && !w.NBA_PROPS.live()[p8.id] && !w.NBA_PROPS.live()[p6.id] && !w.NBA_PROPS.live()[p5.id] && !w.NBA_PROPS.live()[p10.id], 'the game that tipped while its props were read has no button and nothing taken; nor have the three ESPN or the clock had started (p10 by ESPN\'s own tip alone)');
+
+  /* the sheet after the press: every line, every rung and every Yes price worked out here */
+  cardBtn(p1).click(); await sleep(30);
+  bt = body().textContent;
+  check(/DraftKings' props from ESPN, read \d{1,2}:\d{2}/.test(bt) && /For this visit only: a reload shows the published page again/.test(bt), 'the sheet says when DraftKings\' props were read, for this visit only');
+  const parsed1 = PF.propParse(p1Items), rows1 = props8.games[p1.id].players;
+  const muOf = (r, k) => k in props8.combos ? Math.round(props8.combos[k].reduce((t, s) => t + at8(r, s), 0) * 100) / 100 : at8(r, k);   // a combo: its parts' sum, to two decimals, as the ledger's call holds it
+  let lineBad = [], nLines = 0;
+  for (const m of parsed1.mains) {
+    const el = body().querySelector(`[data-pp-player="${m.player}"] [data-pp-line="${m.stat}"]`); nLines++;
+    if (!el) { lineBad.push(`${m.player} ${m.stat} missing`); continue; }
+    const r = rows1[m.player], fair = PF.propFairOver(m.over, m.under);
+    const md = r ? `projection ${muOf(r, m.stat).toFixed(1)} · model ${ppPct(PJ.pOver(m.line, muOf(r, m.stat), PJ.nbVar(muOf(r, m.stat), props8.dist.var[m.stat])))} · DraftKings ${ppPct(fair)}` : `DraftKings ${ppPct(fair)}`;
+    const t = [...el.children].map(c => c.textContent.trim());
+    if (t[1] !== String(m.line) || t[2] !== 'O' + ppAm(m.over) || t[3] !== 'U' + ppAm(m.under) || t[4] !== md) lineBad.push(`${m.player} ${m.stat}: ${t.join(' | ')} (want ${md})`);
+  }
+  check(nLines === nMain1 && !lineBad.length, `each of the ${nLines} main lines shows its line, DraftKings' Over and Under, and "projection · model · DraftKings" worked out from the published projection, tools/props.js's distribution and the whole margin on the Over${lineBad.length ? ': ' + lineBad.slice(0, 3).join('; ') : ''}`);
+  const cade = body().querySelector('[data-pp-player="4432166"] [data-pp-line="pts"] .md');
+  check(cade && /^projection 20\.8 · model \d+% · DraftKings \d+%$/.test(cade.textContent.trim()), `Cunningham's points: "${cade && cade.textContent.trim()}"`);
+  const fair8 = props8.fair;
+  let rungBad = [], nRungs = 0, mono = true;
+  for (const tb of body().querySelectorAll('[data-pp-player] [data-pp-ladder]')) {
+    const pid = tb.closest('[data-pp-player]').dataset.ppPlayer, s = tb.dataset.ppLadder, r = rows1[pid];
+    const want8 = parsed1.ladders.filter(l => l.player === pid && l.stat === s);
+    const trs = [...tb.querySelectorAll('tbody tr')];
+    if (trs.length !== want8.length) rungBad.push(`${pid} ${s}: ${trs.length} rows for ${want8.length}`);
+    let last = 2;
+    trs.forEach((tr, i) => { const l = want8[i], t = [...tr.children].map(c => c.textContent.trim()); nRungs++;
+      const pm = r ? PJ.nbSf(l.k, muOf(r, s), PJ.nbVar(muOf(r, s), props8.dist.var[s])) : null;
+      if (t[0] !== l.k + '+' || t[1] !== ppAm(l.price) || t[2] !== ppPct(PF.propFairRung(l.price, fair8.rung.a[s])) || (r && t[3] !== ppPct(pm))) rungBad.push(`${pid} ${s} ${l.k}+: ${t.join(' | ')}`);
+      if (pm != null) { if (pm > last + 1e-12) mono = false; last = pm; } });
+  }
+  check(nRungs === parsed1.ladders.length && !rungBad.length, `each of the ${nRungs} milestone prices shows k+, DraftKings' price, its fair chance est. (tools/props_feed.js's rung rule on the measured margin) and the model's chance of reaching it${rungBad.length ? ': ' + rungBad.slice(0, 3).join('; ') : ''}`);
+  check(mono && nRungs > 0, "the model's chance of each ladder falls as the rung rises");
+  check([...body().querySelectorAll('[data-pp-ladder] th')].some(th => /DraftKings, est\./.test(th.textContent)), 'the ladder columns are headed DraftKings, est.');
+  let yesBad = [];
+  for (const y of parsed1.yes) { const el = body().querySelector(`[data-pp-player="${y.player}"] [data-pp-yes="${y.market}"]`), r = rows1[y.player];
+    const want8 = `${y.market === 'dd' ? 'Double-double' : 'Triple-double'} ${ppAm(y.price)} · ${r ? `model ${ppPct(at8(r, y.market))} · ` : ''}DraftKings ${ppPct(PF.propFairRung(y.price, fair8.yes.a[y.market]))} est.`;
+    if (!el || el.textContent.trim() !== want8) yesBad.push(`${el && el.textContent.trim()} (want ${want8})`); }
+  check(parsed1.yes.length && !yesBad.length, `the double- and triple-double prices show the model's chance and DraftKings' fair chance, est., by the rung rule on the rungs' margin${yesBad.length ? ': ' + yesBad.join('; ') : ''}`);
+  const yesEst = body().querySelector('[data-pp-yes] .muted');
+  check(yesEst && /never measured on this market itself/.test(yesEst.title) && /read it as high/.test(yesEst.title) && /never measured on those markets/.test(body().querySelector('[data-pp-trial]').textContent),
+    "their est. says the margin was never measured on those markets and the figure may run high, and so does the on-trial note");
+  const star = body().querySelector('[data-pp-player="2"]');
+  check(star && /Some Star/.test(star.textContent) && star.querySelector('.tag.rose') && /No projection: Out on the injury report/.test(star.textContent) && star.querySelector('[data-pp-line="pts"] .md').textContent.trim() === `DraftKings ${ppPct(PF.propFairOver(-120, -110))}`,
+    "a player DraftKings lines whom the report has out is named from the game's absentees, marked Out, with no projection and DraftKings' fair chance alone");
+  check(body().querySelector('[data-pp-player="4065648"] .pp-pl-h').textContent.includes(`${rows1['4065648'][3].toFixed(1)} min projected`), "a player's projected minutes are beside his name");
+  check(body().querySelector('details[data-pp-more]') && body().querySelectorAll('details[data-pp-more] [data-pp-proj]').length === Object.keys(rows1).length - 2, "the projected players with no DraftKings line are listed apart, folded");
+  bt = body().textContent;
+  check(!banned(bt), 'the view says neither "edge" nor "model says" on a prop');
+  check(storedNoTab(w) === before, 'nothing stored by opening the sheet');
+  d.getElementById('ppClose').click(); await sleep(20);
+  cardBtn(p2).click(); await sleep(20);
+  const pts2 = body().querySelector('[data-pp-player="9000001"] [data-pp-line="pts"]'), reb2 = body().querySelector('[data-pp-player="9000002"] [data-pp-line="reb"]');
+  check(pts2 && reb2 && /^projection 25\.3 · model \d+% · DraftKings \d+%$/.test(pts2.querySelector('.md').textContent.trim()), 'p2 read on both pages, its ESPN id from the scoreboard: a pair split across the pages is still a line');
+  check(/ESPN athlete 99999999/.test(body().textContent), 'an athlete no file knows is shown by his ESPN id');
+  const pra2 = body().querySelector('[data-pp-player="9000002"] [data-pp-line="pra"] .md');
+  check(pra2 && pra2.textContent.trim().startsWith(`projection ${(15.5 + 11.8 + 2.1).toFixed(1)} `), "a combo's projection is the sum of its parts'");
+  d.getElementById('ppClose').click(); await sleep(20);
+  cardBtn(p3).click(); await sleep(20);
+  check(/DraftKings has posted no player props for this game yet/.test(body().textContent) && /No projection for this game yet/.test(body().textContent), 'a 404 is "none posted yet", and a game the model has not projected says so');
+  d.getElementById('ppClose').click(); await sleep(20);
+  cardBtn(p4).click(); await sleep(20);
+  check(/could not be read at/.test(body().textContent), 'a junk answer is "could not be read"');
+  d.getElementById('ppClose').click(); await sleep(20);
+
+  /* nothing suggested: the Parlay Builder drawn with the props read is the one drawn without them, and names no player */
+  d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+  const sugWith = d.getElementById('bkSuggest').innerHTML, planWith = planText();
+  w.eval('window.__pp = PP_LIVE; PP_LIVE = {}; render.parlay();');
+  const sugWithout = d.getElementById('bkSuggest').innerHTML, planWithout = planText();
+  w.eval('PP_LIVE = window.__pp; delete window.__pp; render.parlay();');
+  check(/sugg-tier safe/.test(sugWith) && sugWith === sugWithout && planWith === planWithout, 'the suggested parlays, the Value card and the plan drawn with the props read are exactly those drawn without them: no prop is suggested');
+  check(!/Tatum|Cunningham|Some Star|Lal Guard/.test(d.getElementById('tab-parlay').textContent), 'no player is named anywhere in the Parlay Builder');
+  check(!w.localStorage.getItem('nba_hub_2027') || !/props|Tatum|4432166/.test(w.localStorage.getItem('nba_hub_2027')), 'and none is in the Bet Build');
+
+  /* a second press: p1's read fails, and p2's page 1 answers but its page 2 is a 404, so the earlier props of both stand,
+     with their read time (a 404 after page 1 is a failed read, never "none posted") */
+  const firstAt = w.NBA_PROPS.live()[p1.id].at, firstAt2 = w.NBA_PROPS.live()[p2.id].at, lines2 = w.NBA_PROPS.live()[p2.id].mains.length;
+  propsAns['401909088'] = 500;
+  propsAns['401900002'] = [page(p2Items.slice(0, half), 1, 2), 404];
+  d.querySelector('#nav button[data-tab=slate]').click(); await sleep(20);
+  cardBtn(p1).click(); await sleep(20);
+  d.querySelector('#ppBody [data-pp-refresh]').click();
+  check(/Reading DraftKings' lines and player props from ESPN/.test(body().textContent), "the sheet's own Refresh odds button is the same press, and the sheet says it is reading");
+  await idle();
+  check(/4 could not be read \(2 keep their props read earlier\)/.test(d.getElementById('propsSt').textContent) && w.NBA_PROPS.live()[p1.id].at === firstAt && body().querySelector('[data-pp-line="pts"]'),
+    `a failed read keeps the earlier press's props for its game ("${d.getElementById('propsSt').textContent}")`);
+  check(w.NBA_PROPS.live()[p2.id].status === 'ok' && w.NBA_PROPS.live()[p2.id].at === firstAt2 && w.NBA_PROPS.live()[p2.id].mains.length === lines2 && lines2 > 0,
+    "a game whose page 2 is a 404 after page 1 answered keeps its earlier props whole, never page 1's alone nor \"none posted\"");
+  check(d.getElementById('ppSub').textContent.includes('BOS') && !sheet().hidden, 'the open sheet is redrawn in place after the press');
+  d.getElementById('ppClose').click(); await sleep(20);
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  /* a reload is the published page again */
+  ({ w, errors, requests, timers } = load('index.html', st8, null, espnStub(sb, () => 0, propsAns)));
+  await sleep(300); d = w.document;
+  await provoke(w, timers, errors);
+  cardBtn(p1).click(); await sleep(20);
+  check(/Press Refresh odds for DraftKings' props/.test(body().textContent) && !body().querySelector('[data-pp-line]') && d.getElementById('propsSt').hidden && !Object.keys(w.NBA_PROPS.live()).length && !espnReqs(requests).length,
+    'a reload shows the projections again with no DraftKings line, reads nothing, and holds nothing from before');
+  d.getElementById('ppClose').click();
+
+  /* a sheet left open while its game tips says so, at the page's once-a-minute look */
+  const p9 = og('NOP', 'MEM', 1500, { espn: '401900009' });
+  ({ w, errors, requests, timers } = load('index.html', { ...st8, slate: [p9, p1].map(g => JSON.parse(JSON.stringify(g))) }, null, espnStub(sb, () => 0, propsAns)));
+  await sleep(300); d = w.document;
+  cardBtn(p9).click(); await sleep(20);
+  check(/Press Refresh odds/.test(body().textContent), 'p9 opens before its tip');
+  await sleep(1700);
+  for (const t of timers.filter(t => t.k === 'setInterval')) t.fn();
+  await sleep(20);
+  check(/This game has tipped off/.test(body().textContent) && !body().querySelector('[data-pp-refresh]'), 'once it tips, the open sheet says so and offers nothing');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  /* the page's copies are tools/props_feed.js's and tools/props.js's: the text, then the results */
+  const pageSrc = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+  const feedSrc = fs.readFileSync(path.join(ROOT, 'tools', 'props_feed.js'), 'utf8'), nbSrc = fs.readFileSync(path.join(ROOT, 'tools', 'props.js'), 'utf8');
+  const copied = [['props_feed.js', feedSrc, ['PROP_URL', 'PROP_MAIN', 'PROP_MILE', 'PROP_YES', 'PROP_STATS', 'propAmerican', 'propImplied', 'propAthlete', 'propLine', 'propTypeId', 'propPrice', 'propItems', 'propParse', 'propFairOver', 'propFairRung', 'propRead']],
+    ['props.js', nbSrc, ['nbVar', 'nbPmf', 'nbSf', 'pOver']]];
+  for (const [file, src, names] of copied) { const diff = names.filter(n => { const a = srcOf(src, n), b = srcOf(pageSrc, n); return !a || a !== b; });
+    check(!diff.length, `the page's ${names.join(', ')} are tools/${file}'s, line for line${diff.length ? `: differ: ${diff.join(', ')}` : ''}`); }
+  const P = w.NBA_PROPS;
+  const sameP = (items) => { const run = fn => { try { return JSON.stringify(fn(JSON.parse(JSON.stringify(items)))); } catch (e) { return 'threw ' + e.name; } }; return run(PF.propParse) === run(x => P.propParse(x)); };
+  const base8 = rec.items;
+  const swap = (a, i) => { const b = a.slice(); [b[i], b[i + 1]] = [b[i + 1], b[i]]; return b; };
+  const variants8 = {
+    'the recorded answer': base8, 'with made-up lines and two pages': p1Items.concat(p2Items),
+    'every pair swapped (Over second)': base8.reduce((a, it, i) => i % 2 ? a : a.concat(base8[i + 1] ? [base8[i + 1], it] : [it]), []),
+    'a pair broken by an item between': (() => { const a = base8.slice(); a.splice(1, 0, ppItem(5, '1', 1.5, -110)); return a; })(),
+    'one side of a pair missing': base8.slice(1),
+    'a rung contradicting its pair': [ppItem(1, '7', 20.5, -150), ppItem(1, '7', 20.5, 120), ppItem(218, '7', 21, 118)].concat(base8),
+    'two lines on one stat': [ppItem(90, '8', 18.5, -160), ppItem(90, '8', 18.5, 125), ppItem(90, '8', 17.5, -112), ppItem(90, '8', 17.5, -108)].concat(base8),
+    'prices OFF, EVEN, blank and small': base8.map((it, i) => { const c = JSON.parse(JSON.stringify(it)); c.odds.american.value = ['OFF', 'EVEN', '', '+99', '-100', null, 'EV', '+117'][i % 8]; return c; }),
+    'lines that are not numbers': base8.map((it, i) => { const c = JSON.parse(JSON.stringify(it)); if (i % 3 === 0 && c.current && c.current.target) c.current.target.value = ['x', '', null][(i / 3) % 3]; return c; }),
+    'team markets, unknown types and no athlete': [{ team: { $ref: '.../teams/8' }, type: { id: '98' }, odds: { american: { value: '-115' } }, current: { target: { value: 115.5 } } }, { type: { id: '1' } }, ppItem(72, '3', 1.5, -110), null, 7].concat(base8),
+    'a rung listed twice and a fractional rung': [ppItem(218, '4', 20, -200), ppItem(218, '4', 20, -150), ppItem(218, '4', 20.5, -110), ppItem(92, '4', null, 300), ppItem(92, '4', null, 200)].concat(base8),
+  };
+  for (const [name, items] of Object.entries(variants8)) check(sameP(items), `the page's parse equals tools/props_feed.js's on ${name}`);
+  check(PF.propParse(swap(base8, 0)).mains.length < PF.propParse(base8).mains.length || JSON.stringify(PF.propParse(swap(base8, 0)).mains) !== JSON.stringify(PF.propParse(base8).mains), 'the swapped-pair variant really changes what the parse reads (the cases bite)');
+  const scen = { 'one page': () => async () => page(base8, 1, 1), 'two pages': () => { const pg = [page(base8.slice(0, 7), 1, 2), page(base8.slice(7), 2, 2)]; return async url => pg[+/page=(\d+)/.exec(url)[1] - 1]; },
+    'a 404': () => async () => { throw new Error('HTTP 404'); }, 'a 404 on page 2': () => async url => { if (/page=2/.test(url)) throw new Error('HTTP 404'); return page(base8, 1, 2); },
+    'a 503': () => async () => { throw new Error('HTTP 503'); }, 'junk': () => async () => '<html>', 'an object that is not a page': () => async () => ({ hello: 1 }),
+    "ESPN's 404 body": () => async () => ({ error: { message: 'No propBets found for eventId 1 and provider 100', code: 404 } }), 'a network error': () => async () => { throw new TypeError('Failed to fetch'); } };
+  const wantSt = { 'one page': 'ok', 'two pages': 'ok', 'a 404': 'none', 'a 404 on page 2': 'failed', 'a 503': 'failed', 'junk': 'failed', 'an object that is not a page': 'failed', "ESPN's 404 body": 'none', 'a network error': 'failed' };
+  for (const [name, mk] of Object.entries(scen)) { const a = JSON.stringify(await PF.propRead('401909088', mk())), b = JSON.stringify(await P.propRead('401909088', mk()));
+    check(a === b && JSON.parse(b).status === wantSt[name], `the page's read equals tools/props_feed.js's on ${name}, and is ${wantSt[name]} (${JSON.parse(b).status})`); }
+  let nbBad = 0;
+  for (const k of ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb']) for (const mu of [0, 0.3, 1.7, 4.4, 9.9, 21.6, 38.2]) { const ab = props8.dist.var[k], v = PJ.nbVar(mu, ab);
+    if (v !== P.nbVar(mu, ab)) nbBad++;
+    for (const line of [0.5, 1.5, 4, 9.5, 22.5, 40.5]) if (PJ.pOver(line, mu, v) !== P.pOver(line, mu, v) || PJ.nbSf(Math.ceil(line), mu, v) !== P.nbSf(Math.ceil(line), mu, v)) nbBad++; }
+  check(nbBad === 0, "the page's distribution equals tools/props.js's: variance, P(over a line) and P(at least k), every stat, means 0 to 38");
+  let fairBad = 0;
+  for (const a of [-1000, -250, -130, -110, 100, 105, 150, 400, 2500]) for (const b of [-400, -115, 100, 120, 300]) if (PF.propFairOver(a, b) !== P.propFairOver(a, b)) fairBad++;
+  for (const a of [-3000, -400, -150, 100, 140, 300, 900, 5000]) { for (const s of Object.keys(fair8.rung.a)) if (PF.propFairRung(a, fair8.rung.a[s]) !== P.propFairRung(a, fair8.rung.a[s])) fairBad++; for (const m of ['dd', 'td']) if (PF.propFairRung(a, fair8.yes.a[m]) !== P.propFairRung(a, fair8.yes.a[m])) fairBad++; }
+  check(fairBad === 0, "and its fair chances are tools/props_feed.js's: the main line's, a rung's and a Yes price's");
+
+  /* the shadow ledger, quietly, on made-up summaries: running numbers with no verdict before the bar; then a FAIL and a PASS */
+  const lgOf = (summary, decision) => ({ ...st8, props: { ...props8, ledger: { ...props8.ledger, summary: { ...props8.ledger.summary, ...summary }, decision } } });
+  const scores = { lines: 12345, model: { logloss: 0.69, brier: 0.249 }, market: { logloss: 0.68, brier: 0.244 } };
+  const ledgerText = async st => { ({ w, errors } = load('index.html', st)); await sleep(300); d = w.document; d.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
+    const rp = d.getElementById('ppRecord'); const t = rp ? rp.nextElementSibling.textContent : ''; cardBtn(p1).click(); await sleep(20); const tr = d.querySelector('[data-pp-trial]'); return [t, tr ? tr.textContent : '']; };
+  let [lt, tt] = await ledgerText(lgOf({ lines: 12345, gradedGames: 101, scores }, null));
+  check(/12,345 of the 30,000 graded lines its bar is judged on are in, from 101 games; no verdict before 30,000\. So far on 12,345 lines, log loss model 0\.6900 · DraftKings 0\.6800, Brier model 0\.2490 · DraftKings 0\.2440/.test(lt) && tt.includes('12,345 of the 30,000'),
+    `before the bar, the Record tab and the sheet give the running numbers, model against DraftKings ("${lt.slice(-190)}")`);
+  check(!/PASS|FAIL|pass|fail/.test(lt + tt), 'and no verdict, nor a word of one');
+  [lt] = await ledgerText(lgOf({ lines: 30000, gradedGames: 260, scores }, { verdict: 'FAIL', decidedAt: '2026-11-25T12:00Z', lines: 30000 }));
+  check(/decided on Nov 25 at 30,000 lines: FAIL\. It stays on trial and suggests nothing/.test(lt), `a FAIL is said, and the model stays on trial ("${lt.slice(-140)}")`);
+  [lt] = await ledgerText(lgOf({ lines: 30000, gradedGames: 260, scores }, { verdict: 'PASS', decidedAt: '2026-11-25T12:00Z', lines: 30000 }));
+  check(/PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial/.test(lt), 'a PASS moves nothing by itself: the model stays on trial');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  /* the real published state: every game's sheet draws */
+  ({ w, errors } = load('index.html', real));
+  await sleep(300); d = w.document;
+  const withProj = real.slate.filter(g => RP.games && RP.games[g.id] && !(g.tip && Date.parse(g.tip) <= Date.now()) && g.status === 'scheduled');
+  let realBad = [];
+  for (const g of withProj) { w.eval(`propsOpen(${JSON.stringify(g.id)})`); await sleep(5);
+    const n = body().querySelectorAll('[data-pp-proj]').length, t = body().textContent;
+    if (n !== Object.keys(RP.games[g.id].players).length || /\bNaN\b|\bundefined\b/.test(t) || banned(t)) realBad.push(`${g.id}: ${n} rows`);
+    w.eval('propsClose()'); }
+  check(!realBad.length, `on the real published state, every game the model projects opens with all its projections, no NaN or undefined (${withProj.length} games)${realBad.length ? ': ' + realBad.slice(0, 3).join('; ') : ''}`);
+  /* the means the page prices a line on, its own ppMean, are the shadow ledger's open call to the digit, combos included */
+  { const lg = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'props_shadow.json'), 'utf8')), lay = ['min'].concat(PJ.ALL, ['dd', 'td']), diff = [];
+    let n = 0;
+    for (const [gid, g] of Object.entries(RP.games || {})) { const c = lg.calls[gid]; if (!c || c.frozen) continue;
+      for (const pid of Object.keys(g.players)) { const call = c.players[pid]; if (!call) continue; n++;
+        const page = JSON.parse(w.eval(`JSON.stringify(${JSON.stringify(PJ.ALL)}.map(k => ppMean(ppRow(${JSON.stringify(gid)}, ${JSON.stringify(pid)}), k)))`));
+        PJ.ALL.forEach((k, i) => { if (page[i] !== call[lay.indexOf(k)]) diff.push(`${gid} ${pid} ${k}: page ${page[i]}, call ${call[lay.indexOf(k)]}`); }); } }
+    const calling = !(lg.decision && lg.decision.verdict === 'FAIL');       // once the bar has failed no call is made
+    check(!Object.keys(RP.games || {}).length || !calling || (n > 0 && !diff.length), `the page's own means, combos included, are the shadow ledger's open calls to the digit (${n} players${calling ? '' : '; the bar failed, so no call is open'})${diff.length ? ': ' + diff.slice(0, 3).join('; ') : ''}`); }
+  d.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
+  const recP = d.getElementById('ppRecord');
+  check(recP && /on trial/.test(recP.textContent) && /graded lines its bar is judged on are in|Its bar was decided/.test(recP.nextElementSibling.textContent) && !/passing/i.test(recP.nextElementSibling.textContent), "the Record tab gives the shadow ledger's running numbers quietly, with no verdict before its bar is decided");
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 }
 
 (async () => {
@@ -596,6 +983,7 @@ async function refreshOdds() {
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   await refreshOdds();
+  await playerProps();
 
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

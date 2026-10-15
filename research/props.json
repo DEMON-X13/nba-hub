@@ -1,0 +1,1427 @@
+{
+ "generated": "2026-10-15T11:35Z",
+ "what": "tools/props.js research: each season scored cold by constants fitted only on the seasons before it (2022 warms up), against the naive own average; and against DraftKings' archived closing lines where the hub has them, with the eight ways of taking the margin out of their prices",
+ "folds": [
+  {
+   "season": 2024,
+   "role": "development: the structure was chosen on this fold",
+   "fitOn": "2023-2023",
+   "params": {
+    "min": {
+     "h": 2,
+     "w0": 0.25,
+     "minN": 20,
+     "alpha": 0.5,
+     "T": 250,
+     "floor": 0,
+     "post": 0.2
+    },
+    "rate": {
+     "pts": {
+      "h": 15,
+      "m": 25
+     },
+     "reb": {
+      "h": 15,
+      "m": 50
+     },
+     "ast": {
+      "h": 8,
+      "m": 25
+     },
+     "tpm": {
+      "h": 25,
+      "m": 50
+     },
+     "stl": {
+      "h": 70,
+      "m": 400
+     },
+     "blk": {
+      "h": 25,
+      "m": 100
+     }
+    },
+    "gamma": 0.75,
+    "opp": {
+     "pts": 1,
+     "reb": 0.75,
+     "ast": 0.75,
+     "tpm": 0.75,
+     "stl": 0.75,
+     "blk": 1
+    },
+    "post": {
+     "pts": 0.8975,
+     "reb": 0.9701,
+     "ast": 0.8739,
+     "tpm": 0.9031,
+     "stl": 0.9207,
+     "blk": 1.0773
+    },
+    "var": {
+     "pts": [
+      7.8251,
+      0.7084
+     ],
+     "reb": [
+      1.6401,
+      0.9568
+     ],
+     "ast": [
+      1.3047,
+      0.9927
+     ],
+     "tpm": [
+      1.2711,
+      0.9796
+     ],
+     "stl": [
+      1.08,
+      0.9097
+     ],
+     "blk": [
+      1.121,
+      0.9976
+     ],
+     "pra": [
+      11.3314,
+      0.6266
+     ],
+     "pr": [
+      9.3933,
+      0.6753
+     ],
+     "pa": [
+      7.1438,
+      0.749
+     ],
+     "ar": [
+      2.8522,
+      0.728
+     ],
+     "sb": [
+      1.1813,
+      0.9873
+     ]
+    },
+    "rho": 0.35
+   },
+   "players": 27872,
+   "minutes": {
+    "mae": 4.82,
+    "unscaled": 4.88,
+    "hubRule": 5.07,
+    "openers": {
+     "n": 451,
+     "mae": 5.83,
+     "hubRule": 7.07
+    }
+   },
+   "stats": {
+    "pts": {
+     "n": 27872,
+     "mae": 4.48,
+     "naiveMae": 4.63,
+     "bias": 0.2,
+     "logScore": 2.9933,
+     "naiveLogScore": 3.17,
+     "lineLogloss": 0.6711,
+     "naiveLineLogloss": 0.7229,
+     "lineBrier": 0.2374,
+     "naiveLineBrier": 0.2577,
+     "rotation": {
+      "n": 17020,
+      "mae": 5.2,
+      "naiveMae": 5.31
+     }
+    },
+    "reb": {
+     "n": 27872,
+     "mae": 1.85,
+     "naiveMae": 1.91,
+     "bias": 0.03,
+     "logScore": 2.1521,
+     "naiveLogScore": 2.2237,
+     "lineLogloss": 0.6649,
+     "naiveLineLogloss": 0.7036,
+     "lineBrier": 0.2333,
+     "naiveLineBrier": 0.2496,
+     "rotation": {
+      "n": 17020,
+      "mae": 2.05,
+      "naiveMae": 2.08
+     }
+    },
+    "ast": {
+     "n": 27872,
+     "mae": 1.32,
+     "naiveMae": 1.36,
+     "bias": -0.01,
+     "logScore": 1.7361,
+     "naiveLogScore": 1.8185,
+     "lineLogloss": 0.6537,
+     "naiveLineLogloss": 0.7009,
+     "lineBrier": 0.2297,
+     "naiveLineBrier": 0.245,
+     "rotation": {
+      "n": 17020,
+      "mae": 1.56,
+      "naiveMae": 1.59
+     }
+    },
+    "tpm": {
+     "n": 27872,
+     "mae": 0.85,
+     "naiveMae": 0.87,
+     "bias": 0,
+     "logScore": 1.2614,
+     "naiveLogScore": 1.3193,
+     "lineLogloss": 0.5788,
+     "naiveLineLogloss": 0.6167,
+     "lineBrier": 0.1998,
+     "naiveLineBrier": 0.2106,
+     "rotation": {
+      "n": 17020,
+      "mae": 1.02,
+      "naiveMae": 1.03
+     }
+    },
+    "stl": {
+     "n": 27872,
+     "mae": 0.67,
+     "naiveMae": 0.68,
+     "bias": 0,
+     "logScore": 1.066,
+     "naiveLogScore": 1.136,
+     "lineLogloss": 0.6245,
+     "naiveLineLogloss": 0.6751,
+     "lineBrier": 0.2163,
+     "naiveLineBrier": 0.2285,
+     "rotation": {
+      "n": 17020,
+      "mae": 0.77,
+      "naiveMae": 0.78
+     }
+    },
+    "blk": {
+     "n": 27872,
+     "mae": 0.52,
+     "naiveMae": 0.53,
+     "bias": -0.01,
+     "logScore": 0.8279,
+     "naiveLogScore": 0.8834,
+     "lineLogloss": 0.5505,
+     "naiveLineLogloss": 0.5931,
+     "lineBrier": 0.1849,
+     "naiveLineBrier": 0.193,
+     "rotation": {
+      "n": 17020,
+      "mae": 0.61,
+      "naiveMae": 0.61
+     }
+    },
+    "pra": {
+     "n": 27872,
+     "mae": 5.92,
+     "naiveMae": 6.21,
+     "bias": 0.22,
+     "logScore": 3.3505,
+     "naiveLogScore": 3.4725,
+     "lineLogloss": 0.6656,
+     "naiveLineLogloss": 0.7153,
+     "lineBrier": 0.2341,
+     "naiveLineBrier": 0.2571,
+     "rotation": {
+      "n": 17020,
+      "mae": 6.66,
+      "naiveMae": 6.89
+     }
+    },
+    "pr": {
+     "n": 27872,
+     "mae": 5.44,
+     "naiveMae": 5.66,
+     "bias": 0.24,
+     "logScore": 3.2459,
+     "naiveLogScore": 3.3775,
+     "lineLogloss": 0.6688,
+     "naiveLineLogloss": 0.7156,
+     "lineBrier": 0.2355,
+     "naiveLineBrier": 0.2567,
+     "rotation": {
+      "n": 17020,
+      "mae": 6.15,
+      "naiveMae": 6.31
+     }
+    },
+    "pa": {
+     "n": 27872,
+     "mae": 4.93,
+     "naiveMae": 5.15,
+     "bias": 0.19,
+     "logScore": 3.1277,
+     "naiveLogScore": 3.2815,
+     "lineLogloss": 0.6672,
+     "naiveLineLogloss": 0.7209,
+     "lineBrier": 0.2354,
+     "naiveLineBrier": 0.258,
+     "rotation": {
+      "n": 17020,
+      "mae": 5.68,
+      "naiveMae": 5.86
+     }
+    },
+    "ar": {
+     "n": 27872,
+     "mae": 2.55,
+     "naiveMae": 2.67,
+     "bias": 0.02,
+     "logScore": 2.5034,
+     "naiveLogScore": 2.5784,
+     "lineLogloss": 0.6655,
+     "naiveLineLogloss": 0.7087,
+     "lineBrier": 0.2339,
+     "naiveLineBrier": 0.2535,
+     "rotation": {
+      "n": 17020,
+      "mae": 2.84,
+      "naiveMae": 2.93
+     }
+    },
+    "sb": {
+     "n": 27872,
+     "mae": 0.89,
+     "naiveMae": 0.92,
+     "bias": -0.01,
+     "logScore": 1.3636,
+     "naiveLogScore": 1.4387,
+     "lineLogloss": 0.6441,
+     "naiveLineLogloss": 0.691,
+     "lineBrier": 0.2249,
+     "naiveLineBrier": 0.2379,
+     "rotation": {
+      "n": 17020,
+      "mae": 1.01,
+      "naiveMae": 1.04
+     }
+    }
+   },
+   "doubles": {
+    "dd": {
+     "logloss": 0.1909,
+     "naive": 0.2874,
+     "rate": 0.0862,
+     "said": 0.0872
+    },
+    "td": {
+     "logloss": 0.0185,
+     "naive": 0.03,
+     "rate": 0.0053,
+     "said": 0.0064
+    }
+   }
+  },
+  {
+   "season": 2025,
+   "role": "test",
+   "fitOn": "2023-2024",
+   "params": {
+    "min": {
+     "h": 2,
+     "w0": 0.25,
+     "minN": 20,
+     "alpha": 0.5,
+     "T": 250,
+     "floor": 0,
+     "post": 0.2
+    },
+    "rate": {
+     "pts": {
+      "h": 15,
+      "m": 25
+     },
+     "reb": {
+      "h": 15,
+      "m": 50
+     },
+     "ast": {
+      "h": 8,
+      "m": 25
+     },
+     "tpm": {
+      "h": 25,
+      "m": 50
+     },
+     "stl": {
+      "h": 70,
+      "m": 400
+     },
+     "blk": {
+      "h": 25,
+      "m": 100
+     }
+    },
+    "gamma": 1,
+    "opp": {
+     "pts": 1,
+     "reb": 0.75,
+     "ast": 0.75,
+     "tpm": 0.75,
+     "stl": 0.75,
+     "blk": 1.25
+    },
+    "post": {
+     "pts": 0.9044,
+     "reb": 0.9783,
+     "ast": 0.8748,
+     "tpm": 0.8986,
+     "stl": 0.9089,
+     "blk": 1.0335
+    },
+    "var": {
+     "pts": [
+      7.6072,
+      0.7224
+     ],
+     "reb": [
+      1.6123,
+      0.9647
+     ],
+     "ast": [
+      1.3231,
+      0.9849
+     ],
+     "tpm": [
+      1.2479,
+      0.996
+     ],
+     "stl": [
+      1.0543,
+      0.8807
+     ],
+     "blk": [
+      1.1182,
+      1.0033
+     ],
+     "pra": [
+      10.334,
+      0.6619
+     ],
+     "pr": [
+      8.6692,
+      0.7069
+     ],
+     "pa": [
+      6.7092,
+      0.7754
+     ],
+     "ar": [
+      2.3741,
+      0.8442
+     ],
+     "sb": [
+      1.2001,
+      0.9682
+     ]
+    },
+    "rho": 0.35
+   },
+   "players": 28007,
+   "minutes": {
+    "mae": 4.83,
+    "unscaled": 4.9,
+    "hubRule": 5.09,
+    "openers": {
+     "n": 447,
+     "mae": 5.83,
+     "hubRule": 7.24
+    }
+   },
+   "stats": {
+    "pts": {
+     "n": 28007,
+     "mae": 4.55,
+     "naiveMae": 4.71,
+     "bias": -0.03,
+     "logScore": 3.0147,
+     "naiveLogScore": 3.1644,
+     "lineLogloss": 0.6765,
+     "naiveLineLogloss": 0.7232,
+     "lineBrier": 0.2396,
+     "naiveLineBrier": 0.2587,
+     "rotation": {
+      "n": 17324,
+      "mae": 5.24,
+      "naiveMae": 5.39
+     }
+    },
+    "reb": {
+     "n": 28007,
+     "mae": 1.89,
+     "naiveMae": 1.95,
+     "bias": 0.01,
+     "logScore": 2.1743,
+     "naiveLogScore": 2.2452,
+     "lineLogloss": 0.6667,
+     "naiveLineLogloss": 0.7057,
+     "lineBrier": 0.2353,
+     "naiveLineBrier": 0.2508,
+     "rotation": {
+      "n": 17324,
+      "mae": 2.04,
+      "naiveMae": 2.09
+     }
+    },
+    "ast": {
+     "n": 28007,
+     "mae": 1.31,
+     "naiveMae": 1.35,
+     "bias": 0.01,
+     "logScore": 1.7429,
+     "naiveLogScore": 1.8165,
+     "lineLogloss": 0.6549,
+     "naiveLineLogloss": 0.7023,
+     "lineBrier": 0.2308,
+     "naiveLineBrier": 0.2465,
+     "rotation": {
+      "n": 17324,
+      "mae": 1.54,
+      "naiveMae": 1.58
+     }
+    },
+    "tpm": {
+     "n": 28007,
+     "mae": 0.88,
+     "naiveMae": 0.9,
+     "bias": -0.04,
+     "logScore": 1.3069,
+     "naiveLogScore": 1.3664,
+     "lineLogloss": 0.5877,
+     "naiveLineLogloss": 0.626,
+     "lineBrier": 0.2041,
+     "naiveLineBrier": 0.2144,
+     "rotation": {
+      "n": 17324,
+      "mae": 1.05,
+      "naiveMae": 1.06
+     }
+    },
+    "stl": {
+     "n": 28007,
+     "mae": 0.7,
+     "naiveMae": 0.72,
+     "bias": -0.05,
+     "logScore": 1.1268,
+     "naiveLogScore": 1.1952,
+     "lineLogloss": 0.6357,
+     "naiveLineLogloss": 0.684,
+     "lineBrier": 0.2216,
+     "naiveLineBrier": 0.233,
+     "rotation": {
+      "n": 17324,
+      "mae": 0.79,
+      "naiveMae": 0.81
+     }
+    },
+    "blk": {
+     "n": 28007,
+     "mae": 0.52,
+     "naiveMae": 0.52,
+     "bias": 0.02,
+     "logScore": 0.8111,
+     "naiveLogScore": 0.8642,
+     "lineLogloss": 0.5438,
+     "naiveLineLogloss": 0.5857,
+     "lineBrier": 0.1816,
+     "naiveLineBrier": 0.1898,
+     "rotation": {
+      "n": 17324,
+      "mae": 0.59,
+      "naiveMae": 0.58
+     }
+    },
+    "pra": {
+     "n": 28007,
+     "mae": 5.96,
+     "naiveMae": 6.25,
+     "bias": -0.01,
+     "logScore": 3.3617,
+     "naiveLogScore": 3.4622,
+     "lineLogloss": 0.6691,
+     "naiveLineLogloss": 0.7168,
+     "lineBrier": 0.2361,
+     "naiveLineBrier": 0.2583,
+     "rotation": {
+      "n": 17324,
+      "mae": 6.6,
+      "naiveMae": 6.87
+     }
+    },
+    "pr": {
+     "n": 28007,
+     "mae": 5.48,
+     "naiveMae": 5.72,
+     "bias": -0.02,
+     "logScore": 3.2624,
+     "naiveLogScore": 3.3682,
+     "lineLogloss": 0.6714,
+     "naiveLineLogloss": 0.7174,
+     "lineBrier": 0.2372,
+     "naiveLineBrier": 0.2581,
+     "rotation": {
+      "n": 17324,
+      "mae": 6.12,
+      "naiveMae": 6.33
+     }
+    },
+    "pa": {
+     "n": 28007,
+     "mae": 4.99,
+     "naiveMae": 5.21,
+     "bias": -0.02,
+     "logScore": 3.1686,
+     "naiveLogScore": 3.2702,
+     "lineLogloss": 0.6715,
+     "naiveLineLogloss": 0.7199,
+     "lineBrier": 0.2372,
+     "naiveLineBrier": 0.2584,
+     "rotation": {
+      "n": 17324,
+      "mae": 5.68,
+      "naiveMae": 5.9
+     }
+    },
+    "ar": {
+     "n": 28007,
+     "mae": 2.59,
+     "naiveMae": 2.7,
+     "bias": 0.01,
+     "logScore": 2.515,
+     "naiveLogScore": 2.5879,
+     "lineLogloss": 0.6652,
+     "naiveLineLogloss": 0.7101,
+     "lineBrier": 0.2347,
+     "naiveLineBrier": 0.2543,
+     "rotation": {
+      "n": 17324,
+      "mae": 2.83,
+      "naiveMae": 2.92
+     }
+    },
+    "sb": {
+     "n": 28007,
+     "mae": 0.91,
+     "naiveMae": 0.94,
+     "bias": -0.03,
+     "logScore": 1.3992,
+     "naiveLogScore": 1.473,
+     "lineLogloss": 0.6436,
+     "naiveLineLogloss": 0.6919,
+     "lineBrier": 0.225,
+     "naiveLineBrier": 0.2387,
+     "rotation": {
+      "n": 17324,
+      "mae": 1.01,
+      "naiveMae": 1.04
+     }
+    }
+   },
+   "doubles": {
+    "dd": {
+     "logloss": 0.1932,
+     "naive": 0.2981,
+     "rate": 0.0857,
+     "said": 0.0852
+    },
+    "td": {
+     "logloss": 0.0215,
+     "naive": 0.0346,
+     "rate": 0.0056,
+     "said": 0.0059
+    }
+   }
+  },
+  {
+   "season": 2026,
+   "role": "test",
+   "fitOn": "2023-2025",
+   "params": {
+    "min": {
+     "h": 2,
+     "w0": 0.25,
+     "minN": 10,
+     "alpha": 0.5,
+     "T": 250,
+     "floor": 0,
+     "post": 0.2
+    },
+    "rate": {
+     "pts": {
+      "h": 15,
+      "m": 25
+     },
+     "reb": {
+      "h": 15,
+      "m": 50
+     },
+     "ast": {
+      "h": 8,
+      "m": 25
+     },
+     "tpm": {
+      "h": 25,
+      "m": 50
+     },
+     "stl": {
+      "h": 40,
+      "m": 200
+     },
+     "blk": {
+      "h": 25,
+      "m": 100
+     }
+    },
+    "gamma": 1,
+    "opp": {
+     "pts": 1,
+     "reb": 0.75,
+     "ast": 1,
+     "tpm": 0.75,
+     "stl": 0.75,
+     "blk": 1
+    },
+    "post": {
+     "pts": 0.9029,
+     "reb": 0.9696,
+     "ast": 0.8674,
+     "tpm": 0.9009,
+     "stl": 0.9353,
+     "blk": 1.0002
+    },
+    "var": {
+     "pts": [
+      7.8756,
+      0.7035
+     ],
+     "reb": [
+      1.6349,
+      0.9506
+     ],
+     "ast": [
+      1.3228,
+      0.978
+     ],
+     "tpm": [
+      1.2439,
+      0.9795
+     ],
+     "stl": [
+      1.1031,
+      0.9752
+     ],
+     "blk": [
+      1.1175,
+      1.0038
+     ],
+     "pra": [
+      10.7646,
+      0.6425
+     ],
+     "pr": [
+      8.9861,
+      0.6876
+     ],
+     "pa": [
+      7.0046,
+      0.7555
+     ],
+     "ar": [
+      2.4385,
+      0.8309
+     ],
+     "sb": [
+      1.1906,
+      0.9524
+     ]
+    },
+    "rho": 0.4
+   },
+   "players": 28463,
+   "minutes": {
+    "mae": 4.82,
+    "unscaled": 4.88,
+    "hubRule": 5.09,
+    "openers": {
+     "n": 464,
+     "mae": 6.17,
+     "hubRule": 7.38
+    }
+   },
+   "stats": {
+    "pts": {
+     "n": 28463,
+     "mae": 4.51,
+     "naiveMae": 4.7,
+     "bias": 0.05,
+     "logScore": 3.0192,
+     "naiveLogScore": 3.1602,
+     "lineLogloss": 0.6694,
+     "naiveLineLogloss": 0.7198,
+     "lineBrier": 0.2371,
+     "naiveLineBrier": 0.2577,
+     "rotation": {
+      "n": 17802,
+      "mae": 5.14,
+      "naiveMae": 5.32
+     }
+    },
+    "reb": {
+     "n": 28463,
+     "mae": 1.86,
+     "naiveMae": 1.92,
+     "bias": 0.08,
+     "logScore": 2.1567,
+     "naiveLogScore": 2.2378,
+     "lineLogloss": 0.6611,
+     "naiveLineLogloss": 0.7054,
+     "lineBrier": 0.2341,
+     "naiveLineBrier": 0.2507,
+     "rotation": {
+      "n": 17802,
+      "mae": 2.01,
+      "naiveMae": 2.06
+     }
+    },
+    "ast": {
+     "n": 28463,
+     "mae": 1.32,
+     "naiveMae": 1.36,
+     "bias": 0.01,
+     "logScore": 1.7474,
+     "naiveLogScore": 1.8255,
+     "lineLogloss": 0.6554,
+     "naiveLineLogloss": 0.7019,
+     "lineBrier": 0.231,
+     "naiveLineBrier": 0.2461,
+     "rotation": {
+      "n": 17802,
+      "mae": 1.54,
+      "naiveMae": 1.58
+     }
+    },
+    "tpm": {
+     "n": 28463,
+     "mae": 0.88,
+     "naiveMae": 0.9,
+     "bias": 0.01,
+     "logScore": 1.2986,
+     "naiveLogScore": 1.3569,
+     "lineLogloss": 0.5869,
+     "naiveLineLogloss": 0.6254,
+     "lineBrier": 0.2038,
+     "naiveLineBrier": 0.2147,
+     "rotation": {
+      "n": 17802,
+      "mae": 1.03,
+      "naiveMae": 1.04
+     }
+    },
+    "stl": {
+     "n": 28463,
+     "mae": 0.71,
+     "naiveMae": 0.73,
+     "bias": -0.01,
+     "logScore": 1.1336,
+     "naiveLogScore": 1.2028,
+     "lineLogloss": 0.6337,
+     "naiveLineLogloss": 0.6827,
+     "lineBrier": 0.2209,
+     "naiveLineBrier": 0.233,
+     "rotation": {
+      "n": 17802,
+      "mae": 0.8,
+      "naiveMae": 0.82
+     }
+    },
+    "blk": {
+     "n": 28463,
+     "mae": 0.51,
+     "naiveMae": 0.51,
+     "bias": 0.01,
+     "logScore": 0.7983,
+     "naiveLogScore": 0.8492,
+     "lineLogloss": 0.5382,
+     "naiveLineLogloss": 0.5786,
+     "lineBrier": 0.1798,
+     "naiveLineBrier": 0.1871,
+     "rotation": {
+      "n": 17802,
+      "mae": 0.58,
+      "naiveMae": 0.58
+     }
+    },
+    "pra": {
+     "n": 28463,
+     "mae": 5.92,
+     "naiveMae": 6.24,
+     "bias": 0.14,
+     "logScore": 3.363,
+     "naiveLogScore": 3.4825,
+     "lineLogloss": 0.6607,
+     "naiveLineLogloss": 0.7112,
+     "lineBrier": 0.2335,
+     "naiveLineBrier": 0.2563,
+     "rotation": {
+      "n": 17802,
+      "mae": 6.5,
+      "naiveMae": 6.8
+     }
+    },
+    "pr": {
+     "n": 28463,
+     "mae": 5.43,
+     "naiveMae": 5.7,
+     "bias": 0.13,
+     "logScore": 3.2599,
+     "naiveLogScore": 3.3846,
+     "lineLogloss": 0.6629,
+     "naiveLineLogloss": 0.7123,
+     "lineBrier": 0.2345,
+     "naiveLineBrier": 0.2563,
+     "rotation": {
+      "n": 17802,
+      "mae": 6.01,
+      "naiveMae": 6.25
+     }
+    },
+    "pa": {
+     "n": 28463,
+     "mae": 4.97,
+     "naiveMae": 5.21,
+     "bias": 0.06,
+     "logScore": 3.1493,
+     "naiveLogScore": 3.2748,
+     "lineLogloss": 0.6645,
+     "naiveLineLogloss": 0.7172,
+     "lineBrier": 0.2351,
+     "naiveLineBrier": 0.2578,
+     "rotation": {
+      "n": 17802,
+      "mae": 5.61,
+      "naiveMae": 5.84
+     }
+    },
+    "ar": {
+     "n": 28463,
+     "mae": 2.56,
+     "naiveMae": 2.67,
+     "bias": 0.08,
+     "logScore": 2.5054,
+     "naiveLogScore": 2.5961,
+     "lineLogloss": 0.6585,
+     "naiveLineLogloss": 0.7073,
+     "lineBrier": 0.2327,
+     "naiveLineBrier": 0.2532,
+     "rotation": {
+      "n": 17802,
+      "mae": 2.79,
+      "naiveMae": 2.89
+     }
+    },
+    "sb": {
+     "n": 28463,
+     "mae": 0.92,
+     "naiveMae": 0.95,
+     "bias": 0,
+     "logScore": 1.402,
+     "naiveLogScore": 1.4782,
+     "lineLogloss": 0.6476,
+     "naiveLineLogloss": 0.6954,
+     "lineBrier": 0.2273,
+     "naiveLineBrier": 0.2409,
+     "rotation": {
+      "n": 17802,
+      "mae": 1.02,
+      "naiveMae": 1.04
+     }
+    }
+   },
+   "doubles": {
+    "dd": {
+     "logloss": 0.1832,
+     "naive": 0.2873,
+     "rate": 0.072,
+     "said": 0.0798
+    },
+    "td": {
+     "logloss": 0.0191,
+     "naive": 0.0293,
+     "rate": 0.005,
+     "said": 0.006
+    }
+   },
+   "market": {
+    "season": 2026,
+    "voids": 302,
+    "noProjection": 0,
+    "all": {
+     "lines": 11395,
+     "games": 83,
+     "overRate": 0.4592,
+     "modelSaid": 0.4457,
+     "marketSaid": 0.4561,
+     "logloss": {
+      "model": 0.6934,
+      "market": 0.6788,
+      "marketMultiplicative": 0.6807,
+      "diff": 0.0147,
+      "diffCi90": [
+       0.008254,
+       0.021361
+      ]
+     },
+     "brier": {
+      "model": 0.2495,
+      "market": 0.243,
+      "diff": 0.0064,
+      "diffCi90": [
+       0.003596,
+       0.009387
+      ]
+     },
+     "guess": {
+      "lineMae": 3.11,
+      "modelMae": 3.19,
+      "modelMinusLine": -0.01
+     },
+     "flat": {
+      "edge3": {
+       "over": {
+        "bets": 967,
+        "won": 442,
+        "units": -106.44,
+        "roi": -0.1101
+       },
+       "under": {
+        "bets": 4271,
+        "won": 2357,
+        "units": 135.28,
+        "roi": 0.0317
+       }
+      },
+      "edge5": {
+       "over": {
+        "bets": 616,
+        "won": 269,
+        "units": -101.27,
+        "roi": -0.1644
+       },
+       "under": {
+        "bets": 3279,
+        "won": 1787,
+        "units": 65.48,
+        "roi": 0.02
+       }
+      },
+      "edge8": {
+       "over": {
+        "bets": 316,
+        "won": 121,
+        "units": -86.34,
+        "roi": -0.2732
+       },
+       "under": {
+        "bets": 2063,
+        "won": 1094,
+        "units": -6.78,
+        "roi": -0.0033
+       }
+      }
+     }
+    },
+    "byStat": {
+     "pts": {
+      "lines": 1328,
+      "overRate": 0.4578,
+      "modelSaid": 0.4383,
+      "marketSaid": 0.4694,
+      "logloss": {
+       "model": 0.7172,
+       "market": 0.6884,
+       "marketMultiplicative": 0.6916,
+       "diff": 0.0288,
+       "diffCi90": [
+        0.018288,
+        0.039786
+       ]
+      },
+      "brier": {
+       "model": 0.2605,
+       "market": 0.2476,
+       "diff": 0.0129,
+       "diffCi90": [
+        0.008172,
+        0.017781
+       ]
+      },
+      "guess": {
+       "lineMae": 4.51,
+       "modelMae": 4.73,
+       "modelMinusLine": 0.08
+      }
+     },
+     "reb": {
+      "lines": 1234,
+      "overRate": 0.4968,
+      "modelSaid": 0.485,
+      "marketSaid": 0.4632,
+      "logloss": {
+       "model": 0.7008,
+       "market": 0.6925,
+       "marketMultiplicative": 0.69,
+       "diff": 0.0082,
+       "diffCi90": [
+        -0.001301,
+        0.017962
+       ]
+      },
+      "brier": {
+       "model": 0.2532,
+       "market": 0.2496,
+       "diff": 0.0035,
+       "diffCi90": [
+        -0.000962,
+        0.008019
+       ]
+      },
+      "guess": {
+       "lineMae": 2.04,
+       "modelMae": 2.06,
+       "modelMinusLine": 0.25
+      }
+     },
+     "ast": {
+      "lines": 1094,
+      "overRate": 0.4506,
+      "modelSaid": 0.4333,
+      "marketSaid": 0.4616,
+      "logloss": {
+       "model": 0.685,
+       "market": 0.6758,
+       "marketMultiplicative": 0.6799,
+       "diff": 0.0092,
+       "diffCi90": [
+        -0.000754,
+        0.019275
+       ]
+      },
+      "brier": {
+       "model": 0.2452,
+       "market": 0.2414,
+       "diff": 0.0038,
+       "diffCi90": [
+        -0.000819,
+        0.008423
+       ]
+      },
+      "guess": {
+       "lineMae": 1.49,
+       "modelMae": 1.45,
+       "modelMinusLine": -0.07
+      }
+     },
+     "tpm": {
+      "lines": 1079,
+      "overRate": 0.4615,
+      "modelSaid": 0.4414,
+      "marketSaid": 0.4489,
+      "logloss": {
+       "model": 0.6737,
+       "market": 0.6654,
+       "marketMultiplicative": 0.666,
+       "diff": 0.0083,
+       "diffCi90": [
+        0.000201,
+        0.016824
+       ]
+      },
+      "brier": {
+       "model": 0.2406,
+       "market": 0.2371,
+       "diff": 0.0035,
+       "diffCi90": [
+        -0.000202,
+        0.007375
+       ]
+      },
+      "guess": {
+       "lineMae": 1.1,
+       "modelMae": 1.06,
+       "modelMinusLine": 0.07
+      }
+     },
+     "stl": {
+      "lines": 888,
+      "overRate": 0.4809,
+      "modelSaid": 0.4722,
+      "marketSaid": 0.468,
+      "logloss": {
+       "model": 0.6529,
+       "market": 0.6539,
+       "marketMultiplicative": 0.6554,
+       "diff": -0.001,
+       "diffCi90": [
+        -0.006506,
+        0.004492
+       ]
+      },
+      "brier": {
+       "model": 0.2302,
+       "market": 0.2306,
+       "diff": -0.0004,
+       "diffCi90": [
+        -0.002981,
+        0.002219
+       ]
+      },
+      "guess": {
+       "lineMae": 0.95,
+       "modelMae": 0.87,
+       "modelMinusLine": 0.13
+      }
+     },
+     "blk": {
+      "lines": 795,
+      "overRate": 0.3887,
+      "modelSaid": 0.3895,
+      "marketSaid": 0.3785,
+      "logloss": {
+       "model": 0.6345,
+       "market": 0.6349,
+       "marketMultiplicative": 0.6364,
+       "diff": -0.0005,
+       "diffCi90": [
+        -0.007077,
+        0.005773
+       ]
+      },
+      "brier": {
+       "model": 0.2225,
+       "market": 0.2227,
+       "diff": -0.0001,
+       "diffCi90": [
+        -0.003003,
+        0.002592
+       ]
+      },
+      "guess": {
+       "lineMae": 0.73,
+       "modelMae": 0.68,
+       "modelMinusLine": 0.02
+      }
+     },
+     "pra": {
+      "lines": 1113,
+      "overRate": 0.4537,
+      "modelSaid": 0.4421,
+      "marketSaid": 0.4659,
+      "logloss": {
+       "model": 0.716,
+       "market": 0.6883,
+       "marketMultiplicative": 0.6924,
+       "diff": 0.0277,
+       "diffCi90": [
+        0.014041,
+        0.041956
+       ]
+      },
+      "brier": {
+       "model": 0.2597,
+       "market": 0.2476,
+       "diff": 0.0121,
+       "diffCi90": [
+        0.00607,
+        0.018255
+       ]
+      },
+      "guess": {
+       "lineMae": 6.11,
+       "modelMae": 6.37,
+       "modelMinusLine": -0.3
+      }
+     },
+     "pr": {
+      "lines": 1204,
+      "overRate": 0.451,
+      "modelSaid": 0.4509,
+      "marketSaid": 0.465,
+      "logloss": {
+       "model": 0.71,
+       "market": 0.6861,
+       "marketMultiplicative": 0.6905,
+       "diff": 0.0239,
+       "diffCi90": [
+        0.012675,
+        0.03567
+       ]
+      },
+      "brier": {
+       "model": 0.2574,
+       "market": 0.2465,
+       "diff": 0.0109,
+       "diffCi90": [
+        0.005813,
+        0.016152
+       ]
+      },
+      "guess": {
+       "lineMae": 5.65,
+       "modelMae": 5.88,
+       "modelMinusLine": 0.03
+      }
+     },
+     "pa": {
+      "lines": 1029,
+      "overRate": 0.45,
+      "modelSaid": 0.435,
+      "marketSaid": 0.4656,
+      "logloss": {
+       "model": 0.7138,
+       "market": 0.687,
+       "marketMultiplicative": 0.6916,
+       "diff": 0.0267,
+       "diffCi90": [
+        0.012999,
+        0.041832
+       ]
+      },
+      "brier": {
+       "model": 0.2584,
+       "market": 0.247,
+       "diff": 0.0114,
+       "diffCi90": [
+        0.005402,
+        0.017912
+       ]
+      },
+      "guess": {
+       "lineMae": 5.3,
+       "modelMae": 5.56,
+       "modelMinusLine": -0.36
+      }
+     },
+     "ar": {
+      "lines": 1041,
+      "overRate": 0.4784,
+      "modelSaid": 0.4555,
+      "marketSaid": 0.4609,
+      "logloss": {
+       "model": 0.7031,
+       "market": 0.6905,
+       "marketMultiplicative": 0.6904,
+       "diff": 0.0127,
+       "diffCi90": [
+        0.001445,
+        0.024136
+       ]
+      },
+      "brier": {
+       "model": 0.2543,
+       "market": 0.2487,
+       "diff": 0.0056,
+       "diffCi90": [
+        0.00043,
+        0.010859
+       ]
+      },
+      "guess": {
+       "lineMae": 2.82,
+       "modelMae": 2.84,
+       "modelMinusLine": -0.02
+      }
+     },
+     "sb": {
+      "lines": 590,
+      "overRate": 0.4678,
+      "modelSaid": 0.4452,
+      "marketSaid": 0.4384,
+      "logloss": {
+       "model": 0.6874,
+       "market": 0.6865,
+       "marketMultiplicative": 0.6845,
+       "diff": 0.001,
+       "diffCi90": [
+        -0.006748,
+        0.008568
+       ]
+      },
+      "brier": {
+       "model": 0.2473,
+       "market": 0.2468,
+       "diff": 0.0005,
+       "diffCi90": [
+        -0.003189,
+        0.004096
+       ]
+      },
+      "guess": {
+       "lineMae": 1.18,
+       "modelMae": 1.15,
+       "modelMinusLine": 0.04
+      }
+     }
+    }
+   }
+  }
+ ],
+ "fair": [
+  {
+   "season": 2026,
+   "lines": 11395,
+   "overRate": 0.4592,
+   "methods": {
+    "whole margin on the Over": {
+     "logloss": 0.6788,
+     "brier": 0.243,
+     "meanFairOver": 0.4561
+    },
+    "power": {
+     "logloss": 0.6805,
+     "brier": 0.2439,
+     "meanFairOver": 0.4893
+    },
+    "additive": {
+     "logloss": 0.6806,
+     "brier": 0.244,
+     "meanFairOver": 0.4896
+    },
+    "shin": {
+     "logloss": 0.6806,
+     "brier": 0.244,
+     "meanFairOver": 0.4896
+    },
+    "multiplicative": {
+     "logloss": 0.6807,
+     "brier": 0.244,
+     "meanFairOver": 0.4902
+    },
+    "whole margin on the longshot": {
+     "logloss": 0.6821,
+     "brier": 0.2447,
+     "meanFairOver": 0.4878
+    },
+    "whole margin on the favourite": {
+     "logloss": 0.6836,
+     "brier": 0.2455,
+     "meanFairOver": 0.4914
+    },
+    "whole margin on the Under": {
+     "logloss": 0.687,
+     "brier": 0.2471,
+     "meanFairOver": 0.5232
+    }
+   }
+  }
+ ]
+}

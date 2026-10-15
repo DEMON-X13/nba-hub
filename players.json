@@ -229,7 +229,7 @@
     "Draymond Green (Day-To-Day)",
     "Al Horford (Day-To-Day)",
     "Moses Moody (Out)",
-    "Kristaps Porzingis (Day-To-Day)"
+    "Kristaps Porzingis (Out)"
    ]
   },
   "HOU": {
@@ -8451,15 +8451,15 @@
    }
   },
   "2027_20261016_BOS_PHI": {
-   "pHome": 0.4995,
+   "pHome": 0.5003,
    "spread": 0,
-   "total": 233.4,
+   "total": 232.2,
    "pace": 103.1,
    "home": {
     "team": "PHI",
-    "strength": 1580,
-    "offence": 65,
-    "defence": 17.5,
+    "strength": 1580.6,
+    "offence": 49.5,
+    "defence": 33.6,
     "coach": {
      "name": "Nick Nurse",
      "elo": -2.6
@@ -8520,31 +8520,45 @@
       "adds": 22.7
      },
      {
-      "id": "4351851",
-      "name": "Anfernee Simons",
-      "pos": "G",
-      "min": 28,
-      "o": 25,
-      "d": -8,
-      "adds": 9.7
-     },
-     {
       "id": "2581018",
       "name": "Kentavious Caldwell-Pope",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 17,
-      "adds": 0.8
+      "adds": 5
+     },
+     {
+      "id": "3912848",
+      "name": "Dean Wade",
+      "pos": "F",
+      "min": 8,
+      "o": 12,
+      "d": 26,
+      "adds": 6.3
      }
     ],
     "out": [
+     {
+      "id": "5105637",
+      "name": "Adem Bona",
+      "status": "Day-To-Day",
+      "min": 18,
+      "costs": -10.2
+     },
      {
       "id": "4871141",
       "name": "Ariel Hukporti",
       "status": "Out",
       "min": 13,
       "costs": -3.2
+     },
+     {
+      "id": "4351851",
+      "name": "Anfernee Simons",
+      "status": "Day-To-Day",
+      "min": 28,
+      "costs": 9.7
      }
     ]
    },
@@ -9291,15 +9305,15 @@
    }
   },
   "2027_20261016_MIL_IND": {
-   "pHome": 0.6632,
-   "spread": -4.5,
-   "total": 233.9,
+   "pHome": 0.6308,
+   "spread": -3.6,
+   "total": 234,
    "pace": 103.1,
    "home": {
     "team": "IND",
-    "strength": 1512,
-    "offence": 32.7,
-    "defence": -16.8,
+    "strength": 1484.6,
+    "offence": 19.9,
+    "defence": -31.3,
     "coach": {
      "name": "Rick Carlisle",
      "elo": -4
@@ -9322,15 +9336,6 @@
       "o": 55,
       "d": 10,
       "adds": 44
-     },
-     {
-      "id": "4396909",
-      "name": "Aaron Nesmith",
-      "pos": "G",
-      "min": 31,
-      "o": 0,
-      "d": 7,
-      "adds": 4.2
      },
      {
       "id": "3133603",
@@ -9375,7 +9380,25 @@
       "min": 27,
       "o": -10,
       "d": -11,
-      "adds": -11.5
+      "adds": -11.9
+     },
+     {
+      "id": "5106060",
+      "name": "Jarace Walker",
+      "pos": "F",
+      "min": 24,
+      "o": -24,
+      "d": -22,
+      "adds": -23.3
+     },
+     {
+      "id": "4017837",
+      "name": "Ivica Zubac",
+      "pos": "C",
+      "min": 6,
+      "o": -5,
+      "d": 6,
+      "adds": 0.2
      }
     ],
     "out": [
@@ -9385,6 +9408,13 @@
       "status": "Out",
       "min": 20,
       "costs": -14
+     },
+     {
+      "id": "4396909",
+      "name": "Aaron Nesmith",
+      "status": "Day-To-Day",
+      "min": 31,
+      "costs": 4.2
      }
     ]
    },
@@ -9792,7 +9822,7 @@
      {
       "id": "3102531",
       "name": "Kristaps Porzingis",
-      "status": "Day-To-Day",
+      "status": "Out",
       "min": 23,
       "costs": 12
      },
@@ -12121,9 +12151,9 @@
    }
   },
   "2027_20261021_GSW_LAL": {
-   "pHome": 0.6712,
-   "spread": -4.8,
-   "total": 232.4,
+   "pHome": 0.6794,
+   "spread": -5,
+   "total": 232.7,
    "pace": 103.1,
    "home": {
     "team": "LAL",
@@ -12221,9 +12251,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -12284,15 +12314,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -12314,10 +12335,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -12327,6 +12357,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -14937,9 +14974,9 @@
    }
   },
   "2027_20261023_LAC_LAL": {
-   "pHome": 0.6112,
-   "spread": -3,
-   "total": 233.1,
+   "pHome": 0.6504,
+   "spread": -4.2,
+   "total": 232.9,
    "pace": 103.1,
    "home": {
     "team": "LAL",
@@ -15037,9 +15074,9 @@
    },
    "away": {
     "team": "LAC",
-    "strength": 1524.1,
-    "offence": 23.1,
-    "defence": 1.1,
+    "strength": 1491.5,
+    "offence": 3.8,
+    "defence": -12.3,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -15052,7 +15089,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.3
+      "adds": 6.4
      },
      {
       "id": "4396907",
@@ -15061,7 +15098,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.8
+      "adds": 22.7
      },
      {
       "id": "3448",
@@ -15070,7 +15107,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 18
+      "adds": 17.9
      },
      {
       "id": "2991139",
@@ -15088,16 +15125,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.7
-     },
-     {
-      "id": "6580",
-      "name": "Bradley Beal",
-      "pos": "G",
-      "min": 20,
-      "o": 11,
-      "d": -3,
-      "adds": 3.3
+      "adds": 13.6
      },
      {
       "id": "4702352",
@@ -15106,7 +15134,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14.1
+      "adds": -14
      },
      {
       "id": "4432170",
@@ -15115,7 +15143,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.6
+      "adds": -1.5
      },
      {
       "id": "4398390",
@@ -15124,7 +15152,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.8
+      "adds": -2.7
      },
      {
       "id": "5159895",
@@ -15133,7 +15161,7 @@
       "min": 14,
       "o": -13,
       "d": -12,
-      "adds": -6.8
+      "adds": -6.7
      },
      {
       "id": "5105853",
@@ -15142,7 +15170,25 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16.1
+      "adds": -16
+     },
+     {
+      "id": "5105832",
+      "name": "Nick Martinelli",
+      "pos": "F",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5075626",
+      "name": "Baba Miller",
+      "pos": "F",
+      "min": 10,
+      "o": -32,
+      "d": -32,
+      "adds": -13
      }
     ],
     "out": [
@@ -15159,6 +15205,13 @@
       "status": "Out",
       "min": 24,
       "costs": -4.3
+     },
+     {
+      "id": "6580",
+      "name": "Bradley Beal",
+      "status": "Out",
+      "min": 20,
+      "costs": 3.3
      },
      {
       "id": "4065778",
@@ -15178,15 +15231,15 @@
    }
   },
   "2027_20261023_MEM_GSW": {
-   "pHome": 0.7171,
-   "spread": -6.2,
-   "total": 232.4,
+   "pHome": 0.7094,
+   "spread": -6,
+   "total": 232.7,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -15247,15 +15300,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -15277,10 +15321,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -15290,6 +15343,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -16614,9 +16674,9 @@
    }
   },
   "2027_20261024_GSW_PHX": {
-   "pHome": 0.7667,
-   "spread": -8,
-   "total": 231.2,
+   "pHome": 0.7733,
+   "spread": -8.2,
+   "total": 231.4,
    "pace": 103.1,
    "home": {
     "team": "PHX",
@@ -16713,9 +16773,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -16776,15 +16836,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -16806,10 +16857,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -16819,6 +16879,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -18359,9 +18426,9 @@
    }
   },
   "2027_20261025_LAC_OKC": {
-   "pHome": 0.7846,
-   "spread": -8.7,
-   "total": 230.4,
+   "pHome": 0.8117,
+   "spread": -9.8,
+   "total": 230.2,
    "pace": 103.1,
    "home": {
     "team": "OKC",
@@ -18477,9 +18544,9 @@
    },
    "away": {
     "team": "LAC",
-    "strength": 1524.1,
-    "offence": 23.1,
-    "defence": 1.1,
+    "strength": 1491.5,
+    "offence": 3.8,
+    "defence": -12.3,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -18492,7 +18559,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.3
+      "adds": 6.4
      },
      {
       "id": "4396907",
@@ -18501,7 +18568,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.8
+      "adds": 22.7
      },
      {
       "id": "3448",
@@ -18510,7 +18577,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 18
+      "adds": 17.9
      },
      {
       "id": "2991139",
@@ -18528,16 +18595,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.7
-     },
-     {
-      "id": "6580",
-      "name": "Bradley Beal",
-      "pos": "G",
-      "min": 20,
-      "o": 11,
-      "d": -3,
-      "adds": 3.3
+      "adds": 13.6
      },
      {
       "id": "4702352",
@@ -18546,7 +18604,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14.1
+      "adds": -14
      },
      {
       "id": "4432170",
@@ -18555,7 +18613,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.6
+      "adds": -1.5
      },
      {
       "id": "4398390",
@@ -18564,7 +18622,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.8
+      "adds": -2.7
      },
      {
       "id": "5159895",
@@ -18573,7 +18631,7 @@
       "min": 14,
       "o": -13,
       "d": -12,
-      "adds": -6.8
+      "adds": -6.7
      },
      {
       "id": "5105853",
@@ -18582,7 +18640,25 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16.1
+      "adds": -16
+     },
+     {
+      "id": "5105832",
+      "name": "Nick Martinelli",
+      "pos": "F",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5075626",
+      "name": "Baba Miller",
+      "pos": "F",
+      "min": 10,
+      "o": -32,
+      "d": -32,
+      "adds": -13
      }
     ],
     "out": [
@@ -18599,6 +18675,13 @@
       "status": "Out",
       "min": 24,
       "costs": -4.3
+     },
+     {
+      "id": "6580",
+      "name": "Bradley Beal",
+      "status": "Out",
+      "min": 20,
+      "costs": 3.3
      },
      {
       "id": "4065778",
@@ -18820,15 +18903,15 @@
    }
   },
   "2027_20261025_MEM_SAC": {
-   "pHome": 0.5772,
-   "spread": -2.1,
-   "total": 232.4,
+   "pHome": 0.5754,
+   "spread": -2,
+   "total": 230.2,
    "pace": 103.1,
    "home": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -59.8,
-    "defence": -63.5,
+    "strength": 1368.8,
+    "offence": -88.8,
+    "defence": -36,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -18842,15 +18925,6 @@
       "o": -25,
       "d": -30,
       "adds": -43.4
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -26,
-      "d": -31,
-      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -18895,7 +18969,7 @@
       "min": 28,
       "o": -12,
       "d": -5,
-      "adds": -9.7
+      "adds": -9.6
      },
      {
       "id": "3064440",
@@ -18905,9 +18979,34 @@
       "o": 9,
       "d": -13,
       "adds": -2
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39.6
+     },
+     {
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
+      "min": 8,
+      "o": -6,
+      "d": 2,
+      "adds": -0.7
      }
     ],
     "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -38.7
+     },
      {
       "id": "4433174",
       "name": "Dylan Cardwell",
@@ -19982,9 +20081,9 @@
    }
   },
   "2027_20261026_GSW_DEN": {
-   "pHome": 0.762,
-   "spread": -7.8,
-   "total": 236.1,
+   "pHome": 0.7688,
+   "spread": -8.1,
+   "total": 236.4,
    "pace": 103.1,
    "home": {
     "team": "DEN",
@@ -20073,9 +20172,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -20136,15 +20235,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -20166,10 +20256,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -20179,6 +20278,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -21789,9 +21895,9 @@
    }
   },
   "2027_20261027_SAC_SAS": {
-   "pHome": 0.908,
-   "spread": -15.3,
-   "total": 230.8,
+   "pHome": 0.9086,
+   "spread": -15.4,
+   "total": 228.6,
    "pace": 103.1,
    "home": {
     "team": "SAS",
@@ -21889,9 +21995,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -59.8,
-    "defence": -63.5,
+    "strength": 1368.8,
+    "offence": -88.8,
+    "defence": -36,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -21905,15 +22011,6 @@
       "o": -25,
       "d": -30,
       "adds": -43.4
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -26,
-      "d": -31,
-      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -21958,7 +22055,7 @@
       "min": 28,
       "o": -12,
       "d": -5,
-      "adds": -9.7
+      "adds": -9.6
      },
      {
       "id": "3064440",
@@ -21968,9 +22065,34 @@
       "o": 9,
       "d": -13,
       "adds": -2
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39.6
+     },
+     {
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
+      "min": 8,
+      "o": -6,
+      "d": 2,
+      "adds": -0.7
      }
     ],
     "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -38.7
+     },
      {
       "id": "4433174",
       "name": "Dylan Cardwell",
@@ -22361,9 +22483,9 @@
    }
   },
   "2027_20261028_GSW_MIN": {
-   "pHome": 0.6739,
-   "spread": -4.9,
-   "total": 231.6,
+   "pHome": 0.6821,
+   "spread": -5.1,
+   "total": 231.8,
    "pace": 103.1,
    "home": {
     "team": "MIN",
@@ -22460,9 +22582,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -22523,15 +22645,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -22553,10 +22666,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -22566,6 +22688,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -22754,15 +22883,15 @@
    }
   },
   "2027_20261028_LAL_LAC": {
-   "pHome": 0.5869,
-   "spread": -2.4,
-   "total": 233.1,
+   "pHome": 0.5455,
+   "spread": -1.2,
+   "total": 232.9,
    "pace": 103.1,
    "home": {
     "team": "LAC",
-    "strength": 1524.1,
-    "offence": 23.1,
-    "defence": 1.1,
+    "strength": 1491.5,
+    "offence": 3.8,
+    "defence": -12.3,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -22775,7 +22904,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.3
+      "adds": 6.4
      },
      {
       "id": "4396907",
@@ -22784,7 +22913,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.8
+      "adds": 22.7
      },
      {
       "id": "3448",
@@ -22793,7 +22922,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 18
+      "adds": 17.9
      },
      {
       "id": "2991139",
@@ -22811,16 +22940,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.7
-     },
-     {
-      "id": "6580",
-      "name": "Bradley Beal",
-      "pos": "G",
-      "min": 20,
-      "o": 11,
-      "d": -3,
-      "adds": 3.3
+      "adds": 13.6
      },
      {
       "id": "4702352",
@@ -22829,7 +22949,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14.1
+      "adds": -14
      },
      {
       "id": "4432170",
@@ -22838,7 +22958,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.6
+      "adds": -1.5
      },
      {
       "id": "4398390",
@@ -22847,7 +22967,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.8
+      "adds": -2.7
      },
      {
       "id": "5159895",
@@ -22856,7 +22976,7 @@
       "min": 14,
       "o": -13,
       "d": -12,
-      "adds": -6.8
+      "adds": -6.7
      },
      {
       "id": "5105853",
@@ -22865,7 +22985,25 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16.1
+      "adds": -16
+     },
+     {
+      "id": "5105832",
+      "name": "Nick Martinelli",
+      "pos": "F",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5075626",
+      "name": "Baba Miller",
+      "pos": "F",
+      "min": 10,
+      "o": -32,
+      "d": -32,
+      "adds": -13
      }
     ],
     "out": [
@@ -22882,6 +23020,13 @@
       "status": "Out",
       "min": 24,
       "costs": -4.3
+     },
+     {
+      "id": "6580",
+      "name": "Bradley Beal",
+      "status": "Out",
+      "min": 20,
+      "costs": 3.3
      },
      {
       "id": "4065778",
@@ -24806,9 +24951,9 @@
    }
   },
   "2027_20261029_SAC_NOP": {
-   "pHome": 0.5918,
+   "pHome": 0.5937,
    "spread": -2.5,
-   "total": 233.7,
+   "total": 231.5,
    "pace": 103.1,
    "home": {
     "team": "NOP",
@@ -24897,9 +25042,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -59.8,
-    "defence": -63.5,
+    "strength": 1368.8,
+    "offence": -88.8,
+    "defence": -36,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -24913,15 +25058,6 @@
       "o": -25,
       "d": -30,
       "adds": -43.4
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -26,
-      "d": -31,
-      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -24966,7 +25102,7 @@
       "min": 28,
       "o": -12,
       "d": -5,
-      "adds": -9.7
+      "adds": -9.6
      },
      {
       "id": "3064440",
@@ -24976,9 +25112,42 @@
       "o": 9,
       "d": -13,
       "adds": -2
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39.6
+     },
+     {
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
+      "min": 8,
+      "o": -6,
+      "d": 2,
+      "adds": -0.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -38.7
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.3
+     }
+    ]
    }
   },
   "2027_20261030_CHA_WAS": {
@@ -26141,9 +26310,9 @@
    }
   },
   "2027_20261030_LAC_MIN": {
-   "pHome": 0.6209,
-   "spread": -3.3,
-   "total": 232.3,
+   "pHome": 0.6597,
+   "spread": -4.4,
+   "total": 232.1,
    "pace": 103.1,
    "home": {
     "team": "MIN",
@@ -26240,9 +26409,9 @@
    },
    "away": {
     "team": "LAC",
-    "strength": 1524.1,
-    "offence": 23.1,
-    "defence": 1.1,
+    "strength": 1491.5,
+    "offence": 3.8,
+    "defence": -12.3,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -26255,7 +26424,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.3
+      "adds": 6.4
      },
      {
       "id": "4396907",
@@ -26264,7 +26433,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.8
+      "adds": 22.7
      },
      {
       "id": "3448",
@@ -26273,7 +26442,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 18
+      "adds": 17.9
      },
      {
       "id": "2991139",
@@ -26291,16 +26460,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.7
-     },
-     {
-      "id": "6580",
-      "name": "Bradley Beal",
-      "pos": "G",
-      "min": 20,
-      "o": 11,
-      "d": -3,
-      "adds": 3.3
+      "adds": 13.6
      },
      {
       "id": "4702352",
@@ -26309,7 +26469,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14.1
+      "adds": -14
      },
      {
       "id": "4432170",
@@ -26318,7 +26478,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.6
+      "adds": -1.5
      },
      {
       "id": "4398390",
@@ -26327,7 +26487,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.8
+      "adds": -2.7
      },
      {
       "id": "5159895",
@@ -26336,7 +26496,7 @@
       "min": 14,
       "o": -13,
       "d": -12,
-      "adds": -6.8
+      "adds": -6.7
      },
      {
       "id": "5105853",
@@ -26345,7 +26505,25 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16.1
+      "adds": -16
+     },
+     {
+      "id": "5105832",
+      "name": "Nick Martinelli",
+      "pos": "F",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5075626",
+      "name": "Baba Miller",
+      "pos": "F",
+      "min": 10,
+      "o": -32,
+      "d": -32,
+      "adds": -13
      }
     ],
     "out": [
@@ -26362,6 +26540,13 @@
       "status": "Out",
       "min": 24,
       "costs": -4.3
+     },
+     {
+      "id": "6580",
+      "name": "Bradley Beal",
+      "status": "Out",
+      "min": 20,
+      "costs": 3.3
      },
      {
       "id": "4065778",
@@ -26381,15 +26566,15 @@
    }
   },
   "2027_20261030_LAL_GSW": {
-   "pHome": 0.4581,
-   "spread": 1.1,
-   "total": 232.4,
+   "pHome": 0.4488,
+   "spread": 1.4,
+   "total": 232.7,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -26450,15 +26635,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -26480,10 +26656,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -26493,6 +26678,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -28182,9 +28374,9 @@
    }
   },
   "2027_20261031_SAC_MEM": {
-   "pHome": 0.5511,
+   "pHome": 0.553,
    "spread": -1.4,
-   "total": 232.4,
+   "total": 230.2,
    "pace": 103.1,
    "home": {
     "team": "MEM",
@@ -28282,9 +28474,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -59.8,
-    "defence": -63.5,
+    "strength": 1368.8,
+    "offence": -88.8,
+    "defence": -36,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -28298,15 +28490,6 @@
       "o": -25,
       "d": -30,
       "adds": -43.4
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -26,
-      "d": -31,
-      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -28351,7 +28534,7 @@
       "min": 28,
       "o": -12,
       "d": -5,
-      "adds": -9.7
+      "adds": -9.6
      },
      {
       "id": "3064440",
@@ -28361,9 +28544,42 @@
       "o": 9,
       "d": -13,
       "adds": -2
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39.6
+     },
+     {
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
+      "min": 8,
+      "o": -6,
+      "d": 2,
+      "adds": -0.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -38.7
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.3
+     }
+    ]
    }
   },
   "2027_20261101_BKN_IND": {
@@ -28772,15 +28988,15 @@
    }
   },
   "2027_20261101_LAC_GSW": {
-   "pHome": 0.4548,
-   "spread": 1.2,
-   "total": 232.4,
+   "pHome": 0.5324,
+   "spread": -0.9,
+   "total": 232.2,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -28841,15 +29057,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -28871,10 +29078,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -28884,6 +29100,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -28896,23 +29119,14 @@
    },
    "away": {
     "team": "LAC",
-    "strength": 1558.8,
-    "offence": 42.7,
-    "defence": 16.1,
+    "strength": 1491.5,
+    "offence": 3.8,
+    "defence": -12.3,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
     },
     "lineup": [
-     {
-      "id": "3913176",
-      "name": "Brandon Ingram",
-      "pos": "F",
-      "min": 33,
-      "o": 17,
-      "d": 14,
-      "adds": 21.6
-     },
      {
       "id": "4066648",
       "name": "Rui Hachimura",
@@ -28959,15 +29173,6 @@
       "adds": 13.6
      },
      {
-      "id": "6580",
-      "name": "Bradley Beal",
-      "pos": "G",
-      "min": 20,
-      "o": 11,
-      "d": -3,
-      "adds": 3.3
-     },
-     {
       "id": "4702352",
       "name": "Kobe Sanders",
       "pos": "G",
@@ -28977,25 +29182,68 @@
       "adds": -14
      },
      {
-      "id": "5108024",
-      "name": "Yanic Konan Niederhauser",
-      "pos": "C",
-      "min": 18,
-      "o": -16,
-      "d": -20,
-      "adds": -13.5
-     },
-     {
       "id": "4432170",
       "name": "Isaiah Jackson",
       "pos": "F",
-      "min": 7,
+      "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -0.8
+      "adds": -1.5
+     },
+     {
+      "id": "4398390",
+      "name": "Jalen Pickett",
+      "pos": "G",
+      "min": 14,
+      "o": -3,
+      "d": -7,
+      "adds": -2.7
+     },
+     {
+      "id": "5159895",
+      "name": "Yuki Kawamura",
+      "pos": "G",
+      "min": 14,
+      "o": -13,
+      "d": -12,
+      "adds": -6.7
+     },
+     {
+      "id": "5105853",
+      "name": "Fletcher Loyer",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5105832",
+      "name": "Nick Martinelli",
+      "pos": "F",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5075626",
+      "name": "Baba Miller",
+      "pos": "F",
+      "min": 10,
+      "o": -32,
+      "d": -32,
+      "adds": -13
      }
     ],
     "out": [
+     {
+      "id": "5108024",
+      "name": "Yanic Konan Niederhauser",
+      "status": "Out",
+      "min": 18,
+      "costs": -13.5
+     },
      {
       "id": "4396818",
       "name": "Jordan Miller",
@@ -29004,11 +29252,25 @@
       "costs": -4.3
      },
      {
+      "id": "6580",
+      "name": "Bradley Beal",
+      "status": "Out",
+      "min": 20,
+      "costs": 3.3
+     },
+     {
       "id": "4065778",
       "name": "Max Strus",
       "status": "Out",
       "min": 24,
       "costs": 11.3
+     },
+     {
+      "id": "3913176",
+      "name": "Brandon Ingram",
+      "status": "Out",
+      "min": 33,
+      "costs": 21.6
      }
     ]
    }
@@ -30951,15 +31213,15 @@
    }
   },
   "2027_20261102_PHX_GSW": {
-   "pHome": 0.3379,
-   "spread": 4.5,
-   "total": 231.2,
+   "pHome": 0.3295,
+   "spread": 4.8,
+   "total": 231.4,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -31020,15 +31282,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -31050,10 +31303,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -31063,6 +31325,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -31537,29 +31806,20 @@
    }
   },
   "2027_20261102_TOR_LAC": {
-   "pHome": 0.5753,
-   "spread": -2,
-   "total": 232.1,
+   "pHome": 0.4553,
+   "spread": 1.2,
+   "total": 231.4,
    "pace": 103.1,
    "home": {
     "team": "LAC",
-    "strength": 1584.7,
-    "offence": 58.4,
-    "defence": 26.4,
+    "strength": 1491.5,
+    "offence": 3.8,
+    "defence": -12.3,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
     },
     "lineup": [
-     {
-      "id": "3913176",
-      "name": "Brandon Ingram",
-      "pos": "F",
-      "min": 34,
-      "o": 17,
-      "d": 14,
-      "adds": 21.9
-     },
      {
       "id": "4066648",
       "name": "Rui Hachimura",
@@ -31567,7 +31827,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.3
+      "adds": 6.4
      },
      {
       "id": "4396907",
@@ -31576,7 +31836,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.8
+      "adds": 22.7
      },
      {
       "id": "3448",
@@ -31597,31 +31857,13 @@
       "adds": 1.3
      },
      {
-      "id": "4065778",
-      "name": "Max Strus",
-      "pos": "G",
-      "min": 24,
-      "o": 17,
-      "d": 5,
-      "adds": 11.3
-     },
-     {
       "id": "3936099",
       "name": "Derrick Jones Jr.",
       "pos": "F",
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.7
-     },
-     {
-      "id": "6580",
-      "name": "Bradley Beal",
-      "pos": "G",
-      "min": 20,
-      "o": 11,
-      "d": -3,
-      "adds": 3.3
+      "adds": 13.6
      },
      {
       "id": "4702352",
@@ -31630,16 +31872,98 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14.1
+      "adds": -14
+     },
+     {
+      "id": "4432170",
+      "name": "Isaiah Jackson",
+      "pos": "F",
+      "min": 18,
+      "o": -6,
+      "d": 1,
+      "adds": -1.5
+     },
+     {
+      "id": "4398390",
+      "name": "Jalen Pickett",
+      "pos": "G",
+      "min": 14,
+      "o": -3,
+      "d": -7,
+      "adds": -2.7
+     },
+     {
+      "id": "5159895",
+      "name": "Yuki Kawamura",
+      "pos": "G",
+      "min": 14,
+      "o": -13,
+      "d": -12,
+      "adds": -6.7
+     },
+     {
+      "id": "5105853",
+      "name": "Fletcher Loyer",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5105832",
+      "name": "Nick Martinelli",
+      "pos": "F",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5075626",
+      "name": "Baba Miller",
+      "pos": "F",
+      "min": 10,
+      "o": -32,
+      "d": -32,
+      "adds": -13
      }
     ],
     "out": [
+     {
+      "id": "5108024",
+      "name": "Yanic Konan Niederhauser",
+      "status": "Out",
+      "min": 18,
+      "costs": -13.5
+     },
      {
       "id": "4396818",
       "name": "Jordan Miller",
       "status": "Out",
       "min": 24,
       "costs": -4.3
+     },
+     {
+      "id": "6580",
+      "name": "Bradley Beal",
+      "status": "Out",
+      "min": 20,
+      "costs": 3.3
+     },
+     {
+      "id": "4065778",
+      "name": "Max Strus",
+      "status": "Out",
+      "min": 24,
+      "costs": 11.3
+     },
+     {
+      "id": "3913176",
+      "name": "Brandon Ingram",
+      "status": "Out",
+      "min": 33,
+      "costs": 21.6
      }
     ]
    },
@@ -33553,29 +33877,20 @@
    }
   },
   "2027_20261104_MIA_LAC": {
-   "pHome": 0.627,
-   "spread": -3.5,
-   "total": 232.6,
+   "pHome": 0.5091,
+   "spread": -0.2,
+   "total": 232,
    "pace": 103.1,
    "home": {
     "team": "LAC",
-    "strength": 1584.7,
-    "offence": 58.4,
-    "defence": 26.4,
+    "strength": 1491.5,
+    "offence": 3.8,
+    "defence": -12.3,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
     },
     "lineup": [
-     {
-      "id": "3913176",
-      "name": "Brandon Ingram",
-      "pos": "F",
-      "min": 34,
-      "o": 17,
-      "d": 14,
-      "adds": 21.9
-     },
      {
       "id": "4066648",
       "name": "Rui Hachimura",
@@ -33583,7 +33898,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.3
+      "adds": 6.4
      },
      {
       "id": "4396907",
@@ -33592,7 +33907,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.8
+      "adds": 22.7
      },
      {
       "id": "3448",
@@ -33613,31 +33928,13 @@
       "adds": 1.3
      },
      {
-      "id": "4065778",
-      "name": "Max Strus",
-      "pos": "G",
-      "min": 24,
-      "o": 17,
-      "d": 5,
-      "adds": 11.3
-     },
-     {
       "id": "3936099",
       "name": "Derrick Jones Jr.",
       "pos": "F",
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.7
-     },
-     {
-      "id": "6580",
-      "name": "Bradley Beal",
-      "pos": "G",
-      "min": 20,
-      "o": 11,
-      "d": -3,
-      "adds": 3.3
+      "adds": 13.6
      },
      {
       "id": "4702352",
@@ -33646,16 +33943,98 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14.1
+      "adds": -14
+     },
+     {
+      "id": "4432170",
+      "name": "Isaiah Jackson",
+      "pos": "F",
+      "min": 18,
+      "o": -6,
+      "d": 1,
+      "adds": -1.5
+     },
+     {
+      "id": "4398390",
+      "name": "Jalen Pickett",
+      "pos": "G",
+      "min": 14,
+      "o": -3,
+      "d": -7,
+      "adds": -2.7
+     },
+     {
+      "id": "5159895",
+      "name": "Yuki Kawamura",
+      "pos": "G",
+      "min": 14,
+      "o": -13,
+      "d": -12,
+      "adds": -6.7
+     },
+     {
+      "id": "5105853",
+      "name": "Fletcher Loyer",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5105832",
+      "name": "Nick Martinelli",
+      "pos": "F",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16
+     },
+     {
+      "id": "5075626",
+      "name": "Baba Miller",
+      "pos": "F",
+      "min": 10,
+      "o": -32,
+      "d": -32,
+      "adds": -13
      }
     ],
     "out": [
+     {
+      "id": "5108024",
+      "name": "Yanic Konan Niederhauser",
+      "status": "Out",
+      "min": 18,
+      "costs": -13.5
+     },
      {
       "id": "4396818",
       "name": "Jordan Miller",
       "status": "Out",
       "min": 24,
       "costs": -4.3
+     },
+     {
+      "id": "6580",
+      "name": "Bradley Beal",
+      "status": "Out",
+      "min": 20,
+      "costs": 3.3
+     },
+     {
+      "id": "4065778",
+      "name": "Max Strus",
+      "status": "Out",
+      "min": 24,
+      "costs": 11.3
+     },
+     {
+      "id": "3913176",
+      "name": "Brandon Ingram",
+      "status": "Out",
+      "min": 33,
+      "costs": 21.6
      }
     ]
    },
@@ -34870,15 +35249,15 @@
    }
   },
   "2027_20261105_MIA_GSW": {
-   "pHome": 0.5649,
-   "spread": -1.8,
-   "total": 231.5,
+   "pHome": 0.5556,
+   "spread": -1.5,
+   "total": 231.8,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -34939,15 +35318,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -34969,10 +35339,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -34982,6 +35361,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -37815,15 +38201,15 @@
    }
   },
   "2027_20261107_ORL_GSW": {
-   "pHome": 0.4435,
-   "spread": 1.5,
-   "total": 227.8,
+   "pHome": 0.4343,
+   "spread": 1.8,
+   "total": 228.1,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1481.4,
+    "strength": 1474.1,
     "offence": -6.1,
-    "defence": -9.1,
+    "defence": -16.4,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -37884,15 +38270,6 @@
       "adds": -16.3
      },
      {
-      "id": "3102531",
-      "name": "Kristaps Porzingis",
-      "pos": "C",
-      "min": 23,
-      "o": 13,
-      "d": 12,
-      "adds": 12
-     },
-     {
       "id": "4066436",
       "name": "De'Anthony Melton",
       "pos": "G",
@@ -37914,10 +38291,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 6,
+      "o": -13,
+      "d": -16,
+      "adds": -3.9
      }
     ],
     "out": [
@@ -37927,6 +38313,13 @@
       "status": "Out",
       "min": 30,
       "costs": -5.4
+     },
+     {
+      "id": "3102531",
+      "name": "Kristaps Porzingis",
+      "status": "Out",
+      "min": 23,
+      "costs": 12
      },
      {
       "id": "6430",
@@ -48039,5 +48432,5 @@
    }
   }
  },
- "generated": "2026-10-15T08:02Z"
+ "generated": "2026-10-15T17:46Z"
 }

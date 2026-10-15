@@ -223,6 +223,55 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
 @keyframes spin{to{transform:rotate(360deg)}}
 .odds-st{flex:1 1 220px;min-width:0;font-size:12.5px;color:var(--ink-2);line-height:1.4}
 .chip sup.mv{color:var(--hot-2);margin-left:0}
+/* ---------- Player props ---------- */
+.foot>span{display:flex;gap:6px;flex-wrap:wrap}
+.btn.pp-btn{min-height:44px;display:inline-flex;align-items:center;gap:6px}
+.btn.pp-btn.has{border-color:var(--hot);color:var(--hot-2)}
+.pp-mini{background:transparent;border:1px solid var(--line-2);color:var(--ink-2);border-radius:999px;padding:0 12px;min-height:32px;font-size:11.5px;font-weight:700;cursor:pointer;margin-top:4px}
+.pp-mini:hover{border-color:var(--ink-2);color:var(--ink)}
+body.pp-lock{overflow:hidden}
+.pp-back{position:fixed;inset:0;z-index:20;background:rgba(14,17,27,.66);display:flex;justify-content:center;align-items:flex-start;padding:28px 16px}
+.pp-sheet{position:relative;width:100%;max-width:900px;max-height:calc(100vh - 56px);max-height:calc(100dvh - 56px);overflow-y:auto;overscroll-behavior:contain;background:var(--bg-2);border:1px solid var(--line-2);border-radius:var(--r);box-shadow:0 30px 80px -30px rgba(0,0,0,.8);outline:none}
+.pp-head{position:sticky;top:0;z-index:2;display:flex;align-items:flex-start;gap:12px;padding:16px 18px 12px;background:var(--bg-2);border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0}
+.pp-head h2{margin:0;font-size:18px} .pp-head .grow{flex:1;min-width:0}
+.pp-sub{font-size:12.5px;color:var(--ink-2);margin-top:4px;display:flex;gap:6px 10px;flex-wrap:wrap;align-items:center}
+.pp-x{flex:none;width:44px;height:44px;border-radius:12px;border:1px solid var(--line-2);background:var(--panel);color:var(--ink);font-size:22px;line-height:1;cursor:pointer}
+.pp-x:hover{border-color:var(--ink-2)}
+.pp-body{padding:14px 18px 22px}
+.pp-body .note{margin-bottom:12px}
+.pp-trial{font-size:12.5px;color:var(--ink-2);background:var(--panel);border:1px dashed var(--line-2);border-radius:12px;padding:10px 14px;margin:0 0 12px;line-height:1.5}
+.pp-trial summary{cursor:pointer;color:var(--ink);font-weight:700;min-height:28px}
+.pp-trial p{margin:8px 0 0}
+.pp-ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}
+.pp-ctl .seg button{min-height:40px}
+.pp-pl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 10px}
+.pp-pl-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+.pp-pl-h b{font-family:var(--display);font-size:14px;font-weight:700}
+.pp-pl-h .muted{font-size:12px}
+.pp-ln{display:grid;grid-template-columns:minmax(0,1fr) 52px 72px 72px;gap:2px 8px;align-items:baseline;padding:7px 0;border-top:1px solid var(--line);font-size:13px}
+.pp-ln .st{color:var(--ink);font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pp-ln .ln{font-family:var(--display);font-weight:700;text-align:right}
+.pp-ln .px{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums} .pp-ln .px i{font-style:normal;color:var(--muted);font-size:11px;margin-right:3px}
+.pp-ln .md{grid-column:1/-1;color:var(--ink-2);font-size:12px;font-variant-numeric:tabular-nums}
+@media(min-width:760px){.pp-ln{grid-template-columns:150px 52px 72px 72px minmax(0,1fr)}.pp-ln .md{grid-column:auto;padding-left:10px}}
+.pp-ln.head{border-top:0;padding:0 0 4px;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.pp-ln.head .md{color:var(--muted);font-size:10.5px}
+.pp-yes{display:flex;flex-direction:column;gap:2px;padding:7px 0 0;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-2)}
+.pp-yes b{color:var(--ink)}
+.pp-lad{margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
+.pp-lad summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--ink-2);min-height:32px;display:flex;align-items:center;list-style:none}
+.pp-lad summary::-webkit-details-marker,.pp-more summary::-webkit-details-marker{display:none}
+.pp-lad summary::before,.pp-more summary::before{content:"";width:0;height:0;border-left:5px solid currentColor;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-right:8px;transition:transform .15s var(--ease)}
+.pp-lad[open] summary::before,.pp-more[open] summary::before{transform:rotate(90deg)}
+.pp-lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:6px}
+.pp-lt{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
+.pp-lt th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right;padding:3px 6px;font-weight:800}
+.pp-lt th:first-child,.pp-lt td:first-child{text-align:left}
+.pp-lt td{text-align:right;padding:3px 6px;border-top:1px solid var(--line)}
+.pp-proj{font-size:12.5px} .pp-proj td,.pp-proj th{padding:7px 9px}
+.pp-proj tr.pp-team td{background:var(--panel-2);font-weight:800;color:var(--ink-2)}
+.pp-more{margin-top:12px} .pp-more summary{cursor:pointer;font-weight:700;color:var(--ink-2);min-height:36px;display:flex;align-items:center;list-style:none}
+@media(max-width:620px){.pp-back{padding:0}.pp-sheet{border-radius:0;max-height:none;height:100%;border:0}.pp-head{border-radius:0;padding:12px 16px 10px}.pp-body{padding:12px 16px 28px}}
 </style>
 </head>
 <body>
@@ -248,7 +297,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
   </nav>
 </header>
 <main>
-  <div class="oddsbar" id="oddsBar" hidden><button type="button" class="btn" id="oddsBtn" aria-describedby="oddsSt"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Refresh odds</button><span class="odds-st" id="oddsSt" role="status" aria-live="polite"></span></div>
+  <div class="oddsbar" id="oddsBar" hidden><button type="button" class="btn" id="oddsBtn" aria-describedby="oddsSt"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false"><path d="M20 12a8 8 0 1 1-2.34-5.66M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>Refresh odds</button><span class="odds-st" id="oddsSt" role="status" aria-live="polite"></span><span class="odds-st" id="propsSt" role="status" aria-live="polite" hidden></span></div>
   <section id="tab-slate"><div class="days" id="days"></div><div id="slate"></div></section>
   <section id="tab-teams" hidden></section>
   <section id="tab-players" hidden></section>
@@ -261,6 +310,7 @@ footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);fon
 </main>
 <footer>Rebuilt in the morning from the previous night's box scores, and again through the afternoon for the day's lines and injury report. Your picks and bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
 <div class="toast" id="toast"></div>
+<div class="pp-back" id="ppBack" hidden><div class="pp-sheet" id="ppSheet" role="dialog" aria-modal="true" aria-labelledby="ppTitle" aria-describedby="ppSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="ppTitle">Player props</h2><div class="pp-sub" id="ppSub"></div></div><button type="button" class="pp-x" id="ppClose" aria-label="Close player props">×</button></div><div class="pp-body" id="ppBody"></div></div></div>
 <script>
 'use strict';
 /* ---------- constants ---------- */
@@ -428,7 +478,7 @@ function card(g) {
     ${outRows.length ? `<div class="out">${outRows.join('')}</div>` : ''}
     ${drawer}
     <div class="foot">
-      <span>${drawer ? `<button class="btn ghost" data-act="drawer">Lineups</button>` : ''}</span>
+      <span>${drawer ? `<button class="btn ghost" data-act="drawer">Lineups</button>` : ''}${!started(g) ? propsBtn(g) : ''}</span>
       <span style="display:flex;gap:6px">${m && !started(g) ? `<button class="btn" data-act="plan" title="Open this game in the Parlay Builder">Parlay Builder →</button>` : ''}</span>
     </div></article>`;
 }
@@ -555,6 +605,8 @@ render.record = function () {
     ${R.length ? `<div class="two"><div><h2>By month</h2><div class="wrap"><table class="tbl"><thead><tr><th>Month</th><th class="num">Games</th><th class="num">SU</th><th class="num">ATS</th><th class="num">O/U</th></tr></thead><tbody>${mrows.map(r => `<tr><td>${r.m}</td><td class="num">${r.n}</td><td class="num">${r.su}</td><td class="num">${r.ats}</td><td class="num">${r.ou}</td></tr>`).join('')}</tbody></table></div></div>
       <div><h2>Latest</h2><div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>Pick</th><th class="num">Said</th><th>Result</th></tr></thead><tbody>${[...R].sort((a, b) => b.date < a.date ? -1 : 1).slice(0, 40).map(g => `<tr><td class="muted">${dayNum(g.date)}</td><td>${pill(g.away)} <span class="muted">@</span> ${pill(g.home)} <span class="muted num">${g.awayScore}-${g.homeScore}</span></td><td>${pill(g.pick)} <span class="muted">${fmtSp(g.pick === g.home ? g.spread : -g.spread)}</span></td><td class="num">${fmtPct(g.pick === g.home ? g.pHome : 1 - g.pHome)}</td><td><span class="res ${g.su === null ? 'push' : g.su ? 'won' : 'lost'}">${g.su === null ? 'tie' : g.su ? 'hit' : 'miss'}</span>${g.ats !== null ? ` <span class="res ${g.ats ? 'won' : 'lost'}">ATS</span>` : ''}</td></tr>`).join('')}</tbody></table></div></div></div>` : `<div class="empty"><b>Nothing graded yet</b>The record starts on opening night. Every morning the job publishes a number on each game; once the game is final it is graded here against that number, never against a replay.</div>`}
     ${marketTable()}
+    ${S.props && S.props.ledger ? `<h2 style="margin-top:22px" id="ppRecord">Player props, on trial <small>the props model's shadow ledger, graded on DraftKings' closing lines</small></h2>
+    <p class="muted" style="margin:0;font-size:13px;max-width:900px">Before each tip-off the props model's distribution for every expected player is frozen; once the game is final, each of DraftKings' closing main lines on him is graded from the box score, the model's chance of the Over against DraftKings' own fair chance. The bar it must clear was written down before its first call. ${ppLedger()}</p>` : ''}
     <h2 style="margin-top:22px">Backtest <small>held out: ${fmtSeasons(bt.holdoutSeasons)}, fitted on ${fmtSeasons(bt.fitSeasons)} · log loss · straight up · spread error</small></h2>
     <div class="wrap"><table class="tbl"><thead><tr><th>Model</th><th>Holdout</th></tr></thead><tbody>
       <tr><td>Team Elo</td><td class="num">${f(bt.player.teamElo.holdout)}</td></tr>
@@ -755,7 +807,7 @@ function renderPlan(day) {
   const vegasCell = x => { if (x.mp == null) return '<span class="muted">–</span>'; const fav = x.mp >= 0.5 ? x.pick : (x.pick === x.g.home ? x.g.away : x.g.home), p = Math.max(x.mp, 1 - x.mp);
     return `<span class="vg${fav !== x.pick ? ' differs' : ''}" title="${fav !== x.pick ? `The market makes ${fav} the winner, so the model's pick disagrees with it.` : 'The market agrees with the model.'}">${pill(fav)} <span class="muted">${Math.round(p * 100)}%</span></span>`; };
   const lead = r => `<td><input type="checkbox" data-bkg="${r.x.g.id}" ${r.on ? 'checked' : ''} ${r.locked || !r.x.px ? 'disabled' : ''} aria-label="Include ${gameLabel(r.x.g)}"></td>
-    <td><b>${gameLabel(r.x.g)}</b>${r.x.g.type === 'PRE' ? ' <span class="tag">Pre</span>' : ''}${r.locked ? ' <span class="tag lime">In build</span>' : ''}<div class="muted" style="font-size:11.5px">${tipTime(r.x.g.tip)}</div></td>
+    <td><b>${gameLabel(r.x.g)}</b>${r.x.g.type === 'PRE' ? ' <span class="tag">Pre</span>' : ''}${r.locked ? ' <span class="tag lime">In build</span>' : ''}<div class="muted" style="font-size:11.5px">${tipTime(r.x.g.tip)}</div>${propsBtn(r.x.g, true)}</td>
     <td>${pill(r.x.pick)}</td><td>${vegasCell(r.x)}</td>
     <td><span class="tierc ${r.x.tc}">${band(r.x.conf)[1]} ${Math.round(r.x.conf * 100)}%</span></td>
     <td class="num">${fmtPx(r.x.px)}</td>`;
@@ -832,7 +884,8 @@ render.about = function () {
     <h3>Before a game</h3><p>The home side gets the court (${t.hfa} Elo, about ${(t.hfa / t.scale).toFixed(1)} points), Denver and Utah more for altitude, and both sides are adjusted for a back to back (−${t.b2b}), three games in four nights and three days off. Tonight's lineup is the roster minus the injury report's absences (ESPN gives a return date; a player is out of every game before it), with minutes projected from each player's last ${p.minGames} appearances, a newcomer with none at twelve, filled into the game's 240 minutes in rotation order. Pace is a running average of each team's possessions per 48 minutes, and the total is the two expected efficiencies times the expected pace. A tenth of the plain team Elo's opinion is blended in.</p>
     <h3>What the numbers are worth</h3><p>See Record for the held-out seasons, and how the suggested parlays did there against the closing line: about what the market expected, less its cut. Where a moneyline is posted, the market's chance is the better one; the model's is its own view, for the games and days the market has not priced yet. The model picks winners at about 69% when it is told who played, which is more than the injury report tells it before a game. The market's closing line does a little better than that, because it also knows who is playing and a great deal more. Where the model's spread differs from the market's by a point and a half or more the card says by how much, highlighted from three; that is a place to look, not a bet.</p>
     <h3>Parlay Builder</h3><p>It works like the NFL hub's. At the top, three suggested parlays for the day, Safe, Medium and Aggressive, grown from one core out of the games where the model and the market pick the same winner. Legs go in likeliest first: Safe takes the two likeliest and keeps adding while the chance that every leg lands stays above 50%, Medium and Aggressive keep going down to 30% and 15%. A leg's chance is the market's, from the book's moneylines with its cut taken out, because the market is the sharper number. A separate Value card lists the model's picks whose chance beats the market's by 5 points or more; that is the model disagreeing with the market, which is where models are most often wrong, so it is shown for interest and not as a suggestion. Below, the day's plan: pick a day, a stake, a confidence band and straight bets or a parlay, then tick the games. Straight bets share the stake evenly unless you type an amount; a parlay shows its odds, its payout and the chance it hits. Lock in what you like and it goes to the Bet Build, which grades itself as the games go final. Each leg is the model's pick on the moneyline, priced at the book's moneyline where one is published. Legs from different games are independent, so chances and prices multiply.</p>
-    <h3>What lives where</h3><p>The job pulls scores, box scores, injuries, coaches and rosters from ESPN's public feeds every morning, replays both models, logs the day's numbers and rebuilds this page. Refresh odds, over Tonight and the Parlay Builder, reads DraftKings' current lines from ESPN when you press it, for this visit only: a reload shows the published lines again. Your picks and tickets stay in this browser: clearing site data loses them.</p>`;
+    <h3>Player props</h3><p>Each game still to come has a Player props button, on its card and in the plan. Refresh odds reads DraftKings' player props from ESPN with the lines: each player's main lines (points, rebounds, assists, threes, steals, blocks and the combinations) with the Over and Under prices, the milestone ladders (25+ points and so on) and the double- and triple-double prices. Beside each line, the hub's props model: its projection and its chance of the Over, then DraftKings' fair chance, the book's margin taken out (all of it on the Over, which scored best on DraftKings' archived closing lines; milestone and double-double fair chances are estimates and marked est.). The model projects minutes from each player's own record, a rate a minute for each stat shrunk toward his position's, the pace and the opponent, and a spread fitted on past seasons. It beat each player's own average on every stat in the walk-forward test, and lost to DraftKings' closing lines on the 2026 playoffs. <b>So it is on trial and suggests nothing</b>: no prop goes into a suggested parlay or a pick. Its shadow ledger (on Record) grades its call, frozen at tip-off, on every closing line, against a bar written down before its first call. Player legs are not in the Parlay Builder yet.</p>
+    <h3>What lives where</h3><p>The job pulls scores, box scores, injuries, coaches and rosters from ESPN's public feeds every morning, replays both models, logs the day's numbers and rebuilds this page. Refresh odds, over Tonight and the Parlay Builder, reads DraftKings' current lines and player props from ESPN when you press it, for this visit only: a reload shows the published lines again. Your picks and tickets stay in this browser: clearing site data loses them.</p>`;
 };
 render.data = function () {
   const el = $('#tab-data');
@@ -992,6 +1045,7 @@ async function refreshOdds() {
   if (!games.length) { st.textContent = 'No game still to come on the board: nothing to read.'; return; }
   oddsBusy = true; bar.classList.add('busy'); btn.setAttribute('aria-disabled', 'true');
   st.textContent = "Reading DraftKings' lines from ESPN…";
+  if (ppOpen) propsDraw();
   const days = [...new Set(games.map(g => g.date))].sort();
   let answers;
   try { answers = await Promise.all(days.map(oddsReadDay)); } catch (e) { answers = days.map(() => null); }
@@ -1013,6 +1067,9 @@ async function refreshOdds() {
     Object.assign(g, now, { oddsAt: at });
   });
   st.textContent = oddsSaid(at, games, n, left, answers.every(a => !a));
+  /* then DraftKings' player props for the same games (README "Player props"), on their own status line */
+  let pr = null; try { pr = await propsRead(games, days, answers); } catch (e) { pr = null; }
+  const ps = $('#propsSt'); ps.textContent = pr ? propsSaid(new Date().toISOString(), pr) : "DraftKings' player props could not be read."; ps.hidden = false;
   oddsDone = at; oddsBusy = false; bar.classList.remove('busy'); btn.removeAttribute('aria-disabled');
   /* redraw the tab in view where the visitor left it: the day, the open lineups, the scroll and the focus */
   const tab = tabNow();
@@ -1024,9 +1081,417 @@ async function refreshOdds() {
     window.scrollTo(0, y);
   }
   oddsBarSync(tab);
+  if (ppOpen) propsDraw();
 }
 $('#oddsBtn').addEventListener('click', refreshOdds);
 window.NBA_ODDS = { parseDay: oddsParseDay, take: oddsTake, teams: ODDS_TEAMS, espnAb: ODDS_ESPN_AB };
+
+/* ---------- Player props ----------
+   DraftKings' player props as ESPN's free feed carries them (README "Player props"), read on the same Refresh odds
+   press as the lines, never on load or on a timer: once the scoreboard has answered, one request for each game still
+   to come (another only if an answer runs past a page), six at a time, by ESPN's event id from the press's own
+   scoreboard (the published one where that day did not answer), past any cache and with no headers of its own. A game
+   that has started (by its published tip, ESPN's status or ESPN's own tip, as the lines are judged) is not asked for,
+   and one that tips while its read is out is not taken. What is read lives in PP_LIVE, in memory only: nothing is
+   saved, and a reload is the published page again. A read that fails keeps an earlier press's props for its game; a
+   404 ("No propBets found") means DraftKings has posted none, and replaces them.
+   The parse is tools/props_feed.js's and the distribution tools/props.js's, copied below line for line (the smoke holds
+   the text and the results to theirs): the first of a main line's two items is the Over, a pair its "k+" rung
+   contradicts is dropped, and a main line's fair chance is DraftKings' with the whole margin on the Over (the method
+   that scored best on the archive); a rung's and a Yes price's are estimates from the measured margins (state.json's
+   props.fair), marked est. Players are matched by ESPN's athlete id, which is this hub's player id.
+   The props model is ON TRIAL. Beside each line the view shows its projection and its chance of the Over, and
+   DraftKings' fair chance: "projection 20.8 · model 23% · DraftKings 45%". It suggests nothing: no prop reaches a
+   suggested parlay, the Value card, a pick, the plan or the Bet Build, and nothing in the view says "model says" or
+   "edge" on a prop until the shadow ledger has passed its bar (state.json's props.ledger). Display only: player legs
+   in the Parlay Builder wait on the owner's call (README). */
+/* ---- tools/props_feed.js, line for line ---- */
+const PROP_URL = (e, page) => `https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/${e}/competitions/${e}/odds/100/propBets?lang=en&region=us&limit=1000&page=${page}`;
+/* market type id -> this hub's stat code (pts points, reb rebounds, ast assists, tpm threes made, stl steals, blk
+   blocks, pra points + rebounds + assists, pr points + rebounds, pa points + assists, ar assists + rebounds, sb steals
+   + blocks) */
+const PROP_MAIN = { 1: 'pts', 2: 'ast', 3: 'reb', 4: 'tpm', 5: 'stl', 6: 'blk', 87: 'pa', 88: 'pr', 89: 'ar', 90: 'pra', 91: 'sb' };
+const PROP_MILE = { 218: 'pts', 219: 'ast', 220: 'reb', 221: 'tpm', 222: 'stl', 223: 'blk', 225: 'pra', 226: 'pa', 227: 'pr' };
+const PROP_YES = { 92: 'dd', 93: 'td' };
+const PROP_STATS = ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'];
+
+/* "+117" -> 117, "-112" -> -112, "EVEN" -> 100; anything else (OFF, blank, |n| under 100) -> null */
+function propAmerican(v) {
+  if (v == null) return null;
+  const t = String(v).trim().toUpperCase();
+  if (t === 'EVEN' || t === 'EV') return 100;
+  if (!/^[+-]?\d+$/.test(t)) return null;
+  const n = parseInt(t, 10);
+  return Math.abs(n) >= 100 ? n : null;
+}
+const propImplied = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100);
+const propAthlete = it => { const m = /\/athletes\/(\d+)/.exec(String(((it && it.athlete) || {}).$ref || '')); return m ? m[1] : ''; };
+const propLine = it => { const v = it && it.current && it.current.target ? it.current.target.value : null; return typeof v === 'number' && Number.isFinite(v) ? v : (v != null && v !== '' && Number.isFinite(+v) ? +v : null); };
+const propTypeId = it => { const id = it && it.type ? parseInt(it.type.id, 10) : NaN; return Number.isFinite(id) ? id : null; };
+const propPrice = it => propAmerican(it && it.odds && it.odds.american ? it.odds.american.value : null);
+
+/* one answer's pages -> their items in the feed's order, or null when an answer is not a propBets page */
+function propItems(pages) {
+  const out = [];
+  for (const p of pages || []) {
+    if (!p || typeof p !== 'object' || !Array.isArray(p.items)) return null;
+    for (const it of p.items) out.push(it);
+  }
+  return out;
+}
+
+/* items (every page, in order) -> { mains, ladders, yes, dropped }
+     mains:   [{ player, stat, line, over, under }]   one a player and stat: the main line, DraftKings' two prices
+     ladders: [{ player, stat, k, price }]            a Yes price on reaching k ("k+"), k ascending within a player and stat
+     yes:     [{ player, market, price }]             market dd (double-double) or td (triple-double)
+     dropped: counts of what was left out and why (unpaired, contradicted, alternate, noPrice) */
+function propParse(items) {
+  const dropped = { unpaired: 0, contradicted: 0, alternate: 0, noPrice: 0 };
+  const mains = [], ladders = [], yes = [];
+  const groups = new Map(), rung = new Map();
+  (items || []).forEach((it, i) => {
+    const id = propTypeId(it), player = propAthlete(it);
+    if (id == null || !player) return;
+    if (PROP_MAIN[id]) {
+      const line = propLine(it);
+      if (line == null) { dropped.unpaired++; return; }
+      const key = id + '|' + player + '|' + line;
+      if (!groups.has(key)) groups.set(key, []);
+      groups.get(key).push({ i, it });
+    } else if (PROP_MILE[id]) {
+      const k = propLine(it), price = propPrice(it);
+      if (k == null || price == null || k < 1 || k !== Math.round(k)) { dropped.noPrice++; return; }
+      const key = PROP_MILE[id] + '|' + player + '|' + k;
+      if (rung.has(key)) return;                                  // a rung listed twice keeps its first price
+      rung.set(key, price);
+      ladders.push({ player, stat: PROP_MILE[id], k, price });
+    } else if (PROP_YES[id]) {
+      const price = propPrice(it);
+      if (price == null) { dropped.noPrice++; return; }
+      if (yes.some(y => y.player === player && y.market === PROP_YES[id])) return;
+      yes.push({ player, market: PROP_YES[id], price });
+    }
+  });
+  /* main lines: exactly two adjacent items, the first the Over; then the rung cross-check; then one line a stat */
+  const cand = new Map();
+  for (const [key, g] of groups) {
+    const [id, player, line] = key.split('|');
+    if (g.length !== 2 || g[1].i !== g[0].i + 1) { dropped.unpaired += g.length; continue; }
+    const over = propPrice(g[0].it), under = propPrice(g[1].it);
+    if (over == null || under == null) { dropped.noPrice++; continue; }
+    const stat = PROP_MAIN[id], ln = +line;
+    const r = rung.get(stat + '|' + player + '|' + (ln + 0.5));
+    if (r != null) {
+      const io = propImplied(over), iu = propImplied(under), ir = propImplied(r);
+      const dO = Math.abs(ir - io), dU = Math.abs(ir - iu);
+      if (Math.min(dO, dU) <= 0.10 && dU < dO && Math.abs(io - iu) >= 0.03) { dropped.contradicted++; continue; }
+    }
+    const k2 = stat + '|' + player;
+    if (!cand.has(k2)) cand.set(k2, []);
+    cand.get(k2).push({ player, stat, line: ln, over, under });
+  }
+  for (const list of cand.values()) {
+    list.sort((a, b) => Math.abs(propImplied(a.over) - propImplied(a.under)) - Math.abs(propImplied(b.over) - propImplied(b.under)) || a.line - b.line);
+    mains.push(list[0]);
+    dropped.alternate += list.length - 1;
+  }
+  const order = s => PROP_STATS.indexOf(s);
+  mains.sort((a, b) => a.player < b.player ? -1 : a.player > b.player ? 1 : order(a.stat) - order(b.stat));
+  ladders.sort((a, b) => a.player < b.player ? -1 : a.player > b.player ? 1 : order(a.stat) - order(b.stat) || a.k - b.k);
+  yes.sort((a, b) => a.player < b.player ? -1 : a.player > b.player ? 1 : a.market < b.market ? -1 : 1);
+  return { mains, ladders, yes, dropped };
+}
+
+/* DraftKings' fair chance of the Over on a main line, from its two prices. The method is the one that scored best
+   on the 83 archived 2026 play-in and playoff games (tools/props.js market, README "Player props"): the whole
+   margin on the Over, so the fair Over is 1 minus the Under's implied chance. Overs are the side the book shades on
+   player props (archived Overs hit 45.9% where the two prices split evenly said 49.0%) */
+function propFairOver(over, under) {
+  if (over == null || under == null) return null;
+  return 1 - propImplied(under);
+}
+
+/* A "k+" rung's or a Yes market's fair chance, estimated from its one price (README "Player props"; the constants are
+   in state.json's props.fair, measured on the archive): a rung carries a margin about `a` points of chance over the
+   main line's fair Over, flat from 30% to 70% and scaled toward 0 and 1 beyond; a double- or triple-double's Yes price
+   is its fair chance times c. Both are estimates: the page marks them est. */
+function propFairRung(price, a) {
+  if (price == null || !(a >= 0)) return null;
+  const I = propImplied(price);
+  const f = I < 0.3 ? I * (1 - a / 0.3) : I <= 0.7 ? I - a : 1 - (1 - I) * (1 + a / 0.3);
+  return Math.min(1, Math.max(0, f));
+}
+function propFairYes(price, c) { return price == null || !(c > 0) ? null : Math.min(1, propImplied(price) / c); }
+
+/* Read one game's answer, every page, with getJSON(url) (it throws Error('HTTP <code> ...') on a refusal, as
+   lib.getJSON does). Returns { status: 'ok', items } | { status: 'none' } (a 404: nothing posted) |
+   { status: 'failed', error } (any other refusal, a timeout, or an answer that is not a propBets page). */
+async function propRead(espnId, getJSON) {
+  const pages = [];
+  for (let page = 1; page <= 20; page++) {
+    let j;
+    try { j = await getJSON(PROP_URL(espnId, page)); } catch (e) {
+      const m = /HTTP (\d{3})/.exec(String(e && e.message || e));
+      if (m && m[1] === '404' && page === 1) return { status: 'none' };
+      return { status: 'failed', error: String(e && e.message || e) };
+    }
+    if (!j || typeof j !== 'object' || !Array.isArray(j.items)) {
+      if (page === 1 && j && j.error && +j.error.code === 404) return { status: 'none' };
+      return { status: 'failed', error: 'not a propBets answer' };
+    }
+    pages.push(j);
+    const count = +j.pageCount || 1;
+    if (page >= count) break;
+  }
+  return { status: 'ok', items: propItems(pages) };
+}
+/* ---- tools/props.js, line for line ---- */
+const nbVar = (mu, ab) => ab[0] * Math.pow(Math.max(mu, 1e-9), ab[1]);
+/* P(Y = 0..kmax) for a negative binomial with mean mu and variance v (Poisson where v is not above mu) */
+function nbPmf(kmax, mu, v) {
+  const out = new Array(kmax + 1).fill(0);
+  if (!(mu > 0)) { out[0] = 1; return out; }
+  if (v <= mu * 1.000001) {
+    let p = Math.exp(-mu); out[0] = p;
+    for (let j = 1; j <= kmax; j++) { p *= mu / j; out[j] = p; }
+    return out;
+  }
+  const r = mu * mu / (v - mu), q = mu / (r + mu);            // q = 1 - p, p = r / (r + mu)
+  let p = Math.exp(r * Math.log(1 - q)); out[0] = p;
+  for (let j = 1; j <= kmax; j++) { p *= (j - 1 + r) / j * q; out[j] = p; }
+  return out;
+}
+/* P(Y >= k) */
+function nbSf(k, mu, v) {
+  if (k <= 0) return 1;
+  const pm = nbPmf(k - 1, mu, v);
+  let c = 0; for (const x of pm) c += x;
+  return Math.min(1, Math.max(0, 1 - c));
+}
+/* P(over a line): a half line's over is reaching floor(line) + 1; on a whole line that many is a push, so the over
+   is reaching line + 1 and the chance shown is of the over among over and under */
+function pOver(line, mu, v) {
+  if (line === Math.floor(line)) { const over = nbSf(line + 1, mu, v), push = nbSf(line, mu, v) - over; return push < 1 ? over / (1 - push) : 0.5; }
+  return nbSf(Math.floor(line) + 1, mu, v);
+}
+/* ---- the read ---- */
+let PP_LIVE = {};                                            // game id -> { status: 'ok' | 'none' | 'failed', at, mains, ladders, yes }
+const PP_POOL = 6;
+/* propRead's getJSON: a plain GET past any cache (no headers: no preflight), dropped after 15 seconds; a refusal throws
+   "HTTP <code>", as lib.getJSON does, so a 404 reads as nothing posted */
+async function ppGetJSON(url) {
+  const ctl = typeof AbortController === 'function' ? new AbortController() : null;
+  const tm = ctl ? setTimeout(() => ctl.abort(), 15000) : null;
+  try {
+    const r = await fetch(url + '&_=' + Date.now(), ctl ? { cache: 'no-store', signal: ctl.signal } : { cache: 'no-store' });
+    if (!r || !r.ok) throw new Error(`HTTP ${r ? r.status : 0}`);
+    return await r.json();
+  } finally { if (tm) clearTimeout(tm); }
+}
+async function ppReadAll(jobs) {
+  const out = new Array(jobs.length); let next = 0;
+  const worker = async () => {
+    while (next < jobs.length) {
+      const i = next++;
+      let r; try { r = await propRead(jobs[i].eid, ppGetJSON); } catch (e) { r = { status: 'failed', error: String(e && e.message || e) }; }
+      out[i] = Object.assign(r, { at: new Date().toISOString() });
+    }
+  };
+  await Promise.all(Array.from({ length: Math.min(PP_POOL, jobs.length) }, worker));
+  return out;
+}
+const ppCount = e => e && e.status === 'ok' ? e.mains.length + e.ladders.length + e.yes.length : 0;
+/* the press's props read: `games` the games still to come when it was pressed, `answers` the scoreboard's rows by day */
+async function propsRead(games, days, answers) {
+  const now = Date.now(), jobs = [], x = { got: [], none: [], failed: [], kept: [], tipped: 0, noId: 0 };
+  for (const g of games) {
+    if (started(g)) { x.tipped++; continue; }
+    const rows = answers[days.indexOf(g.date)], r = rows && rows.find(y => y.game_id === g.id);
+    if (r && (r.status !== 'scheduled' || (r.tip && Date.parse(r.tip) <= now))) { x.tipped++; continue; }
+    const eid = String((r && r.espn_id) || g.espn || '');
+    if (!/^\d+$/.test(eid)) { x.noId++; continue; }
+    jobs.push({ g, eid });
+  }
+  const res = jobs.length ? await ppReadAll(jobs) : [];
+  jobs.forEach(({ g }, i) => {
+    const r = res[i];
+    if (started(g)) { x.tipped++; return; }                 // tipped while its read was out: nothing taken
+    if (r.status === 'ok') {
+      const p = propParse(r.items);
+      PP_LIVE[g.id] = { status: 'ok', at: r.at, mains: p.mains, ladders: p.ladders, yes: p.yes };
+      (ppCount(PP_LIVE[g.id]) ? x.got : x.none).push(g);
+    } else if (r.status === 'none') { PP_LIVE[g.id] = { status: 'none', at: r.at }; x.none.push(g); }
+    else if (ppCount(PP_LIVE[g.id])) x.kept.push(g);          // an earlier press's props stand, with their read time
+    else { PP_LIVE[g.id] = { status: 'failed', at: r.at }; x.failed.push(g); }
+  });
+  return x;
+}
+function propsSaid(at, x) {
+  const t = oddsClock(at), mains = x.got.reduce((s, g) => s + PP_LIVE[g.id].mains.length, 0), fail = x.failed.length + x.noId, k = x.kept.length;
+  if (!x.got.length && !x.none.length && !k && fail) return `DraftKings' player props could not be read at ${t}.`;
+  const keep = k === fail + k ? (k === 1 ? 'it keeps its' : 'they keep their') : `${k} keep${k === 1 ? 's its' : ' their'}`;
+  const parts = [x.none.length && `${x.none.length} ${x.none.length === 1 ? 'has' : 'have'} none posted yet`,
+    (fail || k) && `${fail + k} could not be read${k ? ` (${keep} props read earlier)` : ''}`, x.tipped && `${x.tipped} tipped off`].filter(Boolean);
+  const said = oddsAnd(parts);
+  return `DraftKings' player props, read ${t}: ${x.got.length ? `${x.got.length} game${x.got.length === 1 ? '' : 's'}, ${mains} main line${mains === 1 ? '' : 's'}, under Player props on each game` : 'none to show yet'}.`
+    + (said ? ` ${said[0].toUpperCase()}${said.slice(1)}.` : '');
+}
+
+/* ---- the view: a sheet a game, from its card on Tonight and its row in the Parlay Builder's plan ---- */
+const PP_NAMES = { pts: 'Points', reb: 'Rebounds', ast: 'Assists', tpm: 'Threes', stl: 'Steals', blk: 'Blocks', pra: 'Pts + reb + ast', pr: 'Pts + reb', pa: 'Pts + ast', ar: 'Ast + reb', sb: 'Stl + blk', dd: 'Double-double', td: 'Triple-double' };
+const ppPct = p => p == null || !Number.isFinite(p) ? '–' : p < 0.005 ? '<1%' : p > 0.995 ? '>99%' : Math.round(p * 100) + '%';
+const ppGame = gid => (S.props && S.props.games && S.props.games[gid]) || null;
+/* a player's numbers in a game, by ESPN athlete id: [name, team, pos, min, pts, reb, ast, tpm, stl, blk, dd, td] */
+const ppRow = (gid, pid) => { const g = ppGame(gid); return (g && g.players && g.players[pid]) || null; };
+const ppAt = (row, k) => row[S.props.layout.indexOf(k)];
+/* a combo's mean is the sum of its parts' (state.json's props.combos); its spread is its own fitted one */
+function ppMean(row, k) {
+  if (!row || !S.props) return null;
+  const v = k in S.props.combos ? S.props.combos[k].reduce((t, s) => t + ppAt(row, s), 0) : ppAt(row, k);
+  return Number.isFinite(v) ? v : null;
+}
+function ppDist(row, k) { const mu = ppMean(row, k), ab = S.props && S.props.dist && S.props.dist.var ? S.props.dist.var[k] : null; return mu == null || !ab ? null : { mu, v: nbVar(mu, ab) }; }
+const ppModelOver = (row, k, line) => { const d = ppDist(row, k); return d ? pOver(line, d.mu, d.v) : null; };
+const ppModelAtLeast = (row, k, n) => { const d = ppDist(row, k); return d ? nbSf(n, d.mu, d.v) : null; };
+const ppSides = g => g.model ? [g.model.away, g.model.home].filter(Boolean) : [];
+/* who an athlete id is: the props model's row, else the game's lineups and absentees, else the rated players */
+function ppWho(g, pid) {
+  const row = ppRow(g.id, pid);
+  if (row) return { name: row[0], team: row[1], pos: row[2], row };
+  for (const s of ppSides(g)) { const p = (s.lineup || []).concat(s.out || []).find(y => y.id === pid); if (p) return { name: p.name, team: s.team, pos: p.pos || '', row: null }; }
+  const p = (S.players || []).find(y => y.id === pid);
+  if (p) return { name: p.name, team: p.team, pos: p.pos || '', row: null };
+  return { name: (S.names && S.names[pid]) || `ESPN athlete ${pid}`, team: '', pos: '', row: null };
+}
+const ppOut = (g, pid) => { for (const s of ppSides(g)) { const p = (s.out || []).find(y => y.id === pid); if (p) return p.status || 'Out'; } return ''; };
+function ppNoGame(g) {
+  if (!S.props) return 'No projections are published.';
+  if (g.type === 'PRE') return 'The props model does not project preseason games: rotations are experiments.';
+  return `No projection for this game yet: the model projects the regular season and the playoffs, the next ${S.props.horizonGameDays} game days.`;
+}
+const ppNumTxt = v => Number.isFinite(v) ? v.toFixed(1) : '–';
+/* the shadow ledger's running numbers, quietly: never a verdict, nor a word of one, before its bar is decided */
+function ppLedger() {
+  const lg = S.props && S.props.ledger; if (!lg || !lg.bar) return '';
+  const sm = lg.summary || {}, sc = sm.scores, N = lg.bar.lines, dec = lg.decision, fmtN = v => Number(v || 0).toLocaleString('en-US');
+  let s = dec ? `Its bar was decided on ${dayNum(String(dec.decidedAt).slice(0, 10))} at ${fmtN(dec.lines)} lines: ${dec.verdict === 'PASS' ? 'PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial.' : 'FAIL. It stays on trial and suggests nothing, and its calls have stopped.'}`
+    : `Shadow ledger: ${fmtN(Math.min(sm.lines || 0, N))} of the ${fmtN(N)} graded lines its bar is judged on are in${sm.gradedGames ? `, from ${fmtN(sm.gradedGames)} game${sm.gradedGames === 1 ? '' : 's'}` : ''}; no verdict before ${fmtN(N)}.`;
+  if (sc && sc.model && sc.market) s += ` So far on ${fmtN(sc.lines)} lines, log loss model ${sc.model.logloss.toFixed(4)} · DraftKings ${sc.market.logloss.toFixed(4)}, Brier model ${sc.model.brier.toFixed(4)} · DraftKings ${sc.market.brier.toFixed(4)} (lower is better).`;
+  return s;
+}
+function ppTrial() {
+  const P = S.props, mk = P && P.research && P.research.market;
+  const lost = mk && mk.logloss ? ` On DraftKings' closing lines for the 2026 play-in and playoffs (${Number(mk.lines).toLocaleString('en-US')} lines) it lost: log loss ${mk.logloss.model.toFixed(4)} against DraftKings' ${mk.logloss.market.toFixed(4)}, lower being better.` : '';
+  return `<details class="pp-trial" data-pp-trial><summary>The props model is on trial: not yet shown to beat DraftKings, it suggests nothing</summary>
+    <p>Beside each DraftKings line: the hub's projection and its chance of the Over, then DraftKings' fair chance of the Over, its two prices with the book's margin taken out (all of it on the Over, the way that scored best on DraftKings' archived closing lines). No prop goes into a suggested parlay, a pick or the plan because of the model, and player legs are not in the Parlay Builder yet.</p>
+    <p>Walk-forward on 2024 to 2026 it beat each player's own average on every stat.${lost}</p>
+    ${ppLedger() ? `<p>${ppLedger()}</p>` : ''}
+    <p>Milestone (k+) and double- and triple-double fair chances are estimates (est.): DraftKings gives one price there, and the margin taken out is the one measured on the archive.</p></details>`;
+}
+/* the model's projections for a game's expected players, a table a team */
+function ppProjTable(g, keep) {
+  const pg = ppGame(g.id); if (!pg) return `<p class="muted" style="margin:0">${ppNoGame(g)}</p>`;
+  const teams = [g.away, g.home].filter(t => ppTeam === 'all' || t === (ppTeam === 'away' ? g.away : g.home));
+  const rows = Object.entries(pg.players).filter(([pid]) => !keep || keep(pid)).map(([pid, r]) => ({ pid, r }));
+  const cols = ['min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk'];
+  const body = teams.map(t => { const list = rows.filter(x => x.r[1] === t).sort((a, b) => b.r[3] - a.r[3]); if (!list.length) return '';
+    return `<tr class="pp-team"><td colspan="10">${pill(t)} ${esc((TEAMS[t] || [t, t])[1])}</td></tr>` + list.map(({ pid, r }) => `<tr data-pp-proj="${esc(pid)}"><td><b>${esc(r[0])}</b> <span class="muted">${esc(r[2])}</span></td>${cols.map(k => `<td class="num">${ppNumTxt(ppAt(r, k))}</td>`).join('')}<td class="num">${ppNumTxt(ppMean(r, 'pra'))}</td><td class="num">${ppPct(ppAt(r, 'dd'))}</td></tr>`).join(''); }).join('');
+  const outs = ppSides(g).filter(s => teams.includes(s.team)).flatMap(s => (s.out || []).map(o => `${esc(o.name)} <span class="muted">${s.team} · ${esc(o.status)}</span>`));
+  return body ? `<div class="wrap"><table class="tbl pp-proj"><thead><tr><th>Player</th><th class="num" title="minutes projected">Min</th><th class="num">Pts</th><th class="num">Reb</th><th class="num">Ast</th><th class="num" title="threes made">3PM</th><th class="num">Stl</th><th class="num">Blk</th><th class="num" title="points + rebounds + assists">PRA</th><th class="num" title="chance of a double-double">DD</th></tr></thead><tbody>${body}</tbody></table></div>`
+    + (outs.length ? `<p class="muted" style="margin:8px 0 0;font-size:12px">Not projected, on the injury report: ${outs.join(', ')}.</p>` : '') : `<p class="muted" style="margin:0">No player projected here.</p>`;
+}
+/* one player's DraftKings lines, each with the model beside it */
+function ppPlayerHtml(g, pid, e) {
+  const who = ppWho(g, pid), row = who.row, out = ppOut(g, pid), F = (S.props && S.props.fair) || {};
+  const mains = e.mains.filter(m => m.player === pid), lads = e.ladders.filter(m => m.player === pid), yes = e.yes.filter(m => m.player === pid);
+  const head = `<div class="pp-pl-h"><b>${esc(who.name)}</b>${who.team ? pill(who.team) : ''}<span class="muted">${esc(who.pos)}${row ? ` · ${ppNumTxt(row[3])} min projected` : ''}</span>${out ? `<span class="tag rose">${esc(out)}</span>` : ''}</div>`
+    + (row ? '' : `<p class="muted" style="margin:0 0 6px;font-size:12px">No projection: ${out ? `${esc(out)} on the injury report` : !ppGame(g.id) ? 'none for this game' : `projected under ${S.props.minShown} minutes, or no game on record`}.</p>`);
+  const lines = mains.length ? `<div class="pp-ln head"><span>Stat</span><span class="ln">Line</span><span class="px">Over</span><span class="px">Under</span><span class="md">${row ? 'Chance of the Over' : "DraftKings' chance of the Over"}</span></div>`
+    + mains.map(m => { const fair = propFairOver(m.over, m.under), pm = row ? ppModelOver(row, m.stat, m.line) : null;
+      return `<div class="pp-ln" data-pp-line="${m.stat}"><span class="st">${PP_NAMES[m.stat]}</span><span class="ln">${m.line}</span><span class="px"><i>O</i>${fmtAm(m.over)}</span><span class="px"><i>U</i>${fmtAm(m.under)}</span>`
+        + `<span class="md">${row ? `projection ${ppNumTxt(ppMean(row, m.stat))} · model ${ppPct(pm)} · ` : ''}DraftKings ${ppPct(fair)}</span></div>`; }).join('') : '';
+  const estT = 'est.: DraftKings gives a single price here, so its margin is taken out as measured on the archive';
+  const yesH = yes.length ? `<div class="pp-yes">${yes.map(y => { const fair = propFairYes(y.price, F.yes && F.yes.c ? F.yes.c[y.market] : null), pm = row ? ppAt(row, y.market) : null;
+    return `<span data-pp-yes="${y.market}"><b>${PP_NAMES[y.market]}</b> ${fmtAm(y.price)} · ${row ? `model ${ppPct(pm)} · ` : ''}DraftKings ${ppPct(fair)} <span class="muted" title="${estT}">est.</span></span>`; }).join('')}</div>` : '';
+  const stats = PROP_STATS.filter(s => lads.some(l => l.stat === s));
+  const ladH = lads.length ? `<details class="pp-lad" data-pp-lad><summary>Milestones (k+): ${lads.length} price${lads.length === 1 ? '' : 's'}</summary><div class="pp-lgrid">${stats.map(s => `<table class="pp-lt" data-pp-ladder="${s}"><thead><tr><th>${PP_NAMES[s]}</th><th>Price</th><th title="${estT}">DraftKings, est.</th>${row ? '<th>Model</th>' : ''}</tr></thead><tbody>`
+    + lads.filter(l => l.stat === s).map(l => `<tr><td>${l.k}+</td><td>${fmtAm(l.price)}</td><td>${ppPct(propFairRung(l.price, F.rung && F.rung.a ? F.rung.a[s] : null))}</td>${row ? `<td>${ppPct(ppModelAtLeast(row, s, l.k))}</td>` : ''}</tr>`).join('') + '</tbody></table>').join('')}</div></details>` : '';
+  return `<div class="pp-pl" data-pp-player="${esc(pid)}">${head}${lines}${yesH}${ladH}</div>`;
+}
+let ppOpen = null, ppTeam = 'all', ppFrom = null;
+function propsDraw() {
+  if (!ppOpen) return;
+  const sc = $('#ppSheet'), body = $('#ppBody'), sub = $('#ppSub');
+  const y = sc.scrollTop, act = document.activeElement, key = act && body.contains(act) ? act.getAttribute('data-pp-key') : null;
+  const open = new Set([...body.querySelectorAll('details[open]')].map(d => d.closest('[data-pp-player]') ? 'l' + d.closest('[data-pp-player]').dataset.ppPlayer : d.hasAttribute('data-pp-trial') ? 'trial' : 'more'));
+  const g = S.slate.find(x => x.id === ppOpen);
+  if (!g) { sub.innerHTML = ''; body.innerHTML = '<p class="muted">This game is no longer on the board.</p>'; return; }
+  sub.innerHTML = `<span>${pill(g.away)} <span class="muted">at</span> ${pill(g.home)}</span><span>${g.tip ? `${tipTime(g.tip)} · ` : ''}${dayName(g.date)} ${dayNum(g.date)}</span><span class="tag rose" title="Not yet shown to beat DraftKings: shown beside its lines, it suggests nothing">Model on trial</span>`;
+  let h = '';
+  if (started(g)) h = `<div class="note"><b>This game has tipped off.</b> Its props are off the board here.</div>`;
+  else {
+    const e = PP_LIVE[g.id], busy = oddsBusy, n = ppCount(e);
+    const again = `<div style="margin-top:10px"><button type="button" class="btn${e ? '' : ' hot'} pp-btn" data-pp-refresh data-pp-key="refresh"${busy ? ' aria-disabled="true"' : ''}>Refresh odds</button></div>`;
+    if (busy) h += `<div class="note"><b>Reading DraftKings' lines and player props from ESPN…</b></div>`;
+    else if (!e) h += `<div class="note"><b>Press Refresh odds for DraftKings' props.</b> They are read from ESPN when you press it, for this visit only. Until then, the props model's projections for the players expected to play.${again}</div>`;
+    else if (n) h += `<div class="note"><b>DraftKings' props from ESPN, read ${oddsClock(e.at)}:</b> ${e.mains.length} main line${e.mains.length === 1 ? '' : 's'}${e.ladders.length ? `, ${e.ladders.length} milestone price${e.ladders.length === 1 ? '' : 's'}` : ''}${e.yes.length ? `, ${e.yes.length} double- and triple-double price${e.yes.length === 1 ? '' : 's'}` : ''}. For this visit only: a reload shows the published page again.${again}</div>`;
+    else if (e.status === 'failed') h += `<div class="note"><b>DraftKings' player props could not be read at ${oddsClock(e.at)}.</b> Below, the props model's projections.${again}</div>`;
+    else h += `<div class="note"><b>DraftKings has posted no player props for this game yet</b> (read ${oddsClock(e.at)}). They go up one to six days before tip-off. Below, the props model's projections.${again}</div>`;
+    h += ppTrial();
+    h += `<div class="pp-ctl"><div class="seg" role="group" aria-label="Team">${[['all', 'Both'], ['away', g.away], ['home', g.home]].map(([k, l]) => `<button type="button" class="${ppTeam === k ? 'on' : ''}" data-pp-team="${k}" data-pp-key="team-${k}" aria-pressed="${ppTeam === k}">${l}</button>`).join('')}</div></div>`;
+    const want = t => ppTeam === 'all' || t === (ppTeam === 'away' ? g.away : g.home);
+    if (n) {                                                 // a second press's read keeps the lines in view until it lands
+      const ids = [...new Set(e.mains.concat(e.ladders, e.yes).map(m => m.player))];
+      const order = t => t === g.away ? 0 : t === g.home ? 1 : 2;
+      const list = ids.map(pid => ({ pid, who: ppWho(g, pid), mains: e.mains.filter(m => m.player === pid).length })).filter(x => want(x.who.team))
+        .sort((a, b) => order(a.who.team) - order(b.who.team) || (b.who.row ? b.who.row[3] : -1) - (a.who.row ? a.who.row[3] : -1) || b.mains - a.mains || (a.who.name < b.who.name ? -1 : 1));
+      h += list.length ? list.map(x => ppPlayerHtml(g, x.pid, e)).join('') : `<p class="muted">No DraftKings line on ${esc(ppTeam === 'away' ? g.away : g.home)} players.</p>`;
+      if (ppGame(g.id)) {
+        const lined = new Set(ids), rest = Object.entries(ppGame(g.id).players).filter(([pid, r]) => !lined.has(pid) && want(r[1])).length;
+        if (rest) h += `<details class="pp-more" data-pp-more><summary>The model's projections for ${rest} player${rest === 1 ? '' : 's'} with no DraftKings line</summary>${ppProjTable(g, pid => !lined.has(pid))}</details>`;
+      }
+    } else h += `<h3 style="font-family:var(--display);font-size:14px;margin:4px 0 8px">The model's projections</h3>${ppProjTable(g)}`;
+  }
+  body.innerHTML = h;
+  body.querySelectorAll('details').forEach(d => { const p = d.closest('[data-pp-player]'); if (open.has(p ? 'l' + p.dataset.ppPlayer : d.hasAttribute('data-pp-trial') ? 'trial' : 'more')) d.open = true; });
+  body.querySelectorAll('[data-pp-team]').forEach(b => b.onclick = () => { ppTeam = b.dataset.ppTeam; propsDraw(); });
+  body.querySelectorAll('[data-pp-refresh]').forEach(b => b.onclick = () => refreshOdds());
+  sc.scrollTop = y;
+  if (key) { const el = body.querySelector(`[data-pp-key="${key}"]`); (el || $('#ppClose')).focus(); }
+}
+function propsOpen(gid, from) {
+  if (!S || !S.slate.some(x => x.id === gid)) return;
+  ppOpen = gid; ppTeam = 'all'; ppFrom = from || null;
+  const back = $('#ppBack'); $('#ppBody').innerHTML = ''; back.hidden = false; document.body.classList.add('pp-lock');
+  propsDraw(); $('#ppSheet').scrollTop = 0; $('#ppClose').focus();
+}
+function propsClose() {
+  if (!ppOpen) return;
+  const gid = ppOpen; ppOpen = null; $('#ppBack').hidden = true; document.body.classList.remove('pp-lock');
+  const to = ppFrom && document.contains(ppFrom) ? ppFrom : document.querySelector(`main [data-props="${gid}"]`);
+  ppFrom = null; if (to) to.focus();
+}
+/* a game's button, on its card and its plan row; it counts the main lines a press read */
+function propsBtn(g, mini) {
+  const e = PP_LIVE[g.id], n = e && e.status === 'ok' ? e.mains.length : 0, c = ppCount(e);
+  const label = `Player props${n ? ` · ${n} line${n === 1 ? '' : 's'}` : c ? ` · ${c} price${c === 1 ? '' : 's'}` : ''}`;
+  return mini ? `<button type="button" class="pp-mini" data-props="${g.id}" aria-haspopup="dialog">${label}</button>`
+    : `<button type="button" class="btn ghost pp-btn${c ? ' has' : ''}" data-props="${g.id}" aria-haspopup="dialog">${label}</button>`;
+}
+document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-props]'); if (b) propsOpen(b.dataset.props, b); });
+$('#ppClose').addEventListener('click', propsClose);
+$('#ppBack').addEventListener('click', e => { if (e.target === e.currentTarget) propsClose(); });
+$('#ppBack').addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.preventDefault(); propsClose(); return; }
+  if (e.key !== 'Tab') return;
+  const sheet = $('#ppSheet'), f = [...sheet.querySelectorAll('button, summary, a[href]')].filter(el => !el.disabled && !el.closest('[hidden]') && !(el.tagName !== 'SUMMARY' && el.closest('details:not([open])')));
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1], at = document.activeElement;
+  if (!sheet.contains(at) || at === sheet) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+  else if (e.shiftKey && at === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
+});
+window.NBA_PROPS = { PROP_URL, PROP_MAIN, PROP_MILE, PROP_YES, PROP_STATS, propAmerican, propImplied, propAthlete, propLine, propTypeId, propPrice, propItems, propParse, propFairOver, propFairRung, propFairYes, propRead, nbVar, nbPmf, nbSf, pOver, live: () => PP_LIVE };
 
 /* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's.
    It moves at midnight Eastern while the page is open (watch() below) */
@@ -1045,6 +1510,7 @@ function watch() {
   const tab = ($$('#nav button').find(b => b.getAttribute('aria-selected') === 'true') || {}).dataset?.tab;
   oddsBarSync(tab);
   if (tab && render[tab]) render[tab](); badges();
+  if (ppOpen) propsDraw();
 }
 const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
 

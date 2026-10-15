@@ -106,6 +106,7 @@ jobs:
           node tools/test_fetch.js
           node tools/test_fetch_box.js
           node tools/test_props.js
+          node tools/test_corr.js
           node tools/smoke.js
       - name: Commit if anything changed
         if: always() && steps.fetch.outcome == 'success'

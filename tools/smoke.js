@@ -716,6 +716,7 @@ const decOf = a => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
 const amOfDec = d => d >= 2 ? Math.round((d - 1) * 100) : Math.round(-100 / (d - 1));
 const fmtA = a => (a > 0 ? '+' : '') + a;
 const pct1 = p => (p * 100).toFixed(p < 0.01 ? 2 : 1) + '%';
+const cents = v => '$' + (Math.round(v * 100) / 100).toFixed(2);
 /* P(z1 > t1, z2 > t2, z3 > t3) for standard normals with correlations R: z1 integrated out by Simpson's rule, the other
    two in closed form given z1 (tools/corr.js's bivariate normal) */
 function tri(ps, R) {
@@ -723,6 +724,20 @@ function tri(ps, R) {
   const s2 = Math.sqrt(1 - r12 * r12), s3 = Math.sqrt(1 - r13 * r13), rc = (r23 - r12 * r13) / (s2 * s3);
   const f = x => Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI) * CJ.bvnUpper((t[1] - r12 * x) / s2, (t[2] - r13 * x) / s3, rc);
   const a = t[0], b = t[0] + 12, N = 6000, h = (b - a) / N; let sum = f(a) + f(b);
+  for (let i = 1; i < N; i++) sum += f(a + i * h) * (i % 2 ? 4 : 2);
+  return sum * h / 3;
+}
+/* the same for four legs: z1 integrated out by Simpson's rule, the other three given z1 by tri's own reduction (their
+   thresholds and correlations conditioned on z1), so a four-leg price has a reference of this file's own */
+function quad4(ps, R, N = 400) {
+  const t = ps.map(p => PJ.normInv(1 - p)), r = R[0], s = r.map(v => Math.sqrt(1 - v * v));
+  const Rc = [1, 2, 3].map(j => [1, 2, 3].map(k => j === k ? 1 : (R[j][k] - r[j] * r[k]) / (s[j] * s[k])));
+  const r12 = Rc[0][1], r13 = Rc[0][2], r23 = Rc[1][2], s2 = Math.sqrt(1 - r12 * r12), s3 = Math.sqrt(1 - r13 * r13), rc = (r23 - r12 * r13) / (s2 * s3);
+  const inner = u => { const a = u[0], b = u[0] + 12, h = (b - a) / N;
+    const f = y => Math.exp(-y * y / 2) / Math.sqrt(2 * Math.PI) * CJ.bvnUpper((u[1] - r12 * y) / s2, (u[2] - r13 * y) / s3, rc);
+    let sum = f(a) + f(b); for (let i = 1; i < N; i++) sum += f(a + i * h) * (i % 2 ? 4 : 2); return sum * h / 3; };
+  const f = x => Math.exp(-x * x / 2) / Math.sqrt(2 * Math.PI) * inner([1, 2, 3].map(j => (t[j] - r[j] * x) / s[j]));
+  const a = t[0], b = t[0] + 12, h = (b - a) / N; let sum = f(a) + f(b);
   for (let i = 1; i < N; i++) sum += f(a + i * h) * (i % 2 ? 4 : 2);
   return sum * h / 3;
 }
@@ -883,7 +898,7 @@ async function builder() {
   const modelOf = l => { if (l.kind === 'ml') { const g = [q1, q2].find(x => x.id === l.id); return l.side === g.home ? g.model.pHome : 1 - g.model.pHome; } if (l.kind !== 'prop') return null;
     const pl = (props9.games[l.id].players)[l.pid], mu = muOf(pl, l.stat); if (l.mk === 'yes') return pl[LAY.indexOf(l.stat)];
     if (l.mk === 'mile') return PJ.nbSf(l.k, mu, PJ.nbVar(mu, VAR[l.stat])); const o = PJ.pOver(l.line, mu, PJ.nbVar(mu, VAR[l.stat])); return l.side === 'under' ? 1 - o : o; };
-  const joint = (ps, ls) => ps.length === 1 ? ps[0] : ps.length === 2 ? CJ.joint2(ps[0], ps[1], rho(ls[0], ls[1])) : tri(ps, ls.map(a => ls.map(b => a === b ? 1 : rho(a, b))));
+  const joint = (ps, ls) => ps.length === 1 ? ps[0] : ps.length === 2 ? CJ.joint2(ps[0], ps[1], rho(ls[0], ls[1])) : (ps.length === 3 ? tri : quad4)(ps, ls.map(a => ls.map(b => a === b ? 1 : rho(a, b))));
   const groups = ls => { const m = new Map(); for (const l of ls) { if (!m.has(l.id)) m.set(l.id, []); m.get(l.id).push(l); } return [...m.values()]; };
   const mine = ls => { let dec = 1, prod = 1, fair = 1, model = 1;
     for (const g of groups(ls)) { const mult = g.reduce((t, l) => t * decOf(l.odds), 1); prod *= mult;
@@ -913,6 +928,29 @@ async function builder() {
   const pb = pagePrice(legs), mb = mine(legs);
   check(Math.abs(pb.dec / mb.dec - 1) < TOL3 && Math.abs(pb.fair / mb.fair - 1) < TOL3 && pb.model === null && mb.model === null && pb.dec <= pb.prod && Math.abs(pb.prod - mb.prod) < 1e-9,
     `three legs of one game and one of another: the page's price ${pb.dec.toFixed(4)} and fair chance ${pb.fair.toFixed(5)} are this file's ${mb.dec.toFixed(4)} and ${mb.fair.toFixed(5)} (its own integration, within ${TOL3 * 100}% of each other), under the product ${mb.prod.toFixed(4)}; no model chance, a total having none`);
+  /* more sets of three and four legs of one game, priced one after another in the same page session, each against this
+     file's own integration (tri, quad4): one player's three Overs at -110 each, then three legs at the very same implied
+     chances but other relations (two opponents' points and the total Under; his points Over, rebounds Under and assists
+     Over), four at -110 (his three Overs and the total), four of every kind at their own prices, and four with a model
+     chance each. A price kept from another set (a cache keyed by the chances alone), one leg's relation read for
+     another's, or a fourth leg's dropped, shows */
+  { const cade = (stat, side, odds, other, x) => ({ ...L(stat, side, odds, other, x), pid: '4432166', name: 'Cade Cunningham', team: 'DET' });
+    const TOL4 = 1e-3;
+    const sets = {
+      "his points, rebounds and assists Overs, -110 each": [L('pts', 'over', -110, -110, { line: 26.5 }), L('reb', 'over', -110, -110, { line: 8.5 }), L('ast', 'over', -110, -110, { line: 5.5 })],
+      'his points Over, the Celtics to win and the total Over, -110 each': [L('pts', 'over', -110, -110, { line: 26.5 }), T('ml', 'BOS', -110, -110, null), T('total', 'over', -110, -110, 221.5)],
+      'his points and threes Overs and the total Over, -110 each': [L('pts', 'over', -110, -110, { line: 26.5 }), L('tpm', 'over', -110, -110, { line: 2.5 }), T('total', 'over', -110, -110, 221.5)],
+      "his points Over, rebounds Under and assists Over, -110 each (held at the product)": [L('pts', 'over', -110, -110, { line: 26.5 }), L('reb', 'under', -110, -110, { line: 8.5 }), L('ast', 'over', -110, -110, { line: 5.5 })],
+      "two opponents' points Overs and the total Under, -110 each": [L('pts', 'over', -110, -110, { line: 26.5 }), cade('pts', 'over', -110, -110, { line: 24.5 }), T('total', 'under', -110, -110, 221.5)],
+      'his three Overs and the total Over, -110 each': [L('pts', 'over', -110, -110, { line: 26.5 }), L('reb', 'over', -110, -110, { line: 8.5 }), L('ast', 'over', -110, -110, { line: 5.5 }), T('total', 'over', -110, -110, 221.5)],
+      "his points Over, an opponent's rebounds Under, the Pistons to win and the total Over": [L('pts', 'over', -111, -114, { line: 26.5 }), cade('reb', 'under', 120, -150, { line: 4.5 }), T('ml', 'DET', -115, -105, null), T('total', 'over', -115, -105, 221.5)],
+      "his points and assists Overs, an opponent's points Over and the Celtics to win": [L('pts', 'over', -111, -114, { line: 26.5 }), L('ast', 'over', 113, -149, { line: 5.5 }), cade('pts', 'over', -104, -123, { line: 24.5 }), T('ml', 'BOS', -105, -115, null)] };
+    const bad3 = [], gaps = [];
+    for (const [name, ls] of Object.entries(sets)) { const p = pagePrice(ls), m = mine(ls), tol = ls.length > 3 ? TOL4 : TOL3;
+      const e = [Math.abs(p.dec / m.dec - 1), Math.abs(p.fair / m.fair - 1), m.model == null ? (p.model === null ? 0 : 1) : Math.abs(p.model / m.model - 1)]; gaps.push(Math.max(...e));
+      if (e.some(x => !(x < tol)) || p.dec > p.prod + 1e-12 || Math.abs(p.prod - m.prod) > 1e-9 || !p.sg || !p.fairEst) bad3.push(`${name}: page ${p.dec.toFixed(4)}/${p.fair.toFixed(5)}/${p.model}, here ${m.dec.toFixed(4)}/${m.fair.toFixed(5)}/${m.model}`); }
+    const d3 = Object.values(sets).slice(0, 3).map(ls => pagePrice(ls).dec);
+    check(!bad3.length && d3[0] !== d3[1] && d3[1] !== d3[2] && d3[0] !== d3[2], `${Object.keys(sets).length} more sets of three and four legs of one game in one session (${Object.keys(sets).join('; ')}): each one's price, fair chance and model chance this file's own integration's (three legs within ${TOL3 * 100}%, four within ${TOL4 * 100}%; the largest gap ${(Math.max(...gaps) * 100).toFixed(4)}%), under the product, and the first three, at one set of implied chances, priced apart (${d3.map(x => fmtA(amOfDec(x))).join(', ')})${bad3.length ? ': ' + bad3.join('; ') : ''}`); }
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
   const sl = d.getElementById('bkSlip'), tiles = [...sl.querySelectorAll('.sl-sum .stat')];
   check(tiles[0] && tiles[0].hasAttribute('data-sl-fair') && tiles[0].querySelector('b').textContent === pct1(pb.fair) && tiles[0].querySelector('span').textContent === "DraftKings' fair chance all 4 land, est.",
@@ -938,6 +976,13 @@ async function builder() {
   const mt = d.querySelector('#bkSlip [data-sl-model]');
   check(mt && Math.abs(pm.model - mm.model) < 1e-9 && mt.querySelector('b').textContent === pct1(mm.model) && mt.querySelector('span').textContent === "the hub's model, on trial" && Math.abs(pm.dec - mm.dec) < 1e-9,
     `with every leg modelled, the model's chance stands beside it, labelled on trial (${mt && mt.textContent}), the copula of its chances`);
+  /* the card on that parlay: the model's chance as the builder gives it, labelled on trial, and what the stake pays */
+  d.getElementById('slFinish').click(); await sleep(20);
+  { const pc2 = d.getElementById('pcBack'), cm = pc2.querySelector('[data-pc-model]'), cp = pc2.querySelector('[data-pc-pays] b');
+    check(!pc2.hidden && cm && cm.querySelector('b').textContent === pct1(mm.model) && cm.querySelector('span').textContent === "the hub's model, on trial" && !pc2.querySelector('[data-pc-nomodel]')
+      && cp && cp.textContent === cents(20 * mm.dec) && !banned(d.getElementById('pcBody').textContent),
+      `its card shows the model's chance, ${pct1(mm.model)}, labelled on trial, with no "edge" or "model says", and pays ${cents(20 * mm.dec)} on $20 to the cent (${cm && cm.textContent} | ${cp && cp.textContent})`);
+    pc2.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20); }
   w.eval(`M.slip.legs.splice(2, 0, ${JSON.stringify({ ...legs[0], kind: 'total', side: 'over', line: 221.5, odds: -115, other: -105, dk: '0OU85841510O22150_1', at: gl1.at, pid: undefined, name: undefined, team: undefined, stat: undefined, mk: undefined })}); saveMine(); render.parlay();`);
   /* nothing from the read is stored but the legs added */
   const store = JSON.parse(w.localStorage.getItem('nba_hub_2027')), sj = JSON.stringify(store);
@@ -960,13 +1005,18 @@ async function builder() {
     `and says what it opens and what to add by hand, never every leg ("${d.getElementById('pcDkNote').textContent}")`);
   check(pc.querySelector('.pc-nums > div').hasAttribute('data-pc-fair') && pc.querySelector('[data-pc-fair] b').textContent === pct1(pb.fair) && /fair chance, est\.$/.test(pc.querySelector('[data-pc-fair] span').textContent), 'the card leads with DraftKings\' fair chance, est., too');
   check(pc.querySelector('[data-pc-price] b').textContent === fmtA(amOfDec(pb.dec)) + ' est.' && pc.querySelector('[data-pc-why]').textContent === "DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together.", 'its price is marked est., with the why');
+  const NOMODEL = "No model chance: the hub's models give none on a spread, a total or a player the props model does not project.";
+  check(pc.querySelector('[data-pc-pays] b') && pc.querySelector('[data-pc-pays] b').textContent === cents(20 * pb.dec) && pc.querySelector('[data-pc-pays] span').textContent === 'pays on $20.00',
+    `what the stake pays on the card is $20 times the same-game price (held to this file's integration above), to the cent (${cents(20 * pb.dec)}; the legs multiplied would pay ${cents(20 * mb.prod)})`);
+  check(!pc.querySelector('[data-pc-model]') && pc.querySelector('[data-pc-nomodel]') && pc.querySelector('[data-pc-nomodel]').textContent === NOMODEL && !banned(d.getElementById('pcBody').textContent),
+    'with a total in it the card shows no model chance and says why, and says neither "edge" nor "model says"');
   let shared = null; w.navigator.share = async x => { shared = x; }; w.navigator.canShare = () => true;
   d.getElementById('pcShare').click(); await sleep(20);
   const tl = shared && shared.text.split('\n');
   check(shared && Object.keys(shared).sort().join() === 'text,title' && shared.title === `4-leg parlay ${fmtA(amOfDec(pb.dec))} (estimated same-game price)` && tl.includes('https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1')
     && tl.includes(`1. Jayson Tatum (BOS): Points Over 26.5 -111, BOS at DET, read ${etT(e1.at)}`) && tl.includes("Add by hand, leg 1: Jayson Tatum, Points Over 26.5 (DraftKings' player lines carry no betslip id in ESPN's feed)")
-    && tl.includes("Add by hand, leg 4: Lal Guard, Points Over 24.5 (DraftKings' player lines carry no betslip id in ESPN's feed)") && !tl.some(x => /^Add by hand, leg 3/.test(x)) && tl.some(x => /^\$20\.00 pays \$[\d.]+ at [+-]\d+, an estimated same-game price \(DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together; the legs multiplied [+-]\d+\)$/.test(x)) && !/every leg|all 4 legs/.test(shared.text),
-    'Share link sends a title and a text, no url field: each leg with its price and read time, the betslip link alone on its line, the player legs to add by hand with why, the price an estimate');
+    && tl.includes("Add by hand, leg 4: Lal Guard, Points Over 24.5 (DraftKings' player lines carry no betslip id in ESPN's feed)") && !tl.some(x => /^Add by hand, leg 3/.test(x)) && tl.includes(`$20.00 pays ${cents(20 * pb.dec)} at ${fmtA(amOfDec(pb.dec))}, an estimated same-game price (DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together; the legs multiplied ${fmtA(amOfDec(mb.prod))})`) && !/every leg|all 4 legs/.test(shared.text),
+    'Share link sends a title and a text, no url field: each leg with its price and read time, the betslip link alone on its line, the player legs to add by hand with why, what $20 pays to the cent at the estimated same-game price, the legs multiplied beside it');
   delete w.navigator.share; let copied = null; w.navigator.clipboard = { writeText: async t => { copied = t; } };
   d.getElementById('pcShare').click(); await sleep(20);
   check(copied === shared.text && /Copied/.test(d.getElementById('pcMsg').textContent), 'with no share sheet the same text is copied, and the card says so');
@@ -1061,8 +1111,14 @@ async function builder() {
   const gidOf = (n, a, h) => `${state.season}_${ymd(ago(n))}_${a}_${h}`;
   const f1 = gidOf(1, 'BOS', 'DET'), f2 = gidOf(2, 'LAL', 'GSW'), f3 = gidOf(20, 'MIA', 'ORL');
   const tat = [30, 10, 5, 3, 1, 0];
-  const st10 = { ...state, slate: [], record: [], finals: { [f1]: [110, 105], [f2]: [101, 99], [f3]: [100, 96] }, pending: [], corr: CORR, props: null,
-    boxes: { from: ago(7), days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: { [f1]: { '4065648': tat, '3001': [10, 2, 2, 1, 0, 0] } } } };
+  /* Bos Rim's double-double is his rebounds and blocks, Bos Thief's triple-double his points, rebounds and steals: on
+     points, rebounds and assists alone neither gets there */
+  const rim = [8, 12, 1, 0, 2, 10], thief = [20, 11, 3, 2, 10, 1];
+  /* a game called off: in the slate as void (postponed), and one off every list two days past its date */
+  const fv = gidOf(1, 'NYK', 'BKN'), fo = gidOf(3, 'CHI', 'MIL');
+  const voidG = { ...fake(fv, ago(1), false), away: 'NYK', home: 'BKN', tip: ago(1) + 'T23:30:00Z', status: 'void' };
+  const st10 = { ...state, slate: [voidG], record: [], finals: { [f1]: [110, 105], [f2]: [101, 99], [f3]: [100, 96] }, pending: [], corr: CORR, props: null,
+    boxes: { from: ago(7), days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: { [f1]: { '4065648': tat, '3001': [10, 2, 2, 1, 0, 0], '3002': rim, '3003': thief } } } };
   const P = (id, away, home, x) => ({ id, away, home, date: ago(id === f1 ? 1 : id === f2 ? 2 : 20), tip: ago(1) + 'T23:00:00Z', kind: 'prop', pid: '4065648', name: 'Jayson Tatum', team: away, mk: 'main', side: 'over', at: ago(1) + 'T15:00:00Z', ...x });
   const Tg = (id, kind, side, odds, other, line) => ({ id, away: 'BOS', home: 'DET', date: ago(1), tip: ago(1) + 'T23:00:00Z', kind, side, line, odds, other, at: ago(1) + 'T15:00:00Z' });
   const ptsO = P(f1, 'BOS', 'DET', { stat: 'pts', line: 26.5, odds: -111, other: -114 }), cadeA = P(f1, 'BOS', 'DET', { pid: '4432166', name: 'Cade Cunningham', team: 'DET', stat: 'ast', line: 9.5, odds: 109, other: -144 });
@@ -1082,10 +1138,12 @@ async function builder() {
   const kindWant = Object.fromEntries(kinds.map(([stat, side, line], i) => { const v = PARTS[stat].reduce((t, j) => t + tat[j], 0);
     const r = v === line ? 'push' : (v > line) === (side === 'over') ? 'won' : 'lost'; return ['k' + i, [r, r === 'won' ? '$' + (10 * decOf(-110)).toFixed(2) : r === 'push' ? '$10.00' : '$0.00']]; }));
   /* the season's box file for the final three weeks back: every stat column a different number from every other on a row
-     (Old Hand 31 points, 3 + 7 boards, 6 assists, 4 threes, 2 steals, 1 block; Old Big a triple-double), so a column read
-     from the wrong place grades wrong; Old Bench did not play */
+     (Old Hand 31 points, 3 + 7 boards, 6 assists, 4 threes, 2 steals, 1 block; Old Big a triple-double; Old Rim a
+     double-double of his rebounds and blocks, Old Thief a triple-double of his points, rebounds and steals), so a column
+     read from the wrong place grades wrong; Old Bench did not play */
   const boxCsv = 'game_id,date,team,opp,home,player_id,name,pos,starter,min,fgm,fga,tpm,tpa,ftm,fta,orb,drb,ast,stl,blk,tov,pf,pm,pts,dnp\n'
     + `${f3},${ago(20)},MIA,ORL,0,777,Old Hand,G,1,36,11,20,4,9,5,8,3,7,6,2,1,0,5,4,31,0\n${f3},${ago(20)},MIA,ORL,0,779,Old Big,C,1,33,7,14,1,5,3,6,4,9,11,3,2,8,0,-2,18,0\n`
+    + `${f3},${ago(20)},MIA,ORL,0,780,Old Rim,C,1,30,4,13,0,2,1,8,5,7,6,3,11,9,4,-15,9,0\n${f3},${ago(20)},MIA,ORL,0,781,Old Thief,G,1,35,5,15,3,7,8,13,2,9,4,10,1,0,6,12,21,0\n`
     + `${f3},${ago(20)},MIA,ORL,0,778,Old Bench,G,0,0,,,,,,,,,,,,,,,,1\n`;
   FILES = [[new RegExp(`data/box_${state.season}\\.csv$`), boxCsv]];
   /* the file's lines by this file's own reading of it (rebounds the offensive and defensive boards), and on each of Old
@@ -1096,14 +1154,24 @@ async function builder() {
       o[v[h.indexOf('player_id')]] = { pts: at('pts'), reb: at('orb') + at('drb'), ast: at('ast'), tpm: at('tpm'), stl: at('stl'), blk: at('blk') }; }
     return o; })();
   const fileBets = [], fileWant = {};
-  for (const [pid, name] of [['777', 'Old Hand'], ['779', 'Old Big']]) { const bx = csvLine[pid];
+  for (const [pid, name] of [['777', 'Old Hand'], ['779', 'Old Big'], ['780', 'Old Rim'], ['781', 'Old Thief']]) { const bx = csvLine[pid];
     for (const k of ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb']) { const v = (COMBO[k] || [k]).reduce((t, x) => t + bx[x], 0), id = `f${pid}${k}`;
       fileBets.push(bet(id, [P(f3, 'MIA', 'ORL', { pid, name, team: 'MIA', stat: k, line: v, odds: -110, other: -110 })])); fileWant[id] = ['push', '$10.00']; }
     for (const [k, need, odds] of [['dd', 2, 150], ['td', 3, 900]]) { const won = ['pts', 'reb', 'ast', 'stl', 'blk'].filter(x => bx[x] >= 10).length >= need, id = `f${pid}${k}`;
       fileBets.push(bet(id, [P(f3, 'MIA', 'ORL', { pid, name, team: 'MIA', stat: k, mk: 'yes', side: 'yes', odds, other: null, line: undefined })])); fileWant[id] = won ? ['won', '$' + (10 * decOf(odds)).toFixed(2)] : ['lost', '$0.00']; } }
+  /* a double- and a triple-double reached through blocks and steals; a same-game parlay with a player's leg on a whole
+     line that pushes, and one with the total pushing (215 on 215); a player's leg on the game postponed in the slate, one
+     on the game off every list, and a parlay with the latter beside a winner of another game */
+  const rimDd = P(f1, 'BOS', 'DET', { pid: '3002', name: 'Bos Rim', stat: 'dd', mk: 'yes', side: 'yes', odds: 250, other: null, line: undefined });
+  const thiefTd = P(f1, 'BOS', 'DET', { pid: '3003', name: 'Bos Thief', stat: 'td', mk: 'yes', side: 'yes', odds: 900, other: null, line: undefined });
+  const pts30w = P(f1, 'BOS', 'DET', { stat: 'pts', line: 30, odds: -110, other: -110 }), reb85 = P(f1, 'BOS', 'DET', { stat: 'reb', line: 8.5, odds: -143, other: 109 }), tot215 = Tg(f1, 'total', 'over', -110, -110, 215);
+  const vLeg = P(fv, 'NYK', 'BKN', { pid: '5001', name: 'Nyk Wing', team: 'NYK', stat: 'pts', line: 18.5, odds: -110, other: -110, date: ago(1) });
+  const oLeg = P(fo, 'CHI', 'MIL', { pid: '5002', name: 'Chi Wing', team: 'CHI', stat: 'reb', line: 6.5, odds: -120, other: 100, date: ago(3) });
   const mine10 = { picks: {}, slip: { legs: [], stake: 20 }, build: [
     bet('g1', [ptsO, cadeA, bosMl], { sg: true, dec: 9.99 }), bet('g2', [ptsO, reb10, tot], { sg: true, dec: 9.99 }), bet('g3', [pts30, dd], { sg: true, dec: 3.21 }),
-    bet('g4', [td]), bet('g5', [reb10]), bet('g6', [rebU]), bet('g7', [lal]), bet('g8', [old]), bet('g9', [ptsO, old]), bet('g10', [old2]), ...kindBets, ...fileBets ] };
+    bet('g4', [td]), bet('g5', [reb10]), bet('g6', [rebU]), bet('g7', [lal]), bet('g8', [old]), bet('g9', [ptsO, old]), bet('g10', [old2]),
+    bet('g11', [rimDd]), bet('g12', [thiefTd]), bet('g13', [pts30w, reb85, bosMl], { sg: true, dec: 9.99 }), bet('g14', [tot215, ptsO], { sg: true, dec: 9.99 }),
+    bet('g15', [vLeg]), bet('g16', [oLeg]), bet('g17', [oLeg, ptsO]), ...kindBets, ...fileBets ] };
   ({ w, errors, requests } = load('index.html', st10, mine10));
   await sleep(300); d = w.document;
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(150);
@@ -1111,10 +1179,16 @@ async function builder() {
   const st = id => { const r = row(id); return r ? r.children[6].textContent.trim() : '?'; }, ret = id => { const r = row(id); return r ? r.children[7].textContent.trim() : '?'; };
   const m2 = (a, b) => Math.min(decOf(a.odds) * decOf(b.odds), HOLD / CJ.joint2(imp(a.odds), imp(b.odds), rho(a, b)));
   const want0 = { g1: ['won', '$' + (10 * m2(ptsO, bosMl)).toFixed(2)], g2: ['lost', '$0.00'], g3: ['won', '$32.10'], g4: ['lost', '$0.00'], g5: ['push', '$10.00'], g6: ['won', '$' + (10 * decOf(120)).toFixed(2)],
-    g7: ['open', '–'], g8: ['won', '$20.00'], g9: ['won', '$' + (10 * decOf(-111) * 2).toFixed(2)], g10: ['void', '$10.00'], ...kindWant }, want = { ...want0, ...fileWant };
+    g7: ['open', '–'], g8: ['won', '$20.00'], g9: ['won', '$' + (10 * decOf(-111) * 2).toFixed(2)], g10: ['void', '$10.00'], ...kindWant };
+  const cats = l => [0, 1, 2, 4, 5].filter(i => l[i] >= 10).length;            // points, rebounds, assists, steals, blocks at 10 or more
+  const wantX = { g11: cats(rim) >= 2 ? ['won', cents(10 * decOf(250))] : ['lost', '$0.00'], g12: cats(thief) >= 3 ? ['won', cents(10 * decOf(900))] : ['lost', '$0.00'],
+    g13: ['won', cents(10 * m2(reb85, bosMl))], g14: ['won', cents(10 * decOf(-111))], g15: ['void', '$10.00'], g16: ['void', '$10.00'], g17: ['won', cents(10 * decOf(-111))] };
+  const want = { ...want0, ...fileWant, ...wantX };
   const got = Object.fromEntries(Object.keys(want).map(k => [k, [st(k), ret(k)]]));
   bad = Object.keys(want0).filter(k => JSON.stringify(want[k]) !== JSON.stringify(got[k]));
   check(!bad.length, `each bet graded from the box scores by this file's sums: a void leg (Cunningham, not in the box) dropped and the same-game parlay priced again on the two left (${want.g1[1]}), a lost total, a push on a whole line, a milestone and a double-double at the price locked, a triple-double short, an Under, a final whose box is not read waiting, one from three weeks back read from its season's box file, and a straight bet on every other stat (${kinds.map(([k, s, l], i) => `${k} ${s} ${l} ${got['k' + i][0]}`).join(', ')})${bad.length ? ': ' + bad.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
+  const badX = Object.keys(wantX).filter(k => JSON.stringify(want[k]) !== JSON.stringify(got[k]));
+  check(!badX.length && cats(rim) === 2 && cats(thief) === 3, `by this file's sums: a double-double of rebounds and blocks (${got.g11.join(' ')}) and a triple-double of points, rebounds and steals (${got.g12.join(' ')}); a same-game parlay with a player's whole line pushing paid at the same-game price of the two legs left (${got.g13.join(' ')}, want ${wantX.g13[1]}) and one with the total pushing at the leg left's own price (${got.g14.join(' ')}); a player's leg on a game postponed in the slate and on one off every list two days past its date void with the stake back (${got.g15.join(' ')}, ${got.g16.join(' ')}), and dropped from a parlay (${got.g17.join(' ')})${badX.length ? ': ' + badX.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
   const badF = Object.keys(fileWant).filter(k => JSON.stringify(want[k]) !== JSON.stringify(got[k]));
   check(!badF.length, `from the season's box file, by this file's own reading of it: Old Hand's and Old Big's points, rebounds (both boards), assists, threes, steals, blocks and the five combos each push at their own sum, so each column is read from its own place, and their double- and triple-doubles (${Object.keys(fileWant).filter(k => /(dd|td)$/.test(k)).map(k => `${k.slice(1, 4)} ${k.slice(4)} ${got[k][0]}`).join(', ')})${badF.length ? ': ' + badF.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
   const csvReq = requests.filter(x => /data\/box_\d{4}\.csv/.test(x.url));
@@ -1122,8 +1196,10 @@ async function builder() {
   const lalTitle = row('g7').querySelector('[title]');
   check(lalTitle && lalTitle.getAttribute('title') === 'final: waiting for its box score', 'the leg whose final has no box score yet says it waits for it');
   const saved = JSON.parse(w.localStorage.getItem('nba_hub_2027')).build, res = id => saved.find(b => b.id === id).legs.map(l => l.res ? l.res.r + ':' + l.res.v : '-').join(',');
-  check(res('g1') === 'won:30,void:null,-' && res('g3') === 'won:30,won:2' && res('g5') === 'push:10' && res('g7') === '-' && res('g8') === 'won:31' && res('g10') === 'void:null',
-    `each player leg's grade is written into the visitor's own Bet Build once made, the value with it (${res('g1')} | ${res('g3')} | ${res('g8')}), none for the leg still waiting`);
+  const why = id => saved.find(b => b.id === id).legs[0].res, ddN = cats(rim), tdN = cats(thief);
+  check(res('g1') === 'won:30,void:null,-' && res('g3') === 'won:30,won:2' && res('g5') === 'push:10' && res('g7') === '-' && res('g8') === 'won:31' && res('g10') === 'void:null'
+    && res('g11') === `won:${ddN}` && res('g12') === `won:${tdN}` && res('g13') === 'push:30,won:10,-' && res('g15') === 'void:null' && res('g16') === 'void:null' && why('g15').why === 'not played on its date' && why('g16').why === 'not played on its date',
+    `each player leg's grade is written into the visitor's own Bet Build once made, the value with it (${res('g1')} | ${res('g3')} | ${res('g8')} | ${res('g11')} | ${res('g13')}), a leg on a game called off void "not played on its date" (${res('g15')} | ${res('g16')}), none for the leg still waiting`);
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
   FILES = [];
   ({ w, errors, requests } = load('index.html', { ...st10, boxes: { ...st10.boxes, games: {} } }, JSON.parse(JSON.stringify({ ...mine10, build: saved }))));

@@ -1747,6 +1747,7 @@ function normInv(p) {
 /* ---- the builder ---- */
 const SG_SIMS = 20000, SG_SEED = 20261015;
 const SG_WHY = "DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together";
+const SL_NOMODEL = "No model chance: the hub's models give none on a spread, a total or a player the props model does not project.";
 const SG_KIND = { ml: 'win', spread: 'cover', total: 'over' };
 const SG_PARTS = { pts: ['pts'], reb: ['reb'], ast: ['ast'], tpm: ['tpm'], stl: ['stl'], blk: ['blk'], pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] };
 const BY_HAND = "DraftKings' player lines carry no betslip id in ESPN's feed: add this leg by hand";
@@ -2018,7 +2019,7 @@ function renderSlip() {
     ${P.model != null ? `<div class="stat" data-sl-model><b>${slipPct(P.model)}</b><span>the hub's model${P.props ? ', on trial' : ''}</span></div>` : ''}</div>`;
   const notes = [P.sg ? `<p class="sl-why" data-sl-why>${SG_WHY}. The same-game hold is the NFL hub's (${S.corr.hold}), untested on the NBA.</p>` : '',
     P.fair == null ? `<p class="sl-why">No fair chance: a leg has one price only, so DraftKings' margin cannot be taken out of it.</p>` : P.fairEst && !P.sg ? `<p class="sl-why">The fair chance is an estimate: a milestone's or a double-double's comes from its one price.</p>` : '',
-    P.model == null ? `<p class="sl-why" data-sl-nomodel>No model chance: the hub's models give none on a spread, a total or a player the props model does not project.</p>` : P.props ? `<p class="sl-why">The props model is on trial: not yet shown to beat DraftKings, it is shown beside DraftKings' chance, never as a pick.</p>` : ''].join('');
+    P.model == null ? `<p class="sl-why" data-sl-nomodel>${SL_NOMODEL}</p>` : P.props ? `<p class="sl-why">The props model is on trial: not yet shown to beat DraftKings, it is shown beside DraftKings' chance, never as a pick.</p>` : ''].join('');
   el.innerHTML = rows + sum + notes + `<div class="sl-stake"><label for="slStake">Stake $</label><input type="text" inputmode="decimal" id="slStake" value="${stake}"></div>
     <div class="sl-btns"><button type="button" class="btn hot" id="slLock" ${stake > 0 && !inBuild ? '' : 'disabled'}>${inBuild ? 'In the Bet Build' : `Lock in · ${money(stake)}`}</button><button type="button" class="btn" id="slFinish">Finish</button><button type="button" class="btn ghost" id="slClear">Clear all</button></div>`;
   el.querySelectorAll('[data-sl-del]').forEach(b => b.onclick = () => { const k = b.dataset.slDel; M.slip.legs = M.slip.legs.filter(x => slipKey(x) !== k); SLIP_SAID = []; saveMine(); render.parlay(); const t = $('#slTitle'); if (t) t.focus(); });
@@ -2095,8 +2096,8 @@ function pcBuild(legs, stake) {
   const html = `<ol class="pc-legs">${legs.map((l, i) => `<li data-pc-leg="${i + 1}"><div><b>${esc(slipWho(l))}</b>${l.kind === 'prop' && l.team ? ` <span class="muted">${l.team}</span>` : ''} ${esc(slipWhat(l))}</div><div class="pc-px">${fmtAm(l.odds)}</div>`
       + `<div class="pc-meta">${l.kind === 'prop' ? `${l.away} at ${l.home} · ` : ''}read ${etAt(l.at)}</div>${ids[i] ? '' : `<div class="pc-hand" data-pc-hand>${esc(l.kind === 'prop' ? BY_HAND : why(l))}</div>`}</li>`).join('')}</ol>
     <div class="pc-nums"><div data-pc-fair><b>${slipPct(P.fair)}</b><span>DraftKings' fair chance${P.fair != null && P.fairEst ? ', est.' : ''}</span></div><div data-pc-price><b>${am}${P.sg ? ' est.' : ''}</b><span>${P.sg ? `price, est. · legs multiplied ${fmtAm(decToAm(P.prod))}` : 'price'}</span></div>
-      <div><b>${money(stake * P.dec)}</b><span>pays on ${money(stake)}</span></div>${P.model != null ? `<div><b>${slipPct(P.model)}</b><span>the hub's model${P.props ? ', on trial' : ''}</span></div>` : ''}</div>
-    ${P.sg ? `<p class="pc-note" data-pc-why>${SG_WHY}.</p>` : ''}
+      <div data-pc-pays><b>${money(stake * P.dec)}</b><span>pays on ${money(stake)}</span></div>${P.model != null ? `<div data-pc-model><b>${slipPct(P.model)}</b><span>the hub's model${P.props ? ', on trial' : ''}</span></div>` : ''}</div>
+    ${P.sg ? `<p class="pc-note" data-pc-why>${SG_WHY}.</p>` : ''}${P.model == null ? `<p class="pc-note" data-pc-nomodel>${SL_NOMODEL}</p>` : ''}
     <div class="pc-btns"><a class="btn hot" id="pcDk" href="${esc(url)}" target="_blank" rel="noopener" title="${esc(note)}">${open.length ? 'Open in DraftKings' : ev ? 'Open game in DraftKings' : 'Open DraftKings'}</a><button type="button" class="btn" id="pcShare">Share link</button><button type="button" class="btn ghost" id="pcDone">Back to your parlay</button></div>
     <p class="pc-note" id="pcDkNote">${esc(note)}</p><p class="pc-msg" id="pcMsg" role="status" aria-live="polite"></p>`;
   return { title, text, url, html, n, sub: `${n} leg${n === 1 ? '' : 's'} · ${money(stake)} stake · times in Eastern` };

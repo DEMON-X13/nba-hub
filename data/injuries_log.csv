@@ -2202,9 +2202,9 @@ date,team,player_id,name,status
 2026-10-15,OKC,4900671,Ajay Mitchell,Day-To-Day
 2026-10-15,OKC,5061603,Thomas Sorber,Day-To-Day
 2026-10-15,OKC,5159925,Nikola Topic,Day-To-Day
-2026-10-15,ORL,6478,Nikola Vucevic,Day-To-Day
-2026-10-15,ORL,4712849,Anthony Black,Day-To-Day
 2026-10-15,ORL,4065654,Jonathan Isaac,Day-To-Day
+2026-10-15,ORL,4712849,Anthony Black,Day-To-Day
+2026-10-15,ORL,6478,Nikola Vucevic,Day-To-Day
 2026-10-15,ORL,5107251,Izaiyah Nelson,Out
 2026-10-15,PHI,4870562,Dominick Barlow,Day-To-Day
 2026-10-15,PHI,5105637,Adem Bona,Day-To-Day
@@ -2224,6 +2224,8 @@ date,team,player_id,name,status
 2026-10-15,PHX,4701232,Mark Williams,Out
 2026-10-15,POR,4706557,Chris Youngblood,Day-To-Day
 2026-10-15,POR,4914336,Shaedon Sharpe,Out
+2026-10-15,SAC,4433174,Dylan Cardwell,Out
+2026-10-15,SAC,4898371,Maxime Raynaud,Out
 2026-10-15,SAC,4431679,Precious Achiuwa,Day-To-Day
 2026-10-15,SAC,3907387,Ben Simmons,Day-To-Day
 2026-10-15,SAC,4065732,De'Andre Hunter,Day-To-Day
@@ -2231,8 +2233,6 @@ date,team,player_id,name,status
 2026-10-15,SAC,4066262,Malik Monk,Day-To-Day
 2026-10-15,SAC,3155942,Domantas Sabonis,Day-To-Day
 2026-10-15,SAC,3064440,Zach LaVine,Day-To-Day
-2026-10-15,SAC,4433174,Dylan Cardwell,Out
-2026-10-15,SAC,4898371,Maxime Raynaud,Out
 2026-10-15,SAS,3064560,Luke Kornet,Day-To-Day
 2026-10-15,SAS,4395723,Keldon Johnson,Day-To-Day
 2026-10-15,SAS,4592479,Julian Champagnie,Day-To-Day

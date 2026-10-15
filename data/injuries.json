@@ -862,12 +862,12 @@
   ],
   "ORL": [
    {
-    "id": "6478",
-    "name": "Nikola Vucevic",
-    "pos": "C",
+    "id": "4065654",
+    "name": "Jonathan Isaac",
+    "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-13",
+    "detail": "Knee Sprain",
+    "date": "2026-10-15",
     "returns": "2026-10-16"
    },
    {
@@ -876,15 +876,15 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-13",
+    "date": "2026-10-15",
     "returns": "2026-10-16"
    },
    {
-    "id": "4065654",
-    "name": "Jonathan Isaac",
-    "pos": "F",
+    "id": "6478",
+    "name": "Nikola Vucevic",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Knee Sprain",
+    "detail": "Rest",
     "date": "2026-10-13",
     "returns": "2026-10-16"
    },
@@ -1068,6 +1068,24 @@
   ],
   "SAC": [
    {
+    "id": "4433174",
+    "name": "Dylan Cardwell",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Calf Strain",
+    "date": "2026-10-15",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "4898371",
+    "name": "Maxime Raynaud",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee Dislocated",
+    "date": "2026-10-15",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "4431679",
     "name": "Precious Achiuwa",
     "pos": "F",
@@ -1129,24 +1147,6 @@
     "detail": "Rest",
     "date": "2026-10-14",
     "returns": "2026-10-16"
-   },
-   {
-    "id": "4433174",
-    "name": "Dylan Cardwell",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Calf Strain",
-    "date": "2026-10-13",
-    "returns": "2026-10-29"
-   },
-   {
-    "id": "4898371",
-    "name": "Maxime Raynaud",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Dislocated",
-    "date": "2026-10-11",
-    "returns": "2026-10-25"
    }
   ],
   "SAS": [

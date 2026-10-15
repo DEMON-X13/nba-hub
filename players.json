@@ -18820,15 +18820,15 @@
    }
   },
   "2027_20261025_MEM_SAC": {
-   "pHome": 0.5772,
-   "spread": -2.1,
-   "total": 232.4,
+   "pHome": 0.5754,
+   "spread": -2,
+   "total": 230.2,
    "pace": 103.1,
    "home": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -59.8,
-    "defence": -63.5,
+    "strength": 1368.8,
+    "offence": -88.8,
+    "defence": -36,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -18842,15 +18842,6 @@
       "o": -25,
       "d": -30,
       "adds": -43.4
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -26,
-      "d": -31,
-      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -18895,7 +18886,7 @@
       "min": 28,
       "o": -12,
       "d": -5,
-      "adds": -9.7
+      "adds": -9.6
      },
      {
       "id": "3064440",
@@ -18905,9 +18896,34 @@
       "o": 9,
       "d": -13,
       "adds": -2
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39.6
+     },
+     {
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
+      "min": 8,
+      "o": -6,
+      "d": 2,
+      "adds": -0.7
      }
     ],
     "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -38.7
+     },
      {
       "id": "4433174",
       "name": "Dylan Cardwell",
@@ -21789,9 +21805,9 @@
    }
   },
   "2027_20261027_SAC_SAS": {
-   "pHome": 0.908,
-   "spread": -15.3,
-   "total": 230.8,
+   "pHome": 0.9086,
+   "spread": -15.4,
+   "total": 228.6,
    "pace": 103.1,
    "home": {
     "team": "SAS",
@@ -21889,9 +21905,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -59.8,
-    "defence": -63.5,
+    "strength": 1368.8,
+    "offence": -88.8,
+    "defence": -36,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -21905,15 +21921,6 @@
       "o": -25,
       "d": -30,
       "adds": -43.4
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -26,
-      "d": -31,
-      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -21958,7 +21965,7 @@
       "min": 28,
       "o": -12,
       "d": -5,
-      "adds": -9.7
+      "adds": -9.6
      },
      {
       "id": "3064440",
@@ -21968,9 +21975,34 @@
       "o": 9,
       "d": -13,
       "adds": -2
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39.6
+     },
+     {
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
+      "min": 8,
+      "o": -6,
+      "d": 2,
+      "adds": -0.7
      }
     ],
     "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -38.7
+     },
      {
       "id": "4433174",
       "name": "Dylan Cardwell",
@@ -24806,9 +24838,9 @@
    }
   },
   "2027_20261029_SAC_NOP": {
-   "pHome": 0.5918,
+   "pHome": 0.5937,
    "spread": -2.5,
-   "total": 233.7,
+   "total": 231.5,
    "pace": 103.1,
    "home": {
     "team": "NOP",
@@ -24897,9 +24929,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -59.8,
-    "defence": -63.5,
+    "strength": 1368.8,
+    "offence": -88.8,
+    "defence": -36,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -24913,15 +24945,6 @@
       "o": -25,
       "d": -30,
       "adds": -43.4
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -26,
-      "d": -31,
-      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -24966,7 +24989,7 @@
       "min": 28,
       "o": -12,
       "d": -5,
-      "adds": -9.7
+      "adds": -9.6
      },
      {
       "id": "3064440",
@@ -24976,9 +24999,42 @@
       "o": 9,
       "d": -13,
       "adds": -2
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39.6
+     },
+     {
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
+      "min": 8,
+      "o": -6,
+      "d": 2,
+      "adds": -0.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -38.7
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.3
+     }
+    ]
    }
   },
   "2027_20261030_CHA_WAS": {
@@ -28182,9 +28238,9 @@
    }
   },
   "2027_20261031_SAC_MEM": {
-   "pHome": 0.5511,
+   "pHome": 0.553,
    "spread": -1.4,
-   "total": 232.4,
+   "total": 230.2,
    "pace": 103.1,
    "home": {
     "team": "MEM",
@@ -28282,9 +28338,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1370.3,
-    "offence": -59.8,
-    "defence": -63.5,
+    "strength": 1368.8,
+    "offence": -88.8,
+    "defence": -36,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -28298,15 +28354,6 @@
       "o": -25,
       "d": -30,
       "adds": -43.4
-     },
-     {
-      "id": "4898371",
-      "name": "Maxime Raynaud",
-      "pos": "C",
-      "min": 33,
-      "o": -26,
-      "d": -31,
-      "adds": -38.8
      },
      {
       "id": "4279318",
@@ -28351,7 +28398,7 @@
       "min": 28,
       "o": -12,
       "d": -5,
-      "adds": -9.7
+      "adds": -9.6
      },
      {
       "id": "3064440",
@@ -28361,9 +28408,42 @@
       "o": 9,
       "d": -13,
       "adds": -2
+     },
+     {
+      "id": "2583639",
+      "name": "Elfrid Payton",
+      "pos": "G",
+      "min": 25,
+      "o": -88,
+      "d": 12,
+      "adds": -39.6
+     },
+     {
+      "id": "4065732",
+      "name": "De'Andre Hunter",
+      "pos": "F",
+      "min": 8,
+      "o": -6,
+      "d": 2,
+      "adds": -0.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4898371",
+      "name": "Maxime Raynaud",
+      "status": "Out",
+      "min": 33,
+      "costs": -38.7
+     },
+     {
+      "id": "4433174",
+      "name": "Dylan Cardwell",
+      "status": "Out",
+      "min": 24,
+      "costs": -23.3
+     }
+    ]
    }
   },
   "2027_20261101_BKN_IND": {
@@ -48039,5 +48119,5 @@
    }
   }
  },
- "generated": "2026-10-15T08:02Z"
+ "generated": "2026-10-15T15:37Z"
 }

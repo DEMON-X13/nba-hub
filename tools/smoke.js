@@ -384,7 +384,7 @@ async function playerProps() {
      p4 junk; p5 tipped an hour ago; p6 under way at ESPN; p7 a 500; p8 tips while its props read is out; p10 still
      scheduled at ESPN with ESPN's own tip a minute before the press, its published tip later (a game ESPN moved earlier) */
   const p1 = og('BOS', 'DET', 3 * 3600e3, { espn: '401909088' });
-  const p2 = og('LAL', 'GSW', 5 * 3600e3, { espn: '' });
+  const p2 = og('LAL', 'GSW', 3 * 3600e3, { espn: '' });         // p1's tip, so on p1's day in the plan at any hour (at five hours it fell on the next Eastern day from 7 to 9pm)
   const p3 = og('MIA', 'ORL', 3 * 3600e3, { espn: '401900003' });
   const p4 = og('PHI', 'CHA', 3 * 3600e3, { espn: '401900004' });
   const p5 = og('DEN', 'UTA', -3600e3, { espn: '401900005' });
@@ -930,10 +930,11 @@ async function builder() {
     `three legs of one game and one of another: the page's price ${pb.dec.toFixed(4)} and fair chance ${pb.fair.toFixed(5)} are this file's ${mb.dec.toFixed(4)} and ${mb.fair.toFixed(5)} (its own integration, within ${TOL3 * 100}% of each other), under the product ${mb.prod.toFixed(4)}; no model chance, a total having none`);
   /* more sets of three and four legs of one game, priced one after another in the same page session, each against this
      file's own integration (tri, quad4): one player's three Overs at -110 each, then three legs at the very same implied
-     chances but other relations (two opponents' points and the total Under; his points Over, rebounds Under and assists
-     Over), four at -110 (his three Overs and the total), four of every kind at their own prices, and four with a model
-     chance each. A price kept from another set (a cache keyed by the chances alone), one leg's relation read for
-     another's, or a fourth leg's dropped, shows */
+     chances but other relations (his points with his club's win and the Over; his points and threes with the Over; his
+     points Over, rebounds Under and assists Over, held at the product; two opponents' points and the Under), four at
+     -110 (his three Overs and the Over), four of every kind at their own prices, and four with a model chance each. A
+     price kept from another set (a cache keyed by the chances alone), one leg's relation read for another's, or a fourth
+     leg dropped, shows */
   { const cade = (stat, side, odds, other, x) => ({ ...L(stat, side, odds, other, x), pid: '4432166', name: 'Cade Cunningham', team: 'DET' });
     const TOL4 = 1e-3;
     const sets = {
@@ -1190,7 +1191,7 @@ async function builder() {
   const badX = Object.keys(wantX).filter(k => JSON.stringify(want[k]) !== JSON.stringify(got[k]));
   check(!badX.length && cats(rim) === 2 && cats(thief) === 3, `by this file's sums: a double-double of rebounds and blocks (${got.g11.join(' ')}) and a triple-double of points, rebounds and steals (${got.g12.join(' ')}); a same-game parlay with a player's whole line pushing paid at the same-game price of the two legs left (${got.g13.join(' ')}, want ${wantX.g13[1]}) and one with the total pushing at the leg left's own price (${got.g14.join(' ')}); a player's leg on a game postponed in the slate and on one off every list two days past its date void with the stake back (${got.g15.join(' ')}, ${got.g16.join(' ')}), and dropped from a parlay (${got.g17.join(' ')})${badX.length ? ': ' + badX.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
   const badF = Object.keys(fileWant).filter(k => JSON.stringify(want[k]) !== JSON.stringify(got[k]));
-  check(!badF.length, `from the season's box file, by this file's own reading of it: Old Hand's and Old Big's points, rebounds (both boards), assists, threes, steals, blocks and the five combos each push at their own sum, so each column is read from its own place, and their double- and triple-doubles (${Object.keys(fileWant).filter(k => /(dd|td)$/.test(k)).map(k => `${k.slice(1, 4)} ${k.slice(4)} ${got[k][0]}`).join(', ')})${badF.length ? ': ' + badF.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
+  check(!badF.length, `from the season's box file, by this file's own reading of it: Old Hand's, Old Big's, Old Rim's and Old Thief's points, rebounds (both boards), assists, threes, steals, blocks and the five combos each push at their own sum, so each column is read from its own place, and their double- and triple-doubles (${Object.keys(fileWant).filter(k => /(dd|td)$/.test(k)).map(k => `${k.slice(1, 4)} ${k.slice(4)} ${got[k][0]}`).join(', ')})${badF.length ? ': ' + badF.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
   const csvReq = requests.filter(x => /data\/box_\d{4}\.csv/.test(x.url));
   check(csvReq.length === 1 && csvReq[0].opt && csvReq[0].opt.cache === 'no-store', `the season's box file is read once, no-store, for the legs older than the state's window (${csvReq.length})`);
   const lalTitle = row('g7').querySelector('[title]');

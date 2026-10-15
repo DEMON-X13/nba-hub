@@ -1649,9 +1649,9 @@ window.NBA_PROPS = { PROP_URL, PROP_MAIN, PROP_MILE, PROP_YES, PROP_STATS, propA
      the NFL hub's 0.896, untested on the NBA. That price is an estimate and is marked est. wherever it shows.
    - The chances. DraftKings' fair chance of the whole parlay leads: each leg's own (a main line's with the whole margin
      on the Over, as the Player props view; a milestone's or a Yes price's by the rung rule, est.; a team line's two
-     prices split evenly) joined the same way, est. where a same-game correction or an est. leg is in it. The model's
-     chance beside it only where every leg has one (a player's from the props model, ON TRIAL; a moneyline's from the
-     game model), and never as an edge.
+     prices with the margin taken out in proportion) joined the same way, est. where a same-game correction or an est.
+     leg is in it. The model's chance beside it only where every leg has one (a player's from the props model, ON TRIAL;
+     a moneyline's from the game model), and never as an edge.
    - The legs are the visitor's: kept in this browser (M.slip, the page's own key), each at the price it was added at,
      dated, until a later press reads that line again (the new price, or out if DraftKings has moved or pulled it, said
      once); a leg leaves at its game's tip. Nothing else from a read is stored.
@@ -1771,7 +1771,7 @@ const slipWho = l => l.kind === 'prop' ? l.name : `${l.away} at ${l.home}`;
 const sgLeg = l => l.kind === 'prop' ? { game: l.id, kind: l.stat, player: l.pid, team: l.team, side: l.side, home: l.home } : { game: l.id, kind: SG_KIND[l.kind], team: l.kind === 'total' ? '' : l.side, side: l.side, home: l.home };
 /* DraftKings' fair chance of one leg: { p, est } or null. A player's main line: the whole margin on the Over (as the
    Player props view); a milestone or a Yes price: the rung rule on the measured margin, est.; a team line: its two
-   prices with the margin split evenly (the page's market chance) */
+   prices with the margin taken out in proportion (the page's market chance) */
 function legFair(l) {
   if (l.kind === 'prop') {
     if (l.mk === 'main') { if (l.other == null) return null; const fo = l.side === 'under' ? propFairOver(l.other, l.odds) : propFairOver(l.odds, l.other); return fo == null ? null : { p: l.side === 'under' ? 1 - fo : fo, est: false }; }

@@ -668,28 +668,32 @@ multiplied beside it.
 
 **The chances.** The summary leads with DraftKings' fair chance of the whole parlay: each leg's (a player's main line
 with the whole margin on the Over, as the Player props view; a milestone's or a Yes price's by the rung rule, est.; a
-team line's two prices with the margin split evenly, the page's market chance) joined the same way, est. wherever a
-same-game correction or an est. leg is in it. The model's chance stands beside it only where every leg has one (a player's
-from the props model, labelled on trial; a moneyline's from the game model; the page has never put a chance on a spread
-or a total, and does not start here), and nothing says "model says" or "edge". Then the price and what the stake pays.
+team line's two prices with the margin taken out in proportion, the page's market chance) joined the same way, est.
+wherever a same-game correction or an est. leg is in it. The model's chance stands beside it only where every leg has
+one (a player's from the props model, labelled on trial; a moneyline's from the game model; the page has never put a
+chance on a spread or a total, and does not start here), and nothing says "model says" or "edge". Then the price and
+what the stake pays.
 
-**Lock in** puts the parlay in the Bet Build at the price worked out then (`dec`, marked est. where a game has two legs).
-**Finish** shows it as a card (Eastern time, since it goes to other people): each leg with its price and read time,
-the price est. with the legs multiplied, the fair chance first, Open in DraftKings and Share link. ESPN's feed carries no
-DraftKings betslip id for a player's line, so each player leg says "DraftKings' player lines carry no betslip id in ESPN's
-feed: add this leg by hand"; the betslip link (`sportsbook.draftkings.com/?outcomes=`) opens the game lines that carry
-an id, the note under it says which legs it opens, as DraftKings had them at the oldest read, and which to add by hand,
-never that every leg lands; with no id it opens the game's page or DraftKings' NBA page. Share link sends one text
-(a title and the text, never a url field, as on the NFL and NHL hubs) with each leg, the betslip link alone on its line
-and the legs to add by hand with why; with no share sheet the same text is copied.
+**Lock in** puts the parlay in the Bet Build at the price worked out then (`dec`, marked est. where a game has two
+legs). **Finish** shows it as a card (Eastern time, since it goes to other people): each leg with its price and read
+time, the price est. with the legs multiplied, the fair chance first, what the stake pays, the model's chance where
+every leg has one (on trial with a player leg) or the line saying why there is none, Open in DraftKings and Share link.
+ESPN's feed carries no DraftKings betslip id for a player's line, so each player leg says "DraftKings' player lines
+carry no betslip id in ESPN's feed: add this leg by hand"; the betslip link (`sportsbook.draftkings.com/?outcomes=`)
+opens the game lines that carry an id, the note under it says which legs it opens, as DraftKings had them at the oldest
+read, and which to add by hand, never that every leg lands; with no id it opens the game's page or DraftKings' NBA page.
+Share link sends one text (a title and the text, never a url field, as on the NFL and NHL hubs) with each leg, the
+betslip link alone on its line and the legs to add by hand with why; with no share sheet the same text is copied.
 
 ### Grading a player's leg
 
 Once its game is final, a player's leg is graded as DraftKings settles it, from the box score: the stat as the box has
 it (a combo the sum of its parts; a double- or triple-double two or three of points, rebounds, assists, steals and blocks
 at 10 or more), a push on a whole line, void for a player who did not play (the box lists him as not playing, or not at
-all). A void or a push drops out of a parlay, and a same-game parlay is then priced again by the same rule on the legs
-left. A leg whose game is final and whose box score is not read yet waits (its title says so). Once made, a grade is
+all). A leg on a game not played on its date is void too, as a team bet on it is: a game the published slate has called
+off, or one on no published list two days after its date ("not played on its date"). A void or a push drops out of a
+parlay, and a same-game parlay is then priced again by the same rule on the legs left (one leg left pays its own
+price). A leg whose game is final and whose box score is not read yet waits (its title says so). Once made, a grade is
 written into the visitor's own Bet Build entry (`res`: the result and the stat), so it holds when the box score has left
 the published file.
 
@@ -716,7 +720,8 @@ players projected 12 minutes or more (about the players a book lines). Written b
   are counts of 0, 1 and 2, whose normal scores would understate it.
 - **Thin pairs.** Each rho carries a jackknife error over groups of games and is shrunk toward 0 by it (empirical Bayes
   within its relation); a pair with under 300 observations, under 5 expected in any outcome, or a likelihood peaking at
-  |rho| 0.97 or more is 0. Two teammates' triple-doubles (4 of 10,228 pairs both) measure 0.04 with an error of 0.12, so 0.
+  |rho| 0.97 or more is 0. Two teammates' triple-doubles (4 of 10,228 pairs both) measure 0.04 with an error of 0.12, so
+  they shrink to 0 (the positive-definite repair below then moves them to 0.03, which is what the page prices).
 - **Positive definite in use.** As measured the table is not (least eigenvalue -0.515), mostly because triple-double pairs
   are measured on the few players who can get one. It is moved to the nearest table that is positive definite over every
   leg one game can carry (13 players a side, every kind each, the win, the cover and the total: 341 legs), each value held
@@ -732,8 +737,8 @@ The table in brief (the sign turns for each Under, and for a side bet on the oth
 | One player | points-rebounds 0.33, points-assists 0.21, rebounds-assists 0.25, points-threes 0.74, points-steals 0.19, steals-blocks 0.07, rebounds-double-double 0.72, points-double-double 0.43, assists-triple-double 0.80, rebounds-triple-double 0.61 |
 | A player with his club's win | points 0.13, rebounds 0.11, assists 0.10, points + rebounds + assists 0.16, double-double 0.14, triple-double 0.17 (with the cover about the same: points 0.12) |
 | A player with the game's Over | points 0.13, assists 0.11, threes 0.11, points + assists 0.15, rebounds -0.07, blocks -0.03 |
-| Teammates | about 0: points-points -0.024, assists-points +0.034, all within 0.03 |
-| Opponents | about 0, all within 0.016 |
+| Teammates | about 0: points-points -0.024, assists-points +0.034, all within 0.04 (the largest assists-threes +0.039) |
+| Opponents | about 0, all within 0.02 (the largest blocks-double-double +0.019) |
 | The side bet with the total | 0 (measured 0.03 with an error of 0.02; the repair took it to 0, as the NFL hub uses) |
 | A player with his club's points | 0.19 (points + assists 0.22): measured, not used, since no team-total leg is offered |
 
@@ -755,8 +760,7 @@ Log loss of the combination landing, copula minus independence, on DraftKings' l
 [90%: -0.0066, -0.0044], a player with a game leg -0.0015 [-0.0019, -0.0011] (teammates and opponents 0.0000). By lift
 the copula's predicted lift matched what happened on the regular season (1.452 said, 1.446 happened, in the 1.3 to
 1.6 band; 0.497 and 0.495 below 0.7), and ran high only at the very top (1.73 said, 1.60 happened, above 1.6). Rho measured at milestone-like lines differs from the main line's by 0.007 on average
-(0.02 at most), so a milestone uses its stat's main-line rho. On DraftKings' playoff lines a uniform 0.90 on one player's
-rhos fitted best; not applied (one playoff run, and the regular season says 1.0). ESPN keeps no regular-season DraftKings
+(0.02 at most), so a milestone uses its stat's main-line rho. ESPN keeps no regular-season DraftKings
 lines, so those lines are the model's; and no spread or total prices are on file for past games, so in the DraftKings test
 those legs sit at even odds.
 
@@ -767,8 +771,9 @@ No DraftKings same-game price is recorded anywhere this hub reads (ESPN's feed c
 **untested on the NBA**, and the page and `state.json` (`corr.holdTested: false`) say so. It applies to J of the implied
 chances, as the NFL fitted it: applied to the fair joint it would overpay correlated tickets by about a tenth. Worked
 examples (`research/corr.json` `hold.examples`, both legs -110/-110): one player's points Over and rebounds Over, 3.64
-multiplied, 2.74 with the hold; two teammates' points Overs, 3.64 and 3.31 (the hold alone cuts 9% even from unrelated
-legs, as it does on the NFL hub); one player's points Over and rebounds Under, held at the 3.64 product.
+multiplied, 2.74 with the hold; two teammates' points Overs, 3.64 and 3.31 (the hold alone cuts 10.4% from
+independent legs, as it does on the NFL hub; this pair's slight negative rho, -0.024, gives a little back, so about 9%
+here); one player's points Over and rebounds Under, held at the 3.64 product.
 
 ### Live, 15 October 2026
 
@@ -813,30 +818,42 @@ an Under beside the Over, a triple-double beside a double-double, two totals, th
 other team's, a preseason player leg, and another leg of the game beside a player no table names or one the tables put
 on another club, whichever comes first, each taken alone); the price, the fair chance and the model's chance of eight
 two-leg pairs of every kind worked out here exactly from `data/corr.json` and `tools/corr.js`, and of three legs by this
-file's own integration (to 0.02%), never above the product; the summary and the card leading with the fair chance, est.,
-the price est. beside the legs multiplied, the why line, the model on trial or absent with its reason; the suggested
-parlays and the plan byte for byte the same with legs in and without; the card's legs, add-by-hand lines, betslip link
-and note, Share text, copy, Escape and focus, and the note and Share text dated by the older read when the legs it opens
-were read at two presses; Lock in; a reload; a later press moving, dropping and repricing legs, a failed read keeping
-one, a none-posted read dropping one, said once; a tip; grading ten bets by its own sums (a void leg dropped and the
+file's own integration (to 0.02%), never above the product; eight more sets of three and four legs of one game priced
+one after another in one page session, each against that integration (four legs by its extension to a fourth, to 0.1%),
+three of them at one set of implied chances with other relations, priced apart; the summary and the card leading with
+the fair chance, est., the price est. beside the legs multiplied, what the stake pays to the cent, the why line, the
+model's chance labelled on trial (a second card, on a parlay with a model chance on every leg) or absent with its
+reason, and neither saying "edge" or "model says"; the suggested parlays and the plan byte for byte the same with legs
+in and without; the card's legs, add-by-hand lines, betslip link and note, Share text (what the stake pays, to the
+cent), copy, Escape and focus, and the note and Share text dated by the older read when the legs it opens were read at
+two presses; Lock in; a reload; a later press moving, dropping and repricing legs, a failed read keeping one, a
+none-posted read dropping one, said once; a tip; grading seventeen bets by its own sums (a void leg dropped and the
 same-game parlay repriced, a push, a milestone, a double-double, a triple-double short, an Under, a final with no box
-waiting, a leg three weeks old read from its season's box file, and a straight bet on every other stat: each combo,
-threes, steals and blocks, by its own sum of the parts); from the season's box file, two players' every stat and combo,
-each at a whole line at this file's own sum of the file's columns (every column a different number on a row, rebounds
-both boards), so only the exact value pushes, and their double- and triple-doubles; the grades written into the Bet
-Build and holding with the box scores gone; and the page's copies of `tools/corr.js` (`rhoFor`, `joint2`, `bvnUpper` and
-their pieces) and `tools/props.js` (`normCdf`, `normInv`) line for line. Section 0 holds `state.json`'s `boxes` to
-`games.csv` and the box files (today, and a full mid-season week through `publish.js`'s own `boxesState`) and its `corr`
-to `data/corr.json`. `node tools/test_corr.js` holds the table (the workflow's tests run it now). Each check was shown
-to fail on a planted break: `NBA_HTML=<copy> SMOKE_ONLY=9 node tools/smoke.js` runs section 9 on a broken copy of the
-page.
+waiting, a leg three weeks old read from its season's box file, a double-double of rebounds and blocks and a
+triple-double of points, rebounds and steals, a same-game parlay with a player's whole line pushing priced again on the
+two legs left and one with the total pushing paid at the leg left's own price, a player's leg on a game postponed in the
+slate and on one off every list two days past its date void with the stake back, alone and beside a winner) and a
+straight bet on every other stat (each combo, threes, steals and blocks, by its own sum of the parts); from the season's
+box file, four players' every stat and combo, each at a whole line at this file's own sum of the file's columns (every
+column a different number on a row, rebounds both boards), so only the exact value pushes, and their double- and
+triple-doubles (one through blocks, one through steals); the grades written into the Bet Build (a called-off game's void
+with its reason) and holding with the box scores gone; and the page's copies of `tools/corr.js` (`rhoFor`, `joint2`,
+`bvnUpper` and their pieces) and `tools/props.js` (`normCdf`, `normInv`) line for line. Section 0 holds `state.json`'s
+`boxes` to `games.csv` and the box files (today, and a full mid-season week through `publish.js`'s own `boxesState`) and
+its `corr` to `data/corr.json`. `node tools/test_corr.js` holds the table (the workflow's tests run it now). Each check
+was shown to fail on a planted break: `NBA_HTML=<copy> SMOKE_ONLY=9 node tools/smoke.js` runs section 9 on a broken copy
+of the page.
 
-The 65 breaks (60 in the page, 5 in `publish.js`, the latter run in a scratch copy of the repo: publish, then sections 0
+The 75 breaks (70 in the page, 5 in `publish.js`, the latter run in a scratch copy of the repo: publish, then sections 0
 and 9), each red. The second sweep's first run left one green, a combo graded without its rebounds: no check graded a
 combo, so the straight bets on every stat went in, and it and two more breaks of the same kind turned red. A review then
 planted six that passed every check (the box file's rebounds and assists read from the wrong columns, the foot's price
 without its est., the card dated by the newest read, a total on another number offered, the unplaced player's refusal
-deleted); the checks above went in for them, and the third sweep, these 13 among the 65, left none green:
+deleted); the checks above went in for them, and the third sweep, these 13 among them, left none green. A second review
+planted four more that passed every check (a double- or triple-double counted on points, rebounds and assists alone, a
+push kept in a same-game parlay's reprice, the void for a game called off deleted, the same-game cache keyed by the
+chances alone) and found the card's payout and model tile read by nothing; the checks went in for those, and the four
+and six breaks of the card (the last ten rows) are red:
 
 | Planted break | What failed |
 |---|---|
@@ -905,6 +922,16 @@ deleted); the checks above went in for them, and the third sweep, these 13 among
 | publish.js: a six-day window | section 0: the published box lines, and the mid-season ones |
 | publish.js: the same-game table left out of the state | 17: the published table, and every same-game price in section 9 |
 | publish.js: the hold said tested | the published table |
+| a double- or triple-double counted on points, rebounds and assists alone | the steals and blocks doubles, the box file's doubles, the grades written and holding |
+| a push kept in a same-game parlay's reprice | the pushed same-game parlays, the grades holding |
+| the void for a game called off deleted | the called-off legs, the grades written and holding |
+| the same-game cache keyed by the chances alone | the sets of three and four legs |
+| the card's payout on the legs multiplied | both cards' payout |
+| the Share text's payout on the legs multiplied | the Share text |
+| the card's model tile the fair chance, labelled "model says" | the second card |
+| the card's model not labelled on trial | the second card |
+| the card's no-model reason dropped | the card with a total |
+| the card saying "edge" and "model says" | both cards, and the card's note |
 
 ## Runs
 
@@ -928,11 +955,11 @@ After the players model, the props step reads DraftKings' closing lines for the 
 (`props.json`) and the shadow ledger, and runs the ledger's check; when either fails, every props data file goes back to
 the last commit's and the run is red (README "Player props").
 
-After the pull, each step may fail on its own: the data folder and the model files are committed whenever the
-pull succeeded, and state.json and the pages only when publishing and the tests (`tools/test_fetch.js`,
-`tools/test_fetch_box.js`, then the page's smoke test on the new state) pass; the run is red when any step
-failed. The page says when the injury report is older than the file it came in. On demand the job
-takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
+After the pull, each step may fail on its own: the data folder and the model files are committed whenever the pull
+succeeded, and state.json and the pages only when publishing and the tests (`tools/test_fetch.js`,
+`tools/test_fetch_box.js`, `tools/test_props.js`, `tools/test_corr.js`, then the page's smoke test on the new state)
+pass; the run is red when any step failed. The page says when the injury report is older than the file it came in. On
+demand the job takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
 `claude/` branch too, committing there and in its own queue; the schedule only fires from `main`).
 
 Local:

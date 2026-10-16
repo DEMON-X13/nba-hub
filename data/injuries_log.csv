@@ -2135,10 +2135,10 @@ date,team,player_id,name,status
 2026-10-15,CLE,4066757,Sam Merrill,Day-To-Day
 2026-10-15,CLE,4997530,Khalifa Diop,Day-To-Day
 2026-10-15,DAL,4701208,Moussa Cisse,Day-To-Day
-2026-10-15,DAL,5105806,Jett Howard,Day-To-Day
-2026-10-15,DAL,4432107,Marcus Sasser,Day-To-Day
-2026-10-15,DAL,4683688,Dereck Lively II,Day-To-Day
 2026-10-15,DAL,4593125,Santi Aldama,Day-To-Day
+2026-10-15,DAL,4432107,Marcus Sasser,Day-To-Day
+2026-10-15,DAL,5105806,Jett Howard,Day-To-Day
+2026-10-15,DAL,4683688,Dereck Lively II,Day-To-Day
 2026-10-15,DAL,4873153,Morez Johnson Jr.,Day-To-Day
 2026-10-15,DAL,4278049,Daniel Gafford,Day-To-Day
 2026-10-15,DAL,5041939,Cooper Flagg,Day-To-Day
@@ -2152,12 +2152,9 @@ date,team,player_id,name,status
 2026-10-15,GSW,6430,Jimmy Butler III,Out
 2026-10-15,GSW,4432171,Moses Moody,Out
 2026-10-15,HOU,2991235,Steven Adams,Day-To-Day
-2026-10-15,HOU,4871144,Alperen Sengun,Day-To-Day
-2026-10-15,HOU,2991230,Fred VanVleet,Day-To-Day
-2026-10-15,HOU,3202,Kevin Durant,Day-To-Day
+2026-10-15,IND,4396909,Aaron Nesmith,Day-To-Day
 2026-10-15,IND,2530530,T.J. McConnell,Day-To-Day
 2026-10-15,IND,5106060,Jarace Walker,Day-To-Day
-2026-10-15,IND,4396909,Aaron Nesmith,Day-To-Day
 2026-10-15,IND,4395712,Andrew Nembhard,Day-To-Day
 2026-10-15,IND,5157066,Johnny Furphy,Out
 2026-10-15,LAC,2991139,Kris Dunn,Day-To-Day
@@ -2169,8 +2166,8 @@ date,team,player_id,name,status
 2026-10-15,LAC,4396818,Jordan Miller,Out
 2026-10-15,LAL,5113969,Cameron Carr,Day-To-Day
 2026-10-15,LAL,4277811,Collin Sexton,Day-To-Day
-2026-10-15,LAL,5060631,Adou Thiero,Day-To-Day
 2026-10-15,LAL,4433137,Ziaire Williams,Day-To-Day
+2026-10-15,LAL,5060631,Adou Thiero,Day-To-Day
 2026-10-15,LAL,3945274,Luka Doncic,Day-To-Day
 2026-10-15,MEM,4432185,Micah Peavy,Day-To-Day
 2026-10-15,MEM,4432810,Isaiah Stewart,Out
@@ -2187,19 +2184,15 @@ date,team,player_id,name,status
 2026-10-15,MIL,3134907,Kyle Kuzma,Day-To-Day
 2026-10-15,MIL,4432848,Jaime Jaquez Jr.,Day-To-Day
 2026-10-15,MIL,4277843,Gary Trent Jr.,Day-To-Day
+2026-10-15,MIN,4397002,Ayo Dosunmu,Day-To-Day
 2026-10-15,MIN,5157587,Rocco Zikarsky,Day-To-Day
 2026-10-15,MIN,4592699,Enrique Freeman,Day-To-Day
 2026-10-15,MIN,3934673,Donte DiVincenzo,Out
 2026-10-15,NOP,3907497,Dejounte Murray,Day-To-Day
-2026-10-15,NYK,3136195,Karl-Anthony Towns,Day-To-Day
-2026-10-15,NYK,3147657,Mikal Bridges,Day-To-Day
 2026-10-15,NYK,3062679,Josh Hart,Day-To-Day
-2026-10-15,NYK,3934719,OG Anunoby,Day-To-Day
-2026-10-15,NYK,3934672,Jalen Brunson,Day-To-Day
 2026-10-15,OKC,5106270,Otega Oweh,Out
 2026-10-15,OKC,4432823,Jaylin Williams,Day-To-Day
 2026-10-15,OKC,4433255,Chet Holmgren,Day-To-Day
-2026-10-15,OKC,4900671,Ajay Mitchell,Day-To-Day
 2026-10-15,OKC,5061603,Thomas Sorber,Day-To-Day
 2026-10-15,OKC,5159925,Nikola Topic,Day-To-Day
 2026-10-15,ORL,4065654,Jonathan Isaac,Day-To-Day
@@ -2215,6 +2208,7 @@ date,team,player_id,name,status
 2026-10-15,PHI,3059318,Joel Embiid,Day-To-Day
 2026-10-15,PHI,4871141,Ariel Hukporti,Out
 2026-10-15,PHI,3904625,Tacko Fall,Day-To-Day
+2026-10-15,PHX,3913174,Luke Kennard,Day-To-Day
 2026-10-15,PHX,4601023,Oso Ighodaro,Day-To-Day
 2026-10-15,PHX,4278585,Collin Gillespie,Day-To-Day
 2026-10-15,PHX,4066383,Miles Bridges,Day-To-Day
@@ -2239,6 +2233,7 @@ date,team,player_id,name,status
 2026-10-15,SAS,5101845,Jayden Quaintance,Out
 2026-10-15,SAS,6440,Tobias Harris,Day-To-Day
 2026-10-15,TOR,4432586,Nate Bittle,Day-To-Day
+2026-10-15,TOR,4590360,Chucky Hepburn,Day-To-Day
 2026-10-15,UTA,4396963,Blake Hinson,Day-To-Day
 2026-10-15,UTA,4684793,Kyle Filipowski,Day-To-Day
 2026-10-15,UTA,3102530,Jusuf Nurkic,Out

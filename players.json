@@ -339,15 +339,16 @@
    ]
   },
   "MIN": {
-   "strength": 1566.1,
-   "offence": 34.9,
-   "defence": 28.8,
+   "strength": 1583.8,
+   "offence": 41.6,
+   "defence": 39.9,
    "coach": "Chris Finch",
    "coachElo": 2.4,
    "coachGames": 467,
    "pace": 103.1,
    "out": [
     "Donte DiVincenzo (Out)",
+    "Ayo Dosunmu (Day-To-Day)",
     "Enrique Freeman (Day-To-Day)",
     "Rocco Zikarsky (Day-To-Day)"
    ]
@@ -365,14 +366,16 @@
    ]
   },
   "NYK": {
-   "strength": 1712.8,
-   "offence": 103.5,
-   "defence": 100.6,
+   "strength": 1693.4,
+   "offence": 88.5,
+   "defence": 96.1,
    "coach": "Mike Brown",
    "coachElo": 8.8,
    "coachGames": 306,
    "pace": 103.1,
-   "out": []
+   "out": [
+    "Josh Hart (Day-To-Day)"
+   ]
   },
   "OKC": {
    "strength": 1701.7,
@@ -419,9 +422,9 @@
    ]
   },
   "PHX": {
-   "strength": 1428.1,
-   "offence": -43.7,
-   "defence": -31.2,
+   "strength": 1395.2,
+   "offence": -62.6,
+   "defence": -45.2,
    "coach": "Jordan Ott",
    "coachElo": 3,
    "coachGames": 88,
@@ -433,6 +436,7 @@
     "Collin Gillespie (Day-To-Day)",
     "Jalen Green (Day-To-Day)",
     "Oso Ighodaro (Day-To-Day)",
+    "Luke Kennard (Day-To-Day)",
     "Mark Williams (Out)"
    ]
   },
@@ -491,7 +495,9 @@
    "coachElo": 3.1,
    "coachGames": 253,
    "pace": 103.1,
-   "out": []
+   "out": [
+    "Chucky Hepburn (Day-To-Day)"
+   ]
   },
   "UTA": {
    "strength": 1410.7,
@@ -8055,15 +8061,15 @@
    }
   },
   "2027_20261015_TOR_NYK": {
-   "pHome": 0.7453,
-   "spread": -7.2,
-   "total": 230.9,
+   "pHome": 0.7257,
+   "spread": -6.5,
+   "total": 230.5,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1693.4,
+    "offence": 88.5,
+    "defence": 96.1,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -8076,7 +8082,7 @@
       "min": 35,
       "o": 40,
       "d": 19,
-      "adds": 43.3
+      "adds": 43.5
      },
      {
       "id": "3934719",
@@ -8085,7 +8091,7 @@
       "min": 32,
       "o": 17,
       "d": 24,
-      "adds": 27.5
+      "adds": 27.7
      },
      {
       "id": "3147657",
@@ -8094,7 +8100,7 @@
       "min": 31,
       "o": 24,
       "d": 26,
-      "adds": 32.1
+      "adds": 32.3
      },
      {
       "id": "3136195",
@@ -8103,25 +8109,16 @@
       "min": 31,
       "o": 38,
       "d": 18,
-      "adds": 36.1
-     },
-     {
-      "id": "3062679",
-      "name": "Josh Hart",
-      "pos": "G",
-      "min": 30,
-      "o": 31,
-      "d": 25,
-      "adds": 34.8
+      "adds": 36.3
      },
      {
       "id": "6585",
       "name": "Andre Drummond",
       "pos": "C",
-      "min": 24,
+      "min": 25,
       "o": -8,
       "d": 23,
-      "adds": 7.8
+      "adds": 8.1
      },
      {
       "id": "4065670",
@@ -8136,22 +8133,39 @@
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
-      "min": 22,
+      "min": 23,
       "o": 1,
       "d": 21,
-      "adds": 10
+      "adds": 10.4
      },
      {
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.4
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 18,
+      "o": 6,
+      "d": 10,
+      "adds": 5.9
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "3062679",
+      "name": "Josh Hart",
+      "status": "Day-To-Day",
+      "min": 30,
+      "costs": 34.8
+     }
+    ]
    },
    "away": {
     "team": "TOR",
@@ -8245,7 +8259,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    }
   },
   "2027_20261016_ATL_DAL": {
@@ -8658,29 +8680,20 @@
    }
   },
   "2027_20261016_CHA_MEM": {
-   "pHome": 0.3869,
-   "spread": 3.1,
-   "total": 231.6,
+   "pHome": 0.4127,
+   "spread": 2.4,
+   "total": 231.8,
    "pace": 103.1,
    "home": {
     "team": "MEM",
-    "strength": 1363.9,
-    "offence": -52.8,
-    "defence": -80.1,
+    "strength": 1384.7,
+    "offence": -39.5,
+    "defence": -72.6,
     "coach": {
      "name": "Tuomas Iisalo",
      "elo": -3.3
     },
     "lineup": [
-     {
-      "id": "4432185",
-      "name": "Micah Peavy",
-      "pos": "G",
-      "min": 35,
-      "o": -22,
-      "d": -24,
-      "adds": -33.1
-     },
      {
       "id": "4683934",
       "name": "Jahmai Mashack",
@@ -8748,13 +8761,38 @@
       "id": "4781746",
       "name": "Javon Small",
       "pos": "G",
-      "min": 21,
+      "min": 24,
       "o": -20,
       "d": -28,
-      "adds": -20.7
+      "adds": -23.1
+     },
+     {
+      "id": "5112087",
+      "name": "Jaylen Wells",
+      "pos": "F",
+      "min": 23,
+      "o": -1,
+      "d": -11,
+      "adds": -5.5
+     },
+     {
+      "id": "5105550",
+      "name": "GG Jackson",
+      "pos": "F",
+      "min": 10,
+      "o": -8,
+      "d": -13,
+      "adds": -4.1
      }
     ],
     "out": [
+     {
+      "id": "4432185",
+      "name": "Micah Peavy",
+      "status": "Day-To-Day",
+      "min": 35,
+      "costs": -33.1
+     },
      {
       "id": "4432810",
       "name": "Isaiah Stewart",
@@ -9505,9 +9543,9 @@
    }
   },
   "2027_20261016_MIN_CHI": {
-   "pHome": 0.3906,
-   "spread": 3,
-   "total": 232,
+   "pHome": 0.369,
+   "spread": 3.6,
+   "total": 231.8,
    "pace": 103.1,
    "home": {
     "team": "CHI",
@@ -9613,9 +9651,9 @@
    },
    "away": {
     "team": "MIN",
-    "strength": 1566.2,
-    "offence": 34.9,
-    "defence": 28.8,
+    "strength": 1583.9,
+    "offence": 41.5,
+    "defence": 39.9,
     "coach": {
      "name": "Chris Finch",
      "elo": 2.4
@@ -9628,7 +9666,7 @@
       "min": 36,
       "o": -21,
       "d": -27,
-      "adds": -36
+      "adds": -36.3
      },
      {
       "id": "4432816",
@@ -9637,7 +9675,7 @@
       "min": 33,
       "o": 35,
       "d": 10,
-      "adds": 30.6
+      "adds": 30.7
      },
      {
       "id": "4431671",
@@ -9649,22 +9687,13 @@
       "adds": 19.1
      },
      {
-      "id": "4397002",
-      "name": "Ayo Dosunmu",
-      "pos": "G",
-      "min": 32,
-      "o": -14,
-      "d": -8,
-      "adds": -14.6
-     },
-     {
       "id": "4594268",
       "name": "Anthony Edwards",
       "pos": "G",
       "min": 30,
       "o": 27,
       "d": 6,
-      "adds": 20.9
+      "adds": 21
      },
      {
       "id": "3136196",
@@ -9679,22 +9708,38 @@
       "id": "3032976",
       "name": "Rudy Gobert",
       "pos": "C",
-      "min": 29,
+      "min": 30,
       "o": 6,
       "d": 52,
-      "adds": 35.1
+      "adds": 35.6
      },
      {
       "id": "4592492",
       "name": "Bones Hyland",
       "pos": "G",
-      "min": 17,
+      "min": 25,
       "o": 10,
       "d": 0,
-      "adds": 3.4
+      "adds": 4.9
+     },
+     {
+      "id": "4433247",
+      "name": "Jonathan Kuminga",
+      "pos": "F",
+      "min": 23,
+      "o": -9,
+      "d": 12,
+      "adds": 1.1
      }
     ],
     "out": [
+     {
+      "id": "4397002",
+      "name": "Ayo Dosunmu",
+      "status": "Day-To-Day",
+      "min": 32,
+      "costs": -14.6
+     },
      {
       "id": "3934673",
       "name": "Donte DiVincenzo",
@@ -10337,7 +10382,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    }
   },
   "2027_20261016_UTA_PHX": {
@@ -11868,7 +11921,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    },
    "away": {
     "team": "CHI",
@@ -16467,7 +16528,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    }
   },
   "2027_20261024_BKN_CLE": {
@@ -19513,7 +19582,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    }
   },
   "2027_20261026_ATL_HOU": {
@@ -23827,7 +23904,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    },
    "away": {
     "team": "ORL",
@@ -27080,7 +27165,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    },
    "away": {
     "team": "ORL",
@@ -29466,7 +29559,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    }
   },
   "2027_20261102_ATL_IND": {
@@ -32059,7 +32160,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    }
   },
   "2027_20261102_UTA_SAS": {
@@ -35060,7 +35169,15 @@
       "adds": -9.1
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4590360",
+      "name": "Chucky Hepburn",
+      "status": "Day-To-Day",
+      "min": 7,
+      "costs": -5.5
+     }
+    ]
    }
   },
   "2027_20261104_UTA_NOP": {
@@ -48432,5 +48549,5 @@
    }
   }
  },
- "generated": "2026-10-15T17:46Z"
+ "generated": "2026-10-16T00:15Z"
 }

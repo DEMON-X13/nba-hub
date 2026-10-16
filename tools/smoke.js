@@ -376,14 +376,18 @@ async function playerProps() {
      p4 junk; p5 tipped an hour ago; p6 under way at ESPN; p7 a 500; p8 tips while its props read is out; p10 still
      scheduled at ESPN with ESPN's own tip a minute before the press, its published tip later (a game ESPN moved earlier) */
   const p1 = og('BOS', 'DET', 3 * 3600e3, { espn: '401909088' });
-  const p2 = og('LAL', 'GSW', 5 * 3600e3, { espn: '' });
+  const p2 = og('LAL', 'GSW', 3 * 3600e3, { espn: '' });         // p1's tip, so on p1's day in the plan at any hour (at five hours it fell on the next Eastern day from 7 to 9pm)
   const p3 = og('MIA', 'ORL', 3 * 3600e3, { espn: '401900003' });
   const p4 = og('PHI', 'CHA', 3 * 3600e3, { espn: '401900004' });
   const p5 = og('DEN', 'UTA', -3600e3, { espn: '401900005' });
   const p6 = og('ATL', 'BKN', 3 * 3600e3, { espn: '401900006' });
   const p7 = og('TOR', 'CLE', 3 * 3600e3, { espn: '401900007' });
   const p8 = og('POR', 'HOU', 3600e3, { espn: '401900008' });          // its tip is moved to just after the press, below
-  const p10 = og('SAC', 'PHX', 30 * 60e3, { espn: '401900010' });      // ESPN's tip is set a minute before the press, below
+  /* p10's day and id are ESPN's tip's, Eastern, as the job would write them (section 7's r10), so ESPN's event and the
+     published game are on one day at any hour: on the published tip's day, half an hour on, they fell on two days from
+     23:30 to just after midnight Eastern and the page never matched them. ESPN's tip goes on its event at the press */
+  const p10Espn = new Date(Date.now() - 60e3).toISOString();
+  const p10 = { ...og('SAC', 'PHX', 30 * 60e3, { espn: '401900010' }), date: etDateOf(p10Espn), id: `2027_${ymd(etDateOf(p10Espn))}_SAC_PHX` };
   const games = [p1, p2, p3, p4, p5, p6, p7, p8, p10];
   const eid = { [p1.id]: '401909088', [p2.id]: '401900002', [p3.id]: '401900003', [p4.id]: '401900004', [p5.id]: '401900005', [p6.id]: '401900006', [p7.id]: '401900007', [p8.id]: '401900008', [p10.id]: '401900010' };
   const lal = { '9000001': ['Lal Guard', 'LAL', 'G', 34.2, 25.3, 5.1, 6.2, 2.8, 1.1, 0.4, 0.21, 0.02], '9000002': ['Gsw Center', 'GSW', 'C', 30.0, 15.5, 11.8, 2.1, 0.2, 0.7, 1.9, 0.55, 0.01], '9000003': ['Gsw Wing', 'GSW', 'F', 22.0, 9.0, 4.0, 1.5, 1.4, 0.6, 0.3, 0.02, 0] };
@@ -477,8 +481,8 @@ async function playerProps() {
   p8.tip = new Date(Date.now() + 2500).toISOString();
   w.eval(`S.slate.find(g => g.id === ${JSON.stringify(p8.id)}).tip = ${JSON.stringify(p8.tip)}`);
   sb[ymd(p8.date)].events.find(e => e.id === eid[p8.id]).date = new Date(Date.parse(p8.tip) + 3600e3).toISOString().slice(0, 16) + 'Z';
-  /* p10: ESPN still calls it scheduled, its own tip a minute ago; the published tip is still to come */
-  sb[ymd(p10.date)].events.find(e => e.id === eid[p10.id]).date = new Date(Date.now() - 60e3).toISOString().slice(0, 16) + 'Z';
+  /* p10: ESPN still calls it scheduled, its own tip a minute before the load (so before the press); the published tip is still to come */
+  sb[ymd(p10.date)].events.find(e => e.id === eid[p10.id]).date = p10Espn.slice(0, 16) + 'Z';
   const pressedAt = Date.now();
   d.getElementById('oddsBtn').click(); await idle();
   check(Date.now() > Date.parse(p8.tip) && pressedAt < Date.parse(p8.tip) - 1500, 'the press landed well before p8 tipped and ended after it (else the machine is too slow for this case)');

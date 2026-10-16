@@ -100,10 +100,10 @@
     "id": "4870564",
     "name": "Joshua Jefferson",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Back",
-    "date": "2026-10-14",
-    "returns": "2026-10-21"
+    "date": "2026-10-16",
+    "returns": "2026-10-24"
    }
   ],
   "CHA": [
@@ -977,15 +977,6 @@
     "id": "3136193",
     "name": "Devin Booker",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "3155526",
-    "name": "Dillon Brooks",
-    "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
     "date": "2026-10-14",

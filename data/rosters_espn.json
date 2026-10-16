@@ -1521,6 +1521,13 @@
     "injured": false
    },
    {
+    "id": "4432394",
+    "name": "Cameron Matthews",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4709131",
     "name": "Sean Pedulla",
     "pos": "G",
@@ -3092,7 +3099,7 @@
     "name": "Cason Wallace",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4593803",

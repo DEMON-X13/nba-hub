@@ -386,8 +386,8 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-11",
-    "returns": "2026-10-15"
+    "date": "2026-10-16",
+    "returns": "2026-10-21"
    }
   ],
   "IND": [
@@ -752,13 +752,13 @@
   ],
   "OKC": [
    {
-    "id": "5106270",
-    "name": "Otega Oweh",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Achilles Surgery",
-    "date": "2026-10-15",
-    "returns": "2027-07-01"
+    "id": "5061603",
+    "name": "Thomas Sorber",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee Surgery",
+    "date": "2026-10-16",
+    "returns": "2026-10-20"
    },
    {
     "id": "4432823",
@@ -766,26 +766,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Heel",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
+    "date": "2026-10-16",
+    "returns": "2026-10-20"
    },
    {
-    "id": "4433255",
-    "name": "Chet Holmgren",
-    "pos": "C",
+    "id": "4683692",
+    "name": "Cason Wallace",
+    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Quadriceps Bruise",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
-   },
-   {
-    "id": "5061603",
-    "name": "Thomas Sorber",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee Surgery",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
+    "detail": "Undisclosed",
+    "date": "2026-10-16",
+    "returns": "2026-10-20"
    },
    {
     "id": "5159925",
@@ -793,8 +784,26 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Back Surgery",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
+    "date": "2026-10-16",
+    "returns": "2026-10-20"
+   },
+   {
+    "id": "4433255",
+    "name": "Chet Holmgren",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Quadriceps Bruise",
+    "date": "2026-10-16",
+    "returns": "2026-10-20"
+   },
+   {
+    "id": "5106270",
+    "name": "Otega Oweh",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Achilles Surgery",
+    "date": "2026-10-15",
+    "returns": "2027-07-01"
    }
   ],
   "ORL": [

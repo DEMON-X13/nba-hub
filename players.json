@@ -233,14 +233,16 @@
    ]
   },
   "HOU": {
-   "strength": 1664.8,
-   "offence": 80.9,
-   "defence": 79.8,
+   "strength": 1640.6,
+   "offence": 67.9,
+   "defence": 68.5,
    "coach": "Ime Udoka",
    "coachElo": 4.1,
    "coachGames": 365,
    "pace": 103.1,
-   "out": []
+   "out": [
+    "Steven Adams (Day-To-Day)"
+   ]
   },
   "IND": {
    "strength": 1493.6,
@@ -378,14 +380,19 @@
    ]
   },
   "OKC": {
-   "strength": 1701.7,
-   "offence": 72.2,
-   "defence": 115.5,
+   "strength": 1561.4,
+   "offence": 9.5,
+   "defence": 37.9,
    "coach": "Mark Daigneault",
    "coachElo": 14,
    "coachGames": 460,
    "pace": 103.1,
-   "out": []
+   "out": [
+    "Chet Holmgren (Day-To-Day)",
+    "Nikola Topic (Day-To-Day)",
+    "Cason Wallace (Day-To-Day)",
+    "Jaylin Williams (Day-To-Day)"
+   ]
   },
   "ORL": {
    "strength": 1543.9,
@@ -7858,15 +7865,15 @@
  },
  "upcoming": {
   "2027_20261015_OKC_HOU": {
-   "pHome": 0.5021,
-   "spread": -0.1,
-   "total": 229.6,
+   "pHome": 0.6479,
+   "spread": -4.1,
+   "total": 230.1,
    "pace": 103.1,
    "home": {
     "team": "HOU",
-    "strength": 1664.8,
-    "offence": 80.8,
-    "defence": 79.8,
+    "strength": 1640.6,
+    "offence": 67.8,
+    "defence": 68.5,
     "coach": {
      "name": "Ime Udoka",
      "elo": 4.1
@@ -7927,31 +7934,39 @@
       "adds": 16.7
      },
      {
-      "id": "2991235",
-      "name": "Steven Adams",
-      "pos": "C",
-      "min": 25,
-      "o": 20,
-      "d": 17,
-      "adds": 19.7
-     },
-     {
       "id": "4433192",
       "name": "Tari Eason",
       "pos": "F",
-      "min": 15,
+      "min": 25,
       "o": 4,
       "d": 10,
-      "adds": 4.2
+      "adds": 6.9
+     },
+     {
+      "id": "4432827",
+      "name": "Oscar Tshiebwe",
+      "pos": "C",
+      "min": 15,
+      "o": -10,
+      "d": -13,
+      "adds": -7.2
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "2991235",
+      "name": "Steven Adams",
+      "status": "Day-To-Day",
+      "min": 25,
+      "costs": 19.7
+     }
+    ]
    },
    "away": {
     "team": "OKC",
-    "strength": 1701.8,
-    "offence": 72.2,
-    "defence": 115.5,
+    "strength": 1561.4,
+    "offence": 9.4,
+    "defence": 37.9,
     "coach": {
      "name": "Mark Daigneault",
      "elo": 14
@@ -7976,15 +7991,6 @@
       "adds": 20.6
      },
      {
-      "id": "4433255",
-      "name": "Chet Holmgren",
-      "pos": "C",
-      "min": 25,
-      "o": 9,
-      "d": 25,
-      "adds": 18
-     },
-     {
       "id": "4900671",
       "name": "Ajay Mitchell",
       "pos": "G",
@@ -7992,24 +7998,6 @@
       "o": 4,
       "d": 16,
       "adds": 9.8
-     },
-     {
-      "id": "4683692",
-      "name": "Cason Wallace",
-      "pos": "G",
-      "min": 23,
-      "o": 12,
-      "d": 25,
-      "adds": 17.9
-     },
-     {
-      "id": "5159925",
-      "name": "Nikola Topic",
-      "pos": "G",
-      "min": 22,
-      "o": -22,
-      "d": -21,
-      "adds": -19.4
      },
      {
       "id": "4222252",
@@ -8030,15 +8018,6 @@
       "adds": 22.3
      },
      {
-      "id": "4432823",
-      "name": "Jaylin Williams",
-      "pos": "F",
-      "min": 17,
-      "o": 19,
-      "d": 22,
-      "adds": 14.8
-     },
-     {
       "id": "4683778",
       "name": "Jared McCain",
       "pos": "G",
@@ -8055,9 +8034,101 @@
       "o": 12,
       "d": 52,
       "adds": 21.9
+     },
+     {
+      "id": "4684208",
+      "name": "Brooks Barnhizer",
+      "pos": "F",
+      "min": 15,
+      "o": -21,
+      "d": -17,
+      "adds": -11.5
+     },
+     {
+      "id": "5105800",
+      "name": "Josh Dix",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "5116468",
+      "name": "Andrew Holifield",
+      "pos": "F",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "5174983",
+      "name": "Aday Mara",
+      "pos": "C",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4685802",
+      "name": "Robert McCray V",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4897155",
+      "name": "Anthony Pritchard",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "5241364",
+      "name": "Bennett Stirtz",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5159925",
+      "name": "Nikola Topic",
+      "status": "Day-To-Day",
+      "min": 22,
+      "costs": -19
+     },
+     {
+      "id": "4432823",
+      "name": "Jaylin Williams",
+      "status": "Day-To-Day",
+      "min": 17,
+      "costs": 14.7
+     },
+     {
+      "id": "4433255",
+      "name": "Chet Holmgren",
+      "status": "Day-To-Day",
+      "min": 25,
+      "costs": 17.9
+     },
+     {
+      "id": "4683692",
+      "name": "Cason Wallace",
+      "status": "Day-To-Day",
+      "min": 23,
+      "costs": 17.7
+     }
+    ]
    }
   },
   "2027_20261015_TOR_NYK": {
@@ -48549,5 +48620,5 @@
    }
   }
  },
- "generated": "2026-10-16T00:15Z"
+ "generated": "2026-10-16T01:53Z"
 }

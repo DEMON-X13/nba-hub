@@ -86,8 +86,7 @@ h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13
 .teams{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
 .team{display:flex;flex-direction:column;align-items:flex-start;gap:6px;min-width:0}
 .team.home{align-items:flex-end;text-align:right}
-.badge{font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:-.01em;line-height:1;padding:8px 10px;border-radius:12px;border:2px solid var(--tc,#888);color:var(--tc,#888);background:rgba(255,255,255,.02);cursor:pointer;transition:all .15s var(--ease);user-select:none;position:relative}
-.badge:hover{background:rgba(255,255,255,.06);transform:translateY(-1px)}
+.badge{font-family:var(--display);font-weight:900;font-size:26px;letter-spacing:-.01em;line-height:1;padding:8px 10px;border-radius:12px;border:2px solid var(--tc,#888);color:var(--tc,#888);background:rgba(255,255,255,.02);transition:all .15s var(--ease);user-select:none;position:relative}
 .badge.pick{background:var(--tc,#888);color:#1E2230;box-shadow:0 0 18px -6px var(--tc,#888)}
 .team .nm{font-size:12px;color:var(--ink-2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .team .sc{font-family:var(--display);font-size:30px;font-weight:700;line-height:1}
@@ -115,12 +114,19 @@ h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13
 .btn.lime{background:var(--lime);border-color:var(--lime);color:#1E2230}
 .btn.ghost{background:transparent}
 .btn:disabled{opacity:.45;cursor:default;transform:none}
-.drawer{margin-top:12px;border-top:1px dashed var(--line-2);padding-top:10px;display:grid;grid-template-columns:1fr 1fr;gap:12px;font-size:12px}
+.card{container-type:inline-size}
+.drawer{margin-top:12px;border-top:1px dashed var(--line-2);padding-top:10px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:14px;font-size:12px}
+@container (max-width:359px){.drawer{grid-template-columns:minmax(0,1fr)}}
 .drawer h4{margin:0 0 6px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .drawer ul{list-style:none;margin:0;padding:0} .drawer li{display:flex;justify-content:space-between;gap:6px;padding:2px 0;border-bottom:1px solid var(--line)}
-.drawer li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.drawer li .m{color:var(--muted);flex:none;width:34px;text-align:right} .drawer li .v{flex:none;width:44px;text-align:right;font-weight:700}
+.drawer li span:first-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;flex:1}
+.drawer li .m{color:var(--muted);flex:none;width:28px;text-align:right} .drawer li .v{flex:none;width:34px;text-align:right;font-weight:700}
 .drawer li .v.pos{color:var(--lime)} .drawer li .v.neg{color:var(--rose)}
+.tierbadge{display:inline-block;width:18px;height:20px;vertical-align:middle;flex:none}
+.elocell{display:inline-flex;align-items:center;gap:7px;vertical-align:middle;white-space:nowrap}
+.tierladder{display:flex;flex-wrap:wrap;gap:6px 8px;margin:2px 0 14px}
+.tierladder .t{display:inline-flex;align-items:center;gap:6px;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px 10px 3px 6px;font-size:12px;color:var(--ink-2)}
+.tierladder .t b{color:var(--ink);font-weight:700} .tierladder .t .muted{font-size:11px}
 .drawer .coach{color:var(--ink-2);margin-top:6px}
 .note{background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--hot);border-radius:12px;padding:12px 16px;margin:0 0 16px;color:var(--ink-2);font-size:13px;line-height:1.5}
 .note b{color:var(--ink)}
@@ -209,7 +215,6 @@ input[type=number]{width:92px;text-align:right}
 .saved .ticket{margin-bottom:10px}
 .res{font-size:11px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:999px}
 .res.won{background:var(--lime-soft);color:var(--lime)} .res.lost{background:var(--rose-soft);color:var(--rose)} .res.open{background:var(--panel-3);color:var(--ink-2)} .res.push,.res.void{background:var(--ice-soft);color:var(--ice)}
-.about p{max-width:760px;color:var(--ink-2)} .about h3{font-family:var(--display);font-size:15px;margin:22px 0 8px}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#1E2230;padding:10px 16px;border-radius:999px;font-weight:800;font-size:13px;opacity:0;transition:all .25s var(--ease);pointer-events:none;z-index:9}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 footer{max-width:1240px;margin:0 auto;padding:0 22px 40px;color:var(--muted);font-size:12px}
@@ -317,6 +322,13 @@ body.pp-lock{overflow:hidden}
 .pc-note{font-size:12.5px;color:var(--ink-2);margin:6px 0 0;overflow-wrap:anywhere}
 .pc-msg{font-size:12.5px;color:var(--lime);font-weight:700;margin:6px 0 0} .pc-msg:empty{display:none}
 @media(max-width:620px){.pp-slipbar{border-radius:0;padding:10px 16px}}
+/* the tables at narrower widths, last in the sheet so they override the base .tbl rules: a table's least-needed columns
+   (mid: true) give way on a tablet and its secondary ones (wide: true) on a phone, so its rating, and every column
+   still shown, is in view without scrolling; a long name or list of absentees wraps where it must */
+@media(min-width:641px){.narrow-only{display:none}}
+@media(max-width:900px){.mid-hide{display:none}}
+@media(max-width:640px){.wide-only{display:none} main{padding-left:12px;padding-right:12px} .tbl th,.tbl td{padding:9px 7px} .tbl th{letter-spacing:.03em}
+  .tbl td.wrap-any{overflow-wrap:anywhere}}
 </style>
 </head>
 <body>
@@ -335,9 +347,7 @@ body.pp-lock{overflow:hidden}
     <button data-tab="players">Players</button>
     <button data-tab="coaches">Coaches</button>
     <button data-tab="record">Record</button>
-    <button data-tab="mine">My Picks<span class="n" id="nMine" hidden></span></button>
     <button data-tab="parlay">Parlay Builder<span class="n" id="nLegs" hidden></span></button>
-    <button data-tab="about">How it works</button>
     <button data-tab="data" id="dataTabBtn" hidden>Data</button>
   </nav>
 </header>
@@ -348,12 +358,10 @@ body.pp-lock{overflow:hidden}
   <section id="tab-players" hidden></section>
   <section id="tab-coaches" hidden></section>
   <section id="tab-record" hidden></section>
-  <section id="tab-mine" hidden></section>
   <section id="tab-parlay" hidden></section>
-  <section id="tab-about" hidden class="about"></section>
   <section id="tab-data" hidden></section>
 </main>
-<footer>Rebuilt in the morning from the previous night's box scores, and again through the afternoon for the day's lines and injury report. Your picks and bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
+<footer>Rebuilt in the morning from the previous night's box scores, and again through the afternoon for the day's lines and injury report. Your bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
 <div class="toast" id="toast"></div>
 <div class="pp-back" id="ppBack" hidden><div class="pp-sheet" id="ppSheet" role="dialog" aria-modal="true" aria-labelledby="ppTitle" aria-describedby="ppSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="ppTitle">Player props</h2><div class="pp-sub" id="ppSub"></div></div><button type="button" class="pp-x" id="ppClose" aria-label="Close player props">×</button></div><div class="pp-body" id="ppBody"></div><div class="pp-slipbar" id="ppSlipBar" hidden><span class="pp-slipst" id="ppSlipSt" role="status" aria-live="polite"></span><span class="pp-slipsum" id="ppSlipSum"></span><button type="button" class="btn" id="ppSlipGo">Your parlay</button></div></div></div>
 <div class="pp-back" id="pcBack" hidden><div class="pp-sheet" id="pcSheet" role="dialog" aria-modal="true" aria-labelledby="pcTitle" aria-describedby="pcSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="pcTitle">Your parlay</h2><div class="pp-sub" id="pcSub"></div></div><button type="button" class="pp-x" id="pcClose" aria-label="Close the parlay card">×</button></div><div class="pp-body" id="pcBody"></div></div></div>
@@ -458,6 +466,7 @@ const legLabel = leg => { const g = gameById(leg.id); const nm = t => TEAMS[t] ?
 /* ---------- tabs ---------- */
 $('#nav').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; show(b.dataset.tab); });
 function show(tab) {
+  if (!document.getElementById('tab-' + tab) || !$$('#nav button').some(b => b.dataset.tab === tab)) tab = 'slate';   // a tab saved that the page no longer has
   $$('#nav button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false'));
   $$('main > section').forEach(s => { s.hidden = s.id !== 'tab-' + tab; });
   try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {}
@@ -499,9 +508,7 @@ render.slate = function () {
 function card(g) {
   const m = g.model, pick = pickOf(g), win = winner(g), fin = g.status === 'final';
   const A = TEAMS[g.away] || [g.away, g.away, '#888'], H = TEAMS[g.home] || [g.home, g.home, '#888'];
-  const mine = M.picks[g.id] || null;
   const tags = [];
-  if (mine) tags.push(`<span class="tag hot">Your pick · ${mine}</span>`);
   if (fin) tags.push(`<span class="tag">Final</span>`); else if (g.status === 'live') tags.push(`<span class="tag hot">Live</span>`); else if (started(g)) tags.push(`<span class="tag hot">Tipped off</span>`);
   if (g.type === 'POST') tags.push(`<span class="tag ice">Playoffs</span>`);
   if (g.type === 'PRE') tags.push(`<span class="tag">Preseason</span>`);
@@ -523,13 +530,13 @@ function card(g) {
     if (S.params && g.team && Math.abs(g.team.pHome - m.pHome) >= 0.1) chips += `<span class="chip">Team model <b>${g.team.pHome >= 0.5 ? g.home : g.away} ${fmtPct(Math.max(g.team.pHome, 1 - g.team.pHome))}</b></span>`;
   }
   const line = side => { const s = m && m[side]; return s ? s.lineup.slice(0, 8) : []; };
-  const drawer = m && m.home && m.home.lineup ? `<div class="drawer" id="dr-${g.id}" hidden>${['away', 'home'].map(side => `<div><h4>${side === 'away' ? g.away : g.home} · projected</h4><ul>${line(side).map(p => `<li><span>${esc(p.name)}</span><span class="m">${p.min}'</span><span class="v ${p.adds >= 0 ? 'pos' : 'neg'}">${(p.adds / S.params.team.scale * 1).toFixed(1)}</span></li>`).join('')}</ul><div class="coach">Coach ${esc(m[side].coach.name)} <span class="muted">${m[side].coach.elo >= 0 ? '+' : ''}${m[side].coach.elo.toFixed(0)}</span> · strength <b>${m[side].strength.toFixed(0)}</b></div></div>`).join('')}</div>` : '';
+  const drawer = m && m.home && m.home.lineup ? `<div class="drawer" id="dr-${g.id}" hidden>${['away', 'home'].map(side => `<div><h4>${side === 'away' ? g.away : g.home} · projected</h4><ul>${line(side).map(p => `<li><span title="${esc(p.name)}">${esc(p.name)}</span><span class="m">${p.min}'</span><span class="v ${p.adds >= 0 ? 'pos' : 'neg'}">${(p.adds / S.params.team.scale * 1).toFixed(1)}</span></li>`).join('')}</ul><div class="coach">Coach ${esc(m[side].coach.name)} <span class="muted">${m[side].coach.elo >= 0 ? '+' : ''}${m[side].coach.elo.toFixed(0)}</span> · strength <b>${m[side].strength.toFixed(0)}</b></div></div>`).join('')}</div>` : '';
   return `<article class="card${fin ? ' final' : ''}" data-id="${g.id}">
     <div class="top"><span><b>${tipTime(g.tip) || dayNum(g.date)}</b>${g.tip ? ` · ${dayNum(g.date)}` : ''}</span><span class="tags">${tags.join('')}</span></div>
     <div class="teams">
-      <div class="team away" style="--tc:${A[2]}"><span class="badge${pick === g.away ? ' pick' : ''}${mine === g.away ? ' mine' : ''}" data-act="pick" data-side="${g.away}" title="Pick ${A[1]}">${g.away}</span><span class="nm">${A[1]}</span>${fin ? `<span class="sc${win === g.home ? ' lose' : ''}">${g.awayScore}</span>` : ''}</div>
+      <div class="team away" style="--tc:${A[2]}"><span class="badge${pick === g.away ? ' pick' : ''}" title="${A[1]}${pick === g.away ? ': the model\'s pick' : ''}">${g.away}</span><span class="nm">${A[1]}</span>${fin ? `<span class="sc${win === g.home ? ' lose' : ''}">${g.awayScore}</span>` : ''}</div>
       <div class="vs">${m ? `<b>${fmtPct(Math.max(m.pHome, 1 - m.pHome))}</b>${pick}` : 'no number'}</div>
-      <div class="team home" style="--tc:${H[2]}"><span class="badge${pick === g.home ? ' pick' : ''}${mine === g.home ? ' mine' : ''}" data-act="pick" data-side="${g.home}" title="Pick ${H[1]}">${g.home}</span><span class="nm">${H[1]}</span>${fin ? `<span class="sc${win === g.away ? ' lose' : ''}">${g.homeScore}</span>` : ''}</div>
+      <div class="team home" style="--tc:${H[2]}"><span class="badge${pick === g.home ? ' pick' : ''}" title="${H[1]}${pick === g.home ? ': the model\'s pick' : ''}">${g.home}</span><span class="nm">${H[1]}</span>${fin ? `<span class="sc${win === g.away ? ' lose' : ''}">${g.homeScore}</span>` : ''}</div>
     </div>
     ${m ? `<div class="prob" style="--ac:${A[2]};--hc:${H[2]}"><i style="width:${(1 - m.pHome) * 100}%"></i><i class="h" style="width:${m.pHome * 100}%"></i></div>
     <div class="pline"><span>${g.away} <b>${fmtPct(1 - m.pHome)}</b></span><span><b>${fmtPct(m.pHome)}</b> ${g.home}</span></div>` : ''}
@@ -544,11 +551,6 @@ function card(g) {
 function act(e) {
   const b = e.currentTarget, id = b.closest('[data-id]').dataset.id, g = gameById(id);
   if (b.dataset.act === 'drawer') { const d = $('#dr-' + CSS.escape(id)); d.hidden = !d.hidden; return; }
-  if (b.dataset.act === 'pick') {
-    if (started(g)) { render.slate(); return toast(g.status === 'final' ? 'That one is over' : 'That one has tipped off'); }
-    M.picks[id] = M.picks[id] === b.dataset.side ? null : b.dataset.side; if (!M.picks[id]) delete M.picks[id];
-    saveMine(); toast(M.picks[id] ? `You have ${TEAMS[b.dataset.side][1]}` : 'Pick removed'); render.slate(); badges(); return;
-  }
   if (b.dataset.act === 'plan') {
     if (started(g)) { render.slate(); return toast('That one has tipped off'); }
     /* open the builder on that game's day with the game ticked, whatever band it is in */
@@ -558,40 +560,77 @@ function act(e) {
     setTimeout(() => { const r = document.querySelector(`#bkPlan tr[data-gid="${id}"]`); if (r) { r.scrollIntoView?.({ behavior: 'smooth', block: 'center' }); r.classList.add('flash'); } }, 50);
   }
 }
-function badges() { const n = Object.keys(M.picks).length; $('#nMine').hidden = !n; $('#nMine').textContent = n; const open = M.build.filter(b => gradeBet(b).st === 'pending').length; $('#nLegs').hidden = !open; $('#nLegs').textContent = open; }
+function badges() { const open = M.build.filter(b => gradeBet(b).st === 'pending').length; $('#nLegs').hidden = !open; $('#nLegs').textContent = open; }
 
 /* ---------- tables ---------- */
 function table(el, cols, rows, sortKey, desc = true) {
   let sk = sortKey, sd = desc;
   const draw = () => {
     const sorted = [...rows].sort((a, b) => { const x = a[sk], y = b[sk]; if (x === y) return 0; if (x === null || x === undefined) return 1; if (y === null || y === undefined) return -1; return (x < y ? -1 : 1) * (sd ? -1 : 1); });
-    el.innerHTML = `<div class="wrap"><table class="tbl"><thead><tr>${cols.map(c => `<th class="${c.num ? 'num' : ''}${c.key === sk ? ' on' : ''}" data-k="${c.key}">${c.label}</th>`).join('')}</tr></thead><tbody>${sorted.map((r, i) => `<tr>${cols.map(c => `<td class="${c.num ? 'num' : ''} ${c.cls || ''}">${c.fmt ? c.fmt(r[c.key], r, i) : esc(r[c.key])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    el.innerHTML = `<div class="wrap"><table class="tbl"><thead><tr>${cols.map(c => `<th class="${c.num ? 'num' : ''}${c.key === sk ? ' on' : ''}${c.wide ? ' wide-only' : ''}${c.mid ? ' mid-hide' : ''}" data-k="${c.key}">${c.label}</th>`).join('')}</tr></thead><tbody>${sorted.map((r, i) => `<tr>${cols.map(c => `<td class="${c.num ? 'num' : ''} ${c.cls || ''}${c.wide ? ' wide-only' : ''}${c.mid ? ' mid-hide' : ''}">${c.fmt ? c.fmt(r[c.key], r, i) : esc(r[c.key])}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
     el.querySelectorAll('th').forEach(th => th.onclick = () => { const k = th.dataset.k; if (sk === k) sd = !sd; else { sk = k; sd = true; } draw(); });
   };
   draw();
 }
 const pill = t => `<span class="pill" style="--tc:${(TEAMS[t] || [0, 0, '#888'])[2]}">${t}</span>`;
+/* ---------- Elo tiers, as the NFL hub shows them (its betting/tools/tiers.js) ----------
+   An overall rating is put on a bell curve by the job (publish.js, THE LADDER): 1500 the ranked pool's average, 100
+   points a standard deviation. The shields then split the pool as a ranked ladder does: the Wood League under 1350,
+   Iron, Bronze, Silver, Gold, Platinum, Diamond, Master and Elite 50 points apart, and HOF from 1750, worn as a gem */
+const TIERS = [['HOF', 1750, '#C084FC', '#6D28D9'], ['Elite', 1700, '#7C3AED', '#4C1D95'], ['Master', 1650, '#DB2777', '#9D174D'], ['Diamond', 1600, '#3B82F6', '#1E4FA8'],
+  ['Platinum', 1550, '#2FA5A0', '#176F6C'], ['Gold', 1500, '#D4A017', '#8A6508'], ['Silver', 1450, '#9CA3AF', '#5A6673'], ['Bronze', 1400, '#A05A2C', '#5E3416'],
+  ['Iron', 1350, '#6B6B6B', '#3A3A3A'], ['Wood', -Infinity, '#9A7B56', '#5E4630']];
+const eloTier = v => TIERS.find(t => v >= t[1]);
+const SHIELD = 'M2 2 H16 V10 C16 15 12.5 17.5 9 19 C5.5 17.5 2 15 2 10 Z', GEM = 'M4.6 3.2 H13.4 L17 7.6 L9 18.8 L1 7.6 Z';
+const GEM_GRAD = id => `<linearGradient id="${id}" x1="0" y1="0" x2="1" y2="1">`
+  + `<stop offset="0" stop-color="#67E8F9"/><stop offset=".38" stop-color="#A78BFA"/><stop offset=".7" stop-color="#F472B6"/><stop offset="1" stop-color="#FCD34D"/>`
+  + `<animateTransform attributeName="gradientTransform" type="rotate" values="0 .5 .5;360 .5 .5" dur="8s" repeatCount="indefinite"/></linearGradient>`;
+let gemN = 0;
+const TIER_DEFS = `<svg width="0" height="0" style="position:absolute" aria-hidden="true" id="tierDefs"><defs>`
+  + TIERS.map(t => `<linearGradient id="tg-${t[0].toLowerCase()}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${t[2]}"/><stop offset="1" stop-color="${t[3]}"/></linearGradient>`).join('') + `</defs></svg>`;
+function tierBadge(v) {
+  const [name, min, , edge] = eloTier(v), range = isFinite(min) ? `${min}+` : 'under 1350';
+  const open = `<svg class="tierbadge tier-${name.toLowerCase()}" viewBox="0 0 18 20" role="img" aria-label="${name} tier"><title>${name} tier (Elo ${range})</title>`;
+  if (name === 'HOF') { const gid = 'tg-hof-gem-' + (++gemN);   // the gem's turning gradient in its own svg: Chromium does not repaint one animated in another svg
+    return open + `<defs>${GEM_GRAD(gid)}</defs><path d="${GEM}" fill="none" stroke="#E879F9" stroke-width="2.4" stroke-linejoin="round" opacity=".45"/><path d="${GEM}" fill="url(#${gid})" stroke="#5B21B6" stroke-width=".9" stroke-linejoin="round"/>`
+    + `<path d="M1 7.6 H17 M4.6 3.2 L6.7 7.6 L9 3.2 L11.3 7.6 L13.4 3.2 M6.7 7.6 L9 18.8 L11.3 7.6" fill="none" stroke="#fff" stroke-opacity=".6" stroke-width=".65" stroke-linejoin="round"/><path d="M5 3.8 H8.2 L6.5 7 H2.5 Z" fill="#fff" opacity=".5"/>`
+    + `<path d="M15.4 .2 l.45 1.15 1.15.45-1.15.45-.45 1.15-.45-1.15-1.15-.45 1.15-.45z" fill="#F59E0B"/><path d="M2.2 13 l.3.8.8.3-.8.3-.3.8-.3-.8-.8-.3.8-.3z" fill="#F59E0B" opacity=".8"/></svg>`; }
+  if (name === 'Wood') return open + `<path d="${SHIELD}" fill="#9A7B56" stroke="#5E4630" stroke-width="1.1"/><path d="M3.5 6.2 C6 5.4 9 7 14.5 6 M3.4 10.4 C7 9.6 10 11.2 14.6 10.2 M5 14.4 C7.5 13.8 10 14.9 13 14.2" fill="none" stroke="#5E4630" stroke-opacity=".45" stroke-width=".7" stroke-linecap="round"/>`
+    + `<ellipse cx="11.2" cy="8.3" rx="1.1" ry=".6" fill="none" stroke="#5E4630" stroke-opacity=".5" stroke-width=".6"/></svg>`;
+  const i = TIERS.findIndex(t => t[0] === name) - 1;          // the emblems as the NFL hub's: Elite a crown and star, Master a crown, Diamond a diamond, Platinum and Gold a pearl
+  const inner = i === 0 ? `<path d="M4.5 7 L6.8 4.2 L9 6.6 L11.2 4.2 L13.5 7 L12.6 9.2 H5.4 Z" fill="#FDE68A"/><path d="M9 10.2 l1 2.1 2.3.3-1.7 1.6.4 2.3L9 15.4l-2 1.1.4-2.3-1.7-1.6 2.3-.3z" fill="#fff" opacity=".95"/>`
+    : i === 1 ? `<path d="M5 6.8 L7 4.4 L9 6.6 L11 4.4 L13 6.8 L12.2 8.8 H5.8 Z" fill="#FBCFE8"/><circle cx="9" cy="12.6" r="2" fill="#fff" opacity=".9"/>`
+    : i === 2 ? `<path d="M9 5.2 L12.6 9 L9 14.6 L5.4 9 Z" fill="#fff" opacity=".9"/>`
+    : i === 3 ? `<circle cx="9" cy="9.8" r="2.4" fill="#fff" opacity=".85"/>` : i === 4 ? `<circle cx="9" cy="9.8" r="2" fill="#fff" opacity=".7"/>` : '';
+  const glow = i === 0 ? `<path d="${SHIELD}" fill="none" stroke="#C4B5FD" stroke-width="2.4" opacity=".55"/>` : '';
+  return open + glow + `<path d="${SHIELD}" fill="url(#tg-${name.toLowerCase()})" stroke="${edge}" stroke-width="1.1"/><path d="M4.2 4 H13.8 V9.6 C13.8 13.3 11.4 15.2 9 16.4 C6.6 15.2 4.2 13.3 4.2 9.6 Z" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1"/>${inner}</svg>`;
+}
+const eloCell = v => v === null || v === undefined || !isFinite(v) ? '<span class="muted">–</span>' : `<span class="elocell">${tierBadge(v)}<b>${Math.round(v)}</b></span>`;
+/* the ladder over a list: each tier's shield, its range and how many of the ranked are in it, top tier first */
+const tierLadder = (vals, what) => `<div class="tierladder" aria-label="${esc(what)} by tier">${TIERS.map(t => { const n = vals.filter(v => eloTier(v) === t).length;
+  return `<span class="t">${tierBadge(isFinite(t[1]) ? t[1] : 1300)}<b>${t[0]}</b><span class="muted">${isFinite(t[1]) ? t[1] + '+' : '&lt;1350'} · ${n}</span></span>`; }).join('')}</div>`;
 const signed = v => v === null || v === undefined ? '—' : `<span class="${v > 0 ? 'lime' : v < 0 ? 'rose' : ''}">${v > 0 ? '+' : ''}${v.toFixed(0)}</span>`;
 render.teams = function () {
   const rows = Object.entries(S.teams).map(([t, v]) => ({ t, name: TEAMS[t] ? TEAMS[t][0] + ' ' + TEAMS[t][1] : t, ...v, outN: v.out.length, outList: v.out.join(', ') }));
   const el = $('#tab-teams');
-  el.innerHTML = `<h2>Teams <small>strength from the player model with today's injuries; the plain team rating beside it</small></h2><div id="teamsT"></div>`;
+  el.innerHTML = `<h2>Teams <small>strength from the player model with today's injuries, in Elo with its tier; the plain team rating beside it</small></h2>${tierLadder(rows.map(r => r.strength), 'Teams')}<div id="teamsT"></div>`;
   table($('#teamsT'), [
     { key: 'strength', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
-    { key: 't', label: 'Team', fmt: (v, r) => `${pill(v)} <span style="margin-left:8px">${esc(r.name)}</span>` },
-    { key: 'strength', label: 'Strength', num: true, cls: 'big', fmt: v => v.toFixed(0) },
-    { key: 'offence', label: 'Offence', num: true, fmt: signed },
-    { key: 'defence', label: 'Defence', num: true, fmt: signed },
-    { key: 'pace', label: 'Pace', num: true, fmt: v => v.toFixed(1) },
-    { key: 'coach', label: 'Coach', fmt: (v, r) => `${esc(v)} <span class="muted">${r.coachElo >= 0 ? '+' : ''}${r.coachElo.toFixed(0)}</span>` },
-    { key: 'elo', label: 'Team Elo', num: true, fmt: v => v.toFixed(0) },
-    { key: 'outN', label: 'Out', fmt: (v, r) => v ? `<span class="rose">${esc(r.outList)}</span>` : '<span class="muted">—</span>' },
+    { key: 't', label: 'Team', fmt: (v, r) => `${pill(v)} <span class="wide-only" style="margin-left:8px">${esc(r.name)}</span>` },
+    { key: 'strength', label: 'Strength', num: true, cls: 'big', fmt: eloCell },
+    { key: 'offence', label: 'Offence', num: true, fmt: signed, wide: true },
+    { key: 'defence', label: 'Defence', num: true, fmt: signed, wide: true },
+    { key: 'pace', label: 'Pace', num: true, fmt: v => v.toFixed(1), wide: true, mid: true },
+    { key: 'coach', label: 'Coach', fmt: (v, r) => `${esc(v)} <span class="muted">${r.coachElo >= 0 ? '+' : ''}${r.coachElo.toFixed(0)}</span>`, wide: true, mid: true },
+    { key: 'elo', label: 'Team Elo', num: true, fmt: v => v.toFixed(0), wide: true, mid: true },
+    { key: 'outN', label: 'Out', cls: 'wrap-any', fmt: (v, r) => v ? `<span class="rose">${esc(r.outList)}</span>` : '<span class="muted">—</span>' },
   ], rows, 'strength');
 };
 render.players = function () {
   const el = $('#tab-players');
   if (!el.dataset.ready) {
-    el.innerHTML = `<h2>Players <small>offence and defence in rating points, for a player on the floor all game</small></h2>
+    el.innerHTML = `<h2>Players <small>overall Elo on the ladder (1500 the average rotation player, 100 points a standard deviation) and its tier; offence and defence in rating points, for a player on the floor all game</small></h2>
+      ${tierLadder(S.players.filter(p => p.ranked).map(p => p.rating), 'Rotation players')}
       <div class="bar"><input type="text" id="pq" placeholder="Search a player"><select id="pt"><option value="">All teams</option>${Object.keys(TEAMS).map(t => `<option>${t}</option>`).join('')}</select><label class="muted"><input type="checkbox" id="pall"> show everyone</label><span class="grow"></span><span class="muted" id="pn"></span></div><div id="playersT"></div>`;
     el.dataset.ready = 1;
     ['#pq', '#pt', '#pall'].forEach(s => $(s).oninput = render.players);
@@ -601,26 +640,28 @@ render.players = function () {
   if (!all && !q && !t) rows = rows.slice(0, 80);
   $('#pn').textContent = `${rows.length} shown`;
   table($('#playersT'), [
-    { key: 'elo', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
-    { key: 'name', label: 'Player', fmt: (v, r) => `<b>${esc(v)}</b> <span class="muted">${esc(r.pos)}</span>` },
-    { key: 'team', label: 'Team', fmt: pill },
-    { key: 'elo', label: 'Elo', num: true, cls: 'big', fmt: signed },
-    { key: 'o', label: 'Offence', num: true, fmt: signed },
-    { key: 'd', label: 'Defence', num: true, fmt: signed },
-    { key: 'min', label: 'Min', num: true, fmt: v => v.toFixed(0) },
-    { key: 'games', label: 'GP', num: true },
-    { key: 'prior', label: 'Prior', fmt: v => `<span class="muted">${v === 'raptor' ? 'RAPTOR' : 'rookie'}</span>` },
-  ], rows, 'elo');
+    { key: 'rating', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
+    { key: 'name', label: 'Player', cls: 'wrap-any', fmt: (v, r) => `<b>${esc(v)}</b> <span class="muted">${esc(r.pos)}</span><span class="narrow-only"> ${pill(r.team)}</span>` },
+    { key: 'team', label: 'Team', fmt: pill, wide: true },
+    { key: 'rating', label: '<span class="wide-only">Overall </span>Elo', num: true, cls: 'big', fmt: eloCell },
+    { key: 'o', label: 'Offence', num: true, fmt: signed, wide: true },
+    { key: 'd', label: 'Defence', num: true, fmt: signed, wide: true },
+    { key: 'min', label: 'Min', num: true, fmt: v => v.toFixed(0), wide: true, mid: true },
+    { key: 'games', label: 'GP', num: true, wide: true, mid: true },
+    { key: 'prior', label: 'Prior', fmt: v => `<span class="muted">${v === 'raptor' ? 'RAPTOR' : 'rookie'}</span>`, wide: true, mid: true },
+  ], rows, 'rating');
 };
 render.coaches = function () {
-  $('#tab-coaches').innerHTML = `<h2>Coaches <small>moves with each game's surprise; follows the coach between teams</small></h2><div id="coachT"></div>`;
+  $('#tab-coaches').innerHTML = `<h2>Coaches <small>overall Elo on the ladder (1500 the average coach, 100 points a standard deviation) and its tier; moves with each game's surprise and follows the coach between teams</small></h2>
+    ${tierLadder(S.coaches.filter(c => c.ranked).map(c => c.rating), 'Coaches')}<div id="coachT"></div>`;
   table($('#coachT'), [
-    { key: 'elo', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
-    { key: 'name', label: 'Coach', fmt: v => `<b>${esc(v)}</b>` },
-    { key: 'team', label: 'Team', fmt: v => v ? pill(v) : '<span class="muted">–</span>' },
-    { key: 'elo', label: 'Elo', num: true, cls: 'big', fmt: signed },
-    { key: 'games', label: 'Games rated', num: true },
-  ], S.coaches, 'elo');
+    { key: 'rating', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
+    { key: 'name', label: 'Coach', fmt: (v, r) => `<b>${esc(v)}</b>${r.team ? `<span class="narrow-only"> ${pill(r.team)}</span>` : ''}` },
+    { key: 'team', label: 'Team', fmt: v => v ? pill(v) : '<span class="muted">–</span>', wide: true },
+    { key: 'rating', label: '<span class="wide-only">Overall </span>Elo', num: true, cls: 'big', fmt: eloCell },
+    { key: 'elo', label: 'Rating pts', num: true, fmt: signed, wide: true },
+    { key: 'games', label: 'Games rated', num: true, wide: true },
+  ], S.coaches, 'rating');
 };
 /* seasons are named by the year they end in the data (2026 is 2025-26); the page writes them the NBA's way */
 const seasonName = y => `${+y - 1}-${String(y).slice(2)}`;
@@ -672,17 +713,6 @@ render.record = function () {
       <tr><td>Player model, previous game's lineup (no injury report)</td><td class="num">${f(bt.player.naive.holdout)}</td></tr>
       <tr><td><b>Player model, lineup known, minutes projected</b> <span class="muted">a perfect injury report; what runs here is between this and no report</span></td><td class="num"><b>${f(bt.player.known.holdout)}</b></td></tr>
       <tr><td>Player model, actual minutes</td><td class="num">${f(bt.player.actual.holdout)}</td></tr></tbody></table></div>`;
-};
-render.mine = function () {
-  const ids = Object.keys(M.picks);
-  const games = ids.map(id => ({ id, side: M.picks[id], g: gameById(id) })).filter(x => x.g).sort((a, b) => a.g.date < b.g.date ? 1 : -1);
-  const graded = games.map(x => ({ su: x.g.homeScore === null ? undefined : winner(x.g) === null ? null : winner(x.g) === x.side }));
-  const isVoid = x => x.g.status === 'void';
-  const r = rec(graded, 'su');
-  $('#tab-mine').innerHTML = `<h2>My picks <small>select a team on any card; kept in this browser only</small></h2>
-    <div class="strip"><div class="stat"><b>${r.s}</b><span>Your record${r.pct !== null ? ' · ' + fmtPct(r.pct) : ''}</span></div><div class="stat"><b>${games.filter(x => x.g.homeScore === null && !isVoid(x)).length}</b><span>Open</span></div><div class="stat"><b>${games.filter(x => x.side === pickOf(x.g)).length}/${games.length}</b><span>With the model</span></div></div>
-    ${games.length ? `<div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>You</th><th>Model</th><th>Result</th><th></th></tr></thead><tbody>${games.map(x => { const w = winner(x.g), fin = x.g.homeScore !== null; return `<tr><td class="muted">${dayNum(x.g.date)}</td><td>${pill(x.g.away)} <span class="muted">@</span> ${pill(x.g.home)}${fin ? ` <span class="muted num">${x.g.awayScore}-${x.g.homeScore}</span>` : ''}</td><td>${pill(x.side)}</td><td>${pickOf(x.g) ? `${pill(pickOf(x.g))} <span class="muted">${fmtPct(Math.max(x.g.model.pHome, 1 - x.g.model.pHome))}</span>` : '—'}</td><td>${fin ? `<span class="res ${w === null ? 'push' : w === x.side ? 'won' : 'lost'}">${w === null ? 'tie' : w === x.side ? 'won' : 'lost'}</span>` : isVoid(x) ? '<span class="res void" title="Not played on its date: a postponed game">void</span>' : '<span class="res open">open</span>'}</td><td>${fin || (started(x.g) && !['void', 'unlisted'].includes(x.g.status)) ? '' : `<button class="btn ghost" data-un="${x.id}">remove</button>`}</td></tr>`; }).join('')}</tbody></table></div>` : `<div class="empty"><b>No picks yet</b>Open Tonight and tap a team badge.</div>`}`;
-  $$('#tab-mine [data-un]').forEach(b => b.onclick = () => { delete M.picks[b.dataset.un]; saveMine(); badges(); render.mine(); });
 };
 /* ---------- Parlay Builder: in the spirit of the NFL hub's ----------
    Suggested parlays (Safe, Medium, Aggressive), then a day's plan (stake, confidence band, straight up or parlay,
@@ -945,18 +975,6 @@ function renderBuild() {
     <div class="wrap"><table class="tbl"><thead><tr><th>Day</th><th>Bet</th><th>Legs</th><th class="num">Odds</th><th class="num">Stake</th><th class="num">To win</th><th>Status</th><th class="num">Return</th><th></th></tr></thead><tbody>${rows}</tbody></table></div>`;
   el.querySelectorAll('[data-del]').forEach(b => b.onclick = () => { M.build = M.build.filter(x => x.id !== b.dataset.del); saveMine(); render.parlay(); });
 }
-render.about = function () {
-  const p = S.params.player, t = S.params.team;
-  $('#tab-about').innerHTML = `<h2>How it works</h2>
-    <p><b>Every player carries two ratings, offence and defence,</b> in Elo points for a player on the floor all game. A team's strength for a game is 1500 plus its coach plus each player's ratings weighted by his share of the minutes, five shares in all. So a team is exactly the sum of who plays and how much, and a star sitting out changes the number by what he is worth times the minutes he would have played.</p>
-    <h3>After a game</h3><p>Each side's offensive efficiency, points per 100 possessions, is compared with what the ratings expected. The surprise moves the offence of the players who were on the floor, by their minutes, and the defence of the players they faced, the other way. A win update rides alongside. The coach moves with the margin surprise and carries his rating when he changes teams. Ratings carry ${Math.round(p.carryP * 100)}% of the way into a new season; rookies start at ${p.rookie}; a first rating comes from FiveThirtyEight's RAPTOR where there is one.</p>
-    <h3>Before a game</h3><p>The home side gets the court (${t.hfa} Elo, about ${(t.hfa / t.scale).toFixed(1)} points), Denver and Utah more for altitude, and both sides are adjusted for a back to back (−${t.b2b}), three games in four nights and three days off. Tonight's lineup is the roster minus the injury report's absences (ESPN gives a return date; a player is out of every game before it), with minutes projected from each player's last ${p.minGames} appearances, a newcomer with none at twelve, filled into the game's 240 minutes in rotation order. Pace is a running average of each team's possessions per 48 minutes, and the total is the two expected efficiencies times the expected pace. A tenth of the plain team Elo's opinion is blended in.</p>
-    <h3>What the numbers are worth</h3><p>See Record for the held-out seasons, and how the suggested parlays did there against the closing line: about what the market expected, less its cut. Where a moneyline is posted, the market's chance is the better one; the model's is its own view, for the games and days the market has not priced yet. The model picks winners at about 69% when it is told who played, which is more than the injury report tells it before a game. The market's closing line does a little better than that, because it also knows who is playing and a great deal more. Where the model's spread differs from the market's by a point and a half or more the card says by how much, highlighted from three; that is a place to look, not a bet.</p>
-    <h3>Parlay Builder</h3><p>It works like the NFL hub's. At the top, three suggested parlays for the day, Safe, Medium and Aggressive, grown from one core out of the games where the model and the market pick the same winner. Legs go in likeliest first: Safe takes the two likeliest and keeps adding while the chance that every leg lands stays above 50%, Medium and Aggressive keep going down to 30% and 15%. A leg's chance is the market's, from the book's moneylines with its cut taken out, because the market is the sharper number. A separate Value card lists the model's picks whose chance beats the market's by 5 points or more; that is the model disagreeing with the market, which is where models are most often wrong, so it is shown for interest and not as a suggestion. Below, the day's plan: pick a day, a stake, a confidence band and straight bets or a parlay, then tick the games. Straight bets share the stake evenly unless you type an amount; a parlay shows its odds, its payout and the chance it hits. Lock in what you like and it goes to the Bet Build, which grades itself as the games go final. Each leg is the model's pick on the moneyline, priced at the book's moneyline where one is published. Legs from different games are independent, so chances and prices multiply.</p>
-    <h3>Your parlay</h3><p>Your own parlay, beside the plan: after Refresh odds, a tap on any DraftKings price in a game's Player props (a player's points, rebounds, assists, threes, steals, blocks or their combinations, a milestone such as 25+ points, a double- or triple-double, or the game's moneyline, spread and total) puts that leg in it, at the price as read and dated by the read. A later press reads it again: a new price is taken, and a line DraftKings has moved or pulled leaves, which the page says once; every leg leaves at its game's tip. Two legs of one game make a same-game parlay. Such legs move together (a player's points and his team winning, say), so their prices cannot simply be multiplied: the chance they all land comes from each leg's chance joined by correlations measured on the finished seasons' box scores${S.corr ? ` (${fmtSeasons(S.corr.measured)})` : ''}, and the price is estimated as the NFL hub estimates DraftKings' same-game prices, never above the legs multiplied. DraftKings prices same-game parlays its own way, so the price is marked est. The builder takes one side bet a game (the moneyline or the spread), one total, and one leg a player a stat, and refuses one player's two legs that share a part (points with points + rebounds, say): DraftKings publishes no list of what it takes on one ticket, so it is cautious. It leads with DraftKings' fair chance of the whole parlay; the model's chance stands beside it only where every leg has one, on trial for a player's leg, and never as a reason to bet. Lock in sends it to the Bet Build, which grades a player's leg from the box score as DraftKings settles it (a player who does not play is void); Finish shows it as a card with a DraftKings betslip link for the game lines (ESPN's feed carries no betslip id for a player's line, so those are added by hand).</p>
-    <h3>Player props</h3><p>Each game still to come has a Player props button, on its card and in the plan. Refresh odds reads DraftKings' player props from ESPN with the lines: each player's main lines (points, rebounds, assists, threes, steals, blocks and the combinations) with the Over and Under prices, the milestone ladders (25+ points and so on) and the double- and triple-double prices. Beside each line, the hub's props model: its projection and its chance of the Over, then DraftKings' fair chance, the book's margin taken out (all of it on the Over, which scored best on DraftKings' archived closing lines; milestone and double-double fair chances are estimates and marked est.). The model projects minutes from each player's own record, a rate a minute for each stat shrunk toward his position's, the pace and the opponent, and a spread fitted on past seasons. It beat each player's own average on every stat in the walk-forward test, and lost to DraftKings' closing lines on the 2026 playoffs. <b>So it is on trial and suggests nothing</b>: no prop goes into a suggested parlay or a pick. Its shadow ledger (on Record) grades its call, frozen at tip-off, on every closing line, against a bar written down before its first call. A DraftKings price you tap goes into your own parlay in the Parlay Builder (above): your pick, at DraftKings' price.</p>
-    <h3>What lives where</h3><p>The job pulls scores, box scores, injuries, coaches and rosters from ESPN's public feeds every morning, replays both models, logs the day's numbers and rebuilds this page. Refresh odds, over Tonight and the Parlay Builder, reads DraftKings' current lines and player props from ESPN when you press it, for this visit only: a reload shows the published lines again. Your picks and tickets stay in this browser: clearing site data loses them.</p>`;
-};
 render.data = function () {
   const el = $('#tab-data');
   el.innerHTML = `<h2>Data <small>the published file and this browser's own</small></h2><div class="bar"><button class="btn" id="exp">Save backup of my picks and bets</button><label class="btn ghost">Import backup <input type="file" id="imp" accept="application/json" hidden></label><span class="grow"></span><span class="muted">state.json ${(JSON.stringify(S).length / 1024).toFixed(0)} KB · generated ${S.generated}</span></div>
@@ -2173,6 +2191,7 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
   const gen = new Date(S.generated);
   $('#stamp').innerHTML = `<b>Updated ${gen.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</b>ratings through ${dayNum(S.asOf)} · ${S.players.length} players rated`;
   if (window.ADMIN) $('#dataTabBtn').hidden = false;
+  if (!document.getElementById('tierDefs')) document.body.insertAdjacentHTML('afterbegin', TIER_DEFS);
   settleProps();
   badges();
   let tab = 'slate'; try { tab = localStorage.getItem(KEY + ':tab') || 'slate'; } catch (e) {}

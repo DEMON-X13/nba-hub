@@ -32,7 +32,7 @@ final, the job runs every morning, and the page will show today's and tomorrow's
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
 | `tools/props_ledger.js`, `tools/props_check.js`, `data/props_shadow.json`, `data/props_shadow_lines.csv` | The props shadow ledger: the model's call frozen at tip-off, graded against the closing lines, its pre-registered bar, and the check that holds it to the last commit |
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, a pick, a parlay ticket and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays") |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a parlay ticket and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays") |
 | `tools/corr.js`, `data/corr.json`, `research/corr.json` | The same-game correlation table (README "Same-game parlays"): measured on the finished seasons' box scores, written by the script only; the report beside it |
 | `tools/test_corr.js` | The bivariate normal, the fit, the lookup's sign rules, and the committed table held to its rules |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
@@ -978,11 +978,12 @@ node tools/players.js      # player model replay; add "fit" to refit
 
 `index.html`, its own look: graphite blue with an orange accent, bold display type, faint court lines, team-coloured badges, cards like tickets; one card per game. Tabs:
 
-- **Tonight**: a day strip from yesterday to ten days out. Each card has the two teams (tap a badge to
-  make it your pick), the model's win chance and a probability bar, the spread and total, the market
-  line with an edge chip when the model is three or more points away, who is out on each side and what
+- **Tonight**: a day strip from yesterday to ten days out. Each card has the two teams (the model's pick
+  lit), the model's win chance and a probability bar, the spread and total, the market
+  line with a chip saying how far the model's spread is from it, who is out on each side and what
   it costs in points, a lineups drawer with projected minutes and each player's contribution and the
-  coach, two buttons that put the model's side on a parlay ticket (moneyline or spread), and a Player props
+  coach (the two sides side by side on a wide card, one above the other on a narrow one, so nothing is cut
+  off), two buttons that put the model's side on a parlay ticket (moneyline or spread), and a Player props
   button that opens the game's props: the model's projections, and DraftKings' player lines beside them once
   Refresh odds has read them (README "Player props"; the model on trial, suggesting nothing). Finals
   show the score and whether the model hit. Before the schedule appears the tab counts down to
@@ -1001,12 +1002,18 @@ node tools/players.js      # player model replay; add "fit" to refit
   props with a second status line (README "Player props"); nothing is priced or suggested from them. It is all held
   in memory only, never saved: a reload is the published state again. Nothing is read on load or on a timer, only on
   a press.
-- **Teams, Players, Coaches**: sortable tables of the ratings; players searchable and filterable by team.
+- **Teams, Players, Coaches**: sortable tables of the ratings; players searchable and filterable by team. Each
+  rating wears its tier, as on the NFL hub: a player's and a coach's overall Elo is put on a bell curve by
+  `publish.js` (THE LADDER: 1500 the ranked pool's average, 100 points a standard deviation; the pool is rostered
+  players with ten minutes or more over twenty games or more, and coaches with ten games rated), and the shields
+  split it as a ranked ladder does: the Wood League under 1350, Iron, Bronze, Silver, Gold, Platinum, Diamond,
+  Master and Elite 50 points apart, and HOF from 1750, worn as a gem. A team's strength, already on the Elo scale,
+  wears its shield as it is. Over each table, the ladder: every tier, its range and how many are in it. On a
+  phone a table keeps its rating in view and lets its secondary columns go.
 - **Record**: the season graded straight up, against the spread and on totals, by month and game, from
   `predictions.csv`; the suggested parlays and the model's picks against the closing line, season by
   season, from `research/backtest.json` (state.json's `vsMarket`, beside the two-biggest-favourites
   baseline); and the backtest table.
-- **My Picks**: the visitor's picks, graded against the published finals; browser only.
 - **Parlay Builder**: in the spirit of the NFL hub's. Suggested parlays at the top (Safe, Medium,
   Aggressive), grown from one core out of the games where the model's pick is also the market's
   favourite (the model's chance stands in where no line is up yet), likeliest first: the two likeliest,
@@ -1025,7 +1032,6 @@ node tools/players.js      # player model replay; add "fit" to refit
   from a game's Player props after Refresh odds (DraftKings' player lines, milestones, double- and triple-doubles,
   and the game's moneyline, spread and total), same-game legs priced as an estimate, locked into the Bet Build or
   finished as a card (README "Same-game parlays").
-- **How it works**: the model in plain words with the fitted numbers.
 
 Nothing a visitor does reaches the published files. The job runs `publish.js`, `build.js` and the
 smoke test after the models, and commits `state.json` and both pages.

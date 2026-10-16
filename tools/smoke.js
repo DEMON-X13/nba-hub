@@ -3,8 +3,8 @@
  *   node tools/smoke.js        (needs jsdom: npm install in tools/)
  *
  * Loads index.html in jsdom with fetch stubbed to serve state.json plus one fabricated
- * game for tonight, and checks: the update stamp shows, every tab renders without a script error, a
- * visitor's pick is kept in their own storage and shows on My Picks, a parlay leg reaches the ticket
+ * game for tonight, and checks: the update stamp shows, every tab renders without a script error, the team
+ * badges show the model's pick and take none, a parlay leg reaches the ticket
  * and a saved ticket grades once the game is final, the Data tab is only on the admin page, a preseason
  * game shows with its tag and the not-graded note, and a game that has tipped off (by its tip time, though the
  * published file still calls it scheduled) can no longer be picked, planned, suggested or locked in, including
@@ -50,7 +50,7 @@ const withGames = (fin) => ({ ...state, slate: [fake('t1', state.today, fin), fa
 
 /* every request the page makes is recorded; ESPN's scoreboard answers from `espn` (url, options) when a test gives
    one, and fails otherwise. Every timer the page sets is recorded too (and still runs), so provoke() below can fire it */
-function load(page, st, mine, espn) {
+function load(page, st, mine, espn, tab) {
   const html = fs.readFileSync(pageFile(page), 'utf8').replace(/<link[^>]*fonts[^>]*>/g, '');
   const errors = [], requests = [], scrolls = [], timers = [];
   const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/',
@@ -62,6 +62,7 @@ function load(page, st, mine, espn) {
       w.scrollTo = (x, y) => scrolls.push(y); w.URL.createObjectURL = () => 'blob:x';
       if (!w.CSS) w.CSS = { escape: v => String(v).replace(/[^\w-]/g, c => '\\' + c) };            // jsdom has no CSS.escape; the lineups button uses it
       if (mine) w.localStorage.setItem('nba_hub_2027', JSON.stringify(mine));
+      if (tab) w.localStorage.setItem('nba_hub_2027:tab', tab);
       for (const k of ['setTimeout', 'setInterval', 'requestAnimationFrame']) { const real = w[k]; if (typeof real === 'function') w[k] = function (fn, ms, ...a) { timers.push({ k, fn, ms }); return real.call(w, fn, ms, ...a); }; }
       w.addEventListener('error', e => errors.push(e.message));
     } });
@@ -173,7 +174,7 @@ async function refreshOdds() {
   check(stl && stl.getAttribute('aria-live') === 'polite' && stl.getAttribute('role') === 'status', 'one aria-live status line beside it');
   const pubTime = new Date(st7.generated).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
   check(stl && stl.textContent.includes(`Lines as published ${pubTime}`), `before any press it says when the lines were published ("${stl && stl.textContent}")`);
-  for (const tab of ['teams', 'players', 'coaches', 'record', 'mine', 'about', 'parlay', 'slate']) { d.querySelector(`#nav button[data-tab=${tab}]`).click(); await sleep(20);
+  for (const tab of ['teams', 'players', 'coaches', 'record', 'parlay', 'slate']) { d.querySelector(`#nav button[data-tab=${tab}]`).click(); await sleep(20);
     if (tab === 'teams') check(bar.hidden, 'the bar is not on the Teams tab');
     if (tab === 'parlay') check(!bar.hidden, 'it is on the Parlay Builder'); }
   await sleep(400);
@@ -1280,11 +1281,28 @@ async function builder() {
     const d0 = w.document;
     const shown = d0.querySelector('#days .day.on');
     check(!real.slate.length || (shown && d0.querySelectorAll('#slate .card').length === real.slate.filter(g => g.date === shown.dataset.d).length), 'the board draws a card for every game of the day shown');
-    for (const tab of ['slate', 'teams', 'players', 'coaches', 'record', 'mine', 'parlay', 'about']) {
+    for (const tab of ['slate', 'teams', 'players', 'coaches', 'record', 'parlay']) {
       d0.querySelector(`#nav button[data-tab=${tab}]`).click(); await sleep(30);
       const txt = d0.getElementById('tab-' + tab).textContent;
       check(!/\bNaN\b|\bundefined\b/.test(txt), `the real ${tab} tab shows no NaN or undefined`);
     }
+    /* the ladder: each overall Elo is the published rating, worn with the tier its number falls in, and the tier
+       counts above each table add up to the ranked */
+    const TIER_AT = [['HOF', 1750], ['Elite', 1700], ['Master', 1650], ['Diamond', 1600], ['Platinum', 1550], ['Gold', 1500], ['Silver', 1450], ['Bronze', 1400], ['Iron', 1350], ['Wood', -Infinity]];
+    const tierOf = v => TIER_AT.find(t => v >= t[1])[0];
+    for (const [tab, list, what] of [['players', real.players, 'player'], ['coaches', real.coaches, 'coach']]) {
+      d0.querySelector(`#nav button[data-tab=${tab}]`).click(); await sleep(30);
+      const tp = d0.getElementById('tab-' + tab), rows = [...tp.querySelectorAll('.tbl tbody tr')];
+      const best = [...list].sort((a, b) => b.rating - a.rating)[0], cell = rows[0] && rows[0].querySelector('.elocell');
+      check(cell && cell.querySelector('b').textContent === String(best.rating) && cell.querySelector(`.tierbadge.tier-${tierOf(best.rating).toLowerCase()}`) && rows[0].textContent.includes(best.name),
+        `the ${tab} table leads with the top ${what}'s overall Elo (${best.name}, ${best.rating}) in his tier (${tierOf(best.rating)})`);
+      check(rows.every(r => { const c = r.querySelector('.elocell'); if (!c) return false; const v = +c.querySelector('b').textContent; return c.querySelector(`.tierbadge.tier-${tierOf(v).toLowerCase()}`); }), `every ${what} row wears the shield its number falls in`);
+      const ladderN = [...tp.querySelectorAll('.tierladder .t .muted')].reduce((a, x) => a + +x.textContent.split('·')[1], 0);
+      check(ladderN === list.filter(x => x.ranked).length && ladderN > 0, `the ${tab} ladder counts the ${list.filter(x => x.ranked).length} ranked`);
+    }
+    check(d0.getElementById('tierDefs') && d0.getElementById('tierDefs').closest('section') === null && d0.querySelector('#tierDefs #tg-gold') && [...d0.querySelectorAll('.tier-hof')].every(b => { const f = b.querySelector('path[fill^="url"]'), id = f && f.getAttribute('fill').slice(5, -1); return id && b.querySelector('#' + id + ' animateTransform'); }), "the shields' gradients are in the page once, outside every hidden tab, and each HOF gem carries its own turning gradient");
+    d0.querySelector('#nav button[data-tab=teams]').click(); await sleep(30);
+    check(d0.querySelectorAll('#tab-teams .tbl tbody tr .elocell .tierbadge').length === 30, "every team's strength wears its shield");
     if (real.vsMarket && real.vsMarket.seasons.length) {
       d0.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
       const rt = d0.getElementById('tab-record');
@@ -1308,18 +1326,23 @@ async function builder() {
   check(d.querySelector('.card .badge.pick').textContent === 'NYK', 'the model pick is highlighted');
   check(/Some Star/.test(d.querySelector('.card .out').textContent), 'the absentee is listed');
   check(d.getElementById('dataTabBtn').hidden === true, 'no Data tab on the viewer');
-  for (const tab of ['teams', 'players', 'coaches', 'record', 'mine', 'parlay', 'about']) {
+  for (const tab of ['teams', 'players', 'coaches', 'record', 'parlay']) {
     d.querySelector(`#nav button[data-tab=${tab}]`).click(); await sleep(30);
     check(!d.getElementById('tab-' + tab).hidden && d.getElementById('tab-' + tab).innerHTML.length > 200, `tab ${tab} renders`);
   }
+  check(!d.querySelector('#nav button[data-tab=mine]') && !d.querySelector('#nav button[data-tab=about]') && !d.getElementById('tab-mine') && !d.getElementById('tab-about'), 'My Picks and How it works are gone');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  for (const gone of ['mine', 'about']) {
+    const r = load('index.html', withGames(false), null, null, gone); await sleep(250);
+    check(!r.w.document.getElementById('tab-slate').hidden && r.w.document.querySelector('#nav button[data-tab=slate]').getAttribute('aria-selected') === 'true' && !r.errors.length,
+      `a browser that last had ${gone === 'mine' ? 'My Picks' : 'How it works'} open opens on Tonight`);
+  }
 
-  console.log('2. a pick, then a straight bet from the Parlay Builder');
+  console.log('2. a straight bet from the Parlay Builder');
   d.querySelector('#nav button[data-tab=slate]').click(); await sleep(30);
   d.querySelector('.card .team.away .badge').click(); await sleep(30);
-  let mine = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(mine.picks.t1 === 'BOS', 'pick stored in the browser');
-  check(d.querySelector('.card .team.away .badge').classList.contains('mine'), 'pick marked on the card');
+  let mine = JSON.parse(w.localStorage.getItem('nba_hub_2027') || '{}');
+  check(!d.querySelector('.card [data-act=pick]') && !Object.keys(mine.picks || {}).length && !d.querySelector('.card .badge.mine'), "the team badges show the model's pick and take none");
   d.querySelector('.card [data-act=plan]').click(); await sleep(80);
   check(!d.getElementById('tab-parlay').hidden && d.querySelector('#bkPlan tr[data-gid="t1"]'), 'the card button opens the builder on that game');
   check(/NYK/.test(d.querySelector('#bkPlan tr[data-gid="t1"]').textContent) && /MED 61%/.test(d.querySelector('#bkPlan tr[data-gid="t1"]').textContent), 'the plan row shows the model pick and its band');
@@ -1329,15 +1352,11 @@ async function builder() {
   mine = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
   check(mine.build.length === 1 && mine.build[0].type === 'single' && mine.build[0].legs[0].side === 'NYK' && mine.build[0].legs[0].odds === -140, 'straight bet locked into the Bet Build');
   check(/open/.test(d.getElementById('bkBuild').textContent), 'the Bet Build lists it as open');
-  d.querySelector('#nav button[data-tab=mine]').click(); await sleep(30);
-  check(/BOS/.test(d.getElementById('tab-mine').textContent) && /open/.test(d.getElementById('tab-mine').textContent), 'My Picks lists the open pick');
 
   console.log('3. the next morning: the game is final');
   ({ w, errors } = load('index.html', withGames(true), mine));
   await sleep(250);
   const d2 = w.document;
-  d2.querySelector('#nav button[data-tab=mine]').click(); await sleep(30);
-  check(/lost/.test(d2.getElementById('tab-mine').textContent) && /0-1/.test(d2.getElementById('tab-mine').textContent), 'the pick graded as a loss (BOS lost 98-105)');
   d2.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
   check(/won/.test(d2.getElementById('bkBuild').textContent) && /\$34\.29/.test(d2.getElementById('bkBuild').textContent), 'the straight bet graded: NYK at -140 returns $34.29 on $20');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
@@ -1350,8 +1369,6 @@ async function builder() {
   await sleep(250);
   w.document.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
   check(/won/.test(w.document.getElementById('bkBuild').textContent), 'a bet still grades from the published finals');
-  w.document.querySelector('#nav button[data-tab=mine]').click(); await sleep(30);
-  check(/won/.test(w.document.getElementById('tab-mine').textContent), 'and so does an old pick');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   console.log('3c. three games: suggestions and a parlay');
@@ -1420,14 +1437,6 @@ async function builder() {
   const c1 = d6.querySelector('.card[data-id="x1"]');
   check(c1 && /Tipped off/.test(c1.querySelector('.tags').textContent), 'a game past its tip time is tagged Tipped off');
   check(c1 && !c1.querySelector('[data-act=plan]'), 'it has no Parlay Builder button');
-  c1.querySelector('.team.away .badge').click(); await sleep(30);
-  check(!(JSON.parse(w.localStorage.getItem('nba_hub_2027') || '{}').picks || {}).x1, 'it cannot be picked');
-  ({ w, errors } = load('index.html', tipped(), { picks: { x1: 'NYK', x3: 'ORL' }, build: [] }));
-  await sleep(250);
-  w.document.querySelector('#nav button[data-tab=mine]').click(); await sleep(30);
-  check(!w.document.querySelector('#tab-mine [data-un="x1"]') && w.document.querySelector('#tab-mine [data-un="x3"]'), 'a pick cannot be removed once its game has tipped, and can before');
-  d6 = w.document;
-  d6.querySelector('#nav button[data-tab=slate]').click(); await sleep(30);
   d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
   check(!d6.querySelector('#bkPlan tr[data-gid="x1"]') && d6.querySelector('#bkPlan tr[data-gid="x2"]') && d6.querySelector('#bkPlan tr[data-gid="x3"]'), 'the builder leaves it out and keeps the two games to come');
   check(!/BOS/.test(d6.getElementById('bkSuggest').textContent), 'the suggestions leave it out');
@@ -1469,27 +1478,23 @@ async function builder() {
     const ancient = `${state.season - 2}_20241105_LAL_GSW`;
     const st6 = { ...state, slate: [], finals: { [done]: [100, 110] }, pending: [waiting],
       record: [{ id: graded, date: ago(5), away: 'DEN', home: 'UTA', awayScore: 120, homeScore: 101, pHome: 0.22, spread: 9.1, total: 231, line: 8.5, totalLine: 230, pick: 'DEN', su: true, ats: true, ou: false, teamPick: 'DEN' }] };
-    const mine6 = { picks: { [pp]: 'NYK', [fresh]: 'ORL', [graded]: 'DEN', [waiting]: 'PHI', [ancient]: 'GSW' }, build: [
+    const mine6 = { picks: { [pp]: 'NYK' }, build: [
+      { id: 'v4', day: ago(6), type: 'single', stake: 10, legs: [{ id: waiting, kind: 'ml', side: 'PHI', odds: 110 }] },
+      { id: 'v5', day: ago(5), type: 'single', stake: 10, legs: [{ id: graded, kind: 'ml', side: 'DEN', odds: 200 }] },
       { id: 'v1', day: ago(3), type: 'single', stake: 10, legs: [{ id: pp, kind: 'ml', side: 'NYK', odds: -140 }] },
       { id: 'v2', day: ago(4), type: 'parlay', stake: 10, legs: [{ id: pp, kind: 'ml', side: 'NYK', odds: -140 }, { id: done, kind: 'ml', side: 'GSW', odds: 150 }] },
       { id: 'v3', day: ago(1), type: 'single', stake: 10, legs: [{ id: fresh, kind: 'ml', side: 'ORL', odds: -120, est: 'model' }] }] };
     ({ w, errors } = load('index.html', st6, mine6));
     await sleep(250);
     const d7 = w.document;
-    d7.querySelector('#nav button[data-tab=mine]').click(); await sleep(30);
-    const mt = d7.getElementById('tab-mine');
-    const rowOf = id => [...mt.querySelectorAll('tbody tr')].find(r => r.querySelector(`[data-un="${id}"]`) || r.textContent.includes(id.split('_')[2]));
-    check(/void/.test(mt.textContent), 'a pick on a game missing three days on reads void');
-    check(/>2<\/b><span>Open/.test(mt.innerHTML), "open: yesterday's game (a day is not enough to call it off) and one played whose final is not read yet");
-    check(/PHI/.test(mt.textContent) && (mt.textContent.match(/void/g) || []).length === 1, 'the game awaiting its final is not void');
-    check(mt.querySelectorAll('tbody tr').length === 4 && ![...mt.querySelectorAll('tbody tr')].some(r => /LAL/.test(r.textContent) && /GSW/.test(r.textContent)), 'a pick from three seasons back is not shown (four of the five picks are)');
-    check(/1\/4<\/b><span>With the model/.test(mt.innerHTML) && /DEN/.test(mt.textContent) && /78%/.test(mt.textContent), "a graded game off the slate keeps the model's pick (DEN 78%)");
     d7.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
     const bb = d7.getElementById('bkBuild');
     const rowB = id => [...bb.querySelectorAll('tbody tr')].find(r => r.querySelector(`[data-del="${id}"]`));
     check(/void/.test(rowB('v1').textContent) && /\$10\.00/.test(rowB('v1').lastElementChild.previousElementSibling.textContent), 'a straight bet on it is void, the stake back');
     check(/won/.test(rowB('v2').textContent) && /\$25\.00/.test(rowB('v2').textContent), 'a parlay drops the void leg and pays on the rest: GSW +150 returns $25 on $10');
-    check(/open/.test(rowB('v3').textContent) && rowB('v3').querySelector('sup') && /est/.test(rowB('v3').querySelector('sup').textContent), 'an estimated price is marked est in the Bet Build');
+    check(/open/.test(rowB('v3').textContent) && rowB('v3').querySelector('sup') && /est/.test(rowB('v3').querySelector('sup').textContent), 'an estimated price is marked est in the Bet Build, and a game from yesterday is still open: a day is not enough to call it off');
+    check(/open/.test(rowB('v4').textContent) && !/void/.test(rowB('v4').textContent), 'a bet on a game played whose final is not read yet is open, not void');
+    check(/won/.test(rowB('v5').textContent) && /\$30\.00/.test(rowB('v5').textContent), 'a bet on a graded game off the slate grades from the record: DEN +200 returns $30 on $10');
     check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
     const stale = { ...withGames(false), injuriesAsOf: ago(1) };

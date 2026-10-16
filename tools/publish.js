@@ -91,6 +91,21 @@ function main() {
   const coaches = Object.entries(players.coaches).map(([name, c]) => ({ name, ...c, team: coachedBy[name] || '' }));
   for (const [t, name] of Object.entries(current)) if (!players.coaches[name]) coaches.push({ name, team: t, elo: players.teams[t].coachElo || 0, games: players.teams[t].coachGames || 0 });
   coaches.sort((a, b) => b.elo - a.elo);
+
+  /* THE LADDER, as the NFL hub draws it: a rating shown on a bell curve, 1500 plus 100 points for every standard
+     deviation above the ranked pool's average, so the tier shields (Wood under 1350, then Iron, Bronze, Silver, Gold,
+     Platinum, Diamond, Master and Elite 50 points apart, the HOF gem from 1750) split the pool the way a ranked ladder
+     does. The pool: rostered players with ten minutes or more a game over twenty games or more (every listed player
+     is shown on its curve), and coaches with ten games rated. The order is untouched; the models never read it */
+  const curve = vals => { const n = vals.length, m = n ? vals.reduce((a, x) => a + x, 0) / n : 0, sd = n > 1 ? Math.sqrt(vals.reduce((a, x) => a + (x - m) ** 2, 0) / n) : 0;
+    return { n, mean: +m.toFixed(2), sd: +sd.toFixed(2), show: v => sd > 0 ? Math.round(1500 + 100 * (v - m) / sd) : 1500 }; };
+  let pool = plist.filter(p => p.team !== 'FA' && p.min >= 10 && p.games >= 20);
+  if (pool.length < 30) pool = plist;                       // too few to make a curve of: everyone
+  const pc = curve(pool.map(p => p.elo)), cc = curve(coaches.filter(c => c.games >= 10).map(c => c.elo));
+  const inPool = new Set(pool.map(p => p.id));
+  for (const p of plist) { p.rating = pc.show(p.elo); if (inPool.has(p.id)) p.ranked = true; }
+  for (const c of coaches) { c.rating = cc.show(c.elo); if (c.games >= 10) c.ranked = true; }
+  const ladder = { players: { pool: pc.n, mean: pc.mean, sd: pc.sd }, coaches: { pool: cc.n, mean: cc.mean, sd: cc.sd } };
   const names = {};
   for (const p of plist) names[p.id] = p.name;
 
@@ -115,7 +130,7 @@ function main() {
   const props = propsState(slate, nowIso);
   const boxes = boxesState(games, today), corr = corrState();
   const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
-    slate, record, teams, players: plist, coaches, names,
+    slate, record, teams, players: plist, coaches, names, ladder,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };
   const body = JSON.stringify(state);

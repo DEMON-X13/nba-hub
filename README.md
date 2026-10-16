@@ -542,8 +542,8 @@ frozen or past its tip, a line graded, a verdict written, its time not later, a 
 and the committed ledger's bar being `BAR`, every call made after its registration. `node tools/smoke.js` section 8 holds
 the page: the props view on a press against a stubbed ESPN (the recorded
 opening-night answer with made-up lines added, two pages, a 404, junk, a 503, a game ESPN has under way, one that
-tips while its props are read, one ESPN still calls scheduled with its own tip passed and the published one to come, and
-on a second press a game whose page 2 is a 404, which keeps its earlier read whole); every line, rung and Yes price the sheet shows worked out on its own from
+tips while its props are read, one ESPN still calls scheduled with its own tip passed and the published one to come
+(dated by ESPN's tip, as the page's parse dates a row, so it holds across midnight Eastern), and on a second press a game whose page 2 is a 404, which keeps its earlier read whole); every line, rung and Yes price the sheet shows worked out on its own from
 `props_feed.js`, `props.js` and the state's props block; the on-trial wording; nothing suggested (the Parlay Builder
 drawn with the props read is byte for byte the one drawn without them, and names no player); nothing read before a
 press (on load, opening a sheet, switching its team, on every timer and event the page sets); nothing stored; a reload
@@ -821,13 +821,15 @@ two-leg pairs of every kind worked out here exactly from `data/corr.json` and `t
 file's own integration (to 0.02%), never above the product; eight more sets of three and four legs of one game priced
 one after another in one page session, each against that integration (four legs by its extension to a fourth, to 0.1%),
 three of them at one set of implied chances with other relations, priced apart; the summary and the card leading with
-the fair chance, est., the price est. beside the legs multiplied, what the stake pays to the cent, the why line, the
-model's chance labelled on trial (a second card, on a parlay with a model chance on every leg) or absent with its
-reason, and neither saying "edge" or "model says"; the suggested parlays and the plan byte for byte the same with legs
-in and without; the card's legs, add-by-hand lines, betslip link and note, Share text (what the stake pays, to the
-cent), copy, Escape and focus, and the note and Share text dated by the older read when the legs it opens were read at
-two presses; Lock in; a reload; a later press moving, dropping and repricing legs, a failed read keeping one, a
-none-posted read dropping one, said once; a tip; grading seventeen bets by its own sums (a void leg dropped and the
+the fair chance, est., the price est. beside the legs multiplied, what the stake pays to the cent (a stake typed into
+the Stake box, $37.50, not the $20 every store there starts on, followed by the summary, Lock in, the card, its Share
+text and the Bet Build), the why line, the model's chance labelled on trial (a second card, on a parlay with a model
+chance on every leg) or absent with its reason, and neither saying "edge" or "model says"; the suggested parlays and the
+plan byte for byte the same with legs in and without; the card's legs, add-by-hand lines, betslip link and note, Share
+text (what the stake pays, to the cent), copy, Escape and focus, and the note and Share text dated by the older read
+when the legs it opens were read at two presses; Lock in (staked $37.50, to win the same-game price's profit on it); a
+reload; a later press moving, dropping and repricing legs, a failed read keeping one, a none-posted read dropping one,
+said once; a tip; grading seventeen bets by its own sums (a void leg dropped and the
 same-game parlay repriced, a push, a milestone, a double-double, a triple-double short, an Under, a final with no box
 waiting, a leg three weeks old read from its season's box file, a double-double of rebounds and blocks and a
 triple-double of points, rebounds and steals, a same-game parlay with a player's whole line pushing priced again on the

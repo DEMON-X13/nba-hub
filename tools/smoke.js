@@ -391,7 +391,11 @@ async function playerProps() {
   const p6 = og('ATL', 'BKN', 3 * 3600e3, { espn: '401900006' });
   const p7 = og('TOR', 'CLE', 3 * 3600e3, { espn: '401900007' });
   const p8 = og('POR', 'HOU', 3600e3, { espn: '401900008' });          // its tip is moved to just after the press, below
-  const p10 = og('SAC', 'PHX', 30 * 60e3, { espn: '401900010' });      // ESPN's tip is set a minute before the press, below
+  /* p10's day and id are the Eastern date its ESPN tip is held on below, as the page's scoreboard parse (fetch.js's)
+     builds a row's id from ESPN's tip, and as section 7's r10 takes them; not its published tip's, half an hour on: from
+     11:30pm Eastern that was the next day while ESPN's tip a minute back was still today, no row matched and the press
+     read p10's props */
+  const d10 = etDateOf(new Date().toISOString()), p10 = { ...og('SAC', 'PHX', 30 * 60e3, { espn: '401900010' }), date: d10, id: `2027_${ymd(d10)}_SAC_PHX` };
   const games = [p1, p2, p3, p4, p5, p6, p7, p8, p10];
   const eid = { [p1.id]: '401909088', [p2.id]: '401900002', [p3.id]: '401900003', [p4.id]: '401900004', [p5.id]: '401900005', [p6.id]: '401900006', [p7.id]: '401900007', [p8.id]: '401900008', [p10.id]: '401900010' };
   const lal = { '9000001': ['Lal Guard', 'LAL', 'G', 34.2, 25.3, 5.1, 6.2, 2.8, 1.1, 0.4, 0.21, 0.02], '9000002': ['Gsw Center', 'GSW', 'C', 30.0, 15.5, 11.8, 2.1, 0.2, 0.7, 1.9, 0.55, 0.01], '9000003': ['Gsw Wing', 'GSW', 'F', 22.0, 9.0, 4.0, 1.5, 1.4, 0.6, 0.3, 0.02, 0] };
@@ -485,11 +489,17 @@ async function playerProps() {
   p8.tip = new Date(Date.now() + 2500).toISOString();
   w.eval(`S.slate.find(g => g.id === ${JSON.stringify(p8.id)}).tip = ${JSON.stringify(p8.tip)}`);
   sb[ymd(p8.date)].events.find(e => e.id === eid[p8.id]).date = new Date(Date.parse(p8.tip) + 3600e3).toISOString().slice(0, 16) + 'Z';
-  /* p10: ESPN still calls it scheduled, its own tip a minute ago; the published tip is still to come */
-  sb[ymd(p10.date)].events.find(e => e.id === eid[p10.id]).date = new Date(Date.now() - 60e3).toISOString().slice(0, 16) + 'Z';
+  /* p10: ESPN still calls it scheduled, its own tip a minute ago; the published tip is still to come. The tip is kept on
+     p10's day (Eastern), so the scoreboard's row is p10's at any hour: in the first minute after midnight it is the
+     day's first minute, and should midnight pass between setting p10 up and the press, its day's last minute */
+  let t10 = Math.floor((Date.now() - 60e3) / 60e3) * 60e3;
+  for (let i = 0; i < 120 && etDateOf(new Date(t10).toISOString()) < p10.date; i++) t10 += 60e3;
+  for (let i = 0; i < 120 && etDateOf(new Date(t10).toISOString()) > p10.date; i++) t10 -= 60e3;
+  sb[ymd(p10.date)].events.find(e => e.id === eid[p10.id]).date = new Date(t10).toISOString().slice(0, 16) + 'Z';
   const pressedAt = Date.now();
   d.getElementById('oddsBtn').click(); await idle();
   check(Date.now() > Date.parse(p8.tip) && pressedAt < Date.parse(p8.tip) - 1500, 'the press landed well before p8 tipped and ended after it (else the machine is too slow for this case)');
+  check(etDateOf(new Date(t10).toISOString()) === p10.date && t10 <= pressedAt && Date.parse(p10.tip) > Date.now(), `p10's ESPN tip (${new Date(t10).toISOString()}) is on its day, ${p10.date}, before the press, and its published tip still to come after it (else this case tests nothing)`);
   const pr = propsReqs(requests), sbr = sbReqs(requests);
   const asked = pr.map(x => PROPS_RE.exec(x.url)[1] + ':' + PROPS_RE.exec(x.url)[2]).sort();
   const want = ['401909088:1', '401900002:1', '401900002:2', '401900003:1', '401900004:1', '401900007:1', '401900008:1'].sort();
@@ -985,10 +995,17 @@ async function builder() {
       `its card shows the model's chance, ${pct1(mm.model)}, labelled on trial, with no "edge" or "model says", and pays ${cents(20 * mm.dec)} on $20 to the cent (${cm && cm.textContent} | ${cp && cp.textContent})`);
     pc2.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20); }
   w.eval(`M.slip.legs.splice(2, 0, ${JSON.stringify({ ...legs[0], kind: 'total', side: 'over', line: 221.5, odds: -115, other: -105, dk: '0OU85841510O22150_1', at: gl1.at, pid: undefined, name: undefined, team: undefined, stat: undefined, mk: undefined })}); saveMine(); render.parlay();`);
+  /* a stake typed into the Stake box, not the $20 every store in this section starts on, so a figure fixed at $20 cannot
+     pass for the visitor's: the summary, Lock in, the card, its Share text and the Bet Build all follow it */
+  const STAKE = 37.5;
+  { const inp = d.getElementById('slStake'); inp.value = '$37.50'; inp.dispatchEvent(new w.Event('change', { bubbles: true })); await sleep(20);
+    const pt = d.querySelector('#bkSlip [data-sl-pays]'), lk = d.getElementById('slLock');
+    check(pt && pt.querySelector('b').textContent === cents(STAKE * pb.dec) && pt.querySelector('span').textContent === 'pays on $37.50' && d.getElementById('slStake').value === '37.5' && lk && lk.textContent === 'Lock in · $37.50',
+      `a stake typed into the Stake box ("$37.50") is your parlay's: the summary pays ${cents(STAKE * pb.dec)} on $37.50, the same-game price to the cent, and Lock in says $37.50 (${pt && pt.textContent} | ${lk && lk.textContent})`); }
   /* nothing from the read is stored but the legs added */
   const store = JSON.parse(w.localStorage.getItem('nba_hub_2027')), sj = JSON.stringify(store);
-  check(store.slip.legs.length === 4 && !/4432166|Cunningham|mains|ladders|"yes"\s*:\s*\[|9000002|7000001|9000099|9000088|Moved Wing/.test(sj) && Object.keys(w.localStorage).filter(k => !/^nba_hub_2027(:tab)?$/.test(k)).length === 0 && dump(w.sessionStorage) && !Object.keys(dump(w.sessionStorage)).length,
-    'storage holds the four legs added and nothing else from the read (no other line, player or price), in the one key');
+  check(store.slip.stake === STAKE && store.slip.legs.length === 4 && !/4432166|Cunningham|mains|ladders|"yes"\s*:\s*\[|9000002|7000001|9000099|9000088|Moved Wing/.test(sj) && Object.keys(w.localStorage).filter(k => !/^nba_hub_2027(:tab)?$/.test(k)).length === 0 && dump(w.sessionStorage) && !Object.keys(dump(w.sessionStorage)).length,
+    'storage holds the four legs added and the stake typed, and nothing else from the read (no other line, player or price), in the one key');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   /* Finish: the card */
@@ -1007,8 +1024,9 @@ async function builder() {
   check(pc.querySelector('.pc-nums > div').hasAttribute('data-pc-fair') && pc.querySelector('[data-pc-fair] b').textContent === pct1(pb.fair) && /fair chance, est\.$/.test(pc.querySelector('[data-pc-fair] span').textContent), 'the card leads with DraftKings\' fair chance, est., too');
   check(pc.querySelector('[data-pc-price] b').textContent === fmtA(amOfDec(pb.dec)) + ' est.' && pc.querySelector('[data-pc-why]').textContent === "DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together.", 'its price is marked est., with the why');
   const NOMODEL = "No model chance: the hub's models give none on a spread, a total or a player the props model does not project.";
-  check(pc.querySelector('[data-pc-pays] b') && pc.querySelector('[data-pc-pays] b').textContent === cents(20 * pb.dec) && pc.querySelector('[data-pc-pays] span').textContent === 'pays on $20.00',
-    `what the stake pays on the card is $20 times the same-game price (held to this file's integration above), to the cent (${cents(20 * pb.dec)}; the legs multiplied would pay ${cents(20 * mb.prod)})`);
+  check(pc.querySelector('[data-pc-pays] b') && pc.querySelector('[data-pc-pays] b').textContent === cents(STAKE * pb.dec) && pc.querySelector('[data-pc-pays] span').textContent === 'pays on $37.50'
+    && d.getElementById('pcSub').textContent === '4 legs · $37.50 stake · times in Eastern',
+    `what the stake pays on the card is the stake typed, $37.50, times the same-game price (held to this file's integration above), to the cent (${cents(STAKE * pb.dec)}; the legs multiplied would pay ${cents(STAKE * mb.prod)}), its head saying the stake ("${d.getElementById('pcSub').textContent}")`);
   check(!pc.querySelector('[data-pc-model]') && pc.querySelector('[data-pc-nomodel]') && pc.querySelector('[data-pc-nomodel]').textContent === NOMODEL && !banned(d.getElementById('pcBody').textContent),
     'with a total in it the card shows no model chance and says why, and says neither "edge" nor "model says"');
   let shared = null; w.navigator.share = async x => { shared = x; }; w.navigator.canShare = () => true;
@@ -1016,8 +1034,8 @@ async function builder() {
   const tl = shared && shared.text.split('\n');
   check(shared && Object.keys(shared).sort().join() === 'text,title' && shared.title === `4-leg parlay ${fmtA(amOfDec(pb.dec))} (estimated same-game price)` && tl.includes('https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1')
     && tl.includes(`1. Jayson Tatum (BOS): Points Over 26.5 -111, BOS at DET, read ${etT(e1.at)}`) && tl.includes("Add by hand, leg 1: Jayson Tatum, Points Over 26.5 (DraftKings' player lines carry no betslip id in ESPN's feed)")
-    && tl.includes("Add by hand, leg 4: Lal Guard, Points Over 24.5 (DraftKings' player lines carry no betslip id in ESPN's feed)") && !tl.some(x => /^Add by hand, leg 3/.test(x)) && tl.includes(`$20.00 pays ${cents(20 * pb.dec)} at ${fmtA(amOfDec(pb.dec))}, an estimated same-game price (DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together; the legs multiplied ${fmtA(amOfDec(mb.prod))})`) && !/every leg|all 4 legs/.test(shared.text),
-    'Share link sends a title and a text, no url field: each leg with its price and read time, the betslip link alone on its line, the player legs to add by hand with why, what $20 pays to the cent at the estimated same-game price, the legs multiplied beside it');
+    && tl.includes("Add by hand, leg 4: Lal Guard, Points Over 24.5 (DraftKings' player lines carry no betslip id in ESPN's feed)") && !tl.some(x => /^Add by hand, leg 3/.test(x)) && tl.includes(`$37.50 pays ${cents(STAKE * pb.dec)} at ${fmtA(amOfDec(pb.dec))}, an estimated same-game price (DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together; the legs multiplied ${fmtA(amOfDec(mb.prod))})`) && !/every leg|all 4 legs/.test(shared.text),
+    'Share link sends a title and a text, no url field: each leg with its price and read time, the betslip link alone on its line, the player legs to add by hand with why, what the stake typed ($37.50) pays to the cent at the estimated same-game price, the legs multiplied beside it');
   delete w.navigator.share; let copied = null; w.navigator.clipboard = { writeText: async t => { copied = t; } };
   d.getElementById('pcShare').click(); await sleep(20);
   check(copied === shared.text && /Copied/.test(d.getElementById('pcMsg').textContent), 'with no share sheet the same text is copied, and the card says so');
@@ -1045,10 +1063,11 @@ async function builder() {
   /* Lock in */
   d.getElementById('slLock').click(); await sleep(30);
   const b0 = JSON.parse(w.localStorage.getItem('nba_hub_2027')).build;
-  check(b0.length === 1 && b0[0].type === 'parlay' && b0[0].legs.length === 4 && Math.abs(b0[0].dec - pb.dec) < 1e-12 && b0[0].sg === true && b0[0].stake === 20, 'Lock in puts it in the Bet Build at its same-game price, marked same-game');
-  const brow = d.querySelector('#bkBuild tbody tr');
-  check(brow && /Parlay · 4/.test(brow.textContent) && brow.querySelector('sup') && /est/.test(brow.querySelector('sup').textContent) && brow.textContent.includes(fmtA(amOfDec(pb.dec))) && /Jayson Tatum/.test(brow.textContent) && /open/.test(brow.textContent),
-    'the Bet Build lists it, its price est., its player legs named, open');
+  check(b0.length === 1 && b0[0].type === 'parlay' && b0[0].legs.length === 4 && Math.abs(b0[0].dec - pb.dec) < 1e-12 && b0[0].sg === true && b0[0].stake === STAKE, 'Lock in puts it in the Bet Build at its same-game price, marked same-game, on the stake typed ($37.50)');
+  const brow = d.querySelector('#bkBuild tbody tr'), bnum = brow ? [...brow.querySelectorAll('td.num')].map(td => td.textContent.trim()) : [];
+  check(brow && /Parlay · 4/.test(brow.textContent) && brow.querySelector('sup') && /est/.test(brow.querySelector('sup').textContent) && brow.textContent.includes(fmtA(amOfDec(pb.dec))) && /Jayson Tatum/.test(brow.textContent) && /open/.test(brow.textContent)
+    && bnum[1] === '$37.50' && bnum[2] === cents(STAKE * pb.dec - STAKE),
+    `the Bet Build lists it, its price est., its player legs named, open, staked $37.50 to win ${cents(STAKE * pb.dec - STAKE)} (${bnum.join(' | ')})`);
   check(d.getElementById('slLock').disabled && /In the Bet Build/.test(d.getElementById('slLock').textContent), 'and the builder says it is in the Bet Build');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 

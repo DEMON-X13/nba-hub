@@ -391,11 +391,11 @@ async function playerProps() {
   const p6 = og('ATL', 'BKN', 3 * 3600e3, { espn: '401900006' });
   const p7 = og('TOR', 'CLE', 3 * 3600e3, { espn: '401900007' });
   const p8 = og('POR', 'HOU', 3600e3, { espn: '401900008' });          // its tip is moved to just after the press, below
-  /* p10's day and id are the Eastern date its ESPN tip is held on below, as the page's scoreboard parse (fetch.js's)
-     builds a row's id from ESPN's tip, and as section 7's r10 takes them; not its published tip's, half an hour on: from
-     11:30pm Eastern that was the next day while ESPN's tip a minute back was still today, no row matched and the press
-     read p10's props */
-  const d10 = etDateOf(new Date().toISOString()), p10 = { ...og('SAC', 'PHX', 30 * 60e3, { espn: '401900010' }), date: d10, id: `2027_${ymd(d10)}_SAC_PHX` };
+  /* p10's day and id are ESPN's tip's, Eastern, as the job would write them (section 7's r10), so ESPN's event and the
+     published game are on one day at any hour: on the published tip's day, half an hour on, they fell on two days from
+     23:30 to just after midnight Eastern and the page never matched them. ESPN's tip goes on its event at the press */
+  const p10Espn = new Date(Date.now() - 60e3).toISOString();
+  const p10 = { ...og('SAC', 'PHX', 30 * 60e3, { espn: '401900010' }), date: etDateOf(p10Espn), id: `2027_${ymd(etDateOf(p10Espn))}_SAC_PHX` };
   const games = [p1, p2, p3, p4, p5, p6, p7, p8, p10];
   const eid = { [p1.id]: '401909088', [p2.id]: '401900002', [p3.id]: '401900003', [p4.id]: '401900004', [p5.id]: '401900005', [p6.id]: '401900006', [p7.id]: '401900007', [p8.id]: '401900008', [p10.id]: '401900010' };
   const lal = { '9000001': ['Lal Guard', 'LAL', 'G', 34.2, 25.3, 5.1, 6.2, 2.8, 1.1, 0.4, 0.21, 0.02], '9000002': ['Gsw Center', 'GSW', 'C', 30.0, 15.5, 11.8, 2.1, 0.2, 0.7, 1.9, 0.55, 0.01], '9000003': ['Gsw Wing', 'GSW', 'F', 22.0, 9.0, 4.0, 1.5, 1.4, 0.6, 0.3, 0.02, 0] };
@@ -489,17 +489,12 @@ async function playerProps() {
   p8.tip = new Date(Date.now() + 2500).toISOString();
   w.eval(`S.slate.find(g => g.id === ${JSON.stringify(p8.id)}).tip = ${JSON.stringify(p8.tip)}`);
   sb[ymd(p8.date)].events.find(e => e.id === eid[p8.id]).date = new Date(Date.parse(p8.tip) + 3600e3).toISOString().slice(0, 16) + 'Z';
-  /* p10: ESPN still calls it scheduled, its own tip a minute ago; the published tip is still to come. The tip is kept on
-     p10's day (Eastern), so the scoreboard's row is p10's at any hour: in the first minute after midnight it is the
-     day's first minute, and should midnight pass between setting p10 up and the press, its day's last minute */
-  let t10 = Math.floor((Date.now() - 60e3) / 60e3) * 60e3;
-  for (let i = 0; i < 120 && etDateOf(new Date(t10).toISOString()) < p10.date; i++) t10 += 60e3;
-  for (let i = 0; i < 120 && etDateOf(new Date(t10).toISOString()) > p10.date; i++) t10 -= 60e3;
-  sb[ymd(p10.date)].events.find(e => e.id === eid[p10.id]).date = new Date(t10).toISOString().slice(0, 16) + 'Z';
+  /* p10: ESPN still calls it scheduled, its own tip a minute before the load (so before the press); the published tip is still to come */
+  sb[ymd(p10.date)].events.find(e => e.id === eid[p10.id]).date = p10Espn.slice(0, 16) + 'Z';
   const pressedAt = Date.now();
   d.getElementById('oddsBtn').click(); await idle();
   check(Date.now() > Date.parse(p8.tip) && pressedAt < Date.parse(p8.tip) - 1500, 'the press landed well before p8 tipped and ended after it (else the machine is too slow for this case)');
-  check(etDateOf(new Date(t10).toISOString()) === p10.date && t10 <= pressedAt && Date.parse(p10.tip) > Date.now(), `p10's ESPN tip (${new Date(t10).toISOString()}) is on its day, ${p10.date}, before the press, and its published tip still to come after it (else this case tests nothing)`);
+  check(etDateOf(p10Espn) === p10.date && Date.parse(p10Espn) <= pressedAt && Date.parse(p10.tip) > Date.now(), `p10's ESPN tip (${p10Espn}) is on its day, ${p10.date}, before the press, and its published tip still to come after it (else this case tests nothing)`);
   const pr = propsReqs(requests), sbr = sbReqs(requests);
   const asked = pr.map(x => PROPS_RE.exec(x.url)[1] + ':' + PROPS_RE.exec(x.url)[2]).sort();
   const want = ['401909088:1', '401900002:1', '401900002:2', '401900003:1', '401900004:1', '401900007:1', '401900008:1'].sort();

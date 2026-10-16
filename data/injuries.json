@@ -231,6 +231,24 @@
     "returns": "2026-10-16"
    },
    {
+    "id": "4593125",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-15",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "4432107",
+    "name": "Marcus Sasser",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-10-15",
+    "returns": "2026-10-16"
+   },
+   {
     "id": "5105806",
     "name": "Jett Howard",
     "pos": "G",
@@ -240,29 +258,11 @@
     "returns": "2026-10-16"
    },
    {
-    "id": "4432107",
-    "name": "Marcus Sasser",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hip",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
-   },
-   {
     "id": "4683688",
     "name": "Dereck Lively II",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot Surgery",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "4593125",
-    "name": "Santi Aldama",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee",
     "date": "2026-10-14",
     "returns": "2026-10-16"
    },
@@ -388,36 +388,18 @@
     "detail": "Rest",
     "date": "2026-10-11",
     "returns": "2026-10-15"
-   },
-   {
-    "id": "4871144",
-    "name": "Alperen Sengun",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-11",
-    "returns": "2026-10-15"
-   },
-   {
-    "id": "2991230",
-    "name": "Fred VanVleet",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-11",
-    "returns": "2026-10-15"
-   },
-   {
-    "id": "3202",
-    "name": "Kevin Durant",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Not Injury Related",
-    "date": "2026-10-09",
-    "returns": "2026-10-15"
    }
   ],
   "IND": [
+   {
+    "id": "4396909",
+    "name": "Aaron Nesmith",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-15",
+    "returns": "2026-10-21"
+   },
    {
     "id": "2530530",
     "name": "T.J. McConnell",
@@ -435,15 +417,6 @@
     "detail": "Undisclosed",
     "date": "2026-10-14",
     "returns": "2026-10-16"
-   },
-   {
-    "id": "4396909",
-    "name": "Aaron Nesmith",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-10-14",
-    "returns": "2026-10-21"
    },
    {
     "id": "4395712",
@@ -536,7 +509,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Undisclosed Bruise",
-    "date": "2026-10-14",
+    "date": "2026-10-15",
     "returns": "2026-10-16"
    },
    {
@@ -545,16 +518,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Lower Leg",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "5060631",
-    "name": "Adou Thiero",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-10-14",
+    "date": "2026-10-15",
     "returns": "2026-10-16"
    },
    {
@@ -563,7 +527,16 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Foot Bruise",
-    "date": "2026-10-14",
+    "date": "2026-10-15",
+    "returns": "2026-10-16"
+   },
+   {
+    "id": "5060631",
+    "name": "Adou Thiero",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-15",
     "returns": "2026-10-16"
    },
    {
@@ -583,8 +556,8 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-10",
-    "returns": "2026-10-16"
+    "date": "2026-10-15",
+    "returns": "2026-10-21"
    },
    {
     "id": "4432810",
@@ -719,6 +692,15 @@
   ],
   "MIN": [
    {
+    "id": "4397002",
+    "name": "Ayo Dosunmu",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-15",
+    "returns": "2026-10-21"
+   },
+   {
     "id": "5157587",
     "name": "Rocco Zikarsky",
     "pos": "C",
@@ -759,49 +741,13 @@
   ],
   "NYK": [
    {
-    "id": "3136195",
-    "name": "Karl-Anthony Towns",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
-   },
-   {
-    "id": "3147657",
-    "name": "Mikal Bridges",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
-   },
-   {
     "id": "3062679",
     "name": "Josh Hart",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
-   },
-   {
-    "id": "3934719",
-    "name": "OG Anunoby",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
-   },
-   {
-    "id": "3934672",
-    "name": "Jalen Brunson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
+    "detail": "Ankle Soreness",
+    "date": "2026-10-15",
+    "returns": "2026-10-20"
    }
   ],
   "OKC": [
@@ -829,15 +775,6 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Quadriceps Bruise",
-    "date": "2026-10-13",
-    "returns": "2026-10-15"
-   },
-   {
-    "id": "4900671",
-    "name": "Ajay Mitchell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
     "date": "2026-10-13",
     "returns": "2026-10-15"
    },
@@ -982,6 +919,15 @@
    }
   ],
   "PHX": [
+   {
+    "id": "3913174",
+    "name": "Luke Kennard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-16",
+    "returns": "2026-10-16"
+   },
    {
     "id": "4601023",
     "name": "Oso Ighodaro",
@@ -1205,6 +1151,15 @@
     "detail": "Foot",
     "date": "2026-10-13",
     "returns": "2026-10-21"
+   },
+   {
+    "id": "4590360",
+    "name": "Chucky Hepburn",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-12",
+    "returns": "2026-11-06"
    }
   ],
   "UTA": [

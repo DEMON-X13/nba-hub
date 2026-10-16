@@ -26,13 +26,15 @@ final, the job runs every morning, and the page will show today's and tomorrow's
 | `tools/elo.js` | The team model: replay, fit, report |
 | `tools/players.js` | The player, coach and matchup model: replay, fit, report, tonight's lineups; logs the day's numbers to `data/predictions.csv` |
 | `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
-| `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players, coaches, the backtest |
+| `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players, coaches, the backtest, the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays") |
 | `tools/props.js`, `props.json` | The props model (README "Player props"): each expected player's eleven stat distributions and double chances for the next five game days, its walk-forward and market tests (`research/props.json`) |
 | `tools/props_feed.js` | DraftKings' player props as ESPN's feed carries them: the parse the job and the page share, the fair-chance rules |
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
 | `tools/props_ledger.js`, `tools/props_check.js`, `data/props_shadow.json`, `data/props_shadow_lines.csv` | The props shadow ledger: the model's call frozen at tip-off, graded against the closing lines, its pre-registered bar, and the check that holds it to the last commit |
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, a pick, a parlay ticket and its grading, Refresh odds on a stubbed ESPN, and the player props view on a press (section 8, README "Player props") |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, a pick, a parlay ticket and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays") |
+| `tools/corr.js`, `data/corr.json`, `research/corr.json` | The same-game correlation table (README "Same-game parlays"): measured on the finished seasons' box scores, written by the script only; the report beside it |
+| `tools/test_corr.js` | The bivariate normal, the fit, the lookup's sign rules, and the committed table held to its rules |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
 | `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s, and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to; and that morning's rosters and injury report as the props model reads them (`props_live_20261015.json`), on which `test_props.js` holds the live minutes to the backtest's |
 
@@ -200,8 +202,9 @@ DraftKings' NBA player props, read from ESPN's free feed, with the hub's own pro
 go-ahead, 15 October 2026. **The model is on trial**: it has not been shown to beat DraftKings, so it is shown beside
 DraftKings' line and fair chance and suggests nothing. No prop goes into a suggested parlay, a pick or a Safe, Medium or
 Aggressive level because of it, and nothing on the page says "model says" or "edge" on a prop until the shadow ledger
-(below) has passed its bar. Player legs in the Parlay Builder are not part of this round: they need the owner's call on
-the one-leg-a-game rule and a same-game correlation table, so the props view is display only.
+(below) has passed its bar. A DraftKings price in the view is also the control that puts that leg in the visitor's own
+parlay in the Parlay Builder, at DraftKings' price (the owner's go-ahead, 15 October 2026, README "Same-game parlays"):
+the visitor's pick, never the model's.
 
 ### DraftKings' props on ESPN's feed (`tools/props_feed.js`)
 
@@ -491,7 +494,8 @@ to beat DraftKings and suggests nothing, with the walk-forward and the market te
 running numbers. The Record tab gives the ledger quietly: how many of the 30,000 graded lines are in, and the model
 against DraftKings on log loss and Brier, never a verdict or a word of one before the bar is decided (a PASS, when it
 comes, is said to move nothing by itself). Nothing in the view says "model says" or "edge". No prop reaches the suggested
-parlays, the Value card, a pick, the plan or the Bet Build: the view is display only.
+parlays, the Value card, a pick or the plan: the model suggests nothing. The only way a prop leaves the view is the
+visitor's own tap on DraftKings' price, which puts that leg in their parlay (README "Same-game parlays").
 
 The parse and the fair chances are `tools/props_feed.js`'s and the distribution `tools/props.js`'s (`propParse`,
 `propRead`, `propFairOver`, `propFairRung`, `nbVar`, `nbPmf`, `nbSf`, `pOver` and their pieces), copied
@@ -538,8 +542,8 @@ frozen or past its tip, a line graded, a verdict written, its time not later, a 
 and the committed ledger's bar being `BAR`, every call made after its registration. `node tools/smoke.js` section 8 holds
 the page: the props view on a press against a stubbed ESPN (the recorded
 opening-night answer with made-up lines added, two pages, a 404, junk, a 503, a game ESPN has under way, one that
-tips while its props are read, one ESPN still calls scheduled with its own tip passed and the published one to come, and
-on a second press a game whose page 2 is a 404, which keeps its earlier read whole); every line, rung and Yes price the sheet shows worked out on its own from
+tips while its props are read, one ESPN still calls scheduled with its own tip passed and the published one to come
+(dated by ESPN's tip, as the page's parse dates a row, so it holds across midnight Eastern), and on a second press a game whose page 2 is a 404, which keeps its earlier read whole); every line, rung and Yes price the sheet shows worked out on its own from
 `props_feed.js`, `props.js` and the state's props block; the on-trial wording; nothing suggested (the Parlay Builder
 drawn with the props read is byte for byte the one drawn without them, and names no player); nothing read before a
 press (on load, opening a sheet, switching its team, on every timer and event the page sets); nothing stored; a reload
@@ -602,8 +606,334 @@ node tools/props.js research      # the walk-forward and market tests (about sev
 node tools/props.js fit           # refit the constants on the finished seasons (between seasons only)
 node tools/props_ledger.js init   # once: the ledger with its bar and no call
 node tools/test_props.js          # the parse, the record, the model, the ledger and the bar; ends "all good"
-node tools/smoke.js               # the page; section 8 is the props view; ends "all good"
+node tools/smoke.js               # the page; section 8 is the props view, section 9 your parlay; ends "all good"
 ```
+
+## Same-game parlays
+
+Player legs in the Parlay Builder, the owner's go-ahead of 15 October 2026: a visitor builds a parlay of their own from
+DraftKings' player props and game lines, with more than one leg of a game where DraftKings would take them together,
+priced as a same-game parlay from a correlation table measured on the hub's own box scores. **The suggested parlays,
+the Value card and the plan are exactly as they were**: team bets only, one leg a game, chosen by their own rules, no
+prop and no same-game combination. The props model is on trial and the levels' search is not built for correlated legs,
+so nothing here is suggested by any model: every leg in a visitor's parlay is the visitor's tap.
+
+### Your parlay, on the page (`app/nba_hub.html`)
+
+**Adding a leg.** After a Refresh odds press, every DraftKings price in a game's Player props is the control that adds
+that leg: each main line's Over and Under (points, rebounds, assists, threes, steals, blocks and the five combos), each
+milestone (k+), each double- and triple-double, and a Game lines block over the players with the game's moneylines,
+spreads and total, read from the same press's scoreboard answer (`oddsGameLines`: DraftKings' own two prices on each,
+the spread and the total only where their number is the one the page shows, and each outcome's betslip id from ESPN's
+link, kept only in its side's shape and naming the line's own number, as the NHL hub keeps them). Each is a real button,
+44px, in the tab order, named for what it adds and pressed while that leg is in. A tap puts the leg in at DraftKings'
+price as read, dated by the read; a second tap takes it out; the sheet's foot says what the tap did and shows the parlay
+in a line ("Your parlay: 3 legs, +441 est."), with a button to it. Before a press there is nothing to add.
+
+**Kept, and read again.** The legs are the visitor's own, in the page's one key (`nba_hub_2027`, `slip`): the game, its
+clubs, date and tip, the player (ESPN athlete id, name, club), the stat, the line or the milestone, the side, DraftKings'
+price and the other side's, the read's time, and a game line's betslip id. Nothing else from a read is stored. A reload
+keeps every leg at the price it was added at, dated ("as read 9:58 AM"). A later press that reads a leg's line again
+takes its new price and time; a line DraftKings has moved, no longer lists, or a game whose props it has taken down
+(ESPN's 404) takes the leg out; a read that fails leaves it as it was. What a press changed is said once, in Your parlay
+and in a word on the press's own status line ("Your parlay: 2 legs left it and 1 took a new price"). A leg leaves at
+its game's tip, said once, on any tab.
+
+**What goes together.** Legs of different games join as they always have. In one game:
+
+| | Taken | Refused, with the reason said |
+|---|---|---|
+| Side bets | the moneyline or the spread, on one team | the other team's side, or the moneyline beside the spread |
+| Total | the Over or the Under, once | the total twice |
+| Player legs | one a player a stat (a milestone is its stat's leg); two stats of one player; teammates, opponents, beside the side and the total | his stat beside a combo holding it (points with points + rebounds), two combos sharing a part (points + assists with points + rebounds), his double- with his triple-double |
+
+DraftKings publishes no list of what it takes on one same-game ticket that this build could find, so the builder is
+conservative: the refused pairs are `data/corr.json`'s, which `tools/corr.js` also leaves unpriced (a stat beside a sum
+holding it is not jointly gaussian at these lines: steals with blocks measure 0.07, steals + blocks with steals 0.90 and
+with blocks 0.78, three values no correlation matrix holds). Points with threes, and a double- or triple-double with
+points, rebounds or assists, are taken. A player leg on a preseason game is refused (no box score is pulled for one, so
+it could never be graded), and so is a second leg of a game beside a player the hub places on neither of its clubs (no
+table names him, or the tables put him on another club, as after a trade they have not caught up with): priced as
+everyone's opponent, his sign with a side bet would be turned, so he goes alone in his game.
+
+**The price.** Different games: the legs' prices multiplied, as a book does. One game's legs, as the NFL hub prices a
+same-game parlay (`parlayDec`, `SGP_HOLD`): their joint chance J from each leg's implied chance (its price's own, the
+margin left in) joined by a gaussian copula with the rho of the table below, and the price min(the prices multiplied,
+HOLD / J), never above the product. Two legs exactly (`joint2`, tools/corr.js's bivariate normal); three or more by the
+GHK simulator on 20,000 points of a shifted Halton sequence, a fixed seed, so a parlay always prices the same (within a
+few parts in 100,000 of the exact integral on three legs; a plain simulation of the NFL hub's kind was off by parts in
+1,000 at that count). The price is an estimate and says so wherever it shows (est.), with the line "DraftKings prices
+same-game parlays its own way: this is an estimate from the legs' prices and how they move together", and the legs
+multiplied beside it.
+
+**The chances.** The summary leads with DraftKings' fair chance of the whole parlay: each leg's (a player's main line
+with the whole margin on the Over, as the Player props view; a milestone's or a Yes price's by the rung rule, est.; a
+team line's two prices with the margin taken out in proportion, the page's market chance) joined the same way, est.
+wherever a same-game correction or an est. leg is in it. The model's chance stands beside it only where every leg has
+one (a player's from the props model, labelled on trial; a moneyline's from the game model; the page has never put a
+chance on a spread or a total, and does not start here), and nothing says "model says" or "edge". Then the price and
+what the stake pays.
+
+**Lock in** puts the parlay in the Bet Build at the price worked out then (`dec`, marked est. where a game has two
+legs). **Finish** shows it as a card (Eastern time, since it goes to other people): each leg with its price and read
+time, the price est. with the legs multiplied, the fair chance first, what the stake pays, the model's chance where
+every leg has one (on trial with a player leg) or the line saying why there is none, Open in DraftKings and Share link.
+ESPN's feed carries no DraftKings betslip id for a player's line, so each player leg says "DraftKings' player lines
+carry no betslip id in ESPN's feed: add this leg by hand"; the betslip link (`sportsbook.draftkings.com/?outcomes=`)
+opens the game lines that carry an id, the note under it says which legs it opens, as DraftKings had them at the oldest
+read, and which to add by hand, never that every leg lands; with no id it opens the game's page or DraftKings' NBA page.
+Share link sends one text (a title and the text, never a url field, as on the NFL and NHL hubs) with each leg, the
+betslip link alone on its line and the legs to add by hand with why; with no share sheet the same text is copied.
+
+### Grading a player's leg
+
+Once its game is final, a player's leg is graded as DraftKings settles it, from the box score: the stat as the box has
+it (a combo the sum of its parts; a double- or triple-double two or three of points, rebounds, assists, steals and blocks
+at 10 or more), a push on a whole line, void for a player who did not play (the box lists him as not playing, or not at
+all). A leg on a game not played on its date is void too, as a team bet on it is: a game the published slate has called
+off, or one on no published list two days after its date ("not played on its date"). A void or a push drops out of a
+parlay, and a same-game parlay is then priced again by the same rule on the legs left (one leg left pays its own
+price). A leg whose game is final and whose box score is not read yet waits (its title says so). Once made, a grade is
+written into the visitor's own Bet Build entry (`res`: the result and the stat), so it holds when the box score has left
+the published file.
+
+The smallest honest way to give the page what it grades from: `state.json` carries `boxes`, the box line of every player
+who played in each regular-season and playoff final of the last seven days ([points, rebounds, assists, threes, steals,
+blocks] by ESPN athlete id, about 36 KB at a full week of games), and nothing else. A leg still ungraded once its game is
+older than that (a visitor who does not look for a week) is graded from `data/box_<season>.csv`, which Pages serves, read
+once a page load, no-store, only then. `corr` carries the table's rho, the refused pairs and the hold, said untested.
+
+### The correlation table (`tools/corr.js`, `data/corr.json`, `research/corr.json`)
+
+`node tools/corr.js` (about four minutes, the same output every run) measures it on the finished seasons only, never the
+season in play (it refuses to read one): the shipped table on 2022-23 to 2025-26, 5,276 games and 94,613 player-games of
+players projected 12 minutes or more (about the players a book lines). Written by the script, never by hand.
+
+- **The legs.** Each is a yes/no outcome at the line a book would hang: a player's stat at the half point where the
+  props model, as it stood that morning, gives the Over the chance nearest 50%; his double- and triple-double at the
+  model's own chance; his club's win, cover and the game's Over at the closing lines (`data/odds_hist.csv`). Each kind's
+  chances are moved by one shift on the normal scale so they average what happened, so rho measures how two legs move
+  together and not the model's miss.
+- **The estimate.** For every pair of leg kinds that shared a game, rho is the maximum likelihood of the four outcomes
+  (both hit, one, the other, neither) under the bivariate normal, each pair at its own two thresholds: a tetrachoric
+  correlation, which is what the copula consumes. Not a correlation of the stats' normal scores: steals, blocks and threes
+  are counts of 0, 1 and 2, whose normal scores would understate it.
+- **Thin pairs.** Each rho carries a jackknife error over groups of games and is shrunk toward 0 by it (empirical Bayes
+  within its relation); a pair with under 300 observations, under 5 expected in any outcome, or a likelihood peaking at
+  |rho| 0.97 or more is 0. Two teammates' triple-doubles (4 of 10,228 pairs both) measure 0.04 with an error of 0.12, so
+  they shrink to 0 (the positive-definite repair below then moves them to 0.03, which is what the page prices).
+- **Positive definite in use.** As measured the table is not (least eigenvalue -0.515), mostly because triple-double pairs
+  are measured on the few players who can get one. It is moved to the nearest table that is positive definite over every
+  leg one game can carry (13 players a side, every kind each, the win, the cover and the total: 341 legs), each value held
+  by its precision, and checked by a Cholesky factor of that whole matrix (least eigenvalue 0.029), so any set of legs the
+  builder can join is valid. Most values barely moved (one player's pairs 0.009 on average); the largest moves are
+  triple-double pairs (assists with a triple-double 0.875 to 0.799, points with one 0.115 to 0.192); a player with his
+  club's result moved 0.042 at most, teammates and opponents 0.03.
+
+The table in brief (the sign turns for each Under, and for a side bet on the other club):
+
+| Pair | rho |
+|---|---|
+| One player | points-rebounds 0.33, points-assists 0.21, rebounds-assists 0.25, points-threes 0.74, points-steals 0.19, steals-blocks 0.07, rebounds-double-double 0.72, points-double-double 0.43, assists-triple-double 0.80, rebounds-triple-double 0.61 |
+| A player with his club's win | points 0.13, rebounds 0.11, assists 0.10, points + rebounds + assists 0.16, double-double 0.14, triple-double 0.17 (with the cover about the same: points 0.12) |
+| A player with the game's Over | points 0.13, assists 0.11, threes 0.11, points + assists 0.15, rebounds -0.07, blocks -0.03 |
+| Teammates | about 0: points-points -0.024, assists-points +0.034, all within 0.04 (the largest assists-threes +0.039) |
+| Opponents | about 0, all within 0.02 (the largest blocks-double-double +0.019) |
+| The side bet with the total | 0 (measured 0.03 with an error of 0.02; the repair took it to 0, as the NFL hub uses) |
+| A player with his club's points | 0.19 (points + assists 0.22): measured, not used, since no team-total leg is offered |
+
+**Validated** on a season the table never saw (the table measured on 2022-23 to 2024-25, tested on 2025-26), the joint
+hit rate of every two-leg combination the builder could join, as the copula says, as the plain product (independence)
+says, and as happened:
+
+| Test | Combinations | Happened | Copula | Independence |
+|---|---|---|---|---|
+| DraftKings' closing lines, 2026 play-in and playoffs (83 games, 11,395 lines; DraftKings' fair chances as the margins), the copula saying more likely | 156,652 | 26.00% | 26.17% | 23.79% |
+| the same, the copula saying less likely | 156,949 | 21.49% | 21.44% | 23.81% |
+| one player's two legs, more likely | 62,877 | 28.05% | 29.06% | 25.02% |
+| one player's two legs, less likely | 63,030 | 21.63% | 20.63% | 24.67% |
+| 2025-26 regular season, model-set lines (1,237 games), more likely | 4,969,386 | 20.71% | 20.80% | 18.93% |
+| the same, less likely | 4,890,948 | 17.24% | 17.28% | 19.18% |
+| milestone lines (the Over at about 30%, the main line's rho), more likely | 2,967,391 | 8.72% | 8.94% | 7.87% |
+
+Log loss of the combination landing, copula minus independence, on DraftKings' lines: one player's two legs -0.0055
+[90%: -0.0066, -0.0044], a player with a game leg -0.0015 [-0.0019, -0.0011] (teammates and opponents 0.0000). By lift
+the copula's predicted lift matched what happened on the regular season (1.452 said, 1.446 happened, in the 1.3 to
+1.6 band; 0.497 and 0.495 below 0.7), and ran high only at the very top (1.73 said, 1.60 happened, above 1.6). Rho measured at milestone-like lines differs from the main line's by 0.007 on average
+(0.02 at most), so a milestone uses its stat's main-line rho. ESPN keeps no regular-season DraftKings
+lines, so those lines are the model's; and no spread or total prices are on file for past games, so in the DraftKings test
+those legs sit at even odds.
+
+### The same-game hold
+
+No DraftKings same-game price is recorded anywhere this hub reads (ESPN's feed carries none), so HOLD is the NFL hub's
+0.896, fitted there to two real DraftKings tickets on Detroit at Buffalo (cuts of 0.852 and 0.942, their geometric mean),
+**untested on the NBA**, and the page and `state.json` (`corr.holdTested: false`) say so. It applies to J of the implied
+chances, as the NFL fitted it: applied to the fair joint it would overpay correlated tickets by about a tenth. Worked
+examples (`research/corr.json` `hold.examples`, both legs -110/-110): one player's points Over and rebounds Over, 3.64
+multiplied, 2.74 with the hold; two teammates' points Overs, 3.64 and 3.31 (the hold alone cuts 10.4% from
+independent legs, as it does on the NFL hub; this pair's slight negative rho, -0.024, gives a little back, so about 9%
+here); one player's points Over and rebounds Under, held at the 3.64 product.
+
+### Live, 15 October 2026
+
+In Chromium against ESPN at 1280 and 390 wide (the third look, 20:05 UTC, after the review's fixes): one press read 57
+games' lines (20 with DraftKings' lines, 37 with none yet) and their player props (5 games with props posted, 166 main
+lines, 52 with none yet), nothing read on load or on a reload, every request a plain GET with no header of its own, none
+failed at either width. Celtics at Pistons on opening night had DraftKings' game lines with every betslip id, its sheet
+offered 441 add controls, every one 44px or more, and its six lined players were each placed on one of its clubs. (The
+second look's "11 could not be read" at 1280 was the test browser's, not a visitor's: ESPN answers HeadlessChrome's user
+agent with a 403 and no CORS header and a real browser's with the answer, so the desktop run now gives Chrome's own user
+agent.) Two Pistons' points and the total went in, and Cunningham's points + rebounds + assists beside his points was
+refused with its reason:
+
+| Leg | DraftKings | Fair chance |
+|---|---|---|
+| Cade Cunningham, points Over 24.5 | -104 (Under -123) | 44.8% |
+| Jalen Duren, points Over 14.5 | -123 (Under -103) | 49.3% |
+| Total Over 221.5 | -115 (Under -105) | 51.1% |
+| The parlay | legs multiplied +565; same-game price +427 est. | 13.0% est. (11.3% multiplied) |
+
+The two teammates move apart a little (teammates' points -0.024) and each with the Over (0.13), so the three landing
+together is likelier than the product says, and the estimate pays less: $20 pays $105.30 where the product would pay
+$132.97. The page's numbers are Node's from `data/corr.json` and `tools/corr.js` (J 0.17018 of the implied chances, so
+0.896 / J = 5.2650, the page's 5.2650; the fair chance 0.13027 on both). The sheet's foot read "Your parlay: 3 legs,
++427 est."; the card opened the total on DraftKings' betslip (`?outcomes=0OU85841510O22150_1`) and named the two player
+legs to add by hand; Share link sent a title and a text, no url field; storage held the three legs and nothing else of
+the read; a reload showed them at the prices they were added at, dated by their read, and asked ESPN for nothing;
+neither width scrolled sideways. (The first look, 14:02 UTC, had Derrick White's points Over 15.5 at -113 and Jayson
+Tatum's Over 26.5 at -106 with the total: +441 est. where the legs multiplied paid +585; the second, 19:10 UTC, White at
+-123 and Tatum at -112: +409 est. against +542.)
+
+### The checks
+
+`node tools/smoke.js` section 9 holds it all with rules of its own, on a stubbed ESPN (the recorded opening-night props
+and scoreboard answers, and made-up games in their shapes): nothing to add before a press; after one, every price an add
+control, 44px, named, in the tab order; the recorded game lines and ids read as ESPN has them, another book's odds, a
+spread on another number, a total on another number or with its Over and Under on two, and ids in the wrong shape
+refused; every leg added stored with its read time and nothing else of the read; the sheet's foot (a single leg at its
+price, two legs of one game at the same-game price worked out here and marked est., a leg in each of two games at their
+prices multiplied with no est.); each refusal with its reason (a combo holding a stat, a milestone beside the main line,
+an Under beside the Over, a triple-double beside a double-double, two totals, the moneyline beside the spread or the
+other team's, a preseason player leg, and another leg of the game beside a player no table names or one the tables put
+on another club, whichever comes first, each taken alone); the price, the fair chance and the model's chance of eight
+two-leg pairs of every kind worked out here exactly from `data/corr.json` and `tools/corr.js`, and of three legs by this
+file's own integration (to 0.02%), never above the product; eight more sets of three and four legs of one game priced
+one after another in one page session, each against that integration (four legs by its extension to a fourth, to 0.1%),
+three of them at one set of implied chances with other relations, priced apart; the summary and the card leading with
+the fair chance, est., the price est. beside the legs multiplied, what the stake pays to the cent (a stake typed into
+the Stake box, $37.50, not the $20 every store there starts on, followed by the summary, Lock in, the card, its Share
+text and the Bet Build), the why line, the model's chance labelled on trial (a second card, on a parlay with a model
+chance on every leg) or absent with its reason, and neither saying "edge" or "model says"; the suggested parlays and the
+plan byte for byte the same with legs in and without; the card's legs, add-by-hand lines, betslip link and note, Share
+text (what the stake pays, to the cent), copy, Escape and focus, and the note and Share text dated by the older read
+when the legs it opens were read at two presses; Lock in (staked $37.50, to win the same-game price's profit on it); a
+reload; a later press moving, dropping and repricing legs, a failed read keeping one, a none-posted read dropping one,
+said once; a tip; grading seventeen bets by its own sums (a void leg dropped and the
+same-game parlay repriced, a push, a milestone, a double-double, a triple-double short, an Under, a final with no box
+waiting, a leg three weeks old read from its season's box file, a double-double of rebounds and blocks and a
+triple-double of points, rebounds and steals, a same-game parlay with a player's whole line pushing priced again on the
+two legs left and one with the total pushing paid at the leg left's own price, a player's leg on a game postponed in the
+slate and on one off every list two days past its date void with the stake back, alone and beside a winner) and a
+straight bet on every other stat (each combo, threes, steals and blocks, by its own sum of the parts); from the season's
+box file, four players' every stat and combo, each at a whole line at this file's own sum of the file's columns (every
+column a different number on a row, rebounds both boards), so only the exact value pushes, and their double- and
+triple-doubles (one through blocks, one through steals); the grades written into the Bet Build (a called-off game's void
+with its reason) and holding with the box scores gone; and the page's copies of `tools/corr.js` (`rhoFor`, `joint2`,
+`bvnUpper` and their pieces) and `tools/props.js` (`normCdf`, `normInv`) line for line. Section 0 holds `state.json`'s
+`boxes` to `games.csv` and the box files (today, and a full mid-season week through `publish.js`'s own `boxesState`) and
+its `corr` to `data/corr.json`. `node tools/test_corr.js` holds the table (the workflow's tests run it now). Each check
+was shown to fail on a planted break: `NBA_HTML=<copy> SMOKE_ONLY=9 node tools/smoke.js` runs section 9 on a broken copy
+of the page.
+
+The 75 breaks (70 in the page, 5 in `publish.js`, the latter run in a scratch copy of the repo: publish, then sections 0
+and 9), each red. The second sweep's first run left one green, a combo graded without its rebounds: no check graded a
+combo, so the straight bets on every stat went in, and it and two more breaks of the same kind turned red. A review then
+planted six that passed every check (the box file's rebounds and assists read from the wrong columns, the foot's price
+without its est., the card dated by the newest read, a total on another number offered, the unplaced player's refusal
+deleted); the checks above went in for them, and the third sweep, these 13 among them, left none green. A second review
+planted four more that passed every check (a double- or triple-double counted on points, rebounds and assists alone, a
+push kept in a same-game parlay's reprice, the void for a game called off deleted, the same-game cache keyed by the
+chances alone) and found the card's payout and model tile read by nothing; the checks went in for those, and the four
+and six breaks of the card (the last ten rows) are red:
+
+| Planted break | What failed |
+|---|---|
+| the Over leg added at the Under's price | 10 checks: the stored leg, the sheet's words, the summary, the card |
+| the hold taken on the fair joint, not the implied chances | the eight two-leg pairs, three legs against the integration, the summary, Lock in's price |
+| the same-game price not capped at the legs multiplied | the pairs (the Under pair pays more than its product) |
+| one game's legs joined with no correlation | the pairs, three legs, the fair chance, the price shown |
+| an Under's sign ignored in the copied `rhoFor` | the pairs with an Under; the copy's text |
+| no one-side-bet-a-game rule | 22: the spread and the other moneyline taken, and everything priced after |
+| refused pairs not refused | 24: points + rebounds + assists beside points, a triple-double beside a double-double, and after |
+| no one-leg-per-player-per-stat rule | the milestone and the Under beside the Over |
+| two totals allowed | the Under beside the Over |
+| a player leg on a preseason game allowed | the preseason refusal and the legs after |
+| the price tile not marked est. | the price, marked est. |
+| the why line reworded | the builder's and the card's why line |
+| the first tile the model's chance, not DraftKings' fair chance | the summary leads with the fair chance |
+| the fair chance not est. on a same-game parlay | the pairs, the summary, the card |
+| a model chance shown where a leg has none (the total) | the pairs, three legs, no model chance with its reason |
+| the model not labelled on trial in the builder | the model's chance labelled on trial |
+| the props read stored with a leg | storage holds the legs and nothing else |
+| a reload re-dating the legs | the later press's re-read (the read no longer newer than the legs) |
+| a moved line kept | 7: the re-read, said once, the status line, the tip |
+| a new price not taken | the re-read |
+| a leg kept past its tip | the tip |
+| a push on a whole line graded lost | the ten bets, the grades written |
+| a player who did not play graded lost | the ten bets, the grades written |
+| a same-game parlay with a void leg paid at its locked price | the ten bets, the grades holding |
+| a final with no box read graded at once | the ten bets, the waiting leg's title, the grades written |
+| no box file read for a leg past the window | the ten bets, the one read, the grades |
+| grades not written into the Bet Build | the grades written, the grades holding |
+| the card's add-by-hand line dropped | the card's legs |
+| player legs put on the betslip link | the card's legs, the link, its note, the Share text |
+| a url field in the share | Share link sends a title and a text |
+| the suggestions drawn differently with legs in your parlay | the levels and the plan byte for byte |
+| the add control under 44px | each at least 44px |
+| a leg dated when added, not by its read | the stored leg |
+| the control losing the focus on a tap | the control keeps the focus |
+| a game line's id kept in the other side's shape | the junk cases |
+| a spread on another number than the line shown offered | the junk cases |
+| the game lines read with no ids | the recorded ids, the card's link |
+| a leg kept when DraftKings takes its game's props down | the none-posted press, and after |
+| the moneyline leg worded otherwise | the refusal's words |
+| the levels drawn without the games your parlay has legs on | the levels and the plan byte for byte |
+| a game with two of your legs taken out of the levels | the levels and the plan byte for byte |
+| a void player leg graded won | the ten bets, the grades written |
+| a double-double needing three categories | the ten bets, the grades written |
+| a combo summed without its rebounds | the straight bets on every stat |
+| steals graded from the blocks column | the straight bets on every stat |
+| threes graded from the steals column | the straight bets on every stat |
+| three legs of one game priced on the plain product | three legs against the integration |
+| the sheet's foot price not marked est. | the foot with two legs of one game, and after the reload |
+| the box file's rebounds from the defensive board alone | the box file's bets, and the grades holding |
+| the box file's assists from the steals column | the box file's bets, and the grades holding |
+| the box file's steals from the blocks column | the box file's bets, and the grades holding |
+| the box file's threes from the steals column | the box file's bets, and the grades holding |
+| the box file's points from field goals made | the ten bets, the box file's bets, the grades written and holding |
+| the card's note dated by the newest read | the two reads' card |
+| the card's note dated by the first leg's read | the two reads' card |
+| a total on another number than the line shown offered | the junk cases |
+| a total with its Over and Under on two numbers offered | the junk cases |
+| the refusal beside a player on neither club deleted | 6: the legs beside the unplaced players, each way |
+| a player the tables put on another club taken as placed | 5: the legs beside Moved Wing, each way |
+| only the leg being added checked for a club | 5: the legs added before the unplaced players' |
+| publish.js: rebounds from the defensive board alone | section 0: the mid-season box lines |
+| publish.js: players who did not play listed | section 0: the mid-season box lines |
+| publish.js: a six-day window | section 0: the published box lines, and the mid-season ones |
+| publish.js: the same-game table left out of the state | 17: the published table, and every same-game price in section 9 |
+| publish.js: the hold said tested | the published table |
+| a double- or triple-double counted on points, rebounds and assists alone | the steals and blocks doubles, the box file's doubles, the grades written and holding |
+| a push kept in a same-game parlay's reprice | the pushed same-game parlays, the grades holding |
+| the void for a game called off deleted | the called-off legs, the grades written and holding |
+| the same-game cache keyed by the chances alone | the sets of three and four legs |
+| the card's payout on the legs multiplied | both cards' payout |
+| the Share text's payout on the legs multiplied | the Share text |
+| the card's model tile the fair chance, labelled "model says" | the second card |
+| the card's model not labelled on trial | the second card |
+| the card's no-model reason dropped | the card with a total |
+| the card saying "edge" and "model says" | both cards, and the card's note |
 
 ## Runs
 
@@ -627,11 +957,11 @@ After the players model, the props step reads DraftKings' closing lines for the 
 (`props.json`) and the shadow ledger, and runs the ledger's check; when either fails, every props data file goes back to
 the last commit's and the run is red (README "Player props").
 
-After the pull, each step may fail on its own: the data folder and the model files are committed whenever the
-pull succeeded, and state.json and the pages only when publishing and the tests (`tools/test_fetch.js`,
-`tools/test_fetch_box.js`, then the page's smoke test on the new state) pass; the run is red when any step
-failed. The page says when the injury report is older than the file it came in. On demand the job
-takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
+After the pull, each step may fail on its own: the data folder and the model files are committed whenever the pull
+succeeded, and state.json and the pages only when publishing and the tests (`tools/test_fetch.js`,
+`tools/test_fetch_box.js`, `tools/test_props.js`, `tools/test_corr.js`, then the page's smoke test on the new state)
+pass; the run is red when any step failed. The page says when the injury report is older than the file it came in. On
+demand the job takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
 `claude/` branch too, committing there and in its own queue; the schedule only fires from `main`).
 
 Local:
@@ -691,7 +1021,10 @@ node tools/players.js      # player model replay; add "fit" to refit
   sends bets to the Bet Build, which grades them as games go final, from `finals` in `state.json` once a
   game has left the slate. Prices are the book's moneylines (`moneyline.home.close.odds` on ESPN's odds
   object, DraftKings'); before a line is up they are estimated, from the spread or else the model's
-  chance, with a typical book cut, and marked est.
+  chance, with a typical book cut, and marked est. Under the plan, **Your parlay**: the legs the visitor adds
+  from a game's Player props after Refresh odds (DraftKings' player lines, milestones, double- and triple-doubles,
+  and the game's moneyline, spread and total), same-game legs priced as an estimate, locked into the Bet Build or
+  finished as a card (README "Same-game parlays").
 - **How it works**: the model in plain words with the fitted numbers.
 
 Nothing a visitor does reaches the published files. The job runs `publish.js`, `build.js` and the
@@ -701,6 +1034,6 @@ smoke test after the models, and commits `state.json` and both pages.
 
 1. **Style matchups**: the four factors each team forces and allows (shooting, turnovers, rebounding,
    free throws) as a fitted term on the residual, on top of pace and efficiency.
-2. **Player legs in the Parlay Builder**: DraftKings' props and the model on trial are on the page (README "Player
-   props"); legs need the owner's call on the one-leg-a-game rule and a same-game correlation table like the NFL props
-   model's, and nothing is suggested from the model until its shadow ledger passes.
+2. **The same-game hold**: the price of two legs of one game uses the NFL hub's hold, untested here (README "Same-game
+   parlays"). A few real DraftKings same-game tickets on NBA games, recorded with their legs' own prices, would test it;
+   until then it stays an estimate and says so. Nothing is suggested from the props model until its shadow ledger passes.

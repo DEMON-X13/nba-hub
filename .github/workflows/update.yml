@@ -97,7 +97,7 @@ jobs:
         run: node tools/publish.js && node tools/build.js
       # The tests gate what visitors see, state.json and the pages, and never the data: a failed test (or npm registry)
       # must not throw away the day's finals, lines, box scores and pre-tip numbers.
-      - name: Tests (the pull's bookkeeping, the box scores, then the viewer on the new state)
+      - name: Tests (the pull's bookkeeping, the box scores, the props model, the same-game table, then the viewer on the new state)
         id: tests
         if: steps.publish.outcome == 'success'
         continue-on-error: true
@@ -106,6 +106,7 @@ jobs:
           node tools/test_fetch.js
           node tools/test_fetch_box.js
           node tools/test_props.js
+          node tools/test_corr.js
           node tools/smoke.js
       - name: Commit if anything changed
         if: always() && steps.fetch.outcome == 'success'

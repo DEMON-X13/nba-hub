@@ -113,7 +113,8 @@ function main() {
     season: x.season, games: x.priced, logloss: x.logloss, straightUp: x.straightUp, against: x.modelPicks.againstMarket,
     tiers: Object.fromEntries(['safe', 'med', 'aggr', 'value'].filter(k => x.parlays[k]).map(k => [k, tierOf(x.parlays[k])])), twoFav: tierOf(x.baseline && x.baseline.twoFavourites) })) } : null;
   const props = propsState(slate, nowIso);
-  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
+  const boxes = boxesState(games, today), corr = corrState();
+  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
     slate, record, teams, players: plist, coaches, names,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };
@@ -156,5 +157,37 @@ function propsState(slate, nowIso) {
     dist: { kind: 'negative binomial', var: pj.params.var, rule: pj.distribution },
     fair: pj.fair, games, ledger, research };
 }
-module.exports = { propsState };
+/* What a visitor's player leg is graded from (README "Same-game parlays"): the box score of every final of the last
+   BOX_DAYS days, regular season and playoffs (preseason games get no box score), as fetch_box.js wrote it. One line a
+   player who played: [points, rebounds, assists, threes made, steals, blocks], by ESPN athlete id; a player the box
+   lists as not playing, or does not list, is not there, and DraftKings voids a leg on a player who does not play. A
+   final with no box read yet is not there at all, so a leg on it waits. The page writes a leg's grade into the
+   visitor's own Bet Build once it is made, so the window only has to cover the days between a final and the visitor's
+   next look; a leg still ungraded after it is read from data/box_<season>.csv, which Pages serves too */
+const BOX_DAYS = 7;
+const BOX_LINE = ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'];
+function boxesState(games, today) {
+  const from = L.addDays(today, -BOX_DAYS);
+  const want = new Set(games.filter(g => g.status === 'final' && g.type !== 'PRE' && g.date >= from && g.date <= today).map(g => g.game_id));
+  const out = {};
+  for (const season of [...new Set([...want].map(id => id.split('_')[0]))].sort()) {
+    for (const r of csv(`box_${season}.csv`)) {
+      if (!want.has(r.game_id)) continue;
+      const g = out[r.game_id] = out[r.game_id] || {};
+      if (+r.dnp === 1) continue;
+      g[r.player_id] = [+r.pts, +r.orb + +r.drb, +r.ast, +r.tpm, +r.stl, +r.blk];
+    }
+  }
+  return { from, days: BOX_DAYS, line: BOX_LINE, games: out };
+}
+/* The same-game table the builder prices two legs of one game with (tools/corr.js writes data/corr.json, measured on
+   the finished seasons; README "Same-game parlays"): the rho between two legs' hits, the pairs never joined, and the
+   same-game hold, the NFL hub's, untested here */
+function corrState() {
+  const f = path.join(DATA, 'corr.json');
+  if (!fs.existsSync(f)) return null;
+  const c = JSON.parse(fs.readFileSync(f, 'utf8'));
+  return { measured: c.measured, rho: c.rho, refused: c.refused.pairs, hold: c.hold.value, holdTested: !!c.hold.tested };
+}
+module.exports = { propsState, boxesState, corrState };
 if (require.main === module) main();

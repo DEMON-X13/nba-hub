@@ -334,6 +334,24 @@
   ],
   "GSW": [
    {
+    "id": "4432171",
+    "name": "Moses Moody",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-10-16",
+    "returns": "2026-12-01"
+   },
+   {
+    "id": "6430",
+    "name": "Jimmy Butler III",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-10-16",
+    "returns": "2027-01-02"
+   },
+   {
     "id": "3102531",
     "name": "Kristaps Porzingis",
     "pos": "C",
@@ -359,24 +377,6 @@
     "detail": "Rest",
     "date": "2026-10-12",
     "returns": "2026-10-16"
-   },
-   {
-    "id": "6430",
-    "name": "Jimmy Butler III",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-10-02",
-    "returns": "2027-01-02"
-   },
-   {
-    "id": "4432171",
-    "name": "Moses Moody",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-09-28",
-    "returns": "2026-12-01"
    }
   ],
   "HOU": [

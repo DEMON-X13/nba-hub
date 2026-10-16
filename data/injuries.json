@@ -1,5 +1,5 @@
 {
- "date": "2026-10-15",
+ "date": "2026-10-16",
  "teams": {
   "ATL": [
    {
@@ -746,7 +746,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Soreness",
-    "date": "2026-10-15",
+    "date": "2026-10-16",
     "returns": "2026-10-20"
    }
   ],
@@ -935,7 +935,7 @@
     "status": "Day-To-Day",
     "detail": "Knee",
     "date": "2026-10-16",
-    "returns": "2026-10-16"
+    "returns": "2026-10-21"
    },
    {
     "id": "4601023",

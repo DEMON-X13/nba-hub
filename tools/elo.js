@@ -10,7 +10,7 @@
  * wins is the logistic of the adjusted difference; the spread is that difference over a fitted scale.
  * After a final the winner takes K times a margin multiplier (FiveThirtyEight's form) times the surprise.
  *
- * Fit seasons 2008-2022, holdout 2023-2025 (the first three seasons only warm the ratings up). The fit
+ * Fit seasons 2008-2022, holdout every season after (the first three seasons only warm the ratings up). The fit
  * is a coordinate search on log loss, one parameter at a time until nothing moves. It is deterministic:
  * the same games and the same grid give the same numbers, so a rerun on unchanged data is a no-op.
  */

@@ -569,12 +569,6 @@ function cholesky(A) {
   }
   return Lm;
 }
-/* the least eigenvalue, by bisection on the Cholesky of A - x I (A is symmetric) */
-function minEigen(A) {
-  const n = A.length; let lo = -n, hi = 1;
-  for (let it = 0; it < 50; it++) { const m = (lo + hi) / 2; if (cholesky(A.map((row, i) => row.map((v, j) => i === j ? v - m : v)))) lo = m; else hi = m; }
-  return lo;
-}
 
 /* ---------- the validation: real pairs on held-out games ---------- */
 const BUCKETS = [0, 0.7, 0.9, 0.98, 1.02, 1.1, 1.3, 1.6, Infinity];
@@ -811,5 +805,5 @@ function main() {
   log(`${path.relative(L.ROOT, OUT)} and ${path.relative(L.ROOT, REPORT)} written in ${((Date.now() - t0) / 1000).toFixed(0)}s`);
 }
 
-module.exports = { PLAYER, MAIN, TEAM, OFFERED, GAME_KEYS, KEYS, TABLE_KEYS, REFUSED, HOLD, PSD_PLAYERS, finalTable, bvnUpper, bvnDensity, joint2, rhoFor, overlaps, gameMatrix, cholesky, minEigen, toBlocks, modeBlocks, jacobiEig, lineAt, shiftFor, solve, binsOf, loglik };
+module.exports = { PLAYER, MAIN, TEAM, OFFERED, GAME_KEYS, KEYS, TABLE_KEYS, REFUSED, HOLD, PSD_PLAYERS, finalTable, bvnUpper, bvnDensity, joint2, rhoFor, overlaps, gameMatrix, cholesky, toBlocks, modeBlocks, jacobiEig, lineAt, shiftFor, solve, binsOf, loglik };
 if (require.main === module) main();

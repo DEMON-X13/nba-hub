@@ -25,7 +25,6 @@ const REAL = path.resolve(__dirname, '..', 'data');
 const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-props-'));
 process.env.NBA_DATA_DIR = tmp;
 process.env.NBA_FETCH_PAUSE_MS = '0';
-const L = require('./lib');
 const F = require('./props_feed');
 const PM = require('./props');
 const REC = require('./props_record');

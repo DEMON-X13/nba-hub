@@ -48,7 +48,7 @@ const REC = require('./props_record');
 const DATA = process.env.NBA_DATA_DIR || path.join(L.ROOT, 'data');
 const LEDGER = () => process.env.NBA_PROPS_LEDGER || path.join(DATA, 'props_shadow.json');
 const LINES = () => process.env.NBA_PROPS_LINES || path.join(DATA, 'props_shadow_lines.csv');
-const LEDGER_REL = 'data/props_shadow.json', LINES_REL = 'data/props_shadow_lines.csv';
+const LEDGER_REL = 'data/props_shadow.json';
 const LINE_COLS = ['game_id', 'player_id', 'stat', 'p_model', 'p_market', 'y'];
 const CALL_LAYOUT = ['min'].concat(PM.ALL, ['dd', 'td']);
 
@@ -300,7 +300,7 @@ function run({ upcoming, params, games, now = new Date(), boxes = null, log = L.
   return { ledger: Lg, n, changed };
 }
 
-module.exports = { BAR, barCI, barRng, LEDGER, LINES, LEDGER_REL, LINES_REL, LINE_COLS, CALL_LAYOUT, CALL_FIELDS, fitId, newLedger, readLedger, stringify, readLines, lineText, recordIndex, gradeGame, gradeable, compared, scores, flat, decide, summarize, started, callOf, run };
+module.exports = { BAR, barCI, barRng, LEDGER, LINES, LEDGER_REL, LINE_COLS, CALL_LAYOUT, CALL_FIELDS, fitId, newLedger, readLedger, stringify, readLines, lineText, recordIndex, gradeGame, gradeable, compared, scores, flat, decide, summarize, started, callOf, run };
 
 /* node tools/props_ledger.js init: write the ledger with the bar and no call, so the bar is on record before the first
    call is made (the job's first run then makes them); refuses if a ledger is already there */

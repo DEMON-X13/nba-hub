@@ -7,8 +7,9 @@
  * last, this reads it once and writes data/odds_hist.csv, one row per game: the provider used (the first of
  * DraftKings, ESPN BET, consensus, then any, that has both moneylines), both moneylines, the home spread and the
  * total, and the opening numbers where the summary carries them. A game already in the file is not asked again,
- * so a run stopped by its time budget is finished by the next. The first pickcenter read is kept as
- * data/sample_pickcenter.json. Exits 1 only if nothing at all could be read.
+ * so a run stopped by its time budget is finished by the next. Exits 1 only if nothing at all could be read.
+ * The backfill of 2023-2026 is done (data/odds_hist.csv); it is run by hand, from a machine that reaches ESPN, only
+ * to add a season. Going forward the daily job keeps each game's closing moneylines in games.csv.
  *
  * In-game prices ("DraftKings - Live Odds") are never taken. The home spread is read from the provider's own
  * line ("CLE -5.5", as tools/fetch.js reads it) before its bare `spread` field, which had the wrong sign on a
@@ -89,13 +90,11 @@ async function main() {
   const done = id => { const r = have.get(id); if (!r) return false; const c = check(r); return c.ml && c.line && c.total; };
   const games = L.readGames().filter(g => g.status === 'final' && g.type !== 'PRE' && +g.season >= FROM && +g.season <= TO && g.espn_id && !done(g.game_id));
   L.log(`${games.length} games to read (${have.size} already in the file), seasons ${FROM}-${TO}`);
-  let read = 0, empty = 0, failed = 0, core = 0, sampled = fs.existsSync(path.join(L.ROOT, 'data', 'sample_pickcenter.json'));
-  let coreSampled = fs.existsSync(path.join(L.ROOT, 'data', 'sample_core_odds.json'));
+  let read = 0, empty = 0, failed = 0, core = 0;
   /* the core feed lists the providers' odds; an item may be only a $ref to follow */
   async function coreOdds(id) {
     try {
       const j = await L.getJSON(`https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/${id}/competitions/${id}/odds?limit=50`);
-      if (!coreSampled) { coreSampled = true; fs.writeFileSync(path.join(L.ROOT, 'data', 'sample_core_odds.json'), JSON.stringify(j, null, 1).slice(0, 200000) + '\n'); }
       const out = [];
       for (const it of (j.items || []).slice(0, 12)) {
         if (it.provider || it.homeTeamOdds || it.details) out.push(it);
@@ -112,7 +111,6 @@ async function main() {
       try {
         const j = await L.getJSON(`https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=${g.espn_id}`);
         let pc = j.pickcenter || [];
-        if (!sampled && pc.length) { sampled = true; fs.writeFileSync(path.join(L.ROOT, 'data', 'sample_pickcenter.json'), JSON.stringify(pc, null, 1) + '\n'); }
         let p = pick(pc, g.home);
         /* the summary has no pickcenter for 2023-24, 2024-25 and the autumn of 2025: ESPN's core feed keeps each
            event's odds from the providers, which may carry them */

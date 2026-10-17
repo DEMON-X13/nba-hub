@@ -3,7 +3,7 @@
  *   node tools/fetch_box.js                 every final from the 2022 season on that has no box score yet,
  *                                               then today's injury report and each team's coach
  *   node tools/fetch_box.js --from 2022 --to 2026 --budget 300   (seasons, minutes)
- *   node tools/fetch_box.js --offline summary.json                (parse one saved payload, for tests)
+ *   node tools/fetch_box.js --offline summary.json                (print the parse of one saved payload, by hand)
  *
  * Writes, per season, data/box_<season>.csv (one row per player per game: minutes and the box line)
  * and data/teambox_<season>.jsonl (one line per team per game: every team statistic the feed gives).
@@ -186,8 +186,6 @@ async function teamIds() {
 async function injuries() {
   const today = L.etDate(new Date());
   const j = await L.getJSON(BASE + 'injuries');
-  const sample = path.join(DATA, 'sample_injuries.json');
-  if (!fs.existsSync(sample)) fs.writeFileSync(sample, JSON.stringify(j, null, 1));
   const ids = await teamIds();
   const teams = {};
   const lines = [];

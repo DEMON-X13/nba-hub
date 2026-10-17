@@ -4,12 +4,12 @@
  *
  * Loads index.html in jsdom with fetch stubbed to serve state.json plus one fabricated
  * game for tonight, and checks: the update stamp shows, every tab renders without a script error, the team
- * badges show the model's pick and take none, a parlay leg reaches the ticket
- * and a saved ticket grades once the game is final, the Data tab is only on the admin page, a preseason
+ * badges show the model's pick and take none, a straight bet locked from the Parlay Builder reaches the Bet Build
+ * and grades once the game is final, the Data tab is only on the admin page, a preseason
  * game shows with its tag and the not-graded note, and a game that has tipped off (by its tip time, though the
- * published file still calls it scheduled) can no longer be picked, planned, suggested or locked in, including
+ * published file still calls it scheduled) can no longer be planned, suggested or locked in, including
  * from a page drawn before the tip. Section 0 renders the real published state as it is and holds it to
- * data/games.csv; section 6 covers a postponed game (void), a graded game's model pick once it has left the slate,
+ * data/games.csv; section 6 covers a postponed game (void), a game played whose final is not read yet and a graded game off the slate (in the Bet Build),
  * the backup import, a day-old injury report and a suggested tier short of its aim. Section 7 is Refresh odds on a
  * stubbed ESPN: nothing read on load, on any timer the page sets (each fired at once) or on focus and visibility, a
  * press taking fresh lines into everything priced from them, a started game (by its tip, ESPN's status or ESPN's own

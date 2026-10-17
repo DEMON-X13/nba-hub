@@ -7,7 +7,7 @@
  *
  * ESPN keeps a game's propBets answer after the game: the lines and prices DraftKings had at tip (the last update lands
  * a few minutes after it), so a read the morning after a final is the closing line. It does not keep them for good:
- * on 15 October 2026 it served none of the 2025-26 regular season and 83 of the 85 play-in and playoff games. So the
+ * on 15 October 2026 it served none of the 2025-26 regular season and 83 of the 91 play-in and playoff games. So the
  * hub keeps its own copy, from the first game of 2026-27 on, and a backfill of what was still there.
  *
  * data/props_<season>.csv, one row a main line (the parse is tools/props_feed.js: the first item the Over, the rung

@@ -54,7 +54,6 @@ nav button:hover{color:var(--ink);border-color:var(--line-2);transform:translate
 nav button[aria-selected=true]{background:var(--ink);color:#1E2230;border-color:var(--ink)}
 nav button .n{display:inline-block;margin-left:7px;font-size:11px;padding:1px 7px;border-radius:999px;background:var(--hot);color:#1E2230;font-weight:800}
 main{max-width:1240px;margin:0 auto;padding:18px 22px 90px}
-section[hidden]{display:none}
 h2{font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.01em;margin:0 0 14px}
 h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13px;margin-left:10px;letter-spacing:0}
 .muted{color:var(--muted)} .hot{color:var(--hot)} .lime{color:var(--lime)} .rose{color:var(--rose)} .ice{color:var(--ice)}
@@ -100,10 +99,8 @@ h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13
 .pline b{color:var(--ink);font-family:var(--display);font-size:13px}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
 .chip{background:var(--panel-3);border:1px solid var(--line);border-radius:10px;padding:6px 9px;font-size:12px;color:var(--ink-2);display:inline-flex;gap:6px;align-items:baseline;white-space:nowrap}
-.chip .lime{color:var(--lime)} .chip .muted{color:var(--muted)}
 .chip b{color:var(--ink);font-family:var(--display);font-size:13px;font-weight:700}
 .chip.edge{border-color:rgba(205,255,79,.5);background:var(--lime-soft)} .chip.edge b{color:var(--lime)}
-.chip.fade{border-color:rgba(255,61,107,.5);background:var(--rose-soft)} .chip.fade b{color:var(--rose)}
 .out{margin-top:10px;font-size:12px;color:var(--ink-2);display:flex;flex-direction:column;gap:3px}
 .out span{display:flex;justify-content:space-between;gap:8px}
 .out .who{color:var(--rose);font-weight:700} .out .cost{color:var(--muted);font-variant-numeric:tabular-nums}
@@ -111,7 +108,6 @@ h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13
 .btn{background:var(--panel-3);border:1px solid var(--line-2);color:var(--ink);padding:8px 12px;border-radius:10px;cursor:pointer;font-weight:700;font-size:12.5px;transition:all .15s var(--ease)}
 .btn:hover{border-color:var(--ink-2);transform:translateY(-1px)}
 .btn.hot{background:var(--hot);border-color:var(--hot);color:#1E2230} .btn.hot:hover{background:var(--hot-2)}
-.btn.lime{background:var(--lime);border-color:var(--lime);color:#1E2230}
 .btn.ghost{background:transparent}
 .btn:disabled{opacity:.45;cursor:default;transform:none}
 .card{container-type:inline-size}
@@ -195,24 +191,11 @@ sup{font-size:9px;font-weight:800;letter-spacing:.04em;color:var(--muted);margin
 input[type=text],input[type=number],select{background:var(--panel);border:1px solid var(--line-2);border-radius:10px;padding:9px 12px;color:var(--ink);min-width:0}
 input[type=number]{width:92px;text-align:right}
 .wrap{overflow-x:auto;border-radius:14px}
-.meter{height:6px;border-radius:999px;background:var(--panel-3);overflow:hidden;min-width:80px}
-.meter i{display:block;height:100%;background:linear-gradient(90deg,var(--hot),var(--lime))}
-.meter.neg i{background:linear-gradient(90deg,var(--rose),var(--hot))}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 @media(max-width:820px){.two{grid-template-columns:1fr}}
 
 /* ---------- parlay ---------- */
-.ticket{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:16px;position:relative}
-.ticket::before,.ticket::after{content:"";position:absolute;width:22px;height:22px;border-radius:50%;background:var(--bg);border:1px solid var(--line);top:50%;transform:translateY(-50%)}
-.ticket::before{left:-12px} .ticket::after{right:-12px}
-.legs{list-style:none;margin:0;padding:0}
-.legs li{display:grid;grid-template-columns:1fr auto auto auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed var(--line-2)}
-.legs li .l b{font-family:var(--display);font-size:13px} .legs li .l>span{display:block;font-size:12px;color:var(--muted);margin-top:2px}
 .x{background:transparent;border:0;color:var(--muted);font-size:18px;line-height:1;cursor:pointer;padding:0 4px} .x:hover{color:var(--rose)}
-.tot{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-top:14px}
-.tot div{background:var(--panel-2);border-radius:12px;padding:10px 12px} .tot b{font-family:var(--display);font-size:20px;font-weight:900;display:block;line-height:1.1} .tot span{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;font-weight:700}
-.saved{margin-top:16px}
-.saved .ticket{margin-bottom:10px}
 .res{font-size:11px;font-weight:800;letter-spacing:.08em;padding:3px 9px;border-radius:999px}
 .res.won{background:var(--lime-soft);color:var(--lime)} .res.lost{background:var(--rose-soft);color:var(--rose)} .res.open{background:var(--panel-3);color:var(--ink-2)} .res.push,.res.void{background:var(--ice-soft);color:var(--ice)}
 .toast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#1E2230;padding:10px 16px;border-radius:999px;font-weight:800;font-size:13px;opacity:0;transition:all .25s var(--ease);pointer-events:none;z-index:9}
@@ -253,7 +236,7 @@ body.pp-lock{overflow:hidden}
 .pp-pl-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 6px}
 .pp-pl-h b{font-family:var(--display);font-size:14px;font-weight:700}
 .pp-pl-h .muted{font-size:12px}
-.pp-ln{display:grid;grid-template-columns:minmax(0,1fr) 52px 72px 72px;gap:2px 8px;align-items:baseline;padding:7px 0;border-top:1px solid var(--line);font-size:13px}
+.pp-ln{display:grid;grid-template-columns:minmax(0,1fr) 52px 72px 72px;gap:2px 8px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13px}
 .pp-ln .st{color:var(--ink);font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .pp-ln .ln{font-family:var(--display);font-weight:700;text-align:right}
 .pp-ln .px{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums} .pp-ln .px i{font-style:normal;color:var(--muted);font-size:11px;margin-right:3px}
@@ -284,8 +267,7 @@ body.pp-lock{overflow:hidden}
 .pp-add:hover{border-color:var(--hot)}
 .pp-add:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
 .pp-add.in{background:var(--hot);border-color:var(--hot);color:#1E2230}
-.pp-ln .pp-add.px i{font-style:normal;color:var(--muted);font-size:11px;margin-right:3px} .pp-ln .pp-add.in i{color:#1E2230}
-.pp-ln{align-items:center}
+.pp-ln .pp-add.in i{color:#1E2230}
 .pp-yes>span{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .pp-lt td .pp-add{min-width:56px}
 .pp-gl .pp-glr{display:grid;grid-template-columns:86px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
@@ -378,7 +360,6 @@ const TEAMS = {
   SAC:['Sacramento','Kings','#9B6BFF'], SAS:['San Antonio','Spurs','#C4CED4'], TOR:['Toronto','Raptors','#E4262B'], UTA:['Utah','Jazz','#F9A01B'], WAS:['Washington','Wizards','#E63C5C'] };
 const KEY = 'nba_hub_2027';
 const SIGMA = 12.5;                                                  // points: the spread of a game's margin around the model's number
-const OPENING_FALLBACK = '2026-10-20';                        // until the schedule in state.json shows the opener
 const $ = s => document.querySelector(s), $$ = s => [...document.querySelectorAll(s)];
 const fmtPct = p => Math.round(p * 100) + '%';
 const fmtSp = s => s === null || s === undefined ? '—' : (s > 0 ? '+' : '') + s.toFixed(1).replace('.0', '');
@@ -391,13 +372,12 @@ const erf = x => { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - ((
 const Phi = z => 0.5 * (1 + erf(z / Math.SQRT2));
 const probToAm = p => p >= 0.5 ? -Math.round(100 * p / (1 - p)) : Math.round(100 * (1 - p) / p);
 const amToDec = a => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
-const amToProb = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100);
 
 /* ---------- state ---------- */
 let S = null;                                                        // published
-/* mine, this browser only: picks, the Parlay Builder's settings, your parlay (the legs you add from a game's Player
-   props, README "Same-game parlays") and the Bet Build. Tickets saved by the old builder are carried into the Bet Build
-   once. */
+/* mine, this browser only: the Parlay Builder's settings, your parlay (the legs you add from a game's Player props,
+   README "Same-game parlays") and the Bet Build. Tickets saved by the old builder are carried into the Bet Build once,
+   and picks an older page saved are kept as they were, for the backup. */
 const BANK0 = () => ({ filter: 'all', mode: 'straight', amt: 20, suggStake: 10, suggMin: false, sort: 'tip', sortDir: 'asc', day: null, off: {}, fixed: {} });
 let M = { picks: {}, bank: BANK0(), build: [], slip: { legs: [], stake: 20 } };
 /* your parlay's legs: a leg this page did not write (junk, or an older page's) is dropped, never priced */
@@ -423,7 +403,7 @@ let toastT; function toast(m) { const t = $('#toast'); t.textContent = m; t.clas
 const gameById = id => S.slate.find(g => g.id === id) || fromRecord(S.record.find(g => g.id === id)) || fromFinal(id) || offList(id);
 /* a graded game carries the number published before its tip; as a game it is final, with that number as its model */
 const fromRecord = r => r ? { ...r, status: 'final', model: { pHome: r.pHome, spread: r.spread, total: r.total } } : null;
-/* a game on no published list, from its id: a pick or bet on it still shows, as open. Once the published file is two
+/* a game on no published list, from its id: a bet on it still shows, as open. Once the published file is two
    days past its date it was not played that day (ESPN drops a postponed game, and one rescheduled comes back under a
    new id): a book voids a bet on it, and so does this. Void only for the seasons whose finals are published (this one
    and the last), so a missing final is a missing game and not missing data */
@@ -442,10 +422,9 @@ function fromFinal(id) {
   return { id, date: `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}`, away, home, awayScore: f[0], homeScore: f[1], status: 'final', model: null, line: null, totalLine: null };
 }
 const pickOf = g => g.model ? (g.model.pHome >= 0.5 ? g.home : g.away) : null;
-/* a game is off the board for picks and bets once it has tipped: by its status, or by its tip time on the viewer's
+/* a game is off the board for bets once it has tipped: by its status, or by its tip time on the viewer's
    clock, since the published file is hours old by the evening and still calls tonight's games scheduled */
 const started = g => g.status !== 'scheduled' || (!!g.tip && Date.parse(g.tip) <= Date.now());
-const modelMargin = g => g.model ? -g.model.spread : null;          // home margin the model expects
 const winner = g => g.homeScore === null ? null : g.homeScore > g.awayScore ? g.home : g.homeScore < g.awayScore ? g.away : null;
 /* one leg: {id, kind:'ml'|'spread'|'total', side, line, p}, or a player's leg (kind 'prop'), graded from the box score
    (propGrade, under Your parlay below) */
@@ -458,7 +437,7 @@ function legResult(leg) {
   if (leg.kind === 'total') return tot === leg.line ? 'push' : ((tot > leg.line) === (leg.side === 'over') ? 'won' : 'lost');
   return 'open';
 }
-const legLabel = leg => { const g = gameById(leg.id); const nm = t => TEAMS[t] ? TEAMS[t][1] : t;
+const legLabel = leg => { const nm = t => TEAMS[t] ? TEAMS[t][1] : t;
   if (leg.kind === 'ml') return `${nm(leg.side)} to win`;
   if (leg.kind === 'spread') return `${nm(leg.side)} ${fmtSp(leg.line)}`;
   return `${leg.side === 'over' ? 'Over' : 'Under'} ${leg.line}`; };
@@ -487,7 +466,7 @@ render.slate = function () {
   const games = S.slate.filter(g => g.date === day);
   const n = S.slate.filter(g => g.date === TODAY).length; $('#nSlate').hidden = !n; $('#nSlate').textContent = n;
   if (!games.length) {
-    const OPENING = S.opening || OPENING_FALLBACK;
+    const OPENING = S.opening;
     const daysTo = Math.round((Date.parse(OPENING) - Date.parse(TODAY)) / 86400000);
     const board = Object.entries(S.teams).sort((a, b) => b[1].strength - a[1].strength).slice(0, 5);
     $('#slate').innerHTML = `<div class="empty"><b>No games on the board</b>${daysTo > 0 ? `<div class="countdown">${daysTo}</div>days to opening night, ${dayNum(OPENING)}` : 'The schedule shows up here about ten days out.'}
@@ -787,7 +766,7 @@ function suggest(pool) {
   /* value: a real market price and the model clear of it by VALUE_EDGE; its chance shown is the market's */
   const val = priced.filter(x => x.mp != null && x.px.est !== 'model' && x.conf - x.mp >= VALUE_EDGE).sort((a, b) => (b.conf - b.mp) - (a.conf - a.mp)).slice(0, VALUE_MAX);
   const value = val.length >= 2 ? { id: 'value', label: 'Value', legs: val, p: P(val), pModel: val.reduce((t, x) => t * x.conf, 1), dec: Dm(val) } : null;
-  return { tiers, value, pool: legs.length, agreeing: legs.length, priced: priced.length };
+  return { tiers, value };
 }
 
 /* ---------- the Bet Build ---------- */
@@ -823,7 +802,7 @@ function gradeBet(b) {
 let bkMsg = '';
 render.parlay = function () {
   const el = $('#tab-parlay');
-  const B = M.bank, day = bkDay();
+  const day = bkDay();
   if (!el.dataset.ready) { el.innerHTML = '<div class="panel" id="bkSuggest"></div><div class="panel" id="bkPlan"></div><div class="panel" id="bkSlip"><h2 id="slTitle" tabindex="-1">Your parlay <small>legs you add from a game\'s Player props, kept in this browser</small></h2><p class="sl-said" id="slSaid" role="status" aria-live="polite"></p><div id="slBody"></div></div><div class="panel" id="bkBuild"></div>'; el.dataset.ready = 1; }
   settleProps(); renderSuggest(day); renderPlan(day); renderSlip(); renderBuild(); badges();
 };
@@ -833,7 +812,7 @@ function renderSuggest(day) {
   const head = `<div class="bar" style="margin:0 0 6px"><h2 style="margin:0">Suggested parlays</h2>${day ? `<span class="tag hot">${dayTitle(day)}</span>` : ''}<span class="grow"></span><button class="btn ghost" id="suggToggle" aria-expanded="${open}">${open ? 'Minimize' : 'Show'}</button></div>`;
   if (!open) { el.innerHTML = head; $('#suggToggle').onclick = () => { B.suggMin = false; saveMine(); render.parlay(); }; return; }
   const pool = day ? bkGames(day) : [];
-  const { tiers, value, pool: n } = suggest(pool);
+  const { tiers, value } = suggest(pool);
   let body;
   if (!day) body = `<p class="muted" style="margin:0">No games left to bet in the next ten days. They show up here as the schedule fills in.</p>`;
   else if (!tiers.length) body = `<p class="muted" style="margin:0">A suggestion needs at least two picks the model and the market agree on, in the chosen band and with a price. Pick a wider band below, or another day.</p>`;
@@ -842,7 +821,7 @@ function renderSuggest(day) {
     <div class="sugg-grid">${tiers.map((t, i) => `<div class="sugg-tier ${t.id}">
       <div class="sugg-top"><span class="nm">${t.label}</span><span class="muted">${t.legs.length} legs</span><span class="grow"></span>${i ? `<span class="muted">+${t.added} leg${t.added === 1 ? '' : 's'}</span>` : ''}</div>
       <div class="sugg-nums"><div><b>${Math.round(t.p * 100)}%</b><span>chance all land</span></div><div><b>${fmtAm(decToAm(t.dec))}</b><span>odds</span></div><div><b>${money(stake * t.dec)}</b><span>returns on ${money(stake)}</span></div></div>
-      ${t.short ? `<p class="muted sugg-short" style="margin:0 0 8px;font-size:12px">Under ${t.label}'s ${Math.round(t.floor * 100)}% aim: ${t.id === 'safe' ? `the two likeliest picks` : `the likeliest leg left, added`} land ${Math.round(t.p * 100)}% of the time together.</p>` : ''}
+      ${t.short ? `<p class="muted" style="margin:0 0 8px;font-size:12px">Under ${t.label}'s ${Math.round(t.floor * 100)}% aim: ${t.id === 'safe' ? `the two likeliest picks` : `the likeliest leg left, added`} land ${Math.round(t.p * 100)}% of the time together.</p>` : ''}
       <ul class="sugg-legs">${t.legs.map(x => `<li>${pill(x.pick)}<span class="g">${gameLabel(x.g)}</span><span class="od">${fmtPx(x.px)}</span><span class="pc muted">${Math.round(x.p * 100)}%</span></li>`).join('')}</ul>
       <div class="sugg-btns"><button class="btn hot" data-sugg-lock="${t.id}" ${stake > 0 ? '' : 'disabled'}>Lock in</button><button class="btn" data-sugg-load="${t.id}">Edit below</button></div></div>`).join('')}</div>`
     + (value ? `<div class="sugg-tier value" style="margin-top:12px">
@@ -1005,9 +984,10 @@ render.data = function () {
    while the read is out is left as it was. A failed request, an answer that is not a scoreboard, a game missing from
    the answer or one with no line keeps the lines it shows (the published ones, or an earlier press's), and so does a
    read older than the published one; the status line says which. What is taken lives in S, in memory: nothing is
-   saved anywhere, and a reload is the published state again. Everything priced from a game's lines (the edge
-   chips, the market's chance and the Vegas pick, the prices and est marks, the suggested parlays, the plan and what
-   Lock in records) is worked from S on every draw, so a redraw is all it takes. This hub keeps no DraftKings ids. */
+   saved anywhere, and a reload is the published state again. Everything priced from a game's lines (the Market
+   and Over/under chips, the market's chance and the Vegas pick, the prices and est marks, the suggested parlays, the plan and what
+   Lock in records) is worked from S on every draw, so a redraw is all it takes. The only DraftKings ids it keeps are the game
+   lines' betslip ids, on the legs of your parlay (oddsGameLines). */
 const ODDS_SB = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?limit=100&dates=';
 const ODDS_TEAMS = ['ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'];
 const ODDS_ESPN_AB = { GS: 'GSW', NO: 'NOP', NY: 'NYK', SA: 'SAS', UTAH: 'UTA', WSH: 'WAS' };
@@ -1039,7 +1019,7 @@ function oddsMoneyline(odds, side) {
   }
   return '';
 }
-/* fetch.js parseDay: one scoreboard answer -> the games table's rows (its sampleOdds, a file write, is the job's alone) */
+/* fetch.js parseDay: one scoreboard answer -> the games table's rows */
 function oddsParseDay(j) {
   const rows = [];
   for (const e of j.events || []) {
@@ -1511,7 +1491,7 @@ function ppWho(g, pid) {
   for (const s of ppSides(g)) { const p = (s.lineup || []).concat(s.out || []).find(y => y.id === pid); if (p) return { name: p.name, team: s.team, pos: p.pos || '', row: null }; }
   const p = (S.players || []).find(y => y.id === pid);
   if (p) return { name: p.name, team: p.team, pos: p.pos || '', row: null };
-  return { name: (S.names && S.names[pid]) || `ESPN athlete ${pid}`, team: '', pos: '', row: null };
+  return { name: `ESPN athlete ${pid}`, team: '', pos: '', row: null };
 }
 const ppOut = (g, pid) => { for (const s of ppSides(g)) { const p = (s.out || []).find(y => y.id === pid); if (p) return p.status || 'Out'; } return ''; };
 function ppNoGame(g) {
@@ -2158,11 +2138,11 @@ $('#pcBack').addEventListener('keydown', e => {
   else if (e.shiftKey && at === first) { e.preventDefault(); last.focus(); }
   else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
 });
-window.NBA_SLIP = { slipKey, slipWhy, slipDec, slipPrice, legFair, legModel, sgLeg, sgJoint, propGrade, propValue, oddsGameLines, oddsDkHref, oddsIdOk, lines: () => SG_LINES, card: () => PC, SG_SIMS, SG_SEED, SG_WHY, BY_HAND };
+window.NBA_SLIP = { slipPrice, oddsGameLines, lines: () => SG_LINES, card: () => PC };   // what the smoke test reads
 
 /* the viewer's date in Eastern time: the published file can be from last night, and "tonight" is the viewer's.
    It moves at midnight Eastern while the page is open (watch() below) */
-const etToday = () => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date());
+const etToday = () => oddsEtDate(Date.now());
 let TODAY = etToday();
 /* once a minute: a game that tips off leaves the board's buttons and the builder, and the day turns at midnight,
    without a reload. Redraws only the tab in view and only when something changed */
@@ -2175,7 +2155,7 @@ function watch() {
   if (TODAY !== was && day === was) day = null;              // a board left on Today moves to the new today
   slipPrune();                                               // a leg of your parlay leaves at its game's tip, on any tab
   if (first) return;
-  const tab = ($$('#nav button').find(b => b.getAttribute('aria-selected') === 'true') || {}).dataset?.tab;
+  const tab = tabNow();
   oddsBarSync(tab);
   if (tab && render[tab]) render[tab](); badges();
   if (ppOpen) propsDraw();
@@ -2186,7 +2166,7 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
 (async function () {
   loadMine();
   try {
-    S = window.NBA_STATE || await (await fetch('state.json', { cache: 'no-store' })).json();
+    S = await (await fetch('state.json', { cache: 'no-store' })).json();
   } catch (e) { $('#stamp').innerHTML = '<b class="rose">Could not load state.json</b>'; return; }
   const gen = new Date(S.generated);
   $('#stamp').innerHTML = `<b>Updated ${gen.toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</b>ratings through ${dayNum(S.asOf)} · ${S.players.length} players rated`;

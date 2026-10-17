@@ -7,10 +7,16 @@
  *             out and what it costs, the market line, and the score once final
  *   record    the season's finals with the number the site published before each (predictions.csv),
  *             graded straight up and against the line that was on the table at the time
- *   teams     strength, offence, defence, coach, pace, the team Elo, and the injured
- *   players   every rated player with offence, defence, minutes, team
- *   coaches   every rated coach
+ *   teams     strength, offence, defence, coach, pace, the team Elo, and who is out
+ *   players   every rated player with his overall Elo on the ladder (THE LADDER below), offence, defence, minutes,
+ *             team
+ *   coaches   every rated coach, with his overall Elo
  *   backtest  the models' holdout report, so the site can say what the numbers are worth
+ *   vsMarket  research/backtest.json's summary, the Record tab's table against the market
+ *   finals    every final of this season and the last by id, the score a bet is graded on once its game has left
+ *             the slate (pending: past games not yet read final)
+ *   props, boxes, corr  the props model's block, the recent box lines a player's leg is graded from and the
+ *             same-game table (README "Player props" and "Same-game parlays")
  * Nothing a visitor does reaches this file; only the job writes it.
  */
 'use strict';
@@ -51,8 +57,7 @@ function main() {
       ml: g.home_ml || g.away_ml ? { home: num(g.home_ml), away: num(g.away_ml) } : null,
       model: frozen || (u ? { pHome: u.pHome, spread: u.spread, total: u.total, pace: u.pace, home: u.home, away: u.away }
         : p ? { pHome: +p.pHome, spread: +p.spread, total: +p.total } : null),
-      team: t ? { pHome: t.pHome, spread: t.spread } : p && p.team_pHome ? { pHome: +p.team_pHome } : null,
-      published: p ? { pHome: +p.pHome, spread: +p.spread, total: +p.total, line: num(p.home_line), totalLine: num(p.total_line), at: p.logged } : null };
+      team: t ? { pHome: t.pHome, spread: t.spread } : p && p.team_pHome ? { pHome: +p.team_pHome } : null };
   });
 
   /* the season's record: only games the site had a number on before tip-off */
@@ -68,14 +73,13 @@ function main() {
     const tl = num(p.total_line); let ou = null;
     if (tl !== null && +p.total !== tl) { const tot = +g.home_score + +g.away_score; ou = tot === tl ? null : (+p.total > tl) === (tot > tl); }
     return { id: g.game_id, date: g.date, away: g.away, home: g.home, awayScore: +g.away_score, homeScore: +g.home_score, pHome: +p.pHome, spread: +p.spread, total: +p.total,
-      line, totalLine: tl, pick, su, ats, ou, teamPick: p.team_pHome ? (+p.team_pHome >= 0.5 ? g.home : g.away) : null };
+      line, totalLine: tl, pick, su, ats, ou };
   });
 
   const teams = {};
   for (const t of L.TEAMS) {
     const pt = players.teams[t] || {}, mt = model.teams[t] || {};
-    teams[t] = { strength: pt.strength, offence: pt.offence, defence: pt.defence, coach: pt.coach, coachElo: pt.coachElo, pace: pt.pace, elo: mt.elo, out: pt.out || [],
-      injuries: (inj.teams[t] || []).map(x => ({ id: x.id, name: x.name, pos: x.pos, status: x.status, detail: x.detail, returns: x.returns || '' })) };
+    teams[t] = { strength: pt.strength, offence: pt.offence, defence: pt.defence, coach: pt.coach, coachElo: pt.coachElo, pace: pt.pace, elo: mt.elo, out: pt.out || [] };
   }
   /* a player's club is the one whose ESPN roster lists him today; the model only knows the last club he played for,
      which is last season's for everyone who moved over the summer. With the rosters read, a player on none is FA */
@@ -105,9 +109,7 @@ function main() {
   const inPool = new Set(pool.map(p => p.id));
   for (const p of plist) { p.rating = pc.show(p.elo); if (inPool.has(p.id)) p.ranked = true; }
   for (const c of coaches) { c.rating = cc.show(c.elo); if (c.games >= 10) c.ranked = true; }
-  const ladder = { players: { pool: pc.n, mean: pc.mean, sd: pc.sd }, coaches: { pool: cc.n, mean: cc.mean, sd: cc.sd } };
-  const names = {};
-  for (const p of plist) names[p.id] = p.name;
+  for (const p of plist) { delete p.elo; delete p.last; }    // the page shows the rating and offence and defence; the raw sum and the last game date are the model's
 
   /* opening night: the first regular-season game on or after today, once the schedule shows it */
   const opener = games.filter(g => g.type === 'REG' && g.date >= today).map(g => g.date).sort()[0] || null;
@@ -129,14 +131,15 @@ function main() {
     tiers: Object.fromEntries(['safe', 'med', 'aggr', 'value'].filter(k => x.parlays[k]).map(k => [k, tierOf(x.parlays[k])])), twoFav: tierOf(x.baseline && x.baseline.twoFavourites) })) } : null;
   const props = propsState(slate, nowIso);
   const boxes = boxesState(games, today), corr = corrState();
-  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today, modelBuild: players.generated, teamModelBuild: model.generated,
-    slate, record, teams, players: plist, coaches, names, ladder,
+  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today,
+    slate, record, teams, players: plist, coaches,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };
   const body = JSON.stringify(state);
   const before = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
-  /* only the timestamp differs on a quiet day: leave the file alone then */
-  const strip = s => s.replace(/"generated":"[^"]*"/, '');
+  /* only the timestamp differs on a quiet day: leave the file alone then (the top-level stamp, not the first
+     "generated" in the text, which is vsMarket's) */
+  const strip = s => { try { const o = JSON.parse(s); delete o.generated; return JSON.stringify(o); } catch (e) { return s; } };
   if (strip(body) !== strip(before)) fs.writeFileSync(OUT, body);
   L.log(`state.json: ${slate.length} games on the slate ${from}..${to}, ${record.length} graded this season, ${plist.length} players, ${coaches.length} coaches, ${(body.length / 1024).toFixed(0)} KB, ${strip(body) !== strip(before) ? 'written' : 'unchanged'}`);
 }
@@ -162,9 +165,7 @@ function propsState(slate, nowIso) {
   const ledger = lg ? { registered: lg.bar_registered, bar: { lines: lg.bar.lines, passIf: lg.bar.pass_if, otherwise: lg.bar.otherwise, before: lg.bar.before }, decision: lg.decision ? { verdict: lg.decision.verdict, decidedAt: lg.decision.decided_at, lines: lg.decision.lines } : null,
     summary: lg.summary ? { standing: lg.summary.standing, gradedGames: lg.summary.graded_games, lines: lg.summary.compared, voids: lg.summary.voids, scores: lg.summary.scores, flat: lg.summary.flat, toCome: lg.summary.to_come } : null } : null;
   const rs = pj.research;
-  const research = rs ? { folds: rs.folds.map(x => ({ season: x.season, role: x.role, fitOn: x.fitOn, minutes: x.minutes,
-    pts: x.stats.pts, reb: x.stats.reb, ast: x.stats.ast, pra: x.stats.pra })),
-    market: (rs.folds.find(x => x.market) || {}).market || null } : null;
+  const research = rs ? { market: (rs.folds.find(x => x.market) || {}).market || null } : null;   // the page shows the archive test
   /* on trial until a change of its own says otherwise: a PASS makes the model a candidate, it never moves the page by itself */
   return { onTrial: true, build: pj.generated, asOf: pj.asOf, fitSeasons: pj.fitSeasons,
     stats: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'], combos: { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] },

@@ -4,9 +4,10 @@
  *
  *   index.html   the public viewer
  *   admin.html   the same page with a Data tab: the published file at a glance, backup and
- *                        restore of this browser's picks and tickets
+ *                        restore of this browser's own saved data (the Bet Build, the builder's settings,
+ *                        your parlay)
  *
- * Both load state.json (written by publish.js). A visitor's picks, parlay legs and tickets live in
+ * Both load state.json (written by publish.js). A visitor's bets, builder settings and parlay legs live in
  * the browser under one key shared by the two pages.
  */
 'use strict';

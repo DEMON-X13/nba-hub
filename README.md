@@ -4,7 +4,7 @@ One repo, one scheduled job, one site. The job pulls last night's box scores and
 replays a team model and a player, coach and matchup model, prices the slate, and commits the page.
 GitHub Pages serves the repo root: `index.html` is the site, `admin.html` the same page with a Data tab.
 The NBA has no weeks, so the unit is the slate, one Eastern calendar day. Ratings update after every
-final, the job runs every morning, and the page will show today's and tomorrow's games.
+final, the job runs every morning, and the page shows the games from yesterday to ten days out.
 
 ## Layout
 
@@ -26,14 +26,16 @@ final, the job runs every morning, and the page will show today's and tomorrow's
 | `tools/elo.js` | The team model: replay, fit, report |
 | `tools/players.js` | The player, coach and matchup model: replay, fit, report, tonight's lineups; logs the day's numbers to `data/predictions.csv` |
 | `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
-| `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players, coaches, the backtest, the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays") |
+| `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players and coaches (with their overall Elo on the ladder the tier shields are drawn on), the backtest, the market table (`vsMarket`, from `research/backtest.json`), the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays") |
 | `tools/props.js`, `props.json` | The props model (README "Player props"): each expected player's eleven stat distributions and double chances for the next five game days, its walk-forward and market tests (`research/props.json`) |
 | `tools/props_feed.js` | DraftKings' player props as ESPN's feed carries them: the parse the job and the page share, the fair-chance rules |
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
 | `tools/props_ledger.js`, `tools/props_check.js`, `data/props_shadow.json`, `data/props_shadow_lines.csv` | The props shadow ledger: the model's call frozen at tip-off, graded against the closing lines, its pre-registered bar, and the check that holds it to the last commit |
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a parlay ticket and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays") |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet locked into the Bet Build and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays") |
 | `tools/corr.js`, `data/corr.json`, `research/corr.json` | The same-game correlation table (README "Same-game parlays"): measured on the finished seasons' box scores, written by the script only; the report beside it |
+| `tools/backtest.js`, `research/backtest.json`, `research/backtest_games.csv` | The walk-forward of the model's picks and the suggested parlays against the closing line, run by hand; `publish.js` reads its summary into state.json's `vsMarket` for the Record tab |
+| `tools/fetch_odds_hist.js`, `data/odds_hist.csv` | The closing lines on the 2023-2026 finals from ESPN's game summaries: a finished backfill, run by hand from a machine that reaches ESPN only to add a season (the daily job keeps each game's closing moneylines in `games.csv` from now on); its `check()` is shared with `backtest.js` and `corr.js` |
 | `tools/test_corr.js` | The bivariate normal, the fit, the lookup's sign rules, and the committed table held to its rules |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
 | `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s, and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to; and that morning's rosters and injury report as the props model reads them (`props_live_20261015.json`), on which `test_props.js` holds the live minutes to the backtest's |
@@ -46,7 +48,7 @@ No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke t
   (`github.com/Neil-Paine-1/NBA-elo`), every game since 1946 with scores. Seasons from 2005 on are
   kept. It runs to 2025-03-17. `history.js` maps its team codes onto this site's and folds defunct
   franchises into their current team (Sonics into OKC, Nets into BKN, the two Hornets into NOP and CHA).
-- **From 2025-03-18 on**: ESPN's public scoreboard feed, the one the season tracker already uses,
+- **From 2025-03-18 on**: ESPN's public scoreboard feed,
   one request per day. It gives finals, the schedule about ten days out, the neutral-site flag (the
   Cup final), and a consensus line and total on games not yet played. It looks thirty days ahead so
   opening night is known from the schedule; the page shows ten. Postponed games are dropped.
@@ -74,13 +76,13 @@ ratings up). The fit is deterministic. What it found:
 | Parameter | Value | In points |
 |---|---|---|
 | K | 20 | |
-| home court, to start | 60 Elo | 2.3 |
-| altitude, on top | 60 Elo | 2.3 |
+| home court, to start | 60 Elo | 2.2 |
+| altitude, on top | 60 Elo | 2.2 |
 | back to back | -40 Elo | -1.5 |
 | three in four | -5 Elo | -0.2 |
 | three days off | +5 Elo | +0.2 |
 | season carry | 0.70 | |
-| scale | 26.2 Elo per point | |
+| scale | 26.7 Elo per point | |
 
 The home court is where the fit starts it; from there it is learned as the finals come, a thousandth of
 the way toward what each home margin said. Home teams win less than they did in the fit's seasons, and a
@@ -88,8 +90,8 @@ fixed 60 priced every home side about three points of win chance too high in 202
 model said 58% on average, home teams won 54.5-55.5% and the market said 55%); learned, it stood at 45
 Elo for the player model in October 2026.
 
-Holdout (5,282 games): 66.1% straight up, log loss 0.616 (0.617 with the home court fixed), spread error
-10.9 points. That is what a public NBA Elo does. It picks winners; it does not know who is playing tonight.
+Holdout (5,282 games, `model.json` `holdout`): 66.0% straight up, log loss 0.616 (0.617 with the home court
+fixed), spread error 11.0 points. That is what a public NBA Elo does. It picks winners; it does not know who is playing tonight.
 
 ## The player, coach and matchup model
 
@@ -142,12 +144,12 @@ The 2026 holdout, four ways:
 
 | | Log loss | Straight up | Spread error |
 |---|---|---|---|
-| Team model | 0.602 | 68.4% | 11.51 |
-| Player model, previous game's lineup (no report) | 0.602 | 68.3% | 11.45 |
-| Player model, lineup known, minutes projected (a good report) | 0.591 | 69.4% | 11.30 |
-| Player model, actual minutes (perfect lineup knowledge) | 0.589 | 69.4% | 11.26 |
+| Team model | 0.601 | 68.8% | 11.53 |
+| Player model, previous game's lineup (no report) | 0.602 | 67.6% | 11.48 |
+| Player model, lineup known, minutes projected (a good report) | 0.590 | 69.7% | 11.33 |
+| Player model, actual minutes (perfect lineup knowledge) | 0.588 | 69.7% | 11.29 |
 
-Totals: 15.3 points of error.
+Totals: 15.1 points of error (`players.json` `report`, which the Record tab's backtest table shows).
 
 ### Walk-forward test (`node tools/players.js research`, writes `research.json`)
 
@@ -193,8 +195,12 @@ does not have. What runs here, the roster minus the report's absences filled to 
 scored on its own; it sits between "lineup known" and "no report".
 
 What the ratings say after the 2026 Finals: Gilgeous-Alexander first, then Jokić and Leonard;
-Daigneault, Mitch Johnson and Bickerstaff the top coaches; with the 2026-27 rosters, Oklahoma City,
-San Antonio and New York the strongest teams and the Wizards the weakest.
+Daigneault, Mitch Johnson and Bickerstaff the top coaches. The Teams tab has the live order of the teams.
+
+The site's own numbers through the 2026-27 preseason (graded once it ended, from the state.json each run
+published before tip-off): 26-28 straight up over 54 games, and of the six suggested parlays it showed on
+13 and 14 October, Safe and Medium on the 14th won and the other four lost. Preseason games are never in the
+record.
 
 ## Player props
 
@@ -430,7 +436,7 @@ props: {
   fair: { main, mainWhy, rung: { form, a: { pts: 0.061, ... }, measured }, yes: { form, a: { dd: 0.068, td: 0.068 }, measured, playoffs }, estimated },
   games: { <game_id>: { tip, away, home, players: { <ESPN athlete id>: [ ...layout ] } } },   // the slate's games not yet started
   ledger: { registered, bar: { lines, passIf, otherwise, before }, decision, summary: { standing, gradedGames, lines, voids, scores, flat, toCome } },
-  research: { folds: [...the walk-forward: minutes, points, rebounds, assists, pts+reb+ast], market: {...the archive test} }
+  research: { market: {...the archive test} }
 }
 ```
 
@@ -972,18 +978,19 @@ node tools/fetch.js        # needs ESPN reachable; --from / --to for a range
 node tools/fetch_box.js    # needs ESPN reachable; --from / --to for seasons, --budget minutes
 node tools/elo.js          # team model replay; add "fit" to refit
 node tools/players.js      # player model replay; add "fit" to refit
+node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.csv -> research/backtest.json
 ```
 
 ## The site
 
-`index.html`, its own look: graphite blue with an orange accent, bold display type, faint court lines, team-coloured badges, cards like tickets; one card per game. Tabs:
+`index.html`, its own look: graphite blue with an orange accent, bold display type, faint court lines, team-coloured badges; one card per game. Tabs:
 
 - **Tonight**: a day strip from yesterday to ten days out. Each card has the two teams (the model's pick
   lit), the model's win chance and a probability bar, the spread and total, the market
   line with a chip saying how far the model's spread is from it, who is out on each side and what
   it costs in points, a lineups drawer with projected minutes and each player's contribution and the
   coach (the two sides side by side on a wide card, one above the other on a narrow one, so nothing is cut
-  off), two buttons that put the model's side on a parlay ticket (moneyline or spread), and a Player props
+  off), a Parlay Builder button that opens the builder on that game's day with the game ticked, and a Player props
   button that opens the game's props: the model's projections, and DraftKings' player lines beside them once
   Refresh odds has read them (README "Player props"; the model on trial, suggesting nothing). Finals
   show the score and whether the model hit. Before the schedule appears the tab counts down to
@@ -996,7 +1003,7 @@ node tools/players.js      # player model replay; add "fit" to refit
   tip); one that tips while the read is out, a day that fails or answers junk, a game ESPN has no line for, and
   a read older than the published one keep the lines they show (the published ones, or an earlier press's), and
   the status line beside the button says how many, and which games have no line yet. Everything priced from the lines
-  follows: the edge chips, the market's chance and Vegas pick, the prices and est marks, the suggested parlays,
+  follows: the Market and Over/under chips, the market's chance and Vegas pick, the prices and est marks, the suggested parlays,
   the plan and what Lock in records. The same press then reads DraftKings' player props for the same games, one
   request each, by the ESPN event id the scoreboard gives (or the slate's `espn`), shown under each game's Player
   props with a second status line (README "Player props"); nothing is priced or suggested from them. It is all held

@@ -3,7 +3,7 @@
  *   node tools/fetch.js                      every day from the first with a game not final (three weeks back at
  *                                            most), else the day after the last final, to thirty days out
  *   node tools/fetch.js --from 2025-03-18 --to 2025-06-30
- *   node tools/fetch.js --offline data.json  parse one saved scoreboard payload (for tests)
+ *   node tools/fetch.js --offline data.json  print the parse of one saved scoreboard payload (by hand)
  *
  * One request per calendar day (Eastern). A day already complete in games.csv (every game final) is not
  * asked for again, and July to September are skipped, so a rerun costs a handful of requests. Games are
@@ -36,7 +36,7 @@ function homeLine(odds, homeAb) {
 
 /* ESPN puts the moneylines in one of two places: homeTeamOdds.moneyLine (the older form, seen on a saved summary)
    or moneyline.home.close.odds / .open.odds (the newer form, DraftKings' price, confirmed live on 2026-10-13).
-   Read whichever is filled. One live odds object is kept as data/sample_odds.json for reference. */
+   Read whichever is filled. */
 const asMl = v => { if (v == null || v === '') return ''; if (/^(EVEN|PK)$/i.test(String(v))) return '100';
   const n = parseInt(String(v).replace('+', ''), 10); return Number.isFinite(n) && Math.abs(n) >= 100 ? String(n) : ''; };
 function moneyline(odds, side) {
@@ -50,12 +50,6 @@ function moneyline(odds, side) {
     const v = asMl(n.current && n.current.odds) || asMl(n.open && n.open.odds) || asMl(n.odds); if (v) return v;
   }
   return '';
-}
-let oddsSampled = false;
-function sampleOdds(odds) {
-  if (oddsSampled || !odds) return; oddsSampled = true;
-  const f = require('path').join(L.ROOT, 'data', 'sample_odds.json');
-  try { if (!require('fs').existsSync(f)) require('fs').writeFileSync(f, JSON.stringify(odds, null, 1) + '\n'); } catch (e) {}   // once: a daily rewrite would be commit noise
 }
 
 /* one scoreboard payload -> rows for the games table */
@@ -75,7 +69,6 @@ function parseDay(j) {
     const date = L.etDate(e.date);
     const season = (e.season && e.season.year) || L.seasonOf(date);
     const odds = (c.odds || [])[0];
-    if (!done) sampleOdds(odds);
     rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 3 ? 'POST' : 'REG', /* the play-in (5) is REG, as in the history */ away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',

@@ -2374,11 +2374,8 @@ date,team,player_id,name,status
 2026-10-17,BOS,4065804,Sam Hauser,Day-To-Day
 2026-10-17,BOS,4351852,Mitchell Robinson,Day-To-Day
 2026-10-17,BOS,4397424,Neemias Queta,Day-To-Day
-2026-10-17,BOS,4251,Paul George,Day-To-Day
 2026-10-17,BOS,4066354,Payton Pritchard,Day-To-Day
-2026-10-17,BOS,3195,Mike Conley,Day-To-Day
 2026-10-17,BOS,3078576,Derrick White,Day-To-Day
-2026-10-17,BOS,4065648,Jayson Tatum,Day-To-Day
 2026-10-17,BKN,4870564,Joshua Jefferson,Out
 2026-10-17,CHA,3135045,Grayson Allen,Day-To-Day
 2026-10-17,CHA,4433249,Moussa Diabate,Day-To-Day
@@ -2390,8 +2387,8 @@ date,team,player_id,name,status
 2026-10-17,CHI,4432822,Isaac Okoro,Day-To-Day
 2026-10-17,CHI,4066650,Zach Collins,Day-To-Day
 2026-10-17,CHI,4278067,Nic Claxton,Day-To-Day
-2026-10-17,CLE,5106268,Nae'Qwan Tomlin,Day-To-Day
 2026-10-17,CLE,4066757,Sam Merrill,Day-To-Day
+2026-10-17,CLE,5106268,Nae'Qwan Tomlin,Day-To-Day
 2026-10-17,CLE,4997530,Khalifa Diop,Day-To-Day
 2026-10-17,DAL,4432582,Max Christie,Day-To-Day
 2026-10-17,DAL,5148538,Tarik Biberovic,Day-To-Day
@@ -2424,7 +2421,6 @@ date,team,player_id,name,status
 2026-10-17,MEM,5105550,GG Jackson,Day-To-Day
 2026-10-17,MEM,4432185,Micah Peavy,Day-To-Day
 2026-10-17,MEM,4432810,Isaiah Stewart,Out
-2026-10-17,MIA,5106051,Ezra Ausar,Day-To-Day
 2026-10-17,MIA,4601025,Pelle Larsson,Day-To-Day
 2026-10-17,MIA,4066993,Dru Smith,Day-To-Day
 2026-10-17,MIA,4066261,Bam Adebayo,Day-To-Day
@@ -2456,8 +2452,8 @@ date,team,player_id,name,status
 2026-10-17,ORL,4065654,Jonathan Isaac,Day-To-Day
 2026-10-17,ORL,4712849,Anthony Black,Day-To-Day
 2026-10-17,ORL,5107251,Izaiyah Nelson,Out
-2026-10-17,PHI,4870562,Dominick Barlow,Day-To-Day
 2026-10-17,PHI,3904625,Tacko Fall,Day-To-Day
+2026-10-17,PHI,4870562,Dominick Barlow,Day-To-Day
 2026-10-17,PHI,3912848,Dean Wade,Day-To-Day
 2026-10-17,PHI,5124612,VJ Edgecombe,Day-To-Day
 2026-10-17,PHI,4351851,Anfernee Simons,Day-To-Day
@@ -2476,14 +2472,8 @@ date,team,player_id,name,status
 2026-10-17,SAC,4898371,Maxime Raynaud,Out
 2026-10-17,SAS,5101845,Jayden Quaintance,Out
 2026-10-17,SAS,6440,Tobias Harris,Day-To-Day
-2026-10-17,TOR,4684272,Ja'Kobe Walter,Day-To-Day
-2026-10-17,TOR,4432241,Jamal Shead,Day-To-Day
-2026-10-17,TOR,5093267,Collin Murray-Boyles,Day-To-Day
 2026-10-17,TOR,3134908,Jakob Poeltl,Day-To-Day
 2026-10-17,TOR,4395625,RJ Barrett,Day-To-Day
-2026-10-17,TOR,4395724,Immanuel Quickley,Day-To-Day
-2026-10-17,TOR,6450,Kawhi Leonard,Day-To-Day
-2026-10-17,TOR,4433134,Scottie Barnes,Day-To-Day
 2026-10-17,TOR,4590360,Chucky Hepburn,Day-To-Day
 2026-10-17,UTA,4396963,Blake Hinson,Day-To-Day
 2026-10-17,UTA,4433268,Trey Alexander,Day-To-Day

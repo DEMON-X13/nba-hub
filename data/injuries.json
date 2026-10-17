@@ -50,26 +50,8 @@
     "returns": "2026-10-20"
    },
    {
-    "id": "4251",
-    "name": "Paul George",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-20"
-   },
-   {
     "id": "4066354",
     "name": "Payton Pritchard",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-20"
-   },
-   {
-    "id": "3195",
-    "name": "Mike Conley",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Rest",
@@ -80,15 +62,6 @@
     "id": "3078576",
     "name": "Derrick White",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-20"
-   },
-   {
-    "id": "4065648",
-    "name": "Jayson Tatum",
-    "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
     "date": "2026-10-16",
@@ -202,20 +175,20 @@
   ],
   "CLE": [
    {
-    "id": "5106268",
-    "name": "Nae'Qwan Tomlin",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-13",
-    "returns": "2026-10-22"
-   },
-   {
     "id": "4066757",
     "name": "Sam Merrill",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Elbow Soreness",
+    "date": "2026-10-17",
+    "returns": "2026-10-22"
+   },
+   {
+    "id": "5106268",
+    "name": "Nae'Qwan Tomlin",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
     "date": "2026-10-13",
     "returns": "2026-10-22"
    },
@@ -492,7 +465,7 @@
     "name": "Jerami Grant",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Rest",
+    "detail": "Undisclosed Soreness",
     "date": "2026-10-16",
     "returns": "2026-10-21"
    },
@@ -525,15 +498,6 @@
    }
   ],
   "MIA": [
-   {
-    "id": "5106051",
-    "name": "Ezra Ausar",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
    {
     "id": "4601025",
     "name": "Pelle Larsson",
@@ -828,20 +792,20 @@
   ],
   "PHI": [
    {
-    "id": "4870562",
-    "name": "Dominick Barlow",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-17",
-    "returns": "2026-10-20"
-   },
-   {
     "id": "3904625",
     "name": "Tacko Fall",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Hip",
+    "date": "2026-10-17",
+    "returns": "2026-10-20"
+   },
+   {
+    "id": "4870562",
+    "name": "Dominick Barlow",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
     "date": "2026-10-17",
     "returns": "2026-10-20"
    },
@@ -1018,33 +982,6 @@
   ],
   "TOR": [
    {
-    "id": "4684272",
-    "name": "Ja'Kobe Walter",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "4432241",
-    "name": "Jamal Shead",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "5093267",
-    "name": "Collin Murray-Boyles",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
     "id": "3134908",
     "name": "Jakob Poeltl",
     "pos": "C",
@@ -1058,36 +995,9 @@
     "name": "RJ Barrett",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Rest",
+    "detail": "Barrett will rest for Friday's preseason finale against Detroit  Omari Sankofa II of the Detroit Free Pressreports.",
     "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "4395724",
-    "name": "Immanuel Quickley",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "6450",
-    "name": "Kawhi Leonard",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "4433134",
-    "name": "Scottie Barnes",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
+    "returns": ""
    },
    {
     "id": "4590360",
@@ -1105,7 +1015,7 @@
     "name": "Blake Hinson",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Hip",
+    "detail": "Hamstring",
     "date": "2026-10-17",
     "returns": "2026-10-21"
    },
@@ -1163,7 +1073,7 @@
     "status": "Out",
     "detail": "Knee",
     "date": "2026-07-30",
-    "returns": "2027-04-01"
+    "returns": "2027-04-02"
    }
   ]
  }

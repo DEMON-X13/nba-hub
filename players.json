@@ -103,21 +103,18 @@
    ]
   },
   "BOS": {
-   "strength": 1377,
-   "offence": -65.2,
-   "defence": -64.5,
+   "strength": 1538.1,
+   "offence": 18.2,
+   "defence": 13.3,
    "coach": "Joe Mazzulla",
    "coachElo": 6.6,
    "coachGames": 385,
    "pace": 103.1,
    "out": [
-    "Mike Conley (Day-To-Day)",
-    "Paul George (Day-To-Day)",
     "Sam Hauser (Day-To-Day)",
     "Payton Pritchard (Day-To-Day)",
     "Neemias Queta (Day-To-Day)",
     "Mitchell Robinson (Day-To-Day)",
-    "Jayson Tatum (Day-To-Day)",
     "Derrick White (Day-To-Day)"
    ]
   },
@@ -302,9 +299,9 @@
    ]
   },
   "MIA": {
-   "strength": 1468.9,
-   "offence": -15.9,
-   "defence": -18.5,
+   "strength": 1472.8,
+   "offence": -13.3,
+   "defence": -17.2,
    "coach": "Erik Spoelstra",
    "coachElo": 3.3,
    "coachGames": 467,
@@ -480,23 +477,16 @@
    ]
   },
   "TOR": {
-   "strength": 1273.7,
-   "offence": -124.6,
-   "defence": -104.9,
+   "strength": 1573.9,
+   "offence": 30.4,
+   "defence": 40.4,
    "coach": "Darko Rajakovic",
    "coachElo": 3.1,
    "coachGames": 253,
    "pace": 103.1,
    "out": [
-    "Scottie Barnes (Day-To-Day)",
-    "RJ Barrett (Day-To-Day)",
     "Chucky Hepburn (Day-To-Day)",
-    "Kawhi Leonard (Day-To-Day)",
-    "Collin Murray-Boyles (Day-To-Day)",
-    "Jakob Poeltl (Day-To-Day)",
-    "Immanuel Quickley (Day-To-Day)",
-    "Jamal Shead (Day-To-Day)",
-    "Ja'Kobe Walter (Day-To-Day)"
+    "Jakob Poeltl (Day-To-Day)"
    ]
   },
   "UTA": {
@@ -9867,29 +9857,20 @@
    }
   },
   "2027_20261021_MIN_MIA": {
-   "pHome": 0.5119,
-   "spread": -0.3,
-   "total": 231.6,
+   "pHome": 0.5677,
+   "spread": -1.8,
+   "total": 232,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -9897,25 +9878,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -9924,34 +9905,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -11719,29 +11718,20 @@
    }
   },
   "2027_20261023_DET_MIA": {
-   "pHome": 0.4883,
-   "spread": 0.3,
-   "total": 230.6,
+   "pHome": 0.5444,
+   "spread": -1.2,
+   "total": 231,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -11749,25 +11739,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -11776,34 +11766,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -14206,9 +14214,9 @@
    }
   },
   "2027_20261024_MIA_CHA": {
-   "pHome": 0.5919,
-   "spread": -2.5,
-   "total": 231,
+   "pHome": 0.5366,
+   "spread": -1,
+   "total": 231.4,
    "pace": 103.1,
    "home": {
     "team": "CHA",
@@ -14315,23 +14323,14 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -14339,25 +14338,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -14366,34 +14365,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -17035,29 +17052,20 @@
    }
   },
   "2027_20261026_DAL_MIA": {
-   "pHome": 0.6564,
-   "spread": -4.3,
-   "total": 230.9,
+   "pHome": 0.7052,
+   "spread": -5.8,
+   "total": 231.3,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -17065,25 +17073,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -17092,34 +17100,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -20295,9 +20321,9 @@
    }
   },
   "2027_20261028_MIA_ATL": {
-   "pHome": 0.6267,
-   "spread": -3.5,
-   "total": 230.1,
+   "pHome": 0.5728,
+   "spread": -2,
+   "total": 230.5,
    "pace": 103.1,
    "home": {
     "team": "ATL",
@@ -20395,23 +20421,14 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -20419,25 +20436,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -20446,34 +20463,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -23297,29 +23332,20 @@
    }
   },
   "2027_20261030_IND_MIA": {
-   "pHome": 0.6047,
-   "spread": -2.8,
-   "total": 233.3,
+   "pHome": 0.657,
+   "spread": -4.4,
+   "total": 233.7,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -23327,25 +23353,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -23354,34 +23380,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -27625,9 +27669,9 @@
    }
   },
   "2027_20261102_MIA_LAL": {
-   "pHome": 0.5349,
-   "spread": -0.9,
-   "total": 232.4,
+   "pHome": 0.4787,
+   "spread": 0.6,
+   "total": 232.8,
    "pace": 103.1,
    "home": {
     "team": "LAL",
@@ -27725,23 +27769,14 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -27749,25 +27784,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -27776,34 +27811,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -31080,9 +31133,9 @@
    }
   },
   "2027_20261104_MIA_LAC": {
-   "pHome": 0.5091,
-   "spread": -0.2,
-   "total": 232,
+   "pHome": 0.453,
+   "spread": 1.3,
+   "total": 232.4,
    "pace": 103.1,
    "home": {
     "team": "LAC",
@@ -31243,23 +31296,14 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -31267,25 +31311,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -31294,34 +31338,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -32468,9 +32530,9 @@
    }
   },
   "2027_20261105_MIA_GSW": {
-   "pHome": 0.5556,
-   "spread": -1.5,
-   "total": 231.8,
+   "pHome": 0.4996,
+   "spread": 0,
+   "total": 232.2,
    "pace": 103.1,
    "home": {
     "team": "GSW",
@@ -32599,23 +32661,14 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -32623,25 +32676,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -32650,34 +32703,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -36657,9 +36728,9 @@
    }
   },
   "2027_20261108_MIA_SAC": {
-   "pHome": 0.3374,
-   "spread": 4.5,
-   "total": 231.5,
+   "pHome": 0.2891,
+   "spread": 6,
+   "total": 231.9,
    "pace": 103.1,
    "home": {
     "team": "SAC",
@@ -36748,23 +36819,14 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -36772,25 +36834,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -36799,34 +36861,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -39387,9 +39467,9 @@
    }
   },
   "2027_20261110_MIA_UTA": {
-   "pHome": 0.4522,
-   "spread": 1.3,
-   "total": 233.6,
+   "pHome": 0.3973,
+   "spread": 2.8,
+   "total": 234,
    "pace": 103.1,
    "home": {
     "team": "UTA",
@@ -39487,23 +39567,14 @@
    },
    "away": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -39511,25 +39582,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -39538,34 +39609,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -43142,29 +43231,20 @@
    }
   },
   "2027_20261113_CLE_MIA": {
-   "pHome": 0.4975,
-   "spread": 0.1,
-   "total": 233.5,
+   "pHome": 0.5535,
+   "spread": -1.4,
+   "total": 233.9,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -43172,25 +43252,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -43199,34 +43279,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -45498,29 +45596,20 @@
    }
   },
   "2027_20261114_DET_MIA": {
-   "pHome": 0.4382,
-   "spread": 1.7,
-   "total": 230.6,
+   "pHome": 0.4942,
+   "spread": 0.2,
+   "total": 231,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -45528,25 +45617,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -45555,34 +45644,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -47854,29 +47961,20 @@
    }
   },
   "2027_20261116_HOU_MIA": {
-   "pHome": 0.4393,
-   "spread": 1.6,
-   "total": 231.4,
+   "pHome": 0.4953,
+   "spread": 0.1,
+   "total": 231.8,
    "pace": 103.1,
    "home": {
     "team": "MIA",
-    "strength": 1529.7,
-    "offence": 15.2,
-    "defence": 11.1,
+    "strength": 1573.1,
+    "offence": 42.1,
+    "defence": 27.6,
     "coach": {
      "name": "Erik Spoelstra",
      "elo": 3.3
     },
     "lineup": [
-     {
-      "id": "4898237",
-      "name": "Bez Mbeng",
-      "pos": "G",
-      "min": 38,
-      "o": -22,
-      "d": -22,
-      "adds": -35.1
-     },
      {
       "id": "4278053",
       "name": "Davion Mitchell",
@@ -47884,25 +47982,25 @@
       "min": 32,
       "o": 13,
       "d": 14,
-      "adds": 18.2
+      "adds": 18.1
      },
      {
       "id": "4066261",
       "name": "Bam Adebayo",
       "pos": "C",
-      "min": 31,
+      "min": 30,
       "o": 8,
       "d": 31,
-      "adds": 25
+      "adds": 24.5
      },
      {
       "id": "3059319",
       "name": "Andrew Wiggins",
       "pos": "F",
-      "min": 30,
+      "min": 29,
       "o": 11,
       "d": 12,
-      "adds": 14.3
+      "adds": 14
      },
      {
       "id": "4431720",
@@ -47911,34 +48009,52 @@
       "min": 28,
       "o": -6,
       "d": -4,
-      "adds": -6.1
+      "adds": -5.9
      },
      {
       "id": "3032977",
       "name": "Giannis Antetokounmpo",
       "pos": "F",
-      "min": 28,
+      "min": 27,
       "o": 36,
       "d": 6,
-      "adds": 24.1
+      "adds": 23.6
      },
      {
       "id": "4601025",
       "name": "Pelle Larsson",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": 0,
       "d": -14,
-      "adds": -7.5
+      "adds": -7.6
      },
      {
       "id": "3064482",
       "name": "Bobby Portis",
       "pos": "F",
-      "min": 27,
+      "min": 26,
       "o": -6,
       "d": -5,
       "adds": -6.3
+     },
+     {
+      "id": "2528210",
+      "name": "Tim Hardaway Jr.",
+      "pos": "G",
+      "min": 21,
+      "o": 20,
+      "d": 8,
+      "adds": 12.2
+     },
+     {
+      "id": "6475",
+      "name": "Klay Thompson",
+      "pos": "G",
+      "min": 19,
+      "o": 3,
+      "d": -11,
+      "adds": -3.3
      }
     ],
     "out": []
@@ -49021,5 +49137,5 @@
    }
   }
  },
- "generated": "2026-10-17T14:14Z"
+ "generated": "2026-10-17T16:24Z"
 }

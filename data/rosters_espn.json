@@ -163,7 +163,7 @@
     "name": "Devin Carter",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5142621",
@@ -1376,7 +1376,7 @@
     "name": "Al Horford",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703396",
@@ -4044,7 +4044,7 @@
     "name": "Nate Bittle",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432737",

@@ -103,15 +103,14 @@
    ]
   },
   "BOS": {
-   "strength": 1386.2,
-   "offence": -66.5,
-   "defence": -53.9,
+   "strength": 1377,
+   "offence": -65.2,
+   "defence": -64.5,
    "coach": "Joe Mazzulla",
    "coachElo": 6.6,
    "coachGames": 385,
    "pace": 103.1,
    "out": [
-    "Devin Carter (Day-To-Day)",
     "Mike Conley (Day-To-Day)",
     "Paul George (Day-To-Day)",
     "Sam Hauser (Day-To-Day)",
@@ -481,9 +480,9 @@
    ]
   },
   "TOR": {
-   "strength": 1280.5,
-   "offence": -121.8,
-   "defence": -100.8,
+   "strength": 1273.7,
+   "offence": -124.6,
+   "defence": -104.9,
    "coach": "Darko Rajakovic",
    "coachElo": 3.1,
    "coachGames": 253,
@@ -49022,5 +49021,5 @@
    }
   }
  },
- "generated": "2026-10-17T11:39Z"
+ "generated": "2026-10-17T14:14Z"
 }

@@ -32,15 +32,6 @@
     "returns": "2026-10-20"
    },
    {
-    "id": "4433188",
-    "name": "Devin Carter",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-10-16",
-    "returns": "2026-10-20"
-   },
-   {
     "id": "4351852",
     "name": "Mitchell Robinson",
     "pos": "C",
@@ -341,15 +332,6 @@
     "detail": "Undisclosed",
     "date": "2026-10-15",
     "returns": "2026-11-09"
-   },
-   {
-    "id": "3213",
-    "name": "Al Horford",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-12",
-    "returns": "2026-10-16"
    }
   ],
   "HOU": [
@@ -1105,15 +1087,6 @@
     "status": "Day-To-Day",
     "detail": "Rest",
     "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "4432586",
-    "name": "Nate Bittle",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-10-13",
     "returns": "2026-10-21"
    },
    {

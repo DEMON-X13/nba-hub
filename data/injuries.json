@@ -1,5 +1,5 @@
 {
- "date": "2026-10-16",
+ "date": "2026-10-17",
  "teams": {
   "ATL": [
    {
@@ -117,6 +117,15 @@
   ],
   "CHA": [
    {
+    "id": "3135045",
+    "name": "Grayson Allen",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee Soreness",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
+   },
+   {
     "id": "4433249",
     "name": "Moussa Diabate",
     "pos": "F",
@@ -124,15 +133,6 @@
     "detail": "Elbow",
     "date": "2026-10-16",
     "returns": "2026-10-21"
-   },
-   {
-    "id": "3135045",
-    "name": "Grayson Allen",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
    },
    {
     "id": "4684269",
@@ -287,22 +287,22 @@
   ],
   "DEN": [
    {
+    "id": "3064290",
+    "name": "Aaron Gordon",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-17",
+    "returns": "2026-10-22"
+   },
+   {
     "id": "4432181",
     "name": "Julian Strawther",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "3978",
-    "name": "DeMar DeRozan",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
+    "status": "Out",
+    "detail": "Knee Sprain",
+    "date": "2026-10-17",
+    "returns": "2026-11-29"
    },
    {
     "id": "4592427",
@@ -341,15 +341,6 @@
     "detail": "Undisclosed",
     "date": "2026-10-15",
     "returns": "2026-11-09"
-   },
-   {
-    "id": "6589",
-    "name": "Draymond Green",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
    },
    {
     "id": "3213",
@@ -477,13 +468,22 @@
   ],
   "LAL": [
    {
+    "id": "4278077",
+    "name": "Jarred Vanderbilt",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
+   },
+   {
     "id": "5113969",
     "name": "Cameron Carr",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Undisclosed Bruise",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    },
    {
     "id": "4277811",
@@ -491,17 +491,8 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Lower Leg",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "4433137",
-    "name": "Ziaire Williams",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Foot Bruise",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    },
    {
     "id": "5060631",
@@ -509,17 +500,8 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "3945274",
-    "name": "Luka Doncic",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    }
   ],
   "MEM": [
@@ -609,22 +591,13 @@
   ],
   "MIL": [
    {
-    "id": "4397140",
-    "name": "Kevin Porter Jr.",
-    "pos": "G",
+    "id": "4277922",
+    "name": "Jericho Sims",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "4397475",
-    "name": "AJ Green",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
+    "detail": "Undisclosed",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    },
    {
     "id": "5164559",
@@ -632,17 +605,8 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-15",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "4277843",
-    "name": "Gary Trent Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    }
   ],
   "MIN": [
@@ -826,6 +790,24 @@
   ],
   "ORL": [
    {
+    "id": "5239561",
+    "name": "Jase Richardson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back Soreness",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4566434",
+    "name": "Franz Wagner",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Shoulder Soreness",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
+   },
+   {
     "id": "5214637",
     "name": "Noah Penda",
     "pos": "F",
@@ -864,6 +846,33 @@
   ],
   "PHI": [
    {
+    "id": "4870562",
+    "name": "Dominick Barlow",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-17",
+    "returns": "2026-10-20"
+   },
+   {
+    "id": "3904625",
+    "name": "Tacko Fall",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-10-17",
+    "returns": "2026-10-20"
+   },
+   {
+    "id": "3912848",
+    "name": "Dean Wade",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-17",
+    "returns": "2026-10-20"
+   },
+   {
     "id": "5124612",
     "name": "VJ Edgecombe",
     "pos": "G",
@@ -891,15 +900,6 @@
     "returns": "2026-10-20"
    },
    {
-    "id": "4870562",
-    "name": "Dominick Barlow",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-13",
-    "returns": "2026-10-16"
-   },
-   {
     "id": "4871141",
     "name": "Ariel Hukporti",
     "pos": "C",
@@ -907,15 +907,6 @@
     "detail": "Achilles Ruptured",
     "date": "2026-10-06",
     "returns": "2027-10-01"
-   },
-   {
-    "id": "3904625",
-    "name": "Tacko Fall",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Hip",
-    "date": "2026-10-01",
-    "returns": "2026-10-16"
    }
   ],
   "PHX": [
@@ -924,7 +915,7 @@
     "name": "Luke Kennard",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Knee",
+    "detail": "Knee Strain",
     "date": "2026-10-17",
     "returns": "2026-10-21"
    },
@@ -934,44 +925,8 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "4278585",
-    "name": "Collin Gillespie",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "4066383",
-    "name": "Miles Bridges",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "4437244",
-    "name": "Jalen Green",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
-   },
-   {
-    "id": "3136193",
-    "name": "Devin Booker",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-14",
-    "returns": "2026-10-16"
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    },
    {
     "id": "4701232",
@@ -990,8 +945,35 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Calf Soreness",
-    "date": "2026-10-13",
-    "returns": "2026-10-16"
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4066211",
+    "name": "Robert Williams III",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4066399",
+    "name": "Micah Potter",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "3995",
+    "name": "Jrue Holiday",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hand Soreness",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    },
    {
     "id": "4914336",
@@ -1151,8 +1133,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hip",
-    "date": "2026-10-13",
-    "returns": "2026-10-16"
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4433268",
+    "name": "Trey Alexander",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    },
    {
     "id": "4684793",
@@ -1175,13 +1166,13 @@
   ],
   "WAS": [
    {
-    "id": "6609",
-    "name": "Khris Middleton",
+    "id": "5142718",
+    "name": "AJ Dybantsa",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-13",
-    "returns": "2026-10-16"
+    "detail": "Ankle",
+    "date": "2026-10-17",
+    "returns": "2026-10-21"
    },
    {
     "id": "4997537",

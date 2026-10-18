@@ -103,19 +103,15 @@
    ]
   },
   "BOS": {
-   "strength": 1538.1,
-   "offence": 18.2,
-   "defence": 13.3,
+   "strength": 1688.5,
+   "offence": 89.3,
+   "defence": 92.6,
    "coach": "Joe Mazzulla",
    "coachElo": 6.6,
    "coachGames": 385,
    "pace": 103.1,
    "out": [
-    "Sam Hauser (Day-To-Day)",
-    "Payton Pritchard (Day-To-Day)",
-    "Neemias Queta (Day-To-Day)",
-    "Mitchell Robinson (Day-To-Day)",
-    "Derrick White (Day-To-Day)"
+    "Devin Carter (Day-To-Day)"
    ]
   },
   "BKN": {
@@ -129,9 +125,9 @@
    "out": []
   },
   "CHA": {
-   "strength": 1418.3,
-   "offence": -55,
-   "defence": -31.7,
+   "strength": 1462,
+   "offence": -35.1,
+   "defence": -8,
    "coach": "Charles Lee",
    "coachElo": 5,
    "coachGames": 166,
@@ -145,9 +141,9 @@
    ]
   },
   "CHI": {
-   "strength": 1436.2,
-   "offence": -21.3,
-   "defence": -41.6,
+   "strength": 1424.7,
+   "offence": -25.9,
+   "defence": -48.4,
    "coach": "Tiago Splitter",
    "coachElo": -0.9,
    "coachGames": 87,
@@ -159,9 +155,9 @@
    ]
   },
   "CLE": {
-   "strength": 1560.7,
-   "offence": 57.7,
-   "defence": 0.5,
+   "strength": 1537,
+   "offence": 38.7,
+   "defence": -4.3,
    "coach": "Kenny Atkinson",
    "coachElo": 2.6,
    "coachGames": 191,
@@ -172,30 +168,28 @@
    ]
   },
   "DAL": {
-   "strength": 1475.6,
-   "offence": -15.5,
-   "defence": -9,
+   "strength": 1483.6,
+   "offence": -12.1,
+   "defence": -4.3,
    "coach": "Dusty May",
    "coachElo": 0,
    "coachGames": 0,
    "pace": 103.1,
    "out": [
     "Santi Aldama (Day-To-Day)",
-    "Max Christie (Day-To-Day)",
     "Jett Howard (Day-To-Day)",
     "Dereck Lively II (Day-To-Day)"
    ]
   },
   "DEN": {
-   "strength": 1560.4,
-   "offence": 98.7,
-   "defence": -36.3,
+   "strength": 1581,
+   "offence": 110.8,
+   "defence": -27.9,
    "coach": "David Adelman",
    "coachElo": -1.9,
    "coachGames": 105,
    "pace": 103.1,
    "out": [
-    "Aaron Gordon (Day-To-Day)",
     "Spencer Jones (Day-To-Day)",
     "Julian Strawther (Out)"
    ]
@@ -211,9 +205,9 @@
    "out": []
   },
   "GSW": {
-   "strength": 1474.1,
-   "offence": -6,
-   "defence": -16.3,
+   "strength": 1486.3,
+   "offence": 0,
+   "defence": -10.1,
    "coach": "Steve Kerr",
    "coachElo": -3.5,
    "coachGames": 461,
@@ -225,16 +219,14 @@
    ]
   },
   "HOU": {
-   "strength": 1640.6,
-   "offence": 67.9,
-   "defence": 68.5,
+   "strength": 1664.8,
+   "offence": 80.9,
+   "defence": 79.8,
    "coach": "Ime Udoka",
    "coachElo": 4.1,
    "coachGames": 365,
    "pace": 103.1,
-   "out": [
-    "Steven Adams (Day-To-Day)"
-   ]
+   "out": []
   },
   "IND": {
    "strength": 1506.3,
@@ -252,20 +244,18 @@
    ]
   },
   "LAC": {
-   "strength": 1464.6,
-   "offence": -11.7,
-   "defence": -23.6,
+   "strength": 1491.8,
+   "offence": 4.1,
+   "defence": -12.1,
    "coach": "Tyronn Lue",
    "coachElo": -0.1,
    "coachGames": 431,
    "pace": 103.1,
    "out": [
     "Bradley Beal (Out)",
-    "Kris Dunn (Day-To-Day)",
     "Brandon Ingram (Out)",
     "Jordan Miller (Out)",
     "Yanic Konan Niederhauser (Out)",
-    "Kobe Sanders (Day-To-Day)",
     "Max Strus (Out)"
    ]
   },
@@ -299,24 +289,23 @@
    ]
   },
   "MIA": {
-   "strength": 1472.8,
-   "offence": -13.3,
-   "defence": -17.2,
+   "strength": 1530.2,
+   "offence": 23.9,
+   "defence": 3,
    "coach": "Erik Spoelstra",
    "coachElo": 3.3,
    "coachGames": 467,
    "pace": 103.1,
    "out": [
     "Bam Adebayo (Day-To-Day)",
-    "Giannis Antetokounmpo (Day-To-Day)",
     "Pelle Larsson (Day-To-Day)",
     "Dru Smith (Day-To-Day)"
    ]
   },
   "MIL": {
-   "strength": 1431,
-   "offence": -21.5,
-   "defence": -50.1,
+   "strength": 1434.1,
+   "offence": -21.2,
+   "defence": -47.3,
    "coach": "Taylor Jenkins",
    "coachElo": 2.7,
    "coachGames": 337,
@@ -326,24 +315,15 @@
    ]
   },
   "MIN": {
-   "strength": 1345.6,
-   "offence": -73.7,
-   "defence": -83,
+   "strength": 1566.1,
+   "offence": 34.9,
+   "defence": 28.8,
    "coach": "Chris Finch",
    "coachElo": 2.4,
    "coachGames": 467,
    "pace": 103.1,
    "out": [
-    "LaMelo Ball (Day-To-Day)",
     "Donte DiVincenzo (Out)",
-    "Ayo Dosunmu (Day-To-Day)",
-    "Anthony Edwards (Day-To-Day)",
-    "Enrique Freeman (Day-To-Day)",
-    "Rudy Gobert (Day-To-Day)",
-    "Bones Hyland (Day-To-Day)",
-    "Jonathan Kuminga (Day-To-Day)",
-    "Trey Lyles (Day-To-Day)",
-    "Jaden McDaniels (Day-To-Day)",
     "Rocco Zikarsky (Day-To-Day)"
    ]
   },
@@ -360,9 +340,9 @@
    ]
   },
   "NYK": {
-   "strength": 1693.4,
-   "offence": 88.5,
-   "defence": 96.1,
+   "strength": 1689.2,
+   "offence": 85.9,
+   "defence": 94.5,
    "coach": "Mike Brown",
    "coachElo": 8.8,
    "coachGames": 306,
@@ -372,9 +352,9 @@
    ]
   },
   "OKC": {
-   "strength": 1581,
-   "offence": 18.6,
-   "defence": 48.4,
+   "strength": 1602.8,
+   "offence": 28.7,
+   "defence": 60.1,
    "coach": "Mark Daigneault",
    "coachElo": 14,
    "coachGames": 460,
@@ -397,15 +377,15 @@
    "out": [
     "Anthony Black (Day-To-Day)",
     "Jonathan Isaac (Day-To-Day)",
-    "Noah Penda (Day-To-Day)",
+    "Noah Penda (Out)",
     "Jase Richardson (Day-To-Day)",
     "Franz Wagner (Day-To-Day)"
    ]
   },
   "PHI": {
-   "strength": 1539,
-   "offence": 32.2,
-   "defence": 9.4,
+   "strength": 1569.2,
+   "offence": 45.6,
+   "defence": 26.3,
    "coach": "Nick Nurse",
    "coachElo": -2.6,
    "coachGames": 436,
@@ -413,7 +393,6 @@
    "out": [
     "Dominick Barlow (Day-To-Day)",
     "Adem Bona (Day-To-Day)",
-    "VJ Edgecombe (Day-To-Day)",
     "Tacko Fall (Day-To-Day)",
     "Ariel Hukporti (Out)",
     "Anfernee Simons (Day-To-Day)",
@@ -421,9 +400,9 @@
    ]
   },
   "PHX": {
-   "strength": 1571.8,
-   "offence": 28.6,
-   "defence": 40.2,
+   "strength": 1575.7,
+   "offence": 28.1,
+   "defence": 44.6,
    "coach": "Jordan Ott",
    "coachElo": 3,
    "coachGames": 88,
@@ -446,14 +425,13 @@
     "Jrue Holiday (Day-To-Day)",
     "Micah Potter (Day-To-Day)",
     "Shaedon Sharpe (Out)",
-    "Robert Williams III (Day-To-Day)",
     "Chris Youngblood (Day-To-Day)"
    ]
   },
   "SAC": {
-   "strength": 1368.8,
-   "offence": -88.7,
-   "defence": -35.9,
+   "strength": 1405.1,
+   "offence": -46,
+   "defence": -42.3,
    "coach": "Doug Christie",
    "coachElo": -6.6,
    "coachGames": 134,
@@ -484,10 +462,7 @@
    "coachElo": 3.1,
    "coachGames": 253,
    "pace": 103.1,
-   "out": [
-    "Chucky Hepburn (Day-To-Day)",
-    "Jakob Poeltl (Day-To-Day)"
-   ]
+   "out": []
   },
   "UTA": {
    "strength": 1399.7,
@@ -7847,9 +7822,9 @@
  },
  "upcoming": {
   "2027_20261020_BOS_DET": {
-   "pHome": 0.5015,
-   "spread": 0,
-   "total": 230.8,
+   "pHome": 0.4727,
+   "spread": 0.7,
+   "total": 230.6,
    "pace": 103.1,
    "home": {
     "team": "DET",
@@ -7947,9 +7922,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -8010,15 +7985,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -8031,10 +7997,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -8253,15 +8228,15 @@
    }
   },
   "2027_20261020_PHI_NYK": {
-   "pHome": 0.7405,
-   "spread": -7,
-   "total": 233.2,
+   "pHome": 0.7495,
+   "spread": -7.3,
+   "total": 232.6,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -8322,15 +8297,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -8343,10 +8309,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -8560,7 +8535,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    },
    "away": {
     "team": "ATL",
@@ -8957,15 +8940,7 @@
       "adds": -9.1
      }
     ],
-    "out": [
-     {
-      "id": "4590360",
-      "name": "Chucky Hepburn",
-      "status": "Day-To-Day",
-      "min": 7,
-      "costs": -5.5
-     }
-    ]
+    "out": []
    },
    "away": {
     "team": "CHI",
@@ -9063,9 +9038,9 @@
    }
   },
   "2027_20261021_DAL_HOU": {
-   "pHome": 0.7987,
-   "spread": -9.2,
-   "total": 230.8,
+   "pHome": 0.7792,
+   "spread": -8.5,
+   "total": 230.7,
    "pace": 103.1,
    "home": {
     "team": "HOU",
@@ -9154,9 +9129,9 @@
    },
    "away": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -9226,30 +9201,30 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
    }
   },
   "2027_20261021_GSW_LAL": {
-   "pHome": 0.6794,
-   "spread": -5,
+   "pHome": 0.6655,
+   "spread": -4.6,
    "total": 232.7,
    "pace": 103.1,
    "home": {
@@ -9348,9 +9323,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -9393,15 +9368,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -9441,10 +9407,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -10050,9 +10025,9 @@
    }
   },
   "2027_20261021_PHX_POR": {
-   "pHome": 0.5586,
-   "spread": -1.6,
-   "total": 231.2,
+   "pHome": 0.5456,
+   "spread": -1.2,
+   "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "POR",
@@ -10149,9 +10124,9 @@
    },
    "away": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -10161,19 +10136,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -10182,16 +10148,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -10200,7 +10166,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -10209,7 +10175,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -10218,7 +10184,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -10227,7 +10193,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -10242,15 +10226,15 @@
    }
   },
   "2027_20261021_SAC_LAC": {
-   "pHome": 0.7263,
-   "spread": -6.5,
-   "total": 229.8,
+   "pHome": 0.6828,
+   "spread": -5.1,
+   "total": 232,
    "pace": 103.1,
    "home": {
     "team": "LAC",
-    "strength": 1491.5,
-    "offence": 3.8,
-    "defence": -12.3,
+    "strength": 1491.8,
+    "offence": 4,
+    "defence": -12.2,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -10263,7 +10247,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.4
+      "adds": 6.3
      },
      {
       "id": "4396907",
@@ -10272,7 +10256,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.7
+      "adds": 22.8
      },
      {
       "id": "3448",
@@ -10281,7 +10265,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 17.9
+      "adds": 18
      },
      {
       "id": "2991139",
@@ -10290,7 +10274,7 @@
       "min": 27,
       "o": 3,
       "d": -1,
-      "adds": 1.3
+      "adds": 1.2
      },
      {
       "id": "3936099",
@@ -10299,7 +10283,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.6
+      "adds": 13.7
      },
      {
       "id": "4702352",
@@ -10308,7 +10292,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14
+      "adds": -14.1
      },
      {
       "id": "4432170",
@@ -10317,7 +10301,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.5
+      "adds": -1.6
      },
      {
       "id": "4398390",
@@ -10326,25 +10310,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.7
-     },
-     {
-      "id": "5159895",
-      "name": "Yuki Kawamura",
-      "pos": "G",
-      "min": 14,
-      "o": -13,
-      "d": -12,
-      "adds": -6.7
-     },
-     {
-      "id": "5105853",
-      "name": "Fletcher Loyer",
-      "pos": "G",
-      "min": 12,
-      "o": -32,
-      "d": -32,
-      "adds": -16
+      "adds": -2.8
      },
      {
       "id": "5105832",
@@ -10353,16 +10319,43 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16
+      "adds": -16.2
      },
      {
       "id": "5075626",
       "name": "Baba Miller",
       "pos": "F",
-      "min": 10,
+      "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -13
+      "adds": -16.2
+     },
+     {
+      "id": "5254165",
+      "name": "Keaton Wagler",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4845363",
+      "name": "Cam Christie",
+      "pos": "G",
+      "min": 5,
+      "o": -11,
+      "d": -14,
+      "adds": -2.5
+     },
+     {
+      "id": "5106258",
+      "name": "Gradey Dick",
+      "pos": "G",
+      "min": 5,
+      "o": -8,
+      "d": -2,
+      "adds": -1
      }
     ],
     "out": [
@@ -10405,9 +10398,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.8,
-    "offence": -88.8,
-    "defence": -36,
+    "strength": 1409.4,
+    "offence": -40.5,
+    "defence": -43.6,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -10477,22 +10470,22 @@
       "adds": -2
      },
      {
-      "id": "2583639",
-      "name": "Elfrid Payton",
-      "pos": "G",
-      "min": 25,
-      "o": -88,
-      "d": 12,
-      "adds": -39.6
-     },
-     {
       "id": "4065732",
       "name": "De'Andre Hunter",
       "pos": "F",
-      "min": 8,
+      "min": 23,
       "o": -6,
       "d": 2,
-      "adds": -0.7
+      "adds": -1.8
+     },
+     {
+      "id": "4066262",
+      "name": "Malik Monk",
+      "pos": "G",
+      "min": 10,
+      "o": 20,
+      "d": -10,
+      "adds": 2.1
      }
     ],
     "out": [
@@ -10724,9 +10717,9 @@
    }
   },
   "2027_20261022_CLE_PHI": {
-   "pHome": 0.5571,
-   "spread": -1.5,
-   "total": 235.2,
+   "pHome": 0.5313,
+   "spread": -0.8,
+   "total": 235.6,
    "pace": 103.1,
    "home": {
     "team": "PHI",
@@ -10823,9 +10816,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -10895,15 +10888,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -10916,19 +10900,28 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
    }
   },
   "2027_20261022_DEN_OKC": {
-   "pHome": 0.7297,
-   "spread": -6.7,
-   "total": 234.3,
+   "pHome": 0.7196,
+   "spread": -6.3,
+   "total": 234.9,
    "pace": 103.1,
    "home": {
     "team": "OKC",
@@ -11044,9 +11037,9 @@
    },
    "away": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -11080,15 +11073,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -11119,10 +11103,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -11525,9 +11518,9 @@
    }
   },
   "2027_20261023_DAL_IND": {
-   "pHome": 0.6179,
-   "spread": -3.2,
-   "total": 232.7,
+   "pHome": 0.5898,
+   "spread": -2.4,
+   "total": 232.6,
    "pace": 103.1,
    "home": {
     "team": "IND",
@@ -11624,9 +11617,9 @@
    },
    "away": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -11696,22 +11689,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -12097,7 +12090,7 @@
    }
   },
   "2027_20261023_LAC_LAL": {
-   "pHome": 0.6504,
+   "pHome": 0.6501,
    "spread": -4.2,
    "total": 232.9,
    "pace": 103.1,
@@ -12197,9 +12190,9 @@
    },
    "away": {
     "team": "LAC",
-    "strength": 1491.5,
-    "offence": 3.8,
-    "defence": -12.3,
+    "strength": 1491.8,
+    "offence": 4,
+    "defence": -12.2,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -12212,7 +12205,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.4
+      "adds": 6.3
      },
      {
       "id": "4396907",
@@ -12221,7 +12214,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.7
+      "adds": 22.8
      },
      {
       "id": "3448",
@@ -12230,7 +12223,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 17.9
+      "adds": 18
      },
      {
       "id": "2991139",
@@ -12239,7 +12232,7 @@
       "min": 27,
       "o": 3,
       "d": -1,
-      "adds": 1.3
+      "adds": 1.2
      },
      {
       "id": "3936099",
@@ -12248,7 +12241,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.6
+      "adds": 13.7
      },
      {
       "id": "4702352",
@@ -12257,7 +12250,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14
+      "adds": -14.1
      },
      {
       "id": "4432170",
@@ -12266,7 +12259,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.5
+      "adds": -1.6
      },
      {
       "id": "4398390",
@@ -12275,25 +12268,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.7
-     },
-     {
-      "id": "5159895",
-      "name": "Yuki Kawamura",
-      "pos": "G",
-      "min": 14,
-      "o": -13,
-      "d": -12,
-      "adds": -6.7
-     },
-     {
-      "id": "5105853",
-      "name": "Fletcher Loyer",
-      "pos": "G",
-      "min": 12,
-      "o": -32,
-      "d": -32,
-      "adds": -16
+      "adds": -2.8
      },
      {
       "id": "5105832",
@@ -12302,16 +12277,43 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16
+      "adds": -16.2
      },
      {
       "id": "5075626",
       "name": "Baba Miller",
       "pos": "F",
-      "min": 10,
+      "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -13
+      "adds": -16.2
+     },
+     {
+      "id": "5254165",
+      "name": "Keaton Wagler",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4845363",
+      "name": "Cam Christie",
+      "pos": "G",
+      "min": 5,
+      "o": -11,
+      "d": -14,
+      "adds": -2.5
+     },
+     {
+      "id": "5106258",
+      "name": "Gradey Dick",
+      "pos": "G",
+      "min": 5,
+      "o": -8,
+      "d": -2,
+      "adds": -1
      }
     ],
     "out": [
@@ -12354,15 +12356,15 @@
    }
   },
   "2027_20261023_MEM_GSW": {
-   "pHome": 0.7094,
-   "spread": -6,
+   "pHome": 0.7223,
+   "spread": -6.4,
    "total": 232.7,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -12405,15 +12407,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -12453,10 +12446,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -12693,7 +12695,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    },
    "away": {
     "team": "MIN",
@@ -12983,15 +12993,15 @@
    }
   },
   "2027_20261023_NYK_BOS": {
-   "pHome": 0.4322,
-   "spread": 1.8,
-   "total": 231.7,
+   "pHome": 0.4489,
+   "spread": 1.4,
+   "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -13052,15 +13062,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -13073,19 +13074,28 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -13146,15 +13156,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -13167,25 +13168,34 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
    }
   },
   "2027_20261023_POR_SAC": {
-   "pHome": 0.271,
-   "spread": 6.6,
-   "total": 229.3,
+   "pHome": 0.3146,
+   "spread": 5.2,
+   "total": 231.5,
    "pace": 103.1,
    "home": {
     "team": "SAC",
-    "strength": 1368.8,
-    "offence": -88.8,
-    "defence": -36,
+    "strength": 1409.4,
+    "offence": -40.5,
+    "defence": -43.6,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -13255,22 +13265,22 @@
       "adds": -2
      },
      {
-      "id": "2583639",
-      "name": "Elfrid Payton",
-      "pos": "G",
-      "min": 25,
-      "o": -88,
-      "d": 12,
-      "adds": -39.6
-     },
-     {
       "id": "4065732",
       "name": "De'Andre Hunter",
       "pos": "F",
-      "min": 8,
+      "min": 23,
       "o": -6,
       "d": 2,
-      "adds": -0.7
+      "adds": -1.8
+     },
+     {
+      "id": "4066262",
+      "name": "Malik Monk",
+      "pos": "G",
+      "min": 10,
+      "o": 20,
+      "d": -10,
+      "adds": 2.1
      }
     ],
     "out": [
@@ -13590,27 +13600,19 @@
       "adds": -9.1
      }
     ],
-    "out": [
-     {
-      "id": "4590360",
-      "name": "Chucky Hepburn",
-      "status": "Day-To-Day",
-      "min": 7,
-      "costs": -5.5
-     }
-    ]
+    "out": []
    }
   },
   "2027_20261024_BKN_CLE": {
-   "pHome": 0.8086,
-   "spread": -9.7,
-   "total": 233,
+   "pHome": 0.8242,
+   "spread": -10.4,
+   "total": 233.3,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -13680,15 +13682,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -13701,10 +13694,19 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
@@ -13805,15 +13807,15 @@
    }
   },
   "2027_20261024_GSW_PHX": {
-   "pHome": 0.7733,
+   "pHome": 0.7714,
    "spread": -8.2,
-   "total": 231.4,
+   "total": 231.2,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -13823,19 +13825,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -13844,16 +13837,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -13862,7 +13855,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -13871,7 +13864,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -13880,7 +13873,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -13889,7 +13882,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -13904,9 +13915,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -13949,15 +13960,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -13997,10 +13999,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -14601,15 +14612,15 @@
    }
   },
   "2027_20261024_NOP_DEN": {
-   "pHome": 0.8415,
-   "spread": -11.2,
-   "total": 238.3,
+   "pHome": 0.8481,
+   "spread": -11.5,
+   "total": 238.9,
    "pace": 103.1,
    "home": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -14643,15 +14654,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -14682,10 +14684,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -14785,15 +14796,15 @@
    }
   },
   "2027_20261024_SAS_DAL": {
-   "pHome": 0.2212,
-   "spread": 8.4,
-   "total": 230.2,
+   "pHome": 0.2421,
+   "spread": 7.7,
+   "total": 230.1,
    "pace": 103.1,
    "home": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -14863,22 +14874,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -15574,7 +15585,7 @@
    }
   },
   "2027_20261025_LAC_OKC": {
-   "pHome": 0.8117,
+   "pHome": 0.8115,
    "spread": -9.8,
    "total": 230.2,
    "pace": 103.1,
@@ -15692,9 +15703,9 @@
    },
    "away": {
     "team": "LAC",
-    "strength": 1491.5,
-    "offence": 3.8,
-    "defence": -12.3,
+    "strength": 1491.8,
+    "offence": 4,
+    "defence": -12.2,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -15707,7 +15718,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.4
+      "adds": 6.3
      },
      {
       "id": "4396907",
@@ -15716,7 +15727,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.7
+      "adds": 22.8
      },
      {
       "id": "3448",
@@ -15725,7 +15736,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 17.9
+      "adds": 18
      },
      {
       "id": "2991139",
@@ -15734,7 +15745,7 @@
       "min": 27,
       "o": 3,
       "d": -1,
-      "adds": 1.3
+      "adds": 1.2
      },
      {
       "id": "3936099",
@@ -15743,7 +15754,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.6
+      "adds": 13.7
      },
      {
       "id": "4702352",
@@ -15752,7 +15763,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14
+      "adds": -14.1
      },
      {
       "id": "4432170",
@@ -15761,7 +15772,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.5
+      "adds": -1.6
      },
      {
       "id": "4398390",
@@ -15770,25 +15781,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.7
-     },
-     {
-      "id": "5159895",
-      "name": "Yuki Kawamura",
-      "pos": "G",
-      "min": 14,
-      "o": -13,
-      "d": -12,
-      "adds": -6.7
-     },
-     {
-      "id": "5105853",
-      "name": "Fletcher Loyer",
-      "pos": "G",
-      "min": 12,
-      "o": -32,
-      "d": -32,
-      "adds": -16
+      "adds": -2.8
      },
      {
       "id": "5105832",
@@ -15797,16 +15790,43 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16
+      "adds": -16.2
      },
      {
       "id": "5075626",
       "name": "Baba Miller",
       "pos": "F",
-      "min": 10,
+      "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -13
+      "adds": -16.2
+     },
+     {
+      "id": "5254165",
+      "name": "Keaton Wagler",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4845363",
+      "name": "Cam Christie",
+      "pos": "G",
+      "min": 5,
+      "o": -11,
+      "d": -14,
+      "adds": -2.5
+     },
+     {
+      "id": "5106258",
+      "name": "Gradey Dick",
+      "pos": "G",
+      "min": 5,
+      "o": -8,
+      "d": -2,
+      "adds": -1
      }
     ],
     "out": [
@@ -16051,15 +16071,15 @@
    }
   },
   "2027_20261025_MEM_SAC": {
-   "pHome": 0.5754,
-   "spread": -2,
-   "total": 230.2,
+   "pHome": 0.6258,
+   "spread": -3.4,
+   "total": 232.4,
    "pace": 103.1,
    "home": {
     "team": "SAC",
-    "strength": 1368.8,
-    "offence": -88.8,
-    "defence": -36,
+    "strength": 1409.4,
+    "offence": -40.5,
+    "defence": -43.6,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -16129,22 +16149,22 @@
       "adds": -2
      },
      {
-      "id": "2583639",
-      "name": "Elfrid Payton",
-      "pos": "G",
-      "min": 25,
-      "o": -88,
-      "d": 12,
-      "adds": -39.6
-     },
-     {
       "id": "4065732",
       "name": "De'Andre Hunter",
       "pos": "F",
-      "min": 8,
+      "min": 23,
       "o": -6,
       "d": 2,
-      "adds": -0.7
+      "adds": -1.8
+     },
+     {
+      "id": "4066262",
+      "name": "Malik Monk",
+      "pos": "G",
+      "min": 10,
+      "o": 20,
+      "d": -10,
+      "adds": 2.1
      }
     ],
     "out": [
@@ -16260,15 +16280,15 @@
    }
   },
   "2027_20261025_ORL_NYK": {
-   "pHome": 0.7531,
-   "spread": -7.5,
-   "total": 227.8,
+   "pHome": 0.7619,
+   "spread": -7.8,
+   "total": 227.2,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -16329,15 +16349,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -16350,10 +16361,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -16468,7 +16488,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    }
   },
   "2027_20261025_TOR_MIN": {
@@ -16661,15 +16689,7 @@
       "adds": -9.1
      }
     ],
-    "out": [
-     {
-      "id": "4590360",
-      "name": "Chucky Hepburn",
-      "status": "Day-To-Day",
-      "min": 7,
-      "costs": -5.5
-     }
-    ]
+    "out": []
    }
   },
   "2027_20261026_ATL_HOU": {
@@ -16858,15 +16878,15 @@
    }
   },
   "2027_20261026_CHI_BOS": {
-   "pHome": 0.8013,
-   "spread": -9.3,
-   "total": 231,
+   "pHome": 0.819,
+   "spread": -10.1,
+   "total": 230.8,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -16927,15 +16947,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -16948,10 +16959,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -17052,9 +17072,9 @@
    }
   },
   "2027_20261026_DAL_MIA": {
-   "pHome": 0.7052,
-   "spread": -5.8,
-   "total": 231.3,
+   "pHome": 0.6802,
+   "spread": -5.1,
+   "total": 231.2,
    "pace": 103.1,
    "home": {
     "team": "MIA",
@@ -17152,9 +17172,9 @@
    },
    "away": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -17224,37 +17244,37 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
    }
   },
   "2027_20261026_GSW_DEN": {
-   "pHome": 0.7688,
-   "spread": -8.1,
-   "total": 236.4,
+   "pHome": 0.7665,
+   "spread": -8,
+   "total": 237,
    "pace": 103.1,
    "home": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -17288,15 +17308,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -17327,10 +17338,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -17345,9 +17365,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -17390,15 +17410,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -17438,10 +17449,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -17856,15 +17876,15 @@
    }
   },
   "2027_20261026_MIN_CLE": {
-   "pHome": 0.6463,
-   "spread": -4,
-   "total": 233.6,
+   "pHome": 0.6696,
+   "spread": -4.7,
+   "total": 234,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -17934,15 +17954,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -17955,10 +17966,19 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
@@ -18058,9 +18078,9 @@
    }
   },
   "2027_20261026_PHX_OKC": {
-   "pHome": 0.657,
-   "spread": -4.4,
-   "total": 229.4,
+   "pHome": 0.6451,
+   "spread": -4,
+   "total": 229.1,
    "pace": 103.1,
    "home": {
     "team": "OKC",
@@ -18176,9 +18196,9 @@
    },
    "away": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -18188,19 +18208,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -18209,16 +18220,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -18227,7 +18238,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -18236,7 +18247,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -18245,7 +18256,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -18254,7 +18265,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -18487,15 +18516,15 @@
    }
   },
   "2027_20261027_BKN_BOS": {
-   "pHome": 0.8176,
-   "spread": -10.1,
-   "total": 231.2,
+   "pHome": 0.8341,
+   "spread": -10.8,
+   "total": 231,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -18556,15 +18585,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -18577,10 +18597,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -18681,15 +18710,15 @@
    }
   },
   "2027_20261027_DET_NYK": {
-   "pHome": 0.7389,
-   "spread": -7,
-   "total": 230.5,
+   "pHome": 0.748,
+   "spread": -7.3,
+   "total": 229.9,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -18750,15 +18779,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -18771,10 +18791,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -19068,9 +19097,9 @@
    }
   },
   "2027_20261027_SAC_SAS": {
-   "pHome": 0.9086,
-   "spread": -15.4,
-   "total": 228.6,
+   "pHome": 0.8896,
+   "spread": -14,
+   "total": 230.8,
    "pace": 103.1,
    "home": {
     "team": "SAS",
@@ -19168,9 +19197,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.8,
-    "offence": -88.8,
-    "defence": -36,
+    "strength": 1409.4,
+    "offence": -40.5,
+    "defence": -43.6,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -19240,22 +19269,22 @@
       "adds": -2
      },
      {
-      "id": "2583639",
-      "name": "Elfrid Payton",
-      "pos": "G",
-      "min": 25,
-      "o": -88,
-      "d": 12,
-      "adds": -39.6
-     },
-     {
       "id": "4065732",
       "name": "De'Andre Hunter",
       "pos": "F",
-      "min": 8,
+      "min": 23,
       "o": -6,
       "d": 2,
-      "adds": -0.7
+      "adds": -1.8
+     },
+     {
+      "id": "4066262",
+      "name": "Malik Monk",
+      "pos": "G",
+      "min": 10,
+      "o": 20,
+      "d": -10,
+      "adds": 2.1
      }
     ],
     "out": [
@@ -19480,9 +19509,9 @@
    }
   },
   "2027_20261028_DEN_NOP": {
-   "pHome": 0.3729,
-   "spread": 3.5,
-   "total": 238.3,
+   "pHome": 0.3612,
+   "spread": 3.8,
+   "total": 238.9,
    "pace": 103.1,
    "home": {
     "team": "NOP",
@@ -19571,9 +19600,9 @@
    },
    "away": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -19607,15 +19636,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -19646,10 +19666,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -19664,8 +19693,8 @@
    }
   },
   "2027_20261028_GSW_MIN": {
-   "pHome": 0.6821,
-   "spread": -5.1,
+   "pHome": 0.6681,
+   "spread": -4.7,
    "total": 231.8,
    "pace": 103.1,
    "home": {
@@ -19763,9 +19792,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -19808,15 +19837,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -19856,10 +19876,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -20064,15 +20093,15 @@
    }
   },
   "2027_20261028_LAL_LAC": {
-   "pHome": 0.5455,
+   "pHome": 0.5459,
    "spread": -1.2,
    "total": 232.9,
    "pace": 103.1,
    "home": {
     "team": "LAC",
-    "strength": 1491.5,
-    "offence": 3.8,
-    "defence": -12.3,
+    "strength": 1491.8,
+    "offence": 4,
+    "defence": -12.2,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -20085,7 +20114,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.4
+      "adds": 6.3
      },
      {
       "id": "4396907",
@@ -20094,7 +20123,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.7
+      "adds": 22.8
      },
      {
       "id": "3448",
@@ -20103,7 +20132,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 17.9
+      "adds": 18
      },
      {
       "id": "2991139",
@@ -20112,7 +20141,7 @@
       "min": 27,
       "o": 3,
       "d": -1,
-      "adds": 1.3
+      "adds": 1.2
      },
      {
       "id": "3936099",
@@ -20121,7 +20150,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.6
+      "adds": 13.7
      },
      {
       "id": "4702352",
@@ -20130,7 +20159,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14
+      "adds": -14.1
      },
      {
       "id": "4432170",
@@ -20139,7 +20168,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.5
+      "adds": -1.6
      },
      {
       "id": "4398390",
@@ -20148,25 +20177,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.7
-     },
-     {
-      "id": "5159895",
-      "name": "Yuki Kawamura",
-      "pos": "G",
-      "min": 14,
-      "o": -13,
-      "d": -12,
-      "adds": -6.7
-     },
-     {
-      "id": "5105853",
-      "name": "Fletcher Loyer",
-      "pos": "G",
-      "min": 12,
-      "o": -32,
-      "d": -32,
-      "adds": -16
+      "adds": -2.8
      },
      {
       "id": "5105832",
@@ -20175,16 +20186,43 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16
+      "adds": -16.2
      },
      {
       "id": "5075626",
       "name": "Baba Miller",
       "pos": "F",
-      "min": 10,
+      "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -13
+      "adds": -16.2
+     },
+     {
+      "id": "5254165",
+      "name": "Keaton Wagler",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4845363",
+      "name": "Cam Christie",
+      "pos": "G",
+      "min": 5,
+      "o": -11,
+      "d": -14,
+      "adds": -2.5
+     },
+     {
+      "id": "5106258",
+      "name": "Gradey Dick",
+      "pos": "G",
+      "min": 5,
+      "o": -8,
+      "d": -2,
+      "adds": -1
      }
     ],
     "out": [
@@ -20515,9 +20553,9 @@
    }
   },
   "2027_20261028_NYK_CHI": {
-   "pHome": 0.2513,
-   "spread": 7.3,
-   "total": 230.7,
+   "pHome": 0.2425,
+   "spread": 7.6,
+   "total": 230.1,
    "pace": 103.1,
    "home": {
     "team": "CHI",
@@ -20615,9 +20653,9 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -20678,15 +20716,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -20699,25 +20728,34 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
    }
   },
   "2027_20261028_OKC_DAL": {
-   "pHome": 0.2527,
-   "spread": 7.3,
-   "total": 229.1,
+   "pHome": 0.2755,
+   "spread": 6.5,
+   "total": 229,
    "pace": 103.1,
    "home": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -20787,22 +20825,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -21017,15 +21055,7 @@
       "adds": -9.1
      }
     ],
-    "out": [
-     {
-      "id": "4590360",
-      "name": "Chucky Hepburn",
-      "status": "Day-To-Day",
-      "min": 7,
-      "costs": -5.5
-     }
-    ]
+    "out": []
    },
    "away": {
     "team": "ORL",
@@ -21137,7 +21167,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    }
   },
   "2027_20261028_PHI_IND": {
@@ -21535,15 +21573,15 @@
    }
   },
   "2027_20261028_WAS_CLE": {
-   "pHome": 0.8291,
-   "spread": -10.6,
-   "total": 233.5,
+   "pHome": 0.8433,
+   "spread": -11.3,
+   "total": 233.8,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -21613,15 +21651,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -21634,10 +21663,19 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
@@ -21753,9 +21791,9 @@
    }
   },
   "2027_20261029_CLE_ATL": {
-   "pHome": 0.555,
-   "spread": -1.5,
-   "total": 232.2,
+   "pHome": 0.5292,
+   "spread": -0.8,
+   "total": 232.5,
    "pace": 103.1,
    "home": {
     "team": "ATL",
@@ -21853,9 +21891,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -21925,15 +21963,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -21946,10 +21975,19 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
@@ -22149,9 +22187,9 @@
    }
   },
   "2027_20261029_SAC_NOP": {
-   "pHome": 0.5937,
-   "spread": -2.5,
-   "total": 231.5,
+   "pHome": 0.542,
+   "spread": -1.1,
+   "total": 233.6,
    "pace": 103.1,
    "home": {
     "team": "NOP",
@@ -22240,9 +22278,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.8,
-    "offence": -88.8,
-    "defence": -36,
+    "strength": 1409.4,
+    "offence": -40.5,
+    "defence": -43.6,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -22312,22 +22350,22 @@
       "adds": -2
      },
      {
-      "id": "2583639",
-      "name": "Elfrid Payton",
-      "pos": "G",
-      "min": 25,
-      "o": -88,
-      "d": 12,
-      "adds": -39.6
-     },
-     {
       "id": "4065732",
       "name": "De'Andre Hunter",
       "pos": "F",
-      "min": 8,
+      "min": 23,
       "o": -6,
       "d": 2,
-      "adds": -0.7
+      "adds": -1.8
+     },
+     {
+      "id": "4066262",
+      "name": "Malik Monk",
+      "pos": "G",
+      "min": 10,
+      "o": 20,
+      "d": -10,
+      "adds": 2.1
      }
     ],
     "out": [
@@ -22567,15 +22605,15 @@
    }
   },
   "2027_20261030_CHI_BOS": {
-   "pHome": 0.7966,
-   "spread": -9.2,
-   "total": 231,
+   "pHome": 0.8146,
+   "spread": -9.9,
+   "total": 230.8,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -22636,15 +22674,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -22657,10 +22686,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -22761,15 +22799,15 @@
    }
   },
   "2027_20261030_DEN_PHX": {
-   "pHome": 0.5983,
+   "pHome": 0.5988,
    "spread": -2.7,
-   "total": 235.8,
+   "total": 236.1,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -22779,19 +22817,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -22800,16 +22829,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -22818,7 +22847,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -22827,7 +22856,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -22836,7 +22865,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -22845,7 +22874,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -22860,9 +22907,9 @@
    },
    "away": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -22896,15 +22943,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -22935,10 +22973,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -23147,15 +23194,15 @@
    }
   },
   "2027_20261030_HOU_DAL": {
-   "pHome": 0.297,
-   "spread": 5.8,
-   "total": 230.8,
+   "pHome": 0.3221,
+   "spread": 5,
+   "total": 230.7,
    "pace": 103.1,
    "home": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -23225,22 +23272,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -23525,7 +23572,7 @@
    }
   },
   "2027_20261030_LAC_MIN": {
-   "pHome": 0.6597,
+   "pHome": 0.6594,
    "spread": -4.4,
    "total": 232.1,
    "pace": 103.1,
@@ -23624,9 +23671,9 @@
    },
    "away": {
     "team": "LAC",
-    "strength": 1491.5,
-    "offence": 3.8,
-    "defence": -12.3,
+    "strength": 1491.8,
+    "offence": 4,
+    "defence": -12.2,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -23639,7 +23686,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.4
+      "adds": 6.3
      },
      {
       "id": "4396907",
@@ -23648,7 +23695,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.7
+      "adds": 22.8
      },
      {
       "id": "3448",
@@ -23657,7 +23704,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 17.9
+      "adds": 18
      },
      {
       "id": "2991139",
@@ -23666,7 +23713,7 @@
       "min": 27,
       "o": 3,
       "d": -1,
-      "adds": 1.3
+      "adds": 1.2
      },
      {
       "id": "3936099",
@@ -23675,7 +23722,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.6
+      "adds": 13.7
      },
      {
       "id": "4702352",
@@ -23684,7 +23731,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14
+      "adds": -14.1
      },
      {
       "id": "4432170",
@@ -23693,7 +23740,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.5
+      "adds": -1.6
      },
      {
       "id": "4398390",
@@ -23702,25 +23749,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.7
-     },
-     {
-      "id": "5159895",
-      "name": "Yuki Kawamura",
-      "pos": "G",
-      "min": 14,
-      "o": -13,
-      "d": -12,
-      "adds": -6.7
-     },
-     {
-      "id": "5105853",
-      "name": "Fletcher Loyer",
-      "pos": "G",
-      "min": 12,
-      "o": -32,
-      "d": -32,
-      "adds": -16
+      "adds": -2.8
      },
      {
       "id": "5105832",
@@ -23729,16 +23758,43 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16
+      "adds": -16.2
      },
      {
       "id": "5075626",
       "name": "Baba Miller",
       "pos": "F",
-      "min": 10,
+      "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -13
+      "adds": -16.2
+     },
+     {
+      "id": "5254165",
+      "name": "Keaton Wagler",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4845363",
+      "name": "Cam Christie",
+      "pos": "G",
+      "min": 5,
+      "o": -11,
+      "d": -14,
+      "adds": -2.5
+     },
+     {
+      "id": "5106258",
+      "name": "Gradey Dick",
+      "pos": "G",
+      "min": 5,
+      "o": -8,
+      "d": -2,
+      "adds": -1
      }
     ],
     "out": [
@@ -23781,15 +23837,15 @@
    }
   },
   "2027_20261030_LAL_GSW": {
-   "pHome": 0.4488,
-   "spread": 1.4,
+   "pHome": 0.4646,
+   "spread": 1,
    "total": 232.7,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -23832,15 +23888,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -23880,10 +23927,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -24006,9 +24062,9 @@
    }
   },
   "2027_20261030_NYK_PHI": {
-   "pHome": 0.3769,
-   "spread": 3.4,
-   "total": 233.2,
+   "pHome": 0.3658,
+   "spread": 3.7,
+   "total": 232.6,
    "pace": 103.1,
    "home": {
     "team": "PHI",
@@ -24105,9 +24161,9 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -24168,15 +24224,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -24189,10 +24236,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -24295,15 +24351,7 @@
       "adds": -9.1
      }
     ],
-    "out": [
-     {
-      "id": "4590360",
-      "name": "Chucky Hepburn",
-      "status": "Day-To-Day",
-      "min": 7,
-      "costs": -5.5
-     }
-    ]
+    "out": []
    },
    "away": {
     "team": "ORL",
@@ -24415,7 +24463,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    }
   },
   "2027_20261031_ATL_NOP": {
@@ -24604,9 +24660,9 @@
    }
   },
   "2027_20261031_CLE_MIL": {
-   "pHome": 0.3623,
-   "spread": 3.8,
-   "total": 234.2,
+   "pHome": 0.3387,
+   "spread": 4.5,
+   "total": 234.5,
    "pace": 103.1,
    "home": {
     "team": "MIL",
@@ -24695,9 +24751,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -24767,15 +24823,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -24788,10 +24835,19 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
@@ -25597,9 +25653,9 @@
    }
   },
   "2027_20261031_SAC_MEM": {
-   "pHome": 0.553,
-   "spread": -1.4,
-   "total": 230.2,
+   "pHome": 0.5006,
+   "spread": 0,
+   "total": 232.4,
    "pace": 103.1,
    "home": {
     "team": "MEM",
@@ -25697,9 +25753,9 @@
    },
    "away": {
     "team": "SAC",
-    "strength": 1368.8,
-    "offence": -88.8,
-    "defence": -36,
+    "strength": 1409.4,
+    "offence": -40.5,
+    "defence": -43.6,
     "coach": {
      "name": "Doug Christie",
      "elo": -6.6
@@ -25769,22 +25825,22 @@
       "adds": -2
      },
      {
-      "id": "2583639",
-      "name": "Elfrid Payton",
-      "pos": "G",
-      "min": 25,
-      "o": -88,
-      "d": 12,
-      "adds": -39.6
-     },
-     {
       "id": "4065732",
       "name": "De'Andre Hunter",
       "pos": "F",
-      "min": 8,
+      "min": 23,
       "o": -6,
       "d": 2,
-      "adds": -0.7
+      "adds": -1.8
+     },
+     {
+      "id": "4066262",
+      "name": "Malik Monk",
+      "pos": "G",
+      "min": 10,
+      "o": 20,
+      "d": -10,
+      "adds": 2.1
      }
     ],
     "out": [
@@ -25999,9 +26055,9 @@
    }
   },
   "2027_20261101_BOS_ORL": {
-   "pHome": 0.4827,
-   "spread": 0.5,
-   "total": 228.1,
+   "pHome": 0.4541,
+   "spread": 1.2,
+   "total": 227.9,
    "pace": 103.1,
    "home": {
     "team": "ORL",
@@ -26113,13 +26169,21 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    },
    "away": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -26180,15 +26244,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -26201,25 +26256,34 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
    }
   },
   "2027_20261101_LAC_GSW": {
-   "pHome": 0.5324,
-   "spread": -0.9,
+   "pHome": 0.5478,
+   "spread": -1.3,
    "total": 232.2,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -26262,15 +26326,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -26310,10 +26365,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -26342,9 +26406,9 @@
    },
    "away": {
     "team": "LAC",
-    "strength": 1491.5,
-    "offence": 3.8,
-    "defence": -12.3,
+    "strength": 1491.8,
+    "offence": 4,
+    "defence": -12.2,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -26357,7 +26421,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.4
+      "adds": 6.3
      },
      {
       "id": "4396907",
@@ -26366,7 +26430,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.7
+      "adds": 22.8
      },
      {
       "id": "3448",
@@ -26375,7 +26439,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 17.9
+      "adds": 18
      },
      {
       "id": "2991139",
@@ -26384,7 +26448,7 @@
       "min": 27,
       "o": 3,
       "d": -1,
-      "adds": 1.3
+      "adds": 1.2
      },
      {
       "id": "3936099",
@@ -26393,7 +26457,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.6
+      "adds": 13.7
      },
      {
       "id": "4702352",
@@ -26402,7 +26466,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14
+      "adds": -14.1
      },
      {
       "id": "4432170",
@@ -26411,7 +26475,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.5
+      "adds": -1.6
      },
      {
       "id": "4398390",
@@ -26420,25 +26484,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.7
-     },
-     {
-      "id": "5159895",
-      "name": "Yuki Kawamura",
-      "pos": "G",
-      "min": 14,
-      "o": -13,
-      "d": -12,
-      "adds": -6.7
-     },
-     {
-      "id": "5105853",
-      "name": "Fletcher Loyer",
-      "pos": "G",
-      "min": 12,
-      "o": -32,
-      "d": -32,
-      "adds": -16
+      "adds": -2.8
      },
      {
       "id": "5105832",
@@ -26447,16 +26493,43 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16
+      "adds": -16.2
      },
      {
       "id": "5075626",
       "name": "Baba Miller",
       "pos": "F",
-      "min": 10,
+      "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -13
+      "adds": -16.2
+     },
+     {
+      "id": "5254165",
+      "name": "Keaton Wagler",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4845363",
+      "name": "Cam Christie",
+      "pos": "G",
+      "min": 5,
+      "o": -11,
+      "d": -14,
+      "adds": -2.5
+     },
+     {
+      "id": "5106258",
+      "name": "Gradey Dick",
+      "pos": "G",
+      "min": 5,
+      "o": -8,
+      "d": -2,
+      "adds": -1
      }
     ],
     "out": [
@@ -26689,15 +26762,7 @@
       "adds": -9.1
      }
     ],
-    "out": [
-     {
-      "id": "4590360",
-      "name": "Chucky Hepburn",
-      "status": "Day-To-Day",
-      "min": 7,
-      "costs": -5.5
-     }
-    ]
+    "out": []
    }
   },
   "2027_20261102_ATL_IND": {
@@ -26894,15 +26959,15 @@
    }
   },
   "2027_20261102_BKN_NYK": {
-   "pHome": 0.9255,
-   "spread": -16.9,
-   "total": 230.9,
+   "pHome": 0.9287,
+   "spread": -17.2,
+   "total": 230.3,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -26963,15 +27028,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -26984,10 +27040,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -27088,9 +27153,9 @@
    }
   },
   "2027_20261102_BOS_HOU": {
-   "pHome": 0.6665,
-   "spread": -4.6,
-   "total": 231.6,
+   "pHome": 0.6405,
+   "spread": -3.9,
+   "total": 231.5,
    "pace": 103.1,
    "home": {
     "team": "HOU",
@@ -27179,9 +27244,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -27242,15 +27307,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -27263,10 +27319,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -28232,15 +28297,15 @@
    }
   },
   "2027_20261102_OKC_CLE": {
-   "pHome": 0.3949,
-   "spread": 2.9,
-   "total": 231.7,
+   "pHome": 0.42,
+   "spread": 2.2,
+   "total": 232,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -28310,15 +28375,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -28331,10 +28387,19 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
@@ -28453,15 +28518,15 @@
    }
   },
   "2027_20261102_PHX_GSW": {
-   "pHome": 0.3295,
-   "spread": 4.8,
-   "total": 231.4,
+   "pHome": 0.3319,
+   "spread": 4.7,
+   "total": 231.2,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -28504,15 +28569,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -28552,10 +28608,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -28584,9 +28649,9 @@
    },
    "away": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -28596,19 +28661,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -28617,16 +28673,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -28635,7 +28691,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -28644,7 +28700,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -28653,7 +28709,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -28662,7 +28718,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -28677,15 +28751,15 @@
    }
   },
   "2027_20261102_POR_DEN": {
-   "pHome": 0.6327,
-   "spread": -3.6,
-   "total": 236.1,
+   "pHome": 0.6444,
+   "spread": -4,
+   "total": 236.7,
    "pace": 103.1,
    "home": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -28719,15 +28793,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -28758,10 +28823,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -28869,15 +28943,15 @@
    }
   },
   "2027_20261102_SAC_DAL": {
-   "pHome": 0.6902,
-   "spread": -5.4,
-   "total": 230.9,
+   "pHome": 0.7147,
+   "spread": -6.2,
+   "total": 230.8,
    "pace": 103.1,
    "home": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -28947,22 +29021,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -29054,15 +29128,15 @@
    }
   },
   "2027_20261102_TOR_LAC": {
-   "pHome": 0.4553,
+   "pHome": 0.4557,
    "spread": 1.2,
    "total": 231.4,
    "pace": 103.1,
    "home": {
     "team": "LAC",
-    "strength": 1491.5,
-    "offence": 3.8,
-    "defence": -12.3,
+    "strength": 1491.8,
+    "offence": 4,
+    "defence": -12.2,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -29075,7 +29149,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.4
+      "adds": 6.3
      },
      {
       "id": "4396907",
@@ -29084,7 +29158,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.7
+      "adds": 22.8
      },
      {
       "id": "3448",
@@ -29093,7 +29167,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 17.9
+      "adds": 18
      },
      {
       "id": "2991139",
@@ -29102,7 +29176,7 @@
       "min": 27,
       "o": 3,
       "d": -1,
-      "adds": 1.3
+      "adds": 1.2
      },
      {
       "id": "3936099",
@@ -29111,7 +29185,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.6
+      "adds": 13.7
      },
      {
       "id": "4702352",
@@ -29120,7 +29194,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14
+      "adds": -14.1
      },
      {
       "id": "4432170",
@@ -29129,7 +29203,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.5
+      "adds": -1.6
      },
      {
       "id": "4398390",
@@ -29138,25 +29212,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.7
-     },
-     {
-      "id": "5159895",
-      "name": "Yuki Kawamura",
-      "pos": "G",
-      "min": 14,
-      "o": -13,
-      "d": -12,
-      "adds": -6.7
-     },
-     {
-      "id": "5105853",
-      "name": "Fletcher Loyer",
-      "pos": "G",
-      "min": 12,
-      "o": -32,
-      "d": -32,
-      "adds": -16
+      "adds": -2.8
      },
      {
       "id": "5105832",
@@ -29165,16 +29221,43 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16
+      "adds": -16.2
      },
      {
       "id": "5075626",
       "name": "Baba Miller",
       "pos": "F",
-      "min": 10,
+      "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -13
+      "adds": -16.2
+     },
+     {
+      "id": "5254165",
+      "name": "Keaton Wagler",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4845363",
+      "name": "Cam Christie",
+      "pos": "G",
+      "min": 5,
+      "o": -11,
+      "d": -14,
+      "adds": -2.5
+     },
+     {
+      "id": "5106258",
+      "name": "Gradey Dick",
+      "pos": "G",
+      "min": 5,
+      "o": -8,
+      "d": -2,
+      "adds": -1
      }
     ],
     "out": [
@@ -29307,15 +29390,7 @@
       "adds": -9.1
      }
     ],
-    "out": [
-     {
-      "id": "4590360",
-      "name": "Chucky Hepburn",
-      "status": "Day-To-Day",
-      "min": 7,
-      "costs": -5.5
-     }
-    ]
+    "out": []
    }
   },
   "2027_20261102_UTA_SAS": {
@@ -29635,7 +29710,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    },
    "away": {
     "team": "WAS",
@@ -30146,15 +30229,15 @@
    }
   },
   "2027_20261104_CHI_NYK": {
-   "pHome": 0.866,
-   "spread": -12.5,
-   "total": 230.7,
+   "pHome": 0.8714,
+   "spread": -12.8,
+   "total": 230.1,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -30215,15 +30298,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -30236,10 +30310,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -30340,9 +30423,9 @@
    }
   },
   "2027_20261104_CLE_OKC": {
-   "pHome": 0.7198,
-   "spread": -6.3,
-   "total": 231.7,
+   "pHome": 0.6984,
+   "spread": -5.6,
+   "total": 232,
    "pace": 103.1,
    "home": {
     "team": "OKC",
@@ -30458,9 +30541,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -30530,15 +30613,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -30551,19 +30625,28 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
    }
   },
   "2027_20261104_DAL_SAS": {
-   "pHome": 0.8515,
-   "spread": -11.7,
-   "total": 230.2,
+   "pHome": 0.8361,
+   "spread": -10.9,
+   "total": 230.1,
    "pace": 103.1,
    "home": {
     "team": "SAS",
@@ -30661,9 +30744,9 @@
    },
    "away": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -30733,22 +30816,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -31133,15 +31216,15 @@
    }
   },
   "2027_20261104_MIA_LAC": {
-   "pHome": 0.453,
+   "pHome": 0.4534,
    "spread": 1.3,
    "total": 232.4,
    "pace": 103.1,
    "home": {
     "team": "LAC",
-    "strength": 1491.5,
-    "offence": 3.8,
-    "defence": -12.3,
+    "strength": 1491.8,
+    "offence": 4,
+    "defence": -12.2,
     "coach": {
      "name": "Tyronn Lue",
      "elo": -0.1
@@ -31154,7 +31237,7 @@
       "min": 31,
       "o": 14,
       "d": -4,
-      "adds": 6.4
+      "adds": 6.3
      },
      {
       "id": "4396907",
@@ -31163,7 +31246,7 @@
       "min": 30,
       "o": 42,
       "d": -6,
-      "adds": 22.7
+      "adds": 22.8
      },
      {
       "id": "3448",
@@ -31172,7 +31255,7 @@
       "min": 30,
       "o": 1,
       "d": 27,
-      "adds": 17.9
+      "adds": 18
      },
      {
       "id": "2991139",
@@ -31181,7 +31264,7 @@
       "min": 27,
       "o": 3,
       "d": -1,
-      "adds": 1.3
+      "adds": 1.2
      },
      {
       "id": "3936099",
@@ -31190,7 +31273,7 @@
       "min": 24,
       "o": 5,
       "d": 22,
-      "adds": 13.6
+      "adds": 13.7
      },
      {
       "id": "4702352",
@@ -31199,7 +31282,7 @@
       "min": 19,
       "o": -16,
       "d": -21,
-      "adds": -14
+      "adds": -14.1
      },
      {
       "id": "4432170",
@@ -31208,7 +31291,7 @@
       "min": 18,
       "o": -6,
       "d": 1,
-      "adds": -1.5
+      "adds": -1.6
      },
      {
       "id": "4398390",
@@ -31217,25 +31300,7 @@
       "min": 14,
       "o": -3,
       "d": -7,
-      "adds": -2.7
-     },
-     {
-      "id": "5159895",
-      "name": "Yuki Kawamura",
-      "pos": "G",
-      "min": 14,
-      "o": -13,
-      "d": -12,
-      "adds": -6.7
-     },
-     {
-      "id": "5105853",
-      "name": "Fletcher Loyer",
-      "pos": "G",
-      "min": 12,
-      "o": -32,
-      "d": -32,
-      "adds": -16
+      "adds": -2.8
      },
      {
       "id": "5105832",
@@ -31244,16 +31309,43 @@
       "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -16
+      "adds": -16.2
      },
      {
       "id": "5075626",
       "name": "Baba Miller",
       "pos": "F",
-      "min": 10,
+      "min": 12,
       "o": -32,
       "d": -32,
-      "adds": -13
+      "adds": -16.2
+     },
+     {
+      "id": "5254165",
+      "name": "Keaton Wagler",
+      "pos": "G",
+      "min": 12,
+      "o": -32,
+      "d": -32,
+      "adds": -16.2
+     },
+     {
+      "id": "4845363",
+      "name": "Cam Christie",
+      "pos": "G",
+      "min": 5,
+      "o": -11,
+      "d": -14,
+      "adds": -2.5
+     },
+     {
+      "id": "5106258",
+      "name": "Gradey Dick",
+      "pos": "G",
+      "min": 5,
+      "o": -8,
+      "d": -2,
+      "adds": -1
      }
     ],
     "out": [
@@ -31390,15 +31482,15 @@
    }
   },
   "2027_20261104_MIL_BOS": {
-   "pHome": 0.7929,
-   "spread": -9,
-   "total": 232.4,
+   "pHome": 0.8112,
+   "spread": -9.8,
+   "total": 232.2,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -31459,15 +31551,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -31480,10 +31563,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -31952,15 +32044,15 @@
    }
   },
   "2027_20261104_POR_PHX": {
-   "pHome": 0.5699,
-   "spread": -1.9,
-   "total": 231.2,
+   "pHome": 0.5827,
+   "spread": -2.2,
+   "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -31970,19 +32062,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -31991,16 +32074,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -32009,7 +32092,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -32018,7 +32101,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -32027,7 +32110,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -32036,7 +32119,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -32144,15 +32245,15 @@
    }
   },
   "2027_20261104_TOR_DEN": {
-   "pHome": 0.654,
-   "spread": -4.3,
-   "total": 235.6,
+   "pHome": 0.6653,
+   "spread": -4.6,
+   "total": 236.2,
    "pace": 103.1,
    "home": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -32186,15 +32287,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -32225,10 +32317,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -32333,15 +32434,7 @@
       "adds": -9.1
      }
     ],
-    "out": [
-     {
-      "id": "4590360",
-      "name": "Chucky Hepburn",
-      "status": "Day-To-Day",
-      "min": 7,
-      "costs": -5.5
-     }
-    ]
+    "out": []
    }
   },
   "2027_20261104_UTA_NOP": {
@@ -32530,15 +32623,15 @@
    }
   },
   "2027_20261105_MIA_GSW": {
-   "pHome": 0.4996,
-   "spread": 0,
+   "pHome": 0.5155,
+   "spread": -0.4,
    "total": 232.2,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -32581,15 +32674,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -32629,10 +32713,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -32755,15 +32848,15 @@
    }
   },
   "2027_20261105_ORL_PHX": {
-   "pHome": 0.5319,
-   "spread": -0.9,
-   "total": 227.6,
+   "pHome": 0.5449,
+   "spread": -1.2,
+   "total": 227.3,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -32773,19 +32866,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -32794,16 +32878,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -32812,7 +32896,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -32821,7 +32905,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -32830,7 +32914,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -32839,7 +32923,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -32962,13 +33064,21 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    }
   },
   "2027_20261106_BOS_CHA": {
-   "pHome": 0.4612,
-   "spread": 1,
-   "total": 231.2,
+   "pHome": 0.4328,
+   "spread": 1.8,
+   "total": 231,
    "pace": 103.1,
    "home": {
     "team": "CHA",
@@ -33075,9 +33185,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -33138,15 +33248,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -33159,10 +33260,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -33565,15 +33675,15 @@
    }
   },
   "2027_20261106_PHI_CLE": {
-   "pHome": 0.571,
-   "spread": -1.9,
-   "total": 235.2,
+   "pHome": 0.5962,
+   "spread": -2.6,
+   "total": 235.6,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -33643,15 +33753,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -33664,10 +33765,19 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
@@ -34330,15 +34440,15 @@
    }
   },
   "2027_20261106_UTA_DAL": {
-   "pHome": 0.6602,
-   "spread": -4.5,
-   "total": 233,
+   "pHome": 0.686,
+   "spread": -5.2,
+   "total": 232.9,
    "pace": 103.1,
    "home": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -34408,22 +34518,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -34920,9 +35030,9 @@
    }
   },
   "2027_20261107_DEN_IND": {
-   "pHome": 0.3982,
-   "spread": 2.8,
-   "total": 237.9,
+   "pHome": 0.3862,
+   "spread": 3.1,
+   "total": 238.5,
    "pace": 103.1,
    "home": {
     "team": "IND",
@@ -35019,9 +35129,9 @@
    },
    "away": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -35055,15 +35165,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -35094,10 +35195,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -35112,15 +35222,15 @@
    }
   },
   "2027_20261107_HOU_PHX": {
-   "pHome": 0.4572,
-   "spread": 1.2,
-   "total": 231.1,
+   "pHome": 0.4702,
+   "spread": 0.8,
+   "total": 230.8,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -35130,19 +35240,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -35151,16 +35252,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -35169,7 +35270,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -35178,7 +35279,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -35187,7 +35288,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -35196,7 +35297,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -35296,15 +35415,15 @@
    }
   },
   "2027_20261107_NYK_CLE": {
-   "pHome": 0.3119,
-   "spread": 5.3,
-   "total": 233.5,
+   "pHome": 0.3242,
+   "spread": 4.9,
+   "total": 233.2,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -35374,15 +35493,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -35395,19 +35505,28 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -35468,15 +35587,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -35489,25 +35599,34 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
    }
   },
   "2027_20261107_ORL_GSW": {
-   "pHome": 0.4343,
-   "spread": 1.8,
+   "pHome": 0.4499,
+   "spread": 1.3,
    "total": 228.1,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1474.1,
-    "offence": -6.1,
-    "defence": -16.4,
+    "strength": 1486.4,
+    "offence": -0.1,
+    "defence": -10.1,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -35550,15 +35669,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -35598,10 +35708,19 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 6,
+      "min": 21,
       "o": -13,
       "d": -16,
-      "adds": -3.9
+      "adds": -12
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 11,
+      "o": -8,
+      "d": -7,
+      "adds": -3.5
      }
     ],
     "out": [
@@ -35738,7 +35857,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    }
   },
   "2027_20261107_SAS_POR": {
@@ -36155,15 +36282,15 @@
    }
   },
   "2027_20261108_BKN_DAL": {
-   "pHome": 0.7338,
-   "spread": -6.8,
-   "total": 230.4,
+   "pHome": 0.7561,
+   "spread": -7.6,
+   "total": 230.3,
    "pace": 103.1,
    "home": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -36233,22 +36360,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -36349,9 +36476,9 @@
    }
   },
   "2027_20261108_BOS_MIL": {
-   "pHome": 0.2984,
-   "spread": 5.7,
-   "total": 232.4,
+   "pHome": 0.2749,
+   "spread": 6.5,
+   "total": 232.2,
    "pace": 103.1,
    "home": {
     "team": "MIL",
@@ -36440,9 +36567,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -36503,15 +36630,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -36524,10 +36642,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -37492,9 +37619,9 @@
    }
   },
   "2027_20261109_CLE_CHA": {
-   "pHome": 0.5334,
-   "spread": -0.9,
-   "total": 233,
+   "pHome": 0.5075,
+   "spread": -0.2,
+   "total": 233.3,
    "pace": 103.1,
    "home": {
     "team": "CHA",
@@ -37601,9 +37728,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -37673,15 +37800,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -37694,19 +37812,28 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
    }
   },
   "2027_20261109_DEN_HOU": {
-   "pHome": 0.6777,
-   "spread": -5,
-   "total": 236,
+   "pHome": 0.6665,
+   "spread": -4.6,
+   "total": 236.6,
    "pace": 103.1,
    "home": {
     "team": "HOU",
@@ -37795,9 +37922,9 @@
    },
    "away": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -37831,15 +37958,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -37870,10 +37988,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -37888,15 +38015,15 @@
    }
   },
   "2027_20261109_IND_DAL": {
-   "pHome": 0.4444,
-   "spread": 1.5,
-   "total": 232.7,
+   "pHome": 0.4736,
+   "spread": 0.7,
+   "total": 232.6,
    "pace": 103.1,
    "home": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -37966,22 +38093,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -38469,15 +38596,15 @@
    }
   },
   "2027_20261109_NOP_GSW": {
-   "pHome": 0.6881,
-   "spread": -5.3,
-   "total": 233.6,
+   "pHome": 0.718,
+   "spread": -6.3,
+   "total": 233.9,
    "pace": 103.1,
    "home": {
     "team": "GSW",
-    "strength": 1481.4,
-    "offence": -6.1,
-    "defence": -9.1,
+    "strength": 1509,
+    "offence": 11.2,
+    "defence": 1.2,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -38520,15 +38647,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -38568,10 +38686,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 9,
+      "o": -13,
+      "d": -16,
+      "adds": -5
      }
     ],
     "out": [
@@ -38678,15 +38805,15 @@
    }
   },
   "2027_20261109_SAS_PHX": {
-   "pHome": 0.3883,
-   "spread": 3,
-   "total": 230.5,
+   "pHome": 0.4008,
+   "spread": 2.7,
+   "total": 230.2,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -38696,19 +38823,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -38717,16 +38835,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -38735,7 +38853,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -38744,7 +38862,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -38753,7 +38871,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -38762,7 +38880,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -39073,9 +39209,9 @@
    }
   },
   "2027_20261110_BOS_PHI": {
-   "pHome": 0.4995,
-   "spread": 0,
-   "total": 233.4,
+   "pHome": 0.4707,
+   "spread": 0.8,
+   "total": 233.3,
    "pace": 103.1,
    "home": {
     "team": "PHI",
@@ -39172,9 +39308,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -39235,15 +39371,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -39256,25 +39383,34 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
    }
   },
   "2027_20261110_LAC_PHX": {
-   "pHome": 0.517,
-   "spread": -0.5,
-   "total": 232.3,
+   "pHome": 0.5301,
+   "spread": -0.8,
+   "total": 232,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -39284,19 +39420,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -39305,16 +39432,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -39323,7 +39450,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -39332,7 +39459,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -39341,7 +39468,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -39350,7 +39477,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -39661,15 +39806,15 @@
    }
   },
   "2027_20261110_MIL_NYK": {
-   "pHome": 0.8733,
-   "spread": -12.9,
-   "total": 232.1,
+   "pHome": 0.8784,
+   "spread": -13.3,
+   "total": 231.5,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -39730,15 +39875,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -39751,10 +39887,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -40256,7 +40401,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    }
   },
   "2027_20261111_BKN_NOP": {
@@ -40445,9 +40598,9 @@
    }
   },
   "2027_20261111_BOS_TOR": {
-   "pHome": 0.5578,
-   "spread": -1.6,
-   "total": 231.2,
+   "pHome": 0.5292,
+   "spread": -0.8,
+   "total": 231,
    "pace": 103.1,
    "home": {
     "team": "TOR",
@@ -40545,9 +40698,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -40608,15 +40761,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -40629,25 +40773,34 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
    }
   },
   "2027_20261111_CLE_NYK": {
-   "pHome": 0.6876,
-   "spread": -5.3,
-   "total": 233.5,
+   "pHome": 0.6754,
+   "spread": -4.9,
+   "total": 233.2,
    "pace": 103.1,
    "home": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -40708,15 +40861,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -40729,19 +40873,28 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
    },
    "away": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -40811,15 +40964,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -40832,19 +40976,28 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
    }
   },
   "2027_20261111_DEN_MEM": {
-   "pHome": 0.2799,
-   "spread": 6.3,
-   "total": 237,
+   "pHome": 0.2698,
+   "spread": 6.7,
+   "total": 237.6,
    "pace": 103.1,
    "home": {
     "team": "MEM",
@@ -40942,9 +41095,9 @@
    },
    "away": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -40978,15 +41131,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -41017,10 +41161,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -41035,9 +41188,9 @@
    }
   },
   "2027_20261111_GSW_HOU": {
-   "pHome": 0.7816,
-   "spread": -8.5,
-   "total": 231.4,
+   "pHome": 0.7562,
+   "spread": -7.6,
+   "total": 231.6,
    "pace": 103.1,
    "home": {
     "team": "HOU",
@@ -41126,9 +41279,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1481.4,
-    "offence": -6.1,
-    "defence": -9.1,
+    "strength": 1509,
+    "offence": 11.2,
+    "defence": 1.2,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -41171,15 +41324,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -41219,10 +41363,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 9,
+      "o": -13,
+      "d": -16,
+      "adds": -5
      }
     ],
     "out": [
@@ -41848,7 +42001,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    }
   },
   "2027_20261111_SAS_CHI": {
@@ -42247,15 +42408,15 @@
    }
   },
   "2027_20261112_CHA_PHX": {
-   "pHome": 0.6097,
-   "spread": -3,
-   "total": 230.6,
+   "pHome": 0.6221,
+   "spread": -3.3,
+   "total": 230.4,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -42265,19 +42426,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -42286,16 +42438,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -42304,7 +42456,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -42313,7 +42465,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -42322,7 +42474,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -42331,7 +42483,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -42449,9 +42619,9 @@
    }
   },
   "2027_20261112_DAL_MIN": {
-   "pHome": 0.7023,
-   "spread": -5.8,
-   "total": 231,
+   "pHome": 0.6771,
+   "spread": -5,
+   "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "MIN",
@@ -42548,9 +42718,9 @@
    },
    "away": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -42620,22 +42790,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -43231,9 +43401,9 @@
    }
   },
   "2027_20261113_CLE_MIA": {
-   "pHome": 0.5535,
-   "spread": -1.4,
-   "total": 233.9,
+   "pHome": 0.5277,
+   "spread": -0.7,
+   "total": 234.3,
    "pace": 103.1,
    "home": {
     "team": "MIA",
@@ -43331,9 +43501,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -43403,15 +43573,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -43424,19 +43585,28 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
    }
   },
   "2027_20261113_GSW_SAS": {
-   "pHome": 0.838,
-   "spread": -11,
-   "total": 230.8,
+   "pHome": 0.8176,
+   "spread": -10.1,
+   "total": 231.1,
    "pace": 103.1,
    "home": {
     "team": "SAS",
@@ -43534,9 +43704,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1481.4,
-    "offence": -6.1,
-    "defence": -9.1,
+    "strength": 1509,
+    "offence": 11.2,
+    "defence": 1.2,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -43579,15 +43749,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -43627,10 +43788,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 9,
+      "o": -13,
+      "d": -16,
+      "adds": -5
      }
     ],
     "out": [
@@ -43951,7 +44121,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    },
    "away": {
     "team": "MIL",
@@ -44040,9 +44218,9 @@
    }
   },
   "2027_20261113_NYK_IND": {
-   "pHome": 0.2813,
-   "spread": 6.3,
-   "total": 233.2,
+   "pHome": 0.2719,
+   "spread": 6.6,
+   "total": 232.6,
    "pace": 103.1,
    "home": {
     "team": "IND",
@@ -44139,9 +44317,9 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -44202,15 +44380,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -44223,10 +44392,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -45209,15 +45387,15 @@
    }
   },
   "2027_20261114_DAL_CLE": {
-   "pHome": 0.6646,
-   "spread": -4.6,
-   "total": 232.9,
+   "pHome": 0.6616,
+   "spread": -4.5,
+   "total": 233.2,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -45287,15 +45465,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -45308,19 +45477,28 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
    },
    "away": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -45390,31 +45568,31 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
    }
   },
   "2027_20261114_DEN_NOP": {
-   "pHome": 0.3025,
-   "spread": 5.6,
-   "total": 238.3,
+   "pHome": 0.2919,
+   "spread": 5.9,
+   "total": 238.9,
    "pace": 103.1,
    "home": {
     "team": "NOP",
@@ -45503,9 +45681,9 @@
    },
    "away": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -45539,15 +45717,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -45578,10 +45747,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -46186,15 +46364,15 @@
    }
   },
   "2027_20261115_DAL_BOS": {
-   "pHome": 0.812,
+   "pHome": 0.8116,
    "spread": -9.8,
-   "total": 231.2,
+   "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -46255,15 +46433,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -46276,19 +46445,28 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
    },
    "away": {
     "team": "DAL",
-    "strength": 1467.4,
-    "offence": -22.2,
-    "defence": -10.5,
+    "strength": 1490,
+    "offence": -11.9,
+    "defence": 1.8,
     "coach": {
      "name": "Dusty May",
      "elo": 0
@@ -46358,22 +46536,22 @@
       "adds": -22.9
      },
      {
-      "id": "4898238",
-      "name": "John Poulakidas",
-      "pos": "G",
-      "min": 24,
-      "o": -19,
-      "d": -21,
-      "adds": -20.3
-     },
-     {
       "id": "4278049",
       "name": "Daniel Gafford",
       "pos": "F",
-      "min": 15,
+      "min": 21,
       "o": -4,
       "d": 0,
-      "adds": -0.9
+      "adds": -1.7
+     },
+     {
+      "id": "2531367",
+      "name": "Dwight Powell",
+      "pos": "F",
+      "min": 17,
+      "o": 3,
+      "d": 5,
+      "adds": 2.8
      }
     ],
     "out": []
@@ -46765,15 +46943,15 @@
    }
   },
   "2027_20261115_LAL_PHX": {
-   "pHome": 0.6101,
-   "spread": -3,
-   "total": 232.1,
+   "pHome": 0.6225,
+   "spread": -3.4,
+   "total": 231.8,
    "pace": 103.1,
    "home": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -46783,19 +46961,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -46804,16 +46973,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -46822,7 +46991,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -46831,7 +47000,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -46840,7 +47009,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -46849,7 +47018,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -46958,9 +47145,9 @@
    }
   },
   "2027_20261115_NYK_TOR": {
-   "pHome": 0.371,
-   "spread": 3.5,
-   "total": 230.9,
+   "pHome": 0.36,
+   "spread": 3.9,
+   "total": 230.3,
    "pace": 103.1,
    "home": {
     "team": "TOR",
@@ -47058,9 +47245,9 @@
    },
    "away": {
     "team": "NYK",
-    "strength": 1712.9,
-    "offence": 103.4,
-    "defence": 100.5,
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
     "coach": {
      "name": "Mike Brown",
      "elo": 8.8
@@ -47121,15 +47308,6 @@
       "adds": 7.8
      },
      {
-      "id": "4065670",
-      "name": "Bruce Brown",
-      "pos": "G",
-      "min": 23,
-      "o": 13,
-      "d": -7,
-      "adds": 3
-     },
-     {
       "id": "3914044",
       "name": "Landry Shamet",
       "pos": "G",
@@ -47142,10 +47320,19 @@
       "id": "4277869",
       "name": "Jose Alvarado",
       "pos": "G",
-      "min": 12,
+      "min": 22,
       "o": 7,
       "d": 31,
-      "adds": 9.5
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
      }
     ],
     "out": []
@@ -47549,15 +47736,15 @@
    }
   },
   "2027_20261116_CHI_CLE": {
-   "pHome": 0.7512,
-   "spread": -7.4,
-   "total": 232.8,
+   "pHome": 0.7701,
+   "spread": -8.1,
+   "total": 233.1,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1580.8,
-    "offence": 67.1,
-    "defence": 10.9,
+    "strength": 1600.9,
+    "offence": 81.5,
+    "defence": 16.6,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -47627,15 +47814,6 @@
       "adds": 2.9
      },
      {
-      "id": "4701845",
-      "name": "Kadary Richmond",
-      "pos": "G",
-      "min": 22,
-      "o": -20,
-      "d": -18,
-      "adds": -17.4
-     },
-     {
       "id": "4683747",
       "name": "Jaylon Tyson",
       "pos": "G",
@@ -47648,10 +47826,19 @@
       "id": "3934723",
       "name": "Thomas Bryant",
       "pos": "C",
-      "min": 10,
+      "min": 19,
       "o": 11,
       "d": 6,
-      "adds": 3.4
+      "adds": 6.4
+     },
+     {
+      "id": "4576087",
+      "name": "Peyton Watson",
+      "pos": "G",
+      "min": 13,
+      "o": 13,
+      "d": -14,
+      "adds": -0.4
      }
     ],
     "out": []
@@ -47752,9 +47939,9 @@
    }
   },
   "2027_20261116_GSW_NOP": {
-   "pHome": 0.4817,
-   "spread": 0.5,
-   "total": 233.6,
+   "pHome": 0.4461,
+   "spread": 1.5,
+   "total": 233.9,
    "pace": 103.1,
    "home": {
     "team": "NOP",
@@ -47843,9 +48030,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1481.4,
-    "offence": -6.1,
-    "defence": -9.1,
+    "strength": 1509,
+    "offence": 11.2,
+    "defence": 1.2,
     "coach": {
      "name": "Steve Kerr",
      "elo": -3.5
@@ -47888,15 +48075,6 @@
       "adds": -12.6
      },
      {
-      "id": "4431914",
-      "name": "Tyler Burton",
-      "pos": "F",
-      "min": 25,
-      "o": -22,
-      "d": -24,
-      "adds": -24.3
-     },
-     {
       "id": "4397040",
       "name": "Brandon Williams",
       "pos": "G",
@@ -47936,10 +48114,19 @@
       "id": "2990969",
       "name": "Georges Niang",
       "pos": "F",
-      "min": 4,
+      "min": 21,
       "o": 23,
       "d": 2,
-      "adds": 2
+      "adds": 10.7
+     },
+     {
+      "id": "4897449",
+      "name": "Malevy Leons",
+      "pos": "F",
+      "min": 9,
+      "o": -13,
+      "d": -16,
+      "adds": -5
      }
     ],
     "out": [
@@ -48348,15 +48535,15 @@
    }
   },
   "2027_20261116_ORL_BOS": {
-   "pHome": 0.5809,
-   "spread": -2.2,
-   "total": 228.1,
+   "pHome": 0.6086,
+   "spread": -3,
+   "total": 227.9,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1622.2,
-    "offence": 62.9,
-    "defence": 52.6,
+    "strength": 1644.4,
+    "offence": 71.7,
+    "defence": 66,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -48417,15 +48604,6 @@
       "adds": 15
      },
      {
-      "id": "5176420",
-      "name": "Hayden Gray",
-      "pos": "G",
-      "min": 25,
-      "o": -21,
-      "d": -20,
-      "adds": -21.3
-     },
-     {
       "id": "4397424",
       "name": "Neemias Queta",
       "pos": "C",
@@ -48438,10 +48616,19 @@
       "id": "4593841",
       "name": "Baylor Scheierman",
       "pos": "G",
-      "min": 4,
+      "min": 24,
       "o": -7,
       "d": 4,
-      "adds": -0.5
+      "adds": -1.6
+     },
+     {
+      "id": "4277951",
+      "name": "Luka Garza",
+      "pos": "C",
+      "min": 5,
+      "o": 9,
+      "d": 12,
+      "adds": 2.2
      }
     ],
     "out": []
@@ -48556,7 +48743,15 @@
       "adds": -1.3
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5214637",
+      "name": "Noah Penda",
+      "status": "Out",
+      "min": 5,
+      "costs": -4.2
+     }
+    ]
    }
   },
   "2027_20261116_PHI_BKN": {
@@ -48753,15 +48948,15 @@
    }
   },
   "2027_20261116_PHX_DEN": {
-   "pHome": 0.6731,
+   "pHome": 0.6727,
    "spread": -4.8,
-   "total": 235.8,
+   "total": 236.1,
    "pace": 103.1,
    "home": {
     "team": "DEN",
-    "strength": 1571.2,
-    "offence": 98.2,
-    "defence": -25.2,
+    "strength": 1581,
+    "offence": 110.8,
+    "defence": -27.9,
     "coach": {
      "name": "David Adelman",
      "elo": -1.9
@@ -48795,15 +48990,6 @@
       "adds": 63.5
      },
      {
-      "id": "4277890",
-      "name": "Lonnie Walker IV",
-      "pos": "G",
-      "min": 34,
-      "o": -5,
-      "d": -10,
-      "adds": -10.5
-     },
-     {
       "id": "3138196",
       "name": "Cameron Johnson",
       "pos": "F",
@@ -48834,10 +49020,19 @@
       "id": "3978",
       "name": "DeMar DeRozan",
       "pos": "G",
-      "min": 8,
+      "min": 27,
       "o": 21,
       "d": -21,
-      "adds": -0.1
+      "adds": 0
+     },
+     {
+      "id": "4277848",
+      "name": "Marvin Bagley III",
+      "pos": "F",
+      "min": 15,
+      "o": 1,
+      "d": -4,
+      "adds": -0.8
      }
     ],
     "out": [
@@ -48852,9 +49047,9 @@
    },
    "away": {
     "team": "PHX",
-    "strength": 1598,
-    "offence": 45.4,
-    "defence": 49.6,
+    "strength": 1608.2,
+    "offence": 47,
+    "defence": 58.1,
     "coach": {
      "name": "Jordan Ott",
      "elo": 3
@@ -48864,19 +49059,10 @@
       "id": "3136193",
       "name": "Devin Booker",
       "pos": "G",
-      "min": 39,
+      "min": 38,
       "o": 43,
       "d": 4,
-      "adds": 38.5
-     },
-     {
-      "id": "4432646",
-      "name": "Kennedy Chandler",
-      "pos": "G",
-      "min": 33,
-      "o": -12,
-      "d": -15,
-      "adds": -18.1
+      "adds": 37.8
      },
      {
       "id": "3155526",
@@ -48885,16 +49071,16 @@
       "min": 31,
       "o": 3,
       "d": 45,
-      "adds": 31.1
+      "adds": 30.8
      },
      {
       "id": "4437244",
       "name": "Jalen Green",
       "pos": "G",
-      "min": 31,
+      "min": 30,
       "o": 2,
       "d": 9,
-      "adds": 7.2
+      "adds": 6.9
      },
      {
       "id": "4066383",
@@ -48903,7 +49089,7 @@
       "min": 30,
       "o": 21,
       "d": 18,
-      "adds": 24.3
+      "adds": 24.1
      },
      {
       "id": "3913174",
@@ -48912,7 +49098,7 @@
       "min": 27,
       "o": 21,
       "d": 15,
-      "adds": 20.6
+      "adds": 20.4
      },
      {
       "id": "4278402",
@@ -48921,7 +49107,7 @@
       "min": 25,
       "o": -3,
       "d": 9,
-      "adds": 3.1
+      "adds": 3.2
      },
      {
       "id": "4592714",
@@ -48930,7 +49116,25 @@
       "min": 23,
       "o": -14,
       "d": -11,
-      "adds": -12
+      "adds": -11.7
+     },
+     {
+      "id": "4278585",
+      "name": "Collin Gillespie",
+      "pos": "G",
+      "min": 21,
+      "o": -5,
+      "d": 2,
+      "adds": -1.1
+     },
+     {
+      "id": "4601023",
+      "name": "Oso Ighodaro",
+      "pos": "F",
+      "min": 15,
+      "o": -10,
+      "d": -6,
+      "adds": -5.1
      }
     ],
     "out": [
@@ -49135,7 +49339,992 @@
      }
     ]
    }
+  },
+  "2027_20261117_CHA_LAL": {
+   "pHome": 0.578,
+   "spread": -2.1,
+   "total": 231.9,
+   "pace": 103.1,
+   "home": {
+    "team": "LAL",
+    "strength": 1556.8,
+    "offence": 43.7,
+    "defence": 16.4,
+    "coach": {
+     "name": "JJ Redick",
+     "elo": -3.5
+    },
+    "lineup": [
+     {
+      "id": "3945274",
+      "name": "Luka Doncic",
+      "pos": "G",
+      "min": 35,
+      "o": 46,
+      "d": 7,
+      "adds": 39.1
+     },
+     {
+      "id": "4066457",
+      "name": "Austin Reaves",
+      "pos": "G",
+      "min": 34,
+      "o": 21,
+      "d": 16,
+      "adds": 25.7
+     },
+     {
+      "id": "4433136",
+      "name": "Walker Kessler",
+      "pos": "C",
+      "min": 31,
+      "o": -4,
+      "d": -7,
+      "adds": -7.2
+     },
+     {
+      "id": "4277811",
+      "name": "Collin Sexton",
+      "pos": "G",
+      "min": 30,
+      "o": 2,
+      "d": -9,
+      "adds": -4
+     },
+     {
+      "id": "4592691",
+      "name": "Jake LaRavia",
+      "pos": "F",
+      "min": 29,
+      "o": 6,
+      "d": -3,
+      "adds": 2
+     },
+     {
+      "id": "4433137",
+      "name": "Ziaire Williams",
+      "pos": "F",
+      "min": 24,
+      "o": -19,
+      "d": 5,
+      "adds": -6.7
+     },
+     {
+      "id": "4397014",
+      "name": "Quentin Grimes",
+      "pos": "G",
+      "min": 23,
+      "o": 5,
+      "d": 19,
+      "adds": 11.5
+     },
+     {
+      "id": "4278580",
+      "name": "Sandro Mamukelashvili",
+      "pos": "F",
+      "min": 21,
+      "o": 4,
+      "d": 7,
+      "adds": 5
+     },
+     {
+      "id": "4868423",
+      "name": "Jaden Hardy",
+      "pos": "G",
+      "min": 13,
+      "o": -3,
+      "d": -14,
+      "adds": -5.1
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "CHA",
+    "strength": 1543.5,
+    "offence": 13.9,
+    "defence": 24.5,
+    "coach": {
+     "name": "Charles Lee",
+     "elo": 5
+    },
+    "lineup": [
+     {
+      "id": "5061575",
+      "name": "Kon Knueppel",
+      "pos": "G",
+      "min": 32,
+      "o": 2,
+      "d": -4,
+      "adds": -1.1
+     },
+     {
+      "id": "4433287",
+      "name": "Brandon Miller",
+      "pos": "F",
+      "min": 32,
+      "o": 5,
+      "d": 12,
+      "adds": 10.8
+     },
+     {
+      "id": "4433249",
+      "name": "Moussa Diabate",
+      "pos": "F",
+      "min": 28,
+      "o": 5,
+      "d": 10,
+      "adds": 8.5
+     },
+     {
+      "id": "4396971",
+      "name": "Naz Reid",
+      "pos": "C",
+      "min": 27,
+      "o": -3,
+      "d": 20,
+      "adds": 9.2
+     },
+     {
+      "id": "3135045",
+      "name": "Grayson Allen",
+      "pos": "G",
+      "min": 22,
+      "o": 9,
+      "d": -6,
+      "adds": 1
+     },
+     {
+      "id": "2583632",
+      "name": "Royce O'Neale",
+      "pos": "F",
+      "min": 22,
+      "o": 5,
+      "d": 13,
+      "adds": 8
+     },
+     {
+      "id": "4066218",
+      "name": "Grant Williams",
+      "pos": "F",
+      "min": 20,
+      "o": 6,
+      "d": 15,
+      "adds": 8.7
+     },
+     {
+      "id": "3032979",
+      "name": "Dennis Schroder",
+      "pos": "G",
+      "min": 20,
+      "o": -7,
+      "d": -6,
+      "adds": -5.4
+     },
+     {
+      "id": "4395651",
+      "name": "Coby White",
+      "pos": "G",
+      "min": 19,
+      "o": 17,
+      "d": -8,
+      "adds": 3.3
+     },
+     {
+      "id": "4576060",
+      "name": "Ryan Kalkbrenner",
+      "pos": "C",
+      "min": 18,
+      "o": -7,
+      "d": -5,
+      "adds": -4.6
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261117_DET_SAS": {
+   "pHome": 0.7412,
+   "spread": -7.1,
+   "total": 229.9,
+   "pace": 103.1,
+   "home": {
+    "team": "SAS",
+    "strength": 1722.8,
+    "offence": 97.5,
+    "defence": 111.5,
+    "coach": {
+     "name": "Mitch Johnson",
+     "elo": 13.8
+    },
+    "lineup": [
+     {
+      "id": "4845367",
+      "name": "Stephon Castle",
+      "pos": "G",
+      "min": 33,
+      "o": 5,
+      "d": 13,
+      "adds": 12.4
+     },
+     {
+      "id": "4066259",
+      "name": "De'Aaron Fox",
+      "pos": "G",
+      "min": 33,
+      "o": 38,
+      "d": 17,
+      "adds": 37.4
+     },
+     {
+      "id": "4395630",
+      "name": "Devin Vassell",
+      "pos": "G",
+      "min": 32,
+      "o": 25,
+      "d": 25,
+      "adds": 33.9
+     },
+     {
+      "id": "5104157",
+      "name": "Victor Wembanyama",
+      "pos": "F",
+      "min": 28,
+      "o": 10,
+      "d": 32,
+      "adds": 25.1
+     },
+     {
+      "id": "4592479",
+      "name": "Julian Champagnie",
+      "pos": "F",
+      "min": 28,
+      "o": 17,
+      "d": 28,
+      "adds": 25.9
+     },
+     {
+      "id": "5037871",
+      "name": "Dylan Harper",
+      "pos": "G",
+      "min": 25,
+      "o": -4,
+      "d": 6,
+      "adds": 1.1
+     },
+     {
+      "id": "4395723",
+      "name": "Keldon Johnson",
+      "pos": "F",
+      "min": 23,
+      "o": 34,
+      "d": 26,
+      "adds": 29
+     },
+     {
+      "id": "6578",
+      "name": "Harrison Barnes",
+      "pos": "F",
+      "min": 23,
+      "o": 33,
+      "d": 25,
+      "adds": 27.8
+     },
+     {
+      "id": "3064560",
+      "name": "Luke Kornet",
+      "pos": "C",
+      "min": 15,
+      "o": 22,
+      "d": 31,
+      "adds": 16.5
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "DET",
+    "strength": 1573.2,
+    "offence": 21.4,
+    "defence": 42.2,
+    "coach": {
+     "name": "J.B. Bickerstaff",
+     "elo": 9.5
+    },
+    "lineup": [
+     {
+      "id": "4397449",
+      "name": "Elijah Harkless",
+      "pos": "G",
+      "min": 34,
+      "o": -14,
+      "d": -16,
+      "adds": -20.6
+     },
+     {
+      "id": "2990962",
+      "name": "Taurean Prince",
+      "pos": "F",
+      "min": 32,
+      "o": 3,
+      "d": -5,
+      "adds": -0.8
+     },
+     {
+      "id": "4433621",
+      "name": "Jalen Duren",
+      "pos": "C",
+      "min": 30,
+      "o": 11,
+      "d": 23,
+      "adds": 20.9
+     },
+     {
+      "id": "4684742",
+      "name": "Ausar Thompson",
+      "pos": "G",
+      "min": 26,
+      "o": 3,
+      "d": 20,
+      "adds": 12.9
+     },
+     {
+      "id": "3157465",
+      "name": "Duncan Robinson",
+      "pos": "F",
+      "min": 25,
+      "o": 15,
+      "d": 17,
+      "adds": 16.9
+     },
+     {
+      "id": "5107199",
+      "name": "Daniss Jenkins",
+      "pos": "G",
+      "min": 25,
+      "o": -7,
+      "d": 7,
+      "adds": -0.2
+     },
+     {
+      "id": "4432166",
+      "name": "Cade Cunningham",
+      "pos": "G",
+      "min": 24,
+      "o": 14,
+      "d": 29,
+      "adds": 21.2
+     },
+     {
+      "id": "4066372",
+      "name": "Kevin Huerter",
+      "pos": "G",
+      "min": 23,
+      "o": 18,
+      "d": 11,
+      "adds": 14.1
+     },
+     {
+      "id": "3908845",
+      "name": "John Collins",
+      "pos": "F",
+      "min": 22,
+      "o": 4,
+      "d": -5,
+      "adds": -0.3
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261117_NYK_TOR": {
+   "pHome": 0.3534,
+   "spread": 4.1,
+   "total": 230.3,
+   "pace": 103.1,
+   "home": {
+    "team": "TOR",
+    "strength": 1573.9,
+    "offence": 30.3,
+    "defence": 40.4,
+    "coach": {
+     "name": "Darko Rajakovic",
+     "elo": 3.1
+    },
+    "lineup": [
+     {
+      "id": "4397784",
+      "name": "Malachi Smith",
+      "pos": "G",
+      "min": 35,
+      "o": -26,
+      "d": -20,
+      "adds": -34.6
+     },
+     {
+      "id": "6450",
+      "name": "Kawhi Leonard",
+      "pos": "F",
+      "min": 33,
+      "o": 64,
+      "d": 18,
+      "adds": 57.4
+     },
+     {
+      "id": "4395625",
+      "name": "RJ Barrett",
+      "pos": "F",
+      "min": 32,
+      "o": 21,
+      "d": 15,
+      "adds": 23.6
+     },
+     {
+      "id": "4433134",
+      "name": "Scottie Barnes",
+      "pos": "F",
+      "min": 31,
+      "o": 5,
+      "d": 23,
+      "adds": 17.6
+     },
+     {
+      "id": "4684272",
+      "name": "Ja'Kobe Walter",
+      "pos": "G",
+      "min": 27,
+      "o": -9,
+      "d": 2,
+      "adds": -4.5
+     },
+     {
+      "id": "4432241",
+      "name": "Jamal Shead",
+      "pos": "G",
+      "min": 24,
+      "o": -12,
+      "d": 4,
+      "adds": -3.7
+     },
+     {
+      "id": "4395724",
+      "name": "Immanuel Quickley",
+      "pos": "G",
+      "min": 24,
+      "o": 21,
+      "d": 23,
+      "adds": 21.7
+     },
+     {
+      "id": "2993874",
+      "name": "Kyle Anderson",
+      "pos": "F",
+      "min": 21,
+      "o": -7,
+      "d": 12,
+      "adds": 2.3
+     },
+     {
+      "id": "5093267",
+      "name": "Collin Murray-Boyles",
+      "pos": "F",
+      "min": 13,
+      "o": -23,
+      "d": -10,
+      "adds": -9.1
+     }
+    ],
+    "out": []
+   },
+   "away": {
+    "team": "NYK",
+    "strength": 1722,
+    "offence": 100.2,
+    "defence": 113,
+    "coach": {
+     "name": "Mike Brown",
+     "elo": 8.8
+    },
+    "lineup": [
+     {
+      "id": "3934672",
+      "name": "Jalen Brunson",
+      "pos": "G",
+      "min": 35,
+      "o": 40,
+      "d": 19,
+      "adds": 43.3
+     },
+     {
+      "id": "3934719",
+      "name": "OG Anunoby",
+      "pos": "F",
+      "min": 32,
+      "o": 17,
+      "d": 24,
+      "adds": 27.5
+     },
+     {
+      "id": "3147657",
+      "name": "Mikal Bridges",
+      "pos": "G",
+      "min": 31,
+      "o": 24,
+      "d": 26,
+      "adds": 32.1
+     },
+     {
+      "id": "3136195",
+      "name": "Karl-Anthony Towns",
+      "pos": "C",
+      "min": 31,
+      "o": 38,
+      "d": 18,
+      "adds": 36.1
+     },
+     {
+      "id": "3062679",
+      "name": "Josh Hart",
+      "pos": "G",
+      "min": 30,
+      "o": 31,
+      "d": 25,
+      "adds": 34.8
+     },
+     {
+      "id": "6585",
+      "name": "Andre Drummond",
+      "pos": "C",
+      "min": 24,
+      "o": -8,
+      "d": 23,
+      "adds": 7.8
+     },
+     {
+      "id": "3914044",
+      "name": "Landry Shamet",
+      "pos": "G",
+      "min": 22,
+      "o": 1,
+      "d": 21,
+      "adds": 10
+     },
+     {
+      "id": "4277869",
+      "name": "Jose Alvarado",
+      "pos": "G",
+      "min": 22,
+      "o": 7,
+      "d": 31,
+      "adds": 17.3
+     },
+     {
+      "id": "4431823",
+      "name": "Miles McBride",
+      "pos": "G",
+      "min": 13,
+      "o": 6,
+      "d": 10,
+      "adds": 4.2
+     }
+    ],
+    "out": []
+   }
+  },
+  "2027_20261117_POR_MIN": {
+   "pHome": 0.526,
+   "spread": -0.7,
+   "total": 231.6,
+   "pace": 103.1,
+   "home": {
+    "team": "MIN",
+    "strength": 1566.2,
+    "offence": 34.9,
+    "defence": 28.8,
+    "coach": {
+     "name": "Chris Finch",
+     "elo": 2.4
+    },
+    "lineup": [
+     {
+      "id": "4895758",
+      "name": "Cody Williams",
+      "pos": "F",
+      "min": 36,
+      "o": -21,
+      "d": -27,
+      "adds": -36
+     },
+     {
+      "id": "4432816",
+      "name": "LaMelo Ball",
+      "pos": "G",
+      "min": 33,
+      "o": 35,
+      "d": 10,
+      "adds": 30.6
+     },
+     {
+      "id": "4431671",
+      "name": "Jaden McDaniels",
+      "pos": "F",
+      "min": 33,
+      "o": 9,
+      "d": 19,
+      "adds": 19.1
+     },
+     {
+      "id": "4397002",
+      "name": "Ayo Dosunmu",
+      "pos": "G",
+      "min": 32,
+      "o": -14,
+      "d": -8,
+      "adds": -14.6
+     },
+     {
+      "id": "4594268",
+      "name": "Anthony Edwards",
+      "pos": "G",
+      "min": 30,
+      "o": 27,
+      "d": 6,
+      "adds": 20.9
+     },
+     {
+      "id": "3136196",
+      "name": "Trey Lyles",
+      "pos": "F",
+      "min": 30,
+      "o": 12,
+      "d": -3,
+      "adds": 5.4
+     },
+     {
+      "id": "3032976",
+      "name": "Rudy Gobert",
+      "pos": "C",
+      "min": 29,
+      "o": 6,
+      "d": 52,
+      "adds": 35.1
+     },
+     {
+      "id": "4592492",
+      "name": "Bones Hyland",
+      "pos": "G",
+      "min": 17,
+      "o": 10,
+      "d": 0,
+      "adds": 3.4
+     }
+    ],
+    "out": [
+     {
+      "id": "3934673",
+      "name": "Donte DiVincenzo",
+      "status": "Out",
+      "min": 23,
+      "costs": 7.2
+     }
+    ]
+   },
+   "away": {
+    "team": "POR",
+    "strength": 1594.2,
+    "offence": 48.7,
+    "defence": 45.5,
+    "coach": {
+     "name": "Micah Nori",
+     "elo": 0
+    },
+    "lineup": [
+     {
+      "id": "4683021",
+      "name": "Deni Avdija",
+      "pos": "F",
+      "min": 37,
+      "o": 4,
+      "d": 27,
+      "adds": 23.3
+     },
+     {
+      "id": "4431736",
+      "name": "Toumani Camara",
+      "pos": "F",
+      "min": 36,
+      "o": -11,
+      "d": 8,
+      "adds": -2.5
+     },
+     {
+      "id": "6606",
+      "name": "Damian Lillard",
+      "pos": "G",
+      "min": 35,
+      "o": 36,
+      "d": -5,
+      "adds": 23
+     },
+     {
+      "id": "3995",
+      "name": "Jrue Holiday",
+      "pos": "G",
+      "min": 35,
+      "o": 31,
+      "d": 20,
+      "adds": 36.7
+     },
+     {
+      "id": "4279888",
+      "name": "Ja Morant",
+      "pos": "G",
+      "min": 30,
+      "o": 29,
+      "d": 6,
+      "adds": 21.6
+     },
+     {
+      "id": "4683678",
+      "name": "Scoot Henderson",
+      "pos": "G",
+      "min": 30,
+      "o": -6,
+      "d": 5,
+      "adds": -0.7
+     },
+     {
+      "id": "5105565",
+      "name": "Donovan Clingan",
+      "pos": "C",
+      "min": 28,
+      "o": -11,
+      "d": 2,
+      "adds": -5.5
+     },
+     {
+      "id": "4066399",
+      "name": "Micah Potter",
+      "pos": "C",
+      "min": 10,
+      "o": -1,
+      "d": -5,
+      "adds": -1.4
+     }
+    ],
+    "out": [
+     {
+      "id": "4914336",
+      "name": "Shaedon Sharpe",
+      "status": "Out",
+      "min": 20,
+      "costs": -1
+     }
+    ]
+   }
+  },
+  "2027_20261117_UTA_LAC": {
+   "pHome": 0.793,
+   "spread": -9,
+   "total": 234.7,
+   "pace": 103.1,
+   "home": {
+    "team": "LAC",
+    "strength": 1584.7,
+    "offence": 58.4,
+    "defence": 26.4,
+    "coach": {
+     "name": "Tyronn Lue",
+     "elo": -0.1
+    },
+    "lineup": [
+     {
+      "id": "3913176",
+      "name": "Brandon Ingram",
+      "pos": "F",
+      "min": 34,
+      "o": 17,
+      "d": 14,
+      "adds": 21.9
+     },
+     {
+      "id": "4066648",
+      "name": "Rui Hachimura",
+      "pos": "F",
+      "min": 31,
+      "o": 14,
+      "d": -4,
+      "adds": 6.3
+     },
+     {
+      "id": "4396907",
+      "name": "Darius Garland",
+      "pos": "G",
+      "min": 30,
+      "o": 42,
+      "d": -6,
+      "adds": 22.8
+     },
+     {
+      "id": "3448",
+      "name": "Brook Lopez",
+      "pos": "C",
+      "min": 30,
+      "o": 1,
+      "d": 27,
+      "adds": 17.9
+     },
+     {
+      "id": "2991139",
+      "name": "Kris Dunn",
+      "pos": "G",
+      "min": 27,
+      "o": 3,
+      "d": -1,
+      "adds": 1.3
+     },
+     {
+      "id": "4065778",
+      "name": "Max Strus",
+      "pos": "G",
+      "min": 24,
+      "o": 17,
+      "d": 5,
+      "adds": 11.3
+     },
+     {
+      "id": "3936099",
+      "name": "Derrick Jones Jr.",
+      "pos": "F",
+      "min": 24,
+      "o": 5,
+      "d": 22,
+      "adds": 13.7
+     },
+     {
+      "id": "6580",
+      "name": "Bradley Beal",
+      "pos": "G",
+      "min": 20,
+      "o": 11,
+      "d": -3,
+      "adds": 3.3
+     },
+     {
+      "id": "4702352",
+      "name": "Kobe Sanders",
+      "pos": "G",
+      "min": 19,
+      "o": -16,
+      "d": -21,
+      "adds": -14.1
+     }
+    ],
+    "out": [
+     {
+      "id": "4396818",
+      "name": "Jordan Miller",
+      "status": "Out",
+      "min": 24,
+      "costs": -4.3
+     }
+    ]
+   },
+   "away": {
+    "team": "UTA",
+    "strength": 1396.8,
+    "offence": -19.4,
+    "defence": -77,
+    "coach": {
+     "name": "Will Hardy",
+     "elo": -6.9
+    },
+    "lineup": [
+     {
+      "id": "4873138",
+      "name": "Ace Bailey",
+      "pos": "G",
+      "min": 31,
+      "o": -19,
+      "d": -34,
+      "adds": -34.8
+     },
+     {
+      "id": "5105839",
+      "name": "Brice Sensabaugh",
+      "pos": "F",
+      "min": 30,
+      "o": -8,
+      "d": -33,
+      "adds": -25.3
+     },
+     {
+      "id": "4684793",
+      "name": "Kyle Filipowski",
+      "pos": "F",
+      "min": 28,
+      "o": -13,
+      "d": -34,
+      "adds": -27.5
+     },
+     {
+      "id": "4277961",
+      "name": "Jaren Jackson Jr.",
+      "pos": "F",
+      "min": 27,
+      "o": -2,
+      "d": 29,
+      "adds": 15.1
+     },
+     {
+      "id": "4433627",
+      "name": "Keyonte George",
+      "pos": "G",
+      "min": 27,
+      "o": -3,
+      "d": -36,
+      "adds": -21.8
+     },
+     {
+      "id": "4683766",
+      "name": "Isaiah Collier",
+      "pos": "G",
+      "min": 26,
+      "o": -11,
+      "d": -32,
+      "adds": -23.9
+     },
+     {
+      "id": "3102530",
+      "name": "Jusuf Nurkic",
+      "pos": "C",
+      "min": 26,
+      "o": 6,
+      "d": 16,
+      "adds": 12.3
+     },
+     {
+      "id": "4066336",
+      "name": "Lauri Markkanen",
+      "pos": "F",
+      "min": 26,
+      "o": 21,
+      "d": -6,
+      "adds": 8
+     },
+     {
+      "id": "4397077",
+      "name": "Jaxson Hayes",
+      "pos": "C",
+      "min": 19,
+      "o": 5,
+      "d": 0,
+      "adds": 1.7
+     }
+    ],
+    "out": []
+   }
   }
  },
- "generated": "2026-10-17T16:24Z"
+ "generated": "2026-10-18T12:04Z"
 }

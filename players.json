@@ -111,7 +111,7 @@
    "coachGames": 385,
    "pace": 103.1,
    "out": [
-    "Devin Carter (Day-To-Day)"
+    "Devin Carter (Out)"
    ]
   },
   "BKN": {
@@ -7822,9 +7822,9 @@
  },
  "upcoming": {
   "2027_20261020_BOS_DET": {
-   "pHome": 0.4727,
-   "spread": 0.7,
-   "total": 230.6,
+   "pHome": 0.4163,
+   "spread": 2.3,
+   "total": 230.3,
    "pace": 103.1,
    "home": {
     "team": "DET",
@@ -7922,9 +7922,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -7938,15 +7938,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -8006,13 +7997,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    }
   },
   "2027_20261020_OKC_SAS": {
@@ -12993,15 +13001,15 @@
    }
   },
   "2027_20261023_NYK_BOS": {
-   "pHome": 0.4489,
-   "spread": 1.4,
-   "total": 230.9,
+   "pHome": 0.5059,
+   "spread": -0.2,
+   "total": 230.6,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -13015,15 +13023,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -13083,13 +13082,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    },
    "away": {
     "team": "NYK",
@@ -16878,15 +16894,15 @@
    }
   },
   "2027_20261026_CHI_BOS": {
-   "pHome": 0.819,
-   "spread": -10.1,
-   "total": 230.8,
+   "pHome": 0.8505,
+   "spread": -11.7,
+   "total": 230.5,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -16900,15 +16916,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -16968,13 +16975,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    },
    "away": {
     "team": "CHI",
@@ -50326,5 +50350,5 @@
    }
   }
  },
- "generated": "2026-10-18T12:04Z"
+ "generated": "2026-10-18T16:32Z"
 }

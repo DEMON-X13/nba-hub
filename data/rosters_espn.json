@@ -256,7 +256,7 @@
     "name": "Tyler Bilodeau",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5101761",
@@ -291,7 +291,7 @@
     "name": "Joshua Jefferson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5174655",
@@ -1124,7 +1124,7 @@
     "name": "Charles Bassey",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6430",
@@ -1215,7 +1215,7 @@
     "name": "Brandin Podziemski",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3102531",
@@ -2346,7 +2346,7 @@
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703115",
@@ -3156,13 +3156,6 @@
    {
     "id": "4702384",
     "name": "Nique Clifford",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4397654",
-    "name": "Adam Flagler",
     "pos": "G",
     "status": "active",
     "injured": false

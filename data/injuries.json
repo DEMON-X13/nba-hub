@@ -34,13 +34,13 @@
   ],
   "BKN": [
    {
-    "id": "4870564",
-    "name": "Joshua Jefferson",
+    "id": "5105626",
+    "name": "Tyler Bilodeau",
     "pos": "F",
     "status": "Out",
-    "detail": "Back",
-    "date": "2026-10-16",
-    "returns": "2026-11-16"
+    "detail": "Shoulder",
+    "date": "2026-10-19",
+    "returns": "2026-10-24"
    }
   ],
   "CHA": [
@@ -101,6 +101,24 @@
   ],
   "CHI": [
    {
+    "id": "4066650",
+    "name": "Zach Collins",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Toe Surgery",
+    "date": "2026-10-19",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4278067",
+    "name": "Nic Claxton",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Hamstring",
+    "date": "2026-10-19",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "5105555",
     "name": "Tobe Awaka",
     "pos": "F",
@@ -116,24 +134,6 @@
     "status": "Day-To-Day",
     "detail": "Undisclosed",
     "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "4066650",
-    "name": "Zach Collins",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Toe Surgery",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "4278067",
-    "name": "Nic Claxton",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-10-05",
     "returns": "2026-10-21"
    }
   ],
@@ -226,6 +226,24 @@
   ],
   "GSW": [
    {
+    "id": "4397886",
+    "name": "Charles Bassey",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-19",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4709138",
+    "name": "Brandin Podziemski",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-19",
+    "returns": "2026-10-21"
+   },
+   {
     "id": "3975",
     "name": "Stephen Curry",
     "pos": "G",
@@ -297,7 +315,7 @@
     "status": "Out",
     "detail": "Knee Surgery",
     "date": "2026-02-09",
-    "returns": "2027-01-01"
+    "returns": "2027-01-02"
    }
   ],
   "LAC": [
@@ -344,7 +362,7 @@
     "status": "Out",
     "detail": "Shoulder Surgery",
     "date": "2026-08-26",
-    "returns": "2027-03-01"
+    "returns": "2027-03-02"
    }
   ],
   "LAL": [
@@ -492,17 +510,6 @@
     "returns": "2027-04-02"
    }
   ],
-  "NOP": [
-   {
-    "id": "3907497",
-    "name": "Dejounte Murray",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Toe Bruise",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   }
-  ],
   "NYK": [
    {
     "id": "3062679",
@@ -623,7 +630,7 @@
     "status": "Out",
     "detail": "Ankle Surgery",
     "date": "2026-09-28",
-    "returns": "2026-11-01"
+    "returns": "2026-11-18"
    }
   ],
   "PHI": [
@@ -789,22 +796,22 @@
   ],
   "SAS": [
    {
+    "id": "6440",
+    "name": "Tobias Harris",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Calf Strain",
+    "date": "2026-10-19",
+    "returns": "2026-10-23"
+   },
+   {
     "id": "5101845",
     "name": "Jayden Quaintance",
     "pos": "F",
     "status": "Out",
     "detail": "Knee Surgery",
     "date": "2026-10-05",
-    "returns": "2026-12-01"
-   },
-   {
-    "id": "6440",
-    "name": "Tobias Harris",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-10-05",
-    "returns": "2026-10-20"
+    "returns": "2026-12-03"
    }
   ],
   "TOR": [
@@ -863,7 +870,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-18",
+    "date": "2026-10-19",
     "returns": "2026-10-21"
    },
    {

@@ -1,5 +1,5 @@
 {
- "date": "2026-10-18",
+ "date": "2026-10-19",
  "teams": {
   "ATL": [
    {
@@ -750,13 +750,6 @@
   ],
   "DAL": [
    {
-    "id": "6576",
-    "name": "Quincy Acy",
-    "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4593125",
     "name": "Santi Aldama",
     "pos": "F",
@@ -850,13 +843,6 @@
    {
     "id": "3138160",
     "name": "Caleb Martin",
-    "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "2531367",
-    "name": "Dwight Powell",
     "pos": "F",
     "status": "active",
     "injured": false
@@ -1159,7 +1145,7 @@
     "name": "Stephen Curry",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6589",
@@ -1278,13 +1264,6 @@
    {
     "id": "3102529",
     "name": "Clint Capela",
-    "pos": "C",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "984",
-    "name": "Tyson Chandler",
     "pos": "C",
     "status": "active",
     "injured": false
@@ -1972,13 +1951,6 @@
     "injured": false
    },
    {
-    "id": "4702784",
-    "name": "J'Vonne Hadley",
-    "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "2528210",
     "name": "Tim Hardaway Jr.",
     "pos": "G",
@@ -2021,13 +1993,6 @@
     "injured": false
    },
    {
-    "id": "4431720",
-    "name": "Lester Quinones",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4278076",
     "name": "Nick Richards",
     "pos": "C",
@@ -2040,13 +2005,6 @@
     "pos": "G",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "4065697",
-    "name": "Dennis Smith Jr.",
-    "pos": "G",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "6475",
@@ -2075,13 +2033,6 @@
     "id": "5082206",
     "name": "Brayden Burries",
     "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4432588",
-    "name": "John Butler Jr.",
-    "pos": "F",
     "status": "active",
     "injured": false
    },
@@ -2356,13 +2307,6 @@
     "injured": false
    },
    {
-    "id": "4431778",
-    "name": "Christian Koloko",
-    "pos": "C",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4683634",
     "name": "Bennedict Mathurin",
     "pos": "G",
@@ -2626,13 +2570,6 @@
     "injured": false
    },
    {
-    "id": "4685802",
-    "name": "Robert McCray V",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4900671",
     "name": "Ajay Mitchell",
     "pos": "G",
@@ -2794,13 +2731,6 @@
     "pos": "G",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "5105875",
-    "name": "Mike Sharavjamts",
-    "pos": "G",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "4432165",
@@ -3152,13 +3082,6 @@
     "injured": false
    },
    {
-    "id": "4684737",
-    "name": "Jaylen Martin",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4279888",
     "name": "Ja Morant",
     "pos": "G",
@@ -3319,7 +3242,7 @@
     "name": "Ben Simmons",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "SAS": [
@@ -3587,13 +3510,6 @@
     "injured": false
    },
    {
-    "id": "4395997",
-    "name": "Terrell Brown Jr.",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4683766",
     "name": "Isaiah Collier",
     "pos": "G",
@@ -3757,13 +3673,6 @@
     "injured": false
    },
    {
-    "id": "4708972",
-    "name": "Jazian Gortman",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "5238230",
     "name": "Tre Johnson",
     "pos": "G",
@@ -3806,13 +3715,6 @@
     "injured": false
    },
    {
-    "id": "4704043",
-    "name": "Steve Settle III",
-    "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4997537",
     "name": "Tristan Vukcevic",
     "pos": "F",
@@ -3836,35 +3738,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-18",
-  "BOS": "2026-10-18",
-  "BKN": "2026-10-18",
-  "CHA": "2026-10-18",
-  "CHI": "2026-10-18",
-  "CLE": "2026-10-18",
-  "DAL": "2026-10-18",
-  "DEN": "2026-10-18",
-  "DET": "2026-10-18",
-  "GSW": "2026-10-18",
-  "HOU": "2026-10-18",
-  "IND": "2026-10-18",
-  "LAC": "2026-10-18",
-  "LAL": "2026-10-18",
-  "MEM": "2026-10-18",
-  "MIA": "2026-10-18",
-  "MIL": "2026-10-18",
-  "MIN": "2026-10-18",
-  "NOP": "2026-10-18",
-  "NYK": "2026-10-18",
-  "OKC": "2026-10-18",
-  "ORL": "2026-10-18",
-  "PHI": "2026-10-18",
-  "PHX": "2026-10-18",
-  "POR": "2026-10-18",
-  "SAC": "2026-10-18",
-  "SAS": "2026-10-18",
-  "TOR": "2026-10-18",
-  "UTA": "2026-10-18",
-  "WAS": "2026-10-18"
+  "ATL": "2026-10-19",
+  "BOS": "2026-10-19",
+  "BKN": "2026-10-19",
+  "CHA": "2026-10-19",
+  "CHI": "2026-10-19",
+  "CLE": "2026-10-19",
+  "DAL": "2026-10-19",
+  "DEN": "2026-10-19",
+  "DET": "2026-10-19",
+  "GSW": "2026-10-19",
+  "HOU": "2026-10-19",
+  "IND": "2026-10-19",
+  "LAC": "2026-10-19",
+  "LAL": "2026-10-19",
+  "MEM": "2026-10-19",
+  "MIA": "2026-10-19",
+  "MIL": "2026-10-19",
+  "MIN": "2026-10-19",
+  "NOP": "2026-10-19",
+  "NYK": "2026-10-19",
+  "OKC": "2026-10-19",
+  "ORL": "2026-10-19",
+  "PHI": "2026-10-19",
+  "PHX": "2026-10-19",
+  "POR": "2026-10-19",
+  "SAC": "2026-10-19",
+  "SAS": "2026-10-19",
+  "TOR": "2026-10-19",
+  "UTA": "2026-10-19",
+  "WAS": "2026-10-19"
  }
 }

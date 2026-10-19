@@ -1,5 +1,5 @@
 {
- "date": "2026-10-18",
+ "date": "2026-10-19",
  "teams": {
   "ATL": [
    {
@@ -45,6 +45,24 @@
   ],
   "CHA": [
    {
+    "id": "4395651",
+    "name": "Coby White",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Calf Strain",
+    "date": "2026-10-18",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "5061575",
+    "name": "Kon Knueppel",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-18",
+    "returns": "2026-10-21"
+   },
+   {
     "id": "3135045",
     "name": "Grayson Allen",
     "pos": "G",
@@ -69,24 +87,6 @@
     "status": "Day-To-Day",
     "detail": "Knee",
     "date": "2026-10-05",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "4395651",
-    "name": "Coby White",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-10-05",
-    "returns": "2026-10-21"
-   },
-   {
-    "id": "5061575",
-    "name": "Kon Knueppel",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-09-28",
     "returns": "2026-10-21"
    },
    {
@@ -168,6 +168,15 @@
   ],
   "DAL": [
    {
+    "id": "4593125",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-18",
+    "returns": "2026-10-21"
+   },
+   {
     "id": "5148538",
     "name": "Tarik Biberovic",
     "pos": "F",
@@ -193,18 +202,18 @@
     "detail": "Foot Surgery",
     "date": "2026-10-16",
     "returns": "2026-10-21"
-   },
-   {
-    "id": "4593125",
-    "name": "Santi Aldama",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
    }
   ],
   "DEN": [
+   {
+    "id": "4592427",
+    "name": "Spencer Jones",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-18",
+    "returns": "2026-10-22"
+   },
    {
     "id": "4432181",
     "name": "Julian Strawther",
@@ -213,18 +222,18 @@
     "detail": "Knee Sprain",
     "date": "2026-10-17",
     "returns": "2026-11-29"
-   },
-   {
-    "id": "4592427",
-    "name": "Spencer Jones",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-10-13",
-    "returns": "2026-10-22"
    }
   ],
   "GSW": [
+   {
+    "id": "3975",
+    "name": "Stephen Curry",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-18",
+    "returns": "2026-10-21"
+   },
    {
     "id": "4432171",
     "name": "Moses Moody",
@@ -416,21 +425,21 @@
   ],
   "MIA": [
    {
-    "id": "4601025",
-    "name": "Pelle Larsson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
     "id": "4066993",
     "name": "Dru Smith",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Calf Strain",
-    "date": "2026-10-16",
+    "date": "2026-10-18",
+    "returns": "2026-10-21"
+   },
+   {
+    "id": "4601025",
+    "name": "Pelle Larsson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-10-18",
     "returns": "2026-10-21"
    },
    {
@@ -439,7 +448,7 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Groin",
-    "date": "2026-10-16",
+    "date": "2026-10-18",
     "returns": "2026-10-21"
    }
   ],
@@ -507,6 +516,15 @@
   ],
   "OKC": [
    {
+    "id": "4683692",
+    "name": "Cason Wallace",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-19",
+    "returns": "2026-10-20"
+   },
+   {
     "id": "5061603",
     "name": "Thomas Sorber",
     "pos": "C",
@@ -521,15 +539,6 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Heel",
-    "date": "2026-10-16",
-    "returns": "2026-10-20"
-   },
-   {
-    "id": "4683692",
-    "name": "Cason Wallace",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed",
     "date": "2026-10-16",
     "returns": "2026-10-20"
    },
@@ -562,6 +571,15 @@
    }
   ],
   "ORL": [
+   {
+    "id": "4712849",
+    "name": "Anthony Black",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-18",
+    "returns": "2026-10-21"
+   },
    {
     "id": "4566434",
     "name": "Franz Wagner",
@@ -599,15 +617,6 @@
     "returns": "2026-10-21"
    },
    {
-    "id": "4712849",
-    "name": "Anthony Black",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-16",
-    "returns": "2026-10-21"
-   },
-   {
     "id": "5107251",
     "name": "Izaiyah Nelson",
     "pos": "F",
@@ -619,30 +628,12 @@
   ],
   "PHI": [
    {
-    "id": "3904625",
-    "name": "Tacko Fall",
+    "id": "5105637",
+    "name": "Adem Bona",
     "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Hip",
-    "date": "2026-10-17",
-    "returns": "2026-10-20"
-   },
-   {
-    "id": "4870562",
-    "name": "Dominick Barlow",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-17",
-    "returns": "2026-10-20"
-   },
-   {
-    "id": "3912848",
-    "name": "Dean Wade",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-17",
+    "detail": "Foot Sprain",
+    "date": "2026-10-18",
     "returns": "2026-10-20"
    },
    {
@@ -651,16 +642,34 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-10-15",
+    "date": "2026-10-18",
     "returns": "2026-10-20"
    },
    {
-    "id": "5105637",
-    "name": "Adem Bona",
+    "id": "3904625",
+    "name": "Tacko Fall",
     "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Foot Sprain",
-    "date": "2026-10-15",
+    "detail": "Hip",
+    "date": "2026-10-18",
+    "returns": "2026-10-20"
+   },
+   {
+    "id": "4870562",
+    "name": "Dominick Barlow",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-18",
+    "returns": "2026-10-20"
+   },
+   {
+    "id": "3912848",
+    "name": "Dean Wade",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-18",
     "returns": "2026-10-20"
    },
    {
@@ -680,7 +689,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Knee Strain",
-    "date": "2026-10-18",
+    "date": "2026-10-19",
     "returns": "2026-10-21"
    },
    {
@@ -689,7 +698,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hip Soreness",
-    "date": "2026-10-17",
+    "date": "2026-10-18",
     "returns": "2026-10-21"
    },
    {
@@ -741,6 +750,15 @@
    }
   ],
   "SAC": [
+   {
+    "id": "3907387",
+    "name": "Ben Simmons",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Achilles Ruptured",
+    "date": "2026-10-18",
+    "returns": "2027-10-01"
+   },
    {
     "id": "4066262",
     "name": "Malik Monk",
@@ -844,8 +862,8 @@
     "name": "AJ Dybantsa",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-10-17",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-18",
     "returns": "2026-10-21"
    },
    {

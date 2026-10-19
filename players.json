@@ -18599,15 +18599,15 @@
    }
   },
   "2027_20261027_BKN_BOS": {
-   "pHome": 0.8341,
-   "spread": -10.8,
-   "total": 231,
+   "pHome": 0.8634,
+   "spread": -12.4,
+   "total": 230.7,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -18621,15 +18621,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -18689,13 +18680,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    },
    "away": {
     "team": "BKN",
@@ -22711,15 +22719,15 @@
    }
   },
   "2027_20261030_CHI_BOS": {
-   "pHome": 0.8146,
-   "spread": -9.9,
-   "total": 230.8,
+   "pHome": 0.8467,
+   "spread": -11.5,
+   "total": 230.5,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -22733,15 +22741,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -22801,13 +22800,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    },
    "away": {
     "team": "CHI",
@@ -26177,9 +26193,9 @@
    }
   },
   "2027_20261101_BOS_ORL": {
-   "pHome": 0.4541,
-   "spread": 1.2,
-   "total": 227.9,
+   "pHome": 0.3982,
+   "spread": 2.8,
+   "total": 227.6,
    "pace": 103.1,
    "home": {
     "team": "ORL",
@@ -26303,9 +26319,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -26319,15 +26335,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -26387,13 +26394,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    }
   },
   "2027_20261101_LAC_GSW": {
@@ -27275,9 +27299,9 @@
    }
   },
   "2027_20261102_BOS_HOU": {
-   "pHome": 0.6405,
-   "spread": -3.9,
-   "total": 231.5,
+   "pHome": 0.5863,
+   "spread": -2.3,
+   "total": 231.1,
    "pace": 103.1,
    "home": {
     "team": "HOU",
@@ -27366,9 +27390,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -27382,15 +27406,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -27450,13 +27465,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    }
   },
   "2027_20261102_CHI_PHI": {
@@ -31638,15 +31670,15 @@
    }
   },
   "2027_20261104_MIL_BOS": {
-   "pHome": 0.8112,
-   "spread": -9.8,
-   "total": 232.2,
+   "pHome": 0.8437,
+   "spread": -11.3,
+   "total": 231.9,
    "pace": 103.1,
    "home": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -31660,15 +31692,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -31728,13 +31751,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    },
    "away": {
     "team": "MIL",
@@ -33241,9 +33281,9 @@
    }
   },
   "2027_20261106_BOS_CHA": {
-   "pHome": 0.4328,
-   "spread": 1.8,
-   "total": 231,
+   "pHome": 0.3777,
+   "spread": 3.3,
+   "total": 230.7,
    "pace": 103.1,
    "home": {
     "team": "CHA",
@@ -33350,9 +33390,9 @@
    },
    "away": {
     "team": "BOS",
-    "strength": 1644.4,
-    "offence": 71.7,
-    "defence": 66,
+    "strength": 1688.6,
+    "offence": 89.3,
+    "defence": 92.6,
     "coach": {
      "name": "Joe Mazzulla",
      "elo": 6.6
@@ -33366,15 +33406,6 @@
       "o": 37,
       "d": 18,
       "adds": 41.4
-     },
-     {
-      "id": "4433188",
-      "name": "Devin Carter",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -25,
-      "adds": -23.4
      },
      {
       "id": "3078576",
@@ -33434,13 +33465,30 @@
       "id": "4277951",
       "name": "Luka Garza",
       "pos": "C",
-      "min": 5,
+      "min": 22,
       "o": 9,
       "d": 12,
-      "adds": 2.2
+      "adds": 9.4
+     },
+     {
+      "id": "3195",
+      "name": "Mike Conley",
+      "pos": "G",
+      "min": 15,
+      "o": 22,
+      "d": 20,
+      "adds": 13.4
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "4433188",
+      "name": "Devin Carter",
+      "status": "Out",
+      "min": 32,
+      "costs": -23.4
+     }
+    ]
    }
   },
   "2027_20261106_MIN_NOP": {
@@ -52967,5 +53015,5 @@
    }
   }
  },
- "generated": "2026-10-19T14:43Z"
+ "generated": "2026-10-19T17:30Z"
 }

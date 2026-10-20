@@ -2675,12 +2675,14 @@ date,team,player_id,name,status
 2026-10-20,CHA,4433249,Moussa Diabate,Day-To-Day
 2026-10-20,CHA,4684269,Kylan Boswell,Day-To-Day
 2026-10-20,CHA,4066218,Grant Williams,Day-To-Day
+2026-10-20,CHI,4683750,Jordan Hawkins,Out
+2026-10-20,CHI,4848625,Dailyn Swain,Out
 2026-10-20,CHI,4066650,Zach Collins,Day-To-Day
 2026-10-20,CHI,4278067,Nic Claxton,Out
 2026-10-20,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-10-20,CHI,4432822,Isaac Okoro,Day-To-Day
-2026-10-20,CLE,5106268,Nae'Qwan Tomlin,Out
 2026-10-20,CLE,4066757,Sam Merrill,Day-To-Day
+2026-10-20,CLE,5106268,Nae'Qwan Tomlin,Out
 2026-10-20,CLE,4997530,Khalifa Diop,Day-To-Day
 2026-10-20,DAL,4593125,Santi Aldama,Day-To-Day
 2026-10-20,DAL,5148538,Tarik Biberovic,Day-To-Day
@@ -2712,6 +2714,7 @@ date,team,player_id,name,status
 2026-10-20,MEM,2991070,Jerami Grant,Day-To-Day
 2026-10-20,MEM,5105550,GG Jackson,Day-To-Day
 2026-10-20,MEM,4432810,Isaiah Stewart,Out
+2026-10-20,MIA,4700818,Vladislav Goldin,Day-To-Day
 2026-10-20,MIA,4066993,Dru Smith,Day-To-Day
 2026-10-20,MIA,4066261,Bam Adebayo,Day-To-Day
 2026-10-20,MIA,4601025,Pelle Larsson,Day-To-Day
@@ -2752,6 +2755,6 @@ date,team,player_id,name,status
 2026-10-20,UTA,4433268,Trey Alexander,Day-To-Day
 2026-10-20,UTA,4684793,Kyle Filipowski,Day-To-Day
 2026-10-20,UTA,3102530,Jusuf Nurkic,Out
-2026-10-20,WAS,5142718,AJ Dybantsa,Day-To-Day
+2026-10-20,WAS,5142718,AJ Dybantsa,Out
 2026-10-20,WAS,4997537,Tristan Vukcevic,Out
 2026-10-20,WAS,4606840,Jamir Watkins,Out

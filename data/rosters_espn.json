@@ -547,7 +547,7 @@
     "name": "Jordan Hawkins",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2990984",
@@ -603,7 +603,7 @@
     "name": "Dailyn Swain",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4431687",
@@ -1913,7 +1913,7 @@
     "name": "Vladislav Goldin",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2528210",

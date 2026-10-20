@@ -101,6 +101,24 @@
   ],
   "CHI": [
    {
+    "id": "4683750",
+    "name": "Jordan Hawkins",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Illness",
+    "date": "2026-10-20",
+    "returns": "2026-10-23"
+   },
+   {
+    "id": "4848625",
+    "name": "Dailyn Swain",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Illness",
+    "date": "2026-10-20",
+    "returns": "2026-10-23"
+   },
+   {
     "id": "4066650",
     "name": "Zach Collins",
     "pos": "F",
@@ -139,6 +157,15 @@
   ],
   "CLE": [
    {
+    "id": "4066757",
+    "name": "Sam Merrill",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Elbow Soreness",
+    "date": "2026-10-20",
+    "returns": "2026-10-22"
+   },
+   {
     "id": "5106268",
     "name": "Nae'Qwan Tomlin",
     "pos": "F",
@@ -146,15 +173,6 @@
     "detail": "Back",
     "date": "2026-10-20",
     "returns": "2026-11-16"
-   },
-   {
-    "id": "4066757",
-    "name": "Sam Merrill",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Elbow Soreness",
-    "date": "2026-10-17",
-    "returns": "2026-10-22"
    },
    {
     "id": "4997530",
@@ -454,6 +472,15 @@
   ],
   "MIA": [
    {
+    "id": "4700818",
+    "name": "Vladislav Goldin",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-10-20",
+    "returns": "2026-10-21"
+   },
+   {
     "id": "4066993",
     "name": "Dru Smith",
     "pos": "G",
@@ -557,7 +584,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-18",
+    "date": "2026-10-20",
     "returns": "2026-10-21"
    },
    {
@@ -566,7 +593,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Shoulder Soreness",
-    "date": "2026-10-18",
+    "date": "2026-10-20",
     "returns": "2026-10-21"
    },
    {
@@ -841,10 +868,10 @@
     "id": "5142718",
     "name": "AJ Dybantsa",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-10-19",
-    "returns": "2026-10-21"
+    "date": "2026-10-20",
+    "returns": "2026-10-23"
    },
    {
     "id": "4997537",

@@ -141,9 +141,9 @@
    ]
   },
   "CHI": {
-   "strength": 1424.7,
-   "offence": -25.9,
-   "defence": -48.4,
+   "strength": 1434.6,
+   "offence": -23.5,
+   "defence": -41,
    "coach": "Tiago Splitter",
    "coachElo": -0.9,
    "coachGames": 87,
@@ -151,6 +151,7 @@
    "out": [
     "Nic Claxton (Out)",
     "Zach Collins (Day-To-Day)",
+    "Jordan Hawkins (Out)",
     "Isaac Okoro (Day-To-Day)"
    ]
   },
@@ -303,6 +304,7 @@
    "pace": 103.1,
    "out": [
     "Bam Adebayo (Day-To-Day)",
+    "Vladislav Goldin (Day-To-Day)",
     "Pelle Larsson (Day-To-Day)",
     "Dru Smith (Day-To-Day)"
    ]
@@ -8912,9 +8914,9 @@
    }
   },
   "2027_20261021_CHI_TOR": {
-   "pHome": 0.7296,
-   "spread": -6.7,
-   "total": 231.3,
+   "pHome": 0.708,
+   "spread": -5.9,
+   "total": 230.9,
    "pace": 103.1,
    "home": {
     "team": "TOR",
@@ -9012,9 +9014,9 @@
    },
    "away": {
     "team": "CHI",
-    "strength": 1448.6,
-    "offence": -18.7,
-    "defence": -32,
+    "strength": 1469.2,
+    "offence": -14.2,
+    "defence": -15.8,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -0.9
@@ -9075,15 +9077,6 @@
       "adds": 0.7
      },
      {
-      "id": "4683750",
-      "name": "Jordan Hawkins",
-      "pos": "G",
-      "min": 25,
-      "o": -9,
-      "d": -24,
-      "adds": -17.4
-     },
-     {
       "id": "2595516",
       "name": "Norman Powell",
       "pos": "G",
@@ -9096,13 +9089,29 @@
       "id": "4397189",
       "name": "Jalen Smith",
       "pos": "F",
-      "min": 14,
+      "min": 21,
       "o": 17,
       "d": -8,
-      "adds": 2.6
+      "adds": 3.7
+     },
+     {
+      "id": "4066650",
+      "name": "Zach Collins",
+      "pos": "F",
+      "min": 18,
+      "o": -8,
+      "d": 13,
+      "adds": 2
      }
     ],
     "out": [
+     {
+      "id": "4683750",
+      "name": "Jordan Hawkins",
+      "status": "Out",
+      "min": 25,
+      "costs": -17.4
+     },
      {
       "id": "4278067",
       "name": "Nic Claxton",
@@ -54378,5 +54387,5 @@
    }
   }
  },
- "generated": "2026-10-20T15:40Z"
+ "generated": "2026-10-20T17:58Z"
 }

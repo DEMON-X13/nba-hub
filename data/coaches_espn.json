@@ -1,10 +1,10 @@
 {
- "date": "2026-10-19",
+ "date": "2026-10-20",
  "teams": {
   "ATL": {
    "id": "52120",
    "name": "Quin Snyder",
-   "experience": 10
+   "experience": 12
   },
   "BOS": {
    "id": "2232684",
@@ -13,11 +13,13 @@
   },
   "BKN": {
    "id": "4058088",
-   "name": "Jordi Fernandez"
+   "name": "Jordi Fernandez",
+   "experience": 2
   },
   "CHA": {
    "id": "3062",
-   "name": "Charles Lee"
+   "name": "Charles Lee",
+   "experience": 2
   },
   "CHI": {
    "id": "3233",
@@ -27,7 +29,7 @@
   "CLE": {
    "id": "6809",
    "name": "Kenny Atkinson",
-   "experience": 4
+   "experience": 6
   },
   "DAL": {
    "id": "4391222",
@@ -36,46 +38,48 @@
   },
   "DEN": {
    "id": "3067059",
-   "name": "David Adelman"
+   "name": "David Adelman",
+   "experience": 2
   },
   "DET": {
    "id": "2613478",
    "name": "J.B. Bickerstaff",
-   "experience": 8
+   "experience": 10
   },
   "GSW": {
    "id": "425",
    "name": "Steve Kerr",
-   "experience": 10
+   "experience": 12
   },
   "HOU": {
    "id": "866",
    "name": "Ime Udoka",
-   "experience": 2
+   "experience": 4
   },
   "IND": {
    "id": "4661",
    "name": "Rick Carlisle",
-   "experience": 22
+   "experience": 24
   },
   "LAC": {
    "id": "489",
    "name": "Tyronn Lue",
-   "experience": 8
+   "experience": 10
   },
   "LAL": {
    "id": "3024",
    "name": "JJ Redick",
-   "experience": 1
+   "experience": 2
   },
   "MEM": {
    "id": "5277133",
-   "name": "Tuomas Iisalo"
+   "name": "Tuomas Iisalo",
+   "experience": 2
   },
   "MIA": {
    "id": "6749",
    "name": "Erik Spoelstra",
-   "experience": 16
+   "experience": 18
   },
   "MIL": {
    "id": "3044495",
@@ -85,62 +89,67 @@
   "MIN": {
    "id": "2613479",
    "name": "Chris Finch",
-   "experience": 4
+   "experience": 6
   },
   "NOP": {
    "id": "2529241",
    "name": "Jamahl Mosley",
-   "experience": 3
+   "experience": 5
   },
   "NYK": {
    "id": "3612",
-   "name": "Mike Brown"
+   "name": "Mike Brown",
+   "experience": 12
   },
   "OKC": {
    "id": "4356384",
    "name": "Mark Daigneault",
-   "experience": 4
+   "experience": 6
   },
   "ORL": {
    "id": "2142798",
-   "name": "Sean Sweeney"
+   "name": "Sean Sweeney",
+   "experience": 0
   },
   "PHI": {
    "id": "52085",
    "name": "Nick Nurse",
-   "experience": 6
+   "experience": 8
   },
   "PHX": {
    "id": "4061667",
-   "name": "Jordan Ott"
+   "name": "Jordan Ott",
+   "experience": 1
   },
   "POR": {
    "id": "2487822",
-   "name": "Micah Nori"
+   "name": "Micah Nori",
+   "experience": 0
   },
   "SAC": {
    "id": "147",
-   "name": "Doug Christie"
+   "name": "Doug Christie",
+   "experience": 2
   },
   "SAS": {
    "id": "4401170",
    "name": "Mitch Johnson",
-   "experience": 1
+   "experience": 2
   },
   "TOR": {
    "id": "3116516",
    "name": "Darko Rajakovic",
-   "experience": 0
+   "experience": 3
   },
   "UTA": {
    "id": "4059065",
    "name": "Will Hardy",
-   "experience": 2
+   "experience": 4
   },
   "WAS": {
    "id": "2487819",
    "name": "Brian Keefe",
-   "experience": 0
+   "experience": 3
   }
  }
 }

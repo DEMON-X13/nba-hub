@@ -1,5 +1,5 @@
 {
- "date": "2026-10-19",
+ "date": "2026-10-20",
  "teams": {
   "ATL": [
    {
@@ -599,13 +599,6 @@
     "injured": false
    },
    {
-    "id": "4432117",
-    "name": "Isaiah Stevens",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4848625",
     "name": "Dailyn Swain",
     "pos": "G",
@@ -1087,7 +1080,7 @@
     "name": "Taurean Prince",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278562",
@@ -1293,13 +1286,6 @@
     "id": "4433192",
     "name": "Tari Eason",
     "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4709131",
-    "name": "Sean Pedulla",
-    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -1657,7 +1643,7 @@
     "name": "Bronny James",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433599",
@@ -1670,13 +1656,6 @@
     "id": "4433136",
     "name": "Walker Kessler",
     "pos": "C",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4897943",
-    "name": "Dalton Knecht",
-    "pos": "F",
     "status": "active",
     "injured": false
    },
@@ -1767,13 +1746,6 @@
     "injured": false
    },
    {
-    "id": "4896372",
-    "name": "Walter Clayton Jr.",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "5105817",
     "name": "Carson Cooper",
     "pos": "C",
@@ -1842,13 +1814,6 @@
     "pos": "F",
     "status": "active",
     "injured": false
-   },
-   {
-    "id": "4432185",
-    "name": "Micah Peavy",
-    "pos": "G",
-    "status": "active",
-    "injured": true
    },
    {
     "id": "4431785",
@@ -2096,13 +2061,6 @@
     "id": "5214989",
     "name": "Bogoljub Markovic",
     "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
-    "id": "4397140",
-    "name": "Kevin Porter Jr.",
-    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -2460,7 +2418,7 @@
     "name": "Josh Hart",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433225",
@@ -2553,7 +2511,7 @@
     "name": "Chet Holmgren",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5174983",
@@ -2609,7 +2567,7 @@
     "name": "Cason Wallace",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4593803",
@@ -2623,7 +2581,7 @@
     "name": "Jaylin Williams",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133626",
@@ -2891,13 +2849,6 @@
     "injured": false
    },
    {
-    "id": "4591259",
-    "name": "Koby Brea",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4066383",
     "name": "Miles Bridges",
     "pos": "F",
@@ -2947,13 +2898,6 @@
     "injured": false
    },
    {
-    "id": "4702602",
-    "name": "CJ Huntley",
-    "pos": "F",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4601023",
     "name": "Oso Ighodaro",
     "pos": "F",
@@ -2992,6 +2936,13 @@
     "id": "4592714",
     "name": "Pat Spencer",
     "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4431695",
+    "name": "Drew Timme",
+    "pos": "F",
     "status": "active",
     "injured": false
    },
@@ -3731,35 +3682,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-19",
-  "BOS": "2026-10-19",
-  "BKN": "2026-10-19",
-  "CHA": "2026-10-19",
-  "CHI": "2026-10-19",
-  "CLE": "2026-10-19",
-  "DAL": "2026-10-19",
-  "DEN": "2026-10-19",
-  "DET": "2026-10-19",
-  "GSW": "2026-10-19",
-  "HOU": "2026-10-19",
-  "IND": "2026-10-19",
-  "LAC": "2026-10-19",
-  "LAL": "2026-10-19",
-  "MEM": "2026-10-19",
-  "MIA": "2026-10-19",
-  "MIL": "2026-10-19",
-  "MIN": "2026-10-19",
-  "NOP": "2026-10-19",
-  "NYK": "2026-10-19",
-  "OKC": "2026-10-19",
-  "ORL": "2026-10-19",
-  "PHI": "2026-10-19",
-  "PHX": "2026-10-19",
-  "POR": "2026-10-19",
-  "SAC": "2026-10-19",
-  "SAS": "2026-10-19",
-  "TOR": "2026-10-19",
-  "UTA": "2026-10-19",
-  "WAS": "2026-10-19"
+  "ATL": "2026-10-20",
+  "BOS": "2026-10-20",
+  "BKN": "2026-10-20",
+  "CHA": "2026-10-20",
+  "CHI": "2026-10-20",
+  "CLE": "2026-10-20",
+  "DAL": "2026-10-20",
+  "DEN": "2026-10-20",
+  "DET": "2026-10-20",
+  "GSW": "2026-10-20",
+  "HOU": "2026-10-20",
+  "IND": "2026-10-20",
+  "LAC": "2026-10-20",
+  "LAL": "2026-10-20",
+  "MEM": "2026-10-20",
+  "MIA": "2026-10-20",
+  "MIL": "2026-10-20",
+  "MIN": "2026-10-20",
+  "NOP": "2026-10-20",
+  "NYK": "2026-10-20",
+  "OKC": "2026-10-20",
+  "ORL": "2026-10-20",
+  "PHI": "2026-10-20",
+  "PHX": "2026-10-20",
+  "POR": "2026-10-20",
+  "SAC": "2026-10-20",
+  "SAS": "2026-10-20",
+  "TOR": "2026-10-20",
+  "UTA": "2026-10-20",
+  "WAS": "2026-10-20"
  }
 }

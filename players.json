@@ -164,7 +164,7 @@
    "pace": 103.1,
    "out": [
     "Sam Merrill (Day-To-Day)",
-    "Nae'Qwan Tomlin (Day-To-Day)"
+    "Nae'Qwan Tomlin (Out)"
    ]
   },
   "DAL": {
@@ -195,14 +195,16 @@
    ]
   },
   "DET": {
-   "strength": 1573.2,
-   "offence": 21.5,
-   "defence": 42.2,
+   "strength": 1595.4,
+   "offence": 25.1,
+   "defence": 60.8,
    "coach": "J.B. Bickerstaff",
    "coachElo": 9.5,
    "coachGames": 448,
    "pace": 103.1,
-   "out": []
+   "out": [
+    "Taurean Prince (Out)"
+   ]
   },
   "GSW": {
    "strength": 1455.3,
@@ -7816,15 +7818,15 @@
  },
  "upcoming": {
   "2027_20261020_BOS_DET": {
-   "pHome": 0.4163,
-   "spread": 2.3,
-   "total": 230.3,
+   "pHome": 0.4445,
+   "spread": 1.5,
+   "total": 229.7,
    "pace": 103.1,
    "home": {
     "team": "DET",
-    "strength": 1573.2,
-    "offence": 21.4,
-    "defence": 42.2,
+    "strength": 1595.4,
+    "offence": 25.1,
+    "defence": 60.7,
     "coach": {
      "name": "J.B. Bickerstaff",
      "elo": 9.5
@@ -7834,19 +7836,10 @@
       "id": "4397449",
       "name": "Elijah Harkless",
       "pos": "G",
-      "min": 34,
+      "min": 33,
       "o": -14,
       "d": -16,
       "adds": -20.6
-     },
-     {
-      "id": "2990962",
-      "name": "Taurean Prince",
-      "pos": "F",
-      "min": 32,
-      "o": 3,
-      "d": -5,
-      "adds": -0.8
      },
      {
       "id": "4433621",
@@ -7855,16 +7848,16 @@
       "min": 30,
       "o": 11,
       "d": 23,
-      "adds": 20.9
+      "adds": 20.8
      },
      {
       "id": "4684742",
       "name": "Ausar Thompson",
       "pos": "G",
-      "min": 26,
+      "min": 25,
       "o": 3,
       "d": 20,
-      "adds": 12.9
+      "adds": 12.4
      },
      {
       "id": "3157465",
@@ -7873,7 +7866,7 @@
       "min": 25,
       "o": 15,
       "d": 17,
-      "adds": 16.9
+      "adds": 16.8
      },
      {
       "id": "5107199",
@@ -7882,7 +7875,7 @@
       "min": 25,
       "o": -7,
       "d": 7,
-      "adds": -0.2
+      "adds": -0.1
      },
      {
       "id": "4432166",
@@ -7891,7 +7884,7 @@
       "min": 24,
       "o": 14,
       "d": 29,
-      "adds": 21.2
+      "adds": 21.1
      },
      {
       "id": "4066372",
@@ -7900,7 +7893,7 @@
       "min": 23,
       "o": 18,
       "d": 11,
-      "adds": 14.1
+      "adds": 14
      },
      {
       "id": "3908845",
@@ -7909,10 +7902,36 @@
       "min": 22,
       "o": 4,
       "d": -5,
-      "adds": -0.3
+      "adds": -0.2
+     },
+     {
+      "id": "4683771",
+      "name": "Ronald Holland II",
+      "pos": "F",
+      "min": 20,
+      "o": 0,
+      "d": 11,
+      "adds": 4.4
+     },
+     {
+      "id": "4395702",
+      "name": "Isaiah Joe",
+      "pos": "G",
+      "min": 13,
+      "o": 23,
+      "d": 39,
+      "adds": 17.2
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "2990962",
+      "name": "Taurean Prince",
+      "status": "Out",
+      "min": 31,
+      "costs": -1.1
+     }
+    ]
    },
    "away": {
     "team": "BOS",
@@ -10799,8 +10818,8 @@
    }
   },
   "2027_20261022_CLE_PHI": {
-   "pHome": 0.5313,
-   "spread": -0.8,
+   "pHome": 0.5373,
+   "spread": -1,
    "total": 235.6,
    "pace": 103.1,
    "home": {
@@ -10905,9 +10924,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -10959,15 +10978,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -10998,13 +11008,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    }
   },
   "2027_20261022_DEN_OKC": {
@@ -13742,15 +13769,15 @@
    }
   },
   "2027_20261024_BKN_CLE": {
-   "pHome": 0.8242,
-   "spread": -10.4,
-   "total": 233.3,
+   "pHome": 0.8207,
+   "spread": -10.2,
+   "total": 233.4,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -13802,15 +13829,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -13841,13 +13859,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    },
    "away": {
     "team": "BKN",
@@ -18111,15 +18146,15 @@
    }
   },
   "2027_20261026_MIN_CLE": {
-   "pHome": 0.6696,
-   "spread": -4.7,
+   "pHome": 0.6643,
+   "spread": -4.6,
    "total": 234,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -18171,15 +18206,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -18210,13 +18236,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    },
    "away": {
     "team": "MIN",
@@ -21855,15 +21898,15 @@
    }
   },
   "2027_20261028_WAS_CLE": {
-   "pHome": 0.8433,
-   "spread": -11.3,
-   "total": 233.8,
+   "pHome": 0.8401,
+   "spread": -11.1,
+   "total": 233.9,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -21915,15 +21958,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -21954,13 +21988,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    },
    "away": {
     "team": "WAS",
@@ -22073,9 +22124,9 @@
    }
   },
   "2027_20261029_CLE_ATL": {
-   "pHome": 0.5292,
-   "spread": -0.8,
-   "total": 232.5,
+   "pHome": 0.5352,
+   "spread": -0.9,
+   "total": 232.6,
    "pace": 103.1,
    "home": {
     "team": "ATL",
@@ -22181,9 +22232,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -22235,15 +22286,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -22274,13 +22316,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    }
   },
   "2027_20261029_MEM_POR": {
@@ -25006,8 +25065,8 @@
    }
   },
   "2027_20261031_CLE_MIL": {
-   "pHome": 0.3327,
-   "spread": 4.7,
+   "pHome": 0.3381,
+   "spread": 4.5,
    "total": 234.6,
    "pace": 103.1,
    "home": {
@@ -25097,9 +25156,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -25151,15 +25210,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -25190,13 +25240,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    }
   },
   "2027_20261031_MIN_SAS": {
@@ -28716,15 +28783,15 @@
    }
   },
   "2027_20261102_OKC_CLE": {
-   "pHome": 0.42,
-   "spread": 2.2,
-   "total": 232,
+   "pHome": 0.4141,
+   "spread": 2.3,
+   "total": 232.1,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -28776,15 +28843,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -28815,13 +28873,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    },
    "away": {
     "team": "OKC",
@@ -30858,9 +30933,9 @@
    }
   },
   "2027_20261104_CLE_OKC": {
-   "pHome": 0.6984,
-   "spread": -5.6,
-   "total": 232,
+   "pHome": 0.7034,
+   "spread": -5.8,
+   "total": 232.1,
    "pace": 103.1,
    "home": {
     "team": "OKC",
@@ -30976,9 +31051,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -31030,15 +31105,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -31069,13 +31135,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    }
   },
   "2027_20261104_DAL_SAS": {
@@ -34170,15 +34253,15 @@
    }
   },
   "2027_20261106_PHI_CLE": {
-   "pHome": 0.5962,
-   "spread": -2.6,
+   "pHome": 0.5904,
+   "spread": -2.5,
    "total": 235.6,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -34230,15 +34313,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -34269,13 +34343,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    },
    "away": {
     "team": "PHI",
@@ -35934,15 +36025,15 @@
    }
   },
   "2027_20261107_NYK_CLE": {
-   "pHome": 0.3242,
-   "spread": 4.9,
-   "total": 233.2,
+   "pHome": 0.3189,
+   "spread": 5.1,
+   "total": 233.3,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -35994,15 +36085,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -36033,13 +36115,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    },
    "away": {
     "team": "NYK",
@@ -38155,9 +38254,9 @@
    }
   },
   "2027_20261109_CLE_CHA": {
-   "pHome": 0.5075,
-   "spread": -0.2,
-   "total": 233.3,
+   "pHome": 0.5135,
+   "spread": -0.4,
+   "total": 233.4,
    "pace": 103.1,
    "home": {
     "team": "CHA",
@@ -38264,9 +38363,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -38318,15 +38417,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -38357,13 +38447,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    }
   },
   "2027_20261109_DEN_HOU": {
@@ -41369,9 +41476,9 @@
    }
   },
   "2027_20261111_CLE_NYK": {
-   "pHome": 0.6754,
-   "spread": -4.9,
-   "total": 233.2,
+   "pHome": 0.6806,
+   "spread": -5.1,
+   "total": 233.3,
    "pace": 103.1,
    "home": {
     "team": "NYK",
@@ -41469,9 +41576,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -41523,15 +41630,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -41562,13 +41660,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    }
   },
   "2027_20261111_DEN_MEM": {
@@ -44002,9 +44117,9 @@
    }
   },
   "2027_20261113_CLE_MIA": {
-   "pHome": 0.5178,
-   "spread": -0.5,
-   "total": 234.2,
+   "pHome": 0.5238,
+   "spread": -0.6,
+   "total": 234.3,
    "pace": 103.1,
    "home": {
     "team": "MIA",
@@ -44111,9 +44226,9 @@
    },
    "away": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -44165,15 +44280,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -44204,13 +44310,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    }
   },
   "2027_20261113_GSW_SAS": {
@@ -46030,15 +46153,15 @@
    }
   },
   "2027_20261114_DAL_CLE": {
-   "pHome": 0.6647,
-   "spread": -4.6,
-   "total": 233.2,
+   "pHome": 0.6593,
+   "spread": -4.4,
+   "total": 233.3,
    "pace": 103.1,
    "home": {
     "team": "CLE",
-    "strength": 1600.9,
-    "offence": 81.5,
-    "defence": 16.6,
+    "strength": 1596.2,
+    "offence": 80,
+    "defence": 13.4,
     "coach": {
      "name": "Kenny Atkinson",
      "elo": 2.6
@@ -46090,15 +46213,6 @@
       "adds": 30.1
      },
      {
-      "id": "5106268",
-      "name": "Nae'Qwan Tomlin",
-      "pos": "F",
-      "min": 22,
-      "o": -7,
-      "d": -13,
-      "adds": -9.3
-     },
-     {
       "id": "4701233",
       "name": "Craig Porter Jr.",
       "pos": "G",
@@ -46129,13 +46243,30 @@
       "id": "4576087",
       "name": "Peyton Watson",
       "pos": "G",
-      "min": 13,
+      "min": 19,
       "o": 13,
       "d": -14,
-      "adds": -0.4
+      "adds": -0.6
+     },
+     {
+      "id": "5023693",
+      "name": "Tyrese Proctor",
+      "pos": "G",
+      "min": 16,
+      "o": -19,
+      "d": -21,
+      "adds": -13.7
      }
     ],
-    "out": []
+    "out": [
+     {
+      "id": "5106268",
+      "name": "Nae'Qwan Tomlin",
+      "status": "Out",
+      "min": 22,
+      "costs": -9.3
+     }
+    ]
    },
    "away": {
     "team": "DAL",
@@ -54247,5 +54378,5 @@
    }
   }
  },
- "generated": "2026-10-20T12:45Z"
+ "generated": "2026-10-20T15:40Z"
 }

@@ -247,9 +247,9 @@
     "id": "2990962",
     "name": "Taurean Prince",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Personal",
-    "date": "2026-10-20",
+    "date": "2026-10-21",
     "returns": "2026-10-23"
    }
   ],
@@ -483,18 +483,18 @@
     "id": "5061603",
     "name": "Thomas Sorber",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Surgery",
-    "date": "2026-10-19",
+    "date": "2026-10-21",
     "returns": "2026-10-22"
    },
    {
     "id": "5159925",
     "name": "Nikola Topic",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Surgery",
-    "date": "2026-10-19",
+    "date": "2026-10-21",
     "returns": "2026-10-22"
    },
    {
@@ -547,21 +547,21 @@
   ],
   "PHI": [
    {
+    "id": "3904625",
+    "name": "Tacko Fall",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-10-21",
+    "returns": "2026-10-22"
+   },
+   {
     "id": "3912848",
     "name": "Dean Wade",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
     "date": "2026-10-21",
-    "returns": "2026-10-22"
-   },
-   {
-    "id": "3904625",
-    "name": "Tacko Fall",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Hip",
-    "date": "2026-10-19",
     "returns": "2026-10-22"
    },
    {
@@ -693,9 +693,9 @@
     "id": "6440",
     "name": "Tobias Harris",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Calf Strain",
-    "date": "2026-10-19",
+    "date": "2026-10-21",
     "returns": "2026-10-23"
    },
    {
@@ -720,15 +720,6 @@
    }
   ],
   "UTA": [
-   {
-    "id": "4396963",
-    "name": "Blake Hinson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-10-20",
-    "returns": "2026-10-23"
-   },
    {
     "id": "4065673",
     "name": "Tony Bradley",

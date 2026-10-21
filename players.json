@@ -199,7 +199,7 @@
    "coachGames": 449,
    "pace": 103.1,
    "out": [
-    "Taurean Prince (Out)"
+    "Taurean Prince (Day-To-Day)"
    ]
   },
   "GSW": {
@@ -340,7 +340,7 @@
    "coachGames": 461,
    "pace": 103.6,
    "out": [
-    "Nikola Topic (Out)"
+    "Nikola Topic (Day-To-Day)"
    ]
   },
   "ORL": {
@@ -367,7 +367,7 @@
    "pace": 103.5,
    "out": [
     "Dominick Barlow (Out)",
-    "Tacko Fall (Out)",
+    "Tacko Fall (Day-To-Day)",
     "Ariel Hukporti (Out)",
     "Dean Wade (Day-To-Day)"
    ]
@@ -421,7 +421,7 @@
    "coachGames": 183,
    "pace": 103.6,
    "out": [
-    "Tobias Harris (Out)"
+    "Tobias Harris (Day-To-Day)"
    ]
   },
   "TOR": {
@@ -435,9 +435,9 @@
    "out": []
   },
   "UTA": {
-   "strength": 1389.2,
-   "offence": -30.1,
-   "defence": -73.8,
+   "strength": 1363.7,
+   "offence": -32.8,
+   "defence": -96.6,
    "coach": "Will Hardy",
    "coachElo": -6.9,
    "coachGames": 328,
@@ -445,7 +445,6 @@
    "out": [
     "Trey Alexander (Out)",
     "Tony Bradley (Out)",
-    "Blake Hinson (Out)",
     "Jusuf Nurkic (Out)"
    ]
   },
@@ -9939,9 +9938,9 @@
    }
   },
   "2027_20261021_UTA_MEM": {
-   "pHome": 0.5889,
-   "spread": -2.4,
-   "total": 233.7,
+   "pHome": 0.6204,
+   "spread": -3.3,
+   "total": 234.5,
    "pace": 103.2,
    "home": {
     "team": "MEM",
@@ -10048,9 +10047,9 @@
    },
    "away": {
     "team": "UTA",
-    "strength": 1389.2,
-    "offence": -30.1,
-    "defence": -73.8,
+    "strength": 1363.7,
+    "offence": -32.8,
+    "defence": -96.6,
     "coach": {
      "name": "Will Hardy",
      "elo": -6.9
@@ -10063,7 +10062,7 @@
       "min": 32,
       "o": -20,
       "d": -34,
-      "adds": -35.5
+      "adds": -35.2
      },
      {
       "id": "5105839",
@@ -10072,16 +10071,16 @@
       "min": 30,
       "o": -9,
       "d": -33,
-      "adds": -26.3
+      "adds": -26
      },
      {
       "id": "4684793",
       "name": "Kyle Filipowski",
       "pos": "F",
-      "min": 29,
+      "min": 28,
       "o": -14,
       "d": -34,
-      "adds": -28
+      "adds": -28.1
      },
      {
       "id": "4277961",
@@ -10090,7 +10089,7 @@
       "min": 28,
       "o": -3,
       "d": 29,
-      "adds": 15.2
+      "adds": 15.1
      },
      {
       "id": "4433627",
@@ -10099,16 +10098,16 @@
       "min": 27,
       "o": -4,
       "d": -36,
-      "adds": -22.5
+      "adds": -22.3
      },
      {
       "id": "4683766",
       "name": "Isaiah Collier",
       "pos": "G",
-      "min": 27,
+      "min": 26,
       "o": -12,
       "d": -32,
-      "adds": -24.4
+      "adds": -24.6
      },
      {
       "id": "4066336",
@@ -10129,23 +10128,16 @@
       "adds": 1.8
      },
      {
-      "id": "4065663",
-      "name": "Josh Okogie",
-      "pos": "G",
-      "min": 19,
-      "o": -17,
-      "d": 39,
-      "adds": 8.7
+      "id": "4396963",
+      "name": "Blake Hinson",
+      "pos": "F",
+      "min": 21,
+      "o": -22,
+      "d": -19,
+      "adds": -17.6
      }
     ],
     "out": [
-     {
-      "id": "4396963",
-      "name": "Blake Hinson",
-      "status": "Out",
-      "min": 21,
-      "costs": -17.4
-     },
      {
       "id": "4433268",
       "name": "Trey Alexander",
@@ -55391,5 +55383,5 @@
    }
   }
  },
- "generated": "2026-10-21T12:58Z"
+ "generated": "2026-10-21T15:59Z"
 }

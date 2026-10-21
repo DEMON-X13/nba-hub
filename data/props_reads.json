@@ -89,5 +89,8 @@
  "2026_20260605_NYK_SAS": {"at":"2026-10-15T08:16Z","status":"ok","lines":168,"tries":1},
  "2026_20260608_SAS_NYK": {"at":"2026-10-15T08:16Z","status":"ok","lines":174,"tries":1},
  "2026_20260610_SAS_NYK": {"at":"2026-10-15T08:16Z","status":"ok","lines":181,"tries":1},
- "2026_20260613_NYK_SAS": {"at":"2026-10-15T08:16Z","status":"ok","lines":176,"tries":1}
+ "2026_20260613_NYK_SAS": {"at":"2026-10-15T08:16Z","status":"ok","lines":176,"tries":1},
+ "2027_20261020_BOS_DET": {"at":"2026-10-21T12:58Z","status":"ok","lines":116,"tries":1},
+ "2027_20261020_OKC_SAS": {"at":"2026-10-21T12:58Z","status":"ok","lines":123,"tries":1},
+ "2027_20261020_PHI_NYK": {"at":"2026-10-21T12:58Z","status":"ok","lines":105,"tries":1}
 }

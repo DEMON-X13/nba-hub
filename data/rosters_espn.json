@@ -1,5 +1,5 @@
 {
- "date": "2026-10-20",
+ "date": "2026-10-21",
  "teams": {
   "ATL": [
    {
@@ -384,7 +384,7 @@
     "name": "Grayson Allen",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5060701",
@@ -405,7 +405,7 @@
     "name": "Moussa Diabate",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4701225",
@@ -568,7 +568,7 @@
     "name": "Leonard Miller",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432822",
@@ -838,7 +838,7 @@
     "name": "Caleb Martin",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5211175",
@@ -1245,7 +1245,7 @@
     "name": "Steven Adams",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3037789",
@@ -1294,7 +1294,7 @@
     "name": "Julian Phillips",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4871144",
@@ -1471,7 +1471,7 @@
     "name": "Jarace Walker",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4017837",
@@ -1643,7 +1643,7 @@
     "name": "Bronny James",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433599",
@@ -1727,7 +1727,7 @@
     "name": "Jarred Vanderbilt",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433137",
@@ -1771,7 +1771,7 @@
     "name": "Jerami Grant",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4684806",
@@ -1785,7 +1785,7 @@
     "name": "GG Jackson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4065733",
@@ -1871,7 +1871,7 @@
     "name": "Bam Adebayo",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3032977",
@@ -1941,7 +1941,7 @@
     "name": "Pelle Larsson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278053",
@@ -1969,7 +1969,7 @@
     "name": "Dru Smith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6475",
@@ -2083,7 +2083,7 @@
     "name": "Jericho Sims",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4277843",
@@ -2218,7 +2218,7 @@
     "name": "Rocco Zikarsky",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "NOP": [
@@ -2688,7 +2688,7 @@
     "name": "Jase Richardson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432165",
@@ -2709,7 +2709,7 @@
     "name": "Franz Wagner",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "PHI": [
@@ -2725,7 +2725,7 @@
     "name": "Adem Bona",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3917376",
@@ -2816,7 +2816,7 @@
     "name": "Anfernee Simons",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3912848",
@@ -2902,7 +2902,7 @@
     "name": "Oso Ighodaro",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3913174",
@@ -2960,7 +2960,7 @@
     "name": "Deni Avdija",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4431736",
@@ -2974,7 +2974,7 @@
     "name": "Branden Carlson",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5081727",
@@ -3009,7 +3009,7 @@
     "name": "Jrue Holiday",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703889",
@@ -3451,7 +3451,7 @@
     "name": "Tony Bradley",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683766",
@@ -3465,7 +3465,7 @@
     "name": "Kyle Filipowski",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433627",
@@ -3682,35 +3682,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-20",
-  "BOS": "2026-10-20",
-  "BKN": "2026-10-20",
-  "CHA": "2026-10-20",
-  "CHI": "2026-10-20",
-  "CLE": "2026-10-20",
-  "DAL": "2026-10-20",
-  "DEN": "2026-10-20",
-  "DET": "2026-10-20",
-  "GSW": "2026-10-20",
-  "HOU": "2026-10-20",
-  "IND": "2026-10-20",
-  "LAC": "2026-10-20",
-  "LAL": "2026-10-20",
-  "MEM": "2026-10-20",
-  "MIA": "2026-10-20",
-  "MIL": "2026-10-20",
-  "MIN": "2026-10-20",
-  "NOP": "2026-10-20",
-  "NYK": "2026-10-20",
-  "OKC": "2026-10-20",
-  "ORL": "2026-10-20",
-  "PHI": "2026-10-20",
-  "PHX": "2026-10-20",
-  "POR": "2026-10-20",
-  "SAC": "2026-10-20",
-  "SAS": "2026-10-20",
-  "TOR": "2026-10-20",
-  "UTA": "2026-10-20",
-  "WAS": "2026-10-20"
+  "ATL": "2026-10-21",
+  "BOS": "2026-10-21",
+  "BKN": "2026-10-21",
+  "CHA": "2026-10-21",
+  "CHI": "2026-10-21",
+  "CLE": "2026-10-21",
+  "DAL": "2026-10-21",
+  "DEN": "2026-10-21",
+  "DET": "2026-10-21",
+  "GSW": "2026-10-21",
+  "HOU": "2026-10-21",
+  "IND": "2026-10-21",
+  "LAC": "2026-10-21",
+  "LAL": "2026-10-21",
+  "MEM": "2026-10-21",
+  "MIA": "2026-10-21",
+  "MIL": "2026-10-21",
+  "MIN": "2026-10-21",
+  "NOP": "2026-10-21",
+  "NYK": "2026-10-21",
+  "OKC": "2026-10-21",
+  "ORL": "2026-10-21",
+  "PHI": "2026-10-21",
+  "PHX": "2026-10-21",
+  "POR": "2026-10-21",
+  "SAC": "2026-10-21",
+  "SAS": "2026-10-21",
+  "TOR": "2026-10-21",
+  "UTA": "2026-10-21",
+  "WAS": "2026-10-21"
  }
 }

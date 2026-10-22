@@ -1,5 +1,5 @@
 {
- "date": "2026-10-21",
+ "date": "2026-10-22",
  "teams": {
   "ATL": [
    {
@@ -505,7 +505,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4711294",
@@ -526,7 +526,7 @@
     "name": "Zach Collins",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5242496",
@@ -568,14 +568,14 @@
     "name": "Leonard Miller",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432822",
     "name": "Isaac Okoro",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2595516",
@@ -626,7 +626,7 @@
     "name": "Jarrett Allen",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3934723",
@@ -668,7 +668,7 @@
     "name": "Sam Merrill",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5177362",
@@ -767,6 +767,13 @@
     "id": "4701208",
     "name": "Moussa Cisse",
     "pos": "C",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4896372",
+    "name": "Walter Clayton Jr.",
+    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -1138,7 +1145,7 @@
     "name": "Stephen Curry",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6589",
@@ -1294,7 +1301,7 @@
     "name": "Julian Phillips",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4871144",
@@ -1913,7 +1920,7 @@
     "name": "Vladislav Goldin",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2528210",
@@ -1992,7 +1999,7 @@
     "name": "Nate Ament",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5082206",
@@ -2060,6 +2067,13 @@
    {
     "id": "5214989",
     "name": "Bogoljub Markovic",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4397233",
+    "name": "Pete Nance",
     "pos": "F",
     "status": "active",
     "injured": false
@@ -2902,7 +2916,7 @@
     "name": "Oso Ighodaro",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3913174",
@@ -2960,7 +2974,7 @@
     "name": "Deni Avdija",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431736",
@@ -3044,7 +3058,7 @@
     "name": "Micah Potter",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4914336",
@@ -3682,35 +3696,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-21",
-  "BOS": "2026-10-21",
-  "BKN": "2026-10-21",
-  "CHA": "2026-10-21",
-  "CHI": "2026-10-21",
-  "CLE": "2026-10-21",
-  "DAL": "2026-10-21",
-  "DEN": "2026-10-21",
-  "DET": "2026-10-21",
-  "GSW": "2026-10-21",
-  "HOU": "2026-10-21",
-  "IND": "2026-10-21",
-  "LAC": "2026-10-21",
-  "LAL": "2026-10-21",
-  "MEM": "2026-10-21",
-  "MIA": "2026-10-21",
-  "MIL": "2026-10-21",
-  "MIN": "2026-10-21",
-  "NOP": "2026-10-21",
-  "NYK": "2026-10-21",
-  "OKC": "2026-10-21",
-  "ORL": "2026-10-21",
-  "PHI": "2026-10-21",
-  "PHX": "2026-10-21",
-  "POR": "2026-10-21",
-  "SAC": "2026-10-21",
-  "SAS": "2026-10-21",
-  "TOR": "2026-10-21",
-  "UTA": "2026-10-21",
-  "WAS": "2026-10-21"
+  "ATL": "2026-10-22",
+  "BOS": "2026-10-22",
+  "BKN": "2026-10-22",
+  "CHA": "2026-10-22",
+  "CHI": "2026-10-22",
+  "CLE": "2026-10-22",
+  "DAL": "2026-10-22",
+  "DEN": "2026-10-22",
+  "DET": "2026-10-22",
+  "GSW": "2026-10-22",
+  "HOU": "2026-10-22",
+  "IND": "2026-10-22",
+  "LAC": "2026-10-22",
+  "LAL": "2026-10-22",
+  "MEM": "2026-10-22",
+  "MIA": "2026-10-22",
+  "MIL": "2026-10-22",
+  "MIN": "2026-10-22",
+  "NOP": "2026-10-22",
+  "NYK": "2026-10-22",
+  "OKC": "2026-10-22",
+  "ORL": "2026-10-22",
+  "PHI": "2026-10-22",
+  "PHX": "2026-10-22",
+  "POR": "2026-10-22",
+  "SAC": "2026-10-22",
+  "SAS": "2026-10-22",
+  "TOR": "2026-10-22",
+  "UTA": "2026-10-22",
+  "WAS": "2026-10-22"
  }
 }

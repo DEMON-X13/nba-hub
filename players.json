@@ -134,8 +134,8 @@
    "pace": 103.4,
    "out": [
     "Kon Knueppel (Day-To-Day)",
-    "Coby White (Out)",
-    "Grant Williams (Out)"
+    "Coby White (Day-To-Day)",
+    "Grant Williams (Day-To-Day)"
    ]
   },
   "CHI": {
@@ -174,7 +174,7 @@
    "out": [
     "Santi Aldama (Day-To-Day)",
     "Jett Howard (Day-To-Day)",
-    "Dereck Lively II (Out)",
+    "Dereck Lively II (Day-To-Day)",
     "Caleb Martin (Day-To-Day)"
    ]
   },
@@ -400,7 +400,7 @@
    "coachGames": 1,
    "pace": 103.3,
    "out": [
-    "Branden Carlson (Out)",
+    "Branden Carlson (Day-To-Day)",
     "Shaedon Sharpe (Out)",
     "Chris Youngblood (Day-To-Day)"
    ]
@@ -8369,9 +8369,9 @@
    }
   },
   "2027_20261023_CHI_MIL": {
-   "pHome": 0.5567,
-   "spread": -1.5,
-   "total": 233.2,
+   "pHome": 0.5847,
+   "spread": -2.3,
+   "total": 233.1,
    "pace": 103.8,
    "home": {
     "team": "MIL",
@@ -8460,9 +8460,9 @@
    },
    "away": {
     "team": "CHI",
-    "strength": 1404.8,
-    "offence": -47.1,
-    "defence": -46,
+    "strength": 1382.8,
+    "offence": -59.4,
+    "defence": -55.8,
     "coach": {
      "name": "Tiago Splitter",
      "elo": -2.1
@@ -8508,10 +8508,19 @@
       "id": "4711294",
       "name": "Matas Buzelis",
       "pos": "F",
-      "min": 28,
+      "min": 29,
       "o": -26,
       "d": -29,
-      "adds": -32.8
+      "adds": -32.5
+     },
+     {
+      "id": "4683750",
+      "name": "Jordan Hawkins",
+      "pos": "G",
+      "min": 25,
+      "o": -10,
+      "d": -24,
+      "adds": -17.9
      },
      {
       "id": "4432822",
@@ -8535,29 +8544,13 @@
       "id": "2595516",
       "name": "Norman Powell",
       "pos": "G",
-      "min": 22,
+      "min": 10,
       "o": 13,
       "d": -1,
-      "adds": 5.4
-     },
-     {
-      "id": "4397189",
-      "name": "Jalen Smith",
-      "pos": "F",
-      "min": 14,
-      "o": 14,
-      "d": -9,
-      "adds": 1.5
+      "adds": 2.4
      }
     ],
     "out": [
-     {
-      "id": "4683750",
-      "name": "Jordan Hawkins",
-      "status": "Day-To-Day",
-      "min": 25,
-      "costs": -17.9
-     },
      {
       "id": "4278067",
       "name": "Nic Claxton",
@@ -53881,5 +53874,5 @@
    }
   }
  },
- "generated": "2026-10-22T12:59Z"
+ "generated": "2026-10-22T15:54Z"
 }

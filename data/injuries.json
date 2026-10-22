@@ -45,6 +45,24 @@
   ],
   "CHA": [
    {
+    "id": "4066218",
+    "name": "Grant Williams",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-22",
+    "returns": "2026-10-23"
+   },
+   {
+    "id": "4395651",
+    "name": "Coby White",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Calf Strain",
+    "date": "2026-10-22",
+    "returns": "2026-10-23"
+   },
+   {
     "id": "5061575",
     "name": "Kon Knueppel",
     "pos": "G",
@@ -61,24 +79,6 @@
     "detail": "Knee",
     "date": "2026-10-20",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "4066218",
-    "name": "Grant Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Hamstring",
-    "date": "2026-10-20",
-    "returns": "2026-10-23"
-   },
-   {
-    "id": "4395651",
-    "name": "Coby White",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Calf Strain",
-    "date": "2026-10-20",
-    "returns": "2026-10-23"
    }
   ],
   "CHI": [
@@ -89,7 +89,7 @@
     "status": "Day-To-Day",
     "detail": "Illness",
     "date": "2026-10-22",
-    "returns": "2026-10-24"
+    "returns": "2026-10-23"
    },
    {
     "id": "4683750",
@@ -98,7 +98,7 @@
     "status": "Day-To-Day",
     "detail": "Illness",
     "date": "2026-10-22",
-    "returns": "2026-10-24"
+    "returns": "2026-10-23"
    },
    {
     "id": "4278067",
@@ -112,6 +112,15 @@
   ],
   "CLE": [
    {
+    "id": "4066328",
+    "name": "Jarrett Allen",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-22",
+    "returns": "2026-10-22"
+   },
+   {
     "id": "4997530",
     "name": "Khalifa Diop",
     "pos": "C",
@@ -119,15 +128,6 @@
     "detail": "Knee",
     "date": "2026-10-21",
     "returns": "2026-10-24"
-   },
-   {
-    "id": "4066328",
-    "name": "Jarrett Allen",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-10-21",
-    "returns": "2026-10-22"
    },
    {
     "id": "5106268",
@@ -140,6 +140,15 @@
    }
   ],
   "DAL": [
+   {
+    "id": "4683688",
+    "name": "Dereck Lively II",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Foot Surgery",
+    "date": "2026-10-22",
+    "returns": "2026-10-23"
+   },
    {
     "id": "3138160",
     "name": "Caleb Martin",
@@ -174,15 +183,6 @@
     "status": "Day-To-Day",
     "detail": "Knee",
     "date": "2026-10-22",
-    "returns": "2026-10-23"
-   },
-   {
-    "id": "4683688",
-    "name": "Dereck Lively II",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Foot Surgery",
-    "date": "2026-10-20",
     "returns": "2026-10-23"
    }
   ],
@@ -471,6 +471,15 @@
   ],
   "PHI": [
    {
+    "id": "3912848",
+    "name": "Dean Wade",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-22",
+    "returns": "2026-10-22"
+   },
+   {
     "id": "3904625",
     "name": "Tacko Fall",
     "pos": "C",
@@ -478,15 +487,6 @@
     "detail": "Quadriceps",
     "date": "2026-10-21",
     "returns": "2026-10-24"
-   },
-   {
-    "id": "3912848",
-    "name": "Dean Wade",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-21",
-    "returns": "2026-10-22"
    },
    {
     "id": "4870562",
@@ -538,21 +538,21 @@
   ],
   "POR": [
    {
+    "id": "4592435",
+    "name": "Branden Carlson",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Concussion",
+    "date": "2026-10-22",
+    "returns": "2026-10-23"
+   },
+   {
     "id": "4706557",
     "name": "Chris Youngblood",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Soreness",
     "date": "2026-10-22",
-    "returns": "2026-10-23"
-   },
-   {
-    "id": "4592435",
-    "name": "Branden Carlson",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Concussion",
-    "date": "2026-10-20",
     "returns": "2026-10-23"
    },
    {

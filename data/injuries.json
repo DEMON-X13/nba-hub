@@ -353,6 +353,15 @@
   ],
   "LAL": [
    {
+    "id": "4592691",
+    "name": "Jake LaRavia",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-10-22",
+    "returns": "2026-10-23"
+   },
+   {
     "id": "5060631",
     "name": "Adou Thiero",
     "pos": "F",
@@ -668,10 +677,10 @@
     "id": "5142718",
     "name": "AJ Dybantsa",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Sprain",
     "date": "2026-10-22",
-    "returns": "2026-10-23"
+    "returns": "2026-10-24"
    },
    {
     "id": "4997537",

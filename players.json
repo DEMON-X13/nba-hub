@@ -261,14 +261,15 @@
    ]
   },
   "LAL": {
-   "strength": 1581.3,
-   "offence": 40.3,
-   "defence": 43.4,
+   "strength": 1591.4,
+   "offence": 40.7,
+   "defence": 53.1,
    "coach": "JJ Redick",
    "coachElo": -2.4,
    "coachGames": 180,
    "pace": 103,
    "out": [
+    "Jake LaRavia (Day-To-Day)",
     "Collin Sexton (Day-To-Day)",
     "Adou Thiero (Day-To-Day)"
    ]
@@ -53874,5 +53875,5 @@
    }
   }
  },
- "generated": "2026-10-22T15:54Z"
+ "generated": "2026-10-22T17:58Z"
 }

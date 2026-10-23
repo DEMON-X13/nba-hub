@@ -352,15 +352,16 @@
    ]
   },
   "PHI": {
-   "strength": 1585.9,
-   "offence": 55.2,
-   "defence": 32.9,
+   "strength": 1533.1,
+   "offence": 23,
+   "defence": 12.2,
    "coach": "Nick Nurse",
    "coachElo": -2.1,
    "coachGames": 438,
    "pace": 104.5,
    "out": [
     "Dominick Barlow (Out)",
+    "Joel Embiid (Day-To-Day)",
     "Tacko Fall (Day-To-Day)",
     "Ariel Hukporti (Out)",
     "Dean Wade (Day-To-Day)"
@@ -55026,5 +55027,5 @@
    }
   }
  },
- "generated": "2026-10-23T12:39Z"
+ "generated": "2026-10-23T15:46Z"
 }

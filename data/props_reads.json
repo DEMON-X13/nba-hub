@@ -103,5 +103,7 @@
  "2027_20261021_MIN_MIA": {"at":"2026-10-22T13:00Z","status":"ok","lines":108,"tries":1},
  "2027_20261021_PHX_POR": {"at":"2026-10-22T13:00Z","status":"ok","lines":113,"tries":1},
  "2027_20261021_SAC_LAC": {"at":"2026-10-22T13:00Z","status":"ok","lines":105,"tries":1},
- "2027_20261021_UTA_MEM": {"at":"2026-10-22T13:00Z","status":"ok","lines":97,"tries":1}
+ "2027_20261021_UTA_MEM": {"at":"2026-10-22T13:00Z","status":"ok","lines":97,"tries":1},
+ "2027_20261022_CLE_PHI": {"at":"2026-10-23T12:39Z","status":"ok","lines":105,"tries":1},
+ "2027_20261022_DEN_OKC": {"at":"2026-10-23T12:39Z","status":"ok","lines":124,"tries":1}
 }

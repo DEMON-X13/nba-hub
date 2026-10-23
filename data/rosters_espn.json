@@ -505,7 +505,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4711294",
@@ -526,7 +526,7 @@
     "name": "Zach Collins",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5242496",
@@ -540,14 +540,14 @@
     "name": "Josh Giddey",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683750",
     "name": "Jordan Hawkins",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2990984",
@@ -603,7 +603,7 @@
     "name": "Dailyn Swain",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431687",
@@ -1066,7 +1066,7 @@
     "name": "Taurean Prince",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278562",
@@ -2414,6 +2414,13 @@
     "injured": false
    },
    {
+    "id": "4897943",
+    "name": "Dalton Knecht",
+    "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4433225",
     "name": "Tyler Kolek",
     "pos": "G",
@@ -3444,7 +3451,7 @@
     "name": "Tony Bradley",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683766",

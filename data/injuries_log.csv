@@ -2918,11 +2918,6 @@ date,team,player_id,name,status
 2026-10-23,CHA,4395651,Coby White,Out
 2026-10-23,CHA,5061575,Kon Knueppel,Out
 2026-10-23,CHA,4684269,Kylan Boswell,Out
-2026-10-23,CHI,4683750,Jordan Hawkins,Day-To-Day
-2026-10-23,CHI,4848625,Dailyn Swain,Day-To-Day
-2026-10-23,CHI,4066650,Zach Collins,Day-To-Day
-2026-10-23,CHI,5105555,Tobe Awaka,Day-To-Day
-2026-10-23,CHI,4871145,Josh Giddey,Day-To-Day
 2026-10-23,CHI,4278067,Nic Claxton,Out
 2026-10-23,DAL,5105806,Jett Howard,Day-To-Day
 2026-10-23,DAL,3138160,Caleb Martin,Out
@@ -2932,7 +2927,6 @@ date,team,player_id,name,status
 2026-10-23,DEN,4592427,Spencer Jones,Day-To-Day
 2026-10-23,DEN,3138196,Cameron Johnson,Day-To-Day
 2026-10-23,DEN,4432181,Julian Strawther,Out
-2026-10-23,DET,2990962,Taurean Prince,Day-To-Day
 2026-10-23,GSW,4397886,Charles Bassey,Day-To-Day
 2026-10-23,GSW,4709138,Brandin Podziemski,Day-To-Day
 2026-10-23,GSW,3102531,Kristaps Porzingis,Out
@@ -2977,8 +2971,8 @@ date,team,player_id,name,status
 2026-10-23,SAC,3907387,Ben Simmons,Out
 2026-10-23,SAC,4433174,Dylan Cardwell,Out
 2026-10-23,SAC,4898371,Maxime Raynaud,Out
-2026-10-23,SAS,4066259,De'Aaron Fox,Day-To-Day
 2026-10-23,SAS,4395723,Keldon Johnson,Day-To-Day
+2026-10-23,SAS,4066259,De'Aaron Fox,Day-To-Day
 2026-10-23,SAS,6440,Tobias Harris,Out
 2026-10-23,SAS,5101845,Jayden Quaintance,Out
 2026-10-23,TOR,4432586,Nate Bittle,Out

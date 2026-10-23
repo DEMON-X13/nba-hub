@@ -83,51 +83,6 @@
   ],
   "CHI": [
    {
-    "id": "4683750",
-    "name": "Jordan Hawkins",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness Not Specified",
-    "date": "2026-10-23",
-    "returns": "2026-10-23"
-   },
-   {
-    "id": "4848625",
-    "name": "Dailyn Swain",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness Not Specified",
-    "date": "2026-10-23",
-    "returns": "2026-10-23"
-   },
-   {
-    "id": "4066650",
-    "name": "Zach Collins",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Quadriceps",
-    "date": "2026-10-22",
-    "returns": "2026-10-23"
-   },
-   {
-    "id": "5105555",
-    "name": "Tobe Awaka",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Sprain",
-    "date": "2026-10-22",
-    "returns": "2026-10-23"
-   },
-   {
-    "id": "4871145",
-    "name": "Josh Giddey",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Wrist",
-    "date": "2026-10-22",
-    "returns": "2026-10-23"
-   },
-   {
     "id": "4278067",
     "name": "Nic Claxton",
     "pos": "C",
@@ -211,17 +166,6 @@
     "detail": "Knee Sprain",
     "date": "2026-10-17",
     "returns": "2026-11-29"
-   }
-  ],
-  "DET": [
-   {
-    "id": "2990962",
-    "name": "Taurean Prince",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Personal",
-    "date": "2026-10-22",
-    "returns": "2026-10-23"
    }
   ],
   "GSW": [
@@ -472,7 +416,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-10-22",
+    "date": "2026-10-23",
     "returns": "2026-10-25"
    },
    {
@@ -648,21 +592,21 @@
   ],
   "SAS": [
    {
-    "id": "4066259",
-    "name": "De'Aaron Fox",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Wrist Sprain",
-    "date": "2026-10-22",
-    "returns": "2026-10-23"
-   },
-   {
     "id": "4395723",
     "name": "Keldon Johnson",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Mouth Laceration",
-    "date": "2026-10-22",
+    "date": "2026-10-23",
+    "returns": "2026-10-23"
+   },
+   {
+    "id": "4066259",
+    "name": "De'Aaron Fox",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Wrist Sprain",
+    "date": "2026-10-23",
     "returns": "2026-10-23"
    },
    {

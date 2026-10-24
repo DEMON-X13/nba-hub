@@ -789,7 +789,7 @@
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4873153",
@@ -1124,7 +1124,7 @@
     "name": "Stephen Curry",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6589",
@@ -1194,7 +1194,7 @@
     "name": "Brandin Podziemski",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3102531",

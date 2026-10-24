@@ -94,6 +94,15 @@
   ],
   "DAL": [
    {
+    "id": "6442",
+    "name": "Kyrie Irving",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-24",
+    "returns": "2026-10-24"
+   },
+   {
     "id": "3138160",
     "name": "Caleb Martin",
     "pos": "F",
@@ -208,12 +217,30 @@
   ],
   "GSW": [
    {
+    "id": "4709138",
+    "name": "Brandin Podziemski",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-10-24",
+    "returns": "2026-10-26"
+   },
+   {
+    "id": "3975",
+    "name": "Stephen Curry",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-24",
+    "returns": "2026-10-24"
+   },
+   {
     "id": "4397886",
     "name": "Charles Bassey",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-10-23",
+    "date": "2026-10-24",
     "returns": "2026-10-24"
    },
    {
@@ -249,7 +276,7 @@
     "id": "4711272",
     "name": "Reed Sheppard",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Bruise",
     "date": "2026-10-24",
     "returns": "2026-10-24"
@@ -333,30 +360,30 @@
   ],
   "LAL": [
    {
-    "id": "4592691",
-    "name": "Jake LaRavia",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-23",
-    "returns": "2026-10-25"
-   },
-   {
     "id": "5060631",
     "name": "Adou Thiero",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Inflammation",
-    "date": "2026-10-23",
+    "date": "2026-10-24",
+    "returns": "2026-10-25"
+   },
+   {
+    "id": "4592691",
+    "name": "Jake LaRavia",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-24",
     "returns": "2026-10-25"
    },
    {
     "id": "5113969",
     "name": "Cameron Carr",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Oblique Strain",
-    "date": "2026-10-23",
+    "date": "2026-10-24",
     "returns": "2026-10-25"
    }
   ],
@@ -365,7 +392,7 @@
     "id": "4903027",
     "name": "Cedric Coward",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Wrist Sprain",
     "date": "2026-10-24",
     "returns": "2026-10-25"
@@ -547,21 +574,21 @@
   ],
   "POR": [
    {
-    "id": "4592435",
-    "name": "Branden Carlson",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Concussion Concussion",
-    "date": "2026-10-22",
-    "returns": "2026-10-27"
-   },
-   {
     "id": "4706557",
     "name": "Chris Youngblood",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Soreness",
-    "date": "2026-10-22",
+    "date": "2026-10-24",
+    "returns": "2026-10-27"
+   },
+   {
+    "id": "4592435",
+    "name": "Branden Carlson",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Concussion Concussion",
+    "date": "2026-10-24",
     "returns": "2026-10-27"
    },
    {
@@ -608,9 +635,9 @@
     "id": "6440",
     "name": "Tobias Harris",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Calf Strain",
-    "date": "2026-10-22",
+    "date": "2026-10-24",
     "returns": "2026-10-24"
    },
    {
@@ -639,9 +666,9 @@
     "id": "4433268",
     "name": "Trey Alexander",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Bruise",
-    "date": "2026-10-22",
+    "date": "2026-10-24",
     "returns": "2026-10-25"
    },
    {

@@ -197,17 +197,17 @@
    ]
   },
   "GSW": {
-   "strength": 1432.6,
-   "offence": -26.3,
-   "defence": -36.8,
+   "strength": 1436.6,
+   "offence": -24.3,
+   "defence": -34.7,
    "coach": "Steve Kerr",
    "coachElo": -4.4,
    "coachGames": 463,
    "pace": 102.8,
    "out": [
-    "Charles Bassey (Out)",
     "Jimmy Butler III (Out)",
     "Moses Moody (Out)",
+    "Brandin Podziemski (Out)",
     "Kristaps Porzingis (Out)"
    ]
   },
@@ -219,9 +219,7 @@
    "coachElo": 5.5,
    "coachGames": 367,
    "pace": 102.3,
-   "out": [
-    "Reed Sheppard (Out)"
-   ]
+   "out": []
   },
   "IND": {
    "strength": 1499.9,
@@ -262,8 +260,8 @@
    "coachGames": 181,
    "pace": 103,
    "out": [
-    "Jake LaRavia (Out)",
-    "Adou Thiero (Out)"
+    "Jake LaRavia (Day-To-Day)",
+    "Adou Thiero (Day-To-Day)"
    ]
   },
   "MEM": {
@@ -275,7 +273,7 @@
    "coachGames": 99,
    "pace": 103.7,
    "out": [
-    "Cedric Coward (Out)"
+    "Cedric Coward (Day-To-Day)"
    ]
   },
   "MIA": {
@@ -392,9 +390,9 @@
    "coachGames": 2,
    "pace": 103.6,
    "out": [
-    "Branden Carlson (Out)",
+    "Branden Carlson (Day-To-Day)",
     "Shaedon Sharpe (Out)",
-    "Chris Youngblood (Out)"
+    "Chris Youngblood (Day-To-Day)"
    ]
   },
   "SAC": {
@@ -412,16 +410,14 @@
    ]
   },
   "SAS": {
-   "strength": 1690.5,
-   "offence": 77,
-   "defence": 101.1,
+   "strength": 1688,
+   "offence": 73.6,
+   "defence": 101.9,
    "coach": "Mitch Johnson",
    "coachElo": 12.5,
    "coachGames": 184,
    "pace": 103.7,
-   "out": [
-    "Tobias Harris (Out)"
-   ]
+   "out": []
   },
   "TOR": {
    "strength": 1595.1,
@@ -442,7 +438,7 @@
    "coachGames": 330,
    "pace": 103.3,
    "out": [
-    "Trey Alexander (Out)",
+    "Trey Alexander (Day-To-Day)",
     "Jusuf Nurkic (Out)"
    ]
   },
@@ -7920,8 +7916,8 @@
    }
   },
   "2027_20261024_GSW_PHX": {
-   "pHome": 0.7936,
-   "spread": -9,
+   "pHome": 0.7901,
+   "spread": -8.9,
    "total": 228.9,
    "pace": 102.7,
    "home": {
@@ -8028,9 +8024,9 @@
    },
    "away": {
     "team": "GSW",
-    "strength": 1432.6,
-    "offence": -26.3,
-    "defence": -36.8,
+    "strength": 1436.6,
+    "offence": -24.3,
+    "defence": -34.8,
     "coach": {
      "name": "Steve Kerr",
      "elo": -4.4
@@ -8044,15 +8040,6 @@
       "o": -35,
       "d": -35,
       "adds": -47.5
-     },
-     {
-      "id": "4709138",
-      "name": "Brandin Podziemski",
-      "pos": "G",
-      "min": 32,
-      "o": -11,
-      "d": -10,
-      "adds": -13.5
      },
      {
       "id": "3975",
@@ -8121,25 +8108,43 @@
       "id": "4897449",
       "name": "Malevy Leons",
       "pos": "F",
-      "min": 9,
+      "min": 19,
       "o": -15,
       "d": -17,
-      "adds": -6.4
+      "adds": -12.2
+     },
+     {
+      "id": "4397886",
+      "name": "Charles Bassey",
+      "pos": "C",
+      "min": 18,
+      "o": -9,
+      "d": -8,
+      "adds": -6.5
+     },
+     {
+      "id": "3213",
+      "name": "Al Horford",
+      "pos": "C",
+      "min": 4,
+      "o": 13,
+      "d": 20,
+      "adds": 2.9
      }
     ],
     "out": [
+     {
+      "id": "4709138",
+      "name": "Brandin Podziemski",
+      "status": "Out",
+      "min": 32,
+      "costs": -13.5
+     },
      {
       "id": "4432171",
       "name": "Moses Moody",
       "status": "Out",
       "min": 30,
-      "costs": -6.5
-     },
-     {
-      "id": "4397886",
-      "name": "Charles Bassey",
-      "status": "Out",
-      "min": 18,
       "costs": -6.5
      },
      {
@@ -8349,15 +8354,7 @@
       "adds": 13.3
      }
     ],
-    "out": [
-     {
-      "id": "4711272",
-      "name": "Reed Sheppard",
-      "status": "Out",
-      "min": 21,
-      "costs": -5.3
-     }
-    ]
+    "out": []
    }
   },
   "2027_20261024_MIA_CHA": {
@@ -8978,9 +8975,9 @@
    }
   },
   "2027_20261024_SAS_DAL": {
-   "pHome": 0.2559,
-   "spread": 7.2,
-   "total": 229.7,
+   "pHome": 0.2584,
+   "spread": 7.1,
+   "total": 229.5,
    "pace": 103.4,
    "home": {
     "team": "DAL",
@@ -9102,9 +9099,9 @@
    },
    "away": {
     "team": "SAS",
-    "strength": 1690.6,
-    "offence": 76.9,
-    "defence": 101,
+    "strength": 1688.1,
+    "offence": 73.5,
+    "defence": 101.9,
     "coach": {
      "name": "Mitch Johnson",
      "elo": 12.5
@@ -9174,33 +9171,25 @@
       "adds": 25.4
      },
      {
+      "id": "6440",
+      "name": "Tobias Harris",
+      "pos": "F",
+      "min": 21,
+      "o": 20,
+      "d": 27,
+      "adds": 20.6
+     },
+     {
       "id": "3064560",
       "name": "Luke Kornet",
       "pos": "C",
-      "min": 19,
+      "min": 15,
       "o": 19,
       "d": 30,
-      "adds": 19.3
-     },
-     {
-      "id": "6578",
-      "name": "Harrison Barnes",
-      "pos": "F",
-      "min": 16,
-      "o": 31,
-      "d": 24,
-      "adds": 18.4
+      "adds": 14.9
      }
     ],
-    "out": [
-     {
-      "id": "6440",
-      "name": "Tobias Harris",
-      "status": "Out",
-      "min": 21,
-      "costs": 20.6
-     }
-    ]
+    "out": []
    }
   },
   "2027_20261024_WAS_CHI": {
@@ -54908,5 +54897,5 @@
    }
   }
  },
- "generated": "2026-10-24T12:02Z"
+ "generated": "2026-10-24T14:36Z"
 }

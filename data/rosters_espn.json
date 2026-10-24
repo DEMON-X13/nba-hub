@@ -1,5 +1,5 @@
 {
- "date": "2026-10-23",
+ "date": "2026-10-24",
  "teams": {
   "ATL": [
    {
@@ -768,7 +768,7 @@
     "name": "Cooper Flagg",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278049",
@@ -882,7 +882,7 @@
     "name": "Alpha Diallo",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3064290",
@@ -989,7 +989,7 @@
     "name": "Jalen Duren",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2596112",
@@ -1094,7 +1094,7 @@
     "name": "Ausar Thompson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "GSW": [
@@ -1194,7 +1194,7 @@
     "name": "Brandin Podziemski",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3102531",
@@ -1231,7 +1231,7 @@
     "name": "Steven Adams",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3037789",
@@ -1408,7 +1408,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133603",
@@ -1841,7 +1841,7 @@
     "name": "Isaiah Stewart",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5112087",
@@ -2283,7 +2283,7 @@
     "name": "Yves Missi",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397688",
@@ -2435,13 +2435,6 @@
     "injured": false
    },
    {
-    "id": "4411057",
-    "name": "Kevin McCullar Jr.",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4838721",
     "name": "Tyler Nickel",
     "pos": "F",
@@ -2542,6 +2535,13 @@
     "injured": true
    },
    {
+    "id": "4432185",
+    "name": "Micah Peavy",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "5061603",
     "name": "Thomas Sorber",
     "pos": "C",
@@ -2597,7 +2597,7 @@
     "name": "Paolo Banchero",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4066320",
@@ -2760,7 +2760,7 @@
     "name": "Joel Embiid",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3904625",
@@ -2781,7 +2781,7 @@
     "name": "LeBron James",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433144",
@@ -3144,12 +3144,19 @@
     "name": "Malik Monk",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4594327",
     "name": "Keegan Murray",
     "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4709131",
+    "name": "Sean Pedulla",
+    "pos": "G",
     "status": "active",
     "injured": false
    },
@@ -3230,7 +3237,7 @@
     "name": "De'Aaron Fox",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107968",
@@ -3258,7 +3265,7 @@
     "name": "Keldon Johnson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4713010",
@@ -3642,7 +3649,7 @@
     "name": "Felix Okpara",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5144126",
@@ -3682,35 +3689,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-23",
-  "BOS": "2026-10-23",
-  "BKN": "2026-10-23",
-  "CHA": "2026-10-23",
-  "CHI": "2026-10-23",
-  "CLE": "2026-10-23",
-  "DAL": "2026-10-23",
-  "DEN": "2026-10-23",
-  "DET": "2026-10-23",
-  "GSW": "2026-10-23",
-  "HOU": "2026-10-23",
-  "IND": "2026-10-23",
-  "LAC": "2026-10-23",
-  "LAL": "2026-10-23",
-  "MEM": "2026-10-23",
-  "MIA": "2026-10-23",
-  "MIL": "2026-10-23",
-  "MIN": "2026-10-23",
-  "NOP": "2026-10-23",
-  "NYK": "2026-10-23",
-  "OKC": "2026-10-23",
-  "ORL": "2026-10-23",
-  "PHI": "2026-10-23",
-  "PHX": "2026-10-23",
-  "POR": "2026-10-23",
-  "SAC": "2026-10-23",
-  "SAS": "2026-10-23",
-  "TOR": "2026-10-23",
-  "UTA": "2026-10-23",
-  "WAS": "2026-10-23"
+  "ATL": "2026-10-24",
+  "BOS": "2026-10-24",
+  "BKN": "2026-10-24",
+  "CHA": "2026-10-24",
+  "CHI": "2026-10-24",
+  "CLE": "2026-10-24",
+  "DAL": "2026-10-24",
+  "DEN": "2026-10-24",
+  "DET": "2026-10-24",
+  "GSW": "2026-10-24",
+  "HOU": "2026-10-24",
+  "IND": "2026-10-24",
+  "LAC": "2026-10-24",
+  "LAL": "2026-10-24",
+  "MEM": "2026-10-24",
+  "MIA": "2026-10-24",
+  "MIL": "2026-10-24",
+  "MIN": "2026-10-24",
+  "NOP": "2026-10-24",
+  "NYK": "2026-10-24",
+  "OKC": "2026-10-24",
+  "ORL": "2026-10-24",
+  "PHI": "2026-10-24",
+  "PHX": "2026-10-24",
+  "POR": "2026-10-24",
+  "SAC": "2026-10-24",
+  "SAS": "2026-10-24",
+  "TOR": "2026-10-24",
+  "UTA": "2026-10-24",
+  "WAS": "2026-10-24"
  }
 }

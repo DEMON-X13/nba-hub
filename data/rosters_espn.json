@@ -1231,7 +1231,7 @@
     "name": "Steven Adams",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3037789",
@@ -1343,7 +1343,7 @@
     "name": "Fred VanVleet",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "IND": [

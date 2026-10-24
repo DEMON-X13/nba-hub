@@ -273,6 +273,24 @@
   ],
   "HOU": [
    {
+    "id": "2991235",
+    "name": "Steven Adams",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-24",
+    "returns": "2026-10-24"
+   },
+   {
+    "id": "2991230",
+    "name": "Fred VanVleet",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-24",
+    "returns": "2026-10-24"
+   },
+   {
     "id": "4711272",
     "name": "Reed Sheppard",
     "pos": "G",

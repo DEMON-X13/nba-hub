@@ -28,6 +28,8 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/players.js` | The player, coach and matchup model: replay, fit, report, tonight's lineups; logs the day's numbers to `data/predictions.csv` |
 | `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
 | `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players and coaches (with their overall Elo on the ladder the tier shields are drawn on, and its change over 7 days), the backtest, the market table (`vsMarket`, from `research/backtest.json`), the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays"); and `history.json` |
+| `tools/alpha.js`, `models/alpha.json`, `research/alpha.json` | The Alpha Model (README "The Alpha Model"): the NFL hub's main game model refitted on NBA games; its calls on the season in play and the games to come, and its walk-forward and every design choice tried |
+| `tools/test_alpha.js` | Alpha's leakage check, its state by hand on a made-up league, tonight's rotation on made-up reports, and the committed files held to their rules |
 | `tools/props.js`, `props.json` | The props model (README "Player props"): each expected player's eleven stat distributions and double chances for the next five game days, its walk-forward and market tests (`research/props.json`) |
 | `tools/props_feed.js` | DraftKings' player props as ESPN's feed carries them: the parse the job and the page share, the fair-chance rules |
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
@@ -226,6 +228,106 @@ The site's own numbers through the 2026-27 preseason (graded once it ended, from
 published before tip-off): 26-28 straight up over 54 games, and of the six suggested parlays it showed on
 13 and 14 October, Safe and Medium on the 14th won and the other four lost. Preseason games are never in the
 record.
+
+## The Alpha Model
+
+The NFL hub's main game model, Alpha, rebuilt on NBA games (`tools/alpha.js`, `models/alpha.json`): the same recipe,
+every constant fitted here. A least-squares formula for the home margin over a rating state, rest, the home court and a
+lineup term, and the home win chance the logistic of that margin with one slope fitted by log loss. It never reads the
+betting line. It keeps its own Elo, its own net rating from the team box scores and its own player ratings, so it is a
+second opinion beside the team model and the player model, not either of them again.
+
+The margin, in home points, fitted on 2021-22 to 2025-26 (6,599 games):
+
+| Term | What | Coefficient |
+|---|---|---|
+| home | 1 on the home club's court, 0 at a neutral site | 1.965 points |
+| Elo difference | each club's Elo before the game, updated after every final since 2004-05 by the NFL app's rule (a log-of-margin multiplier damped by the gap, K 20 over 2.3, 60 Elo of home court inside the expectation only), 70% carried into a new season | 0.0236 a point of Elo: 100 Elo is 2.4 points |
+| rest | days since each club's last game, capped at 4, home less away, clipped at 3 | 0.264 a day |
+| back to back | home less away | -1.748 points |
+| net rating | each club's points per 100 possessions less its opponents', weighted 3% a game (team box scores, 2021-22 on), 60% carried into a new season | 0.514 a point |
+| rotation drop | each club's usual rotation less tonight's, home less away (below) | -89.5: a median 1.5 points a game, a tenth of games over 4.4 |
+
+The home win chance is 1 / (1 + e^(-0.1308 m)): a 3-point margin is 60%, 7 points 71%, 10 points 79%. The spread is
+the margin, written as a home line (-m). Alpha makes no total.
+
+**The rotation drop**, the NFL quarterback term's analogue. Each player is rated by his on-court plus-minus a minute,
+shrunk by 500 minutes toward the replacement level (the plus-minus a minute of the players outside each side's top eight
+by minutes, over every final before the day), each season's sums worth 0.6 of the next's. A rotation's strength is its
+players at their projected minutes (the mean of their last eight appearances, the player model's rule) filled into 240
+in rotation order, each weighted by his minutes over 240, above replacement. A club's usual strength is the mean, over
+its last 40 games, of the rotation that played each, every player at today's rating: a player out for half of them
+counts half, an absence the window has rolled past costs nothing (the club's Elo and net rating, which move about as
+slowly, have taken it in), and a player traded away counts against his old club until the window rolls past him.
+Tonight's strength is the rotation expected before tip-off:
+
+- a game to come: the hub's one availability rule, players.js `makeLiveLineup` on today's roster and injury report, run
+  on Alpha's own players (out before his return date, Out out on the report's own day, suspended out), filled to 240;
+- a final of the season in play: the club's players less those the injury log (`data/injuries_log.csv`) had Out or
+  suspended that day (the log keeps no return dates, so Day-To-Day plays);
+- a game of an earlier season, in the walk-forward: the club's previous game's rotation (none at a club's first game of
+  a season), the honest stand-in for a report from before the log began.
+
+The drop is usual less tonight, so a club at full strength has none. Its coefficient is fitted on who actually played,
+the cost of an absence that is known, which is what the report gives the live call. Early in a season the window is
+mostly last season's games, so a club that remade its roster carries a drop or a gain until its new rotation fills the
+window, as its carried Elo and net rating are still last season's club's: on 25 October 2026 the Lakers' was 3.1 points
+(last season's LeBron James, Rui Hachimura, Marcus Smart, Luke Kennard and Deandre Ayton have all played for other clubs
+since).
+
+### Walk-forward test (`node tools/alpha.js research`, writes `research/alpha.json`)
+
+Each season fitted on the seasons before it (from 2021-22) and scored cold on its regular-season and playoff finals with
+both box scores, the player model's own games. Alpha is the call made before tip-off on the previous game's rotation,
+the honest number; "lineup known" is the same model told who played, never a call, only the bound a perfect report would
+reach. Live, Alpha runs on the injury report, between the two. The team model is model.json's (fitted on 2008-2022), on
+the same games; the player model is research.json's walk-forward; the market is the consensus closing moneyline with the
+margin out and its closing spread (`data/odds_hist.csv`). Log loss / straight up / spread error:
+
+| Season scored | Alpha | Alpha without the rotation drop | Alpha, lineup known | Team model | Player model, no report | Player model, lineup known | Market |
+|---|---|---|---|---|---|---|---|
+| 2024 (1,314 games) | 0.600 / 67.8% / 10.87 | 0.609 / 66.8% / 11.03 | 0.598 / 67.2% / 10.91 | 0.609 / 66.1% / 11.06 | 0.615 / 67.7% / 11.30 | 0.613 / 66.3% / 11.28 | 0.583 / 69.1% / 10.66 |
+| 2025 (1,320) | 0.602 / 66.8% / 11.01 | 0.607 / 66.7% / 11.04 | 0.592 / 68.0% / 10.81 | 0.609 / 65.5% / 11.12 | 0.600 / 67.7% / 11.04 | 0.591 / 67.6% / 10.96 | 0.585 / 68.7% / 10.63 |
+| 2026 (1,322) | 0.598 / 69.1% / 11.37 | 0.603 / 68.3% / 11.44 | 0.590 / 67.9% / 11.20 | 0.601 / 68.8% / 11.53 | 0.603 / 66.7% / 11.52 | 0.589 / 68.5% / 11.38 | 0.576 / 68.7% / 11.00 (1,318 games) |
+
+The rotation drop is what makes Alpha more than a copy of the team model: without it Alpha is level with the team model
+(0.609 against 0.609, 0.607 against 0.609, 0.603 against 0.601); with it Alpha is ahead in all three seasons, by 0.009,
+0.007 and 0.0025, on nothing but the previous game's rotation. 2026, scored once with the design 2024 and 2025 chose:
+0.5985 against the team model's 0.6010 and the player model's 0.6026 with no report. Told who played, Alpha (0.590) is
+level with the player model told the same (0.589). The market is ahead of every model in every season, by 0.016 to 0.023.
+
+The design was chosen on 2024 and 2025 alone, one knob at a time from a start, each change kept only by the hub's rule
+(lower log loss in both seasons, by 0.0005 between them, and the spread error no worse; 73 trials, every one in
+`research/alpha.json`). Kept, in order: the rest gap and the back to back both (the gap alone was the start);
+plus-minus over Hollinger's Game Score for the player ratings; a 40-game usual window (5 to 82 tried; the grid was
+widened twice when the search stopped at its top); the fit from 2021-22 rather than 2022-23; 3% a game on the net
+rating (3% to 12% tried); the NFL app's Elo rule over FiveThirtyEight's NBA multiplier. Tried and not kept: altitude
+(Denver and Utah at home), K 15 and 25, the net rating carried 40% or 80%, 250 or 1,000 minutes of shrinkage, a season
+decay of 0.4 or 0.8, a usual rotation of only the players still at the club, and the drop fitted on the previous game's
+rotation instead of on who played. The rotation drop itself passes the same rule on the chosen design (2024 0.609 to
+0.600, 2025 0.607 to 0.602); had it not, Alpha would have shipped without it and said so. An early development run
+printed three baseline variants' 2026 numbers before the search existed; nothing was chosen on them (the file's notes say
+what they were).
+
+What it does not use, and why: the betting line (the market is the yardstick, as for the NFL's Alpha); the player model's
+ratings, coaches or travel (its own ratings keep it a second opinion); altitude (tried, not kept); preseason games (never
+learned from, never called); a Day-To-Day player as half a player (the hub's one rule, out before his return date); a
+total (the player model publishes the site's); and the season in play, which is never fitted, tuned or scored. Its
+finals are called as a backtest on that day's injury log: of the 36 so far, 20 right (log loss 0.646), too few to read
+anything. The log keeps the day's last read, which on a late or pushed run can land after a tip-off.
+
+In the job, `node tools/alpha.js` (about 3 seconds) replays every final since 2004-05 with the fitted numbers in
+`models/alpha.json` and writes the calls: `games`, every regular-season and playoff game of the season in play (its
+finals as above, its games to come as `upcoming`), and `upcoming`, the games to come on today's roster and report. It
+never refits; `node tools/alpha.js fit` refits by hand on the finished seasons, and `node tools/alpha.js research` walks
+forward, chooses the design and refits. An unchanged file keeps its stamp, so a quiet day commits nothing; a failed run
+keeps the last good calls and writes `status: {ok: false, why}`. `node tools/test_alpha.js` (about ten seconds) holds
+the leakage rule (the day's games read before tip-off and once final give the same inputs and the same call), the state
+by hand on a made-up league (the Elo update, the net rating, a club's first game of a season, a neutral site, a postponed
+game, a club with no box score, every player out), tonight's rotation through makeLiveLineup on made-up reports (Out,
+Day-To-Day returning after the game and on it, suspended, a debutant, a trade), the fit, determinism and a quiet day, and
+the committed files (the contract's shape, every game of the season in play called, the fitted numbers the fit of their
+seasons, the walk-forward research/alpha.json's).
 
 ## Player props
 
@@ -1003,6 +1105,7 @@ node tools/fetch.js        # needs ESPN reachable; --from / --to for a range
 node tools/fetch_box.js    # needs ESPN reachable; --from / --to for seasons, --budget minutes
 node tools/elo.js          # team model replay; add "fit" to refit
 node tools/players.js      # player model replay; add "fit" to refit
+node tools/alpha.js        # the Alpha Model's calls; "fit" refits by hand, "research" walks it forward (by hand)
 node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.csv -> research/backtest.json
 ```
 

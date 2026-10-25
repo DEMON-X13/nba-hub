@@ -1,0 +1,1472 @@
+{
+ "name": "Alpha Model: walk-forward and design",
+ "version": "alpha 1 · 2026-10-25",
+ "generatedBy": "node tools/alpha.js research",
+ "design": {
+  "elo": "nfl",
+  "K": 20,
+  "hfa": 60,
+  "carry": 0.7,
+  "alpha": 0.03,
+  "carryNet": 0.6,
+  "rest": "both",
+  "restCap": 4,
+  "restClip": 3,
+  "alt": 0,
+  "value": "pm",
+  "n0": 500,
+  "decay": 0.6,
+  "window": 40,
+  "usual": "all",
+  "rot": 1,
+  "fitMode": "known",
+  "fitFrom": 2022
+ },
+ "trials": [
+  {
+   "2024": {
+    "logloss": 0.611331,
+    "acc": 0.6636,
+    "mae": 11.032
+   },
+   "2025": {
+    "logloss": 0.607804,
+    "acc": 0.6682,
+    "mae": 11.098
+   },
+   "change": "start",
+   "design": {
+    "elo": "538",
+    "K": 20,
+    "hfa": 60,
+    "carry": 0.7,
+    "alpha": 0.05,
+    "carryNet": 0.6,
+    "rest": "gap",
+    "restCap": 4,
+    "restClip": 3,
+    "alt": 0,
+    "value": "gs",
+    "n0": 500,
+    "decay": 0.6,
+    "window": 10,
+    "usual": "all",
+    "rot": 1,
+    "fitMode": "known",
+    "fitFrom": 2023
+   },
+   "kept": true
+  },
+  {
+   "2024": {
+    "logloss": 0.611967,
+    "acc": 0.6644,
+    "mae": 11.042
+   },
+   "2025": {
+    "logloss": 0.608113,
+    "acc": 0.6644,
+    "mae": 11.099
+   },
+   "change": "alpha 0.03",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.611013,
+    "acc": 0.6667,
+    "mae": 11.031
+   },
+   "2025": {
+    "logloss": 0.608041,
+    "acc": 0.6667,
+    "mae": 11.099
+   },
+   "change": "alpha 0.08",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.610917,
+    "acc": 0.6651,
+    "mae": 11.033
+   },
+   "2025": {
+    "logloss": 0.608365,
+    "acc": 0.6659,
+    "mae": 11.102
+   },
+   "change": "alpha 0.12",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.611748,
+    "acc": 0.6629,
+    "mae": 11.04
+   },
+   "2025": {
+    "logloss": 0.607765,
+    "acc": 0.6682,
+    "mae": 11.095
+   },
+   "change": "carryNet 0.4",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.610926,
+    "acc": 0.6651,
+    "mae": 11.027
+   },
+   "2025": {
+    "logloss": 0.607976,
+    "acc": 0.6682,
+    "mae": 11.102
+   },
+   "change": "carryNet 0.8",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.610506,
+    "acc": 0.6636,
+    "mae": 11.027
+   },
+   "2025": {
+    "logloss": 0.607816,
+    "acc": 0.6659,
+    "mae": 11.095
+   },
+   "change": "elo nfl",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.610892,
+    "acc": 0.6674,
+    "mae": 11.03
+   },
+   "2025": {
+    "logloss": 0.607809,
+    "acc": 0.6644,
+    "mae": 11.094
+   },
+   "change": "K 15",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.61244,
+    "acc": 0.6629,
+    "mae": 11.048
+   },
+   "2025": {
+    "logloss": 0.607906,
+    "acc": 0.6667,
+    "mae": 11.104
+   },
+   "change": "K 25",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.610149,
+    "acc": 0.672,
+    "mae": 11.005
+   },
+   "2025": {
+    "logloss": 0.607036,
+    "acc": 0.6689,
+    "mae": 11.068
+   },
+   "change": "rest b2b",
+   "pass": 1,
+   "kept": false,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.610069,
+    "acc": 0.6712,
+    "mae": 11.004
+   },
+   "2025": {
+    "logloss": 0.606785,
+    "acc": 0.6682,
+    "mae": 11.065
+   },
+   "change": "rest both",
+   "pass": 1,
+   "kept": true,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.608964,
+    "acc": 0.6743,
+    "mae": 10.992
+   },
+   "2025": {
+    "logloss": 0.607796,
+    "acc": 0.6636,
+    "mae": 11.095
+   },
+   "change": "alt 1",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.607379,
+    "acc": 0.6689,
+    "mae": 10.972
+   },
+   "2025": {
+    "logloss": 0.606219,
+    "acc": 0.6636,
+    "mae": 11.05
+   },
+   "change": "value pm",
+   "pass": 1,
+   "kept": true,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.607397,
+    "acc": 0.6689,
+    "mae": 10.975
+   },
+   "2025": {
+    "logloss": 0.606037,
+    "acc": 0.6644,
+    "mae": 11.049
+   },
+   "change": "n0 250",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.607352,
+    "acc": 0.6689,
+    "mae": 10.969
+   },
+   "2025": {
+    "logloss": 0.606484,
+    "acc": 0.6636,
+    "mae": 11.052
+   },
+   "change": "n0 1000",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.607288,
+    "acc": 0.6689,
+    "mae": 10.968
+   },
+   "2025": {
+    "logloss": 0.607059,
+    "acc": 0.6644,
+    "mae": 11.062
+   },
+   "change": "decay 0.4",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.607534,
+    "acc": 0.6689,
+    "mae": 10.975
+   },
+   "2025": {
+    "logloss": 0.605606,
+    "acc": 0.6659,
+    "mae": 11.042
+   },
+   "change": "decay 0.8",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.60953,
+    "acc": 0.6629,
+    "mae": 11.017
+   },
+   "2025": {
+    "logloss": 0.60677,
+    "acc": 0.6636,
+    "mae": 11.064
+   },
+   "change": "window 5",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.604534,
+    "acc": 0.6674,
+    "mae": 10.936
+   },
+   "2025": {
+    "logloss": 0.604525,
+    "acc": 0.6697,
+    "mae": 11.015
+   },
+   "change": "window 20",
+   "pass": 1,
+   "kept": false,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.604067,
+    "acc": 0.6689,
+    "mae": 10.924
+   },
+   "2025": {
+    "logloss": 0.603302,
+    "acc": 0.6652,
+    "mae": 11.023
+   },
+   "change": "window 40",
+   "pass": 1,
+   "kept": true,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.604019,
+    "acc": 0.6705,
+    "mae": 10.918
+   },
+   "2025": {
+    "logloss": 0.603462,
+    "acc": 0.6667,
+    "mae": 11.058
+   },
+   "change": "window 60",
+   "pass": 1,
+   "kept": false,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.604948,
+    "acc": 0.6766,
+    "mae": 10.93
+   },
+   "2025": {
+    "logloss": 0.604227,
+    "acc": 0.6644,
+    "mae": 11.091
+   },
+   "change": "window 82",
+   "pass": 1,
+   "kept": false,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.603897,
+    "acc": 0.6811,
+    "mae": 10.911
+   },
+   "2025": {
+    "logloss": 0.60431,
+    "acc": 0.6667,
+    "mae": 11.03
+   },
+   "change": "usual current",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.605618,
+    "acc": 0.6743,
+    "mae": 10.951
+   },
+   "2025": {
+    "logloss": 0.602837,
+    "acc": 0.6621,
+    "mae": 11.002
+   },
+   "change": "fitMode pretip",
+   "pass": 1,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.602306,
+    "acc": 0.672,
+    "mae": 10.898
+   },
+   "2025": {
+    "logloss": 0.602912,
+    "acc": 0.6644,
+    "mae": 11.037
+   },
+   "change": "fitFrom 2022",
+   "pass": 1,
+   "kept": true,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.601148,
+    "acc": 0.6689,
+    "mae": 10.884
+   },
+   "2025": {
+    "logloss": 0.602351,
+    "acc": 0.6652,
+    "mae": 11.027
+   },
+   "change": "alpha 0.03",
+   "pass": 2,
+   "kept": true,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.601966,
+    "acc": 0.672,
+    "mae": 10.904
+   },
+   "2025": {
+    "logloss": 0.603412,
+    "acc": 0.6636,
+    "mae": 11.043
+   },
+   "change": "alpha 0.08",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.601363,
+    "acc": 0.6743,
+    "mae": 10.906
+   },
+   "2025": {
+    "logloss": 0.60374,
+    "acc": 0.6644,
+    "mae": 11.048
+   },
+   "change": "alpha 0.12",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.602321,
+    "acc": 0.6682,
+    "mae": 10.901
+   },
+   "2025": {
+    "logloss": 0.602463,
+    "acc": 0.6629,
+    "mae": 11.028
+   },
+   "change": "carryNet 0.4",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600099,
+    "acc": 0.6697,
+    "mae": 10.87
+   },
+   "2025": {
+    "logloss": 0.602492,
+    "acc": 0.6689,
+    "mae": 11.029
+   },
+   "change": "carryNet 0.8",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599756,
+    "acc": 0.6781,
+    "mae": 10.869
+   },
+   "2025": {
+    "logloss": 0.602111,
+    "acc": 0.6682,
+    "mae": 11.01
+   },
+   "change": "elo nfl",
+   "pass": 2,
+   "kept": true,
+   "passes": true
+  },
+  {
+   "2024": {
+    "logloss": 0.599635,
+    "acc": 0.6811,
+    "mae": 10.873
+   },
+   "2025": {
+    "logloss": 0.602387,
+    "acc": 0.6712,
+    "mae": 11.01
+   },
+   "change": "K 15",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600215,
+    "acc": 0.6728,
+    "mae": 10.873
+   },
+   "2025": {
+    "logloss": 0.602064,
+    "acc": 0.6644,
+    "mae": 11.013
+   },
+   "change": "K 25",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600977,
+    "acc": 0.6689,
+    "mae": 10.903
+   },
+   "2025": {
+    "logloss": 0.602967,
+    "acc": 0.672,
+    "mae": 11.03
+   },
+   "change": "rest gap",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599777,
+    "acc": 0.6788,
+    "mae": 10.868
+   },
+   "2025": {
+    "logloss": 0.602423,
+    "acc": 0.6712,
+    "mae": 11.015
+   },
+   "change": "rest b2b",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.598953,
+    "acc": 0.6743,
+    "mae": 10.866
+   },
+   "2025": {
+    "logloss": 0.602602,
+    "acc": 0.672,
+    "mae": 11.025
+   },
+   "change": "alt 1",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.604791,
+    "acc": 0.6811,
+    "mae": 10.897
+   },
+   "2025": {
+    "logloss": 0.605302,
+    "acc": 0.6659,
+    "mae": 11.02
+   },
+   "change": "value gs",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599877,
+    "acc": 0.675,
+    "mae": 10.872
+   },
+   "2025": {
+    "logloss": 0.601595,
+    "acc": 0.6689,
+    "mae": 11.002
+   },
+   "change": "n0 250",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599704,
+    "acc": 0.6819,
+    "mae": 10.87
+   },
+   "2025": {
+    "logloss": 0.60286,
+    "acc": 0.672,
+    "mae": 11.017
+   },
+   "change": "n0 1000",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.59914,
+    "acc": 0.6743,
+    "mae": 10.857
+   },
+   "2025": {
+    "logloss": 0.603298,
+    "acc": 0.672,
+    "mae": 11.024
+   },
+   "change": "decay 0.4",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600411,
+    "acc": 0.675,
+    "mae": 10.883
+   },
+   "2025": {
+    "logloss": 0.601285,
+    "acc": 0.6689,
+    "mae": 10.997
+   },
+   "change": "decay 0.8",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.606166,
+    "acc": 0.675,
+    "mae": 10.971
+   },
+   "2025": {
+    "logloss": 0.607752,
+    "acc": 0.6652,
+    "mae": 11.087
+   },
+   "change": "window 5",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.603823,
+    "acc": 0.6796,
+    "mae": 10.923
+   },
+   "2025": {
+    "logloss": 0.606905,
+    "acc": 0.6682,
+    "mae": 11.069
+   },
+   "change": "window 10",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.601137,
+    "acc": 0.6781,
+    "mae": 10.901
+   },
+   "2025": {
+    "logloss": 0.604348,
+    "acc": 0.6735,
+    "mae": 11.024
+   },
+   "change": "window 20",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599411,
+    "acc": 0.6743,
+    "mae": 10.865
+   },
+   "2025": {
+    "logloss": 0.601572,
+    "acc": 0.6667,
+    "mae": 11.034
+   },
+   "change": "window 60",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.60048,
+    "acc": 0.675,
+    "mae": 10.876
+   },
+   "2025": {
+    "logloss": 0.602067,
+    "acc": 0.6644,
+    "mae": 11.064
+   },
+   "change": "window 82",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599848,
+    "acc": 0.6697,
+    "mae": 10.874
+   },
+   "2025": {
+    "logloss": 0.603957,
+    "acc": 0.6697,
+    "mae": 11.03
+   },
+   "change": "usual current",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.601241,
+    "acc": 0.6811,
+    "mae": 10.887
+   },
+   "2025": {
+    "logloss": 0.600999,
+    "acc": 0.675,
+    "mae": 10.975
+   },
+   "change": "fitMode pretip",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.602435,
+    "acc": 0.6735,
+    "mae": 10.908
+   },
+   "2025": {
+    "logloss": 0.602388,
+    "acc": 0.6735,
+    "mae": 10.995
+   },
+   "change": "fitFrom 2023",
+   "pass": 2,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600618,
+    "acc": 0.6743,
+    "mae": 10.879
+   },
+   "2025": {
+    "logloss": 0.602037,
+    "acc": 0.6667,
+    "mae": 11.013
+   },
+   "change": "alpha 0.05",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600572,
+    "acc": 0.6758,
+    "mae": 10.885
+   },
+   "2025": {
+    "logloss": 0.6023,
+    "acc": 0.6682,
+    "mae": 11.011
+   },
+   "change": "alpha 0.08",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600108,
+    "acc": 0.6758,
+    "mae": 10.888
+   },
+   "2025": {
+    "logloss": 0.602658,
+    "acc": 0.6712,
+    "mae": 11.012
+   },
+   "change": "alpha 0.12",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600931,
+    "acc": 0.6758,
+    "mae": 10.887
+   },
+   "2025": {
+    "logloss": 0.602009,
+    "acc": 0.6697,
+    "mae": 11.009
+   },
+   "change": "carryNet 0.4",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.598676,
+    "acc": 0.6758,
+    "mae": 10.856
+   },
+   "2025": {
+    "logloss": 0.602476,
+    "acc": 0.6735,
+    "mae": 11.014
+   },
+   "change": "carryNet 0.8",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.601148,
+    "acc": 0.6689,
+    "mae": 10.884
+   },
+   "2025": {
+    "logloss": 0.602351,
+    "acc": 0.6652,
+    "mae": 11.027
+   },
+   "change": "elo 538",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599635,
+    "acc": 0.6811,
+    "mae": 10.873
+   },
+   "2025": {
+    "logloss": 0.602387,
+    "acc": 0.6712,
+    "mae": 11.01
+   },
+   "change": "K 15",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600215,
+    "acc": 0.6728,
+    "mae": 10.873
+   },
+   "2025": {
+    "logloss": 0.602064,
+    "acc": 0.6644,
+    "mae": 11.013
+   },
+   "change": "K 25",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600977,
+    "acc": 0.6689,
+    "mae": 10.903
+   },
+   "2025": {
+    "logloss": 0.602967,
+    "acc": 0.672,
+    "mae": 11.03
+   },
+   "change": "rest gap",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599777,
+    "acc": 0.6788,
+    "mae": 10.868
+   },
+   "2025": {
+    "logloss": 0.602423,
+    "acc": 0.6712,
+    "mae": 11.015
+   },
+   "change": "rest b2b",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.598953,
+    "acc": 0.6743,
+    "mae": 10.866
+   },
+   "2025": {
+    "logloss": 0.602602,
+    "acc": 0.672,
+    "mae": 11.025
+   },
+   "change": "alt 1",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.604791,
+    "acc": 0.6811,
+    "mae": 10.897
+   },
+   "2025": {
+    "logloss": 0.605302,
+    "acc": 0.6659,
+    "mae": 11.02
+   },
+   "change": "value gs",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599877,
+    "acc": 0.675,
+    "mae": 10.872
+   },
+   "2025": {
+    "logloss": 0.601595,
+    "acc": 0.6689,
+    "mae": 11.002
+   },
+   "change": "n0 250",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599704,
+    "acc": 0.6819,
+    "mae": 10.87
+   },
+   "2025": {
+    "logloss": 0.60286,
+    "acc": 0.672,
+    "mae": 11.017
+   },
+   "change": "n0 1000",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.59914,
+    "acc": 0.6743,
+    "mae": 10.857
+   },
+   "2025": {
+    "logloss": 0.603298,
+    "acc": 0.672,
+    "mae": 11.024
+   },
+   "change": "decay 0.4",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600411,
+    "acc": 0.675,
+    "mae": 10.883
+   },
+   "2025": {
+    "logloss": 0.601285,
+    "acc": 0.6689,
+    "mae": 10.997
+   },
+   "change": "decay 0.8",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.606166,
+    "acc": 0.675,
+    "mae": 10.971
+   },
+   "2025": {
+    "logloss": 0.607752,
+    "acc": 0.6652,
+    "mae": 11.087
+   },
+   "change": "window 5",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.603823,
+    "acc": 0.6796,
+    "mae": 10.923
+   },
+   "2025": {
+    "logloss": 0.606905,
+    "acc": 0.6682,
+    "mae": 11.069
+   },
+   "change": "window 10",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.601137,
+    "acc": 0.6781,
+    "mae": 10.901
+   },
+   "2025": {
+    "logloss": 0.604348,
+    "acc": 0.6735,
+    "mae": 11.024
+   },
+   "change": "window 20",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599411,
+    "acc": 0.6743,
+    "mae": 10.865
+   },
+   "2025": {
+    "logloss": 0.601572,
+    "acc": 0.6667,
+    "mae": 11.034
+   },
+   "change": "window 60",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.60048,
+    "acc": 0.675,
+    "mae": 10.876
+   },
+   "2025": {
+    "logloss": 0.602067,
+    "acc": 0.6644,
+    "mae": 11.064
+   },
+   "change": "window 82",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599848,
+    "acc": 0.6697,
+    "mae": 10.874
+   },
+   "2025": {
+    "logloss": 0.603957,
+    "acc": 0.6697,
+    "mae": 11.03
+   },
+   "change": "usual current",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.601241,
+    "acc": 0.6811,
+    "mae": 10.887
+   },
+   "2025": {
+    "logloss": 0.600999,
+    "acc": 0.675,
+    "mae": 10.975
+   },
+   "change": "fitMode pretip",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  },
+  {
+   "2024": {
+    "logloss": 0.602435,
+    "acc": 0.6735,
+    "mae": 10.908
+   },
+   "2025": {
+    "logloss": 0.602388,
+    "acc": 0.6735,
+    "mae": 10.995
+   },
+   "change": "fitFrom 2023",
+   "pass": 3,
+   "kept": false,
+   "passes": false
+  }
+ ],
+ "rotation": {
+  "with": {
+   "2024": {
+    "logloss": 0.599756,
+    "acc": 0.6781,
+    "mae": 10.869
+   },
+   "2025": {
+    "logloss": 0.602111,
+    "acc": 0.6682,
+    "mae": 11.01
+   }
+  },
+  "without": {
+   "2024": {
+    "logloss": 0.609175,
+    "acc": 0.6682,
+    "mae": 11.029
+   },
+   "2025": {
+    "logloss": 0.606597,
+    "acc": 0.6667,
+    "mae": 11.037
+   }
+  },
+  "survives": true,
+  "rule": "lower log loss in 2024 and in 2025, by 0.0005 between them, and the spread error no worse, the call made on the previous game's rotation"
+ },
+ "folds": [
+  {
+   "season": 2024,
+   "fit": "2022-2023",
+   "fitGames": 2643,
+   "coef": {
+    "home": 2.001817,
+    "elo": 0.01979,
+    "rest": 0.326849,
+    "b2b": -1.619055,
+    "net": 0.524119,
+    "rot": -85.950517
+   },
+   "k": 0.132152,
+   "alpha": {
+    "games": 1314,
+    "logloss": 0.599756,
+    "acc": 0.6781,
+    "mae": 10.869
+   },
+   "alphaKnown": {
+    "games": 1314,
+    "logloss": 0.597996,
+    "acc": 0.672,
+    "mae": 10.907
+   },
+   "alphaNoRotation": {
+    "games": 1314,
+    "logloss": 0.609175,
+    "acc": 0.6682,
+    "mae": 11.029
+   },
+   "teamElo": {
+    "games": 1314,
+    "logloss": 0.608618,
+    "acc": 0.6613,
+    "mae": 11.061
+   },
+   "playerModel": {
+    "naive": {
+     "games": 1314,
+     "logloss": 0.61531,
+     "acc": 0.6766,
+     "mae": 11.3
+    },
+    "known": {
+     "games": 1314,
+     "logloss": 0.61314,
+     "acc": 0.6629,
+     "mae": 11.28
+    },
+    "note": "research.json, on its own games"
+   },
+   "market": {
+    "games": 1314,
+    "market": {
+     "games": 1314,
+     "logloss": 0.583478,
+     "acc": 0.691,
+     "mae": 10.662
+    },
+    "alpha": {
+     "games": 1314,
+     "logloss": 0.599756,
+     "acc": 0.6781,
+     "mae": 10.869
+    },
+    "teamElo": {
+     "games": 1314,
+     "logloss": 0.608618,
+     "acc": 0.6613,
+     "mae": 11.061
+    }
+   }
+  },
+  {
+   "season": 2025,
+   "fit": "2022-2024",
+   "fitGames": 3957,
+   "coef": {
+    "home": 2.113373,
+    "elo": 0.024225,
+    "rest": 0.359305,
+    "b2b": -1.676873,
+    "net": 0.437875,
+    "rot": -85.472311
+   },
+   "k": 0.133535,
+   "alpha": {
+    "games": 1320,
+    "logloss": 0.602111,
+    "acc": 0.6682,
+    "mae": 11.01
+   },
+   "alphaKnown": {
+    "games": 1320,
+    "logloss": 0.592456,
+    "acc": 0.6795,
+    "mae": 10.81
+   },
+   "alphaNoRotation": {
+    "games": 1320,
+    "logloss": 0.606597,
+    "acc": 0.6667,
+    "mae": 11.037
+   },
+   "teamElo": {
+    "games": 1320,
+    "logloss": 0.60868,
+    "acc": 0.6545,
+    "mae": 11.123
+   },
+   "playerModel": {
+    "naive": {
+     "games": 1320,
+     "logloss": 0.59987,
+     "acc": 0.6765,
+     "mae": 11.04
+    },
+    "known": {
+     "games": 1320,
+     "logloss": 0.59147,
+     "acc": 0.6758,
+     "mae": 10.96
+    },
+    "note": "research.json, on its own games"
+   },
+   "market": {
+    "games": 1320,
+    "market": {
+     "games": 1320,
+     "logloss": 0.585423,
+     "acc": 0.6871,
+     "mae": 10.628
+    },
+    "alpha": {
+     "games": 1320,
+     "logloss": 0.602111,
+     "acc": 0.6682,
+     "mae": 11.01
+    },
+    "teamElo": {
+     "games": 1320,
+     "logloss": 0.60868,
+     "acc": 0.6545,
+     "mae": 11.123
+    }
+   }
+  },
+  {
+   "season": 2026,
+   "fit": "2022-2025",
+   "fitGames": 5277,
+   "coef": {
+    "home": 2.049725,
+    "elo": 0.025993,
+    "rest": 0.34371,
+    "b2b": -1.866143,
+    "net": 0.422857,
+    "rot": -87.283355
+   },
+   "k": 0.131952,
+   "alpha": {
+    "games": 1322,
+    "logloss": 0.598468,
+    "acc": 0.6914,
+    "mae": 11.368
+   },
+   "alphaKnown": {
+    "games": 1322,
+    "logloss": 0.590182,
+    "acc": 0.6793,
+    "mae": 11.196
+   },
+   "alphaNoRotation": {
+    "games": 1322,
+    "logloss": 0.602974,
+    "acc": 0.6831,
+    "mae": 11.442
+   },
+   "teamElo": {
+    "games": 1322,
+    "logloss": 0.600973,
+    "acc": 0.6884,
+    "mae": 11.529
+   },
+   "playerModel": {
+    "naive": {
+     "games": 1322,
+     "logloss": 0.60255,
+     "acc": 0.6672,
+     "mae": 11.52
+    },
+    "known": {
+     "games": 1322,
+     "logloss": 0.58878,
+     "acc": 0.6853,
+     "mae": 11.38
+    },
+    "note": "research.json, on its own games"
+   },
+   "market": {
+    "games": 1318,
+    "market": {
+     "games": 1318,
+     "logloss": 0.57574,
+     "acc": 0.6874,
+     "mae": 11.001
+    },
+    "alpha": {
+     "games": 1318,
+     "logloss": 0.598264,
+     "acc": 0.692,
+     "mae": 11.375
+    },
+    "teamElo": {
+     "games": 1318,
+     "logloss": 0.60086,
+     "acc": 0.6882,
+     "mae": 11.538
+    }
+   }
+  }
+ ],
+ "notes": [
+  "Every call is made before tip-off: the state is what the finals before the game's day left, and tonight's rotation is the club's previous game's (alpha, the honest number). alphaKnown is the same model told who played (hindsight, as the player model's \"known\" rows): never a call, only the bound a perfect injury report would reach.",
+  "The design was chosen on 2024 and 2025 alone (trials); 2026 was scored once, with that design. An early development run printed the 2026 numbers of three baseline variants (no rotation term; the term fitted on who played; fitted on the previous game's rotation) before the search was written. No choice reads them: the search kept the rotation term on 2024 and 2025 (those 2026 numbers had it too), and chose to fit it on who played where they had favoured the previous game's rotation.",
+  "Each fold is fitted on the seasons before it (fit) and scored on its own regular-season and playoff finals with both box scores, the player model's own games. 2026-27, the season in play, is never fitted, tuned or scored.",
+  "teamElo is the hub's team model with model.json's parameters (fitted on 2008-2022, the home edge learned as the finals come), on the same games. playerModel is research.json's walk-forward, on its own games (the same count). market is odds_hist.csv's consensus closing moneyline with the margin taken out, and its closing spread, on the games that have one."
+ ],
+ "generated": "2026-10-25T17:47Z"
+}

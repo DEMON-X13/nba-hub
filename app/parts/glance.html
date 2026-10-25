@@ -82,8 +82,8 @@
    The same leg can be drawn in several places at once (its Top 50 row and its builder row, a level card and another), so
    the bubble keeps the place it was opened from (placeOf) and the leg's key, side and line, and when the page draws its
    rows again while it is open (a MutationObserver, connected only then) it is bound to that place's copy of the leg
-   (marked open, placed again, drawn again where the copy's price moved), or closed, the focus on the leg's neighbour
-   there, where that place no longer draws the leg. Placed again, it keeps where the reader had scrolled it.
+   (marked open, drawn and placed again with the copy's numbers), or closed, the focus on the leg's neighbour there,
+   where that place no longer draws the leg. Drawn again, it keeps where the reader had scrolled it.
 
    A player's bubble: his position and club and his status on the injury report as the page reads it; his overall Elo
    with its tier shield and tier, and his rank among the rated players at his position (the Players tab's own numbers,
@@ -332,9 +332,9 @@ const ROOM_MIN = 160;
    640px and under, and wherever neither side of the name has ROOM_MIN for it (a landscape phone), since a bubble held to
    its floor there would cover the name and run off the screen. Where the reader has scrolled the bubble, the scroll is
    kept: measuring its whole height clears its max-height, and a browser takes the scroll back to the top on that */
-function place() {
+function place(keep) {
   if (!box || box.hidden) return;
-  const scrolled = box.scrollTop || 0;
+  const scrolled = keep != null ? keep : box.scrollTop || 0;
   let sh = sheet();
   if (!sh) {
     /* the name's own block (the name and its line under it), so the bubble never covers what the leg is */
@@ -358,13 +358,13 @@ function place() {
 }
 function draw() {
   if (!cur || !box) return;
-  const at = document.activeElement, inBox = box.contains(at), key = inBox && at !== box ? ['glanceClose', 'glanceTonight'].find(k => at.dataset && at.dataset[k] != null) : null;
+  const scrolled = box.scrollTop || 0, at = document.activeElement, inBox = box.contains(at), key = inBox && at !== box ? ['glanceClose', 'glanceTonight'].find(k => at.dataset && at.dataset[k] != null) : null;
   let v; try { v = cur.of.startsWith('p:') ? playerHtml() : teamHtml(); } catch (e) { v = { title: 'Matchup', body: `<p class="glance-q">This could not be drawn: ${H(e && e.message || e)}.</p>` }; }
   box.dataset.glanceOf = cur.of; box.dataset.glanceGame = cur.gid;
   box.innerHTML = `<div class="glance-hd"><h3 class="glance-title" id="glanceTitle">${v.title}</h3><button type="button" class="btn ghost glance-x" data-glance-close>Close</button></div><div class="glance-body">${v.body}</div>`;
   if (key) { const nx = box.querySelector(`[data-${key.replace(/[A-Z]/g, c => '-' + c.toLowerCase())}]`); try { (nx || box).focus({ preventScroll: true }); } catch (e) {} }
   else if (inBox) { try { box.focus({ preventScroll: true }); } catch (e) {} }
-  place();
+  place(scrolled);
 }
 function open(btn) {
   const of = btn.dataset.glance || '', i = of.indexOf(':'); if (i < 1) return;
@@ -409,7 +409,9 @@ function sync() {
   if (!cur || !box || box.hidden) return;
   const a = anchor(); if (!a || a.closest('[hidden]')) { gone(); return; }
   const pl = cur.place && document.querySelector(cur.place), i = namesIn(pl).indexOf(a); if (i >= 0) cur.at = i;
-  if (cur.stale) { cur.stale = false; draw(); } else place();
+  /* drawn again on every redraw, not only where its row's price moved: a press can move the line the bubble shows, or a
+     file it waits on answer, with the row's own leg unchanged */
+  cur.stale = false; draw();
 }
 /* the leg is gone from where its bubble was opened: the bubble closes and the focus, where it was in the bubble (or lost
    with the old row), goes to the leg's neighbour in that place (the name now at its place in the list, else the last),

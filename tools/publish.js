@@ -60,7 +60,10 @@ function main() {
     const frozen = started && p ? { pHome: +p.pHome, spread: +p.spread, total: +p.total, pace: u ? u.pace : undefined, home: u ? u.home : undefined, away: u ? u.away : undefined } : null;
     /* espn: ESPN's event id, which the page's props read (Refresh odds) asks for DraftKings' player props by; the
        press's own scoreboard read gives it too, and this stands in when that day's scoreboard does not answer */
+    /* tv: the national networks ESPN lists the game on (games.csv's tv, README "The national networks"), which make it a
+       featured game on Suggested Parlays; [] for a game on local networks only, or one read before the column existed */
     return { id: g.game_id, date: g.date, tip: g.tip || '', type: g.type, away: g.away, home: g.home, neutral: +g.neutral === 1, status: g.status, espn: g.espn_id || '',
+      tv: g.tv ? String(g.tv).split('|').filter(Boolean) : [],
       awayScore: num(g.away_score), homeScore: num(g.home_score), line: num(g.home_line), totalLine: num(g.total),
       ml: g.home_ml || g.away_ml ? { home: num(g.home_ml), away: num(g.away_ml) } : null,
       model: frozen || (u ? { pHome: u.pHome, spread: u.spread, total: u.total, pace: u.pace, home: u.home, away: u.away }

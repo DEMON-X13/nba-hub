@@ -2764,7 +2764,7 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
 .pb-amt{display:inline-flex;align-items:center;min-height:44px;padding:0 2px 0 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel)}
 .pb-amt:focus-within{border-color:var(--hot);box-shadow:0 0 0 2px rgba(255,106,31,.4)}
 .pb-amt>span{font-family:var(--display);font-size:16px;font-weight:700;color:var(--ink-2)}
-.pb-amt input[type=number]{width:120px;min-height:42px;border:0;border-radius:0 8px 8px 0;background:transparent;padding:8px 8px 8px 3px;font-family:var(--display);font-size:16px;font-weight:700;text-align:left;color:var(--ink)}
+.pb-amt input[type=number]{width:120px;min-height:44px;border:0;border-radius:0 8px 8px 0;background:transparent;padding:8px 8px 8px 3px;font-family:var(--display);font-size:16px;font-weight:700;text-align:left;color:var(--ink)}
 .pb-amt input[type=number]:focus{outline:none}
 .pb-amt-hint{font-size:12px;color:var(--pb-q)}
 .pb-seg{display:inline-flex;border:1px solid var(--line-2);border-radius:999px;overflow:hidden;background:var(--panel);max-width:100%}
@@ -2988,8 +2988,9 @@ function pbGames() {
 }
 const pbListed = g => !!g && pbGames().some(x => x.id === g.id);
 const pbDayText = d => `${dayName(d)} ${dayNum(d)}`;
-/* a tip-off in the viewer's own time zone */
-const pbTip = g => g.tip ? new Date(g.tip).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' }) : '';
+/* a tip-off in the viewer's own time zone, its own weekday with it (a game is listed under its Eastern date, the NBA's;
+   10:30 PM Eastern is Monday 3:30 AM in London) */
+const pbTip = g => g.tip ? new Date(g.tip).toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit' }) : '';
 
 /* ---------- the choices: the visitor's own, in M.pb, saved as M is ---------- */
 function pbClean(v) {
@@ -3471,7 +3472,7 @@ function pbPanel() {
   const chips = PB_KINDS.map(([k, l, s]) => `<label class="pb-chip${u.k[k] ? ' on' : ''}"><input type="checkbox" data-pb-kind="${k}" ${u.k[k] ? 'checked' : ''}><span>${l}${s ? ` <small>${s}</small>` : ''}</span></label>`).join('');
   const glist = ds.map(d => { const gs = games.filter(g => g.date === d); if (!gs.length) return '';
     return `<div class="pb-gday"><h3>${esc(pbDayText(d))}</h3><div class="pb-glist">${gs.map(g => { const on = !u.off.includes(g.id), t = pbTip(g);
-      return `<label class="pb-g${on ? ' on' : ''}"><input type="checkbox" data-pb-game="${g.id}" ${on ? 'checked' : ''} aria-label="${esc(g.away)} at ${esc(g.home)}, ${esc(pbDayText(d))} ${esc(t)}"><span><b>${esc(g.away)} @ ${esc(g.home)}</b><small>${esc(dayName(d))}${t ? ' · ' + esc(t) : ''}</small></span></label>`; }).join('')}</div></div>`; }).join('');
+      return `<label class="pb-g${on ? ' on' : ''}"><input type="checkbox" data-pb-game="${g.id}" ${on ? 'checked' : ''} aria-label="${esc(g.away)} at ${esc(g.home)}, ${esc(t || pbDayText(d))}"><span><b>${esc(g.away)} @ ${esc(g.home)}</b><small>${t ? esc(t) : esc(dayName(d))}</small></span></label>`; }).join('')}</div></div>`; }).join('');
   const notes = [];
   if (LINES_ERR && !Object.keys(SG_LINES).length && !Object.keys(PP_LIVE).length) notes.push('DraftKings’ published lines did not load: the list has what Refresh odds reads, once it is pressed.');
   if (u.k.total) notes.push(`Game totals are never Value picks: each is priced at the book’s own chance, so the totals come last among the other lines, and on a long list the ${PB_TOP_N} lines can end before them.`);

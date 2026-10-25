@@ -33,7 +33,10 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
 | `tools/props_ledger.js`, `tools/props_check.js`, `data/props_shadow.json`, `data/props_shadow_lines.csv` | The props shadow ledger: the model's call frozen at tip-off, graded against the closing lines, its pre-registered bar, and the check that holds it to the last commit |
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet locked into the Bet Build and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays"), and the rating over time (section 10) |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet locked into the Bet Build and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays"), and the rating over time (section 10); and X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays") |
+| `liveparlays/parlays.json` | X's placed parlays, kept by hand from the slips the owner sends (README "X Parlays"); the page reads it when its X Parlays tab opens, and the job's `tools/autoclear.js` marks a finished one cleared two Eastern days after its last game |
+| `app/parts/xparlays.html` | The X Parlays tab: its markup, its styles (all under `#lpCard`) and its script in a closure of its own, set into the page by `build.js` at its `<!--part:xparlays-->` marker |
+| `tools/autoclear.js`, `tools/test_autoclear.js` | X's finished parlays clear themselves (README "X Parlays"); the test runs first in the job's step |
 | `tools/corr.js`, `data/corr.json`, `research/corr.json` | The same-game correlation table (README "Same-game parlays"): measured on the finished seasons' box scores, written by the script only; the report beside it |
 | `tools/backtest.js`, `research/backtest.json`, `research/backtest_games.csv` | The walk-forward of the model's picks and the suggested parlays against the closing line, run by hand; `publish.js` reads its summary into state.json's `vsMarket` for the Record tab |
 | `tools/fetch_odds_hist.js`, `data/odds_hist.csv` | The closing lines on the 2023-2026 finals from ESPN's game summaries: a finished backfill, run by hand from a machine that reaches ESPN only to add a season (the daily job keeps each game's closing moneylines in `games.csv` from now on); its `check()` is shared with `backtest.js` and `corr.js` |
@@ -966,6 +969,147 @@ and six breaks of the card (the last ten rows) are red:
 | the card's no-model reason dropped | the card with a total |
 | the card saying "edge" and "model says" | both cards, and the card's note |
 
+## X Parlays
+
+The parlays X placed at the book, the same on every device and read only everywhere: a tab of their own, after the
+Parlay Builder, from one file kept by hand, `liveparlays/parlays.json`. It is the NFL hub's X Parlays carried over (the
+NFL hub's `liveparlays/build/page.html` and its checks, `nflbets/build/smoke_live.js`), with the NBA's game ids, stats,
+settlement and look. Each parlay is followed live against ESPN's scoreboard and box scores in the visitor's browser:
+every leg has its target, a bar, a word for where it stands and a mark (✓ won, ✗ lost, P a push, V void), each game a
+score chip coloured by how the parlay stands in it. Nothing on the page writes anywhere but one list, in the visitor's
+own browser, of the parlays they chose to hide.
+
+### The file
+
+```
+{ "how": "...", "updated": "2026-10-25T17:30:00Z" | null,
+  "games": ["2027_20261024_BKN_CLE", ...],
+  "parlays": [ { "id": "w1-dk-bkncle-3", "date": "2026-10-24", "stake": 10, "price": 264, "payout": 36.4, "note": "same game",
+                 "legs": [ { "game": 0, "player": "Cade Cunningham", "pid": "4432166", "team": "DET", "stat": "pts", "line": 24.5, "side": "over", "main": true } ],
+                 "cleared": true, "cleared_on": "2026-10-26", "cleared_by": "auto" } ] }
+```
+
+Claude keeps it from the slips the owner sends in chat, as its `how` says: `games` lists each game once by the site's id
+(`season_YYYYMMDD_AWAY_HOME`, the season the year it ends, the date Eastern, as `data/games.csv` writes it) and a leg
+points at one by its place in that list. A parlay is `id` (any name not used before), `date` (optional: the Eastern date
+of its first game; without it the page takes the first game's), `stake`, `price` (the American odds it was placed at),
+`payout` (stake included), an optional `note` and its `legs`. A leg is `game`, `player` (as ESPN spells him), `pid` (his
+ESPN athlete id: optional, but the page finds him by it first), `team` (his club's code), `stat`, `line`, `side` (over or
+under) and `main` (true for a book main line like 24.5, false for an "N+" milestone written with line N). The stats are
+the props view's: `pts reb ast tpm stl blk pra pr pa ar sb`, `dd` and `td` (a Yes bet: line 1, side over, main false), and
+`ml` or `spread` for a whole-game bet (`ats` is read as `spread`), `total` for the game's points. A whole-game bet takes
+`team` set to the side bet on, `line` 0 for `ml` and the spread from that team's side; a total its line and either club.
+A line the book moved before X placed the bet is written as the line X took. A parlay X no longer wants on the page is
+marked `"cleared": true` and stays as history, drawn by no device and its games never read. `updated` is when the file
+last changed what the tab shows. The file is written as `JSON.stringify(doc, null, 1)` writes it (one-space indent, a
+newline at the end), so the job's edits to it are small diffs; the page reads it at runtime, so an edit needs no rebuild,
+and the job's push trigger does not fire on it.
+
+### On the page (`app/parts/xparlays.html`)
+
+**When it reads.** The file (`liveparlays/parlays.json?t=…`), then one ESPN scoreboard for each Eastern date of the
+parlays' games, then a box score for each game with a player's leg, when the tab is first shown in a page load (a page
+that opens on it from the saved tab too) and on Refresh now: never before that, never on a timer, never on focus or
+visibility, as the Refresh odds rule is. Showing the tab again draws what was read. Every read is a plain GET, no-store,
+past any cache, dropped after 15 seconds. A scoreboard that fails, or answers anything but a scoreboard, fails the whole
+read (the scores stand as they were and a note says ESPN is not answering, most often a blocker); a box score that
+fails leaves its game's player legs waiting. A box score is not asked for before tip, and a final's is read once.
+
+**How a leg is graded.** Wherever the published state has its game's final, by the page's own settlement, so X Parlays
+and the Bet Build never disagree: `legResult` on the published score for a team's leg, `propGrade` on the published box
+lines (`state.json`'s `boxes`, else the season's box file) for a player's, the player placed by his `pid` or by his
+name and club among the published players. A game the published state grades for every leg on it is read from nobody.
+Otherwise ESPN's live answers carry the leg: a moneyline or a spread is points clear of the line on the side bet,
+settled at the final (a whole line can push); a total is settled the moment it passes its line (an Over won, an Under
+lost: points only go up, overtime included) and else at the final; a player's Over main line is won the moment he
+passes it and an Under lost, else each waits for the final, where a whole line pushes; a milestone (N+) is won the
+moment it is reached; a combo is the sum of its parts; a double-double or triple-double is two or three of points,
+rebounds, assists, steals and blocks at 10 or more, won the moment they are. In the box a player is found by his ESPN
+id, else his whole name, else his last name and first initial, and only where one player answers to it.
+
+**Void.** Every leg on a game ESPN calls postponed or canceled, or one of this season or the last on no published list
+two days after its date (the page's `offList`), is void: "not played on its date". A player who did not take the floor
+is void once the game is final, as DraftKings settles it: the box lists him as not playing (with its reason, "coach's
+decision"), with no line, or not at all. While the game is on, a player with no line yet is graded on nothing and said
+to be "not in yet"; one not on the box at all, "not on the box score".
+
+**What it draws.** The parlays still running first, under the Eastern day of their first game ("Sunday games", its date
+and first tip in the viewer's own time), in the order they tip, a pill where one runs into the next night; then, under
+Finished, each settled parlay in full ("each clears itself the day after its last game"). Settled is a leg lost (gone,
+whatever is still to play) or every game over or not played and every leg graded: "landed" only when every leg is won,
+pushed or void, so a leg waiting on its box score is never counted (the NFL hub's tab could say landed there), "void"
+or "push" when every leg came back, and "N void" beside landed. A main line reads "Over 24.5" or "Under 24.5" (the NFL
+hub's tab wrote an Over as "24.5+"), a milestone "25+", a double- or triple-double "Yes". A player's row has his box line
+and minutes under his name ("24 pts, 9 reb, 7 ast, 3 3PM, 1 stl, 0 blk · 28 min"; before tip his leg's parts at
+nought); a team row has its score chip, coloured by the bet. Each card has the stake, the price and what it pays, the
+date (in place of the NFL's week) and the note. With nothing to show: "Nothing to watch yet".
+
+**Clear this parlay?** Every card has an X at its top right, the same for every visitor (a 44px button, first in its
+card). It opens a small window naming the parlay ("4-leg parlay · Sun Oct 25 · +580 · same game") and saying it is
+cleared from this device only, nothing is sent anywhere, and X's parlays clear themselves for everyone the day after
+their last game, with Cancel and Clear: Escape, Cancel or a click outside clear nothing and give the focus back to the X;
+Tab stays inside; a tap within 0.4 seconds of the window opening (a double tap's second) neither clears nor closes; the
+page behind is held still; it scrolls when taller than the screen; leaving the tab closes it, quietly. Clear takes the
+parlay off this browser's X Parlays alone: its id, with when, goes into `nba_lp_cleared_v1`, the tab's own key, never
+the NFL hub's `lp_cleared_here_v1` (the two hubs are one origin, `demon-x13.github.io`, and share a browser's storage, so
+each list is pruned by its own file alone), never into the page's own key or the Data tab's backup. Each change starts
+from what storage holds then, so two tabs of the site never write an older list over each other, and a tab follows
+another's change (the `storage` event). The list is pruned on every read of the file to the ids it still has and has
+not cleared (a file that does not answer prunes nothing), and the key is removed once empty. With some cleared, a quiet
+line at the foot says how many, with Show it (them) again, which brings back the ones this tab shows as cleared and
+reads their games. Where storage refuses, the list lives in memory for the visit.
+
+### Clearing itself (`tools/autoclear.js`)
+
+The job's step right after the pull: `node tools/test_autoclear.js && node tools/autoclear.js`, or the file is put back
+as committed and the step (and so the run) is red. A parlay is cleared, `"cleared": true` with `cleared_on` (the Eastern
+date) and `cleared_by: "auto"`, when every game it is on is final in `data/games.csv` (status final, or both scores) and
+its last game's date is two or more Eastern days before today: a Saturday night's on Monday. A game games.csv no longer
+lists (ESPN drops a postponed one, and the job with it) counts as played on its date and void, as the page grades it,
+once two days have passed, for this season or the last; a game of an older season, an id not in the site's shape or a
+leg on no game is never cleared. The file is written only when something cleared, in its own style, with `updated` now.
+
+### The checks
+
+`SMOKE_ONLY=xparlays node tools/smoke.js` (`tools/smoke_xparlays.js`) boots the built page on the published state, a
+stubbed file and a stubbed ESPN (answers in the shapes of `tools/fixtures/` and `data/sample_summary.json`, on made-up
+games tonight, tomorrow and yesterday, so it holds on any day) and holds, in 137 checks: nothing read before the tab
+is shown, on a timer, on focus or visibility, then the file and the scoreboard once, each read a plain no-store GET, and
+Refresh now reading again; every leg's target, value, status, bar and stat line mid-game (an Over passed, an Under to
+spare, a milestone short, a combo summed), the strip and the money; the order and the night's heading; the browser's own
+Bet Build and parlay neither drawn nor touched; parlays alike but for a side kept apart; a player who did not take the
+floor (void at the final with the box score's reason, not on the box at all, no line; "not in yet" while the game is on),
+a postponed game and one on no list two days after its date (void, the parlay void or landed beside them, and that date
+never read); a double-double hit mid-game, a triple-double short, steals + blocks summed, a push on a whole line (points,
+spread and total) and a parlay of pushes, a parlay into the next night read from that night's own scoreboard (a game
+of the same clubs listed for another day not taken), "landed" only once a final's box score answers (and that box never
+read again); a published final graded by the page's own settlement from the published box lines and read from nobody,
+and one whose box line is not published yet graded from ESPN's; the chips and the totals settling mid-game; nought
+before tip; an empty, missing, junk or wrong-shaped file; ESPN down, a scoreboard answering junk (all or nothing) and a
+box score failing (that game alone); a box score only where a player's leg needs one; `ats` as a spread and bad legs
+dropped; a player found by his id whatever the file calls him; a cleared parlay never drawn or followed; the updated
+line; the real file and a parlay on the published state's own last finals; the page's box reading held to
+`tools/fetch_box.js`'s on the recorded summary; the part's code touching no storage but its key and sending nothing; and
+section O of the NFL hub's checks whole (the X on every card, its window, Cancel, Escape, a click outside, Tab, Clear,
+Show them again, the double tap, leaving the tab, two tabs, the prune, a reload, a fresh browser, storage refused), with
+the NFL hub's key on the same origin seeded and left exactly as it was. `node tools/test_autoclear.js` holds the clear to
+its cases (the game day and the next clearing nothing, Monday clearing the Saturday parlays and the one on a game no list
+has, Tuesday Sunday's, the rest never; the fields; a second run; the command on a scratch copy; the real file's style).
+
+Each check was shown to fail on a planted break (35, run on a copy of the built page with `NBA_HTML`): the NFL hub's key,
+a player who did not play graded on zero, a postponed game read as not started, a combo graded on its first part, a push
+graded lost, landed with a leg ungraded, a read on load, a read from a cache, the published final ignored, a
+double-double needing three, no double-tap guard, Escape reaching the page, no prune, Show them again clearing another
+tab's, the key kept when empty, another day's game taken (green on the first sweep: the case went in), a spread read from
+the other side, the X not first in its card, the window left open on a tab change, a total settled only at the final, a
+box read before tip, a final box read again, `ats` not read, rebounds from the offensive board, the minutes dropped, "not
+in yet" voided mid-game, a cleared parlay drawn, the all-or-nothing rule dropped for a scoreboard with no events (green on
+the first sweep), a player found by name before his id (green on the first sweep), "None of X's parlays" with some
+cleared here, the focus not given back, the storage event ignored, a postponed game's team leg graded, the X under 44px
+and Refresh now not reading. In Chromium at 360, 390, 768 and 1280 wide on stubbed answers (25 October 2026): no sideways
+scroll and nothing past an edge, every button 44px or more, every text at 5.14:1 or more on what is under it (the open
+window's at 5.36:1), the window inside the screen with the focus on Cancel and given back to the X on Escape.
+
 ## Runs
 
 `.github/workflows/update.yml` is queued at 07:17, 11:17 and 13:17 UTC. GitHub starts this repo's
@@ -983,6 +1127,10 @@ stopped listing them, and needs a person to look. An injury report that answers 
 last one's players is refused, and the last report stands with its date; a club whose roster answers short or
 fails keeps its last good roster and coach, dated in `rosters_espn.json`'s `asOf`; `data/coaches.csv` takes the
 season's coaches from ESPN and a dated row when a club changes coach.
+
+Right after the pull, X's finished parlays clear themselves (`tools/test_autoclear.js`, then `tools/autoclear.js`, README
+"X Parlays"): a failure there marks that step alone, puts `liveparlays/parlays.json` back as committed and turns the run
+red at the end; the file rides on the data's commit.
 
 After the players model, the props step reads DraftKings' closing lines for the new finals, writes the projections
 (`props.json`) and the shadow ledger, and runs the ledger's check; when either fails, every props data file goes back to
@@ -1080,8 +1228,13 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   and the game's moneyline, spread and total), same-game legs priced as an estimate, locked into the Bet Build or
   finished as a card (README "Same-game parlays").
 
+- **X Parlays**: the parlays X placed at the book, the same on every device and read only, each followed live through
+  its games; read from `liveparlays/parlays.json` and ESPN when the tab is first opened in a visit and on Refresh now,
+  never on load before that or on a timer (README "X Parlays").
+
 Nothing a visitor does reaches the published files. The job runs `publish.js`, `build.js` and the
-smoke test after the models, and commits `state.json`, `history.json` and both pages.
+smoke test after the models, and commits `state.json`, `history.json` and both pages (and `liveparlays/parlays.json`
+when a finished parlay of X's cleared itself).
 
 ## What comes next, in order
 

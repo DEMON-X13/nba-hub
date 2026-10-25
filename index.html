@@ -4001,11 +4001,16 @@ function spShown(g) {
     if (T.every(Boolean)) { tiers = T; at = e.taken_at || null; if (k && k.own) { k = { tip: g.tip, rep: {} }; K[g.id] = k; dirty = true; } } }
   if (!tiers && k && k.own && Array.isArray(k.tiers)) { const T = PB_TIERS.map(([id]) => spTierIn(k.tiers.find(t => t && t.id === id), g));
     if (T.every(Boolean)) { tiers = T; own = true; at = k.at || null; } }
+  /* the page's own set waits for DraftKings' lines (lines.json, read when the tab opened) as it waits for the record; one
+     built with no published lines at all (lines.json did not load) is shown and not kept, so a reload tries again */
+  const linesIn = !!LINES || !!LINES_ERR;
+  if (!tiers && !linesIn) return { phase: 'loading', lock, tiers: null, lines: true };
   if (!tiers) { const s = spSet(g.id), out = s.tiers.map(spTierOut);
     tiers = PB_TIERS.map(([id], i) => spTierIn(out.find(t => t.id === id), g) || s.tiers[i]);
-    k = { tip: g.tip, own: true, at: new Date(now).toISOString().slice(0, 19) + 'Z', tiers: out, rep: {} }; K[g.id] = k; dirty = true; own = true; at = k.at; }
+    k = { tip: g.tip, own: true, at: new Date(now).toISOString().slice(0, 19) + 'Z', tiers: out, rep: {} }; K[g.id] = k; dirty = !!LINES; own = true; at = k.at; }
   const rep = k && spIsMap(k.rep) ? k.rep : {};
   tiers = tiers.map(t => {
+    if (!linesIn) return t;
     let cur = t, upd = null; const r = rep[t.id];
     /* the page's own replacement, unless the record has made one for the same player */
     if (r && spIsMap(r.tier)) { const T = spTierIn(r.tier, g);
@@ -4115,7 +4120,7 @@ function epRecordText() {
   const R = S.eloPicks && S.eloPicks.record && S.eloPicks.record.folds; if (!R) return '';
   const ks = Object.keys(R).sort(), pc = v => v == null ? '–' : (v * 100).toFixed(1) + '%', list = f => oddsAnd(ks.map(f));
   const ml = ks.every(k => R[k].ml && R[k].ml.picks), sp = ks.every(k => R[k].spread && R[k].spread.picks);
-  return `The ELO Model's own chance is no promise. On the walk-forward folds (${oddsAnd(ks)}, each called by the model fitted on the seasons before it), its moneylines 3 points or more above the price${ml ? ` said ${list(k => pc(R[k].ml.said))} and won ${list(k => pc(R[k].ml.won))} (${list(k => R[k].ml.picks)} picks)` : ''}${sp ? `, and its spreads 3 points or more above -110 won ${list(k => pc(R[k].spread.won))} (${list(k => R[k].spread.picks)})` : ''}, at DraftKings' closing lines.`;
+  return `The ELO Model's own chance is no promise. On the walk-forward folds (${oddsAnd(ks)}, each called by the model fitted on the seasons before it), its moneylines 3 points or more above the price${ml ? ` said ${list(k => pc(R[k].ml.said))} and won ${list(k => pc(R[k].ml.won))} (${list(k => R[k].ml.picks)} picks)` : ''}${sp ? `, and its spreads 3 points or more above -110 won ${list(k => pc(R[k].spread.won))} (${list(k => R[k].spread.picks)})` : ''}, at the closing lines.`;
 }
 function eloPicksHtml() {
   const E = S.eloPicks, ds = pbDates(), pill = ds.length ? `<span class="pb-pill">${esc(ds.map(pbDayText).join(' & '))}</span>` : '';
@@ -4155,7 +4160,7 @@ function spGameHtml(g) {
   /* one short line each (the NFL owner's call of 17 October 2026, "get rid of all the long paragraph description stuff") */
   const mark = '<span class="sp-lockmark">Locked</span>';
   const line = v.phase === 'live' ? `<p class="sp-lock" data-sp-phase="live">Locks ${lockT}, 2 hours before tip-off.</p>`
-    : v.phase === 'loading' ? `<p class="sp-lock" data-sp-phase="loading">${mark} since ${lockT}. Loading the site’s set…</p>`
+    : v.phase === 'loading' ? `<p class="sp-lock" data-sp-phase="loading">${mark} since ${lockT}. ${v.lines ? 'Loading DraftKings’ lines…' : 'Loading the site’s set…'}</p>`
     : v.own ? `<p class="sp-lock" data-sp-phase="own">${mark} since ${lockT}. This browser’s own set: the site’s was not published in time, so the record does not grade it.</p>`
     : `<p class="sp-lock" data-sp-phase="locked">${mark} since ${lockT}.</p>`;
   const cards = v.tiers ? `<div class="pb-tiers">${v.tiers.map(t => spUpdHtml(t, spCard(t, { kind: 'sp', fid: `${g.id}:${t.id}`, add: `data-sp-add="${g.id}:${t.id}"`, what, quiet: true, mktWhy: 'this game’s other legs do not make a parlay of this size' }))).join('')}</div>` : '';
@@ -4186,6 +4191,8 @@ function spSetsHtml() {
 function renderSp() {
   const el = $('#spPanel'), tab = $('#tab-suggest'); if (!el || !S || !S.slate || !tab || tab.hidden) return;
   if (!$('#spSets')) { el.innerHTML = '<div class="pb-card sp" id="spCard"><div id="spHead"></div><p class="pb-said" id="spSaid" role="status" aria-live="polite"></p><div id="spSets"></div><div id="pbElo" class="pb-elo"></div></div>'; spWire(el); }
+  /* a game this browser kept a locked set of that has tipped, left the slate or moved leaves the key */
+  { const K = spKeep(), G = spGames(); if (Object.keys(K).some(id => !G.some(g => g.id === id && g.tip === K[id].tip))) spKeepSave(); }
   $('#spHead').innerHTML = spHeadHtml();
   $('#spSaid').textContent = SP_SAID;
   $('#spSets').innerHTML = spSetsHtml();

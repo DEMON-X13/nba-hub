@@ -1464,9 +1464,9 @@
  ],
  "notes": [
   "Every call is made before tip-off: the state is what the finals before the game's day left, and tonight's rotation is the club's previous game's (alpha, the honest number). alphaKnown is the same model told who played (hindsight, as the player model's \"known\" rows): never a call, only the bound a perfect injury report would reach.",
-  "The design was chosen on 2024 and 2025 alone (trials); 2026 was scored once, with that design. An early development run printed the 2026 numbers of three baseline variants (no rotation term; the term fitted on who played; fitted on the previous game's rotation) before the search was written. No choice reads them: the search kept the rotation term on 2024 and 2025 (those 2026 numbers had it too), and chose to fit it on who played where they had favoured the previous game's rotation.",
+  "The design was chosen on 2024 and 2025 alone (trials); 2026 was scored once, with that design. Before the search was written, one development run on the starting design (DEFAULT) printed 2026's log loss, straight-up rate and spread error for three variants, each scored on the previous game's rotation and told who played: no rotation term (0.6005), the term fitted on who played (0.5992 on the previous game's rotation, 0.5917 told who played) and fitted on the previous game's rotation (0.5988, 0.5939). No other 2026 number was printed before the design was fixed. No choice reads them: the search kept the rotation term on 2024 and 2025 (those 2026 numbers had it too), and chose to fit it on who played where they had favoured the previous game's rotation.",
   "Each fold is fitted on the seasons before it (fit) and scored on its own regular-season and playoff finals with both box scores, the player model's own games. 2026-27, the season in play, is never fitted, tuned or scored.",
   "teamElo is the hub's team model with model.json's parameters (fitted on 2008-2022, the home edge learned as the finals come), on the same games. playerModel is research.json's walk-forward, on its own games (the same count). market is odds_hist.csv's consensus closing moneyline with the margin taken out, and its closing spread, on the games that have one."
  ],
- "generated": "2026-10-25T17:47Z"
+ "generated": "2026-10-25T18:59Z"
 }

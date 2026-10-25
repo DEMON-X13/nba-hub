@@ -1,10 +1,11 @@
 /* The Alpha Model: the NFL hub's main game model, refitted on NBA data.
  *
  *   node tools/alpha.js            replay the games with the fitted numbers in models/alpha.json and write each game's
- *                                      call there: the season in play's finals as the model called them before tip-off
- *                                      (a backtest replay) and the games to come on today's injury report
- *   node tools/alpha.js fit        refit the margin and the chance on the finished seasons (by hand, between seasons;
- *                                      the season in play is never in a fit)
+ *                                      call there: every game of the season in play as the walk-forward calls a game
+ *                                      before tip-off, on each club's previous game's rotation (`games`, the backtest
+ *                                      replay), and the games to come on today's roster and injury report (`upcoming`)
+ *   node tools/alpha.js fit        refit the margin and the chance on the seasons before the one in play (by hand,
+ *                                      between seasons; the season in play is never in a fit)
  *   node tools/alpha.js research   the walk-forward (2024, 2025 and 2026, each fitted on the seasons before it and
  *                                      scored cold) and every design choice tried, into research/alpha.json; then the fit
  *
@@ -52,7 +53,6 @@ const TOP = 8;                          // a side's top eight by minutes; the re
 const PROJ = 8;                         // projected minutes: the mean of a player's last eight appearances (players.js)
 const KEEP = 15;                        // minutes kept per player
 const DEBUT = [12, 26];                 // a player with no minutes on record yet: bench, starter (players.js)
-const LOG_DAYS = 3;                     // an injury log older than this before a game is no report
 const VERSION = 'alpha 1 · 2026-10-25';
 
 /* The design: the state machine's constants and the fit's choices. The values here are where the search starts; the
@@ -106,7 +106,8 @@ const pairN = v => { const m = /^\s*(\d+)\s*-\s*(\d+)/.exec(String(v || '')); re
 const gameScore = r => r.pts + 0.4 * r.fgm - 0.7 * r.fga - 0.4 * (r.fta - r.ftm) + 0.7 * r.orb + 0.3 * r.drb + r.stl + 0.7 * r.ast + 0.7 * r.blk - 0.4 * r.pf - r.tov;
 
 /* Everything the model reads, from a repo's data folder: the games (preseason left out: it teaches nothing and is never
-   graded), each side's box rows, each side's possessions, and the injury log by day */
+   graded), each side's box rows and each side's possessions. Not the injury log: it keeps each day's last read, which on
+   a late run lands after tip-off, so no call reads it (ROTATION) */
 function load(root = L.ROOT) {
   const data = path.join(root, 'data');
   const games = readCsv(path.join(data, 'games.csv'))
@@ -138,9 +139,7 @@ function load(root = L.ROOT) {
     poss[gid + ':' + t] = Math.max(fga - orb + tov + 0.44 * fta, 60);
   }
   for (const sides of Object.values(boxes)) for (const rows of Object.values(sides)) for (const r of rows) { delete r.fga; delete r.fta; delete r.orb; delete r.tov; }
-  const injLog = {};
-  for (const r of readCsv(path.join(data, 'injuries_log.csv'))) ((injLog[r.date] = injLog[r.date] || {})[r.team] = injLog[r.date][r.team] || []).push({ id: r.player_id, status: r.status });
-  return { games, boxes, poss, injLog, logDates: Object.keys(injLog).sort() };
+  return { games, boxes, poss };
 }
 
 /* ---------- the replay ---------- */
@@ -156,14 +155,14 @@ function load(root = L.ROOT) {
    rolled past costs nothing, as the NFL's quarterback change fades once the club's ratings have taken it in. With
    `usual` 'current' a player since gone to another club leaves the old club's usual at once; with 'all' his leaving
    costs the old club until the window rolls past it, as his absence would.
-     Tonight's strength is the rotation expected before tip-off, read four ways:
+     Tonight's strength is the rotation expected before tip-off, read three ways:
        known   who played, at projected minutes (what a perfect injury report would say: the fit's rows, and a
                hindsight comparison, never an honest call)
-       pretip  the club's previous game's rotation, less anyone since gone to another club (the walk-forward's honest
-               call for seasons before the injury log); a club's first game of a season has no previous game and no drop
-       log     the season in play's past games: the club's players less those the injury log had Out (or suspended)
-               that day, makeLiveLineup's rule on a report that keeps no return dates
-       live    the games to come: the hub's own rule, players.js makeLiveLineup on today's roster and report
+       pretip  the club's previous game's rotation, less anyone since gone to another club: the walk-forward's honest
+               call, and every call in the model file's `games` (the backtest replay of the season in play, final, under
+               way or to come), so a game's call there never reads today's roster or report, nor the injury log; a club's
+               first game of a season has no previous game of the season and no drop, whoever last played for it
+       live    the games to come (`upcoming`): the hub's own rule, players.js makeLiveLineup on today's roster and report
    and the drop is usual less tonight, so a club at full strength has none and a missing star costs his minutes'
    worth over the man who takes them. */
 function replay(D, ctx, opt = {}) {
@@ -172,7 +171,7 @@ function replay(D, ctx, opt = {}) {
   let r0n = 0, r0d = 0, r0 = R0_START, lg = 110;
   const club = t => clubs[t] || (clubs[t] = { elo: MEAN, o: null, d: null, season: null, dates: [], ahead: [], win: [], boxSeason: null });
   /* proj: the mean of the last PROJ minutes, kept as they change (the window reads it some forty times a game) */
-  const player = (id, season) => players[id] || (players[id] = { num: 0, den: 0, s: season, mins: [], proj: 0, team: '', last: '', ts: null });
+  const player = (id, season) => players[id] || (players[id] = { num: 0, den: 0, s: season, mins: [], proj: 0, team: '', last: '' });
   const rating = (p, season) => { if (p.s < season) { const f = Math.pow(D.decay, season - p.s); p.num *= f; p.den *= f; p.s = season; } return (p.num + D.n0 * r0) / (p.den + D.n0); };
   const projected = (p, starter) => p.mins.length ? p.proj : DEBUT[starter ? 1 : 0];
   /* a rotation's strength: its players by projected minutes, longest first (ties in the order given), filled to 240, a
@@ -192,13 +191,6 @@ function replay(D, ctx, opt = {}) {
     return filled(n, season);
   };
   const usualOf = (c, t, season) => { if (!c.win.length) return null; let s = 0; for (const e of c.win) s += rotation(e, t, season, D.usual === 'current'); return s / c.win.length; };
-  const outOn = (date, team) => {
-    /* the injury log on the game's day, or its last day before (LOG_DAYS at most): Out or suspended is out */
-    const ds = ctx.logDates || []; let i = ds.length - 1; while (i >= 0 && ds[i] > date) i--;
-    if (i < 0 || dayGap(ds[i], date) > LOG_DAYS) return null;
-    const s = new Set(); for (const x of (ctx.injLog[ds[i]][team] || [])) if (/^(out|suspended|suspension)/i.test(x.status || '')) s.add(x.id);
-    return s;
-  };
   const rows = [], byDate = [];
   for (const g of ctx.games) { if (!byDate.length || byDate[byDate.length - 1][0].date !== g.date) byDate.push([g]); else byDate[byDate.length - 1].push(g); }
   for (const day of byDate) {
@@ -220,15 +212,9 @@ function replay(D, ctx, opt = {}) {
       const side = (c, t) => {
         const usual = usualOf(c, t, g.season);
         const drop = {};
-        if (usual === null) return { known: 0, pretip: 0, log: 0, live: 0, usual: null };
+        if (usual === null) return { known: 0, pretip: 0, live: 0, usual: null };
         if (box[t]) drop.known = usual - strength(box[t].filter(r => r.min > 0).map(r => [player(r.id, g.season), projected(player(r.id, g.season), r.starter)]), g.season);
         drop.pretip = c.boxSeason !== g.season ? 0 : usual - rotation(c.win[c.win.length - 1], t, g.season, true);
-        const out = outOn(g.date, t);
-        if (out) {
-          const thisSeason = c.boxSeason === g.season;
-          const list = Object.entries(players).filter(([id, p]) => p.team === t && p.mins.length && (!thisSeason || p.ts === g.season) && !out.has(id)).map(([, p]) => [p, projected(p, 0)]);
-          drop.log = usual - strength(list, g.season);
-        }
         if (!g.final && opt.live) { const lv = opt.live(g, t, players, projected, (r, season) => { const p = player(r.player_id, season); if (!p.team) p.team = r.team; return p; });
           if (lv) drop.live = usual - strength(lv, g.season); }
         drop.usual = usual;
@@ -271,7 +257,7 @@ function replay(D, ctx, opt = {}) {
         const entry = [];
         for (const r of rs) {
           const pl = player(r.id, g.season); rating(pl, g.season);
-          pl.team = t; pl.last = g.date; pl.ts = g.season;
+          pl.team = t; pl.last = g.date;
           if (r.min <= 0) continue;
           const v = D.value === 'pm' ? r.pm : r.gs;
           if (v !== null) { pl.num += v; pl.den += r.min; if (!top.has(r.id)) { r0n += v; r0d += r.min; } }
@@ -398,7 +384,7 @@ function research(ctx, ref, opts = {}) {
 }
 const NOTES = [
   'Every call is made before tip-off: the state is what the finals before the game\'s day left, and tonight\'s rotation is the club\'s previous game\'s (alpha, the honest number). alphaKnown is the same model told who played (hindsight, as the player model\'s "known" rows): never a call, only the bound a perfect injury report would reach.',
-  'The design was chosen on 2024 and 2025 alone (trials); 2026 was scored once, with that design. An early development run printed the 2026 numbers of three baseline variants (no rotation term; the term fitted on who played; fitted on the previous game\'s rotation) before the search was written. No choice reads them: the search kept the rotation term on 2024 and 2025 (those 2026 numbers had it too), and chose to fit it on who played where they had favoured the previous game\'s rotation.',
+  'The design was chosen on 2024 and 2025 alone (trials); 2026 was scored once, with that design. Before the search was written, one development run on the starting design (DEFAULT) printed 2026\'s log loss, straight-up rate and spread error for three variants, each scored on the previous game\'s rotation and told who played: no rotation term (0.6005), the term fitted on who played (0.5992 on the previous game\'s rotation, 0.5917 told who played) and fitted on the previous game\'s rotation (0.5988, 0.5939). No other 2026 number was printed before the design was fixed. No choice reads them: the search kept the rotation term on 2024 and 2025 (those 2026 numbers had it too), and chose to fit it on who played where they had favoured the previous game\'s rotation.',
   'Each fold is fitted on the seasons before it (fit) and scored on its own regular-season and playoff finals with both box scores, the player model\'s own games. 2026-27, the season in play, is never fitted, tuned or scored.',
   'teamElo is the hub\'s team model with model.json\'s parameters (fitted on 2008-2022, the home edge learned as the finals come), on the same games. playerModel is research.json\'s walk-forward, on its own games (the same count). market is odds_hist.csv\'s consensus closing moneyline with the margin taken out, and its closing spread, on the games that have one.',
 ];
@@ -427,27 +413,38 @@ function references(root = L.ROOT) {
 /* ---------- the live run ---------- */
 /* tonight's rotation for a game to come: players.js makeLiveLineup, the hub's one availability rule (today's roster
    less the injury report's absences by their return dates, filled to 240 by projected minutes), run on Alpha's own
-   players (`make` stands in for it in the tests, the same function loaded on another folder's files) */
-function liveProvider(make) {
-  if (!make) { try { make = require('./players').makeLiveLineup({ coachOf: () => '' }); } catch (e) { return null; } }
+   players. `make` is that function, or the players.js to load it from (the tests load another folder's). When it
+   cannot be had (today's report or roster does not read), the games to come are called as every other game is, on
+   each club's previous game's rotation, and the provider carries why, for the file's status to say */
+function liveProvider(make = './players') {
+  if (typeof make === 'string') {
+    try { make = require(make).makeLiveLineup({ coachOf: () => '' }); }
+    catch (e) {
+      const why = `today's roster and injury report did not read (${String(e && e.message || e).split('\n')[0]})`;
+      L.log(`alpha: ${why}; the games to come are called on each club's previous game's rotation`);
+      const none = () => null; none.why = why;
+      return none;
+    }
+  }
   const memo = {};
   return (g, t, players, projected, getP) => {
     if (!memo[g.id]) memo[g.id] = make({ season: g.season, date: g.date, home: g.home, away: g.away }, players, projected, getP);
     return memo[g.id][t === g.home ? 'home' : 'away'].list;
   };
 }
-/* the call each game gets: a game to come on tonight's rotation by the hub's rule; a final of the season in play on the
-   injury log of its day; any other on its previous game's rotation */
-const modeOf = r => !r.final && r.drop.home.live !== undefined && r.drop.away.live !== undefined ? 'live'
-  : r.drop.home.log !== undefined && r.drop.away.log !== undefined ? 'log' : 'pretip';
-const callOf = (r, M) => { const m = margin(r, M, modeOf(r)); return { pHome: r4(sig(M.k * m)), spread: +(-m).toFixed(1) }; };
+/* the reading a call is made on: in `upcoming`, a game to come on tonight's rotation by the hub's rule, else (no report
+   read) on its previous game's rotation; every call in `games` on the previous game's rotation (callOf's mode
+   'pretip'), what the walk-forward scores */
+const modeOf = r => !r.final && r.drop.home.live !== undefined && r.drop.away.live !== undefined ? 'live' : 'pretip';
+const callOf = (r, M, mode = modeOf(r)) => { const m = margin(r, M, mode); return { pHome: r4(sig(M.k * m)), spread: +(-m).toFixed(1) }; };
 
-/* the season in play: the latest with a game still to play, else the latest with a final; the last finished season is
-   the one before it while a game is to play */
+/* the season in play: the latest with a game still to play, else (the summer) the latest with a final; the last
+   finished season, the last a fit may take, is the latest before it, so the season whose games the file calls is never
+   in its fit, whatever the phase */
 function seasons(ctx) {
   const toPlay = ctx.games.filter(g => !g.final).map(g => g.season), finals = ctx.games.filter(g => g.final).map(g => g.season);
   const inPlay = toPlay.length ? Math.max(...toPlay) : finals.length ? Math.max(...finals) : null;
-  const finished = finals.filter(s => s < inPlay || !toPlay.length);
+  const finished = finals.filter(s => s < inPlay);
   return { inPlay, lastFinished: finished.length ? Math.max(...finished) : null };
 }
 /* the live fit: the design's first fit season to the last finished one (or `to`, the seasons a committed fit names) */
@@ -461,21 +458,28 @@ function fitLive(ctx, D, to) {
 const testRowsRange = (rows, a, b) => rows.filter(r => r.final && r.box && r.season >= a && r.season <= b);
 const ABOUT = D => 'The NFL hub\'s Alpha Model refitted on NBA games: a least-squares home margin on home court, the two clubs\' Elo, ' +
   'rest and back to backs, net rating (points per 100 possessions for less against, exponentially weighted)' + (D.rot ? ' and the rotation drop (each club\'s ' +
-  'usual rotation less tonight\'s on the injury report, each player rated by his shrunk ' + (D.value === 'pm' ? 'on-court plus-minus' : 'Game Score') + ' a minute)' : '') +
-  ', and the win chance the logistic of that margin. The spread is the margin; no total. Fitted on finished seasons only, never refitted by the job.';
+  'usual rotation less tonight\'s, each player rated by his shrunk ' + (D.value === 'pm' ? 'on-court plus-minus' : 'Game Score') + ' a minute; tonight\'s is, in games, ' +
+  'the club\'s previous game\'s rotation, none at its first game of a season, as the walk-forward calls a game before tip-off, and in upcoming the hub\'s ' +
+  'availability rule on today\'s roster and injury report)' : '') +
+  ', and the win chance the logistic of that margin. The spread is the margin; no total. Fitted on seasons before the one in play only, never refitted by the job.';
 
-/* the model file: every final and game to come of the season in play as the model calls it before tip-off, the games
-   to come apart, with the fitted numbers and the walk-forward */
+/* the model file: every game of the season in play, final, under way or to come, as the walk-forward calls a game
+   before tip-off (`games`, which the Pick'em Record takes for a game played before Alpha's first published call), the
+   games to come apart on today's report (`upcoming`), with the fitted numbers and the walk-forward. A game to come
+   that could not be read on today's report is called on its previous game's rotation, and the status says so */
 function build(ctx, P, walkForward, live) {
   const R = replay(P.design, ctx, { live });
   const { inPlay } = seasons(ctx);
   const M = { feats: P.feats, coef: P.coef, k: P.k };
   const games = {}, upcoming = {};
+  let unread = 0;
   for (const r of R.rows) {
-    if (!r.final) upcoming[r.id] = callOf(r, M);
-    if (r.season === inPlay) games[r.id] = callOf(r, M);
+    if (!r.final) { const mode = modeOf(r); if (mode !== 'live') unread++; upcoming[r.id] = callOf(r, M, mode); }
+    if (r.season === inPlay) games[r.id] = callOf(r, M, 'pretip');
   }
-  return { id: 'alpha', name: 'Alpha Model', version: VERSION, about: ABOUT(P.design), fitSeasons: P.fitSeasons, params: P, walkForward, games, upcoming, status: { ok: true } };
+  const status = { ok: true };
+  if (unread) status.note = `${live && live.why ? live.why : 'today\'s roster and injury report were not read'}: ${unread} game${unread === 1 ? '' : 's'} to come called on each club's previous game's rotation`;
+  return { id: 'alpha', name: 'Alpha Model', version: VERSION, about: ABOUT(P.design), fitSeasons: P.fitSeasons, params: P, walkForward, games, upcoming, status };
 }
 /* written only when its content moved: an unchanged file keeps its stamp, so a quiet day commits nothing */
 function write(file, obj, prev) {
@@ -488,19 +492,26 @@ function write(file, obj, prev) {
   fs.writeFileSync(file, body);
   return true;
 }
-const readJson = f => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { return null; } };
+/* a file not there is null (a first run); one there that does not read is an error, never a quiet fresh start: a model
+   file read as missing would be refitted by the job */
+const readJson = f => {
+  if (!fs.existsSync(f)) return null;
+  try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { throw new Error(`${path.basename(path.dirname(f))}/${path.basename(f)} does not read: ${e.message}`); }
+};
 
-function main() {
+/* one run on a repo folder (the tests run it on a scratch one); its exit code. A failed run keeps the last good calls
+   and says why, for the record to show; a model file that does not read is left as it is, for the job to put back */
+function run(root = L.ROOT, cmd = '', live) {
   const t0 = Date.now();
-  const OUT = path.join(L.ROOT, 'models', 'alpha.json'), RES = path.join(L.ROOT, 'research', 'alpha.json');
-  const prev = readJson(OUT), cmd = process.argv[2] || '';
-  let ctx;
+  const OUT = path.join(root, 'models', 'alpha.json'), RES = path.join(root, 'research', 'alpha.json');
+  let prev;
+  try { prev = readJson(OUT); } catch (e) { L.log('alpha failed: ' + e.message); return 1; }
   try {
-    ctx = load();
+    const ctx = load(root);
     if (!ctx.games.some(g => g.final)) throw new Error('no finals in data/games.csv');
     let res = readJson(RES);
     if (cmd === 'research') {
-      const R = research(ctx, references());
+      const R = research(ctx, references(root));
       res = { name: 'Alpha Model: walk-forward and design', version: VERSION, generatedBy: 'node tools/alpha.js research', ...R };
       L.log(`research/alpha.json ${write(RES, res, readJson(RES)) ? 'written' : 'unchanged'}`);
     }
@@ -511,17 +522,18 @@ function main() {
       L.log(`fitted on ${P.fitSeasons}: ${JSON.stringify(P.coef)} k ${P.k}`);
     }
     const wf = res && res.folds ? Object.fromEntries(res.folds.map(f => [f.season, { games: f.alpha.games, logloss: f.alpha.logloss, acc: f.alpha.acc, mae: f.alpha.mae }])) : (prev && prev.walkForward) || {};
-    const model = build(ctx, P, wf, liveProvider());
+    const model = build(ctx, P, wf, live || liveProvider());
+    if (model.status.note) L.log('alpha: ' + model.status.note);
     const wrote = write(OUT, model, prev);
     L.log(`alpha: ${Object.keys(model.games).length} calls of the season in play, ${Object.keys(model.upcoming).length} to come | models/alpha.json ${wrote ? 'written' : 'unchanged'} | ${((Date.now() - t0) / 1000).toFixed(1)}s`);
+    return 0;
   } catch (e) {
-    /* a failed run keeps the last good calls and says why, for the record to show */
     L.log('alpha failed: ' + (e && e.stack || e));
     if (prev) write(OUT, { ...prev, status: { ok: false, why: String(e && e.message || e) } }, prev);
-    process.exitCode = 1;
+    return 1;
   }
 }
 
-if (require.main === module) main();
-module.exports = { load, replay, fit, lsq, slope, margin, score, scoreAlpha, feats, vec, gameScore, build, write, callOf, modeOf, seasons, fitLive, research, references, liveProvider,
+if (require.main === module) process.exitCode = run(L.ROOT, process.argv[2] || '');
+module.exports = { load, replay, fit, lsq, slope, margin, score, scoreAlpha, feats, vec, gameScore, build, write, readJson, run, callOf, modeOf, seasons, fitLive, research, references, liveProvider,
   DEFAULT, GRID, FOLDS, DESIGN_ON, STATE_KEYS, VERSION };

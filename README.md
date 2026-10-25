@@ -259,14 +259,20 @@ in rotation order, each weighted by his minutes over 240, above replacement. A c
 its last 40 games, of the rotation that played each, every player at today's rating: a player out for half of them
 counts half, an absence the window has rolled past costs nothing (the club's Elo and net rating, which move about as
 slowly, have taken it in), and a player traded away counts against his old club until the window rolls past him.
-Tonight's strength is the rotation expected before tip-off:
+Tonight's strength is the rotation expected before tip-off, read one of two ways:
 
-- a game to come: the hub's one availability rule, players.js `makeLiveLineup` on today's roster and injury report, run
-  on Alpha's own players (out before his return date, Out out on the report's own day, suspended out), filled to 240;
-- a final of the season in play: the club's players less those the injury log (`data/injuries_log.csv`) had Out or
-  suspended that day (the log keeps no return dates, so Day-To-Day plays);
-- a game of an earlier season, in the walk-forward: the club's previous game's rotation (none at a club's first game of
-  a season), the honest stand-in for a report from before the log began.
+- the games to come, `upcoming` in `models/alpha.json`, the calls the Pick'em Record publishes: the hub's one
+  availability rule, players.js `makeLiveLineup` on today's roster and injury report, run on Alpha's own players (out
+  before his return date, Out out on the report's own day, suspended out), filled to 240;
+- every call in `games`, the season in play's games final, under way or to come (the record takes one for a game played
+  before Alpha's first published call, its backtest call), and every game of the walk-forward: the club's previous
+  game's rotation, less anyone since gone to another club, each player at the rating the finals before the day left.
+  A club's first game of a season has no previous game of the season, so no drop, whoever last played for it. So a
+  call in `games` is always what was known before its tip-off, never this run's roster or report, and never the injury
+  log (`data/injuries_log.csv`), which keeps each day's last read: on a late run that lands after a tip-off.
+
+Should today's roster or report not read, the games to come are called the second way too, and the file's status says
+so (`{ok: true, note}`), the error logged.
 
 The drop is usual less tonight, so a club at full strength has none. Its coefficient is fitted on who actually played,
 the cost of an absence that is known, which is what the report gives the live call. Early in a season the window is
@@ -279,10 +285,11 @@ since).
 
 Each season fitted on the seasons before it (from 2021-22) and scored cold on its regular-season and playoff finals with
 both box scores, the player model's own games. Alpha is the call made before tip-off on the previous game's rotation,
-the honest number; "lineup known" is the same model told who played, never a call, only the bound a perfect report would
-reach. Live, Alpha runs on the injury report, between the two. The team model is model.json's (fitted on 2008-2022), on
-the same games; the player model is research.json's walk-forward; the market is the consensus closing moneyline with the
-margin out and its closing spread (`data/odds_hist.csv`). Log loss / straight up / spread error:
+the honest number and the reading of every call in `games`; "lineup known" is the same model told who played, never a
+call, only the bound a perfect report would reach. Live, in `upcoming`, Alpha runs on the injury report, between the
+two. The team model is model.json's (fitted on 2008-2022), on the same games; the player model is research.json's
+walk-forward; the market is the consensus closing moneyline with the margin out and its closing spread
+(`data/odds_hist.csv`). Log loss / straight up / spread error:
 
 | Season scored | Alpha | Alpha without the rotation drop | Alpha, lineup known | Team model | Player model, no report | Player model, lineup known | Market |
 |---|---|---|---|---|---|---|---|
@@ -305,29 +312,37 @@ rating (3% to 12% tried); the NFL app's Elo rule over FiveThirtyEight's NBA mult
 (Denver and Utah at home), K 15 and 25, the net rating carried 40% or 80%, 250 or 1,000 minutes of shrinkage, a season
 decay of 0.4 or 0.8, a usual rotation of only the players still at the club, and the drop fitted on the previous game's
 rotation instead of on who played. The rotation drop itself passes the same rule on the chosen design (2024 0.609 to
-0.600, 2025 0.607 to 0.602); had it not, Alpha would have shipped without it and said so. An early development run
-printed three baseline variants' 2026 numbers before the search existed; nothing was chosen on them (the file's notes say
-what they were).
+0.600, 2025 0.607 to 0.602); had it not, Alpha would have shipped without it and said so. One development run, on the
+starting design, printed three baseline variants' 2026 numbers before the search existed, and no other 2026 number was
+printed before the design was fixed; nothing was chosen on them (the file's notes give them).
 
 What it does not use, and why: the betting line (the market is the yardstick, as for the NFL's Alpha); the player model's
 ratings, coaches or travel (its own ratings keep it a second opinion); altitude (tried, not kept); preseason games (never
 learned from, never called); a Day-To-Day player as half a player (the hub's one rule, out before his return date); a
-total (the player model publishes the site's); and the season in play, which is never fitted, tuned or scored. Its
-finals are called as a backtest on that day's injury log: of the 36 so far, 20 right (log loss 0.646), too few to read
-anything. The log keeps the day's last read, which on a late or pushed run can land after a tip-off.
+total (the player model publishes the site's); the injury log (above); and the season in play, which is never fitted,
+tuned or scored here (its calls are graded on the Pick'em Record like every model's).
 
 In the job, `node tools/alpha.js` (about 3 seconds) replays every final since 2004-05 with the fitted numbers in
-`models/alpha.json` and writes the calls: `games`, every regular-season and playoff game of the season in play (its
-finals as above, its games to come as `upcoming`), and `upcoming`, the games to come on today's roster and report. It
-never refits; `node tools/alpha.js fit` refits by hand on the finished seasons, and `node tools/alpha.js research` walks
+`models/alpha.json` and writes the calls: `games`, every regular-season and playoff game of the season in play on the
+previous game's rotation, and `upcoming`, the games to come on today's roster and report (above). It never refits;
+`node tools/alpha.js fit` refits by hand on the seasons before the one in play (so a season just finished joins the fit
+once the next season's schedule is in, about 30 days before its opening night), and `node tools/alpha.js research` walks
 forward, chooses the design and refits. An unchanged file keeps its stamp, so a quiet day commits nothing; a failed run
-keeps the last good calls and writes `status: {ok: false, why}`. `node tools/test_alpha.js` (about ten seconds) holds
-the leakage rule (the day's games read before tip-off and once final give the same inputs and the same call), the state
-by hand on a made-up league (the Elo update, the net rating, a club's first game of a season, a neutral site, a postponed
-game, a club with no box score, every player out), tonight's rotation through makeLiveLineup on made-up reports (Out,
-Day-To-Day returning after the game and on it, suspended, a debutant, a trade), the fit, determinism and a quiet day, and
-the committed files (the contract's shape, every game of the season in play called, the fitted numbers the fit of their
-seasons, the walk-forward research/alpha.json's).
+(no final in the games table, a research file that does not read, any error) keeps the last good calls and writes
+`status: {ok: false, why}`, and a model file that does not read is left as it is, never refitted in its place.
+`node tools/test_alpha.js` (about ten seconds), which the job runs straight after it on the same data, holds in every
+phase of a season (tried on copies of the data set back to before opening night, opening night, 15 January, the
+playoffs and July): the leakage rule (the day's games read before tip-off and once final give the same inputs and the
+same call, on the season in play's last day with a final, else the last day with one of any season), every call in
+`games` on the previous game's rotation and none moved by today's roster or report, each club's first game of the
+season in play with no drop; the state by hand on a made-up league (the Elo update, the net rating, a club's first game
+of a season, in `games` too, a neutral site, a postponed game, a club with no box score, every player out); tonight's
+rotation through makeLiveLineup on made-up reports (Out, Day-To-Day returning after the game and on it, suspended, a
+debutant, a trade, and a report that does not read); the fit on planted data and its own conditions on a frozen
+made-up league; determinism and a quiet day, and a run that refuses (the last calls kept, status `{ok: false, why}`);
+and the model file (the contract's shape whatever its status, every game of the season in play called, the fit's
+seasons before the season in play, the walk-forward research/alpha.json's). A refit of the fit's seasons on today's
+data is printed beside it as a note, never a failure: ESPN back-fills an old final's box score now and then.
 
 ## Player props
 

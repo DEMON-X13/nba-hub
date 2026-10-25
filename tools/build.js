@@ -7,7 +7,8 @@
  *                        restore of this browser's own saved data (the Bet Build, the builder's settings,
  *                        your parlay)
  *
- * The app file may name parts, app/parts/<name>.html, each set in whole at its <!--part:name--> marker.
+ * The app file may name parts, app/parts/<name>.html, each set in whole at its <!--part:name--> marker. The parlay card
+ * (card) and the matchup bubble (glance) must neither fetch nor store: the build stops if either does.
  *
  * Both load state.json (written by publish.js). A visitor's bets, builder settings and parlay legs live in
  * the browser under one key shared by the two pages.
@@ -25,7 +26,12 @@ const files = fs.existsSync(PARTS) ? fs.readdirSync(PARTS).filter(f => /^[a-z0-9
 const marks = [...app.matchAll(/<!--part:([a-z0-9_-]+)-->/g)].map(m => m[1]);
 for (const m of marks) if (!files.includes(m)) throw new Error(`build: <!--part:${m}--> has no app/parts/${m}.html`);
 for (const f of files) if (!marks.includes(f)) throw new Error(`build: app/parts/${f}.html has no <!--part:${f}--> marker`);
-for (const m of marks) { const body = fs.readFileSync(path.join(PARTS, m + '.html'), 'utf8'); app = app.replace(`<!--part:${m}-->`, () => body); }
+/* the parlay card and the matchup bubble read what the page already has and keep nothing (README "The parlay card", "The
+   matchup bubble"): a part of theirs that fetches, or touches a browser store, stops the build */
+const KEEPS_NOTHING = { card: /\bfetch\s*\(|localStorage|sessionStorage|indexedDB|document\.cookie/, glance: /\bfetch\s*\(|localStorage|sessionStorage|indexedDB|document\.cookie/ };
+for (const m of marks) { const body = fs.readFileSync(path.join(PARTS, m + '.html'), 'utf8');
+  if (KEEPS_NOTHING[m] && KEEPS_NOTHING[m].test(body)) throw new Error(`build: app/parts/${m}.html fetches or stores (${KEEPS_NOTHING[m].exec(body)[0]}), which it must not`);
+  app = app.replace(`<!--part:${m}-->`, () => body); }
 const write = (name, body) => { const f = path.join(ROOT, name); const before = fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : ''; if (before !== body) fs.writeFileSync(f, body); console.log(`${name}: ${(body.length / 1024).toFixed(0)} KB ${before !== body ? 'written' : 'unchanged'}`); };
 write('index.html', app);
 write('admin.html', app.replace('<script>\n\'use strict\';', '<script>window.ADMIN = true;</script>\n<script>\n\'use strict\';'));

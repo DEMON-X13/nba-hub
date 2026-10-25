@@ -1017,15 +1017,20 @@ async function builder() {
   const withL = topKeys(); w.eval('window.__s = M.slip.legs; M.slip.legs = []; render.parlay();'); const withoutL = topKeys(); w.eval('M.slip.legs = window.__s; delete window.__s; render.parlay();');
   const totAdd = d.querySelector(`#pbPanel [data-pb-leg="${keyOwn9(legs.find(l => l.kind === 'total'))}"]`);
   check(withL === withoutL && JSON.parse(withL).length > 0 && totAdd && totAdd.textContent === 'Added' && totAdd.getAttribute('aria-pressed') === 'true', 'the Top 50 lines are the same with legs in the builder and without, and the total in it reads Added there');
-  /* the card on that parlay: the model's chance as the builder gives it, labelled on trial, and what the stake pays */
+  /* the card on that parlay (app/parts/card.html, README "The parlay card"): the model's chance as the builder gives it,
+     labelled on trial, and what the stake pays */
+  const tx9 = el => el ? el.textContent.replace(/\s+/g, ' ').trim() : '';
   d.getElementById('pFinish').click(); await sleep(20);
-  { const pc2 = d.getElementById('pcBack'), cm = pc2.querySelector('[data-pc-model]'), cp = pc2.querySelector('[data-pc-pays] b');
-    check(!pc2.hidden && cm && cm.querySelector('b').textContent === pct1(pb.model) && cm.querySelector('span').textContent === "the hub's model, on trial" && !pc2.querySelector('[data-pc-nomodel]') && cp && cp.textContent === cents(20 * pb.dec),
-      `its card shows the model's chance, ${pct1(pb.model)}, labelled on trial, and pays ${cents(20 * pb.dec)} on $20 to the cent (${cm && cm.textContent} | ${cp && cp.textContent})`);
+  { const pc2 = d.getElementById('pcBack'), ch = tx9(d.querySelector('#pcView .pc-chance')), mo = [...d.querySelectorAll('#pcView .pc-money b')].map(x => x.textContent);
+    check(!pc2.hidden && ch.includes(`model (on trial) says ${pct1(pb.model)}`) && mo[1] === cents(20 * pb.dec),
+      `its card shows the model's chance, ${pct1(pb.model)}, labelled on trial, and pays ${cents(20 * pb.dec)} on $20 to the cent (${ch} | ${mo.join(' / ')})`);
     pc2.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20); }
   { const lone = { id: q2.id, away: 'LAL', home: 'GSW', date: q2.date, tip: q2.tip, kind: 'prop', pid: '9000099', name: 'ESPN athlete 9000099', team: '', at: e1.at, stat: 'pts', mk: 'main', line: 18.5, side: 'over', odds: -110, other: -110 };
-    const x = d.createElement('div'); x.innerHTML = w.eval(`pcBuild(${JSON.stringify([lone])}, 20).html`);
-    check(!x.querySelector('[data-pc-model]') && x.querySelector('[data-pc-nomodel]') && x.querySelector('[data-pc-nomodel]').textContent === 'No model chance: the props model does not project a player in it.', 'a leg on a player the props model does not project leaves a card no model chance, and it says why'); }
+    w.eval(`PARLAY_CARD.from('smoke9', () => ({ legs: ${JSON.stringify([lone])}, kicker: 'A lone leg' })); PARLAY_CARD.open(PARLAY_CARD.fromTier('smoke9', 'x'))`); await sleep(20);
+    const lines9 = [...d.querySelectorAll('#pcView .pc-chance > div')].map(tx9), small9 = [...d.querySelectorAll('#pcView .pc-chance small')].map(tx9);
+    check(w.PARLAY_CARD.current().chance === null && !lines9.some(t => /model/i.test(t)) && small9.includes('No model chance: the props model does not project a player in it.'),
+      `a leg on a player the props model does not project leaves a card no model chance, and it says why (${lines9.join(' / ')} | ${small9.join(' / ')})`);
+    w.PARLAY_CARD.close(); }
   /* a stake typed into the builder, not the $20 every store in this section starts on, so a figure fixed at $20 cannot
      pass for the visitor's: the builder, the card, its Share text all follow it, and the panel's Bet amount with them */
   const STAKE = 37.5;
@@ -1039,42 +1044,49 @@ async function builder() {
     'storage holds the four legs added and the Bet amount typed, and nothing else from the read (no other line, player or price), in the one key');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
-  /* Finish: the card, its legs in the builder's order */
+  /* Finish: the card (app/parts/card.html), its legs in the builder's order */
   d.getElementById('pFinish').focus(); d.getElementById('pFinish').click(); await sleep(20);
   const pc = d.getElementById('pcBack'), pcs = d.getElementById('pcSheet'), card = w.NBA_SLIP.card();
-  check(!pc.hidden && pcs.getAttribute('role') === 'dialog' && pcs.getAttribute('aria-modal') === 'true' && d.activeElement === d.getElementById('pcClose'), 'Finish parlay opens the card, a dialog, the focus on its Close');
-  const li = [...pc.querySelectorAll('.pc-legs li')], etT = iso => new Date(iso).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET';
+  check(!pc.hidden && pcs.getAttribute('role') === 'dialog' && pcs.getAttribute('aria-modal') === 'true' && d.activeElement === d.getElementById('pcDownload'), 'Finish parlay opens the card, a dialog, the focus on Download image');
+  const li = [...pc.querySelectorAll('#pcView .pc-legs li')], etT = iso => new Date(iso).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET';
+  const whenT = iso => new Date(iso).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET', mi = s => String(s).replace(/-/g, '−');
   const at9 = l => ord9.findIndex(x => keyOwn9(x) === keyOwn9(l)), iT = at9(legs[0]), iR = at9(legs[1]), iTot = at9(legs[2]), iL = at9(legs[3]);
   const hand9 = ord9.map((l, i) => l.kind === 'prop' ? i + 1 : null).filter(Boolean), handTxt = hand9.length === 1 ? `leg ${hand9[0]}` : `legs ${hand9.slice(0, -1).join(', ')} and ${hand9[hand9.length - 1]}`;
-  check(legs[2].kind === 'total' && li.length === 4 && li.every((x, i) => x.querySelector('b').textContent === (ord9[i].kind === 'prop' ? ord9[i].name : `${ord9[i].away} at ${ord9[i].home}`))
-    && li[iT].querySelector('.pc-px').textContent === '-111' && li[iT].querySelector('.pc-meta').textContent === `BOS at DET · read ${etT(e1.at)}` && (li[iT].querySelector('[data-pc-hand]') || {}).textContent === "DraftKings' player lines carry no betslip id in ESPN's feed: add this leg by hand"
-    && li[iR].querySelector('[data-pc-hand]') && !li[iTot].querySelector('[data-pc-hand]') && li[iL].querySelector('[data-pc-hand]'),
-    "it lists each leg in the builder's order with its price and read time (Eastern), each player leg to add by hand with the reason, the total not");
+  check(legs[2].kind === 'total' && li.length === 4 && li.every((x, i) => x.querySelector('.pc-who').textContent === nameOwn9(ord9[i]))
+    && li[iT].querySelector('.pc-lp').firstChild.textContent === '−111' && li[iT].querySelector('.pc-what').textContent === 'Over 26.5 points' && li[iT].querySelector('.pc-meta').textContent === `F · BOS v DET · ${whenT(q1.tip)}`
+    && li[iTot].querySelector('.pc-what').textContent === 'Over 221.5 points' && li.every(x => x.querySelector('.pc-lp small').textContent === 'book'),
+    `it lists each leg in the builder's order with its bet, its price (DraftKings', book) and its game and tip-off in Eastern (${li.map(tx9).join(' | ')})`);
+  const miss9 = [...d.querySelectorAll('#pcDkNote li[data-pc-dkmiss]')];
+  check(JSON.stringify(miss9.map(x => +x.dataset.pcDkmiss)) === JSON.stringify(hand9) && miss9.every(x => /: DraftKings’ player lines carry no betslip id in ESPN’s feed$/.test(x.textContent)),
+    `each player leg is one to add by hand, with the reason, and the total is not (${miss9.map(tx9).join(' | ')})`);
   const dk = d.getElementById('pcDk');
-  check(dk.getAttribute('href') === 'https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1' && dk.getAttribute('target') === '_blank' && /noopener/.test(dk.getAttribute('rel')) && dk.textContent === 'Open in DraftKings',
-    `the betslip link opens the leg that has an id, the total (${dk.getAttribute('href')})`);
-  check(d.getElementById('pcDkNote').textContent === `Open in DraftKings opens 1 of the 4 legs as DraftKings had them at ${etT(gl1.at)}; add ${handTxt} by hand. A line DraftKings has moved or pulled since will not be on the slip, so check each leg before you bet.`,
-    `and says what it opens and what to add by hand, never every leg ("${d.getElementById('pcDkNote').textContent}")`);
-  check(pc.querySelector('.pc-nums > div').hasAttribute('data-pc-fair') && pc.querySelector('[data-pc-fair] b').textContent === pct1(pb.fair) && /fair chance, est\.$/.test(pc.querySelector('[data-pc-fair] span').textContent), 'the card leads with DraftKings\' fair chance, est., too');
-  check(pc.querySelector('[data-pc-price] b').textContent === fmtA(amOfDec(pb.dec)) + ' est.' && pc.querySelector('[data-pc-why]').textContent === "DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together.", 'its price is marked est., with the why');
-  check(pc.querySelector('[data-pc-pays] b') && pc.querySelector('[data-pc-pays] b').textContent === cents(STAKE * pb.dec) && pc.querySelector('[data-pc-pays] span').textContent === 'pays on $37.50'
-    && d.getElementById('pcSub').textContent === '4 legs · $37.50 stake · times in Eastern',
-    `what the stake pays on the card is the Bet amount typed, $37.50, times the same-game price (held to this file's integration above), to the cent (${cents(STAKE * pb.dec)}; the legs multiplied would pay ${cents(STAKE * mb.prod)}), its head saying the stake ("${d.getElementById('pcSub').textContent}")`);
-  check(pc.querySelector('[data-pc-model]') && pc.querySelector('[data-pc-model] b').textContent === pct1(pb.model) && !pc.querySelector('[data-pc-nomodel]'),
-    "with the total's chance the market's own, every leg has a model chance, and the card shows the parlay's, on trial");
+  check(dk.getAttribute('href') === 'https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1' && dk.getAttribute('target') === '_blank' && /noopener/.test(dk.getAttribute('rel')) && dk.textContent === 'Open 1 of 4 legs in DraftKings',
+    `the betslip link opens the leg that has an id, the total, and the button says how many of the legs it opens (${dk.getAttribute('href')}, "${dk.textContent}")`);
+  const note9 = tx9(d.querySelector('#pcDkNote p'));
+  check(note9 === `DraftKings’ lines as read ${etT(gl1.at)}: Open in DraftKings opens 1 of the 4 legs as DraftKings had it then; a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet. Add by hand:`,
+    `and says what it opens, dated by the read, and what to add by hand, never every leg ("${note9}")`);
+  const ch9 = [...pc.querySelectorAll('#pcView .pc-chance > div')].map(tx9), sm9 = [...pc.querySelectorAll('#pcView .pc-chance small')].map(tx9);
+  check(ch9[0] === `Fair chance all 4 land ${pct1(pb.fair)} (est.)` && ch9[1] === `model (on trial) says ${pct1(pb.model)} · the price says ${(100 / pb.dec).toFixed(1)}%`,
+    `the card leads with DraftKings' fair chance, est., then the model's on trial and the price's (${ch9.join(' / ')})`);
+  check(tx9(pc.querySelector('.pc-price')) === mi(fmtA(amOfDec(pb.dec))) && tx9(pc.querySelector('.pc-sub')).endsWith('estimated same-game price') && sm9.includes("DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together."),
+    `its price is the builder's same-game price, said to be an estimate, with the why (${tx9(pc.querySelector('.pc-price'))}, ${tx9(pc.querySelector('.pc-sub'))})`);
+  const mo9 = [...pc.querySelectorAll('#pcView .pc-money b')].map(x => x.textContent);
+  check(JSON.stringify(mo9) === JSON.stringify(['$37.50', cents(STAKE * pb.dec), '+' + cents(STAKE * pb.dec - STAKE)]),
+    `what the stake pays on the card is the Bet amount typed, $37.50, times the same-game price (held to this file's integration above), to the cent (${mo9.join(' / ')}; the legs multiplied would pay ${cents(STAKE * mb.prod)})`);
   let shared = null; w.navigator.share = async x => { shared = x; }; w.navigator.canShare = () => true;
-  d.getElementById('pcShare').click(); await sleep(20);
+  d.getElementById('pcLink').click(); await sleep(20);
   const tl = shared && shared.text.split('\n');
   check(shared && Object.keys(shared).sort().join() === 'text,title' && shared.title === `4-leg parlay ${fmtA(amOfDec(pb.dec))} (estimated same-game price)` && tl.includes('https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1')
-    && tl.includes(`${iT + 1}. Jayson Tatum (BOS): Points Over 26.5 -111, BOS at DET, read ${etT(e1.at)}`) && tl.includes(`Add by hand, leg ${iT + 1}: Jayson Tatum, Points Over 26.5 (DraftKings' player lines carry no betslip id in ESPN's feed)`)
-    && tl.includes(`Add by hand, leg ${iL + 1}: Lal Guard, Points Over 24.5 (DraftKings' player lines carry no betslip id in ESPN's feed)`) && !tl.some(x => new RegExp(`^Add by hand, leg ${iTot + 1}:`).test(x)) && tl.includes(`$37.50 pays ${cents(STAKE * pb.dec)} at ${fmtA(amOfDec(pb.dec))}, an estimated same-game price (DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together; the legs multiplied ${fmtA(amOfDec(mb.prod))})`) && !/every leg|all 4 legs/.test(shared.text),
-    'Share link sends a title and a text, no url field: each leg with its price and read time, the betslip link alone on its line, the player legs to add by hand with why, what the Bet amount typed ($37.50) pays to the cent at the estimated same-game price, the legs multiplied beside it');
+    && tl.includes(`${iT + 1}. Jayson Tatum: Over 26.5 points (-111)`) && tl.includes(`DraftKings betslip (opens 1 of the 4 legs as DraftKings had it; add ${handTxt} by hand):`) && tl.includes('Add by hand at DraftKings:')
+    && tl.includes(`${iT + 1}. Jayson Tatum Over 26.5 points (no betslip id in ESPN’s feed)`) && tl.includes(`${iL + 1}. Lal Guard Over 24.5 points (no betslip id in ESPN’s feed)`) && !tl.some(x => new RegExp(`^${iTot + 1}\\. .*\\(no betslip`).test(x))
+    && tl.includes(`Stake $37.50 · Pays ${cents(STAKE * pb.dec)}`) && tl[tl.length - 1] === 'demon-x13.github.io/nba-hub' && !/every leg|all 4 legs/.test(shared.text),
+    'Share link sends a title and a text, no url field: each leg with its price, the betslip link alone on its line under what it opens, the player legs to add by hand with why, what the Bet amount typed ($37.50) pays to the cent, the site last');
   delete w.navigator.share; let copied = null; w.navigator.clipboard = { writeText: async t => { copied = t; } };
-  d.getElementById('pcShare').click(); await sleep(20);
-  check(copied === shared.text && /Copied/.test(d.getElementById('pcMsg').textContent), 'with no share sheet the same text is copied, and the card says so');
+  d.getElementById('pcLink').click(); await sleep(20);
+  check(copied === shared.text && /Link copied/.test(d.getElementById('pcMsg').textContent), 'with no share sheet the same text is copied, and the card says so');
   pc.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20);
   check(pc.hidden && d.activeElement === d.getElementById('pFinish'), 'Escape closes it, the focus back on Finish parlay');
-  check(card && card.title === shared.title, 'the card the page holds is the one shared');
+  check(card && w.PARLAY_CARD.linkText(card).title === shared.title, 'the card the page holds is the one shared');
   /* the betslip note is dated by the oldest read of the legs it opens: a parlay kept from two presses, as a reload finds
      it (the total read at this press, the other game's moneyline at one two hours before, put second so that neither
      the first leg's read nor the newest stands in for it) */
@@ -1086,10 +1098,11 @@ async function builder() {
     xd.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
     xd.getElementById('pFinish').click(); await sleep(20);
     let sh = null; x.w.navigator.share = async v => { sh = v; }; x.w.navigator.canShare = () => true;
-    xd.getElementById('pcShare').click(); await sleep(20);
-    const note = xd.getElementById('pcDkNote').textContent, opens = `opens the 2 legs as DraftKings had them at ${etT(tOld)}`;
-    check(etT(tOld) !== etT(gl1.at) && xd.getElementById('pcDk').getAttribute('href') === 'https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1+0ML85841599_1'
-      && note === `Open in DraftKings ${opens}. A line DraftKings has moved or pulled since will not be on the slip, so check each leg before you bet.` && sh && sh.text.split('\n').includes(`DraftKings betslip (${opens}):`) && !espnReqs(x.requests).length,
+    xd.getElementById('pcLink').click(); await sleep(20);
+    const note = tx9(xd.querySelector('#pcDkNote p'));
+    check(etT(tOld) !== etT(gl1.at) && xd.getElementById('pcDk').getAttribute('href') === 'https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1+0ML85841599_1' && xd.getElementById('pcDk').textContent === 'Open in DraftKings'
+      && note.startsWith(`DraftKings’ lines as read ${etT(tOld)}: Open in DraftKings opens the 2 legs as DraftKings had them then;`) && sh && sh.text.split('\n').includes('DraftKings betslip (opens the 2 legs as DraftKings had them):')
+      && sh.text.split('\n').includes(`DraftKings lines as read ${etT(tOld)}: a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet`) && !espnReqs(x.requests).length,
       `two legs read at different presses: the card's note and the Share text date what the link opens by the older read, ${etT(tOld)}, not ${etT(gl1.at)} ("${note}")`);
     check(x.errors.length === 0, 'no script errors: ' + x.errors.join(' | ')); }
 

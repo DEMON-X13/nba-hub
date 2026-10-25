@@ -10,7 +10,8 @@
  * upserted by id: a day's ESPN rows are replaced by what the feed says now, so a postponed game leaves
  * its old date and appears on the new one. Rows from the history file are kept unless the feed has a
  * final for the same game. ESPN carries a line only before tip-off, so the line a final keeps is the last
- * one seen on it, the morning-of line from the day's earlier pull. Preseason games are kept, typed PRE:
+ * one seen on it, the morning-of line from the day's earlier pull. A game's national networks (tv) are kept the same
+ * way, frozen at tip-off with its lines (README "The lines feed"). Preseason games are kept, typed PRE:
  * the page shows them, but neither model learns from them, no box score is pulled and the record skips them.
  * The pull looks thirty days ahead so opening night is known from the schedule. Exit 1 if ESPN could not be read at all, so a
  * network block shows as a failed run and not as a quiet day with no games.
@@ -52,6 +53,19 @@ function moneyline(odds, side) {
   return '';
 }
 
+/* the national networks a game is on, as the games table keeps them (tv, names joined by '|'): every name ESPN's
+   broadcasts list in the national market, then any national TV listing its geoBroadcasts adds (market type National,
+   type TV). A local listing (the home or away market: a regional sports network, League Pass, a team's app) is never
+   one. A name is kept as ESPN writes it, with any comma, quote or bar taken out (the table is a plain CSV); none is
+   '' */
+function national(c) {
+  const out = [], add = n => { const t = String(n == null ? '' : n).replace(/[,|"\r\n]+/g, ' ').replace(/\s+/g, ' ').trim(); if (t && !out.includes(t)) out.push(t); };
+  const mk = m => String(m && typeof m === 'object' ? m.type : m == null ? '' : m);
+  for (const b of Array.isArray(c.broadcasts) ? c.broadcasts : []) if (b && /^national$/i.test(mk(b.market))) for (const n of Array.isArray(b.names) ? b.names : []) add(n);
+  for (const b of Array.isArray(c.geoBroadcasts) ? c.geoBroadcasts : []) if (b && /^national$/i.test(mk(b.market)) && b.type && /^tv$/i.test(String(b.type.shortName || ''))) add(b.media && b.media.shortName);
+  return out.join('|');
+}
+
 /* one scoreboard payload -> rows for the games table */
 function parseDay(j) {
   const rows = [];
@@ -72,15 +86,18 @@ function parseDay(j) {
     rows.push({ game_id: L.gameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 3 ? 'POST' : 'REG', /* the play-in (5) is REG, as in the history */ away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
-      home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), home_ml: moneyline(odds, 'home'), away_ml: moneyline(odds, 'away'), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });
+      home_line: homeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), home_ml: moneyline(odds, 'home'), away_ml: moneyline(odds, 'away'), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '', tv: national(c) });
   }
   return rows;
 }
 
 /* The market a game keeps is the last one read before tip-off. Once a game has started (ESPN says live or final,
    or its tip time has passed) a fresh read's lines are not taken: a run that lands during the game (scheduled runs
-   start hours late) would otherwise store an in-game line, and the record would grade against it. */
+   start hours late) would otherwise store an in-game line, and the record would grade against it. The national networks
+   (tv) are kept by the same rules: what ESPN listed before tip-off is what a game was on (Suggested Parlays' featured
+   games), and a read with none keeps the last. */
 const MARKET = ['home_line', 'total', 'home_ml', 'away_ml'];
+const KEPT = MARKET.concat('tv');
 function merge(have, date, fresh, now = new Date()) {
   const prev = new Map(have.map(r => [r.game_id, r]));
   const keep = have.filter(r => !(r.date === date && r.source === 'espn'));
@@ -93,10 +110,10 @@ function merge(have, date, fresh, now = new Date()) {
       if (!r.tip && old.tip) r.tip = old.tip;
       if (!r.home_ml !== !r.away_ml) { r.home_ml = ''; r.away_ml = ''; }   // a read with one side only is no price: a pair is never two reads
       const started = r.status !== 'scheduled' || (r.tip && r.tip <= nowIso);
-      if (started) for (const k of MARKET) r[k] = old[k] || '';                 // frozen at tip: the last pre-game read
-      else for (const k of MARKET) if (!r[k] && old[k]) r[k] = old[k];          // a read with no line keeps the last one
+      if (started) for (const k of KEPT) r[k] = old[k] || '';                   // frozen at tip: the last pre-game read
+      else for (const k of KEPT) if (!r[k] && old[k]) r[k] = old[k];            // a read with no line keeps the last one
       if (!r.home_ml !== !r.away_ml) { r.home_ml = old.home_ml || ''; r.away_ml = old.away_ml || ''; }   // both sides or neither
-    } else if (r.status !== 'scheduled' || (r.tip && r.tip <= nowIso)) for (const k of MARKET) r[k] = '';   // first seen after tip: no pre-game line
+    } else if (r.status !== 'scheduled' || (r.tip && r.tip <= nowIso)) for (const k of KEPT) r[k] = '';     // first seen after tip: no pre-game line
     byId.set(r.game_id, r);
   }
   return [...byId.values()];
@@ -166,5 +183,5 @@ async function main(now = new Date()) {
   if (asked && !ok) process.exit(1);
 }
 
-module.exports = { parseDay, merge, homeLine, moneyline, MARKET, main };
+module.exports = { parseDay, merge, homeLine, moneyline, national, MARKET, KEPT, main };
 if (require.main === module) main().catch(e => { console.error(e.message || e); process.exit(1); });

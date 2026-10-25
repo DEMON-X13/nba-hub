@@ -1189,6 +1189,15 @@ function oddsMoneyline(odds, side) {
   }
   return '';
 }
+/* fetch.js national: the national networks a game is on, names joined by '|' (broadcasts in the national market,
+   then geoBroadcasts' national TV listings; never a local one) */
+function oddsNational(c) {
+  const out = [], add = n => { const t = String(n == null ? '' : n).replace(/[,|"\r\n]+/g, ' ').replace(/\s+/g, ' ').trim(); if (t && !out.includes(t)) out.push(t); };
+  const mk = m => String(m && typeof m === 'object' ? m.type : m == null ? '' : m);
+  for (const b of Array.isArray(c.broadcasts) ? c.broadcasts : []) if (b && /^national$/i.test(mk(b.market))) for (const n of Array.isArray(b.names) ? b.names : []) add(n);
+  for (const b of Array.isArray(c.geoBroadcasts) ? c.geoBroadcasts : []) if (b && /^national$/i.test(mk(b.market)) && b.type && /^tv$/i.test(String(b.type.shortName || ''))) add(b.media && b.media.shortName);
+  return out.join('|');
+}
 /* fetch.js parseDay: one scoreboard answer -> the games table's rows */
 function oddsParseDay(j) {
   const rows = [];
@@ -1209,7 +1218,7 @@ function oddsParseDay(j) {
     rows.push({ game_id: oddsGameId(season, date, A, H), season, date, type: type === 1 ? 'PRE' : type === 3 ? 'POST' : 'REG', away: A, home: H,
       away_score: done ? parseInt(away.score, 10) : '', home_score: done ? parseInt(home.score, 10) : '',
       neutral: c.neutralSite ? 1 : 0, status: done ? 'final' : /IN_PROGRESS|HALFTIME|END_PERIOD/.test(st) ? 'live' : 'scheduled',
-      home_line: oddsHomeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), home_ml: oddsMoneyline(odds, 'home'), away_ml: oddsMoneyline(odds, 'away'), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '' });
+      home_line: oddsHomeLine(odds, H), total: odds && odds.overUnder != null ? String(odds.overUnder) : '', source: 'espn', espn_id: String(e.id || ''), home_ml: oddsMoneyline(odds, 'home'), away_ml: oddsMoneyline(odds, 'away'), tip: e.date ? new Date(e.date).toISOString().slice(0, 16) + 'Z' : '', tv: oddsNational(c) });
   }
   return rows;
 }

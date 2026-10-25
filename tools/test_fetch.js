@@ -7,6 +7,8 @@
  * updating. main(): a day with a game still to finish is read again, today included once one of today's games is
  * final; an answer with no games for a day the table has games on, from yesterday on, keeps the rows and counts as
  * a failed read (three of them and nothing else stops the run); an empty answer for a day two days past is taken.
+ * The national networks (tv, README "The lines feed"): read from the recorded answers in tools/fixtures/ (national
+ * listings kept, local ones never) and from made-up listings, and frozen at tip-off by merge() as the lines are.
  */
 'use strict';
 process.env.NBA_FETCH_PAUSE_MS = '0';
@@ -125,6 +127,38 @@ async function run(now, table, feed, to) {
   const back = row({ game_id: id('2026-10-15', 'DEN', 'UTA'), date: '2026-10-15', away: 'DEN', home: 'UTA', espn_id: '90', tip: '2026-10-15T23:00Z', status: 'live' });
   r = await run(new Date('2026-10-25T15:00:00Z'), [back], { '2026-10-15': board([{ ...back, status: 'final', away_score: 101, home_score: 99 }]) });
   check(r.asked[0] <= '2026-10-15' && r.written.find(x => x.game_id === back.game_id).status === 'final', 'a game left live ten days back is read again and finished');
+
+  console.log('5. the national networks (tv)');
+  const fs = require('fs'), path = require('path');
+  const fx = f => JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', f), 'utf8'));
+  const tvOf = j => Object.fromEntries(F.parseDay(j).map(x => [x.game_id, x.tv]));
+  const t14 = tvOf(fx('scoreboard_20261014.json')), t20 = tvOf(fx('scoreboard_20261020.json')), t25 = tvOf(fx('scoreboard_20261025.json')), t27 = tvOf(fx('scoreboard_20261027.json'));
+  check(Object.values(t20).length === 3 && Object.values(t20).every(v => v === 'NBC'), 'opening night: all three games on NBC');
+  check(JSON.stringify(Object.values(t14).filter(Boolean)) === '["NBA TV","NBA TV"]' && Object.values(t14).length === 7, 'a preseason night: two of seven on NBA TV, the rest none');
+  check(t25['2027_20261025_TOR_MIN'] === 'NBA TV' && Object.entries(t25).filter(([k]) => k !== '2027_20261025_TOR_MIN').every(([, v]) => v === ''),
+    'a regular-season Sunday: NBA TV on one game, and the local listings (regional networks, League Pass, team apps, the home and away markets) none');
+  check(t27['2027_20261027_POR_LAL'] === 'Peacock|NBC' && t27['2027_20261027_DET_NYK'] === 'NBC' && t27['2027_20261027_BKN_BOS'] === '', "Peacock and NBC as ESPN's broadcasts list them nationally, joined by '|', the home market's Spectrum left out");
+  const nat = (c) => F.national(c);
+  check(nat({ geoBroadcasts: [{ type: { shortName: 'TV' }, market: { type: 'National' }, media: { shortName: 'ESPN' } }, { type: { shortName: 'Streaming' }, market: { type: 'National' }, media: { shortName: 'ESPN+' } }, { type: { shortName: 'TV' }, market: { type: 'Home' }, media: { shortName: 'MSG' } }] }) === 'ESPN',
+    "with no broadcasts list, geoBroadcasts' national TV listing is taken, never a streaming or a local one");
+  check(nat({ broadcasts: [{ market: 'national', names: ['ABC', 'ESPN'] }], geoBroadcasts: [{ type: { shortName: 'TV' }, market: { type: 'National' }, media: { shortName: 'ESPN' } }, { type: { shortName: 'TV' }, market: { type: 'National' }, media: { shortName: 'ESPN2' } }] }) === 'ABC|ESPN|ESPN2',
+    'both lists: every national name once, broadcasts first');
+  check(nat({ broadcasts: [{ market: { type: 'National' }, names: ['Prime Video'] }, { market: 'home', names: ['FanDuel Sports Network'] }] }) === 'Prime Video', 'a market written as an object is read the same; a home market is not national');
+  check(nat({ broadcasts: [{ market: 'national', names: ['A, B', 'C|D', 'E "F"', '  ', null] }] }) === 'A B|C D|E F', "a comma, a bar or a quote in a name is taken out (the table is a plain CSV), and an empty name is none");
+  check(nat({ broadcasts: 'NBC', geoBroadcasts: null }) === '' && nat({}) === '' && nat({ broadcasts: [null, { market: 'national' }] }) === '', 'no list, a list that is not one, or an entry with no names: none');
+  console.log('5b. merge: the networks are frozen at tip-off with the lines');
+  const tvB = row({ game_id: g, date: D, tip: '2026-10-21T23:30Z', tv: 'NBA TV' });
+  m = F.merge([tvB], D, [{ ...tvB, tv: 'ESPN' }], new Date('2026-10-21T15:00:00Z')).find(x => x.game_id === g);
+  check(m.tv === 'ESPN', 'before tip-off a new listing is taken');
+  m = F.merge([tvB], D, [{ ...tvB, tv: '' }], new Date('2026-10-21T15:00:00Z')).find(x => x.game_id === g);
+  check(m.tv === 'NBA TV', 'a read with none keeps the last');
+  m = F.merge([tvB], D, [{ ...tvB, status: 'live', tv: 'ESPN' }], new Date('2026-10-22T00:30:00Z')).find(x => x.game_id === g);
+  check(m.tv === 'NBA TV', 'a read during the game keeps the pre-game listing');
+  m = F.merge([tvB], D, [{ ...tvB, tv: 'ESPN' }], new Date('2026-10-22T00:30:00Z')).find(x => x.game_id === g);
+  check(m.tv === 'NBA TV', 'so does a read past the tip that ESPN still calls scheduled');
+  m = F.merge([], D, [{ ...tvB, status: 'live' }], new Date('2026-10-22T00:30:00Z')).find(x => x.game_id === g);
+  check(m.tv === '', 'a game first seen after tip has none');
+  check(L.COLS[L.COLS.length - 1] === 'tv', 'the games table keeps it as its last column, tv');
 
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

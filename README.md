@@ -42,12 +42,14 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
 | `tools/props_ledger.js`, `tools/props_check.js`, `data/props_shadow.json`, `data/props_shadow_lines.csv` | The props shadow ledger: the model's call frozen at tip-off, graded against the closing lines, its pre-registered bar, and the check that holds it to the last commit |
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet locked into the Bet Build and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), and X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays") |
+| `app/parts/parlay.html` | The Parlay Builder tab (README "Parlay Builder"): the NFL hub's choices, Top 50 lines, builder and level engine on this page's tokens, set into the page by `build.js` at its `<!--part:parlay-->` marker |
+| `tools/sigma.js`, `research/sigma.json` | The spread of the real margin about the player model's own number, which the Parlay Builder prices a cover from (14.5 points, the 2026 walk-forward fold), and what the Value rule's team picks were worth on each fold; run by hand |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays") and the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder") |
 | `liveparlays/parlays.json` | X's placed parlays, kept by hand from the slips the owner sends (README "X Parlays"); the page reads it when its X Parlays tab opens, and the job's `tools/autoclear.js` marks a finished one cleared two Eastern days after its last game |
 | `app/parts/xparlays.html` | The X Parlays tab: its markup, its styles (all under `#lpCard`) and its script in a closure of its own, set into the page by `build.js` at its `<!--part:xparlays-->` marker |
 | `tools/autoclear.js`, `tools/test_autoclear.js` | X's finished parlays clear themselves (README "X Parlays"); the test runs first in the job's step |
 | `tools/corr.js`, `data/corr.json`, `research/corr.json` | The same-game correlation table (README "Same-game parlays"): measured on the finished seasons' box scores, written by the script only; the report beside it |
-| `tools/backtest.js`, `research/backtest.json`, `research/backtest_games.csv` | The walk-forward of the model's picks and the suggested parlays against the closing line, run by hand; `publish.js` reads its summary into state.json's `vsMarket` for the Record tab |
+| `tools/backtest.js`, `research/backtest.json`, `research/backtest_games.csv` | The walk-forward of the model's picks and the earlier Parlay Builder's suggested parlays (its rules kept in the file as a frozen copy since 25 October 2026) against the closing line, run by hand; `publish.js` reads its summary into state.json's `vsMarket` for the Record tab |
 | `tools/fetch_odds_hist.js`, `data/odds_hist.csv` | The closing lines on the 2023-2026 finals from ESPN's game summaries: a finished backfill, run by hand from a machine that reaches ESPN only to add a season (the daily job keeps each game's closing moneylines in `games.csv` from now on); its `check()` is shared with `backtest.js` and `corr.js` |
 | `tools/test_corr.js` | The bivariate normal, the fit, the lookup's sign rules, and the committed table held to its rules |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
@@ -706,11 +708,12 @@ What it does not use, and why:
 
 DraftKings' NBA player props, read from ESPN's free feed, with the hub's own projection beside each line. The owner's
 go-ahead, 15 October 2026. **The model is on trial**: it has not been shown to beat DraftKings, so it is shown beside
-DraftKings' line and fair chance and suggests nothing. No prop goes into a suggested parlay, a pick or a Safe, Medium or
-Aggressive level because of it, and nothing on the page says "model says" or "edge" on a prop until the shadow ledger
-(below) has passed its bar. A DraftKings price in the view is also the control that puts that leg in the visitor's own
-parlay in the Parlay Builder, at DraftKings' price (the owner's go-ahead, 15 October 2026, README "Same-game parlays"):
-the visitor's pick, never the model's.
+DraftKings' line and fair chance, and nothing in the Player props view says "model says" or "edge" on a prop until the
+shadow ledger (below) has passed its bar. Until 25 October 2026 it suggested nothing; since then (the owner's call) the
+Parlay Builder's Top 50 lines take a player's line where its chance clears their bar, Value picks among them, each marked
+**on trial** beside its chance there, in the builder and on a level's card (README "Parlay Builder"); a failed bar takes
+every prop off the list. A DraftKings price in the view is also the control that puts that leg in the visitor's own
+parlay in the Parlay Builder, at DraftKings' price (the owner's go-ahead, 15 October 2026, README "Same-game parlays").
 
 ### DraftKings' props on ESPN's feed (`tools/props_feed.js`)
 
@@ -957,8 +960,7 @@ A player DraftKings lines with no game on record has no projection, and is said 
 
 ### On the page (`app/nba_hub.html`)
 
-Every game still to come has a **Player props** button: on its card on Tonight (44px, beside Lineups) and on its row
-in the Parlay Builder's plan. It opens that game's props in a sheet: a window over the page on a wide screen, the whole
+Every game still to come has a **Player props** button on its card on Tonight (44px, beside Lineups). It opens that game's props in a sheet: a window over the page on a wide screen, the whole
 screen on a phone. Escape, Close (44px) or a tap outside closes it, Tab stays inside, and the focus goes back to the
 button that opened it. Nothing in it is saved, not even the team switch.
 
@@ -996,12 +998,13 @@ injury report, projected under 8 minutes or no game on record) and shows DraftKi
 DraftKings has no line on are listed under, folded.
 
 **On trial, everywhere it shows.** The sheet's head says Model on trial, and its note says the model has not been shown
-to beat DraftKings and suggests nothing, with the walk-forward and the market test in brief and the shadow ledger's
-running numbers. The Record tab gives the ledger quietly: how many of the 30,000 graded lines are in, and the model
+to beat DraftKings and its chances are marked on trial wherever they show (the Parlay Builder's Top 50 lines take its
+lines since 25 October 2026), with the walk-forward and the market test in brief and the shadow ledger's running
+numbers. The Record tab gives the ledger quietly: how many of the 30,000 graded lines are in, and the model
 against DraftKings on log loss and Brier, never a verdict or a word of one before the bar is decided (a PASS, when it
-comes, is said to move nothing by itself). Nothing in the view says "model says" or "edge". No prop reaches the suggested
-parlays, the Value card, a pick or the plan: the model suggests nothing. The only way a prop leaves the view is the
-visitor's own tap on DraftKings' price, which puts that leg in their parlay (README "Same-game parlays").
+comes, is said to move nothing by itself). Nothing in the view says "model says" or "edge". From the view a prop goes only into the
+visitor's own parlay, by their tap on DraftKings' price (README "Same-game parlays"); the Parlay Builder's Top 50 lines
+reach the same lines on their own rules, marked on trial (README "Parlay Builder").
 
 The parse and the fair chances are `tools/props_feed.js`'s and the distribution `tools/props.js`'s (`propParse`,
 `propRead`, `propFairOver`, `propFairRung`, `nbVar`, `nbPmf`, `nbSf`, `pOver` and their pieces), copied
@@ -1119,10 +1122,9 @@ node tools/smoke.js               # the page; section 8 is the props view, secti
 
 Player legs in the Parlay Builder, the owner's go-ahead of 15 October 2026: a visitor builds a parlay of their own from
 DraftKings' player props and game lines, with more than one leg of a game where DraftKings would take them together,
-priced as a same-game parlay from a correlation table measured on the hub's own box scores. **The suggested parlays,
-the Value card and the plan are exactly as they were**: team bets only, one leg a game, chosen by their own rules, no
-prop and no same-game combination. The props model is on trial and the levels' search is not built for correlated legs,
-so nothing here is suggested by any model: every leg in a visitor's parlay is the visitor's tap.
+priced as a same-game parlay from a correlation table measured on the hub's own box scores. Since 25 October 2026 the
+builder is the NFL hub's Parlay Builder (README "Parlay Builder"), whose Top 50 lines add legs to the same parlay by the
+same rules and price it by the same engine; every leg in a visitor's parlay is still the visitor's own Add or tap.
 
 ### Your parlay, on the page (`app/nba_hub.html`)
 
@@ -1176,12 +1178,12 @@ multiplied beside it.
 with the whole margin on the Over, as the Player props view; a milestone's or a Yes price's by the rung rule, est.; a
 team line's two prices with the margin taken out in proportion, the page's market chance) joined the same way, est.
 wherever a same-game correction or an est. leg is in it. The model's chance stands beside it only where every leg has
-one (a player's from the props model, labelled on trial; a moneyline's from the game model; the page has never put a
-chance on a spread or a total, and does not start here), and nothing says "model says" or "edge". Then the price and
-what the stake pays.
+one (a player's from the props model, labelled on trial; a moneyline's from the game model; since 25 October 2026 a
+spread's from the game model's margin and a total's the market's own, README "Parlay Builder"). Then the price and what
+the stake pays.
 
-**Lock in** puts the parlay in the Bet Build at the price worked out then (`dec`, marked est. where a game has two
-legs). **Finish** shows it as a card (Eastern time, since it goes to other people): each leg with its price and read
+Until 25 October 2026 **Lock in** put the parlay in the Bet Build; the Bet Build is gone (README "Parlay Builder", "What
+went"). **Finish parlay** shows it as a card (Eastern time, since it goes to other people): each leg with its price and read
 time, the price est. with the legs multiplied, the fair chance first, what the stake pays, the model's chance where
 every leg has one (on trial with a player leg) or the line saying why there is none, Open in DraftKings and Share link.
 ESPN's feed carries no DraftKings betslip id for a player's line, so each player leg says "DraftKings' player lines
@@ -1199,9 +1201,9 @@ at 10 or more), a push on a whole line, void for a player who did not play (the 
 all). A leg on a game not played on its date is void too, as a team bet on it is: a game the published slate has called
 off, or one on no published list two days after its date ("not played on its date"). A void or a push drops out of a
 parlay, and a same-game parlay is then priced again by the same rule on the legs left (one leg left pays its own
-price). A leg whose game is final and whose box score is not read yet waits (its title says so). Once made, a grade is
-written into the visitor's own Bet Build entry (`res`: the result and the stat), so it holds when the box score has left
-the published file.
+price). A leg whose game is final and whose box score is not read yet waits. Until 25 October 2026 a grade once made was
+written into the visitor's own Bet Build entry (`res`: the result and the stat); the Bet Build is drawn no more, and its
+kept bets are graded by `NBA_GRADE.gradeBet` when asked, a grade written then still read first.
 
 The smallest honest way to give the page what it grades from: `state.json` carries `boxes`, the box line of every player
 who played in each regular-season and playoff final of the last seven days ([points, rebounds, assists, threes, steals,
@@ -1313,7 +1315,11 @@ Tatum's Over 26.5 at -106 with the total: +441 est. where the legs multiplied pa
 
 ### The checks
 
-`node tools/smoke.js` section 9 holds it all with rules of its own, on a stubbed ESPN (the recorded opening-night props
+Since the Parlay Builder of 25 October 2026 (README "Parlay Builder") section 9 holds the builder in its place: its
+four figures, rows and same-game note against the sums below, the Bet amount typed into it, Finish parlay, the kept Bet
+Build undrawn and graded by `NBA_GRADE.gradeBet`, and no Lock in; the levels, the plan and Lock in it names below are
+gone, and the breaks in the table were planted on the page as it then stood. `node tools/smoke.js` section 9 holds it
+all with rules of its own, on a stubbed ESPN (the recorded opening-night props
 and scoreboard answers, and made-up games in their shapes): nothing to add before a press; after one, every price an add
 control, 44px, named, in the tab order; the recorded game lines and ids read as ESPN has them, another book's odds, a
 spread on another number, a total on another number or with its Over and Under on two, and ids in the wrong shape
@@ -1446,7 +1452,8 @@ and six breaks of the card (the last ten rows) are red:
 DraftKings' lines on the next nights' games, published by the job, so the Parlay Builder, Suggested Parlays and the
 suggestions record can price those games from the moment a page loads rather than only after a Refresh odds press (the
 build plan's "Prices on load", 25 October 2026). Free: ESPN's public scoreboard and propBets feeds, no key, no credits.
-At this commit nothing on the page reads `lines.json` yet.
+The Parlay Builder reads it (README "Parlay Builder"): once a page load, no-store, the first time its tab opens; a Refresh
+odds press's read of a game's lines or props takes its place where it is newer.
 
 ### What is read (`tools/lines.js`, `tools/lines_feed.js`)
 
@@ -1577,6 +1584,169 @@ fail on a planted break in a scratch copy:
 | the page's `oddsNational` not reading geoBroadcasts | smoke section lines (3) |
 | the page's `oddsIdOk` not checking the id's number | smoke section lines: the text, and an id on an older number (2) |
 
+## Parlay Builder
+
+The NFL hub's Parlay Builder tab, carried to the NBA on 25 October 2026 (the build plan's "Parlay Builder"; the NFL hub's
+README, "Bets and Stats: the loop", and its `props/build/part3.js` at app v114 are the source). It is
+`app/parts/parlay.html`, set in at its `<!--part:parlay-->` marker: its styles on the page's tokens and its script, which
+shares the page's globals (the visitor's store `M`, the lines a press reads, the same-game engine). It replaced the tab's
+day plan, its Safe, Medium and Aggressive parlays grown from one core, the Value card and the Bet Build (below, "What
+went").
+
+### On the page
+
+**The choices**, at the top, each the visitor's own in the page's one key (`M.pb`; `M.stake` for the amount):
+- **Bet amount** (`#pbStake`): dollars, the decimal keypad on a phone, $1 to $100,000, cents kept, $20 to start. One
+  number, the builder's stake and every level's on Suggested Parlays when that tab comes: the builder's own stake box and
+  its one-tap amounts set the same number. A typed amount is read by `stakeRead` ($ and thousands commas allowed); one that
+  is not a positive number leaves the amount as it was, and a saved one that is not an amount reads as $20, so nothing
+  drawn from it is NaN. A browser that kept the old builder's stake (`slip.stake`) and no Bet amount has it read once as
+  the Bet amount.
+- **Refresh odds**, with its own status line beside it (and again in the builder): the board's press (README "The site"),
+  which reads DraftKings' current game lines and player props from ESPN; the board's odds bar is not shown over this tab.
+- **Build from**: All, Teams only or Players only, which set five boxes, **Moneyline**, **Spread**, **Game total**,
+  **Player overs** and **Player unders** (a milestone and a double- or triple-double are overs); a box changed by hand
+  lights the mix it makes, or none.
+- **Games**: every game still to tip on the lines feed's two Eastern dates (the next two with a game to come that is not
+  preseason, README "The lines feed"), listed under their day ("Sun Oct 25") with each tip-off in the viewer's own zone
+  and weekday, all ticked to start, All and None; the list is open on a screen 761px or wider and folded on a phone until
+  the visitor opens it. A game that tips while the page is open leaves the list, the Top 50 and the builder at the page's
+  half-minute look. Tonight's card has a **Parlay Builder** button for each of these games, which opens the tab with that
+  game alone ticked.
+
+**The Top 50 lines** (`getPbTop`, `pbTopBuild`): every leg on the ticks that qualifies, in two parts, **Value picks**
+(each marked Value) then **Other lines** (the thin-edge legs, then the game totals), each part ranked by what $1 on it is
+expected to make at the model's chance (the chance times the decimal price, less the $1), best first, the totals set after
+every thin-edge line, 50 lines at most in all (`PB_TOP_N`). Each bet is listed once: a milestone k+ lands exactly when the
+player's main Over at k - 0.5 does (DraftKings' NBA rungs sit at the main line + 0.5), so where that main Over qualifies
+the rung is left out and its slot goes to the next line; a whole-number main line, an Under, a main Over that does not
+qualify and the same rung in another game never take a rung's place. Each row gives its rank, the player or team, the bet
+and its game, the Value mark, DraftKings' price, the model's chance (marked **on trial** on a player's line), DraftKings'
+fair chance (est. where it is), what $1 wins and what $1 is expected to make, and an **Add**. The notes say how many lines
+were left out far off the market and for want of a betslip id, and that the totals come last; an empty list says why (no
+box or game ticked, no player prices read yet, none the props model prices, or nothing qualifying).
+
+**A line qualifies** with DraftKings' real price, the model's chance from 45% to 97% and at or above the chance that price
+implies (the book's margin left in): 3 points above it or more is a **Value pick**, less a thin-edge line. Left out and
+counted: a line the model rates 15 points or more above DraftKings' fair chance (`legFarOff`, the NFL's `FAR_OFF`), and a
+game's moneyline, spread or total with no DraftKings betslip id at its number where its game's lines carry ids. A game
+total is at the book's own chance, so never a Value pick and always last.
+
+**Add** puts that one leg in the builder by the builder's own rules, reads **Added** while it is in, and a second press
+takes it out, the focus kept on it. **The builder** (`#parlayBody`) is the visitor's own parlay (`M.slip.legs`, the same
+legs a game's Player props adds, README "Same-game parlays"), in the builder's order (the day, then the name): each leg with
+its projection, the model's chance and its confidence band (on trial on a player), DraftKings' fair chance, its price and
+read time, a line where it will not go on DraftKings' slip as built, and Remove; then **What it pays**: the stake, the
+one-tap amounts, a parlay price of the visitor's own book to type over the estimate, and four figures, DraftKings' fair
+chance that every leg lands first (est. where a leg is priced on one side or the legs share a game), the model's beside it,
+the fair price for the model's chance, what the stake returns and the confidence band of the whole; the same-game note
+where legs share a game; **Finish parlay** (the card, README "Same-game parlays") and **Clear ALL** (asked first); and the
+legs that move together. Both Refresh odds there and in the controls keep the focus on the button pressed.
+
+**The engine** the NFL's levels are built by is carried whole for Suggested Parlays to draw on: `pbLegs`, `pbPool`,
+`pbTier` and its searches (a beam over a pairwise copula reading, the finalists worked by the builder's own sums),
+`getPbTiers` (Safe the likeliest pair; Medium, Aggressive and Extreme the 3-, 4- and 5-leg parlay with the best expected
+return that lands 25%, 12% and 5% by the model, else the likeliest of that size), `pbTierCard` (with `o.quiet`) and a
+level's **Add to builder**, and `parlayProb`, `parlayDec`, `parlayFair`, `legFair`, `legFarOff`, `pbOrder`, `pbIsValue`,
+`pbValMark`, `toggleLeg` on `window`. Nothing on this tab draws a level.
+
+### Where the NBA differs, and why
+
+| The NFL hub | Here | Why |
+|---|---|---|
+| A week's games | Every game still to tip on the lines feed's two Eastern dates, under their day; never preseason | The NBA has no weeks; the dates are the ones the job reads DraftKings' lines for |
+| The payload's prices, a Refresh odds press over them | `lines.json`, read once a page load, no-store, the first time the tab opens (never on load or a timer), and a press's read, the newer of the two for each game's lines and its props; every price DraftKings' real one, nothing estimated | The NBA's prices come from the lines feed, which carries both prices on every line |
+| A moneyline's or a cover's chance from the NFL's game model | A moneyline's the player model's win chance (the number Tonight shows); a spread's Phi((m + h) / sigma), m the side's expected margin (minus the model's spread for the home side) and h its line, sigma 14.5 points | The NBA's game model gives a margin; sigma is measured, below. Until this change the page put no chance on a spread |
+| A total at the market's own chance | The same: its two prices with the margin out in proportion (50% where one is missing), never a Value pick, last | The NBA's total has never been tested against the market |
+| A player's chance from the props model, on a book price | The props model's (README "Player props"), which is **on trial**: marked so beside its chance on every Top 50 row, builder row and level card, the mark titled with the shadow ledger's count, and said once in the lead; never a player it does not project or the report has out; none at all once its ledger fails its bar | The owner's call of 25 October 2026: props in the Top 50, Value picks allowed, every one marked |
+| Value: the 3-point edge with market + form agreeing on a player's line | The 3-point edge alone, which the panel says | The NBA has no market + form (no player Elo is fitted to the props) |
+| DraftKings' fair chance by `legFair` | The NBA's `legFair`: a main line's whole margin on the Over (measured on DraftKings' archived lines), a milestone's and a Yes price's by the rung rule, est., a team line's two prices in proportion | The NBA's measured rule |
+| Every suggested leg needs DraftKings' betslip id | Game legs only, where the game's lines carry ids; a player's leg carries none on ESPN's feed and goes on the slip by hand, which its builder row says ("Not on DraftKings' slip yet: no betslip id in ESPN's feed") | ESPN's feed has no outcome id for a player's line |
+| `parlayProb` and `parlayDec` by the NFL's copula draws and its hold | The NBA's same-game engine behind the NFL's names: legs of different games multiplied, one game's joined by the gaussian copula at `data/corr.json`'s rho (two legs exactly, more by the GHK sum), worked in one order a game (`sgOrder`), so the same legs price the same in the list, the builder, a card and the sheet; the price min(the prices multiplied, 0.896 / J) | The NBA's table and engine (README "Same-game parlays"), with the NFL's hold, untested here |
+| A second leg on one bet's key replaces the first | Refused, the reason said at its row and in the builder's status line, by the NBA's same-game rules (`slipWhy`: one side bet a game, one total, one leg a player a stat, no stat beside a sum holding it, no double- beside a triple-double) | The NBA's rules, as the sheet applies them |
+| The builder's confidence band | The NBA's band (HIGH from 75%, MED 60%, LOW 55%), under 55% "UNDER 55%" | The page's own band |
+| Market + form and the Elo matchup on each builder row; the matchup bubble on each name | Neither; names are plain | Neither exists for NBA props yet |
+
+### The spread's sigma (`tools/sigma.js`, `research/sigma.json`)
+
+The cover chance needs the spread of the real margin about the model's own number. On the 2026 fold of the walk-forward
+(`research/backtest_games.csv`, every final called by the parameters fitted on the seasons before, the lineup known), the
+root mean square of the home margin less the model's expected home margin is 14.54 points over 1,322 finals (the standard
+deviation about the residuals' own mean 14.54, their mean -0.19), so sigma is **14.5**. The folds before it: 14.41 on
+2024 (1,314 finals) and 14.07 on 2025 (1,320). The root mean square is used because the page draws the margin about the
+model's number, bias in. Until this change the page's `SIGMA` was 12.5, assumed, and priced only the old builder's market
+chance from a spread where no moneyline was posted.
+
+### What the team picks have been worth
+
+Shown for the owner, not acted on: nothing on the page is chosen from these numbers. Every side the Value rule's 3-point
+edge would have listed on each fold, lineup known, at the closing price (a cover at -110, which `data/odds_hist.csv` keeps
+no spread price for; a push left out), the model's chance said on average, how often it won, and the profit on $1; and
+the same with the far-off guard as the page applies it:
+
+| Fold | Moneyline Value picks | with the far-off guard | Cover Value picks | with the far-off guard |
+|---|---|---|---|---|
+| 2024 | 368, said 56.3%, won 43.8%, -16.3u | 287, said 56.5%, won 44.6%, -25.6u | 904, said 62.2%, won 48.7%, -64.0u | 658, said 59.7%, won 49.4%, -37.6u |
+| 2025 | 299, said 59.3%, won 53.8%, +18.2u | 253, said 59.7%, won 56.9%, +20.5u | 707, said 60.2%, won 50.9%, -19.7u | 634, said 59.3%, won 51.9%, -5.9u |
+| 2026 | 304, said 61.2%, won 51.6%, -0.7u | 244, said 61.1%, won 53.7%, +1.0u | 728, said 60.3%, won 47.0%, -75.1u | 634, said 59.2%, won 46.9%, -67.0u |
+
+The model has said 56% to 62% on its team Value picks and they have won 44% to 57%: on these folds a team Value pick has
+been a pick the model rates above the market, not one that has beaten it. The covers' 2026 row uses a sigma measured on
+those same games. `node tools/sigma.js` writes the file only when it changes and prints these lines.
+
+### What went
+
+Until 25 October 2026 the tab was a day's plan (a confidence band, straight bets or a parlay of the model's picks, Lock
+in), Safe, Medium and Aggressive parlays of team moneylines grown from one core, a Value card and a Bet Build graded as
+games went final. What a browser kept for them (`M.build`, `M.bank`, `slip.stake`) stays in its storage, undrawn, and goes
+into a backup as before; a kept bet is still graded by the page's own settlement, `NBA_GRADE.gradeBet` (the one X Parlays
+grades by), and nothing writes its grades back. The Record tab's table of those rules against the market is labelled as
+the earlier rules' backtest, and `tools/backtest.js` keeps them as a frozen copy (it no longer reads the page), giving the
+same numbers.
+
+### The checks
+
+`SMOKE_ONLY=pb node tools/smoke.js` (`tools/smoke_parlay.js`), blocking, boots the built page on made-up games tomorrow and
+the two days after (so it holds at any hour, the off-season included), a made-up `lines.json` in `tools/lines.js`'s shape,
+a props block of its own and a stubbed ESPN, and works every number out on its own copies of the rules (`qualOwn`,
+`pbTopOwn`, `sameBetOwn`, `PB_TOP_N_OWN` 50; the model's chances from `tools/props.js`'s distribution, `research/sigma.json`
+and the market's prices; the fair chances by `tools/props_feed.js`'s rules): nothing read before the tab opens, then
+`lines.json` once, no-store; the games, their days and the preseason and started games left out; the list line for line
+(its parts, ranks, prices, chances, fair chances, wins and expected on $1), Value first, the totals last and never Value,
+the on-trial mark on every player leg and nowhere else and the Value mark on every Value pick and nowhere else, each bet
+once (a rung left out for its half-point main Over, a whole-number Over, an Under, a main Over that does not qualify and a
+rung in another game each keeping it, a Value-pick rung left out for its thin main Over), a total priced on its Over
+alone at +120, put at 50% and expected to make $0.10, still after every thin-edge line, the far-off and no-id rules and
+their notes; the four levels by the builder's own sums, their cards' marks and `o.quiet`, and a level's Add to builder;
+every control 44px; the mix, the boxes and the games, saved; Add, Added and a second press, the refusals with their
+reasons (a combo holding a stat, the moneyline beside the spread); the builder's numbers against `data/corr.json` and
+`tools/corr.js` (two legs of one game exactly) and the page's `parlayProb`, `parlayDec` and `parlayFair`, its rows, its
+fair chance first, the model's on trial, the payout, the band, the slip lines and the same-game note; `stakeRead` on 24
+cases, the Bet amount typed, left empty, set by a chip and by the builder's box, and read from saved junk, from 250,000
+and from the old stake; Finish parlay on the builder's legs, order and price; a game tipping while the page is open; Clear
+ALL; a press taking DraftKings' newer price and storing nothing, and a reload; the cut on sixty made-up games (forty Value
+picks, twenty thin, the first 50 of their order under "Top 50 lines", the other lines ranked from 41); a `lines.json` that
+does not load; a slate with no game to build from; and the real `state.json` and `lines.json`, the list this file's own
+line for line wherever no game tips within two minutes. Sections 7, 8 and 9 follow the tab: a press's prices in the Top
+50 and the builder's leg repriced, the props a press reads reaching the list marked on trial, the builder held to section
+9's own same-game sums. Eight breaks planted in a copy of the built page (`NBA_HTML=<copy> SMOKE_ONLY=pb`) each turn it
+red: the list cut at 40, the each-bet-once rule dropped, a 2-point Value edge, the on-trial mark on team legs, the far-off
+guard dropped, the old sigma of 12.5, a $0 Bet amount taken, and the totals ranked with the thin-edge lines (which passed
+until the one-sided total went in).
+
+In Chromium at 1280 and 390 wide on the published `state.json` and that afternoon's `lines.json` (16 games, 726 lines
+qualifying for the 50), with three legs in the builder and the games list open: no sideways scroll, every control 44px or
+taller (93), and every one of 984 and 978 texts at 4.5:1 or better on what is under it (the lowest 5.1:1). The quiet text
+is the NHL hub's #B3B9CB, not the page's `--muted`, which falls under 4.5:1 on `--panel-2`; the on-trial mark is the rose
+#FFA2B8 (5.7:1 on the panel) and the Value mark dark text on the gold (12.1:1).
+
+**What the owner may want to look at.** On that afternoon's lines 48 of the 50 were player lines and 44 of them Unders,
+every row a Value pick: the props model runs low on the Over against DraftKings (README "Player props": on the 2026
+play-in and playoffs its chance of a side beat the price's by 3 points on 4,271 Unders and 967 Overs), so its Unders clear
+the 3-point edge most often, and 232 lines were left out as far off the market. The levels over every game ticked, which no
+tab draws yet, made a Safe pair at 92.7% by the model (-484) and a Medium at 86.6%. These are the on-trial model's
+chances, marked so wherever they show.
+
 ## X Parlays
 
 The parlays X placed at the book, the same on every device and read only everywhere: a tab of their own, after the
@@ -1624,7 +1794,7 @@ read (the scores stand as they were and a note says ESPN is not answering, most 
 fails leaves its game's player legs waiting. A box score is not asked for before tip, and a final's is read once.
 
 **How a leg is graded.** Wherever the published state has its game's final, by the page's own settlement, so X Parlays
-and the Bet Build never disagree: `legResult` on the published score for a team's leg, `propGrade` on the published box
+and the page's own grading (`NBA_GRADE`, which grades a browser's kept bets) never disagree: `legResult` on the published score for a team's leg, `propGrade` on the published box
 lines (`state.json`'s `boxes`, else the season's box file) for a player's, the player placed by his `pid` or by his
 name and club among the published players. A game the published state grades for every leg on it is read from nobody.
 Otherwise ESPN's live answers carry the leg: a moneyline or a spread is points clear of the line on the side bet,
@@ -1778,12 +1948,12 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   line with a chip saying how far the model's spread is from it, who is out on each side and what
   it costs in points, a lineups drawer with projected minutes and each player's contribution and the
   coach (the two sides side by side on a wide card, one above the other on a narrow one, so nothing is cut
-  off), a Parlay Builder button that opens the builder on that game's day with the game ticked, and a Player props
-  button that opens the game's props: the model's projections, and DraftKings' player lines beside them once
-  Refresh odds has read them (README "Player props"; the model on trial, suggesting nothing). Finals
+  off), a Parlay Builder button on each game the builder lists that opens it with that game alone ticked, and a
+  Player props button that opens the game's props: the model's projections, and DraftKings' player lines beside them
+  once Refresh odds has read them (README "Player props"; the model on trial). Finals
   show the score and whether the model hit. Before the schedule appears the tab counts down to
   opening night over the preseason board.
-- **Refresh odds**, over Tonight and the Parlay Builder: the job's lines are as old as its last run, so a
+- **Refresh odds**, over Tonight (the Parlay Builder has its own in its controls and its builder): the job's lines are as old as its last run, so a
   press reads DraftKings' current lines from ESPN's public scoreboard in the browser (one request a day with a
   game still to come; ESPN answers any page), taken exactly as `fetch.js` takes them (the page carries a copy of
   its `parseDay` and of `merge` for a game not started, and the smoke holds both to the job's on the recorded
@@ -1791,10 +1961,11 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   tip); one that tips while the read is out, a day that fails or answers junk, a game ESPN has no line for, and
   a read older than the published one keep the lines they show (the published ones, or an earlier press's), and
   the status line beside the button says how many, and which games have no line yet. Everything priced from the lines
-  follows: the Market and Over/under chips, the market's chance and Vegas pick, the prices and est marks, the suggested parlays,
-  the plan and what Lock in records. The same press then reads DraftKings' player props for the same games, one
+  follows: the Market and Over/under chips, the market's chance and Vegas pick, and the Parlay Builder's lines where
+  the read is newer than `lines.json`. The same press then reads DraftKings' player props for the same games, one
   request each, by the ESPN event id the scoreboard gives (or the slate's `espn`), shown under each game's Player
-  props with a second status line (README "Player props"); nothing is priced or suggested from them. It is all held
+  props with a second status line (README "Player props") and taken by the Parlay Builder's Top 50 lines, marked on
+  trial. It is all held
   in memory only, never saved: a reload is the published state again. Nothing is read on load or on a timer, only on
   a press.
 - **Teams, Players, Coaches**: sortable tables of the ratings; players searchable and filterable by team. Each
@@ -1821,27 +1992,16 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   carried rating. `history.json` is read when a window first opens, once a page load (a read that fails is made again
   by the next window), and kept in memory only.
 - **Record**: the season graded straight up, against the spread and on totals, by month and game, from
-  `predictions.csv`; the suggested parlays and the model's picks against the closing line, season by
-  season, from `research/backtest.json` (state.json's `vsMarket`, beside the two-biggest-favourites
-  baseline); and the backtest table.
-- **Parlay Builder**: in the spirit of the NFL hub's. Suggested parlays at the top (Safe, Medium,
-  Aggressive), grown from one core out of the games where the model's pick is also the market's
-  favourite (the model's chance stands in where no line is up yet), likeliest first: the two likeliest,
-  then more while the chance every leg lands stays above 50%, 30% and 15%. A leg's chance is the
-  market's with the book's cut removed. (Ranking added legs by chance times payout, the first rule, ranked
-  nothing: with chance and price from the same market the product is the same for every leg up to the
-  book's cut.) A separate, labelled Value card lists the model's picks whose chance beats the market's by
-  5 points or more, biggest gap first, shown for interest. Below, a day's plan: day, stake, confidence
-  band (ALL, MED + HIGH, HIGH only), straight up or parlay, and a tickable table of the model's picks with
-  the market's pick (outlined red where it disagrees), the band and the price. Straight bets share the
-  stake evenly unless an amount is typed; a parlay shows its odds, payout and the chance it hits. Lock in
-  sends bets to the Bet Build, which grades them as games go final, from `finals` in `state.json` once a
-  game has left the slate. Prices are the book's moneylines (`moneyline.home.close.odds` on ESPN's odds
-  object, DraftKings'); before a line is up they are estimated, from the spread or else the model's
-  chance, with a typical book cut, and marked est. Under the plan, **Your parlay**: the legs the visitor adds
-  from a game's Player props after Refresh odds (DraftKings' player lines, milestones, double- and triple-doubles,
-  and the game's moneyline, spread and total), same-game legs priced as an estimate, locked into the Bet Build or
-  finished as a card (README "Same-game parlays").
+  `predictions.csv`; the earlier Parlay Builder's suggested parlays (its rules until 25 October 2026, labelled so)
+  and the model's picks against the closing line, season by season, from `research/backtest.json` (state.json's
+  `vsMarket`, beside the two-biggest-favourites baseline); and the backtest table.
+- **Parlay Builder**: the NFL hub's (README "Parlay Builder"). Its choices (the Bet amount, Refresh odds, All, Teams
+  only or Players only, five bet types and the games of the lines feed's two dates, under their day), the Top 50 lines
+  they make from DraftKings' prices (`lines.json`, or a press's newer read), Value picks first, then the other lines
+  with the game totals last, each ranked by what $1 is expected to make, every player's line marked on trial, each with
+  its own Add; and the builder under them: the visitor's own parlay, from the list or a game's Player props, priced by
+  the same-game engine, DraftKings' fair chance first and the model's beside it, what the Bet amount returns, Finish
+  parlay (a card to place at DraftKings or share, README "Same-game parlays") and Clear ALL.
 
 - **X Parlays**: the parlays X placed at the book, the same on every device and read only, each followed live through
   its games; read from `liveparlays/parlays.json` and ESPN when the tab is first opened in a visit and on Refresh now,
@@ -1857,4 +2017,7 @@ when a finished parlay of X's cleared itself).
    free throws) as a fitted term on the residual, on top of pace and efficiency.
 2. **The same-game hold**: the price of two legs of one game uses the NFL hub's hold, untested here (README "Same-game
    parlays"). A few real DraftKings same-game tickets on NBA games, recorded with their legs' own prices, would test it;
-   until then it stays an estimate and says so. Nothing is suggested from the props model until its shadow ledger passes.
+   until then it stays an estimate and says so. The props model's lines are on the Parlay Builder's Top 50, marked on
+   trial, until its shadow ledger decides its bar; a FAIL takes them off.
+3. **Suggested Parlays**: the NFL hub's tab on the Parlay Builder's engine (`getPbTiers`, `pbTierCard`, a level's Add to
+   builder, README "Parlay Builder"), with its lock and its record; and the parlay card and matchup bubble upgrades.

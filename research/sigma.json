@@ -1,0 +1,138 @@
+{
+ "about": "tools/sigma.js: the spread of the home margin about the player model's own (walk-forward, lineup known, research/backtest_games.csv), and the Value rule's team picks on the folds",
+ "source": "research/backtest_games.csv",
+ "fold": 2026,
+ "lineup": "known",
+ "sigma": 14.5,
+ "folds": {
+  "2024": {
+   "games": 1314,
+   "mean": 0.1213,
+   "rms": 14.4094,
+   "sd": 14.4089
+  },
+  "2025": {
+   "games": 1320,
+   "mean": -0.2225,
+   "rms": 14.0652,
+   "sd": 14.0635
+  },
+  "2026": {
+   "games": 1322,
+   "mean": -0.1907,
+   "rms": 14.5364,
+   "sd": 14.5351
+  }
+ },
+ "rule": {
+  "pmin": 0.45,
+  "pmax": 0.97,
+  "edge": 0.03,
+  "far": 0.15,
+  "spreadPrice": -110
+ },
+ "picks": {
+  "2024": {
+   "ml": {
+    "n": 368,
+    "said": 0.5633,
+    "won": 161,
+    "rate": 0.4375,
+    "units": -16.32,
+    "pushes": 0
+   },
+   "mlNear": {
+    "n": 287,
+    "said": 0.565,
+    "won": 128,
+    "rate": 0.446,
+    "units": -25.63,
+    "pushes": 0
+   },
+   "cover": {
+    "n": 904,
+    "said": 0.6222,
+    "won": 440,
+    "rate": 0.4867,
+    "units": -64,
+    "pushes": 14
+   },
+   "coverNear": {
+    "n": 658,
+    "said": 0.5973,
+    "won": 325,
+    "rate": 0.4939,
+    "units": -37.55,
+    "pushes": 13
+   }
+  },
+  "2025": {
+   "ml": {
+    "n": 299,
+    "said": 0.593,
+    "won": 161,
+    "rate": 0.5385,
+    "units": 18.17,
+    "pushes": 0
+   },
+   "mlNear": {
+    "n": 253,
+    "said": 0.5965,
+    "won": 144,
+    "rate": 0.5692,
+    "units": 20.47,
+    "pushes": 0
+   },
+   "cover": {
+    "n": 707,
+    "said": 0.6018,
+    "won": 360,
+    "rate": 0.5092,
+    "units": -19.73,
+    "pushes": 0
+   },
+   "coverNear": {
+    "n": 634,
+    "said": 0.5933,
+    "won": 329,
+    "rate": 0.5189,
+    "units": -5.91,
+    "pushes": 0
+   }
+  },
+  "2026": {
+   "ml": {
+    "n": 304,
+    "said": 0.6117,
+    "won": 157,
+    "rate": 0.5164,
+    "units": -0.7,
+    "pushes": 0
+   },
+   "mlNear": {
+    "n": 244,
+    "said": 0.6105,
+    "won": 131,
+    "rate": 0.5369,
+    "units": 0.99,
+    "pushes": 0
+   },
+   "cover": {
+    "n": 728,
+    "said": 0.6031,
+    "won": 342,
+    "rate": 0.4698,
+    "units": -75.09,
+    "pushes": 0
+   },
+   "coverNear": {
+    "n": 634,
+    "said": 0.5916,
+    "won": 297,
+    "rate": 0.4685,
+    "units": -67,
+    "pushes": 0
+   }
+  }
+ }
+}

@@ -117,5 +117,13 @@
  "2027_20261023_NOP_UTA": {"at":"2026-10-24T12:02Z","status":"ok","lines":91,"tries":1},
  "2027_20261023_NYK_BOS": {"at":"2026-10-24T12:02Z","status":"ok","lines":120,"tries":1},
  "2027_20261023_POR_SAC": {"at":"2026-10-24T12:02Z","status":"ok","lines":92,"tries":1},
- "2027_20261023_TOR_WAS": {"at":"2026-10-24T12:02Z","status":"ok","lines":98,"tries":1}
+ "2027_20261023_TOR_WAS": {"at":"2026-10-24T12:02Z","status":"ok","lines":98,"tries":1},
+ "2027_20261024_BKN_CLE": {"at":"2026-10-25T04:49Z","status":"ok","lines":110,"tries":1},
+ "2027_20261024_GSW_PHX": {"at":"2026-10-25T04:49Z","status":"ok","lines":92,"tries":1},
+ "2027_20261024_HOU_ATL": {"at":"2026-10-25T04:49Z","status":"ok","lines":82,"tries":1},
+ "2027_20261024_MIA_CHA": {"at":"2026-10-25T04:49Z","status":"ok","lines":99,"tries":1},
+ "2027_20261024_MIL_PHI": {"at":"2026-10-25T04:49Z","status":"ok","lines":109,"tries":1},
+ "2027_20261024_NOP_DEN": {"at":"2026-10-25T04:49Z","status":"ok","lines":94,"tries":1},
+ "2027_20261024_SAS_DAL": {"at":"2026-10-25T04:49Z","status":"ok","lines":107,"tries":1},
+ "2027_20261024_WAS_CHI": {"at":"2026-10-25T04:49Z","status":"ok","lines":94,"tries":1}
 }

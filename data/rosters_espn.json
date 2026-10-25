@@ -1,5 +1,5 @@
 {
- "date": "2026-10-24",
+ "date": "2026-10-25",
  "teams": {
   "ATL": [
    {
@@ -263,7 +263,7 @@
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4712896",
@@ -533,7 +533,7 @@
     "name": "Noa Essengue",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4871145",
@@ -610,7 +610,7 @@
     "name": "Patrick Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5095151",
@@ -782,7 +782,7 @@
     "name": "Jett Howard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6442",
@@ -1103,7 +1103,7 @@
     "name": "Charles Bassey",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6430",
@@ -1131,14 +1131,14 @@
     "name": "Draymond Green",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3213",
     "name": "Al Horford",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4703396",
@@ -1294,14 +1294,14 @@
     "name": "Reed Sheppard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2990992",
     "name": "Marcus Smart",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432639",
@@ -1408,7 +1408,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133603",
@@ -1650,7 +1650,7 @@
     "name": "Jake LaRavia",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3155535",
@@ -1750,7 +1750,7 @@
     "name": "Zach Edey",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2991070",
@@ -2355,7 +2355,7 @@
     "name": "Jose Alvarado",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3934719",
@@ -2760,7 +2760,7 @@
     "name": "Joel Embiid",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3904625",
@@ -2823,14 +2823,14 @@
     "name": "Dean Wade",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432446",
     "name": "Jabari Walker",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "PHX": [
@@ -2909,7 +2909,7 @@
     "name": "Luke Kennard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5203685",
@@ -3151,7 +3151,7 @@
     "name": "Keegan Murray",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4709131",
@@ -3689,35 +3689,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-24",
-  "BOS": "2026-10-24",
-  "BKN": "2026-10-24",
-  "CHA": "2026-10-24",
-  "CHI": "2026-10-24",
-  "CLE": "2026-10-24",
-  "DAL": "2026-10-24",
-  "DEN": "2026-10-24",
-  "DET": "2026-10-24",
-  "GSW": "2026-10-24",
-  "HOU": "2026-10-24",
-  "IND": "2026-10-24",
-  "LAC": "2026-10-24",
-  "LAL": "2026-10-24",
-  "MEM": "2026-10-24",
-  "MIA": "2026-10-24",
-  "MIL": "2026-10-24",
-  "MIN": "2026-10-24",
-  "NOP": "2026-10-24",
-  "NYK": "2026-10-24",
-  "OKC": "2026-10-24",
-  "ORL": "2026-10-24",
-  "PHI": "2026-10-24",
-  "PHX": "2026-10-24",
-  "POR": "2026-10-24",
-  "SAC": "2026-10-24",
-  "SAS": "2026-10-24",
-  "TOR": "2026-10-24",
-  "UTA": "2026-10-24",
-  "WAS": "2026-10-24"
+  "ATL": "2026-10-25",
+  "BOS": "2026-10-25",
+  "BKN": "2026-10-25",
+  "CHA": "2026-10-25",
+  "CHI": "2026-10-25",
+  "CLE": "2026-10-25",
+  "DAL": "2026-10-25",
+  "DEN": "2026-10-25",
+  "DET": "2026-10-25",
+  "GSW": "2026-10-25",
+  "HOU": "2026-10-25",
+  "IND": "2026-10-25",
+  "LAC": "2026-10-25",
+  "LAL": "2026-10-25",
+  "MEM": "2026-10-25",
+  "MIA": "2026-10-25",
+  "MIL": "2026-10-25",
+  "MIN": "2026-10-25",
+  "NOP": "2026-10-25",
+  "NYK": "2026-10-25",
+  "OKC": "2026-10-25",
+  "ORL": "2026-10-25",
+  "PHI": "2026-10-25",
+  "PHX": "2026-10-25",
+  "POR": "2026-10-25",
+  "SAC": "2026-10-25",
+  "SAS": "2026-10-25",
+  "TOR": "2026-10-25",
+  "UTA": "2026-10-25",
+  "WAS": "2026-10-25"
  }
 }

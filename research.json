@@ -18,33 +18,34 @@
     "shrink": 0,
     "recency": 0,
     "postMult": 0.5,
-    "wexp": 1.5
+    "wexp": 1.5,
+    "tz": 10
    },
    "actual": {
     "games": 1314,
-    "logloss": 0.61195,
-    "acc": 0.6705,
-    "mae": 11.24,
-    "totalMae": 14.91
+    "logloss": 0.60985,
+    "acc": 0.6697,
+    "mae": 11.23,
+    "totalMae": 14.99
    },
    "known": {
     "games": 1314,
-    "logloss": 0.61474,
-    "acc": 0.6659,
+    "logloss": 0.61314,
+    "acc": 0.6629,
     "mae": 11.28,
-    "totalMae": 14.91
+    "totalMae": 15
    },
    "naive": {
     "games": 1314,
-    "logloss": 0.61703,
-    "acc": 0.6697,
-    "mae": 11.29,
-    "totalMae": 14.91
+    "logloss": 0.61531,
+    "acc": 0.6766,
+    "mae": 11.3,
+    "totalMae": 15
    },
    "teamElo": {
     "games": 1319,
-    "logloss": 0.60949,
-    "acc": 0.6641,
+    "logloss": 0.60896,
+    "acc": 0.6603,
     "mae": 11.07
    }
   },
@@ -55,45 +56,46 @@
     "kc": 0,
     "carryP": 0.5,
     "carryC": 0.5,
-    "prior": 1,
+    "prior": 1.25,
     "rookie": -60,
     "clip": 40,
     "minGames": 8,
-    "blend": 0,
+    "blend": 0.1,
     "pm": 0.25,
-    "pmClip": 12,
+    "pmClip": 8,
     "winK": 4,
-    "shrink": 0.002,
+    "shrink": 0,
     "recency": 0,
-    "postMult": 1,
-    "wexp": 0.5
+    "postMult": 0.75,
+    "wexp": 0.5,
+    "tz": 10
    },
    "actual": {
     "games": 1320,
-    "logloss": 0.59072,
-    "acc": 0.6909,
+    "logloss": 0.58858,
+    "acc": 0.6894,
     "mae": 10.94,
-    "totalMae": 14.9
+    "totalMae": 14.86
    },
    "known": {
     "games": 1320,
-    "logloss": 0.59344,
-    "acc": 0.6788,
-    "mae": 10.95,
-    "totalMae": 14.91
+    "logloss": 0.59147,
+    "acc": 0.6758,
+    "mae": 10.96,
+    "totalMae": 14.86
    },
    "naive": {
     "games": 1320,
-    "logloss": 0.60392,
-    "acc": 0.6803,
-    "mae": 11.07,
-    "totalMae": 14.92
+    "logloss": 0.59987,
+    "acc": 0.6765,
+    "mae": 11.04,
+    "totalMae": 14.87
    },
    "teamElo": {
     "games": 1321,
-    "logloss": 0.61104,
-    "acc": 0.6586,
-    "mae": 11.12
+    "logloss": 0.60923,
+    "acc": 0.654,
+    "mae": 11.13
    }
   },
   {
@@ -101,47 +103,48 @@
    "params": {
     "ke": 0.5,
     "kc": 0,
-    "carryP": 0.7,
+    "carryP": 0.6,
     "carryC": 0.5,
-    "prior": 1.25,
+    "prior": 1,
     "rookie": -80,
-    "clip": 20,
+    "clip": 15,
     "minGames": 8,
     "blend": 0.1,
-    "pm": 0,
-    "pmClip": 15,
-    "winK": 6,
+    "pm": 0.25,
+    "pmClip": 8,
+    "winK": 4,
     "shrink": 0,
     "recency": 0,
-    "postMult": 0.5,
-    "wexp": 0.5
+    "postMult": 0.75,
+    "wexp": 0.5,
+    "tz": 10
    },
    "actual": {
     "games": 1322,
-    "logloss": 0.58935,
-    "acc": 0.6944,
-    "mae": 11.3,
-    "totalMae": 15.28
+    "logloss": 0.58812,
+    "acc": 0.6884,
+    "mae": 11.36,
+    "totalMae": 15.15
    },
    "known": {
     "games": 1322,
-    "logloss": 0.5913,
-    "acc": 0.6944,
-    "mae": 11.34,
-    "totalMae": 15.28
+    "logloss": 0.58878,
+    "acc": 0.6853,
+    "mae": 11.38,
+    "totalMae": 15.16
    },
    "naive": {
     "games": 1322,
-    "logloss": 0.60216,
-    "acc": 0.68,
-    "mae": 11.49,
-    "totalMae": 15.31
+    "logloss": 0.60255,
+    "acc": 0.6672,
+    "mae": 11.52,
+    "totalMae": 15.19
    },
    "teamElo": {
     "games": 1322,
-    "logloss": 0.60174,
-    "acc": 0.6838,
-    "mae": 11.51
+    "logloss": 0.60097,
+    "acc": 0.6884,
+    "mae": 11.53
    }
   }
  ],
@@ -149,75 +152,83 @@
  "finalParams": {
   "ke": 0.5,
   "kc": 0,
-  "carryP": 0.7,
+  "carryP": 0.6,
   "carryC": 0.5,
-  "prior": 1.25,
+  "prior": 1,
   "rookie": -80,
-  "clip": 20,
+  "clip": 15,
   "minGames": 8,
-  "blend": 0.1,
-  "pm": 0,
-  "pmClip": 15,
-  "winK": 6,
+  "blend": 0,
+  "pm": 0.25,
+  "pmClip": 8,
+  "winK": 4,
   "shrink": 0,
   "recency": 0,
-  "postMult": 0.5,
-  "wexp": 0.5
+  "postMult": 0.75,
+  "wexp": 0.5,
+  "tz": 10
  },
  "ablationsOn": 2026,
  "ablations": {
   "full": {
    "games": 1322,
-   "logloss": 0.5913,
-   "acc": 0.6944,
-   "mae": 11.34,
-   "totalMae": 15.28
+   "logloss": 0.58893,
+   "acc": 0.6831,
+   "mae": 11.38,
+   "totalMae": 15.16
   },
-  "without pm": "not used",
+  "without pm": {
+   "games": 1322,
+   "logloss": 0.59197,
+   "acc": 0.6914,
+   "mae": 11.44,
+   "totalMae": 15.16
+  },
   "without winK": {
    "games": 1322,
-   "logloss": 0.5934,
-   "acc": 0.6929,
-   "mae": 11.4,
-   "totalMae": 15.28
+   "logloss": 0.59085,
+   "acc": 0.6853,
+   "mae": 11.43,
+   "totalMae": 15.16
   },
   "without shrink": "not used",
   "without recency": "not used",
   "without postMult": {
    "games": 1322,
-   "logloss": 0.59107,
-   "acc": 0.6921,
-   "mae": 11.33,
-   "totalMae": 15.27
+   "logloss": 0.58879,
+   "acc": 0.6823,
+   "mae": 11.38,
+   "totalMae": 15.16
   },
   "without wexp": {
    "games": 1322,
-   "logloss": 0.59133,
-   "acc": 0.6921,
-   "mae": 11.34,
-   "totalMae": 15.28
+   "logloss": 0.58917,
+   "acc": 0.6831,
+   "mae": 11.39,
+   "totalMae": 15.16
   },
   "without kc": "not used",
-  "without blend": {
-   "games": 1322,
-   "logloss": 0.59138,
-   "acc": 0.6921,
-   "mae": 11.34,
-   "totalMae": 15.28
-  },
+  "without blend": "not used",
   "without prior": {
    "games": 1322,
-   "logloss": 0.59277,
-   "acc": 0.6868,
-   "mae": 11.37,
-   "totalMae": 15.31
+   "logloss": 0.58947,
+   "acc": 0.6838,
+   "mae": 11.4,
+   "totalMae": 15.18
   },
   "without rookie": {
    "games": 1322,
-   "logloss": 0.59946,
-   "acc": 0.6876,
-   "mae": 11.5,
-   "totalMae": 15.28
+   "logloss": 0.59786,
+   "acc": 0.6921,
+   "mae": 11.56,
+   "totalMae": 15.15
+  },
+  "without tz": {
+   "games": 1322,
+   "logloss": 0.58983,
+   "acc": 0.68,
+   "mae": 11.38,
+   "totalMae": 15.16
   }
  }
 }

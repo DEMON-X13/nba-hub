@@ -18,7 +18,8 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `data/rosters_espn.json` | Each team's roster as the feed lists it today, so offseason moves are known before a game is played |
 | `data/raptor.csv` | FiveThirtyEight RAPTOR 2020-2022, offence and defence per player: the priors |
 | `model.json` | The team model: fitted parameters, the fit and holdout report, every team's rating after the last final, and its number on each game not yet final |
-| `players.json` | The player model: parameters, the report against the team model, every current player's offence and defence, every coach, each team's strength and pace, and tonight's numbers with lineups and absentees |
+| `players.json` | The player model: parameters, the report against the team model, every current player's offence and defence, every coach, each team's strength and pace, tonight's numbers with lineups and absentees, and the rating history (`history`: every listed player's, coach's and club's rating after each final since the season before the one the ratings are carried into, each centred as its day ended, with the day-by-day centring) |
+| `history.json` | The rating over time the page draws, from `players.json`'s history by `publish.js` (THE HISTORY): each series on the ladder its table shows, its change over 7 and 30 days and this season. The page reads it only when a window opens |
 | `tools/lib.js` | The games table, team codes, dates, ESPN access |
 | `tools/history.js` | One-time import of the history the team model is fitted on |
 | `tools/fetch.js` | Daily pull of finals, the coming slate and its lines |
@@ -26,13 +27,13 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/elo.js` | The team model: replay, fit, report |
 | `tools/players.js` | The player, coach and matchup model: replay, fit, report, tonight's lineups; logs the day's numbers to `data/predictions.csv` |
 | `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
-| `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players and coaches (with their overall Elo on the ladder the tier shields are drawn on), the backtest, the market table (`vsMarket`, from `research/backtest.json`), the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays") |
+| `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players and coaches (with their overall Elo on the ladder the tier shields are drawn on, and its change over 7 days), the backtest, the market table (`vsMarket`, from `research/backtest.json`), the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays"); and `history.json` |
 | `tools/props.js`, `props.json` | The props model (README "Player props"): each expected player's eleven stat distributions and double chances for the next five game days, its walk-forward and market tests (`research/props.json`) |
 | `tools/props_feed.js` | DraftKings' player props as ESPN's feed carries them: the parse the job and the page share, the fair-chance rules |
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
 | `tools/props_ledger.js`, `tools/props_check.js`, `data/props_shadow.json`, `data/props_shadow_lines.csv` | The props shadow ledger: the model's call frozen at tip-off, graded against the closing lines, its pre-registered bar, and the check that holds it to the last commit |
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet locked into the Bet Build and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays") |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet locked into the Bet Build and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays"), and the rating over time (section 10) |
 | `tools/corr.js`, `data/corr.json`, `research/corr.json` | The same-game correlation table (README "Same-game parlays"): measured on the finished seasons' box scores, written by the script only; the report beside it |
 | `tools/backtest.js`, `research/backtest.json`, `research/backtest_games.csv` | The walk-forward of the model's picks and the suggested parlays against the closing line, run by hand; `publish.js` reads its summary into state.json's `vsMarket` for the Record tab |
 | `tools/fetch_odds_hist.js`, `data/odds_hist.csv` | The closing lines on the 2023-2026 finals from ESPN's game summaries: a finished backfill, run by hand from a machine that reaches ESPN only to add a season (the daily job keeps each game's closing moneylines in `games.csv` from now on); its `check()` is shared with `backtest.js` and `corr.js` |
@@ -84,14 +85,14 @@ ratings up). The fit is deterministic. What it found:
 | season carry | 0.70 | |
 | scale | 26.7 Elo per point | |
 
-The home court is where the fit starts it; from there it is learned as the finals come, a thousandth of
-the way toward what each home margin said. Home teams win less than they did in the fit's seasons, and a
-fixed 60 priced every home side about three points of win chance too high in 2023-24 to 2025-26 (the
-model said 58% on average, home teams won 54.5-55.5% and the market said 55%); learned, it stood at 45
-Elo for the player model in October 2026.
+The home court is where the fit starts it (`params.hfa`); from there it is learned as the finals come, a thousandth of
+the way toward what each home margin said, and `model.json`'s `homeEdge` is where it stands. Home teams win less
+than they did in the fit's seasons, and a fixed 60 priced every home side about three points of win chance too high
+in 2023-24 to 2025-26 (the model said 58% on average, home teams won 54.5-55.5% and the market said 55%); learned, it
+stood at 44 Elo for the team model and 42 for the player model on 23 October 2026.
 
-Holdout (5,282 games, `model.json` `holdout`): 66.0% straight up, log loss 0.616 (0.617 with the home court
-fixed), spread error 11.0 points. That is what a public NBA Elo does. It picks winners; it does not know who is playing tonight.
+Holdout (2022-23 on, 5,310 games to 23 October 2026, `model.json` `holdout`): 65.9% straight up, log loss 0.617
+(0.6167; 0.6173 with the home court fixed), spread error 11.0 points. That is what a public NBA Elo does. It picks winners; it does not know who is playing tonight.
 
 ## The player, coach and matchup model
 
@@ -101,8 +102,14 @@ share of the minutes, five shares in all, so a team is exactly the sum of who pl
 The situational terms (court, altitude, rest) are the team model's, with the home court learned the same
 way and on its own (players.json's `homeEdge`); learning it lowered the walk-forward log loss in every
 backtested season and lineup mode (known lineups: 0.6152, 0.5932 and 0.5914 to 0.6139, 0.5917 and
-0.5906). Blending the model with the market's chance where a moneyline is posted was tested the same way
-and given no weight: fitted on the seasons before, the best blend was the market alone.
+0.5906). One term is the player model's own, **travel** (October 2026): a side whose last game was two days or less
+before loses `tz` Elo for every hour between that venue's clock and this one's. A game's venue is its home club's and
+a neutral site has none; both clocks are read on the game's date, so Phoenix sits with the Pacific clubs from March
+and a club that stays put over the clocks' change has crossed nothing. A coast-to-coast trip on a back to back costs
+about 30 Elo, a point. The fit took 10, the top of its grid, in every season it was given (on the fit seasons alone 15
+to 20 scored a shade better; the grid was set before the test and is kept). Blending the model with the market's
+chance where a moneyline is posted was tested the same way and given no weight: fitted on the seasons before, the
+best blend was the market alone (a test run by hand in October 2026; the script was not kept).
 
 After a final, each side's offensive efficiency (points per 100 possessions, possessions from the
 team box) is compared with what the ratings expected. The surprise moves the offence of the players
@@ -129,66 +136,84 @@ games still to play too, so a game two days out sees tomorrow's. The final win c
 tenth of the team model's difference.
 
 Fit on 2023-2025 by coordinate search on log loss with the lineup known and minutes projected;
-2022 warms up; 2026 held out (1,322 games). Every knob has an off value the search can choose, so
-the fit decides what to use. What it kept: efficiency surprises clipped at 20, moving a full-time
-player 0.5 Elo per point; a win update of 6 Elo on the result beside the efficiency one; the update
-falling on players by the square root of their minutes share (so bench players move relatively
-more); playoff updates at half weight; season carry 0.7 for players; rookies start at -80; RAPTOR
-priors scaled by 1.25; a tenth of the team model's difference blended in. What it turned off: each
-player's own plus-minus (not robust across seasons), shrinkage toward the prior, recency weighting of
-minutes. The coach term fits to zero; it is kept at 0.05 per point of margin surprise so the coach
-table means something, at no measurable cost (0.0002 of log loss on the fit seasons, and slightly
-better on 2026 cold).
+2022 warms up; 2026 on held out. Every knob has an off value the search can choose, so the fit decides what to use.
+The live parameters (`players.json` `params`) are the search's of 20 September 2026 with travel added in October:
+efficiency surprises clipped at 20, moving a full-time player 0.5 Elo per point; a win update of 6 Elo on the result
+beside the efficiency one; the update falling on players by the square root of their minutes share (so bench players
+move relatively more); playoff updates at half weight; season carry 0.7 for players; rookies start at -80; RAPTOR
+priors scaled by 1.25; a tenth of the team model's difference blended in; travel at 10 Elo an hour. Off: each
+player's own plus-minus, shrinkage toward the prior, recency weighting of minutes. The coach term fits to zero; it is
+kept at 0.05 per point of the two sides' efficiency surprise so the coach table means something, at no measurable
+cost (0.0002 of log loss on the fit seasons, and slightly better on 2026 cold).
 
-The 2026 holdout, four ways:
+**The October 2026 refresh.** Seven ideas were each walked forward on 2023-24 and 2024-25 (the fit choosing the
+knob from the seasons before each, nothing tuned on the season scored), with the rule set before: lower log loss in
+both seasons, by 0.0005 between them, and the spread error no worse. One passed, travel, and was then scored once on
+2025-26, which none of the others had seen. Change in log loss with the lineup known (lower is better):
+
+| Idea | 2023-24 | 2024-25 | Kept |
+|---|---|---|---|
+| Travel: Elo off per time zone crossed on two days' rest or less | -0.0008 | -0.0004 | yes: 2025-26 -0.0008, accuracy level, spread error +0.01 |
+| Faster updates in a player's first games of a season (or a club's) | 0 (the fit left it off) | -0.0008 | no |
+| The rest and altitude terms fitted by the player model | -0.0004 | +0.0019 | no |
+| The home edge's learning rate and start | -0.0007 | +0.0001 | no |
+| A calibration temperature on the win chance | +0.0014 | -0.0030 | no |
+| Young players (no RAPTOR prior) gaining at the season's turn | 0 (off) | +0.0005 | no |
+| The team model refitted with the home court learned, and with faster early-season updates | +0.0001 pooled on 2023-2025 | -0.0006 pooled, halved and inside the noise at the scale a refit publishes | no |
+
+A full refit of the player model on today's code (`node tools/players.js research`) was scored against the live
+parameters on 2025-26 and not taken: lineup known 0.5889 against 0.5893 for the live parameters with travel, but
+with no report 0.6043 against 0.6007, and 68.3% straight up against 69.8%. It turns plus-minus on and the team
+model's blend off, which helps when the lineup is known and hurts when it is not, and the site runs between the two.
+The live parameters with travel beat the live parameters without it both ways (lineup known 0.5893 against 0.5902,
+no report 0.6007 against 0.6015). That choice looked at 2025-26, so 2025-26 is no longer untouched for it.
+
+The holdout, 2025-26 and the season in play so far (1,350 games to 23 October 2026, `players.json` `report`, which
+the Record tab's backtest table shows), four ways:
 
 | | Log loss | Straight up | Spread error |
 |---|---|---|---|
-| Team model | 0.601 | 68.8% | 11.53 |
-| Player model, previous game's lineup (no report) | 0.602 | 67.6% | 11.48 |
-| Player model, lineup known, minutes projected (a good report) | 0.590 | 69.7% | 11.33 |
-| Player model, actual minutes (perfect lineup knowledge) | 0.588 | 69.7% | 11.29 |
+| Team model | 0.603 | 68.4% | 11.58 |
+| Player model, previous game's lineup (no report) | 0.601 | 67.6% | 11.52 |
+| Player model, lineup known, minutes projected (a good report) | 0.590 | 69.7% | 11.37 |
+| Player model, actual minutes (perfect lineup knowledge) | 0.588 | 69.8% | 11.33 |
 
-Totals: 15.1 points of error (`players.json` `report`, which the Record tab's backtest table shows).
+Totals: 15.1 points of error.
 
 ### Walk-forward test (`node tools/players.js research`, writes `research.json`)
 
-One holdout can flatter a model, so each season from 2024 on is also scored cold: the parameters are
-searched again on only the seasons before it, then that season is played through once. Log loss /
-straight up / spread error:
+One holdout can flatter a model, so each finished season from 2024 on is also scored cold: the parameters are
+searched again on only the seasons before it, then that season is played through once (a season with games still to
+play is not a fold). On the October 2026 code, travel among the knobs. Log loss / straight up / spread error:
 
 | Season scored | Team model | Player model, no report | Player model, lineup known | Player model, actual minutes |
 |---|---|---|---|---|
-| 2024 | 0.609 / 66.4% / 11.07 | 0.617 / 67.0% | 0.615 / 66.6% / 11.28 | 0.612 / 67.0% |
-| 2025 | 0.611 / 65.9% / 11.12 | 0.604 / 68.0% | 0.593 / 67.9% / 10.95 | 0.591 / 69.1% |
-| 2026 | 0.602 / 68.4% / 11.51 | 0.602 / 68.0% | 0.591 / 69.4% / 11.34 | 0.589 / 69.4% |
+| 2024 | 0.609 / 66.0% / 11.07 | 0.615 / 67.7% | 0.613 / 66.3% / 11.28 | 0.610 / 67.0% |
+| 2025 | 0.609 / 65.4% / 11.13 | 0.600 / 67.7% | 0.591 / 67.6% / 10.96 | 0.589 / 68.9% |
+| 2026 | 0.601 / 68.8% / 11.53 | 0.603 / 66.7% | 0.589 / 68.5% / 11.38 | 0.588 / 68.8% |
 
-With one season to learn from (2024) the player model is not yet ahead of the team model. With two
-or three it is clearly ahead, by about two points of accuracy and 0.01 to 0.02 of log loss, and the
-gap between "no report" and "lineup known" is the injury report's worth: about a point and a half.
+With one season to learn from (2024) the player model is not yet ahead of the team model. With two or three it is
+ahead on log loss with the lineup known, by 0.01 to 0.02 (0.018 in 2025, 0.012 in 2026); with no report it is only
+level with the team model (0.009 ahead in 2025, 0.002 behind in 2026). The gap between "no report" and "lineup known"
+is the injury report's worth: about 0.01 of log loss (0.008 in 2025, 0.014 in 2026).
 
-### What each piece is worth (2026 cold, parameters fitted on 2023-2025, one piece switched off)
+### What each piece is worth (2026 cold, the refit's parameters fitted on 2023-2025, one piece switched off)
 
 | Switched off | Log loss | Straight up | Change |
 |---|---|---|---|
-| nothing (the model) | 0.5913 | 69.4% | |
-| rookies start at zero instead of below average | 0.5995 | 68.8% | +0.0082 |
-| no RAPTOR priors | 0.5928 | 68.7% | +0.0015 |
-| no win update, efficiency only | 0.5934 | 69.3% | +0.0021 |
-| no blend with the team model | 0.5914 | 69.2% | +0.0001 |
-| update by minutes share, not its square root | 0.5913 | 69.2% | +0.0000 |
-| playoffs updated at full weight | 0.5911 | 69.2% | -0.0002 |
+| nothing (the refit) | 0.5889 | 68.3% | |
+| rookies start at zero instead of below average | 0.5979 | 69.2% | +0.0089 |
+| no plus-minus | 0.5920 | 69.1% | +0.0030 |
+| no win update, efficiency only | 0.5909 | 68.5% | +0.0019 |
+| no travel | 0.5898 | 68.0% | +0.0009 |
+| no RAPTOR priors | 0.5895 | 68.4% | +0.0005 |
+| update by minutes share, not its square root | 0.5892 | 68.3% | +0.0002 |
+| playoffs updated at full weight | 0.5888 | 68.2% | -0.0001 |
 
 The priors carry the most: a rookie really is below average, and last season's RAPTOR is a better
-start than zero. The rest are small and real. Adding a signal that does not survive the walk-forward
-is how a model gets weaker while looking stronger, so plus-minus stays off until it does.
-
-`research.json` and the tables above were produced before the October 2026 data fixes (a side's points
-from the final score, a new season's minutes from the regular season, the play-in typed as regular
-season). Rerun on them, the walk-forward's 2025 and 2026 folds pick slightly different parameters and
-the final fit turns plus-minus on (0.25), for about 0.0006 in log loss on 2026, which is within the
-noise. The live parameters in players.json change only on a refit (the job's `fit` switch); none was
-run before the 2026-27 opener, and a refit should be a deliberate choice with a new research.json.
+start than zero. Plus-minus is worth 0.003 here with the lineup known, and costs more than that with no report (the
+refresh above), so it stays off. Adding a signal that does not survive the walk-forward is how a model gets weaker
+while looking stronger.
 
 The "lineup known" rows are scored with who actually played: a perfect injury report, which the site
 does not have. What runs here, the roster minus the report's absences filled to 240, has not been
@@ -1017,6 +1042,21 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   Master and Elite 50 points apart, and HOF from 1750, worn as a gem. A team's strength, already on the Elo scale,
   wears its shield as it is. Over each table, the ladder: every tier, its range and how many are in it. On a
   phone a table keeps its rating in view and lets its secondary columns go.
+- **The rating over time**: each of the three tables has a **7d** column, the rating's change over the last seven days,
+  and a name (a team's badge) opens a window with its rating game by game since last season began: the line, the
+  change over 7 and 30 days and this season, and its last ten games this season, newest first, with each one's change
+  (before its first game, the last five of last season). Every point is on the ladder its table uses: this season's on
+  today's (so the line ends on the table's number), last season's on its own as it ended, each centred on the league's
+  average player as its day ended, so a line moves with the player and not with the league's average, and a point once
+  drawn never changes. The season's turn keeps 70% of a player's rating, which moves him little on his ladder; a coach
+  keeps half of his, and coaches out of work keep all of theirs, so a coach's line can step toward the middle; a club's
+  line, which is not on a ladder, steps toward 1500. A change counts from the season's start, never across it. A club's
+  line is its recent rotation's strength (who played in its last five games, at their usual minutes, filled to 240 as
+  the Teams tab fills today's): one night's lineup would move a club fifty points for the stars who sat a blowout. The
+  Teams tab's strength is today's roster instead, with who is out taken off and anyone back or new counted, so the two
+  can differ either way, and the window says both. In the preseason the line runs to last season's end and today's
+  carried rating. `history.json` is read when a window first opens, once a page load (a read that fails is made again
+  by the next window), and kept in memory only.
 - **Record**: the season graded straight up, against the spread and on totals, by month and game, from
   `predictions.csv`; the suggested parlays and the model's picks against the closing line, season by
   season, from `research/backtest.json` (state.json's `vsMarket`, beside the two-biggest-favourites
@@ -1041,7 +1081,7 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   finished as a card (README "Same-game parlays").
 
 Nothing a visitor does reaches the published files. The job runs `publish.js`, `build.js` and the
-smoke test after the models, and commits `state.json` and both pages.
+smoke test after the models, and commits `state.json`, `history.json` and both pages.
 
 ## What comes next, in order
 

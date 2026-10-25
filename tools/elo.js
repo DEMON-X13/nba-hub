@@ -147,6 +147,9 @@ function main() {
     params: P,
     fit: { games: fitS.n, logloss: +fitS.logloss.toFixed(5), acc: +fitS.acc.toFixed(4), mae: +fitS.mae.toFixed(2) },
     holdout: { games: hold.n, logloss: +hold.logloss.toFixed(5), acc: +hold.acc.toFixed(4), mae: +hold.mae.toFixed(2) },
+    /* params.hfa is where the home court starts; this is where the finals have taken it (players.json's homeEdge is
+       the player model's own) */
+    homeEdge: +R.hfa.toFixed(1),
     asOf, season: seasonNow, games: final.length,
     teams,
     upcoming: R.upcoming,

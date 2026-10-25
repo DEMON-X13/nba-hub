@@ -19,7 +19,11 @@
  * press (by ESPN's ids, only games still to come, two pages, a 404, junk, a refusal, a game that tips during its read),
  * every line, rung and Yes price the sheet shows worked out here on its own, the model on trial and suggesting nothing,
  * nothing read before a press, nothing stored, a reload, the shadow ledger's running numbers, and the page's copies of
- * tools/props_feed.js and tools/props.js held to their text and results.
+ * tools/props_feed.js and tools/props.js held to their text and results. Section 10 is the rating over time (publish.js
+ * THE HISTORY): history.json worked out here on its own from players.json and the published ladders (every point, the
+ * changes over 7 and 30 days and this season, today's point the table's rating), the 7d columns, the window a name opens
+ * (read once and only then, never stored, its numbers, the line's points, the games, Escape, the focus kept inside and
+ * given back) and a history that does not load or is junk.
  */
 'use strict';
 const fs = require('fs');
@@ -35,6 +39,8 @@ const ONLY = (process.env.SMOKE_ONLY || '').split(',').filter(Boolean), run = k 
 /* files the page may read beside state.json (data/box_<season>.csv, for a leg older than the state's box window):
    url pattern -> text, set by a test; every other request fails as before */
 let FILES = [];
+/* JSON files the page may read (history.json): url pattern -> the object, or a function (url, options) -> a response */
+let JSONS = [];
 
 const state = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'));
 /* the page labels days against the viewer's Eastern date, so the fixtures use that date too */
@@ -58,6 +64,7 @@ function load(page, st, mine, espn, tab) {
       w.fetch = async (url, opt) => { url = String(url); requests.push({ url, opt });
         if (/espn\.com/.test(url)) return espn ? espn(url, opt) : { ok: false, status: 404, json: async () => ({}) };
         const file = FILES.find(f => f[0].test(url)); if (file) return { ok: true, status: 200, text: async () => file[1], json: async () => { throw new SyntaxError('not JSON'); } };
+        const js = JSONS.find(f => f[0].test(url)); if (js) return typeof js[1] === 'function' ? js[1](url, opt) : { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(js[1])) };
         return { ok: /state\.json/.test(url), status: 200, json: async () => JSON.parse(JSON.stringify(st)) }; };   // a fresh copy, as a browser parses one
       w.scrollTo = (x, y) => scrolls.push(y); w.URL.createObjectURL = () => 'blob:x';
       if (!w.CSS) w.CSS = { escape: v => String(v).replace(/[^\w-]/g, c => '\\' + c) };            // jsdom has no CSS.escape; the lineups button uses it
@@ -1231,6 +1238,155 @@ async function builder() {
     check(!diff.length, `the page's ${names.join(', ')} are tools/${file}'s, line for line${diff.length ? `: differ: ${diff.join(', ')}` : ''}`); }
 }
 
+/* ---------- 10. the rating over time ---------- */
+async function ratingHistory() {
+  console.log('10. the rating over time (history.json, the 7d columns and the window)');
+  const real = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'));
+  const HJ = JSON.parse(fs.readFileSync(path.join(ROOT, 'history.json'), 'utf8'));
+  const PJ = JSON.parse(fs.readFileSync(path.join(ROOT, 'players.json'), 'utf8'));
+  const RAW = PJ.history;
+  check(HJ.v === 1 && RAW && Array.isArray(RAW.games), 'history.json and players.json history are there');
+  check(JSON.stringify(HJ.games) === JSON.stringify(RAW.games), 'history.json carries players.json\'s games list');
+
+  /* the ladders worked out here: today's from the ranked rows and the model's raw ratings, a finished season's from
+     players.json's curves */
+  const curveOf = vals => { const n = vals.length, m = vals.reduce((a, x) => a + x, 0) / n, sd = Math.sqrt(vals.reduce((a, x) => a + (x - m) ** 2, 0) / n); return v => sd > 0 ? Math.round(1500 + 100 * (v - m) / sd) : 1500; };
+  const pToday = curveOf(real.players.filter(p => p.ranked).map(p => PJ.players[p.id].elo));
+  const cToday = curveOf(real.coaches.filter(c => c.ranked).map(c => c.elo));
+  check(real.players.every(p => pToday(PJ.players[p.id].elo) === p.rating), 'today\'s player ladder, worked out here, gives every table rating');
+  check(real.coaches.filter(c => PJ.coaches[c.name]).every(c => cToday(c.elo) === c.rating), 'today\'s coach ladder gives every table rating');
+  const past = (s0, kind, v) => { const c = RAW.curves[s0] && RAW.curves[s0][kind]; return c && c.sd > 0 ? Math.round(1500 + 100 * (v - c.mean) / c.sd) : 1500; };
+  const season = RAW.season, today = HJ.asOf;
+  const seasonOfRef = ref => +RAW.games[ref >> 1].split('_')[0];
+  const firstCur = RAW.games.find(id => +id.split('_')[0] === season);
+  /* the season's start is its first final; with none yet (the preseason) it is today, as publish.js has it */
+  const start = firstCur ? `${firstCur.slice(5, 9)}-${firstCur.slice(9, 11)}-${firstCur.slice(11, 13)}` : today;
+  const dayOf = d => Math.round((Date.parse(d + 'T12:00:00Z') - Date.parse(RAW.from + 'T12:00:00Z')) / 864e5);
+  const minus = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() - n); return x.toISOString().slice(0, 10); };
+  check(HJ.start === start && HJ.startDay === dayOf(start) && HJ.today === dayOf(today) && HJ.season === season, `the season began ${start}, day ${HJ.startDay}; today is day ${HJ.today}`);
+  check(RAW.season >= PJ.season && Object.keys(RAW.curves).every(s0 => +s0 === season - 1), `the history's season is the one the ratings are carried into (${season}), last season's ladder beside it`);
+  const decode = p => { const out = []; let d = 0, r = 0, f = 0; for (let i = 0; i < p.length; i += 3) { d += p[i]; r += p[i + 1]; f += p[i + 2]; out.push([d, r, f]); } return out; };
+  /* one series, as its window and its table must show it */
+  const own = (list, startRaw, nowV, show) => {
+    const pts = []; for (const [d, v, ref] of list || []) if (seasonOfRef(ref) < season) pts.push([d, show(seasonOfRef(ref), v), ref]);
+    for (const [d, v, ref] of list || []) if (seasonOfRef(ref) === season) pts.push([d, show(season, v), ref]);
+    const s0 = startRaw === undefined ? null : show(season, startRaw);
+    const at = t => { if (s0 === null) return null; if (t < start) return s0; let v = s0; for (const [d, r, ref] of pts) if (seasonOfRef(ref) === season && d <= dayOf(t)) v = r; return v; };
+    const ch = t => nowV === null || at(t) === null ? null : nowV - at(t);
+    return { pts, s: s0, n: nowV, d7: ch(minus(today, 7)), d30: ch(minus(today, 30)), dS: s0 === null || nowV === null ? null : nowV - s0 };
+  };
+  const same = (got, want) => got && JSON.stringify(decode(got.p)) === JSON.stringify(want.pts) && got.s === want.s && got.n === want.n && got.d7 === want.d7 && got.d30 === want.d30 && got.dS === want.dS;
+  let bad = [];
+  for (const p of real.players) { const want = own(RAW.players[p.id], RAW.start.players[p.id], p.rating, (s0, v) => s0 < season ? past(s0, 'p', v) : pToday(v));
+    if (!HJ.players[p.id] ? RAW.players[p.id] || RAW.start.players[p.id] !== undefined : !same(HJ.players[p.id], want) || p.d7 !== want.d7) bad.push(p.name); }
+  check(!bad.length, `every player's series, worked out here (${real.players.length}): each point on its season's ladder, start, today, 7 and 30 days and this season ${bad.slice(0, 4).join(', ')}`);
+  check(real.players.every(p => RAW.start.players[p.id] !== undefined && HJ.players[p.id] && HJ.players[p.id].s !== null && p.d7 !== null), 'every listed player has a start this season and a 7-day change');
+  bad = [];
+  for (const c of real.coaches) { const want = own(RAW.coaches[c.name], RAW.start.coaches[c.name], c.rating, (s0, v) => s0 < season ? past(s0, 'c', v) : cToday(v));
+    if (HJ.coaches[c.name] ? !same(HJ.coaches[c.name], want) || c.d7 !== want.d7 : (RAW.coaches[c.name] || RAW.start.coaches[c.name] !== undefined)) bad.push(c.name); }
+  check(!bad.length, `every coach's series (${real.coaches.length}) ${bad.slice(0, 4).join(', ')}`);
+  bad = [];
+  for (const [t, x] of Object.entries(real.teams)) { const nowR = RAW.now.teams[t]; const want = own(RAW.teams[t], RAW.start.teams[t], nowR === undefined ? null : Math.round(nowR), (s0, v) => Math.round(v));
+    if (!same(HJ.teams[t], want) || x.d7 !== want.d7) bad.push(t); }
+  check(!bad.length, `every club's series (30), on its rotation's strength ${bad.join(', ')}`);
+  check(Object.keys(real.teams).every(t => HJ.teams[t] && HJ.teams[t].n !== null && HJ.teams[t].s !== null && real.teams[t].d7 !== null), 'every club has a start, today\'s point and a 7-day change, played this season or not');
+  /* the recorder held to the ratings themselves, not to its own sums: each player's last game this season, put back on
+     today's centring, is his rating now; each coach's is his */
+  const shiftAt = Object.fromEntries((RAW.shifts || []).map(([d, v]) => [d, v]));
+  bad = [];
+  for (const [id, p] of Object.entries(PJ.players)) { const L = (RAW.players[id] || []).filter(([, , ref]) => seasonOfRef(ref) === season); if (!L.length) continue;
+    const [d, v] = L[L.length - 1]; if (shiftAt[d] === undefined || Math.abs(v + shiftAt[d] - RAW.shift - p.elo) > 0.15) bad.push(p.name); }
+  for (const [n, c] of Object.entries(PJ.coaches)) { const L = (RAW.coaches[n] || []).filter(([, , ref]) => seasonOfRef(ref) === season); if (L.length && Math.abs(L[L.length - 1][1] - c.elo) > 0.051) bad.push(n); }
+  check(!bad.length, `each player's and coach's last game this season is his rating now, recentred (${bad.slice(0, 4).join(', ')})`);
+  const lastDay = (RAW.shifts || []).length ? RAW.shifts[RAW.shifts.length - 1] : null;
+  check(!firstCur || (lastDay && lastDay[0] === dayOf(PJ.asOf) && Math.abs(lastDay[1] - RAW.shift) < 0.0015), 'the last day\'s centring is today\'s, the one the tables are on');
+  const anyPast = Object.values(HJ.players).some(x => decode(x.p).some(([, , ref]) => seasonOfRef(ref) < season));
+  check(anyPast && Object.keys(RAW.curves).map(Number).includes(season - 1), `last season's games are there, on ${season - 1}'s own ladder`);
+  check(Object.values(HJ.players).every(x => decode(x.p).every(([d, , ref], i, a) => d >= 0 && d <= HJ.today && ref >= 0 && ref >> 1 < RAW.games.length && (!i || d >= a[i - 1][0]))), 'every point is in range, in order, on a game of the list');
+
+  /* the page: nothing read until a window opens; the columns; the window */
+  let hxReads = 0, serve = HJ;
+  JSONS = [[/history\.json/, (url, opt) => { hxReads++; check(opt && opt.cache === 'no-store', 'history.json is read no-store'); return { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(serve)) }; }]];
+  let { w, errors, timers } = load('index.html', real, null, null, 'players');
+  await sleep(300); await provoke(w, timers, errors); await sleep(50);
+  /* the page keeps which tab is open (its own key); the windows keep nothing */
+  const kept = () => JSON.stringify(Object.keys(w.localStorage).filter(k => !/:tab$/.test(k)).sort().map(k => [k, w.localStorage.getItem(k)]));
+  const d = w.document, stored0 = kept();
+  check(hxReads === 0, 'nothing reads history.json on load, on a timer or an event');
+  const ths = [...d.querySelectorAll('#playersT th')], c7 = ths.findIndex(th => th.dataset.k === 'd7');
+  check(c7 > 0 && ths[c7].textContent === '7dChange over 7 days' && ths[c7].querySelector('[aria-hidden="true"]').textContent === '7d', 'the Players table has a 7d column, with words for a screen reader');
+  const rows = [...d.querySelectorAll('#playersT tbody tr')];
+  const shown = real.players.slice(0, rows.length);
+  const fmt7 = v => v === null || v === undefined ? '–' : v === 0 ? '0' : (v > 0 ? '▲up ' : '▼down ') + Math.abs(v);
+  check(rows.length > 10 && rows.every((tr, i) => tr.children[c7].textContent.trim() === fmt7(shown[i].d7)), `each player's 7d is his change, arrow and word (${rows.length} rows)`);
+  /* the player opened is one with games this season and last, so every part of the window is drawn */
+  const pick = real.players.find(p => { const x = HJ.players[p.id]; if (!x) return false; const q = decode(x.p); return q.some(([, , r]) => seasonOfRef(r) < season) && q.some(([, , r]) => seasonOfRef(r) === season); }) || real.players[0];
+  d.getElementById('pq').value = pick.name; d.getElementById('pq').dispatchEvent(new w.Event('input')); await sleep(30);
+  const btn = d.querySelector(`#playersT [data-hx="p:${pick.id}"]`), pid = pick.id, pl = pick;
+  check(!!btn && btn.tagName === 'BUTTON' && btn.getAttribute('aria-haspopup') === 'dialog' && /rating over time/.test(btn.textContent), 'a player\'s name is a button that says what it opens');
+  /* the numbers in the boxes: served as planted, so a box that shows another number than its own fails */
+  serve = JSON.parse(JSON.stringify(HJ)); Object.assign(serve.players[pid], { d7: 3, d30: -7, dS: 12 });
+  btn.click(); await sleep(60);
+  const back = d.getElementById('hxBack');
+  check(!back.hidden && d.activeElement === d.getElementById('hxClose'), 'a name opens the window, the focus on Close');
+  check(hxReads === 1, 'history.json is read once, when the window first opens');
+  check(d.getElementById('hxTitle').textContent === pl.name, 'the window is headed with his name');
+  const boxes = [...d.querySelectorAll('.hx-nums > div > b')].map(b => b.textContent.trim());
+  check(boxes[0].endsWith(String(pl.rating)) && boxes[1] === '▲up 3' && boxes[2] === '▼down 7' && boxes[3] === '▲up 12', `now, 7 days, 30 days and this season, each its own: ${boxes.join(' | ')}`);
+  const H1 = HJ.players[pid], pts = decode(H1.p);
+  const circles = [...d.querySelectorAll('.hx-chart circle')];
+  check(circles.length === pts.length + (H1.s !== null ? 1 : 0) + 1, `the line has every game, the start and today (${circles.length} points)`);
+  check(circles[circles.length - 1].textContent === `Today: ${pl.rating}`, 'its last point is today\'s, the table\'s rating');
+  const cx = circles.map(c => +c.getAttribute('cx'));
+  check(cx.every((v, i) => !i || v >= cx[i - 1]) && cx[cx.length - 1] > cx[0], 'the points run left to right');
+  const nPast = pts.filter(([, , r]) => seasonOfRef(r) < season).length, nCur = pts.length - nPast + (H1.s !== null ? 1 : 0) + 1;
+  check(d.querySelectorAll('.hx-chart path.ln').length === (nPast > 1 ? 1 : 0) + (nCur > 1 ? 1 : 0) && d.querySelectorAll('.hx-chart path.gap').length === (nPast && nCur ? 1 : 0), 'last season\'s line, this season\'s, and the summer between them dotted');
+  const svgW = +d.querySelector('.hx-chart').getAttribute('width');
+  const startC = circles.find(c => /began/.test(c.textContent));
+  check(!nPast || !startC || HJ.today === HJ.startDay || +startC.getAttribute('cx') <= svgW * 0.62, 'this season has its share of the width, not the last few pixels of a year');
+  const cur = pts.filter(([, , ref]) => seasonOfRef(ref) === season);
+  const li = [...d.querySelectorAll('.hx-games li')];
+  check(li.length === Math.min(10, cur.length || Math.min(5, pts.length)), `the games listed: ${li.length}`);
+  if (cur.length) { const [, r, ref] = cur[cur.length - 1], gid = RAW.games[ref >> 1], home = (ref & 1) === 1, opp = gid.split('_')[home ? 2 : 3];
+    const sc = real.finals[gid], own0 = sc[home ? 1 : 0], their = sc[home ? 0 : 1], res = `${own0 > their ? 'W' : own0 < their ? 'L' : 'T'} ${own0}-${their}`;
+    check(li[0].textContent.includes(opp) && li[0].children[2].textContent === res && li[0].children[3].textContent === String(r), `the newest game first, its result from the finals: ${li[0].textContent.replace(/\s+/g, ' ').trim()}`); }
+  check(d.querySelector('.hx-chart').getAttribute('role') === 'img' && /Rating over time/.test(d.querySelector('.hx-chart').getAttribute('aria-label')), 'the chart says what it shows to a screen reader');
+  /* Tab and Shift+Tab stay inside, Escape closes and gives the focus back */
+  for (const shiftKey of [false, true]) { d.getElementById('hxClose').focus();
+    const ev = new w.KeyboardEvent('keydown', { key: 'Tab', shiftKey, bubbles: true, cancelable: true }); d.activeElement.dispatchEvent(ev);
+    check(ev.defaultPrevented && back.contains(d.activeElement), `${shiftKey ? 'Shift+Tab' : 'Tab'} stays in the window`); }
+  back.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20);
+  check(back.hidden && d.activeElement && d.activeElement.dataset.hx === 'p:' + pid, 'Escape closes it and the focus goes back to the name');
+  /* a coach and a club */
+  d.querySelector('#nav button[data-tab=coaches]').click(); await sleep(40);
+  const cb = d.querySelector('#coachT [data-hx^="c:"]'), cname = cb.dataset.hx.slice(2), co = real.coaches.find(c => c.name === cname);
+  cb.click(); await sleep(40);
+  check(!back.hidden && d.getElementById('hxTitle').textContent === cname && d.querySelector('.hx-nums > div').textContent.includes(String(co.rating)) && /half|50%/.test(d.querySelector('.hx-note').textContent), `a coach's window: ${cname}, ${co.rating}, and a coach's carry in its own words`);
+  check(hxReads === 1, 'a second window reads nothing more');
+  d.getElementById('hxClose').click(); await sleep(20);
+  check(back.hidden && !!d.activeElement && d.activeElement.dataset.hx === cb.dataset.hx, 'Close gives the focus back');
+  d.querySelector('#nav button[data-tab=teams]').click(); await sleep(40);
+  const tk = Object.keys(real.teams).find(t => HJ.teams[t] && HJ.teams[t].n !== null);
+  d.querySelector(`#teamsT [data-hx="t:${tk}"]`).click(); await sleep(40);
+  const tnote = d.querySelector('.hx-note').textContent;
+  check(d.querySelector('.hx-nums > div').textContent.includes(String(HJ.teams[tk].n)) && tnote.includes(String(Math.round(real.teams[tk].strength))) && /either way/.test(tnote), `a club's window (${tk}): its rotation now, and the Teams tab's strength named as another lineup`);
+  const tth = [...d.querySelectorAll('#teamsT th')].find(th => th.dataset.k === 'd7');
+  check(!!tth && /rotation/.test(tth.querySelector('[title]').getAttribute('title')), 'the Teams table has a 7d column, titled as the rotation\'s change');
+  d.getElementById('hxClose').click(); await sleep(20);
+  check(kept() === stored0, 'opening and closing the windows stores nothing');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  /* a history that does not load, and one that is junk: the window says so, the tables stand; the next window reads again */
+  for (const [label, resp] of [['a 404', () => ({ ok: false, status: 404, json: async () => ({}) })], ['not JSON', () => ({ ok: true, status: 200, json: async () => { throw new SyntaxError('bad'); } })], ['the wrong shape', () => ({ ok: true, status: 200, json: async () => ({ v: 2 }) })]]) {
+    let n = 0; JSONS = [[/history\.json/, (u, o) => (++n === 1 ? resp() : { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(HJ)) })]];
+    ({ w, errors } = load('index.html', real, null, null, 'players')); await sleep(250);
+    const b1 = w.document.querySelector('#playersT [data-hx^="p:"]'); b1.click(); await sleep(60);
+    const failed = /did not load/.test(w.document.getElementById('hxBody').textContent);
+    w.document.getElementById('hxClose').click(); await sleep(20); b1.click(); await sleep(60);
+    check(failed && n === 2 && w.document.querySelectorAll('.hx-chart circle').length > 0 && errors.length === 0, `history.json ${label}: the window says it did not load, nothing thrown, and the next window reads it again`);
+  }
+  JSONS = [];
+}
 (async () => {
   let w, errors;
   if (run('base')) {
@@ -1555,6 +1711,7 @@ async function builder() {
   await guard('7', refreshOdds);
   await guard('8', playerProps);
   await guard('9', builder);
+  await guard('10', ratingHistory);
 
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

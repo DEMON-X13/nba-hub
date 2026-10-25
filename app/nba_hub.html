@@ -10,7 +10,7 @@
 <style>
 :root{
   --bg:#2A3043; --bg-2:#30374B; --panel:#363D52; --panel-2:#3D455B; --panel-3:#475068;
-  --ink:#F6F7FB; --ink-2:#CDD2DF; --muted:#A0A7BB; --line:#4A5269; --line-2:#59627B;
+  --ink:#F6F7FB; --ink-2:#CDD2DF; --muted:#A4ABBF; --line:#4A5269; --line-2:#59627B;
   --hot:#FF6A1F; --hot-2:#FF8C4A; --hot-soft:rgba(255,106,31,.14);
   --lime:#CDFF4F; --lime-soft:rgba(205,255,79,.14);
   --ice:#5FD4FF; --ice-soft:rgba(95,212,255,.14);
@@ -304,6 +304,29 @@ body.pp-lock{overflow:hidden}
 .pc-note{font-size:12.5px;color:var(--ink-2);margin:6px 0 0;overflow-wrap:anywhere}
 .pc-msg{font-size:12.5px;color:var(--lime);font-weight:700;margin:6px 0 0} .pc-msg:empty{display:none}
 @media(max-width:620px){.pp-slipbar{border-radius:0;padding:10px 16px}}
+/* ---------- rating over time ---------- */
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.hxname{background:none;border:0;padding:10px 0;margin:-10px 0;color:inherit;text-align:left;cursor:pointer;text-decoration:underline dotted var(--line-2);text-underline-offset:4px;text-decoration-thickness:1.5px}
+.hxname:hover,.hxname:focus-visible{text-decoration-color:var(--hot-2)}
+.chg{font-variant-numeric:tabular-nums;font-weight:800;white-space:nowrap} .chg.up{color:var(--lime)} .chg.dn{color:#FF8FA8} .chg.eq{color:var(--muted)}
+.hx-sheet{max-width:760px}
+.hx-nums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin:0 0 12px}
+.hx-nums div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:9px 11px;min-width:0}
+.hx-nums>div>span{display:block;font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.hx-nums>div>b{display:block;font-family:var(--display);font-size:19px;line-height:1.25;white-space:nowrap}
+.hx-chart{display:block;width:100%;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.hx-chart text{font-family:var(--body)}
+.hx-chart .tl{stroke:var(--line-2);stroke-dasharray:3 4} .hx-chart .tt{fill:var(--muted);font-size:11px}
+.hx-chart .sb{stroke:var(--ink-2);stroke-dasharray:2 3;opacity:.55} .hx-chart .sl{fill:var(--ink-2);font-size:11px;font-weight:700}
+.hx-chart .ln{fill:none;stroke:var(--hot-2);stroke-width:2.2;stroke-linejoin:round;stroke-linecap:round} .hx-chart .gap{fill:none;stroke:var(--hot-2);stroke-width:1.6;stroke-dasharray:3 4;opacity:.6}
+.hx-chart .pt{fill:var(--hot-2)} .hx-chart .st{fill:var(--bg-2);stroke:var(--hot-2);stroke-width:2} .hx-chart .nw{fill:var(--lime);stroke:var(--bg-2);stroke-width:2}
+.hx-chart .mt{fill:var(--muted);font-size:11px}
+.hx-note{font-size:12.5px;color:var(--ink-2);margin:8px 0 14px}
+.hx-body h3{margin:4px 0 8px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.hx-games{list-style:none;margin:0;padding:0;border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.hx-games li{display:grid;grid-template-columns:56px minmax(0,1fr) auto 50px 46px;gap:8px;align-items:center;padding:8px 12px;border-bottom:1px solid var(--line);font-size:13px}
+.hx-games li:last-child{border-bottom:0} .hx-games .r{text-align:right;font-variant-numeric:tabular-nums} .hx-games .muted{white-space:nowrap}
+@media(max-width:520px){.hx-nums{grid-template-columns:repeat(2,minmax(0,1fr))}.hx-games li{grid-template-columns:50px minmax(0,1fr) auto 44px;padding:8px 10px}.hx-games .rt{display:none}}
 /* the tables at narrower widths, last in the sheet so they override the base .tbl rules: a table's least-needed columns
    (mid: true) give way on a tablet and its secondary ones (wide: true) on a phone, so its rating, and every column
    still shown, is in view without scrolling; a long name or list of absentees wraps where it must */
@@ -346,6 +369,7 @@ body.pp-lock{overflow:hidden}
 <footer>Rebuilt in the morning from the previous night's box scores, and again through the afternoon for the day's lines and injury report. Your bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
 <div class="toast" id="toast"></div>
 <div class="pp-back" id="ppBack" hidden><div class="pp-sheet" id="ppSheet" role="dialog" aria-modal="true" aria-labelledby="ppTitle" aria-describedby="ppSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="ppTitle">Player props</h2><div class="pp-sub" id="ppSub"></div></div><button type="button" class="pp-x" id="ppClose" aria-label="Close player props">×</button></div><div class="pp-body" id="ppBody"></div><div class="pp-slipbar" id="ppSlipBar" hidden><span class="pp-slipst" id="ppSlipSt" role="status" aria-live="polite"></span><span class="pp-slipsum" id="ppSlipSum"></span><button type="button" class="btn" id="ppSlipGo">Your parlay</button></div></div></div>
+<div class="pp-back" id="hxBack" hidden><div class="pp-sheet hx-sheet" id="hxSheet" role="dialog" aria-modal="true" aria-labelledby="hxTitle" aria-describedby="hxSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="hxTitle">Rating over time</h2><div class="pp-sub" id="hxSub"></div></div><button type="button" class="pp-x" id="hxClose" aria-label="Close the rating window">×</button></div><div class="pp-body hx-body" id="hxBody"></div></div></div>
 <div class="pp-back" id="pcBack" hidden><div class="pp-sheet" id="pcSheet" role="dialog" aria-modal="true" aria-labelledby="pcTitle" aria-describedby="pcSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="pcTitle">Your parlay</h2><div class="pp-sub" id="pcSub"></div></div><button type="button" class="pp-x" id="pcClose" aria-label="Close the parlay card">×</button></div><div class="pp-body" id="pcBody"></div></div></div>
 <script>
 'use strict';
@@ -591,11 +615,12 @@ const signed = v => v === null || v === undefined ? '—' : `<span class="${v > 
 render.teams = function () {
   const rows = Object.entries(S.teams).map(([t, v]) => ({ t, name: TEAMS[t] ? TEAMS[t][0] + ' ' + TEAMS[t][1] : t, ...v, outN: v.out.length, outList: v.out.join(', ') }));
   const el = $('#tab-teams');
-  el.innerHTML = `<h2>Teams <small>strength from the player model with today's injuries, in Elo with its tier; the plain team rating beside it</small></h2>${tierLadder(rows.map(r => r.strength), 'Teams')}<div id="teamsT"></div>`;
+  el.innerHTML = `<h2>Teams <small>strength from the player model with today's injuries, in Elo with its tier; the plain team rating beside it. A team opens its rating over time</small></h2>${tierLadder(rows.map(r => r.strength), 'Teams')}<div id="teamsT"></div>`;
   table($('#teamsT'), [
     { key: 'strength', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
-    { key: 't', label: 'Team', fmt: (v, r) => `${pill(v)} <span class="wide-only" style="margin-left:8px">${esc(r.name)}</span>` },
+    { key: 't', label: 'Team', fmt: (v, r) => `<button type="button" class="hxname" data-hx="t:${esc(v)}" aria-haspopup="dialog">${pill(v)} <span class="wide-only" style="margin-left:8px">${esc(r.name)}</span><span class="sr narrow-only"> ${esc(r.name)}</span><span class="sr">: rating over time</span></button>` },
     { key: 'strength', label: 'Strength', num: true, cls: 'big', fmt: eloCell },
+    { key: 'd7', label: D7_HEAD('its recent rotation\'s strength'), num: true, fmt: chg },
     { key: 'offence', label: 'Offence', num: true, fmt: signed, wide: true },
     { key: 'defence', label: 'Defence', num: true, fmt: signed, wide: true },
     { key: 'pace', label: 'Pace', num: true, fmt: v => v.toFixed(1), wide: true, mid: true },
@@ -607,7 +632,7 @@ render.teams = function () {
 render.players = function () {
   const el = $('#tab-players');
   if (!el.dataset.ready) {
-    el.innerHTML = `<h2>Players <small>overall Elo on the ladder (1500 the average rotation player, 100 points a standard deviation) and its tier; offence and defence in rating points, for a player on the floor all game</small></h2>
+    el.innerHTML = `<h2>Players <small>overall Elo on the ladder (1500 the average rotation player, 100 points a standard deviation) and its tier; offence and defence in rating points, for a player on the floor all game. A name opens his rating over time</small></h2>
       ${tierLadder(S.players.filter(p => p.ranked).map(p => p.rating), 'Rotation players')}
       <div class="bar"><input type="text" id="pq" placeholder="Search a player"><select id="pt"><option value="">All teams</option>${Object.keys(TEAMS).map(t => `<option>${t}</option>`).join('')}</select><label class="muted"><input type="checkbox" id="pall"> show everyone</label><span class="grow"></span><span class="muted" id="pn"></span></div><div id="playersT"></div>`;
     el.dataset.ready = 1;
@@ -619,9 +644,10 @@ render.players = function () {
   $('#pn').textContent = `${rows.length} shown`;
   table($('#playersT'), [
     { key: 'rating', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
-    { key: 'name', label: 'Player', cls: 'wrap-any', fmt: (v, r) => `<b>${esc(v)}</b> <span class="muted">${esc(r.pos)}</span><span class="narrow-only"> ${pill(r.team)}</span>` },
+    { key: 'name', label: 'Player', cls: 'wrap-any', fmt: (v, r) => `<button type="button" class="hxname" data-hx="p:${esc(r.id)}" aria-haspopup="dialog"><b>${esc(v)}</b><span class="sr">: rating over time</span></button> <span class="muted">${esc(r.pos)}</span><span class="narrow-only"> ${pill(r.team)}</span>` },
     { key: 'team', label: 'Team', fmt: pill, wide: true },
     { key: 'rating', label: '<span class="wide-only">Overall </span>Elo', num: true, cls: 'big', fmt: eloCell },
+    { key: 'd7', label: D7_HEAD('overall Elo'), num: true, fmt: chg },
     { key: 'o', label: 'Offence', num: true, fmt: signed, wide: true },
     { key: 'd', label: 'Defence', num: true, fmt: signed, wide: true },
     { key: 'min', label: 'Min', num: true, fmt: v => v.toFixed(0), wide: true, mid: true },
@@ -630,17 +656,160 @@ render.players = function () {
   ], rows, 'rating');
 };
 render.coaches = function () {
-  $('#tab-coaches').innerHTML = `<h2>Coaches <small>overall Elo on the ladder (1500 the average coach, 100 points a standard deviation) and its tier; moves with each game's surprise and follows the coach between teams</small></h2>
+  $('#tab-coaches').innerHTML = `<h2>Coaches <small>overall Elo on the ladder (1500 the average coach, 100 points a standard deviation) and its tier; moves with each game's surprise and follows the coach between teams. A name opens his rating over time</small></h2>
     ${tierLadder(S.coaches.filter(c => c.ranked).map(c => c.rating), 'Coaches')}<div id="coachT"></div>`;
   table($('#coachT'), [
     { key: 'rating', label: '#', fmt: (v, r, i) => `<span class="rk">${i + 1}</span>` },
-    { key: 'name', label: 'Coach', fmt: (v, r) => `<b>${esc(v)}</b>${r.team ? `<span class="narrow-only"> ${pill(r.team)}</span>` : ''}` },
+    { key: 'name', label: 'Coach', fmt: (v, r) => `<button type="button" class="hxname" data-hx="c:${esc(v)}" aria-haspopup="dialog"><b>${esc(v)}</b><span class="sr">: rating over time</span></button>${r.team ? `<span class="narrow-only"> ${pill(r.team)}</span>` : ''}` },
     { key: 'team', label: 'Team', fmt: v => v ? pill(v) : '<span class="muted">–</span>', wide: true },
     { key: 'rating', label: '<span class="wide-only">Overall </span>Elo', num: true, cls: 'big', fmt: eloCell },
+    { key: 'd7', label: D7_HEAD('overall Elo'), num: true, fmt: chg },
     { key: 'elo', label: 'Rating pts', num: true, fmt: signed, wide: true },
     { key: 'games', label: 'Games rated', num: true, wide: true },
   ], S.coaches, 'rating');
 };
+/* ---------- rating over time (history.json, publish.js THE HISTORY) ----------
+   A change is today's rating less the rating 7 days ago, a day before the season counting as its start, so the summer's
+   carry is never a change. A name on the Players, Coaches or Teams tab opens its rating game by game since last season
+   began: the line on the same ladder as its table, the change over 7 and 30 days and this season, and its games.
+   history.json is read only when a window first opens, once a load, and kept in memory alone */
+const chg = v => v === null || v === undefined || !isFinite(v) ? '<span class="muted">–</span>'
+  : v === 0 ? '<span class="chg eq">0</span>'
+  : `<span class="chg ${v > 0 ? 'up' : 'dn'}"><span aria-hidden="true">${v > 0 ? '▲' : '▼'}</span><span class="sr">${v > 0 ? 'up ' : 'down '}</span>${Math.abs(v)}</span>`;
+const D7_HEAD = what => `<span aria-hidden="true" title="Change in ${what} over the last 7 days">7d</span><span class="sr">Change over 7 days</span>`;
+let HX = null, HX_ERR = false, HX_LOADING = null, hxKey = null, hxFrom = null;
+function hxLoad() {
+  if (!HX_LOADING) HX_LOADING = (async () => {
+    try { const r = await fetch('history.json', { cache: 'no-store' }); if (!r.ok) throw new Error(r.status);
+      const j = await r.json(); if (!j || j.v !== 1 || !Array.isArray(j.games) || !j.players || !j.coaches || !j.teams) throw new Error('shape'); HX = j; HX_ERR = false; }
+    catch (e) { HX_ERR = true; }
+  })().then(() => { if (!HX) HX_LOADING = null; });   // a read that failed is made again by the next window
+  return HX_LOADING;
+}
+const HX_KIND = { p: 'players', c: 'coaches', t: 'teams' };
+/* a series with its games added back up: [{ day, r, ref }] */
+function hxSeries(kind, id) {
+  const raw = HX && HX[HX_KIND[kind]] && HX[HX_KIND[kind]][id];
+  if (!raw || !Array.isArray(raw.p)) return null;
+  const pts = []; let d = 0, r = 0, f = 0;
+  for (let i = 0; i + 2 < raw.p.length; i += 3) { d += raw.p[i]; r += raw.p[i + 1]; f += raw.p[i + 2]; pts.push({ day: d, r, ref: f }); }
+  return { s: raw.s, n: raw.n, d7: raw.d7, d30: raw.d30, dS: raw.dS, pts };
+}
+/* a point's game: its id is season_YYYYMMDD_away_home, the reference's last bit says the side was at home */
+function hxGame(ref) {
+  const id = HX.games[ref >> 1]; if (!id) return null;
+  const [season, ymd, away, home] = id.split('_'), atHome = (ref & 1) === 1;
+  const sc = S.finals && S.finals[id], own = sc ? sc[atHome ? 1 : 0] : null, opp = sc ? sc[atHome ? 0 : 1] : null;
+  return { id, season: +season, date: `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`, team: atHome ? home : away, opp: atHome ? away : home, atHome,
+    result: own === null ? null : `${own > opp ? 'W' : own < opp ? 'L' : 'T'} ${own}-${opp}` };
+}
+const hxSigned = v => v === null || v === undefined ? '' : `${v > 0 ? '+' : v < 0 ? '−' : '±'}${Math.abs(v)}`;
+/* the line: last season's games, its start as this season began (carried), this season's games, today's */
+function hxLine(s) {
+  const cur = [], past = [];
+  for (const x of s.pts) (hxGame(x.ref) && hxGame(x.ref).season === HX.season ? cur : past).push({ ...x, g: hxGame(x.ref) });
+  const out = past.slice();
+  if (s.s !== null && s.s !== undefined) out.push({ day: HX.startDay, r: s.s, start: true });
+  out.push(...cur);
+  if (s.n !== null && s.n !== undefined) out.push({ day: HX.today, r: s.n, now: true });
+  /* a game's change is from the point before it, this season's first from the start; the start (the summer's carry) and
+     today's point are not changes */
+  for (let i = 0; i < out.length; i++) { const p = out[i], q = out[i - 1]; p.ch = !q || p.start || p.now ? null : p.r - q.r; }
+  return { all: out, past, cur };
+}
+function hxChart(L, W) {
+  const narrow = W < 480, H = narrow ? 200 : 240, padL = 10, padR = narrow ? 42 : 96, padT = 22, padB = 26;
+  const vals = L.all.map(x => x.r); let lo = Math.min(...vals), hi = Math.max(...vals);
+  if (hi - lo < 60) { const m = (hi + lo) / 2; lo = m - 30; hi = m + 30; } lo -= 10; hi += 10;
+  /* the season in play gets at least 40% of the width, last season the rest from the line's first point: drawn to scale,
+     October's few games would sit in the last pixels of a year */
+  const plotW = W - padL - padR, sd = HX.startDay, d0 = L.past.length ? Math.min(sd, L.all[0].day) : sd, curSpan = HX.today - sd;
+  const share = d0 >= sd ? 1 : curSpan <= 0 ? 0.08 : Math.max(curSpan / Math.max(1, HX.today - d0), 0.4), xs = padL + plotW * (1 - share);   // before the season's first final, a sliver
+  const x = d => d >= sd ? xs + plotW * share * (curSpan > 0 ? (d - sd) / curSpan : 1) : padL + (xs - padL) * (sd > d0 ? (d - d0) / (sd - d0) : 0);
+  const y = v => padT + (H - padT - padB) * (1 - (v - lo) / (hi - lo));
+  let g = '';
+  for (const t of TIERS) { const v = isFinite(t[1]) ? t[1] : null; if (v === null || v < lo || v > hi) continue;
+    g += `<line class="tl" x1="${padL}" x2="${W - padR}" y1="${y(v).toFixed(1)}" y2="${y(v).toFixed(1)}"/><text class="tt" x="${W - padR + 6}" y="${(y(v) + 4).toFixed(1)}">${narrow ? v : t[0] + ' ' + v}</text>`; }
+  let lastTick = -1e9;
+  for (let d = d0; d <= HX.today; d++) { const ds = addDays(HX.from, d); if (ds.slice(8) !== '01') continue;
+    const xx = x(d); if (xx < padL + 14 || xx > W - padR - 14 || xx - lastTick < 40) continue; lastTick = xx;
+    g += `<text class="mt" x="${xx.toFixed(1)}" y="${H - 8}" text-anchor="middle">${new Date(ds + 'T12:00:00Z').toLocaleDateString(undefined, { month: 'short', timeZone: 'UTC' })}</text>`; }
+  const sx = x(HX.startDay);
+  if (d0 < sd) g += `<line class="sb" x1="${sx.toFixed(1)}" x2="${sx.toFixed(1)}" y1="${padT - 12}" y2="${H - padB}"/>`
+    + `<text class="sl" x="${(sx - 6).toFixed(1)}" y="${padT - 8}" text-anchor="end">${seasonName(HX.season - 1)}</text>${sx + 60 < W ? `<text class="sl" x="${(sx + 6).toFixed(1)}" y="${padT - 8}">${seasonName(HX.season)}</text>` : ''}`;   // no room right of the line before the season's first final
+  const path = list => list.map((p, i) => `${i ? 'L' : 'M'}${x(p.day).toFixed(1)},${y(p.r).toFixed(1)}`).join('');
+  const past = L.past, cur = L.all.filter(p => !past.includes(p));
+  if (past.length > 1) g += `<path class="ln" d="${path(past)}"/>`;
+  if (past.length && cur.length) g += `<path class="gap" d="${path([past[past.length - 1], cur[0]])}"/>`;
+  if (cur.length > 1) g += `<path class="ln" d="${path(cur)}"/>`;
+  for (const p of L.all) {
+    const label = p.now ? `Today: ${p.r}` : p.start ? `As ${seasonName(HX.season)} began: ${p.r}` : `${dayNum(p.g.date)} · ${p.g.atHome ? 'vs' : 'at'} ${p.g.opp}${p.g.result ? ' · ' + p.g.result : ''} · ${p.r}${p.ch !== null ? ' (' + hxSigned(p.ch) + ')' : ''}`;
+    g += `<circle class="${p.now ? 'nw' : p.start ? 'st' : 'pt'}" cx="${x(p.day).toFixed(1)}" cy="${y(p.r).toFixed(1)}" r="${p.now || p.start ? 4.5 : 2.6}"><title>${esc(label)}</title></circle>`;
+  }
+  const first = L.all[0], last = L.all[L.all.length - 1];
+  const sum = `Rating over time: ${first.r} on ${dayNum(addDays(HX.from, first.day))}, ${last.r} today; high ${Math.max(...vals)}, low ${Math.min(...vals)}`;
+  return `<svg class="hx-chart" viewBox="0 0 ${W} ${H}" width="${W}" height="${H}" role="img" aria-label="${esc(sum)}">${g}</svg>`;
+}
+function hxDraw() {
+  if (!hxKey) return;
+  const kind = hxKey[0], id = hxKey.slice(2), body = $('#hxBody');
+  const row = kind === 'p' ? S.players.find(p => p.id === id) : kind === 'c' ? S.coaches.find(c => c.name === id) : S.teams[id] ? { ...S.teams[id], t: id } : null;
+  const name = kind === 't' ? (TEAMS[id] ? TEAMS[id][0] + ' ' + TEAMS[id][1] : id) : row ? row.name : id;
+  $('#hxTitle').textContent = name;
+  const tier = v => v === null || v === undefined ? '' : eloTier(v)[0] + ' tier';
+  $('#hxSub').innerHTML = kind === 'p' ? `${row && row.team ? pill(row.team) : ''}<span>${esc(row ? row.pos : '')}</span><span>overall Elo · ${tier(row && row.rating)}</span>`
+    : kind === 'c' ? `${row && row.team ? pill(row.team) : ''}<span>coach · overall Elo · ${tier(row && row.rating)}</span>` : `${pill(id)}<span>team strength · ${tier(row && row.strength)}</span>`;
+  if (!HX && !HX_ERR) { body.innerHTML = '<p class="muted" role="status">Loading the rating history…</p>'; return; }
+  if (HX_ERR) { body.innerHTML = '<p class="muted" role="status">The rating history did not load. The tables still show today\'s ratings; close this and open it again to try again.</p>'; return; }
+  const s = hxSeries(kind, id);
+  if (!s || (!s.pts.length && (s.s === null || s.s === undefined))) { body.innerHTML = `<p class="muted">No games rated since ${seasonName(HX.season - 1)} began.</p>`; return; }
+  const L = hxLine(s), W = Math.max(280, Math.min(720, (body.clientWidth || 340) - 36));
+  const now = s.n !== null && s.n !== undefined ? s.n : L.all[L.all.length - 1].r;
+  const nums = `<div class="hx-nums"><div><span>${kind === 't' ? 'Rotation' : 'Now'}</span><b>${eloCell(now)}</b></div><div><span>7 days</span><b>${chg(s.d7)}</b></div><div><span>30 days</span><b>${chg(s.d30)}</b></div><div><span>${seasonName(HX.season)}</span><b>${chg(s.dS)}</b></div></div>`;
+  const cp = (S.params && S.params.player) || {}, pct = v => isFinite(v) ? Math.round(v * 100) + '%' : 'part';
+  const note = kind === 't'
+    ? `<p class="hx-note">Its recent rotation's strength after each game: who played in its last five games, at their usual minutes. The Teams tab's strength, ${row && row.strength !== undefined ? Math.round(row.strength) : '–'}, is today's roster instead, with who is out today taken off and anyone back or new counted, so the two can differ either way. At a new season every player keeps ${pct(cp.carryP)} of his rating, so a club's line steps toward 1500.</p>`
+    : kind === 'c'
+    ? `<p class="hx-note">On the ladder as each season stood: ${seasonName(HX.season)} on today's, ${seasonName(HX.season - 1)} on its own as it ended. A new season keeps ${pct(cp.carryC)} of a coach's rating, and coaches out of work keep all of theirs, so a coach's line can step toward the middle at the turn.</p>`
+    : `<p class="hx-note">On the ladder as each season stood: ${seasonName(HX.season)} on today's, ${seasonName(HX.season - 1)} on its own as it ended. A new season keeps ${pct(cp.carryP)} of every player's rating, which moves a player little on the ladder.</p>`;
+  const games = (L.cur.length ? L.cur : L.past.slice(-5)).slice().reverse().slice(0, 10);
+  const list = games.length ? `<h3>${L.cur.length ? (L.cur.length > 10 ? `Last 10 of ${L.cur.length} ${seasonName(HX.season)} games` : seasonName(HX.season) + ' games') : 'Last games of ' + seasonName(HX.season - 1)}</h3><ul class="hx-games">${games.map(p => {
+    const ch = p.ch;
+    return `<li><span class="muted">${dayNum(p.g.date)}</span><span>${p.g.atHome ? 'vs' : 'at'} ${pill(p.g.opp)}</span><span class="muted">${p.g.result || ''}</span><span class="r rt">${p.r}</span><span class="r">${ch === null ? '' : chg(ch)}</span></li>`; }).join('')}</ul>`
+    : `<p class="muted">No game this season yet: the line ends at the rating it carried in.</p>`;
+  body.innerHTML = nums + hxChart(L, W) + note + list;
+}
+async function hxOpen(key, from) {
+  if (!S || !key || !/^[pct]:/.test(key)) return;
+  hxKey = key; hxFrom = from || null;
+  if (!HX && !HX_LOADING) HX_ERR = false;           // a window after a failed read says it is loading, and reads again
+  $('#hxBack').hidden = false; document.body.classList.add('pp-lock'); $('#hxSheet').scrollTop = 0;
+  hxDraw(); $('#hxClose').focus();
+  await hxLoad();
+  if (hxKey === key) hxDraw();
+}
+function hxClose() {
+  if (!hxKey) return;
+  const key = hxKey; hxKey = null; $('#hxBack').hidden = true; document.body.classList.remove('pp-lock');
+  const to = hxFrom && document.contains(hxFrom) ? hxFrom : document.querySelector(`main [data-hx="${CSS.escape(key)}"]`);
+  hxFrom = null; if (to) to.focus();
+}
+document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-hx]'); if (b) hxOpen(b.dataset.hx, b); });
+$('#hxClose').addEventListener('click', hxClose);
+$('#hxBack').addEventListener('click', e => { if (e.target === e.currentTarget) hxClose(); });
+$('#hxBack').addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.preventDefault(); hxClose(); return; }
+  if (e.key !== 'Tab') return;
+  const sheet = $('#hxSheet'), f = [...sheet.querySelectorAll('button, a[href]')].filter(el => !el.disabled && !el.closest('[hidden]'));
+  if (!f.length) return;
+  const first = f[0], last = f[f.length - 1], at = document.activeElement;
+  if (!sheet.contains(at) || at === sheet) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+  else if (e.shiftKey && at === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
+});
+let hxResize = null;
+window.addEventListener('resize', () => { if (!hxKey) return; clearTimeout(hxResize); hxResize = setTimeout(hxDraw, 120); });
+window.NBA_HX = { load: hxLoad, series: hxSeries, line: hxLine, game: hxGame, data: () => HX, key: () => hxKey };   // what the smoke test reads
 /* seasons are named by the year they end in the data (2026 is 2025-26); the page writes them the NBA's way */
 const seasonName = y => `${+y - 1}-${String(y).slice(2)}`;
 const fmtSeasons = r => { const [a, b] = String(r || '').split('-'); if (!a) return ''; return !b || a === b ? `the ${seasonName(a)} season` : `${seasonName(a)} to ${seasonName(b)}`; };

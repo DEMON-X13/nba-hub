@@ -7,7 +7,8 @@
  * Every player carries two ratings, offence and defence, in Elo points for a player on the floor all
  * game. A team's strength for a game is 1500 plus the coach plus each player's ratings weighted by his
  * share of the minutes (five shares in all), so a team is exactly the sum of who plays and how much.
- * Before a game the home side gets the court, altitude and rest terms the team model fitted.
+ * Before a game the home side gets the court, altitude and rest terms the team model fitted, and a side on two days'
+ * rest or less loses a little for every time zone it has crossed since its last game (TRAVEL).
  *
  * After a final, each side's offensive efficiency (points per 100 possessions) is compared with what
  * the ratings expected. The surprise moves the offence of the players who were on the floor, by their
@@ -39,7 +40,7 @@ const OUT = path.join(L.ROOT, 'players.json');
 const MODEL = path.join(L.ROOT, 'model.json');
 const FIRST = 2022, WARM_TO = 2022, FIT_TO = 2025;
 const DEFAULT = { ke: 0.4, kc: 0.05, carryP: 0.6, carryC: 0.5, prior: 1.25, rookie: -60, clip: 30, minGames: 8, blend: 0.1,
-  pm: 0, pmClip: 15, winK: 0, shrink: 0, recency: 0, postMult: 1, wexp: 1 };
+  pm: 0, pmClip: 15, winK: 0, shrink: 0, recency: 0, postMult: 1, wexp: 1, tz: 0 };
 const GRID = {
   ke: [0.2, 0.3, 0.4, 0.5, 0.6, 0.75, 1, 1.25],
   kc: [0, 0.05, 0.1, 0.2, 0.3, 0.5],
@@ -57,6 +58,7 @@ const GRID = {
   recency: [0, 0.1, 0.2, 0.3],                    // minutes projection: weight decay per game back (0 = plain mean)
   postMult: [0.5, 0.75, 1, 1.25, 1.5],            // the efficiency update in the playoffs, times this
   wexp: [0.5, 0.75, 1, 1.25, 1.5],                // the update falls on players by minutes share to this power
+  tz: [0, 2, 4, 6, 10],                           // Elo off a side per hour of time zone crossed since a game two days or less before (TZ)
 };
 const PCOLS = ['game_id', 'date', 'team', 'opp', 'home', 'player_id', 'name', 'pos', 'starter', 'min', 'fgm', 'fga', 'tpm', 'tpa', 'ftm', 'fta', 'orb', 'drb', 'ast', 'stl', 'blk', 'tov', 'pf', 'pm', 'pts', 'dnp'];
 const norm = s => String(s || '').normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\b(jr|sr|ii|iii|iv)\b/g, '').replace(/[^a-z]/g, '');
@@ -137,13 +139,57 @@ const EARLY_PACE = 1.5;
    and the market said 55%, and expected home margins of +2.5 where they were +1.8 to +2.3. After each final at a home
    venue the edge moves HFA_K of the way toward what the margin said, about a season's worth of games deep */
 const HFA_K = 0.001;
+/* TRAVEL: jet lag on short rest. Each club's home time zone; a game's venue is its home club's (a neutral site's is not
+   known, so a game there neither takes the term nor gives the next game a venue to have come from). A side whose
+   previous game was two days or less before loses P.tz Elo for every hour between that venue's clock and this one's,
+   both read on this game's date (Phoenix keeps no summer time, so from March it sits with the Pacific clubs, and a
+   club that stays put over the clocks' change has crossed nothing). Walked forward on 2023-24 and 2024-25 with the
+   fit choosing it from the seasons before each, it lowered the log loss and the spread error in both (README) */
+const TZ = { ATL: 'America/New_York', BOS: 'America/New_York', BKN: 'America/New_York', CHA: 'America/New_York', CHI: 'America/Chicago',
+  CLE: 'America/New_York', DAL: 'America/Chicago', DEN: 'America/Denver', DET: 'America/Detroit', GSW: 'America/Los_Angeles',
+  HOU: 'America/Chicago', IND: 'America/Indiana/Indianapolis', LAC: 'America/Los_Angeles', LAL: 'America/Los_Angeles', MEM: 'America/Chicago',
+  MIA: 'America/New_York', MIL: 'America/Chicago', MIN: 'America/Chicago', NOP: 'America/Chicago', NYK: 'America/New_York',
+  OKC: 'America/Chicago', ORL: 'America/New_York', PHI: 'America/New_York', PHX: 'America/Phoenix', POR: 'America/Los_Angeles',
+  SAC: 'America/Los_Angeles', SAS: 'America/Chicago', TOR: 'America/Toronto', UTA: 'America/Denver', WAS: 'America/New_York' };
+const tzMemo = {};
+/* a zone's hours from UTC on a date, read at 5pm UTC (morning on the West Coast, after every zone's 2am change of clocks) */
+function tzHours(zone, date) {
+  const k = zone + date;
+  if (tzMemo[k] === undefined) {
+    const name = new Intl.DateTimeFormat('en-US', { timeZone: zone, timeZoneName: 'shortOffset' }).formatToParts(new Date(date + 'T17:00:00Z')).find(x => x.type === 'timeZoneName').value;
+    const m = /GMT([+-]\d+)(?::(\d+))?/.exec(name);
+    tzMemo[k] = m ? +m[1] + Math.sign(+m[1]) * (m[2] ? +m[2] / 60 : 0) : 0;
+  }
+  return tzMemo[k];
+}
+const dayGap = (a, b) => Math.round((Date.parse(b + 'T12:00:00Z') - Date.parse(a + 'T12:00:00Z')) / 86400000);
 function replay(P, ctx, mode, collect) {
   const { games, boxes, teamStats, coachOf, raptor, situP } = ctx;
   const players = {}, coaches = {}, dates = {}, ahead = {}, seasonOf = {}, pace = {}, lastLineup = {};   // ahead: games still to play (elo.js)
   let lg = 112, lgDay = 112, lgDate = '';         // lgDay: the league's efficiency as the day began, for scoring a final
   let lgPace = 99;                                  // the league's regular-season pace, possessions per 48
   let hfa = situP.hfa;                              // the home edge in Elo, learned (HFA_K)
+  /* travel: a club's last final's venue ({date, zone}, zone null at a neutral site) as the games pass, and the venues of
+     its games still to play, so a game two days out reads the one before it as elo.js's ahead does for rest */
+  const venue = {}, aheadVenue = {};
   const recs = [], upcoming = {};
+  /* THE HISTORY (ctx.hist, which only main sets, on the replay it publishes): each player's, coach's and club's rating
+     after every final from ctx.hist.from on, each season's ladder as the season ended, and each rating as it entered
+     the season the replay ends in, for the page's rating-over-time windows (publish.js turns them into history.json).
+     A player's and a club's rating is centred as main centres today's, on the league's average player as that day
+     ended (hsShift), so a line moves with the player or the club and not with the league's average, and a point once
+     written never changes. It records and never changes a number the model uses */
+  const HS = collect && ctx.hist ? ctx.hist : null;
+  if (HS) Object.assign(HS, { players: {}, coaches: {}, teams: {}, games: [], curves: {}, shifts: [], start: { players: {}, coaches: {}, teams: {} }, now: { teams: {} } });
+  let hsSeason = null, hsDay = null, hsDaySeason = null, hsPend = []; const hsFirst = {}, hsTeamSeason = {}, hsRot = {};
+  /* a club's strength in the history is its recent rotation's, not one night's lineup: everyone who played in its last
+     five games of the season and plays for it still, at projected minutes filled to 240 as today's strength is. One
+     night's lineup would move a club 50 points for the stars who sat a blowout or a back to back */
+  const rotStrength = (t, coach) => {
+    const ids = new Set(); for (const list of (hsRot[t] || { games: [] }).games) for (const id of list) ids.add(id);
+    const X = strength(fill240([...ids].map(id => players[id]).filter(p => p && p.team === t).map(p => [p, projected(p, false)])));
+    return E.MEAN + coach.c + X.O + X.D;
+  };
   const getP = (r, season) => {
     let p = players[r.player_id];
     if (!p) {
@@ -152,14 +198,15 @@ function replay(P, ctx, mode, collect) {
       const o0 = usePrior ? rp.o * P.prior * situP.scale : P.rookie / 2, d0 = usePrior ? rp.d * P.prior * situP.scale : P.rookie / 2;
       p = players[r.player_id] = { name: r.name, pos: r.pos, o: o0, d: d0, o0, d0,
         n: 0, mins: [], team: r.team, last: '', season, prior: usePrior ? 'raptor' : 'rookie' };
+      if (HS) HS.start.players[r.player_id] = [season, o0 + d0];
     }
-    if (p.season !== season) { p.o *= P.carryP; p.d *= P.carryP; p.season = season; p.mins = newSeasonMins(p); }
+    if (p.season !== season) { p.o *= P.carryP; p.d *= P.carryP; p.season = season; p.mins = newSeasonMins(p); if (HS) HS.start.players[r.player_id] = [season, p.o + p.d]; }
     return p;
   };
   const getC = (name, season) => {
     let c = coaches[name];
-    if (!c) c = coaches[name] = { c: 0, n: 0, season, team: '' };
-    if (c.season !== season) { c.c *= P.carryC; c.season = season; }
+    if (!c) { c = coaches[name] = { c: 0, n: 0, season, team: '' }; if (HS) HS.start.coaches[name] = [season, 0]; }
+    if (c.season !== season) { c.c *= P.carryC; c.season = season; if (HS) HS.start.coaches[name] = [season, c.c]; }
     return c;
   };
   /* strength of one side from a list of [player, minutes]; also its offence and defence and the weights */
@@ -187,31 +234,73 @@ function replay(P, ctx, mode, collect) {
     return prev.map(([p, starter]) => [p, projected(p, starter)]);
   };
 
+  /* the display shift as a day ended: the minutes-weighted average player's rating, as main finds today's, every player
+     read as he enters the day's season (one not carried into it yet carried, with his new season's minutes) */
+  const hsShift = (date, season) => {
+    let sv = 0, sw = 0; const from = L.addDays(date, -400);
+    for (const p of Object.values(players)) {
+      if (!(p.last >= from)) continue;
+      const turn = p.season < season, mins = turn ? newSeasonMins(p) : p.mins;
+      if (!mins.length) continue;
+      const w = mean(mins.slice(-P.minGames)) * mins.length; sv += w * (turn ? (p.o + p.d) * P.carryP : p.o + p.d); sw += w;
+    }
+    return sw ? sv / sw : 0;
+  };
+  /* a day's points, centred once the day's games are all in */
+  const hsFlush = () => {
+    if (hsDay === null) return;
+    const sh = hsShift(hsDay, hsDaySeason); HS.shifts.push([hsDay, sh]);
+    for (const [kind, key, d, v, ref] of hsPend) (HS[kind][key] = HS[kind][key] || []).push([d, v - (kind === 'teams' ? 5 * sh : sh), ref]);
+    hsPend = []; hsDay = null;
+  };
+  /* a finished season's ladder, as publish.js draws today's: players with twenty games or more at ten minutes or more who
+     played in it, centred as its last day ended, and every coach with ten games or more */
+  const hsCurve = S0 => {
+    const stat = vals => { const n = vals.length, m = n ? vals.reduce((a, x) => a + x, 0) / n : 0; return { n, mean: m, sd: n > 1 ? Math.sqrt(vals.reduce((a, x) => a + (x - m) ** 2, 0) / n) : 0 }; };
+    const pl = Object.values(players).filter(p => p.last >= (hsFirst[S0] || '9') && p.n >= 20 && mean(p.mins.slice(-P.minGames)) >= 10);
+    const sh = pl.length ? hsShift(pl.reduce((m, p) => p.last > m ? p.last : m, ''), S0) : 0;
+    HS.curves[S0] = { p: stat(pl.map(p => p.o + p.d - sh)), c: stat(Object.values(coaches).filter(c => c.n >= 10).map(c => c.c)) };
+  };
   for (const g of games) {
+    if (HS) { if (hsDay !== null && g.date !== hsDay) hsFlush();
+      if (hsSeason !== null && g.season > hsSeason) hsCurve(hsSeason);
+      if (hsSeason === null || g.season > hsSeason) hsSeason = g.season; }
     if (g.date !== lgDate) { lgDay = lg; lgDate = g.date; }
     /* a club's pace starts each season at the league's regular-season pace plus the opening weeks' bump: carried
        over, it was the club's last ten games, a playoff run's slow games included, so a new season's totals came out
        5 to 7 points under the actual totals and the posted lines */
     for (const t of [g.home, g.away]) {
       if (pace[t] === undefined) pace[t] = 99;
-      if (seasonOf[t] !== g.season) { if (seasonOf[t] !== undefined) pace[t] = lgPace + EARLY_PACE; seasonOf[t] = g.season; dates[t] = []; ahead[t] = []; }
+      if (seasonOf[t] !== g.season) { if (seasonOf[t] !== undefined) pace[t] = lgPace + EARLY_PACE; seasonOf[t] = g.season; dates[t] = []; ahead[t] = []; aheadVenue[t] = []; }
     }
     const neutral = g.neutral === 1;
     const sd = t => g.status === 'final' ? dates[t] : dates[t].concat(ahead[t]).sort().slice(-4);
     const SP = { ...situP, hfa };
-    const sh = E.situ(SP, sd(g.home), g.date, true, g.home, neutral), sa = E.situ(SP, sd(g.away), g.date, false, g.away, neutral);
-    const ch = getC(coachOf(g.season, g.home, g.date), g.season), ca = getC(coachOf(g.season, g.away, g.date), g.season);
+    const vz = neutral ? null : TZ[g.home] || null;
+    const lag = t => {
+      if (!P.tz || vz == null) return 0;
+      let v = venue[t];
+      if (g.status !== 'final') for (const a of aheadVenue[t]) if (a.date < g.date && (!v || a.date >= v.date)) v = a;
+      if (!v || v.zone == null || dayGap(v.date, g.date) > 2) return 0;
+      return P.tz * Math.abs(tzHours(vz, g.date) - tzHours(v.zone, g.date));
+    };
+    const sh = E.situ(SP, sd(g.home), g.date, true, g.home, neutral) - lag(g.home), sa = E.situ(SP, sd(g.away), g.date, false, g.away, neutral) - lag(g.away);
+    const chN = coachOf(g.season, g.home, g.date), caN = coachOf(g.season, g.away, g.date);
+    const ch = getC(chN, g.season), ca = getC(caN, g.season);
     ch.team = g.home; ca.team = g.away;
     const box = boxes[g.game_id];
     const expPace = (pace[g.home] + pace[g.away]) / 2;
 
     if (g.status !== 'final') {
-      if (g.type !== 'PRE') for (const t of [g.home, g.away]) ahead[t].push(g.date);   // its rest terms are read above
+      if (g.type !== 'PRE') for (const t of [g.home, g.away]) { ahead[t].push(g.date); aheadVenue[t].push({ date: g.date, zone: vz }); }   // its rest and travel terms are read above
       if (!collect) continue;
       /* the first game of a new season rolls every player over once, as a final would have done one by one:
          carried part way toward zero, minutes history trimmed. Without it the opening slate would be priced on
          last June's ratings; done before any lineup is chosen, so a card and the Teams tab see the same players */
-      for (const p of Object.values(players)) if (p.season < g.season) { p.o *= P.carryP; p.d *= P.carryP; p.season = g.season; p.mins = newSeasonMins(p); }
+      for (const [id, p] of Object.entries(players)) if (p.season < g.season) { p.o *= P.carryP; p.d *= P.carryP; p.season = g.season; p.mins = newSeasonMins(p); if (HS) HS.start.players[id] = [g.season, p.o + p.d]; }
+      /* a club yet to play this season starts at its last rotation, carried (its first final replaces it with that
+         game's players) */
+      if (HS) for (const [t, c] of [[g.home, ch], [g.away, ca]]) if (hsTeamSeason[t] !== g.season && hsRot[t] && !(HS.start.teams[t] && HS.start.teams[t][0] === g.season)) HS.start.teams[t] = [g.season, rotStrength(t, c)];
       const live = ctx.liveLineup(g, players, projected, getP);
       const H = strength(live.home.list), A = strength(live.away.list);
       const own = (ch.c + H.O + H.D + sh) - (ca.c + A.O + A.D + sa);
@@ -222,12 +311,16 @@ function replay(P, ctx, mode, collect) {
         pace: +expPace.toFixed(1), home: sideReport(g.home, H, ch, live.home), away: sideReport(g.away, A, ca, live.away) };
       continue;
     }
+    for (const t of [g.home, g.away]) venue[t] = { date: g.date, zone: vz };   // where it was played is known with or without a box score
     if (!box || !box[g.home] || !box[g.away]) continue;      // no box score for it: nothing to learn, nothing to score
     const th = sideTotals(box[g.home], teamStats[g.game_id + ':' + g.home], g.home_score), ta = sideTotals(box[g.away], teamStats[g.game_id + ':' + g.away], g.away_score);
     const oh = 100 * th.pts / th.poss, oa = 100 * ta.pts / ta.poss;
 
     if (collect && g.season > WARM_TO) {
       const Hm = strength(lineupFor(g.home, box[g.home], mode, g.season)), Am = strength(lineupFor(g.away, box[g.away], mode, g.season));
+      /* a club's start: its first game's players as they took the floor, carried into the season */
+      if (HS) for (const [t, c] of [[g.home, ch], [g.away, ca]]) if (hsTeamSeason[t] !== g.season) {
+        hsTeamSeason[t] = g.season; const X = strength(fill240(lineupFor(t, box[t], 'known', g.season))); HS.start.teams[t] = [g.season, E.MEAN + c.c + X.O + X.D]; }
       const own = (ch.c + Hm.O + Hm.D + sh) - (ca.c + Am.O + Am.D + sa);
       const td = ctx.teamDiff[g.game_id];
       const diff = td === undefined ? own : (1 - P.blend) * own + P.blend * td;
@@ -275,8 +368,61 @@ function replay(P, ctx, mode, collect) {
       lastLineup[t] = lineup;
       dates[t].push(g.date); if (dates[t].length > 4) dates[t].shift();
     }
+    if (HS) {
+      if (!hsFirst[g.season] || g.date < hsFirst[g.season]) hsFirst[g.season] = g.date;
+      if (g.date >= HS.from) {
+        /* each player who played, his coach and his club (its recent rotation), after the game;
+           the reference is the game's place in HS.games, twice over, plus one for the home side */
+        const ref = HS.games.push(g.game_id) - 1;
+        hsDay = g.date; hsDaySeason = g.season;
+        for (const [t, rows, home, c, cn] of [[g.home, box[g.home], 1, ch, chN], [g.away, box[g.away], 0, ca, caN]]) {
+          const played = [];
+          for (const r of rows) if (r.min > 0) { const p = players[r.player_id]; hsPend.push(['players', r.player_id, g.date, p.o + p.d, ref * 2 + home]); played.push(r.player_id); }
+          if (!hsRot[t] || hsRot[t].season !== g.season) hsRot[t] = { season: g.season, games: [] };
+          hsRot[t].games.push(played); if (hsRot[t].games.length > 5) hsRot[t].games.shift();
+          hsPend.push(['teams', t, g.date, rotStrength(t, c), ref * 2 + home]);
+          (HS.coaches[cn] = HS.coaches[cn] || []).push([g.date, c.c, ref * 2 + home]);   // a coach's rating needs no centring
+        }
+      }
+    }
+  }
+  /* the season the replay ends in, the shift its starts are centred on (as its first day of finals ended; none yet in
+     the preseason, when main's own is used), and each club's rotation as it stands with its coach today, its last
+     point: a club yet to play this season stands at its last rotation, carried */
+  if (HS) {
+    hsFlush(); HS.season = hsSeason;
+    const first = HS.shifts.find(([d]) => hsFirst[hsSeason] && d === hsFirst[hsSeason]);
+    HS.startShift = first ? first[1] : null;
+    for (const t of Object.keys(hsRot)) HS.now.teams[t] = rotStrength(t, coaches[coachOf(hsSeason, t, '9999-12-31')] || { c: 0 });
   }
   return { players, coaches, pace, lg, hfa, recs, upcoming, getP };
+}
+/* The history as players.json carries it: the points already centred on their own days (replay), the starts of the
+   season the replay ends in centred as its first day of finals ended (or as today, in the preseason), each club's last
+   point centred on today's shift, which main computes, and the day-by-day shifts themselves, so a point can be held to
+   the rating it was. Only the players the file lists; every coach and club */
+function historyOut(HS, shift, playersOut) {
+  if (!HS) return null;
+  const season = HS.season, r1 = v => +v.toFixed(1);
+  const day = d => Math.round((Date.parse(d + 'T12:00:00Z') - Date.parse(HS.from + 'T12:00:00Z')) / 86400000);   // days from the first
+  const pts = (series, keep) => Object.fromEntries(Object.entries(series).filter(([k]) => keep(k)).map(([k, list]) => [k, list.map(([d, v, ref]) => [day(d), r1(v), ref])]));
+  const ss = HS.startShift === null || HS.startShift === undefined ? shift : HS.startShift;
+  const starts = (st, keep, sh) => Object.fromEntries(Object.entries(st).filter(([k, [s0]]) => s0 === season && keep(k)).map(([k, [, v]]) => [k, r1(v - sh)]));
+  const curve = c => ({ n: c.n, mean: +c.mean.toFixed(3), sd: +c.sd.toFixed(3) });
+  const isP = id => !!playersOut[id], any = () => true;
+  return { from: HS.from, season, games: HS.games,
+    curves: Object.fromEntries(Object.entries(HS.curves).filter(([s0]) => +s0 < season && +s0 >= season - 1).map(([s0, c]) => [s0, { p: curve(c.p), c: curve(c.c) }])),
+    shift: +shift.toFixed(3), shifts: HS.shifts.filter(([d]) => d >= HS.from).map(([d, v]) => [day(d), +v.toFixed(3)]),
+    players: pts(HS.players, isP), coaches: pts(HS.coaches, any), teams: pts(HS.teams, any),
+    start: { players: starts(HS.start.players, isP, ss), coaches: starts(HS.start.coaches, any, 0), teams: starts(HS.start.teams, any, 5 * ss) },
+    now: { teams: Object.fromEntries(Object.entries(HS.now.teams).map(([t, v]) => [t, r1(v - 5 * shift)])) } };
+}
+/* a list of [player, projected minutes] filled into a game's 240 minutes in rotation order, as makeLiveLineup fills
+   today's: the longest first, each given his minutes until they run out, a player left under 4 dropped */
+function fill240(list) {
+  const top = []; let left = 240;
+  for (const [p, m] of [...list].sort((a, b) => b[1] - a[1])) { if (left <= 0) break; const give = Math.min(m, left); if (give >= 4) top.push([p, give]); left -= give; }
+  return top;
 }
 function sideReport(team, S, coach, live) {
   return { team, strength: +(E.MEAN + coach.c + S.O + S.D).toFixed(1), offence: +S.O.toFixed(1), defence: +S.D.toFixed(1), coach: { name: live.coach || '', elo: +coach.c.toFixed(1) },
@@ -363,7 +509,10 @@ function fit(ctx, from = WARM_TO, to = FIT_TO, start = DEFAULT, passes = 5) {
 /* Walk forward: for each season from 2024 on, fit on the seasons before it and score it cold. Then the
    ablations: the params fitted on everything but the last season, with each feature switched off in turn. */
 function research(ctx) {
-  const seasons = [...new Set(ctx.games.filter(g => g.status === 'final' && ctx.boxes[g.game_id]).map(g => g.season))].sort();
+  /* the finished seasons only: a season with games still to play is not a fold (in October it is a few weeks of games,
+     and scoring on it would move the final fit onto the held-out season); in the summer every season is finished */
+  const toPlay = ctx.games.filter(g => g.status !== 'final').map(g => g.season), inPlay = toPlay.length ? Math.max(...toPlay) : Infinity;
+  const seasons = [...new Set(ctx.games.filter(g => g.status === 'final' && ctx.boxes[g.game_id] && g.season < inPlay).map(g => g.season))].sort();
   const folds = [];
   for (const S of seasons) {
     if (S <= WARM_TO + 1) continue;
@@ -379,7 +528,7 @@ function research(ctx) {
   const P = fit(ctx, WARM_TO, last - 1, DEFAULT, 4);
   const base = score(replay(P, ctx, 'known', true).recs, last - 1, last, ctx.situP.scale);
   const ablations = { full: base };
-  const off = { pm: 0, winK: 0, shrink: 0, recency: 0, postMult: 1, wexp: 1, kc: 0, blend: 0, prior: 0, rookie: 0 };
+  const off = { pm: 0, winK: 0, shrink: 0, recency: 0, postMult: 1, wexp: 1, kc: 0, blend: 0, prior: 0, rookie: 0, tz: 0 };
   for (const [k, v] of Object.entries(off)) {
     if (P[k] === v) { ablations['without ' + k] = 'not used'; continue; }
     ablations['without ' + k] = score(replay({ ...P, [k]: v }, ctx, 'known', true).recs, last - 1, last, ctx.situP.scale);
@@ -424,16 +573,22 @@ function main() {
   report.teamElo = { fit: score(TR, WARM_TO, FIT_TO, situP.scale), holdout: score(TR, FIT_TO, 9999, situP.scale) };
   delete report.teamElo.fit.totalMae; delete report.teamElo.holdout.totalMae;
 
-  const R = replay(P, ctx, 'known', true);
   const finals = games.filter(g => g.status === 'final' && ctx.boxes[g.game_id]);
   const asOf = finals[finals.length - 1].date, season = finals[finals.length - 1].season;
+  /* the history runs from the first final of the season before the one the replay ends in: the season of the last final,
+     or the next one once its schedule is out (the preseason), into which the replay has already carried every rating */
+  const hseason = games.reduce((m, g) => Math.max(m, g.season), season);
+  ctx.hist = { from: (finals.find(g => g.season >= hseason - 1) || finals[0]).date };
+  const R = replay(P, ctx, 'known', true);
+  const HS = ctx.hist; ctx.hist = null;
   /* only differences between ratings matter to the model, so for display the league's minutes-weighted
      average player is set to zero on each side (shifting every offence or every defence by the same
      amount changes no prediction, since both lineups carry five shares) */
+  let shiftP = 0;
   { let so = 0, sd = 0, sw = 0;
     for (const p of Object.values(R.players)) if (p.last >= L.addDays(asOf, -400) && p.mins.length) { const w = mean(p.mins.slice(-P.minGames)) * p.mins.length; so += w * p.o; sd += w * p.d; sw += w; }
     if (sw) {
-      const mo = so / sw, md = sd / sw;
+      const mo = so / sw, md = sd / sw; shiftP = mo + md;
       for (const p of Object.values(R.players)) { p.o -= mo; p.d -= md; }
       /* the slate was priced before this shift: move its displayed levels by the same amount so a card and the
          Teams tab agree (a difference between two sides, and so every chance and spread, is unchanged) */
@@ -460,10 +615,14 @@ function main() {
       out: live.home.out.map(x => `${x.p.name} (${x.status})`) };
   }
   const out = { name: 'NBA player model', params: P, fitSeasons: `${WARM_TO + 1}-${FIT_TO}`, holdoutSeasons: `${FIT_TO + 1}-${season}`, report, leagueEfficiency: +R.lg.toFixed(1), homeEdge: +R.hfa.toFixed(1),
-    asOf, season, games: finals.length, teams, coaches: coachesOut, players: playersOut, upcoming: R.upcoming };
+    asOf, season, games: finals.length, teams, coaches: coachesOut, players: playersOut, upcoming: R.upcoming, history: historyOut(HS, shiftP, playersOut) };
   const same = prev && JSON.stringify({ ...prev, generated: undefined }) === JSON.stringify({ ...out, generated: undefined });
   out.generated = same ? prev.generated : new Date().toISOString().slice(0, 16) + 'Z';
-  const body = JSON.stringify(out, null, 1) + '\n';
+  /* the history one series a line, so a run's change to it is the lines of those who played */
+  const H = out.history, block = (k, v) => ['players', 'coaches', 'teams'].includes(k) && v && typeof v === 'object'
+    ? '{' + Object.entries(v).map(([id, ser]) => `\n   ${JSON.stringify(id)}: ${JSON.stringify(ser)}`).join(',') + '\n  }' : JSON.stringify(v);
+  const histText = H ? '{' + Object.entries(H).map(([k, v]) => `\n  ${JSON.stringify(k)}: ${block(k, v)}`).join(',') + '\n }' : 'null';
+  const body = JSON.stringify({ ...out, history: '\u0000HISTORY\u0000' }, null, 1).replace('"\\u0000HISTORY\\u0000"', () => histText) + '\n';
   if (!prev || body !== fs.readFileSync(OUT, 'utf8')) fs.writeFileSync(OUT, body);
   logPredictions(games, R.upcoming, ctx);
   const f = m => `${m.logloss} / ${(m.acc * 100).toFixed(1)}% / ${m.mae}`;

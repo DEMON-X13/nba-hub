@@ -18,6 +18,10 @@
  *   props, boxes, corr  the props model's block, the recent box lines a player's leg is graded from and the
  *             same-game table (README "Player props" and "Same-game parlays")
  * Nothing a visitor does reaches this file; only the job writes it.
+ *
+ * And history.json, which the page reads only when a rating-over-time window opens: every listed player's, coach's
+ * and club's rating game by game since the season before the one in play (THE HISTORY below), with the change over
+ * 7 and 30 days and this season, the 7 days of which state.json carries too, for the tables.
  */
 'use strict';
 const fs = require('fs');
@@ -26,6 +30,7 @@ const L = require('./lib');
 
 const DATA = path.join(L.ROOT, 'data');
 const OUT = path.join(L.ROOT, 'state.json');
+const HIST_OUT = path.join(L.ROOT, 'history.json');
 const read = f => JSON.parse(fs.readFileSync(path.join(L.ROOT, f), 'utf8'));
 const csv = f => { const p = path.join(DATA, f); if (!fs.existsSync(p)) return []; const lines = fs.readFileSync(p, 'utf8').trim().split('\n'); const h = lines.shift().split(','); return lines.filter(Boolean).map(l => { const v = l.split(','); const o = {}; h.forEach((k, i) => { o[k] = v[i] === undefined ? '' : v[i]; }); return o; }); };
 const num = v => v === '' || v === undefined ? null : +v;
@@ -109,6 +114,7 @@ function main() {
   const inPool = new Set(pool.map(p => p.id));
   for (const p of plist) { p.rating = pc.show(p.elo); if (inPool.has(p.id)) p.ranked = true; }
   for (const c of coaches) { c.rating = cc.show(c.elo); if (c.games >= 10) c.ranked = true; }
+  const hist = historyState(players.history, { pc, cc, today, plist, coaches, teams });
   for (const p of plist) { delete p.elo; delete p.last; }    // the page shows the rating and offence and defence; the raw sum and the last game date are the model's
 
   /* opening night: the first regular-season game on or after today, once the schedule shows it */
@@ -141,7 +147,59 @@ function main() {
      "generated" in the text, which is vsMarket's) */
   const strip = s => { try { const o = JSON.parse(s); delete o.generated; return JSON.stringify(o); } catch (e) { return s; } };
   if (strip(body) !== strip(before)) fs.writeFileSync(OUT, body);
+  if (hist) { const hb = JSON.stringify(hist), hbefore = fs.existsSync(HIST_OUT) ? fs.readFileSync(HIST_OUT, 'utf8') : '';
+    if (hb !== hbefore) fs.writeFileSync(HIST_OUT, hb);
+    L.log(`history.json: ${Object.keys(hist.players).length} players, ${Object.keys(hist.coaches).length} coaches, ${Object.keys(hist.teams).length} clubs, ${(hb.length / 1024).toFixed(0)} KB, ${hb !== hbefore ? 'written' : 'unchanged'}`); }
   L.log(`state.json: ${slate.length} games on the slate ${from}..${to}, ${record.length} graded this season, ${plist.length} players, ${coaches.length} coaches, ${(body.length / 1024).toFixed(0)} KB, ${strip(body) !== strip(before) ? 'written' : 'unchanged'}`);
+}
+/* THE HISTORY, for the page's rating-over-time windows (players.js records it, players.json's history). Every rating is
+   shown the way its table shows today's: a player's and a coach's on the ladder, a club's strength as it is. A season
+   gone is drawn on its own ladder as that season ended (players.js's curves: twenty games or more at ten minutes or
+   more, as today's pool, and every coach with ten games), the season in play on today's (pc and cc above), so a
+   rating's last point is the table's number and the 30% the new season takes off a player's rating moves him little on
+   his ladder (a coach's carry, half, and the club's line stepping toward 1500, the window says in words). Each
+   series: its value as the season in play began (a player's carried rating or his prior, a club's strength as it took
+   the floor in its first game, or its last rotation carried before then), then after each final, then today's (the
+   table's; a club's is its recent rotation's, players.js says how). players.json's points come centred on their own
+   days, so they are drawn as they are. The changes are today's value less the value as of 7 and 30 days ago and
+   as the season began, a date before the season counting as its start, so last season never leaks into this one's
+   change. Days are counted from the history's first day; a point's game is its place in the games list, twice
+   over, plus one when the side was at home. A series is { s: its start, n: today's, p, d7, d30, dS }, p its games as
+   [day, rating, game] each written as the difference from the one before (the first from zeros), which keeps the
+   file about half the size; the page adds them back up */
+function historyState(H, { pc, cc, today, plist, coaches, teams }) {   // players.json's points are [day, centred rating, game]
+  if (!H || !H.games || !H.games.length) return null;
+  const season = H.season;
+  const first = H.games.find(id => +id.split('_')[0] === season);
+  const start = first ? `${first.slice(5, 9)}-${first.slice(9, 11)}-${first.slice(11, 13)}` : today;   // the first final of the season in play
+  const day = d => Math.round((Date.parse(d + 'T12:00:00Z') - Date.parse(H.from + 'T12:00:00Z')) / 86400000);
+  const seasonOfRef = ref => +H.games[ref >> 1].split('_')[0];
+  const onCurve = (c, v) => c && c.sd > 0 ? Math.round(1500 + 100 * (v - c.mean) / c.sd) : 1500;
+  const build = (list, startVal, now, show) => {
+    const pts = [];
+    for (const [d, v, ref] of list || []) { const s0 = seasonOfRef(ref); if (s0 < season) pts.push([d, show(s0, v), ref]); }
+    if (startVal !== undefined) pts.push([day(start), show(season, startVal), -1]);   // the start and today's go out as s and n
+    for (const [d, v, ref] of list || []) if (seasonOfRef(ref) === season) pts.push([d, show(season, v), ref]);
+    if (now !== undefined && now !== null) pts.push([day(today), now, -2]);
+    if (!pts.length) return null;
+    const s = startVal === undefined ? null : show(season, startVal);
+    const then = t => { if (s === null) return null; if (t < start) return s;
+      let v = s; for (const [d, r, ref] of pts) if (ref >= 0 && seasonOfRef(ref) === season && d <= day(t)) v = r; return v; };
+    const nowV = now === undefined || now === null ? null : now;
+    const ch = t => nowV === null || then(t) === null ? null : nowV - then(t);
+    const games = pts.filter(x => x[2] >= 0), p = [];
+    games.forEach((x, i) => { const b = i ? games[i - 1] : [0, 0, 0]; p.push(x[0] - b[0], x[1] - b[1], x[2] - b[2]); });
+    return { s, n: nowV, p, d7: ch(L.addDays(today, -7)), d30: ch(L.addDays(today, -30)), dS: s === null || nowV === null ? null : nowV - s };
+  };
+  const pShow = (s0, v) => s0 < season ? onCurve(H.curves[s0] && H.curves[s0].p, v) : pc.show(v);
+  const cShow = (s0, v) => s0 < season ? onCurve(H.curves[s0] && H.curves[s0].c, v) : cc.show(v);
+  const out = { v: 1, asOf: today, from: H.from, season, start, startDay: day(start), today: day(today), games: H.games, players: {}, coaches: {}, teams: {} };
+  for (const p of plist) { const s = build(H.players[p.id], H.start.players[p.id], p.rating, pShow); if (s) { out.players[p.id] = s; p.d7 = s.d7; } }
+  for (const c of coaches) { const s = build(H.coaches[c.name], H.start.coaches[c.name], c.rating, cShow); if (s) { out.coaches[c.name] = s; c.d7 = s.d7; } }
+  /* a club's series is its recent rotation's strength (players.js), today's point included: the Teams tab's strength
+     takes today's injuries off it, which is a night's availability and not a change of rating */
+  for (const [t, x] of Object.entries(teams)) { const nowR = H.now && H.now.teams && H.now.teams[t]; const s = build(H.teams[t], H.start.teams[t], nowR === undefined ? null : Math.round(nowR), (s0, v) => Math.round(v)); if (s) { out.teams[t] = s; x.d7 = s.d7; } }
+  return out;
 }
 /* The props model's numbers for the page (tools/props.js writes props.json; README "Player props"): the projections for
    the slate's games not yet started, the distribution's constants so the page can price any line DraftKings posts, the

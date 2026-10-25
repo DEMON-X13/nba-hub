@@ -211,7 +211,8 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
   check(dkA.title === `Opens 3 of the 4 legs on DraftKings’ betslip, in a new tab, as DraftKings’ lines were read ${readOwn(oldest)}: a line moved or pulled since will not be on it, so check each leg is there` && !promises(dkA.title),
     `its title dates the read by the oldest of the legs it opens, ${readOwn(oldest)}, and promises nothing ("${dkA.title}")`);
   const ps = [...note.querySelectorAll('p')].map(txt), legLinks = [...note.querySelectorAll('a[data-pc-dkleg]')];
-  check(ps[0] === `DraftKings’ lines as read ${readOwn(oldest)}: Open in DraftKings opens 3 of the 4 legs as DraftKings had them then; a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet. One leg at a time: ${[iML, iSP, iTO].sort().join(' · ')}. Add by hand:` && !promises(txt(note)),
+  check(ps[0] === `DraftKings’ lines as read ${readOwn(oldest)}: Open in DraftKings opens 3 of the 4 legs as DraftKings had them then; a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet.`
+    && ps[1] === `One leg at a time: ${[iML, iSP, iTO].sort().map(x => 'Leg ' + x).join('')}` && ps[2] === 'Add by hand:' && !promises(txt(note)),
     `the note says what it opens, as DraftKings had them at the oldest read, never that every leg lands ("${ps[0]}")`);
   check(legLinks.length === 3 && legLinks.map(a => a.getAttribute('href')).join(' ') === wantIds.map(x => DKU([x])).join(' ') && legLinks.every(a => a.getAttribute('target') === '_blank' && /noopener/.test(a.getAttribute('rel')) && /^Open leg \d, .+, in DraftKings$/.test(a.getAttribute('aria-label'))),
     'each leg it opens has its own link too, named for its leg');
@@ -384,7 +385,7 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
       "a typed book price: the card pays $120 on $20 at +500, called your book's price, with no same-game note, both legs on the slip");
     sh = null; q3.d.getElementById('pcLink').click(); await sleep(20);
     const n3 = txt(q3.d.querySelector('#pcDkNote p')), rd3 = [RD2, RD3].sort()[0];
-    check(n3 === `DraftKings’ lines as read ${readOwn(rd3)}: Open in DraftKings opens the 2 legs as DraftKings had them then; a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet. One leg at a time: 1 · 2.`
+    check(n3 === `DraftKings’ lines as read ${readOwn(rd3)}: Open in DraftKings opens the 2 legs as DraftKings had them then; a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet.`
       && sh && sh.text.split('\n').includes('DraftKings betslip (opens the 2 legs as DraftKings had them):') && !promises(n3 + ' ' + sh.text + ' ' + q3.d.getElementById('pcDk').title) && !q3.d.querySelector('#pcDkNote li[data-pc-dkmiss]'),
       `with every leg on the slip, the note and Share link open "the 2 legs" as DraftKings had them, never all of them for sure ("${n3}")`);
     q3.d.getElementById('pcClose').click();
@@ -424,6 +425,19 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
         `a level card's Finish (pb|${t.id}) opens the card on that level at its own price`);
       W4.PARLAY_CARD.close(); }
     else check(false, 'the made-up games make a level to finish');
+    /* with no resolver registered, the NFL hub's names: Suggested Parlays' window.spTier and the Elo picks' window.eloPicks */
+    W4.eval(`window.spTier = id => id === 'g1:safe' ? { label: 'Safe', game: 'BOS at DET', legs: [${JSON.stringify(L_ML)}, ${JSON.stringify(L_PL)}] } : null;
+      window.eloPicks = () => ({ tiers: [{ id: 'elo-med', label: 'Medium', p: 0.3125, legs: [${JSON.stringify(L_SP)}, ${JSON.stringify(L_TO)}] }] });`);
+    const h3 = D4.createElement('div'); h3.innerHTML = '<button type="button" id="spT" data-pc-finish="sp|g1:safe">Finish</button><button type="button" id="eloT" data-pc-finish="elo|elo-med">Finish</button>'; D4.getElementById('pbPanel').appendChild(h3);
+    D4.getElementById('spT').click(); await sleep(20);
+    check(!D4.getElementById('pcBack').hidden && txt(D4.querySelector('#pcView .pc-kick')) === 'Safe parlay · BOS at DET' && txt(D4.querySelector('#pcView .pc-price')) === mlOwn(amOf(O4.dec)),
+      "with no resolver registered, a Suggested Parlays level's Finish (sp|<game>:<level>) is read through window.spTier, as on the NFL hub");
+    W4.PARLAY_CARD.close();
+    D4.getElementById('eloT').click(); await sleep(20);
+    const e4 = [...D4.querySelectorAll('#pcView .pc-chance > div')].map(txt);
+    check(!D4.getElementById('pcBack').hidden && txt(D4.querySelector('#pcView .pc-kick')) === 'Medium Elo pick' && e4.some(t => t.startsWith('Elo says 31.3%')),
+      `and an Elo pick's (elo|<level>) through window.eloPicks, its chance the Elo's (${e4.join(' / ')})`);
+    W4.PARLAY_CARD.close();
     /* a page drawn before a game tipped off is redrawn, not finished */
     W4.eval('window.__stale = window.pbStale; window.pbStale = () => true;'); b4.click(); await sleep(20);
     check(D4.getElementById('pcBack').hidden, 'on a page drawn before a tip-off, a Finish redraws rather than opening a parlay nobody saw');

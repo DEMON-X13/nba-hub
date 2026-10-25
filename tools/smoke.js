@@ -31,6 +31,10 @@
  * recorded scoreboard and its variants, and the page's parse keeping each game's national networks as tools/fetch.js
  * does. Section pb is the Parlay Builder (README "Parlay Builder", tools/smoke_parlay.js): the choices, the Top 50 lines
  * and the builder on made-up games a day and more ahead, every number worked out there on its own, then the real files.
+ * Section card is the parlay card (README "The parlay card", tools/smoke_card.js): the window, its image, Open in
+ * DraftKings with its conversions and Share link, on made-up games and ids, every word and figure worked out there; and
+ * section glance the matchup bubble (README "The matchup bubble", tools/smoke_glance.js): every name its leg's button and
+ * every number in each bubble on that file's own reading, its keys, placing and redraws.
  */
 'use strict';
 const fs = require('fs');
@@ -1064,7 +1068,7 @@ async function builder() {
   check(dk.getAttribute('href') === 'https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1' && dk.getAttribute('target') === '_blank' && /noopener/.test(dk.getAttribute('rel')) && dk.textContent === 'Open 1 of 4 legs in DraftKings',
     `the betslip link opens the leg that has an id, the total, and the button says how many of the legs it opens (${dk.getAttribute('href')}, "${dk.textContent}")`);
   const note9 = tx9(d.querySelector('#pcDkNote p'));
-  check(note9 === `DraftKings’ lines as read ${etT(gl1.at)}: Open in DraftKings opens 1 of the 4 legs as DraftKings had it then; a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet. Add by hand:`,
+  check(note9 === `DraftKings’ lines as read ${etT(gl1.at)}: Open in DraftKings opens 1 of the 4 legs as DraftKings had it then; a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet.` && tx9(d.querySelectorAll('#pcDkNote p')[1]) === 'Add by hand:',
     `and says what it opens, dated by the read, and what to add by hand, never every leg ("${note9}")`);
   const ch9 = [...pc.querySelectorAll('#pcView .pc-chance > div')].map(tx9), sm9 = [...pc.querySelectorAll('#pcView .pc-chance small')].map(tx9);
   check(ch9[0] === `Fair chance all 4 land ${pct1(pb.fair)} (est.)` && ch9[1] === `model (on trial) says ${pct1(pb.model)} · the price says ${(100 / pb.dec).toFixed(1)}%`,

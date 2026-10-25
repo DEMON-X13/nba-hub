@@ -220,7 +220,7 @@ function playerHtml() {
     const val = k => { if (k === 'min') return isFinite(row[3]) ? (+row[3]).toFixed(0) : '–';
       if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pc0(v) : '–'; }
       const v = typeof ppMean === 'function' ? ppMean(row, k) : null; return v == null || !isFinite(v) ? '–' : (+v).toFixed(1); };
-    table = `<table class="glance-t" aria-label="The props model's projection for him in this game, on trial"><thead><tr><th scope="col">Projected${trialMark()}</th><th scope="col" class="glance-n">${H(team)}</th></tr></thead><tbody>${want.map(([k, lab]) =>
+    table = `<table class="glance-t" aria-label="The props model's projection for him in this game, on trial"><thead><tr><th scope="col">Projected${trialMark()}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
       `<tr data-glance-stat="${H(k)}"${st === k ? ' class="glance-on"' : ''}><th scope="row">${H(lab)}</th><td class="glance-n" data-glance-n="proj:${H(k)}">${H(val(k))}</td></tr>`).join('')}</tbody></table>`;
   } else table = `<p class="glance-q glance-none" data-glance-n="noproj">No projection: ${out ? 'he is on the injury report' : gameProj ? 'the props model does not project him for this game' : 'the props model has no projections for this game yet'}.</p>`;
   return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${tonightBtn(gid)}` };

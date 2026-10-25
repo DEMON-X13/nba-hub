@@ -60,7 +60,9 @@
 .pc-dk p{margin:0 0 4px}
 .pc-dk ul{margin:2px 0 4px;padding-left:18px}
 .pc-dk a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px}
-.pc-dk a[data-pc-dkleg]{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;vertical-align:middle}
+.pc-dkone{display:flex;align-items:center;gap:6px 8px;flex-wrap:wrap}
+.pc-dk a[data-pc-dkleg]{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:0 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel);text-decoration:none;font-size:12.5px}
+.pc-dk a[data-pc-dkleg]:hover{border-color:var(--ink-2)}
 .pc-msg{min-height:1.4em;font-size:12.5px;color:var(--ink-2);margin:8px 0 0}
 .pc-note{font-size:12px;color:var(--ink-2);margin:2px 0 0;line-height:1.5}
 @media(max-width:620px){.pc-sheet{padding:12px 12px 22px}}
@@ -226,6 +228,13 @@ window.PARLAY_CARD = (function () {
   /* the Parlay Builder's own four levels over the games ticked (getPbTiers), which a level's card drawn with no prefix
      of its own finishes (pbTierCard's default "pb|<level>") */
   from('pb', id => { const t = typeof getPbTiers === 'function' ? getPbTiers().tiers.find(x => x.id === id && x.legs) : null; return t ? { legs: t.legs, kicker: t.label + ' parlay' } : null; });
+  /* and, until a tab registers its own, the NFL hub's names for the two that draw levels: Suggested Parlays' window.spTier
+     ("<game id>:<level>", the level as the tab shows it, live or locked) and the Elo picks' window.eloPicks() (its levels,
+     their chance the Elo's) */
+  from('sp', id => { const t = typeof window.spTier === 'function' ? window.spTier(id) : null;
+    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}`, chance: t.corr } : null; });
+  from('elo', id => { const E = typeof window.eloPicks === 'function' ? window.eloPicks() : null, t = E && Array.isArray(E.tiers) ? E.tiers.find(x => x.id === id) : null;
+    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: `${t.label} Elo pick`, chance: t.p, chanceBy: 'Elo' } : null; });
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
      then whose chance the parlay is on (the model's, on trial with a player leg in it; an Elo pick's the Elo's) and the
@@ -271,11 +280,11 @@ window.PARLAY_CARD = (function () {
   /* the legs to add by hand, by number: "leg 2", "legs 3 and 4", "legs 2, 3 and 5" */
   const legNums = xs => { const n = xs.map(x => x.n); return (n.length === 1 ? 'leg ' : 'legs ') + (n.length > 1 ? n.slice(0, -1).join(', ') + ' and ' + n[n.length - 1] : n[0]); };
   /* under the buttons: what Open in DraftKings opens, each leg on its own (DraftKings documents no link for several
-     outcomes, so one at a time is there too), and the legs to add by hand, why */
+     outcomes, so one at a time is there too, each a 44px button of its own line), and the legs to add by hand, why */
   function dkHtml(dk) {
     if (!dk || !dk.n) return '';
     const name = x => `${x.n}. ${h(x.who)}${x.what ? ', ' + h(x.what) : ''}`;
-    const one = dk.ok.length > 1 ? ` One leg at a time: ${dk.ok.map(x => `<a href="${h(dkUrl([x.id]))}" target="_blank" rel="noopener" data-pc-dkleg="${x.n}" aria-label="Open leg ${x.n}, ${h(x.who)} ${h(x.what)}, in DraftKings">${x.n}</a>`).join(' · ')}.` : '';
+    const one = dk.ok.length > 1 ? `<p class="pc-dkone">One leg at a time: ${dk.ok.map(x => `<a href="${h(dkUrl([x.id]))}" target="_blank" rel="noopener" data-pc-dkleg="${x.n}" aria-label="Open leg ${x.n}, ${h(x.who)} ${h(x.what)}, in DraftKings">Leg ${x.n}</a>`).join('')}</p>` : '';
     const hand = dk.miss.length ? `<ul>${dk.miss.map(x => `<li data-pc-dkmiss="${x.n}">${name(x)}: ${h(x.why)}</li>`).join('')}</ul>` : '';
     /* none on the slip: the button opens the game's page (or DraftKings' NBA page) to add them there */
     if (!dk.ok.length) return `<p>${dk.n === 1 ? 'This leg cannot' : 'None of these legs can'} go on DraftKings’ betslip from here, so ${dk.event ? 'Open game in DraftKings opens the game’s page' : 'Open DraftKings opens its NBA page'}: add ${dk.n === 1 ? 'it' : 'them'} there by hand.</p>${hand}`;
@@ -283,7 +292,7 @@ window.PARLAY_CARD = (function () {
        moved or pulled since is not on the slip */
     const when = `<span data-pc-dkread="${dk.read ? h(dk.read.toISOString()) : ''}">${dk.read ? 'DraftKings’ lines as read ' + h(readOf(dk.read)) : 'When DraftKings’ lines were read is not recorded'}</span>: `;
     const opens = `Open in DraftKings opens ${dkWhich(dk)} as DraftKings had ${dk.ok.length === 1 ? 'it' : 'them'} ${dk.read ? 'then' : 'when last read'}; a leg whose line DraftKings has moved or pulled since will not be on the slip, so check it before you bet.`;
-    return `<p>${when}${opens}${one}${dk.miss.length ? ' Add by hand:' : ''}</p>${hand}${dkSwapHtml(dk)}`;
+    return `<p>${when}${opens}</p>${one}${dk.miss.length ? '<p>Add by hand:</p>' : ''}${hand}${dkSwapHtml(dk)}`;
   }
   /* the legs that go on the slip at DraftKings' own line, and that DraftKings prices them there */
   function dkSwapHtml(dk) {

@@ -41,10 +41,12 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/props_feed.js` | DraftKings' player props as ESPN's feed carries them: the parse the job and the page share, the fair-chance rules |
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
 | `tools/props_ledger.js`, `tools/props_check.js`, `data/props_shadow.json`, `data/props_shadow_lines.csv` | The props shadow ledger: the model's call frozen at tip-off, graded against the closing lines, its pre-registered bar, and the check that holds it to the last commit |
-| `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
+| `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore), setting each `app/parts/<name>.html` in at its marker, and stops if the card or the bubble fetches or stores |
 | `app/parts/parlay.html` | The Parlay Builder tab (README "Parlay Builder"): the NFL hub's choices, Top 50 lines, builder and level engine on this page's tokens, set into the page by `build.js` at its `<!--part:parlay-->` marker |
+| `app/parts/card.html` | The parlay card (README "The parlay card"): the NFL hub's Finish card, its window, image, Share link and Open in DraftKings, `window.PARLAY_CARD`, set in at its `<!--part:card-->` marker |
+| `app/parts/glance.html` | The matchup bubble (README "The matchup bubble"): the NFL hub's bubble on every leg's name, with the NBA's numbers, set in at its `<!--part:glance-->` marker |
 | `tools/sigma.js`, `research/sigma.json` | The spread of the real margin about the player model's own number, which the Parlay Builder prices a cover from (14.5 points, the 2026 walk-forward fold), and what the Value rule's team picks were worth on each fold; run by hand |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays") and the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder") |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays") the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder"), the parlay card (`tools/smoke_card.js`, `SMOKE_ONLY=card`, README "The parlay card") and the matchup bubble (`tools/smoke_glance.js`, `SMOKE_ONLY=glance`, README "The matchup bubble") |
 | `liveparlays/parlays.json` | X's placed parlays, kept by hand from the slips the owner sends (README "X Parlays"); the page reads it when its X Parlays tab opens, and the job's `tools/autoclear.js` marks a finished one cleared two Eastern days after its last game |
 | `app/parts/xparlays.html` | The X Parlays tab: its markup, its styles (all under `#lpCard`) and its script in a closure of its own, set into the page by `build.js` at its `<!--part:xparlays-->` marker |
 | `tools/autoclear.js`, `tools/test_autoclear.js` | X's finished parlays clear themselves (README "X Parlays"); the test runs first in the job's step |
@@ -1183,15 +1185,10 @@ spread's from the game model's margin and a total's the market's own, README "Pa
 the stake pays.
 
 Until 25 October 2026 **Lock in** put the parlay in the Bet Build; the Bet Build is gone (README "Parlay Builder", "What
-went"). **Finish parlay** shows it as a card (Eastern time, since it goes to other people): each leg with its price and read
-time, the price est. with the legs multiplied, the fair chance first, what the stake pays, the model's chance where
-every leg has one (on trial with a player leg) or the line saying why there is none, Open in DraftKings and Share link.
-ESPN's feed carries no DraftKings betslip id for a player's line, so each player leg says "DraftKings' player lines
-carry no betslip id in ESPN's feed: add this leg by hand"; the betslip link (`sportsbook.draftkings.com/?outcomes=`)
-opens the game lines that carry an id, the note under it says which legs it opens, as DraftKings had them at the oldest
-read, and which to add by hand, never that every leg lands; with no id it opens the game's page or DraftKings' NBA page.
-Share link sends one text (a title and the text, never a url field, as on the NFL and NHL hubs) with each leg, the
-betslip link alone on its line and the legs to add by hand with why; with no share sheet the same text is copied.
+went"). **Finish parlay** shows it as the NFL hub's parlay card (README "The parlay card"): each leg with its price, the
+parlay's price (est. where legs share a game), the stake and what it pays, DraftKings' fair chance first and the model's
+beside it (on trial with a player leg), Download image, Open in DraftKings (the game lines' betslip ids, each player leg to
+add by hand: ESPN's feed carries no id for a player's line) and Share link.
 
 ### Grading a player's leg
 
@@ -1640,7 +1637,7 @@ read time, a line where it will not go on DraftKings' slip as built, and Remove;
 one-tap amounts, a parlay price of the visitor's own book to type over the estimate, and four figures, DraftKings' fair
 chance that every leg lands first (est. where a leg is priced on one side or the legs share a game), the model's beside it,
 the fair price for the model's chance, what the stake returns and the confidence band of the whole; the same-game note
-where legs share a game; **Finish parlay** (the card, README "Same-game parlays") and **Clear ALL** (asked first); and the
+where legs share a game; **Finish parlay** (the card, README "The parlay card") and **Clear ALL** (asked first); and the
 legs that move together. Both Refresh odds there and in the controls keep the focus on the button pressed.
 
 **The engine** the NFL's levels are built by is carried whole for Suggested Parlays to draw on: `pbLegs`, `pbPool`,
@@ -1665,7 +1662,9 @@ level's **Add to builder**, and `parlayProb`, `parlayDec`, `parlayFair`, `legFai
 | `parlayProb` and `parlayDec` by the NFL's copula draws and its hold | The NBA's same-game engine behind the NFL's names: legs of different games multiplied, one game's joined by the gaussian copula at `data/corr.json`'s rho (two legs exactly, more by the GHK sum), worked in one order a game (`sgOrder`), so the same legs price the same in the list, the builder, a card and the sheet; the price min(the prices multiplied, 0.896 / J) | The NBA's table and engine (README "Same-game parlays"), with the NFL's hold, untested here |
 | A second leg on one bet's key replaces the first | Refused, the reason said at its row and in the builder's status line, by the NBA's same-game rules (`slipWhy`: one side bet a game, one total, one leg a player a stat, no stat beside a sum holding it, no double- beside a triple-double) | The NBA's rules, as the sheet applies them |
 | The builder's confidence band | The NBA's band (HIGH from 75%, MED 60%, LOW 55%), under 55% "UNDER 55%" | The page's own band |
-| Market + form and the Elo matchup on each builder row; the matchup bubble on each name | Neither; names are plain | Neither exists for NBA props yet |
+| Market + form and the Elo matchup on each builder row | Neither | Neither exists for NBA props yet |
+| The matchup bubble on each name, with a player's season Elo, the ELO Ratings tab's units and the Mismatches | The bubble on each name, with the ladder's rating and rank, the Teams tab's columns and the props model's projection (README "The matchup bubble") | The NBA's own numbers |
+| DraftKings' ids for every leg the paid pull priced | The game lines' ids only, each player leg to add by hand (README "The parlay card") | ESPN's feed carries no id for a player's line |
 
 ### The spread's sigma (`tools/sigma.js`, `research/sigma.json`)
 
@@ -1746,6 +1745,162 @@ play-in and playoffs its chance of a side beat the price's by 3 points on 4,271 
 the 3-point edge most often, and 232 lines were left out as far off the market. The levels over every game ticked, which no
 tab draws yet, made a Safe pair at 92.7% by the model (-484) and a Medium at 86.6%. These are the on-trial model's
 chances, marked so wherever they show.
+
+## The parlay card
+
+The NFL hub's parlay card (its `nflbets/build/card.html` at app v114, and its `smoke_live.js` section J), carried to the
+NBA on 25 October 2026: `app/parts/card.html`, set in at its `<!--part:card-->` marker, its styles, its window and its
+script in a closure of its own, `window.PARLAY_CARD`. It replaced the page's own Finish card (a sheet with the legs, the
+fair chance, Open in DraftKings and Share link, no image, no Start over).
+
+**The window.** Finish parlay in the builder opens it over the page (a modal dialog, "Your parlay card", the focus on
+Download image, or on the share sheet's button where a phone can share a file). The card: the site's mark ("NBA Hub", the
+page's orange accent where the NFL hub has gold, its lighter steps #FF8C4A and #FFB27A for text, so the price and the
+kicker hold their contrast) and the kicker ("Your parlay"); "4-leg parlay" and its price; the legs' days ("Mon Oct 26",
+or "Mon Oct 26 – Tue Oct 27"; the NBA has no weeks), the decimal price, its implied chance and what the price is (book
+price, estimated same-game price, or your book's price where one is typed in the builder); each leg with who and what
+(as the builder words them), its position, clubs and tip-off in Eastern time, and DraftKings' price, tagged book; the
+stake (the one Bet amount), what it pays and the profit, every figure whole with its thousands marked, the tiles sharing
+the row and wrapping rather than cutting a figure; then the chances in two lines, DraftKings' fair chance first ("Fair
+chance all 4 land 4.7% (est.)") and the model's beside the price's ("model (on trial) says 6.4% · the price says 5.7%",
+on trial wherever a player's leg is in it), or with no fair chance the model's and why; under them, in the window only,
+why an estimate is one (a one-sided leg's margin, legs of one game joined by the copula, DraftKings' own same-game
+pricing) and a parlay with no model chance; the site's address, `demon-x13.github.io/nba-hub`, and the day it was made.
+Its price is the builder's own: the builder's sums are `pbQuote` (app/parts/parlay.html), which the builder draws and the
+card reads, so the two cannot drift. Finishing saves nothing anywhere.
+
+**Download image** draws the same card on a canvas at twice its size, in the card's own colours written out (so the image
+never depends on the page), and saves it as `parlay-2026-10-26-4legs.png` (the first leg's day; `1leg` for one). The
+money tiles step their type down from 19px to 14px to stay three across, then take a second row, then one a row; a dollar
+figure is never cut. Where the browser can share a file (a phone), **Share or save to Photos** shows and leads: the share
+sheet with the image, which is how it reaches Photos.
+
+**Open in DraftKings** is a link to DraftKings' betslip, `https://sportsbook.draftkings.com/?outcomes=<id>+<id>`, each id
+encoded (a `#` written `%23`), in a new tab, the legs in the card's order. Only game lines carry an id on ESPN's feed:
+each game leg keeps the one it was added with, dated by its read, and the game's current lines carry theirs (lines.json's,
+or a Refresh odds press's, the newer of the two, as the Parlay Builder prices from). The newer of the leg's own id and the
+game's is taken: at the leg's own number it is the same bet; at another number DraftKings has moved the line since, and the
+leg goes on at DraftKings' number for the same team (a spread) or the same side (a total), which the note and Share link
+name ("goes on as Warriors -4.5", "Over 221.5 points") with that DraftKings prices it at its own line, so the slip's payout
+can differ. A moneyline has no number: the newer id for that team, or nothing. A player's leg has no id ("DraftKings'
+player lines carry no betslip id in ESPN's feed") and is one to add by hand, as is a game leg whose game has tipped off,
+whose lines have not been read, whose lines carry no ids, or whose market carried none, each with why. The button reads
+**Open in DraftKings** where every leg goes on, **Open 2 of 3 legs in DraftKings** where some cannot, and with none on the
+slip **Open game in DraftKings** (the game's page, where every leg is in one game with its event id) or **Open DraftKings**
+(`https://sportsbook.draftkings.com/leagues/basketball/nba`). The note under the buttons is dated by the oldest read of the
+legs it opens and never promises that every leg lands ("opens 2 of the 3 legs as DraftKings had them then; a leg whose
+line DraftKings has moved or pulled since will not be on the slip, so check it before you bet"), with each leg's own link
+(a 44px button a leg) and the legs to add by hand. The builder says it first: under each of its legs that will not go on
+as built, a quiet line read from the card's own plan (`dkSlipRows`, `dkSlipLine`): "On DraftKings as Warriors -4.5", or
+"Not on DraftKings' slip yet: no betslip id in ESPN's feed".
+
+**Share link** sends one plain text, a title ("4-leg parlay +1646 (estimated same-game price)") and the text, never a
+`url` field (on an iPhone the share sheet hands a text and a url as two items, Messages shows the url as a card with only
+the domain and the sheet's Copy drops it, WebKit bug 203221): a line a leg, the stake and what it pays, the chances, what
+the link opens ("DraftKings betslip (opens 2 of the 3 legs as DraftKings had them; add leg 2 by hand):"), the link alone on
+its line, the read and its caution, the legs going on at DraftKings' number, the legs to add by hand with why in a few
+words, and the site's address last; with no leg on the slip, the game's page or DraftKings' NBA page instead. By the
+share sheet where the browser has one and can share it; a cancel does nothing; otherwise, or where it fails, the same text
+is copied (the clipboard, else a hidden read-only box), "Link copied", or "The link could not be copied." Neither button
+draws or downloads the image.
+
+**Keys.** Escape closes it (ahead of anything under it), as do Close and a click on the backdrop, the focus back on the
+button that opened it (Finish parlay where a redraw replaced it); Tab stays inside, in the order Close, Open in DraftKings,
+Share link, Download, Start over, each leg's link. **Start over** (a card from the builder only) empties the builder in
+this browser, as Clear ALL does, and puts the focus on the tab's first control.
+
+**A suggested level's Finish.** A tab that draws a level's card with `pbTierCard` draws its Finish as
+`data-pc-finish="<prefix>|<id>"`, and one listener in the card opens it; the tab registers what its levels are with
+`PARLAY_CARD.from(prefix, id => ({ legs, kicker, chance, chanceBy }))` (Suggested Parlays' `sp|<game id>:<level>`, the Elo
+picks' `elo|<level>`; the Parlay Builder's own all-games levels are `pb|<level>`). Until a tab registers its own, the card
+reads those two by the NFL hub's names: `sp` through `window.spTier(id)`, the level as the tab shows it, live or locked,
+and `elo` through `window.eloPicks()`'s levels, their chance the Elo's. The card lays the legs out in the
+builder's order and prices them by the builder's own sums (`parlayDec`, `parlayProb`, `parlayFair`), on the Bet amount; the
+chance is the level's own where it says so (an Elo pick's is the Elo's). A page drawn before a game tipped off is drawn
+again rather than finishing a parlay nobody saw. `pcOpen` and `pcClose` are kept as names for the builder's card.
+
+### The checks
+
+`SMOKE_ONLY=card node tools/smoke.js` (`tools/smoke_card.js`), blocking, boots the page on made-up games tomorrow and the
+day after (any hour, the off-season included), a made-up `lines.json` with made-up betslip ids and a builder of four legs of
+three games (a player's points, a moneyline whose own id is newer than its game's lines, a spread DraftKings has moved since
+its read, a total DraftKings has at another number), and holds every number and word to this file's own reading: the
+builder's order and price against `tools/corr.js`'s bivariate normal and `data/corr.json`, the card's head, legs, money
+($1,250 paying $14,735.18), chances and small print, the betslip link with `%23`, its title and note dated by the oldest
+read, each leg's link, the converted legs and the leg by hand, the builder's slip lines, Share link's title and text word
+for word with no url field and every fallback, the image through a recorder canvas (every figure whole; the type stepping
+down at $412,500, the tiles a second row at $41,250,000), the Tab order, Escape, the backdrop, Close, Start over, fourteen
+DraftKings cases one at a time, a press newer and older than `lines.json`, no leg on the slip (the game's page, the NBA
+page), a typed book price, a one-sided leg with no fair chance, a level's Finish through `PARLAY_CARD.from` and through `window.spTier` and `window.eloPicks` with none registered, the share
+sheet for the image, every control 44px, and nothing written or fetched by any of it. Section 9 and the Parlay Builder's
+section hold the card on their own parlays too. Twelve breaks planted in a copy of the built page each turn it red.
+
+In Chromium at 1280 and 390 wide, on the published `state.json` and that afternoon's `lines.json`, with four legs in the
+builder: every control in the window 44px or more (7), no sideways scroll, every text at 4.5:1 or better on what is under it
+(3:1 for the price, which is large: 4.3:1), the lowest small text 4.8:1 (the kicker on its pill).
+
+## The matchup bubble
+
+The NFL hub's matchup bubble (its `nflbets/build/glance.js` at app v114; its owner's call of 17 October 2026: "when i click
+on a player or a team, bring up a bubble pop up where it shows their matchup for the day so i can see info at a glance"),
+carried to the NBA on 25 October 2026 with the NBA's numbers: `app/parts/glance.html`, set in at its `<!--part:glance-->`
+marker.
+
+**The names.** Every name on a leg the Parlay Builder draws (a Top 50 row, a builder row) and on any level card a tab
+draws with `pbTierCard` is a button (`glanceName`, on `window` for Suggested Parlays' cards too): `data-glance` `p:<ESPN
+athlete id>` for a player's line, `t:<club>` for a moneyline or spread, `g:<game id>` for a game total, the leg's game in
+`data-glance-game`, the leg kept as its row drew it (`window.glanceLeg`, outside `M`, the last 600), named "Ace Guard: his
+matchup" (the team's, the game's), with no chrome, a dotted underline and a 44px target from padding a negative margin takes
+back out of the line, so no row moves.
+
+**The window.** A dialog, not modal, labelled by its heading, the focus in it and Tab kept there; Escape, Close (44px), a
+click outside or a click on another name closes it, the focus back on the name (with one of the page's windows open,
+Escape is that window's). It sits under the page's windows, below its name, above it where there is no room below, kept on
+the screen; a sheet across the foot of the screen at 640px and under, and wherever neither side of the name has 160px for
+it. It keeps the place it was opened from (the builder, the Top 50, a level card) and the leg's key, side and line, and a
+MutationObserver, connected only while it is open, follows every redraw (a tip-off, a press, a leg added or taken out):
+bound to its leg's copy in that place, drawn again with that copy's numbers (and the line a press moved), the reader's
+scroll kept; where the place no longer draws the leg, it closes, the focus on the leg's neighbour there.
+
+**A player's bubble**: his position and club and his status as the page reads it (OUT where the lineups have him out, NOT
+PROJECTED where the props model does not); his overall Elo with its tier shield and tier, and his rank among the rated
+players at his position ("#15 of 182 rated guards", the Players tab's own numbers), or why the ladder does not rank him (not
+on a roster, under its ten minutes a game or its twenty games); the game and its tip-off in Eastern time; **Faces**: the
+opponent's defence as the player model rates it, the Teams tab's Defence column ranked as that column sorts ("TOR Defence
++59 ranked 6th of 30"), or its offence for a steals, blocks or steals + blocks line, made at the other end of the floor;
+the props model's projection for his minutes, points, rebounds, assists, threes and the leg's own stat (lit), marked on
+trial; and the leg: its line, the price its row shows, the model's chance (on trial) and DraftKings' fair chance. Where the
+NFL hub shows a season Elo by position, the ELO Ratings tab's units and the Mismatches, the NBA has the ladder's rating,
+the Teams tab's columns and the props model; it has no market + form or Elo matchup chance to show.
+
+**A team's or a game total's bubble**: the game and its tip-off; both clubs' records this season (the Pick'em Record's
+regular-season finals, the playoffs beside them once there are any); each club's strength with its tier shield and its rank
+on the Teams tab; the line the leg stands on, the Parlay Builder's own (DraftKings' as `lines.json` read it, or a press's
+where newer, dated; the published line where neither has one, else none yet); offence against defence each way, rated and
+ranked as the Teams tab's columns; and every model's pick and chance: Vegas (the moneyline favourite on that line with the
+margin out, else the spread's favourite), the Player Model and Team Elo (Tonight's numbers), and the Alpha Model, the Joker
+and the ELO Model (their calls as the Pick'em Record has them, "no call" where a model has none on the game). The leg's club
+is marked "this leg" and, on a moneyline alone, each model picking it to win is ticked; then the leg and **Open game on
+Tonight**, which opens the board on the game's day with its card in focus. It reads `pickem.json` through the Pick'em
+Record's own loader (once a page load, no-store; asked for by the first team's bubble where the tab has not read it), and
+says in its own line while it is read or where it did not load, the rest drawn. Nothing else is fetched and nothing is
+stored; `build.js` stops if the part fetches or touches a browser store.
+
+### The checks
+
+`SMOKE_ONLY=glance node tools/smoke.js` (`tools/smoke_glance.js`), blocking, on made-up games tomorrow, a made-up
+`lines.json`, rated players, a props block and a `pickem.json` of its own, and a builder of eight legs (a player's points, a
+steals line, a player the ladder does not rank, one the report has out, one the props model does not project, a moneyline,
+a spread, a total): every name its leg's button (kind and id, the leg it keeps, its words, its 44px target) in the builder
+and the Top 50, each leg drawn once in a place; every number in each bubble on this file's own reading (the rating, tier and
+rank at his position, the game, Faces against the Teams tab's own table sorted on its column, the projection, the leg's
+chances; the records, strength and ranks, the line, offence against defence, Vegas with the margin out and every model's
+call, the moneyline-only tick, "this leg"); the keys and focus; below, above and as a sheet; the reader's scroll; the
+builder redrawn, a price moved, the leg taken out, the Top 50 redrawn and a level card's names; Open game on Tonight; the
+Pick'em Record's file read once, no-store, still loading, missing and asked again; a press newer than `lines.json`; the
+observer connected only while a bubble is open; and nothing written or fetched beyond that file. Ten breaks planted in a
+copy of the built page each turn it red. In Chromium at 1280 and 390, a player's and a team's bubble: every control 44px,
+every name in the builder and the Top 50 44px tall (54), every text 5.0:1 or better, on the screen, a sheet at 390.
 
 ## X Parlays
 
@@ -2001,7 +2156,8 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   with the game totals last, each ranked by what $1 is expected to make, every player's line marked on trial, each with
   its own Add; and the builder under them: the visitor's own parlay, from the list or a game's Player props, priced by
   the same-game engine, DraftKings' fair chance first and the model's beside it, what the Bet amount returns, Finish
-  parlay (a card to place at DraftKings or share, README "Same-game parlays") and Clear ALL.
+  parlay (a card to download, place at DraftKings or share, README "The parlay card") and Clear ALL. Every name on a leg
+  opens its matchup bubble (README "The matchup bubble").
 
 - **X Parlays**: the parlays X placed at the book, the same on every device and read only, each followed live through
   its games; read from `liveparlays/parlays.json` and ESPN when the tab is first opened in a visit and on Refresh now,
@@ -2020,4 +2176,5 @@ when a finished parlay of X's cleared itself).
    until then it stays an estimate and says so. The props model's lines are on the Parlay Builder's Top 50, marked on
    trial, until its shadow ledger decides its bar; a FAIL takes them off.
 3. **Suggested Parlays**: the NFL hub's tab on the Parlay Builder's engine (`getPbTiers`, `pbTierCard`, a level's Add to
-   builder, README "Parlay Builder"), with its lock and its record; and the parlay card and matchup bubble upgrades.
+   builder, README "Parlay Builder"), with its lock and its record, its levels finished as cards through
+   `PARLAY_CARD.from` (README "The parlay card").

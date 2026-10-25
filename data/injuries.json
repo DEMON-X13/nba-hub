@@ -34,6 +34,15 @@
   ],
   "BKN": [
    {
+    "id": "5105626",
+    "name": "Tyler Bilodeau",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Shoulder",
+    "date": "2026-10-25",
+    "returns": "2026-10-25"
+   },
+   {
     "id": "5101761",
     "name": "Mikel Brown Jr.",
     "pos": "G",
@@ -41,15 +50,6 @@
     "detail": "Rest",
     "date": "2026-10-25",
     "returns": "2026-10-27"
-   },
-   {
-    "id": "5105626",
-    "name": "Tyler Bilodeau",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Shoulder",
-    "date": "2026-10-23",
-    "returns": "2026-10-25"
    }
   ],
   "CHA": [
@@ -95,18 +95,18 @@
     "id": "4431687",
     "name": "Patrick Williams",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Groin Soreness",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
     "id": "5242496",
     "name": "Noa Essengue",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Head Bruise",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
@@ -124,9 +124,9 @@
     "id": "6442",
     "name": "Kyrie Irving",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
@@ -177,11 +177,11 @@
   ],
   "DEN": [
    {
-    "id": "4065813",
-    "name": "Alpha Diallo",
+    "id": "4592427",
+    "name": "Spencer Jones",
     "pos": "F",
-    "status": "Out",
-    "detail": "Wrist",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Not Specified",
     "date": "2026-10-25",
     "returns": "2026-10-26"
    },
@@ -189,18 +189,18 @@
     "id": "3138196",
     "name": "Cameron Johnson",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
-    "id": "4592427",
-    "name": "Spencer Jones",
+    "id": "4065813",
+    "name": "Alpha Diallo",
     "pos": "F",
-    "status": "Out",
-    "detail": "Hamstring Not Specified",
-    "date": "2026-10-23",
+    "status": "Day-To-Day",
+    "detail": "Wrist",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
@@ -235,19 +235,10 @@
   ],
   "GSW": [
    {
-    "id": "4997536",
-    "name": "Gui Santos",
-    "pos": "F",
+    "id": "4709138",
+    "name": "Brandin Podziemski",
+    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-10-25",
-    "returns": "2026-10-26"
-   },
-   {
-    "id": "6589",
-    "name": "Draymond Green",
-    "pos": "F",
-    "status": "Out",
     "detail": "Back",
     "date": "2026-10-25",
     "returns": "2026-10-26"
@@ -256,27 +247,36 @@
     "id": "3213",
     "name": "Al Horford",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
+    "returns": "2026-10-26"
+   },
+   {
+    "id": "6589",
+    "name": "Draymond Green",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
     "id": "3975",
     "name": "Stephen Curry",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
-    "id": "4709138",
-    "name": "Brandin Podziemski",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Back",
-    "date": "2026-10-24",
+    "id": "4997536",
+    "name": "Gui Santos",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
@@ -309,30 +309,30 @@
   ],
   "HOU": [
    {
+    "id": "2991230",
+    "name": "Fred VanVleet",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-25",
+    "returns": "2026-10-26"
+   },
+   {
     "id": "2990992",
     "name": "Marcus Smart",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Forearm Strain",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {
     "id": "2991235",
     "name": "Steven Adams",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-24",
-    "returns": "2026-10-26"
-   },
-   {
-    "id": "2991230",
-    "name": "Fred VanVleet",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Knee",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    }
   ],
@@ -572,6 +572,15 @@
   ],
   "PHI": [
    {
+    "id": "1966",
+    "name": "LeBron James",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-10-25",
+    "returns": "2026-10-25"
+   },
+   {
     "id": "3059318",
     "name": "Joel Embiid",
     "pos": "C",
@@ -587,15 +596,6 @@
     "status": "Day-To-Day",
     "detail": "Knee",
     "date": "2026-10-25",
-    "returns": "2026-10-25"
-   },
-   {
-    "id": "1966",
-    "name": "LeBron James",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back",
-    "date": "2026-10-24",
     "returns": "2026-10-25"
    },
    {
@@ -631,9 +631,9 @@
     "id": "4601023",
     "name": "Oso Ighodaro",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Oblique Strain",
-    "date": "2026-10-24",
+    "date": "2026-10-25",
     "returns": "2026-10-26"
    },
    {

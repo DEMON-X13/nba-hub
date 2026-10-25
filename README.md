@@ -1986,6 +1986,16 @@ the real one and an empty one, every number and title its own, a junk record dra
 the day offers. Six breaks planted in copies of the built page each turn it red: the sets up at 7:00 AM, a 3-hour lock, the
 Elo spread on the model's own sigma, the browser lock not kept, the pills counting every key, the on-trial mark dropped.
 
+In Chromium at 1280 and 390 wide, on a scratch copy of 25 October 2026's real data pulled from ESPN that afternoon (the
+slate with its national networks: Raptors at Timberwolves on NBA TV that night, Mavericks at Heat on NBA TV and Warriors at
+Nuggets on NBCSN the next, lines.json read at 21:17 UTC), at three moments (live at 20:30 UTC, this browser's own locked set
+at the real clock, after the 21:00 lock, the wait line at 23:30): no sideways scroll, every control 44px or taller (45 on the tab with its set and the Elo
+picks), every one of about 280 texts at 5.5:1 or better on what is under it, and no script error. The job's run on the same
+data at 21:17 UTC took Monday's two featured sets (four empty levels each: DraftKings had posted neither their game lines nor
+their props) and no set for that night's game, whose lock had passed at 21:00 with no earlier run; held at 20:45 it took that
+game's set too (52 Value picks and 53 thin-edge lines in its pool, 40 left out far off the market: Safe a pair of milestones
+at -514, 84% by the model on trial and 70% by DraftKings' fair chance).
+
 ## X Parlays
 
 The parlays X placed at the book, the same on every device and read only everywhere: a tab of their own, after the

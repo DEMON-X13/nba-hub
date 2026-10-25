@@ -27,8 +27,8 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/elo.js` | The team model: replay, fit, report |
 | `tools/players.js` | The player, coach and matchup model: replay, fit, report, tonight's lineups; logs the day's numbers to `data/predictions.csv` |
 | `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
-| `tools/elo_model.js`, `models/elo.json`, `research/elo.json` | The ELO Model (README "The ELO Model"): the NFL hub's player Elo and logistic on the NBA's box scores; its call on every game of the season in play, the games to come apart, its fitted weights; and its walk-forward with every design choice tried |
-| `tools/test_elo_model.js` | The ELO Model's leakage check (a game's inputs the morning it is played are its inputs once final), its ratings by hand on a made-up league, tonight's rotation on made-up reports and the committed files |
+| `tools/elo_model.js`, `models/elo.json`, `research/elo.json` | The ELO Model (README "The ELO Model"): the NFL hub's player Elo and logistic on the NBA's box scores; its call on every game of the season in play on the previous game's rotation, the games to come apart on today's report, its fitted weights and the Elo picks' prices; and its walk-forward with every design choice tried |
+| `tools/test_elo_model.js` | The ELO Model's leakage check (a game's inputs the morning it is played are its inputs once final; a game under way and a final of today called on the previous game's rotation), its ratings by hand on a made-up league, tonight's rotation on made-up reports, the committed files and a refusal's, and every phase of a season |
 | `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players and coaches (with their overall Elo on the ladder the tier shields are drawn on, and its change over 7 days), the backtest, the market table (`vsMarket`, from `research/backtest.json`), the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays"); and `history.json` |
 | `tools/props.js`, `props.json` | The props model (README "Player props"): each expected player's eleven stat distributions and double chances for the next five game days, its walk-forward and market tests (`research/props.json`) |
 | `tools/props_feed.js` | DraftKings' player props as ESPN's feed carries them: the parse the job and the page share, the fair-chance rules |
@@ -273,37 +273,42 @@ method with a ridge of 0.5 on every weight but home's (the NFL's `logistic_fit`)
 to 2025-26: even rotations at home are 56.6%, ten Elo of rotation is 3.3 points of win chance at even, a back to back
 costs 8. The margin is the same logit times 7.73 points (least squares on the same games), so the pick and the spread
 never disagree: ten Elo of rotation is a point, the home court two, a back to back 2.5. The spread is the margin written
-as a home line (-m). A spread leg's chance is `Phi((m + line) / 14.64)` for the home side at its line (`params.sigma`,
-the root mean square of the margin's miss in the 2026 fold, called before tip-off): what the Suggested Parlays tab's
-ELO picks price a spread with, and `pHome` a moneyline. No total.
+as a home line (-m). The model's own spread chance is `Phi((m + line) / 14.64)` for the home side at
+its line (`params.sigma`, the root mean square of the margin's miss in the 2026 fold, called before tip-off), and its
+moneyline chance `pHome`; Suggested Parlays' Elo picks are not priced on those but on the model pulled toward the market
+(`params.pick`, below). No total.
 
-**Who plays, before tip-off.**
-
-- a game to come: the hub's one availability rule, players.js `makeLiveLineup` on today's roster and injury report, run
-  on the ELO Model's own players (out before his return date, Out out on the report's own day, suspended out, a
-  debutant at twelve minutes), filled to 240;
-- a final of the season in play: the club's players (those who have played for it this season, or before its first game
-  those who played for it last season and for no one since) less those the injury log had Out or suspended that day, the
-  log's own club taken for every player it lists;
-- a game of an earlier season, in the walk-forward: the club's previous box-scored game's players, less anyone since
-  gone to another club; a club's first game of a season reads its last game of the season before.
-
-Who actually played ("lineup known") is a hindsight row the walk-forward shows beside the honest one, never a call.
+**Who plays, before tip-off.** Every call in `games`, which is what `tools/calls.js` takes as the call of a game played
+before the model's first published call (a backtest), is read on the previous game's rotation, whatever the game's state:
+a final, a game under way, a final of the run's own day, a game to come. That is the reading the walk-forward scores
+(`pretip`): the club's previous box-scored game's players, less anyone who has since played for another club; a club's
+first game of a season reads its last game of the season before by the same rule. It never reads this run's roster or
+injury report, or `injuries_log.csv`, which keeps each day's last read and on a late run is written after tip-off. The
+files keep no past rosters, so a player who moved in the summer counts for his old club's first game until he has played
+for his new one: on opening night 2026-10-20, 11 of the 59 rotation slots (246 of 1,384 minutes) were players who had
+moved (Jaylen Brown still on Boston, Paul George on Philadelphia), by the rule the walk-forward scored in every season.
+Only `upcoming`, the games not yet final, is read on the hub's one availability rule, players.js `makeLiveLineup` on today's
+roster and injury report (out before his return date, Out out on the report's own day, suspended out, a debutant at twelve
+minutes), filled to 240. It runs on a copy of the ELO Model's players made for each game, so nothing it does (a roster
+player with no game on record is made up for it) can move a rating, a player's minutes or his club: it shapes the games
+to come and nothing else. Who actually played ("lineup known") is a hindsight row the walk-forward shows beside the honest
+one, never a call.
 
 ### Walk-forward test (`node tools/elo_model.js research`, writes `research/elo.json`)
 
-Each season fitted on the seasons before it (from 2021-22) and scored cold on every decided regular-season and playoff
-final it has (a final with no box score is still called: its inputs are the games before it). The ELO Model is the call
-made before tip-off on the previous game's rotation; "lineup known" is the same model told who played. Live it runs on
-the injury report, between the two. The team model is model.json's (fitted on 2008-2022) on the same games; the player
-model is research.json's walk-forward, on its own games (the finals with both box scores, 0 to 5 fewer); the market is
-the consensus closing moneyline with the margin out and its closing spread (`data/odds_hist.csv`). Log loss / straight
+Each season fitted on the seasons before it (from 2021-22) and scored cold on its decided regular-season and playoff
+finals with both box scores, the games every model on the record counts (1,314, 1,320 and 1,322; `eloAllFinals` in the
+file adds the six finals with no box score, called on the games before them: 1,319 and 1,321 in 2024 and 2025, log loss
+0.6007 and 0.6050). The ELO Model is the call made before tip-off on the previous game's rotation; "lineup known" is the
+same model told who played. Live it runs on the injury report, between the two. The team model is model.json's (fitted on
+2008-2022) and the player model research.json's walk-forward, both on the same games; the market is the consensus closing
+moneyline with the margin out and its closing spread (`data/odds_hist.csv`), on those with a line. Log loss / straight
 up / spread error:
 
 | Season scored | ELO Model | ELO Model, lineup known | Team model | Player model, no report | Player model, lineup known | Market |
 |---|---|---|---|---|---|---|
-| 2024 (1,319 games) | 0.601 / 67.5% / 10.91 | 0.596 / 66.8% / 10.88 | 0.609 / 66.0% / 11.07 | 0.615 / 67.7% / 11.30 | 0.613 / 66.3% / 11.28 | 0.583 / 69.1% / 10.66 (1,314 games) |
-| 2025 (1,321) | 0.605 / 68.0% / 11.05 | 0.595 / 68.6% / 10.88 | 0.609 / 65.4% / 11.13 | 0.600 / 67.7% / 11.04 | 0.591 / 67.6% / 10.96 | 0.585 / 68.7% / 10.63 (1,320) |
+| 2024 (1,314 games) | 0.601 / 67.6% / 10.90 | 0.596 / 66.8% / 10.89 | 0.609 / 66.1% / 11.06 | 0.615 / 67.7% / 11.30 | 0.613 / 66.3% / 11.28 | 0.583 / 69.1% / 10.66 |
+| 2025 (1,320) | 0.605 / 68.0% / 11.05 | 0.595 / 68.6% / 10.88 | 0.609 / 65.5% / 11.12 | 0.600 / 67.7% / 11.04 | 0.591 / 67.6% / 10.96 | 0.585 / 68.7% / 10.63 |
 | 2026 (1,322) | 0.602 / 67.5% / 11.44 | 0.592 / 67.4% / 11.25 | 0.601 / 68.8% / 11.53 | 0.603 / 66.7% / 11.52 | 0.589 / 68.5% / 11.38 | 0.576 / 68.7% / 11.00 (1,318) |
 
 On the previous game's rotation, with no report at all, the ELO Model is ahead of the team model in 2024 and 2025 (by
@@ -311,51 +316,106 @@ On the previous game's rotation, with no report at all, the ELO Model is ahead o
 Against the player model with no report it is ahead in 2024, behind in 2025 and level in 2026 (0.6026). Told who played,
 it gains 0.005 to 0.011, and is ahead of the player model told the same in 2024 and behind it in 2025 and 2026 (0.595
 against 0.591, 0.592 against 0.589). The market is ahead of it in every season, by 0.017, 0.019 and 0.026 on the same
-games. On those games its pick is the market favourite's in 85% to 89% of them, and Team Elo's in 86% to 88%: close to
+games. On those games its pick is the market favourite's in 85% to 89% of them, and Team Elo's in 86% to 89%: close to
 both, a copy of neither. Its spread error is the lowest of the three models' honest calls in 2024 and 2026 (the
 market's is lower still) and level with the player model's in 2025 (11.05 against 11.04).
 
 The design was chosen on 2024 and 2025 alone, one knob at a time from the NFL's own form (Game Score, the NFL's
 production scoring; three positions, G, F and C, weighted 1, 0.7, 0.45 and C 1, 0.5; home court only; the NFL's
 constants), each change kept only by the hub's rule: lower log loss in both seasons, by 0.0005 between them, and the
-spread error no worse (28 changes tried over two passes, every one in `research/elo.json`, each knob's own start value
-among its choices so a second pass could move it back; none moved). Kept, in order: plus-minus over Game Score (2024 0.642 to
-0.612, 2025 0.655 to 0.614: a box line says less about winning than the score of the minutes a player was on the
-floor); plus-minus and Game Score summed (0.608, 0.613); one rotation of eight over the three positions (0.606, 0.610;
-ESPN's three labels are loose in today's game); the back-to-back column (0.602, 0.606); new players at 1450 (0.601, 0.606); the unit's K at 60
-rather than the NFL's 120 (0.601, 0.605). Tried and not kept: the weights fitted on who played instead of the previous
-game's rotation, the fit from 2022-23, K halved and half again, the unit's K at 240, a carry of 0.6 or 0.9, a game
-counting in full at 36 minutes. Two runs printed 2026 numbers before the search: the planning pilot (not in the repo) on
-plus-minus and Game Score, and a timing run of this code on the starting design under each score. Nothing was chosen on
-them: the search took every decision on 2024 and 2025 by the rule (the file's notes say so).
+spread error no worse, each season scored on every decided final it has (28 changes tried over two passes, every one in
+`research/elo.json`, each knob's own start value among its choices so a second pass could move it back; none moved).
+Kept, in order: plus-minus over Game Score (2024 0.642 to 0.612, 2025 0.655 to 0.614: a box line says less about winning
+than the score of the minutes a player was on the floor); plus-minus and Game Score summed (0.608, 0.613); one rotation
+of eight over the three positions (0.606, 0.610; ESPN's three labels are loose in today's game); the back-to-back column
+(0.602, 0.606); new players at 1450 (0.601, 0.606); the unit's K at 60 rather than the NFL's 120 (0.601, 0.605). Tried
+and not kept: the weights fitted on who played instead of the previous game's rotation, the fit from 2022-23, K halved
+and half again, the unit's K at 240, a carry of 0.6 or 0.9, a game counting in full at 36 minutes. The design is frozen:
+`research` re-scores it, and only `research search` runs the search again (for a new version of the design).
+
+2026 numbers were seen before the search, though it never read them. The planning pilot (not in the repo; its table is
+in the build plan) printed 2026 log loss for Game Score (0.6424), plus-minus (0.6036), the two summed (0.6038), plus-minus
+with the back-to-back column (0.6050), plus-minus told who played (0.6072), one rotation of eight against the three
+positions (0.610 against 0.607, at other K values) and new players at 1450 (0.602 against 0.604), and the first 36 finals
+of 2026-27 for Game Score (0.641) and plus-minus (0.619); a timing run of this code printed the starting design's 2026
+numbers under each of the three scores. Of the six changes the search kept, those 2026 numbers favoured two (plus-minus
+over Game Score, new players at 1450) and were against three (the sum, one rotation, the back-to-back column); the unit's
+K at 60 was not compared on its own there. Every decision was taken on 2024 and 2025 by the rule, but the 2026 fold is
+not a clean first look at the design.
 
 What it does not use, and why: the betting line (the market is the yardstick); the player model's ratings, RAPTOR priors
 and coaches (its own ratings keep it a third opinion); travel and altitude (the player model's and the team model's
 terms, not in the NFL's form, and not tried); a total (the player model publishes the site's); seasons before 2021-22
 (no box scores); a ladder of its own ratings on the page (the Players tab ranks the player model's, and two player
 ladders would contradict each other); preseason games (never rated, called or graded); and the season in play, which is
-never fitted, tuned or scored. Its finals are called as a backtest on the day's injury log: of the 36 so far, 20 right
-(log loss 0.633), too few to read anything.
+never fitted or tuned on. Its 36 finals so far, called as backtests on the previous game's rotation: 22 right, log loss
+0.612, too few to read anything (on the injury log, which the first version read, they were 20 right and 0.633).
+
+### Pricing the Elo picks (`params.pick`, `research/elo.json`'s `pick`)
+
+Suggested Parlays' Elo picks are the ELO Model's moneylines and spreads where its chance beats the price. On the closing
+line the model's own numbers are no price: its cover chance `Phi((m + line) / sigma)` scores worse than a coin flip in
+every fold, and its moneyline edges, said about 60%, win about half. So the research measures the model pulled toward the market,
+on the 2024 and 2025 folds alone (each fold's model fitted on the seasons before it; a grid of 0 to 1 by 0.05, the pooled
+log loss), then scores 2026 once:
+
+- a spread leg, home side at home line h: `Phi((wSpread m + (1 - wSpread)(-h) + h) / sigma)`, m the model's home margin
+  (`-spread`) and sigma that blended margin's own miss on 2024-2025; scored on the cover at the closing line, a push left
+  out (there the market's own chance is a coin flip, 0.6931);
+- a moneyline, home side: the logistic of `wMl logit(pHome) + (1 - wMl) logit(q)`, q the market's no-vig chance.
+
+Both weights come out at 0: any weight on the model's margin makes the cover log loss worse in both 2024 and 2025, and on
+the moneyline the pooled best is about 0.02 (0.584448 against 0.584453 at 0, worse in 2024, better in 2025), 0 on the grid. So
+`params.pick` is `{wSpread: 0, wMl: 0, sigma: 13.722}`: priced honestly, an Elo pick is the market's own chance, never 3
+points above its price, so the Elo picks section would show none. Whether it then says so or goes is the owner's call.
+The numbers, log loss of the model alone (w = 1) and pulled (the weight chosen), with the NFL Value rule's 3-point-edge picks (a spread side at 55.4% or more, 3 points over -110, since the file
+keeps no spread price; a moneyline side at 45% to 97% and 3 points over the chance its price implies, margin in):
+
+| Fold | Spread, model alone | 3-pt picks won | Spread pulled (w 0) | Coin | Moneyline, model alone | 3-pt picks: said, won, units on $1 | Moneyline pulled (w 0) = market |
+|---|---|---|---|---|---|---|---|
+| 2024 (1,291 / 1,314 games) | 0.7081 | 626, 49.4% | 0.6931 | 0.6931 | 0.6007 | 334: 59.1%, 51.5%, +9.1 | 0.5835 |
+| 2025 (1,319 / 1,320) | 0.7166 | 753, 52.2% | 0.6931 | 0.6931 | 0.6046 | 393: 61.3%, 50.6%, +7.0 | 0.5854 |
+| 2026 (1,318 / 1,318) | 0.7181 | 784, 49.4% | 0.6931 | 0.6931 | 0.6020 | 376: 59.6%, 45.7%, -17.9 | 0.5757 |
+
+Against the opening line and opening moneylines (2023-24 on in `odds_hist.csv`; `pick.open`, for information, never priced
+on), chosen the same way, the weights are 0.25 (spread, sigma 14.03) and 0.3 (moneyline): pulled, 0.6934 and 0.6904
+against the coin's 0.6931 in 2024 and 2025, and 0.5940 and 0.5956 against the opening market's 0.5951 and 0.5976; scored
+once on 2026, 0.6935 against 0.6931 and 0.5869 against 0.5859, a shade worse than the opener on both. A line read on game
+day is nearer the close than the open, and on 2026 the model added nothing even to the opener.
 
 In the job, `node tools/elo_model.js` (about 2 seconds) replays every box score since 2021-22 with the fitted weights
-in `models/elo.json` and writes the calls: `games`, every regular-season and playoff game of the season in play (its
-finals as above, its games to come as `upcoming`), and `upcoming`, the games to come on today's roster and report, each
-`{pHome, spread}`; `tools/calls.js` freezes them at tip-off for the Pick'em Record. The ratings move with every final,
-the weights never: `node tools/elo_model.js fit` refits them by hand on the finished seasons (between seasons; the run
-logs a note when a season has finished since the fit), and `node tools/elo_model.js research` (about 13 seconds) walks
-forward, chooses the design and refits. An unchanged file keeps its stamp, so a quiet day commits nothing; a failed run
-keeps the last good calls and writes `status: {ok: false, why}`. `node tools/test_elo_model.js` (about six seconds)
-holds the leakage rule (on the real data's last day and a mid-season day, and on every morning of a made-up season whose
-bench sits in turn, a game read before tip-off and once final gives the same inputs and the same call; no row of a
-season moves with a later season's games), the ratings by hand (the first final's update and its unit, a row that did
-not play, the left-early skip once and the second short game rated, the offseason carry, a club's first game of a
-season and its first ever), a neutral site (no home court, the call turned exactly over when the clubs swap), a
-postponed game (left out by `load()`, or left as scheduled: no rating or final's input moved), a club with no box
-score, the strength's slots, fill and ties, tonight's rotation through makeLiveLineup on made-up reports (Out,
-Day-To-Day returning after the game and on it, suspended, a debutant, a trade), the fit (planted weights recovered, equal
-clubs at a neutral site 50/50), determinism (a box file's row order changes nothing) and a quiet day, and the committed
-files (the contract's shape, every game of the season in play called, the fitted numbers the fit of their seasons, the
-walk-forward research/elo.json's, every decided final of each fold scored).
+in `models/elo.json` and writes the calls: `games`, every regular-season and playoff game of the season in play on the
+previous game's rotation, and `upcoming`, the games not yet final on today's roster and report, each `{pHome, spread}`;
+`tools/calls.js` freezes them at tip-off for the Pick'em Record. The ratings move with every final, the weights never:
+`node tools/elo_model.js fit` refits them by hand on the finished seasons before the season in play (between seasons,
+once the new schedule is in games.csv: in the summer the season just played is still the season in play, so it is never
+in a fit; the run logs a note when a season has finished since the fit), and `node tools/elo_model.js research` (about
+4 seconds) re-scores the frozen design, prices the Elo picks and refits. An unchanged file keeps its stamp, so a quiet day
+commits nothing. A run that cannot call refuses: it exits 1, keeps the last good calls and writes `status: {ok: false,
+why}` (no final in games.csv, the injury rule not loading, a research file that does not read, no design to fit; a model
+file that does not read is left as it is), says why in the log, and the job puts the last commit's file back.
+
+The job runs `node tools/elo_model.js && node tools/test_elo_model.js` in one step, so the test (about 10 seconds) passes
+in every phase of a season on the data as the job sees it, and turns on nothing ESPN can fill in late: an old final's box
+score back-filled moves the refit and the folds' counts, which the test prints as notes, never failures, while the fit
+procedure is held on made-up data. It holds the leakage rule (on the real data's latest day with a final and a mid-season
+day, and on every morning of a made-up season whose bench sits in turn, a game read before tip-off and once final gives
+the same inputs and the same call; no row of a season moves with a later season's games), a game under way and a final of
+the day each called in `games` on the previous game's rotation, never this run's report, the ratings by hand (the first
+final's update and its unit, a row that did not play, the left-early skip once and the second short game rated, the
+offseason carry, a club's first game of a season and its first ever, a player who moved in the summer before and after he
+plays for his new club), a neutral site (no home court, the call turned exactly over when the clubs swap), a postponed
+game (left out by `load()`, or left as scheduled a season back with the live reading on: no rating, player or final's
+input moved), a club with no box score, the strength's slots, fill and ties, tonight's rotation through makeLiveLineup on
+made-up reports (Out, Day-To-Day returning after the game and on it, suspended, a debutant, a trade) and the live reading
+moving nothing, the fit (planted weights recovered, equal clubs at a neutral site 50/50, fitLive by hand on a made-up
+season), the Elo picks' weights (a made-up model that knows each margin given nearly all of it, one that knows nothing
+none), determinism (a box file's row order changes nothing, `games` the same with the live reading off) and a quiet day,
+the committed files (the contract's shape whether the run called or refused, a refusal on a scratch copy keeping the last
+calls and saying why, every game of the season in play called on the previous game's rotation, the walk-forward
+research/elo.json's on the box-scored finals, the design and the pick weights research/elo.json's, the weights fitted on
+finished seasons), and every phase of a season built in memory on the real data cut back (no final yet, opening night,
+the playoffs, the summer).
 
 ## Player props
 

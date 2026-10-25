@@ -1,12 +1,17 @@
 /* The ELO Model: the NFL hub's third game model (elo/build.py there), in its form on NBA box scores.
  *
- *   node tools/elo_model.js            replay the box scores and write each game's call into models/elo.json: the season
- *                                          in play's finals as the model called them before tip-off (a backtest replay)
- *                                          and the games to come on today's roster and injury report
- *   node tools/elo_model.js fit        refit the weights on the finished seasons (by hand, between seasons; the season in
- *                                          play is never in a fit)
+ *   node tools/elo_model.js            replay the box scores and write each game's call into models/elo.json: every game
+ *                                          of the season in play as the model called it before tip-off (a backtest
+ *                                          replay, on the previous game's rotation) and the games to come apart, on
+ *                                          today's roster and injury report
+ *   node tools/elo_model.js fit        refit the weights on the finished seasons before the season in play (by hand,
+ *                                          between seasons, once the new schedule is in; the season in play is never in
+ *                                          a fit)
  *   node tools/elo_model.js research   the walk-forward (2024, 2025 and 2026, each fitted on the seasons before it and
- *                                          scored cold) and every design choice tried, into research/elo.json; then the fit
+ *                                          scored cold) with the design research/elo.json holds, and the pricing of
+ *                                          the Elo picks, into research/elo.json; then the fit
+ *   node tools/elo_model.js research search   the same after the design search that chose it (every choice tried, on
+ *                                          2024 and 2025 alone): only for a new version of the design
  *
  * THE RATINGS. Every player who has played since 2021-22 carries an Elo rating, moved after each final by how his game
  * compared with a typical game, against the opposing club's unit. The NFL's update, its constants but where DESIGN
@@ -41,15 +46,24 @@
  * line, and a spread leg's chance is Phi((margin + home line) / sigma) for the home side, sigma the walk-forward residual
  * (params.sigma, measured on the 2026 fold).
  *
- * WHO PLAYS, before tip-off. The walk-forward's honest call (pretip) takes each club's previous box-scored game's
- * players, less anyone since gone to another club; a club's first game of a season takes its last game of the season
- * before. The season in play's finals (log) take the club's players less those the injury log had Out or suspended that
- * day, as Alpha's do; a game to come (live) the hub's own rule, players.js makeLiveLineup on today's roster and report.
- * Who actually played (known) is a hindsight row the research shows beside the honest one, never a call.
+ * WHO PLAYS, before tip-off. Every call in `games`, and every call the walk-forward scores (pretip), takes each club's
+ * previous box-scored game's players, less anyone who has since played for another club; a club's first game of a
+ * season takes its last game of the season before, by the same rule (the files keep no past rosters, so a player who
+ * moved in the summer is read on his old club until he plays for his new one). That holds for a final, a game under way
+ * and a game of today alike: a call is never read from this run's roster or report, or from the injury log, which keeps
+ * each day's last read and on a late run is written after tip-off. Only a game to come (`upcoming`, live) takes the hub's
+ * own rule, players.js makeLiveLineup on today's roster and report, run on a copy of the players so that it can never
+ * move a rating. Who actually played (known) is a hindsight row the research shows beside the honest one, never a call.
  *
  * Every input of a game's call is known before its tip-off: the ratings are what the finals before that day left, every
  * game of a day is read before any of them moves a rating, and the typical game is the season before's. The
  * live weights are never refitted by the job, and the season in play is never fitted or tuned on.
+ *
+ * THE ELO PICKS. Suggested Parlays prices the model's team legs with its margin and chance pulled toward the market's
+ * (params.pick, chosen on 2024 and 2025 by the research, then scored once on 2026): a spread leg's chance for the home
+ * side at home line h is Phi((wSpread m + (1 - wSpread)(-h) + h) / sigma), m the model's margin; a moneyline's the
+ * logistic of wMl logit(pHome) + (1 - wMl) logit(the market's no-vig chance). pHome and spread themselves are never
+ * pulled: the Pick'em Record grades those.
  */
 'use strict';
 const fs = require('fs');
@@ -62,8 +76,7 @@ const DESIGN_ON = [2024, 2025];         // the design is chosen on these alone; 
 const PROJ = 8;                         // projected minutes: the mean of a player's last eight appearances (players.js)
 const KEEP = 15;                        // minutes kept per player
 const DEBUT = 12;                       // a player with no minutes on record yet (players.js DEBUT_MIN)
-const LOG_DAYS = 3;                     // an injury log older than this before a game is no report
-const VERSION = 'elo 1 · 2026-10-25';
+const VERSION = 'elo 1.1 · 2026-10-25';
 const GMAP = { G: 'G', PG: 'G', SG: 'G', F: 'F', SF: 'F', PF: 'F', C: 'C' };
 /* the depth weights by position (the NFL's DEPTH, three slots a wing position and two at centre), or one rotation of
    eight (`groups` 'one': the pilot's alternative) */
@@ -114,8 +127,9 @@ function readCsv(f) {
 }
 
 /* Everything the model reads, from a repo's data folder: the games of the box-score era (preseason left out: never
-   rated, called or graded; a game called off, whatever its status says, left out), each side's box rows sorted by
-   player id (so a file's row order changes nothing), and the injury log by day */
+   rated, called or graded; a game called off, whatever its status says, left out) and each side's box rows sorted by
+   player id (so a file's row order changes nothing). The injury log is not read: it keeps each day's last read, which
+   can land after tip-off */
 function load(root = L.ROOT) {
   const data = path.join(root, 'data');
   const games = readCsv(path.join(data, 'games.csv'))
@@ -133,9 +147,7 @@ function load(root = L.ROOT) {
     }
   }
   for (const sides of Object.values(boxes)) for (const rows of Object.values(sides)) rows.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
-  const injLog = {};
-  for (const r of readCsv(path.join(data, 'injuries_log.csv'))) ((injLog[r.date] = injLog[r.date] || {})[r.team] = injLog[r.date][r.team] || []).push({ id: r.player_id, status: r.status });
-  return { games, boxes, injLog, logDates: Object.keys(injLog).sort() };
+  return { games, boxes };
 }
 
 /* a list of [player, projected minutes] filled into a game's 240 minutes in rotation order, as makeLiveLineup fills
@@ -169,10 +181,10 @@ function replay(D, ctx, opt = {}) {
   const one = D.groups === 'one', groups = Object.keys(DEPTHS[D.groups]), sc = SCORE[D.score], [kNew, kSet] = D.k;
   const players = {}, units = {}, clubs = {}, normAcc = {};
   const grp = p => one ? 'R' : p.group;
-  const club = t => clubs[t] || (clubs[t] = { prev: null, dates: [], ahead: [], boxSeason: null });
+  const club = t => clubs[t] || (clubs[t] = { prev: null, dates: [], ahead: [] });
   const newPlayer = (id, name, pos, team, season) => ({ id, name: name || '', group: groupOf(pos), R: season > FIRST ? D.newR : 1500, n: 0, recent: [], short: false,
-    mins: [], reg: [], team: team || '', last: '', ts: null });
-  /* players.js's getP: a player met for the first time (a box row, or a roster player with no game on record) */
+    mins: [], reg: [], team: team || '', last: '' });
+  /* players.js's getP: a player met for the first time in a box row */
   const getP = (r, season) => players[r.player_id] || (players[r.player_id] = newPlayer(r.player_id, r.name, r.pos, r.team, season));
   const projected = p => p.mins.length ? mean(p.mins.slice(-PROJ)) : DEBUT;
   const stat = a => { const m = a.s / a.n; return [m, Math.sqrt(Math.max(a.ss - a.n * m * m, 0) / (a.n - 1)) || 1]; };
@@ -182,33 +194,26 @@ function replay(D, ctx, opt = {}) {
     if (season === FIRST && own && own.n >= 30) return stat(own);
     return NORM0[D.score];
   };
-  /* the injury log on the game's day, or its last day before (LOG_DAYS at most): Out or suspended is out, and every
-     player it lists is on the club it lists him under; null where no log covers the day */
-  const logMemo = {};
-  const outOn = (date, team) => {
-    const ds = ctx.logDates || []; let i = ds.length - 1; while (i >= 0 && ds[i] > date) i--;
-    if (i < 0 || dayGap(ds[i], date) > LOG_DAYS) return null;
-    const d = ds[i];
-    if (!logMemo[d]) { logMemo[d] = {}; for (const [t, list] of Object.entries(ctx.injLog[d])) for (const x of list) logMemo[d][x.id] = t; }
-    const out = new Set(); for (const x of (ctx.injLog[d][team] || [])) if (/^(out|suspended|suspension)/i.test(x.status || '')) out.add(x.id);
-    return { out, club: logMemo[d] };
+  /* live: today's roster and report by the hub's rule, for a game not yet final. It is read on a copy of the players,
+     made once a game, and a roster player with no game on record is made up in the copy alone, so nothing the rule does
+     reaches a rating, a player's minutes or his club: the live reading shapes the games to come and nothing else */
+  let view = null;
+  const liveOf = (g, t) => {
+    if (!view || view.id !== g.id) {
+      const copy = {};
+      for (const [id, p] of Object.entries(players)) copy[id] = { ...p, mins: p.mins.slice(), reg: p.reg.slice(), recent: p.recent.slice() };
+      view = { id: g.id, copy, make: (r, season) => copy[r.player_id] || (copy[r.player_id] = newPlayer(r.player_id, r.name, r.pos, r.team, season)) };
+    }
+    return opt.live(g, t, view.copy, projected, view.make);
   };
   const lineups = (g, t, rows) => {
     const c = club(t), out = {};
-    /* pretip: the club's previous box-scored game's players, less anyone since gone to another club */
+    /* pretip: the club's previous box-scored game's players, less anyone who has since played for another club (at a
+       club's first game of a season, its last game of the season before, by the same rule) */
     out.pretip = (c.prev || []).map(id => players[id]).filter(p => p.team === t).map(p => [p, projected(p)]);
     /* known: who played, at projected minutes (hindsight); a debutant read at the start rating, not kept */
     if (rows) out.known = rows.filter(r => !r.dnp && r.min > 0).map(r => { const p = players[r.id] || newPlayer(r.id, r.name, r.pos, t, g.season); return [p, projected(p)]; });
-    /* log: the club's players less the injury log's Out: those who have played for it this season, or before its first
-       game those who played for it last season, and not since for anyone else (a player the log lists under another club
-       that day is that club's) */
-    const day = outOn(g.date, t);
-    if (day) {
-      const ts = c.boxSeason === g.season ? g.season : g.season - 1;
-      out.log = Object.values(players).filter(p => p.team === t && p.ts === ts && p.mins.length && !day.out.has(p.id) && !(day.club[p.id] && day.club[p.id] !== t)).map(p => [p, projected(p)]);
-    }
-    /* live: today's roster and report by the hub's rule */
-    if (!g.final && opt.live) { const lv = opt.live(g, t, players, projected, getP); if (lv) out.live = lv; }
+    if (!g.final && opt.live) { const lv = liveOf(g, t); if (lv) out.live = lv; }
     return out;
   };
   const rows = [], byDate = [];
@@ -232,7 +237,7 @@ function replay(D, ctx, opt = {}) {
         return last ? dayGap(last, g.date) : 99;
       };
       const H = lineups(g, g.home, box[g.home]), A = lineups(g, g.away, box[g.away]), x = {};
-      for (const m of ['pretip', 'known', 'log', 'live']) if (H[m] && A[m]) {
+      for (const m of ['pretip', 'known', 'live']) if (H[m] && A[m]) {
         const sh = strength(H[m], D), sa = strength(A[m], D);
         x[m] = [g.neutral ? 0 : 1, ...groups.map(gg => (sh[gg] - sa[gg]) / 100)];
       }
@@ -254,7 +259,7 @@ function replay(D, ctx, opt = {}) {
         for (const r of rs) {
           if (r.dnp || !(r.min > 0)) continue;             // did not play: not rated
           const p = getP({ player_id: r.id, name: r.name, pos: r.pos, team: t }, g.season);
-          p.group = groupOf(r.pos, p.group); p.team = t; p.last = g.date; p.ts = g.season; if (r.name) p.name = r.name;
+          p.group = groupOf(r.pos, p.group); p.team = t; p.last = g.date; if (r.name) p.name = r.name;
           played.push(p.id);
           const rv = p.recent, early = rv.length >= 3 && median(rv) >= 0.8 * D.volume && r.min < D.left * median(rv) && !p.short;
           rv.push(r.min); if (rv.length > 5) rv.shift();
@@ -272,7 +277,7 @@ function replay(D, ctx, opt = {}) {
           p.R += (p.n < D.settled ? kNew : kSet) * w * (S - E); p.n++;
           (delta[uk] = delta[uk] || []).push(w * (S - E));
         }
-        const c = club(t); c.prev = played; c.boxSeason = g.season;
+        club(t).prev = played;
       }
       for (const [k, ds] of Object.entries(delta)) units[k] = (units[k] === undefined ? 1500 : units[k]) - D.kUnit * mean(ds);
     }
@@ -339,42 +344,53 @@ function score(list, pOf, mOf) {
 const scoreElo = (list, M, D, mode) => score(list, r => sig(logit(r, M, D, mode)), r => M.slope * logit(r, M, D, mode));
 
 /* ---------- the walk-forward ---------- */
-/* a season is scored on every decided regular-season and playoff final it has, each called on its honest pre-game
-   rotation (a game with no box score of its own is still called: its inputs are the games before it) */
+/* the design search scored a season on every decided regular-season and playoff final it has, each called on its honest
+   pre-game rotation (a game with no box score of its own is still called: its inputs are the games before it); the
+   walk-forward table, as every model's on the record, on the decided finals with both box scores (the same games
+   Alpha, the Joker and the player model count) */
 const testRows = (rows, S) => rows.filter(r => r.final && r.mov !== 0 && r.season === S);
+const boxRows = (rows, S) => testRows(rows, S).filter(r => r.box);
 /* the hub's rule for a change (README, "The October 2026 refresh"): lower log loss in both design seasons, by 0.0005
    between them, and the spread error no worse */
 const better = (a, b) => DESIGN_ON.every(S => a.per[S].logloss < b.per[S].logloss) && DESIGN_ON.reduce((s, S) => s + b.per[S].logloss - a.per[S].logloss, 0) >= 0.0005
   && mean(DESIGN_ON.map(S => a.per[S].mae)) <= mean(DESIGN_ON.map(S => b.per[S].mae)) + 1e-9;
-function research(ctx, ref) {
+/* The research: the design search (only when asked, `frozen` null: the design is frozen once chosen, and a later run
+   re-scores it, never chooses again), the walk-forward folds with that design, and the pricing of the Elo picks */
+function research(ctx, ref, frozen) {
   const cache = new Map();
   const rowsFor = D => { const key = JSON.stringify(STATE_KEYS.map(k => D[k])); if (!cache.has(key)) cache.set(key, replay(D, ctx).rows.filter(r => r.final)); return cache.get(key); };
   /* the design seasons alone: fitted on the seasons before each, scored on the call made before tip-off (pretip) */
   const design = D => { const rows = rowsFor(D), per = {}; for (const S of DESIGN_ON) per[S] = scoreElo(testRows(rows, S), fit(rows, D, D.fitFrom, S - 1), D, 'pretip'); return { per }; };
   const show = r => Object.fromEntries(DESIGN_ON.map(S => [S, { logloss: r.per[S].logloss, acc: r.per[S].acc, mae: r.per[S].mae }]));
-  let D = { ...DEFAULT }, best = design(D);
-  const trials = [{ change: 'start (the NFL form)', design: { ...D }, ...show(best), kept: true }];
-  L.log(`design start: ${JSON.stringify(show(best))}`);
-  for (let pass = 1, moved = true; moved && pass <= 3; pass++) {
-    moved = false;
-    for (const [k, vals] of Object.entries(GRID)) for (const v of vals) {
-      if (JSON.stringify(v) === JSON.stringify(D[k])) continue;
-      const q = { ...D, [k]: v }, res = design(q), ok = better(res, best);
-      trials.push({ pass, change: `${k} ${JSON.stringify(D[k])} -> ${JSON.stringify(v)}`, ...show(res), kept: ok });
-      L.log(`pass ${pass} ${k}=${JSON.stringify(v)}: ${DESIGN_ON.map(S => res.per[S].logloss).join(' / ')} ${ok ? 'KEPT' : ''}`);
-      if (ok) { D = q; best = res; moved = true; }
+  let D = { ...DEFAULT }, trials;
+  if (frozen) { D = { ...frozen.design }; trials = frozen.trials; L.log(`the design research/elo.json holds: ${JSON.stringify(D)}`); }
+  else {
+    let best = design(D);
+    trials = [{ change: 'start (the NFL form)', design: { ...D }, ...show(best), kept: true }];
+    L.log(`design start: ${JSON.stringify(show(best))}`);
+    for (let pass = 1, moved = true; moved && pass <= 3; pass++) {
+      moved = false;
+      for (const [k, vals] of Object.entries(GRID)) for (const v of vals) {
+        if (JSON.stringify(v) === JSON.stringify(D[k])) continue;
+        const q = { ...D, [k]: v }, res = design(q), ok = better(res, best);
+        trials.push({ pass, change: `${k} ${JSON.stringify(D[k])} -> ${JSON.stringify(v)}`, ...show(res), kept: ok });
+        L.log(`pass ${pass} ${k}=${JSON.stringify(v)}: ${DESIGN_ON.map(S => res.per[S].logloss).join(' / ')} ${ok ? 'KEPT' : ''}`);
+        if (ok) { D = q; best = res; moved = true; }
+      }
     }
   }
-  /* the folds, with the chosen design: 2024 and 2025 were read to choose it; 2026 is scored here for the first time */
-  const rows = rowsFor(D), folds = [];
+  /* the folds, with the chosen design: 2024 and 2025 were read to choose it; 2026 was scored once it was chosen. Every
+     number is on the decided finals with both box scores, the walk-forward table's games */
+  const rows = rowsFor(D), folds = [], fits = {};
   for (const S of FOLDS) {
-    const M = fit(rows, D, D.fitFrom, S - 1), te = testRows(rows, S), ids = new Set(te.map(r => r.id));
+    const M = fits[S] = fit(rows, D, D.fitFrom, S - 1), te = boxRows(rows, S), ids = new Set(te.map(r => r.id));
     const fold = { season: S, fitted: M.seasons, fitGames: M.games, coef: Object.fromEntries(Object.entries(M.coef).map(([f, v]) => [f, r6(v)])), slope: r6(M.slope) };
     fold.elo = scoreElo(te, M, D, 'pretip');
     /* the same model told who played (hindsight, the player model's "known" rows): never a call */
     fold.eloKnown = scoreElo(te.filter(r => r.x.known), M, D, 'known');
-    /* on the player model's own games, the finals with both box scores, for a like-for-like with research.json */
-    fold.eloBoxGames = scoreElo(te.filter(r => r.box), M, D, 'pretip'); delete fold.eloBoxGames.sigma;
+    /* every decided final, a final with no box score among them (called on the games before it), as the design search
+       scored its seasons: the count the first version published */
+    fold.eloAllFinals = scoreElo(testRows(rows, S), M, D, 'pretip'); delete fold.eloAllFinals.sigma;
     const tel = ref.teamElo.filter(r => ids.has(r.id));
     fold.teamElo = score(tel, r => r.pHome, r => r.margin); delete fold.teamElo.sigma;
     const pm = (ref.research.folds || []).find(f => f.season === S);
@@ -393,17 +409,91 @@ function research(ctx, ref) {
     fold.agree = { teamElo: r4(mean(te.filter(r => telById[r.id]).map(r => +(pickOf(eloP(r)) === pickOf(telById[r.id].pHome))))),
       market: r4(mean(withOdds.map(r => +(pickOf(eloP(r)) === pickOf(ref.odds[r.id].pHome))))) };
     folds.push(fold);
-    L.log(`fold ${S} (${fold.elo.games} games): ELO ${fold.elo.logloss} / ${(fold.elo.acc * 100).toFixed(1)}% / ${fold.elo.mae} | known ${fold.eloKnown.logloss} | team Elo ${fold.teamElo.logloss} | market ${fold.market.market.logloss} on ${fold.market.games} (ELO ${fold.market.elo.logloss})`);
+    L.log(`fold ${S} (${fold.elo.games} games): ELO ${fold.elo.logloss} / ${(fold.elo.acc * 100).toFixed(1)}% / ${fold.elo.mae} | known ${fold.eloKnown.logloss} | team Elo ${fold.teamElo.logloss} | market ${fold.market.market.logloss} on ${fold.market.games} (ELO ${fold.market.elo.logloss}) | all finals ${fold.eloAllFinals.games} ${fold.eloAllFinals.logloss}`);
   }
-  return { design: D, trials, folds, notes: NOTES };
+  return { design: D, trials, folds, pick: pickStudy(rows, D, fits, ref), notes: NOTES };
+}
+
+/* ---------- pricing the Elo picks ---------- */
+/* Suggested Parlays' Elo picks price the model's team legs against the book. On the closing line the model's own margin
+   and chance are no price: its cover chance Phi((m + h) / sigma) loses to a coin flip in every fold, and its moneyline
+   edges win about what the price implies. So a pick is priced on the model pulled toward the market: the spread on
+   wSpread m + (1 - wSpread)(-h), its sigma that margin's own miss; the moneyline on the logit blend wMl logit(p) +
+   (1 - wMl) logit(the market's no-vig chance). Each weight is chosen on the 2024 and 2025 folds alone (the pooled log
+   loss, on a grid of 0 to 1 by 0.05), the fold's model fitted on the seasons before it, and scored once on 2026. A
+   spread is scored on its cover, a push left out, at the closing line (the market's own chance there is a coin flip);
+   the 3-point-edge picks are those the NFL's Value rule would take, a spread against -110 (odds_hist.csv keeps no
+   spread price), a moneyline 45% to 97% and 3 points above the chance its price implies, margin left in */
+const PICK_GRID = Array.from({ length: 21 }, (_, i) => i / 20);
+const IMP = ml => ml < 0 ? -ml / (-ml + 100) : 100 / (ml + 100), DEC = ml => ml < 0 ? 1 + 100 / -ml : 1 + ml / 100;
+const lgt = p => Math.log(p / (1 - p));
+function pickStudy(rows, D, fits, ref, log = L.log) {
+  const { normCdf } = require('./props');
+  const ln = p => Math.log(Math.min(Math.max(p, 1e-6), 1 - 1e-6));
+  /* one study on one of the market's lines (`at`: the closing line, which the weights are chosen on, or the opening one,
+     shown beside it for information): each fold's games with that spread and those moneylines, the model's margin and
+     chance on each */
+  const study = at => {
+    const per = {};
+    for (const S of FOLDS) {
+      const M = fits[S], te = boxRows(rows, S).filter(r => ref.odds[r.id] && at(ref.odds[r.id]));
+      per[S] = {
+        spread: te.filter(r => at(ref.odds[r.id]).line !== null).map(r => ({ m: M.slope * logit(r, M, D, 'pretip'), h: at(ref.odds[r.id]).line, mov: r.mov })),
+        ml: te.map(r => { const o = at(ref.odds[r.id]); return { p: sig(logit(r, M, D, 'pretip')), q: o.pHome, hml: o.hml, aml: o.aml, y: r.mov > 0 ? 1 : 0 }; }),
+      };
+    }
+    const pool = k => DESIGN_ON.flatMap(S => per[S][k]);
+    const blendM = (g, w) => w * g.m + (1 - w) * -g.h;
+    const sigmaOf = w => Math.sqrt(mean(pool('spread').map(g => (g.mov - blendM(g, w)) ** 2)));
+    const spreadScore = (list, w, sd) => {
+      let ll = 0, n = 0, picks = 0, said = 0, won = 0;
+      for (const g of list) {
+        const c = g.mov + g.h; if (c === 0) continue;
+        const p = normCdf((blendM(g, w) + g.h) / sd), y = c > 0 ? 1 : 0; ll -= y ? ln(p) : ln(1 - p); n++;
+        const best = Math.max(p, 1 - p);
+        if (best >= IMP(-110) + 0.03) { picks++; said += best; won += (p >= 0.5) === (y === 1) ? 1 : 0; }
+      }
+      return { games: n, logloss: r6(ll / n), coin: r6(Math.log(2)), picks, said: picks ? r4(said / picks) : null, won: picks ? r4(won / picks) : null };
+    };
+    const mlP = (g, w) => sig(w * lgt(Math.min(Math.max(g.p, 1e-6), 1 - 1e-6)) + (1 - w) * lgt(g.q));
+    const mlScore = (list, w) => {
+      let ll = 0, mk = 0, picks = 0, said = 0, won = 0, units = 0;
+      for (const g of list) {
+        const p = mlP(g, w); ll -= g.y ? ln(p) : ln(1 - p); mk -= g.y ? ln(g.q) : ln(1 - g.q);
+        for (const [pp, ml, win] of [[p, g.hml, g.y === 1], [1 - p, g.aml, g.y === 0]]) {
+          if (pp < 0.45 || pp > 0.97 || pp < IMP(ml) + 0.03) continue;
+          picks++; said += pp; won += win ? 1 : 0; units += win ? DEC(ml) - 1 : -1;
+        }
+      }
+      return { games: list.length, logloss: r6(ll / list.length), market: r6(mk / list.length), coin: r6(Math.log(2)), picks, said: picks ? r4(said / picks) : null, won: picks ? r4(won / picks) : null, units: +units.toFixed(2) };
+    };
+    const argmin = f => PICK_GRID.reduce((b, w) => { const v = f(w); return v < b.v - 1e-12 ? { w, v } : b; }, { w: null, v: Infinity }).w;
+    const wS = argmin(w => spreadScore(pool('spread'), w, sigmaOf(w)).logloss), sd = sigmaOf(wS), sd1 = sigmaOf(1), wM = argmin(w => mlScore(pool('ml'), w).logloss);
+    const o = { spread: { w: wS, sigma: +sd.toFixed(3), sigmaModel: +sd1.toFixed(3), folds: {} }, ml: { w: wM, folds: {} } };
+    for (const S of FOLDS) {
+      o.spread.folds[S] = { model: spreadScore(per[S].spread, 1, sd1), pulled: spreadScore(per[S].spread, wS, sd) };
+      o.ml.folds[S] = { model: mlScore(per[S].ml, 1), pulled: mlScore(per[S].ml, wM) };
+    }
+    return o;
+  };
+  const close = study(o => o), open = study(o => o.open);
+  const out = { chosenOn: DESIGN_ON.join(' and '), grid: '0 to 1 by 0.05, the pooled log loss of the design seasons', spread: close.spread, ml: close.ml,
+    open: { note: 'the same, chosen the same way, against the opening line and opening moneylines: for information, never priced on', ...open } };
+  for (const [name, x] of [['close', close], ['open', open]]) for (const S of FOLDS) {
+    const a = x.spread.folds[S], b = x.ml.folds[S];
+    log(`pick ${name} ${S}: spread (${a.pulled.games}) model ${a.model.logloss} pulled ${a.pulled.logloss} coin ${a.pulled.coin}; edge picks ${a.model.picks} won ${a.model.won} -> ${a.pulled.picks} won ${a.pulled.won} | ml (${b.pulled.games}) model ${b.model.logloss} pulled ${b.pulled.logloss} market ${b.pulled.market}; edge picks ${b.model.picks} said ${b.model.said} won ${b.model.won} -> ${b.pulled.picks} said ${b.pulled.said} won ${b.pulled.won}`);
+  }
+  log(`pick weights, chosen on ${out.chosenOn}: wSpread ${close.spread.w} (sigma ${close.spread.sigma}), wMl ${close.ml.w} | against the opening line ${open.spread.w}, ${open.ml.w}`);
+  return out;
 }
 const pick4 = m => m ? { games: m.games, logloss: m.logloss, acc: m.acc, mae: m.mae } : null;
 const NOTES = [
-  'Every call is made before tip-off: the ratings are what the finals before the game\'s day left, the typical game they are scored against is the season before\'s, and tonight\'s rotation is the club\'s previous box-scored game\'s (elo, the honest number). eloKnown is the same model told who played, at projected minutes (hindsight, as the player model\'s "known" rows): never a call, only the bound a perfect injury report would reach.',
-  'The design was chosen on 2024 and 2025 alone (trials, one knob at a time from the NFL\'s form, each kept only by the hub\'s rule: lower log loss in both seasons, by 0.0005 between them, and the spread error no worse); 2026 was scored once, with that design. Two runs printed 2026 numbers before the search: the planning pilot (not in the repo) on plus-minus and Game Score, and a timing run of this code on the starting design under each of the three scores. No choice reads them: the search took every decision on 2024 and 2025 by the rule, and the score it kept is the one those 2026 numbers also favoured.',
-  'Each fold is fitted on the seasons before it (fitted) and scored on every decided regular-season and playoff final of its season. 2026-27, the season in play, is never fitted, tuned or scored.',
-  'teamElo is the hub\'s team model with model.json\'s parameters (fitted on 2008-2022, the home edge learned as the finals come), on the same games. playerModel is research.json\'s walk-forward, on its own games (finals with a box score, a few fewer). market is odds_hist.csv\'s consensus closing moneyline with the margin taken out, and its closing spread, on the games that have one (fetch_odds_hist.js check()), with the ELO Model and Team Elo on the same games beside it.',
-  'sigma is the root mean square of the margin\'s miss on the fold: the spread leg\'s chance is Phi((margin + home line) / sigma) for the home side.',
+  'Every call is made before tip-off: the ratings are what the finals before the game\'s day left, the typical game they are scored against is the season before\'s, and each club\'s rotation is its previous box-scored game\'s, less anyone who has since played for another club (elo, the honest number; a club\'s first game of a season reads its last game of the season before by the same rule, so a player who moved in the summer counts for his old club until he plays for his new one: the files keep no past rosters). eloKnown is the same model told who played, at projected minutes (hindsight, as the player model\'s "known" rows): never a call, only the bound a perfect injury report would reach.',
+  'The design was chosen on 2024 and 2025 alone (trials, one knob at a time from the NFL\'s form, each kept only by the hub\'s rule: lower log loss in both seasons, by 0.0005 between them, and the spread error no worse, each season scored on every decided final it has); 2026 was scored with that design once it was chosen, and the design is frozen: a later research run re-scores it (as the box-scored count of every model did) and never searches again unless asked (research search). 2026 numbers were printed before the search, and were seen, though the search never read them: the planning pilot (not in the repo, the spec\'s pilot table) printed 2026 log loss for Game Score (0.6424), plus-minus (0.6036), Game Score plus plus-minus (0.6038), plus-minus with the back-to-back column (0.6050), plus-minus told who played (0.6072), one rotation of eight against the three positions (0.610 against 0.607, at other K values) and new players at 1450 (0.602 against 0.604), and 2026-27\'s first 36 finals for Game Score (0.641) and plus-minus (0.619); a timing run of this code printed the starting design\'s 2026 numbers under each of the three scores. Of the six changes the search kept, those 2026 numbers favoured two (plus-minus over Game Score, the 1450 start) and were against three (the sum, one rotation, the back-to-back column); the unit\'s K at 60 was not compared on its own there (the pilot ran its rotation comparison at a unit K of 60, and K 20/10 and 12/6 with unit K 40/24, reported only as no better).',
+  'Each fold is fitted on the seasons before it (fitted) and scored on every decided regular-season and playoff final of its season with both box scores (elo: the games Alpha, the Joker and the player model count, the walk-forward table on the record); eloAllFinals adds the few finals with no box score, called on the games before them, as the design search scored its seasons. 2026-27, the season in play, is never fitted or tuned on; the README reports its backtest calls so far, for information only.',
+  'teamElo is the hub\'s team model with model.json\'s parameters (fitted on 2008-2022, the home edge learned as the finals come), on the same games. playerModel is research.json\'s walk-forward, on the same games. market is odds_hist.csv\'s consensus closing moneyline with the margin taken out, and its closing spread, on the games that have one (fetch_odds_hist.js check()), with the ELO Model and Team Elo on the same games beside it.',
+  'sigma is the root mean square of the margin\'s miss on the fold: the model\'s own spread chance is Phi((margin + home line) / sigma) for the home side.',
+  'pick is the pricing of Suggested Parlays\' Elo picks: the model\'s margin pulled toward the market\'s (the closing line), wSpread m + (1 - wSpread)(-home line), with that margin\'s own miss as sigma, and its chance toward the market\'s no-vig chance on the logit scale, wMl logit(p) + (1 - wMl) logit(q); each weight chosen on the pooled log loss of the 2024 and 2025 folds (a grid of 0 to 1 by 0.05) and scored once on 2026. A spread is scored on its cover at the closing line, a push left out, where the market\'s own chance is a coin flip; model is the model alone (w = 1), pulled the weight chosen. picks are the NFL Value rule\'s 3-point-edge picks: a spread side at 55.4% or more (3 points over -110, odds_hist.csv keeping no spread price), a moneyline side at 45% to 97% and 3 points over the chance its price implies with the margin in; units on $1 at the closing price. open is the same study against the opening line and opening moneylines (2023-24 on), chosen the same way, for information only: the weights the page prices on are the closing line\'s.',
 ];
 
 /* the comparisons' own numbers, each game by id: the team model's pre-game call (elo.js with model.json's parameters,
@@ -422,9 +512,13 @@ function references(root = L.ROOT) {
     const ok = check(r);
     if (!ok.ml) continue;
     const h = imp(+r.home_ml), a = imp(+r.away_ml);
-    odds[r.game_id] = { pHome: h / (h + a), margin: ok.line ? -r.home_line : null };
+    /* the opening numbers where the file has them (2023-24 on), for the Elo picks' study alone */
+    const oh = r.home_ml_open ? imp(+r.home_ml_open) : 0, oa = r.away_ml_open ? imp(+r.away_ml_open) : 0;
+    const open = oh && oa ? { pHome: oh / (oh + oa), line: r.home_line_open !== '' ? +r.home_line_open : null, hml: +r.home_ml_open, aml: +r.away_ml_open } : null;
+    odds[r.game_id] = { pHome: h / (h + a), margin: ok.line ? -r.home_line : null, line: ok.line ? +r.home_line : null, hml: +r.home_ml, aml: +r.away_ml, open };
   }
   const rj = path.join(root, 'research.json');
+  if (!fs.existsSync(rj)) L.log('research.json is missing: the player model is left out of the comparison');
   return { teamElo, odds, research: fs.existsSync(rj) ? JSON.parse(fs.readFileSync(rj, 'utf8')) : {} };
 }
 
@@ -433,24 +527,25 @@ function references(root = L.ROOT) {
    less the injury report's absences by their return dates, filled to 240 by projected minutes), run on the ELO Model's
    own players (`make` stands in for it in the tests, the same function loaded on another folder's files) */
 function liveProvider(make) {
-  if (!make) { try { make = require('./players').makeLiveLineup({ coachOf: () => '' }); } catch (e) { return null; } }
+  /* without the hub's rule the games to come would be called on no report at all: the run refuses instead */
+  if (!make) { try { make = require('./players').makeLiveLineup({ coachOf: () => '' }); } catch (e) { throw new Error('the injury rule (players.js makeLiveLineup) does not load: ' + e.message); } }
   const memo = {};
   return (g, t, players, projected, getP) => {
     if (!memo[g.id]) memo[g.id] = make({ season: g.season, date: g.date, home: g.home, away: g.away }, players, p => projected(p), getP);
     return memo[g.id][t === g.home ? 'home' : 'away'].list;
   };
 }
-/* the call each game gets: a game to come on tonight's rotation by the hub's rule; a final of the season in play on the
-   injury log of its day; any other on its previous game's rotation */
-const modeOf = r => !r.final && r.x.live ? 'live' : r.x.log ? 'log' : 'pretip';
-const callOf = (r, M, D) => { const z = logit(r, M, D, modeOf(r)); return { pHome: r4(sig(z)), spread: +(-M.slope * z).toFixed(1) }; };
+/* a game's call on one reading of who plays: pretip (the previous game's rotation), the one every row of `games` takes
+   and the walk-forward scores, or live (today's roster and report), the games to come's */
+const callOf = (r, M, D, mode = 'pretip') => { const z = logit(r, M, D, mode); return { pHome: r4(sig(z)), spread: +(-M.slope * z).toFixed(1) }; };
 
-/* the season in play: the latest with a game still to play, else the latest with a final; the last finished season is
-   the latest before it while a game is to play */
+/* the season in play: the latest with a game still to play, else (the summer) the latest with a final; the last
+   finished season is the latest before it, so that in no phase is the season in play in a fit: the summer's refit
+   waits for the new schedule */
 function seasons(ctx) {
   const toPlay = ctx.games.filter(g => !g.final).map(g => g.season), finals = ctx.games.filter(g => g.final).map(g => g.season);
   const inPlay = toPlay.length ? Math.max(...toPlay) : finals.length ? Math.max(...finals) : null;
-  const finished = finals.filter(s => s < inPlay || !toPlay.length);
+  const finished = finals.filter(s => s < inPlay);
   return { inPlay, lastFinished: finished.length ? Math.max(...finished) : null };
 }
 /* the live fit: the design's first fit season to the last finished one (or `to`) */
@@ -463,25 +558,30 @@ function fitLive(ctx, D, res, to) {
   return { design: D, feats: M.feats, coef: Object.fromEntries(Object.entries(M.coef).map(([f, v]) => [f, r6(v)])), slope: r6(M.slope),
     /* the spread leg's sigma: the walk-forward's residual on its last fold, else the fit's own */
     sigma: f2026 ? f2026.elo.sigma : self.sigma, sigmaFrom: f2026 ? `walk-forward ${f2026.season}, before tip-off` : `the fit ${M.seasons}`,
-    fitSeasons: M.seasons, fit: { games: self.games, logloss: self.logloss, acc: self.acc, mae: self.mae } };
+    fitSeasons: M.seasons, fit: { games: self.games, logloss: self.logloss, acc: self.acc, mae: self.mae },
+    /* the Elo picks' prices: the model pulled toward the market (research/elo.json's pick, chosen on 2024 and 2025) */
+    ...(res && res.pick ? { pick: { wSpread: res.pick.spread.w, wMl: res.pick.ml.w, sigma: res.pick.spread.sigma, chosenOn: res.pick.chosenOn,
+      spread: 'home side at home line h: Phi((wSpread * m + (1 - wSpread) * (-h) + h) / sigma), m = -spread, the model\'s home margin',
+      ml: 'home side: 1 / (1 + exp(-(wMl * logit(pHome) + (1 - wMl) * logit(the market\'s no-vig home chance))))' } } : {}) };
 }
 const ABOUT = D => 'The NFL hub\'s ELO Model on NBA box scores: every player an Elo rating moved after each final by his ' +
   ({ gs: 'Game Score', pm: 'on-court plus-minus', mix: 'Game Score plus on-court plus-minus' })[D.score] + (D.groups === 'one' ? ' against a regular\'s typical game' : ' against the position\'s typical game') + ' and the opposing club\'s unit, ' +
   (D.groups === 'one' ? 'each club\'s expected rotation of eight weighted by rating' : 'each club\'s expected guards, forwards and centres weighted by rating') +
   ', and the home win chance a logistic on the home-minus-away strengths and home court' + (D.b2b ? ' and back to backs' : '') +
-  ', with no intercept. The spread is the same logit times a fitted slope. Who plays: the previous game\'s rotation for history, the injury log for the season in play\'s finals, the hub\'s injury rule for games to come. Fitted on finished seasons only, never refitted by the job.';
+  ', with no intercept. The spread is the same logit times a fitted slope. Who plays: every call in games (a final, a game under way, a game of today or to come) on the club\'s previous box-scored game\'s rotation, less anyone who has since played for another club (a club\'s first game of a season on its last game of the season before), never this run\'s roster or report or the injury log; upcoming, the games not yet final, on the hub\'s injury rule and today\'s roster and report. Fitted on finished seasons only, never refitted by the job. The Elo picks price its legs pulled toward the market (params.pick).';
 
-/* the model file: every final and game to come of the season in play as the model calls it before tip-off, the games
-   to come apart, with the fitted numbers and the walk-forward */
+/* the model file: every game of the season in play as the model calls it before tip-off, on the previous game's
+   rotation whatever its state (the call tools/calls.js takes for a game played before the model's first published call,
+   so never this run's roster or report), the games not yet final apart on tonight's rotation by the hub's rule, with
+   the fitted numbers and the walk-forward */
 function build(ctx, P, walkForward, live) {
   const D = P.design, R = replay(D, ctx, { live });
   const { inPlay } = seasons(ctx);
   const M = { feats: P.feats, coef: P.coef, slope: P.slope };
   const games = {}, upcoming = {};
   for (const r of R.rows) {
-    const c = callOf(r, M, D);
-    if (!r.final) upcoming[r.id] = c;
-    if (r.season === inPlay) games[r.id] = c;
+    if (!r.final) upcoming[r.id] = callOf(r, M, D, r.x.live ? 'live' : 'pretip');
+    if (r.season === inPlay) games[r.id] = callOf(r, M, D, 'pretip');
   }
   return { id: 'elo', name: 'ELO Model', version: VERSION, about: ABOUT(D), fitSeasons: P.fitSeasons, params: P, walkForward, games, upcoming, status: { ok: true } };
 }
@@ -496,29 +596,38 @@ function write(file, obj, prev) {
   fs.writeFileSync(file, body);
   return true;
 }
-const readJson = f => { try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { return null; } };
+/* a file that is missing reads as null; one that is there and does not read says so */
+const readJson = f => { if (!fs.existsSync(f)) return null; try { return JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { throw new Error(`${path.relative(L.ROOT, f)} does not read: ${e.message}`); } };
 
 function main() {
   const t0 = Date.now();
   const OUT = path.join(L.ROOT, 'models', 'elo.json'), RES = path.join(L.ROOT, 'research', 'elo.json');
-  const prev = readJson(OUT), cmd = process.argv[2] || '';
+  const cmd = process.argv[2] || '', search = process.argv[3] === 'search';
+  let prev = null;
   try {
+    /* the last calls, kept by a refusal; a model file that does not read is a refusal of its own (the job puts the last
+       commit's back) */
+    prev = readJson(OUT);
     const ctx = load();
     if (!ctx.games.some(g => g.final)) throw new Error('no finals in data/games.csv');
     let res = readJson(RES);
     if (cmd === 'research') {
-      const R = research(ctx, references());
-      res = { name: 'ELO Model: walk-forward and design', version: VERSION, generatedBy: 'node tools/elo_model.js research', ...R };
+      /* the design is frozen: research re-scores the one research/elo.json holds; the search runs only when asked */
+      if (!search && !(res && res.design && res.trials)) throw new Error('research/elo.json holds no design to re-score: node tools/elo_model.js research search');
+      const R = research(ctx, references(), search ? null : { design: res.design, trials: res.trials });
+      res = { name: 'ELO Model: walk-forward and design', version: VERSION, generatedBy: 'node tools/elo_model.js research' + (search ? ' search' : ''), ...R };
       L.log(`research/elo.json ${write(RES, res, readJson(RES)) ? 'written' : 'unchanged'}`);
     }
     let P = prev && prev.params && prev.params.coef && cmd !== 'fit' && cmd !== 'research' ? prev.params : null;
     if (!P) {
-      const D = res && res.design ? res.design : { ...DEFAULT };
-      P = fitLive(ctx, D, res);
-      L.log(`fitted on ${P.fitSeasons}: ${JSON.stringify(P.coef)} slope ${P.slope} sigma ${P.sigma}`);
+      /* a first run, or a refit by hand: the design is research/elo.json's, never a default the research did not choose */
+      if (!(res && res.design)) throw new Error('research/elo.json holds no design: node tools/elo_model.js research search');
+      P = fitLive(ctx, res.design, res);
+      L.log(`fitted on ${P.fitSeasons}: ${JSON.stringify(P.coef)} slope ${P.slope} sigma ${P.sigma}${P.pick ? ` | picks wSpread ${P.pick.wSpread} wMl ${P.pick.wMl} sigma ${P.pick.sigma}` : ''}`);
     }
     const { lastFinished } = seasons(ctx);
     if (lastFinished && +P.fitSeasons.split('-')[1] < lastFinished) L.log(`note: the weights are fitted on ${P.fitSeasons}; ${lastFinished} has finished since (node tools/elo_model.js fit, by hand)`);
+    if (!(res && res.folds)) L.log('note: research/elo.json is missing; the walk-forward is the last model file\'s');
     const wf = res && res.folds ? Object.fromEntries(res.folds.map(f => [f.season, { games: f.elo.games, logloss: f.elo.logloss, acc: f.elo.acc, mae: f.elo.mae }])) : (prev && prev.walkForward) || {};
     const model = build(ctx, P, wf, liveProvider());
     const wrote = write(OUT, model, prev);
@@ -532,5 +641,5 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { load, replay, strength, fill240, groupOf, gameScore, logistic, fit, score, scoreElo, logit, build, write, callOf, modeOf, seasons, fitLive,
-  research, references, liveProvider, better, DEFAULT, GRID, DEPTHS, FOLDS, DESIGN_ON, STATE_KEYS, FIRST, VERSION };
+module.exports = { load, replay, strength, fill240, groupOf, gameScore, logistic, fit, fitRows, score, scoreElo, logit, build, write, callOf, seasons, fitLive,
+  research, pickStudy, references, liveProvider, better, testRows, boxRows, PICK_GRID, DEFAULT, GRID, DEPTHS, FOLDS, DESIGN_ON, STATE_KEYS, FIRST, VERSION };

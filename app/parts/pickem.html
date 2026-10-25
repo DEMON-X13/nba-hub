@@ -56,10 +56,12 @@
   const sign = n => n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0';
   const rec = t => `${t.w}–${t.l}`;
   const winner = g => g.score ? (g.score[1] > g.score[0] ? g.home : g.score[1] < g.score[0] ? g.away : null) : null;
-  /* Vegas: the moneylines with the margin out (a true 50/50 to the home side), else the spread's favourite */
+  /* Vegas: the moneyline favourite with the margin out; where the two prices are level (no favourite), else where there
+     is no moneyline, the spread's favourite; with neither, no side. A side from the spread alone has no chance (the hub
+     reads none from a spread), so it is in no confidence band, though it counts straight up */
   const vegas = g => {
-    if (g.ml && isFinite(g.ml[0]) && isFinite(g.ml[1]) && g.ml[0] && g.ml[1]) { const h = im(g.ml[1]), a = im(g.ml[0]), ph = h / (h + a); return { pick: ph >= 0.5 ? g.home : g.away, conf: Math.max(ph, 1 - ph) }; }
-    if (g.line) return { pick: g.line < 0 ? g.home : g.away, conf: 0.6 };
+    if (g.ml && isFinite(g.ml[0]) && isFinite(g.ml[1]) && g.ml[0] && g.ml[1]) { const h = im(g.ml[1]), a = im(g.ml[0]), ph = h / (h + a); if (ph !== 0.5) return { pick: ph > 0.5 ? g.home : g.away, conf: Math.max(ph, 1 - ph) }; }
+    if (g.line) return { pick: g.line < 0 ? g.home : g.away, conf: null };
     return null;
   };
   const pickOf = (g, id) => g.c && isFinite(g.c[id]) ? (g.c[id] >= 0.5 ? g.home : g.away) : null;
@@ -82,7 +84,7 @@
     const gs = rows.map(g => { const v = vegas(g); if (!v) return null; return { ok: v.pick === winner(g), conf: v.conf, err: g.line !== null ? Math.abs(g.score[1] - g.score[0] + g.line) : null }; }).filter(Boolean);
     if (!gs.length) return '';
     const c = gs.filter(x => x.ok).length, bands = { high: [0, 0], med: [0, 0], low: [0, 0], coin: [0, 0] };
-    for (const x of gs) { const b = band(x.conf)[0]; bands[b][1]++; if (x.ok) bands[b][0]++; }
+    for (const x of gs) { if (x.conf == null) continue; const b = band(x.conf)[0]; bands[b][1]++; if (x.ok) bands[b][0]++; }
     const pc = ([a, n]) => n ? Math.round(100 * a / n) + '%' : '–';
     const errs = gs.filter(x => x.err !== null);
     return `<div class="strip" id="pkTiles">
@@ -145,7 +147,7 @@
   }
   function draw() {
     const el = $('#tab-pickem');
-    const head = `<h2>Pick'em Record <small>every model's straight-up record this season against Vegas's, each graded on the call it published before tip-off</small></h2>`;
+    const head = `<h2>Pick'em Record <small>every model's straight-up record this season against Vegas's, each graded on the call it published before tip-off, or, for a game played before a model began publishing, one call made on what was known before that game's tip (a backtest)</small></h2>`;
     if (!PK) { el.innerHTML = head + (PK_ERR ? '<p class="muted" role="status">The record did not load. Open the tab again to try again.</p>' : '<p class="muted" role="status">Loading the record…</p>'); return; }
     const T = tallies();
     if (!T.rows.length) { el.innerHTML = head + '<div class="empty"><b>No graded games yet</b>The record starts with the season\'s first final.</div>'; return; }

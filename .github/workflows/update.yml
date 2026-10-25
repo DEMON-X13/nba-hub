@@ -183,15 +183,26 @@ jobs:
         run: |
           git config user.name "nba-hub bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data models model.json players.json props.json lines.json liveparlays/parlays.json
+          git add data models model.json players.json props.json liveparlays/parlays.json
+          if [ -e lines.json ]; then git add lines.json; fi    # absent until the lines feed's first read: a missing path would stop git add
           if [ "${{ steps.publish.outcome }}" = "success" ] && [ "${{ steps.tests.outcome }}" = "success" ]; then git add state.json history.json pickem.json index.html admin.html
           else echo "::warning::publishing or the tests failed: the data is committed, state.json, history.json and the pages are left as they were"; for f in state.json history.json pickem.json index.html admin.html; do if git cat-file -e "HEAD:$f" 2>/dev/null; then git checkout HEAD -- "$f"; else rm -f "$f"; fi; done; fi
           if git diff --cached --quiet; then echo "nothing changed"; else
             git commit -m "update $(date -u +'%Y-%m-%d %H:%M UTC')"
             ok=0
+            # liveparlays/parlays.json is kept by hand as well as cleared by this job: when a hand edit landed on main during
+            # the run and the rebase stops on that file alone, main's copy is kept and this run's clearing dropped (the next
+            # run clears it again from games.csv), so the run's data is never lost to it
             for i in 1 2 3; do
-              if git pull --rebase && git push; then ok=1; break; fi
-              git rebase --abort 2>/dev/null || true          # a stopped rebase would make every retry fail at once
+              if ! git pull --rebase; then
+                if [ "$(git diff --name-only --diff-filter=U)" = "liveparlays/parlays.json" ] && git checkout --ours -- liveparlays/parlays.json && git add liveparlays/parlays.json && GIT_EDITOR=true git rebase --continue; then
+                  echo "liveparlays/parlays.json changed on main during the run: main's copy kept, this run's clearing left to the next"
+                else
+                  git rebase --abort 2>/dev/null || true      # a stopped rebase would make every retry fail at once
+                  echo "push raced another job, retrying ($i)"; sleep 15; continue
+                fi
+              fi
+              if git push; then ok=1; break; fi
               echo "push raced another job, retrying ($i)"; sleep 15
             done
             [ "$ok" = 1 ]

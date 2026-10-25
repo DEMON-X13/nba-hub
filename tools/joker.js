@@ -46,7 +46,8 @@
  *
  * A refusal (Refuse: a season the trees were not fitted for, no games) writes status {ok: false, why}, keeps the last good
  * calls less any game no longer to come, and exits 0, so the job publishes it and the Pick'em Record says why; anything
- * else that goes wrong writes the same and exits 1, and the job puts the last commit's file back.
+ * else that goes wrong writes the same and exits 1, so the step is red and that file is committed; the job puts the last
+ * commit's file back only when the tests (test_gbm.js, test_joker.js) fail.
  */
 'use strict';
 const fs = require('fs');
@@ -700,7 +701,7 @@ function main(argv = process.argv.slice(2)) {
     L.log(`joker: ${season} season, ${Object.keys(out.games).length} calls (${Object.keys(out.upcoming).length} to come), ${noLine} games to come with no moneyline yet and so no call, ${Object.keys(out.inputs.rows).length} input rows logged | models/joker.json ${wrote ? 'written' : 'unchanged'} in ${((Date.now() - t0) / 1000).toFixed(1)}s`);
   } catch (e) {
     /* a refusal is the model saying why: the file says so, and the job publishes it. Anything else is a fault: the file
-       says so too, and the run fails, so the job puts the last commit's file back */
+       says so too, and the run fails: the step is red, and the job puts the last commit's file back only if the tests fail */
     const refused = e instanceof Refuse, why = refused ? e.message : `${e.name}: ${e.message}`;
     console.log(`::warning title=joker did not run::${why}`);
     L.log(`joker: ${refused ? why : e.stack}; its last good calls stay in models/joker.json, less any game no longer to come`);

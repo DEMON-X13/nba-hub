@@ -491,6 +491,14 @@ module.exports = async function xParlays({ check, pageFile, ROOT }) {
         'the page reads the recorded box score (data/sample_summary.json) exactly as the job does: every player, his line, minutes and did-not-play');
       const lab = A.w.NBA_LP.boxSide(sumOf([['NYK', [ath('1', 'A B', [30, 20, 11, 3, 2, 1, 0])]]], true), 'NYK');
       check(JSON.stringify(lab[0].line) === '[20,11,3,2,1,0]' && lab[0].min === 30, 'a box with labels and no keys is read by its labels');
+      /* a leg whose player has an id is found by it or not at all: never on a teammate of the same last name and initial
+         (Jalen and Jaylin Williams, OKC); a leg with no id falls back to the name, where one player answers */
+      /* made-up names, so the published players give the no-id leg no id of their own */
+      const twin = sumOf([['OKC', [ath('9001', 'Jaxlin Wilmerding', [24, 8, 9, 2, 1, 0, 0])]]]), og = { home: 'OKC', away: 'SAS' };
+      const bp = A.w.NBA_LP.boxPlayer, idOf = r => r && r.a ? r.a.id : null;
+      check(idOf(bp(twin, { name: 'Jalen Wilmerding', pid: '9002', team: 'OKC' }, og)) === null && idOf(bp(twin, { name: 'Jaxlin Wilmerding', pid: '9001', team: 'OKC' }, og)) === '9001'
+        && idOf(bp(twin, { name: 'Jaxlin Wilmerding', team: 'OKC' }, og)) === '9001' && idOf(bp(twin, { name: 'J. Wilmerding', team: 'OKC' }, og)) === '9001',
+        'a player missing from the box is not graded on a teammate who shares his last name and initial; a leg with no id is found by name');
       const L = require('./lib');
       check(Object.entries({ GS: 'GSW', NO: 'NOP', NY: 'NYK', SA: 'SAS', UTAH: 'UTA', WSH: 'WAS', BOS: 'BOS' }).every(([e, o]) => L.fromEspn(e) === o), 'ESPN\'s team codes are the job\'s (tools/lib.js)');
     }

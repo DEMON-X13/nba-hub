@@ -33,6 +33,9 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `models/joker.json`, `research/joker.json` | The Joker's frozen trees, its call on every game of the season in play with a moneyline, the season's input rows as the job saw them before each tip; and its walk-forward with the design choice |
 | `tools/test_joker.js`, `tools/test_gbm.js` | The Joker's leakage check (a game's row the morning it is played is its row once final), its rows by hand, its run's and a refusal's file, and on the real data in any phase of a season the file against today's data and the last commit; the trees on sets worked out by hand |
 | `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players and coaches (with their overall Elo on the ladder the tier shields are drawn on, and its change over 7 days), the backtest, the market table (`vsMarket`, from `research/backtest.json`), the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays"); and `history.json` |
+| `tools/calls.js`, `tools/calls_check.js`, `data/calls.json` | The calls ledger (README "Pick'em Record"): each game model's call on each game of the season in play, published before tip-off and frozen from it, and its check against the last commit |
+| `tools/test_calls.js` | The calls ledger and its check on made-up games and model files |
+| `pickem.json`, `app/parts/pickem.html` | The Pick'em Record (README "Pick'em Record"): the season's games, each model's call and the weeks, written by `publish.js`; the tab that grades them against Vegas |
 | `tools/lines.js`, `lines.json` | The lines feed (README "The lines feed"): DraftKings' game lines, with both prices and their betslip ids, and every player prop on the games of the next two Eastern dates with a game to come, read by the job from ESPN's free feeds after the props model |
 | `tools/lines_feed.js` | DraftKings' game lines as ESPN's scoreboard carries them: the page's own reading (`oddsDkHref`, `oddsIdOk`, `oddsGameLines`), line for line, and lines.json's shape of it |
 | `tools/alpha.js`, `models/alpha.json`, `research/alpha.json` | The Alpha Model (README "The Alpha Model"): the NFL hub's main game model refitted on NBA games; its calls on the season in play and the games to come, and its walk-forward and every design choice tried |
@@ -520,9 +523,10 @@ in a fit; the run logs a note when a season has finished since the fit), and `no
 4 seconds) re-scores the frozen design, prices the Elo picks and refits. An unchanged file keeps its stamp, so a quiet day
 commits nothing. A run that cannot call refuses: it exits 1, keeps the last good calls and writes `status: {ok: false,
 why}` (no final in games.csv, the injury rule not loading, a research file that does not read, no design to fit; a model
-file that does not read is left as it is), says why in the log, and the job puts the last commit's file back.
+file that does not read is left as it is), says why in the log; the job commits that file (the step red, the Pick'em
+Record saying why) and puts the last commit's back only when the test fails.
 
-The job runs `node tools/elo_model.js && node tools/test_elo_model.js` in one step, so the test (about 10 seconds) passes
+The job runs `node tools/elo_model.js`, then `node tools/test_elo_model.js` whatever the model's exit, in one step, so the test (about 10 seconds) passes
 in every phase of a season on the data as the job sees it, and turns on nothing ESPN can fill in late: an old final's box
 score back-filled moves the refit and the folds' counts, which the test prints as notes, never failures, while the fit
 procedure is held on made-up data. It holds the leakage rule (on the real data's latest day with a final and a mid-season
@@ -667,8 +671,8 @@ a season is under way, a fit whose inputs read it (the trees' own seasons, or th
 `model.json`'s parameters were fitted on, as a players.js refit taking in the season in play would) is refused unless
 `--force` is passed: its trees would call games they were fitted on. A refused fit leaves the file as it was.
 
-The job's step is `node tools/joker.js && node tools/test_joker.js`, after `players.js` and before `calls.js`, with
-`models/joker.json` put back to the last commit's when either fails; the test runs whole, about ten seconds on the
+The job's step is `node tools/joker.js`, then `node tools/test_gbm.js` and `node tools/test_joker.js` whatever its exit,
+after `players.js` and before `calls.js`, with `models/joker.json` put back to the last commit's when the tests fail; the test runs whole, about ten seconds on the
 real data (twenty when the training rows have drifted, below), in every phase of a season. `node tools/joker.js`
 rebuilds the rows from the data and scores the season in play with them, in about five seconds: a call (`pHome`,
 `spread`) on every final and game not final that has a moneyline, a final's being the call it had the morning it was
@@ -681,7 +685,8 @@ posted gets no call: a missing market would be imputed as a typical favourite; o
 schedule comes in, until the trees are refitted by hand) and an empty schedule: a refusal writes `status: {ok: false,
 why}`, keeps its last good calls less every game no longer to come (so the file never lists a tipped game as one to
 come), and exits 0, so the job publishes it and the Pick'em Record says why. Anything else that goes wrong (a file that
-does not read, a fault in the code) writes the same and exits 1, and the job puts the last commit's file back. An
+does not read, a fault in the code) writes the same and exits 1, so the step is red and that file, the last good calls
+saying why, is committed; the last commit's file is put back only when the tests fail. An
 unchanged file keeps its stamp, so a quiet rerun writes nothing.
 
 The test holds, on the real data in whatever phase it is in: the leakage check on the last day with finals; the file's
@@ -703,6 +708,63 @@ What it does not use, and why:
   from 2026-27 only. **Referees, arenas**: not in the hub's data, and the arena is the home club.
 - **A refit in the season**: none. If one is ever made, the NFL's rule holds: the calls it replaced go in a file the job
   never writes, and the record grades those.
+
+## Pick'em Record
+
+The NFL hub's Pick'em Record, on NBA games: every model's straight-up record this season against Vegas's, on the calls
+each published before tip-off. The models are the three ported from the NFL hub (the Alpha Model, the Joker, the ELO
+Model: README sections above), the hub's own Player Model (the number Tonight shows, `data/predictions.csv`'s `pHome`)
+and Team Elo (`team_pHome` there); Vegas is the zero line.
+
+### The calls ledger (`tools/calls.js`, `data/calls.json`)
+
+`data/calls.json` is `{season, about, calls: {alpha|joker|elo: {<game id>: {pick, pHome, at, src}}}}`, one call a line,
+written by `node tools/calls.js` from each model's `models/<id>.json` (the Player Model's and Team Elo's calls are
+`data/predictions.csv`'s, frozen the same way by `players.js`). A game still to tip takes this run's call (`src:
+'published'`, `at` the run's time; an unchanged chance keeps its old stamp, so a quiet run writes nothing); from tip-off
+(its status no longer scheduled, or its tip time passed) the call is frozen and never written again. A game played before
+a model's first published call (the model is new, or the season is) gets one call from the model's own replay, worked out
+on what was known before that game's tip by the model fitted on earlier seasons only (`src: 'backtest'`, each model's
+section says its pre-tip reading); a game a publishing model missed (it could not run that day) gets none. A model whose
+file is missing or says it could not run adds nothing and keeps what it had. A new season starts a new ledger (the last
+season's stays in git). `CALLS_NOW` stands in for the clock, for tests.
+
+`node tools/calls_check.js` holds the file to the last commit's (`git show HEAD:data/calls.json`) and `data/games.csv`: a
+call the last commit had on a game that has since tipped is still there, unchanged; a published call was logged before its
+game's tip; a backtest call is on a game that tipped before the model's first published call; every pick is the side its
+chance favours, its game a regular-season or playoff game of the file's season. A first file is held to the last three
+rules alone. In the job a failure puts `data/calls.json` back as committed and turns the run red (README "Runs"). No
+ledger is committed from a branch: the job's first run on main writes it, so no call counts as published before the site
+showed it.
+
+### The record (`tools/publish.js`, `pickem.json`, `app/parts/pickem.html`)
+
+`publish.js` writes `pickem.json`: every regular-season and playoff game of the season in play from its first to today
+(Eastern), with the moneylines and spread as the games table froze them at tip, the score once final, each model's call
+(`c`, with `backtest` naming the models whose call on that game is a backtest, kept as data: the page draws every call
+alike, as the NFL owner asked) and the weeks: Monday to Sunday, Eastern, week 1 holding the season's first
+regular-season game, the playoffs in their own weeks, P1 on (the play-in is typed regular season, as in the history,
+so it stays in the regular weeks). A model whose file says it could not run
+is named with why (`status`). It is committed with `state.json`, and put back with it when publishing or the tests fail.
+
+The tab (`#pickem`, its own part) reads `pickem.json` no-store when it is first opened, never on load or a timer, and
+grades the finals itself. **Vegas** is the moneyline favourite with the margin out; where the two prices are level, or
+there is no moneyline, the spread's favourite; with neither, no side (that game is in no model's net). Top to bottom:
+Vegas's tiles (straight up; its confidence bands, `band`'s 75/60/55, counting only a side read from a moneyline, since the
+hub reads no chance from a spread; the spread's average miss), the chart **Wins against Vegas** (each model's wins minus
+Vegas's on the same games, added up week by week, Vegas the zero line; a model is counted only on the games it called,
+and Vegas on the same ones), the **week by week** grid (each model's record a week and the season, shaded red under .500
+and green above), and **Show every pick**, a pick grid one Eastern day at a time. Model colours: Alpha green, the Joker
+red, the ELO Model orange, the Player Model violet, Team Elo ice blue.
+
+### The checks
+
+`node tools/test_calls.js` holds the ledger and its check on made-up games and model files (backtest and published
+calls, a quiet run, a moved chance restamped, a frozen call kept whatever the model says, a model that cannot run, a new
+model backfilling only the games before its first call, every refusal of the check, a new season). `node tools/smoke.js`
+section 12 holds the tab on a made-up season worked out by hand (the tiles, the legend, the chart's lines and weeks, the
+tooltip, the grid, the pick grid, a model that could not run, level moneylines falling to the spread, the bands counting
+only moneyline sides) and on the real `pickem.json`.
 
 ## Player props
 
@@ -1461,9 +1523,11 @@ The games are every game `data/games.csv` has still to come (status scheduled an
 its horizon; never preseason, which DraftKings posts only milestones for and the page prices from no model) on the next
 two Eastern dates with such a game: Sunday night and Monday, then Monday and Tuesday once Sunday's last game has tipped. For each of those dates one scoreboard
 request, the one `fetch.js` makes, and for each game one propBets request by ESPN's event id (another only past a page,
-six at a time). Every request is a plain GET with no headers of its own, past any cache (`cache: 'no-store'` and a
-cache-buster), dropped after 15 seconds, and tried once more after a second on a timeout, a reset or a 408, 425, 429 or
-5xx; any other refusal is answered at once, so a 404 on the props reads as nothing posted.
+six at a time). Every request is a GET past any cache (`cache: 'no-store'` and a cache-buster), dropped after 15
+seconds, made with `tools/lib.js`'s header sets in turn (the named nba-hub User-Agent with Accept: application/json
+first, then none, then a browser's), the box-score pull's proven fallback: up to three tries a second apart, the next
+set on a timeout, a reset or a 403, 408, 425, 429, 500, 502, 503 or 504; any other refusal is answered at once, so a
+404 on the props reads as nothing posted.
 
 A game's **game lines** are read from its event in the day's answer by `tools/lines_feed.js`, whose `oddsDkHref`,
 `oddsIdOk` and `oddsGameLines` are the page's own text (Refresh odds and your parlay read the same way), copied whole:
@@ -1520,7 +1584,9 @@ same. The rules:
   final, or whose own tip there has passed, is dropped; one whose tip passes while the reads are out is not taken; and
   every game of the last file no longer among the games to come (tipped, postponed, past the two dates) goes.
 - **When nothing answers** (every scoreboard and every propBets request failed) the file is left byte for byte as it
-  was and the run exits 1. A run with some reads failed exits 0 and says which in its log line.
+  was and the run exits 1. When a whole half fails for every game (every scoreboard refused, or every propBets read
+  tried), the other half is written, the failed half keeps its last good reads and the run exits 1 too, so the step is
+  red and a stale feed is seen. A run with only some reads failed exits 0 and says which in its log line.
 - A last file that is not JSON, not version 1 or has an entry out of the shape (`entryBad`) is not carried: those games
   start afresh, and the file is rewritten.
 
@@ -1555,7 +1621,9 @@ number and an id naming another number taken as nothing; the drops (live by ESPN
 the reads, a final, a preseason game, a game no longer to come in the last file, a junk entry); the last good read (a
 refused or junk scoreboard, a game missing from its answer, refused props, a half never read, a game never read, a last
 read under another event id); nothing answering, through `run` and from the command line (exit 1, the file untouched);
-the reader itself on a stubbed fetch (no headers, no-store, the cache-buster, which refusals are tried again); the quiet
+the reader itself on a stubbed fetch (lib's header sets in turn, the named User-Agent first, a 403 moving to the next,
+no-store, the cache-buster, which refusals are tried again); a whole half down (the run partial, exit 1 from the
+command line, the last good reads kept) and a junk last entry never carried; the quiet
 run (the same answers write nothing, the file's time included; a moved moneyline and moved props rewrite those halves
 alone); and the committed `lines.json`, where there is one, held to its shape. `node tools/test_fetch.js` section 5
 holds the national networks on the recorded answers and made-up listings and `merge`'s freeze. `node tools/smoke.js`
@@ -1895,7 +1963,8 @@ scheduled runs 3 to 9 hours late, so they land from the morning to the late afte
 for last night's finals and box scores, the other two for the day's lines and injury report. Each run reads
 from the earlier of the first day in the last three weeks with a game not final (today included) and the day
 after the last final, to thirty days ahead; then the new box scores, the injury report, the coaches and
-rosters, both models, and publishes. A game's line and its logged number are frozen at its tip-off, so a run
+rosters, the team and player models, the three game models ported from the NFL hub and the calls ledger, and
+publishes. A game's line and its logged number are frozen at its tip-off, so a run
 that lands during a game changes neither.
 
 ESPN answering with no events at all for a day the table has games on, from yesterday to ten days out, is a
@@ -1914,11 +1983,20 @@ After the players model, the props step reads DraftKings' closing lines for the 
 (`props.json`) and the shadow ledger, and runs the ledger's check; when either fails, every props data file goes back to
 the last commit's and the run is red (README "Player props"). Then the lines step (`node tools/lines.js`) reads
 DraftKings' lines on the next two dates' games into `lines.json` (README "The lines feed"), committed with the data
-whenever the pull succeeded; when nothing answers the file stays as it was and the step is red.
+whenever the pull succeeded (added only once it exists: until the feed's first read there is none); when nothing
+answers the file stays as it was, and when every game-lines or every props read fails that half keeps its last good
+reads; either way the step is red.
+
+After the player model, the three game models run one step each (`node tools/alpha.js`, `node tools/joker.js`, `node
+tools/elo_model.js`, each followed by its test whatever its exit): a model that cannot run keeps its last calls, says
+why and the file is committed, the step red unless it is the Joker's planned refusal; a test that fails puts the model's
+file back as committed. Then the calls ledger (`node tools/calls.js && node tools/calls_check.js`, README "Pick'em
+Record") freezes each model's call at tip-off; a failure puts `data/calls.json` back as committed. `publish.js` reads
+both into `pickem.json`, committed with `state.json`.
 
 After the pull, each step may fail on its own: the data folder and the model files are committed whenever the pull
 succeeded, and state.json and the pages only when publishing and the tests (`tools/test_fetch.js`,
-`tools/test_fetch_box.js`, `tools/test_props.js`, `tools/test_corr.js`, `tools/test_lines.js`, then the page's smoke test on the new state)
+`tools/test_fetch_box.js`, `tools/test_props.js`, `tools/test_corr.js`, `tools/test_lines.js`, `tools/test_calls.js`, then the page's smoke test on the new state)
 pass; the run is red when any step failed. The page says when the injury report is older than the file it came in. On
 demand the job takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
 `claude/` branch too, committing there and in its own queue; the schedule only fires from `main`).

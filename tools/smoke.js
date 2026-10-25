@@ -1408,7 +1408,8 @@ async function pickemRecord() {
   const PKR = JSON.parse(fs.readFileSync(path.join(ROOT, 'pickem.json'), 'utf8'));
   /* the record worked out here: Vegas the moneyline favourite with the margin out, else the spread's, else none */
   const im = x => x < 0 ? -x / (-x + 100) : 100 / (x + 100);
-  const vOwn = g => g.ml && g.ml[0] && g.ml[1] ? (im(g.ml[1]) / (im(g.ml[1]) + im(g.ml[0])) >= 0.5 ? g.home : g.away) : g.line ? (g.line < 0 ? g.home : g.away) : null;
+  /* Vegas, on the smoke's own reading: the moneyline favourite (margin out); level prices or none, the spread's favourite; neither, none */
+  const vOwn = g => { if (g.ml && g.ml[0] && g.ml[1]) { const ph = im(g.ml[1]) / (im(g.ml[1]) + im(g.ml[0])); if (ph !== 0.5) return ph > 0.5 ? g.home : g.away; } return g.line ? (g.line < 0 ? g.home : g.away) : null; };
   const won = g => g.score ? (g.score[1] > g.score[0] ? g.home : g.away) : null;
   const own = pk => {
     const rows = pk.games.filter(g => g.score && g.score[0] !== g.score[1]);
@@ -1453,6 +1454,14 @@ async function pickemRecord() {
      spread's miss |margin + line| over the five graded games with a non-zero... every graded game with a line */
   check(tiles[0] === '60.0% Vegas straight-up, 3 of 5', `Vegas straight-up: ${tiles[0]}`);
   const misses = fake.games.filter(g => g.score && g.line !== null && vOwn(g)).map(g => Math.abs(g.score[1] - g.score[0] + g.line));
+  /* the confidence bands count only a Vegas side with a chance: the spread-only PHX side is straight up and in no band */
+  const bandN = tiles.slice(1, 5).map(t => +/(\d+)\/(\d+)$/.exec(t)[2]).reduce((x, y) => x + y, 0);
+  check(bandN === 4, `the four confidence tiles count the four Vegas sides read from a moneyline, not the spread-only one (${bandN})`);
+  /* level moneylines have no favourite: the spread's favourite stands in, and with no spread there is no Vegas side */
+  const VG = w.NBA_PICKEM.vegas, lv = (ml, line) => VG({ away: 'BOS', home: 'NYK', ml, line });
+  check(lv([-110, -110], 1.5).pick === 'BOS' && lv([-110, -110], 1.5).conf === null && lv([-110, -110], 0) === null && lv([-110, -110], -2).pick === 'NYK'
+    && lv([120, -140], 3).pick === 'NYK' && lv([-100, 100], 0) === null,
+    'level moneylines fall to the spread\'s favourite (none with no spread); a moneyline favourite stands whatever the spread');
   check(tiles[5] === `${(misses.reduce((a, x) => a + x, 0) / misses.length).toFixed(1)} spread's avg miss, pts`, `the spread's average miss, |margin + line| over the graded games Vegas called: ${tiles[5]}`);
   const lg = [...d.querySelectorAll('#pkChart .lgd')].map(x => x.textContent.replace(/\s+/g, ' ').trim());
   const legWant = fake.models.filter(m => want.res[m.id]).map(m => `${m.name} ${want.res[m.id].w}–${want.res[m.id].l} ${sign(want.res[m.id].net)} vs Vegas`).concat([`Vegas ${want.vegas.w}–${want.vegas.l} the zero line`]);

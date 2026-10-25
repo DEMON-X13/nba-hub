@@ -637,14 +637,17 @@ function boxSide(sum, team) {
       line: dnp ? null : [n('pts') || 0, reb || 0, n('ast') || 0, tpm || 0, n('stl') || 0, n('blk') || 0], min: dnp ? null : n('min') };
   });
 }
-/* the leg's player in the box: by his ESPN id, else his whole name, else last name and initial, and only where one
-   player answers to it; on his club's side, or either side for a club the leg does not name in this game */
+/* the leg's player in the box: by his ESPN id, else (only for a leg whose player has no id, in the file or on the
+   published players) his whole name, else last name and initial, and only where one player answers to it; on his club's
+   side, or either side for a club the leg does not name in this game. A known id is never matched by name: a player
+   missing from the box is not on it, and is not graded on a teammate who shares his last name and initial (Jalen and
+   Jaylin Williams, OKC), as the published grading (propGrade's box[pid]) never does */
 function boxPlayer(sum, l, g) {
   const sides = g && l.team !== g.home && l.team !== g.away ? [g.home, g.away] : [l.team];
   const list = [].concat(...sides.map(t => boxSide(sum, t) || []));
   const pid = legPid(l);
   let a = pid ? list.find(x => x.id === pid) : null;
-  if (!a) { const full = normName(l.name), m = list.filter(x => normName(x.name) === full); if (m.length === 1) a = m[0];
+  if (!a && !pid) { const full = normName(l.name), m = list.filter(x => normName(x.name) === full); if (m.length === 1) a = m[0];
     else if (!m.length) { const k = nameKey(l.name), m2 = list.filter(x => nameKey(x.name) === k); if (m2.length === 1) a = m2[0]; } }
   return { a: a || null, any: list.length > 0 };
 }
@@ -984,7 +987,7 @@ window.lpShow = () => { if (!STATE.shown) { STATE.shown = true; draw(); refresh(
 window.lpLeave = () => { const s = $lp('tab-xparlays'); if (askOpen() && s && s.hidden) askClose(false, true); };
 window.lpRefresh = refresh;
 /* what the smoke test reads */
-window.NBA_LP = { key: HERE_KEY, readFile, gidParts, sbGames, boxSide, liveLeg, liveGameLeg, liveTotal, state: () => STATE };
+window.NBA_LP = { key: HERE_KEY, readFile, gidParts, sbGames, boxSide, boxPlayer, liveLeg, liveGameLeg, liveTotal, state: () => STATE };
 foot();
 })();
 </script>
@@ -3738,10 +3741,12 @@ Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind
   const sign = n => n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0';
   const rec = t => `${t.w}–${t.l}`;
   const winner = g => g.score ? (g.score[1] > g.score[0] ? g.home : g.score[1] < g.score[0] ? g.away : null) : null;
-  /* Vegas: the moneylines with the margin out (a true 50/50 to the home side), else the spread's favourite */
+  /* Vegas: the moneyline favourite with the margin out; where the two prices are level (no favourite), else where there
+     is no moneyline, the spread's favourite; with neither, no side. A side from the spread alone has no chance (the hub
+     reads none from a spread), so it is in no confidence band, though it counts straight up */
   const vegas = g => {
-    if (g.ml && isFinite(g.ml[0]) && isFinite(g.ml[1]) && g.ml[0] && g.ml[1]) { const h = im(g.ml[1]), a = im(g.ml[0]), ph = h / (h + a); return { pick: ph >= 0.5 ? g.home : g.away, conf: Math.max(ph, 1 - ph) }; }
-    if (g.line) return { pick: g.line < 0 ? g.home : g.away, conf: 0.6 };
+    if (g.ml && isFinite(g.ml[0]) && isFinite(g.ml[1]) && g.ml[0] && g.ml[1]) { const h = im(g.ml[1]), a = im(g.ml[0]), ph = h / (h + a); if (ph !== 0.5) return { pick: ph > 0.5 ? g.home : g.away, conf: Math.max(ph, 1 - ph) }; }
+    if (g.line) return { pick: g.line < 0 ? g.home : g.away, conf: null };
     return null;
   };
   const pickOf = (g, id) => g.c && isFinite(g.c[id]) ? (g.c[id] >= 0.5 ? g.home : g.away) : null;
@@ -3764,7 +3769,7 @@ Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind
     const gs = rows.map(g => { const v = vegas(g); if (!v) return null; return { ok: v.pick === winner(g), conf: v.conf, err: g.line !== null ? Math.abs(g.score[1] - g.score[0] + g.line) : null }; }).filter(Boolean);
     if (!gs.length) return '';
     const c = gs.filter(x => x.ok).length, bands = { high: [0, 0], med: [0, 0], low: [0, 0], coin: [0, 0] };
-    for (const x of gs) { const b = band(x.conf)[0]; bands[b][1]++; if (x.ok) bands[b][0]++; }
+    for (const x of gs) { if (x.conf == null) continue; const b = band(x.conf)[0]; bands[b][1]++; if (x.ok) bands[b][0]++; }
     const pc = ([a, n]) => n ? Math.round(100 * a / n) + '%' : '–';
     const errs = gs.filter(x => x.err !== null);
     return `<div class="strip" id="pkTiles">
@@ -3827,7 +3832,7 @@ Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind
   }
   function draw() {
     const el = $('#tab-pickem');
-    const head = `<h2>Pick'em Record <small>every model's straight-up record this season against Vegas's, each graded on the call it published before tip-off</small></h2>`;
+    const head = `<h2>Pick'em Record <small>every model's straight-up record this season against Vegas's, each graded on the call it published before tip-off, or, for a game played before a model began publishing, one call made on what was known before that game's tip (a backtest)</small></h2>`;
     if (!PK) { el.innerHTML = head + (PK_ERR ? '<p class="muted" role="status">The record did not load. Open the tab again to try again.</p>' : '<p class="muted" role="status">Loading the record…</p>'); return; }
     const T = tallies();
     if (!T.rows.length) { el.innerHTML = head + '<div class="empty"><b>No graded games yet</b>The record starts with the season\'s first final.</div>'; return; }

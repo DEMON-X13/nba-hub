@@ -10,9 +10,10 @@
  * game's DraftKings game lines, read by tools/lines_feed.js exactly as the page reads them: the two moneylines, the
  * spread's number and its two prices, the total's number and its two prices, and each outcome's betslip id. For each
  * game one propBets request (another past a page) gives its player props, parsed by tools/props_feed.js: the main lines
- * with both prices, the "k+" rungs and the double- and triple-double Yes prices. Every request is a plain GET with no
- * headers of its own, past any cache (a cache-buster), dropped after 15 seconds and tried once more on a timeout, a
- * reset or a 5xx; six propBets reads at a time.
+ * with both prices, the "k+" rungs and the double- and triple-double Yes prices. Every request is a GET past any cache
+ * (a cache-buster), dropped after 15 seconds, made with lib.js's header sets in turn (the named User-Agent first, then
+ * none, then a browser's): up to three tries, the next set on a timeout, a reset or a 403, 408, 425, 429, 500, 502, 503
+ * or 504; six propBets reads at a time.
  *
  * lines.json:
  *   { v: 1, at,                                              when the run that last changed the file read

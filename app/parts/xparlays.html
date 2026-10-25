@@ -316,14 +316,17 @@ function boxSide(sum, team) {
       line: dnp ? null : [n('pts') || 0, reb || 0, n('ast') || 0, tpm || 0, n('stl') || 0, n('blk') || 0], min: dnp ? null : n('min') };
   });
 }
-/* the leg's player in the box: by his ESPN id, else his whole name, else last name and initial, and only where one
-   player answers to it; on his club's side, or either side for a club the leg does not name in this game */
+/* the leg's player in the box: by his ESPN id, else (only for a leg whose player has no id, in the file or on the
+   published players) his whole name, else last name and initial, and only where one player answers to it; on his club's
+   side, or either side for a club the leg does not name in this game. A known id is never matched by name: a player
+   missing from the box is not on it, and is not graded on a teammate who shares his last name and initial (Jalen and
+   Jaylin Williams, OKC), as the published grading (propGrade's box[pid]) never does */
 function boxPlayer(sum, l, g) {
   const sides = g && l.team !== g.home && l.team !== g.away ? [g.home, g.away] : [l.team];
   const list = [].concat(...sides.map(t => boxSide(sum, t) || []));
   const pid = legPid(l);
   let a = pid ? list.find(x => x.id === pid) : null;
-  if (!a) { const full = normName(l.name), m = list.filter(x => normName(x.name) === full); if (m.length === 1) a = m[0];
+  if (!a && !pid) { const full = normName(l.name), m = list.filter(x => normName(x.name) === full); if (m.length === 1) a = m[0];
     else if (!m.length) { const k = nameKey(l.name), m2 = list.filter(x => nameKey(x.name) === k); if (m2.length === 1) a = m2[0]; } }
   return { a: a || null, any: list.length > 0 };
 }
@@ -663,7 +666,7 @@ window.lpShow = () => { if (!STATE.shown) { STATE.shown = true; draw(); refresh(
 window.lpLeave = () => { const s = $lp('tab-xparlays'); if (askOpen() && s && s.hidden) askClose(false, true); };
 window.lpRefresh = refresh;
 /* what the smoke test reads */
-window.NBA_LP = { key: HERE_KEY, readFile, gidParts, sbGames, boxSide, liveLeg, liveGameLeg, liveTotal, state: () => STATE };
+window.NBA_LP = { key: HERE_KEY, readFile, gidParts, sbGames, boxSide, boxPlayer, liveLeg, liveGameLeg, liveTotal, state: () => STATE };
 foot();
 })();
 </script>

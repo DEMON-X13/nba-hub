@@ -1,6 +1,6 @@
 {
- "about": "The Joker's walk-forward (node tools/joker.js research). Each fold Y fits the trees on the finals of 2022-23 to the season before Y that have a closing moneyline, and scores Y's finals cold. The player-model inputs of fold Y are replayed on research.json's fold-Y parameters (fitted on the seasons before Y), Team Elo on model.json's (fitted on 2007-08 to 2021-22). Every model is scored on the same games: the finals of Y with a closing moneyline and a number from every comparison model.",
- "rule": "Set before any fold was scored: the design with the lowest mean log loss on 2024 and 2025 (ties to the earlier in the list), then for it the spread with the lower mean spread error on the same folds. 2026 is scored once, on the chosen design only, and reported as it came out.",
+ "about": "The Joker's walk-forward (node tools/joker.js research). Each fold Y fits the trees on the finals of 2022-23 to the season before Y that have a closing moneyline, and scores Y's finals cold. The player-model inputs of fold Y are replayed on research.json's fold-Y parameters (fitted on the seasons before Y), Team Elo on model.json's (fitted on 2007-08 to 2021-22). Every model is scored on the same games: boxScored, every decided final of Y with both box scores (the set each model on the Pick'em Record is scored on, and the walk-forward models/joker.json publishes), and priced, those of them with a closing moneyline, beside the market.",
+ "rule": "Set before any fold was scored: the design with the lowest mean log loss on 2024 and 2025 (ties to the earlier in the list), then for it the spread with the lower mean spread error on the same folds. The rule picked people and the margin trees on 25 October 2026. The design is kept as chosen whatever a re-scoring of those folds says (rulePick says what the rule picks on the numbers in this file). The spread was then set to the chance's (scale) by the review's decision of 25 October 2026, so that it never names the other side from the pick; the margin trees' error is kept beside it.",
  "hyper": {
   "loss": "binomial",
   "rounds": 25,
@@ -162,57 +162,156 @@
  },
  "chosen": {
   "design": "people",
-  "spread": "trees"
+  "spread": "scale"
  },
+ "rulePick": "people",
  "folds": {
   "2024": {
    "train": {
     "seasons": "2023-2023",
     "rows": 1320
    },
-   "games": 1314,
-   "left": "5 finals of the season have no closing moneyline or no number from a comparison model (a side's box score is missing) and are not scored: 2024_20231109_ORL_ATL 2024_20231207_LAL_NOP 2024_20231207_MIL_IND 2024_20240111_CLE_BKN 2024_20240317_SAS_BKN",
-   "joker": {
+   "boxScored": {
     "games": 1314,
-    "logloss": 0.62651,
-    "acc": 0.6621,
-    "brier": 0.21828,
-    "mae": 11.12,
-    "maeGames": 1314
+    "joker": {
+     "games": 1314,
+     "logloss": 0.62651,
+     "acc": 0.6621,
+     "brier": 0.21828,
+     "mae": 11.4,
+     "maeGames": 1314
+    },
+    "teamElo": {
+     "games": 1314,
+     "logloss": 0.60862,
+     "acc": 0.6613,
+     "brier": 0.21079,
+     "mae": 11.06,
+     "maeGames": 1314
+    },
+    "playerNaive": {
+     "games": 1314,
+     "logloss": 0.61531,
+     "acc": 0.6766,
+     "brier": 0.21328,
+     "mae": 11.29,
+     "maeGames": 1314
+    },
+    "playerKnown": {
+     "games": 1314,
+     "logloss": 0.61314,
+     "acc": 0.6629,
+     "brier": 0.21225,
+     "mae": 11.27,
+     "maeGames": 1314
+    }
    },
-   "market": {
+   "priced": {
     "games": 1314,
-    "logloss": 0.58348,
-    "acc": 0.691,
-    "brier": 0.19949,
-    "mae": 10.66,
-    "maeGames": 1309
+    "joker": {
+     "games": 1314,
+     "logloss": 0.62651,
+     "acc": 0.6621,
+     "brier": 0.21828,
+     "mae": 11.4,
+     "maeGames": 1314
+    },
+    "teamElo": {
+     "games": 1314,
+     "logloss": 0.60862,
+     "acc": 0.6613,
+     "brier": 0.21079,
+     "mae": 11.06,
+     "maeGames": 1314
+    },
+    "playerNaive": {
+     "games": 1314,
+     "logloss": 0.61531,
+     "acc": 0.6766,
+     "brier": 0.21328,
+     "mae": 11.29,
+     "maeGames": 1314
+    },
+    "playerKnown": {
+     "games": 1314,
+     "logloss": 0.61314,
+     "acc": 0.6629,
+     "brier": 0.21225,
+     "mae": 11.27,
+     "maeGames": 1314
+    },
+    "market": {
+     "games": 1314,
+     "logloss": 0.58348,
+     "acc": 0.691,
+     "brier": 0.19949,
+     "mae": 10.66,
+     "maeGames": 1309
+    },
+    "marginTrees": {
+     "mae": 11.12,
+     "maeGames": 1314,
+     "about": "the spread of a second set of trees fitted to the home margin, scored as a comparison and never published"
+    },
+    "spreadAgainstPick": {
+     "published": 0,
+     "marginTrees": 147
+    },
+    "vsMarket": {
+     "takesFavourite": 0.8583,
+     "against": {
+      "n": 185,
+      "won": 75
+     },
+     "loglossDiff": 0.04303,
+     "loglossDiff90": [
+      0.0332,
+      0.0535
+     ]
+    },
+    "openingLines": {
+     "games": 1221,
+     "closing": {
+      "games": 1221,
+      "logloss": 0.6255,
+      "acc": 0.6675,
+      "brier": 0.21771,
+      "mae": 11.5,
+      "maeGames": 1221
+     },
+     "opening": {
+      "games": 1221,
+      "logloss": 0.63205,
+      "acc": 0.6503,
+      "brier": 0.22084,
+      "mae": 11.59,
+      "maeGames": 1221
+     },
+     "marketClosing": {
+      "games": 1221,
+      "logloss": 0.58384,
+      "acc": 0.6912,
+      "brier": 0.19961
+     },
+     "marketOpening": {
+      "games": 1221,
+      "logloss": 0.59508,
+      "acc": 0.6798,
+      "brier": 0.20424
+     }
+    },
+    "reference": {
+     "marketOnly": {
+      "games": 1314,
+      "logloss": 0.60433,
+      "acc": 0.6743,
+      "brier": 0.20816,
+      "mae": 10.97,
+      "maeGames": 1314
+     }
+    }
    },
-   "teamElo": {
-    "games": 1314,
-    "logloss": 0.60862,
-    "acc": 0.6613,
-    "brier": 0.21079,
-    "mae": 11.06,
-    "maeGames": 1314
-   },
-   "playerNaive": {
-    "games": 1314,
-    "logloss": 0.61531,
-    "acc": 0.6766,
-    "brier": 0.21328,
-    "mae": 11.29,
-    "maeGames": 1314
-   },
-   "playerKnown": {
-    "games": 1314,
-    "logloss": 0.61314,
-    "acc": 0.6629,
-    "brier": 0.21225,
-    "mae": 11.27,
-    "maeGames": 1314
-   },
-   "spreadAgainstPick": 147,
+   "notScored": "5 finals of the season have no box score for a side, so no comparison model has a number on them, and are not scored: 2024_20231109_ORL_ATL 2024_20231207_LAL_NOP 2024_20231207_MIL_IND 2024_20240111_CLE_BKN 2024_20240317_SAS_BKN",
    "researchJson": {
     "teamElo": {
      "games": 1319,
@@ -234,59 +333,6 @@
      "mae": 11.28,
      "totalMae": 15
     }
-   },
-   "vsMarket": {
-    "takesFavourite": 0.8583,
-    "against": {
-     "n": 185,
-     "won": 75
-    },
-    "loglossDiff": 0.04303,
-    "loglossDiff90": [
-     0.0332,
-     0.0535
-    ]
-   },
-   "openingLines": {
-    "games": 1221,
-    "closing": {
-     "games": 1221,
-     "logloss": 0.6255,
-     "acc": 0.6675,
-     "brier": 0.21771,
-     "mae": 11.28,
-     "maeGames": 1221
-    },
-    "opening": {
-     "games": 1221,
-     "logloss": 0.63205,
-     "acc": 0.6503,
-     "brier": 0.22084,
-     "mae": 11.4,
-     "maeGames": 1221
-    },
-    "marketClosing": {
-     "games": 1221,
-     "logloss": 0.58384,
-     "acc": 0.6912,
-     "brier": 0.19961
-    },
-    "marketOpening": {
-     "games": 1221,
-     "logloss": 0.59508,
-     "acc": 0.6798,
-     "brier": 0.20424
-    }
-   },
-   "reference": {
-    "marketOnly": {
-     "games": 1314,
-     "logloss": 0.60433,
-     "acc": 0.6743,
-     "brier": 0.20816,
-     "mae": 10.94,
-     "maeGames": 1314
-    }
    }
   },
   "2025": {
@@ -294,49 +340,147 @@
     "seasons": "2023-2024",
     "rows": 2634
    },
-   "games": 1320,
-   "left": "1 finals of the season have no closing moneyline or no number from a comparison model (a side's box score is missing) and are not scored: 2025_20241217_OKC_MIL",
-   "joker": {
+   "boxScored": {
     "games": 1320,
-    "logloss": 0.6055,
-    "acc": 0.6712,
-    "brier": 0.20888,
-    "mae": 10.81,
-    "maeGames": 1320
+    "joker": {
+     "games": 1320,
+     "logloss": 0.6055,
+     "acc": 0.6712,
+     "brier": 0.20888,
+     "mae": 10.98,
+     "maeGames": 1320
+    },
+    "teamElo": {
+     "games": 1320,
+     "logloss": 0.60868,
+     "acc": 0.6545,
+     "brier": 0.21118,
+     "mae": 11.12,
+     "maeGames": 1320
+    },
+    "playerNaive": {
+     "games": 1320,
+     "logloss": 0.59987,
+     "acc": 0.6765,
+     "brier": 0.20722,
+     "mae": 11.03,
+     "maeGames": 1320
+    },
+    "playerKnown": {
+     "games": 1320,
+     "logloss": 0.59147,
+     "acc": 0.6758,
+     "brier": 0.20349,
+     "mae": 10.94,
+     "maeGames": 1320
+    }
    },
-   "market": {
+   "priced": {
     "games": 1320,
-    "logloss": 0.58542,
-    "acc": 0.6871,
-    "brier": 0.20093,
-    "mae": 10.63,
-    "maeGames": 1319
+    "joker": {
+     "games": 1320,
+     "logloss": 0.6055,
+     "acc": 0.6712,
+     "brier": 0.20888,
+     "mae": 10.98,
+     "maeGames": 1320
+    },
+    "teamElo": {
+     "games": 1320,
+     "logloss": 0.60868,
+     "acc": 0.6545,
+     "brier": 0.21118,
+     "mae": 11.12,
+     "maeGames": 1320
+    },
+    "playerNaive": {
+     "games": 1320,
+     "logloss": 0.59987,
+     "acc": 0.6765,
+     "brier": 0.20722,
+     "mae": 11.03,
+     "maeGames": 1320
+    },
+    "playerKnown": {
+     "games": 1320,
+     "logloss": 0.59147,
+     "acc": 0.6758,
+     "brier": 0.20349,
+     "mae": 10.94,
+     "maeGames": 1320
+    },
+    "market": {
+     "games": 1320,
+     "logloss": 0.58542,
+     "acc": 0.6871,
+     "brier": 0.20093,
+     "mae": 10.63,
+     "maeGames": 1319
+    },
+    "marginTrees": {
+     "mae": 10.81,
+     "maeGames": 1320,
+     "about": "the spread of a second set of trees fitted to the home margin, scored as a comparison and never published"
+    },
+    "spreadAgainstPick": {
+     "published": 0,
+     "marginTrees": 108
+    },
+    "vsMarket": {
+     "takesFavourite": 0.9203,
+     "against": {
+      "n": 104,
+      "won": 41
+     },
+     "loglossDiff": 0.02008,
+     "loglossDiff90": [
+      0.013,
+      0.0271
+     ]
+    },
+    "openingLines": {
+     "games": 1320,
+     "closing": {
+      "games": 1320,
+      "logloss": 0.6055,
+      "acc": 0.6712,
+      "brier": 0.20888,
+      "mae": 10.98,
+      "maeGames": 1320
+     },
+     "opening": {
+      "games": 1320,
+      "logloss": 0.61566,
+      "acc": 0.6553,
+      "brier": 0.21345,
+      "mae": 11.23,
+      "maeGames": 1320
+     },
+     "marketClosing": {
+      "games": 1320,
+      "logloss": 0.58542,
+      "acc": 0.6871,
+      "brier": 0.20093
+     },
+     "marketOpening": {
+      "games": 1320,
+      "logloss": 0.59759,
+      "acc": 0.6773,
+      "brier": 0.20592
+     }
+    },
+    "reference": {
+     "marketOnly": {
+      "games": 1320,
+      "logloss": 0.60149,
+      "acc": 0.6795,
+      "brier": 0.2071,
+      "mae": 10.89,
+      "maeGames": 1320
+     }
+    }
    },
-   "teamElo": {
-    "games": 1320,
-    "logloss": 0.60868,
-    "acc": 0.6545,
-    "brier": 0.21118,
-    "mae": 11.12,
-    "maeGames": 1320
-   },
-   "playerNaive": {
-    "games": 1320,
-    "logloss": 0.59987,
-    "acc": 0.6765,
-    "brier": 0.20722,
-    "mae": 11.03,
-    "maeGames": 1320
-   },
-   "playerKnown": {
-    "games": 1320,
-    "logloss": 0.59147,
-    "acc": 0.6758,
-    "brier": 0.20349,
-    "mae": 10.94,
-    "maeGames": 1320
-   },
-   "spreadAgainstPick": 108,
+   "notScored": "1 finals of the season have no box score for a side, so no comparison model has a number on them, and are not scored: 2025_20241217_OKC_MIL",
    "researchJson": {
     "teamElo": {
      "games": 1321,
@@ -358,59 +502,6 @@
      "mae": 10.96,
      "totalMae": 14.86
     }
-   },
-   "vsMarket": {
-    "takesFavourite": 0.9203,
-    "against": {
-     "n": 104,
-     "won": 41
-    },
-    "loglossDiff": 0.02008,
-    "loglossDiff90": [
-     0.013,
-     0.0271
-    ]
-   },
-   "openingLines": {
-    "games": 1320,
-    "closing": {
-     "games": 1320,
-     "logloss": 0.6055,
-     "acc": 0.6712,
-     "brier": 0.20888,
-     "mae": 10.81,
-     "maeGames": 1320
-    },
-    "opening": {
-     "games": 1320,
-     "logloss": 0.61566,
-     "acc": 0.6553,
-     "brier": 0.21345,
-     "mae": 11.06,
-     "maeGames": 1320
-    },
-    "marketClosing": {
-     "games": 1320,
-     "logloss": 0.58542,
-     "acc": 0.6871,
-     "brier": 0.20093
-    },
-    "marketOpening": {
-     "games": 1320,
-     "logloss": 0.59759,
-     "acc": 0.6773,
-     "brier": 0.20592
-    }
-   },
-   "reference": {
-    "marketOnly": {
-     "games": 1320,
-     "logloss": 0.60149,
-     "acc": 0.6795,
-     "brier": 0.2071,
-     "mae": 10.85,
-     "maeGames": 1320
-    }
    }
   },
   "2026": {
@@ -418,49 +509,156 @@
     "seasons": "2023-2025",
     "rows": 3954
    },
-   "games": 1318,
-   "left": "4 finals of the season have no closing moneyline or no number from a comparison model (a side's box score is missing) and are not scored: 2026_20260430_DEN_MIN 2026_20260507_CLE_DET 2026_20260513_CLE_DET 2026_20260523_NYK_CLE",
-   "joker": {
-    "games": 1318,
-    "logloss": 0.59038,
-    "acc": 0.6859,
-    "brier": 0.20231,
-    "mae": 11.13,
-    "maeGames": 1318
+   "boxScored": {
+    "games": 1322,
+    "joker": {
+     "games": 1322,
+     "logloss": 0.59078,
+     "acc": 0.6853,
+     "brier": 0.20249,
+     "mae": 11.27,
+     "maeGames": 1322
+    },
+    "teamElo": {
+     "games": 1322,
+     "logloss": 0.60097,
+     "acc": 0.6884,
+     "brier": 0.20687,
+     "mae": 11.53,
+     "maeGames": 1322
+    },
+    "playerNaive": {
+     "games": 1322,
+     "logloss": 0.60255,
+     "acc": 0.6672,
+     "brier": 0.20778,
+     "mae": 11.51,
+     "maeGames": 1322
+    },
+    "playerKnown": {
+     "games": 1322,
+     "logloss": 0.58878,
+     "acc": 0.6853,
+     "brier": 0.20178,
+     "mae": 11.37,
+     "maeGames": 1322
+    },
+    "noMarket": {
+     "games": 4,
+     "how": "no closing moneyline anywhere: called by the trees with the market missing, imputed as any missing input is; the live job calls no such game",
+     "ids": [
+      "2026_20260430_DEN_MIN",
+      "2026_20260507_CLE_DET",
+      "2026_20260513_CLE_DET",
+      "2026_20260523_NYK_CLE"
+     ]
+    }
    },
-   "market": {
+   "priced": {
     "games": 1318,
-    "logloss": 0.57574,
-    "acc": 0.6874,
-    "brier": 0.19695,
-    "mae": 11,
-    "maeGames": 1318
+    "joker": {
+     "games": 1318,
+     "logloss": 0.59038,
+     "acc": 0.6859,
+     "brier": 0.20231,
+     "mae": 11.27,
+     "maeGames": 1318
+    },
+    "teamElo": {
+     "games": 1318,
+     "logloss": 0.60086,
+     "acc": 0.6882,
+     "brier": 0.20682,
+     "mae": 11.54,
+     "maeGames": 1318
+    },
+    "playerNaive": {
+     "games": 1318,
+     "logloss": 0.60234,
+     "acc": 0.6677,
+     "brier": 0.20768,
+     "mae": 11.52,
+     "maeGames": 1318
+    },
+    "playerKnown": {
+     "games": 1318,
+     "logloss": 0.58857,
+     "acc": 0.6859,
+     "brier": 0.20169,
+     "mae": 11.38,
+     "maeGames": 1318
+    },
+    "market": {
+     "games": 1318,
+     "logloss": 0.57574,
+     "acc": 0.6874,
+     "brier": 0.19695,
+     "mae": 11,
+     "maeGames": 1318
+    },
+    "marginTrees": {
+     "mae": 11.13,
+     "maeGames": 1318,
+     "about": "the spread of a second set of trees fitted to the home margin, scored as a comparison and never published"
+    },
+    "spreadAgainstPick": {
+     "published": 0,
+     "marginTrees": 56
+    },
+    "vsMarket": {
+     "takesFavourite": 0.9795,
+     "against": {
+      "n": 27,
+      "won": 13
+     },
+     "loglossDiff": 0.01464,
+     "loglossDiff90": [
+      0.0085,
+      0.0199
+     ]
+    },
+    "openingLines": {
+     "games": 1318,
+     "closing": {
+      "games": 1318,
+      "logloss": 0.59038,
+      "acc": 0.6859,
+      "brier": 0.20231,
+      "mae": 11.27,
+      "maeGames": 1318
+     },
+     "opening": {
+      "games": 1318,
+      "logloss": 0.59588,
+      "acc": 0.6791,
+      "brier": 0.20495,
+      "mae": 11.43,
+      "maeGames": 1318
+     },
+     "marketClosing": {
+      "games": 1318,
+      "logloss": 0.57574,
+      "acc": 0.6874,
+      "brier": 0.19695
+     },
+     "marketOpening": {
+      "games": 1318,
+      "logloss": 0.58593,
+      "acc": 0.676,
+      "brier": 0.20125
+     }
+    },
+    "reference": {
+     "marketOnly": {
+      "games": 1318,
+      "logloss": 0.58144,
+      "acc": 0.6844,
+      "brier": 0.19929,
+      "mae": 11.04,
+      "maeGames": 1318
+     }
+    }
    },
-   "teamElo": {
-    "games": 1318,
-    "logloss": 0.60086,
-    "acc": 0.6882,
-    "brier": 0.20682,
-    "mae": 11.54,
-    "maeGames": 1318
-   },
-   "playerNaive": {
-    "games": 1318,
-    "logloss": 0.60234,
-    "acc": 0.6677,
-    "brier": 0.20768,
-    "mae": 11.52,
-    "maeGames": 1318
-   },
-   "playerKnown": {
-    "games": 1318,
-    "logloss": 0.58857,
-    "acc": 0.6859,
-    "brier": 0.20169,
-    "mae": 11.38,
-    "maeGames": 1318
-   },
-   "spreadAgainstPick": 56,
    "researchJson": {
     "teamElo": {
      "games": 1322,
@@ -482,67 +680,16 @@
      "mae": 11.38,
      "totalMae": 15.16
     }
-   },
-   "vsMarket": {
-    "takesFavourite": 0.9795,
-    "against": {
-     "n": 27,
-     "won": 13
-    },
-    "loglossDiff": 0.01464,
-    "loglossDiff90": [
-     0.0085,
-     0.0199
-    ]
-   },
-   "openingLines": {
-    "games": 1318,
-    "closing": {
-     "games": 1318,
-     "logloss": 0.59038,
-     "acc": 0.6859,
-     "brier": 0.20231,
-     "mae": 11.13,
-     "maeGames": 1318
-    },
-    "opening": {
-     "games": 1318,
-     "logloss": 0.59588,
-     "acc": 0.6791,
-     "brier": 0.20495,
-     "mae": 11.28,
-     "maeGames": 1318
-    },
-    "marketClosing": {
-     "games": 1318,
-     "logloss": 0.57574,
-     "acc": 0.6874,
-     "brier": 0.19695
-    },
-    "marketOpening": {
-     "games": 1318,
-     "logloss": 0.58593,
-     "acc": 0.676,
-     "brier": 0.20125
-    }
-   },
-   "reference": {
-    "marketOnly": {
-     "games": 1318,
-     "logloss": 0.58144,
-     "acc": 0.6844,
-     "brier": 0.19929,
-     "mae": 11.06,
-     "maeGames": 1318
-    }
    }
   }
  },
  "lookedAt": [
-  "The designs, the running-form constants (0.1 a game, 0.7 carry, the league mean at 0.005 a team-game) and the settings were set before any fold was scored; 2026 was scored once, after the choice.",
+  "The designs, the running-form constants (0.1 a game, 0.7 carry, the league mean at 0.005 a team-game) and the settings were set before any fold was scored, and the design was chosen on 2024 and 2025 alone.",
+  "2026 was first scored after the choice, on the chosen design only, and has been scored more than once since: several times on 25 October 2026 while the code and the data were finished (the job's data moved between runs), and again in the review's fixes of the same day (each club's coach read as the game's day began, the spread set to the chance's, every box-scored final counted). Each time it was reported as it came out, and nothing was chosen or tuned on it; the spread was switched knowing every fold's numbers, for agreement with the pick and not for its error, which is a little worse.",
+  "The 2026 numbers of the market, Team Elo and the player model (README, research.json, research/backtest.json) were published before the Joker's designs were set, so how its inputs fared on 2025-26 was known when they were picked.",
   "The player model's travel term, in every fold's parameters, was kept after the October 2026 refresh walked it forward on 2023-24 and 2024-25 and scored it on 2025-26 (README, the October 2026 refresh), so its inputs to every fold are not wholly untouched.",
   "Team Elo's parameters were fitted on 2007-08 to 2021-22; its learned home court was added after a look at 2023-24 to 2025-26 (README, the team model).",
   "The market inputs in training and in the folds are closing lines; live, the job calls on its last read before tip-off, which is earlier than the close. openingLines bounds the cost."
  ],
- "generated": "2026-10-25T17:54Z"
+ "generated": "2026-10-25T18:59Z"
 }

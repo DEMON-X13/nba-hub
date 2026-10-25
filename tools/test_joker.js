@@ -1,19 +1,29 @@
-/* The Joker's rows and runs (tools/joker.js) on made-up seasons, and its two promises on the real data.
+/* The Joker's rows and runs (tools/joker.js) on made-up seasons, and its promises on the real data.
  *
- *   node tools/test_joker.js            the made-up cases, then the real data's (about ten seconds in all)
- *   node tools/test_joker.js --quick    the made-up cases alone
+ *   node tools/test_joker.js       the made-up cases, then the real data's (ten to twenty seconds in all); the job runs it
+ *                                  whole after node tools/joker.js, and puts models/joker.json back if either fails
  *
  * The promise that matters most is the leakage check: a game's row built the morning it is played, with nothing of
- * that day final, is the row it has once it is final and the training reads it. The rest: the running form by hand
- * (the first game sets it, 0.1 a game after, 0.7 carried toward the league at a season's turn), rest, back to backs,
- * three in four, time zones, altitude and a neutral site, the series, a dated coach change, the previous game's top
- * player, the market and check()'s refusals, a team's first game of a season, a club with no box score, a postponed
- * game, a preseason game, determinism, and a run's file: its shape, no call without a moneyline, the input rows frozen
- * at tip, a quiet rerun, and the refusal of a season the trees were never fitted for.
+ * that day final, is the row it has once it is final and the training reads it, so the call the Pick'em Record takes
+ * for a game played before the Joker's first published call is the call it had that morning. The rest: the running form
+ * by hand (the first game sets it, 0.1 a game after, 0.7 carried toward the league at a season's turn), rest, back to
+ * backs, three in four, time zones, altitude and a neutral site, the series, a dated coach change and one dated on a
+ * game's own day, the previous game's top player, the market and check()'s refusals, a team's first game of a season,
+ * a club with no box score, a postponed game, a preseason game, determinism, and a run's file: its shape, its about
+ * from the design's own inputs, a spread that agrees with its pick, no call without a moneyline, the input rows frozen
+ * at tip and kept for the season in play alone, a quiet rerun, the refusal of a season the trees were never fitted for
+ * and a refusal's file, and a fit refused while a season its inputs read is under way.
+ *
+ * On the real data, in any phase of a season (none of it final yet, opening night, mid-season, the play-offs, the summer,
+ * a refusal): the leakage check on the last day with finals, models/joker.json's shape whatever its status, the file
+ * as this code makes it from today's data when it ran, and its input rows against the last commit's. A refit on today's
+ * data is compared with the committed trees and printed, never failed: ESPN back-fills old box scores.
  */
 'use strict';
 const assert = require('assert');
 const fs = require('fs');
+const { execFileSync } = require('child_process');
+const L = require('./lib');
 const J = require('./joker');
 
 let n = 0;
@@ -88,12 +98,14 @@ function league() {
   D.coachOf = (s, t, d) => t === 'NYK' && s === 2023 && d >= '2022-11-20' ? 'NYK second coach' : t + ' coach';
   return D;
 }
-/* the data as it stood the morning of `date`: that day and every later one not played yet, with no box score */
+/* the data as it stood the morning of `date`: that day and every later one not played yet, with no box score, and no
+   coach change known that is dated that day or later */
 function truncate(D, date) {
   const gone = new Set(D.games.filter(g => g.date >= date).map(g => g.game_id));
   const boxes = {}; for (const k of Object.keys(D.boxes)) if (!gone.has(k)) boxes[k] = D.boxes[k];
   const teamStats = {}; for (const k of Object.keys(D.teamStats)) if (!gone.has(k.split(':')[0])) teamStats[k] = D.teamStats[k];
-  return { ...D, boxes, teamStats, games: D.games.map(g => gone.has(g.game_id) ? { ...g, status: 'scheduled', home_score: '', away_score: '' } : g) };
+  const before = addDays(date, -1), coachOf = (s, t, d) => D.coachOf(s, t, d < before ? d : before);
+  return { ...D, boxes, teamStats, coachOf, games: D.games.map(g => gone.has(g.game_id) ? { ...g, status: 'scheduled', home_score: '', away_score: '' } : g) };
 }
 
 /* ---------- 1. the leakage check, and determinism ---------- */
@@ -129,6 +141,21 @@ function truncate(D, date) {
   const a = J.fitJoker(train, J.DESIGNS[1]), b = J.fitJoker(train, J.DESIGNS[1]);
   eq(JSON.stringify(a), JSON.stringify(b), 'the same rows fit the same trees');
   eq(a.sha, b.sha, 'and the same training hash');
+}
+
+/* ---------- 1b. a coach change dated on a game's own day: the job dates a change by the day it read it, which on a
+   late run is after that day's tip, so it is the club's from the next day, in the categories and in the player model ---------- */
+{
+  const D0 = league(); D0.coachOf = (s, t) => t + ' coach';
+  const ny = J.build(D0, PMP, SITU).rows.filter(r => r.season === 2023 && r.type === 'REG' && (r.home === 'NYK' || r.away === 'NYK'));
+  const day = ny[8].date, next = ny[9];
+  const D1 = { ...D0, coachOf: (s, t, d) => t === 'NYK' && s === 2023 && d >= day ? 'NYK new coach' : t + ' coach' };
+  const a = J.build(D0, PMP, SITU).rows, b = J.build(D1, PMP, SITU).rows;
+  eq(b.filter(r => r.date <= day).map(inputs), a.filter(r => r.date <= day).map(inputs), 'a change dated on the game\'s day moves nothing that day or before');
+  const nb = b.find(r => r.id === next.id), na = a.find(r => r.id === next.id), side = next.home === 'NYK' ? 'coach_h' : 'coach_a';
+  eq([nb.cat[side], na.cat[side]], ['NYK new coach', 'NYK coach'], 'the next game has the new coach');
+  ok(nb.num.pm_p !== na.num.pm_p, 'and the player model prices it on him (not vacuous: his rating is not the old coach\'s)');
+  eq(J.coachAt(D1)(2023, 'NYK', day), 'NYK coach', 'coachAt reads coaches.csv as the day began');
 }
 
 /* ---------- 2. the running form, rest and travel, by hand ---------- */
@@ -221,18 +248,30 @@ function truncate(D, date) {
 }
 
 /* ---------- 5. a run: the file, the calls, the inputs log ---------- */
+const sideOk = c => !((c.spread < 0 && c.pHome < 0.5) || (c.spread > 0 && c.pHome >= 0.5));   // a spread never names the other side
 {
   const D = league();
   const rows = J.build(D, PMP, SITU).rows;
   const train = rows.filter(r => r.final && r.market.ok && r.season === 2023);
   const F = J.fitJoker(train, J.DESIGNS[0]);
-  const params = { design: 'base', spread: 'trees', hyper: J.HYPER, fitSeasons: [2023], rows: F.rows, trainSha256: F.sha, playerParams: PMP, teamParams: SITU,
-    columns: { num: F.enc.num, cat: F.enc.cat, medians: F.enc.medians, levels: F.enc.levels }, scale: F.scale, win: F.win, margin: F.margin };
+  ok(F.margin === null, 'the live fit has no margin trees: the spread is the chance\'s');
+  const params = { design: 'base', spread: 'scale', hyper: J.HYPER, fitSeasons: [2023], rows: F.rows, trainSha256: F.sha, playerParams: PMP, teamParams: SITU,
+    columns: { num: F.enc.num, cat: F.enc.cat, medians: F.enc.medians, levels: F.enc.levels }, scale: F.scale, win: F.win };
   const wf = { 2024: { games: 1, logloss: 0.6, acc: 0.6, mae: 11 } };
   const run1 = J.score(D, params, null, { now: '2023-10-28T12:00Z', walkForward: wf });
   const o = run1.out;
   eq(Object.keys(o).sort(), ['about', 'fitSeasons', 'games', 'id', 'inputs', 'name', 'params', 'status', 'upcoming', 'version', 'walkForward'].sort(), 'the contract\'s keys, and the inputs log');
   eq([o.id, o.name, o.status], ['joker', 'The Joker', { ok: true }], 'its name and status');
+  eq(o.about, J.aboutOf('base', J.HYPER, [2023]), 'the about is the fitted design\'s');
+  ok(!/both coaches|top player|four factors/.test(o.about) && /the teams/.test(o.about) && /Fitted on 2022-23 to 2022-23/.test(o.about), 'and names its inputs, its seasons and nothing else');
+  /* every design's about names exactly the groups its columns read */
+  for (const d of J.DESIGNS) {
+    const text = J.aboutOf(d.id), cols = d.num.concat(d.cat);
+    for (const [say, gc] of J.GROUPS) eq(text.includes(say), gc.some(c => cols.includes(c)), `${d.id}'s about ${gc.some(c => cols.includes(c)) ? 'names' : 'leaves out'} ${say}`);
+  }
+  ok(/both coaches/.test(J.aboutOf('people')) && /top player by minutes/.test(J.aboutOf('people')), 'the chosen design\'s about names the people');
+  eq(J.CHOSEN, 'people', 'the design chosen on 2024 and 2025');
+  ok(/known before its tip/.test(o.about) && /coach as the game's Eastern day began/.test(o.about), 'the about says the calls are pre-tip');
   const s24 = rows.filter(r => r.season === 2024);
   eq(Object.keys(o.games).sort(), s24.filter(r => r.market.ok).map(r => r.id).sort(), 'a call on every game of the season with a moneyline, finals and to come');
   eq(Object.keys(o.upcoming).sort(), s24.filter(r => r.market.ok && !r.final).map(r => r.id).sort(), 'upcoming: the ones not final');
@@ -242,6 +281,9 @@ function truncate(D, date) {
   for (const [id, c] of Object.entries(o.games)) {
     ok(c.pHome > 0 && c.pHome < 1 && c.pHome === +c.pHome.toFixed(4), `${id}: a chance to four places`);
     ok(Number.isFinite(c.spread) && c.spread === +c.spread.toFixed(1), `${id}: a spread to one place`);
+    ok(sideOk(c), `${id}: the spread agrees with the pick`);
+    const r = rows.find(x => x.id === id), p = J.callOf(F, r).p;
+    eq(c.spread, +(-F.scale * Math.log(p / (1 - p))).toFixed(1), `${id}: the spread is the margin the chance implies`);
   }
   for (const id of Object.keys(o.upcoming)) eq(o.upcoming[id], o.games[id], `${id}: upcoming is games' call`);
   /* the call on a final is the trees on its pre-tip row: the same as the morning it was played */
@@ -249,12 +291,19 @@ function truncate(D, date) {
   const morning = J.score(truncate(D, fin.date), params, null, { now: fin.date + 'T12:00Z', walkForward: wf }).out;
   eq(morning.upcoming[fin.id], o.games[fin.id], 'a final\'s call is the call it had that morning');
   eq(morning.inputs.rows[fin.id].num, J.NUM.map(c => fin.num[c] === null ? null : +fin.num[c].toFixed(4)), 'the morning logged its input row');
+  /* and a game under way: tipped, not final, its call the morning's and in upcoming (the ledger freezes it at tip) */
+  const live = s24.find(r => !r.final && r.market.ok);
+  const under = { ...D, games: D.games.map(x => x.game_id === live.id ? { ...x, status: 'in' } : x) };
+  const u = J.score(under, params, null, { now: '2023-10-28T12:00Z', walkForward: wf }).out;
+  eq([u.games[live.id], u.upcoming[live.id]], [o.games[live.id], o.games[live.id]], 'a game under way keeps the call it had before tip');
+  ok(!u.inputs.rows[live.id], 'and logs no row: it had tipped');
   /* the inputs log: every game to come not yet tipped, then frozen */
   eq(Object.keys(o.inputs.rows).sort(), Object.keys(o.upcoming).sort(), 'an input row for every call still to tip');
   eq(o.inputs.columns, { num: J.NUM, cat: J.CAT }, 'the log names its columns');
   const first = Object.keys(o.upcoming).sort()[0], g = D.games.find(x => x.game_id === first);
   const later = J.score(D, params, o, { now: '2023-10-28T13:00Z', walkForward: wf }).out;
   eq(JSON.stringify(later), JSON.stringify(o), 'a quiet rerun gives the same file, stamps and all');
+  ok(JSON.stringify(J.score(D, params, o, { now: '2023-10-28T13:00Z', walkForward: wf, rows }).out) === JSON.stringify(o), 'and so do rows handed in');
   /* the line moves after tip: the frozen row stays, the call follows the line (the ledger, not this file, freezes calls) */
   const moved = { ...D, games: D.games.map(x => x.game_id === first ? { ...x, home_ml: '-400', away_ml: '320' } : x) };
   const after = J.score(moved, params, o, { now: g.tip, walkForward: wf }).out;
@@ -269,41 +318,132 @@ function truncate(D, date) {
   ok(!l.upcoming[quiet] && l.inputs.rows[quiet] && JSON.stringify(l.inputs.rows[quiet]) === JSON.stringify(o.inputs.rows[quiet]), 'no line now: no call, the last row kept');
   const gone = { ...D, games: D.games.filter(x => x.game_id !== quiet) };
   ok(!J.score(gone, params, o, { now: '2023-10-28T14:00Z', walkForward: wf }).out.inputs.rows[quiet], 'a postponed game leaves the log');
+  /* the log holds the season in play alone: a row of an earlier season is dropped, a frozen one of this season kept */
+  const old23 = rows.find(r => r.season === 2023 && r.final).id;
+  const planted = { ...o, inputs: { ...o.inputs, rows: { ...o.inputs.rows, [old23]: { at: '2022-11-01T12:00Z', num: [], cat: [], ml: [-110, -110], pHome: 0.5 } } } };
+  const pr = J.score(D, params, planted, { now: '2023-10-28T13:00Z', walkForward: wf }).out;
+  ok(!pr.inputs.rows[old23], 'an earlier season\'s row is pruned');
+  const frozen = J.score(moved, params, o, { now: g.tip, walkForward: wf }).out;
+  ok(frozen.inputs.rows[first] && Object.keys(frozen.inputs.rows).every(id => D.games.find(x => x.game_id === id).season === 2024), 'this season\'s frozen rows stay, and nothing else');
   /* a season the trees were never fitted for is refused */
   const far = { ...D, games: D.games.concat([{ ...D.games[D.games.length - 1], game_id: '2025_x', season: 2025, date: '2024-10-22', status: 'scheduled' }]) };
-  assert.throws(() => J.score(far, params, null, { walkForward: wf }), /fitted on seasons up to 2023: refit/); n++;
+  assert.throws(() => J.score(far, params, null, { walkForward: wf }), e => e instanceof J.Refuse && /fitted on seasons up to 2023: refit/.test(e.message)); n++;
+  /* a refusal's file: the last good calls, saying why, less every game no longer to come */
+  const tipNow = Object.keys(o.upcoming).map(id => D.games.find(x => x.game_id === id).tip).sort()[0];
+  const ref = J.refusal(o, 'the box scores did not load', tipNow, D.games);
+  eq(ref.status, { ok: false, why: 'the box scores did not load' }, 'a refusal says why');
+  eq(ref.games, o.games, 'and keeps the last good calls');
+  const still = Object.keys(o.upcoming).filter(id => D.games.find(x => x.game_id === id).tip > tipNow);
+  ok(still.length > 0 && still.length < Object.keys(o.upcoming).length, 'some games had tipped, some had not (not vacuous)');
+  eq(Object.keys(ref.upcoming).sort(), still.sort(), 'a game whose tip has passed is no longer listed to come');
+  const played = { ...D, games: D.games.map(x => x.game_id === still[0] ? { ...x, status: 'final' } : x).filter(x => x.game_id !== still[1]) };
+  const ref2 = J.refusal(o, 'x', '2023-10-28T12:00Z', played.games);
+  ok(!ref2.upcoming[still[0]] && !ref2.upcoming[still[1]] && Object.keys(ref2.upcoming).length === Object.keys(o.upcoming).length - 2, 'nor one now final, nor one gone from the schedule');
+  eq(J.refusal(o, 'x', '2023-10-28T12:00Z', { map: () => { throw new Error('unreadable'); } }).upcoming, {}, 'with the schedule unreadable, none');
+  const bare = J.refusal(null, 'models/joker.json has no fitted trees', '2023-10-28T12:00Z', D.games);
+  eq([bare.status.ok, bare.params, bare.games, bare.upcoming], [false, null, {}, {}], 'a first run that cannot fit: an empty file that says why');
+  ok(/Not fitted yet/.test(bare.about), 'and an about that says so');
   /* the file as written: one entry a line where it is long, and JSON that reads back as the same object */
   const text = J.pretty(o);
   eq(JSON.parse(text), JSON.parse(JSON.stringify(o)), 'the written file reads back as the run');
   ok(text.split('\n').some(l => /^  "[^"]+": \{"pHome"/.test(l)), 'one call a line');
+  eq(JSON.parse(J.pretty(ref)), JSON.parse(JSON.stringify(ref)), 'and so does a refusal');
 }
 
-/* ---------- 6. the real data ---------- */
-if (!process.argv.includes('--quick')) {
+/* ---------- 6. a fit while a season is under way ---------- */
+{
+  const G = (season, date, status, type = 'REG') => ({ game_id: `${season}_${date}`, season, date, type, status });
+  const D = { games: [G(2026, '2026-04-10', 'final'), G(2027, '2026-10-21', 'final'), G(2027, '2026-12-01', 'scheduled'), G(2028, '2027-10-20', 'scheduled', 'PRE')] };
+  eq(J.seasonUnderWay(D.games, '2026-11-01'), 2027, 'a season with games still to play is under way');
+  eq(J.seasonUnderWay(D.games, '2026-10-12'), 2027, 'so is one whose first game is ten days off');
+  eq(J.seasonUnderWay(D.games, '2026-09-20'), null, 'before that, between seasons, none is');
+  eq(J.seasonUnderWay(D.games, '2026-06-20'), 2026, 'a season whose games are all final is under way until 1 July');
+  const done = D.games.map(g => g.season === 2027 ? { ...g, status: 'final' } : g);
+  eq(J.seasonUnderWay(done, '2027-06-20'), 2027, 'every listed game final before July: between play-off rounds, still under way');
+  eq(J.seasonUnderWay(done, '2027-07-02'), null, 'in July with every game final, none is');
+  /* the guard, on the made-up league: its 2024 season is under way on 1 November 2023 and the fit seasons reach it */
+  const M = { ...league(), pmLive: PMP, situP: SITU, pmFit: '2023-2025', situFit: '2008-2022' };
+  assert.throws(() => J.fitLive(M, false, '2023-11-01'), e => e instanceof J.Refuse && /2023-24 season is under way/.test(e.message) && /--force/.test(e.message) && /the trees' own seasons/.test(e.message)); n++;
+  const pmOnly = { ...M, games: M.games.filter(g => g.season < 2024).concat([{ ...M.games.find(g => g.season === 2024), game_id: 'x2027', season: 2027, date: '2026-10-21', status: 'scheduled' }]), pmFit: '2023-2027' };
+  assert.throws(() => J.fitLive(pmOnly, false, '2026-11-01'), e => e instanceof J.Refuse && /2026-27 season is under way/.test(e.message) && /players\.json's parameters \(fitted on 2023-2027\)/.test(e.message) && !/trees' own/.test(e.message)); n++;
+  const forced = J.fitLive(M, true, '2023-11-01');
+  ok(forced.win && forced.spread === 'scale' && !forced.margin && forced.design === 'people', '--force fits all the same, the chance\'s spread, no margin trees');
+}
+
+/* ---------- 7. the real data, in whatever phase of a season it is in ---------- */
+{
   const t0 = Date.now();
   const D = J.load();
-  const season = Math.max(...D.games.map(g => g.season));
-  const days = [...new Set(D.games.filter(g => g.season === season && g.status === 'final').map(g => g.date))].sort();
+  const o = fs.existsSync(J.OUT) ? JSON.parse(fs.readFileSync(J.OUT, 'utf8')) : null;
+  const params = o && o.params && o.params.win ? o.params : null;
+  const P = params ? params.playerParams : D.pmLive, T = params ? params.teamParams : D.situP;
+  const full = J.build(D, P, T).rows, rowOf = Object.fromEntries(full.map(r => [r.id, r]));
+  const gameOf = Object.fromEntries(D.games.map(g => [g.game_id, g]));
+  /* the leakage check on the job's own files: the last day with finals, rebuilt as that morning saw it */
+  const days = [...new Set(D.games.filter(g => g.status === 'final').map(g => g.date))].sort();
   if (days.length) {
-    /* the leakage check on the job's own files: the last day with finals, rebuilt as that morning saw it */
     const d = days[days.length - 1];
-    const full = J.build(D, D.pmLive, D.situP).rows, morning = J.build(truncate(D, d), D.pmLive, D.situP).rows;
-    const today = morning.filter(r => r.date === d);
+    const today = J.build(truncate(D, d), P, T).rows.filter(r => r.date === d);
     ok(today.length > 0, 'the real day has games');
-    for (const r of today) eq(inputs(r), inputs(full.find(x => x.id === r.id)), `${r.id}: the morning's row is the final's`);
-  }
-  if (fs.existsSync(J.OUT)) {
-    const o = JSON.parse(fs.readFileSync(J.OUT, 'utf8'));
-    for (const k of ['id', 'name', 'version', 'about', 'fitSeasons', 'params', 'walkForward', 'games', 'upcoming', 'status', 'generated']) ok(k in o, `models/joker.json has ${k}`);
+    for (const r of today) eq(inputs(r), inputs(rowOf[r.id]), `${r.id}: the morning's row is the final's`);
+    console.log(`test_joker: the leakage check on ${d}, ${today.length} games`);
+  } else console.log('test_joker: no final in the data yet, so no real day for the leakage check');
+  if (!o) console.log('test_joker: no models/joker.json yet');
+  else {
+    for (const k of ['id', 'name', 'version', 'about', 'fitSeasons', 'params', 'walkForward', 'games', 'upcoming', 'status', 'generated', 'inputs']) ok(k in o, `models/joker.json has ${k}`);
     eq(o.id, 'joker', 'its id');
+    ok(o.status.ok === true ? Object.keys(o.status).length === 1 : o.status.ok === false && typeof o.status.why === 'string' && o.status.why.length > 0, 'its status: ok, or not ok and why');
+    for (const [id, c] of Object.entries(o.games)) ok(gameOf[id] && c.pHome > 0 && c.pHome < 1 && Number.isFinite(c.spread), `${id}: a call on a game of the schedule`);
+    for (const [id, c] of Object.entries(o.upcoming)) ok(gameOf[id] && gameOf[id].status !== 'final' && JSON.stringify(c) === JSON.stringify(o.games[id]), `${id}: to come, and games' call`);
+    const S = Math.max(...D.games.map(g => g.season));
+    const logged = Object.keys(o.inputs.rows), season = new Set(logged.map(id => gameOf[id] && gameOf[id].season));
+    ok(season.size <= 1 && !season.has(undefined), 'the input rows are of one season, each game on the schedule');
+    for (const [id, r] of Object.entries(o.inputs.rows)) ok(/^\d{4}-\d\d-\d\dT\d\d:\d\dZ$/.test(r.at) && r.num.length === J.NUM.length && r.cat.length === J.CAT.length, `${id}: a stamped input row`);
     if (o.status.ok) {
-      for (const Y of ['2024', '2025', '2026']) ok(o.walkForward[Y] && o.walkForward[Y].games > 1000 && o.walkForward[Y].logloss > 0 && o.walkForward[Y].acc > 0 && o.walkForward[Y].mae > 0, `the walk-forward's ${Y}`);
-      const S = Math.max(...o.fitSeasons);
-      const mine = D.games.filter(g => g.season === S + 1);
-      const priced = new Set(mine.filter(g => g.home_ml !== '' && g.away_ml !== '').map(g => g.game_id));
-      for (const id of Object.keys(o.games)) ok(priced.has(id), `${id}: called, and it has a moneyline`);
-      for (const id of Object.keys(o.upcoming)) ok(mine.find(g => g.game_id === id).status !== 'final' && o.games[id], `${id}: to come`);
+      /* the file is what this code makes of today's data: its calls, its about, its walk-forward */
       eq(o.fitSeasons, J.FIT_SEASONS, 'fitted on 2022-23 to 2025-26');
+      eq(o.params.design, J.CHOSEN, 'on the chosen design');
+      const re = J.score(D, params, o, { now: o.generated, rows: full }).out;
+      eq(o.games, re.games, 'its calls are this code\'s on today\'s data');
+      eq(o.upcoming, re.upcoming, 'and its games to come');
+      eq([o.about, o.walkForward], [re.about, re.walkForward], 'its about and its walk-forward');
+      for (const [id, c] of Object.entries(o.games)) ok(sideOk(c), `${id}: the spread agrees with the pick`);
+      for (const Y of ['2024', '2025', '2026']) {
+        const w = o.walkForward[Y];
+        ok(w && w.games > 1000 && w.logloss > 0 && w.acc > 0 && w.mae > 0 && w.priced && w.priced.games <= w.games && w.priced.games === w.games - (w.noMarket || 0), `the walk-forward's ${Y}, every box-scored final and the priced ones`);
+      }
+      ok(season.size === 0 || season.has(S), 'the input rows are the season in play\'s');
+    } else console.log(`test_joker: models/joker.json says the Joker could not run: ${o.status.why}`);
+    /* the input rows against the last commit's: none of this season's dropped while its game is on the schedule, and one
+       that has changed rewritten after the last commit and before its game's tip */
+    let head = null;
+    try { head = JSON.parse(execFileSync('git', ['show', 'HEAD:models/joker.json'], { cwd: L.ROOT, stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 1 << 28 }).toString()); }
+    catch (e) { console.log('test_joker: no last commit of models/joker.json to hold the input rows to'); }
+    if (head && head.inputs && head.inputs.rows) {
+      const cur = logged.length ? gameOf[logged[0]].season : S;
+      let held = 0;
+      for (const [id, row] of Object.entries(head.inputs.rows)) {
+        if (!gameOf[id] || gameOf[id].season !== cur) continue;                  // another season's, or a postponed game's
+        held++;
+        const now = o.inputs.rows[id];
+        ok(now, `${id}: the last commit's input row is kept`);
+        if (now && JSON.stringify(now) !== JSON.stringify(row)) ok(now.at > row.at && (!gameOf[id].tip || now.at < gameOf[id].tip), `${id}: rewritten since the last commit, before its tip`);
+      }
+      for (const id of logged) if (!head.inputs.rows[id]) ok(!gameOf[id].tip || o.inputs.rows[id].at < gameOf[id].tip, `${id}: a new row, written before its tip`);
+      console.log(`test_joker: ${held} input rows of the last commit held`);
+    }
+    /* drift: the trees' training rows rebuilt from today's data, a printed note and never a failure */
+    if (params) {
+      const design = J.DESIGNS.find(d => d.id === params.design);
+      const train = full.filter(r => r.final && r.market.ok && params.fitSeasons.includes(r.season));
+      if (J.trainingSet(train, design).sha === params.trainSha256) console.log(`test_joker: drift: none, today's data rebuilds the ${train.length} rows the trees were fitted on`);
+      else {
+        const F = J.fitJoker(train, design), mine = full.filter(r => r.season === S && r.market.ok);
+        const enc = { num: params.columns.num, cat: params.columns.cat, medians: params.columns.medians, levels: params.columns.levels };
+        const dp = mine.map(r => [J.callOf({ enc, win: params.win, scale: params.scale }, r).p, J.callOf(F, r).p]);
+        const most = dp.reduce((m, [a, b]) => Math.max(m, Math.abs(a - b)), 0), flips = dp.filter(([a, b]) => (a >= 0.5) !== (b >= 0.5)).length;
+        console.log(`test_joker: drift: today's data gives ${train.length} training rows (the trees were fitted on ${params.rows}) that are not the ones fitted on; a refit would move this season's ${mine.length} chances by ${(most * 100).toFixed(1)} points at most and turn ${flips} picks. A note, not a failure: refit by hand if it matters`);
+      }
     }
   }
   console.log(`test_joker: the real data in ${((Date.now() - t0) / 1000).toFixed(1)}s`);

@@ -1,0 +1,669 @@
+<section id="tab-xparlays" hidden>
+  <div id="lpCard">
+    <h2>X Parlays</h2>
+    <p class="lp-upd" id="lpUpdated"></p>
+    <div class="lp-ctl">
+      <span class="lp-stamp"><span class="lp-dot" id="lpDot"></span><span id="lpStamp" role="status" aria-live="polite">idle</span></span>
+      <span class="lp-grow"></span>
+      <button type="button" class="btn" id="lpNow">Refresh now</button>
+    </div>
+    <div id="lpApp"></div>
+    <div class="lp-dlg" id="lpAsk" hidden>
+      <div class="lp-dlg-panel" role="alertdialog" aria-modal="true" aria-labelledby="lpAskTitle" aria-describedby="lpAskWhat lpAskText">
+        <h3 id="lpAskTitle">Clear this parlay?</h3>
+        <p class="lp-dlg-what" id="lpAskWhat"></p>
+        <p class="lp-dlg-text" id="lpAskText">It is cleared from X Parlays on this device only, and nothing is sent anywhere; you can show it again at the foot of the list. X’s parlays clear themselves for everyone the day after their last game.</p>
+        <div class="lp-dlg-btns"><button type="button" class="btn" id="lpAskNo">Cancel</button><button type="button" class="btn lp-danger" id="lpAskYes">Clear</button></div>
+      </div>
+    </div><!-- /lpAsk -->
+  </div>
+</section>
+<style>
+/* ---------- X Parlays (app/parts/xparlays.html): every rule scoped to #lpCard, on the hub's own tokens ----------
+   Text that must hold 4.5:1 sits on --panel or the darker --bg-2, never on --panel-2 or --panel-3 where --muted falls
+   under it; red text is #FFA2B8, since the hub's --rose is under 4.5:1 on a panel */
+#lpCard{--lp-red:#FFA2B8;--lp-violet:#B49CFF}
+#lpCard h2{margin:0 0 4px}
+#lpCard .lp-upd{margin:0 0 12px;font-size:13px;color:var(--ink-2)}
+#lpCard .lp-ctl{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+#lpCard .lp-grow{flex:1}
+#lpCard .btn{min-height:44px;padding:10px 16px;font-size:13px}
+#lpCard .btn:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+/* Clear: dark text on a rose a step lighter than --rose, so it holds 4.5:1 with room */
+#lpCard .lp-danger{background:#FF5C82;border-color:#FF5C82;color:#1E2230}
+#lpCard .lp-danger:hover{background:#FF7A98;border-color:#FF7A98}
+#lpCard .lp-stamp{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums}
+#lpCard .lp-dot{width:8px;height:8px;border-radius:50%;background:var(--line-2);display:inline-block;flex:none}
+#lpCard .lp-dot.on{background:var(--lime);box-shadow:0 0 8px rgba(205,255,79,.6)}
+#lpCard .lp-note{margin:0 0 14px;padding:12px 16px;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:12px;color:var(--ink-2);font-size:13px;line-height:1.55}
+#lpCard .lp-note b{color:var(--ink)}
+#lpCard .lp-note code{font-size:12px;color:var(--ink)}
+#lpCard .lp-empty{background:var(--panel);border:1px dashed var(--line-2);border-radius:var(--r);padding:34px 24px;text-align:center;color:var(--ink-2)}
+#lpCard .lp-empty b{display:block;font-family:var(--display);font-size:20px;color:var(--ink)}
+#lpCard .lp-quiet{font-size:13px;color:var(--ink-2);margin:4px 0 0}
+#lpCard .lp-win{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin:20px 0 10px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+#lpCard .lp-win:first-child{margin-top:4px}
+#lpCard .lp-win b{font-family:var(--display);font-size:15px;font-weight:700;color:var(--ink)}
+#lpCard .lp-win span{font-size:12px;color:var(--ink-2)}
+/* one parlay: a card on the panel, X's own accent down its left edge */
+#lpCard .lp-p{position:relative;background:var(--panel);border:1px solid var(--line);border-left:3px solid var(--lp-violet);border-radius:14px;padding:14px 16px 8px;margin-bottom:12px;min-width:0}
+/* the header keeps clear of the X at the card's top right, so its chips wrap before they reach it */
+#lpCard .lp-head{display:flex;align-items:center;gap:8px 10px;flex-wrap:wrap;margin-bottom:10px;padding-right:34px}
+#lpCard .lp-title{font-family:var(--display);font-size:16px;font-weight:700;letter-spacing:-.01em}
+#lpCard .lp-date{font-size:12px;color:var(--ink-2)}
+#lpCard .lp-pill{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--bg-2);border:1px solid var(--line);color:var(--ink-2);white-space:nowrap}
+#lpCard .lp-pill.lp-pnote{white-space:normal;overflow-wrap:anywhere;text-transform:none;letter-spacing:.02em;max-width:100%}
+#lpCard .lp-pill.ok{background:var(--lime-soft);border-color:rgba(205,255,79,.45);color:var(--lime)}
+#lpCard .lp-pill.bad{background:var(--rose-soft);border-color:rgba(255,61,107,.5);color:var(--lp-red)}
+/* the X: clears that parlay from X Parlays on this device (the visitor's own choice of what to see here, kept in this
+   browser's storage and nowhere else). A 44px target, the icon in the middle */
+#lpCard .lp-x{position:absolute;top:3px;right:3px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;padding:0;margin:0;border:0;border-radius:999px;background:transparent;color:var(--muted);cursor:pointer;transition:background .15s var(--ease),color .15s var(--ease)}
+#lpCard .lp-x svg{width:16px;height:16px;display:block;pointer-events:none}
+#lpCard .lp-x:hover{background:var(--bg-2);color:var(--ink)}
+#lpCard .lp-x:focus-visible{outline:2px solid var(--hot);outline-offset:-2px;color:var(--ink)}
+#lpCard .lp-money{display:grid;grid-template-columns:repeat(auto-fit,minmax(112px,1fr));gap:8px;margin:0 0 10px}
+#lpCard .lp-money div{background:var(--bg-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:7px 10px;min-width:0}
+#lpCard .lp-money b{display:block;font-family:var(--display);font-size:15px;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums;white-space:nowrap}
+#lpCard .lp-money span{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+#lpCard .lp-games{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 6px}
+/* green while the parlay is winning this game, red once it is losing it, gold while it is level or undecided: the
+   legs' own three colours, on the scoreboard */
+#lpCard .lp-gm{display:inline-block;background:var(--bg-2);border:1.5px solid var(--line-2);border-radius:999px;padding:4px 11px;font-family:var(--display);font-size:12.5px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
+#lpCard .lp-gm em{font-style:normal;font-family:var(--body);font-weight:600;font-size:12px;color:var(--ink-2);margin-left:9px}
+#lpCard .lp-gm.good{border-color:var(--lime);color:var(--lime)} #lpCard .lp-gm.good em{color:var(--lime)}
+#lpCard .lp-gm.bad{border-color:var(--rose);color:var(--lp-red)} #lpCard .lp-gm.bad em{color:var(--lp-red)}
+#lpCard .lp-gm.tie{border-color:var(--gold);color:var(--gold)} #lpCard .lp-gm.tie em{color:var(--gold)}
+@media(max-width:430px){#lpCard .lp-gm{font-size:12px;padding:3px 9px} #lpCard .lp-p{padding:12px 12px 6px}}
+#lpCard .lp-leg{display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;align-items:start;padding:12px 0 6px;border-top:1px solid var(--line);font-size:13px}
+#lpCard .lp-res{display:inline-block;width:20px;margin-top:3px;text-align:center;font-weight:800;color:var(--ink-2)}
+#lpCard .lp-res.win{color:var(--lime)} #lpCard .lp-res.loss{color:var(--lp-red)} #lpCard .lp-res.tie{color:var(--gold)}
+#lpCard .lp-body{min-width:0}
+#lpCard .lp-top{display:flex;align-items:baseline;gap:10px;min-width:0}
+#lpCard .lp-tgt{font-family:var(--display);font-size:18px;font-weight:700;letter-spacing:-.02em;line-height:1.15;white-space:nowrap}
+#lpCard .lp-status{font-size:12px;color:var(--ink-2);text-align:right;margin-left:auto;min-width:0}
+#lpCard .lp-status.win{color:var(--lime);font-weight:800} #lpCard .lp-status.lose{color:var(--lp-red);font-weight:800}
+#lpCard .lp-who{color:var(--ink-2);font-size:13px;margin-top:1px;overflow-wrap:anywhere}
+#lpCard .lp-stat{display:block;font-size:11.5px;color:var(--ink-2);font-variant-numeric:tabular-nums;margin-top:2px;overflow-wrap:anywhere}
+/* room at both ends so a knob well past its line can overhang without touching the card */
+#lpCard .lp-pbar{position:relative;margin:14px 0 0;padding:0 26px 30px 6px}
+#lpCard .lp-track{position:relative;height:10px;border-radius:999px;background:var(--bg-2);border:1px solid var(--line)}
+#lpCard .lp-fill{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,rgba(255,209,102,.35),var(--gold));transition:width .3s var(--ease)}
+#lpCard .lp-fill.win{background:linear-gradient(90deg,rgba(205,255,79,.3),var(--lime))}
+#lpCard .lp-fill.lose{background:linear-gradient(90deg,rgba(255,61,107,.35),var(--rose))}
+#lpCard .lp-tick{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--ink-2);border-radius:2px;opacity:.75}
+#lpCard .lp-knob{position:absolute;top:50%;transform:translate(-50%,-50%);background:var(--panel);border:2px solid var(--gold);border-radius:999px;padding:1px 9px;font-family:var(--display);font-size:12px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
+#lpCard .lp-knob.win{border-color:var(--lime);color:var(--lime)} #lpCard .lp-knob.lose{border-color:var(--rose);color:var(--lp-red)}
+#lpCard .lp-line{position:absolute;top:calc(100% + 6px);transform:translateX(-50%);font-size:12px;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* what this device has cleared: a quiet line, and the way to bring them back */
+#lpCard .lp-here{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:12px 0 0;font-size:13px;color:var(--ink-2)}
+#lpCard .lp-here .btn{min-height:44px}
+/* Clear this parlay?: a small window over the page (Escape, Cancel or a click outside close it, Tab stays inside, the
+   focus goes back to the X). It scrolls, so a phone on its side or large text never puts Clear out of reach; the panel's
+   auto margins centre it while it fits and let it start at the top once it does not */
+#lpCard .lp-dlg{position:fixed;inset:0;z-index:30;background:rgba(14,17,27,.66);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:16px}
+#lpCard .lp-dlg-panel{background:var(--panel);color:var(--ink);border:1px solid var(--line-2);border-radius:var(--r);box-shadow:0 30px 80px -30px rgba(0,0,0,.8);width:100%;max-width:420px;margin:auto;padding:20px 20px 18px}
+#lpCard .lp-dlg-panel h3{font-family:var(--display);font-size:18px;font-weight:700;line-height:1.2;margin:0 0 8px;color:var(--ink)}
+#lpCard .lp-dlg-what{margin:0 0 10px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+#lpCard .lp-dlg-text{margin:0;font-size:13.5px;line-height:1.5;color:var(--ink-2)}
+#lpCard .lp-dlg-btns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap;margin-top:18px}
+#lpCard .lp-dlg-btns .btn{min-height:44px;min-width:104px}
+</style>
+<script>
+/* ---------- X Parlays ----------
+   X's placed parlays, the same on every device and read only everywhere: the parlays X placed at the book, in the
+   repository's liveparlays/parlays.json, which Claude keeps from the slips the owner sends in chat (README "X Parlays").
+   The page reads the file, and ESPN's scoreboard and box scores for the parlays' games, when this tab is first shown in
+   a page load (a page that opens on it from the saved tab too) and on Refresh now: never on load before that, never on
+   a timer, never on focus or visibility. Every read is cache no-store. A parlay the file marks "cleared" stays there as
+   history and is not drawn, nor are its games read.
+
+   A leg is graded by the page's own settlement wherever the published state has its game's final (legResult for a team
+   leg, propGrade on the published box lines for a player's), so X Parlays and the Bet Build never disagree; ESPN's
+   live answers carry a leg while its game is on, or final and not published yet. A game ESPN calls postponed or
+   canceled, or one the published state says was not played on its date, voids every leg on it; a player who did not
+   take the floor voids his leg once the game is final, as DraftKings settles it.
+
+   Every card has an X at its top right, the same for every visitor: it asks "Clear this parlay?" and, on Clear, takes
+   that parlay off X Parlays on this device alone. That is the visitor's own choice of what to see here, never X's data:
+   it is kept in this browser's storage under nba_lp_cleared_v1 (the parlay ids, each with when it was cleared), never
+   sent anywhere, and never under the NFL hub's lp_cleared_here_v1: the two hubs are one origin and share a browser's
+   storage, so each prunes only its own list. The list is pruned of any id the file no longer has or has cleared itself.
+
+   This script runs before the page's own (it sits in the page where its section does), so it reads the page's state
+   and helpers (S, gameById, legResult, propGrade, boxOf, propValue) only when it draws or reads, long after both have
+   loaded; the page calls window.lpShow() from its tab code and window.lpLeave() on every tab change. */
+(function () {
+'use strict';
+const DATA = 'liveparlays/parlays.json';
+const SB = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scoreboard?limit=100&dates=';
+const SUM = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/summary?event=';
+/* ESPN's codes where they differ from the site's (tools/lib.js ESPN_AB) */
+const AB = { GS: 'GSW', NO: 'NOP', NY: 'NYK', SA: 'SAS', UTAH: 'UTA', WSH: 'WAS' };
+const ab = c => { const u = String(c || '').toUpperCase(); return AB[u] || u; };
+const HERE_KEY = 'nba_lp_cleared_v1';
+const STATS = ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb', 'dd', 'td', 'ml', 'spread', 'total'];
+const PARTS = { pts: ['pts'], reb: ['reb'], ast: ['ast'], tpm: ['tpm'], stl: ['stl'], blk: ['blk'], pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'], dd: ['pts', 'reb', 'ast', 'stl', 'blk'], td: ['pts', 'reb', 'ast', 'stl', 'blk'] };
+const LINE = ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'];                 // the box line's order, S.boxes.line's
+const SHORT = { pts: 'pts', reb: 'reb', ast: 'ast', tpm: '3PM', stl: 'stl', blk: 'blk' };
+const STAT_NAME = { pts: 'Points', reb: 'Rebounds', ast: 'Assists', tpm: 'Threes', stl: 'Steals', blk: 'Blocks', pra: 'Pts + reb + ast', pr: 'Pts + reb', pa: 'Pts + ast', ar: 'Ast + reb', sb: 'Stl + blk', dd: 'Double-double', td: 'Triple-double', ml: 'To Win', spread: 'To Cover', total: 'Total Points' };
+const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const num = (x, d) => x == null || !Number.isFinite(+x) ? '–' : (+x).toFixed(d);
+const n1 = x => num(x, Math.abs(+x % 1) > 1e-9 ? 1 : 0);
+const fmtML = ml => ml == null ? '–' : (ml > 0 ? '+' + ml : '' + ml);
+const money = x => x != null && x !== '' && Number.isFinite(+x) ? +x : null;
+const isGameLeg = l => l.stat === 'ml' || l.stat === 'spread' || l.stat === 'total';
+const isYes = l => l.stat === 'dd' || l.stat === 'td';
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const espnNum = s => { if (s == null || s === '') return null; const v = parseFloat(String(s).replace(/,/g, '')); return Number.isFinite(v) ? v : null; };
+const etDate = ms => new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date(ms));
+const dayLong = d => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' });
+const dayShort = d => { const x = new Date(d + 'T12:00:00Z'), o = { timeZone: 'UTC' };
+  return `${x.toLocaleDateString('en-US', { ...o, weekday: 'short' })} ${x.toLocaleDateString('en-US', { ...o, month: 'short' })} ${x.getUTCDate()}`; };
+const monDay = d => { const x = new Date(d + 'T12:00:00Z'); return `${x.toLocaleDateString('en-US', { month: 'short', timeZone: 'UTC' })} ${x.getUTCDate()}`; };
+const localT = k => new Date(k).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+/* a name both sources can agree on: no case, accents, punctuation or suffix (the NFL hub's normName); and last name
+   plus first initial, for a box that spells him another way */
+const normName = n => String(n || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/[.'’]/g, '').replace(/-/g, ' ')
+  .replace(/\b(jr|sr|ii|iii|iv)\b/g, '').replace(/\s+/g, ' ').trim();
+const nameKey = n => { const p = normName(n).split(' ').filter(Boolean); return p.length ? p[p.length - 1] + '|' + p[0][0] : ''; };
+
+/* a game id carries its season, its Eastern date and its clubs: 2027_20261024_BKN_CLE is the 2026-27 season, 24 October,
+   Brooklyn at Cleveland, as data/games.csv writes it */
+function gidParts(gid) {
+  const m = /^(\d{4})_(\d{4})(\d{2})(\d{2})_([A-Z]{2,3})_([A-Z]{2,3})$/.exec(String(gid || ''));
+  return m ? { id: String(gid), season: +m[1], date: `${m[2]}-${m[3]}-${m[4]}`, ymd: m[2] + m[3] + m[4], a: m[5], h: m[6] } : null;
+}
+/* the file's own shape: games listed once, legs pointing at them by their place in that list. A cleared parlay is left
+   out here, before anything reads its games; a leg on no game, an unknown stat or no line is dropped, and a parlay with
+   no leg left */
+function readLeg(q, games) {
+  if (!q || typeof q !== 'object') return null;
+  const gid = Number.isInteger(q.game) && q.game >= 0 && q.game < games.length ? String(games[q.game] || '') : '', gp = gidParts(gid);
+  let stat = String(q.stat || '').toLowerCase(); if (stat === 'ats') stat = 'spread';
+  const k = q.line != null && q.line !== '' ? +q.line : NaN;
+  if (!gp || !STATS.includes(stat) || !Number.isFinite(k)) return null;
+  return { gid, date: gp.date, stat, k, side: q.side === 'under' ? 'under' : 'over', main: !!q.main, name: String(q.player || ''), team: ab(q.team), pid: q.pid != null && q.pid !== '' ? String(q.pid) : '' };
+}
+function readFile(v) {
+  if (!v || typeof v !== 'object') return [];
+  const games = Array.isArray(v.games) ? v.games : [], rows = Array.isArray(v.parlays) ? v.parlays : [];
+  return rows.map((o, ix) => {
+    if (!o || typeof o !== 'object' || o.cleared === true) return null;
+    const legs = (Array.isArray(o.legs) ? o.legs : []).map(q => readLeg(q, games)).filter(Boolean);
+    if (!legs.length) return null;
+    const date = typeof o.date === 'string' && /^\d{4}-\d\d-\d\d$/.test(o.date) ? o.date : legs.map(l => l.date).sort()[0];
+    return { id: String(o.id || ('p' + ix)), date, stake: +o.stake || 0, price: money(o.price), payout: +o.payout || 0, note: o.note ? String(o.note) : '', legs };
+  }).filter(Boolean);
+}
+const updatedOf = v => { const t = v && typeof v.updated === 'string' ? Date.parse(v.updated) : NaN; return Number.isFinite(t) ? t : null; };
+
+/* ---- the parlays this device has cleared: this browser's own list, under one key of its own ----
+   [{id, at}], the parlay's id in the file and when it was cleared here. Storage is shared by every tab of the site (and
+   by the NFL hub, one origin), so each change starts from what it holds now, never from this tab's copy; where storage
+   refuses (a private window, blocked site data) the list in memory is the list for the visit, and the page still draws */
+function hereLoad() {
+  let raw; try { raw = localStorage.getItem(HERE_KEY); } catch (e) { return null; }
+  let v = null; try { v = JSON.parse(raw || 'null'); } catch (e) { v = null; }
+  const seen = new Set();
+  return (Array.isArray(v) ? v : []).filter(x => x && typeof x.id === 'string' && x.id && !seen.has(x.id) && seen.add(x.id)).map(x => ({ id: x.id, at: typeof x.at === 'string' ? x.at : null }));
+}
+let hereMem = false;
+function hereNow() {
+  if (hereMem) return STATE.here.slice();
+  const v = hereLoad(); if (v === null) { hereMem = true; return STATE.here.slice(); }
+  return v;
+}
+/* written only where it differs, removed when empty, so a browser that never cleared anything never has the key */
+function hereWrite(list) {
+  STATE.here = list;
+  if (hereMem) return;
+  try {
+    const want = list.length ? JSON.stringify(list) : null;
+    if (localStorage.getItem(HERE_KEY) === want) return;
+    if (want === null) localStorage.removeItem(HERE_KEY); else localStorage.setItem(HERE_KEY, want);
+  } catch (e) { hereMem = true; }
+}
+const STATE = { parlays: [], updated: null, games: {}, box: {}, err: null, dataErr: null, at: 0, busy: false, settled: {}, loaded: false, shown: false, here: [], again: false };
+STATE.here = hereNow();
+const isHere = id => STATE.here.some(x => x.id === id);
+const shown = () => STATE.parlays.filter(p => !isHere(p.id));
+
+/* ---- the published state, the page's own reading of it ---- */
+const pubOk = () => { try { return typeof S === 'object' && !!S && Array.isArray(S.slate); } catch (e) { return false; } };
+function pubGame(gid) { if (!pubOk()) return null; try { return gameById(gid) || null; } catch (e) { return null; } }
+/* who a player's leg is on, by his ESPN athlete id: the leg's own, else the published players by name and club */
+function legPid(l) {
+  if (l.pid) return l.pid;
+  if (!pubOk() || !Array.isArray(S.players)) return null;
+  const nm = normName(l.name); if (!nm) return null;
+  const m = S.players.filter(x => x && normName(x.name) === nm && (!l.team || x.team === l.team));
+  return m.length === 1 ? String(m[0].id) : null;
+}
+const RES = { won: 'hit', lost: 'missed', push: 'push', void: 'void' };
+/* a leg graded by the page's own settlement on the published final: {state, val, line, why} or null where the published
+   state has no answer yet (no final, a player's box line not published, a player the page cannot place) */
+function pubLeg(l) {
+  const g = pubGame(l.gid); if (!g) return null;
+  if (g.status === 'void') return { state: 'void', val: null, why: 'not played on its date' };
+  if (g.status !== 'final' || g.homeScore == null || g.awayScore == null) return null;
+  try {
+    if (isGameLeg(l)) {
+      const r = legResult({ id: l.gid, kind: l.stat, side: l.stat === 'total' ? l.side : l.team, line: l.stat === 'ml' ? 0 : l.k });
+      if (!RES[r]) return null;
+      const home = l.team === g.home, mine = home ? g.homeScore : g.awayScore, theirs = home ? g.awayScore : g.homeScore;
+      const val = l.stat === 'total' ? (l.side === 'under' ? -1 : 1) * (g.homeScore + g.awayScore - l.k) : mine - theirs + (l.stat === 'spread' ? l.k : 0);
+      return { state: RES[r], val, k: 0 };
+    }
+    const pid = legPid(l); if (!pid) return null;
+    const r = propGrade({ id: l.gid, pid, stat: l.stat, mk: isYes(l) ? 'yes' : l.main ? 'main' : 'mile', line: l.k, k: l.k, side: l.side });
+    if (!r || !RES[r.r]) return null;
+    if (r.r === 'void') return { state: 'void', val: null, why: r.why || 'did not play' };
+    const box = boxOf(l.gid, g), line = box && box[pid];
+    return { state: RES[r.r], val: r.v, k: isYes(l) ? (l.stat === 'td' ? 3 : 2) : l.k, need: null, line: Array.isArray(line) ? line : null };
+  } catch (e) { return null; }
+}
+/* a game as this tab sees it: the published final (or the published word that it was not played) wins; otherwise ESPN's
+   live answer; and the published tip, for the order, where ESPN has not been read */
+function view(gid) {
+  const g = pubGame(gid), e = STATE.games[gid];
+  const tip = g && g.tip ? Date.parse(g.tip) : NaN;
+  if (g && g.status === 'void') return { home: g.home, away: g.away, hs: null, as: null, state: 'void', clock: 'Not played', kick: e && e.kick != null ? e.kick : Number.isFinite(tip) ? tip : null, eid: e ? e.eid : '' };
+  if (g && g.status === 'final' && g.homeScore != null) return { home: g.home, away: g.away, hs: g.homeScore, as: g.awayScore, state: 'post', clock: 'Final', kick: e && e.kick != null ? e.kick : Number.isFinite(tip) ? tip : null, eid: (e && e.eid) || (g.espn ? String(g.espn) : ''), pub: true };
+  if (e) return e;
+  return null;
+}
+const kickOf = gid => { const v = view(gid); if (v && v.kick != null) return v.kick; const g = pubGame(gid), t = g && g.tip ? Date.parse(g.tip) : NaN; return Number.isFinite(t) ? t : null; };
+
+/* ---- ESPN: one scoreboard per Eastern date, a box score per game with a player's leg ----
+   A day's answer down to the games asked for, matched by the date and both clubs: a game ESPN carries for another
+   Eastern day is not this one, except one it has called off (postponed or canceled), which keeps its place */
+function sbGames(sb, want, d) {
+  const out = {};
+  for (const e of (sb && Array.isArray(sb.events) ? sb.events : [])) {
+    const c = (e && e.competitions && e.competitions[0]) || {}, cs = Array.isArray(c.competitors) ? c.competitors : [];
+    const home = cs.find(x => x && x.homeAway === 'home'), away = cs.find(x => x && x.homeAway === 'away');
+    if (!home || !away) continue;
+    const H = ab(home.team && home.team.abbreviation), A = ab(away.team && away.team.abbreviation);
+    const st = ((c.status || e.status || {}).type) || {}, name = String(st.name || '').toUpperCase(), off = /POSTPONED|CANCELED|CANCELLED/.test(name);
+    const when = Date.parse(String(e.date || c.date || ''));
+    if (!off && (!Number.isFinite(when) || etDate(when) !== d)) continue;
+    const g = want.find(x => x.h === H && x.a === A); if (!g || out[g.id]) continue;
+    out[g.id] = { eid: String(e.id || ''), home: H, away: A, hs: espnNum(home.score), as: espnNum(away.score),
+      state: off ? 'void' : st.completed === true ? 'post' : st.state === 'in' || st.state === 'post' ? 'live' : 'pre',
+      clock: off ? (/POSTPONED/.test(name) ? 'Postponed' : 'Canceled') : String(st.shortDetail || st.detail || ''), kick: Number.isFinite(when) ? when : null };
+  }
+  return out;
+}
+/* the box score's columns, by the feed's key first and its label after (tools/fetch_box.js KEYS), never by position */
+const KEYS = { min: ['minutes', 'MIN'], pts: ['points', 'PTS'], reb: ['rebounds', 'REB'], orb: ['offensiveRebounds', 'OREB'], drb: ['defensiveRebounds', 'DREB'], ast: ['assists', 'AST'],
+  tp: ['threePointFieldGoalsMade-threePointFieldGoalsAttempted', '3PT'], stl: ['steals', 'STL'], blk: ['blocks', 'BLK'] };
+/* one club's players in a summary: {id, name, line [pts, reb, ast, tpm, stl, blk], min, dnp, reason}, or null where the
+   box has no side for the club */
+function boxSide(sum, team) {
+  const tp = ((sum && sum.boxscore && Array.isArray(sum.boxscore.players)) ? sum.boxscore.players : []).find(b => b && ab(b.team && b.team.abbreviation) === team);
+  const st = tp && Array.isArray(tp.statistics) ? tp.statistics[0] : null; if (!st) return null;
+  const keys = st.keys || [], labels = (st.labels || st.names || []).map(x => String(x).toUpperCase());
+  const col = k => { let i = keys.indexOf(KEYS[k][0]); if (i < 0) i = labels.indexOf(KEYS[k][1]); return i; };
+  const ix = {}; for (const k of Object.keys(KEYS)) ix[k] = col(k);
+  if (ix.pts < 0) return null;
+  return (Array.isArray(st.athletes) ? st.athletes : []).map(a => {
+    const s = Array.isArray(a && a.stats) ? a.stats : [], get = k => ix[k] >= 0 ? s[ix[k]] : undefined, n = k => espnNum(get(k));
+    const dnp = !!(a && a.didNotPlay) || !s.length || s.every(x => x === '' || x == null);
+    const tpm = espnNum(String(get('tp') == null ? '' : get('tp')).split('-')[0]);
+    const reb = n('reb') != null ? n('reb') : (n('orb') != null || n('drb') != null ? (n('orb') || 0) + (n('drb') || 0) : null);
+    const ath = (a && a.athlete) || {};
+    return { id: String(ath.id || ''), name: String(ath.displayName || ath.shortName || ''), dnp, reason: a && a.reason ? String(a.reason) : '',
+      line: dnp ? null : [n('pts') || 0, reb || 0, n('ast') || 0, tpm || 0, n('stl') || 0, n('blk') || 0], min: dnp ? null : n('min') };
+  });
+}
+/* the leg's player in the box: by his ESPN id, else his whole name, else last name and initial, and only where one
+   player answers to it; on his club's side, or either side for a club the leg does not name in this game */
+function boxPlayer(sum, l, g) {
+  const sides = g && l.team !== g.home && l.team !== g.away ? [g.home, g.away] : [l.team];
+  const list = [].concat(...sides.map(t => boxSide(sum, t) || []));
+  const pid = legPid(l);
+  let a = pid ? list.find(x => x.id === pid) : null;
+  if (!a) { const full = normName(l.name), m = list.filter(x => normName(x.name) === full); if (m.length === 1) a = m[0];
+    else if (!m.length) { const k = nameKey(l.name), m2 = list.filter(x => nameKey(x.name) === k); if (m2.length === 1) a = m2[0]; } }
+  return { a: a || null, any: list.length > 0 };
+}
+/* a player's leg against a value: pre | live | post, the NFL hub's liveLeg. A milestone (k+) and a double- or
+   triple-double ("two or three of points, rebounds, assists, steals and blocks at 10 or more") are "k or more", hit the
+   moment they are reached; an Over main line is hit the moment it is passed and an Under lost; each else waits for the
+   final, where a whole line can push */
+function liveLeg(l, val, state) {
+  const k = isYes(l) ? (l.stat === 'td' ? 3 : 2) : +l.k, r = { val, k, state: 'pending', need: null };
+  if (state === 'pre') return r;
+  if (val == null) { r.state = 'unknown'; return r; }
+  const done = state === 'post';
+  if (isYes(l) || !l.main) { if (val >= k) r.state = 'hit'; else { r.need = k - val; r.state = done ? 'missed' : 'live'; } return r; }
+  if (l.side === 'under') { if (val > k) r.state = 'missed'; else { r.state = done ? (val === k ? 'push' : 'hit') : 'live'; r.need = +(k - val).toFixed(2); } return r; }
+  if (val > k) r.state = 'hit'; else { r.need = +(k - val).toFixed(2); r.state = done ? (val === k ? 'push' : 'missed') : 'live'; }
+  return r;
+}
+/* a moneyline or a spread off the scoreboard alone: points clear of the line on the side bet, never settled mid-game */
+function liveGameLeg(l, g) {
+  if (!g || g.state === 'pre') return { val: null, k: 0, need: null, state: 'pending' };
+  const home = l.team === g.home, mine = home ? g.hs : g.as, theirs = home ? g.as : g.hs;
+  if (mine == null || theirs == null) return { val: null, k: 0, need: null, state: 'unknown' };
+  const m = mine - theirs + (l.stat === 'spread' ? +l.k || 0 : 0);
+  return { val: m, k: 0, need: null, state: g.state === 'post' ? (m > 0 ? 'hit' : m === 0 ? 'push' : 'missed') : 'live' };
+}
+/* a game total, over or under, as points clear of the line on the side bet. Points only go up (overtime is the book's
+   game too), so it is settled the moment the total passes the line: an over won and an under lost, there and then */
+function liveTotal(l, g) {
+  if (!g || g.state === 'pre') return { val: null, k: 0, need: null, state: 'pending' };
+  if (g.hs == null || g.as == null) return { val: null, k: 0, need: null, state: 'unknown' };
+  const t = g.hs + g.as, m = (l.side === 'under' ? -1 : 1) * (t - l.k);
+  if (g.state !== 'post' && t > l.k) return { val: m, k: 0, need: null, state: l.side === 'under' ? 'missed' : 'hit' };
+  return { val: m, k: 0, need: null, state: g.state === 'post' ? (m > 0 ? 'hit' : m === 0 ? 'push' : 'missed') : 'live' };
+}
+/* where a leg stands: {state, val, k, need, game, line?, min?, why?, notIn?, absent?, zero?}, or null (waiting) */
+function liveFor(l) {
+  const g = view(l.gid), p = pubLeg(l);
+  if (p) return Object.assign({ k: 0, need: null }, p, { game: g });
+  if (!g) return null;
+  if (g.state === 'void') return { state: 'void', val: null, k: 0, need: null, game: g, why: 'not played on its date' };
+  if (l.stat === 'total') return Object.assign(liveTotal(l, g), { game: g });
+  if (isGameLeg(l)) return Object.assign(liveGameLeg(l, g), { game: g });
+  if (g.state === 'pre') return Object.assign(liveLeg(l, 0, 'pre'), { val: 0, game: g, zero: true });
+  const sum = STATE.box[l.gid]; if (!sum) return null;
+  const { a, any } = boxPlayer(sum, l, g);
+  /* did not take the floor: once the game is final a book voids the leg; while it is on he may still check in, so it is
+     graded on nothing and says he is not in yet */
+  if (!a || a.dnp) {
+    if (g.state === 'post' && any) return { state: 'void', val: null, k: 0, need: null, game: g, why: a ? (a.reason ? a.reason.toLowerCase() : '') : 'not on the box score' };
+    if (!any) return null;                                   // a box with no players yet: nothing to grade on
+    return Object.assign(liveLeg(l, 0, g.state), { game: g, notIn: !!a, absent: !a });
+  }
+  let v = null; try { v = propValue(a.line, l.stat); } catch (e) { v = null; }
+  return Object.assign(liveLeg(l, v, g.state), { game: g, line: a.line, min: a.min });
+}
+
+const legDates = ps => { const s = new Set(); for (const p of ps) for (const l of p.legs) s.add(l.gid); return s; };
+/* a published final answers for a game when it grades every shown leg on it: then its date need not be read from ESPN */
+const pubSettles = (gid, ps) => ps.every(p => p.legs.every(l => l.gid !== gid || !!pubLeg(l)));
+async function getJSON(u) {
+  const ctl = typeof AbortController === 'function' ? new AbortController() : null, tm = ctl ? setTimeout(() => ctl.abort(), 15000) : null;
+  try { const r = await fetch(u, ctl ? { cache: 'no-store', signal: ctl.signal } : { cache: 'no-store' }); if (!r || !r.ok) throw new Error('HTTP ' + (r ? r.status : '?')); return await r.json(); }
+  finally { if (tm) clearTimeout(tm); }
+}
+const $lp = id => document.getElementById(id);
+async function refresh() {
+  if (STATE.busy) return;
+  STATE.busy = true; $lp('lpDot').classList.add('on'); foot();
+  /* the file first: it is the list of what to watch */
+  try {
+    const f = await getJSON(DATA + '?t=' + Date.now());
+    if (!f || typeof f !== 'object' || !Array.isArray(f.parlays)) throw new Error('not a parlay file');
+    STATE.parlays = readFile(f); STATE.updated = updatedOf(f); STATE.dataErr = null;
+    /* a parlay the file no longer has, or has cleared for everyone, leaves this device's list */
+    const inFile = new Set(STATE.parlays.map(p => p.id));
+    hereWrite(hereNow().filter(x => inFile.has(x.id)));
+  } catch (e) { STATE.dataErr = String((e && e.message) || e); }
+  STATE.loaded = true;
+  /* the games of the parlays drawn (one this device has cleared is not followed), less those the published finals grade */
+  const ps = shown(), want = [...legDates(ps)].filter(gid => !pubSettles(gid, ps)).map(gidParts).filter(Boolean);
+  if (want.length) {
+    try {
+      const games = {};
+      for (const d of [...new Set(want.map(g => g.date))].sort()) {
+        const sb = await getJSON(SB + d.replace(/-/g, '') + '&_=' + Date.now());
+        if (!sb || typeof sb !== 'object' || !Array.isArray(sb.events)) throw new Error('not a scoreboard');
+        Object.assign(games, sbGames(sb, want.filter(g => g.date === d), d));
+      }
+      STATE.games = games;
+      /* a box score only where a player's leg is followed against it and the published state has not graded it */
+      const box = Object.assign({}, STATE.box), need = new Set();
+      for (const p of ps) for (const l of p.legs) if (!isGameLeg(l) && !pubLeg(l)) need.add(l.gid);
+      for (const gid of need) {
+        const v = view(gid), eid = (games[gid] && games[gid].eid) || (v && v.eid);
+        if (!v || !eid || v.state === 'pre' || v.state === 'void') continue;
+        if (STATE.settled[gid] && box[gid]) continue;          // a final box score cannot change
+        try { const j = await getJSON(SUM + encodeURIComponent(eid) + '&_=' + Date.now()); if (j && typeof j === 'object') { box[gid] = j; if (v.state === 'post') STATE.settled[gid] = true; } } catch (e) {}
+      }
+      STATE.box = box; STATE.err = null; STATE.at = Date.now();
+    } catch (e) { STATE.err = String((e && e.message) || e); }
+  } else STATE.err = null;                                   // every game graded by the published finals: nothing to read
+  STATE.busy = false; $lp('lpDot').classList.remove('on'); draw();
+  /* Show them again (or another tab's) while a read was out: read again for the parlays it brought back */
+  if (STATE.again) { STATE.again = false; refresh(); }
+}
+
+/* ---- drawing ---- */
+function statLine(line, only) {
+  if (!Array.isArray(line)) return '';
+  const ks = only ? LINE.filter(k => only.includes(k)) : LINE;
+  return ks.map(k => `${n1(line[LINE.indexOf(k)])} ${SHORT[k]}`).join(', ');
+}
+/* the parlay's stake in one game, which colours its chip: red the moment a leg there is lost, green while every leg is
+   won, gold for level or still undecided; a game not started (or not played) is none of the three */
+function gameTone(p, gid) {
+  const g = view(gid); if (!g || g.state === 'pre' || g.state === 'void') return '';
+  let good = 0, bad = 0, n = 0;
+  for (const l of p.legs) {
+    if (l.gid !== gid) continue;
+    const r = liveFor(l); if (r && r.state === 'void') continue;          // a void leg rides on nothing
+    n++; if (!r) continue;
+    if (r.state === 'hit') { good++; continue; }
+    if (r.state === 'missed') { bad++; continue; }
+    if (isGameLeg(l) && r.state === 'live') { if (+r.val > 0) good++; else if (+r.val < 0) bad++; }
+  }
+  if (!n) return '';
+  return bad ? 'bad' : good === n ? 'good' : 'tie';
+}
+const chipTxt = g => `${esc(g.away)} ${g.as == null ? '0' : n1(g.as)}–${g.hs == null ? '0' : n1(g.hs)} ${esc(g.home)}`;
+/* only the games this parlay has no team bet in: where it does, the score is in that leg's own row */
+function gameStrip(p) {
+  const seen = new Set(p.legs.filter(isGameLeg).map(l => l.gid)), out = [];
+  for (const l of p.legs) {
+    if (seen.has(l.gid)) continue; seen.add(l.gid);
+    const g = view(l.gid); if (!g) continue;
+    const tone = gameTone(p, l.gid);
+    out.push(`<span class="lp-gm${tone ? ' ' + tone : ''}">${chipTxt(g)}<em>${esc(g.clock || '')}</em></span>`);
+  }
+  return out.length ? `<div class="lp-games">${out.join('')}</div>` : '';
+}
+function progressBar(val, k, state, lab) {
+  const max = Number.isFinite(k) && k > 0 ? k * 1.25 : Math.max(1, val || 1);
+  const tick = clamp(100 * k / max, 0, 100), pct = clamp(100 * (val || 0) / max, 0, 100), knob = clamp(pct, 3, 97);
+  const tone = state === 'hit' ? ' win' : state === 'missed' ? ' lose' : '';
+  return `<div class="lp-pbar"><div class="lp-track"><div class="lp-fill${tone}" style="width:${pct.toFixed(2)}%"></div>`
+    + `<span class="lp-tick" style="left:${tick.toFixed(2)}%"></span><span class="lp-knob${tone}" style="left:${knob.toFixed(2)}%">${esc(val == null ? '–' : n1(val))}</span>`
+    + `<span class="lp-line" style="left:${tick.toFixed(2)}%">${esc(lab)}</span></div></div>`;
+}
+/* a team bet is points clear of the line, either side of nothing, so its bar has the line in the middle */
+function marginBar(val, state) {
+  const v = val == null ? 0 : +val, span = Math.max(10, Math.abs(v) * 1.3), pos = x => clamp(50 + 50 * x / span, 0, 100);
+  const at = pos(v), lo = Math.min(50, at), hi = Math.max(50, at);
+  const tone = state === 'hit' ? ' win' : state === 'missed' ? ' lose' : '';
+  return `<div class="lp-pbar"><div class="lp-track"><div class="lp-fill${tone}" style="left:${lo.toFixed(2)}%;width:${(hi - lo).toFixed(2)}%"></div>`
+    + `<span class="lp-tick" style="left:50%"></span><span class="lp-knob${tone}" style="left:${clamp(at, 3, 97).toFixed(2)}%">${val == null ? '–' : (v > 0 ? '+' : '') + n1(v)}</span>`
+    + `<span class="lp-line" style="left:50%">line</span></div></div>`;
+}
+const MARK = { hit: '✓', missed: '✗', push: 'P', void: 'V' };
+const VOIDS = 'a book voids this leg';
+/* why a player's leg is void: his game not played on its date, or he did not take the floor (with the box score's reason
+   where it gives one: "coach's decision") */
+const voidLine = why => why === 'not played on its date' ? `not played on its date: ${VOIDS}` : why && why !== 'did not play' ? `did not play (${why}): ${VOIDS}` : `did not play: ${VOIDS}`;
+function legRow(l) {
+  const r = liveFor(l), st = r ? r.state : null, tone = st === 'hit' ? 'win' : st === 'missed' ? 'lose' : '';
+  const mark = st && MARK[st] ? MARK[st] : '○';
+  if (isGameLeg(l)) {
+    const g = r && r.game, k = l.k;
+    const tgt = l.stat === 'ml' ? 'Win' : l.stat === 'total' ? `${l.side === 'under' ? 'Under' : 'Over'} ${n1(k)}` : `${k > 0 ? '+' : ''}${n1(k)}`;
+    const word = !r ? 'waiting' : st === 'void' ? 'void' : st === 'unknown' ? 'not reported' : st === 'hit' ? 'won' : st === 'missed' ? 'lost' : st === 'push' ? 'level' : (g && g.clock) || 'not started';
+    /* the chip's tone and the marker follow the bet while it runs: green while the side bet on is clear of the line */
+    const m = r && r.val != null ? +r.val : null;
+    const t2 = st === 'hit' ? 'win' : st === 'missed' ? 'lose' : st === 'void' || st === 'push' || m == null ? '' : m > 0 ? 'win' : m < 0 ? 'lose' : 'tie';
+    const chip = g ? `<span class="lp-gm${t2 === 'win' ? ' good' : t2 === 'lose' ? ' bad' : t2 === 'tie' ? ' tie' : ''}">${chipTxt(g)}</span>` : '';
+    const tcls = t2 === 'win' ? 'lp-res win' : t2 === 'lose' ? 'lp-res loss' : t2 === 'tie' ? 'lp-res tie' : 'lp-res';
+    return `<div class="lp-leg team" data-lp-leg="${esc(l.stat)}"><span class="${tcls}" aria-hidden="true">${st === 'hit' ? MARK.hit : st === 'missed' ? MARK.missed : mark}</span>`
+      + `<div class="lp-body"><div class="lp-top"><span class="lp-tgt">${esc(tgt)}</span><span class="lp-status ${tone}">${esc(word)}</span></div>`
+      + `<div class="lp-who">${esc(l.name)} ${esc(STAT_NAME[l.stat])}</div>`
+      + (st === 'void' ? `<div class="lp-stat">${esc(`${r.why || 'not played'}: ${VOIDS}`)}</div>` : chip ? `<div class="lp-stat">${chip}</div>` : '')
+      + marginBar(r && st !== 'void' ? r.val : null, st || 'pending') + '</div></div>';
+  }
+  const yes = isYes(l), k = yes ? (l.stat === 'td' ? 3 : 2) : l.k;
+  const tgt = yes ? 'Yes' : l.main ? `${l.side === 'under' ? 'Under' : 'Over'} ${n1(l.k)}` : `${n1(l.k)}+`;
+  const room = l.main && l.side === 'under' && !yes;
+  const status = !r ? 'waiting' : st === 'void' ? 'void' : st === 'hit' ? 'hit' : st === 'missed' ? 'missed' : st === 'push' ? 'push' : st === 'unknown' ? 'not reported'
+    : st === 'pending' ? ((r.game && r.game.clock) || 'not started')
+      : r.need > 0 ? (yes ? `${n1(r.need)} more at 10+` : `${n1(r.need)} ${room ? 'to spare' : 'to go'}`) : 'live';
+  const line = st === 'void' ? voidLine(r.why)
+    : !r ? '' : r.absent ? 'not on the box score' : r.notIn ? 'not in yet' : r.zero ? statLine([0, 0, 0, 0, 0, 0], PARTS[l.stat]) : r.line ? statLine(r.line) + (r.min != null ? ` · ${n1(r.min)} min` : '') : '';
+  const cls = tone === 'win' ? 'lp-res win' : tone === 'lose' ? 'lp-res loss' : 'lp-res';
+  return `<div class="lp-leg prop" data-lp-leg="${esc(l.stat)}"><span class="${cls}" aria-hidden="true">${mark}</span>`
+    + `<div class="lp-body"><div class="lp-top"><span class="lp-tgt">${esc(tgt)}</span><span class="lp-status ${tone}">${esc(status)}</span></div>`
+    + `<div class="lp-who">${esc(l.name)} ${esc(STAT_NAME[l.stat])}</div>`
+    + (line ? `<div class="lp-stat">${esc(line)}</div>` : '')
+    + progressBar(r && st !== 'void' ? r.val : 0, k, st || 'pending', yes ? `${k} at 10+` : n1(l.k)) + '</div></div>';
+}
+/* settled: a leg lost (the parlay is gone, whatever is still to play), or every game over or not played and every leg
+   graded. "landed" asks for every leg won, pushed or void: a leg still waiting on its box score is not landed */
+const legState = l => { const r = liveFor(l); return r ? r.state : null; };
+const isOver = p => p.legs.every(l => { const g = view(l.gid); return !!g && (g.state === 'post' || g.state === 'void'); });
+const isGone = p => p.legs.some(l => legState(l) === 'missed');
+const isDone = p => isOver(p) && p.legs.every(l => ['hit', 'push', 'void', 'missed'].includes(legState(l)));
+const isSettled = p => isGone(p) || isDone(p);
+function draw() { drawList(); foot(); }
+const hereLine = n => `<div class="lp-here"><span>You cleared ${n} parlay${n === 1 ? '' : 's'} on this device</span><button type="button" class="btn" id="lpShowAll">Show ${n === 1 ? 'it' : 'them'} again</button></div>`;
+const X_ICON = '<svg viewBox="0 0 16 16" aria-hidden="true" focusable="false"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"/></svg>';
+function drawList() {
+  const app = $lp('lpApp'); if (!app) return;
+  if (!STATE.loaded) { app.innerHTML = '<p class="lp-quiet">Reading X’s parlays…</p>'; return; }
+  const ps = shown(), nHere = STATE.parlays.length - ps.length;
+  let html = '';
+  if (STATE.dataErr) html += `<div class="lp-note"><b>X's placed parlays could not be read: ${esc(STATE.dataErr)}</b> They come from <code>liveparlays/parlays.json</code> in the repository, read when this tab opens; the rest of the page is not affected.</div>`;
+  else if (STATE.err) html += `<div class="lp-note"><b>Live scores are not loading (${esc(STATE.err)}).</b> This browser could not reach ESPN's live scoreboard, which the page reads directly. An ad or tracker blocker, a VPN, or a work or school network usually causes it; try with the blocker paused, or on another device. The parlays below are still right; only the live numbers against them are stale.</div>`;
+  if (!ps.length) {
+    if (nHere) { app.innerHTML = html + hereLine(nHere); return; }
+    app.innerHTML = html + '<div class="lp-empty"><b>Nothing to watch yet</b></div>';
+    return;
+  }
+  const FAR = Number.MAX_SAFE_INTEGER;
+  const kicks = p => p.legs.map(l => kickOf(l.gid)).filter(k => k != null);
+  const startsAt = p => { const k = kicks(p); return k.length ? Math.min(...k) : null; }, endsAt = p => { const k = kicks(p); return k.length ? Math.max(...k) : null; };
+  const firstDay = p => p.legs.map(l => l.date).sort()[0], lastDay = p => p.legs.map(l => l.date).sort().pop();
+  /* the order a night runs in: still to finish first, then by first tip, then by last; a section a slate (the Eastern date
+   of a parlay's first game), with a pill where it runs on into a later one; the time shown is the viewer's own */
+  const rank = p => { const s = startsAt(p), e = endsAt(p); return [isSettled(p) ? 1 : 0, firstDay(p), s == null ? FAR : s, e == null ? FAR : e]; };
+  const cmp = (x, y) => { const a = rank(x), b = rank(y); for (let i = 0; i < a.length; i++) { if (a[i] < b[i]) return -1; if (a[i] > b[i]) return 1; } return 0; };
+  const sorted = ps.slice().sort(cmp), nSettled = sorted.filter(isSettled).length;
+  /* said of the parlays drawn: one cleared on this device may be live still, so with any cleared it speaks for these */
+  if (nSettled === sorted.length) html += nHere ? '<p class="lp-quiet">None of the parlays shown here is still live.</p>' : '<p class="lp-quiet">None of X’s parlays is still live.</p>';
+  let lastKey;
+  for (const p of sorted) {
+    const d0 = firstDay(p), d1 = lastDay(p), key = isSettled(p) ? 'settled' : d0;
+    if (key !== lastKey) {
+      lastKey = key;
+      if (key === 'settled') html += `<div class="lp-win lp-done"><b>Finished</b><span>${nSettled} · each clears itself the day after its last game</span></div>`;
+      else { const s0 = Math.min(...sorted.filter(q => !isSettled(q) && firstDay(q) === d0).map(q => startsAt(q) == null ? FAR : startsAt(q)));
+        html += `<div class="lp-win"><b>${esc(dayLong(d0))} games</b><span>${esc(monDay(d0))}${s0 < FAR ? ` · first tip ${esc(localT(s0))}` : ''}</span></div>`; }
+    }
+    const runs = !isOver(p) && d1 !== d0 ? `<span class="lp-pill">runs into ${esc(dayLong(d1))} games</span>` : '';
+    const states = p.legs.map(legState), gone = states.includes('missed'), voids = states.filter(x => x === 'void').length;
+    const back = states.every(x => x === 'void' || x === 'push');
+    const tag = gone ? '<span class="lp-pill bad">gone</span>' : isDone(p) ? (back ? `<span class="lp-pill">${voids ? 'void' : 'push'}</span>` : '<span class="lp-pill ok">landed</span>') : '';
+    const nv = voids && !gone && !back ? `<span class="lp-pill">${voids} void</span>` : '';
+    html += `<div class="lp-p" data-lp-id="${esc(p.id)}">`
+      + `<button type="button" class="lp-x" data-lp-clear="${esc(p.id)}" aria-label="Clear this parlay" title="Clear this parlay">${X_ICON}</button>`
+      + `<div class="lp-head"><span class="lp-title">${p.legs.length}-leg parlay</span><span class="lp-pill">placed</span>`
+      + `<span class="lp-date">${esc(dayShort(p.date))}</span>${p.note ? `<span class="lp-pill lp-pnote">${esc(p.note)}</span>` : ''}${runs}${tag}${nv}</div>`
+      + `<div class="lp-money"><div><b>$${(+p.stake || 0).toFixed(2)}</b><span>staked</span></div><div><b>${p.price == null ? '–' : esc(fmtML(p.price))}</b><span>price</span></div>`
+      + `<div><b>${p.payout ? '$' + (+p.payout).toFixed(2) : '–'}</b><span>pays</span></div></div>`
+      + gameStrip(p) + p.legs.map(legRow).join('') + '</div>';
+  }
+  if (nHere) html += hereLine(nHere);
+  app.innerHTML = html;
+}
+/* the live stamp (when the scores were last read) and, under the heading, when X's parlays last changed */
+function foot() {
+  const st = $lp('lpStamp');
+  if (st) st.textContent = STATE.busy ? 'reading…' : STATE.err || STATE.dataErr ? 'not updating' : STATE.at ? 'scores ' + new Date(STATE.at).toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit', second: '2-digit' }) : STATE.loaded ? 'loaded' : 'idle';
+  const up = $lp('lpUpdated');
+  if (up) up.textContent = 'X’s placed parlays, followed live through their games'
+    + (STATE.updated != null ? ' · updated ' + new Date(STATE.updated).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '');
+}
+
+/* ---- Clear this parlay?: the X opens it; Cancel, Escape or a click outside closes it and clears nothing; Clear takes
+   the parlay off this device's X Parlays. Tab stays inside the window and the focus goes back to the X (after a Clear,
+   to the X now in its place, else to Show them again). Nothing is sent anywhere ---- */
+let askId = null, askAt = 0;
+/* a tap within a moment of the window opening is the same finger's double tap on the X, not an answer: it neither
+   clears (Clear can sit right under the X on a phone) nor closes. A key's click (no pointer, detail 0) always counts */
+const tooSoon = e => !!e && e.detail > 0 && Date.now() - askAt < 400;
+const askOpen = () => { const d = $lp('lpAsk'); return !!d && !d.hidden; };
+const xFor = id => [...document.querySelectorAll('#lpApp [data-lp-clear]')].find(b => b.getAttribute('data-lp-clear') === id) || null;
+function ask(id) {
+  const p = STATE.parlays.find(x => x.id === id), d = $lp('lpAsk'); if (!p || !d) return;
+  askId = id;
+  $lp('lpAskWhat').textContent = [`${p.legs.length}-leg parlay`, dayShort(p.date), p.price != null ? fmtML(p.price) : '', p.note || ''].filter(Boolean).join(' · ');
+  d.hidden = false; askAt = Date.now(); document.body.classList.add('pp-lock');
+  try { $lp('lpAskNo').focus(); } catch (e) {}
+}
+/* quiet: closed because the visitor left the tab, so the focus is not sent back into it */
+function askClose(clear, quiet) {
+  const d = $lp('lpAsk'); if (!d || d.hidden) return;
+  const id = askId; askId = null; d.hidden = true;
+  if (!document.querySelector('.pp-back:not([hidden])')) document.body.classList.remove('pp-lock');
+  let back = null;
+  if (clear && id) {
+    const xs = [...document.querySelectorAll('#lpApp [data-lp-clear]')], at = xs.indexOf(xFor(id)), list = hereNow();
+    hereWrite(list.some(x => x.id === id) ? list : list.concat([{ id, at: new Date().toISOString() }]));
+    draw();
+    const now = [...document.querySelectorAll('#lpApp [data-lp-clear]')];
+    back = now[Math.min(Math.max(at, 0), now.length - 1)] || $lp('lpShowAll') || $lp('lpNow');
+  } else back = xFor(id) || $lp('lpNow');
+  if (!quiet) try { if (back) back.focus(); } catch (e) {}
+}
+function showAgain() {
+  /* the ones this tab shows as cleared come back; one another tab cleared since stays cleared */
+  const mine = new Set(STATE.here.map(x => x.id));
+  hereWrite(hereNow().filter(x => !mine.has(x.id)));
+  draw();
+  const first = document.querySelector('#lpApp [data-lp-clear]'); try { if (first) first.focus(); } catch (e) {}
+  /* their games were not followed while they were cleared: read them now */
+  if (STATE.busy) STATE.again = true; else refresh();
+}
+$lp('lpApp').addEventListener('click', e => {
+  const x = e.target && e.target.closest && e.target.closest('[data-lp-clear]');
+  if (x) { ask(x.getAttribute('data-lp-clear')); return; }
+  if (e.target && e.target.closest && e.target.closest('#lpShowAll')) showAgain();
+});
+$lp('lpAskNo').addEventListener('click', () => askClose(false));
+$lp('lpAskYes').addEventListener('click', e => { if (!tooSoon(e)) askClose(true); });
+$lp('lpAsk').addEventListener('click', e => { if (e.target === e.currentTarget && !tooSoon(e)) askClose(false); });
+$lp('lpNow').addEventListener('click', () => refresh());
+/* another tab of the site cleared a parlay, or showed them again: this one follows (the NFL hub's key is not this one) */
+window.addEventListener('storage', e => {
+  if (e.key !== HERE_KEY && e.key !== null) return;
+  if (hereMem) return;
+  const v = hereLoad(); if (v === null) return;
+  const back = STATE.here.some(x => !v.some(y => y.id === x.id));
+  STATE.here = v;
+  if (!STATE.shown) return;                                    // nothing drawn or read before the tab is first shown
+  draw();
+  if (back) { if (STATE.busy) STATE.again = true; else refresh(); }
+});
+/* Escape ahead of the windows beneath it, so it closes this one alone; Tab kept inside */
+window.addEventListener('keydown', e => {
+  if (!askOpen()) return;
+  /* a window left open on a tab no longer shown is closed, and the key goes where it was meant */
+  if ($lp('lpAsk').parentElement.closest('[hidden]')) { askClose(false, true); return; }
+  if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); askClose(false); return; }
+  if (e.key !== 'Tab') return;
+  const f = [$lp('lpAskNo'), $lp('lpAskYes')], at = document.activeElement;
+  if (e.shiftKey && (at === f[0] || !$lp('lpAsk').contains(at))) { e.preventDefault(); f[1].focus(); }
+  else if (!e.shiftKey && (at === f[1] || !$lp('lpAsk').contains(at))) { e.preventDefault(); f[0].focus(); }
+}, true);
+/* the page's tab code: the first show in a page load reads the file and ESPN, every later show draws what was read; a
+   tab change closes the window, quietly, clearing nothing */
+window.lpShow = () => { if (!STATE.shown) { STATE.shown = true; draw(); refresh(); } else draw(); };
+window.lpLeave = () => { const s = $lp('tab-xparlays'); if (askOpen() && s && s.hidden) askClose(false, true); };
+window.lpRefresh = refresh;
+/* what the smoke test reads */
+window.NBA_LP = { key: HERE_KEY, readFile, gidParts, sbGames, boxSide, liveLeg, liveGameLeg, liveTotal, state: () => STATE };
+foot();
+})();
+</script>

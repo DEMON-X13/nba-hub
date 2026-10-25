@@ -348,12 +348,13 @@ body.pp-lock{overflow:hidden}
   </div>
   <nav id="nav" role="tablist">
     <button data-tab="slate" aria-selected="true">Tonight<span class="n" id="nSlate" hidden></span></button>
+    <button data-tab="parlay">Parlay Builder<span class="n" id="nLegs" hidden></span></button>
+    <button data-tab="xparlays">X Parlays</button>
     <button data-tab="teams">Teams</button>
     <button data-tab="players">Players</button>
     <button data-tab="coaches">Coaches</button>
     <button data-tab="pickem">Pick'em Record</button>
     <button data-tab="record">Record</button>
-    <button data-tab="parlay">Parlay Builder<span class="n" id="nLegs" hidden></span></button>
     <button data-tab="data" id="dataTabBtn" hidden>Data</button>
   </nav>
 </header>
@@ -366,6 +367,7 @@ body.pp-lock{overflow:hidden}
   <section id="tab-pickem" hidden></section>
   <section id="tab-record" hidden></section>
   <section id="tab-parlay" hidden></section>
+  <!--part:xparlays-->
   <section id="tab-data" hidden></section>
 </main>
 <footer>Rebuilt in the morning from the previous night's box scores, and again through the afternoon for the day's lines and injury report. Your bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
@@ -473,6 +475,7 @@ function show(tab) {
   if (!document.getElementById('tab-' + tab) || !$$('#nav button').some(b => b.dataset.tab === tab)) tab = 'slate';   // a tab saved that the page no longer has
   $$('#nav button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab ? 'true' : 'false'));
   $$('main > section').forEach(s => { s.hidden = s.id !== 'tab-' + tab; });
+  if (window.lpLeave) window.lpLeave();                      // X Parlays' Clear this parlay? window closes with its tab
   try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {}
   oddsBarSync(tab);
   render[tab] && render[tab]();
@@ -481,6 +484,8 @@ const tabNow = () => ($$('#nav button').find(b => b.getAttribute('aria-selected'
 
 /* ---------- renders ---------- */
 const render = {};
+/* X Parlays (app/parts/xparlays.html): read when its tab is first shown in a page load, drawn again on every show after */
+render.xparlays = () => { if (window.lpShow) window.lpShow(); };
 let day = null;
 render.slate = function () {
   const dates = [...new Set(S.slate.map(g => g.date))].sort();

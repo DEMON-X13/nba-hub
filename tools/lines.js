@@ -47,21 +47,26 @@ const SB = 'https://site.api.espn.com/apis/site/v2/sports/basketball/nba/scorebo
 const DAYS = 2;                   // the next two Eastern dates with a game to come
 const POOL = 6;                   // propBets reads at a time, as the page's press makes them
 const TIMEOUT = 15000;
-const TRIES = 2;
-const RETRY = [408, 425, 429, 500, 502, 503, 504];
+/* the header sets lib.getJSON tries, the named one first (the one ESPN has answered from GitHub's runners), each try one
+   of them in turn */
+const TRIES = L.HEADER_SETS.length;
+const RETRY = [403, 408, 425, 429, 500, 502, 503, 504];
 const PAUSE = process.env.NBA_FETCH_PAUSE_MS != null ? +process.env.NBA_FETCH_PAUSE_MS : 1000;
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 const iso = d => new Date(d).toISOString().slice(0, 19) + 'Z';
 const ISO = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
 
-/* one ESPN read: a plain GET with no headers of its own, past any cache, inside 15 seconds body and all; a refusal
-   throws "HTTP <code> <url>", as lib.getJSON does, so propRead reads a 404 as nothing posted */
+/* one ESPN read: a GET past any cache, inside 15 seconds body and all, with lib's header sets in turn (the named
+   User-Agent, none, a browser's), so a refusal one of them meets is tried with the next, as lib.getJSON does; a refusal
+   throws "HTTP <code> <url>", so propRead reads a 404 as nothing posted */
 async function getJSON(url) {
   let last;
   for (let i = 0; i < TRIES; i++) {
     if (i) await sleep(PAUSE);
     try {
-      const r = await fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(), { cache: 'no-store', signal: AbortSignal.timeout(TIMEOUT) });
+      const h = L.HEADER_SETS[i], opt = { cache: 'no-store', signal: AbortSignal.timeout(TIMEOUT) };
+      if (Object.keys(h).length) opt.headers = h;
+      const r = await fetch(url + (url.includes('?') ? '&' : '?') + '_=' + Date.now(), opt);
       if (r.ok) return await r.json();
       last = new Error('HTTP ' + r.status + ' ' + url);
       if (!RETRY.includes(r.status)) break;
@@ -215,10 +220,15 @@ async function run({ games = L.readGames(), prev, get = getJSON, clock = () => n
   const written = before === null || bare(before) !== bare(text);
   if (written && write) fs.writeFileSync(file, text);
   const kept = n.linesFailed + n.propsFailed + n.noId;
+  /* a whole half failed for every game (every scoreboard refused, or every props read): the file keeps what it has, and
+     the run is red so it is seen, not a feed quietly gone stale */
+  const tried = reads.filter(r => r.prStatus !== 'noId');
+  const halfDown = boards.length && boards.every(b => !b.ok) ? 'game lines' : tried.length && tried.every(r => r.prStatus !== 'ok' && r.prStatus !== 'none') ? 'player props' : null;
+  if (halfDown) log(`lines: every ${halfDown} read failed this run: the last good reads are kept, and the step is red`);
   log(`lines: ${todo.length} games to come on ${days.join(' and ') || 'no date'}: ${n.lines} with DraftKings' game lines${n.noLines ? `, ${n.noLines} with none yet` : ''}; ${n.props} with player props (${n.mains} main lines)${n.noProps ? `, ${n.noProps} with none posted yet` : ''}`
     + `${kept ? `; ${[n.linesFailed && `${n.linesFailed} game lines`, n.propsFailed && `${n.propsFailed} props`, n.noId && `${n.noId} props with no ESPN id`].filter(Boolean).join(', ')} not read, the last good read kept` : ''}${n.tipped ? `; ${n.tipped} tipped off and left` : ''}; ${path.basename(file)} ${written ? `written (${(text.length / 1024).toFixed(0)} KB)` : 'unchanged'}`);
-  return { failed: false, n, written, text, out };
+  return { failed: false, partial: halfDown, n, written, text, out };
 }
 
 module.exports = { SB, DAYS, POOL, getJSON, toCome, entryBad, readLines, stringify, entryOf, run };
-if (require.main === module) run().then(r => { if (r.failed) process.exit(1); }).catch(e => { console.error(e && e.stack || e); process.exit(1); });
+if (require.main === module) run().then(r => { if (r.failed || r.partial) process.exit(1); }).catch(e => { console.error(e && e.stack || e); process.exit(1); });

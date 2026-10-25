@@ -142,13 +142,15 @@ const del = () => { try { fs.unlinkSync(FILE); } catch (e) { /* none */ } };
     const tryGet = async u => { try { return { j: await LN.getJSON(u) }; } catch (e) { return { e: String(e.message) }; } };
     try {
       stub([503, 200]); calls.length = 0; let x = await tryGet(LN.SB + '20261025');
-      check(x.j && calls.length === 2 && calls.every(c => /dates=20261025&_=\d{13}$/.test(c.url) && c.opt.cache === 'no-store' && c.opt.headers === undefined && c.opt.signal), 'a 503 is tried once more; every request is a plain GET with no headers of its own, past any cache (no-store and a cache-buster), with a timeout');
+      check(x.j && calls.length === 2 && calls.every(c => /dates=20261025&_=\d{13}$/.test(c.url) && c.opt.cache === 'no-store' && c.opt.signal) && /^nba-hub\//.test(calls[0].opt.headers['User-Agent']) && calls[1].opt.headers === undefined, 'a 503 is tried again with lib\'s next header set (the named User-Agent first, then none); every request past any cache (no-store and a cache-buster), with a timeout');
+      stub([403, 200]); calls.length = 0; x = await tryGet(LN.SB + '20261025');
+      check(x.j && calls.length === 2, 'a 403 is tried with the next header set, as lib.getJSON does');
       stub([new TypeError('fetch failed'), 200]); calls.length = 0; x = await tryGet('https://x/y');
       check(x.j && calls.length === 2 && /^https:\/\/x\/y\?_=\d+$/.test(calls[0].url), 'so is a request that never answers or is reset');
       stub([404]); calls.length = 0; x = await tryGet(LN.SB + '20261025');
       check(calls.length === 1 && /^HTTP 404 /.test(x.e), 'a 404 is answered at once, as "HTTP 404" (propRead\'s none posted)');
       stub([503, 503]); calls.length = 0; x = await tryGet(LN.SB + '20261025');
-      check(calls.length === 2 && /^HTTP 503 /.test(x.e), 'two refusals are a failed read');
+      check(calls.length === 3 && /^HTTP 503 /.test(x.e) && /Mozilla/.test(calls[2].opt.headers['User-Agent']), 'a refusal under every header set is a failed read');
     } finally { globalThis.fetch = real; }
   }
 
@@ -245,6 +247,58 @@ L.readGames = () => [{ game_id: '2027_20990101_BOS_NYK', season: '2027', date: L
 globalThis.fetch = async () => { throw new TypeError('fetch failed'); };\n`);
     const cli = cp.spawnSync(process.execPath, ['-r', pre, path.join(ROOT, 'tools', 'lines.js')], { env: { ...process.env, NBA_LINES_FILE: FILE, NBA_FETCH_PAUSE_MS: '0' }, encoding: 'utf8' });
     check(cli.status === 1 && fs.readFileSync(FILE, 'utf8') === keep && /nothing answered/.test(cli.stdout), `node tools/lines.js exits 1 with the file untouched when ESPN cannot be reached (${cli.status}: ${(cli.stdout + cli.stderr).trim().split('\n').pop()})`);
+  }
+
+  console.log('3b. a half down, and a junk last entry');
+  {
+    const gs = [...g20, ...g25];
+    del();
+    await go(gs, answers, '2026-10-20T12:00:00Z');
+    const before = readOut();
+    /* every scoreboard answers, every props read refused: the file is still written (its game lines are fresh), each
+       game's props are the last good read, and the run says a half is down so the step goes red */
+    const allPropsDown = { 20261020: SB20, 20261025: SB25 };
+    for (const g of gs) allPropsDown[g.espn_id] = new Error('HTTP 503 x');
+    r = await go(gs, allPropsDown, '2026-10-20T13:00:00Z');
+    const after = readOut();
+    check(!r.failed && r.partial === 'player props', `every props read refused: the run is partial on the player props (${r.partial})`);
+    check(Object.keys(before.games).every(k => JSON.stringify(after.games[k].props) === JSON.stringify(before.games[k].props)), 'and every game keeps its props as last read');
+    /* every scoreboard refused, the props answering: partial on the game lines */
+    const allLinesDown = { ...answers, 20261020: new Error('HTTP 503 x'), 20261025: new Error('HTTP 503 x') };
+    r = await go(gs, allLinesDown, '2026-10-20T14:00:00Z');
+    check(!r.failed && r.partial === 'game lines', `every scoreboard refused: the run is partial on the game lines (${r.partial})`);
+    /* a quiet run is not partial */
+    r = await go(gs, answers, '2026-10-20T15:00:00Z');
+    check(!r.failed && !r.partial, 'a run where everything answers is not partial');
+    /* the command line exits 1 on a partial run (the props refused, the scoreboard answering, in a preload) */
+    const pre2 = path.join(tmp, 'pre2.js'), tip = new Date(Date.now() + 86400e3), L0 = require(path.join(ROOT, 'tools', 'lib.js'));
+    const day = L0.etDate(tip).replace(/-/g, ''), ev = clone(SB20.events[0]);
+    ev.date = tip.toISOString().slice(0, 16) + 'Z';
+    const sb = { ...clone(SB20), events: [ev] };
+    const [aw, hm] = ev.competitions[0].competitors.sort((x, y) => x.homeAway === 'away' ? -1 : 1).map(c => c.team.abbreviation);
+    fs.writeFileSync(pre2, `const L = require(${JSON.stringify(path.join(ROOT, 'tools', 'lib.js'))});
+const tip = ${JSON.stringify(tip.toISOString())};
+L.readGames = () => [{ game_id: '2027_' + ${JSON.stringify(day)} + '_' + ${JSON.stringify(g20[0].away)} + '_' + ${JSON.stringify(g20[0].home)}, season: '2027', date: L.etDate(new Date(tip)), type: 'REG', away: ${JSON.stringify(g20[0].away)}, home: ${JSON.stringify(g20[0].home)}, status: 'scheduled', espn_id: ${JSON.stringify(ev.id)}, tip: tip.slice(0, 16) + 'Z' }];
+const SB = ${JSON.stringify(sb)};
+globalThis.fetch = async url => { url = String(url); if (/scoreboard/.test(url)) return { ok: true, status: 200, headers: { get: () => 'application/json' }, text: async () => JSON.stringify(SB), json: async () => SB }; return { ok: false, status: 503, headers: { get: () => 'text/plain' }, text: async () => 'down', json: async () => { throw new Error('x'); } }; };\n`);
+    const f2 = path.join(tmp, 'lines2.json');
+    const cli2 = cp.spawnSync(process.execPath, ['-r', pre2, path.join(ROOT, 'tools', 'lines.js')], { env: { ...process.env, NBA_LINES_FILE: f2, NBA_FETCH_PAUSE_MS: '0' }, encoding: 'utf8' });
+    check(cli2.status === 1 && /every player props read failed/.test(cli2.stdout), `node tools/lines.js exits 1 when every props read fails (${cli2.status}: ${(cli2.stdout + cli2.stderr).trim().split('\n').pop()})`);
+    /* a last entry that breaks the shape, under the game's own ESPN id, is no last read: with both halves refused now
+       the game is left out, never carried in its broken shape */
+    del();
+    await go([g20[0]], answers, '2026-10-20T12:00:00Z');
+    const good = readOut().games[g20[0].game_id];
+    const junk = { ...good, ml: { home: 'minus a lot', away: 130 } };
+    check(LN.entryBad(g20[0].game_id, junk) !== null, 'the planted entry breaks the shape (a moneyline that is not two prices)');
+    fs.writeFileSync(FILE, LN.stringify({ v: 1, at: '2026-10-19T12:00:00Z', games: { [g20[0].game_id]: junk } }));
+    check(LN.readLines(FILE) && !LN.readLines(FILE).games[g20[0].game_id], 'readLines drops it');
+    r = await go([g20[0]], { 20261020: new Error('HTTP 503 x'), [g20[0].espn_id]: new Error('HTTP 503 x') }, '2026-10-20T13:00:00Z');
+    const out2 = fs.existsSync(FILE) ? JSON.parse(fs.readFileSync(FILE, 'utf8')) : null;
+    check(r.failed && out2 && JSON.stringify(out2.games[g20[0].game_id]) === JSON.stringify(junk) && !r.written, 'with nothing answering the run fails and leaves the file as it was (never rewritten from the junk)');
+    r = await go([g20[0]], { 20261020: new Error('HTTP 503 x'), [g20[0].espn_id]: new Error('HTTP 404 x') }, '2026-10-20T14:00:00Z');
+    const g3 = readOut().games[g20[0].game_id];
+    check(!r.failed && g3 && g3.at === null && g3.ml === null && LN.entryBad(g20[0].game_id, g3) === null, 'with the props answering none posted, the junk game lines are not carried: none read (at null)');
   }
 
   console.log('4. the quiet run');

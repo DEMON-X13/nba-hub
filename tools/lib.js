@@ -60,4 +60,4 @@ async function fetchRetry(url, parse = r => r) {
 const getJSON = url => fetchRetry(url, r => r.json());
 const getText = url => fetchRetry(url, r => r.text());
 
-module.exports = { ROOT, GAMES, COLS, TEAMS, fromHist, fromEspn, log, seasonOf, etDate, addDays, gameId, readGames, writeGames, getJSON, getText };
+module.exports = { ROOT, GAMES, COLS, TEAMS, fromHist, fromEspn, log, seasonOf, etDate, addDays, gameId, readGames, writeGames, getJSON, getText, HEADER_SETS };

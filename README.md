@@ -29,6 +29,9 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
 | `tools/elo_model.js`, `models/elo.json`, `research/elo.json` | The ELO Model (README "The ELO Model"): the NFL hub's player Elo and logistic on the NBA's box scores; its call on every game of the season in play on the previous game's rotation, the games to come apart on today's report, its fitted weights and the Elo picks' prices; and its walk-forward with every design choice tried |
 | `tools/test_elo_model.js` | The ELO Model's leakage check (a game's inputs the morning it is played are its inputs once final; a game under way and a final of today called on the previous game's rotation), its ratings by hand on a made-up league, tonight's rotation on made-up reports, the committed files and a refusal's, and every phase of a season |
+| `tools/joker.js`, `tools/gbm.js` | The Joker (README "The Joker"): gradient-boosted trees, written out in plain Node, on every number the job has before tip-off; its rows, walk-forward, by-hand fit and the job's step |
+| `models/joker.json`, `research/joker.json` | The Joker's frozen trees, its call on every game of the season in play with a moneyline, the season's input rows as the job saw them before each tip; and its walk-forward with the design choice |
+| `tools/test_joker.js`, `tools/test_gbm.js` | The Joker's leakage check (a game's row the morning it is played is its row once final), its rows by hand, its run's and a refusal's file, and on the real data in any phase of a season the file against today's data and the last commit; the trees on sets worked out by hand |
 | `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players and coaches (with their overall Elo on the ladder the tier shields are drawn on, and its change over 7 days), the backtest, the market table (`vsMarket`, from `research/backtest.json`), the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays"); and `history.json` |
 | `tools/lines.js`, `lines.json` | The lines feed (README "The lines feed"): DraftKings' game lines, with both prices and their betslip ids, and every player prop on the games of the next two Eastern dates with a game to come, read by the job from ESPN's free feeds after the props model |
 | `tools/lines_feed.js` | DraftKings' game lines as ESPN's scoreboard carries them: the page's own reading (`oddsDkHref`, `oddsIdOk`, `oddsGameLines`), line for line, and lines.json's shape of it |
@@ -538,6 +541,166 @@ calls and saying why, every game of the season in play called on the previous ga
 research/elo.json's on the box-scored finals, the design and the pick weights research/elo.json's, the weights fitted on
 finished seasons), and every phase of a season built in memory on the real data cut back (no final yet, opening night,
 the playoffs, the summer).
+## The Joker
+
+The NFL hub's Joker is one boosted-tree classifier on every variable its job has before kickoff, fitted on finished
+seasons and frozen for the season. This is the NBA's, with the NFL's settings: gradient-boosted trees on binomial
+deviance, depth 4, 25 rounds at a learning rate of 0.1, at least 5 games in a leaf, a missing number given the training
+rows' median and each category one-hot. The NFL fits them with scikit-learn's histogram trees; the job here has no
+dependencies, so `tools/gbm.js` writes the same algorithm out in plain Node, with exact splits over the sorted values
+in place of 255 bins (the same method, not the same trees to the bit), deterministic to the bit and held to small sets
+worked out by hand in `tools/test_gbm.js`. It gives the chance the home side wins, and a spread: the home margin that
+chance implies, at a scale fitted by least squares on the training rows (9.2 points a unit of log-odds), so the spread
+always names the side the pick does.
+
+Its inputs, built by one function (`build`) for the rows it is trained on and for the games it calls:
+
+- **The market**: the two moneylines' chance with the book's margin taken out (each side's implied chance over their
+  sum), the home line and the total where `fetch_odds_hist.js`'s `check()` passes them. Closing lines from
+  `data/odds_hist.csv` for 2022-23 to 2025-26; from 2026-27 on `games.csv`'s, the job's last read before tip, which
+  `fetch.js` freezes at tip-off.
+- **The two models**: Team Elo's pre-game chance, and the player model's chance, spread, total and pace with the
+  previous game's lineup at its projected minutes (the "no report" lineup: it can be replayed for every past game, and a
+  game to come has the same one). Each fold of the walk-forward replays the player model on that fold's `research.json`
+  parameters, fitted on the seasons before it; the live trees on `players.json`'s as they stood when the trees were
+  fitted, which the Joker keeps in its own file so a later refit of the player model does not move its inputs under it.
+- **The setting**: the play-offs, the day of the season, a neutral site, altitude (Denver and Utah at home), each side's
+  days of rest (capped at 10), a back to back, three games in four nights, the time zones crossed since a game two days
+  or less before (the player model's travel rule; none at a neutral site), same division, same conference, and in the
+  play-offs the series game and the home side's lead in it. All read from the schedule, whatever has been played.
+- **Running form**, from the team box scores: each side's points per 100 possessions scored and allowed and its pace
+  (possessions as the player model counts them), a running average at 0.1 a game, carried 0.7 of the way toward the
+  league's at a season's turn (Team Elo's carry), the league's a running mean at 0.005 a team-game (the player model's
+  league efficiency); 2021-22, the first season with box scores, only warms it up.
+- **The people and the teams**, as categories: home and away, both coaches (`coachOf`, a dated change honoured, read as
+  the game's day began: below) and each side's top player by minutes in its previous game.
+
+Every input is known before tip. A row reads the state as its Eastern day began: every final of an earlier day and
+nothing of its own day, and each club's coach as `coaches.csv` had him the day before, since the job dates a coach
+change by the day it read it and a late run reads it after that day's tip-off (a change dated on a game's own day is the
+club's from the next game, in the categories and in the player model's replay alike). The two models' numbers are read
+the same way: each replay is run on the finals with a copy of each game, marked a game to come and set in front of its
+day's finals, so a model prices a final exactly as it would have that morning. (Read off the replays' own finals
+instead, three things would differ between a game's training row and its live one: the home edge after the day's
+earlier finals, Team Elo's spread rounded to the tenth the player model blends, and a team's first game of a season,
+whose naive lineup the player model prices on ratings not yet carried into the season where a game to come is priced on
+carried ones.) Nothing reads the injury report or the rosters. So a game's call is the same from the morning it is
+played to its final, a game under way or played today included, and `games`, which the Pick'em Record takes as the
+Joker's call for every game of the season played before its first published call, is pre-tip by construction; the
+games to come are called the same way, on the market's latest read. `tools/test_joker.js` rebuilds every day of a
+made-up season, the play-offs among them, as its morning saw it, and the job's own last day with finals, and holds every
+game's row to the row it has once final; with a day's finals reaching its own rows, the copies set after them, a coach
+change read on a game's own day, or the top player taken from the game's own box score, it fails.
+
+**The design** was chosen by a rule set before any fold was scored. Four designs: the inputs above without the people
+(base), with them (people), base with the four factors scored and allowed (factors), and base without the teams
+(noteams); the one with the lowest mean log loss on 2024 and 2025, then for it the spread with the lower mean error on
+the same folds. The people survived in both seasons (0.6265 and 0.6055 against base's 0.6271 and 0.6080), the four
+factors did not (0.6350, 0.6081), dropping the teams helped 2024 and hurt 2025 (0.6254, 0.6101), and a second set of
+trees fitted to the home margin beat the margin the chance implies (10.97 points of error against 11.19). The design is
+kept as chosen (`CHOSEN`): a re-scoring reports what the rule would pick (`rulePick`) and never re-chooses. The margin
+trees' spread named the other side from the pick in 147, 108 and 56 games of the folds (8 of the 59 calls of 25 October
+2026, `2027_20261030_LAL_GSW` 55% to Golden State and Los Angeles by 3.2), so on review the published spread was set to
+the one the chance implies, 0.2 points worse on 2024 and 2025 and in agreement with the pick by construction; the
+margin trees' error stays in `research/joker.json` beside it, and nothing publishes them.
+
+2026 was first scored after the choice, on the chosen design only, and has been scored again since, on the same design:
+while the code and the data were finished on 25 October 2026 (the job's data moved between runs), and in the review's
+fixes of that day (the coach as the day began, the spread from the chance, every box-scored final counted), each time
+reported as it came out, with nothing chosen or tuned on it. The spread was switched knowing every fold's numbers, for
+agreement with the pick, not for its error. And the 2026 numbers of the market, Team Elo and the player model were
+published (above, `research.json`, `research/backtest.json`) before the Joker's designs were set.
+
+### Walk-forward test (`node tools/joker.js research`, writes `research/joker.json`)
+
+Each fold fits the trees on the finals with a closing moneyline from 2022-23 to the season before, and scores the season
+cold, every model on the same games: every decided final with both box scores (1,314, 1,320 and 1,322; 6 finals with a
+side's box score missing are left out, named in the file), the set every model on the Pick'em Record is scored on and
+the walk-forward `models/joker.json` publishes. Four 2026 play-off finals have no moneyline anywhere
+(`2026_20260430_DEN_MIN`, `2026_20260507_CLE_DET`, `2026_20260513_CLE_DET`, `2026_20260523_NYK_CLE`): the trees call
+them with the market missing, imputed as any missing input is, which the live job never does. Log loss / straight up /
+spread error:
+
+| Season scored | The Joker | Team Elo | Player model, no report | Player model, lineup known |
+|---|---|---|---|---|
+| 2024 (trained on 2023), 1,314 finals | 0.627 / 66.2% / 11.40 | 0.609 / 66.1% / 11.06 | 0.615 / 67.7% / 11.29 | 0.613 / 66.3% / 11.27 |
+| 2025 (on 2023-2024), 1,320 | 0.606 / 67.1% / 10.98 | 0.609 / 65.5% / 11.12 | 0.600 / 67.7% / 11.03 | 0.591 / 67.6% / 10.94 |
+| 2026 (on 2023-2025), 1,322 | 0.591 / 68.5% / 11.27 | 0.601 / 68.8% / 11.53 | 0.603 / 66.7% / 11.51 | 0.589 / 68.5% / 11.37 |
+
+And on the finals among them with a closing moneyline (all of 2024's and 2025's, 1,318 of 2026's), beside the market:
+
+| Season scored | The Joker | Market (no-vig moneyline) | Its margin trees' spread error, for comparison |
+|---|---|---|---|
+| 2024, 1,314 finals | 0.627 / 66.2% / 11.40 | 0.583 / 69.1% / 10.66 | 11.12 |
+| 2025, 1,320 | 0.606 / 67.1% / 10.98 | 0.585 / 68.7% / 10.63 | 10.81 |
+| 2026, 1,318 | 0.590 / 68.6% / 11.27 | 0.576 / 68.7% / 11.00 | 11.13 |
+
+(The market's spread error is on the games with a line that passes `check()`.) The market beats it in every season, by
+0.043 of log loss with one season to learn from, 0.020 with two and 0.015 with three, each 90% interval (days
+resampled, `backtest.js`'s seeded bootstrap) clear of zero. It takes the market's favourite in 86%, 92% and 98% of
+games, and where it does not it went 75-110, 41-63 and 13-14: it is the market, read coarsely, with more to learn from
+each season. Against the hub's own models it is behind Team Elo and the player model in 2024, ahead of Team Elo and
+behind the player model in 2025 (by 0.006 with no report, 0.014 with the lineup known), and in 2026 ahead of Team Elo
+and of the player model with no report, and within 0.002 of the player model on a perfect report (0.591 against 0.589);
+its spread error is the lowest of the hub's models in 2026, behind the player model on a perfect report in 2025 (10.98
+against 10.94) and the highest in 2024. The same trees on the market's three numbers alone did better than the whole
+Joker in every season (0.604, 0.601, 0.581): at these settings, which are the NFL's and were not tuned, the rest adds
+more noise than signal. The player model's travel term, in every fold's parameters, was kept after the October 2026
+refresh looked at 2023-24 to 2025-26, and Team Elo's learned home court was added after a look at the same seasons;
+`research/joker.json` lists what was looked at.
+
+The folds train and score on closing lines, while the job calls on its last read before tip, which is earlier. Scored on
+the opening lines instead, where `odds_hist.csv` has them, it loses 0.007, 0.010 and 0.005 of log loss (the market
+itself 0.011, 0.012 and 0.010): a bound on what the earlier read costs.
+
+### The live trees and the job step (`node tools/joker.js`, writes `models/joker.json`)
+
+The live trees are fitted by hand, `node tools/joker.js fit`, on the design the walk-forward chose: the 5,272 finals with
+a closing moneyline of 2022-23 to 2025-26 (in sample 0.560 and 71.0%; `params.splits` counts what the trees split on,
+the market's chance 76 times of 345, its line 20, then the running form and the two models, the people and the
+teams 93 between them), and never refitted by the job. They were refitted once, in the review's fixes of 25 October
+2026, for the coach read as the day began (the same design and settings; no chance of that day's 59 calls moved by
+more than 1.2 percentage points). While
+a season is under way, a fit whose inputs read it (the trees' own seasons, or the seasons `players.json`'s or
+`model.json`'s parameters were fitted on, as a players.js refit taking in the season in play would) is refused unless
+`--force` is passed: its trees would call games they were fitted on. A refused fit leaves the file as it was.
+
+The job's step is `node tools/joker.js && node tools/test_joker.js`, after `players.js` and before `calls.js`, with
+`models/joker.json` put back to the last commit's when either fails; the test runs whole, about ten seconds on the
+real data (twenty when the training rows have drifted, below), in every phase of a season. `node tools/joker.js`
+rebuilds the rows from the data and scores the season in play with them, in about five seconds: a call (`pHome`,
+`spread`) on every final and game not final that has a moneyline, a final's being the call it had the morning it was
+played (for the games before its first published call, the backtest the Pick'em Record counts as such), `upcoming` the
+games not final, and each call's input row of the season in play logged in `inputs` while its game is still to tip, then
+frozen, so a later refit can train on what the job saw rather than on closing lines (a game that loses its line before
+tip keeps its last row; a postponed one leaves, and so does every row of an earlier season). A game with no moneyline
+posted gets no call: a missing market would be imputed as a typical favourite; on 25 October 2026 that was 202 of the
+225 games to come. It refuses a season more than one past its fit (from about 20 September 2027, when the 2027-28
+schedule comes in, until the trees are refitted by hand) and an empty schedule: a refusal writes `status: {ok: false,
+why}`, keeps its last good calls less every game no longer to come (so the file never lists a tipped game as one to
+come), and exits 0, so the job publishes it and the Pick'em Record says why. Anything else that goes wrong (a file that
+does not read, a fault in the code) writes the same and exits 1, and the job puts the last commit's file back. An
+unchanged file keeps its stamp, so a quiet rerun writes nothing.
+
+The test holds, on the real data in whatever phase it is in: the leakage check on the last day with finals; the file's
+shape whatever its status; a file that ran being exactly what this code makes of today's data (its calls, its games to
+come, its about and walk-forward), with every spread agreeing with its pick; and the input rows against the last
+commit's (none of the season's dropped while its game is on the schedule, a changed one rewritten after it and before
+its tip). It rebuilds the trees' training rows from today's data and, where they are not the ones fitted on (ESPN
+back-fills old box scores), refits and prints how far the season's calls would move: a note, never a failure. It was
+run on copies of the data set to each phase: no game of the season played and none priced, the opening night priced,
+the opening night under way, mid-season, the 2025-26 play-offs to come, the summer, and the 2027-28 schedule pulled
+(the refusal); each passed.
+
+What it does not use, and why:
+
+- **The injury report**: its log starts on 20 September 2026, so no game it is trained on has one, and an input only the
+  live games had would be the skew the NFL Joker has with its quarterbacks. The moneyline carries the news.
+- **Who played**: the player model's "lineup known" and "actual minutes" know the box score, which no morning does.
+- **The season as a number**: a tree cannot carry it past the last season it saw. **Tip times**: `games.csv` has them
+  from 2026-27 only. **Referees, arenas**: not in the hub's data, and the arena is the home club.
+- **A refit in the season**: none. If one is ever made, the NFL's rule holds: the calls it replaced go in a file the job
+  never writes, and the record grades those.
 
 ## Player props
 
@@ -1601,6 +1764,8 @@ node tools/players.js      # player model replay; add "fit" to refit
 node tools/lines.js        # needs ESPN reachable; DraftKings' lines on the next two dates' games -> lines.json
 node tools/alpha.js        # the Alpha Model's calls; "fit" refits by hand, "research" walks it forward (by hand)
 node tools/elo_model.js    # the ELO Model's calls; "fit" refits by hand, "research" re-scores its walk-forward (by hand)
+node tools/joker.js && node tools/test_joker.js   # The Joker: score the season in play with its frozen trees -> models/joker.json, then its test, whole
+node tools/joker.js research   # by hand: its walk-forward -> research/joker.json; "fit" refits the live trees (refused mid-season if it reads that season; --force)
 node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.csv -> research/backtest.json
 ```
 

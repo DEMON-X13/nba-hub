@@ -1246,7 +1246,8 @@ and the market's prices; the fair chances by `tools/props_feed.js`'s rules): not
 (its parts, ranks, prices, chances, fair chances, wins and expected on $1), Value first, the totals last and never Value,
 the on-trial mark on every player leg and nowhere else and the Value mark on every Value pick and nowhere else, each bet
 once (a rung left out for its half-point main Over, a whole-number Over, an Under, a main Over that does not qualify and a
-rung in another game each keeping it, a Value-pick rung left out for its thin main Over), the far-off and no-id rules and
+rung in another game each keeping it, a Value-pick rung left out for its thin main Over), a total priced on its Over
+alone at +120, put at 50% and expected to make $0.10, still after every thin-edge line, the far-off and no-id rules and
 their notes; the four levels by the builder's own sums, their cards' marks and `o.quiet`, and a level's Add to builder;
 every control 44px; the mix, the boxes and the games, saved; Add, Added and a second press, the refusals with their
 reasons (a combo holding a stat, the moneyline beside the spread); the builder's numbers against `data/corr.json` and
@@ -1259,7 +1260,10 @@ picks, twenty thin, the first 50 of their order under "Top 50 lines", the other 
 does not load; a slate with no game to build from; and the real `state.json` and `lines.json`, the list this file's own
 line for line wherever no game tips within two minutes. Sections 7, 8 and 9 follow the tab: a press's prices in the Top
 50 and the builder's leg repriced, the props a press reads reaching the list marked on trial, the builder held to section
-9's own same-game sums.
+9's own same-game sums. Eight breaks planted in a copy of the built page (`NBA_HTML=<copy> SMOKE_ONLY=pb`) each turn it
+red: the list cut at 40, the each-bet-once rule dropped, a 2-point Value edge, the on-trial mark on team legs, the far-off
+guard dropped, the old sigma of 12.5, a $0 Bet amount taken, and the totals ranked with the thin-edge lines (which passed
+until the one-sided total went in).
 
 In Chromium at 1280 and 390 wide on the published `state.json` and that afternoon's `lines.json` (16 games, 726 lines
 qualifying for the 50), with three legs in the builder and the games list open: no sideways scroll, every control 44px or

@@ -100,7 +100,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
       for (const m of pr.ladders) { const r = who(m.player); if (r) out.push({ ...base, kind: 'prop', pid: m.player, name: r[0], team: r[1], at: pr.at, stat: m.stat, mk: 'mile', k: m.k, side: 'yes', odds: m.price, other: null }); }
       for (const y of pr.yes) { const r = who(y.player); if (r) out.push({ ...base, kind: 'prop', pid: y.player, name: r[0], team: r[1], at: pr.at, stat: y.market, mk: 'yes', side: 'yes', odds: y.price, other: null }); }
     }
-    return out.map(l => ({ ...l, p: modelOwn(l, st), fc: fairOwn(l, st) }));
+    return out.filter(l => Number.isFinite(l.odds) && l.odds !== 0).map(l => ({ ...l, p: modelOwn(l, st), fc: fairOwn(l, st) }));
   }
   /* the rule: 'value', 'thin', 'total', or why it is out ('band', 'edge', 'far', 'noId', 'box') */
   function qualOwn(l, ticks) {
@@ -213,7 +213,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
         ladders: [{ player: '8100001', stat: 'pts', k: 25, price: -115 }, { player: '8100001', stat: 'pts', k: 30, price: 250 }, { player: '8100002', stat: 'reb', k: 8, price: 105 },
           { player: '8100003', stat: 'reb', k: 10, price: 100 }, { player: '8100003', stat: 'ast', k: 3, price: -110 }, { player: '8100005', stat: 'pts', k: 16, price: 105 }, { player: '8100007', stat: 'pts', k: 12, price: 100 }],
         yes: [{ player: '8100004', market: 'dd', price: -150 }, { player: '8100004', market: 'td', price: 1500 }] } },
-    [A2.id]: { at: RD, espn: A2.espn, ml: { home: 120, away: -140 }, spread: null, total: { line: 230.5, over: -105, under: -115 }, ids: null,
+    [A2.id]: { at: RD, espn: A2.espn, ml: { home: 120, away: -140 }, spread: null, total: { line: 230.5, over: 120, under: null }, ids: null,
       props: { at: RD, mains: [], ladders: [{ player: '8100001', stat: 'pts', k: 25, price: -115 }], yes: [] } },
     [A3.id]: { at: RD, espn: A3.espn, ml: { home: -200, away: 170 }, spread: { line: -5.5, home: -110, away: -110 }, total: null, ids: { ...ids(3, -5.5, null), ml: { home: null, away: '0ML903_3' } }, props: null },
     [A4.id]: { at: RD, espn: A4.espn, ml: { home: -150, away: 130 }, spread: null, total: null, ids: null, props: null },
@@ -272,6 +272,9 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   const parts = got.map(g => g.part), firstOther = parts.indexOf('other');
   check(firstOther > 0 && parts.slice(firstOther).every(x => x === 'other') && own.rows.slice(own.rows.findIndex(r => r.total)).every(r => r.total) && own.rows.some(r => r.total) && !own.rows.find(r => r.total).part.includes('value'),
     'the Value picks come first, then the other lines, the game totals last of all, never a Value pick');
+  const tov = own.rows.find(r => r.id === A2.id && r.kind === 'total');
+  check(tov && tov.side === 'over' && tov.p === 0.5 && Math.abs(tov.ev - 0.1) < 1e-12 && own.rows.filter(r => r.part === 'other' && !r.total).every(r => r.ev < tov.ev) && own.rows.findIndex(r => r === tov) > own.rows.findIndex(r => r.part === 'other' && !r.total),
+    "the Lakers at the Warriors' total, priced on its Over alone at +120, is put at 50% and expected to make $0.10, more than any thin-edge line, and is still listed after every one of them");
   check(got.filter(g => g.trial).length === own.rows.filter(r => r.kind === 'prop').length && got.every((g, i) => g.trial === (own.rows[i].kind === 'prop')) && got.every((g, i) => g.value === (own.rows[i].part === 'value')),
     'every player line wears the on-trial mark and no other line does; every Value pick wears Value and no other line does');
   const trialMk = p.d.querySelector('#pbPanel .pb-trial');

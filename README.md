@@ -10,7 +10,7 @@ final, the job runs every morning, and the page shows the games from yesterday t
 
 | Path | What |
 |---|---|
-| `data/games.csv` | Every game since the 2004-05 season, one row each: id, season (the year it ends), date, REG or POST, away, home, scores, neutral site, status, the home side's line and total when ESPN carried them, the source, the ESPN id |
+| `data/games.csv` | Every game since the 2004-05 season, one row each: id, season (the year it ends), date, REG or POST, away, home, scores, neutral site, status, the home side's line and total when ESPN carried them, the source, the ESPN id, the tip-off, the two moneylines, and the national networks (`tv`, README "The lines feed") |
 | `data/box_<season>.csv` | From 2021-22 on, one row per player per game: minutes, the box line, starter and did-not-play flags |
 | `data/teambox_<season>.jsonl` | One line per team per game with every team statistic the feed gives (turnovers including team turnovers, points in the paint, and so on) |
 | `data/injuries.json`, `data/injuries_log.csv` | Today's injury report by team, and one line per player per day so availability can be replayed later |
@@ -28,18 +28,21 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/players.js` | The player, coach and matchup model: replay, fit, report, tonight's lineups; logs the day's numbers to `data/predictions.csv` |
 | `data/predictions.csv` | The number the site published on each game before it was played: the record is graded against this, never against a replay |
 | `tools/publish.js` | Writes `state.json`, the one file the site loads: the slate, the record, teams, players and coaches (with their overall Elo on the ladder the tier shields are drawn on, and its change over 7 days), the backtest, the market table (`vsMarket`, from `research/backtest.json`), the props model's block, the last week's box lines a player's leg is graded from and the same-game table (README "Same-game parlays"); and `history.json` |
+| `tools/lines.js`, `lines.json` | The lines feed (README "The lines feed"): DraftKings' game lines, with both prices and their betslip ids, and every player prop on the games of the next two Eastern dates with a game to come, read by the job from ESPN's free feeds after the props model |
+| `tools/lines_feed.js` | DraftKings' game lines as ESPN's scoreboard carries them: the page's own reading (`oddsDkHref`, `oddsIdOk`, `oddsGameLines`), line for line, and lines.json's shape of it |
 | `tools/props.js`, `props.json` | The props model (README "Player props"): each expected player's eleven stat distributions and double chances for the next five game days, its walk-forward and market tests (`research/props.json`) |
 | `tools/props_feed.js` | DraftKings' player props as ESPN's feed carries them: the parse the job and the page share, the fair-chance rules |
 | `tools/props_record.js`, `data/props_<season>.csv`, `data/props_reads.json` | DraftKings' closing main lines, read once after each final (2026: the play-in and playoffs ESPN still served) |
 | `tools/props_ledger.js`, `tools/props_check.js`, `data/props_shadow.json`, `data/props_shadow_lines.csv` | The props shadow ledger: the model's call frozen at tip-off, graded against the closing lines, its pre-registered bar, and the check that holds it to the last commit |
 | `app/nba_hub.html`, `tools/build.js` | The site, one file; `build.js` makes `index.html` (public) and `admin.html` (adds a Data tab with backup and restore) |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet locked into the Bet Build and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays"), and the rating over time (section 10) |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet locked into the Bet Build and its grading, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), and your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), and the lines feed's readings held to the page's (section lines, README "The lines feed") |
 | `tools/corr.js`, `data/corr.json`, `research/corr.json` | The same-game correlation table (README "Same-game parlays"): measured on the finished seasons' box scores, written by the script only; the report beside it |
 | `tools/backtest.js`, `research/backtest.json`, `research/backtest_games.csv` | The walk-forward of the model's picks and the suggested parlays against the closing line, run by hand; `publish.js` reads its summary into state.json's `vsMarket` for the Record tab |
 | `tools/fetch_odds_hist.js`, `data/odds_hist.csv` | The closing lines on the 2023-2026 finals from ESPN's game summaries: a finished backfill, run by hand from a machine that reaches ESPN only to add a season (the daily job keeps each game's closing moneylines in `games.csv` from now on); its `check()` is shared with `backtest.js` and `corr.js` |
 | `tools/test_corr.js` | The bivariate normal, the fit, the lookup's sign rules, and the committed table held to its rules |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
-| `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s, and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to; and that morning's rosters and injury report as the props model reads them (`props_live_20261015.json`), on which `test_props.js` holds the live minutes to the backtest's |
+| `tools/test_lines.js` | The lines feed on the recorded answers and made-up ones, through a stubbed reader and a scratch file: the parse, the drops, the last good read, the quiet run, and the committed lines.json held to its shape |
+| `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s; two more recorded on 2026-10-25 (that Sunday's seven games with DraftKings' lines and their local and national listings, and Tuesday 27 October's, Peacock and NBC beside a home market's network), on which `test_fetch.js`, `test_lines.js` and the smoke hold the national networks and the lines feed; and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to; and that morning's rosters and injury report as the props model reads them (`props_live_20261015.json`), on which `test_props.js` holds the live minutes to the backtest's |
 
 No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke test needs jsdom (`npm ci` in `tools/`).
 
@@ -51,7 +54,7 @@ No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke t
   franchises into their current team (Sonics into OKC, Nets into BKN, the two Hornets into NOP and CHA).
 - **From 2025-03-18 on**: ESPN's public scoreboard feed,
   one request per day. It gives finals, the schedule about ten days out, the neutral-site flag (the
-  Cup final), and a consensus line and total on games not yet played. It looks thirty days ahead so
+  Cup final), the national networks a game is on, and a consensus line and total on games not yet played. It looks thirty days ahead so
   opening night is known from the schedule; the page shows ten. Postponed games are dropped.
   **Preseason** games are kept, typed `PRE`: the page shows them with a Preseason tag and a note, but
   neither model learns from them, no box score is pulled for them and the record leaves them out,
@@ -966,6 +969,142 @@ and six breaks of the card (the last ten rows) are red:
 | the card's no-model reason dropped | the card with a total |
 | the card saying "edge" and "model says" | both cards, and the card's note |
 
+## The lines feed
+
+DraftKings' lines on the next nights' games, published by the job, so the Parlay Builder, Suggested Parlays and the
+suggestions record can price those games from the moment a page loads rather than only after a Refresh odds press (the
+build plan's "Prices on load", 25 October 2026). Free: ESPN's public scoreboard and propBets feeds, no key, no credits.
+At this commit nothing on the page reads `lines.json` yet.
+
+### What is read (`tools/lines.js`, `tools/lines_feed.js`)
+
+The games are every game `data/games.csv` has still to come (status scheduled and tip-off not passed, as `props.js` picks
+its horizon; never preseason, which DraftKings posts only milestones for and the page prices from no model) on the next
+two Eastern dates with such a game: Sunday night and Monday, then Monday and Tuesday once Sunday's last game has tipped. For each of those dates one scoreboard
+request, the one `fetch.js` makes, and for each game one propBets request by ESPN's event id (another only past a page,
+six at a time). Every request is a plain GET with no headers of its own, past any cache (`cache: 'no-store'` and a
+cache-buster), dropped after 15 seconds, and tried once more after a second on a timeout, a reset or a 408, 425, 429 or
+5xx; any other refusal is answered at once, so a 404 on the props reads as nothing posted.
+
+A game's **game lines** are read from its event in the day's answer by `tools/lines_feed.js`, whose `oddsDkHref`,
+`oddsIdOk` and `oddsGameLines` are the page's own text (Refresh odds and your parlay read the same way), copied whole:
+DraftKings' odds object only (provider 100); the two moneylines as the scoreboard parse takes them (`parseDay`'s, both
+or neither); the spread only on the number the parse took, with its two prices; the total only with its Over and Under
+on that one number, with its two prices; and each outcome's betslip id from ESPN's DraftKings link, kept only in its
+outcome's own shape naming its own number (`0ML<n>_1` home, `_3` away; `0HC<n>N150_1` the home side at -1.5;
+`0OU<n>O22150_1` the Over 221.5). Player props carry no betslip id on ESPN's feed, so none is kept for them. A game's
+**player props** are its propBets answer parsed by `tools/props_feed.js` (README "Player props"): each player's main
+line with DraftKings' two prices, the "k+" rungs and the double- and triple-double Yes prices, every player DraftKings
+lists.
+
+### `lines.json`
+
+At the repo root, beside `state.json`, one line a game by game id so a change is that line's diff:
+
+```
+{ v: 1, at,                                            // when the run that last changed the file read
+  games: { <game_id>: {
+    at, espn,                                          // when the game lines below were read; ESPN's event id
+    ml: { home, away } | null,                         // DraftKings' American prices
+    spread: { line, home, away } | null,               // line: the home side's number (the away side's is -line)
+    total: { line, over, under } | null,
+    ids: { event, ml: { home, away } | null, spread: { home, away } | null, total: { over, under } | null } | null,
+    props: { at, mains: [{ player, stat, line, over, under }], ladders: [{ player, stat, k, price }],
+             yes: [{ player, market, price }] } | null } } }
+```
+
+A real entry, Sunday 25 October 2026 (`2027_20261025_DET_PHI`, the Pistons 1.5-point favourites at Philadelphia), read
+at 17:45 UTC, its props lists counted:
+
+```
+"at":"2026-10-25T17:45:27Z","espn":"401909866","ml":{"home":-108,"away":-112},"spread":{"line":1.5,"home":-118,"away":-102},
+"total":{"line":227.5,"over":-110,"under":-110},"ids":{"event":"34888879","ml":{"home":"0ML86898039_1","away":"0ML86898039_3"},
+"spread":{"home":"0HC86898039P150_1","away":"0HC86898039N150_3"},"total":{"over":"0OU86898039O22750_1","under":"0OU86898039U22750_3"}},
+"props":{"at":"2026-10-25T17:45:27Z","mains":[66 main lines],"ladders":[550 rungs],"yes":[13 Yes prices]}
+```
+
+`player` is ESPN's athlete id, the hub's player id; `stat` is one of `pts reb ast tpm stl blk pra pr pa ar sb`, a rung's
+`k` a whole number and `market` `dd` or `td`, all in `propParse`'s order. `linesGl` in `tools/lines_feed.js` turns an
+entry back into the shape `oddsGameLines` gives (what the page keeps for a press in `SG_LINES`), and back again is the
+same. The rules:
+
+- **Each half of a game is its own read**: its game lines (the entry's `at`) and its props (`props.at`). A read that
+  answers replaces that half. A read that finds exactly what the file already holds keeps the file's time, so `at` is
+  when the job first read what the half holds, and a run that finds nothing new writes nothing at all: the file is
+  rewritten only when anything but its top-level `at` changed.
+- **A failed read keeps the last good one**: a day's scoreboard refused, timed out or not a scoreboard, a game missing
+  from its day's answer, or a game's props refused leave that half as the last file had it, with its own `at` (only
+  under the same ESPN event id). A half never read is null (`at` null with no game lines), and a game neither of whose
+  halves has ever been read is left out. A 404 on the props ("No propBets found") is an answer: DraftKings has posted
+  none, and the lists are empty; a game with no DraftKings odds on the scoreboard has no line (null), dated.
+- **A game that tips leaves**: one games.csv has as started or final is not read; one the fresh scoreboard calls live or
+  final, or whose own tip there has passed, is dropped; one whose tip passes while the reads are out is not taken; and
+  every game of the last file no longer among the games to come (tipped, postponed, past the two dates) goes.
+- **When nothing answers** (every scoreboard and every propBets request failed) the file is left byte for byte as it
+  was and the run exits 1. A run with some reads failed exits 0 and says which in its log line.
+- A last file that is not JSON, not version 1 or has an entry out of the shape (`entryBad`) is not carried: those games
+  start afresh, and the file is rewritten.
+
+Size: on 25 October 2026 at 17:45 UTC the two dates held 16 games, Sunday's 7 with DraftKings' game lines and props (605
+main lines, 4,569 rungs, 94 Yes prices) and Monday's 9 with neither posted yet: 286 KB, 32 KB gzipped (GitHub Pages serves
+it compressed). A game with props is about 42 KB, five sixths of it the rungs; a full two-date slate with every game
+posted, 15 or 16 games, is about 650 KB, some 70 KB gzipped. The run took about a second.
+
+### The national networks (`tv` in `data/games.csv`)
+
+`fetch.js` keeps the national networks a game is on as a games.csv column, `tv`, names joined by `|`: every name ESPN's
+scoreboard lists under `competitions[0].broadcasts` in the national market, then any national TV listing its
+`geoBroadcasts` adds (market type National, type TV), each once, as ESPN writes it with any comma, quote or bar taken
+out (the table is a plain CSV). A local listing (the home or away market: a regional sports network, League Pass, a
+team's own app or station) is never one. On the recorded answers: opening night's three games `NBC`; two of the seven
+preseason games of 14 October `NBA TV`; of Sunday 25 October's seven, `NBA TV` on Raptors at Timberwolves and none on
+the rest, whose listings are all local; Tuesday 27 October's Trail Blazers at Lakers `Peacock|NBC` (broadcasts lists
+Peacock nationally, geoBroadcasts adds NBC as TV), beside the home market's Spectrum, left out. It is kept by `merge`'s
+rules for the lines: a read before tip-off takes a new listing and a read with none keeps the last, and from tip-off it
+is frozen at the last pre-game read, so what a game was on is what ESPN listed before it tipped; a game first seen after
+its tip has none. Every row before 25 October 2026 has none. The page's copy of the parse (`oddsParseDay`, with
+`oddsNational`) keeps it the same way, held to `fetch.js`'s on the recorded answers and their variants.
+
+### The checks
+
+`node tools/test_lines.js` (its header lists them) runs `lines.js` through a stubbed reader and a scratch file on the
+recorded answers (opening night with its props, Sunday 25 and Tuesday 27 October) and made-up ones: one scoreboard a
+date for the next two dates only and one propBets read a game; every game's prices, spread number and betslip ids worked
+out from the answer on its own, the page's reading, and back through `linesGl`; opening night's props as `propParse`
+gives them, a 404 as none posted, a two-page answer read whole; another book's odds, a spread or total on another
+number and an id naming another number taken as nothing; the drops (live by ESPN, past ESPN's own tip, tipping during
+the reads, a final, a preseason game, a game no longer to come in the last file, a junk entry); the last good read (a
+refused or junk scoreboard, a game missing from its answer, refused props, a half never read, a game never read, a last
+read under another event id); nothing answering, through `run` and from the command line (exit 1, the file untouched);
+the reader itself on a stubbed fetch (no headers, no-store, the cache-buster, which refusals are tried again); the quiet
+run (the same answers write nothing, the file's time included; a moved moneyline and moved props rewrite those halves
+alone); and the committed `lines.json`, where there is one, held to its shape. `node tools/test_fetch.js` section 5
+holds the national networks on the recorded answers and made-up listings and `merge`'s freeze. `node tools/smoke.js`
+section lines (`SMOKE_ONLY=lines`) holds the page's `oddsDkHref`, `oddsIdOk` and `oddsGameLines` to
+`tools/lines_feed.js`'s text, and their results on every recorded scoreboard event with DraftKings' odds as recorded and under fourteen
+variations (another book, DraftKings by name only, spread and total on other numbers, links off DraftKings, swapped,
+with no gateway, not URLs or missing, an id on an older number, OFF, EVEN and junk prices, current prices for close, a
+market missing, no odds); lines.json's shape and back; and the page's parse keeping `tv` as `fetch.js` does on the
+recorded answers and six variations (either list alone, streaming and local only, both with a name twice and markets
+in capitals or as objects, names with commas, bars, quotes and line breaks, lists that are not lists). Each was shown to
+fail on a planted break in a scratch copy:
+
+| Planted break | What failed |
+|---|---|
+| the file written on every run | the quiet run (1) |
+| a failed game-lines read keeping nothing | the last good read (2, then the test stops on the missing line) |
+| a failed props read keeping nothing | the last good read (1) |
+| a game ESPN calls live kept / ESPN's status ignored / ESPN's own tip ignored | the drops (3 / 2 / 1) |
+| a game tipping while its reads are out kept | the drops (1) |
+| three dates read | the parse (5) |
+| a total failure writing the file | nothing answering, by `run` and from the command line (3) |
+| a game-lines read finding the same lines taking a new time / the same for props | the last good read and the quiet run (5) / the quiet run (3) |
+| preseason games read | the drops (3) |
+| a last read carried under another event id | the last good read (1) |
+| `linesOf` giving the away side's number as the spread's line | `test_lines.js` (4); smoke section lines, the shape and back (1) |
+| the page's `oddsNational` not reading geoBroadcasts | smoke section lines (3) |
+| the page's `oddsIdOk` not checking the id's number | smoke section lines: the text, and an id on an older number (2) |
+
 ## Runs
 
 `.github/workflows/update.yml` is queued at 07:17, 11:17 and 13:17 UTC. GitHub starts this repo's
@@ -986,11 +1125,13 @@ season's coaches from ESPN and a dated row when a club changes coach.
 
 After the players model, the props step reads DraftKings' closing lines for the new finals, writes the projections
 (`props.json`) and the shadow ledger, and runs the ledger's check; when either fails, every props data file goes back to
-the last commit's and the run is red (README "Player props").
+the last commit's and the run is red (README "Player props"). Then the lines step (`node tools/lines.js`) reads
+DraftKings' lines on the next two dates' games into `lines.json` (README "The lines feed"), committed with the data
+whenever the pull succeeded; when nothing answers the file stays as it was and the step is red.
 
 After the pull, each step may fail on its own: the data folder and the model files are committed whenever the pull
 succeeded, and state.json and the pages only when publishing and the tests (`tools/test_fetch.js`,
-`tools/test_fetch_box.js`, `tools/test_props.js`, `tools/test_corr.js`, then the page's smoke test on the new state)
+`tools/test_fetch_box.js`, `tools/test_props.js`, `tools/test_corr.js`, `tools/test_lines.js`, then the page's smoke test on the new state)
 pass; the run is red when any step failed. The page says when the injury report is older than the file it came in. On
 demand the job takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
 `claude/` branch too, committing there and in its own queue; the schedule only fires from `main`).
@@ -1003,6 +1144,7 @@ node tools/fetch.js        # needs ESPN reachable; --from / --to for a range
 node tools/fetch_box.js    # needs ESPN reachable; --from / --to for seasons, --budget minutes
 node tools/elo.js          # team model replay; add "fit" to refit
 node tools/players.js      # player model replay; add "fit" to refit
+node tools/lines.js        # needs ESPN reachable; DraftKings' lines on the next two dates' games -> lines.json
 node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.csv -> research/backtest.json
 ```
 

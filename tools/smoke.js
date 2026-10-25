@@ -26,7 +26,10 @@
  * given back) and a history that does not load or is junk. Section 12 is the Pick'em Record (publish.js THE PICK'EM
  * RECORD, app/parts/pickem.html): pickem.json read only when the tab opens, then every number the tab states worked out
  * here on its own, on a made-up season (two weeks and the playoffs, a game with no Vegas side, a model that could not
- * run) and on the real file.
+ * run) and on the real file. Section lines is the lines feed (README "The lines feed"): the page's reading of DraftKings'
+ * game lines held to tools/lines_feed.js's, which tools/lines.js publishes from, the text and the results on every
+ * recorded scoreboard and its variants, and the page's parse keeping each game's national networks as tools/fetch.js
+ * does.
  */
 'use strict';
 const fs = require('fs');
@@ -36,7 +39,7 @@ const ROOT = path.resolve(__dirname, '..');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let fails = 0; const check = (c, m) => { if (!c) { fails++; console.log('  FAIL', m); } else console.log('  ok  ', m); };
 /* NBA_HTML tries another page in place of index.html (a deliberately broken copy, to show a check fails on it);
-   SMOKE_ONLY=base,7,8,9 runs those sections alone (base is 0 to 6) */
+   SMOKE_ONLY=base,7,8,9,10,12,lines runs those sections alone (base is 0 to 6) */
 const pageFile = page => page === 'index.html' && process.env.NBA_HTML ? path.resolve(process.env.NBA_HTML) : path.join(ROOT, page);
 const ONLY = (process.env.SMOKE_ONLY || '').split(',').filter(Boolean), run = k => !ONLY.length || ONLY.includes(k);
 /* files the page may read beside state.json (data/box_<season>.csv, for a leg older than the state's box window):
@@ -1501,6 +1504,89 @@ async function pickemRecord() {
   check(failed && n === 2 && !!w.document.getElementById('pkTiles') && errors.length === 0, 'a record that does not load says so, and the next opening reads it again');
   JSONS = [];
 }
+
+/* ---------- lines. the lines feed's readings, held to the page's (README "The lines feed") ----------
+   tools/lines.js publishes DraftKings' game lines from tools/lines_feed.js, whose oddsDkHref, oddsIdOk and oddsGameLines
+   are the page's own (Refresh odds, your parlay) line for line; and tools/fetch.js keeps each game's national networks
+   (tv), which the page's copy of its parse must keep the same way. Both held here: the text, then the results on the
+   recorded answers and on every way an answer can vary */
+async function linesFeed() {
+  console.log("lines. the lines feed's reading of DraftKings' game lines is the page's, and the page's parse keeps the national networks as the job's does");
+  const LF = require('./lines_feed');
+  const { w, errors } = load('index.html', withGames(false));
+  await sleep(250);
+  const pageSrc = fs.readFileSync(pageFile('index.html'), 'utf8'), lfSrc = fs.readFileSync(path.join(ROOT, 'tools', 'lines_feed.js'), 'utf8');
+  const names = ['oddsDkHref', 'oddsIdOk', 'oddsGameLines'];
+  const diff = names.filter(n => { const a = srcOf(lfSrc, n), b = srcOf(pageSrc, n); return !a || a !== b; });
+  check(!diff.length, `the page's ${names.join(', ')} are tools/lines_feed.js's, line for line${diff.length ? `: differ: ${diff.join(', ')}` : ''}`);
+  const FIX = path.join(ROOT, 'tools', 'fixtures');
+  const recorded = fs.readdirSync(FIX).filter(f => /^scoreboard_\d{8}\.json$/.test(f)).map(f => JSON.parse(fs.readFileSync(path.join(FIX, f), 'utf8')));
+  const withDk = recorded.flatMap(j => j.events).filter(e => e.competitions && e.competitions[0] && (e.competitions[0].odds || []).some(o => String(o.provider && o.provider.id) === '100'));
+  const clone = x => JSON.parse(JSON.stringify(x));
+  const rowOf = (e, base) => F.parseDay({ events: [e] })[0] || F.parseDay({ events: [base] })[0];
+  const links = o => [o.moneyline && o.moneyline.home, o.moneyline && o.moneyline.away, o.pointSpread && o.pointSpread.home, o.pointSpread && o.pointSpread.away, o.total && o.total.over, o.total && o.total.under].filter(Boolean).map(x => x.close || x.current).filter(x => x && x.link);
+  const variantsGl = {
+    'as recorded': () => {},
+    "another book's odds": o => { o.provider = { id: '58', name: 'ESPN BET' }; },
+    'DraftKings named, with no provider id': o => { o.provider = { name: 'DraftKings' }; },
+    'a spread on another number than the line shown': o => { o.pointSpread.home.close.line = '-9.5'; o.pointSpread.away.close.line = '+9.5'; },
+    'a total with its Over and Under on two numbers': o => { o.total.under.close.line = 'u250.5'; },
+    'a total written without its o/u': o => { o.total.over.close.line = o.total.over.close.line.slice(1); o.total.under.close.line = o.total.under.close.line.slice(1); },
+    'links off DraftKings': o => { for (const k of links(o)) k.link.href = 'https://example.com/?outcomes=' + encodeURIComponent(new URL(new URL(k.link.href).searchParams.get('preurl')).searchParams.get('outcomes')); },
+    "each side's link on the other side": o => { for (const [a, b] of [['moneyline', 'home', 'away'], ['pointSpread', 'home', 'away'], ['total', 'over', 'under']].map(([k, x, y]) => [o[k][x].close, o[k][y].close])) [a.link, b.link] = [b.link, a.link]; },
+    'a DraftKings link with no gateway': o => { for (const k of links(o)) k.link.href = new URL(k.link.href).searchParams.get('preurl'); },
+    'links that are not URLs, and none': (o, i) => { links(o).forEach((k, j) => { if ((i + j) % 2) k.link.href = 'not a url'; else delete k.link; }); delete o.link; },
+    'an id naming an older number': o => { const k = o.pointSpread.home.close; k.link.href = k.link.href.replace(/([NP])(\d+)_1/, (m, s, n) => s + (+n + 100) + '_1'); const t = o.total.over.close; t.link.href = t.link.href.replace(/O(\d+)_1/, (m, n) => 'O' + (+n + 100) + '_1'); },
+    'OFF, EVEN and junk prices': (o, i) => { o.pointSpread.home.close.odds = ['OFF', 'EVEN', '', '+99'][i % 4]; o.total.under.close.odds = ['EVEN', 'OFF', null, '-100'][i % 4]; },
+    'current prices in place of close': o => { for (const s of ['home', 'away']) { o.pointSpread[s].current = o.pointSpread[s].close; delete o.pointSpread[s].close; } for (const s of ['over', 'under']) { o.total[s].current = o.total[s].close; delete o.total[s].close; } },
+    'no spread, no total, no moneyline': (o, i) => { delete o[['pointSpread', 'total', 'moneyline'][i % 3]]; },
+    'no odds at all': (o, i, e) => { e.competitions[0].odds = i % 2 ? [] : undefined; },
+  };
+  let same = 0, all = 0, nonNull = 0, withIds = 0;
+  for (const [name, fn] of Object.entries(variantsGl)) {
+    const bad = [];
+    withDk.forEach((base, i) => {
+      const e = clone(base), o = e.competitions[0].odds[0];
+      fn(o, i, e);
+      const r = rowOf(e, base);
+      const run = f => { try { return JSON.stringify(f(clone(e), { ...r })); } catch (x) { return 'threw ' + x.name; } };
+      const a = run(LF.oddsGameLines), b = run((x, y) => w.NBA_SLIP.oddsGameLines(x, y));
+      all++; if (a === b) same++; else bad.push(`${base.id}: job ${a.slice(0, 120)} page ${b.slice(0, 120)}`);
+      if (a !== 'null' && !a.startsWith('threw')) nonNull++;
+      if (/"id":"0/.test(a)) withIds++;
+    });
+    check(!bad.length, `on ${name}, the lines feed reads every recorded event's DraftKings lines as the page does (${withDk.length} events)${bad.length ? `: ${bad.slice(0, 2).join(' | ')}` : ''}`);
+  }
+  check(withDk.length >= 9 && nonNull > all / 2 && withIds > all / 3, `and the cases are not empty: ${all} readings, ${nonNull} with lines, ${withIds} with a betslip id`);
+  /* the lines feed's own shape loses nothing: back to the page's shape is the page's reading */
+  const round = withDk.map(e => { const r = rowOf(e, e), gl = LF.oddsGameLines(e, r); return JSON.stringify(LF.linesGl(LF.linesOf(gl))) === JSON.stringify(w.NBA_SLIP.oddsGameLines(clone(e), { ...r })); });
+  check(round.every(Boolean), "lines.json's shape and back (linesOf, linesGl) is the page's reading, on every recorded event");
+
+  /* the national networks: the page's parse keeps tv as fetch.js does */
+  const P = w.NBA_ODDS, base = { events: recorded.flatMap(j => clone(j.events)) };
+  const vary = fn => { const j = clone(base); j.events.forEach((e, i) => fn(e.competitions[0], i)); return j; };
+  const tvMade = (names, market = 'national') => ({ market, names });
+  const geo = (name, type = 'TV', market = 'National') => ({ type: { id: '1', shortName: type }, market: { id: '1', type: market }, media: { shortName: name }, lang: 'en', region: 'us' });
+  const variantsTv = {
+    'the recorded answers': () => {},
+    'geoBroadcasts alone': c => { delete c.broadcasts; },
+    'broadcasts alone': c => { delete c.geoBroadcasts; },
+    'streaming and local listings only': (c, i) => { c.broadcasts = [tvMade(['MSG'], i % 2 ? 'home' : 'away')]; c.geoBroadcasts = [geo('Peacock', 'Streaming'), geo('MSG', 'TV', 'Home')]; },
+    'both lists, a name twice, markets in capitals and as objects': (c, i) => { c.broadcasts = [tvMade(['ESPN', 'ABC'], i % 2 ? 'NATIONAL' : { type: 'National' })]; c.geoBroadcasts = [geo('ESPN'), geo('ESPN2'), geo('ESPN+', 'Streaming')]; },
+    'names with commas, bars, quotes and line breaks, and no names': (c, i) => { c.broadcasts = [tvMade([['Prime, Video', 'NBA|TV', 'A "B"', 'x\ny', null, 7, '  '][i % 7]])]; c.geoBroadcasts = [geo(i % 2 ? 'TNT,' : null)]; },
+    'lists that are not lists, and empty entries': (c, i) => { c.broadcasts = [null, 'NBC', {}, [], { market: 'national' }][i % 5]; c.geoBroadcasts = [{}, null, [null], 'TV', [{ type: null, market: null }]][i % 5]; },
+  };
+  const tvSeen = new Set();
+  for (const [name, fn] of Object.entries(variantsTv)) {
+    const j = vary(fn);
+    const run = f => { try { return JSON.stringify(f(clone(j))); } catch (x) { return 'threw ' + x.name; } };
+    const a = run(F.parseDay), b = run(x => P.parseDay(x));
+    if (a.startsWith('[')) JSON.parse(a).forEach(r => tvSeen.add(r.tv));
+    check(a === b && a.startsWith('[{') && /"tv":/.test(a), `the page's parse keeps the national networks as tools/fetch.js does, on ${name}${a === b ? '' : `: job ${a.slice(0, 120)} page ${b.slice(0, 120)}`}`);
+  }
+  check(['', 'NBC', 'NBA TV', 'Peacock|NBC', 'ESPN|ABC|ESPN2'].every(v => tvSeen.has(v)), `and the cases meet every kind of listing: ${[...tvSeen].slice(0, 12).map(v => JSON.stringify(v)).join(', ')}`);
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+}
 (async () => {
   let w, errors;
   if (run('base')) {
@@ -1827,6 +1913,7 @@ async function pickemRecord() {
   await guard('9', builder);
   await guard('10', ratingHistory);
   await guard('12', pickemRecord);
+  await guard('lines', linesFeed);
 
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

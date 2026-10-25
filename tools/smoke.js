@@ -4,20 +4,20 @@
  *
  * Loads index.html in jsdom with fetch stubbed to serve state.json plus one fabricated
  * game for tonight, and checks: the update stamp shows, every tab renders without a script error, the team
- * badges show the model's pick and take none, a straight bet locked from the Parlay Builder reaches the Bet Build
- * and grades once the game is final, the Data tab is only on the admin page, a preseason
- * game shows with its tag and the not-graded note, and a game that has tipped off (by its tip time, though the
- * published file still calls it scheduled) can no longer be planned, suggested or locked in, including
- * from a page drawn before the tip. Section 0 renders the real published state as it is and holds it to
- * data/games.csv; section 6 covers a postponed game (void), a game played whose final is not read yet and a graded game off the slate (in the Bet Build),
- * the backup import, a day-old injury report and a suggested tier short of its aim. Section 7 is Refresh odds on a
+ * badges show the model's pick and take none, a game's Parlay Builder button opens the tab on that game alone, a bet
+ * is graded as a book settles it, the Data tab is only on the admin page, a preseason game shows with its tag and the
+ * not-graded note, and a game that has tipped off (by its tip time, though the published file still calls it
+ * scheduled) leaves the Parlay Builder, including a page drawn before the tip. Section 0 renders the real published
+ * state as it is and holds it to data/games.csv; section 6 covers a postponed game (void), a game played whose final is
+ * not read yet and a graded game off the slate, the backup import and a day-old injury report. Section 7 is Refresh odds on a
  * stubbed ESPN: nothing read on load, on any timer the page sets (each fired at once) or on focus and visibility, a
  * press taking fresh lines into everything priced from them, a started game (by its tip, ESPN's status or ESPN's own
  * tip), a failed day and a game with no line left as they were and the status line saying what stands (published, an
  * earlier press's read, or no line yet), nothing stored, and the page's parse held to fetch.js's on the answers
  * recorded in tools/fixtures/. Section 8 is the player props view (README "Player props"): the props read on the same
  * press (by ESPN's ids, only games still to come, two pages, a 404, junk, a refusal, a game that tips during its read),
- * every line, rung and Yes price the sheet shows worked out here on its own, the model on trial and suggesting nothing,
+ * every line, rung and Yes price the sheet shows worked out here on its own, the model on trial (its lines reaching the
+ * Parlay Builder's Top 50 lines marked so),
  * nothing read before a press, nothing stored, a reload, the shadow ledger's running numbers, and the page's copies of
  * tools/props_feed.js and tools/props.js held to their text and results. Section 10 is the rating over time (publish.js
  * THE HISTORY): history.json worked out here on its own from players.json and the published ladders (every point, the
@@ -29,7 +29,8 @@
  * run) and on the real file. Section lines is the lines feed (README "The lines feed"): the page's reading of DraftKings'
  * game lines held to tools/lines_feed.js's, which tools/lines.js publishes from, the text and the results on every
  * recorded scoreboard and its variants, and the page's parse keeping each game's national networks as tools/fetch.js
- * does.
+ * does. Section pb is the Parlay Builder (README "Parlay Builder", tools/smoke_parlay.js): the choices, the Top 50 lines
+ * and the builder on made-up games a day and more ahead, every number worked out there on its own, then the real files.
  */
 'use strict';
 const fs = require('fs');
@@ -39,8 +40,8 @@ const ROOT = path.resolve(__dirname, '..');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let fails = 0; const check = (c, m) => { if (!c) { fails++; console.log('  FAIL', m); } else console.log('  ok  ', m); };
 /* NBA_HTML tries another page in place of index.html (a deliberately broken copy, to show a check fails on it);
-   SMOKE_ONLY=base,7,8,9,10,12,lines,xparlays runs those sections alone (base is 0 to 6; xparlays is X Parlays,
-   tools/smoke_xparlays.js) */
+   SMOKE_ONLY=base,7,8,9,10,12,lines,xparlays,pb runs those sections alone (base is 0 to 6; xparlays is X Parlays,
+   tools/smoke_xparlays.js; pb the Parlay Builder, tools/smoke_parlay.js) */
 const pageFile = page => page === 'index.html' && process.env.NBA_HTML ? path.resolve(process.env.NBA_HTML) : path.join(ROOT, page);
 const ONLY = (process.env.SMOKE_ONLY || '').split(',').filter(Boolean), run = k => !ONLY.length || ONLY.includes(k);
 /* files the page may read beside state.json (data/box_<season>.csv, for a leg older than the state's box window):
@@ -57,6 +58,8 @@ const side = t => ({ team: t, strength: 1500, offence: 0, defence: 0, coach: { n
 const tipIn = ms => new Date(Date.now() + ms).toISOString();
 const fake = (id, date, fin) => ({ id, date, tip: fin ? date + 'T23:30:00Z' : tipIn(3 * 3600e3), type: 'REG', away: 'BOS', home: 'NYK', neutral: false, status: fin ? 'final' : 'scheduled', awayScore: fin ? 98 : null, homeScore: fin ? 105 : null,
   line: -2.5, totalLine: 220, ml: { home: -140, away: 120 }, model: { pHome: 0.61, spread: -3.5, total: 224.5, pace: 99, home: side('NYK'), away: side('BOS') }, team: { pHome: 0.55, spread: -1.5 }, published: null });
+/* the Parlay Builder's five bet types, this file's own copy (README "Parlay Builder") */
+const PB_KINDS_OWN = ['ml', 'ats', 'total', 'over', 'under'];
 /* the second game is yesterday's final: always a different day from today, including on the 1st of a month */
 const yesterday = (() => { const d = new Date(state.today + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() - 1); return d.toISOString().slice(0, 10); })();
 const withGames = (fin) => ({ ...state, slate: [fake('t1', state.today, fin), fake('t0', yesterday, true)] });
@@ -190,7 +193,7 @@ async function refreshOdds() {
   check(stl && stl.textContent.includes(`Lines as published ${pubTime}`), `before any press it says when the lines were published ("${stl && stl.textContent}")`);
   for (const tab of ['teams', 'players', 'coaches', 'record', 'parlay', 'slate']) { d.querySelector(`#nav button[data-tab=${tab}]`).click(); await sleep(20);
     if (tab === 'teams') check(bar.hidden, 'the bar is not on the Teams tab');
-    if (tab === 'parlay') check(!bar.hidden, 'it is on the Parlay Builder'); }
+    if (tab === 'parlay') check(bar.hidden && d.querySelector('#pbPanel [data-espn-refresh]') && d.querySelector('#parlayBody [data-espn-refresh]'), "it is not over the Parlay Builder, which has its own Refresh odds in its controls and its builder"); }
   await sleep(400);
   check(espnReqs(requests).length === 0, `nothing is asked of ESPN on load, nor on opening every tab (${espnReqs(requests).length} requests)`);
   const nTimers = timers.length;
@@ -236,29 +239,32 @@ async function refreshOdds() {
   check(/BKN -2\.5/.test(chipOf(d, r9, 'Market').textContent), 'r9, under way at ESPN before its published tip, keeps its published line');
   check(/CLE -2\.5/.test(chipOf(d, r10, 'Market').textContent) && !chipOf(d, r10, 'Market').querySelector('sup.mv'), "r10, past ESPN's own tip though ESPN still calls it scheduled and its published tip is hours off, keeps its published line (counted as tipped)");
 
-  /* the Parlay Builder works from the fresh prices */
+  /* the Parlay Builder's Top 50 lines work from the fresh prices: no lines.json is served here, so the press's read is
+     all they stand on */
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  const row = id => d.querySelector(`#bkPlan tr[data-gid="${id}"]`);
-  check(row(r1.id) && /-250/.test(row(r1.id).textContent) && !row(r1.id).querySelector('sup'), "the plan prices NYK at DraftKings' fresh -250");
-  check(row(r2.id) && row(r2.id).querySelector('.vg.differs') && /\+150/.test(row(r2.id).textContent), 'GSW is now the underdog at +150: the Vegas pick is LAL, outlined where it differs from the model');
-  check(row(r3.id) && /-175/.test(row(r3.id).textContent) && !row(r3.id).querySelector('sup'), "ORL's estimated price gives way to the book's -175 (no est mark)");
-  check(row(r5.id) && /-165/.test(row(r5.id).textContent), 'PHI keeps its published -165');
-  const safe = d.querySelector('#bkSuggest .sugg-tier.safe');
-  const pS = mktP(-250, 205) * mktP(-175, 150), decS = amToDecT(-250) * amToDecT(-175);
-  const amS = decS >= 2 ? Math.round((decS - 1) * 100) : Math.round(-100 / (decS - 1));
-  check(safe && /NYK/.test(safe.textContent) && /ORL/.test(safe.textContent) && !/GSW/.test(safe.textContent), 'Safe is now NYK + ORL: GSW left it when the market turned against it');
-  check(safe && safe.textContent.includes(`${Math.round(pS * 100)}%`) && safe.textContent.includes(`+${amS}`), `and its chance and odds are the fresh prices' (${Math.round(pS * 100)}%, +${amS})`);
+  const topKey = (g, kind, s) => [g.id, kind, s, ''].join('|');
+  const topBtn = key => d.querySelector(`#pbPanel li.pb-trow [data-pb-leg="${key}"]`), topRow = key => { const b = topBtn(key); return b && b.closest('li.pb-trow'); };
+  let orl = topRow(topKey(r3, 'ml', 'ORL'));
+  check(orl && orl.dataset.pbGrp === 'other' && orl.querySelector('.pb-tc b').textContent === '-175' && orl.querySelector('[data-pb-model]').textContent === '65%' && Math.abs(+orl.querySelector('[data-pb-fair]').dataset.pbFair - mktP(-175, 150)) < 1e-12,
+    "the Top 50 lines list the Magic to win at DraftKings' fresh -175: the model's 65%, a thin edge over it, so among the other lines, DraftKings' fair chance its two prices' with the margin out");
+  check(!topBtn(topKey(r2, 'ml', 'GSW')) && /1 line is left out: the model rates it 15 points or more above DraftKings’ fair chance/.test(d.getElementById('pbPanel').textContent) && !topBtn(topKey(r1, 'ml', 'NYK')) && !topBtn(topKey(r5, 'ml', 'PHI')),
+    "the Warriors, now +150, which the model rates far above DraftKings' fair chance, are left out and counted; the Knicks at -250, over the model's chance, and the 76ers, with no line read, are not listed");
+  topBtn(topKey(r3, 'ml', 'ORL')).click(); await sleep(30);
+  const legs7 = () => JSON.parse(w.localStorage.getItem('nba_hub_2027')).slip.legs;
+  check(legs7().length === 1 && legs7()[0].side === 'ORL' && legs7()[0].odds === -175 && legs7()[0].other === 150 && d.activeElement === topBtn(topKey(r3, 'ml', 'ORL')) && topBtn(topKey(r3, 'ml', 'ORL')).textContent === 'Added',
+    "its Add puts it in the builder at DraftKings' fresh price, and reads Added");
 
-  /* a second press reads again, here from the Parlay Builder, which is redrawn in place */
+  /* a second press reads again, here from the Parlay Builder, which is redrawn in place, the builder's leg repriced */
   r1Fresh = { details: 'NY -7', total: 227, hml: '-270', aml: '+220' };
   answers[ymd(r1.date)].events[0] = espnEvent(r1, r1Fresh);
+  answers[ymd(r3.date)].events[answers[ymd(r3.date)].events.findIndex(e => e.competitions[0].competitors[0].team.abbreviation === 'ORL')] = espnEvent(r3, { details: 'ORL -4', total: 228.5, hml: '-160', aml: '+135' });
   const days2 = new Set([r1, r2, r3, r5, r6, r7, r9, r10].map(g => ymd(g.date))).size;
-  btn.click(); await idle();
+  const pbBtn = d.querySelector('#pbPanel [data-espn-refresh]'); pbBtn.focus(); pbBtn.click(); await idle();
   check(sbReqs(requests).length === reqs.length + days2, `a second press after the first read reads again (${days2} days: r8 has tipped since)`);
-  check(row(r1.id) && /-270/.test(row(r1.id).textContent), 'the Parlay Builder in view is redrawn with the newer price (-270)');
-  d.querySelector('#bkSuggest [data-sugg-lock="safe"]').click(); await sleep(30);
-  const b7 = JSON.parse(w.localStorage.getItem('nba_hub_2027')).build;
-  check(b7.length === 1 && b7[0].legs.some(l => l.side === 'NYK' && l.odds === -270) && b7[0].legs.some(l => l.side === 'ORL' && l.odds === -175), 'Lock in records the fresh prices');
+  orl = topRow(topKey(r3, 'ml', 'ORL'));
+  check(orl && orl.querySelector('.pb-tc b').textContent === '-160' && JSON.parse(w.localStorage.getItem('nba_hub_2027')).slip.legs[0].odds === -160 && /MIA at ORL, Magic to win: now -160, was -175\./.test(d.getElementById('slSaid').textContent),
+    'the Top 50 lines in view are redrawn with the newer price (-160), and the leg in the builder is repriced, said once');
+  check(d.activeElement && d.activeElement.dataset.espnRefresh === 'pb' && /DraftKings' lines from ESPN, read/.test(d.getElementById('espnSt-pb').textContent), "the focus is back on the panel's Refresh odds, its status line saying what the bar's says");
   d.querySelector('#nav button[data-tab=slate]').click(); await sleep(30);
   const day6 = d.querySelector(`#days .day[data-d="${r6.date}"]`); day6.click(); await sleep(30);
   btn.click(); await idle();
@@ -458,7 +464,8 @@ async function playerProps() {
   check(d.activeElement === d.getElementById('ppClose') && w.getComputedStyle(d.getElementById('ppClose')).height === '44px' && /Close/.test(d.getElementById('ppClose').getAttribute('aria-label')), 'the focus moves to its 44px Close button');
   let bt = body().textContent;
   check(/Press Refresh odds for DraftKings' props/.test(bt) && body().querySelector('[data-pp-refresh]'), `before any press it says to press Refresh odds for DraftKings' props, with the button there ("${bt.slice(0, 90)}")`);
-  check(/Model on trial/.test(d.getElementById('ppSub').textContent) && /on trial: not yet shown to beat DraftKings, it suggests nothing/.test(bt), 'the model is labelled on trial, not yet shown to beat DraftKings, suggesting nothing');
+  check(/Model on trial/.test(d.getElementById('ppSub').textContent) && /on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show/.test(bt) && /The Parlay Builder's Top 50 lines take a player's line where this model's chance clears their bar, marked on trial there and in the builder/.test(bt),
+    "the model is labelled on trial, not yet shown to beat DraftKings, its chances marked so wherever they show, the Top 50 lines taking its lines as the owner asked");
   const projRows = [...body().querySelectorAll('[data-pp-proj]')];
   check(projRows.length === Object.keys(bosDet.players).length, `and shows the model's projections for every expected player (${projRows.length} of ${Object.keys(bosDet.players).length})`);
   const L8 = props8.layout, at8 = (r, k) => r[L8.indexOf(k)];
@@ -486,16 +493,14 @@ async function playerProps() {
   sheet().click(); await sleep(20);
   check(sheet().hidden, 'a click outside the sheet closes it');
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
-  const mini = d.querySelector(`#bkPlan tr[data-gid="${p2.id}"] [data-props]`);
-  check(mini && /Player props/.test(mini.textContent), "each game in the Parlay Builder's plan has one too");
-  mini.click(); await sleep(20);
-  check(!sheet().hidden && /LAL/.test(d.getElementById('ppSub').textContent) && body().querySelectorAll('[data-pp-proj]').length === 3, "it opens that game's sheet, with its projections");
+  check(d.getElementById('pbPanel') && !d.querySelector('#pbPanel .pb-trial') && !/Tatum|Cunningham|Lal Guard/.test(d.getElementById('pbPanel').textContent), "before a press (no lines.json is served here) the Parlay Builder's Top 50 lines have no player line");
+  cardBtn(p2).click(); await sleep(20);
+  check(!sheet().hidden && /LAL/.test(d.getElementById('ppSub').textContent) && body().querySelectorAll('[data-pp-proj]').length === 3, "another game's button opens that game's sheet, with its projections");
   d.getElementById('ppClose').click(); await sleep(20);
   const nT = timers.length;
   await provoke(w, timers, errors);
   check(espnReqs(requests).length === 0, `nothing is read before a press: not on load, opening a sheet, switching its team, closing it, nor on any timer or event (${nT} timers fired; ${espnReqs(requests).length} requests)`);
   check(storedNoTab(w) === before, 'and nothing is stored (the tab in view, which the page has always remembered, aside)');
-  const planText = () => [...d.querySelectorAll('#bkPlan tbody tr')].map(r => { const c = r.cloneNode(true); c.querySelectorAll('[data-props]').forEach(b => b.remove()); return c.innerHTML; }).join('|');
 
   /* the press, from the board */
   d.querySelector('#nav button[data-tab=slate]').click(); await sleep(20);
@@ -593,15 +598,18 @@ async function playerProps() {
   check(/could not be read at/.test(body().textContent), 'a junk answer is "could not be read"');
   d.getElementById('ppClose').click(); await sleep(20);
 
-  /* nothing suggested: the Parlay Builder drawn with the props read is the one drawn without them, and names no player */
+  /* the press's props reach the Parlay Builder's Top 50 lines (README "Parlay Builder"): every player line there is
+     marked on trial, and with the read taken away again no player line is left */
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  const sugWith = d.getElementById('bkSuggest').innerHTML, planWith = planText();
-  w.eval('window.__pp = PP_LIVE; PP_LIVE = {}; render.parlay();');
-  const sugWithout = d.getElementById('bkSuggest').innerHTML, planWithout = planText();
-  w.eval('PP_LIVE = window.__pp; delete window.__pp; render.parlay();');
-  check(/sugg-tier safe/.test(sugWith) && sugWith === sugWithout && planWith === planWithout, 'the suggested parlays, the Value card and the plan drawn with the props read are exactly those drawn without them: no prop is suggested');
-  check(!/Tatum|Cunningham|Some Star|Lal Guard/.test(d.getElementById('tab-parlay').textContent), 'no player is named anywhere in the Parlay Builder');
-  check(!w.localStorage.getItem('nba_hub_2027') || !/props|Tatum|4432166/.test(w.localStorage.getItem('nba_hub_2027')), 'and none is in the Bet Build');
+  const plRows = () => [...d.querySelectorAll('#pbPanel li.pb-trow')].filter(li => /\|prop\|/.test(li.querySelector('[data-pb-leg]').dataset.pbLeg));
+  const nPl = w.getPbTop().rows.filter(l => l.kind === 'prop').length;
+  check(nPl > 0 && plRows().length === nPl && plRows().every(li => li.querySelector('.pb-trial')) && [...d.querySelectorAll('#pbPanel li.pb-trow')].every(li => !!li.querySelector('.pb-trial') === /\|prop\|/.test(li.querySelector('[data-pb-leg]').dataset.pbLeg)),
+    `the props the press read reach the Top 50 lines (${nPl} player lines), each marked on trial, and no team line is`);
+  check(!plRows().some(li => /Some Star/.test(li.textContent)), 'never a player the injury report has out');
+  w.eval('window.__pp = PP_LIVE; PP_LIVE = {}; PB_TOP_CACHE.clear(); render.parlay();');
+  check(!plRows().length && !d.querySelector('#pbPanel .pb-trial'), 'with the read taken away, no player line is on the list');
+  w.eval('PP_LIVE = window.__pp; delete window.__pp; PB_TOP_CACHE.clear(); render.parlay();');
+  check(storedNoTab(w) === before && !/Tatum|4432166/.test(w.localStorage.getItem('nba_hub_2027') || ''), 'and nothing of the read is stored');
 
   /* a second press: p1's read fails, and p2's page 1 answers but its page 2 is a 404, so the earlier props of both stand,
      with their read time (a 404 after page 1 is a failed read, never "none posted") */
@@ -915,7 +923,14 @@ async function builder() {
   const rho = (a, b) => CJ.rhoFor(CT, desc(a), desc(b));
   const fairOf = l => l.kind === 'prop' ? (l.mk === 'main' ? (l.side === 'under' ? imp(l.odds) : 1 - imp(l.other)) : PF.propFairRung(l.odds, (l.mk === 'mile' ? PJ.FAIR.rung : PJ.FAIR.yes).a[l.stat])) : imp(l.odds) / (imp(l.odds) + imp(l.other));
   const muOf = (pl, k) => k in COMBO ? Math.round(COMBO[k].reduce((t, s) => t + pl[LAY.indexOf(s)], 0) * 100) / 100 : pl[LAY.indexOf(k)];
-  const modelOf = l => { if (l.kind === 'ml') { const g = [q1, q2].find(x => x.id === l.id); return l.side === g.home ? g.model.pHome : 1 - g.model.pHome; } if (l.kind !== 'prop') return null;
+  /* the model's chance (README "Parlay Builder"): a moneyline the player model's win chance; a spread Phi((m + h) / sigma),
+     m the side's expected margin and sigma research/sigma.json's; a total the market's own, its two prices in proportion */
+  const SIG9 = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'sigma.json'), 'utf8')).sigma, SGM = require('./sigma');
+  const modelOf = l => { const g = [q1, q2].find(x => x.id === l.id);
+    if (l.kind === 'ml') return l.side === g.home ? g.model.pHome : 1 - g.model.pHome;
+    if (l.kind === 'spread') return SGM.Phi(((l.side === g.home ? -g.model.spread : g.model.spread) + l.line) / SIG9);
+    if (l.kind === 'total') return l.other == null ? 0.5 : imp(l.odds) / (imp(l.odds) + imp(l.other));
+    if (l.kind !== 'prop') return null;
     const pl = (props9.games[l.id].players)[l.pid], mu = muOf(pl, l.stat); if (l.mk === 'yes') return pl[LAY.indexOf(l.stat)];
     if (l.mk === 'mile') return PJ.nbSf(l.k, mu, PJ.nbVar(mu, VAR[l.stat])); const o = PJ.pOver(l.line, mu, PJ.nbVar(mu, VAR[l.stat])); return l.side === 'under' ? 1 - o : o; };
   const joint = (ps, ls) => ps.length === 1 ? ps[0] : ps.length === 2 ? CJ.joint2(ps[0], ps[1], rho(ls[0], ls[1])) : (ps.length === 3 ? tri : quad4)(ps, ls.map(a => ls.map(b => a === b ? 1 : rho(a, b))));
@@ -946,8 +961,8 @@ async function builder() {
   /* the builder as it stands: three legs of one game (this file's integration) and one of another */
   legs = slip();
   const pb = pagePrice(legs), mb = mine(legs);
-  check(Math.abs(pb.dec / mb.dec - 1) < TOL3 && Math.abs(pb.fair / mb.fair - 1) < TOL3 && pb.model === null && mb.model === null && pb.dec <= pb.prod && Math.abs(pb.prod - mb.prod) < 1e-9,
-    `three legs of one game and one of another: the page's price ${pb.dec.toFixed(4)} and fair chance ${pb.fair.toFixed(5)} are this file's ${mb.dec.toFixed(4)} and ${mb.fair.toFixed(5)} (its own integration, within ${TOL3 * 100}% of each other), under the product ${mb.prod.toFixed(4)}; no model chance, a total having none`);
+  check(Math.abs(pb.dec / mb.dec - 1) < TOL3 && Math.abs(pb.fair / mb.fair - 1) < TOL3 && pb.model != null && mb.model != null && Math.abs(pb.model / mb.model - 1) < TOL3 && pb.dec <= pb.prod && Math.abs(pb.prod - mb.prod) < 1e-9,
+    `three legs of one game and one of another: the page's price ${pb.dec.toFixed(4)}, fair chance ${pb.fair.toFixed(5)} and model chance ${pb.model && pb.model.toFixed(5)} are this file's ${mb.dec.toFixed(4)}, ${mb.fair.toFixed(5)} and ${mb.model && mb.model.toFixed(5)} (its own integration, within ${TOL3 * 100}% of each other), under the product ${mb.prod.toFixed(4)}; the total's chance the market's own`);
   /* more sets of three and four legs of one game, priced one after another in the same page session, each against this
      file's own integration (tri, quad4): one player's three Overs at -110 each, then three legs at the very same implied
      chances but other relations (his points with his club's win and the Over; his points and threes with the Over; his
@@ -973,84 +988,92 @@ async function builder() {
     const d3 = Object.values(sets).slice(0, 3).map(ls => pagePrice(ls).dec);
     check(!bad3.length && d3[0] !== d3[1] && d3[1] !== d3[2] && d3[0] !== d3[2], `${Object.keys(sets).length} more sets of three and four legs of one game in one session (${Object.keys(sets).join('; ')}): each one's price, fair chance and model chance this file's own integration's (three legs within ${TOL3 * 100}%, four within ${TOL4 * 100}%; the largest gap ${(Math.max(...gaps) * 100).toFixed(4)}%), under the product, and the first three, at one set of implied chances, priced apart (${d3.map(x => fmtA(amOfDec(x))).join(', ')})${bad3.length ? ': ' + bad3.join('; ') : ''}`); }
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  const sl = d.getElementById('bkSlip'), tiles = [...sl.querySelectorAll('.sl-sum .stat')];
-  check(tiles[0] && tiles[0].hasAttribute('data-sl-fair') && tiles[0].querySelector('b').textContent === pct1(pb.fair) && tiles[0].querySelector('span').textContent === "DraftKings' fair chance all 4 land, est.",
-    `the summary leads with DraftKings' fair chance of the whole parlay, est. ("${tiles[0] && tiles[0].textContent}")`);
-  check(tiles[1] && tiles[1].querySelector('b').textContent === fmtA(amOfDec(pb.dec)) + 'est.' && tiles[1].querySelector('span').textContent === `price, est. · legs multiplied ${fmtA(amOfDec(mb.prod))}`,
-    `then the price, marked est., beside the legs multiplied ("${tiles[1] && tiles[1].textContent}")`);
-  check(tiles[2] && tiles[2].querySelector('b').textContent === '$' + (20 * pb.dec).toFixed(2) && !sl.querySelector('[data-sl-model]') && /No model chance/.test(sl.querySelector('[data-sl-nomodel]').textContent), "what $20 pays; and no model chance, with the reason");
-  check(sl.querySelector('[data-sl-why]') && sl.querySelector('[data-sl-why]').textContent.startsWith("DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together.") && /untested on the NBA/.test(sl.querySelector('[data-sl-why]').textContent),
-    'with the one-line why, and the hold said untested');
-  const rowsS = [...sl.querySelectorAll('.sl-leg')];
-  check(rowsS.length === 4 && sl.querySelectorAll('.sl-game').length === 2 && /Same game · 3 legs/.test(sl.querySelector(`.sl-game[data-sl-game="${q1.id}"]`).textContent)
-    && rowsS[0].querySelector('.sl-px').textContent === '-111' && rowsS[0].querySelector('.sl-meta').textContent === `as read ${w.eval(`oddsClock(${JSON.stringify(e1.at)})`)} · DraftKings ${ppPct(fairOf(legs[0]))} · model ${ppPct(modelOf(legs[0]))}, on trial`,
-    `each leg in its game, its price, its read time, DraftKings' fair chance and the model's on trial ("${rowsS[0] && rowsS[0].querySelector('.sl-meta').textContent}")`);
-  check(!banned(d.getElementById('bkSlip').textContent + d.getElementById('bkBuild').textContent) && /model/.test(d.getElementById('bkSlip').textContent), 'your parlay and the Bet Build say neither "edge" nor "model says" (the model is named, on trial)');
-  /* the levels and the plan: exactly as drawn with no leg in your parlay */
-  const lv = () => d.getElementById('bkSuggest').innerHTML + '|' + d.getElementById('bkPlan').innerHTML;
-  const withLegs = lv(); w.eval('window.__s = M.slip.legs; M.slip.legs = []; render.parlay();'); const without = lv(); w.eval('M.slip.legs = window.__s; delete window.__s; render.parlay();');
-  check(withLegs === without && !/Tatum|Lal Guard/.test(withLegs), 'the suggested parlays and the plan are byte for byte the same with legs in your parlay and without: team bets only, no prop, no same-game leg');
-  /* the model's chance where every leg has one: drop the total */
-  w.eval(`M.slip.legs = M.slip.legs.filter(l => l.kind !== 'total'); render.parlay();`);
-  legs = w.eval('JSON.stringify(M.slip.legs)'); legs = JSON.parse(legs);
-  const pm = pagePrice(legs), mm = mine(legs);
-  const mt = d.querySelector('#bkSlip [data-sl-model]');
-  check(mt && Math.abs(pm.model - mm.model) < 1e-9 && mt.querySelector('b').textContent === pct1(mm.model) && mt.querySelector('span').textContent === "the hub's model, on trial" && Math.abs(pm.dec - mm.dec) < 1e-9,
-    `with every leg modelled, the model's chance stands beside it, labelled on trial (${mt && mt.textContent}), the copula of its chances`);
+  /* the builder (README "Parlay Builder"), held to the same sums: DraftKings' fair chance first, the model's beside it,
+     what the Bet amount returns at the same-game price, and each leg in the builder's order with its own numbers */
+  const nick = t => w.eval(`TEAMS[${JSON.stringify(t)}][1]`);
+  const keyOwn9 = l => l.kind === 'prop' ? [l.id, 'prop', l.pid, l.stat, l.mk, l.mk === 'main' ? l.line : l.mk === 'mile' ? l.k : '', l.side].join('|') : [l.id, l.kind, l.side, l.line == null ? '' : l.line].join('|');
+  const nameOwn9 = l => l.kind === 'prop' ? l.name : l.kind === 'total' ? `${nick(l.away)} at ${nick(l.home)}` : nick(l.side);
+  const ordOwn9 = ls => [...ls].sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0) || nameOwn9(a).localeCompare(nameOwn9(b)) || (keyOwn9(a) < keyOwn9(b) ? -1 : keyOwn9(a) > keyOwn9(b) ? 1 : 0));
+  const pct0 = v => (v * 100).toFixed(0) + '%', bd = () => d.getElementById('pbBuild');
+  const hero = bd().querySelector('.pb-box.hero'), hm = hero && hero.querySelector('[data-model]');
+  check(hero && hero.querySelector('[data-fair]').textContent === (pb.fair * 100).toFixed(1) + '%' && hero.querySelector('span').textContent === 'fair chance all 4 land, est.' && hm && Math.abs(+hm.dataset.model / mb.model - 1) < TOL3 && hm.textContent === `model says ${(pb.model * 100).toFixed(1)}%, on trial`,
+    `the builder leads with DraftKings' fair chance of the whole parlay, est., the model's beside it, on trial ("${hero && hero.textContent.replace(/\s+/g, ' ').trim()}")`);
+  const pay = bd().querySelector('[data-payout]');
+  check(pay && Math.abs(+pay.dataset.payout - 20 * pb.dec) < 1e-9 && pay.textContent === cents(20 * pb.dec) && /est\.$/.test(pay.nextElementSibling.textContent),
+    `what $20 returns at the same-game price, est. ("${pay && pay.parentNode.textContent}")`);
+  const whyB = bd().querySelector('[data-sl-why]');
+  check(whyB && whyB.textContent.startsWith(`Legs here share a game, so they are priced together rather than multiplied: multiplying them would say ${cents(20 * mb.prod)}`) && whyB.textContent.includes("DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together") && /untested on the NBA/.test(whyB.textContent),
+    'with the why: what multiplying them would say, and the hold said untested');
+  const ord9 = ordOwn9(legs), rowsB = [...bd().querySelectorAll('tr.legrow')];
+  check(rowsB.length === 4 && rowsB.every((tr, i) => tr.dataset.pbRow === keyOwn9(ord9[i])), `its rows are the legs in the builder's order, the day and then the name (${ord9.map(nameOwn9).join(', ')})`);
+  const tatRow = rowsB.find(tr => tr.dataset.pbRow === keyOwn9(legs[0]));
+  check(tatRow && tatRow.querySelector('.pb-px').textContent.trim() === `-111 real · read ${w.eval(`oddsClock(${JSON.stringify(e1.at)})`)}` && tatRow.querySelector('[data-pb-p]').textContent === pct0(modelOf(legs[0])) && tatRow.querySelector('.legfair').textContent === `fair ${pct0(fairOf(legs[0]))}`
+    && tatRow.querySelector('.pb-trial') && /Not on DraftKings’ slip yet: no betslip id in ESPN’s feed/.test(tatRow.textContent),
+    `each row: DraftKings' price and its read time, the model's chance marked on trial, DraftKings' fair chance, and for a player's leg that it goes on DraftKings' slip by hand ("${tatRow && tatRow.textContent.replace(/\s+/g, ' ').trim()}")`);
+  const totRow = rowsB.find(tr => /\|total\|/.test(tr.dataset.pbRow));
+  check(totRow && !totRow.querySelector('.pb-trial') && !totRow.querySelector('.dkslip') && totRow.querySelector('[data-pb-p]').textContent === pct0(modelOf(legs.find(l => l.kind === 'total'))), "the total's row: the market's own chance, not on trial, and no slip line (it has DraftKings' betslip id)");
+  /* the Top 50 lines are not moved by what is in the builder, and an Add there reads Added for a leg in it */
+  const topKeys = () => JSON.stringify(w.getPbTop().rows.map(l => l.sk));
+  const withL = topKeys(); w.eval('window.__s = M.slip.legs; M.slip.legs = []; render.parlay();'); const withoutL = topKeys(); w.eval('M.slip.legs = window.__s; delete window.__s; render.parlay();');
+  const totAdd = d.querySelector(`#pbPanel [data-pb-leg="${keyOwn9(legs.find(l => l.kind === 'total'))}"]`);
+  check(withL === withoutL && JSON.parse(withL).length > 0 && totAdd && totAdd.textContent === 'Added' && totAdd.getAttribute('aria-pressed') === 'true', 'the Top 50 lines are the same with legs in the builder and without, and the total in it reads Added there');
   /* the card on that parlay: the model's chance as the builder gives it, labelled on trial, and what the stake pays */
-  d.getElementById('slFinish').click(); await sleep(20);
+  d.getElementById('pFinish').click(); await sleep(20);
   { const pc2 = d.getElementById('pcBack'), cm = pc2.querySelector('[data-pc-model]'), cp = pc2.querySelector('[data-pc-pays] b');
-    check(!pc2.hidden && cm && cm.querySelector('b').textContent === pct1(mm.model) && cm.querySelector('span').textContent === "the hub's model, on trial" && !pc2.querySelector('[data-pc-nomodel]')
-      && cp && cp.textContent === cents(20 * mm.dec) && !banned(d.getElementById('pcBody').textContent),
-      `its card shows the model's chance, ${pct1(mm.model)}, labelled on trial, with no "edge" or "model says", and pays ${cents(20 * mm.dec)} on $20 to the cent (${cm && cm.textContent} | ${cp && cp.textContent})`);
+    check(!pc2.hidden && cm && cm.querySelector('b').textContent === pct1(pb.model) && cm.querySelector('span').textContent === "the hub's model, on trial" && !pc2.querySelector('[data-pc-nomodel]') && cp && cp.textContent === cents(20 * pb.dec),
+      `its card shows the model's chance, ${pct1(pb.model)}, labelled on trial, and pays ${cents(20 * pb.dec)} on $20 to the cent (${cm && cm.textContent} | ${cp && cp.textContent})`);
     pc2.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20); }
-  w.eval(`M.slip.legs.splice(2, 0, ${JSON.stringify({ ...legs[0], kind: 'total', side: 'over', line: 221.5, odds: -115, other: -105, dk: '0OU85841510O22150_1', at: gl1.at, pid: undefined, name: undefined, team: undefined, stat: undefined, mk: undefined })}); saveMine(); render.parlay();`);
-  /* a stake typed into the Stake box, not the $20 every store in this section starts on, so a figure fixed at $20 cannot
-     pass for the visitor's: the summary, Lock in, the card, its Share text and the Bet Build all follow it */
+  { const lone = { id: q2.id, away: 'LAL', home: 'GSW', date: q2.date, tip: q2.tip, kind: 'prop', pid: '9000099', name: 'ESPN athlete 9000099', team: '', at: e1.at, stat: 'pts', mk: 'main', line: 18.5, side: 'over', odds: -110, other: -110 };
+    const x = d.createElement('div'); x.innerHTML = w.eval(`pcBuild(${JSON.stringify([lone])}, 20).html`);
+    check(!x.querySelector('[data-pc-model]') && x.querySelector('[data-pc-nomodel]') && x.querySelector('[data-pc-nomodel]').textContent === 'No model chance: the props model does not project a player in it.', 'a leg on a player the props model does not project leaves a card no model chance, and it says why'); }
+  /* a stake typed into the builder, not the $20 every store in this section starts on, so a figure fixed at $20 cannot
+     pass for the visitor's: the builder, the card, its Share text all follow it, and the panel's Bet amount with them */
   const STAKE = 37.5;
-  { const inp = d.getElementById('slStake'); inp.value = '$37.50'; inp.dispatchEvent(new w.Event('change', { bubbles: true })); await sleep(20);
-    const pt = d.querySelector('#bkSlip [data-sl-pays]'), lk = d.getElementById('slLock');
-    check(pt && pt.querySelector('b').textContent === cents(STAKE * pb.dec) && pt.querySelector('span').textContent === 'pays on $37.50' && d.getElementById('slStake').value === '37.5' && lk && lk.textContent === 'Lock in · $37.50',
-      `a stake typed into the Stake box ("$37.50") is your parlay's: the summary pays ${cents(STAKE * pb.dec)} on $37.50, the same-game price to the cent, and Lock in says $37.50 (${pt && pt.textContent} | ${lk && lk.textContent})`); }
+  { const inp = d.getElementById('pStake'); inp.value = '37.5'; inp.dispatchEvent(new w.Event('input', { bubbles: true })); inp.dispatchEvent(new w.Event('change', { bubbles: true })); await sleep(20);
+    const pay2 = d.querySelector('#pbBuild [data-payout]');
+    check(pay2 && Math.abs(+pay2.dataset.payout - STAKE * pb.dec) < 1e-9 && pay2.textContent === cents(STAKE * pb.dec) && +d.getElementById('pStake').value === STAKE && +d.getElementById('pbStake').value === STAKE,
+      `a stake typed into the builder ($37.50) is the Bet amount: the builder returns ${cents(STAKE * pb.dec)} on it, the same-game price to the cent, and the panel's box says $37.50 too (${pay2 && pay2.textContent})`); }
   /* nothing from the read is stored but the legs added */
   const store = JSON.parse(w.localStorage.getItem('nba_hub_2027')), sj = JSON.stringify(store);
-  check(store.slip.stake === STAKE && store.slip.legs.length === 4 && !/4432166|Cunningham|mains|ladders|"yes"\s*:\s*\[|9000002|7000001|9000099|9000088|Moved Wing/.test(sj) && Object.keys(w.localStorage).filter(k => !/^nba_hub_2027(:tab)?$/.test(k)).length === 0 && dump(w.sessionStorage) && !Object.keys(dump(w.sessionStorage)).length,
-    'storage holds the four legs added and the stake typed, and nothing else from the read (no other line, player or price), in the one key');
+  check(store.stake === STAKE && store.slip.legs.length === 4 && !/4432166|Cunningham|mains|ladders|"yes"\s*:\s*\[|9000002|7000001|9000099|9000088|Moved Wing/.test(sj) && Object.keys(w.localStorage).filter(k => !/^nba_hub_2027(:tab)?$/.test(k)).length === 0 && dump(w.sessionStorage) && !Object.keys(dump(w.sessionStorage)).length,
+    'storage holds the four legs added and the Bet amount typed, and nothing else from the read (no other line, player or price), in the one key');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
-  /* Finish: the card */
-  d.getElementById('slFinish').focus(); d.getElementById('slFinish').click(); await sleep(20);
+  /* Finish: the card, its legs in the builder's order */
+  d.getElementById('pFinish').focus(); d.getElementById('pFinish').click(); await sleep(20);
   const pc = d.getElementById('pcBack'), pcs = d.getElementById('pcSheet'), card = w.NBA_SLIP.card();
-  check(!pc.hidden && pcs.getAttribute('role') === 'dialog' && pcs.getAttribute('aria-modal') === 'true' && d.activeElement === d.getElementById('pcClose'), 'Finish opens the card, a dialog, the focus on its Close');
+  check(!pc.hidden && pcs.getAttribute('role') === 'dialog' && pcs.getAttribute('aria-modal') === 'true' && d.activeElement === d.getElementById('pcClose'), 'Finish parlay opens the card, a dialog, the focus on its Close');
   const li = [...pc.querySelectorAll('.pc-legs li')], etT = iso => new Date(iso).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET';
-  check(li.length === 4 && li[0].querySelector('.pc-px').textContent === '-111' && li[0].querySelector('.pc-meta').textContent === `BOS at DET · read ${etT(e1.at)}` && (li[0].querySelector('[data-pc-hand]') || {}).textContent === "DraftKings' player lines carry no betslip id in ESPN's feed: add this leg by hand"
-    && li[1].querySelector('[data-pc-hand]') && !li[2].querySelector('[data-pc-hand]') && li[3].querySelector('[data-pc-hand]'),
-    'it lists each leg with its price and read time (Eastern), each player leg to add by hand with the reason, the total not');
+  const at9 = l => ord9.findIndex(x => keyOwn9(x) === keyOwn9(l)), iT = at9(legs[0]), iR = at9(legs[1]), iTot = at9(legs[2]), iL = at9(legs[3]);
+  const hand9 = ord9.map((l, i) => l.kind === 'prop' ? i + 1 : null).filter(Boolean), handTxt = hand9.length === 1 ? `leg ${hand9[0]}` : `legs ${hand9.slice(0, -1).join(', ')} and ${hand9[hand9.length - 1]}`;
+  check(legs[2].kind === 'total' && li.length === 4 && li.every((x, i) => x.querySelector('b').textContent === (ord9[i].kind === 'prop' ? ord9[i].name : `${ord9[i].away} at ${ord9[i].home}`))
+    && li[iT].querySelector('.pc-px').textContent === '-111' && li[iT].querySelector('.pc-meta').textContent === `BOS at DET · read ${etT(e1.at)}` && (li[iT].querySelector('[data-pc-hand]') || {}).textContent === "DraftKings' player lines carry no betslip id in ESPN's feed: add this leg by hand"
+    && li[iR].querySelector('[data-pc-hand]') && !li[iTot].querySelector('[data-pc-hand]') && li[iL].querySelector('[data-pc-hand]'),
+    "it lists each leg in the builder's order with its price and read time (Eastern), each player leg to add by hand with the reason, the total not");
   const dk = d.getElementById('pcDk');
   check(dk.getAttribute('href') === 'https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1' && dk.getAttribute('target') === '_blank' && /noopener/.test(dk.getAttribute('rel')) && dk.textContent === 'Open in DraftKings',
     `the betslip link opens the leg that has an id, the total (${dk.getAttribute('href')})`);
-  check(d.getElementById('pcDkNote').textContent === `Open in DraftKings opens 1 of the 4 legs as DraftKings had them at ${etT(gl1.at)}; add legs 1, 2 and 4 by hand. A line DraftKings has moved or pulled since will not be on the slip, so check each leg before you bet.`,
+  check(d.getElementById('pcDkNote').textContent === `Open in DraftKings opens 1 of the 4 legs as DraftKings had them at ${etT(gl1.at)}; add ${handTxt} by hand. A line DraftKings has moved or pulled since will not be on the slip, so check each leg before you bet.`,
     `and says what it opens and what to add by hand, never every leg ("${d.getElementById('pcDkNote').textContent}")`);
   check(pc.querySelector('.pc-nums > div').hasAttribute('data-pc-fair') && pc.querySelector('[data-pc-fair] b').textContent === pct1(pb.fair) && /fair chance, est\.$/.test(pc.querySelector('[data-pc-fair] span').textContent), 'the card leads with DraftKings\' fair chance, est., too');
   check(pc.querySelector('[data-pc-price] b').textContent === fmtA(amOfDec(pb.dec)) + ' est.' && pc.querySelector('[data-pc-why]').textContent === "DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together.", 'its price is marked est., with the why');
-  const NOMODEL = "No model chance: the hub's models give none on a spread, a total or a player the props model does not project.";
   check(pc.querySelector('[data-pc-pays] b') && pc.querySelector('[data-pc-pays] b').textContent === cents(STAKE * pb.dec) && pc.querySelector('[data-pc-pays] span').textContent === 'pays on $37.50'
     && d.getElementById('pcSub').textContent === '4 legs · $37.50 stake · times in Eastern',
-    `what the stake pays on the card is the stake typed, $37.50, times the same-game price (held to this file's integration above), to the cent (${cents(STAKE * pb.dec)}; the legs multiplied would pay ${cents(STAKE * mb.prod)}), its head saying the stake ("${d.getElementById('pcSub').textContent}")`);
-  check(!pc.querySelector('[data-pc-model]') && pc.querySelector('[data-pc-nomodel]') && pc.querySelector('[data-pc-nomodel]').textContent === NOMODEL && !banned(d.getElementById('pcBody').textContent),
-    'with a total in it the card shows no model chance and says why, and says neither "edge" nor "model says"');
+    `what the stake pays on the card is the Bet amount typed, $37.50, times the same-game price (held to this file's integration above), to the cent (${cents(STAKE * pb.dec)}; the legs multiplied would pay ${cents(STAKE * mb.prod)}), its head saying the stake ("${d.getElementById('pcSub').textContent}")`);
+  check(pc.querySelector('[data-pc-model]') && pc.querySelector('[data-pc-model] b').textContent === pct1(pb.model) && !pc.querySelector('[data-pc-nomodel]'),
+    "with the total's chance the market's own, every leg has a model chance, and the card shows the parlay's, on trial");
   let shared = null; w.navigator.share = async x => { shared = x; }; w.navigator.canShare = () => true;
   d.getElementById('pcShare').click(); await sleep(20);
   const tl = shared && shared.text.split('\n');
   check(shared && Object.keys(shared).sort().join() === 'text,title' && shared.title === `4-leg parlay ${fmtA(amOfDec(pb.dec))} (estimated same-game price)` && tl.includes('https://sportsbook.draftkings.com/?outcomes=0OU85841510O22150_1')
-    && tl.includes(`1. Jayson Tatum (BOS): Points Over 26.5 -111, BOS at DET, read ${etT(e1.at)}`) && tl.includes("Add by hand, leg 1: Jayson Tatum, Points Over 26.5 (DraftKings' player lines carry no betslip id in ESPN's feed)")
-    && tl.includes("Add by hand, leg 4: Lal Guard, Points Over 24.5 (DraftKings' player lines carry no betslip id in ESPN's feed)") && !tl.some(x => /^Add by hand, leg 3/.test(x)) && tl.includes(`$37.50 pays ${cents(STAKE * pb.dec)} at ${fmtA(amOfDec(pb.dec))}, an estimated same-game price (DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together; the legs multiplied ${fmtA(amOfDec(mb.prod))})`) && !/every leg|all 4 legs/.test(shared.text),
-    'Share link sends a title and a text, no url field: each leg with its price and read time, the betslip link alone on its line, the player legs to add by hand with why, what the stake typed ($37.50) pays to the cent at the estimated same-game price, the legs multiplied beside it');
+    && tl.includes(`${iT + 1}. Jayson Tatum (BOS): Points Over 26.5 -111, BOS at DET, read ${etT(e1.at)}`) && tl.includes(`Add by hand, leg ${iT + 1}: Jayson Tatum, Points Over 26.5 (DraftKings' player lines carry no betslip id in ESPN's feed)`)
+    && tl.includes(`Add by hand, leg ${iL + 1}: Lal Guard, Points Over 24.5 (DraftKings' player lines carry no betslip id in ESPN's feed)`) && !tl.some(x => new RegExp(`^Add by hand, leg ${iTot + 1}:`).test(x)) && tl.includes(`$37.50 pays ${cents(STAKE * pb.dec)} at ${fmtA(amOfDec(pb.dec))}, an estimated same-game price (DraftKings prices same-game parlays its own way: this is an estimate from the legs' prices and how they move together; the legs multiplied ${fmtA(amOfDec(mb.prod))})`) && !/every leg|all 4 legs/.test(shared.text),
+    'Share link sends a title and a text, no url field: each leg with its price and read time, the betslip link alone on its line, the player legs to add by hand with why, what the Bet amount typed ($37.50) pays to the cent at the estimated same-game price, the legs multiplied beside it');
   delete w.navigator.share; let copied = null; w.navigator.clipboard = { writeText: async t => { copied = t; } };
   d.getElementById('pcShare').click(); await sleep(20);
   check(copied === shared.text && /Copied/.test(d.getElementById('pcMsg').textContent), 'with no share sheet the same text is copied, and the card says so');
   pc.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20);
-  check(pc.hidden && d.activeElement === d.getElementById('slFinish'), 'Escape closes it, the focus back on Finish');
+  check(pc.hidden && d.activeElement === d.getElementById('pFinish'), 'Escape closes it, the focus back on Finish parlay');
   check(card && card.title === shared.title, 'the card the page holds is the one shared');
   /* the betslip note is dated by the oldest read of the legs it opens: a parlay kept from two presses, as a reload finds
      it (the total read at this press, the other game's moneyline at one two hours before, put second so that neither
@@ -1061,7 +1084,7 @@ async function builder() {
     const x = load('index.html', st9, { picks: {}, build: [], bank: { day: q1.date }, slip: { legs: keepL, stake: 20 } }, espnStub(sb, () => 0, propsAns));
     await sleep(300); const xd = x.w.document;
     xd.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-    xd.getElementById('slFinish').click(); await sleep(20);
+    xd.getElementById('pFinish').click(); await sleep(20);
     let sh = null; x.w.navigator.share = async v => { sh = v; }; x.w.navigator.canShare = () => true;
     xd.getElementById('pcShare').click(); await sleep(20);
     const note = xd.getElementById('pcDkNote').textContent, opens = `opens the 2 legs as DraftKings had them at ${etT(tOld)}`;
@@ -1070,15 +1093,8 @@ async function builder() {
       `two legs read at different presses: the card's note and the Share text date what the link opens by the older read, ${etT(tOld)}, not ${etT(gl1.at)} ("${note}")`);
     check(x.errors.length === 0, 'no script errors: ' + x.errors.join(' | ')); }
 
-  /* Lock in */
-  d.getElementById('slLock').click(); await sleep(30);
-  const b0 = JSON.parse(w.localStorage.getItem('nba_hub_2027')).build;
-  check(b0.length === 1 && b0[0].type === 'parlay' && b0[0].legs.length === 4 && Math.abs(b0[0].dec - pb.dec) < 1e-12 && b0[0].sg === true && b0[0].stake === STAKE, 'Lock in puts it in the Bet Build at its same-game price, marked same-game, on the stake typed ($37.50)');
-  const brow = d.querySelector('#bkBuild tbody tr'), bnum = brow ? [...brow.querySelectorAll('td.num')].map(td => td.textContent.trim()) : [];
-  check(brow && /Parlay · 4/.test(brow.textContent) && brow.querySelector('sup') && /est/.test(brow.querySelector('sup').textContent) && brow.textContent.includes(fmtA(amOfDec(pb.dec))) && /Jayson Tatum/.test(brow.textContent) && /open/.test(brow.textContent)
-    && bnum[1] === '$37.50' && bnum[2] === cents(STAKE * pb.dec - STAKE),
-    `the Bet Build lists it, its price est., its player legs named, open, staked $37.50 to win ${cents(STAKE * pb.dec - STAKE)} (${bnum.join(' | ')})`);
-  check(d.getElementById('slLock').disabled && /In the Bet Build/.test(d.getElementById('slLock').textContent), 'and the builder says it is in the Bet Build');
+  /* there is no Lock in and no Bet Build any more: a parlay is finished as a card, saved nowhere */
+  check(!d.getElementById('slLock') && !d.getElementById('bkBuild') && !d.getElementById('bkSlip') && !d.getElementById('bkPlan') && !d.getElementById('bkSuggest'), 'the builder has no Lock in, and the tab no Bet Build, plan or suggestions');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   /* a reload: the legs at their read prices, dated, and nothing read */
@@ -1086,8 +1102,8 @@ async function builder() {
   ({ w, errors, requests } = load('index.html', st9, kept, espnStub(sb, () => 0, propsAns)));
   await sleep(300); d = w.document;
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  const rr = [...d.querySelectorAll('#bkSlip .sl-leg')];
-  check(rr.length === 4 && rr[0].querySelector('.sl-px').textContent === '-111' && rr[0].querySelector('.sl-meta').textContent.startsWith(`as read ${w.eval(`oddsClock(${JSON.stringify(e1.at)})`)}`) && !espnReqs(requests).length && !Object.keys(w.NBA_PROPS.live()).length,
+  const rr = [...d.querySelectorAll('#pbBuild tr.legrow')], rT = rr.find(tr => tr.dataset.pbRow === keyOwn9(kept.slip.legs[0]));
+  check(rr.length === 4 && rT && rT.querySelector('.pb-px').textContent.trim() === `-111 real · read ${w.eval(`oddsClock(${JSON.stringify(e1.at)})`)}` && !espnReqs(requests).length && !Object.keys(w.NBA_PROPS.live()).length,
     'a reload keeps the legs at the prices they were added at, dated by their read, and reads nothing');
   open(q1); await sleep(20);
   check(!body().querySelector('[data-sg-add]') && !d.getElementById('ppSlipBar').hidden && /^Your parlay: 4 legs \(3 in this game\), [+-]\d+ est\.$/.test(foot()), `the sheet offers nothing to add before a press, and its foot shows your parlay, its same-game price est. ("${foot()}")`);
@@ -1116,7 +1132,7 @@ async function builder() {
   { const dec = decOf(after[0].odds) * decOf(after[1].odds);
     check(foot() === `Your parlay: 2 legs (1 in this game), ${fmtA(amOfDec(dec))}`, `a leg in each of two games: the foot's price is their prices multiplied, with no est. ("${foot()}")`); }
   shut();
-  d.querySelector('#bkSlip [data-sl-del]').click(); await sleep(20);
+  d.querySelector('#pbBuild [data-drop]').click(); await sleep(20);
   check(d.getElementById('slSaid').textContent === '' && slip().length === 1, 'the next change clears what was said');
   /* a third press: DraftKings has taken down every player prop of the other game (ESPN's 404) */
   propsAns['401900002'] = 404;
@@ -1204,9 +1220,12 @@ async function builder() {
     bet('g15', [vLeg]), bet('g16', [oLeg]), bet('g17', [oLeg, ptsO]), ...kindBets, ...fileBets ] };
   ({ w, errors, requests } = load('index.html', st10, mine10));
   await sleep(300); d = w.document;
-  d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(150);
-  const row = id => [...d.querySelectorAll('#bkBuild tbody tr')].find(r => r.querySelector(`[data-del="${id}"]`));
-  const st = id => { const r = row(id); return r ? r.children[6].textContent.trim() : '?'; }, ret = id => { const r = row(id); return r ? r.children[7].textContent.trim() : '?'; };
+  /* the Bet Build is drawn no more (README "Parlay Builder"): its bets stay in the visitor's storage, and each is graded
+     by the page's own settlement, NBA_GRADE.gradeBet, the one X Parlays grades by. The first look asks for the season's
+     box file, for the legs older than the state's window */
+  const gradeAll = () => Object.fromEntries(JSON.parse(w.eval('JSON.stringify(M.build.map(b => [b.id, NBA_GRADE.gradeBet(b)]))')));
+  gradeAll(); await sleep(150);
+  const G9 = gradeAll(), st = id => G9[id] ? (G9[id].st === 'pending' ? 'open' : G9[id].st) : '?', ret = id => G9[id] ? (G9[id].ret == null ? '–' : cents(G9[id].ret)) : '?';
   const m2 = (a, b) => Math.min(decOf(a.odds) * decOf(b.odds), HOLD / CJ.joint2(imp(a.odds), imp(b.odds), rho(a, b)));
   const want0 = { g1: ['won', '$' + (10 * m2(ptsO, bosMl)).toFixed(2)], g2: ['lost', '$0.00'], g3: ['won', '$32.10'], g4: ['lost', '$0.00'], g5: ['push', '$10.00'], g6: ['won', '$' + (10 * decOf(120)).toFixed(2)],
     g7: ['open', '–'], g8: ['won', '$20.00'], g9: ['won', '$' + (10 * decOf(-111) * 2).toFixed(2)], g10: ['void', '$10.00'], ...kindWant };
@@ -1223,21 +1242,9 @@ async function builder() {
   check(!badF.length, `from the season's box file, by this file's own reading of it: Old Hand's, Old Big's, Old Rim's and Old Thief's points, rebounds (both boards), assists, threes, steals, blocks and the five combos each push at their own sum, so each column is read from its own place, and their double- and triple-doubles (${Object.keys(fileWant).filter(k => /(dd|td)$/.test(k)).map(k => `${k.slice(1, 4)} ${k.slice(4)} ${got[k][0]}`).join(', ')})${badF.length ? ': ' + badF.map(k => `${k} ${got[k]} want ${want[k]}`).join('; ') : ''}`);
   const csvReq = requests.filter(x => /data\/box_\d{4}\.csv/.test(x.url));
   check(csvReq.length === 1 && csvReq[0].opt && csvReq[0].opt.cache === 'no-store', `the season's box file is read once, no-store, for the legs older than the state's window (${csvReq.length})`);
-  const lalTitle = row('g7').querySelector('[title]');
-  check(lalTitle && lalTitle.getAttribute('title') === 'final: waiting for its box score', 'the leg whose final has no box score yet says it waits for it');
-  const saved = JSON.parse(w.localStorage.getItem('nba_hub_2027')).build, res = id => saved.find(b => b.id === id).legs.map(l => l.res ? l.res.r + ':' + l.res.v : '-').join(',');
-  const why = id => saved.find(b => b.id === id).legs[0].res, ddN = cats(rim), tdN = cats(thief);
-  check(res('g1') === 'won:30,void:null,-' && res('g3') === 'won:30,won:2' && res('g5') === 'push:10' && res('g7') === '-' && res('g8') === 'won:31' && res('g10') === 'void:null'
-    && res('g11') === `won:${ddN}` && res('g12') === `won:${tdN}` && res('g13') === 'push:30,won:10,-' && res('g15') === 'void:null' && res('g16') === 'void:null' && why('g15').why === 'not played on its date' && why('g16').why === 'not played on its date',
-    `each player leg's grade is written into the visitor's own Bet Build once made, the value with it (${res('g1')} | ${res('g3')} | ${res('g8')} | ${res('g11')} | ${res('g13')}), a leg on a game called off void "not played on its date" (${res('g15')} | ${res('g16')}), none for the leg still waiting`);
+  check(!d.getElementById('bkBuild') && JSON.parse(w.localStorage.getItem('nba_hub_2027')).build.length === mine10.build.length, "the Bet Build this browser kept is not drawn, and stays in its storage as it was");
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
   FILES = [];
-  ({ w, errors, requests } = load('index.html', { ...st10, boxes: { ...st10.boxes, games: {} } }, JSON.parse(JSON.stringify({ ...mine10, build: saved }))));
-  await sleep(300); d = w.document;
-  d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(80);
-  const got2 = Object.fromEntries(Object.keys(want).map(k => [k, [st(k), ret(k)]]));
-  check(Object.keys(want).every(k => JSON.stringify(want[k]) === JSON.stringify(got2[k])) && !requests.some(x => /box_\d{4}\.csv/.test(x.url)), 'once written, the grades hold with the box scores gone from the state, and no box file is read');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
   /* the page's copies of tools/corr.js and tools/props.js */
   const pageSrc = fs.readFileSync(pageFile('index.html'), 'utf8'), corrSrc = fs.readFileSync(path.join(ROOT, 'tools', 'corr.js'), 'utf8'), pjSrc = fs.readFileSync(path.join(ROOT, 'tools', 'props.js'), 'utf8');
   for (const [file, src, names] of [['corr.js', corrSrc, ['TEAM', 'GL', 'TWOPI', 'bvnUpper', 'joint2', 'sgn', 'isGameKind', 'rhoFor']], ['props.js', pjSrc, ['normCdf', 'normInv']]]) {
@@ -1663,11 +1670,11 @@ async function linesFeed() {
     if (real.vsMarket && real.vsMarket.seasons.length) {
       d0.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
       const rt = d0.getElementById('tab-record');
-      const tbl = [...rt.querySelectorAll('h2')].find(h => /Against the market/.test(h.textContent));
+      const tbl = [...rt.querySelectorAll('h2')].find(h => /The earlier rules' backtest/.test(h.textContent) && /until 25 October 2026/.test(h.textContent));
       const rowsT = tbl ? [...tbl.nextElementSibling.nextElementSibling.querySelectorAll('tbody tr')] : [];
       const safe = rowsT.find(r => /^Safe/.test(r.textContent.trim()));
       const sum = k => real.vsMarket.seasons.reduce((a, x) => a + (x.tiers.safe ? x.tiers.safe[k] : 0), 0);
-      check(tbl && rowsT.length === 7, 'the Record tab shows the suggested parlays against the market, four tiers, the baseline, the picks against the market and log loss');
+      check(tbl && rowsT.length === 7 && /Earlier rule/.test(tbl.nextElementSibling.nextElementSibling.querySelector('th').textContent), "the Record tab shows the earlier suggestion rules' backtest against the market, labelled as the earlier rules: four tiers, the baseline, the picks against the market and log loss");
       check(safe && safe.lastElementChild.textContent.includes(`${sum('won')}/${sum('parlays')}`) && safe.lastElementChild.textContent.includes(`(${Math.round(sum('exp'))})`), "Safe's pooled cell is the seasons' sum, with the market's expectation");
     }
     if (real.slate.length) for (const b of [...d0.querySelectorAll('#days .day')]) { b.click(); await sleep(15); }
@@ -1695,137 +1702,62 @@ async function linesFeed() {
       `a browser that last had ${gone === 'mine' ? 'My Picks' : 'How it works'} open opens on Tonight`);
   }
 
-  console.log('2. a straight bet from the Parlay Builder');
-  d.querySelector('#nav button[data-tab=slate]').click(); await sleep(30);
-  d.querySelector('.card .team.away .badge').click(); await sleep(30);
-  let mine = JSON.parse(w.localStorage.getItem('nba_hub_2027') || '{}');
-  check(!d.querySelector('.card [data-act=pick]') && !Object.keys(mine.picks || {}).length && !d.querySelector('.card .badge.mine'), "the team badges show the model's pick and take none");
-  d.querySelector('.card [data-act=plan]').click(); await sleep(80);
-  check(!d.getElementById('tab-parlay').hidden && d.querySelector('#bkPlan tr[data-gid="t1"]'), 'the card button opens the builder on that game');
-  check(/NYK/.test(d.querySelector('#bkPlan tr[data-gid="t1"]').textContent) && /MED 61%/.test(d.querySelector('#bkPlan tr[data-gid="t1"]').textContent), 'the plan row shows the model pick and its band');
-  check(/-140/.test(d.querySelector('#bkPlan tr[data-gid="t1"]').textContent), "the row carries the book's moneyline");
-  check(/\$20\.00/.test(d.getElementById('bkLock').textContent), 'the default stake of $20 goes on the one game');
-  d.getElementById('bkLock').click(); await sleep(30);
-  mine = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(mine.build.length === 1 && mine.build[0].type === 'single' && mine.build[0].legs[0].side === 'NYK' && mine.build[0].legs[0].odds === -140, 'straight bet locked into the Bet Build');
-  check(/open/.test(d.getElementById('bkBuild').textContent), 'the Bet Build lists it as open');
-
-  console.log('3. the next morning: the game is final');
-  ({ w, errors } = load('index.html', withGames(true), mine));
+  console.log('2. the Parlay Builder from a game on the board');
+  /* two games tonight (ids of three characters or more: the choices keep only ids of a game's shape), and a Bet Build an
+     earlier page kept in this browser */
+  const two = { ...state, slate: [fake('tq1', state.today, false), { ...fake('tq2', state.today, false), away: 'LAL', home: 'GSW' }, fake('tq0', yesterday, true)] };
+  const kept2 = { picks: {}, build: [{ id: 'b1', day: state.today, type: 'single', stake: 20, legs: [{ id: 'tq1', kind: 'ml', side: 'NYK', odds: -140 }] }], bank: { amt: 35, suggStake: 10 }, slip: { legs: [], stake: 20 } };
+  ({ w, errors } = load('index.html', two, kept2));
   await sleep(250);
-  const d2 = w.document;
-  d2.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
-  check(/won/.test(d2.getElementById('bkBuild').textContent) && /\$34\.29/.test(d2.getElementById('bkBuild').textContent), 'the straight bet graded: NYK at -140 returns $34.29 on $20');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  { const d2 = w.document;
+    d2.querySelector('.card[data-id="tq1"] .team.away .badge').click(); await sleep(30);
+    let mine = JSON.parse(w.localStorage.getItem('nba_hub_2027') || '{}');
+    check(!d2.querySelector('.card [data-act=pick]') && !Object.keys(mine.picks || {}).length && !d2.querySelector('.card .badge.mine'), "the team badges show the model's pick and take none");
+    check(d2.querySelectorAll('.card [data-act=plan]').length === 2 && !d2.querySelector('.card[data-id="tq0"] [data-act=plan]'), 'each game to come on the lines feed\'s dates has a Parlay Builder button, a final none');
+    d2.querySelector('.card[data-id="tq1"] [data-act=plan]').click(); await sleep(80);
+    mine = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
+    const gl2 = [...d2.querySelectorAll('#pbPanel [data-pb-game]')];
+    check(!d2.getElementById('tab-parlay').hidden && gl2.length === 2 && gl2.find(x => x.dataset.pbGame === 'tq1').checked && !gl2.find(x => x.dataset.pbGame === 'tq2').checked,
+      "the card's Parlay Builder button opens the builder with that game alone ticked, so its Top 50 lines are that game's");
+    check(mine.pb && JSON.stringify(mine.pb.off) === '["tq2"]' && PB_KINDS_OWN.every(k => mine.pb.k[k] === true), "the choice is the visitor's own, in the page's key: the other game unticked, every bet type as it was");
+    check(!d2.getElementById('bkBuild') && !d2.getElementById('bkPlan') && !d2.getElementById('bkSuggest') && mine.build.length === 1 && mine.build[0].id === 'b1' && mine.bank.amt === 35,
+      "the earlier plan, suggestions and Bet Build are gone from the tab, and what this browser kept for them stays in its storage, undrawn");
+    check(errors.length === 0, 'no script errors: ' + errors.join(' | ')); }
 
+  console.log('3. a bet graded as a book settles it (the settlement X Parlays and the suggestions record grade by)');
+  ({ w, errors } = load('index.html', withGames(true)));
+  await sleep(250);
+  { const gq = b => JSON.parse(w.eval(`JSON.stringify(NBA_GRADE.gradeBet(${JSON.stringify(b)}))`));
+    const g1 = gq({ type: 'single', stake: 20, legs: [{ id: 't1', kind: 'ml', side: 'NYK', odds: -140 }] });
+    check(g1.st === 'won' && Math.abs(g1.ret - 20 * (1 + 100 / 140)) < 1e-9, `a straight bet on NYK at -140 the morning after its final, 105-98: won, $20 returns $34.29 (${g1.st}, ${g1.ret.toFixed(2)})`);
+    check(errors.length === 0, 'no script errors: ' + errors.join(' | ')); }
   console.log('3b. weeks later: the game has left the slate');
   const realId = '2027_' + state.today.replace(/-/g, '') + '_BOS_NYK';
   const gone = { ...state, slate: [], record: [], finals: { [realId]: [98, 105] } };
-  const old = { picks: { [realId]: 'NYK' }, build: [{ id: 'bx', day: state.today, type: 'single', stake: 10, legs: [{ id: realId, kind: 'ml', side: 'NYK', odds: -140 }] }] };
-  ({ w, errors } = load('index.html', gone, old));
+  ({ w, errors } = load('index.html', gone));
   await sleep(250);
-  w.document.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
-  check(/won/.test(w.document.getElementById('bkBuild').textContent), 'a bet still grades from the published finals');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
-
-  console.log('3c. three games: suggestions and a parlay');
-  const three = (fin) => ({ ...state, slate: [
-    { ...fake('a1', state.today, fin) },
-    { ...fake('a2', state.today, fin), away: 'LAL', home: 'GSW', ml: { home: -220, away: 180 }, model: { ...fake('a2', state.today, false).model, pHome: 0.70 }, awayScore: fin ? 100 : null, homeScore: fin ? 110 : null },
-    { ...fake('a3', state.today, fin), away: 'MIA', home: 'ORL', ml: { home: -175, away: 150 }, model: { ...fake('a3', state.today, false).model, pHome: 0.35 }, awayScore: fin ? 99 : null, homeScore: fin ? 101 : null } ] });
-  ({ w, errors } = load('index.html', three(false)));
-  await sleep(250);
-  const d3 = w.document;
-  d3.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  check(/Safe/.test(d3.getElementById('bkSuggest').textContent), 'a Safe parlay is suggested');
-  const safeTxt = d3.querySelector('#bkSuggest .sugg-tier.safe').textContent;
-  check(/NYK/.test(safeTxt) && /GSW/.test(safeTxt) && !/MIA/.test(safeTxt), 'Safe takes the two picks the market agrees with and leaves out MIA, where it does not');
-  check(!d3.querySelector('#bkSuggest .sugg-tier.med'), 'no Medium: the only leg left is one the market disagrees with');
-  check(!d3.querySelector('#bkSuggest .sugg-tier.value'), 'no Value card with a single qualifying leg');
-  check(d3.querySelector('#bkPlan tr[data-gid="a3"] .vg.differs'), 'the Vegas pick is outlined where the market disagrees (MIA vs ORL)');
-  d3.querySelector('#bkSuggest [data-sugg-lock="safe"]').click(); await sleep(30);
-  let m3 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(m3.build.length === 1 && m3.build[0].type === 'parlay' && m3.build[0].legs.length >= 2, 'Lock in puts the Safe parlay in the Bet Build');
-  d3.querySelector('#bkSuggest [data-sugg-lock="safe"]').click(); await sleep(30);
-  m3 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(m3.build.length === 1 && /already/.test(d3.getElementById('bkPlan').textContent), 'the same parlay twice is refused');
-  d3.querySelector('#bkPlan [data-bkmode="parlay"]').click(); await sleep(30);
-  check(/3 of 3 legs in/.test(d3.getElementById('bkPlan').textContent) && /parlay odds/.test(d3.getElementById('bkPlan').textContent), 'parlay mode shows three legs and the parlay odds');
-  d3.querySelector('#bkPlan input[data-bkg="a3"]').click(); await sleep(30);
-  check(/2 of 3 legs in/.test(d3.getElementById('bkPlan').textContent), 'unticking a game drops it from the parlay');
-  d3.getElementById('bkLock').click(); await sleep(30);
-  check(/already/.test(d3.getElementById('bkPlan').textContent), 'NYK + GSW is the Safe parlay already in the build, so it is refused');
-  d3.querySelector('#bkPlan input[data-bkg="a3"]').click(); await sleep(30);
-  d3.getElementById('bkLock').click(); await sleep(30);
-  m3 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(m3.build.length === 2 && m3.build.some(b => b.legs.length === 3), 'the three-leg parlay is locked in');
-  ({ w, errors } = load('index.html', three(true), m3));
-  await sleep(250);
-  w.document.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
-  const bt = w.document.getElementById('bkBuild').textContent;
-  const st = JSON.parse(w.localStorage.getItem('nba_hub_2027')).build;
-  check(/won/.test(bt) && /lost/.test(bt), 'NYK + GSW won; the three-leg parlay lost on MIA (ORL won 101-99)');
-  check(/1-1/.test(bt), 'the Bet Build tallies 1-1');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
-
-  console.log('3d. a value parlay');
-  const val = three(false); val.slate[0] = { ...val.slate[0], model: { ...val.slate[0].model, pHome: 0.72 } };   // NYK 72% against the market's 56%
-  ({ w, errors } = load('index.html', val));
-  await sleep(250);
-  const d4 = w.document;
-  d4.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  const vc = d4.querySelector('#bkSuggest .sugg-tier.value');
-  check(vc && /MIA/.test(vc.textContent) && /NYK/.test(vc.textContent) && !/GSW/.test(vc.textContent), 'the Value card holds the two picks the model rates 5+ points above the market');
-  check(vc && vc.querySelector('.sugg-legs li').textContent.includes('MIA'), 'biggest edge first (MIA 65 vs 39)');
-  check(vc && (!state.vsMarket || /backtested on .* Value parlays won \d+ of \d+/.test(vc.textContent)) && !/NFL/.test(vc.textContent), "the Value card quotes this site's own backtest, not the NFL side's");
-  vc.querySelector('[data-sugg-lock="value"]').click(); await sleep(30);
-  const m4 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(m4.build.length === 1 && m4.build[0].legs.length === 2, 'Lock in anyway puts it in the Bet Build');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  { const g3 = JSON.parse(w.eval(`JSON.stringify(NBA_GRADE.gradeBet(${JSON.stringify({ type: 'single', stake: 10, legs: [{ id: realId, kind: 'ml', side: 'NYK', odds: -140 }] })}))`));
+    check(g3.st === 'won', 'a bet still grades from the published finals');
+    check(errors.length === 0, 'no script errors: ' + errors.join(' | ')); }
 
   console.log('3e. games that have tipped off');
   const tipped = () => ({ ...state, slate: [
-    { ...fake('x1', state.today, false), tip: tipIn(-3600e3) },
-    { ...fake('x2', state.today, false), away: 'LAL', home: 'GSW', ml: { home: -220, away: 180 }, model: { ...fake('x2', state.today, false).model, pHome: 0.70 }, tip: tipIn(1500) },
-    { ...fake('x3', state.today, false), away: 'MIA', home: 'ORL', ml: { home: -175, away: 150 }, model: { ...fake('x3', state.today, false).model, pHome: 0.65 } } ] });
-  ({ w, errors } = load('index.html', tipped()));
-  await sleep(250);
-  let d6 = w.document;
-  const c1 = d6.querySelector('.card[data-id="x1"]');
-  check(c1 && /Tipped off/.test(c1.querySelector('.tags').textContent), 'a game past its tip time is tagged Tipped off');
-  check(c1 && !c1.querySelector('[data-act=plan]'), 'it has no Parlay Builder button');
-  d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  check(!d6.querySelector('#bkPlan tr[data-gid="x1"]') && d6.querySelector('#bkPlan tr[data-gid="x2"]') && d6.querySelector('#bkPlan tr[data-gid="x3"]'), 'the builder leaves it out and keeps the two games to come');
-  check(!/BOS/.test(d6.getElementById('bkSuggest').textContent), 'the suggestions leave it out');
-  await sleep(1600);                                                           // x2 tips while the page is open
-  d6.getElementById('bkLock').click(); await sleep(30);
-  let m6 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(m6.build.length === 1 && m6.build[0].legs[0].id === 'x3', 'a straight lock drawn before the tip adds only the game still to come');
-  check(/1 game has tipped off and was left out/.test(d6.getElementById('bkPlan').textContent), 'and says the other has tipped off');
-  check(!d6.querySelector('#bkPlan tr[data-gid="x2"]'), 'the redrawn plan no longer offers it');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
-  ({ w, errors } = load('index.html', tipped()));
-  await sleep(250);
-  d6 = w.document;
-  d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  const safe6 = d6.querySelector('#bkSuggest .sugg-tier.safe');
-  check(safe6 && /GSW/.test(safe6.textContent) && /ORL/.test(safe6.textContent), 'Safe is GSW + ORL before the tip');
-  await sleep(1600);
-  safe6.querySelector('[data-sugg-lock="safe"]').click(); await sleep(30);
-  m6 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(!m6.build.length && /has tipped off, so it was not added/.test(d6.getElementById('bkPlan').textContent), 'a suggested parlay with a leg that has tipped is refused, and says why');
-  check(!d6.querySelector('#bkSuggest .sugg-tier.safe'), 'the suggestions are redrawn without it');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
-  ({ w, errors } = load('index.html', tipped(), { picks: {}, build: [], bank: { mode: 'parlay' } }));
-  await sleep(250);
-  d6 = w.document;
-  d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-  check(/2 of 2 legs in/.test(d6.getElementById('bkPlan').textContent), 'parlay mode offers the two games to come');
-  await sleep(1600);
-  d6.getElementById('bkLock').click(); await sleep(30);
-  m6 = JSON.parse(w.localStorage.getItem('nba_hub_2027'));
-  check(!m6.build.length && /has tipped off, so it was not added/.test(d6.getElementById('bkPlan').textContent), 'a parlay from the plan with a leg that has tipped is refused, and says so');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+    { ...fake('xq1', state.today, false), tip: tipIn(-3600e3) },
+    { ...fake('xq2', state.today, false), away: 'LAL', home: 'GSW', ml: { home: -220, away: 180 }, model: { ...fake('xq2', state.today, false).model, pHome: 0.70 }, tip: tipIn(1500) },
+    { ...fake('xq3', state.today, false), away: 'MIA', home: 'ORL', ml: { home: -175, away: 150 }, model: { ...fake('xq3', state.today, false).model, pHome: 0.65 } } ] });
+  { const r6 = load('index.html', tipped());
+    await sleep(250);
+    const d6 = r6.w.document, c1 = d6.querySelector('.card[data-id="xq1"]');
+    check(c1 && /Tipped off/.test(c1.querySelector('.tags').textContent), 'a game past its tip time is tagged Tipped off');
+    check(c1 && !c1.querySelector('[data-act=plan]'), 'it has no Parlay Builder button');
+    d6.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+    const ids = () => [...d6.querySelectorAll('#pbPanel [data-pb-game]')].map(x => x.dataset.pbGame).join();
+    check(ids() === 'xq2,xq3', `the builder's games leave it out and keep the two games to come (${ids()})`);
+    await sleep(1600);                                                         // xq2 tips while the page is open
+    for (const t of r6.timers.filter(t => t.k === 'setInterval' && t.ms === 30000)) t.fn();
+    await sleep(30);
+    check(ids() === 'xq3', `at the builder's half-minute look, the game that tipped leaves the list (${ids()})`);
+    check(r6.errors.length === 0, 'no script errors: ' + r6.errors.join(' | ')); }
 
   console.log('6. a postponed game, a graded game off the slate, the import, a stale injury report');
   {
@@ -1845,13 +1777,13 @@ async function linesFeed() {
     await sleep(250);
     const d7 = w.document;
     d7.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
-    const bb = d7.getElementById('bkBuild');
-    const rowB = id => [...bb.querySelectorAll('tbody tr')].find(r => r.querySelector(`[data-del="${id}"]`));
-    check(/void/.test(rowB('v1').textContent) && /\$10\.00/.test(rowB('v1').lastElementChild.previousElementSibling.textContent), 'a straight bet on it is void, the stake back');
-    check(/won/.test(rowB('v2').textContent) && /\$25\.00/.test(rowB('v2').textContent), 'a parlay drops the void leg and pays on the rest: GSW +150 returns $25 on $10');
-    check(/open/.test(rowB('v3').textContent) && rowB('v3').querySelector('sup') && /est/.test(rowB('v3').querySelector('sup').textContent), 'an estimated price is marked est in the Bet Build, and a game from yesterday is still open: a day is not enough to call it off');
-    check(/open/.test(rowB('v4').textContent) && !/void/.test(rowB('v4').textContent), 'a bet on a game played whose final is not read yet is open, not void');
-    check(/won/.test(rowB('v5').textContent) && /\$30\.00/.test(rowB('v5').textContent), 'a bet on a graded game off the slate grades from the record: DEN +200 returns $30 on $10');
+    const gq = b => JSON.parse(w.eval(`JSON.stringify(NBA_GRADE.gradeBet(${JSON.stringify(b)}))`)), G = Object.fromEntries(mine6.build.map(b => [b.id, gq(b)]));
+    check(G.v1.st === 'void' && G.v1.ret === 10, 'a straight bet on it is void, the stake back');
+    check(G.v2.st === 'won' && Math.abs(G.v2.ret - 25) < 1e-9, 'a parlay drops the void leg and pays on the rest: GSW +150 returns $25 on $10');
+    check(G.v3.st === 'pending', 'a game from yesterday is still open: a day is not enough to call it off');
+    check(G.v4.st === 'pending', 'a bet on a game played whose final is not read yet is open, not void');
+    check(G.v5.st === 'won' && Math.abs(G.v5.ret - 30) < 1e-9, 'a bet on a graded game off the slate grades from the record: DEN +200 returns $30 on $10');
+    check(!d7.getElementById('bkBuild') && JSON.parse(w.localStorage.getItem('nba_hub_2027')).build.length === 5, "and the Bet Build this browser kept is not drawn, and stays in its storage as it was");
     check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
     const stale = { ...withGames(false), injuriesAsOf: ago(1) };
@@ -1877,15 +1809,6 @@ async function linesFeed() {
     check(kept.picks.t1 === 'NYK', 'a real backup is restored');
     check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
   }
-  {
-    const three6 = { ...state, slate: [fake('s1', state.today, false), { ...fake('s2', state.today, false), away: 'LAL', home: 'GSW', ml: { home: -220, away: 180 }, model: { ...fake('s2', state.today, false).model, pHome: 0.70 } }] };
-    ({ w, errors } = load('index.html', three6));
-    await sleep(250);
-    w.document.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
-    const sf = w.document.querySelector('#bkSuggest .sugg-tier.safe');
-    check(sf && /Under Safe's 50% aim/.test(sf.textContent), 'a Safe parlay under its 50% aim says so (NYK + GSW land about 37% together)');
-  }
-
   console.log('4. admin page');
   ({ w, errors } = load('admin.html', withGames(false)));
   await sleep(250);
@@ -1917,6 +1840,8 @@ async function linesFeed() {
   await guard('lines', linesFeed);
   /* X Parlays (README "X Parlays"): its own file, tools/smoke_xparlays.js, on this harness's checks */
   await guard('xparlays', () => require('./smoke_xparlays')({ check, pageFile, ROOT }));
+  /* the Parlay Builder (README "Parlay Builder"): its own file, tools/smoke_parlay.js, on this harness's checks */
+  await guard('pb', () => require('./smoke_parlay')({ check, pageFile, ROOT }));
 
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

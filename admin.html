@@ -3828,18 +3828,20 @@ function spPool(g) {
    twice, one side bet and one total a game, one leg a player) are those refusals on one game's legs, so this never
    refuses; it is the guarantee that a level is a parlay the builder takes */
 function spSlipOk(legs) { const have = []; for (const l of legs) { const s = pbSlipOf(l); if (slipWhy(have, s)) return false; have.push(s); } return true; }
-/* why a game's player legs are none */
+/* why a game's player legs are none (a read's time in Eastern: the record keeps these words, read anywhere) */
 function spNoPl(g) {
   if (!pbPropsOn()) return 'no player lines: the props model failed its shadow ledger’s bar, so the sets take none.';
   if (!ppGame(g.id)) return 'no player lines the props model prices: it has no projections for this game yet.';
   const r = pbPr(g.id);
   if (r && (r.mains.length || r.ladders.length || r.yes.length)) return 'no player lines the props model prices: it projects none of the players DraftKings lines here.';
-  return r ? `no player prices yet: DraftKings had posted no player props for it when they were last read (${pbWhen(r.at)}); it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
+  return r ? `no player prices yet: DraftKings had posted no player props for it when they were last read (${spEt(Date.parse(r.at), true)}); it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
     : 'no player prices yet: none have been read for it; the job reads DraftKings’ player props through the day, and Refresh odds reads them now.';
 }
 /* why a level of one game has no parlay: the game does not make that many legs, and why */
 function spWhy(n, pool, g) {
-  if (!pbGl(g.id) && !pbPr(g.id)) return `No legs in this game: no DraftKings line has been read for it yet. The job reads them for the next two nights’ games, and Refresh odds reads the current ones.`;
+  const gl = pbGl(g.id), pr = pbPr(g.id), at = [gl && gl.at, pr && pr.at].filter(Boolean).sort().pop();
+  if (!gl && !pr) return `No legs in this game: no DraftKings line has been read for it yet. The job reads them for the next two nights’ games, and Refresh odds reads the current ones.`;
+  if (!gl && pr && !(pr.mains.length || pr.ladders.length || pr.yes.length)) return `No legs in this game yet: DraftKings had posted neither its game lines nor its player props when they were last read (${spEt(Date.parse(at), true)}). The job reads them through the day, and Refresh odds reads the current ones.`;
   const m = pbMaxLegs([...pool.pref, ...pool.thin, ...(pool.mkt || [])]);
   const what = m < n ? `${m ? `Only ${m} leg${m === 1 ? '' : 's'}` : 'No legs'} in this game${pool.noId ? ' that DraftKings’ betslip can take' : ''}` : `No ${n}-leg parlay in this game`;
   if (!pool.plGames) return `${what}, and ${spNoPl(g)}`;

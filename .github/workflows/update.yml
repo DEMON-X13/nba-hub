@@ -9,12 +9,20 @@ on:
     #   11:17  the day's lines and injury report, landing by mid-afternoon Eastern at the latest
     #   13:17  late lines and injury news, landing before the 7pm Eastern tip-offs (at 9 hours late, 6:17pm EDT and
     #          5:17pm EST: a 5pm or 6pm weekend tip-off can be priced on the 11:17 run instead)
+    #   16:17  the evening's sets for Suggested Parlays' record (tools/suggest_ledger.js): a set locks 2 hours before its
+    #          tip-off (5:30pm Eastern for a 7:30pm game) and the record keeps the last run's before the lock, so this
+    #          slot, landing 3:17pm to 9:17pm EDT (2:17pm to 8:17pm EST), takes most evenings' sets hours nearer their
+    #          lock than the 13:17 run does, on later lines and a later injury report
+    #   19:17  the late games' sets (a 10pm Eastern tip-off locks at 8pm), landing 6:17pm EDT to 12:17am; a set whose
+    #          lock no run reached keeps the last earlier run's, and a game no run took before its lock has none
     # A run that does land after a tip-off changes nothing about that game's line or logged number: both are frozen
     # at tip (fetch.js merge, players.js logPredictions). Off the hour: :00 is the minute most often dropped.
     # ESPN's public scoreboard only: no credits. Empty days cost a few requests and commit nothing.
     - cron: "17 7 * * *"
     - cron: "17 11 * * *"
     - cron: "17 13 * * *"
+    - cron: "17 16 * * *"
+    - cron: "17 19 * * *"
   workflow_dispatch:
     inputs:
       from:
@@ -178,6 +186,22 @@ jobs:
           node tools/test_lines.js
           node tools/test_calls.js
           node tools/smoke.js
+      # The suggestions record (README "Suggested Parlays"): each featured game's set on Suggested Parlays (a game on
+      # national TV), taken from the page just built on the state just published and lines.json, rewritten until 2 hours
+      # before tip-off and locked from then, a level holding a player since listed built again once, graded after the
+      # game, in data/suggest_ledger.json; its test runs first, and its check holds the file to the last commit (no locked
+      # set moved but for that replacement). It boots the page in jsdom, so it runs after the tests' npm ci; a failure
+      # marks this step alone and puts the file back as committed: the record never holds back state.json or the data
+      - name: The suggestions record
+        id: suggest
+        if: steps.tests.outcome == 'success'
+        continue-on-error: true
+        run: |
+          if node tools/test_suggest_ledger.js > /tmp/test_suggest_ledger.log 2>&1 && node tools/suggest_ledger.js && node tools/suggest_check.js; then exit 0; fi
+          tail -20 /tmp/test_suggest_ledger.log
+          echo "::error::the suggestions record failed: data/suggest_ledger.json is put back"
+          if git cat-file -e HEAD:data/suggest_ledger.json 2>/dev/null; then git checkout HEAD -- data/suggest_ledger.json; else rm -f data/suggest_ledger.json; fi
+          exit 1
       - name: Commit if anything changed
         if: always() && steps.fetch.outcome == 'success'
         run: |
@@ -197,7 +221,7 @@ jobs:
             [ "$ok" = 1 ]
           fi
       - name: Fail the run when a step failed
-        if: always() && (steps.fetch.outcome != 'success' || steps.autoclear.outcome != 'success' || steps.lines.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.alpha.outcome != 'success' || steps.joker.outcome != 'success' || steps.elo_model.outcome != 'success' || steps.calls.outcome != 'success' || steps.props.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success')
+        if: always() && (steps.fetch.outcome != 'success' || steps.autoclear.outcome != 'success' || steps.lines.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.alpha.outcome != 'success' || steps.joker.outcome != 'success' || steps.elo_model.outcome != 'success' || steps.calls.outcome != 'success' || steps.props.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success' || steps.suggest.outcome != 'success')
         run: |
-          echo "::error::failed: pull ${{ steps.fetch.outcome }}, autoclear ${{ steps.autoclear.outcome }}, lines ${{ steps.lines.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, alpha ${{ steps.alpha.outcome }}, Joker ${{ steps.joker.outcome }}, ELO Model ${{ steps.elo_model.outcome }}, calls ${{ steps.calls.outcome }}, props ${{ steps.props.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}"
+          echo "::error::failed: pull ${{ steps.fetch.outcome }}, autoclear ${{ steps.autoclear.outcome }}, lines ${{ steps.lines.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, alpha ${{ steps.alpha.outcome }}, Joker ${{ steps.joker.outcome }}, ELO Model ${{ steps.elo_model.outcome }}, calls ${{ steps.calls.outcome }}, props ${{ steps.props.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}, suggestions record ${{ steps.suggest.outcome }}"
           exit 1

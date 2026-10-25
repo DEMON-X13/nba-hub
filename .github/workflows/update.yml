@@ -84,6 +84,32 @@ jobs:
         id: players
         continue-on-error: true
         run: node tools/players.js ${{ inputs.fit && 'fit' || '' }}
+      # The game models ported from the NFL hub (README "The Alpha Model", "The Joker", "The ELO Model"): each calls the
+      # season in play and the games to come into models/<id>.json, then its test holds the file. A model that cannot run
+      # keeps its last calls and says why (status ok false, exit 1, the step red); a test that fails puts the file back as
+      # committed. Either way the run goes on
+      - name: The Alpha Model
+        id: alpha
+        continue-on-error: true
+        run: |
+          m=0; node tools/alpha.js || m=$?          # the step's shell stops at a failed command: keep its code
+          if ! node tools/test_alpha.js; then
+            echo "::error::the Alpha Model's test failed: models/alpha.json is put back"
+            if git cat-file -e HEAD:models/alpha.json 2>/dev/null; then git checkout HEAD -- models/alpha.json; else rm -f models/alpha.json; fi
+            exit 1
+          fi
+          exit $m
+      # The calls ledger (README "Pick'em Record"): each model's call on each game, published before tip-off and frozen
+      # from it, in data/calls.json, which the Pick'em Record grades; its check holds it to the last commit (no frozen call
+      # moved or dropped, none logged after tip-off), and a failure puts the file back as committed
+      - name: The calls ledger
+        id: calls
+        continue-on-error: true
+        run: |
+          if node tools/calls.js && node tools/calls_check.js; then exit 0; fi
+          echo "::error::the calls ledger failed its check: data/calls.json is put back"
+          if git cat-file -e HEAD:data/calls.json 2>/dev/null; then git checkout HEAD -- data/calls.json; else rm -f data/calls.json; fi
+          exit 1
       # The props model (README "Player props"): DraftKings' closing player lines for the finals not read yet (one free
       # ESPN request a game, into data/props_<season>.csv), the projections for the games to come (props.json) and the
       # shadow ledger (data/props_shadow.json and its graded lines, data/props_shadow_lines.csv), then the ledger's check
@@ -134,7 +160,7 @@ jobs:
         run: |
           git config user.name "nba-hub bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data model.json players.json props.json lines.json liveparlays/parlays.json
+          git add data models model.json players.json props.json lines.json liveparlays/parlays.json
           if [ "${{ steps.publish.outcome }}" = "success" ] && [ "${{ steps.tests.outcome }}" = "success" ]; then git add state.json history.json pickem.json index.html admin.html
           else echo "::warning::publishing or the tests failed: the data is committed, state.json, history.json and the pages are left as they were"; for f in state.json history.json pickem.json index.html admin.html; do if git cat-file -e "HEAD:$f" 2>/dev/null; then git checkout HEAD -- "$f"; else rm -f "$f"; fi; done; fi
           if git diff --cached --quiet; then echo "nothing changed"; else
@@ -148,7 +174,7 @@ jobs:
             [ "$ok" = 1 ]
           fi
       - name: Fail the run when a step failed
-        if: always() && (steps.fetch.outcome != 'success' || steps.autoclear.outcome != 'success' || steps.lines.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.props.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success')
+        if: always() && (steps.fetch.outcome != 'success' || steps.autoclear.outcome != 'success' || steps.lines.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.alpha.outcome != 'success' || steps.calls.outcome != 'success' || steps.props.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success')
         run: |
-          echo "::error::failed: pull ${{ steps.fetch.outcome }}, autoclear ${{ steps.autoclear.outcome }}, lines ${{ steps.lines.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, props ${{ steps.props.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}"
+          echo "::error::failed: pull ${{ steps.fetch.outcome }}, autoclear ${{ steps.autoclear.outcome }}, lines ${{ steps.lines.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, alpha ${{ steps.alpha.outcome }}, calls ${{ steps.calls.outcome }}, props ${{ steps.props.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}"
           exit 1

@@ -61,6 +61,17 @@ jobs:
       - name: Pull results and the coming slate from ESPN
         id: fetch
         run: node tools/fetch.js ${{ inputs.from && format('--from {0}', inputs.from) || '' }} ${{ inputs.to && format('--to {0}', inputs.to) || '' }}
+      # X's finished parlays clear themselves (README "X Parlays"): a parlay whose every game is final in this run's
+      # games.csv (or, on no list at all, two days past its date, as the page voids it) is marked "cleared" in
+      # liveparlays/parlays.json two Eastern days after its last game, so X Parlays shows it on its game day and the next.
+      # Its test runs first; a failure marks this step alone and puts the file back as committed
+      - name: Clear X's finished parlays
+        id: autoclear
+        continue-on-error: true
+        run: |
+          if node tools/test_autoclear.js && node tools/autoclear.js; then exit 0; fi
+          git checkout HEAD -- liveparlays/parlays.json
+          exit 1
       - name: Pull box scores, the injury report and the coaches
         id: box
         continue-on-error: true
@@ -113,7 +124,7 @@ jobs:
         run: |
           git config user.name "nba-hub bot"
           git config user.email "bot@users.noreply.github.com"
-          git add data model.json players.json props.json
+          git add data model.json players.json props.json liveparlays/parlays.json
           if [ "${{ steps.publish.outcome }}" = "success" ] && [ "${{ steps.tests.outcome }}" = "success" ]; then git add state.json history.json index.html admin.html
           else echo "::warning::publishing or the tests failed: the data is committed, state.json, history.json and the pages are left as they were"; git checkout -- state.json history.json index.html admin.html; fi
           if git diff --cached --quiet; then echo "nothing changed"; else
@@ -127,7 +138,7 @@ jobs:
             [ "$ok" = 1 ]
           fi
       - name: Fail the run when a step failed
-        if: always() && (steps.fetch.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.props.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success')
+        if: always() && (steps.fetch.outcome != 'success' || steps.autoclear.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.props.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success')
         run: |
-          echo "::error::failed: pull ${{ steps.fetch.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, props ${{ steps.props.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}"
+          echo "::error::failed: pull ${{ steps.fetch.outcome }}, autoclear ${{ steps.autoclear.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, props ${{ steps.props.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}"
           exit 1

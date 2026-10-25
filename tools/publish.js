@@ -19,6 +19,8 @@
  *             same-game table (README "Player props" and "Same-game parlays")
  * Nothing a visitor does reaches this file; only the job writes it.
  *
+ * And pickem.json, which the Pick'em Record tab reads when it first opens: every game of the season in play to today, with
+ * each model's call as published before tip-off (THE PICK'EM RECORD below).
  * And history.json, which the page reads only when a rating-over-time window opens: every listed player's, coach's
  * and club's rating game by game since the season before the one in play (THE HISTORY below), with the change over
  * 7 and 30 days and this season, the 7 days of which state.json carries too, for the tables.
@@ -31,6 +33,7 @@ const L = require('./lib');
 const DATA = path.join(L.ROOT, 'data');
 const OUT = path.join(L.ROOT, 'state.json');
 const HIST_OUT = path.join(L.ROOT, 'history.json');
+const PICKEM_OUT = path.join(L.ROOT, 'pickem.json');
 const read = f => JSON.parse(fs.readFileSync(path.join(L.ROOT, f), 'utf8'));
 const csv = f => { const p = path.join(DATA, f); if (!fs.existsSync(p)) return []; const lines = fs.readFileSync(p, 'utf8').trim().split('\n'); const h = lines.shift().split(','); return lines.filter(Boolean).map(l => { const v = l.split(','); const o = {}; h.forEach((k, i) => { o[k] = v[i] === undefined ? '' : v[i]; }); return o; }); };
 const num = v => v === '' || v === undefined ? null : +v;
@@ -147,6 +150,10 @@ function main() {
      "generated" in the text, which is vsMarket's) */
   const strip = s => { try { const o = JSON.parse(s); delete o.generated; return JSON.stringify(o); } catch (e) { return s; } };
   if (strip(body) !== strip(before)) fs.writeFileSync(OUT, body);
+  const pk = pickemState(games, preds, season, today);
+  { const pb = JSON.stringify(pk), pbefore = fs.existsSync(PICKEM_OUT) ? fs.readFileSync(PICKEM_OUT, 'utf8') : '';
+    if (pb !== pbefore) fs.writeFileSync(PICKEM_OUT, pb);
+    L.log(`pickem.json: ${pk.games.length} games, ${pk.weeks.length} weeks, ${(pb.length / 1024).toFixed(0)} KB, ${pb !== pbefore ? 'written' : 'unchanged'}`); }
   if (hist) { const hb = JSON.stringify(hist), hbefore = fs.existsSync(HIST_OUT) ? fs.readFileSync(HIST_OUT, 'utf8') : '';
     if (hb !== hbefore) fs.writeFileSync(HIST_OUT, hb);
     L.log(`history.json: ${Object.keys(hist.players).length} players, ${Object.keys(hist.coaches).length} coaches, ${Object.keys(hist.teams).length} clubs, ${(hb.length / 1024).toFixed(0)} KB, ${hb !== hbefore ? 'written' : 'unchanged'}`); }
@@ -200,6 +207,43 @@ function historyState(H, { pc, cc, today, plist, coaches, teams }) {   // player
      takes today's injuries off it, which is a night's availability and not a change of rating */
   for (const [t, x] of Object.entries(teams)) { const nowR = H.now && H.now.teams && H.now.teams[t]; const s = build(H.teams[t], H.start.teams[t], nowR === undefined ? null : Math.round(nowR), (s0, v) => Math.round(v)); if (s) { out.teams[t] = s; x.d7 = s.d7; } }
   return out;
+}
+/* THE PICK'EM RECORD, for its tab (README "Pick'em Record"): every regular-season and playoff game of the season in play
+   from its first to today (Eastern), with the market's moneylines and spread as the games table froze them at tip, the
+   score once final, and each model's call as published before tip-off: the Player Model's and Team Elo's from
+   predictions.csv, the Alpha Model's, the Joker's and the ELO Model's from data/calls.json (tools/calls.js, with src
+   backtest kept as data on the game: the page draws every call alike). The weeks run Monday to Sunday, Eastern; week 1
+   holds the season's first regular-season game; the playoffs run in their own weeks, P1 on. A model that could not run
+   is named with why (its models/<id>.json status). The page grades the finals itself, from these numbers alone */
+const PK_MODELS = [['alpha', 'Alpha Model', '#5FD49A'], ['joker', 'The Joker', '#FF6B6B'], ['elo', 'ELO Model', '#FF9F43'],
+  ['player', 'Player Model', '#B79CFF'], ['team', 'Team Elo', '#5FD4FF']];
+function pickemState(games, preds, season, today) {
+  const cf = path.join(DATA, 'calls.json');
+  const calls = fs.existsSync(cf) ? (JSON.parse(fs.readFileSync(cf, 'utf8')).calls || {}) : {};
+  const ours = games.filter(g => +g.season === season && g.type !== 'PRE' && g.date <= today).sort((a, b) => (a.tip || a.date) < (b.tip || b.date) ? -1 : (a.tip || a.date) > (b.tip || b.date) ? 1 : a.game_id < b.game_id ? -1 : 1);
+  const monday = d => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() - ((x.getUTCDay() + 6) % 7)); return x.toISOString().slice(0, 10); };
+  const firstReg = ours.find(g => g.type === 'REG'), firstPost = ours.find(g => g.type === 'POST');
+  const days = (a, b) => Math.round((Date.parse(b + 'T12:00:00Z') - Date.parse(a + 'T12:00:00Z')) / 86400000);
+  const weeks = [], wkOf = {};
+  const weekKey = g => g.type === 'POST' && firstPost ? 'P' + (Math.floor(days(monday(firstPost.date), g.date) / 7) + 1) : String(Math.floor(days(monday(firstReg ? firstReg.date : g.date), g.date) / 7) + 1);
+  const out = [];
+  for (const g of ours) {
+    const k = weekKey(g);
+    if (wkOf[k] === undefined) { const from = monday(g.date); wkOf[k] = weeks.length; weeks.push({ key: k, label: k[0] === 'P' ? 'Playoffs ' + k.slice(1) : 'Week ' + k, short: k[0] === 'P' ? k : 'Wk ' + k, from, to: L.addDays(from, 6) }); }
+    const p = preds[g.game_id], c = {}, back = [];
+    if (p && p.pHome !== '') c.player = +p.pHome;
+    if (p && p.team_pHome !== '' && p.team_pHome !== undefined) c.team = +p.team_pHome;
+    for (const id of ['alpha', 'joker', 'elo']) { const x = calls[id] && calls[id][g.game_id]; if (x) { c[id] = x.pHome; if (x.src === 'backtest') back.push(id); } }
+    const fin = g.status === 'final' && g.home_score !== '' && g.away_score !== '';
+    out.push({ id: g.game_id, date: g.date, tip: g.tip || '', type: g.type, w: wkOf[k], away: g.away, home: g.home,
+      score: fin ? [+g.away_score, +g.home_score] : null, ml: g.home_ml !== '' && g.away_ml !== '' && g.home_ml != null && g.away_ml != null ? [+g.away_ml, +g.home_ml] : null,
+      line: g.home_line === '' || g.home_line == null ? null : +g.home_line, c, ...(back.length ? { backtest: back } : {}) });
+  }
+  const status = {};
+  for (const [id, name] of PK_MODELS.slice(0, 3)) { const f = path.join(L.ROOT, 'models', id + '.json');
+    if (!fs.existsSync(f)) continue;
+    try { const m = JSON.parse(fs.readFileSync(f, 'utf8')); if (m.status && m.status.ok === false) status[id] = { since: m.status.since || m.generated || null, why: m.status.why || '' }; } catch (e) { status[id] = { since: null, why: `models/${id}.json does not read` }; } }
+  return { v: 1, season, today, models: PK_MODELS.map(([id, name, color]) => ({ id, name, color })), status, weeks, games: out };
 }
 /* The props model's numbers for the page (tools/props.js writes props.json; README "Player props"): the projections for
    the slate's games not yet started, the distribution's constants so the page can price any line DraftKings posts, the
@@ -263,5 +307,5 @@ function corrState() {
   const c = JSON.parse(fs.readFileSync(f, 'utf8'));
   return { measured: c.measured, rho: c.rho, refused: c.refused.pairs, hold: c.hold.value, holdTested: !!c.hold.tested };
 }
-module.exports = { propsState, boxesState, corrState };
+module.exports = { propsState, boxesState, corrState, pickemState, PK_MODELS };
 if (require.main === module) main();

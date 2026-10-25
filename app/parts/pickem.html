@@ -1,0 +1,188 @@
+<style>
+/* ---------- Pick'em Record (app/parts/pickem.html; README "Pick'em Record") ---------- */
+#tab-pickem .rv-card{margin:0 0 18px}
+#tab-pickem .rv-intro{color:var(--ink-2);font-size:13px;line-height:1.5;margin:0 0 12px;max-width:900px}
+#tab-pickem .lgdrow{display:flex;flex-wrap:wrap;gap:8px 18px;align-items:center;margin:0 0 10px;font-size:13px}
+#tab-pickem .lgd{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+#tab-pickem .sw{display:inline-block;width:16px;height:3px;border-radius:2px}
+#tab-pickem .rv-notes p{font-size:12px;color:var(--muted);margin:0 0 8px}
+#tab-pickem .rv-wrap{position:relative}
+#tab-pickem .rv-chart{display:block;width:100%;height:auto;overflow:visible}
+#tab-pickem .rv-chart text{font-family:var(--body)}
+#tab-pickem .rv-tip{position:absolute;z-index:3;background:var(--bg-2);border:1px solid var(--line-2);border-radius:10px;padding:8px 10px;font-size:12px;line-height:1.55;pointer-events:none;box-shadow:0 10px 30px -12px rgba(0,0,0,.7);min-width:190px}
+#tab-pickem .rv-tip .sw{margin-right:6px;vertical-align:middle}
+#tab-pickem .rv-bar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:12px 0 0}
+#tab-pickem .rv-bar .btn{min-height:44px;padding:10px 16px}
+#tab-pickem .rv-bar select{min-height:44px}
+#tab-pickem .rv-gridwrap,#tab-pickem .pickgrid{overflow-x:auto}
+#tab-pickem table.rv-grid{border-collapse:separate;border-spacing:3px;font-size:12.5px}
+#tab-pickem .rv-grid th,#tab-pickem .rv-grid td{border-radius:8px;padding:7px 9px;text-align:center}
+#tab-pickem .rv-grid th.rv-m{position:sticky;left:0;z-index:1;background:var(--panel);text-align:left;white-space:nowrap}
+#tab-pickem .rv-grid th.rv-c{color:var(--muted);font-size:11px;font-weight:700;white-space:nowrap}
+#tab-pickem .rv-grid th.rv-c small,#tab-pickem .rv-grid td small{display:block;font-weight:500;color:var(--muted);font-size:11px}
+#tab-pickem .rv-grid td.rv-c{min-width:64px;font-variant-numeric:tabular-nums;background:var(--panel-2)}
+#tab-pickem .rv-grid td.rv-c b{display:block;font-size:13px}
+#tab-pickem .rv-grid td.rv-none{color:var(--muted)}
+#tab-pickem .rv-grid .rv-season{border-left:2px solid var(--line-2)}
+#tab-pickem .pickgrid table{border-collapse:collapse;table-layout:fixed;width:100%;font-size:12.5px;margin-top:12px}
+#tab-pickem .pickgrid th,#tab-pickem .pickgrid td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:center;vertical-align:middle}
+#tab-pickem .pickgrid th{color:var(--muted);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+#tab-pickem .pickgrid th:first-child,#tab-pickem .pickgrid td:first-child{text-align:left;width:228px}
+#tab-pickem .pickgrid td small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
+#tab-pickem .pickcell{display:inline-flex;align-items:center;gap:5px}
+#tab-pickem .res.ok{color:var(--lime);font-weight:800} #tab-pickem .res.bad{color:#FF8FA8;font-weight:800}
+@media(max-width:560px){#tab-pickem .pickgrid th:first-child,#tab-pickem .pickgrid td:first-child{width:176px}}
+</style>
+<script>
+/* ---------- Pick'em Record ----------
+   Every game model's straight-up record this season against Vegas's, as the NFL hub draws it: Vegas's headline tiles, the
+   wins against Vegas added up week by week, each model's record week by week, and every pick, one Eastern day at a time.
+   pickem.json (publish.js THE PICK'EM RECORD) is read when the tab first opens, once a page load (a read that fails is
+   made again the next time the tab opens), and kept in memory alone. Every call graded is the one published before
+   tip-off; a game a model was not yet publishing for is called once on pre-tip information by the model fitted on
+   earlier seasons only, and drawn alike. Vegas is the moneyline favourite with the book's margin out, else the spread's
+   favourite, else no side (a game with no Vegas side counts in no model's net against it) */
+(function () {
+  let PK = null, PK_ERR = false, PK_LOADING = null, open = false, day = null;
+  const load = () => {
+    if (!PK_LOADING) PK_LOADING = (async () => {
+      try { const r = await fetch('pickem.json', { cache: 'no-store' }); if (!r.ok) throw new Error(r.status);
+        const j = await r.json(); if (!j || j.v !== 1 || !Array.isArray(j.games) || !Array.isArray(j.weeks) || !Array.isArray(j.models)) throw new Error('shape'); PK = j; PK_ERR = false; }
+      catch (e) { PK_ERR = true; }
+    })().then(() => { if (!PK) PK_LOADING = null; });
+    return PK_LOADING;
+  };
+  const im = x => x < 0 ? -x / (-x + 100) : 100 / (x + 100);
+  const sign = n => n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0';
+  const rec = t => `${t.w}–${t.l}`;
+  const winner = g => g.score ? (g.score[1] > g.score[0] ? g.home : g.score[1] < g.score[0] ? g.away : null) : null;
+  /* Vegas: the moneylines with the margin out (a true 50/50 to the home side), else the spread's favourite */
+  const vegas = g => {
+    if (g.ml && isFinite(g.ml[0]) && isFinite(g.ml[1]) && g.ml[0] && g.ml[1]) { const h = im(g.ml[1]), a = im(g.ml[0]), ph = h / (h + a); return { pick: ph >= 0.5 ? g.home : g.away, conf: Math.max(ph, 1 - ph) }; }
+    if (g.line) return { pick: g.line < 0 ? g.home : g.away, conf: 0.6 };
+    return null;
+  };
+  const pickOf = (g, id) => g.c && isFinite(g.c[id]) ? (g.c[id] >= 0.5 ? g.home : g.away) : null;
+  const okOf = (g, pick) => { const w = winner(g); return pick && w ? pick === w : null; };
+  function tallies() {
+    const rows = PK.games.filter(g => winner(g));
+    const tally = (ok, rs) => { let w = 0, l = 0; for (const r of rs) { const v = ok(r); if (v === true) w++; else if (v === false) l++; } return { w, l }; };
+    const vOk = g => { const v = vegas(g); return v ? okOf(g, v.pick) : null; };
+    const wks = [...new Set(rows.map(g => g.w))].sort((a, b) => a - b);
+    const vg = { season: tally(vOk, rows), byWeek: wks.map(w => tally(vOk, rows.filter(g => g.w === w))) };
+    const models = PK.models.map(m => {
+      const ok = g => okOf(g, pickOf(g, m.id)), season = tally(ok, rows);
+      let net = 0; const pts = [{ i: 0, net: 0 }];
+      wks.forEach((w, i) => { for (const g of rows.filter(r => r.w === w)) { const a = ok(g), v = vOk(g); if (a === null || v === null) continue; net += (a ? 1 : 0) - (v ? 1 : 0); } pts.push({ i: i + 1, net }); });
+      return { ...m, season, net, pts, byWeek: wks.map(w => tally(ok, rows.filter(g => g.w === w))) };
+    }).filter(m => m.season.w + m.season.l > 0);
+    return { rows, wks, vg, models, vOk };
+  }
+  function tiles(rows) {
+    const gs = rows.map(g => { const v = vegas(g); if (!v) return null; return { ok: v.pick === winner(g), conf: v.conf, err: g.line !== null ? Math.abs(g.score[1] - g.score[0] + g.line) : null }; }).filter(Boolean);
+    if (!gs.length) return '';
+    const c = gs.filter(x => x.ok).length, bands = { high: [0, 0], med: [0, 0], low: [0, 0], coin: [0, 0] };
+    for (const x of gs) { const b = band(x.conf)[0]; bands[b][1]++; if (x.ok) bands[b][0]++; }
+    const pc = ([a, n]) => n ? Math.round(100 * a / n) + '%' : '–';
+    const errs = gs.filter(x => x.err !== null);
+    return `<div class="strip" id="pkTiles">
+      <div class="stat"><b>${(100 * c / gs.length).toFixed(1)}%</b><span>Vegas straight-up, ${c} of ${gs.length}</span></div>
+      <div class="stat"><b>${pc(bands.high)}</b><span>high confidence, ${bands.high[0]}/${bands.high[1]}</span></div>
+      <div class="stat"><b>${pc(bands.med)}</b><span>medium, ${bands.med[0]}/${bands.med[1]}</span></div>
+      <div class="stat"><b>${pc(bands.low)}</b><span>low, ${bands.low[0]}/${bands.low[1]}</span></div>
+      <div class="stat"><b>${pc(bands.coin)}</b><span>50/50, ${bands.coin[0]}/${bands.coin[1]}</span></div>
+      ${errs.length ? `<div class="stat"><b>${(errs.reduce((a, x) => a + x.err, 0) / errs.length).toFixed(1)}</b><span>spread's avg miss, pts</span></div>` : ''}</div>`;
+  }
+  /* the chart: each model's wins less Vegas's on the same games, added up week by week, Vegas the zero line */
+  function chart(T, W) {
+    const n = T.wks.length, H = W < 520 ? 230 : 250, padL = 40, padR = W < 520 ? 112 : 128, padT = 16, padB = 30;
+    let lo = -3, hi = 3; for (const m of T.models) for (const p of m.pts) { lo = Math.min(lo, p.net); hi = Math.max(hi, p.net); }
+    const step = hi - lo <= 8 ? 1 : hi - lo <= 20 ? 2 : 5; lo = Math.floor(lo / step) * step; hi = Math.ceil(hi / step) * step;
+    const X = i => padL + i * (W - padL - padR) / Math.max(1, n), Y = v => padT + (H - padT - padB) * (hi - v) / (hi - lo);
+    let g = '';
+    for (let v = lo; v <= hi; v += step) g += v === 0 ? '' : `<line x1="${padL}" x2="${(W - padR).toFixed(1)}" y1="${Y(v).toFixed(1)}" y2="${Y(v).toFixed(1)}" stroke="var(--line)"/><text x="${padL - 8}" y="${(Y(v) + 4).toFixed(1)}" text-anchor="end" font-size="11" fill="var(--muted)">${sign(v)}</text>`;
+    g += `<line x1="${padL}" x2="${(W - padR).toFixed(1)}" y1="${Y(0).toFixed(1)}" y2="${Y(0).toFixed(1)}" stroke="var(--ink)" stroke-width="1.5"/><text x="${padL - 8}" y="${(Y(0) + 4).toFixed(1)}" text-anchor="end" font-size="11" font-weight="700" fill="var(--ink)">0</text>`;
+    g += `<text x="${X(0).toFixed(1)}" y="${H - 9}" text-anchor="middle" font-size="11" fill="var(--muted)">Start</text>`;
+    const every = Math.max(1, Math.ceil(n / Math.max(1, Math.floor((W - padL - padR) / 44))));
+    T.wks.forEach((w, i) => { if ((i + 1) % every && i !== n - 1) return; g += `<text x="${X(i + 1).toFixed(1)}" y="${H - 9}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(PK.weeks[w].short)}</text>`; });
+    for (const m of T.models) {
+      g += `<polyline fill="none" stroke="${m.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${m.pts.map(p => `${X(p.i).toFixed(1)},${Y(p.net).toFixed(1)}`).join(' ')}"/>`;
+      for (const p of m.pts.slice(1)) g += `<circle cx="${X(p.i).toFixed(1)}" cy="${Y(p.net).toFixed(1)}" r="4" fill="${m.color}" stroke="var(--panel)" stroke-width="2"/>`;
+    }
+    /* the end labels, each model's net and name, nudged 14px apart, Vegas's beside the zero line */
+    const labs = T.models.map(m => ({ y: Y(m.net), html: `<tspan font-weight="700" fill="var(--ink)">${sign(m.net)}</tspan> ${esc(m.name)}`, color: m.color })).concat([{ y: Y(0), html: '<tspan font-weight="700" fill="var(--ink)">= Vegas</tspan>', color: 'var(--ink)', vegas: true }]);
+    labs.sort((a, b) => a.y - b.y || (a.vegas ? -1 : b.vegas ? 1 : 0));
+    for (let i = 1; i < labs.length; i++) if (labs[i].y - labs[i - 1].y < 14) labs[i].y = labs[i - 1].y + 14;
+    const over = labs.length ? labs[labs.length - 1].y - (H - padB) : 0; if (over > 0) for (const l of labs) l.y -= over;
+    const lx = X(n) + 10;
+    for (const l of labs) g += `<line x1="${lx.toFixed(1)}" x2="${(lx + 12).toFixed(1)}" y1="${l.y.toFixed(1)}" y2="${l.y.toFixed(1)}" stroke="${l.color}" stroke-width="2"/><text x="${(lx + 16).toFixed(1)}" y="${(l.y + 4).toFixed(1)}" font-size="12" fill="var(--ink-2)">${l.html}</text>`;
+    g += `<line class="rv-cross" x1="0" x2="0" y1="${padT}" y2="${H - padB}" stroke="var(--line-2)" visibility="hidden"/>`;
+    T.wks.forEach((w, i) => { const x0 = X(i + 0.5), x1 = X(i + 1.5); g += `<rect class="rv-hit" data-i="${i}" x="${x0.toFixed(1)}" y="${padT}" width="${Math.max(1, x1 - x0).toFixed(1)}" height="${H - padT - padB}" fill="transparent"/>`; });
+    return `<svg class="rv-chart" viewBox="0 0 ${W} ${H}" role="img" aria-label="Wins against Vegas by week: ${T.models.map(m => `${esc(m.name)} ${sign(m.net)}`).join(', ')}">${g}</svg>`;
+  }
+  const shade = t => { const n = t.w + t.l; if (!n) return ''; const p = t.w / n; if (p === 0.5) return ''; const a = Math.min(0.42, Math.abs(p - 0.5) / 0.3 * 0.42).toFixed(3); return p > 0.5 ? `background:rgba(27,122,78,${a})` : `background:rgba(192,57,43,${a})`; };
+  const cell = (t, title, season) => t.w + t.l === 0 ? `<td class="rv-c rv-none${season ? ' rv-season' : ''}">–</td>`
+    : `<td class="rv-c${season ? ' rv-season' : ''}" style="${shade(t)}" title="${esc(title)}: ${t.w} of ${t.w + t.l} (${Math.round(100 * t.w / (t.w + t.l))}%)"><b>${rec(t)}</b><small>${Math.round(100 * t.w / (t.w + t.l))}%</small></td>`;
+  function grid(T) {
+    const head = T.wks.map(w => { const k = PK.weeks[w], ng = T.rows.filter(g => g.w === w).length; return `<th class="rv-c" scope="col">${esc(k.label)}<small>${ng} game${ng === 1 ? '' : 's'}</small></th>`; }).join('');
+    const row = (name, sw, byWeek, season) => `<tr><th class="rv-m" scope="row">${sw} ${esc(name)}</th>${byWeek.map((t, i) => cell(t, `${name}, ${PK.weeks[T.wks[i]].label}`)).join('')}${cell(season, `${name}, season`, true)}</tr>`;
+    return `<div class="rv-gridwrap"><table class="rv-grid"><thead><tr><th class="rv-m" scope="col">Model</th>${head}<th class="rv-c rv-season" scope="col">Season<small>${T.rows.length} game${T.rows.length === 1 ? '' : 's'}</small></th></tr></thead><tbody>`
+      + T.models.map(m => row(m.name, `<span class="sw" style="background:${m.color}"></span>`, m.byWeek, m.season)).join('')
+      + row('Vegas', '<span class="sw" style="background:var(--ink);height:2px"></span>', T.vg.byWeek, T.vg.season) + '</tbody></table></div>';
+  }
+  /* every pick, one Eastern day at a time, the days from the season's first to today, newest first */
+  function picks() {
+    const days = [...new Set(PK.games.map(g => g.date))].sort().reverse();
+    if (!day || !days.includes(day)) day = days[0];
+    const gs = PK.games.filter(g => g.date === day), cols = PK.models.filter(m => gs.some(g => g.c && isFinite(g.c[m.id])));
+    const tipEt = g => g.tip ? new Date(g.tip).toLocaleString('en-US', { timeZone: 'America/New_York', weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) + ' ET' : dayNum(g.date);
+    const mark = (g, pick) => { const w = winner(g); return !pick ? '<span class="muted">–</span>' : `<span class="pickcell">${pill(pick)}${w ? (pick === w ? '<span class="res ok" aria-label="right">✓</span>' : '<span class="res bad" aria-label="wrong">✗</span>') : ''}</span>`; };
+    const opt = d => `<option value="${d}"${d === day ? ' selected' : ''}>${d === PK.today ? 'Tonight' : dayTitle(d)}</option>`;
+    return `<div class="rv-bar"><label class="muted" for="pkDay">Day</label> <select id="pkDay">${days.map(opt).join('')}</select></div>
+      <div class="pickgrid"><table style="min-width:${176 + 76 * (cols.length + 1)}px"><thead><tr><th scope="col">Game</th>${cols.map(m => `<th scope="col">${esc(m.name)}</th>`).join('')}<th scope="col">Vegas</th></tr></thead><tbody>${gs.map(g => {
+        const w = winner(g), v = vegas(g);
+        return `<tr><td><b>${g.away}</b> at <b>${g.home}</b><small>${esc(tipEt(g))}${w ? ` · ${w} won ${Math.max(...g.score)}–${Math.min(...g.score)}` : ''}</small></td>${cols.map(m => `<td>${mark(g, pickOf(g, m.id))}</td>`).join('')}<td>${mark(g, v && v.pick)}</td></tr>`; }).join('')}</tbody></table></div>`;
+  }
+  function draw() {
+    const el = $('#tab-pickem');
+    const head = `<h2>Pick'em Record <small>every model's straight-up record this season against Vegas's, each graded on the call it published before tip-off</small></h2>`;
+    if (!PK) { el.innerHTML = head + (PK_ERR ? '<p class="muted" role="status">The record did not load. Open the tab again to try again.</p>' : '<p class="muted" role="status">Loading the record…</p>'); return; }
+    const T = tallies();
+    if (!T.rows.length) { el.innerHTML = head + '<div class="empty"><b>No graded games yet</b>The record starts with the season\'s first final.</div>'; return; }
+    const notes = Object.entries(PK.status || {}).map(([id, s]) => { const m = PK.models.find(x => x.id === id); if (!m) return '';
+      const since = s.since && !isNaN(Date.parse(s.since)) ? ' since ' + new Date(s.since).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) : '';
+      return `<p><b>${esc(m.name)}</b> could not be rescored${since}: ${esc(s.why || 'an input was missing')}. Its picks are the last good ones and its record stands where it was.</p>`; }).join('');
+    const W = Math.max(340, Math.min(900, (el.clientWidth || 760) - 48));
+    el.innerHTML = head + tiles(T.rows) + `<div class="card rv-card" id="pkChart"><h2>Wins against Vegas</h2>
+      <p class="rv-intro">Each model's wins minus the Vegas favourite's on the same games, added up week by week. Above the line is beating Vegas, below is trailing it; one step is one game.</p>
+      <div class="lgdrow">${T.models.map(m => `<span class="lgd"><span class="sw" style="background:${m.color}"></span>${esc(m.name)} <b>${rec(m.season)}</b> <span class="muted">${sign(m.net)} vs Vegas</span></span>`).join('')}<span class="lgd"><span class="sw" style="background:var(--ink);height:2px"></span>Vegas <b>${rec(T.vg.season)}</b> <span class="muted">the zero line</span></span></div>
+      ${notes ? `<div class="rv-notes">${notes}</div>` : ''}
+      <div class="rv-wrap">${chart(T, W)}<div class="rv-tip" hidden></div></div>
+      <div class="rv-bar"><button type="button" class="btn ghost" id="pkPicks" aria-expanded="${open}" aria-controls="pkPickBox">${open ? 'Hide every pick' : 'Show every pick'}</button></div>
+      <div id="pkPickBox"${open ? '' : ' hidden'}>${open ? picks() : ''}</div></div>
+      <div class="card rv-card" id="pkGrid"><h2>Week by week</h2><p class="rv-intro muted">Each model's record by week, shaded red under .500, clear at .500 and green above; the season is the last column.</p>${grid(T)}</div>`;
+    wire(T);
+  }
+  function wire(T) {
+    const el = $('#tab-pickem');
+    const b = el.querySelector('#pkPicks'); if (b) b.onclick = () => { open = !open; draw(); el.querySelector('#pkPicks').focus(); };
+    const s = el.querySelector('#pkDay'); if (s) s.onchange = () => { day = s.value; draw(); el.querySelector('#pkDay').focus(); };
+    const wrap = el.querySelector('.rv-wrap'), tip = wrap && wrap.querySelector('.rv-tip'), cross = wrap && wrap.querySelector('.rv-cross');
+    if (!wrap) return;
+    const showAt = (rect, i) => {
+      const w = T.wks[i], vt = T.vg.byWeek[i];
+      tip.innerHTML = `<b>${esc(PK.weeks[w].label)}</b><br>` + T.models.map(m => { const t = m.byWeek[i], p = m.pts[i + 1]; return `<span class="sw" style="background:${m.color}"></span>${esc(m.name)} ${rec(t)} · season ${sign(p.net)} vs Vegas`; }).join('<br>') + `<br><span class="sw" style="background:var(--ink);height:2px"></span>Vegas ${rec(vt)}`;
+      tip.hidden = false;
+      const svg = wrap.querySelector('svg'), sr = svg.getBoundingClientRect(), wr = wrap.getBoundingClientRect(), k = sr.width / (+svg.viewBox.baseVal.width || sr.width || 1);
+      const cx = (+rect.getAttribute('x') + +rect.getAttribute('width') / 2);
+      cross.setAttribute('x1', cx); cross.setAttribute('x2', cx); cross.setAttribute('visibility', 'visible');
+      const left = Math.max(0, Math.min(wr.width - tip.offsetWidth, cx * k + 12));
+      tip.style.left = left + 'px'; tip.style.top = '8px';
+    };
+    wrap.querySelectorAll('.rv-hit').forEach(r => { r.addEventListener('mouseenter', () => showAt(r, +r.dataset.i)); r.addEventListener('click', () => showAt(r, +r.dataset.i)); });
+    wrap.addEventListener('mouseleave', () => { tip.hidden = true; cross.setAttribute('visibility', 'hidden'); });
+  }
+  render.pickem = function () { draw(); if (!PK) load().then(() => { if (tabNow() === 'pickem') draw(); }); };
+  window.NBA_PICKEM = { data: () => PK, vegas, tallies: () => PK && tallies(), load };   // what the smoke test reads
+})();
+</script>

@@ -351,6 +351,7 @@ body.pp-lock{overflow:hidden}
     <button data-tab="teams">Teams</button>
     <button data-tab="players">Players</button>
     <button data-tab="coaches">Coaches</button>
+    <button data-tab="pickem">Pick'em Record</button>
     <button data-tab="record">Record</button>
     <button data-tab="parlay">Parlay Builder<span class="n" id="nLegs" hidden></span></button>
     <button data-tab="data" id="dataTabBtn" hidden>Data</button>
@@ -362,6 +363,7 @@ body.pp-lock{overflow:hidden}
   <section id="tab-teams" hidden></section>
   <section id="tab-players" hidden></section>
   <section id="tab-coaches" hidden></section>
+  <section id="tab-pickem" hidden></section>
   <section id="tab-record" hidden></section>
   <section id="tab-parlay" hidden></section>
   <section id="tab-data" hidden></section>
@@ -2348,5 +2350,6 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
   watch(); setInterval(watch, 60000);
 })();
 </script>
+<!--part:pickem-->
 </body>
 </html>

@@ -300,6 +300,7 @@ body.pp-lock{overflow:hidden}
   </div>
   <nav id="nav" role="tablist">
     <button data-tab="slate" aria-selected="true">Tonight<span class="n" id="nSlate" hidden></span></button>
+    <button data-tab="suggest">Suggested Parlays</button>
     <button data-tab="parlay">Parlay Builder<span class="n" id="nLegs" hidden></span></button>
     <button data-tab="xparlays">X Parlays</button>
     <button data-tab="teams">Teams</button>
@@ -319,6 +320,7 @@ body.pp-lock{overflow:hidden}
   <section id="tab-pickem" hidden></section>
   <section id="tab-record" hidden></section>
   <section id="tab-parlay" hidden></section>
+  <section id="tab-suggest" hidden><div id="spPanel"></div></section>
   <!--part:xparlays-->
   <section id="tab-data" hidden></section>
 </main>
@@ -441,6 +443,9 @@ function show(tab) {
   $$('main > section').forEach(s => { s.hidden = s.id !== 'tab-' + tab; });
   if (window.lpLeave) window.lpLeave();                      // X Parlays' Clear this parlay? window closes with its tab
   try { localStorage.setItem(KEY + ':tab', tab); } catch (e) {}
+  /* a tab's address is its button's data-tab (#suggest for Suggested Parlays), kept in the address bar without a history
+     entry, so a link to it opens it and Back leaves the site as before */
+  try { if (location.hash.slice(1) !== tab) history.replaceState(null, '', '#' + tab); } catch (e) {}
   oddsBarSync(tab);
   render[tab] && render[tab]();
 }
@@ -1123,9 +1128,9 @@ async function refreshOdds() {
   /* redraw the tab in view where the visitor left it: the day, the open lineups, the scroll and the focus (a Refresh
      odds of the Parlay Builder's own is drawn again with it, so the focus goes to the new one in the same place) */
   const tab = tabNow();
-  if (tab === 'slate' || tab === 'parlay') {
+  if (tab === 'slate' || tab === 'parlay' || tab === 'suggest') {
     const y = window.scrollY || 0, open = $$('.drawer').filter(d => !d.hidden).map(d => d.id), focus = document.activeElement;
-    const pbBtn = focus && focus.closest && focus.closest('[data-espn-refresh]'), pbBox = pbBtn && ['#pbPanel', '#parlayBody'].find(x => pbBtn.closest(x));
+    const pbBtn = focus && focus.closest && focus.closest('[data-espn-refresh]'), pbBox = pbBtn && ['#pbPanel', '#parlayBody', '#spPanel'].find(x => pbBtn.closest(x));
     render[tab](); badges();
     open.forEach(id => { const d = document.getElementById(id); if (d) d.hidden = false; });
     const again = pbBox && document.querySelector(`${pbBox} [data-espn-refresh]`);
@@ -2072,12 +2077,16 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
   if (!document.getElementById('tierDefs')) document.body.insertAdjacentHTML('afterbegin', TIER_DEFS);
   badges();
   let tab = 'slate'; try { tab = localStorage.getItem(KEY + ':tab') || 'slate'; } catch (e) {}
+  /* an address names its tab (#suggest), over the one this browser last showed */
+  const want = (location.hash || '').slice(1); if (want && document.getElementById('tab-' + want) && $$('#nav button').some(b => b.dataset.tab === want)) tab = want;
   if (tab === 'data' && !window.ADMIN) tab = 'slate';
   show(tab);
+  window.addEventListener('hashchange', () => { const h = (location.hash || '').slice(1); if (h && h !== tabNow() && !(h === 'data' && !window.ADMIN) && $$('#nav button').some(b => b.dataset.tab === h)) show(h); });
   watch(); setInterval(watch, 60000);
 })();
 </script>
 <!--part:parlay-->
+<!--part:suggested-->
 <!--part:pickem-->
 </body>
 </html>

@@ -10,10 +10,10 @@
  * between the two.
  *
  * The market is the closing line from ESPN's game summaries (DraftKings first). Its chance is the two
- * moneylines with the book's cut taken out. The suggested parlays are built by the page's own code: the
- * suggestion functions are lifted out of app/nba_hub.html and run unchanged on each day's games, on the
- * default band (ALL), and graded as DraftKings would: every leg must win, paid at the product of the
- * legs' closing prices. Units are per $1 staked.
+ * moneylines with the book's cut taken out. The suggested parlays are the Parlay Builder's earlier rules (Safe,
+ * Medium, Aggressive and Value as the page chose them until 25 October 2026), kept below as a frozen copy of the page's
+ * code and run unchanged on each day's games, on the default band (ALL), and graded as DraftKings would: every leg must
+ * win, paid at the product of the legs' closing prices. Units are per $1 staked.
  *
  * Each odds row is held to tools/fetch_odds_hist.js's check(): in-game prices are not a closing line and the game
  * is left out; a spread whose favourite is not the moneyline's, or an impossible total, is left out of the ATS or
@@ -24,7 +24,6 @@
 'use strict';
 const fs = require('fs');
 const path = require('path');
-const vm = require('vm');
 const L = require('./lib');
 const E = require('./elo');
 const PM = require('./players');
@@ -34,16 +33,39 @@ const ROOT = L.ROOT;
 const OUT = path.join(ROOT, 'research', 'backtest.json');
 const SEASONS = [2024, 2025, 2026];
 
-/* ---------- the page's own suggestion code, run as is ---------- */
-function pageSuggest() {
-  const html = fs.readFileSync(path.join(ROOT, 'app', 'nba_hub.html'), 'utf8');
-  const grab = (startRe, endRe) => { const a = html.search(startRe); const b = html.slice(a).search(endRe); if (a < 0 || b < 0) throw new Error('page code not found: ' + startRe); return html.slice(a, a + b); };
-  const code = [
-    grab(/const amToDec = /, /\n/),
-    grab(/const band = c => /, /\n/),
-    grab(/const BK_TIERS = /, /\n\/\* ---------- the Bet Build/),
-  ].join('\n') + '\n;({ suggest, band, amToDec, VALUE_EDGE });';
-  return vm.runInNewContext(code, {});
+/* ---------- the earlier suggestion rules, frozen ----------
+   Until 25 October 2026 the Parlay Builder suggested Safe, Medium and Aggressive parlays of team moneylines grown from one
+   core, and a Value card, by the rules below; this backtest ran the page's own code, lifted out of app/nba_hub.html. The
+   Parlay Builder is now the NFL hub's (README "Parlay Builder"), so the rules are kept here, copied line for line from the page
+   as it stood before the change (amToDec, band, BK_TIERS, VALUE_EDGE, VALUE_MAX, suggest), and this file no longer reads
+   the page: research/backtest.json, state.json's vsMarket and the Record tab's table of the earlier rules are what
+   they were. */
+function frozenSuggest() {
+  const amToDec = a => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
+  const band = c => { const r = Math.round(c * 100) / 100; return r >= 0.75 ? ['high', 'HIGH'] : r >= 0.60 ? ['med', 'MED'] : r >= 0.55 ? ['low', 'LOW'] : ['coin', '50/50']; };
+  const BK_TIERS = [['safe', 'Safe', 0.50, 3], ['med', 'Medium', 0.30, 5], ['aggr', 'Aggressive', 0.15, 8]];
+  const VALUE_EDGE = 0.05, VALUE_MAX = 4;
+  function suggest(pool) {
+    const priced = pool.filter(x => x.tc !== 'coin' && x.px).map(x => ({ ...x, p: x.mp != null ? x.mp : x.conf, D: amToDec(x.px.am) }));
+    const legs = priced.filter(x => x.mp == null || x.mp >= 0.5).sort((a, b) => b.p - a.p);
+    const P = a => a.reduce((t, x) => t * x.p, 1), Dm = a => a.reduce((t, x) => t * x.D, 1);
+    const tiers = []; let cur = [], i = 0;
+    for (const [id, label, floor, cap] of BK_TIERS) {
+      const start = cur.length, must = id === 'safe' ? 2 : start + 1;
+      while (cur.length < cap && i < legs.length) {
+        const next = [...cur, legs[i]];
+        if (next.length > must && P(next) < floor) break;
+        cur = next; i++;
+      }
+      if (cur.length < 2 || cur.length === start) continue;
+      tiers.push({ id, label, legs: cur.slice(), p: P(cur), dec: Dm(cur), added: cur.length - start, floor, short: P(cur) < floor });
+    }
+    /* value: a real market price and the model clear of it by VALUE_EDGE; its chance shown is the market's */
+    const val = priced.filter(x => x.mp != null && x.px.est !== 'model' && x.conf - x.mp >= VALUE_EDGE).sort((a, b) => (b.conf - b.mp) - (a.conf - a.mp)).slice(0, VALUE_MAX);
+    const value = val.length >= 2 ? { id: 'value', label: 'Value', legs: val, p: P(val), pModel: val.reduce((t, x) => t * x.conf, 1), dec: Dm(val) } : null;
+    return { tiers, value };
+  }
+  return { suggest, band, amToDec, VALUE_EDGE };
 }
 
 /* the market's chance with the book's margin taken out two ways: proportionally (each side's implied chance over
@@ -86,7 +108,7 @@ function modelNumbers(P, mode, ctx) {
 }
 
 function main() {
-  const S = pageSuggest();
+  const S = frozenSuggest();
   const research = JSON.parse(fs.readFileSync(path.join(ROOT, 'research.json'), 'utf8'));
   const situP = JSON.parse(fs.readFileSync(path.join(ROOT, 'model.json'), 'utf8')).params;
   const games = L.readGames().filter(g => +g.season >= PM.FIRST && g.status === 'final' && g.type !== 'PRE');
@@ -213,4 +235,4 @@ function main() {
   L.log(`research/backtest.json written${missing ? ` (${missing} games without lines left out)` : ''}`);
 }
 if (require.main === module) main();
-module.exports = { pageSuggest };
+module.exports = { frozenSuggest };

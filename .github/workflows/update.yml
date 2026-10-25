@@ -99,6 +99,17 @@ jobs:
             exit 1
           fi
           exit $m
+      - name: The ELO Model
+        id: elo_model
+        continue-on-error: true
+        run: |
+          m=0; node tools/elo_model.js || m=$?
+          if ! node tools/test_elo_model.js; then
+            echo "::error::the ELO Model's test failed: models/elo.json is put back"
+            if git cat-file -e HEAD:models/elo.json 2>/dev/null; then git checkout HEAD -- models/elo.json; else rm -f models/elo.json; fi
+            exit 1
+          fi
+          exit $m
       # The calls ledger (README "Pick'em Record"): each model's call on each game, published before tip-off and frozen
       # from it, in data/calls.json, which the Pick'em Record grades; its check holds it to the last commit (no frozen call
       # moved or dropped, none logged after tip-off), and a failure puts the file back as committed
@@ -174,7 +185,7 @@ jobs:
             [ "$ok" = 1 ]
           fi
       - name: Fail the run when a step failed
-        if: always() && (steps.fetch.outcome != 'success' || steps.autoclear.outcome != 'success' || steps.lines.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.alpha.outcome != 'success' || steps.calls.outcome != 'success' || steps.props.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success')
+        if: always() && (steps.fetch.outcome != 'success' || steps.autoclear.outcome != 'success' || steps.lines.outcome != 'success' || steps.box.outcome != 'success' || steps.elo.outcome != 'success' || steps.players.outcome != 'success' || steps.alpha.outcome != 'success' || steps.elo_model.outcome != 'success' || steps.calls.outcome != 'success' || steps.props.outcome != 'success' || steps.publish.outcome != 'success' || steps.tests.outcome != 'success')
         run: |
-          echo "::error::failed: pull ${{ steps.fetch.outcome }}, autoclear ${{ steps.autoclear.outcome }}, lines ${{ steps.lines.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, alpha ${{ steps.alpha.outcome }}, calls ${{ steps.calls.outcome }}, props ${{ steps.props.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}"
+          echo "::error::failed: pull ${{ steps.fetch.outcome }}, autoclear ${{ steps.autoclear.outcome }}, lines ${{ steps.lines.outcome }}, box ${{ steps.box.outcome }}, elo ${{ steps.elo.outcome }}, players ${{ steps.players.outcome }}, alpha ${{ steps.alpha.outcome }}, ELO Model ${{ steps.elo_model.outcome }}, calls ${{ steps.calls.outcome }}, props ${{ steps.props.outcome }}, publish ${{ steps.publish.outcome }}, tests ${{ steps.tests.outcome }}"
           exit 1

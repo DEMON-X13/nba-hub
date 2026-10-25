@@ -1,0 +1,995 @@
+{
+ "name": "ELO Model: walk-forward and design",
+ "version": "elo 1.1 · 2026-10-25",
+ "generatedBy": "node tools/elo_model.js research",
+ "design": {
+  "score": "mix",
+  "groups": "one",
+  "k": [
+   56,
+   32
+  ],
+  "settled": 8,
+  "kUnit": 60,
+  "carry": 0.75,
+  "newR": 1450,
+  "repl": 1450,
+  "volume": 24,
+  "left": 0.35,
+  "b2b": 1,
+  "fitMode": "pretip",
+  "fitFrom": 2022,
+  "ridge": 0.5
+ },
+ "trials": [
+  {
+   "2024": {
+    "logloss": 0.642089,
+    "acc": 0.6406,
+    "mae": 11.628
+   },
+   "2025": {
+    "logloss": 0.654879,
+    "acc": 0.623,
+    "mae": 11.942
+   },
+   "change": "start (the NFL form)",
+   "design": {
+    "score": "gs",
+    "groups": "gfc",
+    "k": [
+     56,
+     32
+    ],
+    "settled": 8,
+    "kUnit": 120,
+    "carry": 0.75,
+    "newR": 1500,
+    "repl": 1450,
+    "volume": 24,
+    "left": 0.35,
+    "b2b": 0,
+    "fitMode": "pretip",
+    "fitFrom": 2022,
+    "ridge": 0.5
+   },
+   "kept": true
+  },
+  {
+   "2024": {
+    "logloss": 0.612151,
+    "acc": 0.6505,
+    "mae": 11.156
+   },
+   "2025": {
+    "logloss": 0.614408,
+    "acc": 0.6624,
+    "mae": 11.249
+   },
+   "pass": 1,
+   "change": "score \"gs\" -> \"pm\"",
+   "kept": true
+  },
+  {
+   "2024": {
+    "logloss": 0.607558,
+    "acc": 0.6687,
+    "mae": 11.036
+   },
+   "2025": {
+    "logloss": 0.612633,
+    "acc": 0.6654,
+    "mae": 11.213
+   },
+   "pass": 1,
+   "change": "score \"pm\" -> \"mix\"",
+   "kept": true
+  },
+  {
+   "2024": {
+    "logloss": 0.605541,
+    "acc": 0.6679,
+    "mae": 11.008
+   },
+   "2025": {
+    "logloss": 0.610165,
+    "acc": 0.6737,
+    "mae": 11.162
+   },
+   "pass": 1,
+   "change": "groups \"gfc\" -> \"one\"",
+   "kept": true
+  },
+  {
+   "2024": {
+    "logloss": 0.601706,
+    "acc": 0.674,
+    "mae": 10.925
+   },
+   "2025": {
+    "logloss": 0.606122,
+    "acc": 0.676,
+    "mae": 11.071
+   },
+   "pass": 1,
+   "change": "b2b 0 -> 1",
+   "kept": true
+  },
+  {
+   "2024": {
+    "logloss": 0.600069,
+    "acc": 0.6785,
+    "mae": 10.903
+   },
+   "2025": {
+    "logloss": 0.606307,
+    "acc": 0.6722,
+    "mae": 11.083
+   },
+   "pass": 1,
+   "change": "fitMode \"pretip\" -> \"known\"",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.606,
+    "acc": 0.6672,
+    "mae": 11.021
+   },
+   "2025": {
+    "logloss": 0.606666,
+    "acc": 0.6775,
+    "mae": 11.076
+   },
+   "pass": 1,
+   "change": "fitFrom 2022 -> 2023",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600889,
+    "acc": 0.6732,
+    "mae": 10.913
+   },
+   "2025": {
+    "logloss": 0.605528,
+    "acc": 0.6745,
+    "mae": 11.061
+   },
+   "pass": 1,
+   "change": "newR 1500 -> 1450",
+   "kept": true
+  },
+  {
+   "2024": {
+    "logloss": 0.598265,
+    "acc": 0.6808,
+    "mae": 10.905
+   },
+   "2025": {
+    "logloss": 0.607331,
+    "acc": 0.6669,
+    "mae": 11.114
+   },
+   "pass": 1,
+   "change": "k [56,32] -> [28,16]",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.605554,
+    "acc": 0.6702,
+    "mae": 10.974
+   },
+   "2025": {
+    "logloss": 0.607046,
+    "acc": 0.6745,
+    "mae": 11.084
+   },
+   "pass": 1,
+   "change": "k [56,32] -> [84,48]",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600652,
+    "acc": 0.6755,
+    "mae": 10.91
+   },
+   "2025": {
+    "logloss": 0.604954,
+    "acc": 0.6798,
+    "mae": 11.053
+   },
+   "pass": 1,
+   "change": "kUnit 120 -> 60",
+   "kept": true
+  },
+  {
+   "2024": {
+    "logloss": 0.601406,
+    "acc": 0.6732,
+    "mae": 10.913
+   },
+   "2025": {
+    "logloss": 0.606059,
+    "acc": 0.676,
+    "mae": 11.068
+   },
+   "pass": 1,
+   "change": "kUnit 60 -> 240",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.602047,
+    "acc": 0.6778,
+    "mae": 10.927
+   },
+   "2025": {
+    "logloss": 0.604826,
+    "acc": 0.6821,
+    "mae": 11.049
+   },
+   "pass": 1,
+   "change": "carry 0.75 -> 0.6",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599632,
+    "acc": 0.6801,
+    "mae": 10.904
+   },
+   "2025": {
+    "logloss": 0.605472,
+    "acc": 0.6768,
+    "mae": 11.067
+   },
+   "pass": 1,
+   "change": "carry 0.75 -> 0.9",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600004,
+    "acc": 0.6732,
+    "mae": 10.9
+   },
+   "2025": {
+    "logloss": 0.60516,
+    "acc": 0.676,
+    "mae": 11.069
+   },
+   "pass": 1,
+   "change": "volume 24 -> 36",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.635306,
+    "acc": 0.6543,
+    "mae": 11.503
+   },
+   "2025": {
+    "logloss": 0.643753,
+    "acc": 0.6329,
+    "mae": 11.77
+   },
+   "pass": 2,
+   "change": "score \"mix\" -> \"gs\"",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.605494,
+    "acc": 0.6596,
+    "mae": 11.028
+   },
+   "2025": {
+    "logloss": 0.60523,
+    "acc": 0.673,
+    "mae": 11.062
+   },
+   "pass": 2,
+   "change": "score \"mix\" -> \"pm\"",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.602416,
+    "acc": 0.671,
+    "mae": 10.927
+   },
+   "2025": {
+    "logloss": 0.607368,
+    "acc": 0.6699,
+    "mae": 11.101
+   },
+   "pass": 2,
+   "change": "groups \"one\" -> \"gfc\"",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.604491,
+    "acc": 0.6694,
+    "mae": 10.993
+   },
+   "2025": {
+    "logloss": 0.608973,
+    "acc": 0.6692,
+    "mae": 11.143
+   },
+   "pass": 2,
+   "change": "b2b 1 -> 0",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599057,
+    "acc": 0.6748,
+    "mae": 10.891
+   },
+   "2025": {
+    "logloss": 0.605172,
+    "acc": 0.6768,
+    "mae": 11.065
+   },
+   "pass": 2,
+   "change": "fitMode \"pretip\" -> \"known\"",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.604887,
+    "acc": 0.671,
+    "mae": 11.002
+   },
+   "2025": {
+    "logloss": 0.605489,
+    "acc": 0.6775,
+    "mae": 11.056
+   },
+   "pass": 2,
+   "change": "fitFrom 2022 -> 2023",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.601502,
+    "acc": 0.6725,
+    "mae": 10.922
+   },
+   "2025": {
+    "logloss": 0.60562,
+    "acc": 0.6783,
+    "mae": 11.065
+   },
+   "pass": 2,
+   "change": "newR 1450 -> 1500",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.59795,
+    "acc": 0.6793,
+    "mae": 10.904
+   },
+   "2025": {
+    "logloss": 0.60676,
+    "acc": 0.6669,
+    "mae": 11.104
+   },
+   "pass": 2,
+   "change": "k [56,32] -> [28,16]",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.605408,
+    "acc": 0.6755,
+    "mae": 10.973
+   },
+   "2025": {
+    "logloss": 0.606494,
+    "acc": 0.6737,
+    "mae": 11.08
+   },
+   "pass": 2,
+   "change": "k [56,32] -> [84,48]",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600889,
+    "acc": 0.6732,
+    "mae": 10.913
+   },
+   "2025": {
+    "logloss": 0.605528,
+    "acc": 0.6745,
+    "mae": 11.061
+   },
+   "pass": 2,
+   "change": "kUnit 60 -> 120",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.601406,
+    "acc": 0.6732,
+    "mae": 10.913
+   },
+   "2025": {
+    "logloss": 0.606059,
+    "acc": 0.676,
+    "mae": 11.068
+   },
+   "pass": 2,
+   "change": "kUnit 60 -> 240",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.602047,
+    "acc": 0.6778,
+    "mae": 10.927
+   },
+   "2025": {
+    "logloss": 0.604826,
+    "acc": 0.6821,
+    "mae": 11.049
+   },
+   "pass": 2,
+   "change": "carry 0.75 -> 0.6",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.599632,
+    "acc": 0.6801,
+    "mae": 10.904
+   },
+   "2025": {
+    "logloss": 0.605472,
+    "acc": 0.6768,
+    "mae": 11.067
+   },
+   "pass": 2,
+   "change": "carry 0.75 -> 0.9",
+   "kept": false
+  },
+  {
+   "2024": {
+    "logloss": 0.600004,
+    "acc": 0.6732,
+    "mae": 10.9
+   },
+   "2025": {
+    "logloss": 0.60516,
+    "acc": 0.676,
+    "mae": 11.069
+   },
+   "pass": 2,
+   "change": "volume 24 -> 36",
+   "kept": false
+  }
+ ],
+ "folds": [
+  {
+   "season": 2024,
+   "fitted": "2022-2023",
+   "fitGames": 2643,
+   "coef": {
+    "home": 0.285497,
+    "R": 1.195906,
+    "b2b": -0.340512
+   },
+   "slope": 7.660467,
+   "elo": {
+    "games": 1314,
+    "logloss": 0.600684,
+    "acc": 0.6758,
+    "mae": 10.899,
+    "sigma": 14.029
+   },
+   "eloKnown": {
+    "games": 1314,
+    "logloss": 0.595951,
+    "acc": 0.6682,
+    "mae": 10.885,
+    "sigma": 13.954
+   },
+   "eloAllFinals": {
+    "games": 1319,
+    "logloss": 0.600652,
+    "acc": 0.6755,
+    "mae": 10.91
+   },
+   "teamElo": {
+    "games": 1314,
+    "logloss": 0.608618,
+    "acc": 0.6613,
+    "mae": 11.061
+   },
+   "playerModel": {
+    "naive": {
+     "games": 1314,
+     "logloss": 0.61531,
+     "acc": 0.6766,
+     "mae": 11.3
+    },
+    "known": {
+     "games": 1314,
+     "logloss": 0.61314,
+     "acc": 0.6629,
+     "mae": 11.28
+    },
+    "note": "research.json, on its own games (finals with a box score)"
+   },
+   "market": {
+    "games": 1314,
+    "market": {
+     "games": 1314,
+     "logloss": 0.583478,
+     "acc": 0.691,
+     "mae": 10.662
+    },
+    "elo": {
+     "games": 1314,
+     "logloss": 0.600684,
+     "acc": 0.6758,
+     "mae": 10.899,
+     "sigma": 14.029
+    },
+    "teamElo": {
+     "games": 1314,
+     "logloss": 0.608618,
+     "acc": 0.6613,
+     "mae": 11.061
+    }
+   },
+   "agree": {
+    "teamElo": 0.8851,
+    "market": 0.8919
+   }
+  },
+  {
+   "season": 2025,
+   "fitted": "2022-2024",
+   "fitGames": 3962,
+   "coef": {
+    "home": 0.272427,
+    "R": 1.28847,
+    "b2b": -0.361535
+   },
+   "slope": 7.559952,
+   "elo": {
+    "games": 1320,
+    "logloss": 0.604633,
+    "acc": 0.6803,
+    "mae": 11.046,
+    "sigma": 14.224
+   },
+   "eloKnown": {
+    "games": 1320,
+    "logloss": 0.594576,
+    "acc": 0.6864,
+    "mae": 10.882,
+    "sigma": 14.018
+   },
+   "eloAllFinals": {
+    "games": 1321,
+    "logloss": 0.604954,
+    "acc": 0.6798,
+    "mae": 11.053
+   },
+   "teamElo": {
+    "games": 1320,
+    "logloss": 0.60868,
+    "acc": 0.6545,
+    "mae": 11.123
+   },
+   "playerModel": {
+    "naive": {
+     "games": 1320,
+     "logloss": 0.59987,
+     "acc": 0.6765,
+     "mae": 11.04
+    },
+    "known": {
+     "games": 1320,
+     "logloss": 0.59147,
+     "acc": 0.6758,
+     "mae": 10.96
+    },
+    "note": "research.json, on its own games (finals with a box score)"
+   },
+   "market": {
+    "games": 1320,
+    "market": {
+     "games": 1320,
+     "logloss": 0.585423,
+     "acc": 0.6871,
+     "mae": 10.628
+    },
+    "elo": {
+     "games": 1320,
+     "logloss": 0.604633,
+     "acc": 0.6803,
+     "mae": 11.046,
+     "sigma": 14.224
+    },
+    "teamElo": {
+     "games": 1320,
+     "logloss": 0.60868,
+     "acc": 0.6545,
+     "mae": 11.123
+    }
+   },
+   "agree": {
+    "teamElo": 0.8727,
+    "market": 0.8735
+   }
+  },
+  {
+   "season": 2026,
+   "fitted": "2022-2025",
+   "fitGames": 5283,
+   "coef": {
+    "home": 0.261596,
+    "R": 1.298313,
+    "b2b": -0.373068
+   },
+   "slope": 7.660942,
+   "elo": {
+    "games": 1322,
+    "logloss": 0.602345,
+    "acc": 0.6747,
+    "mae": 11.439,
+    "sigma": 14.639
+   },
+   "eloKnown": {
+    "games": 1322,
+    "logloss": 0.591832,
+    "acc": 0.674,
+    "mae": 11.254,
+    "sigma": 14.393
+   },
+   "eloAllFinals": {
+    "games": 1322,
+    "logloss": 0.602345,
+    "acc": 0.6747,
+    "mae": 11.439
+   },
+   "teamElo": {
+    "games": 1322,
+    "logloss": 0.600973,
+    "acc": 0.6884,
+    "mae": 11.529
+   },
+   "playerModel": {
+    "naive": {
+     "games": 1322,
+     "logloss": 0.60255,
+     "acc": 0.6672,
+     "mae": 11.52
+    },
+    "known": {
+     "games": 1322,
+     "logloss": 0.58878,
+     "acc": 0.6853,
+     "mae": 11.38
+    },
+    "note": "research.json, on its own games (finals with a box score)"
+   },
+   "market": {
+    "games": 1318,
+    "market": {
+     "games": 1318,
+     "logloss": 0.57574,
+     "acc": 0.6874,
+     "mae": 11.001
+    },
+    "elo": {
+     "games": 1318,
+     "logloss": 0.601983,
+     "acc": 0.6753,
+     "mae": 11.445,
+     "sigma": 14.65
+    },
+    "teamElo": {
+     "games": 1318,
+     "logloss": 0.60086,
+     "acc": 0.6882,
+     "mae": 11.538
+    }
+   },
+   "agree": {
+    "teamElo": 0.8593,
+    "market": 0.8498
+   }
+  }
+ ],
+ "pick": {
+  "chosenOn": "2024 and 2025",
+  "grid": "0 to 1 by 0.05, the pooled log loss of the design seasons",
+  "spread": {
+   "w": 0,
+   "sigma": 13.722,
+   "sigmaModel": 14.133,
+   "folds": {
+    "2024": {
+     "model": {
+      "games": 1291,
+      "logloss": 0.708094,
+      "coin": 0.693147,
+      "picks": 626,
+      "said": 0.6043,
+      "won": 0.4936
+     },
+     "pulled": {
+      "games": 1291,
+      "logloss": 0.693147,
+      "coin": 0.693147,
+      "picks": 0,
+      "said": null,
+      "won": null
+     }
+    },
+    "2025": {
+     "model": {
+      "games": 1319,
+      "logloss": 0.716614,
+      "coin": 0.693147,
+      "picks": 753,
+      "said": 0.6143,
+      "won": 0.5219
+     },
+     "pulled": {
+      "games": 1319,
+      "logloss": 0.693147,
+      "coin": 0.693147,
+      "picks": 0,
+      "said": null,
+      "won": null
+     }
+    },
+    "2026": {
+     "model": {
+      "games": 1318,
+      "logloss": 0.718086,
+      "coin": 0.693147,
+      "picks": 784,
+      "said": 0.6158,
+      "won": 0.4936
+     },
+     "pulled": {
+      "games": 1318,
+      "logloss": 0.693147,
+      "coin": 0.693147,
+      "picks": 0,
+      "said": null,
+      "won": null
+     }
+    }
+   }
+  },
+  "ml": {
+   "w": 0,
+   "folds": {
+    "2024": {
+     "model": {
+      "games": 1314,
+      "logloss": 0.600684,
+      "market": 0.583478,
+      "coin": 0.693147,
+      "picks": 334,
+      "said": 0.5907,
+      "won": 0.515,
+      "units": 9.12
+     },
+     "pulled": {
+      "games": 1314,
+      "logloss": 0.583478,
+      "market": 0.583478,
+      "coin": 0.693147,
+      "picks": 0,
+      "said": null,
+      "won": null,
+      "units": 0
+     }
+    },
+    "2025": {
+     "model": {
+      "games": 1320,
+      "logloss": 0.604633,
+      "market": 0.585423,
+      "coin": 0.693147,
+      "picks": 393,
+      "said": 0.613,
+      "won": 0.5064,
+      "units": 7.04
+     },
+     "pulled": {
+      "games": 1320,
+      "logloss": 0.585423,
+      "market": 0.585423,
+      "coin": 0.693147,
+      "picks": 0,
+      "said": null,
+      "won": null,
+      "units": 0
+     }
+    },
+    "2026": {
+     "model": {
+      "games": 1318,
+      "logloss": 0.601983,
+      "market": 0.57574,
+      "coin": 0.693147,
+      "picks": 376,
+      "said": 0.5958,
+      "won": 0.4574,
+      "units": -17.85
+     },
+     "pulled": {
+      "games": 1318,
+      "logloss": 0.57574,
+      "market": 0.57574,
+      "coin": 0.693147,
+      "picks": 0,
+      "said": null,
+      "won": null,
+      "units": 0
+     }
+    }
+   }
+  },
+  "open": {
+   "note": "the same, chosen the same way, against the opening line and opening moneylines: for information, never priced on",
+   "spread": {
+    "w": 0.25,
+    "sigma": 14.033,
+    "sigmaModel": 14.203,
+    "folds": {
+     "2024": {
+      "model": {
+       "games": 1201,
+       "logloss": 0.70226,
+       "coin": 0.693147,
+       "picks": 507,
+       "said": 0.5971,
+       "won": 0.501
+      },
+      "pulled": {
+       "games": 1201,
+       "logloss": 0.693357,
+       "coin": 0.693147,
+       "picks": 20,
+       "said": 0.566,
+       "won": 0.55
+      }
+     },
+     "2025": {
+      "model": {
+       "games": 1319,
+       "logloss": 0.699175,
+       "coin": 0.693147,
+       "picks": 701,
+       "said": 0.6189,
+       "won": 0.5449
+      },
+      "pulled": {
+       "games": 1319,
+       "logloss": 0.690405,
+       "coin": 0.693147,
+       "picks": 66,
+       "said": 0.5793,
+       "won": 0.6667
+      }
+     },
+     "2026": {
+      "model": {
+       "games": 1318,
+       "logloss": 0.707928,
+       "coin": 0.693147,
+       "picks": 747,
+       "said": 0.6072,
+       "won": 0.5114
+      },
+      "pulled": {
+       "games": 1318,
+       "logloss": 0.693451,
+       "coin": 0.693147,
+       "picks": 38,
+       "said": 0.5726,
+       "won": 0.5
+      }
+     }
+    }
+   },
+   "ml": {
+    "w": 0.3,
+    "folds": {
+     "2024": {
+      "model": {
+       "games": 1221,
+       "logloss": 0.600448,
+       "market": 0.595075,
+       "coin": 0.693147,
+       "picks": 313,
+       "said": 0.6128,
+       "won": 0.5591,
+       "units": 23.45
+      },
+      "pulled": {
+       "games": 1221,
+       "logloss": 0.594044,
+       "market": 0.595075,
+       "coin": 0.693147,
+       "picks": 12,
+       "said": 0.6146,
+       "won": 0.75,
+       "units": 4.47
+      }
+     },
+     "2025": {
+      "model": {
+       "games": 1320,
+       "logloss": 0.604633,
+       "market": 0.597593,
+       "coin": 0.693147,
+       "picks": 391,
+       "said": 0.6266,
+       "won": 0.555,
+       "units": 25.86
+      },
+      "pulled": {
+       "games": 1320,
+       "logloss": 0.595553,
+       "market": 0.597593,
+       "coin": 0.693147,
+       "picks": 39,
+       "said": 0.5547,
+       "won": 0.5641,
+       "units": 4.54
+      }
+     },
+     "2026": {
+      "model": {
+       "games": 1318,
+       "logloss": 0.601983,
+       "market": 0.585932,
+       "coin": 0.693147,
+       "picks": 367,
+       "said": 0.6016,
+       "won": 0.5041,
+       "units": 2.96
+      },
+      "pulled": {
+       "games": 1318,
+       "logloss": 0.586921,
+       "market": 0.585932,
+       "coin": 0.693147,
+       "picks": 27,
+       "said": 0.5518,
+       "won": 0.3704,
+       "units": -6.85
+      }
+     }
+    }
+   }
+  }
+ },
+ "notes": [
+  "Every call is made before tip-off: the ratings are what the finals before the game's day left, the typical game they are scored against is the season before's, and each club's rotation is its previous box-scored game's, less anyone who has since played for another club (elo, the honest number; a club's first game of a season reads its last game of the season before by the same rule, so a player who moved in the summer counts for his old club until he plays for his new one: the files keep no past rosters). eloKnown is the same model told who played, at projected minutes (hindsight, as the player model's \"known\" rows): never a call, only the bound a perfect injury report would reach.",
+  "The design was chosen on 2024 and 2025 alone (trials, one knob at a time from the NFL's form, each kept only by the hub's rule: lower log loss in both seasons, by 0.0005 between them, and the spread error no worse, each season scored on every decided final it has); 2026 was scored with that design once it was chosen, and the design is frozen: a later research run re-scores it (as the box-scored count of every model did) and never searches again unless asked (research search). 2026 numbers were printed before the search, and were seen, though the search never read them: the planning pilot (not in the repo, the spec's pilot table) printed 2026 log loss for Game Score (0.6424), plus-minus (0.6036), Game Score plus plus-minus (0.6038), plus-minus with the back-to-back column (0.6050), plus-minus told who played (0.6072), one rotation of eight against the three positions (0.610 against 0.607, at other K values) and new players at 1450 (0.602 against 0.604), and 2026-27's first 36 finals for Game Score (0.641) and plus-minus (0.619); a timing run of this code printed the starting design's 2026 numbers under each of the three scores. Of the six changes the search kept, those 2026 numbers favoured two (plus-minus over Game Score, the 1450 start) and were against three (the sum, one rotation, the back-to-back column); the unit's K at 60 was not compared on its own there (the pilot ran its rotation comparison at a unit K of 60, and K 20/10 and 12/6 with unit K 40/24, reported only as no better).",
+  "Each fold is fitted on the seasons before it (fitted) and scored on every decided regular-season and playoff final of its season with both box scores (elo: the games Alpha, the Joker and the player model count, the walk-forward table on the record); eloAllFinals adds the few finals with no box score, called on the games before them, as the design search scored its seasons. 2026-27, the season in play, is never fitted or tuned on; the README reports its backtest calls so far, for information only.",
+  "teamElo is the hub's team model with model.json's parameters (fitted on 2008-2022, the home edge learned as the finals come), on the same games. playerModel is research.json's walk-forward, on the same games. market is odds_hist.csv's consensus closing moneyline with the margin taken out, and its closing spread, on the games that have one (fetch_odds_hist.js check()), with the ELO Model and Team Elo on the same games beside it.",
+  "sigma is the root mean square of the margin's miss on the fold: the model's own spread chance is Phi((margin + home line) / sigma) for the home side.",
+  "pick is the pricing of Suggested Parlays' Elo picks: the model's margin pulled toward the market's (the closing line), wSpread m + (1 - wSpread)(-home line), with that margin's own miss as sigma, and its chance toward the market's no-vig chance on the logit scale, wMl logit(p) + (1 - wMl) logit(q); each weight chosen on the pooled log loss of the 2024 and 2025 folds (a grid of 0 to 1 by 0.05) and scored once on 2026. A spread is scored on its cover at the closing line, a push left out, where the market's own chance is a coin flip; model is the model alone (w = 1), pulled the weight chosen. picks are the NFL Value rule's 3-point-edge picks: a spread side at 55.4% or more (3 points over -110, odds_hist.csv keeping no spread price), a moneyline side at 45% to 97% and 3 points over the chance its price implies with the margin in; units on $1 at the closing price. open is the same study against the opening line and opening moneylines (2023-24 on), chosen the same way, for information only: the weights the page prices on are the closing line's."
+ ],
+ "generated": "2026-10-25T19:10Z"
+}

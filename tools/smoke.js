@@ -23,7 +23,10 @@
  * THE HISTORY): history.json worked out here on its own from players.json and the published ladders (every point, the
  * changes over 7 and 30 days and this season, today's point the table's rating), the 7d columns, the window a name opens
  * (read once and only then, never stored, its numbers, the line's points, the games, Escape, the focus kept inside and
- * given back) and a history that does not load or is junk.
+ * given back) and a history that does not load or is junk. Section 12 is the Pick'em Record (publish.js THE PICK'EM
+ * RECORD, app/parts/pickem.html): pickem.json read only when the tab opens, then every number the tab states worked out
+ * here on its own, on a made-up season (two weeks and the playoffs, a game with no Vegas side, a model that could not
+ * run) and on the real file.
  */
 'use strict';
 const fs = require('fs');
@@ -1387,6 +1390,117 @@ async function ratingHistory() {
   }
   JSONS = [];
 }
+/* ---------- 12. the Pick'em Record ---------- */
+async function pickemRecord() {
+  console.log('12. the Pick\'em Record (pickem.json, the tiles, the chart, the grids)');
+  const real = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'));
+  const PKR = JSON.parse(fs.readFileSync(path.join(ROOT, 'pickem.json'), 'utf8'));
+  /* the record worked out here: Vegas the moneyline favourite with the margin out, else the spread's, else none */
+  const im = x => x < 0 ? -x / (-x + 100) : 100 / (x + 100);
+  const vOwn = g => g.ml && g.ml[0] && g.ml[1] ? (im(g.ml[1]) / (im(g.ml[1]) + im(g.ml[0])) >= 0.5 ? g.home : g.away) : g.line ? (g.line < 0 ? g.home : g.away) : null;
+  const won = g => g.score ? (g.score[1] > g.score[0] ? g.home : g.away) : null;
+  const own = pk => {
+    const rows = pk.games.filter(g => g.score && g.score[0] !== g.score[1]);
+    const res = {};
+    for (const m of pk.models) {
+      let w = 0, l = 0, net = 0;
+      for (const g of rows) { if (!(g.c && isFinite(g.c[m.id]))) continue; const p = g.c[m.id] >= 0.5 ? g.home : g.away, ok = p === won(g); ok ? w++ : l++;
+        const v = vOwn(g); if (v) net += (ok ? 1 : 0) - (v === won(g) ? 1 : 0); }
+      if (w + l) res[m.id] = { w, l, net };
+    }
+    let vw = 0, vl = 0; for (const g of rows) { const v = vOwn(g); if (v) v === won(g) ? vw++ : vl++; }
+    return { rows, res, vegas: { w: vw, l: vl } };
+  };
+  const sign = n => n > 0 ? '+' + n : n < 0 ? '−' + Math.abs(n) : '0';
+  /* a made-up season: week 1 of three games, week 2 of two (one with no Vegas side), a playoff week; the joker could not run */
+  const G = (id, date, w, type, score, ml, line, c) => { const [, , away, home] = id.split('_'); return { id, date, tip: date + 'T23:30Z', type, w, away, home, score, ml, line, c }; };
+  const fake = { v: 1, season: 2027, today: '2026-11-03', models: PKR.models,
+    status: { joker: { since: '2026-11-01T12:00Z', why: 'the box scores did not load' } },
+    weeks: [{ key: '1', label: 'Week 1', short: 'Wk 1', from: '2026-10-19', to: '2026-10-25' }, { key: '2', label: 'Week 2', short: 'Wk 2', from: '2026-10-26', to: '2026-11-01' }, { key: 'P1', label: 'Playoffs 1', short: 'P1', from: '2026-11-02', to: '2026-11-08' }],
+    games: [
+      G('2027_20261020_BOS_DET', '2026-10-20', 0, 'REG', [100, 110], [150, -170], -4.5, { alpha: 0.6, joker: 0.4, player: 0.55, team: 0.7 }),          // DET won; Vegas DET
+      G('2027_20261021_LAL_GSW', '2026-10-21', 0, 'REG', [120, 101], [-130, 110], 2.5, { alpha: 0.45, joker: 0.6, player: 0.52, team: 0.4, elo: 0.3 }),  // LAL won; Vegas LAL
+      G('2027_20261022_NYK_MIA', '2026-10-22', 0, 'REG', [99, 104], [-200, 170], 6, { alpha: 0.3, player: 0.4, team: 0.5, elo: 0.6 }),                // MIA won; Vegas NYK
+      G('2027_20261027_OKC_SAS', '2026-10-27', 1, 'REG', [110, 108], null, 0, { alpha: 0.4, player: 0.6, team: 0.45, elo: 0.45 }),                   // OKC won; no Vegas side
+      G('2027_20261028_DEN_PHX', '2026-10-28', 1, 'REG', [95, 105], null, -3, { alpha: 0.7, player: 0.35, team: 0.62, elo: 0.4 }),                     // PHX won; Vegas PHX (spread)
+      G('2027_20261103_BOS_NYK', '2026-11-03', 2, 'POST', [101, 99], [120, -140], -2.5, { alpha: 0.4, player: 0.6, team: 0.48, elo: 0.55 }),          // BOS won; Vegas NYK
+      G('2027_20261103_DAL_HOU', '2026-11-03', 2, 'POST', null, [110, -130], -2, { alpha: 0.5, player: 0.45 }),                                       // to play
+    ] };
+  const want = own(fake);
+  let reads = 0, serve = fake;
+  JSONS = [[/pickem\.json/, (url, opt) => { reads++; check(opt && opt.cache === 'no-store', 'pickem.json is read no-store'); return { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(serve)) }; }]];
+  let { w, errors, timers } = load('index.html', real, null, null, 'slate');
+  await sleep(300); await provoke(w, timers, errors); await sleep(50);
+  const d = w.document;
+  check(reads === 0, 'nothing reads pickem.json on load, on a timer or an event');
+  const btn = [...d.querySelectorAll('#nav button')].find(b => b.dataset.tab === 'pickem');
+  check(!!btn && btn.textContent === "Pick'em Record", 'a Pick\'em Record tab');
+  btn.click(); await sleep(80);
+  check(reads === 1, 'opening it reads pickem.json once');
+  const tiles = [...d.querySelectorAll('#pkTiles .stat')].map(x => `${x.querySelector('b').textContent} ${x.querySelector('span').textContent}`);
+  /* Vegas's tiles on the six graded games, five with a side: DET right, LAL right, NYK wrong, PHX right, NYK wrong; the
+     spread's miss |margin + line| over the five graded games with a non-zero... every graded game with a line */
+  check(tiles[0] === '60.0% Vegas straight-up, 3 of 5', `Vegas straight-up: ${tiles[0]}`);
+  const misses = fake.games.filter(g => g.score && g.line !== null && vOwn(g)).map(g => Math.abs(g.score[1] - g.score[0] + g.line));
+  check(tiles[5] === `${(misses.reduce((a, x) => a + x, 0) / misses.length).toFixed(1)} spread's avg miss, pts`, `the spread's average miss, |margin + line| over the graded games Vegas called: ${tiles[5]}`);
+  const lg = [...d.querySelectorAll('#pkChart .lgd')].map(x => x.textContent.replace(/\s+/g, ' ').trim());
+  const legWant = fake.models.filter(m => want.res[m.id]).map(m => `${m.name} ${want.res[m.id].w}–${want.res[m.id].l} ${sign(want.res[m.id].net)} vs Vegas`).concat([`Vegas ${want.vegas.w}–${want.vegas.l} the zero line`]);
+  check(JSON.stringify(lg) === JSON.stringify(legWant), `the legend, worked out here: ${lg.join(' | ')}`);
+  check(/The Joker<\/b> could not be rescored since/.test(d.querySelector('#pkChart .rv-notes').innerHTML) && /the box scores did not load/.test(d.querySelector('#pkChart .rv-notes').textContent), 'a model that could not run is named, with why');
+  const lines = [...d.querySelectorAll('#pkChart polyline')];
+  check(lines.length === Object.keys(want.res).length && lines.every(l => l.getAttribute('points').split(' ').length === 4), 'one line a model, a point a week and the start');
+  const xl = [...d.querySelectorAll('#pkChart svg text')].map(t => t.textContent);
+  check(['Start', 'Wk 1', 'Wk 2', 'P1'].every(t => xl.includes(t)), 'the weeks along the bottom, the playoffs as P1');
+  check(d.querySelectorAll('#pkChart .rv-hit').length === 3, 'a hover target a week');
+  d.querySelector('#pkChart .rv-hit[data-i="1"]').dispatchEvent(new w.Event('click')); await sleep(10);
+  const tipText = d.querySelector('#pkChart .rv-tip').textContent;
+  check(!d.querySelector('#pkChart .rv-tip').hidden && /^Week 2/.test(tipText) && /Vegas 1–0/.test(tipText), `the week's tooltip: ${tipText.slice(0, 80)}`);
+  const gridRows = [...d.querySelectorAll('#pkGrid tbody tr')].map(tr => [...tr.children].map(c => c.querySelector('b') ? `${c.querySelector('b').textContent} ${c.querySelector('small').textContent}` : c.textContent.trim()));
+  /* Alpha by hand: DET right, LAL right, NYK wrong; OKC right, PHX right; BOS right */
+  const alphaRow = gridRows.find(r => /Alpha Model/.test(r[0]));
+  check(alphaRow && alphaRow[1] === '2–1 67%' && alphaRow[2] === '2–0 100%' && alphaRow[3] === '1–0 100%' && alphaRow[4] === '5–1 83%', `Alpha's week by week, worked out by hand: ${alphaRow && alphaRow.join(' | ')}`);
+  const eloRow = gridRows.find(r => /ELO Model/.test(r[0]));
+  /* ELO by hand (no call on the first game): LAL right, MIA right; OKC right, DEN wrong; NYK wrong */
+  check(eloRow && eloRow[1] === '2–0 100%' && eloRow[2] === '1–1 50%' && eloRow[3] === '0–1 0%' && eloRow[4] === '3–2 60%', `ELO's week by week (no call on the first game): ${eloRow && eloRow.join(' | ')}`);
+  const vRow = gridRows.find(r => /^Vegas/.test(r[0]));
+  check(vRow && vRow[1] === '2–1 67%' && vRow[2] === '1–0 100%' && vRow[3] === '0–1 0%' && vRow[4] === '3–2 60%', `Vegas's week by week: ${vRow && vRow.join(' | ')}`);
+  const cells = [...d.querySelectorAll('#pkGrid td.rv-c')];
+  check(cells.some(c => /rgba\(27, ?122, ?78/.test(c.getAttribute('style') || '')) && cells.some(c => /rgba\(192, ?57, ?43/.test(c.getAttribute('style') || '')) && cells.some(c => !c.getAttribute('style') && /50%/.test(c.textContent)), 'green above .500, red under, clear at .500');
+  /* every pick, a day at a time */
+  const tog = d.getElementById('pkPicks');
+  check(tog.getAttribute('aria-expanded') === 'false' && d.getElementById('pkPickBox').hidden, 'the picks start hidden');
+  tog.click(); await sleep(20);
+  const sel = d.getElementById('pkDay');
+  check(!!sel && d.activeElement && d.activeElement.id === 'pkPicks' && d.getElementById('pkPicks').getAttribute('aria-expanded') === 'true', 'Show every pick opens them, the focus kept');
+  check([...sel.options].map(o => o.value).join(',') === '2026-11-03,2026-10-28,2026-10-27,2026-10-22,2026-10-21,2026-10-20', 'the days newest first');
+  const heads = [...d.querySelectorAll('.pickgrid th')].map(t => t.textContent);
+  check(heads[0] === 'Game' && heads[heads.length - 1] === 'Vegas', `the columns: ${heads.join(', ')}`);
+  sel.value = '2026-10-20'; sel.dispatchEvent(new w.Event('change')); await sleep(20);
+  const r0 = [...d.querySelectorAll('.pickgrid tbody tr')][0];
+  const heads2 = [...d.querySelectorAll('.pickgrid th')].map(t => t.textContent), colOf = n => heads2.indexOf(n);
+  check(/BOS at DET/.test(r0.children[0].textContent) && /DET won 110–100/.test(r0.children[0].textContent), 'a game, its time and who won');
+  check(/BOS/.test(r0.children[colOf('The Joker')].textContent) && /✗/.test(r0.children[colOf('The Joker')].textContent) && /DET/.test(r0.children[colOf('Alpha Model')].textContent) && /✓/.test(r0.children[colOf('Alpha Model')].textContent), 'each model\'s pick, right or wrong');
+  check(colOf('ELO Model') < 0 || r0.children[colOf('ELO Model')].textContent.trim() === '–', 'no call: a dash');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  /* the real file: the legend is the record worked out here, and the Player Model's calls are the Record tab's */
+  serve = PKR;
+  ({ w, errors } = load('index.html', real, null, null, 'pickem')); await sleep(350);
+  const want2 = own(PKR);
+  const lg2 = [...w.document.querySelectorAll('#pkChart .lgd')].map(x => x.textContent.replace(/\s+/g, ' ').trim());
+  const legWant2 = PKR.models.filter(m => want2.res[m.id]).map(m => `${m.name} ${want2.res[m.id].w}–${want2.res[m.id].l} ${sign(want2.res[m.id].net)} vs Vegas`).concat([`Vegas ${want2.vegas.w}–${want2.vegas.l} the zero line`]);
+  check(!want2.rows.length || JSON.stringify(lg2) === JSON.stringify(legWant2), `the real record: ${lg2.join(' | ')}`);
+  const byId = Object.fromEntries(PKR.games.map(g => [g.id, g]));
+  check(real.record.filter(r => byId[r.id]).every(r => byId[r.id].c.player === r.pHome && byId[r.id].score && byId[r.id].score[1] === r.homeScore), 'the Player Model\'s calls are the ones the Record tab grades');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  /* a file that does not load: said, and read again the next time the tab opens */
+  let n = 0; JSONS = [[/pickem\.json/, () => (++n === 1 ? { ok: false, status: 404, json: async () => ({}) } : { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(fake)) })]];
+  ({ w, errors } = load('index.html', real, null, null, 'pickem')); await sleep(250);
+  const failed = /did not load/.test(w.document.getElementById('tab-pickem').textContent);
+  w.document.querySelector('#nav button[data-tab="slate"]').click(); await sleep(20); w.document.querySelector('#nav button[data-tab="pickem"]').click(); await sleep(80);
+  check(failed && n === 2 && !!w.document.getElementById('pkTiles') && errors.length === 0, 'a record that does not load says so, and the next opening reads it again');
+  JSONS = [];
+}
 (async () => {
   let w, errors;
   if (run('base')) {
@@ -1712,6 +1826,7 @@ async function ratingHistory() {
   await guard('8', playerProps);
   await guard('9', builder);
   await guard('10', ratingHistory);
+  await guard('12', pickemRecord);
 
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

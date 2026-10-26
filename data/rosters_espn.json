@@ -2546,7 +2546,7 @@
     "name": "Thomas Sorber",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5241364",
@@ -2560,7 +2560,7 @@
     "name": "Nikola Topic",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683692",

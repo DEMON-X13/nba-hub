@@ -34,20 +34,20 @@
   ],
   "BKN": [
    {
+    "id": "5101761",
+    "name": "Mikel Brown Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-26",
+    "returns": "2026-10-27"
+   },
+   {
     "id": "5105626",
     "name": "Tyler Bilodeau",
     "pos": "F",
     "status": "Out",
     "detail": "Shoulder Sprain",
-    "date": "2026-10-25",
-    "returns": "2026-10-27"
-   },
-   {
-    "id": "5101761",
-    "name": "Mikel Brown Jr.",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Rest",
     "date": "2026-10-25",
     "returns": "2026-10-27"
    }
@@ -215,21 +215,21 @@
   ],
   "DET": [
    {
+    "id": "4684742",
+    "name": "Ausar Thompson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-26",
+    "returns": "2026-10-27"
+   },
+   {
     "id": "4395702",
     "name": "Isaiah Joe",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Hip Bruise",
     "date": "2026-10-26",
-    "returns": "2026-10-27"
-   },
-   {
-    "id": "4684742",
-    "name": "Ausar Thompson",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-25",
     "returns": "2026-10-27"
    },
    {
@@ -428,7 +428,7 @@
     "id": "5231919",
     "name": "Karim Lopez",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Bruise",
     "date": "2026-10-26",
     "returns": "2026-10-26"
@@ -437,9 +437,9 @@
     "id": "4600663",
     "name": "Zach Edey",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-25",
+    "date": "2026-10-26",
     "returns": "2026-10-26"
    }
   ],
@@ -470,9 +470,9 @@
     "id": "4277869",
     "name": "Jose Alvarado",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-25",
+    "date": "2026-10-26",
     "returns": "2026-10-27"
    }
   ],
@@ -481,7 +481,7 @@
     "id": "4593803",
     "name": "Jalen Williams",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle",
     "date": "2026-10-26",
     "returns": "2026-11-02"
@@ -581,12 +581,30 @@
   ],
   "PHI": [
    {
+    "id": "4432446",
+    "name": "Jabari Walker",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Soreness",
+    "date": "2026-10-26",
+    "returns": "2026-10-28"
+   },
+   {
     "id": "5124612",
     "name": "VJ Edgecombe",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Abdomen Bruise",
-    "date": "2026-10-25",
+    "date": "2026-10-26",
+    "returns": "2026-10-28"
+   },
+   {
+    "id": "3059318",
+    "name": "Joel Embiid",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Heel",
+    "date": "2026-10-26",
     "returns": "2026-10-28"
    },
    {
@@ -595,24 +613,6 @@
     "pos": "C",
     "status": "Out",
     "detail": "Quadriceps Strain",
-    "date": "2026-10-25",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "4432446",
-    "name": "Jabari Walker",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Soreness",
-    "date": "2026-10-25",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "3059318",
-    "name": "Joel Embiid",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Heel",
     "date": "2026-10-25",
     "returns": "2026-10-28"
    },
@@ -747,9 +747,9 @@
     "id": "6450",
     "name": "Kawhi Leonard",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Inflammation",
-    "date": "2026-10-25",
+    "date": "2026-10-26",
     "returns": "2026-10-28"
    },
    {

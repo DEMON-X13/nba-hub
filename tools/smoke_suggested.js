@@ -359,6 +359,21 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const wantE = [[2, 0], [3, 0.25], [4, 0.12], [5, 0.05]].map(([n, f]) => eloBest(C5, n, f));
   check(E5.every((t, i) => wantE[i] ? t && JSON.stringify(t.legs.map(keyPg).sort()) === JSON.stringify(wantE[i].L.map(keyOwn).sort()) && Math.abs(t.corr - wantE[i].pr) < 1e-9 && Math.abs(t.dec - wantE[i].d) < 1e-9 && !!t.likeliest === !!(i && wantE[i].likeliest) : !t),
     `the four Elo levels are every parlay's best of their candidates (${E5.map(t => t ? t.legs.length + (t.likeliest ? ' likeliest' : '') : '–').join(', ')})`);
+  /* the bubble on an Elo pick's leg (a page of its own, since a bubble reads the Pick'em Record's file): Model is the
+     player model's chance, the one the builder prices the same leg on, and the ELO Model's has a line of its own */
+  { const q = load(st5, { lines: LN, record: null }); await settle(q); await openTab(q);
+    const SIG = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'sigma.json'), 'utf8')).sigma, Phi = require('./sigma').Phi, pc0 = v => (v * 100).toFixed(0) + '%';
+    const pmOwn = l => { const g = st5.slate.find(x => x.id === l.gid), home = l.side === g.home;
+      return l.kind === 'ml' ? (home ? g.model.pHome : 1 - g.model.pHome) : Phi(((home ? -g.model.spread : g.model.spread) + l.line) / SIG); };
+    const res = [];
+    for (const t of E5.filter(Boolean)) for (const l of t.legs) {
+      const nb = [...q.d.querySelectorAll(`#pbElo [data-pb-tier="${t.id}"] [data-glance]`)].find(b => q.w.glanceLeg(b.dataset.glanceLeg).leg.sk === l.sk); if (!nb) { res.push(`${l.sk}: no name`); continue; }
+      nb.click(); await sleep(30);
+      const bx = q.d.getElementById('glanceBox'), n = k => { const e = bx && !bx.hidden ? bx.querySelector(`[data-glance-legbox] [data-glance-n="${k}"]`) : null; return e ? txt(e) : null; };
+      const want = { model: pc0(pmOwn(l)), elochance: pc0(C5.find(c => keyOwn(c) === keyPg(l)).pe) }, got = { model: n('model'), elochance: n('elochance') };
+      if (JSON.stringify(want) !== JSON.stringify(got)) res.push(`${l.sk}: want ${JSON.stringify(want)}, got ${JSON.stringify(got)}`);
+      q.d.querySelector('[data-glance-close]').click(); await sleep(10); }
+    check(E5.some(Boolean) && !res.length && q.errors.length === 0, `an Elo pick's bubble: Model the player model's chance on every leg, the ELO Model's on its own line${res.length ? ': ' + res.slice(0, 3).join(' | ') : ''}`); }
   const eloBox = p.d.getElementById('pbElo'), lead = eloBox.querySelector('[data-pb-elo-lead]');
   check(txt(lead) === 'Moneylines and spreads where the ELO Model’s chance beats DraftKings’ price, on the games and bet types ticked on the Parlay Builder tab.' && eloBox.querySelectorAll('.pb-lead').length === 1, 'the Elo picks lead with one sentence, word for word');
   check(lead.title === "The ELO Model's own chance is no promise. On the walk-forward folds (2024, 2025 and 2026, each called by the model fitted on the seasons before it), its moneylines 3 points or more above the price said 59.1%, 61.3% and 59.6% and won 51.5%, 50.6% and 45.7% (334, 393 and 376 picks), and its spreads 3 points or more above -110 won 49.4%, 52.2% and 49.4% (626, 753 and 784), at the closing lines.",

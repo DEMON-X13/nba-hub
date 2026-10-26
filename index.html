@@ -1762,7 +1762,12 @@ function legHtml(K) {
   if (!K || !K.leg) return '';
   const l = K.leg, out = [];
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
-  out.push(`<div><dt>Model</dt><dd>${l.p != null && isFinite(l.p) ? N('model', pc0(l.p)) + (l.kind === 'prop' ? trialMark() : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`);
+  /* an Elo pick's leg carries the ELO Model's chance as its p (its level's sums stand on it) and the player model's as
+     pm: Model is always the player model's, the chance the builder prices the same leg on, and the ELO Model's has a line
+     of its own */
+  const elo = l.pe != null && isFinite(l.pe), pm = elo ? l.pm : l.p;
+  out.push(`<div><dt>Model</dt><dd>${pm != null && isFinite(pm) ? N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark() : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`);
+  if (elo) out.push(`<div><dt>ELO Model</dt><dd>${N('elochance', pc0(l.pe))}</dd></div>`);
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
   out.push(`<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`);
   return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;

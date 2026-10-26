@@ -1993,7 +1993,9 @@ and the ELO Model (their calls as the Pick'em Record has them, "no call" where a
 the job's today or before, the call on its row of `pickem.json`'s games; on a game after it, which the record does not run
 to and the Parlay Builder lists all the same, the call in its `next`). The leg's club
 is marked "this leg" and, on a moneyline alone, each model picking it to win is ticked; then the leg and **Open game on
-Tonight**, which opens the board on the game's day with its card in focus. It reads `pickem.json` through the Pick'em
+Tonight**. The leg's Model is always the player model's chance, the one the builder prices the same leg on and the Picks
+list's Player Model; a leg opened from the Elo picks (whose kept leg carries the ELO Model's chance, its level's sums
+standing on it) shows the ELO Model's chance on a line of its own beneath it. **Open game on Tonight** opens the board on the game's day with its card in focus. It reads `pickem.json` through the Pick'em
 Record's own loader (once a page load, no-store; asked for by the first team's bubble where the tab has not read it), and
 says in its own line while it is read or where it did not load, the rest drawn. Nothing else is fetched and nothing is
 stored; `build.js` stops if the part fetches or touches a browser store.

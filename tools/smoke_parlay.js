@@ -8,7 +8,8 @@
  * of its own and a stubbed ESPN, and every number it states is worked out here on this file's own copies of its rules,
  * never read from the page: which legs qualify (qualOwn: DraftKings' price, the model's chance from 45% to 97% at or above
  * the price's implied chance, 3 points above it a Value pick, 15 points above DraftKings' fair chance left out, a game leg
- * with no betslip id where its game's lines carry ids left out), each one's chance (the player model's win chance, the
+ * with no betslip id where its game's lines carry ids left out, a player today's injury report lists left out, Day-To-Day
+ * among them, a probable one kept: the rule every suggested set keeps), each one's chance (the player model's win chance, the
  * cover chance on research/sigma.json's sigma, the market's own on a total, tools/props.js's distribution on a player)
  * and fair chance (tools/props_feed.js's rules), the order (pbTopOwn: the Value picks, then the thin-edge lines, then the
  * totals, each by what $1 is expected to make), each bet once (sameBetOwn: a milestone k+ is the main Over at k - 0.5),
@@ -95,14 +96,16 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
       if (!pr || !pg || failed) continue;
       const out0 = new Set(['away', 'home'].flatMap(s => ((g.model && g.model[s] && g.model[s].out) || []).map(x => x.id)));
       const who = pid => { const r = pg.players[pid]; return r && !out0.has(pid) && (r[1] === g.away || r[1] === g.home) ? r : null; };
-      for (const m of pr.mains) { const r = who(m.player); if (!r) continue; const b = { ...base, kind: 'prop', pid: m.player, name: r[0], team: r[1], at: pr.at };
+      /* listed on today's report, anything but Probable (ESPN's Day-To-Day is the NBA's questionable): held out */
+      const rep = (st.report && st.report.players) || {}, held = pid => Array.isArray(rep[pid]) && !/^probable/i.test(String(rep[pid][1] || '').trim());
+      for (const m of pr.mains) { const r = who(m.player); if (!r) continue; const b = { ...base, kind: 'prop', pid: m.player, name: r[0], team: r[1], at: pr.at, held: held(m.player) };
         out.push({ ...b, stat: m.stat, mk: 'main', line: m.line, side: 'over', odds: m.over, other: m.under }, { ...b, stat: m.stat, mk: 'main', line: m.line, side: 'under', odds: m.under, other: m.over }); }
-      for (const m of pr.ladders) { const r = who(m.player); if (r) out.push({ ...base, kind: 'prop', pid: m.player, name: r[0], team: r[1], at: pr.at, stat: m.stat, mk: 'mile', k: m.k, side: 'yes', odds: m.price, other: null }); }
-      for (const y of pr.yes) { const r = who(y.player); if (r) out.push({ ...base, kind: 'prop', pid: y.player, name: r[0], team: r[1], at: pr.at, stat: y.market, mk: 'yes', side: 'yes', odds: y.price, other: null }); }
+      for (const m of pr.ladders) { const r = who(m.player); if (r) out.push({ ...base, kind: 'prop', pid: m.player, name: r[0], team: r[1], at: pr.at, stat: m.stat, mk: 'mile', k: m.k, side: 'yes', odds: m.price, other: null, held: held(m.player) }); }
+      for (const y of pr.yes) { const r = who(y.player); if (r) out.push({ ...base, kind: 'prop', pid: y.player, name: r[0], team: r[1], at: pr.at, stat: y.market, mk: 'yes', side: 'yes', odds: y.price, other: null, held: held(y.player) }); }
     }
     return out.filter(l => Number.isFinite(l.odds) && l.odds !== 0).map(l => ({ ...l, p: modelOwn(l, st), fc: fairOwn(l, st) }));
   }
-  /* the rule: 'value', 'thin', 'total', or why it is out ('band', 'edge', 'far', 'noId', 'box') */
+  /* the rule: 'value', 'thin', 'total', or why it is out ('band', 'edge', 'far', 'noId', 'held', 'box') */
   function qualOwn(l, ticks) {
     if (!ticks.k[boxOwn(l)] || ticks.off.includes(l.id)) return 'box';
     if (!(l.p >= PMIN_OWN && l.p < PMAX_OWN)) return 'band';
@@ -111,6 +114,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     if (edge < 0) return 'edge';
     if (l.fc && l.p - l.fc.p >= FAR_OWN - 1e-9) return 'far';
     if (l.on && !l.dk) return 'noId';
+    if (l.held) return 'held';
     return edge >= EDGE_OWN ? 'value' : 'thin';
   }
   /* each bet once: a milestone k+ is the main Over at k - 0.5 on a half-point line, wherever that main Over qualifies */
@@ -198,9 +202,12 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     games: {
       [A1.id]: { tip: A1.tip, away: 'BOS', home: 'NYK', players: {
         '8100001': P('Ace Guard', 'BOS', 'G', 27.5, 4, 3), '8100002': P('Bo Wing', 'NYK', 'F', 12, 8.0, 2), '8100003': [...P('Cy Center', 'NYK', 'C', 10, 10.3, 2.9)],
-        '8100005': P('Eli Forward', 'NYK', 'F', 16.8, 5, 2), '8100006': P('Fay Blocker', 'BOS', 'C', 9, 7, 1, 0.1, { blk: 1.8 }), '8100007': P('Gus Out', 'NYK', 'G', 14, 3, 4), '8100004': P('Hal Board', 'NYK', 'C', 14, 11, 2, 0.62) } },
+        '8100005': P('Eli Forward', 'NYK', 'F', 16.8, 5, 2), '8100006': P('Fay Blocker', 'BOS', 'C', 9, 7, 1, 0.1, { blk: 1.8 }), '8100007': P('Gus Out', 'NYK', 'G', 14, 3, 4), '8100004': P('Hal Board', 'NYK', 'C', 14, 11, 2, 0.62), '8100008': P('Ivy Doubt', 'NYK', 'G', 18, 3, 3) } },
       [A2.id]: { tip: A2.tip, away: 'LAL', home: 'GSW', players: { '8100001': P('Ace Guard', 'LAL', 'G', 27.5, 4, 3) } } } };
-  const ST = (o = {}) => ({ ...clone(REAL), today: etDate(now), generated: at(now - 2 * H), injuriesAsOf: etDate(now), slate: clone(SLATE), props: clone(props), corr: PUB.corrState(), ...o });
+  /* today's report: Ivy Doubt Day-To-Day (held out of every list, as every suggested set holds him), Eli Forward Probable
+     (he plays) */
+  const REPORT = { date: etDate(now), players: { '8100008': ['NYK', 'Day-To-Day', 'Ankle Sprain', ''], '8100005': ['NYK', 'Probable', 'Knee', ''] } };
+  const ST = (o = {}) => ({ ...clone(REAL), today: etDate(now), generated: at(now - 2 * H), injuriesAsOf: etDate(now), slate: clone(SLATE), props: clone(props), corr: PUB.corrState(), report: clone(REPORT), ...o });
   const RD = at(now - 90 * 60e3);
   const ids = (n, sp, tl) => ({ event: '90' + n, ml: { home: `0ML90${n}_1`, away: `0ML90${n}_3` }, spread: sp != null ? { home: `0HC90${n}${sp < 0 ? 'N' : 'P'}${Math.round(Math.abs(sp) * 100)}_1`, away: `0HC90${n}${sp < 0 ? 'P' : 'N'}${Math.round(Math.abs(sp) * 100)}_3` } : null, total: tl != null ? { over: `0OU90${n}O${Math.round(tl * 100)}_1`, under: `0OU90${n}U${Math.round(tl * 100)}_3` } : null });
   const LINES = { v: 1, at: RD, games: {
@@ -209,7 +216,8 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
         { player: '8100001', stat: 'pts', line: 24.5, over: -110, under: -110 }, { player: '8100001', stat: 'pra', line: 36.5, over: 100, under: -120 },
         { player: '8100002', stat: 'reb', line: 7, over: -110, under: -110 }, { player: '8100003', stat: 'reb', line: 9.5, over: -150, under: 120 }, { player: '8100003', stat: 'ast', line: 3.5, over: 120, under: -150 },
         { player: '8100005', stat: 'pts', line: 15.5, over: -105, under: -115 }, { player: '8100006', stat: 'blk', line: 0.5, over: 200, under: -250 },
-        { player: '8100007', stat: 'pts', line: 10.5, over: -110, under: -110 }, { player: '8100099', stat: 'pts', line: 8.5, over: -110, under: -110 }],
+        { player: '8100007', stat: 'pts', line: 10.5, over: -110, under: -110 }, { player: '8100099', stat: 'pts', line: 8.5, over: -110, under: -110 },
+        { player: '8100008', stat: 'pts', line: 15.5, over: -110, under: -110 }],
         ladders: [{ player: '8100001', stat: 'pts', k: 25, price: -115 }, { player: '8100001', stat: 'pts', k: 30, price: 250 }, { player: '8100002', stat: 'reb', k: 8, price: 105 },
           { player: '8100003', stat: 'reb', k: 10, price: 100 }, { player: '8100003', stat: 'ast', k: 3, price: -110 }, { player: '8100005', stat: 'pts', k: 16, price: 105 }, { player: '8100007', stat: 'pts', k: 12, price: 100 }],
         yes: [{ player: '8100004', market: 'dd', price: -150 }, { player: '8100004', market: 'td', price: 1500 }] } },
@@ -264,6 +272,10 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   check(want(eliO, 'thin') && want(eli16, 'value') && !inList(eli16.l) && inList(eliO.l), "a Value-pick milestone is left out for its thin-edge main Over (Eli Forward's 16+ points, Over 15.5)");
   check(want(ace25b, 'value') && inList(ace25b.l), 'the same milestone in another game is kept');
   check(own.q.some(e => e.l.pid === '8100006' && e.q === 'far') && !own.q.some(e => e.l.pid === '8100007' || e.l.pid === '8100099'), "a line far off DraftKings' fair chance is left out (Fay Blocker), and a player the report has out or the model does not project is never a leg");
+  const ivyO = own.q.find(e => e.l.pid === '8100008' && e.l.mk === 'main' && e.l.side === 'over'), nHeld = own.q.filter(e => e.q === 'held').length;
+  check(ivyO && ivyO.q === 'held' && qualOwn({ ...ivyO.l, held: false }, TICKS_ALL) === 'value' && !inList(ivyO.l) && nHeld === 1,
+    "a player today's report lists Day-To-Day (Ivy Doubt, Over 15.5 points) has a line that would be a Value pick by its price and chance, and it is held out, as every suggested set holds him");
+  check(want(eliO, 'thin') && inList(eliO.l), 'a player the report lists as Probable (Eli Forward) plays, and his line is listed');
   const a3ml = own.q.find(e => e.l.id === A3.id && e.l.kind === 'ml' && e.l.side === 'ORL');
   check(a3ml && a3ml.q === 'noId', "a game leg with no betslip id at its line, where its game's lines carry ids, is left out (the Magic to win)");
   const got = rows(p).map(rowRead), wantRows = own.rows.map(rowWant);
@@ -283,6 +295,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   const nV = own.rows.filter(r => r.part === 'value').length;
   check(secs.length === 2 && secs[0][0] === 'value' && secs[0][1] === `Value picks ${nV}` && secs[1][1] === `Other lines ${own.rows.length - nV}` && olO && olO.getAttribute('start') === String(nV + 1), `two parts under their headings, each counted, the ranks running on (${secs.map(x => x[1]).join(' / ')}, start ${olO && olO.getAttribute('start')})`);
   const notes = [...p.d.querySelectorAll('#pbPanel .pb-note')].map(txt).join(' | ');
+  check(new RegExp(`${nHeld} line is left out: it is on a player today’s injury report lists \\(Day-To-Day among them`).test(notes) && p.w.getPbTop().held === nHeld, `the notes count the line held out for the report (${p.w.getPbTop().held})`);
   check(/1 line is left out: the model rates it 15 points or more above DraftKings’ fair chance/.test(notes) && /1 line is left out: the list takes a game’s moneyline, spread or total only with DraftKings’ betslip id/.test(notes) && /Game totals are never Value picks/.test(notes), `the notes say what was left out and why, and that the totals come last (${notes.slice(0, 160)})`);
   check(/the props model’s, which is on trial/.test(txt(p.d.querySelector('#pbPanel .pb-lead'))) && (txt(panel).match(/on trial, not yet shown to beat DraftKings/g) || []).length === 1, 'the lead says once that a player\'s chance is the props model\'s, on trial');
   check(own.same === 2 && p.w.getPbTop().same === 2, `two milestones are left out as the same bet as their main line (${p.w.getPbTop().same})`);
@@ -359,6 +372,14 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   check(sl().length === 4 && !p.d.querySelector('#pbPanel .pb-no'), 'the total and a leg of another game join, and the refusal line is gone once something else is done');
   addBtn(p, k(mlH.l)).click(); await sleep(20);
   check(sl().length === 3 && addBtn(p, k(mlH.l)).textContent === 'Add', 'a second press on an Added line takes it out');
+
+  /* a leg on a player the report holds out, added by hand (from a game's Player props, or kept from before he was listed):
+     his builder row wears his status, titled with why the list and the sets hold him out; a probable player's wears none */
+  { const ivyLeg = { ...aceLeg, pid: '8100008', name: 'Ivy Doubt', team: 'NYK', line: 15.5 }, eliLeg = { ...aceLeg, pid: '8100005', name: 'Eli Forward', team: 'NYK', line: 15.5, odds: -105, other: -115 };
+    const q4 = load(ST(), { lines: LINES, mine: { picks: {}, build: [], slip: { legs: [ivyLeg, eliLeg], stake: 20 } }, tab: 'parlay' }); await sleep(300);
+    const rowsB = [...q4.d.querySelectorAll('#pbBuild tr.legrow')], rI = rowsB.find(tr => tr.dataset.pbRow === keyOwn(ivyLeg)), rE = rowsB.find(tr => tr.dataset.pbRow === keyOwn(eliLeg)), chip = rI && rI.querySelector('[data-pb-held]');
+    check(rowsB.length === 2 && chip && txt(chip) === 'DAY-TO-DAY' && /^On today's injury report: listed day-to-day \(ankle sprain\), so held out of the Top 50 lines and every suggested parlay$/.test(chip.title) && rE && !rE.querySelector('.pb-inj') && q4.errors.length === 0,
+      `a Day-To-Day player's leg added by hand wears DAY-TO-DAY in the builder, titled with why (${chip ? txt(chip) + ': ' + chip.title : 'no chip'}); a probable player's wears nothing`); }
 
   /* ---------- 6. the builder's numbers, worked out here ---------- */
   const Lb = sl(), desc = l => l.kind === 'prop' ? { game: l.id, kind: l.stat, player: l.pid, team: l.team, side: l.side, home: l.home } : { game: l.id, kind: { ml: 'win', spread: 'cover', total: 'over' }[l.kind], team: l.kind === 'total' ? '' : l.side, side: l.side, home: l.home };

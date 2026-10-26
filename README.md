@@ -1750,7 +1750,8 @@ leg is a player's (it read "model says 38%, on trial"), and lines.json's one rea
 | The payload's prices, a Refresh odds press over them | `lines.json`, read once a page load, no-store, the first time the tab opens (never on load or a timer), and a press's read, the newer of the two for each game's lines and its props; every price DraftKings' real one, nothing estimated | The NBA's prices come from the lines feed, which carries both prices on every line |
 | A moneyline's or a cover's chance from the NFL's game model | A moneyline's the player model's win chance (the number Tonight shows); a spread's Phi((m + h) / sigma), m the side's expected margin (minus the model's spread for the home side) and h its line, sigma 14.5 points | The NBA's game model gives a margin; sigma is measured, below. Until this change the page put no chance on a spread |
 | A total at the market's own chance | The same: its two prices with the margin out in proportion (50% where one is missing), never a Value pick, last | The NBA's total has never been tested against the market |
-| A player's chance from the props model, on a book price | The props model's (README "Player props"), which is **on trial**: marked so beside its chance on every Top 50 row, builder row and level card, the mark titled with the shadow ledger's count, and said once in the lead; never a player it does not project or the report has out; none at all once its ledger fails its bar | The owner's call of 25 October 2026: props in the Top 50, Value picks allowed, every one marked |
+| A player's chance from the props model, on a book price | The props model's (README "Player props"), which is **on trial**: marked so beside its chance on every Top 50 row, builder row and level card, the mark titled with the shadow ledger's count, and said once in the lead; never a player it does not project or today's report lists, Probable aside (the next row); none at all once its ledger fails its bar | The owner's call of 25 October 2026: props in the Top 50, Value picks allowed, every one marked |
+| A questionable, doubtful or out player never listed (`pricedLegs` skips `!suggestable`), a Q on a leg on him added by hand | The game's out lists and every other listing on today's report, Day-To-Day included, a probable player playing (`pbHeldWhy`, read by `pbWho`: the one rule the Top 50 lines, the all-games levels and Suggested Parlays' sets keep, as the NFL's `pricedLegs` is theirs), the lines left out counted in a note; a leg on him added by hand wears his status (DAY-TO-DAY) in the builder and in his bubble, titled with why | ESPN's NBA feed has no Questionable or Doubtful: every status between playing and out is Day-To-Day |
 | Value: the 3-point edge with market + form agreeing on a player's line | The 3-point edge alone, which the panel says | The NBA has no market + form (no player Elo is fitted to the props) |
 | DraftKings' fair chance by `legFair` | The NBA's `legFair`: a main line's whole margin on the Over (measured on DraftKings' archived lines), a milestone's and a Yes price's by the rung rule, est., a team line's two prices in proportion | The NBA's measured rule |
 | Every suggested leg needs DraftKings' betslip id | Game legs only, where the game's lines carry ids; a player's leg carries none on ESPN's feed and goes on the slip by hand, which its builder row says ("Not on DraftKings' slip yet: no betslip id in ESPN's feed") | ESPN's feed has no outcome id for a player's line |
@@ -1811,7 +1812,9 @@ the on-trial mark on every player leg and nowhere else and the Value mark on eve
 once (a rung left out for its half-point main Over, a whole-number Over, an Under, a main Over that does not qualify and a
 rung in another game each keeping it, a Value-pick rung left out for its thin main Over), a total priced on its Over
 alone at +120, put at 50% and expected to make $0.10, still after every thin-edge line, the far-off and no-id rules and
-their notes; the four levels by the builder's own sums, their cards' marks and `o.quiet`, and a level's Add to builder;
+their notes; a player today's report lists Day-To-Day with a line that would be a Value pick held out of the list and
+counted in its note, a probable one listed, and his leg added by hand wearing DAY-TO-DAY in the builder; the four levels
+by the builder's own sums, their cards' marks and `o.quiet`, and a level's Add to builder;
 every control 44px; the mix, the boxes and the games, saved; Add, Added and a second press, the refusals with their
 reasons (a combo holding a stat, the moneyline beside the spread); the builder's numbers against `data/corr.json` and
 `tools/corr.js` (two legs of one game exactly) and the page's `parlayProb`, `parlayDec` and `parlayFair`, its rows, its
@@ -1963,7 +1966,8 @@ MutationObserver, connected only while it is open, follows every redraw (a tip-o
 bound to its leg's copy in that place, drawn again with that copy's numbers (and the line a press moved), the reader's
 scroll kept; where the place no longer draws the leg, it closes, the focus on the leg's neighbour there.
 
-**A player's bubble**: his position and club and his status as the page reads it (OUT where the lineups have him out, NOT
+**A player's bubble**: his position and club and his status as the page reads it (OUT where the lineups have him out, his
+listing where today's report has him otherwise, DAY-TO-DAY say, which holds him out of the Top 50 and every suggestion, NOT
 PROJECTED where the props model does not); his overall Elo with its tier shield and tier, and his rank among the rated
 players at his position ("#15 of 182 rated guards", the Players tab's own numbers), or why the ladder does not rank him (not
 on a roster, under its ten minutes a game or its twenty games); the game and its tip-off in Eastern time; **Faces**: the
@@ -2008,7 +2012,7 @@ December, a neutral game six days after the last, a play-in game still to play).
 `SMOKE_ONLY=glance node tools/smoke.js` (`tools/smoke_glance.js`), blocking, on made-up games tomorrow, a made-up
 `lines.json`, rated players, a props block and a `pickem.json` of its own, and a builder of eight legs (a player's points, a
 steals line, a player the ladder does not rank, one the report has out, one the props model does not project, a moneyline,
-a spread, a total): every name its leg's button (kind and id, the leg it keeps, its words, its 44px target) in the builder
+a spread, a total, and on a page of its own a player today's report lists Day-To-Day, whose bubble says so): every name its leg's button (kind and id, the leg it keeps, its words, its 44px target) in the builder
 and the Top 50, each leg drawn once in a place; every number in each bubble on this file's own reading (the rating, tier and
 rank at his position, the game, Faces against the Teams tab's own table sorted on its column, the projection, the leg's
 chances; the records, strength and ranks, the line, offence against defence, Vegas with the margin out and every model's

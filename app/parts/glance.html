@@ -195,10 +195,14 @@ function playerHtml() {
   const name = (L && L.name) || (row && row[0]) || (P && P.name) || pid, team = (L && L.team) || (row && row[1]) || (P && P.team) || '';
   const pos = (row && row[2]) || (P && P.pos) || '';
   const opp = g ? (team === g.home ? g.away : team === g.away ? g.home : '') : '', home = g && opp ? team === g.home : null;
-  /* his status as the page reads it: on the injury report (the lineups' absentees), or not projected */
+  /* his status as the page reads it: on the injury report (the lineups' absentees), else listed on today's report and so
+     held out of the Top 50 and every suggestion (pbHeldWhy: Day-To-Day, say), or not projected */
   let out = ''; try { out = g && typeof ppOut === 'function' ? ppOut(g, pid) : ''; } catch (e) { out = ''; }
+  let held = null; try { held = !out && typeof pbHeldWhy === 'function' ? pbHeldWhy(pid, gid) : null; } catch (e) { held = null; }
+  const rp = held && s && s.report && s.report.players ? s.report.players[pid] : null;
   const projected = !!row, gameProj = typeof ppGame === 'function' && !!ppGame(gid);
   const chip = out ? `<span class="glance-inj" data-glance-n="inj" title="On the injury report: ${H(out)}">${/out/i.test(out) ? 'OUT' : H(String(out).toUpperCase())}</span>`
+    : held ? `<span class="glance-inj" data-glance-n="inj" title="On today's injury report: ${H(held)} of the Top 50 lines and every suggested parlay">${H(String((Array.isArray(rp) && rp[1]) || 'listed').toUpperCase())}</span>`
     : !projected && gameProj ? `<span class="glance-inj" data-glance-n="inj" title="The props model does not project him for this game: on no list it reads, or under ${s && s.props ? s.props.minShown : 8} minutes">NOT PROJECTED</span>` : '';
   const sub = `<p class="glance-sub"><span data-glance-n="pos">${H(pos)}</span>${team ? ` · <span data-glance-n="team">${H(team)}</span>` : ''}${chip}</p>`;
   const lines = [];

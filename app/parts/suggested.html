@@ -109,25 +109,15 @@ function spOn() { const n = spNight(); return n.up ? n.games : []; }
 function spState() { const now = Date.now(); return spGames().map(g => g.id + (now < spLockAt(g) ? ':l' : ':k')).concat('on=' + spOn().map(g => g.id).join('+'), 'pb=' + pbGames().map(g => g.id).join('+')).join(); }
 
 /* ---------- who the sets take: the injury report ----------
-   Why a player is kept out of every suggested set, in a few words, or null when he plays: the game's out lists (the hub's
-   availability rule: Out before his return, suspended), else any listing on today's report (state.json's report), Day-To-
-   Day among them: ESPN's NBA feed has no questionable, writing every status between playing and out as Day-To-Day, so the
-   NFL's rule (a questionable player is never suggested) takes it. A probable player plays */
-function spOutWhy(pid, gid) {
-  const g = S.slate.find(x => x.id === gid), out = g && g.model ? ['away', 'home'].map(s => g.model[s] && g.model[s].out || []).flat().find(y => y.id === pid) : null;
-  const r = S.report && spIsMap(S.report.players) ? S.report.players[pid] : null, det = r && r[2] ? String(r[2]).toLowerCase() : '';
-  if (out) return `ruled out (${String(out.status || 'Out').toLowerCase()}${det ? ', ' + det : ''})`;
-  if (!Array.isArray(r)) return null;
-  const st = String(r[1] || '').trim();
-  if (/^probable/i.test(st)) return null;
-  return `listed ${st ? st.toLowerCase() : 'on the injury report'}${det ? ' (' + det + ')' : ''}, so held out`;
-}
-/* the pool: pbPool's lists (pbLegs, then each list cut to SP_SEARCH.cap) less the players spOutWhy keeps out, taken out
-   before the cut so the cut keeps as many as it may */
+   Why a player is kept out of every suggested set, in a few words, or null when he plays: the Parlay Builder's own rule
+   (pbHeldWhy, app/parts/parlay.html: the game's out lists, else any listing on today's report, Day-To-Day among them, a
+   probable player playing), so the Top 50 lines and the sets hold out the same players */
+function spOutWhy(pid, gid) { return pbHeldWhy(pid, gid); }
+/* the pool: pbPool's lists (pbLegs, which already leaves out and counts in held the legs on players spOutWhy keeps out,
+   before the cut so the cut keeps as many as it may), each list cut to SP_SEARCH.cap */
 function spPool(g) {
-  const r = pbLegs([g], SP_ALL), keep = l => l.kind !== 'prop' || !spOutWhy(l.pid, g.id);
-  const pref = r.pref.filter(keep), thin = r.thin.filter(keep);
-  return { ...r, held: r.pref.length + r.thin.length - pref.length - thin.length, pref: pbCap(pref, SP_SEARCH.cap), thin: pbCap(thin, SP_SEARCH.cap), mkt: pbCap(r.mkt, SP_SEARCH.cap) };
+  const r = pbLegs([g], SP_ALL);
+  return { ...r, pref: pbCap(r.pref, SP_SEARCH.cap), thin: pbCap(r.thin, SP_SEARCH.cap), mkt: pbCap(r.mkt, SP_SEARCH.cap) };
 }
 /* a level's legs one by one as the builder takes them (slipWhy, the NBA's same-game refusals): pbFits's rules (no line
    twice, one side bet and one total a game, one leg a player) are those refusals on one game's legs, so this never

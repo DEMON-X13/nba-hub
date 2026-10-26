@@ -216,6 +216,14 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
   check(nOf('inj') === 'NOT PROJECTED' && nOf('noelo') === 'no rating: he is not among the players the model rates' && nOf('noproj') === 'No projection: the props model does not project him for this game.' && nOf('model') === 'none',
     'a player the props model does not project and the ratings do not know: NOT PROJECTED, no rating, no projection, no model chance');
 
+  /* a player today's report lists Day-To-Day: the Top 50 and every suggestion hold him out (pbHeldWhy), so a leg on him
+     added by hand opens a bubble that says so, as his builder row does */
+  { const p3 = load(ST({ report: { date: etDate(now), players: { '9100005': ['DET', 'Day-To-Day', 'Ankle Sprain', ''] } } }), { lines: LINES, mine: MINE([L_ELI]), pickem: PICKEM }); await sleep(400);
+    const nb = p3.d.querySelector('#parlayBody [data-glance]'); if (nb) { nb.click(); await sleep(30); }
+    const bx = p3.d.getElementById('glanceBox'), c = bx && !bx.hidden ? bx.querySelector('[data-glance-n="inj"]') : null;
+    check(c && txt(c) === 'DAY-TO-DAY' && c.title === "On today's injury report: listed day-to-day (ankle sprain), so held out of the Top 50 lines and every suggested parlay" && p3.errors.length === 0,
+      `a Day-To-Day player's bubble wears DAY-TO-DAY, titled with why the list and the sets hold him out (${c ? txt(c) + ': ' + c.title : 'no chip'})`); }
+
   /* ---------- 3. a team's bubble and a game's ---------- */
   const recOwn = t => { let wn = 0, ls = 0; for (const x of PICKEM.games) { if (!x.score || x.type !== 'REG' || x.off || (x.away !== t && x.home !== t)) continue; const m = x.home === t ? x.score[1] - x.score[0] : x.score[0] - x.score[1]; if (m > 0) wn++; else if (m < 0) ls++; } return wn + '-' + ls; };
   const vh = imp(-130) / (imp(-130) + imp(110)), clock = w.eval(`oddsClock(${JSON.stringify(RD)})`);

@@ -1,5 +1,5 @@
 {
- "date": "2026-10-25",
+ "date": "2026-10-26",
  "teams": {
   "ATL": [
    {
@@ -789,7 +789,7 @@
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4873153",
@@ -817,7 +817,7 @@
     "name": "Naji Marshall",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3138160",
@@ -1031,7 +1031,7 @@
     "name": "Isaiah Joe",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107818",
@@ -1103,7 +1103,7 @@
     "name": "Charles Bassey",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6430",
@@ -1124,21 +1124,21 @@
     "name": "Stephen Curry",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6589",
     "name": "Draymond Green",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3213",
     "name": "Al Horford",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703396",
@@ -1194,7 +1194,7 @@
     "name": "Brandin Podziemski",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3102531",
@@ -1222,7 +1222,7 @@
     "name": "Brandon Williams",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "HOU": [
@@ -1343,7 +1343,7 @@
     "name": "Fred VanVleet",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "IND": [
@@ -1408,7 +1408,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133603",
@@ -1464,7 +1464,7 @@
     "name": "Ivica Zubac",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "LAC": [
@@ -1743,7 +1743,7 @@
     "name": "Cedric Coward",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4600663",
@@ -1785,7 +1785,7 @@
     "name": "Karim Lopez",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683934",
@@ -2567,21 +2567,21 @@
     "name": "Cason Wallace",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4593803",
     "name": "Jalen Williams",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432823",
     "name": "Jaylin Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133626",
@@ -2618,7 +2618,7 @@
     "name": "Anthony Black",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278572",
@@ -2695,7 +2695,7 @@
     "name": "Jalen Suggs",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6478",
@@ -2746,7 +2746,7 @@
     "name": "VJ Edgecombe",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4711297",
@@ -2781,7 +2781,7 @@
     "name": "LeBron James",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433144",
@@ -3379,7 +3379,7 @@
     "name": "Kawhi Leonard",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4702656",
@@ -3689,35 +3689,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-25",
-  "BOS": "2026-10-25",
-  "BKN": "2026-10-25",
-  "CHA": "2026-10-25",
-  "CHI": "2026-10-25",
-  "CLE": "2026-10-25",
-  "DAL": "2026-10-25",
-  "DEN": "2026-10-25",
-  "DET": "2026-10-25",
-  "GSW": "2026-10-25",
-  "HOU": "2026-10-25",
-  "IND": "2026-10-25",
-  "LAC": "2026-10-25",
-  "LAL": "2026-10-25",
-  "MEM": "2026-10-25",
-  "MIA": "2026-10-25",
-  "MIL": "2026-10-25",
-  "MIN": "2026-10-25",
-  "NOP": "2026-10-25",
-  "NYK": "2026-10-25",
-  "OKC": "2026-10-25",
-  "ORL": "2026-10-25",
-  "PHI": "2026-10-25",
-  "PHX": "2026-10-25",
-  "POR": "2026-10-25",
-  "SAC": "2026-10-25",
-  "SAS": "2026-10-25",
-  "TOR": "2026-10-25",
-  "UTA": "2026-10-25",
-  "WAS": "2026-10-25"
+  "ATL": "2026-10-26",
+  "BOS": "2026-10-26",
+  "BKN": "2026-10-26",
+  "CHA": "2026-10-26",
+  "CHI": "2026-10-26",
+  "CLE": "2026-10-26",
+  "DAL": "2026-10-26",
+  "DEN": "2026-10-26",
+  "DET": "2026-10-26",
+  "GSW": "2026-10-26",
+  "HOU": "2026-10-26",
+  "IND": "2026-10-26",
+  "LAC": "2026-10-26",
+  "LAL": "2026-10-26",
+  "MEM": "2026-10-26",
+  "MIA": "2026-10-26",
+  "MIL": "2026-10-26",
+  "MIN": "2026-10-26",
+  "NOP": "2026-10-26",
+  "NYK": "2026-10-26",
+  "OKC": "2026-10-26",
+  "ORL": "2026-10-26",
+  "PHI": "2026-10-26",
+  "PHX": "2026-10-26",
+  "POR": "2026-10-26",
+  "SAC": "2026-10-26",
+  "SAS": "2026-10-26",
+  "TOR": "2026-10-26",
+  "UTA": "2026-10-26",
+  "WAS": "2026-10-26"
  }
 }

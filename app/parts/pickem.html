@@ -107,9 +107,14 @@
     g += `<text x="${X(0).toFixed(1)}" y="${H - 9}" text-anchor="middle" font-size="11" fill="var(--muted)">Start</text>`;
     const every = Math.max(1, Math.ceil(n / Math.max(1, Math.floor((W - padL - padR) / 44))));
     T.wks.forEach((w, i) => { if ((i + 1) % every && i !== n - 1) return; g += `<text x="${X(i + 1).toFixed(1)}" y="${H - 9}" text-anchor="middle" font-size="11" fill="var(--muted)">${esc(PK.weeks[w].short)}</text>`; });
+    /* models whose lines fall on the same points (the same record against Vegas every week) are drawn 3px apart, centred
+       on their true place, so no line hides under another; the labels at the end still give each one's net */
+    const same = {}; for (const m of T.models) { const k = m.pts.map(p => p.i + ':' + p.net).join(' '); (same[k] = same[k] || []).push(m); }
+    const dyOf = m => { const grp = same[m.pts.map(p => p.i + ':' + p.net).join(' ')]; return grp.length < 2 ? 0 : (grp.indexOf(m) - (grp.length - 1) / 2) * 3; };
     for (const m of T.models) {
-      g += `<polyline fill="none" stroke="${m.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${m.pts.map(p => `${X(p.i).toFixed(1)},${Y(p.net).toFixed(1)}`).join(' ')}"/>`;
-      for (const p of m.pts.slice(1)) g += `<circle cx="${X(p.i).toFixed(1)}" cy="${Y(p.net).toFixed(1)}" r="4" fill="${m.color}" stroke="var(--panel)" stroke-width="2"/>`;
+      const dy = dyOf(m);
+      g += `<polyline fill="none" stroke="${m.color}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" points="${m.pts.map(p => `${X(p.i).toFixed(1)},${(Y(p.net) + dy).toFixed(1)}`).join(' ')}"/>`;
+      for (const p of m.pts.slice(1)) g += `<circle cx="${X(p.i).toFixed(1)}" cy="${(Y(p.net) + dy).toFixed(1)}" r="4" fill="${m.color}" stroke="var(--panel)" stroke-width="2"/>`;
     }
     /* the end labels, each model's net and name, nudged 14px apart, Vegas's beside the zero line */
     const labs = T.models.map(m => ({ y: Y(m.net), html: `<tspan font-weight="700" fill="var(--ink)">${sign(m.net)}</tspan> ${esc(m.name)}`, color: m.color })).concat([{ y: Y(0), html: '<tspan font-weight="700" fill="var(--ink)">= Vegas</tspan>', color: 'var(--ink)', vegas: true }]);

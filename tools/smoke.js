@@ -1531,6 +1531,16 @@ async function pickemRecord() {
   const byId = Object.fromEntries(PKR.games.map(g => [g.id, g]));
   check(real.record.filter(r => byId[r.id]).every(r => byId[r.id].c.player === r.pHome && byId[r.id].score && byId[r.id].score[1] === r.homeScore), 'the Player Model\'s calls are the ones the Record tab grades');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  { const ys = l => l.getAttribute('points').split(' ').map(q => +q.split(',')[1]), pl = [...w.document.querySelectorAll('#pkChart polyline')].map(l => l.getAttribute('points'));
+    check(new Set(pl).size === pl.length, `on the real file no model's line lies on another's (${pl.length} lines)`); }
+  /* two models with the same record against Vegas every week: their lines are drawn 3px apart, never one on the other */
+  { const twin = JSON.parse(JSON.stringify(fake));
+    for (const g of twin.games) { if (g.c && isFinite(g.c.alpha)) g.c.team = g.c.alpha; else if (g.c) delete g.c.team; }
+    serve = twin; ({ w, errors } = load('index.html', real, null, null, 'pickem')); await sleep(300);
+    const col = id => (twin.models.find(m => m.id === id) || {}).color, line = id => [...w.document.querySelectorAll('#pkChart polyline')].find(l => l.getAttribute('stroke') === col(id));
+    const pa = line('alpha'), pt = line('team'), yy = l => l.getAttribute('points').split(' ').map(q => +q.split(',')[1]), xx = l => l.getAttribute('points').split(' ').map(q => +q.split(',')[0]);
+    check(pa && pt && JSON.stringify(xx(pa)) === JSON.stringify(xx(pt)) && yy(pa).every((y, i) => Math.abs(Math.abs(y - yy(pt)[i]) - 3) < 0.11) && errors.length === 0,
+      `two models with the same record week by week are drawn 3px apart, not one on the other (${pa && pa.getAttribute('points')} / ${pt && pt.getAttribute('points')})`); }
   /* a file that does not load: said, and read again the next time the tab opens */
   let n = 0; JSONS = [[/pickem\.json/, () => (++n === 1 ? { ok: false, status: 404, json: async () => ({}) } : { ok: true, status: 200, json: async () => JSON.parse(JSON.stringify(fake)) })]];
   ({ w, errors } = load('index.html', real, null, null, 'pickem')); await sleep(250);

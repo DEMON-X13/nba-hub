@@ -1,7 +1,8 @@
 /* The suggestions record: what Suggested Parlays said of each game on national TV before it locked, frozen there, and
  * what happened to it (README "Suggested Parlays"). The NFL hub's props/build/suggest_ledger.js, on this hub's page.
  *
- *   node tools/suggest_ledger.js && node tools/suggest_check.js      (the job, after the tests)
+ *   now=$(date -u +%Y-%m-%dT%H:%M:%SZ) && SUGGEST_NOW=$now node tools/suggest_ledger.js && SUGGEST_NOW=$now node tools/suggest_check.js
+ *                                                                     (the job, after the tests: one clock for the two)
  *
  * featured: each featured game's own four levels on the Suggested Parlays tab, Safe, Medium, Aggressive and Extreme, 2
  * to 5 legs from that game alone: a game on any national network ESPN's scoreboard lists (the slate's tv), never a
@@ -37,9 +38,11 @@
  * The job's step then puts the last commit's file back and turns that step red; the record never holds back state.json
  * or the data.
  *
- * SUGGEST_NOW (the clock), SUGGEST_ROOT (the folder the page and its files are read from: index.html, state.json,
- * lines.json, data/box_<season>.csv), SUGGEST_LEDGER and SUGGEST_PREV ('none' skips the last commit) are for the test,
- * tools/test_suggest_ledger.js. Needs jsdom (tools/node_modules, the tests' npm ci). Exit 0: written, or unchanged and not
+ * SUGGEST_NOW is the run's clock: the job hands the same instant to this script and to suggest_check.js after it, so the
+ * check reads which sets are locked at the instant this run rewrote or froze them (a lock passing in the seconds the
+ * script runs would otherwise read as a locked set moved). SUGGEST_ROOT (the folder the page and its files are read from:
+ * index.html, state.json, lines.json, data/box_<season>.csv), SUGGEST_LEDGER and SUGGEST_PREV ('none' skips the last
+ * commit) are for the test, tools/test_suggest_ledger.js. Needs jsdom (tools/node_modules, the tests' npm ci). Exit 0: written, or unchanged and not
  * written. Exit 1: refused, nothing written. The last line starts "suggest ledger:".
  */
 'use strict';

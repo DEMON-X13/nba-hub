@@ -541,7 +541,7 @@ function pbNoPl(games) {
   const reads = games.map(g => pbPr(g.id)), posted = reads.filter(r => r && (r.mains.length || r.ladders.length || r.yes.length));
   if (posted.length) return 'no player lines the props model prices: it projects none of the players DraftKings lines here.';
   const seen = reads.filter(Boolean).map(r => r.at).sort().pop();
-  return seen ? `no player prices yet: DraftKings had posted no player props for these games when they were last read (${pbWhen(seen)}); it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
+  return seen ? `no player prices yet: DraftKings had posted no player props for these games as of ${pbWhen(seen)}, and no read since has found any; it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
     : 'no player prices yet: none have been read for these games; the job reads DraftKings\' player props through the day, and Refresh odds reads them now.';
 }
 const pbWhen = iso => new Date(iso).toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit' });

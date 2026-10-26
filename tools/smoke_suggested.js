@@ -257,6 +257,17 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   /* gB: game lines only, so its larger levels say why */
   const whyB = [...p.d.querySelectorAll(`#spSets [data-sp-game="${gB.id}"] .pb-why`)].map(txt);
   check(whyB.length === 3 && whyB.every(x => /^Only 2 legs in this game, and no player lines the props model prices: it has no projections for this game yet\.$/.test(x)), `a game with no player legs says why its larger levels are empty ("${whyB[0]}")`);
+  /* nothing posted when the job read the game: the time is when the feed first held what it holds (tools/lines.js keeps a
+     half's time while a read finds the same), so the words say "as of" it and that no read since found any */
+  { const why = o => JSON.parse(p.w.eval(`(() => { const id = ${JSON.stringify(gD.id)}, was = LINES.games[id]; LINES.games[id] = ${JSON.stringify(o)};
+      try { return JSON.stringify(spBuild(S.slate.find(g => g.id === id)).tiers.map(t => t.why || '')); } finally { LINES.games[id] = was; } })()`));
+    const at = T(D1, '09:00:00'), when = etWd(Date.parse(at)), base = linesOf([gD]).games[gD.id];
+    const w1 = why({ at: null, espn: gD.espn, ml: null, spread: null, total: null, ids: null, props: { at, mains: [], ladders: [], yes: [] } });
+    const w2 = why({ ...base, props: { at, mains: [], ladders: [], yes: [] } });
+    check(w1.every(x => x === `No legs in this game yet: DraftKings had posted neither its game lines nor its player props as of ${when}, and no read since has found any. The job reads them through the day, and Refresh odds reads the current ones.`),
+      `a game DraftKings had posted nothing for says so as of the read that first found it so ("${w1[0]}")`);
+    check(w2.slice(1).every(x => x.endsWith(`no player prices yet: DraftKings had posted no player props for it as of ${when}, and no read since has found any; it posts them a day or so before tip-off, and Refresh odds reads the current ones.`)),
+      `and one with no player props posted, likewise ("${w2[1]}")`); }
 
   /* ---------- 4. Add, Add to builder, Finish ---------- */
   const mine = () => JSON.parse(p.w.localStorage.getItem('nba_hub_2027') || '{}');
@@ -279,8 +290,28 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   fin.click(); await sleep(30);
   const pcSub = txt(p.d.getElementById('pcSub')), pcLegs = p.d.querySelectorAll('#pcBody [data-pc-leg]').length;
   check(!p.d.getElementById('pcBack').hidden && /^Medium parlay · BOS at NYK · 3 legs/.test(pcSub) && pcLegs === 3 && /pays on \$20/.test(txt(p.d.querySelector('#pcBody [data-pc-pays]'))), `Finish opens the parlay card on the level's legs at the Bet amount ("${pcSub}")`);
+  { const pc = p.d.getElementById('pcBack'), pct = p.w.eval('slipPct'), trial = med.legs.some(l => l.kind === 'prop');
+    check(txt(p.d.getElementById('pcTitle')) === 'Suggested parlay' && txt(pc.querySelector('[data-pc-model] b')) === pct(med.corr) && txt(pc.querySelector('[data-pc-model] span')) === `the hub's model${trial ? ', on trial' : ''}` && txt(p.d.getElementById('pcDone')) === 'Back to Suggested Parlays',
+      `the card is headed Suggested parlay and states the level's own chance as its card does (${txt(pc.querySelector('[data-pc-model]'))}), with its way back to the tab`); }
   p.d.getElementById('pcClose').click(); await sleep(20);
   check(p.d.activeElement === card(gA.id, 'med').querySelector('[data-pc-finish]') || p.d.activeElement === fin, 'closing it gives the focus back');
+  /* the tab redrawn while the card is open (a tip-off anywhere, a lock, a read answering) replaces the Finish: closing
+     the card puts the focus on the same Finish as drawn now; with none drawn, on the tab's own button, never the body */
+  card(gA.id, 'med').querySelector('[data-pc-finish]').click(); await sleep(20);
+  p.w.renderSp(); await sleep(10);
+  const fin2 = card(gA.id, 'med').querySelector('[data-pc-finish]');
+  p.d.getElementById('pcClose').click(); await sleep(20);
+  check(fin2 && fin2 !== fin && p.d.activeElement === fin2, 'a redraw while the card is open: closing it puts the focus on the same Finish, as drawn since');
+  card(gA.id, 'aggr').querySelector('[data-pc-finish]').click(); await sleep(20);
+  p.d.getElementById('spSets').innerHTML = '';
+  p.d.getElementById('pcClose').click(); await sleep(20);
+  check(p.d.activeElement === p.d.querySelector('#nav button[data-tab=suggest]'), `with that Finish no longer drawn, on the tab's own button (${p.d.activeElement && p.d.activeElement.outerHTML.slice(0, 60)})`);
+  p.w.renderSp(); await sleep(10);
+  /* a one-game card with no leg carrying a betslip id (player legs alone) opens the game's page from the lines feed's
+     event id, no press made */
+  { const c = JSON.parse(p.w.eval(`(() => { const L = spPool(S.slate.find(g => g.id === ${JSON.stringify(gA.id)})).pref.filter(l => l.kind === 'prop'), a = L[0], b = L.find(l => l.pid !== a.pid);
+      const c = pcBuild(pbOrder([a, b]).map(pbSlipOf), 20, null); return JSON.stringify({ url: c.url, btn: (c.html.match(/id="pcDk"[^>]*>([^<]*)</) || [])[1], press: !!SG_LINES[${JSON.stringify(gA.id)}] }); })()`));
+    check(!c.press && c.url === 'https://sportsbook.draftkings.com/event/' + idsOf(gA).event && c.btn === 'Open game in DraftKings', `a one-game card of player legs opens the game's page from lines.json's event id (${c.btn}, ${c.url})`); }
   p.w.localStorage.setItem('nba_hub_2027', JSON.stringify({ ...mine(), slip: { legs: [], stake: 20 } }));
 
   /* ---------- 5. the Elo picks: every parlay of their own candidates ---------- */
@@ -328,7 +359,16 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   { const ea = eloBox.querySelector('[data-pb-elo-add="elo-med"]'), tm = p.w.epTier('elo-med'); ea.click(); await sleep(30);
     check(mine().slip.legs.length === tm.legs.length && tm.legs.every(l => mine().slip.legs.some(x => p.w.eval('slipKey')(x) === l.sk)), "an Elo level's Add to builder puts exactly its legs in the builder");
     const ef = p.d.querySelector('#pbElo [data-pc-finish="elo|elo-med"]'); ef.click(); await sleep(30);
-    check(/^Medium Elo pick · /.test(txt(p.d.getElementById('pcSub'))), 'and its Finish opens the card, the kicker "Medium Elo pick"'); p.d.getElementById('pcClose').click(); await sleep(10);
+    check(/^Medium Elo pick · /.test(txt(p.d.getElementById('pcSub'))), 'and its Finish opens the card, the kicker "Medium Elo pick"');
+    { const pc = p.d.getElementById('pcBack'), pct = p.w.eval('slipPct');
+      check(txt(p.d.getElementById('pcTitle')) === 'Elo pick' && txt(pc.querySelector('[data-pc-model] b')) === pct(tm.corr) && txt(pc.querySelector('[data-pc-model] span')) === 'the ELO Model' && txt(p.d.getElementById('pcDone')) === 'Back to Suggested Parlays',
+        `the card states the Elo chance the level was built on, "the ELO Model" (${txt(pc.querySelector('[data-pc-model]'))}, the level's ${pct(tm.corr)}), not the hub's model's`); }
+    p.d.getElementById('pcClose').click(); await sleep(10);
+    p.d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
+    const pf = p.d.getElementById('pFinish'); if (pf) { pf.click(); await sleep(20); }
+    check(!!pf && (txt(p.d.getElementById('pcTitle')) === 'Your parlay' && txt(p.d.getElementById('pcDone')) === 'Back to your parlay'), "the builder's own Finish parlay is headed Your parlay again, its way back as before");
+    if (pf) { p.d.getElementById('pcClose').click(); await sleep(10); }
+    await openTab(p);
     p.w.localStorage.setItem('nba_hub_2027', JSON.stringify({ ...mine(), slip: { legs: [], stake: 20 } })); }
   /* the Parlay Builder's ticks: Spread unticked, the moneylines alone; no team box ticked, the reason */
   { const m0 = mine(); p.w.localStorage.setItem('nba_hub_2027', JSON.stringify(m0));
@@ -338,6 +378,16 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     p.w.eval("M.pb = pbClean({ k: { ml: false, ats: false, total: true, over: true, under: true }, off: [] }); saveMine(); renderSp()"); await sleep(20);
     check(txt(p.d.querySelector('#pbElo [data-pb-elo-none]')) === 'Tick Moneyline or Spread on the Parlay Builder tab for the Elo picks: every leg is a team’s moneyline or spread.', 'with neither ticked it says why there are none');
     p.w.eval("M.pb = pbClean(null); saveMine(); renderSp()"); await sleep(20); }
+  /* no price to beat: the lines feed with no moneyline or spread posted, and lines.json not there, each said so, never
+     that no line beats DraftKings' price */
+  { const noGl = clone(LINES1); for (const e of Object.values(noGl.games)) { e.ml = null; e.spread = null; }
+    NOW = Date.parse(T(D1, '15:00:00'));
+    const q1 = load(stateOf(SLATE), { lines: noGl, record: null, tab: 'suggest' }); await settle(q1); await openTab(q1);
+    const n1 = txt(q1.d.querySelector('#pbElo [data-pb-elo-none]'));
+    check(n1 === 'No Elo picks yet: DraftKings had posted no moneyline or spread on the games and bet types ticked when its lines were read. The job reads them through the day, and Refresh odds reads the current ones.', `with no moneyline or spread posted, the Elo picks say there is none to beat ("${n1}")`);
+    const q2 = load(stateOf(SLATE), { lines: null, record: null, tab: 'suggest' }); await settle(q2); await openTab(q2);
+    const n2 = txt(q2.d.querySelector('#pbElo [data-pb-elo-none]'));
+    check(n2 === 'No Elo picks yet: DraftKings’ published lines did not load, so there is no price to beat. Refresh odds reads the current ones.' && q1.errors.length + q2.errors.length === 0, `with lines.json not there, that they did not load ("${n2}")`); }
 
   /* ---------- 6. the lock: this browser's own, a reload, the record's, a press, a ruled-out level ---------- */
   const st6 = stateOf(SLATE), lockA = lockOwn(gA);

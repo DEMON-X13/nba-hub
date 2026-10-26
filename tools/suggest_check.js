@@ -3,13 +3,16 @@
  *
  *   node tools/suggest_check.js [--prev FILE | --no-prev] [--now ISO]
  *
- * The job runs it right after tools/suggest_ledger.js, which runs the same check() before it writes; a failure fails
- * that step, which puts the ledger back as the last commit had it, and the record never holds back state.json or the
- * data. It fails when:
+ * The job runs it right after tools/suggest_ledger.js, which runs the same check() before it writes, on the script's own
+ * clock (SUGGEST_NOW, the one instant the job hands the two, so a set the script rewrote a second before its lock is not
+ * read here as locked and moved); a failure fails that step, which puts the ledger back as the last commit had it, and the
+ * record never holds back state.json or the data. It fails when:
  *   - an entry lacks its game, tip-off, lock, networks, levels or time taken; is not keyed season|date|tip|game id on its
  *     own fields; its game id is not of its season, Eastern date and clubs; its date is not its tip-off's Eastern date (the
  *     time zone database, Intl); it is not a featured game by its own stored networks and type (on national TV, never a
- *     preseason game: FEATURED_TV below, this file's own copy of the page's); its lock is not exactly 2 hours before its
+ *     preseason game: FEATURED_TV below, this file's own copy of the page's, judges a set still to lock; a set past its
+ *     lock stands on the rule it was taken under, so it needs only a network and no preseason, and a network dropped
+ *     since never jams the record); its lock is not exactly 2 hours before its
  *     tip-off; it was taken at or after its lock; its levels are not the four (Safe 2 legs, Medium 3, Aggressive 4,
  *     Extreme 5) in order; a level holds a leg of another game, a count of legs not its own, a player twice, two side bets
  *     or two totals;
@@ -122,7 +125,11 @@ function entryBad(key, e, now) {
     if (e.lock !== minIso(t(e.tip) - LOCK_MS)) bad.push(`${key}: locks at ${e.lock}, not 2 hours before its tip-off`);
     if (!(t(e.taken_at) < t(e.tip) - LOCK_MS)) bad.push(`${key}: taken at ${e.taken_at}, at or after its lock`);
   }
-  if (!featuredOf(e)) bad.push(`${key}: not a featured game by its own networks (${JSON.stringify(e.tv)}) and type (${e.type})`);
+  /* today's FEATURED_TV.except judges only a set still to lock (one on a network dropped since is dropped by the job); a
+     set past its lock stands on the rule it was taken under, so it needs only a network and no preseason: a network
+     dropped later never fails every locked or graded set on it, which the record could then never get past */
+  const lockedAt = isFinite(t(e.tip)) && t(e.tip) - LOCK_MS <= now;
+  if (!(lockedAt ? e.type !== 'PRE' && e.tv.some(n => typeof n === 'string' && n) : featuredOf(e))) bad.push(`${key}: not a featured game by its own networks (${JSON.stringify(e.tv)}) and type (${e.type})`);
   if (e.tiers.map(x => x && x.id).join() !== TIERS.join()) bad.push(`${key}: its levels are not the four`);
   for (const x of e.tiers) {
     if (!isMap(x)) continue;

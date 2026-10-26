@@ -31,8 +31,11 @@
  *   E  no featured game to come: nothing taken (E2: nothing written).
  *   F  the guard: a ledger on disk whose locked set was edited refused and the last commit's put back; an unlocked set
  *      rewritten since that commit, and a locked level an earlier run replaced, not refused; a state that is not there
- *      refused with the file untouched; and check() on hand-made ledgers failing every rule.
- *   G  the real ledger, copied, on the real state and lines.json at the real clock: nothing refused.
+ *      refused with the file untouched; check() on hand-made ledgers failing every rule; a network dropped from
+ *      FEATURED_TV since sets on it locked failing only the set on it still to lock; and the job's step handing the
+ *      script and its check one clock (a set rewritten a second before its lock passing on it, failing on a later one).
+ *   G  the real ledger, copied, on the real state and lines.json at the real clock, held at one instant for the script
+ *      and the check: nothing refused.
  */
 'use strict';
 const fs = require('fs');
@@ -143,6 +146,9 @@ function stateOf(slate, o = {}) {
   st.boxes = { from: addDay(D1, -7), days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: o.boxes || BOX0 };
   st.finals = { ...REAL.finals, [gWid]: [101, 108], ...Object.fromEntries(slate.filter(g => g.status === 'final').map(g => [g.id, [g.awayScore, g.homeScore]])) };
   st.pending = [gZid];
+  /* gZ and gW are made up off the slate, in the season's own id space: a real game under either id (the real state's
+     record, or its finals for gZ, played and its final not read) must never settle them in the real one's place */
+  delete st.finals[gZid]; st.record = (REAL.record || []).filter(g => g.id !== gZid && g.id !== gWid);
   st.report = { date: st.today, players: o.report || {} };
   st.eloPicks = null;
   return st;
@@ -437,6 +443,26 @@ function entryOk(e, g, at) {
   fails1(L => { L.featured[kF] = { ...L.featured[kF], taken_at: T(D2, '11:00:00') }; }, /new or changed, and not taken by this run before its lock/, 'an entry changed and not this run\'s', base, tD);
   fails1(L => { L.featured[SC.keyOf(P.E5)].grade.safe = { result: 'won', legs: ['win', 'win'], payout: L.featured[SC.keyOf(P.E5)].tiers[0].dec }; }, /graded anew/, "last season's entry graded anew");
   fails1(L => { L.featured_summary.tiers.safe.won += 1; L.__keep = true; }, /the summary does not follow/, 'a summary that does not follow');
+  /* a network dropped from FEATURED_TV (its except) after sets on it locked: the locked and graded sets stand on the rule
+     they were taken under and pass, so the record is never jammed; a set on it still to lock fails, as the job drops it */
+  { const was = SC.FEATURED_TV.except.slice(); SC.FEATURED_TV.except.push(...gA.tv, ...gF.tv);
+    try { const b = SC.check(base, base, now, null, SEASON);
+      chk(b.length === 1 && b[0].startsWith(kF + ':') && /not a featured game/.test(b[0]), `F: a network dropped since (${[...gA.tv, ...gF.tv].join(', ')}): the sets on it locked or graded still pass, and only the one still to lock (gF) fails: ${b.slice(0, 3).join(' | ') || 'nothing'}`); }
+    finally { SC.FEATURED_TV.except.length = 0; SC.FEATURED_TV.except.push(...was); } }
+
+  /* the job's step hands the script and its check one clock: a set rewritten a second before its lock, checked a few
+     seconds later on the wall clock, would read as a locked set moved (and the step would put the file back) */
+  { const wf = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'update.yml'), 'utf8').split('\n').find(l => /node tools\/suggest_ledger\.js/.test(l) && /node tools\/suggest_check\.js/.test(l)) || '';
+    const m = wf.match(/now=\$\(date -u \+[^)]*\) && SUGGEST_NOW=\$now node tools\/suggest_ledger\.js && SUGGEST_NOW=\$now node tools\/suggest_check\.js/);
+    chk(!!m && wf.indexOf('test_suggest_ledger.js') < wf.indexOf('now=$('), `F: the job's step reads one clock after the test and hands it to both the script and its check (${wf.trim().slice(0, 200)})`);
+    fs.writeFileSync(LEDGER, good);
+    const lockD = Date.parse(gD.tip) - LOCK, tJ = new Date(lockD - 1000).toISOString().replace(/\.000Z$/, 'Z'), tLate = new Date(lockD + 5000).toISOString().replace(/\.000Z$/, 'Z');
+    r = run(stateOf(day2, { today: D2, generated: T(D2, '23:00'), boxes: BOXD }), linesOf([gD, gE, gF], { shift: -0.02, at: T(D2, '23:30:00') }), tJ);
+    const ck = at => cp.spawnSync('node', [CHECK, '--prev', goodFile], { encoding: 'utf8', env: { ...process.env, SUGGEST_NOW: at, SUGGEST_LEDGER: LEDGER, SUGGEST_STATE: path.join(DIR, 'state.json') } });
+    const c1 = ck(tJ), c2 = ck(tLate);
+    chk(r.code === 0 && read().featured[kD].taken_at === tJ && c1.status === 0 && c2.status === 1 && /locked at .*, and changed/.test(c2.stdout),
+      `F: a set rewritten a second before its lock passes its check on the run's own clock, and would fail on one read seconds later (${c1.stdout.trim().split('\n').pop()} | ${c2.stdout.trim().split('\n').pop()})`);
+    fs.writeFileSync(LEDGER, good); }
 
   console.log('G. the real ledger, copied, on the real state');
   const realLedger = path.join(ROOT, SC.LEDGER_REL), realLines = path.join(ROOT, 'lines.json');
@@ -446,11 +472,14 @@ function entryOk(e, g, at) {
     for (const f of fs.readdirSync(path.join(ROOT, 'data')).filter(f => /^box_\d{4}\.csv$/.test(f))) fs.copyFileSync(path.join(ROOT, 'data', f), path.join(G, 'data', f));
     const gl = path.join(G, 'ledger.json'); if (fs.existsSync(realLedger)) fs.copyFileSync(realLedger, gl);
     const before = fs.existsSync(gl) ? fs.readFileSync(gl, 'utf8') : null;
-    const rg = cp.spawnSync('node', [SCRIPT], { encoding: 'utf8', env: { ...process.env, SUGGEST_ROOT: G, SUGGEST_LEDGER: gl, SUGGEST_PREV: realLedger && fs.existsSync(realLedger) ? realLedger : 'none' } });
+    /* one clock for the run and for which sets this check counts as locked (the real clock, held at one instant, as the
+       job hands it): a lock passing while the script runs is then neither's */
+    const tG = Date.now();
+    const rg = cp.spawnSync('node', [SCRIPT], { encoding: 'utf8', env: { ...process.env, SUGGEST_NOW: new Date(tG).toISOString(), SUGGEST_ROOT: G, SUGGEST_LEDGER: gl, SUGGEST_PREV: realLedger && fs.existsSync(realLedger) ? realLedger : 'none' } });
     const last = ((rg.stdout || '') + (rg.stderr || '')).trim().split('\n').pop();
     chk(rg.status === 0 && /^suggest ledger: (written|unchanged)/.test(last), 'G: the real state and lines at the real clock: nothing refused: ' + last);
     if (before && rg.status === 0) { const was = JSON.parse(before), now1 = JSON.parse(fs.readFileSync(gl, 'utf8'));
-      chk(Object.entries(was.featured || {}).filter(([, e]) => Date.parse(e.tip) - LOCK <= Date.now()).every(([k, e]) => now1.featured[k] && JSON.stringify(SC.callOf(now1.featured[k])) === JSON.stringify(SC.callOf(e)) || (now1.featured[k] && (now1.featured[k].updates || []).length > (e.updates || []).length)),
+      chk(Object.entries(was.featured || {}).filter(([, e]) => Date.parse(e.tip) - LOCK <= tG).every(([k, e]) => now1.featured[k] && JSON.stringify(SC.callOf(now1.featured[k])) === JSON.stringify(SC.callOf(e)) || (now1.featured[k] && (now1.featured[k].updates || []).length > (e.updates || []).length)),
         'G: every locked set of the real ledger as it was, but for its grade'); }
   } else chk(true, 'G: no lines.json in this checkout: the real run is skipped');
   end();

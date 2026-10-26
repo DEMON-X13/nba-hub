@@ -133,20 +133,22 @@ function spPool(g) {
    twice, one side bet and one total a game, one leg a player) are those refusals on one game's legs, so this never
    refuses; it is the guarantee that a level is a parlay the builder takes */
 function spSlipOk(legs) { const have = []; for (const l of legs) { const s = pbSlipOf(l); if (slipWhy(have, s)) return false; have.push(s); } return true; }
-/* why a game's player legs are none (a read's time in Eastern: the record keeps these words, read anywhere) */
+/* why a game's player legs are none (a read's time in Eastern: the record keeps these words, read anywhere). The time
+   is when the lines feed first held what it holds now (tools/lines.js keeps a half's time while a read finds the same),
+   so the words say "as of" it and that no read since has found any, never that it was the last read */
 function spNoPl(g) {
   if (!pbPropsOn()) return 'no player lines: the props model failed its shadow ledger’s bar, so the sets take none.';
   if (!ppGame(g.id)) return 'no player lines the props model prices: it has no projections for this game yet.';
   const r = pbPr(g.id);
   if (r && (r.mains.length || r.ladders.length || r.yes.length)) return 'no player lines the props model prices: it projects none of the players DraftKings lines here.';
-  return r ? `no player prices yet: DraftKings had posted no player props for it when they were last read (${spEt(Date.parse(r.at), true)}); it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
+  return r ? `no player prices yet: DraftKings had posted no player props for it as of ${spEt(Date.parse(r.at), true)}, and no read since has found any; it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
     : 'no player prices yet: none have been read for it; the job reads DraftKings’ player props through the day, and Refresh odds reads them now.';
 }
 /* why a level of one game has no parlay: the game does not make that many legs, and why */
 function spWhy(n, pool, g) {
   const gl = pbGl(g.id), pr = pbPr(g.id), at = [gl && gl.at, pr && pr.at].filter(Boolean).sort().pop();
   if (!gl && !pr) return `No legs in this game: no DraftKings line has been read for it yet. The job reads them for the next two nights’ games, and Refresh odds reads the current ones.`;
-  if (!gl && pr && !(pr.mains.length || pr.ladders.length || pr.yes.length)) return `No legs in this game yet: DraftKings had posted neither its game lines nor its player props when they were last read (${spEt(Date.parse(at), true)}). The job reads them through the day, and Refresh odds reads the current ones.`;
+  if (!gl && pr && !(pr.mains.length || pr.ladders.length || pr.yes.length)) return `No legs in this game yet: DraftKings had posted neither its game lines nor its player props as of ${spEt(Date.parse(at), true)}, and no read since has found any. The job reads them through the day, and Refresh odds reads the current ones.`;
   const m = pbMaxLegs([...pool.pref, ...pool.thin, ...(pool.mkt || [])]);
   const what = m < n ? `${m ? `Only ${m} leg${m === 1 ? '' : 's'}` : 'No legs'} in this game${pool.noId ? ' that DraftKings’ betslip can take' : ''}` : `No ${n}-leg parlay in this game`;
   if (!pool.plGames) return `${what}, and ${spNoPl(g)}`;
@@ -377,6 +379,8 @@ function epChance(l) {
 function epCands() {
   const u = pbUi(), games = pbGames().filter(g => !u.off.includes(g.id)), out = [];
   let far = 0;
+  /* the ticked games whose DraftKings lines carry a ticked moneyline or spread: with none, there is no price to beat */
+  const priced = games.filter(g => { const gl = pbGl(g.id); return !!gl && ((u.k.ml && !!gl.ml) || (u.k.ats && !!gl.spread)); }).length;
   for (const c of pbPriced(games)) {
     if ((c.kind !== 'ml' && c.kind !== 'spread') || !pbAllows(c, u)) continue;
     if (!Number.isFinite(c.price) || !(c.price >= EP.lo && c.price <= EP.hi) || Math.abs(c.price) < 100) continue;
@@ -390,7 +394,7 @@ function epCands() {
   out.sort((a, b) => (b.ev - a.ev) || ((a.kind === 'ml' ? 0 : 1) - (b.kind === 'ml' ? 0 : 1)) || pbOrd(a, b));
   const one = [], seen = new Set(); for (const c of out) if (!seen.has(c.gid)) { seen.add(c.gid); one.push(c); }
   const keep = new Set([...one.slice(0, EP.cap), ...[...one].sort((a, b) => (b.pe - a.pe) || pbOrd(a, b)).slice(0, EP.capP)].map(c => c.sk));
-  return { all: one, keep: one.filter(c => keep.has(c.sk)), far, games: games.length, kinds: !!(u.k.ml || u.k.ats) };
+  return { all: one, keep: one.filter(c => keep.has(c.sk)), far, priced, games: games.length, kinds: !!(u.k.ml || u.k.ats) };
 }
 /* every parlay of n of the candidates, by the Elo chance (the product: one leg a game) and its price (the prices
    multiplied): Safe the likeliest; a floor's level the best expected return over its floor, else the likeliest */
@@ -439,6 +443,10 @@ function eloPicksHtml() {
   const r = epGet();
   if (!r.kinds) return none('Tick Moneyline or Spread on the Parlay Builder tab for the Elo picks: every leg is a team’s moneyline or spread.');
   if (!r.games) return none('No game ticked on the Parlay Builder tab: tick one there for the Elo picks.');
+  /* no DraftKings price to beat at all: lines.json did not load, or no moneyline or spread is posted yet (the sets' spWhy
+     says the same of their games), never "no line beats the price" */
+  if (!r.priced) return none(LINES_ERR && !Object.keys(SG_LINES).length ? 'No Elo picks yet: DraftKings’ published lines did not load, so there is no price to beat. Refresh odds reads the current ones.'
+    : 'No Elo picks yet: DraftKings had posted no moneyline or spread on the games and bet types ticked when its lines were read. The job reads them through the day, and Refresh odds reads the current ones.');
   if (r.all.length < 2) return none(`No Elo picks on your picks yet: ${r.all.length ? 'only one moneyline or spread' : 'no moneyline or spread'} beats DraftKings’ price by the ELO Model’s chance on the games ticked${r.all.length ? ', and a pick takes two' : ''}.`);
   return `${head}<div class="pb-tiers">${r.tiers.map(t => spCard(t, { chance: t.corr, chanceBy: 'Elo chance', by: 'Elo', kind: 'elo', fid: t.id, what: 'the Elo picks', add: `data-pb-elo-add="${t.id}"`,
     rule: t.legs ? `<span class="pb-rule">${epRuleOf(t)}</span>` : '', legP: l => l.pe })).join('')}</div>`;
@@ -541,13 +549,15 @@ function spAddClick(b, t, what) {
   badges(); spKeepPlace(renderSp);
 }
 /* Finish with no parlay card on the page: the page's own card (pcBuild, as the builder's Finish parlay opens it) on the
-   level's legs, at its price and the Bet amount, the level named over it; the builder is left as it is */
+   level's legs, at its price and the Bet amount, the level named over it, stating the level's own chance as its card
+   does (an Elo pick's the ELO Model's, a set's the model's on its legs as built or as kept at the lock), with its way
+   back to this tab; the builder is left as it is */
 function spFinish(b) {
   if (spStale()) { spKeepPlace(renderSp); return; }
   const [kind, id] = String(b.dataset.pcFinish).split('|'), t = kind === 'sp' ? spTier(id) : kind === 'elo' ? epTier(id) : null; if (!t) return;
   const kicker = kind === 'sp' ? `${t.label} parlay · ${t.game}` : `${t.label} Elo pick`;
-  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null);
-  $('#pcSub').textContent = `${kicker} · ${PC.sub}`; $('#pcBody').innerHTML = PC.html;
+  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null, { chance: t.corr, by: kind === 'elo' ? 'the ELO Model' : "the hub's model", back: 'Back to Suggested Parlays' });
+  $('#pcTitle').textContent = kind === 'elo' ? 'Elo pick' : 'Suggested parlay'; $('#pcSub').textContent = `${kicker} · ${PC.sub}`; $('#pcBody').innerHTML = PC.html;
   $('#pcShare').onclick = pcShare; $('#pcDone').onclick = () => pcClose();
   $('#pcBack').hidden = false; document.body.classList.add('pp-lock'); $('#pcSheet').scrollTop = 0; $('#pcClose').focus();
 }

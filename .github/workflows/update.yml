@@ -190,14 +190,17 @@ jobs:
       # national TV), taken from the page just built on the state just published and lines.json, rewritten until 2 hours
       # before tip-off and locked from then, a level holding a player since listed built again once, graded after the
       # game, in data/suggest_ledger.json; its test runs first, and its check holds the file to the last commit (no locked
-      # set moved but for that replacement). It boots the page in jsdom, so it runs after the tests' npm ci; a failure
-      # marks this step alone and puts the file back as committed: the record never holds back state.json or the data
+      # set moved but for that replacement). The script and its check are handed the run's one clock (SUGGEST_NOW, read
+      # after the test): the check reads which sets are locked at the instant the script rewrote or froze them, so a lock
+      # that passes in the seconds the script runs is judged as the script judged it, never as a locked set moved. It boots
+      # the page in jsdom, so it runs after the tests' npm ci; a failure marks this step alone and puts the file back as
+      # committed: the record never holds back state.json or the data
       - name: The suggestions record
         id: suggest
         if: steps.tests.outcome == 'success'
         continue-on-error: true
         run: |
-          if node tools/test_suggest_ledger.js > /tmp/test_suggest_ledger.log 2>&1 && node tools/suggest_ledger.js && node tools/suggest_check.js; then exit 0; fi
+          if node tools/test_suggest_ledger.js > /tmp/test_suggest_ledger.log 2>&1 && now=$(date -u +%Y-%m-%dT%H:%M:%SZ) && SUGGEST_NOW=$now node tools/suggest_ledger.js && SUGGEST_NOW=$now node tools/suggest_check.js; then exit 0; fi
           tail -20 /tmp/test_suggest_ledger.log
           echo "::error::the suggestions record failed: data/suggest_ledger.json is put back"
           if git cat-file -e HEAD:data/suggest_ledger.json 2>/dev/null; then git checkout HEAD -- data/suggest_ledger.json; else rm -f data/suggest_ledger.json; fi

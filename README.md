@@ -1777,7 +1777,8 @@ line one short line.
 the national market (`tv`, README "The national networks"), NBA TV among them, never a preseason game. Play-in and playoff
 games are on national TV and so featured, and every featured game of a night gets its own set, with no cap.
 `FEATURED_TV.except` (empty) names any network that should not count, so dropping one is one line (and its copy in
-`tools/suggest_check.js`).
+`tools/suggest_check.js`): a set on it still to lock is dropped by the next run, and the sets on it already locked or
+graded stand on the rule they were taken under, so the record's guard never refuses them for it.
 
 **One night at a time** (the NFL owner's call of 17 October 2026, "just show the next night game"): the tab sets out the
 featured games of the first Eastern date with one still to tip, all of them, from 6:00 AM Eastern on the morning after the
@@ -1795,7 +1796,10 @@ the 3-, 4- and 5-leg parlay with the best expected return that lands 25%, 12% an
 else the likeliest of that size, said so on its card; Value picks first, the fewest thin-edge legs to fill, the game's
 total only where the legs with an edge cannot make the size. It is searched at the NFL hub's widths for one game
 (`SP_SEARCH`: each list to 60 legs, a beam of 200 by return and by chance and 400 for the likeliest, the best 4 and 10
-worked by the builder's own sums), a third to three quarters of a second a game with props in jsdom. Every leg is a line
+worked by the builder's own sums). On 25 October 2026's real data a set with props took 7 to 9 seconds to build in jsdom
+and about 1.1 seconds in Chromium (Raptors at Timberwolves, a pool of 100 legs; Pistons at 76ers, 57), most of it the
+builder's same-game sums, which a redraw on the same data takes from their cache (`SG_CACHE`) in a fifth of that or less
+(0.2 seconds in Chromium); the tab builds a set only for a game it sets out, while it is on the screen. Every leg is a line
 the Parlay Builder's Top 50 would take (DraftKings' real price, the model's chance from 45% to 97% and at or above the
 price's implied chance, a Value pick 3 points above it, none 15 points or more over DraftKings' fair chance, a game line
 only with its betslip id where its game's lines carry ids), and besides:
@@ -1816,7 +1820,12 @@ Bet amount pays (redrawn in place as the amount is typed), its legs, each with i
 a locked set's at its locked line and price; Added while it is in, a second press taking it out, the focus kept), **Add to
 builder** (exactly its legs, in the builder's order, so the builder pays what the card said) and **Finish** (the parlay card
 on its legs at the Bet amount: through `PARLAY_CARD.from('sp|')` where the parlay card part is on the page, else the page's
-own card, the level named over it; the builder is left as it is). An Add, a refusal and Add to builder are said on the
+own card, headed "Suggested parlay" (an Elo pick's "Elo pick") with the level named under it, stating the level's own chance
+as its card does, the model's ("the hub's model, on trial" with a player leg) or an Elo pick's "the ELO Model", and "Back to
+Suggested Parlays"; the builder is left as it is). Closing the card puts the focus back on that Finish, or, where the tab
+was redrawn while the card was open (a tip-off, a lock, a read answering), on the same Finish as drawn now, else on the
+tab's own button. A one-game card with no leg carrying a betslip id (every player leg) opens the game's page on
+DraftKings from the lines feed's event id (or a press's), as the NFL card does. An Add, a refusal and Add to builder are said on the
 tab's own status line.
 
 **The lock.** A set is live until 2 hours before its tip-off (`spLockAt`): "Locks Tue 5:30 PM ET, 2 hours before
@@ -1832,7 +1841,8 @@ own, and a set built with no published lines at all is shown and never kept, so 
 holding a player the report has listed since is built again, that level alone, and says so in one line: "Updated in this
 browser: Ace Guard listed out (knee), so held out (Tue 6:00 PM ET); this level was built again.", or the record's own
 "Updated: ..." where the job made the replacement, which then wins. The record is read again when a set reaches its lock
-with the tab open, since the job may have taken the set after the page loaded.
+whichever tab is on the screen, once Suggested Parlays has been opened in that page load, since the job may have taken the
+set after the page loaded.
 
 **The record's pills**: a pill a level, its won-lost and units on $1 from the record's grades (each season's game and level
 once, from the last key that holds it), each titled with the wins expected by DraftKings' fair chance and by the model's
@@ -1864,11 +1874,14 @@ pick is never above its price and the section would always be empty; so the pick
 NFL hub's do on theirs, labelled and guarded (the fair chance first, the far-off guard, the record in the title).
 `ELO_PICK_BLEND` (false) in the part prices them by `params.pick` instead, a one-line change. `state.json`'s `eloPicks`
 (`publish.js`) carries the model's calls on the slate's games to come, its pricing, whether it ran, and that record, so the
-tab reads nothing but the record and lines.json; a model that could not run gives no picks, and says why.
+tab reads nothing but the record and lines.json; a model that could not run gives no picks, and says why. With no price to
+beat, the section says so rather than that no line beats one: "No Elo picks yet: DraftKings' published lines did not load,
+so there is no price to beat." where lines.json did not answer, and "... DraftKings had posted no moneyline or spread on the
+games and bet types ticked when its lines were read." where none is posted yet.
 
-The tab is drawn only while it is on the screen: a hidden tab builds nothing, reads nothing and keeps nothing. Nothing is
-read before it first opens; then the record and lines.json, once each a page load, no-store (lines.json's read is the
-Parlay Builder's, one promise for the two tabs). The half-minute look redraws it where what it shows is stale: a game that
+The tab is drawn only while it is on the screen: a hidden tab builds nothing and keeps nothing. Nothing is read before it
+first opens; then the record and lines.json, once each a page load, no-store (lines.json's read is the Parlay Builder's,
+one promise for the two tabs), and the record again, no-store, whenever a set reaches its lock, whichever tab is showing. The half-minute look redraws it where what it shows is stale: a game that
 tips, a set that locks, the 6:00 AM turn.
 
 ### Where the NBA differs, and why
@@ -1926,7 +1939,8 @@ as the pills do.
 
 `tools/suggest_check.js` is the guard, its rules worked out on its own from the file, the clock and the last commit's
 file: each entry keyed on its own season, date, tip-off and game; its game id its season's, date's and clubs'; its date
-its tip-off's Eastern date (Intl); featured by its own stored networks and type; locking exactly 2 hours before tip-off;
+its tip-off's Eastern date (Intl); featured by its own stored networks and type (today's `FEATURED_TV` for a set still to
+lock; one past its lock needs only a network and no preseason, the rule it was taken under); locking exactly 2 hours before tip-off;
 taken before the lock; the four levels of their sizes, every leg its own game's, one leg a player, one side bet and one
 total; a replacement made between its lock and tip-off, and a level's mark the last recorded for it, no longer holding the
 player; no grade before tip-off, and every grade following its legs (a loss pays 0, a push 1, a win over 1 and exactly its
@@ -1937,14 +1951,17 @@ against the file it started from and, where that differs, the last commit's, and
 back, the last commit's where the file on disk had itself moved a locked entry); the job then runs it again from the
 command line against the last commit.
 
-In the job, after the tests (it needs their `npm ci` for jsdom): `node tools/test_suggest_ledger.js && node
-tools/suggest_ledger.js && node tools/suggest_check.js`; a failure marks that step alone, puts the file back as committed,
-and turns the run red at the end; the record never holds back state.json or the data, and is committed with the data.
+In the job, after the tests (it needs their `npm ci` for jsdom): `node tools/test_suggest_ledger.js`, then one clock read
+(`now=$(date -u +%Y-%m-%dT%H:%M:%SZ)`) handed to both `SUGGEST_NOW=$now node tools/suggest_ledger.js` and `SUGGEST_NOW=$now
+node tools/suggest_check.js`, so the check reads which sets are locked at the instant the script rewrote or froze them (on
+the wall clock a few seconds later, a set rewritten just before its lock would read as a locked set moved, and the step
+would throw that run's takes and grades away); a failure marks that step alone, puts the file back as committed, and turns
+the run red at the end; the record never holds back state.json or the data, and is committed with the data.
 Timing: GitHub starts this repo's runs 3 to 9 hours late, so the locked set is the last run's before the lock, possibly
 hours before it. The two slots added for it, 16:17 and 19:17 UTC, land from about 3:17pm to 9:17pm EDT and 6:17pm to
 12:17am EDT, nearer the 5:30pm to 8pm locks of the evening games; a weekend afternoon tip-off locks before most runs land,
-and a game no run reached before its lock has no entry (each visitor's page then shows its own set, said so). A run takes a
-few seconds a priced game (three sets with props, 15 seconds).
+and a game no run reached before its lock has no entry (each visitor's page then shows its own set, said so). A run takes 7 to
+9 seconds of jsdom a priced game (25 October 2026's two sets with props, about 16 seconds in all).
 
 ### The checks
 
@@ -1962,8 +1979,11 @@ price, two paid at the same-game price `tools/corr.js` gives, every leg a push o
 grade kept that the state can no longer settle, last season's never redone, a game's level under two tip-offs counted once),
 the summary worked out, the next day's set; E no featured game to come; F the guard (a locked set edited on disk refused and
 the last commit's put back, an unlocked set an earlier run rewrote and a locked level an earlier run replaced not refused, no
-state refused, the command line, and `check()` failing every rule on hand-made ledgers); G the real ledger, copied, on the
-real state and lines at the real clock. Four breaks planted in copies each turn it red: a locked set rewritten, a void graded
+state refused, the command line, `check()` failing every rule on hand-made ledgers, a network dropped from `FEATURED_TV`
+since sets on it locked failing only the set on it still to lock, and the job's step reading one clock after the test for
+both the script and its check, a set rewritten a second before its lock passing its check on that clock and failing on one
+read five seconds later); G the real ledger, copied, on the real state and lines at the real clock, held at one instant for
+the script and the check (the made-up off-slate games never settled by a real game under their ids). Four breaks planted in copies each turn it red: a locked set rewritten, a void graded
 a loss, the guard letting a locked set change, the report not read.
 
 `SMOKE_ONLY=sp node tools/smoke.js` (`tools/smoke_suggested.js`), blocking, boots the built page on a made-up November of
@@ -1975,9 +1995,14 @@ featured game, no game at all and a preseason game on national TV; each level's 
 own sums, every leg's rules, the Day-To-Day player in none, Safe the likeliest of every pair of the game's Value picks; the
 on-trial mark on every player leg and nowhere else and the Value mark likewise, "model (on trial)", the payouts on the Bet
 amount and following it, the cards quiet, the lock line word for word, every control 44px, an empty level's reason; Add,
-Added and a second press, Add to builder and the builder paying the level's price, Finish and its card; the Elo picks'
-candidates and four levels against a full enumeration of its own on the ELO Model's chance at `params.pick.sigma`, the lead
-and its title word for word, no mark on their legs, the Parlay Builder's ticks followed; this browser's own set at the lock,
+Added and a second press, Add to builder and the builder paying the level's price, Finish and its card (headed Suggested
+parlay, the level's own chance as its card states it, "Back to Suggested Parlays"), the focus on closing it (back on the
+Finish, on the same Finish as drawn again after a redraw while it was open, on the tab's button with none drawn), a one-game
+card of player legs opening the game's page from lines.json's event id; the Elo picks' candidates and four levels against a
+full enumeration of its own on the ELO Model's chance at `params.pick.sigma`, the lead and its title word for word, no mark
+on their legs, the Parlay Builder's ticks followed, an Elo pick's Finish card stating the Elo chance its level was built on
+("the ELO Model") and the builder's own Finish parlay headed Your parlay again, and with no price to beat (no moneyline or
+spread posted, lines.json not there) the line saying so; this browser's own set at the lock,
 its line and its key, nothing else stored, a locked game waiting for slow lines and an own set never kept without them, a
 reload with the prices moved showing the same set, a locked leg's Add at its locked price, a press re-picking a live set and
 not a locked one, a ruled-out level built again alone and said, the record's set taking the browser's place (after waiting

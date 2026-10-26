@@ -286,6 +286,7 @@ function spKeepSave() {
     if (g && g.status === 'scheduled' && x.tip === g.tip && now < Date.parse(g.tip)) out[id] = x; else delete SP_KEEP[id]; }
   try { if (!Object.keys(out).length) localStorage.removeItem(SP_KEEP_KEY); else localStorage.setItem(SP_KEEP_KEY, JSON.stringify({ v: 1, season: S.season, games: out })); } catch (e) {}
 }
+const spWhyAtLock = w => 'Empty when the set locked: ' + String(w).replace(/, and no read since has found any/, '').replace(/[;.] [^;.]*Refresh odds reads[^.]*\.$/, '.');
 /* a game's set as the tab shows it: live before the lock; from it, the record's locked set, or with none this browser's
    own, built once and kept; a locked level holding a player ruled out since built again, that level only (the record's
    own replacement where the job made one, else the page's, kept) */
@@ -321,6 +322,10 @@ function spShown(g) {
     return upd ? { ...cur, updated: upd } : cur;
   });
   if (dirty) { if (!k) { k = { tip: g.tip, rep: {} }; K[g.id] = k; } k.rep = rep; spKeepSave(); }
+  /* a level empty at the lock keeps its reason as of the take (the record's words, which stay as they are), less what a
+     later read or a press no longer bears out on a set that never moves: "and no read since has found any", and the
+     advice that the job or Refresh odds reads the current ones; said so. A level built again since is left as it is */
+  tiers = tiers.map(t => t && t.why && !t.legs && !t.updated ? { ...t, why: spWhyAtLock(t.why) } : t);
   return { phase: 'locked', lock, tiers, own, at, ledger: !!e };
 }
 /* a level by the id its Finish names (game id:level), as the tab shows it; only a game the tab sets out */
@@ -597,6 +602,6 @@ render.suggest = function () {
   spKeepPlace(renderSp);
 };
 /* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
-Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spState, spLockAt, spEtAt, spOutWhy, spPool, spSet, spRebuild, spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier,
+Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spState, spLockAt, spEtAt, spOutWhy, spWhyAtLock, spPool, spSet, spRebuild, spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier,
   spLedgerOf, spRecSum, spRecLoad, spUpdLine, renderSp, spWatchTick, epChance, epCands, epBuild, epGet, epTier, FEATURED_TV, SP_LOCK_MS, SP_SEARCH, SP_KEEP_KEY, ELO_PICK_BLEND, EP });
 </script>

@@ -474,6 +474,24 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     release(); await sleep(80);
     const kp = JSON.parse(q.w.localStorage.getItem('nba_sp_lock_v1') || '{"games":{}}').games[gA.id];
     check(lnA().dataset.spPhase === 'locked' && txt(lnA()) === `Locked since ${etWd(lockA)}.` && (!kp || !kp.own), `the record's set takes its place, its line word for word, the browser's own set dropped ("${txt(lnA())}")`); }
+  /* a level the record took empty: from the lock it says why as of the take, never that no read since has found any or
+     that Refresh odds reads the current ones (a later run did read gA's props, which LINES1 carries, and a press cannot
+     move a locked set); the record's own words are left as they are */
+  { const rec3 = clone(REC), e = rec3.featured[Object.keys(rec3.featured)[0]];
+    const W = { med: 'Only 2 legs in this game, and no player prices yet: DraftKings had posted no player props for it as of Tue 9:00 AM ET, and no read since has found any; it posts them a day or so before tip-off, and Refresh odds reads the current ones.',
+      aggr: 'No legs in this game yet: DraftKings had posted neither its game lines nor its player props as of Tue 9:00 AM ET, and no read since has found any. The job reads them through the day, and Refresh odds reads the current ones.',
+      xtrm: 'Only 2 legs in this game, and no player prices yet: none have been read for it; the job reads DraftKings’ player props through the day, and Refresh odds reads them now.' };
+    const WANT = { med: 'Empty when the set locked: Only 2 legs in this game, and no player prices yet: DraftKings had posted no player props for it as of Tue 9:00 AM ET.',
+      aggr: 'Empty when the set locked: No legs in this game yet: DraftKings had posted neither its game lines nor its player props as of Tue 9:00 AM ET.',
+      xtrm: 'Empty when the set locked: Only 2 legs in this game, and no player prices yet: none have been read for it.' };
+    e.tiers = e.tiers.map(x => W[x.id] ? { id: x.id, label: x.label, n: x.n, floor: x.floor, why: W[x.id] } : x);
+    const keep = JSON.stringify(rec3);
+    NOW = lockA + 30 * 60e3;
+    const q3 = load(stateOf(SLATE), { lines: LINES1, record: rec3, tab: 'suggest' }); await settle(q3); await openTab(q3);
+    const why3 = Object.fromEntries(['med', 'aggr', 'xtrm'].map(id => [id, txt(q3.d.querySelector(`#spSets [data-sp-game="${gA.id}"] .pb-tier.none.${id} .pb-why`))]));
+    const l3 = q3.d.querySelector(`#spSets [data-sp-game="${gA.id}"] .sp-lock`);
+    check(l3 && l3.dataset.spPhase === 'locked' && JSON.stringify(why3) === JSON.stringify(WANT) && JSON.stringify(rec3) === keep && q3.errors.length === 0 && !/no read since|Refresh odds reads/.test(txt(q3.d.querySelector(`#spSets [data-sp-game="${gA.id}"]`))),
+      `a level the record took empty says from the lock why as of the take, without "no read since" or the Refresh odds advice: ${Object.values(why3).join(' | ')}`); }
   { const rec2 = clone(REC), e = rec2.featured[Object.keys(rec2.featured)[0]], t = e.tiers.find(x => x.legs && x.legs.some(l => l.kind === 'prop')), out = t.legs.find(l => l.kind === 'prop');
     const nt = clone(e.tiers.find(x => x.id !== t.id && x.legs && x.legs.length >= t.n && !x.legs.some(l => l.pid === out.pid)) || t);
     const repl = { ...t, legs: nt.legs.slice(0, t.n), updated: { pid: out.pid, name: out.name, reason: 'listed out, so held out', at: new Date(lockA + 15 * 60e3).toISOString().slice(0, 19) + 'Z' } };

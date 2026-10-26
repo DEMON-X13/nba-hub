@@ -2090,6 +2090,11 @@ only with its betslip id where its game's lines carry ids), and besides:
 - the prices are the Parlay Builder's (`lines.json`, or a Refresh odds press's newer read), and a press re-picks a set until
   its lock and never after.
 An empty level says why in one line ("Only 2 legs in this game, and no player prices yet: ...", any read time in Eastern).
+From the lock to tip-off a level the set locked empty says why as of the take, "Empty when the set locked: Only 2 legs in
+this game, and no player prices yet: DraftKings had posted no player props for it as of Tue 9:00 AM ET." (`spWhyAtLock`),
+without "and no read since has found any" or the advice that the job or Refresh odds reads the current ones: a run after
+the lock does read the game's props, and a press never moves a locked set. The record keeps its words as taken; a level
+built again since the lock says its own.
 
 Each level is a card (`pbTierCard`, quiet): DraftKings' fair chance first and the model's beside it, the price and what the
 Bet amount pays (redrawn in place as the amount is typed), its legs, each with its own **Add** (the leg as the card drew it:
@@ -2273,7 +2278,10 @@ line's instant, games and words, the 6:00 AM turn redrawn by the half-minute loo
 featured game, no game at all and a preseason game on national TV; each level's chance, price and fair chance the builder's
 own sums, every leg's rules, the Day-To-Day player in none, Safe the likeliest of every pair of the game's Value picks; the
 on-trial mark on every player leg and nowhere else and the Value mark likewise, "model (on trial)", the payouts on the Bet
-amount and following it, the cards quiet, the lock line word for word, every control 44px, an empty level's reason; Add,
+amount and following it, the cards quiet, the lock line word for word, every control 44px, an empty level's reason, and
+from the lock a level the record took empty saying why as of the take, word for word, in each wording the reasons take,
+the record's words untouched; an Elo pick's bubble giving the player model's chance as Model and the ELO Model's on its own
+line; Add,
 Added and a second press, Add to builder and the builder paying the level's price, Finish and its card (headed Suggested
 parlay, the level's own chance as its card states it, "Back to Suggested Parlays"), the focus on closing it (back on the
 Finish, on the same Finish as drawn again after a redraw while it was open, on the tab's button with none drawn), a one-game

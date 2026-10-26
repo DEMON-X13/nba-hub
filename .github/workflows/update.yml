@@ -39,7 +39,8 @@ on:
         default: false
   push:
     # a change to the NBA tools runs them once, so a fix is proven straight away. On a claude/ branch the
-    # run commits to that branch; the schedule and the on-demand switch only work from main.
+    # run commits to that branch, all but the calls ledger and the suggestions record, which only main's runs commit;
+    # the schedule and the on-demand switch only work from main.
     branches: [main, "claude/**"]
     paths: ["tools/*.js", "app/*.html", "app/parts/*.html"]
 
@@ -224,6 +225,13 @@ jobs:
         run: |
           git config user.name "nba-hub bot"
           git config user.email "bot@users.noreply.github.com"
+          # the frozen ledgers are the site's record, and the site is main: a run on any other ref (a claude/ branch, a
+          # dispatch from one) writes and checks them but never commits them, so no call or set counts as published before
+          # the site showed it
+          if [ "${{ github.ref }}" != "refs/heads/main" ]; then
+            for f in data/calls.json data/suggest_ledger.json; do if git cat-file -e "HEAD:$f" 2>/dev/null; then git checkout HEAD -- "$f"; else rm -f "$f"; fi; done
+            echo "::notice::a run on ${{ github.ref }}: data/calls.json and data/suggest_ledger.json are put back as committed, since only the job on main writes them"
+          fi
           git add data models model.json players.json props.json liveparlays/parlays.json
           if [ -e lines.json ]; then git add lines.json; fi    # absent until the lines feed's first read: a missing path would stop git add
           if [ "${{ steps.publish.outcome }}" = "success" ] && [ "${{ steps.tests.outcome }}" = "success" ]; then git add state.json history.json pickem.json index.html admin.html

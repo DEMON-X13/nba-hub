@@ -746,9 +746,11 @@ game's tip; a backtest call is on a game that tipped at or before the model's fi
 reads it, at or before the minute: a first run stamps its published calls with its own minute, and backfills a game
 tipping in that minute); every pick is the side its
 chance favours, its game a regular-season or playoff game of the file's season. A first file is held to the last three
-rules alone. In the job a failure puts `data/calls.json` back as committed and turns the run red (README "Runs"). No
-ledger is committed from a branch: the job's first run on main writes it, so no call counts as published before the site
-showed it.
+rules alone. In the job a failure puts `data/calls.json` back as committed and turns the run red (README "Runs"). A run
+on a branch writes and checks the ledger but never commits it: the commit step puts `data/calls.json` and
+`data/suggest_ledger.json` back as committed (removed where new) on any ref but `main`, so only the job on main writes
+them, and no call counts as published before the site showed it (`tools/test_calls.js` runs the step on a branch and on
+main).
 
 ### The record (`tools/publish.js`, `pickem.json`, `app/parts/pickem.html`)
 
@@ -2220,7 +2222,8 @@ In the job, after the tests (it needs their `npm ci` for jsdom): `node tools/tes
 node tools/suggest_check.js`, so the check reads which sets are locked at the instant the script rewrote or froze them (on
 the wall clock a few seconds later, a set rewritten just before its lock would read as a locked set moved, and the step
 would throw that run's takes and grades away); a failure marks that step alone, puts the file back as committed, and turns
-the run red at the end; the record never holds back state.json or the data, and is committed with the data.
+the run red at the end; the record never holds back state.json or the data, and is committed with the data from `main`
+alone (a run on any other ref writes and checks it, and the commit step puts it back as committed: README "Runs").
 Timing: GitHub starts this repo's runs 3 to 9 hours late, so the locked set is the last run's before the lock, possibly
 hours before it. The two slots added for it, 16:17 and 19:17 UTC, land from about 3:17pm to 9:17pm EDT and 6:17pm to
 12:17am EDT, nearer the 5:30pm to 8pm locks of the evening games; a weekend afternoon tip-off locks before most runs land,
@@ -2478,7 +2481,9 @@ pass; the run is red when any step failed. After the tests, the suggestions reco
 game's set into `data/suggest_ledger.json`, committed with the data; a failure marks that step alone and puts the file back
 as committed. The page says when the injury report is older than the file it came in. On
 demand the job takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
-`claude/` branch too, committing there and in its own queue; the schedule only fires from `main`).
+`claude/` branch too, committing there and in its own queue, all but the two frozen ledgers, `data/calls.json` and
+`data/suggest_ledger.json`, which the commit step puts back as committed on any ref but `main`, since only the site's own
+record may hold a call or a set as published; the schedule only fires from `main`).
 
 Local:
 

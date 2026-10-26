@@ -129,6 +129,39 @@ console.log("the job's calls step hands the script and its check one clock");
     ok(r.code === 0 && lag >= 0 && lag <= 120e3, `both are handed the same clock, to the minute (${d.now}, exit ${r.code})`);
   } }
 
+console.log("the job's commit step: the frozen ledgers are committed from main alone");
+{ const sh = stepShell('Commit if anything changed', { 'steps.publish.outcome': 'success', 'steps.tests.outcome': 'success' });
+  ok(!!sh && /git push/.test(sh), 'the step is a run block that commits and pushes');
+  if (sh) {
+    /* a remote and a clone of it with every path the step adds, the ledgers committed (or the calls ledger not yet), then a
+       run's changes to the ledgers, the data and the state, committed by the step on the ref the case names */
+    const FILES = ['data/calls.json', 'data/suggest_ledger.json', 'data/games.csv', 'models/alpha.json', 'model.json', 'players.json', 'props.json', 'liveparlays/parlays.json',
+      'state.json', 'history.json', 'pickem.json', 'index.html', 'admin.html'];
+    const put = (dir, f, v) => { fs.mkdirSync(path.dirname(path.join(dir, f)), { recursive: true }); fs.writeFileSync(path.join(dir, f), v + '\n'); };
+    const run = (branch, ref, o = {}) => {
+      const base = path.join(TMP, 'commit-' + branch.replace(/\W/g, '_') + (o.newLedger ? '-new' : '')), origin = path.join(base, 'origin.git'), seed = path.join(base, 'seed'), work = path.join(base, 'work');
+      fs.mkdirSync(base, { recursive: true });
+      cp.spawnSync('git', ['init', '-q', '--bare', origin]); fs.mkdirSync(seed);
+      git(seed, 'init', '-q'); git(seed, 'checkout', '-q', '-b', branch);
+      for (const f of FILES) if (!(o.newLedger && f === 'data/calls.json')) put(seed, f, 'committed ' + f);
+      git(seed, 'add', '.'); git(seed, 'commit', '-q', '-m', 'base'); git(seed, 'push', '-q', origin, branch);
+      cp.spawnSync('git', ['clone', '-q', '-b', branch, origin, work]);
+      for (const f of ['data/calls.json', 'data/suggest_ledger.json', 'data/games.csv', 'state.json']) put(work, f, 'run ' + f);
+      const r = bash(work, sh.split('${{ github.ref }}').join(ref));
+      const shown = f => { const x = cp.spawnSync('git', ['show', `${branch}:${f}`], { cwd: origin, encoding: 'utf8' }); return x.status === 0 ? x.stdout.trim() : null; };
+      return { code: r.code, out: r.out, shown, here: f => fs.existsSync(path.join(work, f)) ? fs.readFileSync(path.join(work, f), 'utf8').trim() : null };
+    };
+    let x = run('claude/fix-alpha', 'refs/heads/claude/fix-alpha');
+    ok(x.code === 0 && x.shown('data/calls.json') === 'committed data/calls.json' && x.shown('data/suggest_ledger.json') === 'committed data/suggest_ledger.json' && x.here('data/calls.json') === 'committed data/calls.json',
+      `a run on a claude/ branch commits neither ledger: both are put back as committed (exit ${x.code}; the branch has "${x.shown('data/calls.json')}", "${x.shown('data/suggest_ledger.json')}")`);
+    ok(x.shown('data/games.csv') === 'run data/games.csv' && x.shown('state.json') === 'run state.json' && /only the job on main writes them/.test(x.out), 'and commits the rest of its data and its state there, saying why the ledgers were left');
+    x = run('claude/new', 'refs/heads/claude/new', { newLedger: true });
+    ok(x.code === 0 && x.shown('data/calls.json') === null && x.here('data/calls.json') === null && x.shown('data/games.csv') === 'run data/games.csv', `a calls ledger new on a branch is removed, never committed there (exit ${x.code})`);
+    x = run('main', 'refs/heads/main');
+    ok(x.code === 0 && x.shown('data/calls.json') === 'run data/calls.json' && x.shown('data/suggest_ledger.json') === 'run data/suggest_ledger.json' && x.shown('data/games.csv') === 'run data/games.csv' && !/only the job on main/.test(x.out),
+      `a run on main commits both ledgers with the data (exit ${x.code})`);
+  } }
+
 /* what the calls feed besides the record: pickem.json (tools/publish.js pickemState), whose games run to today and
    whose next carries the three models' calls on the games after it for the matchup bubble; and off on the finals a
    club's record leaves out, as the standings do (offFinals) */

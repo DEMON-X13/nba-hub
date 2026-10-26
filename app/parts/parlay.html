@@ -611,8 +611,9 @@ function pbLegAddBtn(l) {
   PB_LEGS.set(l.sk, l); const on = pbOn(l);
   return `<button type="button" class="btn ghost pb-legadd${on ? ' on' : ''}" data-pb-leg="${esc(l.sk)}" aria-pressed="${on}" aria-label="${on ? 'Remove' : 'Add'} ${esc(l.name)}, ${esc(l.label)}, ${on ? 'from' : 'to'} the builder">${on ? 'Added' : 'Add'}</button>`;
 }
-/* a leg's player, team or game: a plain name until the matchup bubble comes (the NFL hub's glance.js answers a
-   button of window.hubGlance's), and the leg kept as drawn, outside M, never saved */
+/* a leg's player, team or game: a button that opens its matchup bubble (app/parts/glance.html, README "The matchup
+   bubble") wherever the bubble is on the page (window.hubGlance), else a plain name; the leg kept as drawn, outside M,
+   never saved, the last 600 (window.glanceLeg). Suggested Parlays' cards draw their names with it too */
 const GLANCE_LEGS = new Map();
 function glanceName(l, shown) {
   const nm = esc(l.name || pbName(l));
@@ -843,6 +844,23 @@ function pbInj(l) {
   if (out) return `<span class="pb-inj" title="On the injury report: ${esc(out)}">${/out/i.test(out) ? 'OUT' : esc(out.toUpperCase())}</span>`;
   return ppRow(l.id, l.pid) ? '' : `<span class="pb-inj" title="The props model does not project him for this game: on no list it reads, or under ${S.props ? S.props.minShown : 8} minutes">NOT PROJECTED</span>`;
 }
+/* the builder's numbers: its legs in its own order, the model's chance and DraftKings' fair chance that all land, the
+   price (DraftKings' prices multiplied, a game's legs priced together by the same-game rule, or a parlay price typed in)
+   and what the Bet amount returns. The parlay card (app/parts/card.html) reads the same, so its price is the builder's */
+function pbQuote() {
+  const legs = pbOrder(M.slip.legs).map(l => pbView(l)); if (!legs.length) return null;
+  const n = legs.length, pr = parlayProb(legs), fair = parlayFair(legs), P = slipDec(legs);
+  const stake = pbStake(), override = M.bookPrice != null && Number.isFinite(M.bookPrice) && M.bookPrice !== 0 ? amToDec(M.bookPrice) : null;
+  const useDec = override || P.dec, payout = stake * useDec, profit = payout - stake, sg = P.sg, trial = legs.some(l => l.kind === 'prop');
+  return { legs, n, pr, fair, P, stake, override, useDec, payout, profit, sg, trial };
+}
+/* what DraftKings' slip will do with each of the builder's legs, by the card's own plan (PARLAY_CARD.dkPlan): nothing
+   under a leg that goes on as built, the number it goes on at where the card converts it, and why where it cannot */
+function dkSlipRows(legs) { try { return window.PARLAY_CARD && typeof window.PARLAY_CARD.dkPlan === 'function' ? window.PARLAY_CARD.dkPlan(legs).each : null; } catch (e) { return null; } }
+function dkSlipLine(x, i) {
+  if (!x || (x.id && !x.swap)) return '';
+  return `<small class="dkslip" data-dkslip="${i + 1}">${x.id ? `On DraftKings as ${esc(x.swap)}` : `Not on DraftKings’ slip yet: ${esc(x.brief || x.why)}`}</small>`;
+}
 function renderParlay(o) {
   slipPrune();
   if (!(o && o.keepPb)) renderPb();
@@ -852,24 +870,21 @@ function renderParlay(o) {
   $('#slSaid').textContent = SLIP_SAID.join(' ');
   if (!PB_SAID) $('#pbSaid').textContent = '';
   const el = $('#pbBuild');
-  const legs = pbOrder(M.slip.legs).map(l => pbView(l));
+  const q = pbQuote(), legs = q ? q.legs : [];
   if (!legs.length) {
     el.innerHTML = `<div class="pb-card pb-builder"><h2 id="pbTitle" tabindex="-1">Parlay Builder</h2>${espnCtl('builder')}
       <p class="pb-lead" style="margin:0">Add a line from the Top ${PB_TOP_N} above${document.getElementById('tab-suggest') ? ' or a parlay from Suggested Parlays' : ''}, or open a game’s Player props after a Refresh odds press and tap any of DraftKings’ prices. Each leg lands here and gets priced.</p></div>`;
     return;
   }
-  const n = legs.length, pr = parlayProb(legs), fair = parlayFair(legs), P = slipDec(legs);
-  const stake = pbStake(), override = M.bookPrice != null && Number.isFinite(M.bookPrice) && M.bookPrice !== 0 ? amToDec(M.bookPrice) : null;
-  const useDec = override || P.dec, payout = stake * useDec, profit = payout - stake, sg = P.sg, trial = legs.some(l => l.kind === 'prop');
+  const { n, pr, fair, P, stake, override, useDec, payout, profit, sg, trial } = q, slips = dkSlipRows(legs);
   const fairAm = pr.corr != null && pr.corr > 0 && pr.corr < 1 ? fmtAm(probToAm(pr.corr)) : '–';
   let html = `<div class="pb-card pb-builder"><h2 id="pbTitle" tabindex="-1" style="display:flex;align-items:center;gap:10px">${n}-leg parlay <span class="pb-pill">building</span></h2>${espnCtl('builder')}
     <p class="pb-lead">Every leg has to land. The chance below is worked out with the legs' real relationship to each other, not by multiplying them together.</p>
     <table class="pb-btbl"><thead><tr><th>Player</th><th>The bet</th><th class="num">Projected</th><th class="num">Chance</th><th class="num">Price</th><th><span class="sr">Remove</span></th></tr></thead><tbody>`;
-  legs.forEach(l => {
+  legs.forEach((l, i) => {
     const f = legFair(l), far = f && l.p != null && l.p - f.p >= PB_FAR - 1e-9, [c, lbl] = l.p != null ? pbBandOf(l.p) : ['', ''];
-    const slip = l.kind === 'prop' ? 'Not on DraftKings’ slip yet: no betslip id in ESPN’s feed' : l.dk ? '' : 'Not on DraftKings’ slip yet: no betslip id was read for this line';
     html += `<tr class="legrow" data-pb-row="${esc(l.sk)}"><td class="plr">${glanceName(l, { ml: l.odds, src: 'real' })}${pbInj(l)}<small>${esc(l.pos)} · ${esc(l.team)} v ${esc(l.opp)} · ${esc(pbDayText(l.date))}</small></td>
-      <td class="bet"><b>${esc(l.label)}</b>${far ? `<small class="faroff" data-far>${farText(l.p, f)}</small>` : ''}${slip ? `<small class="dkslip" data-dkslip>${slip}</small>` : ''}</td>
+      <td class="bet"><b>${esc(l.label)}</b>${far ? `<small class="faroff" data-far>${farText(l.p, f)}</small>` : ''}${dkSlipLine(slips && slips[i], i)}</td>
       <td class="num" data-h="Projected">${pbNum(l.mu)}</td>
       <td class="num" data-h="Chance">${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}</td>
       <td class="num pb-px" data-h="Price">${fmtAm(l.odds)} <small title="DraftKings' price, read ${esc(oddsClock(l.at))}">real · read ${esc(oddsClock(l.at))}</small></td>
@@ -913,7 +928,7 @@ function renderParlay(o) {
   $('#pStake').addEventListener('change', e => { const v = stakeRead(e.target.value); if (v != null) M.stake = v; M.stake = pbStake(); saveMine(); pbKeep(() => renderParlay()); });
   el.querySelectorAll('[data-stake-chip]').forEach(b => b.addEventListener('click', () => { M.stake = +b.dataset.stakeChip; saveMine(); pbKeep(() => renderParlay()); }));
   $('#pBook').addEventListener('change', e => { const v = parseFloat(e.target.value); M.bookPrice = isFinite(v) && v !== 0 && Math.abs(v) >= 100 ? v : null; saveMine(); pbKeep(() => renderParlay()); });
-  $('#pFinish').addEventListener('click', e => { if (pbStale()) { pbKeep(() => render.parlay()); return; } pcOpen(e.currentTarget); });
+  $('#pFinish').addEventListener('click', e => { if (pbStale()) { pbKeep(() => render.parlay()); return; } if (window.PARLAY_CARD) window.PARLAY_CARD.openBuilder(e.currentTarget); });
   $('#pClear').addEventListener('click', () => { if (!confirm('Remove every leg from the builder?')) return;
     M.slip.legs = []; M.bookPrice = null; SLIP_SAID = []; PB_SAID = null; saveMine(); renderParlay(); const t = $('#pbTitle'); if (t) t.focus(); });
 }
@@ -927,6 +942,6 @@ render.parlay = function () {
 /* what Suggested Parlays, the checks and the next pieces stand on */
 Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
   PB_TIERS, PB_KINDS, PB_MIXES, PB_TOP_N, PB_SEARCH, getPbTiers, getPbTop, pbTopBuild, pbTierCard, pbValMark, pbIsValue, pbTrialMark, pbOrder, pbOrd, parlayProb, parlayDec, parlayFair, legFair, legFarOff, legModel,
-  pbView, pbSlipOf, pbLegAddBtn, pbPut, pbStale, pbWatchTick, stakeRead, pbStake, renderParlay, renderPb, pbLinesLoad, linesGl, pbGl, pbPr,
+  pbView, pbSlipOf, pbLegAddBtn, pbPut, pbStale, pbWatchTick, stakeRead, pbStake, renderParlay, renderPb, pbLinesLoad, linesGl, pbGl, pbPr, pbCarries, pbQuote, dkSlipRows, dkSlipLine, glanceName,
   toggleLeg: l => slipToggle(pbSlipOf(l)), pbLines: () => LINES });
 </script>

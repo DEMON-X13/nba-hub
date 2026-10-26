@@ -416,9 +416,9 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
 
   /* ---------- 8. Finish, Clear ALL, a game that tips while the page is open ---------- */
   p.d.getElementById('pFinish').click(); await sleep(20);
-  const card = p.w.NBA_SLIP.card();
-  check(!p.d.getElementById('pcBack').hidden && card && card.n === 3 && card.html.includes(`pays on $12.50`) && [...p.d.querySelectorAll('#pcBody .pc-legs li')].length === 3, "Finish parlay opens the card on the builder's legs and its Bet amount");
-  check([...p.d.querySelectorAll('#pcBody .pc-legs li b')].map(x => x.textContent).join('|') === ordOwn.map(l => l.kind === 'prop' ? l.name : `${l.away} at ${l.home}`).join('|') && txt(p.d.querySelector('#pcBody [data-pc-price] b')).startsWith(am(ob.dec >= 2 ? (ob.dec - 1) * 100 : -100 / (ob.dec - 1))),
+  const card = p.w.PARLAY_CARD.current(), money0 = [...p.d.querySelectorAll('#pcView .pc-money b')].map(x => x.textContent);
+  check(!p.d.getElementById('pcBack').hidden && card && card.legs.length === 3 && card.stake === 12.5 && money0[0] === '$12.50' && money0[1] === '$' + (12.5 * ob.dec).toFixed(2) && [...p.d.querySelectorAll('#pcView .pc-legs li')].length === 3, "Finish parlay opens the card on the builder's legs and its Bet amount");
+  check([...p.d.querySelectorAll('#pcView .pc-legs .pc-who')].map(x => x.textContent).join('|') === ordOwn.map(nameOwn).join('|') && txt(p.d.querySelector('#pcView .pc-price')).replace('−', '-') === am(ob.dec >= 2 ? (ob.dec - 1) * 100 : -100 / (ob.dec - 1)),
     "the card lists them in the builder's order, at the builder's price");
   p.d.getElementById('pcClose').click(); await sleep(20);
   check(p.d.activeElement === p.d.getElementById('pFinish'), 'closing the card gives the focus back to Finish parlay');

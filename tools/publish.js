@@ -20,7 +20,8 @@
  * Nothing a visitor does reaches this file; only the job writes it.
  *
  * And pickem.json, which the Pick'em Record tab reads when it first opens: every game of the season in play to today, with
- * each model's call as published before tip-off (THE PICK'EM RECORD below).
+ * each model's call as published before tip-off (THE PICK'EM RECORD below), and for the matchup bubble the three game
+ * models' calls on the games after today on the slate's horizon (next) and which finals a club's record leaves out (off).
  * And history.json, which the page reads only when a rating-over-time window opens: every listed player's, coach's
  * and club's rating game by game since the season before the one in play (THE HISTORY below), with the change over
  * 7 and 30 days and this season, the 7 days of which state.json carries too, for the tables.
@@ -217,17 +218,43 @@ function historyState(H, { pc, cc, today, plist, coaches, teams }) {   // player
    predictions.csv, the Alpha Model's, the Joker's and the ELO Model's from data/calls.json (tools/calls.js, with src
    backtest kept as data on the game: the page draws every call alike). The weeks run Monday to Sunday, Eastern; week 1
    holds the season's first regular-season game; the playoffs run in their own weeks, P1 on. A model that could not run
-   is named with why (its models/<id>.json status). The page grades the finals itself, from these numbers alone */
+   is named with why (its models/<id>.json status). The page grades the finals itself, from these numbers alone.
+   Two things more, for the matchup bubble (README "The matchup bubble") and read by nothing else: next, the Alpha
+   Model's, the Joker's and the ELO Model's calls on the games after today to the slate's horizon (ten days out, as
+   state.json's slate runs), by game id, since the record runs to today and the Parlay Builder lists tomorrow's games
+   too; and off on a final a club's record leaves out, as the standings do, though ESPN types it REG (tools/fetch.js)
+   and the record grades it like any other: 'cup', the NBA Cup final, and 'playin', a play-in game (offFinals) */
 const PK_MODELS = [['alpha', 'Alpha Model', '#5FD49A'], ['joker', 'The Joker', '#FF6B6B'], ['elo', 'ELO Model', '#FF9F43'],
   ['player', 'Player Model', '#B79CFF'], ['team', 'Team Elo', '#5FD4FF']];
-function pickemState(games, preds, season, today) {
-  const cf = path.join(DATA, 'calls.json');
-  const calls = fs.existsSync(cf) ? (JSON.parse(fs.readFileSync(cf, 'utf8')).calls || {}) : {};
+const REG_GAMES = 82;   // a club's regular season; a season of another length (a lockout's) would need its own
+function readCalls() { const cf = path.join(DATA, 'calls.json'); return fs.existsSync(cf) ? (JSON.parse(fs.readFileSync(cf, 'utf8')).calls || {}) : {}; }
+/* the finals of a season a club's record leaves out, as the standings do, by game id: the NBA Cup final ('cup'), a
+   December final at a neutral site whose two clubs each played another neutral-site final (their semifinals, two
+   games, neither against this opponent) in the four days before, and the play-in ('playin'), a final past either
+   club's 82nd of the season, in tip order, the Cup final not counted. The Cup's earlier rounds and a regular-season
+   game abroad count, as the standings count them */
+function offFinals(games, season) {
+  const days = (a, b) => Math.round((Date.parse(b + 'T12:00:00Z') - Date.parse(a + 'T12:00:00Z')) / 86400000);
+  const fins = games.filter(g => +g.season === season && g.type === 'REG' && g.status === 'final' && g.home_score !== '' && g.away_score !== '' && g.home_score != null && g.away_score != null)
+    .sort((a, b) => (a.tip || a.date) < (b.tip || b.date) ? -1 : (a.tip || a.date) > (b.tip || b.date) ? 1 : a.game_id < b.game_id ? -1 : 1);
+  const neu = fins.filter(g => +g.neutral === 1), off = {}, n = {};
+  for (const g of neu) {
+    if (g.date.slice(5, 7) !== '12') continue;
+    const semi = t => neu.find(x => x !== g && (x.away === t || x.home === t) && x.away !== (t === g.away ? g.home : g.away) && x.home !== (t === g.away ? g.home : g.away) && x.date < g.date && days(x.date, g.date) <= 4);
+    const sa = semi(g.away), sh = semi(g.home);
+    if (sa && sh && sa !== sh) off[g.game_id] = 'cup';
+  }
+  for (const g of fins) { if (off[g.game_id]) continue; let past = false;
+    for (const t of [g.away, g.home]) if ((n[t] = (n[t] || 0) + 1) > REG_GAMES) past = true;
+    if (past) off[g.game_id] = 'playin'; }
+  return off;
+}
+function pickemState(games, preds, season, today, calls = readCalls()) {
   const ours = games.filter(g => +g.season === season && g.type !== 'PRE' && g.date <= today).sort((a, b) => (a.tip || a.date) < (b.tip || b.date) ? -1 : (a.tip || a.date) > (b.tip || b.date) ? 1 : a.game_id < b.game_id ? -1 : 1);
   const monday = d => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() - ((x.getUTCDay() + 6) % 7)); return x.toISOString().slice(0, 10); };
   const firstReg = ours.find(g => g.type === 'REG'), firstPost = ours.find(g => g.type === 'POST');
   const days = (a, b) => Math.round((Date.parse(b + 'T12:00:00Z') - Date.parse(a + 'T12:00:00Z')) / 86400000);
-  const weeks = [], wkOf = {};
+  const weeks = [], wkOf = {}, off = offFinals(games, season);
   const weekKey = g => g.type === 'POST' && firstPost ? 'P' + (Math.floor(days(monday(firstPost.date), g.date) / 7) + 1) : String(Math.floor(days(monday(firstReg ? firstReg.date : g.date), g.date) / 7) + 1);
   const out = [];
   for (const g of ours) {
@@ -240,13 +267,18 @@ function pickemState(games, preds, season, today) {
     const fin = g.status === 'final' && g.home_score !== '' && g.away_score !== '';
     out.push({ id: g.game_id, date: g.date, tip: g.tip || '', type: g.type, w: wkOf[k], away: g.away, home: g.home,
       score: fin ? [+g.away_score, +g.home_score] : null, ml: g.home_ml !== '' && g.away_ml !== '' && g.home_ml != null && g.away_ml != null ? [+g.away_ml, +g.home_ml] : null,
-      line: g.home_line === '' || g.home_line == null ? null : +g.home_line, c, ...(back.length ? { backtest: back } : {}) });
+      line: g.home_line === '' || g.home_line == null ? null : +g.home_line, c, ...(back.length ? { backtest: back } : {}), ...(off[g.game_id] ? { off: off[g.game_id] } : {}) });
   }
+  /* the calls on the games after today, to the slate's horizon: the matchup bubble's alone (the record runs to today) */
+  const next = {};
+  for (const g of games) { if (+g.season !== season || g.type === 'PRE' || g.date <= today || g.date > L.addDays(today, 10)) continue;
+    const c = {}; for (const id of ['alpha', 'joker', 'elo']) { const x = calls[id] && calls[id][g.game_id]; if (x) c[id] = x.pHome; }
+    if (Object.keys(c).length) next[g.game_id] = c; }
   const status = {};
   for (const [id, name] of PK_MODELS.slice(0, 3)) { const f = path.join(L.ROOT, 'models', id + '.json');
     if (!fs.existsSync(f)) continue;
     try { const m = JSON.parse(fs.readFileSync(f, 'utf8')); if (m.status && m.status.ok === false) status[id] = { since: m.status.since || m.generated || null, why: m.status.why || '' }; } catch (e) { status[id] = { since: null, why: `models/${id}.json does not read` }; } }
-  return { v: 1, season, today, models: PK_MODELS.map(([id, name, color]) => ({ id, name, color })), status, weeks, games: out };
+  return { v: 1, season, today, models: PK_MODELS.map(([id, name, color]) => ({ id, name, color })), status, weeks, games: out, next };
 }
 /* The props model's numbers for the page (tools/props.js writes props.json; README "Player props"): the projections for
    the slate's games not yet started, the distribution's constants so the page can price any line DraftKings posts, the
@@ -310,5 +342,5 @@ function corrState() {
   const c = JSON.parse(fs.readFileSync(f, 'utf8'));
   return { measured: c.measured, rho: c.rho, refused: c.refused.pairs, hold: c.hold.value, holdTested: !!c.hold.tested };
 }
-module.exports = { propsState, boxesState, corrState, pickemState, PK_MODELS };
+module.exports = { propsState, boxesState, corrState, pickemState, offFinals, PK_MODELS };
 if (require.main === module) main();

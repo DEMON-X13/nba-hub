@@ -1,0 +1,458 @@
+<!-- The matchup bubble (README "The matchup bubble"): the NFL hub's (its nflbets/build/glance.js at app v114) on this
+     page's numbers, set in by build.js at its part:glance marker: its styles, every class prefixed glance-, and its script
+     in a closure. A leg's name on the Parlay Builder tab (a Top 50 row, a builder row) and on any level card a tab draws
+     with pbTierCard is a button (glanceName in app/parts/parlay.html, drawn only where this part is on the page,
+     window.hubGlance); a click opens a small window anchored to it with that leg's matchup at a glance. It fetches nothing
+     of its own and keeps nothing: every number is read from what the page already has (state.json, the lines the Parlay
+     Builder prices from, and pickem.json, the Pick'em Record's own read, once a page load). -->
+<style>
+/* ---------- the matchup bubble (app/parts/glance.html) ----------
+   On the page's tokens; quiet text is --ink-2, which holds 4.5:1 on --panel and --panel-2. A name is a button with no
+   chrome, a dotted underline and a 44px tap target from padding a negative margin takes back out of the line, so no row
+   moves. The bubble sits under the page's windows (.pp-back, z-index 20) */
+.glance-name{-webkit-appearance:none;appearance:none;position:relative;z-index:1;display:inline-block;box-sizing:border-box;min-height:44px;max-width:100%;margin:-14px 0;padding:14px 0;border:0;border-radius:4px;background:none;font:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;text-align:inherit;vertical-align:baseline;cursor:pointer;overflow-wrap:anywhere;text-decoration:underline dotted;text-decoration-thickness:1px;text-underline-offset:3px;box-shadow:none}
+.glance-name:hover{text-decoration-style:solid;text-decoration-color:var(--hot-2)}
+.glance-name:focus{outline:none}
+.glance-name:focus-visible::after{content:"";position:absolute;left:-4px;right:-4px;top:50%;height:calc(1.35em + 6px);transform:translateY(-50%);border:2px solid var(--ink);border-radius:6px;pointer-events:none}
+.glance-pop{position:absolute;z-index:15;box-sizing:border-box;width:360px;max-width:calc(100vw - 16px);overflow:auto;overscroll-behavior:contain;background:var(--panel);color:var(--ink);border:1px solid var(--line-2);border-radius:14px;box-shadow:0 18px 44px -14px rgba(0,0,0,.6),0 2px 8px rgba(0,0,0,.3);padding:6px 14px 14px;font-family:var(--body);font-size:13px;line-height:1.45;text-align:left}
+.glance-pop[hidden]{display:none}
+.glance-pop:focus{outline:none}
+.glance-pop.glance-sheet{position:fixed;left:0;right:0;bottom:0;top:auto;width:auto;max-width:none;max-height:min(78vh,640px);border-radius:18px 18px 0 0;border-bottom:0;padding:6px 16px calc(16px + env(safe-area-inset-bottom,0px))}
+.glance-hd{display:flex;align-items:center;gap:10px;margin:0 -4px 0 0}
+.glance-title{flex:1 1 auto;min-width:0;margin:0;font:700 16px/1.3 var(--body);color:var(--ink);overflow-wrap:anywhere}
+.glance-x{flex:none;min-height:44px;min-width:44px;padding:0 12px;font-size:13px}
+.glance-sub{margin:0 0 8px;color:var(--ink-2);font-size:12.5px}
+.glance-inj{display:inline-block;margin-left:6px;font-size:10px;font-weight:800;letter-spacing:.05em;padding:1px 6px;border-radius:6px;border:1px solid #FFA2B8;color:#FFA2B8;vertical-align:1px}
+.glance-q{color:var(--ink-2);font-weight:500}
+.glance-kv{margin:0 0 8px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
+.glance-kv>div{display:contents}
+.glance-kv dt{color:var(--ink-2);font-size:12px;font-weight:600;white-space:nowrap}
+.glance-kv dd{margin:0;color:var(--ink);min-width:0;overflow-wrap:anywhere}
+.glance-kv dd b,.glance-vs b,.glance-poss b,.glance-picks b,.glance-nums b,.glance-lt b,.glance-line b{color:var(--ink);font-weight:700}
+.glance-sh{display:inline-flex;vertical-align:-4px;margin-right:4px}
+.glance-sh .tierbadge{width:16px;height:18px}
+.glance-tm{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.02em;color:var(--ink)}
+.glance-trial{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 5px;border:1px solid #FFA2B8;border-radius:999px;color:#FFA2B8;white-space:nowrap;margin-left:5px;vertical-align:1px}
+.glance-pop table.glance-t,.glance-pop table.glance-vs{width:100%;border-collapse:collapse;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible;margin:0 0 8px;font-size:12.5px}
+.glance-pop .glance-t th,.glance-pop .glance-t td,.glance-pop .glance-vs th,.glance-pop .glance-vs td{padding:4px 6px;background:none;border:0;border-top:1px solid var(--line);text-align:left;vertical-align:middle;font-size:12.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);white-space:normal}
+.glance-pop .glance-t thead th,.glance-pop .glance-vs thead th,.glance-pop .glance-vs thead td{border-top:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.glance-pop .glance-t th[scope=row],.glance-pop .glance-vs th[scope=row]{color:var(--ink-2);font-weight:600}
+.glance-pop .glance-t .glance-n{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.glance-pop .glance-t tr.glance-on th,.glance-pop .glance-t tr.glance-on td{background:var(--hot-soft)}
+.glance-pop .glance-vs thead th{text-transform:none;letter-spacing:0}
+.glance-pop .glance-vs th.glance-me{box-shadow:inset 0 -2px 0 var(--hot)}
+.glance-mine{display:block;font-size:10.5px;font-weight:700;color:var(--ink);letter-spacing:.02em}
+.glance-line{margin:0 0 8px;color:var(--ink)}
+.glance-k{display:inline-block;margin-right:6px;color:var(--ink-2);font-size:12px;font-weight:600}
+.glance-h4{margin:8px 0 4px;color:var(--ink-2);font-size:12px;font-weight:700}
+.glance-poss,.glance-picks{list-style:none;margin:0 0 8px;padding:0}
+.glance-poss li{padding:3px 0;color:var(--ink)}
+.glance-picks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 14px}
+.glance-picks li{display:flex;justify-content:space-between;align-items:center;gap:6px;min-width:0;padding:4px 0;border-top:1px solid var(--line);color:var(--ink)}
+.glance-picks li>span:first-child{min-width:0;overflow-wrap:anywhere}
+.glance-picks li>span:last-child{flex:none;white-space:nowrap}
+.glance-picks li.glance-with{font-weight:700}
+.glance-chk{color:var(--ink);font-weight:800}
+.glance-none{margin:0 0 8px}
+.glance-leg{margin:4px 0 0;padding:8px 10px;border-radius:10px;background:var(--panel-2);border:1px solid var(--line)}
+.glance-lt{margin:0 0 4px;color:var(--ink)}
+.glance-nums{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0}
+.glance-nums>div{display:flex;gap:5px;align-items:baseline}
+.glance-nums dt{color:var(--ink-2);font-size:12px;font-weight:600}
+.glance-nums dd{margin:0;color:var(--ink);font-variant-numeric:tabular-nums}
+.glance-acts{margin:10px 0 0}
+.glance-tonight{width:100%;min-height:44px;font-size:13px}
+@media(max-width:400px){.glance-picks{grid-template-columns:minmax(0,1fr)}}
+</style>
+<script>
+/* ---------- the matchup bubble (README "The matchup bubble") ----------
+   The NFL hub's owner, 17 October 2026: "in the parlay builder, when i click on a player or a team, bring up a bubble pop
+   up where it shows their matchup for the day so i can see info at a glance." Carried here on 25 October 2026 with the
+   NBA's numbers.
+
+   A leg's name is a button (glanceName in app/parts/parlay.html): data-glance "p:<ESPN athlete id>" for a player's line,
+   "t:<ABBR>" for a team's moneyline or spread, "g:<game id>" for a game total, the leg's game in data-glance-game and the
+   leg itself kept by its signature (window.glanceLeg). One click on a name (Enter and Space too: it is a button) opens a
+   small window anchored to it: below the name, above it where there is no room below, kept inside the screen; a sheet
+   across the foot of the screen at 640px and under, and wherever neither side of the name has 160px for it (a landscape
+   phone). It is role="dialog" aria-modal="false", labelled by its heading; the focus moves into it and Tab stays inside
+   while it is open; Escape, Close (44px), a click outside it or a click on another name close it, the focus going back
+   to the name. It sits under the page's windows.
+
+   The same leg can be drawn in several places at once (its Top 50 row and its builder row, a level card and another), so
+   the bubble keeps the place it was opened from (placeOf) and the leg's key, side and line, and when the page draws its
+   rows again while it is open (a MutationObserver, connected only then) it is bound to that place's copy of the leg
+   (marked open, drawn and placed again with the copy's numbers), or closed, the focus on the leg's neighbour there,
+   where that place no longer draws the leg. Drawn again, it keeps where the reader had scrolled it.
+
+   A player's bubble: his position and club and his status on the injury report as the page reads it; his overall Elo
+   with its tier shield and tier, and his rank among the rated players at his position (the Players tab's own numbers,
+   state.json's players), or why the ladder does not rank him; the game and its tip-off in ET; what he faces: the
+   opponent's defence as the player model rates it (the Teams tab's Defence column, ranked as that column sorts; the
+   opponent's offence for a steals or blocks line, made at the other end); the props model's projection for his minutes
+   and the leg's stat, on trial; and the leg: its line, the price its row shows, the model's chance (on trial) and
+   DraftKings' fair chance. A team's or a game total's bubble: both records this season as the standings count them (the
+   Pick'em Record's finals, the NBA Cup final and the play-in left out), each club's strength and its rank (the Teams tab), the line the leg stands on (the Parlay Builder's own: DraftKings' as the
+   job read it or a press, the newer), offence against defence each way, and each model's pick and chance (Vegas, the
+   Player Model, Team Elo, the Alpha Model, the Joker and the ELO Model: the last three from pickem.json, its games to
+   today and its next after them), the leg's team marked "this leg" and, on a
+   moneyline alone, each model picking that team to win ticked; then the leg and a button to the game on Tonight. What a
+   file has not given says so in its own line, and the rest draws */
+(function () {
+'use strict';
+const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const ordinal = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)] || 'th');
+const pc0 = p => (p * 100).toFixed(0) + '%';
+const N = (key, v) => `<b data-glance-n="${H(key)}">${H(v)}</b>`;
+const St = () => (typeof S === 'object' && S) ? S : null;
+/* a club by its code, in the bubble's ink (a club's own colour on the panel falls under 4.5:1 for several clubs) */
+const tag = t => `<b class="glance-tm">${H(t)}</b>`;
+const nickOf = t => (typeof TEAMS === 'object' && TEAMS[t]) ? TEAMS[t][1] : t;
+const amTxt = v => v == null || !isFinite(v) ? '–' : (v > 0 ? '+' : '−') + Math.abs(Math.round(v));
+/* a rating in points with its sign, rounded as the Teams tab rounds it (toFixed, which rounds the size: −45.5 is −46,
+   where Math.round would say −45), with a true minus */
+const signed0 = v => { if (v == null || !isFinite(v)) return '–'; const s = Math.abs(v).toFixed(0); return (s === '0' ? '' : v > 0 ? '+' : '−') + s; };
+const game = gid => { const s = St(); return s && Array.isArray(s.slate) ? s.slate.find(g => g.id === gid) || null : null; };
+/* a tip-off in ET, the game's own Eastern date: "Sun Oct 25 · 7:00 PM ET" (in English, as the card writes it) */
+function kickOf(g) {
+  if (!g) return '';
+  const x = new Date(g.date + 'T12:00:00Z'), d = isNaN(x) ? String(g.date || '') : x.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }) + ' ' + x.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+  const t = g.tip && isFinite(Date.parse(g.tip)) ? new Date(g.tip).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET' : '';
+  return t ? d + ' · ' + t : d;
+}
+/* the Teams tab's own ranking of a column: its rows sorted high to low on it (its table's sort, which keeps the file's
+   order on a tie), a club's place in it */
+function teamRank(key, t) {
+  const s = St(); if (!s || !s.teams || !s.teams[t] || !isFinite(s.teams[t][key])) return null;
+  const rows = Object.entries(s.teams).filter(([, v]) => isFinite(v[key])), sorted = [...rows].sort((a, b) => a[1][key] === b[1][key] ? 0 : a[1][key] < b[1][key] ? 1 : -1);
+  return { v: s.teams[t][key], rank: sorted.findIndex(([x]) => x === t) + 1, n: sorted.length };
+}
+/* the Pick'em Record's file (pickem.json): its own read, once a page load (window.NBA_PICKEM.load), asked for by a
+   team's bubble where the tab has not read it yet; a read that fails is made again by the next team's bubble */
+let PK_WAIT = null, PK_FAILED = false;
+function pkData() {
+  const P = window.NBA_PICKEM; if (!P || typeof P.data !== 'function') return { err: true };
+  const d = P.data(); if (d) return { d };
+  if (PK_FAILED) return { err: true };
+  if (!PK_WAIT && typeof P.load === 'function') PK_WAIT = Promise.resolve(P.load()).catch(() => null).then(() => { PK_WAIT = null; PK_FAILED = !P.data(); if (cur) draw(); });
+  return PK_WAIT ? { wait: true } : { err: true };
+}
+/* the leg the bubble was opened from, as its row drew it */
+const legOf = sig => sig && typeof window.glanceLeg === 'function' ? window.glanceLeg(sig) : null;
+
+let cur = null, box = null;
+/* where a name is drawn, worked out from the page when the bubble opens, so a redraw finds the same copy of it: the
+   builder (#parlayBody), the Top 50 lines (#pbPanel), or a level card (.pb-tier[data-pb-tier]) in its section, a set's
+   under its game ([data-sp-game]) and an Elo pick's under #pbElo; anywhere else the nearest element with an id. Within
+   one place a leg is drawn once: the builder holds one leg a stat, the list each bet once, a card one leg a player. A
+   leg is known there by its key, side and line (its signature less the price, its source and the model's chance, which
+   a Refresh odds press can move while the leg stays) */
+const qv = v => '"' + String(v).replace(/["\\]/g, '\\$&') + '"';
+const legId = sig => { const p = String(sig || '').split('|'); return p.length > 3 ? p.slice(0, -3).join('|') : p.join('|'); };
+function placeOf(btn) {
+  const sec = btn.closest('#parlayBody,#pbPanel,#pbElo,[data-sp-game]') || btn.closest('[id]'); if (!sec) return null;
+  const s = sec.id ? `[id=${qv(sec.id)}]` : `[data-sp-game=${qv(sec.dataset.spGame)}]`, card = btn.closest('.pb-tier[data-pb-tier]');
+  return card && sec.contains(card) ? `${s} .pb-tier[data-pb-tier=${qv(card.dataset.pbTier)}]` : s;
+}
+const namesIn = el => el ? [...el.querySelectorAll('[data-glance]')] : [];
+const sameLeg = (b, c) => b.dataset.glance === c.of && (b.dataset.glanceGame || '') === c.gid && legId(b.dataset.glanceLeg) === c.leg;
+/* the open bubble's name: the one it was opened from while that is on the page, else, after a redraw, the same leg's
+   copy in the same place (marked open, and the bubble's leg the copy's, so its numbers follow a new price) */
+function anchor() {
+  if (!cur) return null;
+  if (cur.from && cur.from.isConnected) return cur.from;
+  const pl = cur.place ? document.querySelector(cur.place) : null, same = namesIn(pl).find(b => sameLeg(b, cur)) || null;
+  if (same) { cur.from = same; same.setAttribute('aria-expanded', 'true');
+    if (same.dataset.glanceLeg !== cur.sig) { cur.sig = same.dataset.glanceLeg || ''; cur.stale = true; } }
+  return same;
+}
+
+/* ---- the leg it was opened from ---- */
+const trialMark = () => '<i class="glance-trial" title="The props model is on trial: not yet shown to beat DraftKings">on trial</i>';
+function legHtml(K) {
+  if (!K || !K.leg) return '';
+  const l = K.leg, out = [];
+  out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
+  out.push(`<div><dt>Model</dt><dd>${l.p != null && isFinite(l.p) ? N('model', pc0(l.p)) + (l.kind === 'prop' ? trialMark() : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`);
+  let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
+  out.push(`<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`);
+  return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;
+}
+function tonightBtn(gid) {
+  return game(gid) ? `<div class="glance-acts"><button type="button" class="btn ghost glance-tonight" data-glance-tonight="${H(gid)}">Open game on Tonight</button></div>` : '';
+}
+
+/* ---- a player ---- */
+/* a steals or blocks line is made at the other end of the floor: he faces the opponent's offence there; every other
+   line (points, rebounds, assists, threes, their sums, a double- or triple-double) its defence */
+const AT_DEF = new Set(['stl', 'blk', 'sb']);
+const POS = { G: 'guards', F: 'forwards', C: 'centers', PG: 'point guards', SG: 'shooting guards', SF: 'small forwards', PF: 'power forwards' };
+const STATS = [['min', 'Minutes'], ['pts', 'Points'], ['reb', 'Rebounds'], ['ast', 'Assists'], ['tpm', 'Threes']];
+function playerHtml() {
+  const s = St(), pid = cur.id, gid = cur.gid, K = legOf(cur.sig), L = K && K.leg, g = game(gid);
+  const P = s && Array.isArray(s.players) ? s.players.find(p => p.id === pid) || null : null;
+  let row = null; try { row = typeof ppRow === 'function' ? ppRow(gid, pid) : null; } catch (e) { row = null; }
+  const name = (L && L.name) || (row && row[0]) || (P && P.name) || pid, team = (L && L.team) || (row && row[1]) || (P && P.team) || '';
+  const pos = (row && row[2]) || (P && P.pos) || '';
+  const opp = g ? (team === g.home ? g.away : team === g.away ? g.home : '') : '', home = g && opp ? team === g.home : null;
+  /* his status as the page reads it: on the injury report (the lineups' absentees), or not projected */
+  let out = ''; try { out = g && typeof ppOut === 'function' ? ppOut(g, pid) : ''; } catch (e) { out = ''; }
+  const projected = !!row, gameProj = typeof ppGame === 'function' && !!ppGame(gid);
+  const chip = out ? `<span class="glance-inj" data-glance-n="inj" title="On the injury report: ${H(out)}">${/out/i.test(out) ? 'OUT' : H(String(out).toUpperCase())}</span>`
+    : !projected && gameProj ? `<span class="glance-inj" data-glance-n="inj" title="The props model does not project him for this game: on no list it reads, or under ${s && s.props ? s.props.minShown : 8} minutes">NOT PROJECTED</span>` : '';
+  const sub = `<p class="glance-sub"><span data-glance-n="pos">${H(pos)}</span>${team ? ` · <span data-glance-n="team">${H(team)}</span>` : ''}${chip}</p>`;
+  const lines = [];
+  /* his overall Elo, its shield and tier, and his rank at his position, as the Players tab rates and ranks him */
+  if (P && isFinite(P.rating)) {
+    lines.push(`<div><dt>Overall Elo</dt><dd><span class="glance-sh">${typeof tierBadge === 'function' ? tierBadge(P.rating) : ''}</span>${N('elo', Math.round(P.rating))} <span data-glance-n="tier">${H(typeof eloTier === 'function' ? eloTier(P.rating)[0] : '')}</span></dd></div>`);
+    if (P.ranked) { const pool = s.players.filter(x => x.ranked && x.pos === P.pos && isFinite(x.rating)), sorted = [...pool].sort((a, b) => a.rating === b.rating ? 0 : a.rating < b.rating ? 1 : -1);
+      lines.push(`<div><dt>Rank</dt><dd>${N('rank', '#' + (sorted.indexOf(P) + 1))} <span class="glance-q">of <span data-glance-n="of">${sorted.length}</span> rated <span data-glance-n="posof">${H(POS[P.pos] || P.pos + 's')}</span></span></dd></div>`); }
+    else { const why = P.team === 'FA' ? 'not on a roster' : !(P.min >= 10) ? `${(+P.min || 0).toFixed(0)} minutes a game, under the ladder's ten` : !(P.games >= 20) ? `${P.games || 0} games, under the ladder's twenty` : 'outside the ladder\'s pool';
+      lines.push(`<div><dt>Rank</dt><dd class="glance-q" data-glance-n="norank">not ranked: ${H(why)}</dd></div>`); }
+  } else lines.push(`<div><dt>Overall Elo</dt><dd class="glance-q" data-glance-n="noelo">no rating: he is not among the players the model rates</dd></div>`);
+  /* the game */
+  if (g) lines.push(`<div><dt>Game</dt><dd>${home == null ? '' : `<span data-glance-n="ha">${home ? 'vs' : 'at'}</span> <span data-glance-n="opp">${tag(opp)}</span> · `}<span data-glance-n="kick">${H(kickOf(g))}</span></dd></div>`);
+  /* what he faces: the opponent's defence (or offence) as the Teams tab's column rates and ranks it */
+  if (opp) { const key = L && AT_DEF.has(L.stat) ? 'offence' : 'defence', u = teamRank(key, opp), nm = key === 'offence' ? 'Offence' : 'Defence';
+    if (u) lines.push(`<div data-glance-faces="${key}"><dt>Faces</dt><dd title="The Teams tab's ${nm} column: the ${H(nickOf(opp))}' ${key} in rating points, from the player model with today's injuries, ${ordinal(u.rank)} of the ${u.n} teams"><span data-glance-n="uclub">${tag(opp)}</span> <span data-glance-n="unit">${nm}</span> ${N('uval', signed0(u.v))} ranked ${N('urank', ordinal(u.rank))} <span class="glance-q">of <span data-glance-n="uof">${u.n}</span></span></dd></div>`); }
+  /* the props model's projection for him in this game, on trial: his minutes, the leg's own stat, his main lines */
+  let table = '';
+  if (row) {
+    const st = L && L.kind === 'prop' && L.stat ? L.stat : null, ks = STATS.map(x => x[0]);
+    const want = st && !ks.includes(st) ? [...STATS, [st, (typeof PP_NAMES === 'object' && PP_NAMES[st]) || st]] : STATS;
+    const val = k => { if (k === 'min') return isFinite(row[3]) ? (+row[3]).toFixed(0) : '–';
+      if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pc0(v) : '–'; }
+      const v = typeof ppMean === 'function' ? ppMean(row, k) : null; return v == null || !isFinite(v) ? '–' : (+v).toFixed(1); };
+    table = `<table class="glance-t" aria-label="The props model's projection for him in this game, on trial"><thead><tr><th scope="col">Projected${trialMark()}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
+      `<tr data-glance-stat="${H(k)}"${st === k ? ' class="glance-on"' : ''}><th scope="row">${H(lab)}</th><td class="glance-n" data-glance-n="proj:${H(k)}">${H(val(k))}</td></tr>`).join('')}</tbody></table>`;
+  } else table = `<p class="glance-q glance-none" data-glance-n="noproj">No projection: ${out ? 'he is on the injury report' : gameProj ? 'the props model does not project him for this game' : 'the props model has no projections for this game yet'}.</p>`;
+  return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${tonightBtn(gid)}` };
+}
+
+/* ---- a team, or a game ---- */
+/* the line the leg stands on: the Parlay Builder's own for the game (pbGl: DraftKings' as lines.json read it, or a
+   Refresh odds press's, the newer), else the game's published line, else none yet */
+function lineOf(g) {
+  let G = null; try { G = typeof pbGl === 'function' ? pbGl(g.id) : null; } catch (e) { G = null; }
+  if (G && (G.ml || G.spread || G.total)) return { src: 'dk', at: G.at, hl: G.spread ? +G.spread.home.line : null, tot: G.total ? +G.total.line : null,
+    mla: G.ml ? +G.ml.away.odds : null, mlh: G.ml ? +G.ml.home.odds : null };
+  if (g.line != null || g.totalLine != null || g.ml) return { src: 'pub', at: g.oddsAt || null, hl: g.line != null ? +g.line : null, tot: g.totalLine != null ? +g.totalLine : null,
+    mla: g.ml ? +g.ml.away : null, mlh: g.ml ? +g.ml.home : null };
+  return null;
+}
+const imp = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100);
+/* Vegas, as the Pick'em Record calls it: the moneyline favourite with the margin out, else the spread's favourite (with
+   no chance of its own), else no side */
+/* Vegas as the Pick'em Record reads it (app/parts/pickem.html): the moneyline favourite with the margin out; level prices
+   (no favourite) or none, the spread's favourite, with no chance; neither, no side */
+function vegasOf(g, Ln) {
+  if (Ln && isFinite(Ln.mla) && isFinite(Ln.mlh) && Ln.mla && Ln.mlh) { const h = imp(Ln.mlh), a = imp(Ln.mla), ph = h / (h + a); if (ph !== 0.5) return { pick: ph > 0.5 ? g.home : g.away, p: Math.max(ph, 1 - ph) }; }
+  if (Ln && isFinite(Ln.hl) && Ln.hl) return { pick: Ln.hl < 0 ? g.home : g.away, p: null };
+  return null;
+}
+function teamHtml() {
+  const s = St(), gid = cur.gid, me = cur.kind === 't' ? cur.id : null, K = legOf(cur.sig), L = K && K.leg, g = game(gid);
+  if (!g) return { title: H((L && L.name) || gid), body: `<p class="glance-q">This game is no longer on the board.</p>${legHtml(K)}` };
+  const a = g.away, hm = g.home, toWin = !!me && !!L && L.kind === 'ml';
+  const title = `${H(nickOf(a))} ${g.neutral ? 'vs' : 'at'} ${H(nickOf(hm))}`;
+  const sub = `<p class="glance-sub">${g.type === 'POST' ? 'Playoffs' : g.type === 'PRE' ? 'Preseason' : 'Regular season'} · <span data-glance-n="kick">${H(kickOf(g))}</span></p>`;
+  const col = t => `<th scope="col" data-glance-team="${H(t)}"${t === me ? ' class="glance-me"' : ''}>${tag(t)}${t === me ? ' <small class="glance-mine">this leg</small>' : ''}</th>`;
+  const K0 = pkData(), PK = K0.d || null, rows = [], notes = [];
+  /* both records this season as the standings count them: the Pick'em Record's finals, the regular season less the NBA
+     Cup final and the play-in (pickem.json's off on them), the playoffs beside it once there are any */
+  if (PK) { const rec = t => { const r = [0, 0], p = [0, 0];
+      for (const x of PK.games || []) { if (!x.score || x.off || (x.away !== t && x.home !== t)) continue; const mine = x.home === t ? x.score[1] - x.score[0] : x.score[0] - x.score[1]; if (!mine) continue;
+        const into = x.type === 'POST' ? p : x.type === 'REG' ? r : null; if (into) into[mine > 0 ? 0 : 1]++; }
+      return r[0] + '-' + r[1] + (p[0] + p[1] ? ' · playoffs ' + p[0] + '-' + p[1] : ''); };
+    rows.push(`<tr data-glance-row="rec"><th scope="row">Record</th><td>${N('rec:' + a, rec(a))}</td><td>${N('rec:' + hm, rec(hm))}</td></tr>`); }
+  /* strength, as the Teams tab rates and ranks it, with its tier shield */
+  { const ta = teamRank('strength', a), th = teamRank('strength', hm);
+    if (ta && th) rows.push(`<tr data-glance-row="str"><th scope="row">Strength</th>${[[a, ta], [hm, th]].map(([t, u]) => `<td><span class="glance-sh">${typeof tierBadge === 'function' ? tierBadge(u.v) : ''}</span>${N('str:' + t, Math.round(u.v))} <small class="glance-q">${N('srk:' + t, '#' + u.rank)}</small></td>`).join('')}</tr>`); }
+  const tbl = `<table class="glance-vs"><thead><tr><td></td>${col(a)}${col(hm)}</tr></thead><tbody>${rows.join('')}</tbody></table>`;
+  if (K0.wait) notes.push('<p class="glance-q" data-glance-n="pkwait">Loading the Pick\'em Record\'s records and calls…</p>');
+  else if (!PK) notes.push('<p class="glance-q" data-glance-n="pkerr">The Pick\'em Record\'s file did not load: no records, and no Alpha Model, Joker or ELO Model call.</p>');
+  /* the line */
+  const Ln = lineOf(g), mm = v => v != null && isFinite(v) && v ? amTxt(v) : null;
+  let line;
+  if (Ln) { const parts = [];
+    if (Ln.hl != null && isFinite(Ln.hl)) parts.push(`<span data-glance-n="spread">${Ln.hl < 0 ? H(hm) + ' −' + (-Ln.hl) : Ln.hl > 0 ? H(a) + ' −' + Ln.hl : "Pick'em"}</span>`);
+    if (Ln.tot != null && isFinite(Ln.tot)) parts.push(`total <span data-glance-n="total">${H(Ln.tot)}</span>`);
+    if (mm(Ln.mla) || mm(Ln.mlh)) parts.push(`<span data-glance-n="ml">${H(a)} ${mm(Ln.mla) || '–'} / ${H(hm)} ${mm(Ln.mlh) || '–'}</span>`);
+    const when = Ln.at && typeof oddsClock === 'function' ? ', read ' + oddsClock(Ln.at) : '';
+    line = parts.join(' · ') + ` <span class="glance-q">(<span data-glance-n="lsrc">${Ln.src === 'dk' ? 'DraftKings' + H(when) : 'as published'}</span>)</span>`; }
+  else { const err = typeof LINES_ERR !== 'undefined' && LINES_ERR, wait = typeof LINES !== 'undefined' && !LINES && !err;
+    line = `<span class="glance-q" data-glance-n="noline">${wait ? 'Loading DraftKings’ lines…' : err ? 'no line: DraftKings’ published lines did not load' : 'no line posted yet'}</span>`; }
+  /* offence against defence, each way, as the Teams tab's columns rate and rank them */
+  const one = (o, d) => { const uo = teamRank('offence', o), ud = teamRank('defence', d); if (!uo || !ud) return '';
+    return `<li data-glance-poss="${H(o)}-${H(d)}">${H(o)} offence ${N('ov', signed0(uo.v))} <small class="glance-q">${N('ork', ordinal(uo.rank))}</small> <span class="glance-q">vs</span> ${H(d)} defence ${N('dv', signed0(ud.v))} <small class="glance-q">${N('drk', ordinal(ud.rank))}</small></li>`; };
+  const both = one(a, hm) + one(hm, a), poss = both ? `<p class="glance-h4">Offence vs defence</p><ul class="glance-poss">${both}</ul>` : '';
+  /* every model's pick and its chance: Vegas on the line shown, the Player Model's and Team Elo's numbers on Tonight, and
+     the Alpha Model's, the Joker's and the ELO Model's calls as the Pick'em Record has them: its game to today, else
+     its next (the calls on the games after the job's today, which the record does not run to) */
+  const pkG = PK ? (PK.games || []).find(x => x.id === gid) : null, pkC = pkG && pkG.c ? pkG.c : PK && PK.next && PK.next[gid] ? PK.next[gid] : null;
+  const call = ph => ph != null && isFinite(ph) ? { pick: ph >= 0.5 ? hm : a, p: Math.max(ph, 1 - ph) } : null;
+  const MOD = [['vegas', 'Vegas', vegasOf(g, Ln)], ['player', 'Player Model', call(g.model && g.model.pHome)], ['team', 'Team Elo', call(g.team && g.team.pHome)]];
+  if (PK) for (const [id, lab] of [['alpha', 'Alpha Model'], ['joker', 'The Joker'], ['elo', 'ELO Model']]) MOD.push([id, lab, call(pkC ? pkC[id] : null)]);
+  const picks = `<p class="glance-h4">Picks</p><ul class="glance-picks">${MOD.map(([id, lab, x]) => {
+    if (!x || (x.pick !== a && x.pick !== hm)) return `<li data-glance-model="${id}"><span>${lab}</span><span class="glance-q">no call</span></li>`;
+    const mine = toWin && x.pick === me;
+    return `<li data-glance-model="${id}" data-pick="${H(x.pick)}"${mine ? ' class="glance-with"' : ''}><span>${lab}</span><span>${tag(x.pick)} ${x.p != null ? N('p:' + id, pc0(x.p)) : `<span class="glance-q" data-glance-n="p:${id}">on the spread</span>`}${mine ? ' <span class="glance-chk" aria-label="picks this leg to win" role="img">✓</span>' : ''}</span></li>`; }).join('')}</ul>`;
+  return { title, body: `${sub}${tbl}${notes.join('')}<p class="glance-line"><span class="glance-k">Line</span> ${line}</p>${poss}${picks}${legHtml(K)}${tonightBtn(gid)}` };
+}
+
+/* ---- the window ---- */
+function make() {
+  if (box) return box;
+  box = document.createElement('div'); box.id = 'glanceBox'; box.className = 'glance-pop'; box.hidden = true;
+  box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'false'); box.setAttribute('aria-labelledby', 'glanceTitle'); box.tabIndex = -1;
+  document.body.appendChild(box);
+  box.addEventListener('click', e => {
+    const t = e.target && e.target.closest ? e.target : null; if (!t) return;
+    if (t.closest('[data-glance-close]')) { close(true); return; }
+    const tn = t.closest('[data-glance-tonight]');
+    if (tn) tonight(tn.dataset.glanceTonight);
+  });
+  box.addEventListener('keydown', e => {
+    if (e.key !== 'Tab') return;
+    const f = focusables(box);
+    if (!f.length) { e.preventDefault(); return; }
+    const first = f[0], last = f[f.length - 1], at = document.activeElement;
+    if (e.shiftKey && (at === first || at === box || !box.contains(at))) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && (at === last || !box.contains(at))) { e.preventDefault(); first.focus(); }
+  });
+  return box;
+}
+/* the game on Tonight: the bubble closes, the board opens on the game's day and the game's card takes the focus */
+function tonight(gid) {
+  const g = game(gid); close(false); if (!g) return;
+  try { day = g.date; } catch (e) {}
+  if (typeof show === 'function') show('slate');
+  const card = document.querySelector(`#slate article[data-id=${qv(gid)}]`);
+  if (card) { card.setAttribute('tabindex', '-1'); try { if (typeof card.scrollIntoView === 'function') card.scrollIntoView({ block: 'center' }); } catch (e) {} try { card.focus({ preventScroll: true }); } catch (e) {} }
+}
+const FOCUSABLE = 'button,a[href],input,select,textarea,[tabindex]:not([tabindex="-1"])';
+const focusables = el => el ? [...el.querySelectorAll(FOCUSABLE)].filter(x => !x.disabled && !x.closest('[hidden]')) : [];
+const sheet = () => { try { return !!(window.matchMedia && window.matchMedia('(max-width:640px)').matches); } catch (e) { return false; } };
+/* the least room a side of the name must give the bubble, scrolling inside it, before it is drawn there */
+const ROOM_MIN = 160;
+/* below the name, above it where there is no room below, inside the screen; a sheet across the foot of the screen at
+   640px and under, and wherever neither side of the name has ROOM_MIN for it (a landscape phone), since a bubble held to
+   its floor there would cover the name and run off the screen. Where the reader has scrolled the bubble, the scroll is
+   kept: measuring its whole height clears its max-height, and a browser takes the scroll back to the top on that */
+function place(keep) {
+  if (!box || box.hidden) return;
+  const scrolled = keep != null ? keep : box.scrollTop || 0;
+  let sh = sheet();
+  if (!sh) {
+    /* the name's own block (the name and its line under it), so the bubble never covers what the leg is */
+    const a = anchor(), at = a && (a.closest('.nm,td.plr') || a); let r = null; try { r = at ? at.getBoundingClientRect() : null; } catch (e) { r = null; }
+    if (!r) { box.classList.remove('glance-sheet'); if (scrolled) box.scrollTop = scrolled; return; }
+    const de = document.documentElement, vw = de.clientWidth || window.innerWidth || 0, vh = window.innerHeight || de.clientHeight || 0, pad = 8, gap = 6;
+    box.classList.remove('glance-sheet'); box.style.maxHeight = '';
+    const bw = box.offsetWidth || 0, bh = box.offsetHeight || 0, below = vh - r.bottom - gap - pad, above = r.top - gap - pad;
+    const down = bh <= below || below >= above, room = down ? below : above, fits = bh <= room;
+    if (!fits && room < ROOM_MIN) sh = true;
+    else {
+      const top = down ? r.bottom + gap : r.top - gap - Math.min(bh, room), left = Math.max(pad, Math.min(r.left, vw - bw - pad));
+      box.style.maxHeight = Math.round(room) + 'px';
+      box.style.left = Math.round(left + (window.scrollX || 0)) + 'px'; box.style.top = Math.round(Math.max(pad, top) + (window.scrollY || 0)) + 'px';
+      box.dataset.glanceAt = down ? 'below' : 'above';
+    }
+  }
+  box.classList.toggle('glance-sheet', sh);
+  if (sh) { box.style.left = ''; box.style.top = ''; box.style.maxHeight = ''; box.dataset.glanceAt = 'sheet'; }
+  if (scrolled) box.scrollTop = scrolled;
+}
+function draw() {
+  if (!cur || !box) return;
+  const scrolled = box.scrollTop || 0, at = document.activeElement, inBox = box.contains(at), key = inBox && at !== box ? ['glanceClose', 'glanceTonight'].find(k => at.dataset && at.dataset[k] != null) : null;
+  let v; try { v = cur.of.startsWith('p:') ? playerHtml() : teamHtml(); } catch (e) { v = { title: 'Matchup', body: `<p class="glance-q">This could not be drawn: ${H(e && e.message || e)}.</p>` }; }
+  box.dataset.glanceOf = cur.of; box.dataset.glanceGame = cur.gid;
+  box.innerHTML = `<div class="glance-hd"><h3 class="glance-title" id="glanceTitle">${v.title}</h3><button type="button" class="btn ghost glance-x" data-glance-close>Close</button></div><div class="glance-body">${v.body}</div>`;
+  if (key) { const nx = box.querySelector(`[data-${key.replace(/[A-Z]/g, c => '-' + c.toLowerCase())}]`); try { (nx || box).focus({ preventScroll: true }); } catch (e) {} }
+  else if (inBox) { try { box.focus({ preventScroll: true }); } catch (e) {} }
+  place(scrolled);
+}
+function open(btn) {
+  const of = btn.dataset.glance || '', i = of.indexOf(':'); if (i < 1) return;
+  if (cur) close(false);
+  PK_FAILED = false;                                                   // a file that failed is asked for again by a new bubble
+  const sig = btn.dataset.glanceLeg || '', pl = placeOf(btn), tab = btn.closest('[id^="tab-"]');
+  cur = { of, kind: of.slice(0, i), id: of.slice(i + 1), gid: btn.dataset.glanceGame || '', sig, leg: legId(sig), from: btn, place: pl, tab: tab ? tab.id : null,
+    at: Math.max(0, namesIn(pl && document.querySelector(pl)).indexOf(btn)) };
+  make(); box.hidden = false; btn.setAttribute('aria-expanded', 'true');
+  draw();
+  try { box.focus({ preventScroll: true }); } catch (e) {}
+  watch(true);
+}
+function close(restore) {
+  if (!cur) return;
+  watch(false);
+  const a = anchor(), had = !!box && box.contains(document.activeElement); cur = null;
+  if (box) { box.hidden = true; box.innerHTML = ''; }
+  for (const b of document.querySelectorAll('[data-glance][aria-expanded]')) b.removeAttribute('aria-expanded');
+  if (restore && a && !a.closest('[hidden]')) { try { a.focus({ preventScroll: true }); } catch (e) {} }
+  /* closed with the focus inside it by something that takes no focus of its own: once that has done its work, the
+     focus goes to its name where that is still on the screen, else to the chosen tab's button, never the page's body */
+  else if (had) setTimeout(() => { const at = document.activeElement;
+    if (at && at !== document.body && at.isConnected && !at.closest('[hidden]')) return;
+    const to = a && a.isConnected && !a.closest('[hidden]') ? a : document.querySelector('#nav button[aria-selected="true"]');
+    if (to) try { to.focus({ preventScroll: true }); } catch (e) {} }, 0);
+}
+/* the page draws its rows again while a bubble is open (the half-minute look at a tip-off, a Refresh odds press, a leg
+   added or taken out, the builder's own redraw): one MutationObserver on the page, connected only while a bubble is
+   open, so the bubble follows whatever draws them without wrapping any of it. After each redraw the bubble is bound
+   again to its leg's copy in the place it was opened from, drawn again where the copy's numbers moved, placed again
+   and its name marked open; where that place no longer draws the leg (it left the builder, its game tipped off, its
+   tab was hidden), the bubble closes */
+let MO = null;
+function watch(on) {
+  if (typeof MutationObserver !== 'function') return;
+  if (!MO) MO = new MutationObserver(recs => { if (!cur || !box || recs.every(r => box.contains(r.target))) return; sync(); });
+  if (on) MO.observe(document.body, { childList: true, subtree: true });
+  else { MO.takeRecords(); MO.disconnect(); }
+}
+function sync() {
+  if (!cur || !box || box.hidden) return;
+  const a = anchor(); if (!a || a.closest('[hidden]')) { gone(); return; }
+  const pl = cur.place && document.querySelector(cur.place), i = namesIn(pl).indexOf(a); if (i >= 0) cur.at = i;
+  /* drawn again on every redraw, not only where its row's price moved: a press can move the line the bubble shows, or a
+     file it waits on answer, with the row's own leg unchanged */
+  cur.stale = false; draw();
+}
+/* the leg is gone from where its bubble was opened: the bubble closes and the focus, where it was in the bubble (or lost
+   with the old row), goes to the leg's neighbour in that place (the name now at its place in the list, else the last),
+   else the place's first control, else the first control of the tab it was on, never to the page's body */
+function gone() {
+  const c = cur, at = document.activeElement, mine = !at || at === document.body || (!!box && box.contains(at)) || (!!c.from && at === c.from) || !at.isConnected;
+  close(false);
+  if (!mine) return;
+  const pl = c.place && document.querySelector(c.place), names = namesIn(pl).filter(b => !b.disabled && !b.closest('[hidden]'));
+  const to = names[Math.min(c.at, names.length - 1)] || focusables(pl).filter(x => !x.closest('[hidden]'))[0] || focusables(c.tab && document.getElementById(c.tab))[0] || document.querySelector('#nav button[aria-selected="true"]') || null;
+  if (to) try { to.focus({ preventScroll: true }); } catch (e) {}
+}
+/* a click outside the bubble closes it, before anything else answers it; a name opens its own (or, the open one's,
+   closes it); the focus goes back to the name unless the click was on something that takes it */
+document.addEventListener('click', e => {
+  const t = e.target && e.target.closest ? e.target : null; if (!t) return;
+  const nm = t.closest('[data-glance]');
+  if (cur && box && !box.contains(t)) {
+    if (nm && nm === anchor()) { close(false); return; }
+    close(!nm && !t.closest('button,a[href],input,select,textarea,label,[tabindex]'));
+  }
+  if (nm) open(nm);
+}, true);
+document.addEventListener('keydown', e => {
+  if (!cur || e.key !== 'Escape') return;
+  if (document.querySelector('.pp-back:not([hidden])')) return;      // a window over the page takes its own Escape
+  e.preventDefault(); e.stopPropagation(); close(true);
+}, true);
+window.addEventListener('resize', () => place());
+
+/* the Parlay Builder asks for this before it draws a name as a button (glanceName in app/parts/parlay.html) */
+window.hubGlance = function (btn) { if (btn && btn.dataset && btn.dataset.glance) open(btn); };
+window.hubGlance.vegasOf = vegasOf;   // read by the smoke, which holds it to the Pick'em Record's own
+window.hubGlanceClose = () => close(true);
+window.hubGlanceState = () => cur ? { of: cur.of, gid: cur.gid, sig: cur.sig, place: cur.place } : null;
+})();
+</script>

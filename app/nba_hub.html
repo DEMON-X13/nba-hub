@@ -245,16 +245,6 @@ body.pp-lock{overflow:hidden}
 .pp-slipsum{flex:1 1 200px;font-size:13px;color:var(--ink-2)} .pp-slipsum b{color:var(--ink)}
 .pp-slipst{flex:1 1 100%;font-size:12.5px;color:var(--hot-2);font-weight:600} .pp-slipst:empty{display:none}
 .sl-said{margin:0 0 10px;font-size:13px;color:var(--hot-2);font-weight:600} .sl-said:empty{display:none}
-.pc-legs{list-style:none;margin:0 0 12px;padding:0;counter-reset:pc}
-.pc-legs li{counter-increment:pc;display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:2px 10px;padding:9px 0;border-top:1px solid var(--line);font-size:13px}
-.pc-legs li::before{content:counter(pc);grid-row:1/4;font-family:var(--display);font-weight:700;color:var(--muted)}
-.pc-legs .pc-px{font-family:var(--display);font-weight:700;text-align:right;white-space:nowrap}
-.pc-legs .pc-meta,.pc-legs .pc-hand{grid-column:2/4;font-size:12px;color:var(--muted)} .pc-legs .pc-hand{color:var(--hot-2)}
-.pc-nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin:0 0 8px}
-.pc-nums div{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 12px} .pc-nums b{display:block;font-family:var(--display);font-size:20px;line-height:1.15;overflow-wrap:anywhere} .pc-nums span{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.pc-btns{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0 6px} .pc-btns .btn{min-height:44px;padding:10px 16px;display:inline-flex;align-items:center;text-decoration:none}
-.pc-note{font-size:12.5px;color:var(--ink-2);margin:6px 0 0;overflow-wrap:anywhere}
-.pc-msg{font-size:12.5px;color:var(--lime);font-weight:700;margin:6px 0 0} .pc-msg:empty{display:none}
 @media(max-width:620px){.pp-slipbar{border-radius:0;padding:10px 16px}}
 /* ---------- rating over time ---------- */
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
@@ -326,7 +316,8 @@ body.pp-lock{overflow:hidden}
 <div class="toast" id="toast"></div>
 <div class="pp-back" id="ppBack" hidden><div class="pp-sheet" id="ppSheet" role="dialog" aria-modal="true" aria-labelledby="ppTitle" aria-describedby="ppSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="ppTitle">Player props</h2><div class="pp-sub" id="ppSub"></div></div><button type="button" class="pp-x" id="ppClose" aria-label="Close player props">×</button></div><div class="pp-body" id="ppBody"></div><div class="pp-slipbar" id="ppSlipBar" hidden><span class="pp-slipst" id="ppSlipSt" role="status" aria-live="polite"></span><span class="pp-slipsum" id="ppSlipSum"></span><button type="button" class="btn" id="ppSlipGo">Your parlay</button></div></div></div>
 <div class="pp-back" id="hxBack" hidden><div class="pp-sheet hx-sheet" id="hxSheet" role="dialog" aria-modal="true" aria-labelledby="hxTitle" aria-describedby="hxSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="hxTitle">Rating over time</h2><div class="pp-sub" id="hxSub"></div></div><button type="button" class="pp-x" id="hxClose" aria-label="Close the rating window">×</button></div><div class="pp-body hx-body" id="hxBody"></div></div></div>
-<div class="pp-back" id="pcBack" hidden><div class="pp-sheet" id="pcSheet" role="dialog" aria-modal="true" aria-labelledby="pcTitle" aria-describedby="pcSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="pcTitle">Your parlay</h2><div class="pp-sub" id="pcSub"></div></div><button type="button" class="pp-x" id="pcClose" aria-label="Close the parlay card">×</button></div><div class="pp-body" id="pcBody"></div></div></div>
+<!--part:card-->
+<!--part:glance-->
 <script>
 'use strict';
 /* ---------- constants ---------- */
@@ -1582,8 +1573,9 @@ window.NBA_PROPS = { PROP_URL, PROP_MAIN, PROP_MILE, PROP_YES, PROP_STATS, propA
      once); a leg leaves at its game's tip. Nothing else from a read is stored.
    - A player's leg is graded from the box scores (state.json's boxes) as DraftKings settles it: the stat as the box has
      it, a push on a whole line, void for a player who did not play (propGrade, which X Parlays grades by). Finish shows
-     the builder as a card: player legs to add by hand (ESPN's feed carries no betslip id for a player's line), the game
-     lines' ids on DraftKings' betslip link. */
+     the builder as the NFL hub's parlay card (app/parts/card.html, README "The parlay card"): its image, Share link and
+     Open in DraftKings, the game lines' ids on DraftKings' betslip link and the player legs to add by hand (ESPN's feed
+     carries no betslip id for a player's line). */
 /* ---- tools/corr.js, line for line ---- */
 const TEAM = ['win', 'cover', 'over', 'tpts', 'otpts'];
 const GL = [
@@ -1676,8 +1668,6 @@ const SG_WHY = "DraftKings prices same-game parlays its own way: this is an esti
 const SL_NOMODEL = "No model chance: the props model does not project a player in it.";
 const SG_KIND = { ml: 'win', spread: 'cover', total: 'over' };
 const SG_PARTS = { pts: ['pts'], reb: ['reb'], ast: ['ast'], tpm: ['tpm'], stl: ['stl'], blk: ['blk'], pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] };
-const BY_HAND = "DraftKings' player lines carry no betslip id in ESPN's feed: add this leg by hand";
-const DK_SLIP = 'https://sportsbook.draftkings.com/?outcomes=', DK_EVENT = 'https://sportsbook.draftkings.com/event/', DK_NBA = 'https://sportsbook.draftkings.com/leagues/basketball/nba';
 let SG_LINES = {};                                           // game id -> DraftKings' game lines as a press read them (memory only)
 let SLIP_SAID = [];                                          // what the builder says once: a leg out or repriced by a read, or at a tip
 let PP_OFFER = [];                                           // the legs the open props sheet offers, by its buttons' index
@@ -1926,7 +1916,6 @@ function propGrade(l) {
   if (l.mk === 'mile') return { r: v >= l.k ? 'won' : 'lost', v };
   return { r: v >= (l.stat === 'td' ? 3 : 2) ? 'won' : 'lost', v };
 }
-const slipPct = p => p == null ? '–' : (p * 100).toFixed(p < 0.01 ? 2 : 1) + '%';
 /* the sheet's foot: your parlay in a line, and what the last tap did */
 function ppSlipSync() {
   const bar = $('#ppSlipBar'); if (!bar) return;
@@ -1960,81 +1949,7 @@ function ppGameLines(g) {
 }
 $('#ppSlipGo').addEventListener('click', () => { propsClose(); show('parlay'); const t = $('#pbTitle'); if (t) { t.scrollIntoView?.({ behavior: 'smooth', block: 'start' }); t.focus({ preventScroll: true }); } });
 
-/* ---- the card (Finish): the parlay to place, read only, in Eastern time since it goes to other people ---- */
-let PC = null, pcFrom = null;
-const etAt = iso => new Date(iso).toLocaleString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET';
-/* over: a parlay price the visitor typed into the builder (its decimal), which the card pays on as the builder does */
-function pcBuild(legs, stake, over) {
-  const P = slipPrice(legs), n = legs.length;
-  if (over > 1) Object.assign(P, { dec: over, sg: false, typed: true });
-  const am = fmtAm(decToAm(P.dec));
-  const ids = legs.map(l => l.kind !== 'prop' && l.dk ? l.dk : null), open = ids.filter(Boolean);
-  const why = l => l.kind === 'prop' ? BY_HAND : 'no DraftKings betslip id was read for this line: add it by hand';
-  const hand = legs.map((l, i) => ids[i] ? null : i + 1).filter(Boolean);
-  const games = slipGroups(legs), ev = games.length === 1 ? (SG_LINES[legs[0].id] || {}).event : null;
-  const url = open.length ? DK_SLIP + open.map(encodeURIComponent).join('+') : ev ? DK_EVENT + ev : DK_NBA;
-  const oldest = open.length ? legs.filter((l, i) => ids[i]).map(l => l.at).sort()[0] : null;
-  const nums = list => list.length === 1 ? `leg ${list[0]}` : `legs ${oddsAnd(list.map(String))}`;
-  const opens = open.length ? `opens ${open.length === n ? (n === 1 ? 'the leg' : `the ${n} legs`) : `${open.length} of the ${n} legs`} as DraftKings had them at ${etAt(oldest)}${hand.length ? `; add ${nums(hand)} by hand` : ''}` : `${ev ? "the game's page" : "DraftKings' NBA page"}: add the legs by hand`;
-  const note = open.length ? `Open in DraftKings ${opens}. A line DraftKings has moved or pulled since will not be on the slip, so check each leg before you bet.` : `No leg carries a DraftKings betslip id, so this opens ${ev ? "the game's page" : "DraftKings' NBA page"}: add the legs by hand.`;
-  const title = `${n === 1 ? 'A bet' : `${n}-leg parlay`} ${am}${P.sg ? ' (estimated same-game price)' : ''}`;
-  const lines = legs.map((l, i) => `${i + 1}. ${slipWho(l)}${l.kind === 'prop' && l.team ? ` (${l.team})` : ''}: ${slipWhat(l)} ${fmtAm(l.odds)}${l.kind === 'prop' ? `, ${l.away} at ${l.home}` : ''}, read ${etAt(l.at)}`);
-  const text = [title, ...lines,
-    `${money(stake)} pays ${money(stake * P.dec)} at ${am}${P.sg ? `, an estimated same-game price (${SG_WHY}; the legs multiplied ${fmtAm(decToAm(P.prod))})` : ''}`,
-    P.fair != null ? `DraftKings' fair chance ${n === 1 ? 'it lands' : `all ${n} land`}: ${slipPct(P.fair)}${P.fairEst ? ' (est.)' : ''}` : '',
-    open.length ? `DraftKings betslip (${opens}):` : `DraftKings, ${opens}:`, url,
-    ...legs.map((l, i) => ids[i] ? '' : `Add by hand, leg ${i + 1}: ${slipWho(l)}, ${slipWhat(l)} (${l.kind === 'prop' ? "DraftKings' player lines carry no betslip id in ESPN's feed" : 'no betslip id read for this line'})`),
-    'demon-x13.github.io/nba-hub'].filter(Boolean).join('\n');
-  const html = `<ol class="pc-legs">${legs.map((l, i) => `<li data-pc-leg="${i + 1}"><div><b>${esc(slipWho(l))}</b>${l.kind === 'prop' && l.team ? ` <span class="muted">${l.team}</span>` : ''} ${esc(slipWhat(l))}</div><div class="pc-px">${fmtAm(l.odds)}</div>`
-      + `<div class="pc-meta">${l.kind === 'prop' ? `${l.away} at ${l.home} · ` : ''}read ${etAt(l.at)}</div>${ids[i] ? '' : `<div class="pc-hand" data-pc-hand>${esc(l.kind === 'prop' ? BY_HAND : why(l))}</div>`}</li>`).join('')}</ol>
-    <div class="pc-nums"><div data-pc-fair><b>${slipPct(P.fair)}</b><span>DraftKings' fair chance${P.fair != null && P.fairEst ? ', est.' : ''}</span></div><div data-pc-price><b>${am}${P.sg ? ' est.' : ''}</b><span>${P.typed ? "your book's price" : P.sg ? `price, est. · legs multiplied ${fmtAm(decToAm(P.prod))}` : 'price'}</span></div>
-      <div data-pc-pays><b>${money(stake * P.dec)}</b><span>pays on ${money(stake)}</span></div>${P.model != null ? `<div data-pc-model><b>${slipPct(P.model)}</b><span>the hub's model${P.props ? ', on trial' : ''}</span></div>` : ''}</div>
-    ${P.sg ? `<p class="pc-note" data-pc-why>${SG_WHY}.</p>` : ''}${P.model == null ? `<p class="pc-note" data-pc-nomodel>${SL_NOMODEL}</p>` : ''}
-    <div class="pc-btns"><a class="btn hot" id="pcDk" href="${esc(url)}" target="_blank" rel="noopener" title="${esc(note)}">${open.length ? 'Open in DraftKings' : ev ? 'Open game in DraftKings' : 'Open DraftKings'}</a><button type="button" class="btn" id="pcShare">Share link</button><button type="button" class="btn ghost" id="pcDone">Back to your parlay</button></div>
-    <p class="pc-note" id="pcDkNote">${esc(note)}</p><p class="pc-msg" id="pcMsg" role="status" aria-live="polite"></p>`;
-  return { title, text, url, html, n, sub: `${n} leg${n === 1 ? '' : 's'} · ${money(stake)} stake · times in Eastern` };
-}
-/* the builder's legs in its own order (the Parlay Builder's pbOrder), on its Bet amount, at the price it shows (a typed
-   parlay price where there is one) */
-function pcOpen(from) {
-  slipPrune(); const legs = typeof pbOrder === 'function' ? pbOrder(M.slip.legs) : M.slip.legs; if (!legs.length) return;
-  const over = M.bookPrice != null && Number.isFinite(M.bookPrice) && M.bookPrice !== 0 ? amToDec(M.bookPrice) : null;
-  pcFrom = from || null; PC = pcBuild(legs, typeof pbStake === 'function' ? pbStake() : 20, over);
-  $('#pcSub').textContent = PC.sub; $('#pcBody').innerHTML = PC.html;
-  $('#pcShare').onclick = pcShare; $('#pcDone').onclick = () => pcClose();
-  $('#pcBack').hidden = false; document.body.classList.add('pp-lock'); $('#pcSheet').scrollTop = 0; $('#pcClose').focus();
-}
-function pcClose() {
-  if ($('#pcBack').hidden) return;
-  $('#pcBack').hidden = true; document.body.classList.remove('pp-lock'); PC = null;
-  const to = pcFrom && document.contains(pcFrom) ? pcFrom : $('#pFinish') || $('#pbTitle'); pcFrom = null; if (to) to.focus();
-}
-/* Share link: one plain text with the betslip link inside it, by the share sheet, else copied; never a url field */
-async function pcShare() {
-  if (!PC) return;
-  const data = { title: PC.title, text: PC.text };
-  let can = false;
-  try { can = typeof navigator.share === 'function' && (typeof navigator.canShare !== 'function' || !!navigator.canShare(data)); } catch (e) { can = false; }
-  if (can) { try { await navigator.share(data); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
-  let ok = false;
-  try { if (navigator.clipboard && typeof navigator.clipboard.writeText === 'function') { await navigator.clipboard.writeText(data.text); ok = true; } } catch (e) { ok = false; }
-  if (!ok) { const ta = document.createElement('textarea'); ta.value = data.text; ta.setAttribute('readonly', ''); ta.style.cssText = 'position:fixed;left:-9999px;top:0;opacity:0';
-    $('#pcBody').appendChild(ta); ta.focus(); ta.select(); try { ok = typeof document.execCommand === 'function' && document.execCommand('copy') !== false; } catch (e) { ok = false; } ta.remove(); $('#pcShare').focus(); }
-  $('#pcMsg').textContent = ok ? 'Copied: paste it to share.' : 'This browser would not copy it.';
-}
-$('#pcClose').addEventListener('click', () => pcClose());
-$('#pcBack').addEventListener('click', e => { if (e.target === e.currentTarget) pcClose(); });
-$('#pcBack').addEventListener('keydown', e => {
-  if (e.key === 'Escape') { e.preventDefault(); pcClose(); return; }
-  if (e.key !== 'Tab') return;
-  const sheet = $('#pcSheet'), f = [...sheet.querySelectorAll('button, a[href]')].filter(el => !el.disabled && !el.closest('[hidden]'));
-  if (!f.length) return;
-  const first = f[0], last = f[f.length - 1], at = document.activeElement;
-  if (!sheet.contains(at) || at === sheet) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
-  else if (e.shiftKey && at === first) { e.preventDefault(); last.focus(); }
-  else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
-});
-window.NBA_SLIP = { slipPrice, oddsGameLines, lines: () => SG_LINES, card: () => PC };   // what the smoke test reads
+window.NBA_SLIP = { slipPrice, oddsGameLines, lines: () => SG_LINES, card: () => (window.PARLAY_CARD ? window.PARLAY_CARD.current() : null) };   // what the smoke test reads
 /* a parlay's settlement, as a book settles it (README "Same-game parlays"): what X Parlays and the suggestions record grade by */
 window.NBA_GRADE = { legResult, propGrade, gradeBet };
 

@@ -461,7 +461,7 @@
     "name": "Naz Reid",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5211176",
@@ -533,7 +533,7 @@
     "name": "Noa Essengue",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4871145",
@@ -768,7 +768,7 @@
     "name": "Cooper Flagg",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278049",
@@ -1408,7 +1408,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133603",
@@ -2141,7 +2141,7 @@
     "name": "Anthony Edwards",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5061585",

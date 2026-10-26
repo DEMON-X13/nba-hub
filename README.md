@@ -735,11 +735,16 @@ a model's first published call (the model is new, or the season is) gets one cal
 on what was known before that game's tip by the model fitted on earlier seasons only (`src: 'backtest'`, each model's
 section says its pre-tip reading); a game a publishing model missed (it could not run that day) gets none. A model whose
 file is missing or says it could not run adds nothing and keeps what it had. A new season starts a new ledger (the last
-season's stays in git). `CALLS_NOW` stands in for the clock, for tests.
+season's stays in git). `CALLS_NOW` stands in for the clock (to the minute, `YYYY-MM-DDTHH:MMZ`, as both scripts read
+it): the job hands the run's one clock to the script and its check, as the suggestions record's step does, so a tip-off
+minute that turns in the moment between the two is judged by the check as the script judged it, never as a frozen call
+moved; the tests hand their own.
 
 `node tools/calls_check.js` holds the file to the last commit's (`git show HEAD:data/calls.json`) and `data/games.csv`: a
 call the last commit had on a game that has since tipped is still there, unchanged; a published call was logged before its
-game's tip; a backtest call is on a game that tipped before the model's first published call; every pick is the side its
+game's tip; a backtest call is on a game that tipped at or before the model's first published call (tipped as `calls.js`
+reads it, at or before the minute: a first run stamps its published calls with its own minute, and backfills a game
+tipping in that minute); every pick is the side its
 chance favours, its game a regular-season or playoff game of the file's season. A first file is held to the last three
 rules alone. In the job a failure puts `data/calls.json` back as committed and turns the run red (README "Runs"). No
 ledger is committed from a branch: the job's first run on main writes it, so no call counts as published before the site
@@ -773,7 +778,10 @@ red, the ELO Model orange, the Player Model violet, Team Elo ice blue.
 
 `node tools/test_calls.js` holds the ledger and its check on made-up games and model files (backtest and published
 calls, a quiet run, a moved chance restamped, a frozen call kept whatever the model says, a model that cannot run, a new
-model backfilling only the games before its first call, every refusal of the check, a new season). `node tools/smoke.js`
+model backfilling only the games before its first call, every refusal of the check, a new season, a first run in a
+game's own tip-off minute backfilling it and passing its check, and a call restamped the minute before its tip reading as
+moved on a clock a minute later) and the job's calls step itself, its run block taken from `update.yml` and run under
+`bash -e` with stand-ins, both scripts handed one clock to the minute. `node tools/smoke.js`
 section 12 holds the tab on a made-up season worked out by hand (the tiles, the legend, the chart's lines and weeks, the
 tooltip, the grid, the pick grid, a model that could not run, level moneylines falling to the spread, the bands counting
 only moneyline sides) and on the real `pickem.json`.
@@ -2457,8 +2465,9 @@ keeps its last good reads; either way the step is red.
 After the player model, the three game models run one step each (`node tools/alpha.js`, `node tools/joker.js`, `node
 tools/elo_model.js`, each followed by its test whatever its exit): a model that cannot run keeps its last calls, says
 why and the file is committed, the step red unless it is the Joker's planned refusal; a test that fails puts the model's
-file back as committed. Then the calls ledger (`node tools/calls.js && node tools/calls_check.js`, README "Pick'em
-Record") freezes each model's call at tip-off; a failure puts `data/calls.json` back as committed. `publish.js` reads
+file back as committed. Then the calls ledger (`node tools/calls.js && node tools/calls_check.js`, both handed the run's
+one clock as `CALLS_NOW`, README "Pick'em Record") freezes each model's call at tip-off; a failure puts `data/calls.json`
+back as committed. `publish.js` reads
 both into `pickem.json`, committed with `state.json`.
 
 After the pull, each step may fail on its own: the data folder and the model files are committed whenever the pull

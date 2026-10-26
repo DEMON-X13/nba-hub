@@ -77,6 +77,58 @@ const g7 = [...games, G('2028_20271019_BOS_DET', '2027-10-19', '2027-10-19T23:00
 const d7 = build(d5, g7, { alpha: model({}, { '2028_20271019_BOS_DET': { pHome: 0.5 } }) }, '2027-10-12T12:00Z');
 ok(d7.season === 2028 && Object.keys(d7.calls.alpha).length === 1, 'last season\'s calls are not carried into the new one');
 
+console.log("a game tipping in the run's own minute; the run's one clock");
+{ const tip = '2026-10-26T01:00Z';
+  const gs = [G('2027_20261020_BOS_DET', '2026-10-20', '2026-10-20T23:00Z', 'final'), G('2027_20261025_MEM_SAC', '2026-10-25', tip, 'scheduled'), G('2027_20261026_NYK_MIA', '2026-10-26', '2026-10-26T23:30Z', 'scheduled')];
+  const rp = { '2027_20261020_BOS_DET': { pHome: 0.6 }, '2027_20261025_MEM_SAC': { pHome: 0.48 } };
+  const mk = p => ({ alpha: model(rp, { '2027_20261025_MEM_SAC': { pHome: p }, '2027_20261026_NYK_MIA': { pHome: 0.55 } }) });
+  /* a first run (no ledger yet, the first run on main) in the very minute a game tips: calls.js reads it as tipped (tip at
+     or before now) and backfills it, and stamps the games to come with that minute, so the model's first published call is
+     the game's own tip */
+  const d = build(null, gs, mk(0.5), tip), a = d.calls.alpha;
+  ok(a['2027_20261025_MEM_SAC'] && a['2027_20261025_MEM_SAC'].src === 'backtest' && a['2027_20261026_NYK_MIA'].src === 'published' && a['2027_20261026_NYK_MIA'].at === tip,
+    'a first run in a game\'s tip-off minute backfills that game, and stamps its published calls with the same minute');
+  const b = check(d, null, gs, tip);
+  ok(b.length === 0, `and the check passes it: a game tipping at the first published call's minute tipped at or before it, as calls.js reads it (${b.join(' | ') || 'no problem'})`);
+  /* the calls step's race: a call restamped in the minute before its game's tip, checked on a clock read a moment later
+     that has turned to the tip, reads as a frozen call moved (and the step would throw the run's calls away) */
+  const d0 = build(null, gs, mk(0.4828), '2026-10-25T20:00Z'), d1 = build(d0, gs, mk(0.5012), '2026-10-26T00:59Z');
+  ok(d1.calls.alpha['2027_20261025_MEM_SAC'].at === '2026-10-26T00:59Z' && check(d1, d0, gs, '2026-10-26T00:59Z').length === 0, 'a call restamped a minute before its tip passes its check on the same clock');
+  ok(check(d1, d0, gs, '2026-10-26T01:00Z').some(m => /frozen call moved/.test(m)), 'on a clock read a minute later, at the tip, the same file reads as a frozen call moved: why the job hands the two one clock'); }
+
+/* the job's own steps (.github/workflows/update.yml), each run block run as the job runs it (bash -e) in a scratch
+   repository with stand-ins for the scripts; ${{ ... }} expressions set as the case says */
+const fs = require('fs'), path = require('path'), os = require('os'), cp = require('child_process');
+const ROOT = path.resolve(__dirname, '..'), TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-calls-'));
+function stepShell(name, expr) {
+  const L = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'update.yml'), 'utf8').split('\n');
+  const i = L.findIndex(l => l.trim() === `- name: ${name}`); if (i < 0) return null;
+  let j = i + 1; while (j < L.length && !/^\s+run: \|\s*$/.test(L[j])) { if (/^\s+- name:/.test(L[j])) return null; j++; }
+  if (j >= L.length) return null;
+  const ind = L[j].search(/\S/), body = [];
+  for (let k = j + 1; k < L.length && !(L[k].trim() && L[k].search(/\S/) <= ind); k++) body.push(L[k]);
+  const pad = Math.min(...body.filter(l => l.trim()).map(l => l.search(/\S/)));
+  return body.map(l => l.slice(pad)).join('\n').replace(/\$\{\{\s*([^}]+?)\s*\}\}/g, (m, e) => e in expr ? expr[e] : m) + '\n';
+}
+const git = (cwd, ...a) => cp.spawnSync('git', ['-c', 'user.name=test', '-c', 'user.email=test@example.com', ...a], { cwd, encoding: 'utf8' });
+const bash = (cwd, sh) => { const f = path.join(TMP, 'step.sh'); fs.writeFileSync(f, sh); const r = cp.spawnSync('bash', ['--noprofile', '--norc', '-eo', 'pipefail', f], { cwd, encoding: 'utf8' }); return { code: r.status, out: (r.stdout || '') + (r.stderr || '') }; };
+
+console.log("the job's calls step hands the script and its check one clock");
+{ const sh = stepShell('The calls ledger', {});
+  ok(!!sh && /node tools\/calls\.js/.test(sh) && /node tools\/calls_check\.js/.test(sh), 'the step is a run block running calls.js and its check');
+  if (sh) {
+    const repo = path.join(TMP, 'calls'); fs.mkdirSync(path.join(repo, 'tools'), { recursive: true }); fs.mkdirSync(path.join(repo, 'data'));
+    /* stand-ins: the script writes the clock it was handed, and the check passes only on a clock handed to it that is the
+       script's own, in the ledger's minute format (what new Date().toISOString().slice(0, 16) + 'Z' gives) */
+    fs.writeFileSync(path.join(repo, 'tools', 'calls.js'), "require('fs').writeFileSync('data/calls.json', JSON.stringify({ now: process.env.CALLS_NOW || null }) + '\\n');\n");
+    fs.writeFileSync(path.join(repo, 'tools', 'calls_check.js'), "const d = JSON.parse(require('fs').readFileSync('data/calls.json', 'utf8')); process.exit(d.now && d.now === process.env.CALLS_NOW && /^\\d{4}-\\d\\d-\\d\\dT\\d\\d:\\d\\dZ$/.test(d.now) ? 0 : 1);\n");
+    fs.writeFileSync(path.join(repo, 'data', 'calls.json'), '{"now":"committed"}\n');
+    git(repo, 'init', '-q'); git(repo, 'add', '.'); git(repo, 'commit', '-q', '-m', 'base');
+    const t0 = Date.now(), r = bash(repo, sh), d = JSON.parse(fs.readFileSync(path.join(repo, 'data', 'calls.json'), 'utf8'));
+    const lag = Date.parse(d.now) - Date.parse(new Date(t0).toISOString().slice(0, 16) + 'Z');
+    ok(r.code === 0 && lag >= 0 && lag <= 120e3, `both are handed the same clock, to the minute (${d.now}, exit ${r.code})`);
+  } }
+
 /* what the calls feed besides the record: pickem.json (tools/publish.js pickemState), whose games run to today and
    whose next carries the three models' calls on the games after it for the matchup bubble; and off on the finals a
    club's record leaves out, as the standings do (offFinals) */
@@ -121,5 +173,6 @@ console.log("the finals a club's record leaves out: the NBA Cup final and the pl
   ok(byId[cupF.game_id].off === 'cup' && byId[pi1.game_id].off === 'playin' && byId[pi2.game_id].off === 'playin' && pk.games.filter(g => g.off).length === 3 && !byId[pi3.game_id],
     "pickem.json marks them off on its games, and the record's games are otherwise as before"); }
 
+fs.rmSync(TMP, { recursive: true, force: true });
 console.log(fails ? `${fails} FAILED` : 'all good');
 process.exit(fails ? 1 : 0);

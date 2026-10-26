@@ -132,12 +132,15 @@ jobs:
           exit $m
       # The calls ledger (README "Pick'em Record"): each model's call on each game, published before tip-off and frozen
       # from it, in data/calls.json, which the Pick'em Record grades; its check holds it to the last commit (no frozen call
-      # moved or dropped, none logged after tip-off), and a failure puts the file back as committed
+      # moved or dropped, none logged after tip-off), and a failure puts the file back as committed. The script and its
+      # check are handed the run's one clock (CALLS_NOW, to the minute, as both read the time): the check reads which
+      # games have tipped at the minute the script froze or rewrote their calls, so a tip-off minute that turns in the
+      # moment between the two is judged as the script judged it, never as a frozen call moved
       - name: The calls ledger
         id: calls
         continue-on-error: true
         run: |
-          if node tools/calls.js && node tools/calls_check.js; then exit 0; fi
+          if now=$(date -u +%Y-%m-%dT%H:%MZ) && CALLS_NOW=$now node tools/calls.js && CALLS_NOW=$now node tools/calls_check.js; then exit 0; fi
           echo "::error::the calls ledger failed its check: data/calls.json is put back"
           if git cat-file -e HEAD:data/calls.json 2>/dev/null; then git checkout HEAD -- data/calls.json; else rm -f data/calls.json; fi
           exit 1

@@ -6,7 +6,9 @@
  * Held against the last commit's file (git show HEAD:data/calls.json) and data/games.csv:
  *   - a call the last commit had on a game that has since tipped is still there, unchanged (frozen calls never move);
  *   - a published call was logged before its game's tip (its at earlier than the tip);
- *   - a backtest call is on a game that tipped before the model's first published call (none published: any game played);
+ *   - a backtest call is on a game that tipped at or before the model's first published call (none published: any game
+ *     played), tipped read as tools/calls.js reads it, at or before the minute: a run's first published calls are stamped
+ *     with its own minute, and a game tipping in that minute is one calls.js backfills;
  *   - every call's pick is the side its chance favours, its chance between 0 and 1, its game a REG or POST game of the
  *     file's season, its src published or backtest.
  * A first file (no last commit to hold it to) is held to the last three rules alone.
@@ -30,7 +32,7 @@ function check(doc, last, games, now) {
       if (!(c.pHome >= 0 && c.pHome <= 1) || c.pick !== (c.pHome >= 0.5 ? g.home : g.away)) bad.push(`${id} ${gid}: pick ${c.pick} is not the side ${c.pHome} favours`);
       if (c.src === 'published') { if (g.tip && !(c.at < g.tip)) bad.push(`${id} ${gid}: published at ${c.at}, at or after its tip ${g.tip}`); }
       else if (c.src === 'backtest') { if (!tipped(g, now)) bad.push(`${id} ${gid}: a backtest call on a game still to tip`);
-        else if (firstPub && !(g.tip && g.tip < firstPub)) bad.push(`${id} ${gid}: a backtest call on a game that tipped after ${id}'s first published call (${firstPub})`); }
+        else if (firstPub && !(g.tip && g.tip <= firstPub)) bad.push(`${id} ${gid}: a backtest call on a game that tipped after ${id}'s first published call (${firstPub})`); }
       else bad.push(`${id} ${gid}: src ${c.src}`);
     }
     if (last && last.season === doc.season) for (const [gid, c] of Object.entries((last.calls && last.calls[id]) || {})) {

@@ -334,6 +334,47 @@ globalThis.fetch = async url => { url = String(url); if (/scoreboard/.test(url))
     }
   }
 
+  /* the job's lines step, its own shell (the run block in .github/workflows/update.yml) run as the job runs it, bash -e,
+     in a scratch repository with a stand-in reader and a stand-in test: the feed's test runs whatever the read's exit, a
+     failed test puts lines.json back as committed (removed where it is new), and the read's own exit code survives */
+  console.log('6. the job\'s lines step');
+  {
+    const L = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'update.yml'), 'utf8').split('\n');
+    const i = L.findIndex(l => l.trim() === "- name: Read DraftKings' lines for the next two nights");
+    let j = i + 1; while (i >= 0 && j < L.length && !/^\s+run: \|\s*$/.test(L[j]) && !/^\s+- name:/.test(L[j])) j++;
+    const body = [];
+    if (i >= 0 && /^\s+run: \|\s*$/.test(L[j] || '')) { const ind = L[j].search(/\S/); for (let k = j + 1; k < L.length && !(L[k].trim() && L[k].search(/\S/) <= ind); k++) body.push(L[k]); }
+    check(body.length > 0 && body.some(l => /node tools\/lines\.js/.test(l)) && body.some(l => /node tools\/test_lines\.js/.test(l)), `the step is a run block that reads the feed and runs its test (${body.length} lines)`);
+    if (body.length) {
+      const pad = Math.min(...body.filter(l => l.trim()).map(l => l.search(/\S/)));
+      const repo = path.join(tmp, 'job'), sh = path.join(tmp, 'step.sh');
+      fs.writeFileSync(sh, body.map(l => l.slice(pad)).join('\n').split('/tmp/').join(tmp + '/') + '\n');
+      const git = (...a) => cp.spawnSync('git', ['-c', 'user.name=test', '-c', 'user.email=test@example.com', ...a], { cwd: repo, encoding: 'utf8' });
+      const COMMITTED = '{"v":1,"at":"2026-10-25T21:17:00Z","games":{}}\n', READ = '{"v":1,"at":"2026-10-26T13:17:00Z","games":{"read":true}}\n';
+      /* a stand-in reader writing READ and exiting `read`, a stand-in test exiting `test`; with or without a committed copy */
+      const step = (read, test, committed) => {
+        fs.rmSync(repo, { recursive: true, force: true }); fs.mkdirSync(path.join(repo, 'tools'), { recursive: true });
+        fs.writeFileSync(path.join(repo, 'tools', 'lines.js'), `require('fs').writeFileSync('lines.json', ${JSON.stringify(READ)}); process.exit(${read});\n`);
+        fs.writeFileSync(path.join(repo, 'tools', 'test_lines.js'), `console.log('${test ? '1 FAILED' : 'all good'}'); process.exit(${test});\n`);
+        git('init', '-q'); if (committed) fs.writeFileSync(path.join(repo, 'lines.json'), COMMITTED);
+        git('add', '.'); git('commit', '-q', '-m', 'base');
+        const r = cp.spawnSync('bash', ['--noprofile', '--norc', '-eo', 'pipefail', sh], { cwd: repo, encoding: 'utf8' });
+        const f = path.join(repo, 'lines.json');
+        return { code: r.status, file: fs.existsSync(f) ? fs.readFileSync(f, 'utf8') : null, out: (r.stdout || '') + (r.stderr || '') };
+      };
+      let s = step(0, 1, true);
+      check(s.code === 1 && s.file === COMMITTED && /lines\.json is put back/.test(s.out), `a read that passes but a feed test that fails: the step is red and lines.json is put back as committed (exit ${s.code})`);
+      s = step(0, 1, false);
+      check(s.code === 1 && s.file === null, `the same with no committed copy: the new lines.json is removed (exit ${s.code}, ${s.file === null ? 'no file' : 'a file left'})`);
+      s = step(1, 1, true);
+      check(s.code === 1 && s.file === COMMITTED && /lines\.json is put back/.test(s.out), `a partial read (exit 1) whose test fails: the test still runs, past bash -e, and lines.json is put back (exit ${s.code})`);
+      s = step(1, 0, true);
+      check(s.code === 1 && s.file === READ, `a partial read (exit 1) whose test passes: its lines.json stays, and the step keeps the read's own exit past bash -e (exit ${s.code})`);
+      s = step(0, 0, true);
+      check(s.code === 0 && s.file === READ, `a clean read and a passing test: the step is green and the new lines.json stays (exit ${s.code})`);
+    }
+  }
+
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

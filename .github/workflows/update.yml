@@ -161,12 +161,23 @@ jobs:
           if ! node tools/props_check.js; then echo "::error::the props ledger's check failed: its data files are put back"; restore; exit 1; fi
       # DraftKings' lines on the next two nights' games, read from ESPN's free feed (README "The lines feed"): the game
       # lines with their prices and ids and each game's player props, into lines.json, which the Parlay Builder and
-      # Suggested Parlays read (its test is in the tests below). A half that fails for every game keeps its last good reads
-      # and marks this step alone; nothing answering at all leaves lines.json as committed
+      # Suggested Parlays read. A half that fails for every game keeps its last good reads and marks this step alone;
+      # nothing answering at all leaves lines.json as committed. The feed's test runs here, whatever the read's exit, as
+      # the models' steps run theirs: a test that fails puts lines.json back as committed (removed where it is new), so a
+      # broken reader never publishes its prices to every visitor while the run is red. lines.json can be read again on
+      # the next run, so nothing is lost by keeping the last good one
       - name: Read DraftKings' lines for the next two nights
         id: lines
         continue-on-error: true
-        run: node tools/lines.js
+        run: |
+          m=0; node tools/lines.js || m=$?          # a partial read (exit 1) keeps its last good halves: keep its code
+          if ! node tools/test_lines.js > /tmp/test_lines.log 2>&1; then
+            tail -20 /tmp/test_lines.log
+            echo "::error::the lines feed's test failed: lines.json is put back"
+            if git cat-file -e HEAD:lines.json 2>/dev/null; then git checkout HEAD -- lines.json; else rm -f lines.json; fi
+            exit 1
+          fi
+          exit $m
       - name: Publish the state and build the pages
         id: publish
         continue-on-error: true

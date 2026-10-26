@@ -61,7 +61,7 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/fetch_odds_hist.js`, `data/odds_hist.csv` | The closing lines on the 2023-2026 finals from ESPN's game summaries: a finished backfill, run by hand from a machine that reaches ESPN only to add a season (the daily job keeps each game's closing moneylines in `games.csv` from now on); its `check()` is shared with `backtest.js` and `corr.js` |
 | `tools/test_corr.js` | The bivariate normal, the fit, the lookup's sign rules, and the committed table held to its rules |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
-| `tools/test_lines.js` | The lines feed on the recorded answers and made-up ones, through a stubbed reader and a scratch file: the parse, the drops, the last good read, the quiet run, and the committed lines.json held to its shape |
+| `tools/test_lines.js` | The lines feed on the recorded answers and made-up ones, through a stubbed reader and a scratch file: the parse, the drops, the last good read, the quiet run, the committed lines.json held to its shape, and the job's lines step (its test run there, lines.json put back when it fails) |
 | `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s; two more recorded on 2026-10-25 (that Sunday's seven games with DraftKings' lines and their local and national listings, and Tuesday 27 October's, Peacock and NBC beside a home market's network), on which `test_fetch.js`, `test_lines.js` and the smoke hold the national networks and the lines feed; and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to; and that morning's rosters and injury report as the props model reads them (`props_live_20261015.json`), on which `test_props.js` holds the live minutes to the backtest's |
 
 No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke test needs jsdom (`npm ci` in `tools/`).
@@ -1634,7 +1634,10 @@ the reader itself on a stubbed fetch (lib's header sets in turn, the named User-
 no-store, the cache-buster, which refusals are tried again); a whole half down (the run partial, exit 1 from the
 command line, the last good reads kept) and a junk last entry never carried; the quiet
 run (the same answers write nothing, the file's time included; a moved moneyline and moved props rewrite those halves
-alone); and the committed `lines.json`, where there is one, held to its shape. `node tools/test_fetch.js` section 5
+alone); the committed `lines.json`, where there is one, held to its shape; and the job's lines step itself, its run
+block taken from `.github/workflows/update.yml` and run as the job runs it (`bash -e`) in a scratch repository with a
+stand-in reader and test: a failed test putting `lines.json` back as committed (removed where it is new), whatever the
+read's exit, a partial read's exit 1 kept, a clean one green. `node tools/test_fetch.js` section 5
 holds the national networks on the recorded answers and made-up listings and `merge`'s freeze. `node tools/smoke.js`
 section lines (`SMOKE_ONLY=lines`) holds the page's `oddsDkHref`, `oddsIdOk` and `oddsGameLines` to
 `tools/lines_feed.js`'s text, and their results on every recorded scoreboard event with DraftKings' odds as recorded and under fourteen
@@ -2443,10 +2446,13 @@ red at the end; the file rides on the data's commit.
 After the players model, the props step reads DraftKings' closing lines for the new finals, writes the projections
 (`props.json`) and the shadow ledger, and runs the ledger's check; when either fails, every props data file goes back to
 the last commit's and the run is red (README "Player props"). Then the lines step (`node tools/lines.js`) reads
-DraftKings' lines on the next two dates' games into `lines.json` (README "The lines feed"), committed with the data
-whenever the pull succeeded (added only once it exists: until the feed's first read there is none); when nothing
-answers the file stays as it was, and when every game-lines or every props read fails that half keeps its last good
-reads; either way the step is red.
+DraftKings' lines on the next two dates' games into `lines.json` (README "The lines feed"), then runs the feed's test
+(`node tools/test_lines.js`) whatever the read's exit, as the models' steps run theirs: a test that fails puts
+`lines.json` back as committed (removed where it is new) and turns the step red, so a broken reader never publishes its
+prices to every visitor while the run is red; the read's own exit is kept past the step's `bash -e`. Otherwise it is
+committed with the data whenever the pull succeeded (added only once it exists: until the feed's first read there is
+none); when nothing answers the file stays as it was, and when every game-lines or every props read fails that half
+keeps its last good reads; either way the step is red.
 
 After the player model, the three game models run one step each (`node tools/alpha.js`, `node tools/joker.js`, `node
 tools/elo_model.js`, each followed by its test whatever its exit): a model that cannot run keeps its last calls, says

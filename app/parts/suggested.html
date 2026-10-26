@@ -338,7 +338,9 @@ function spTier(fid) {
    return (the chance times the decimal price, less 1), priced -200 to +300, the Elo chance 30% or more, the far-off guard
    (15 points over DraftKings' fair chance: left out), DraftKings' betslip id where the game's lines carry ids, one leg a
    game (its best by value). The Elo chance is the ELO Model's own: a moneyline its pHome; a spread Phi((m + h) / sigma),
-   m its home margin (minus its spread), h the home line, sigma params.pick.sigma. Priced honestly (params.pick, the blend
+   m its home margin (minus its spread), h the home line, sigma that margin's own miss, pick.sigmaModel (14.133: research's
+   sigma of the model alone on 2024-2025, at which its picks' record in the lead's title was scored; params.pick.sigma,
+   13.722, is the blended margin's, at weight 0 the closing line's own, and prices only the blend). Priced honestly (params.pick, the blend
    toward DraftKings' closing line the research chose on 2024 and 2025) a pick is the market's own chance and never beats
    a price: ELO_PICK_BLEND true prices them so (and the section then shows none). Its picks' measured record is the lead's
    title. Four levels on the Elo chance: Safe the likeliest pair; Medium, Aggressive and Extreme the 3-, 4- and 5-leg
@@ -361,9 +363,11 @@ function epChance(l) {
       ph = epSig(w * epLogit(Math.min(Math.max(ph, 1e-6), 1 - 1e-6)) + (1 - w) * epLogit(q)); }
     return home ? ph : 1 - ph;
   }
-  if (l.kind !== 'spread' || !Number.isFinite(c.spread) || !Number.isFinite(l.line) || !E.pick || !(E.pick.sigma > 0)) return null;
+  /* each margin at its own miss: the model's alone at sigmaModel, the blend at params.pick's sigma */
+  const sd = E.pick ? (ELO_PICK_BLEND ? E.pick.sigma : E.pick.sigmaModel) : null;
+  if (l.kind !== 'spread' || !Number.isFinite(c.spread) || !Number.isFinite(l.line) || !E.pick || !(sd > 0)) return null;
   const m = -c.spread, h = home ? l.line : -l.line, w = ELO_PICK_BLEND ? E.pick.wSpread : 1;
-  const pH = normCdf((w * m + (1 - w) * -h + h) / E.pick.sigma);
+  const pH = normCdf((w * m + (1 - w) * -h + h) / sd);
   return home ? pH : 1 - pH;
 }
 function epCands() {

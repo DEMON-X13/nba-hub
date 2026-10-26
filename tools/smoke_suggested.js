@@ -9,7 +9,7 @@
  * the time zone database, America/New_York, a DST turn of each kind among them), the wait line's words and instant, the
  * lock lines word for word, each level's numbers against the builder's own sums and the Safe pair against every pair of
  * its pool, the record's pills from made-up ledgers (spRecOwn), the Elo picks against a full enumeration of their own
- * candidates (eloOwn, on the ELO Model's own chance at params.pick's sigma), the on-trial mark on every player leg and
+ * candidates (eloOwn, on the ELO Model's own chance at its own margin's miss, pick.sigmaModel), the on-trial mark on every player leg and
  * nowhere else, Add, Add to builder and Finish, the browser's own lock across a reload and given way to the record's, a
  * ruled-out level built again alone, nothing stored but nba_sp_lock_v1 and nothing read but the record and lines.json,
  * each once and no-store; then the real files, on what the day offers. Every request is recorded.
@@ -129,7 +129,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     st.props = { ...clone(REAL.props), games: Object.fromEntries(slate.filter(g => ROWS[g.id] && g.status === 'scheduled').map(g => [g.id, { tip: g.tip, away: g.away, home: g.home, players: clone(ROWS[g.id]) }])) };
     st.props.ledger = { ...st.props.ledger, decision: null };
     st.report = { date: st.today, players: o.report || { 9300007: ['BOS', 'Day-To-Day', 'Ankle', ''] } };
-    st.eloPicks = o.elo === null ? null : { version: 'test', generated: T(D1, '12:00'), status: { ok: true }, sigma: 14.6, pick: { wSpread: 0, wMl: 0, sigma: 13.722, chosenOn: '2024 and 2025' }, record: { chosenOn: '2024 and 2025', folds: RECORD }, games: clone(o.eloGames || ELO_G) };
+    st.eloPicks = o.elo === null ? null : { version: 'test', generated: T(D1, '12:00'), status: { ok: true }, sigma: 14.6, pick: { wSpread: 0, wMl: 0, sigma: 13.722, sigmaModel: 14.133, chosenOn: '2024 and 2025' }, record: { chosenOn: '2024 and 2025', folds: RECORD }, games: clone(o.eloGames || ELO_G) };
     return st;
   }
 
@@ -323,10 +323,11 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   /* ---------- 5. the Elo picks: every parlay of their own candidates ---------- */
   const st5 = stateOf(SLATE), LN = LINES1;
   /* the candidates, this file's own: each game's moneyline and spread, the ELO Model's own chance (pHome; a cover
-     normCdf((m + h) / params.pick.sigma), m minus its spread, h the home line), beating the no-vig chance with a positive
+     normCdf((m + h) / pick.sigmaModel), m minus its spread, h the home line: the model's own margin at its own miss, never
+     params.pick's sigma, the closing line's), beating the no-vig chance with a positive
      return, -200 to +300, 30% or more, under 15 points over the fair chance, one a game (its best by value) */
   function eloOwn(st, L, ticks) {
-    const out = [], sig = st.eloPicks.pick.sigma;
+    const out = [], sig = st.eloPicks.pick.sigmaModel;
     for (const g of st.slate.filter(x => x.status === 'scheduled' && x.type !== 'PRE' && [D1, D2].includes(x.date) && Date.parse(x.tip) > NOW && !ticks.off.includes(x.id))) {
       const e = L.games[g.id], c = st.eloPicks.games[g.id]; if (!e || !c) continue;
       const cand = [];
@@ -352,7 +353,9 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const keyOwn = c => `${c.gid}|${c.kind}|${c.team}|${c.kind === 'spread' ? c.line : ''}`, keyPg = l => `${l.gid}|${l.kind}|${l.side}|${l.kind === 'spread' ? l.line : ''}`;
   const E5 = elo();
   check(C5.length >= 4 && JSON.stringify(p.w.epGet().all.map(keyPg).sort()) === JSON.stringify(C5.map(keyOwn).sort()), `the candidates are this file's own: ${C5.map(c => c.kind + ' ' + c.team).join(', ')}`);
-  check(p.w.epGet().all.every(l => Math.abs(l.pe - C5.find(c => keyOwn(c) === keyPg(l)).pe) < 1e-12), "each candidate's Elo chance is the ELO Model's own at params.pick's sigma (ELO_PICK_BLEND off)");
+  check(p.w.epGet().all.every(l => Math.abs(l.pe - C5.find(c => keyOwn(c) === keyPg(l)).pe) < 1e-12) && p.w.epGet().all.some(l => l.kind === 'spread'), "each candidate's Elo chance is the ELO Model's own, a spread's at its own margin's miss, pick.sigmaModel (ELO_PICK_BLEND off)");
+  { const pub = require('./publish').eloPickState([]), rs = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'elo.json'), 'utf8')).pick.spread;
+    check(pub && pub.pick && pub.pick.sigmaModel === rs.sigmaModel && rs.sigmaModel > pub.pick.sigma, `publish.js hands the page research/elo.json's sigma of the model alone (pick.sigmaModel ${pub && pub.pick && pub.pick.sigmaModel}) beside params.pick's (${pub && pub.pick && pub.pick.sigma}, the closing line's)`); }
   const wantE = [[2, 0], [3, 0.25], [4, 0.12], [5, 0.05]].map(([n, f]) => eloBest(C5, n, f));
   check(E5.every((t, i) => wantE[i] ? t && JSON.stringify(t.legs.map(keyPg).sort()) === JSON.stringify(wantE[i].L.map(keyOwn).sort()) && Math.abs(t.corr - wantE[i].pr) < 1e-9 && Math.abs(t.dec - wantE[i].d) < 1e-9 && !!t.likeliest === !!(i && wantE[i].likeliest) : !t),
     `the four Elo levels are every parlay's best of their candidates (${E5.map(t => t ? t.legs.length + (t.likeliest ? ' likeliest' : '') : '–').join(', ')})`);

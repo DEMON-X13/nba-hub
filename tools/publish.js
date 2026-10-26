@@ -355,7 +355,10 @@ function reportState(inj) {
 }
 /* The ELO Model's calls on the slate's games still to come (models/elo.json's upcoming: {pHome, spread}, the spread a
    home line), the Elo picks' pricing (its params: the model's own spread sigma and params.pick, the blend toward the
-   market research/elo.json measured), whether it ran, and what such picks have been worth on the walk-forward folds
+   market research/elo.json measured, with research/elo.json's pick.spread.sigmaModel beside it as pick.sigmaModel: the
+   miss of the model's own margin on 2024-2025, the sigma its picks' record below was scored at and the one the page
+   prices the Elo picks' spreads at while ELO_PICK_BLEND is off; params.pick.sigma is the blended margin's, at weight 0
+   the closing line's own), whether it ran, and what such picks have been worth on the walk-forward folds
    (research/elo.json's pick: the 3-point-edge picks of the model alone on the closing line), which the Elo picks'
    lead says so nobody reads the Elo chance as a promise. null without the model's file */
 function eloPickState(slate) {
@@ -364,13 +367,14 @@ function eloPickState(slate) {
   const up = m.upcoming || {}, games = {};
   for (const g of slate) if (g.status !== 'final' && up[g.id] && Number.isFinite(up[g.id].pHome)) games[g.id] = { pHome: up[g.id].pHome, spread: Number.isFinite(up[g.id].spread) ? up[g.id].spread : null };
   const P = m.params || {}, pk = P.pick || null;
-  let record = null;
+  let record = null, sigmaModel = null;
   try { const r = JSON.parse(fs.readFileSync(path.join(L.ROOT, 'research', 'elo.json'), 'utf8')).pick;
+    if (r && r.spread && Number.isFinite(r.spread.sigmaModel) && r.spread.sigmaModel > 0) sigmaModel = r.spread.sigmaModel;
     if (r && r.ml && r.spread) record = { chosenOn: r.chosenOn || null, folds: Object.fromEntries(Object.keys(r.ml.folds || {}).sort().map(s => {
       const a = r.ml.folds[s].model, b = r.spread.folds[s] && r.spread.folds[s].model;
       return [s, { ml: { picks: a.picks, said: a.said, won: a.won, units: a.units }, spread: b ? { picks: b.picks, said: b.said, won: b.won } : null }]; })) }; } catch (e) { record = null; }
   return { version: m.version || null, generated: m.generated || null, status: m.status || { ok: true }, sigma: Number.isFinite(P.sigma) ? P.sigma : null,
-    pick: pk ? { wSpread: pk.wSpread, wMl: pk.wMl, sigma: pk.sigma, chosenOn: pk.chosenOn || null } : null, record, games };
+    pick: pk ? { wSpread: pk.wSpread, wMl: pk.wMl, sigma: pk.sigma, sigmaModel, chosenOn: pk.chosenOn || null } : null, record, games };
 }
 module.exports = { propsState, boxesState, corrState, pickemState, offFinals, reportState, eloPickState, PK_MODELS };
 if (require.main === module) main();

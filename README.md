@@ -410,8 +410,12 @@ costs 8. The margin is the same logit times 7.73 points (least squares on the sa
 never disagree: ten Elo of rotation is a point, the home court two, a back to back 2.5. The spread is the margin written
 as a home line (-m). The model's own spread chance is `Phi((m + line) / 14.64)` for the home side at
 its line (`params.sigma`, the root mean square of the margin's miss in the 2026 fold, called before tip-off), and its
-moneyline chance `pHome`. Suggested Parlays' Elo picks stand on those, the model's own chance at `params.pick`'s sigma
-(README "Suggested Parlays"), with the honest blend toward the market (`params.pick`, below) wired as a switch, off. No total.
+moneyline chance `pHome`. Suggested Parlays' Elo picks stand on the model's own chance too (README "Suggested Parlays"):
+a moneyline its `pHome`, a spread `Phi((m + line) / 14.133)`, its margin at the miss research measured for the model alone
+on 2024-2025 (`research/elo.json`'s `pick.spread.sigmaModel`, published as `eloPicks.pick.sigmaModel`), the sigma at which
+the picks' record in their section's title was scored; `params.pick`'s 13.722 is the blended margin's miss, at weight 0
+the closing line's own, and prices only the honest blend toward the market (`params.pick`, below), wired as a switch,
+off. No total.
 
 **Who plays, before tip-off.** Every call in `games`, which is what `tools/calls.js` takes as the call of a game played
 before the model's first published call (a backtest), is read on the previous game's rotation, whatever the game's state:
@@ -2123,8 +2127,10 @@ ELO Model's team legs (README "The ELO Model"): every moneyline and spread of th
 games and bet types ticked on the Parlay Builder tab, whose Elo chance beats the price's no-vig chance with a positive
 expected return, priced -200 to +300, the Elo chance 30% or more, under 15 points over DraftKings' fair chance, with
 DraftKings' betslip id, one leg a game (its best by value). The Elo chance is the ELO Model's own: a moneyline its home win
-chance (`pHome`), a spread `Phi((m + h) / 13.722)` for the home side at home line h (m its home margin, minus its spread;
-13.722 is `params.pick.sigma`), the away side one less that. Four levels on it, as a set's (the ids `elo-safe` to
+chance (`pHome`), a spread `Phi((m + h) / 14.133)` for the home side at home line h (m its home margin, minus its spread;
+14.133 is the miss of that margin alone on 2024-2025, `research/elo.json`'s `pick.spread.sigmaModel`, which `publish.js`
+hands the page as `eloPicks.pick.sigmaModel`, and the sigma the record below was scored at; `params.pick.sigma`, 13.722, is
+the blended margin's, at weight 0 the closing line's own, and prices only the blend), the away side one less that. Four levels on it, as a set's (the ids `elo-safe` to
 `elo-xtrm`, Finish through `PARLAY_CARD.from('elo|')`), each found by trying every parlay of the candidates (the 30 best by
 value with the 10 likeliest): the legs are of different games, so a level's chance is the product of theirs and its price
 their prices multiplied, which the builder's own sums give. Every card leads with DraftKings' fair chance ("Elo says 36%"
@@ -2270,7 +2276,8 @@ Added and a second press, Add to builder and the builder paying the level's pric
 parlay, the level's own chance as its card states it, "Back to Suggested Parlays"), the focus on closing it (back on the
 Finish, on the same Finish as drawn again after a redraw while it was open, on the tab's button with none drawn), a one-game
 card of player legs opening the game's page from lines.json's event id; the Elo picks' candidates and four levels against a
-full enumeration of its own on the ELO Model's chance at `params.pick.sigma`, the lead and its title word for word, no mark
+full enumeration of its own on the ELO Model's chance, a spread's at `pick.sigmaModel`, `publish.js` handing it the
+research's, the lead and its title word for word, no mark
 on their legs, the Parlay Builder's ticks followed, an Elo pick's Finish card stating the Elo chance its level was built on
 ("the ELO Model") and the builder's own Finish parlay headed Your parlay again, and with no price to beat (no moneyline or
 spread posted, lines.json not there) the line saying so; this browser's own set at the lock,
@@ -2280,7 +2287,7 @@ not a locked one, a ruled-out level built again alone and said, the record's set
 for its read) and its own replacement said, a game leaving the tab and the key at tip-off; the pills from a made-up record,
 the real one and an empty one, every number and title its own, a junk record drawing nothing; and the real files, on what
 the day offers. Six breaks planted in copies of the built page each turn it red: the sets up at 7:00 AM, a 3-hour lock, the
-Elo spread on the model's own sigma, the browser lock not kept, the pills counting every key, the on-trial mark dropped.
+Elo spread at `params.pick`'s sigma (the closing line's miss, not the model's), the browser lock not kept, the pills counting every key, the on-trial mark dropped.
 
 In Chromium at 1280 and 390 wide, on a scratch copy of 25 October 2026's real data pulled from ESPN that afternoon (the
 slate with its national networks: Raptors at Timberwolves on NBA TV that night, Mavericks at Heat on NBA TV and Warriors at

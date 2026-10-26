@@ -342,9 +342,13 @@ window.PARLAY_CARD = (function () {
     const back = el('pcBack'); if (!back || back.hidden) return;
     back.hidden = true; cur = null;
     if (!document.querySelector('.pp-back:not([hidden])')) document.body.classList.remove('pp-lock');
-    /* the focus goes back where it came from: the button that opened it, or the builder's Finish if a redraw has
-       replaced that one */
-    const to = opener && opener.isConnected ? opener : el('pFinish') || el('pbTitle');
+    /* the focus goes back where it came from: the button that opened it; where a redraw has replaced it, the same Finish
+       as drawn now (by its data-pc-finish); else the builder's Finish or title where it is on the screen; else the tab's
+       own button, never the page's body */
+    const shown = x => !!x && x.isConnected && !x.closest('[hidden]');
+    const same = opener && !opener.isConnected && opener.dataset && opener.dataset.pcFinish
+      ? [...document.querySelectorAll('[data-pc-finish]')].find(x => x.dataset.pcFinish === opener.dataset.pcFinish && shown(x)) : null;
+    const to = shown(opener) ? opener : same || (shown(el('pFinish')) ? el('pFinish') : shown(el('pbTitle')) ? el('pbTitle') : document.querySelector('#nav button[aria-selected="true"]'));
     opener = null;
     try { if (to) to.focus(); } catch (e) {}
   }

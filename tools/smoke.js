@@ -44,9 +44,9 @@ const ROOT = path.resolve(__dirname, '..');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let fails = 0; const check = (c, m) => { if (!c) { fails++; console.log('  FAIL', m); } else console.log('  ok  ', m); };
 /* NBA_HTML tries another page in place of index.html (a deliberately broken copy, to show a check fails on it);
-   SMOKE_ONLY=base,7,8,9,10,12,lines,xparlays,pb,card,glance runs those sections alone (base is 0 to 6; xparlays is X
+   SMOKE_ONLY=base,7,8,9,10,12,lines,xparlays,pb,card,glance,sp runs those sections alone (base is 0 to 6; xparlays is X
    Parlays, tools/smoke_xparlays.js; pb the Parlay Builder, tools/smoke_parlay.js; card the parlay card,
-   tools/smoke_card.js; glance the matchup bubble, tools/smoke_glance.js) */
+   tools/smoke_card.js; glance the matchup bubble, tools/smoke_glance.js; sp Suggested Parlays, tools/smoke_suggested.js) */
 const pageFile = page => page === 'index.html' && process.env.NBA_HTML ? path.resolve(process.env.NBA_HTML) : path.join(ROOT, page);
 const ONLY = (process.env.SMOKE_ONLY || '').split(',').filter(Boolean), run = k => !ONLY.length || ONLY.includes(k);
 /* files the page may read beside state.json (data/box_<season>.csv, for a leg older than the state's box window):
@@ -1873,6 +1873,8 @@ async function linesFeed() {
   await guard('card', () => require('./smoke_card')({ check, pageFile, ROOT }));
   /* the matchup bubble (README "The matchup bubble"): its own file, tools/smoke_glance.js */
   await guard('glance', () => require('./smoke_glance')({ check, pageFile, ROOT }));
+  /* Suggested Parlays (README "Suggested Parlays"): its own file, tools/smoke_suggested.js, on this harness's checks */
+  await guard('sp', () => require('./smoke_suggested')({ check, pageFile, ROOT }));
 
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

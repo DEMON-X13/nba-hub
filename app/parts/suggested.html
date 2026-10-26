@@ -1,0 +1,608 @@
+<style>
+/* ---------- Suggested Parlays (app/parts/suggested.html; README "Suggested Parlays") ----------
+   The NFL hub's Suggested Parlays tab (its props/build/part1.html sp- rules) on this page's tokens, the dark look only, as
+   the rest of the page; a level's card is the Parlay Builder's (.pb-tier, app/parts/parlay.html). Small text is --ink-2 or
+   the Parlay Builder's quiet --pb-q, never --muted; every control is 44px tall */
+.sp-game{margin:18px 0 0;padding:14px 0 0;border-top:1px solid var(--line)}
+.sp-hd{display:flex;align-items:baseline;gap:6px 10px;flex-wrap:wrap;margin:0 0 6px}
+.sp-hd h3{margin:0;font-family:var(--display);font-size:17px;font-weight:700;letter-spacing:-.01em;min-width:0;overflow-wrap:anywhere}
+.sp-hd small{font-size:12px;color:var(--pb-q)}
+.sp-lock{margin:0 0 12px;font-size:12.5px;line-height:1.5;color:var(--ink-2)}
+.sp-lockmark{display:inline-block;margin-right:6px;padding:1px 8px;border:1px solid var(--gold);border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);vertical-align:1px}
+.sp-rec .bar{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:8px 0 6px}
+.sp-rec .rec{display:inline-flex;align-items:baseline;gap:6px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:5px 11px;border-radius:999px;background:var(--bg-2);border:1px solid var(--line-2);color:var(--ink-2);white-space:normal;min-width:0;overflow-wrap:anywhere;cursor:help}
+.sp-rec .rec b{font-family:var(--display);font-size:14px;font-weight:700;letter-spacing:0;color:var(--ink);font-variant-numeric:tabular-nums}
+.sp-odds{margin:0 0 4px}
+.sp-upd{color:var(--ink)}
+#spPanel .pb-said{margin:6px 0 0}
+.pb-elo:not(:empty){margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
+.pb-elo h3{margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--display);font-size:17px;font-weight:700}
+.pb-elo .pb-lead{margin:0 0 12px}
+.pb-elo .pb-lead[title]{cursor:help}
+</style>
+<script>
+'use strict';
+/* ---------- Suggested Parlays (README "Suggested Parlays") ----------
+   The NFL hub's Suggested Parlays tab (props/build/part3.js there, app v114: #suggest, its sets, the lock, the record and
+   the Elo picks) on this hub's games, adapted only where basketball or the NBA's data forces it, each adaptation said
+   where it is made:
+   - which games: a featured game is a game on national TV (the slate's tv, the networks ESPN's scoreboard lists in the
+     national market: fetch.js national, README "The national networks"), never a preseason game, where the NFL's is a
+     Thursday, Sunday or Monday night kickoff: the NBA has national games most nights at every hour, so a clock rule says
+     nothing, and which games the league puts on national TV is the league's own "featured";
+   - one night at a time: the first Eastern date with a featured game to come, all its featured games (no cap), up from
+     6:00 AM Eastern the morning after the latest featured date before it (any game of the slate, played or not), as the
+     NFL's night rule with the Eastern date for its weekday;
+   - each set is the Parlay Builder's four levels (app/parts/parlay.html's engine as it is: pbLegs, pbTier, the searches)
+     on that one game's legs and every bet type, searched as hard as one game allows (SP_SEARCH, the NFL's widths); a
+     player's chance is the props model's, on trial, and every player leg says so; the Value rule is the 3-point edge
+     alone (the NBA has no market + form); and a set takes no player the injury report lists at all (spOutWhy: Out,
+     Doubtful, Questionable and Day-To-Day, ESPN's in-between status), as the NFL's takes no questionable player;
+   - the prices are lines.json's, the job's read of DraftKings' lines, or a Refresh odds press's newer read, exactly as the
+     Parlay Builder takes them (pbGl, pbPr): a press re-picks a set until its lock and never after;
+   - the lock is 2 hours before tip-off (the NFL's, from its kickoff), the record's set shown from the lock to tip-off and
+     this browser's own where the record has none (nba_sp_lock_v1), a level holding a player ruled out since built again;
+   - the record is the job's (tools/suggest_ledger.js, data/suggest_ledger.json, its `featured` map), read no-store when
+     the tab first opens and again at a lock;
+   - the Elo picks are the ELO Model's moneylines and spreads (the NBA has no per-stat player matchup to stand an Elo pick
+     on a prop), where its own chance beats DraftKings' price, four levels on that chance.
+   Nothing is read before the tab opens; nothing is stored but nba_sp_lock_v1, a locked set the page built itself. */
+const SP_LOCK_H = 2, SP_LOCK_MS = SP_LOCK_H * 3600e3, SP_OPEN_H = 6;
+/* every bet type, no game unticked: a set never follows the Parlay Builder's boxes, so the page and the record agree */
+const SP_ALL = { k: Object.fromEntries(PB_KINDS.map(([k]) => [k, true])), off: [], gx: null };
+/* one game's lists are short, so a set is searched far harder than the all-games levels: each list to 60 legs, a beam of
+   200 by return and by chance and 400 for the likeliest, its best 4 and 10 worked by the builder's own sums (the NFL's) */
+const SP_SEARCH = { cap: 60, beam: 200, wide: 400, likely: 4, final: 10 };
+/* the national networks that make a game featured: every one ESPN lists nationally (NBA TV among them), less those named
+   in except. Dropping a network is one line: except: ['NBA TV'] (tools/suggest_check.js keeps its own copy) */
+const FEATURED_TV = { except: [] };
+const SP_KEEP_KEY = 'nba_sp_lock_v1', SP_REC_URL = 'data/suggest_ledger.json';
+let SP_CACHE = new Map(), SP_IN = new Map(), SP_SHOWN = null, SP_ASKED = false, SP_SAID = '';
+let SP_REC = null, SP_REC_DONE = false, SP_REC_STATE = null, SP_REC_BUSY = false, SP_KEEP = null;
+const spIsMap = v => !!v && typeof v === 'object' && !Array.isArray(v);
+const spR = (v, d) => v == null || !isFinite(v) ? null : Math.round(v * d) / d;
+/* an instant as the record writes it, to the minute as the slate writes a tip-off ("2026-10-27T23:30Z") */
+const spMin = ms => new Date(ms).toISOString().slice(0, 16) + 'Z';
+
+/* ---------- which games ---------- */
+const spNets = g => (g && Array.isArray(g.tv) ? g.tv : []).filter(n => typeof n === 'string' && n && !FEATURED_TV.except.includes(n));
+function spFeatured(g) { return !!g && g.type !== 'PRE' && spNets(g).length > 0; }
+/* the slate's featured games still to tip, in tip-off order (one tip-off's games in the slate's own order) */
+function spGames() {
+  if (!S || !S.slate) return [];
+  return S.slate.filter(g => spFeatured(g) && g.status === 'scheduled' && !started(g)).map((g, i) => [g, i])
+    .sort((a, b) => (Date.parse(a[0].tip) || 0) - (Date.parse(b[0].tip) || 0) || a[1] - b[1]).map(x => x[0]);
+}
+/* the featured games the record takes: those on the lines feed's two dates (pbDates), the dates the job reads
+   DraftKings' lines for; a game further out has no line read yet, so its set would be four empty levels (README) */
+function spTakes() { const ds = pbDates(); return spGames().filter(g => ds.includes(g.date)); }
+function spLockAt(g) { const t = g && g.tip ? Date.parse(g.tip) : NaN; return Number.isFinite(t) ? t - SP_LOCK_MS : null; }
+/* a time in US Eastern, as the slate's dates are ("Tue 5:30 PM ET") */
+function spEt(ms, day) { try { return new Date(ms).toLocaleString('en-US', { timeZone: 'America/New_York', ...(day ? { weekday: 'short' } : {}), hour: 'numeric', minute: '2-digit' }) + ' ET'; } catch (e) { return spMin(ms).slice(11, 16) + ' UTC'; } }
+function spTipEt(g) { const t = Date.parse(g.tip); if (!Number.isFinite(t)) return { day: pbDayText(g.date), t: '' };
+  try { return { day: new Date(t).toLocaleDateString('en-US', { timeZone: 'America/New_York', weekday: 'short', month: 'short', day: 'numeric' }), t: new Date(t).toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' }) + ' ET' }; }
+  catch (e) { return { day: pbDayText(g.date), t: '' }; } }
+/* the instant of h:00 in New York on an Eastern date, through the time zone database (the page has no offset table): the
+   offset whose instant reads back as that hour of that date */
+const SP_NYF = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', hourCycle: 'h23' });
+function spEtAt(day, h) {
+  const naive = Date.parse(`${day}T${String(h).padStart(2, '0')}:00:00Z`); if (!Number.isFinite(naive)) return null;
+  for (const off of [4, 5]) { const t = naive + off * 3600e3, p = Object.fromEntries(SP_NYF.formatToParts(new Date(t)).map(x => [x.type, x.value]));
+    if (`${p.year}-${p.month}-${p.day}` === day && +p.hour === h) return t; }
+  return naive + 5 * 3600e3;
+}
+const spWeekday = d => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' });
+/* one night at a time (the NFL owner's call of 17 October 2026, "just show the next night game"): the featured games of
+   the first Eastern date with one still to tip, all of them, from 6:00 AM Eastern the morning after the latest featured
+   date before it on the slate (played or not: the slate keeps yesterday); none before it, at once */
+function spNight() {
+  const G = spGames(); if (!G.length) return { games: [], open: null, prev: null, up: false };
+  const D = G[0].date, games = G.filter(g => g.date === D);
+  const prev = (S.slate || []).filter(g => spFeatured(g) && g.date < D).map(g => g.date).sort().pop() || null;
+  const open = prev ? spEtAt(addDays(prev, 1), SP_OPEN_H) : null;
+  return { games, open, prev, up: open == null || Date.now() >= open };
+}
+/* THE one place the tab asks which games it sets out */
+function spOn() { const n = spNight(); return n.up ? n.games : []; }
+/* what the tab stands on beyond the data: each featured game's side of its lock, the games set out, and the games to
+   come the Elo picks are drawn from (a game that tips, a lock and the 6:00 AM turn each move it) */
+function spState() { const now = Date.now(); return spGames().map(g => g.id + (now < spLockAt(g) ? ':l' : ':k')).concat('on=' + spOn().map(g => g.id).join('+'), 'pb=' + pbGames().map(g => g.id).join('+')).join(); }
+
+/* ---------- who the sets take: the injury report ----------
+   Why a player is kept out of every suggested set, in a few words, or null when he plays: the game's out lists (the hub's
+   availability rule: Out before his return, suspended), else any listing on today's report (state.json's report), Day-To-
+   Day among them: ESPN's NBA feed has no questionable, writing every status between playing and out as Day-To-Day, so the
+   NFL's rule (a questionable player is never suggested) takes it. A probable player plays */
+function spOutWhy(pid, gid) {
+  const g = S.slate.find(x => x.id === gid), out = g && g.model ? ['away', 'home'].map(s => g.model[s] && g.model[s].out || []).flat().find(y => y.id === pid) : null;
+  const r = S.report && spIsMap(S.report.players) ? S.report.players[pid] : null, det = r && r[2] ? String(r[2]).toLowerCase() : '';
+  if (out) return `ruled out (${String(out.status || 'Out').toLowerCase()}${det ? ', ' + det : ''})`;
+  if (!Array.isArray(r)) return null;
+  const st = String(r[1] || '').trim();
+  if (/^probable/i.test(st)) return null;
+  return `listed ${st ? st.toLowerCase() : 'on the injury report'}${det ? ' (' + det + ')' : ''}, so held out`;
+}
+/* the pool: pbPool's lists (pbLegs, then each list cut to SP_SEARCH.cap) less the players spOutWhy keeps out, taken out
+   before the cut so the cut keeps as many as it may */
+function spPool(g) {
+  const r = pbLegs([g], SP_ALL), keep = l => l.kind !== 'prop' || !spOutWhy(l.pid, g.id);
+  const pref = r.pref.filter(keep), thin = r.thin.filter(keep);
+  return { ...r, held: r.pref.length + r.thin.length - pref.length - thin.length, pref: pbCap(pref, SP_SEARCH.cap), thin: pbCap(thin, SP_SEARCH.cap), mkt: pbCap(r.mkt, SP_SEARCH.cap) };
+}
+/* a level's legs one by one as the builder takes them (slipWhy, the NBA's same-game refusals): pbFits's rules (no line
+   twice, one side bet and one total a game, one leg a player) are those refusals on one game's legs, so this never
+   refuses; it is the guarantee that a level is a parlay the builder takes */
+function spSlipOk(legs) { const have = []; for (const l of legs) { const s = pbSlipOf(l); if (slipWhy(have, s)) return false; have.push(s); } return true; }
+/* why a game's player legs are none (a read's time in Eastern: the record keeps these words, read anywhere). The time
+   is when the lines feed first held what it holds now (tools/lines.js keeps a half's time while a read finds the same),
+   so the words say "as of" it and that no read since has found any, never that it was the last read */
+function spNoPl(g) {
+  if (!pbPropsOn()) return 'no player lines: the props model failed its shadow ledger’s bar, so the sets take none.';
+  if (!ppGame(g.id)) return 'no player lines the props model prices: it has no projections for this game yet.';
+  const r = pbPr(g.id);
+  if (r && (r.mains.length || r.ladders.length || r.yes.length)) return 'no player lines the props model prices: it projects none of the players DraftKings lines here.';
+  return r ? `no player prices yet: DraftKings had posted no player props for it as of ${spEt(Date.parse(r.at), true)}, and no read since has found any; it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
+    : 'no player prices yet: none have been read for it; the job reads DraftKings’ player props through the day, and Refresh odds reads them now.';
+}
+/* why a level of one game has no parlay: the game does not make that many legs, and why */
+function spWhy(n, pool, g) {
+  const gl = pbGl(g.id), pr = pbPr(g.id), at = [gl && gl.at, pr && pr.at].filter(Boolean).sort().pop();
+  if (!gl && !pr) return `No legs in this game: no DraftKings line has been read for it yet. The job reads them for the next two nights’ games, and Refresh odds reads the current ones.`;
+  if (!gl && pr && !(pr.mains.length || pr.ladders.length || pr.yes.length)) return `No legs in this game yet: DraftKings had posted neither its game lines nor its player props as of ${spEt(Date.parse(at), true)}, and no read since has found any. The job reads them through the day, and Refresh odds reads the current ones.`;
+  const m = pbMaxLegs([...pool.pref, ...pool.thin, ...(pool.mkt || [])]);
+  const what = m < n ? `${m ? `Only ${m} leg${m === 1 ? '' : 's'}` : 'No legs'} in this game${pool.noId ? ' that DraftKings’ betslip can take' : ''}` : `No ${n}-leg parlay in this game`;
+  if (!pool.plGames) return `${what}, and ${spNoPl(g)}`;
+  return `${what}: a parlay takes one leg a player, and one side and one total a game.`;
+}
+const SP_NO_TABLE = 'The same-game table is not in the published file, so a parlay of one game’s legs cannot be priced.';
+function spBuild(g) {
+  const head = t => ({ id: t[0], label: t[1], n: t[2], floor: t[3] });
+  if (!S.corr || !S.corr.rho || !S.corr.hold) return { gid: g.id, tiers: PB_TIERS.map(t => ({ ...head(t), why: SP_NO_TABLE })), pref: 0, thin: 0, mkt: 0, far: 0, noId: 0, held: 0, plGames: 0 };
+  const pool = spPool(g), memo = new Map();
+  const tiers = PB_TIERS.map(t => { const r = pbTier(t, pool, memo, SP_SEARCH);
+    return r && spSlipOk(r.legs) ? { ...head(t), ...r } : { ...head(t), why: r ? 'No parlay of this size in this game that the builder’s same-game rules take.' : spWhy(t[2], pool, g) }; });
+  return { gid: g.id, tiers, pref: pool.pref.length, thin: pool.thin.length, mkt: pool.mkt.length, far: pool.far, noId: pool.noId || 0, held: pool.held, plGames: pool.plGames };
+}
+/* a game's live set, the same for the same data (the searches and the sums are deterministic), from the cache while
+   nothing it stands on has moved: the game's tip-off and pbDataSig (the publish, lines.json, a press's reads) */
+const spSig = g => [g.id, g.tip || '', pbDataSig()].join('|');
+function spSet(gid) {
+  const g = (S.slate || []).find(x => x.id === gid); if (!g) return null;
+  const sig = spSig(g); let r = SP_CACHE.get(sig);
+  if (!r) { r = { sig, ...spBuild(g) }; SP_CACHE.set(sig, r); if (SP_CACHE.size > 24) SP_CACHE.delete(SP_CACHE.keys().next().value); }
+  return r;
+}
+/* one level of a game built again now, from the lines at hand (a locked level holding a player ruled out since) */
+function spRebuild(gid, id) {
+  const g = (S.slate || []).find(x => x.id === gid), t = PB_TIERS.find(s => s[0] === id); if (!g || !t) return null;
+  const head = { id: t[0], label: t[1], n: t[2], floor: t[3] };
+  if (!S.corr || !S.corr.rho || !S.corr.hold) return { ...head, why: SP_NO_TABLE };
+  const pool = spPool(g), r = pbTier(t, pool, new Map(), SP_SEARCH);
+  return r && spSlipOk(r.legs) ? { ...head, ...r } : { ...head, why: spWhy(t[2], pool, g) };
+}
+
+/* ---------- a level as the record and this browser keep it, and back ----------
+   A leg kept is the builder's own leg (pbSlipOf: the game, its clubs, date and tip, the kind, the side, the line or the
+   milestone, DraftKings' price and the other side's, the read's time, a game line's betslip id; a player's id, name, club
+   and stat), its name and words, the model's chance (4 places), DraftKings' fair chance and whether it is estimated, and
+   its marks (thin, market). A level is {id, label, n, floor, legs, p, fair, fair_est, dec, likeliest, thin, mkt} or
+   {id, label, n, floor, why}; one built again after the lock carries `updated` {pid, name, reason, at} */
+function spLegOut(l) { const f = legFair(l);
+  return { ...pbSlipOf(l), name: String(l.name || ''), label: String(l.label || ''), p: spR(l.p, 1e4), fair: f ? spR(f.p, 1e4) : null, fair_est: !!(f && f.est), thin: !!l.thin, market: !!l.market }; }
+function spTierOut(t) {
+  if (!t || !t.legs) return { id: t.id, label: t.label, n: t.n, floor: t.floor, why: t.why };
+  return { id: t.id, label: t.label, n: t.n, floor: t.floor, legs: t.legs.map(spLegOut), p: spR(t.corr, 1e4), fair: t.fair && t.fair.p != null ? spR(t.fair.p, 1e4) : null,
+    fair_est: !!(t.fair && t.fair.est), dec: spR(t.dec, 1e3), likeliest: !!t.likeliest, thin: t.thin || 0, mkt: t.mkt || 0, ...(t.updated ? { updated: t.updated } : {}) };
+}
+/* a kept leg back as a drawn one (pbView), at its kept chance and price; null where it is not a leg of this game the
+   builder would take */
+function spLegIn(l, g) {
+  if (!spIsMap(l) || l.id !== g.id || !['prop', 'ml', 'spread', 'total'].includes(l.kind)) return null;
+  const p = +l.p; if (!(p > 0 && p < 1)) return null;
+  const s = pbSlipOf({ ...l, away: g.away, home: g.home, date: g.date, tip: g.tip });
+  if (normSlip({ legs: [s] }).legs.length !== 1) return null;
+  const v = pbView(s); v.p = p; v.thin = !!l.thin; if (l.market) v.market = true; else delete v.market;
+  return v;
+}
+function spTierIn(t, g) {
+  const spec = t && PB_TIERS.find(s => s[0] === t.id); if (!spec) return null;
+  const head = { id: spec[0], label: spec[1], n: spec[2], floor: spec[3] };
+  const U = spIsMap(t.updated) ? { updated: { pid: String(t.updated.pid || ''), name: String(t.updated.name || ''), reason: String(t.updated.reason || ''), at: String(t.updated.at || ''), ...(t.updated.by === 'page' ? { by: 'page' } : {}) } } : {};
+  if (!Array.isArray(t.legs)) return { ...head, why: typeof t.why === 'string' && t.why ? t.why : 'No parlay of this size in this game.', ...U };
+  const legs = t.legs.map(l => spLegIn(l, g)); if (legs.length !== spec[2] || legs.some(l => !l)) return null;
+  if (!(+t.dec > 1) || !(+t.p > 0 && +t.p <= 1)) return null;
+  /* the chance and the price worked out again on the legs as kept, by the builder's own sums (parlayProb at the kept
+     chances, parlayDec at the kept prices), so a locked level states what Add to builder and Finish then pay (the kept
+     figures are rounded); the fair chance is the one kept, DraftKings' at the lock, so a press after it moves nothing */
+  const L = pbOrder(legs), ck = [JSON.stringify(t), g.id, pbDataSig()].join('|'), was = SP_IN.get(ck);
+  const sum = was || (() => { const pr = parlayProb(L); return { corr: pr.corr, indep: pr.indep, dec: parlayDec(L.map(l => ({ leg: l, ml: l.price }))) }; })();
+  if (!was) { SP_IN.set(ck, sum); if (SP_IN.size > 64) SP_IN.delete(SP_IN.keys().next().value); }
+  return { ...head, legs: L, corr: sum.corr, indep: sum.indep, dec: sum.dec, fair: t.fair != null && isFinite(+t.fair) ? { p: +t.fair, est: !!t.fair_est } : null, likeliest: !!t.likeliest,
+    thin: L.filter(l => l.thin).length, mkt: L.filter(l => l.market).length, ...U };
+}
+
+/* ---------- the record (data/suggest_ledger.json, tools/suggest_ledger.js) ----------
+   Its `featured` map: each featured game's set as the job last published it before the game's lock, keyed
+   season|date|tip|game id, each {season, date, gid, away, home, type, tip, lock, tv, generated, pool, tiers, taken_at,
+   grade?, updates?}. Read with no-store when the tab first opens and again where a set has reached its lock since (the
+   job may have rewritten or first taken it after the page loaded); kept in memory only. A file that is not there or has
+   no featured map is no record; a read again that fails keeps the one before */
+async function spRecLoad(again) {
+  if (again) SP_REC_BUSY = true;
+  let L = null;
+  try { const r = await fetch(SP_REC_URL, { cache: 'no-store' }); if (r && r.ok) L = await r.json(); } catch (e) { L = null; }
+  const ok = spIsMap(L) && spIsMap(L.featured);
+  if (ok || !again) SP_REC = ok ? L : null;
+  SP_REC_DONE = true; SP_REC_BUSY = false;
+  try { SP_REC_STATE = spState(); } catch (e) {}
+  if (tabNow() === 'suggest') spKeepPlace(renderSp);
+}
+/* the site's locked set for a game: its entry of this season and the game's tip-off as it stands, taken before the lock
+   (the job writes none after it), the last such key */
+function spLedgerOf(g) {
+  const P = SP_REC && spIsMap(SP_REC.featured) ? SP_REC.featured : null; if (!P) return null;
+  const lock = spLockAt(g); let e = null;
+  for (const k of Object.keys(P).sort()) { const x = P[k];
+    if (!spIsMap(x) || x.gid !== g.id || +x.season !== +S.season || x.tip !== g.tip || !Array.isArray(x.tiers)) continue;
+    if (x.taken_at != null && !(Date.parse(x.taken_at) < lock)) continue;
+    e = x; }
+  return e;
+}
+/* the record a level: each season's game and level once, from the last entry that holds it (a tip-off ESPN moved makes a
+   new key), from the entries' own grades: won or lost (a push, every leg a push or a void, is counted apart), the wins
+   expected by DraftKings' fair chance and by the model's (the chances the set showed), units on $1 */
+function spRecSum(L) {
+  const out = PB_TIERS.map(([id, label]) => ({ id, label, graded: 0, won: 0, lost: 0, push: 0, fair: 0, fairN: 0, model: 0, units: 0 }));
+  let pending = 0, games = 0; const E = L && spIsMap(L.featured) ? L.featured : {}, last = new Map();
+  for (const k of Object.keys(E).sort()) { const e = E[k]; if (!spIsMap(e) || !Array.isArray(e.tiers)) continue; games++;
+    for (const t of e.tiers) { const g = spIsMap(e.grade) ? e.grade[t && t.id] : null; if (!spIsMap(g) || !out.some(x => t && x.id === t.id) || !Array.isArray(t.legs)) continue;
+      last.set([e.season, e.gid, t.id].join('|'), { t, g }); } }
+  for (const { t, g } of last.values()) { const s = out.find(x => x.id === t.id);
+    if (g.result === 'pending') { pending++; continue; }
+    if (g.result === 'push') { s.push++; continue; }
+    if (g.result !== 'won' && g.result !== 'lost') continue;
+    s.graded++; if (g.result === 'won') s.won++; else s.lost++;
+    s.model += isFinite(+t.p) ? +t.p : 0; if (t.fair != null && isFinite(+t.fair)) { s.fair += +t.fair; s.fairN++; }
+    s.units += (g.result === 'won' && isFinite(+g.payout) ? +g.payout : 0) - 1; }
+  return { tiers: out, pending, games };
+}
+/* the record's line at the top of the tab: a pill a level (won-lost, units on $1), each titled with the wins expected and
+   its pushes, then what is pending; no record, nothing */
+function spRecHtml() {
+  if (!SP_REC) return '<div id="spRec" class="sp-rec" hidden></div>';
+  const R = spRecSum(SP_REC), any = R.tiers.some(s => s.graded || s.push);
+  const un = v => (v > 0.0005 ? '+' : v < -0.0005 ? '−' : '') + Math.abs(v).toFixed(2), f1 = v => v.toFixed(1);
+  const pills = any ? R.tiers.map(s => `<span class="rec" data-sp-rec="${s.id}" title="${esc(s.label)}: ${s.graded} graded, ${s.won} won${s.graded ? `; wins expected ${s.fairN ? f1(s.fair) + ' by DraftKings’ fair chance' + (s.fairN < s.graded ? ' (on the ' + s.fairN + ' with one)' : '') + ', ' : ''}${f1(s.model)} by the model` : ''}${s.push ? `; ${s.push} push${s.push === 1 ? '' : 'es'}, the stake back` : ''}">${esc(s.label)} <b>${s.won}–${s.lost}</b> ${s.graded || s.push ? un(s.units) + ' units' : ''}</span>`).join('')
+    : '<span class="rec" data-sp-rec="none">No featured set graded yet</span>';
+  return `<div id="spRec" class="sp-rec"><div class="bar">${pills}${R.pending ? `<span class="rec" data-sp-rec="pending">Pending <b>${R.pending}</b></span>` : ''}</div></div>`;
+}
+
+/* ---------- this browser's own lock (nba_sp_lock_v1) ----------
+   What this browser keeps of a locked game, outside M and never sent anywhere: the set the page built at the lock where
+   the record had none (own), and the levels the page built again for a player ruled out (rep), per game under its
+   tip-off; a game that has tipped, left the slate or moved is pruned on every write, and the record's set takes the
+   page's place as soon as a load reads one. Held in memory too (SP_KEEP), so a browser that keeps nothing still shows one
+   set a load. The one thing the page keeps of its own making (README "Suggested Parlays") */
+function spKeep() {
+  if (SP_KEEP) return SP_KEEP;
+  SP_KEEP = {};
+  try { const v = JSON.parse(localStorage.getItem(SP_KEEP_KEY) || 'null');
+    if (v && v.v === 1 && +v.season === +S.season && spIsMap(v.games)) for (const [id, x] of Object.entries(v.games)) if (spIsMap(x) && typeof x.tip === 'string') SP_KEEP[id] = x; } catch (e) {}
+  return SP_KEEP;
+}
+function spKeepSave() {
+  const now = Date.now(), out = {};
+  for (const [id, x] of Object.entries(SP_KEEP || {})) { const g = (S.slate || []).find(y => y.id === id);
+    if (g && g.status === 'scheduled' && x.tip === g.tip && now < Date.parse(g.tip)) out[id] = x; else delete SP_KEEP[id]; }
+  try { if (!Object.keys(out).length) localStorage.removeItem(SP_KEEP_KEY); else localStorage.setItem(SP_KEEP_KEY, JSON.stringify({ v: 1, season: S.season, games: out })); } catch (e) {}
+}
+/* a game's set as the tab shows it: live before the lock; from it, the record's locked set, or with none this browser's
+   own, built once and kept; a locked level holding a player ruled out since built again, that level only (the record's
+   own replacement where the job made one, else the page's, kept) */
+function spShown(g) {
+  const lock = spLockAt(g), now = Date.now();
+  if (lock == null || now < lock) { const s = spSet(g.id); return { phase: 'live', lock, tiers: s ? s.tiers : [] }; }
+  if (!SP_REC_DONE || (SP_REC_BUSY && !spLedgerOf(g))) return { phase: 'loading', lock, tiers: null };
+  const K = spKeep(); let k = K[g.id] && K[g.id].tip === g.tip ? K[g.id] : null, dirty = false;
+  const e = spLedgerOf(g); let tiers = null, own = false, at = null;
+  if (e) { const T = PB_TIERS.map(([id]) => spTierIn(e.tiers.find(t => t && t.id === id), g));
+    if (T.every(Boolean)) { tiers = T; at = e.taken_at || null; if (k && k.own) { k = { tip: g.tip, rep: {} }; K[g.id] = k; dirty = true; } } }
+  if (!tiers && k && k.own && Array.isArray(k.tiers)) { const T = PB_TIERS.map(([id]) => spTierIn(k.tiers.find(t => t && t.id === id), g));
+    if (T.every(Boolean)) { tiers = T; own = true; at = k.at || null; } }
+  /* the page's own set waits for DraftKings' lines (lines.json, read when the tab opened) as it waits for the record; one
+     built with no published lines at all (lines.json did not load) is shown and not kept, so a reload tries again */
+  const linesIn = !!LINES || !!LINES_ERR;
+  if (!tiers && !linesIn) return { phase: 'loading', lock, tiers: null, lines: true };
+  if (!tiers) { const s = spSet(g.id), out = s.tiers.map(spTierOut);
+    tiers = PB_TIERS.map(([id], i) => spTierIn(out.find(t => t.id === id), g) || s.tiers[i]);
+    k = { tip: g.tip, own: true, at: new Date(now).toISOString().slice(0, 19) + 'Z', tiers: out, rep: {} }; K[g.id] = k; dirty = !!LINES; own = true; at = k.at; }
+  const rep = k && spIsMap(k.rep) ? k.rep : {};
+  tiers = tiers.map(t => {
+    if (!linesIn) return t;
+    let cur = t, upd = null; const r = rep[t.id];
+    /* the page's own replacement, unless the record has made one for the same player */
+    if (r && spIsMap(r.tier)) { const T = spTierIn(r.tier, g);
+      if (T && !(t.updated && t.updated.pid === r.pid)) { cur = T; upd = { pid: String(r.pid), name: String(r.name || ''), reason: String(r.reason || ''), at: String(r.at || ''), by: 'page' }; }
+      else { delete rep[t.id]; dirty = true; } }
+    const out = cur.legs && cur.legs.find(l => l.kind === 'prop' && spOutWhy(l.pid, g.id));
+    if (out) { const why = spOutWhy(out.pid, g.id), nt = spRebuild(g.id, t.id), at2 = new Date(now).toISOString().slice(0, 19) + 'Z';
+      rep[t.id] = { pid: out.pid, name: out.name, reason: why, at: at2, tier: spTierOut(nt) }; dirty = true;
+      cur = spTierIn(rep[t.id].tier, g) || nt; upd = { pid: out.pid, name: out.name, reason: why, at: at2, by: 'page' }; }
+    return upd ? { ...cur, updated: upd } : cur;
+  });
+  if (dirty) { if (!k) { k = { tip: g.tip, rep: {} }; K[g.id] = k; } k.rep = rep; spKeepSave(); }
+  return { phase: 'locked', lock, tiers, own, at, ledger: !!e };
+}
+/* a level by the id its Finish names (game id:level), as the tab shows it; only a game the tab sets out */
+function spTier(fid) {
+  const s = String(fid || '').replace(/^sp\|/, ''), i = s.lastIndexOf(':'); if (i < 0) return null;
+  const g = spOn().find(x => x.id === s.slice(0, i)); if (!g) return null;
+  const v = spShown(g), t = v.tiers && v.tiers.find(x => x && x.id === s.slice(i + 1));
+  return t && t.legs ? { ...t, game: `${g.away} at ${g.home}` } : null;
+}
+
+/* ---------- the Elo picks: the ELO Model's moneylines and spreads ----------
+   The NFL hub's Elo picks stand on a player's Elo matchup; the NBA has none fitted to props, so its are the ELO Model's
+   team legs (README "The ELO Model"): every moneyline and spread of the lines feed's games still to tip, on the games and
+   bet types ticked on the Parlay Builder tab, whose Elo chance beats the price's no-vig chance with a positive expected
+   return (the chance times the decimal price, less 1), priced -200 to +300, the Elo chance 30% or more, the far-off guard
+   (15 points over DraftKings' fair chance: left out), DraftKings' betslip id where the game's lines carry ids, one leg a
+   game (its best by value). The Elo chance is the ELO Model's own: a moneyline its pHome; a spread Phi((m + h) / sigma),
+   m its home margin (minus its spread), h the home line, sigma params.pick.sigma. Priced honestly (params.pick, the blend
+   toward DraftKings' closing line the research chose on 2024 and 2025) a pick is the market's own chance and never beats
+   a price: ELO_PICK_BLEND true prices them so (and the section then shows none). Its picks' measured record is the lead's
+   title. Four levels on the Elo chance: Safe the likeliest pair; Medium, Aggressive and Extreme the 3-, 4- and 5-leg
+   parlay with the best expected return that lands 25%, 12% and 5% by it, else the likeliest of that size. The legs are
+   of different games, so a level's chance is the product and its price the prices multiplied (the builder's own sums
+   say so), and each level is found by trying every parlay of its size (EP.cap best by value with the EP.capP likeliest) */
+const ELO_PICK_BLEND = false;
+const EP = { lo: -200, hi: 300, floor: 0.30, cap: 30, capP: 10 };
+const EP_TIERS = [['elo-safe', 'safe'], ['elo-med', 'med'], ['elo-aggr', 'aggr'], ['elo-xtrm', 'xtrm']];
+let EP_CACHE = new Map();
+const epLogit = p => Math.log(p / (1 - p)), epSig = x => 1 / (1 + Math.exp(-x));
+/* the Elo chance of a team leg, or null */
+function epChance(l) {
+  const E = S.eloPicks, c = E && E.games ? E.games[l.id] : null, g = S.slate.find(x => x.id === l.id); if (!c || !g || !Number.isFinite(c.pHome)) return null;
+  const home = l.side === g.home;
+  if (l.kind === 'ml') {
+    let ph = c.pHome;
+    if (ELO_PICK_BLEND) { const w = E.pick ? E.pick.wMl : 0, gl = pbGl(l.id); if (!gl || !gl.ml) return null;
+      const ih = propImplied(gl.ml.home.odds), ia = propImplied(gl.ml.away.odds), q = ih / (ih + ia);
+      ph = epSig(w * epLogit(Math.min(Math.max(ph, 1e-6), 1 - 1e-6)) + (1 - w) * epLogit(q)); }
+    return home ? ph : 1 - ph;
+  }
+  if (l.kind !== 'spread' || !Number.isFinite(c.spread) || !Number.isFinite(l.line) || !E.pick || !(E.pick.sigma > 0)) return null;
+  const m = -c.spread, h = home ? l.line : -l.line, w = ELO_PICK_BLEND ? E.pick.wSpread : 1;
+  const pH = normCdf((w * m + (1 - w) * -h + h) / E.pick.sigma);
+  return home ? pH : 1 - pH;
+}
+function epCands() {
+  const u = pbUi(), games = pbGames().filter(g => !u.off.includes(g.id)), out = [];
+  let far = 0;
+  /* the ticked games whose DraftKings lines carry a ticked moneyline or spread: with none, there is no price to beat */
+  const priced = games.filter(g => { const gl = pbGl(g.id); return !!gl && ((u.k.ml && !!gl.ml) || (u.k.ats && !!gl.spread)); }).length;
+  for (const c of pbPriced(games)) {
+    if ((c.kind !== 'ml' && c.kind !== 'spread') || !pbAllows(c, u)) continue;
+    if (!Number.isFinite(c.price) || !(c.price >= EP.lo && c.price <= EP.hi) || Math.abs(c.price) < 100) continue;
+    if (c.dkOn && !c.dk) continue;
+    const pe = epChance(c), f = legFair(c); if (pe == null || !f) continue;
+    const dec = amToDec(c.price), ev = pe * dec - 1;
+    if (!(pe > f.p) || !(ev > 0) || pe < EP.floor) continue;
+    if (pe - f.p >= PB_FAR - 1e-9) { far++; continue; }
+    out.push({ ...c, pm: c.p, p: pe, pe, dec, ev, fc: f });
+  }
+  out.sort((a, b) => (b.ev - a.ev) || ((a.kind === 'ml' ? 0 : 1) - (b.kind === 'ml' ? 0 : 1)) || pbOrd(a, b));
+  const one = [], seen = new Set(); for (const c of out) if (!seen.has(c.gid)) { seen.add(c.gid); one.push(c); }
+  const keep = new Set([...one.slice(0, EP.cap), ...[...one].sort((a, b) => (b.pe - a.pe) || pbOrd(a, b)).slice(0, EP.capP)].map(c => c.sk));
+  return { all: one, keep: one.filter(c => keep.has(c.sk)), far, priced, games: games.length, kinds: !!(u.k.ml || u.k.ats) };
+}
+/* every parlay of n of the candidates, by the Elo chance (the product: one leg a game) and its price (the prices
+   multiplied): Safe the likeliest; a floor's level the best expected return over its floor, else the likeliest */
+function epBest(C, n, floor) {
+  if (C.length < n) return null;
+  let best = null, likely = null; const idx = [];
+  const walk = (s, pr, d) => {
+    if (idx.length === n) { const ev = pr * d, id = idx.map(i => C[i].sk).sort().join(',');
+      if (!likely || pr > likely.pr || (pr === likely.pr && id < likely.id)) likely = { pr, d, ev, id, legs: idx.map(i => C[i]) };
+      if (floor && pr >= floor && (!best || ev > best.ev || (ev === best.ev && id < best.id))) best = { pr, d, ev, id, legs: idx.map(i => C[i]) };
+      return; }
+    for (let i = s; i <= C.length - (n - idx.length); i++) { idx.push(i); walk(i + 1, pr * C[i].pe, d * C[i].dec); idx.pop(); }
+  };
+  walk(0, 1, 1);
+  return floor ? (best ? { ...best, likeliest: false } : likely ? { ...likely, likeliest: true } : null) : likely ? { ...likely, likeliest: false } : null;
+}
+function epBuild() {
+  const c = epCands(), memo = new Map();
+  const tiers = EP_TIERS.map(([eid, lid]) => { const [, label, n, floor] = PB_TIERS.find(t => t[0] === lid), r = epBest(c.keep, n, floor);
+    if (!r) return { id: eid, label, n, floor, why: `Only ${c.keep.length} leg${c.keep.length === 1 ? '' : 's'} on your picks ${c.keep.length === 1 ? 'qualifies' : 'qualify'}: this level takes ${n}.` };
+    const L = pbOrder(r.legs), pr = parlayProb(L);
+    return { id: eid, label, n, floor, legs: L, corr: pr.corr, indep: pr.indep, dec: parlayDec(L.map(l => ({ leg: l, ml: l.price }))), likeliest: r.likeliest && !!floor, fair: parlayFair(L), thin: 0, mkt: 0 }; });
+  return { ...c, tiers };
+}
+const epSigOf = () => [pbSig(), S.eloPicks ? S.eloPicks.generated : '', ELO_PICK_BLEND ? 1 : 0].join('|');
+function epGet() { const sig = epSigOf(); let r = EP_CACHE.get(sig);
+  if (!r) { r = { sig, ...epBuild() }; EP_CACHE.set(sig, r); if (EP_CACHE.size > 12) EP_CACHE.delete(EP_CACHE.keys().next().value); }
+  return r; }
+function epTier(id) { const t = epGet().tiers.find(x => x.id === String(id || '').replace(/^elo\|/, '')); return t && t.legs ? t : null; }
+const epRuleOf = t => { const n = t.legs.length, pct = Math.round((t.floor || 0) * 100); return t.likeliest ? `the likeliest ${n} legs` : t.floor ? `best value that lands ${pct}%+ by Elo` : 'the likeliest pair'; };
+/* what such picks have been worth: the research's 3-point-edge picks of the model alone on the closing line, each fold */
+function epRecordText() {
+  const R = S.eloPicks && S.eloPicks.record && S.eloPicks.record.folds; if (!R) return '';
+  const ks = Object.keys(R).sort(), pc = v => v == null ? '–' : (v * 100).toFixed(1) + '%', list = f => oddsAnd(ks.map(f));
+  const ml = ks.every(k => R[k].ml && R[k].ml.picks), sp = ks.every(k => R[k].spread && R[k].spread.picks);
+  return `The ELO Model's own chance is no promise. On the walk-forward folds (${oddsAnd(ks)}, each called by the model fitted on the seasons before it), its moneylines 3 points or more above the price${ml ? ` said ${list(k => pc(R[k].ml.said))} and won ${list(k => pc(R[k].ml.won))} (${list(k => R[k].ml.picks)} picks)` : ''}${sp ? `, and its spreads 3 points or more above -110 won ${list(k => pc(R[k].spread.won))} (${list(k => R[k].spread.picks)})` : ''}, at the closing lines.`;
+}
+function eloPicksHtml() {
+  const E = S.eloPicks, ds = pbDates(), pill = ds.length ? `<span class="pb-pill">${esc(ds.map(pbDayText).join(' & '))}</span>` : '';
+  const head = `<h3>Elo picks ${pill}</h3><p class="pb-lead" data-pb-elo-lead title="${esc(epRecordText())}">Moneylines and spreads where the ELO Model’s chance beats DraftKings’ price, on the games and bet types ticked on the Parlay Builder tab.</p>`;
+  const none = t => `${head}<p class="pb-why" data-pb-elo-none>${esc(t)}</p>`;
+  if (!E || !E.games) return none('The ELO Model’s calls are not in the published file, so there are no Elo picks.');
+  if (E.status && E.status.ok === false) return none(`The ELO Model could not run${E.status.why ? ` (${E.status.why})` : ''}: no Elo picks until it does.`);
+  if (!pbGames().length) return none('No game is still to tip on the lines feed’s two nights: no Elo picks.');
+  if (!LINES && !LINES_ERR) return none('Loading DraftKings’ lines…');
+  const r = epGet();
+  if (!r.kinds) return none('Tick Moneyline or Spread on the Parlay Builder tab for the Elo picks: every leg is a team’s moneyline or spread.');
+  if (!r.games) return none('No game ticked on the Parlay Builder tab: tick one there for the Elo picks.');
+  /* no DraftKings price to beat at all: lines.json did not load, or no moneyline or spread is posted yet (the sets' spWhy
+     says the same of their games), never "no line beats the price" */
+  if (!r.priced) return none(LINES_ERR && !Object.keys(SG_LINES).length ? 'No Elo picks yet: DraftKings’ published lines did not load, so there is no price to beat. Refresh odds reads the current ones.'
+    : 'No Elo picks yet: DraftKings had posted no moneyline or spread on the games and bet types ticked when its lines were read. The job reads them through the day, and Refresh odds reads the current ones.');
+  if (r.all.length < 2) return none(`No Elo picks on your picks yet: ${r.all.length ? 'only one moneyline or spread' : 'no moneyline or spread'} beats DraftKings’ price by the ELO Model’s chance on the games ticked${r.all.length ? ', and a pick takes two' : ''}.`);
+  return `${head}<div class="pb-tiers">${r.tiers.map(t => spCard(t, { chance: t.corr, chanceBy: 'Elo chance', by: 'Elo', kind: 'elo', fid: t.id, what: 'the Elo picks', add: `data-pb-elo-add="${t.id}"`,
+    rule: t.legs ? `<span class="pb-rule">${epRuleOf(t)}</span>` : '', legP: l => l.pe })).join('')}</div>`;
+}
+
+/* ---------- the tab's drawing ---------- */
+/* a level's card, the Parlay Builder's (pbTierCard). With the parlay card on the page (window.PARLAY_CARD, its own part)
+   pbTierCard draws its Finish; without it, the Finish is drawn here, the same button, and answered by the page's own
+   card (spFinish), so a level always has Add, Add to builder and Finish */
+function spCard(t, o) {
+  const h = pbTierCard(t, o);
+  if (window.PARLAY_CARD || t.why) return h;
+  const nm = o.what ? ` the ${esc(t.label)} parlay for ${esc(o.what)}` : '';
+  return h.replace(/class="btn hot" (data-sp-add|data-pb-elo-add)/, 'class="btn ghost" $1')
+    .replace(/<\/div><\/div>\s*$/, `<button type="button" class="btn hot" data-pc-finish="${o.kind}|${esc(o.fid)}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button></div></div>`);
+}
+const spNick = t => TEAMS[t] ? TEAMS[t][1] : t;
+function spGameHtml(g) {
+  const d = spTipEt(g), what = `${g.away} at ${g.home}`, lk = spLockAt(g);
+  const hd = `<div class="sp-hd"><h3 id="spg-${esc(g.id)}">${esc(spNick(g.away))} at ${esc(spNick(g.home))}</h3><span class="pb-pill" data-sp-tv>${esc(spNets(g).join(' · '))}</span><small>${esc(d.day)}${d.t ? ' · ' + esc(d.t) : ''}</small></div>`;
+  const box = inner => `<div class="sp-game" role="group" data-sp-game="${esc(g.id)}" aria-labelledby="spg-${esc(g.id)}">${hd}${inner}</div>`;
+  /* a live set waits for DraftKings' lines (lines.json, read when the tab first opens) before it is built */
+  if (lk != null && Date.now() < lk && !LINES && !LINES_ERR) return box(`<p class="sp-lock" data-sp-phase="live">Locks ${spEt(lk, true)}, 2 hours before tip-off.</p><p class="pb-none" data-sp-loading>Loading DraftKings’ lines…</p>`);
+  const v = spShown(g), lockT = v.lock != null ? spEt(v.lock, true) : '';
+  /* one short line each (the NFL owner's call of 17 October 2026, "get rid of all the long paragraph description stuff") */
+  const mark = '<span class="sp-lockmark">Locked</span>';
+  const line = v.phase === 'live' ? `<p class="sp-lock" data-sp-phase="live">Locks ${lockT}, 2 hours before tip-off.</p>`
+    : v.phase === 'loading' ? `<p class="sp-lock" data-sp-phase="loading">${mark} since ${lockT}. ${v.lines ? 'Loading DraftKings’ lines…' : 'Loading the site’s set…'}</p>`
+    : v.own ? `<p class="sp-lock" data-sp-phase="own">${mark} since ${lockT}. This browser’s own set: the site’s was not published in time, so the record does not grade it.</p>`
+    : `<p class="sp-lock" data-sp-phase="locked">${mark} since ${lockT}.</p>`;
+  const cards = v.tiers ? `<div class="pb-tiers">${v.tiers.map(t => spUpdHtml(t, spCard(t, { kind: 'sp', fid: `${g.id}:${t.id}`, add: `data-sp-add="${g.id}:${t.id}"`, what, quiet: true, mktWhy: 'this game’s other legs do not make a parlay of this size' }))).join('')}</div>` : '';
+  return box(line + cards);
+}
+/* a level built again for a player ruled out after the lock says so in one line (spUpdLine), under its legs */
+function spUpdLine(u) { return `Updated${u.by === 'page' ? ' in this browser' : ''}: ${u.name} ${u.reason || 'ruled out'} (${spEt(Date.parse(u.at), true)}); this level was built again.`; }
+const spUpdHtml = (t, html) => !t.updated ? html : html.replace(/(<div class="pb-acts">|<\/div>\s*$)/, m => `<p class="pb-thin sp-upd" data-sp-upd="${esc(t.updated.pid)}">${esc(spUpdLine(t.updated))}</p>${m}`);
+function spHeadHtml() {
+  const N = spNight(), d = N.games.length ? N.games[0].date : null;
+  return `<div class="pb-hd"><h2>Suggested Parlays</h2>${d ? `<span class="pb-pill" data-sp-night="${d}">${esc(pbDayText(d))}</span>` : ''}</div>${spRecHtml()}
+    <div class="pb-row pb-odds-row sp-odds"><span class="pb-lbl">Odds</span>${espnCtl('sp')}</div>`;
+}
+function spSetsHtml() {
+  const G = spGames();
+  if (!G.length) return `<p class="pb-none" data-sp-none>${(S.slate || []).some(g => g.status === 'scheduled' && !started(g))
+    ? 'No game on national TV is still to tip in the schedule’s next ten days: a set comes for each one, never for a preseason game.'
+    : 'No game is still to tip on the schedule: a set comes for each game on national TV once there is one.'}</p>`;
+  const On = spOn();
+  if (On.length) return On.map(spGameHtml).join('');
+  /* the next night alone, once its morning has come; until then, which games are next and when their sets go up */
+  const N = spNight(), nm = x => `${spNick(x.away)} at ${spNick(x.home)}`, nets = N.games.map(x => oddsAnd(spNets(x))), same = nets.every(x => x === nets[0]);
+  const pg = N.prev ? (S.slate || []).filter(x => spFeatured(x) && x.date === N.prev).length : 0;
+  const what = same ? `${spWeekday(N.games[0].date)} on ${nets[0]}, ${oddsAnd(N.games.map(nm))}` : `${spWeekday(N.games[0].date)}, ${oddsAnd(N.games.map((x, i) => `${nm(x)} on ${nets[i]}`))}`;
+  return `<p class="pb-none sp-wait" data-sp-wait="${N.open != null ? new Date(N.open).toISOString().slice(0, 19) + 'Z' : ''}" data-sp-next="${esc(N.games.map(x => x.id).join(' '))}">Next up: ${esc(what)}.${N.open != null ? ` ${N.games.length > 1 ? 'Their sets go' : 'Its set goes'} up ${spEt(N.open, true)}, the morning after ${spWeekday(N.prev)}’s featured ${pg > 1 ? 'games' : 'game'}.` : ''}</p>`;
+}
+/* the tab: drawn only while it is on the screen (a hidden tab builds nothing, reads nothing, keeps nothing) */
+function renderSp() {
+  const el = $('#spPanel'), tab = $('#tab-suggest'); if (!el || !S || !S.slate || !tab || tab.hidden) return;
+  if (!$('#spSets')) { el.innerHTML = '<div class="pb-card sp" id="spCard"><div id="spHead"></div><p class="pb-said" id="spSaid" role="status" aria-live="polite"></p><div id="spSets"></div><div id="pbElo" class="pb-elo"></div></div>'; spWire(el); }
+  /* a game this browser kept a locked set of that has tipped, left the slate or moved leaves the key */
+  { const K = spKeep(), G = spGames(); if (Object.keys(K).some(id => !G.some(g => g.id === id && g.tip === K[id].tip))) spKeepSave(); }
+  $('#spHead').innerHTML = spHeadHtml();
+  $('#spSaid').textContent = SP_SAID;
+  $('#spSets').innerHTML = spSetsHtml();
+  $('#pbElo').innerHTML = eloPicksHtml();
+  SP_SHOWN = spState();
+}
+/* a redraw that keeps the reader's place: the control in focus (by what it is, and the set it is in) and the scroll */
+function spKeepPlace(draw) {
+  const a = document.activeElement, y = window.scrollY || 0, inP = a && a.closest && a.closest('#spPanel');
+  let sel = null;
+  if (inP && a.dataset) { const k = ['pbLeg', 'spAdd', 'pbEloAdd', 'pcFinish', 'espnRefresh'].find(x => a.dataset[x] != null);
+    if (k) { const box = a.closest('[data-sp-game]'), tier = a.closest('[data-pb-tier]');
+      sel = `${box ? `[data-sp-game="${CSS.escape(box.dataset.spGame)}"] ` : a.closest('#pbElo') ? '#pbElo ' : ''}${tier ? `[data-pb-tier="${CSS.escape(tier.dataset.pbTier)}"] ` : ''}[data-${k.replace(/[A-Z]/g, c => '-' + c.toLowerCase())}="${CSS.escape(a.dataset[k])}"]`; } }
+  draw();
+  if (sel && !document.contains(a)) { const f = document.querySelector('#spPanel ' + sel); try { if (f) f.focus({ preventScroll: true }); } catch (e) {} }
+  try { if ((window.scrollY || 0) !== y) window.scrollTo(0, y); } catch (e) {}
+}
+/* what is on the screen was drawn before a game tipped, a set locked or the morning's turn: a press asks it first */
+const spStale = () => { try { return SP_SHOWN != null && spState() !== SP_SHOWN; } catch (e) { return false; } };
+
+/* ---------- the controls ---------- */
+/* a leg's own Add: that leg, as the card drew it (a locked set's at its locked line and price), into the builder or out
+   of it by the builder's own rules (slipToggle: a refusal said on the tab's status line), the focus kept on it */
+function spLegOf(b) {
+  const key = b.dataset.pbLeg, gEl = b.closest('[data-sp-game]'), tEl = b.closest('[data-pb-tier]'); if (!tEl) return null;
+  const t = gEl ? spTier(`${gEl.dataset.spGame}:${tEl.dataset.pbTier}`) : b.closest('#pbElo') ? epTier(tEl.dataset.pbTier) : null;
+  return t ? t.legs.find(l => l.sk === key) || null : null;
+}
+function spLegClick(b) {
+  if (spStale()) { spKeepPlace(renderSp); return; }
+  const l = spLegOf(b); if (!l) return;
+  const r = slipToggle(pbSlipOf(l));
+  SP_SAID = r.why ? `Not added: ${l.name}, ${l.label}: ${r.why}` : r.removed ? `Taken out of the builder: ${l.name}, ${l.label}.` : `In the builder: ${l.name}, ${l.label}.`;
+  badges(); spKeepPlace(renderSp);
+}
+function spAddClick(b, t, what) {
+  if (spStale()) { spKeepPlace(renderSp); return; }
+  if (!t) return;
+  if (pbPut(t.legs, what)) SP_SAID = `In the builder: ${what}, on the Parlay Builder tab.`;
+  badges(); spKeepPlace(renderSp);
+}
+/* Finish with no parlay card on the page: the page's own card (pcBuild, as the builder's Finish parlay opens it) on the
+   level's legs, at its price and the Bet amount, the level named over it, stating the level's own chance as its card
+   does (an Elo pick's the ELO Model's, a set's the model's on its legs as built or as kept at the lock), with its way
+   back to this tab; the builder is left as it is */
+function spFinish(b) {
+  if (spStale()) { spKeepPlace(renderSp); return; }
+  const [kind, id] = String(b.dataset.pcFinish).split('|'), t = kind === 'sp' ? spTier(id) : kind === 'elo' ? epTier(id) : null; if (!t) return;
+  const kicker = kind === 'sp' ? `${t.label} parlay · ${t.game}` : `${t.label} Elo pick`;
+  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null, { chance: t.corr, by: kind === 'elo' ? 'the ELO Model' : "the hub's model", back: 'Back to Suggested Parlays' });
+  $('#pcTitle').textContent = kind === 'elo' ? 'Elo pick' : 'Suggested parlay'; $('#pcSub').textContent = `${kicker} · ${PC.sub}`; $('#pcBody').innerHTML = PC.html;
+  $('#pcShare').onclick = pcShare; $('#pcDone').onclick = () => pcClose();
+  $('#pcBack').hidden = false; document.body.classList.add('pp-lock'); $('#pcSheet').scrollTop = 0; $('#pcClose').focus();
+}
+function spWire(el) {
+  el.addEventListener('click', e => {
+    const t = e.target && e.target.closest ? e.target : null; if (!t) return;
+    const leg = t.closest('[data-pb-leg]');
+    /* the tab's own: a level's leg goes in as the card drew it, never by the Parlay Builder's list (its document listener) */
+    if (leg) { e.preventDefault(); e.stopPropagation(); if (!leg.disabled) spLegClick(leg); return; }
+    const add = t.closest('[data-sp-add]');
+    if (add) { e.preventDefault(); const lv = spTier(add.dataset.spAdd); spAddClick(add, lv, lv ? `the ${lv.label} ${lv.legs.length}-leg parlay for ${lv.game}` : ''); return; }
+    const ea = t.closest('[data-pb-elo-add]');
+    if (ea) { e.preventDefault(); const lv = epTier(ea.dataset.pbEloAdd); spAddClick(ea, lv, lv ? `the ${lv.label} Elo pick` : ''); return; }
+    const fin = t.closest('[data-pc-finish]');
+    if (fin && !window.PARLAY_CARD) { e.preventDefault(); spFinish(fin); }
+  });
+}
+/* the parlay card's own Finish (app/parts/card.html, where it is on the page) asks the tab for a level by its prefix (a
+   bare word: the card's data-pc-finish is "<prefix>|<id>"), the chance the level's own and whose (chanceBy): the model's
+   for a set, the ELO Model's for an Elo pick; the card prices the legs by the builder's own sums */
+function spCardHook() {
+  const C = window.PARLAY_CARD; if (!C || typeof C.from !== 'function' || spCardHook.on === C) return;
+  const ok = C.from('sp', id => { const t = spTier(id); return t ? { legs: t.legs, kicker: `${t.label} parlay · ${t.game}`, chance: t.corr, chanceBy: 'Model' } : null; })
+    && C.from('elo', id => { const t = epTier(id); return t ? { legs: t.legs, kicker: `${t.label} Elo pick`, chance: t.corr, chanceBy: 'Elo' } : null; });
+  if (ok) spCardHook.on = C;
+}
+/* the half-minute look, once the tab has been opened: the record read again where a set has reached its lock since it
+   was last read, and the tab redrawn where what it shows is stale (a game tipped, a lock, the 6:00 AM turn) */
+function spWatchTick() {
+  try {
+    if (!S || !S.slate || document.visibilityState === 'hidden') return;
+    if (SP_REC_DONE && SP_REC_STATE != null && !SP_REC_BUSY) { const was = SP_REC_STATE.split(',');
+      if (spState().split(',').some(x => x.endsWith(':k') && was.includes(x.slice(0, -2) + ':l'))) spRecLoad(true); }
+    if (tabNow() === 'suggest' && spStale()) spKeepPlace(renderSp);
+  } catch (e) {}
+}
+function spWatch() { if (spWatch.on) return; spWatch.on = setInterval(spWatchTick, 30000); }
+/* the tab opened: the record and DraftKings' lines read once a load (lines.json is the Parlay Builder's one read), the
+   watch started, the tab drawn */
+render.suggest = function () {
+  spCardHook();
+  if (!SP_ASKED) { SP_ASKED = true; spRecLoad(false); pbLinesLoad(); spWatch(); }
+  spKeepPlace(renderSp);
+};
+/* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
+Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spState, spLockAt, spEtAt, spOutWhy, spPool, spSet, spRebuild, spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier,
+  spLedgerOf, spRecSum, spRecLoad, spUpdLine, renderSp, spWatchTick, epChance, epCands, epBuild, epGet, epTier, FEATURED_TV, SP_LOCK_MS, SP_SEARCH, SP_KEEP_KEY, ELO_PICK_BLEND, EP });
+</script>

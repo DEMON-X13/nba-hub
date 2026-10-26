@@ -182,18 +182,21 @@ let PB_CACHE = new Map(), PB_TOP_CACHE = new Map(), PB_SHOWN = null, PB_AMT_T = 
 const PB_LEGS = new Map();
 
 /* ---------- lines.json: DraftKings' lines as the job read them ----------
-   Read once a page load, no-store, the first time the Parlay Builder opens (never on load, never on a timer); kept in
-   memory, never stored. A file that does not answer, or is not version 1 with its games, is no file: the list then has
-   only what a Refresh odds press reads, and says so. Each half of a game is its own read (README "The lines feed"), and a
-   press's read of a half, being newer, takes its place (pbGl, pbPr) */
-let LINES = null, LINES_ERR = false, LINES_ASKED = false;
-async function pbLinesLoad() {
-  if (LINES_ASKED) return; LINES_ASKED = true;
-  let j = null;
-  try { const r = await fetch('lines.json', { cache: 'no-store' }); if (r && r.ok) j = await r.json(); } catch (e) { j = null; }
-  if (j && typeof j === 'object' && j.v === 1 && j.games && typeof j.games === 'object' && !Array.isArray(j.games)) LINES = j; else LINES_ERR = true;
-  PB_TOP_CACHE.clear(); PB_CACHE.clear();
-  if (tabNow() === 'parlay') pbKeep(() => render.parlay()); else pbOddsSync();
+   Read once a page load, no-store, the first time the Parlay Builder or Suggested Parlays opens (never on load, never on
+   a timer); kept in memory, never stored. A file that does not answer, or is not version 1 with its games, is no file: the
+   list then has only what a Refresh odds press reads, and says so. Each half of a game is its own read (README "The lines
+   feed"), and a press's read of a half, being newer, takes its place (pbGl, pbPr). The one read is one promise, which a
+   second caller (the other tab, the suggestions record's job) waits on; the tab in view is drawn again when it answers */
+let LINES = null, LINES_ERR = false, LINES_ASKED = false, LINES_P = null;
+function pbLinesLoad() {
+  if (LINES_P) return LINES_P; LINES_ASKED = true;
+  return (LINES_P = (async () => {
+    let j = null;
+    try { const r = await fetch('lines.json', { cache: 'no-store' }); if (r && r.ok) j = await r.json(); } catch (e) { j = null; }
+    if (j && typeof j === 'object' && j.v === 1 && j.games && typeof j.games === 'object' && !Array.isArray(j.games)) LINES = j; else LINES_ERR = true;
+    PB_TOP_CACHE.clear(); PB_CACHE.clear();
+    if (tabNow() === 'parlay') pbKeep(() => render.parlay()); else if (tabNow() === 'suggest' && render.suggest) render.suggest(); else pbOddsSync();
+  })());
 }
 /* tools/lines_feed.js linesGl, line for line: a lines.json entry -> the shape oddsGameLines gives (what the page keeps
    for a press in SG_LINES), or null where the entry has no line */
@@ -538,7 +541,7 @@ function pbNoPl(games) {
   const reads = games.map(g => pbPr(g.id)), posted = reads.filter(r => r && (r.mains.length || r.ladders.length || r.yes.length));
   if (posted.length) return 'no player lines the props model prices: it projects none of the players DraftKings lines here.';
   const seen = reads.filter(Boolean).map(r => r.at).sort().pop();
-  return seen ? `no player prices yet: DraftKings had posted no player props for these games when they were last read (${pbWhen(seen)}); it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
+  return seen ? `no player prices yet: DraftKings had posted no player props for these games as of ${pbWhen(seen)}, and no read since has found any; it posts them a day or so before tip-off, and Refresh odds reads the current ones.`
     : 'no player prices yet: none have been read for these games; the job reads DraftKings\' player props through the day, and Refresh odds reads them now.';
 }
 const pbWhen = iso => new Date(iso).toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit' });
@@ -600,10 +603,12 @@ function pbThinLine(legs) {
   return `${n === 1 ? 'One leg is not a Value pick: the model rates it' : n + ' legs are not Value picks: the model rates them'} at or above the book's price, but not 3 points above.`;
 }
 function pbRuleOf(t) { const n = t.legs.length, pct = Math.round((t.floor || 0) * 100); return t.likeliest ? `the likeliest ${n} legs` : t.floor ? `best return that lands ${pct}%+ by the model` : 'the likeliest pair'; }
+/* a level's chance: DraftKings' fair chance first, the model's beside it; where a leg is a player's, the props model's,
+   said "model (on trial) 38%" (Suggested Parlays, the owner's call of 25 October 2026) */
 function pbChanceHtml(F, chance, o) {
-  const by = (o && o.by) || 'model', trial = o && o.trial ? ', on trial' : '';
+  const by = (o && o.by) || 'model', isTrial = !!(o && o.trial), trial = isTrial ? ' (on trial)' : '';
   if (chance == null) return `<div class="pb-chance"><b${F && F.p != null ? ` data-pb-fair="${F.p}"` : ''}>${F && F.p != null ? pbPct(F.p) : '–'}</b><span>${F && F.p != null ? `fair chance${F.est ? ', est.' : ''}` : 'no chance'}</span><small class="pb-model">no model chance: a player in it is not projected</small></div>`;
-  if (F && F.p != null) return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: a leg is priced on one side only, or the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}">${esc(by)} says ${pbPct(chance)}${trial}</small></div>`;
+  if (F && F.p != null) return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: a leg is priced on one side only, or the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}">${isTrial ? `${esc(by)} (on trial) ${pbPct(chance)}` : `${esc(by)} says ${pbPct(chance)}`}</small></div>`;
   return `<div class="pb-chance"><b data-pb-model="${chance}">${pbPct(chance)}</b><span>${(o && o.chanceBy) || 'model’s chance'}${trial}</span><small class="pb-model">no fair chance: a leg has one price only</small></div>`;
 }
 /* one leg's own Add: that leg alone into the builder (or out of it), Added while it is in */

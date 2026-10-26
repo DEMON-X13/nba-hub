@@ -1401,14 +1401,14 @@
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4396909",
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133603",
@@ -1750,7 +1750,7 @@
     "name": "Zach Edey",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2991070",
@@ -1841,7 +1841,7 @@
     "name": "Isaiah Stewart",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5112087",
@@ -2504,7 +2504,7 @@
     "name": "Chet Holmgren",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5174983",
@@ -2546,7 +2546,7 @@
     "name": "Thomas Sorber",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5241364",
@@ -2560,7 +2560,7 @@
     "name": "Nikola Topic",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683692",
@@ -2581,7 +2581,7 @@
     "name": "Jaylin Williams",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133626",
@@ -3493,7 +3493,7 @@
     "name": "Jaxson Hayes",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4396963",

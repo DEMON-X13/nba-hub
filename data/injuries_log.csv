@@ -3159,7 +3159,7 @@ date,team,player_id,name,status
 2026-10-26,DAL,5148538,Tarik Biberovic,Out
 2026-10-26,DAL,4593125,Santi Aldama,Out
 2026-10-26,DAL,4683688,Dereck Lively II,Out
-2026-10-26,DEN,4065813,Alpha Diallo,Day-To-Day
+2026-10-26,DEN,4065813,Alpha Diallo,Out
 2026-10-26,DEN,3138196,Cameron Johnson,Day-To-Day
 2026-10-26,DEN,4592427,Spencer Jones,Out
 2026-10-26,DEN,4432181,Julian Strawther,Out
@@ -3174,8 +3174,10 @@ date,team,player_id,name,status
 2026-10-26,GSW,6430,Jimmy Butler III,Out
 2026-10-26,HOU,2990992,Marcus Smart,Out
 2026-10-26,HOU,2991235,Steven Adams,Out
-2026-10-26,IND,4017837,Ivica Zubac,Day-To-Day
+2026-10-26,IND,4395712,Andrew Nembhard,Day-To-Day
 2026-10-26,IND,2530530,T.J. McConnell,Out
+2026-10-26,IND,4396909,Aaron Nesmith,Day-To-Day
+2026-10-26,IND,4017837,Ivica Zubac,Out
 2026-10-26,IND,4433076,Ben Sheppard,Out
 2026-10-26,IND,5157066,Johnny Furphy,Out
 2026-10-26,LAC,6580,Bradley Beal,Out
@@ -3186,18 +3188,15 @@ date,team,player_id,name,status
 2026-10-26,LAL,5060631,Adou Thiero,Out
 2026-10-26,LAL,5113969,Cameron Carr,Out
 2026-10-26,MEM,5231919,Karim Lopez,Day-To-Day
-2026-10-26,MEM,4600663,Zach Edey,Day-To-Day
 2026-10-26,MIN,4594268,Anthony Edwards,Day-To-Day
 2026-10-26,MIN,3934673,Donte DiVincenzo,Out
 2026-10-26,NOP,5061589,Yves Missi,Out
 2026-10-26,NYK,4277869,Jose Alvarado,Day-To-Day
+2026-10-26,OKC,4683692,Cason Wallace,Out
+2026-10-26,OKC,4433255,Chet Holmgren,Out
 2026-10-26,OKC,4593803,Jalen Williams,Out
-2026-10-26,OKC,4432823,Jaylin Williams,Day-To-Day
-2026-10-26,OKC,4683692,Cason Wallace,Day-To-Day
 2026-10-26,OKC,5106270,Otega Oweh,Out
-2026-10-26,OKC,5159925,Nikola Topic,Out
-2026-10-26,OKC,5061603,Thomas Sorber,Out
-2026-10-26,ORL,4432165,Jalen Suggs,Day-To-Day
+2026-10-26,ORL,4432165,Jalen Suggs,Out
 2026-10-26,ORL,4065654,Jonathan Isaac,Out
 2026-10-26,ORL,4432573,Paolo Banchero,Out
 2026-10-26,ORL,5214637,Noah Penda,Out
@@ -3208,7 +3207,7 @@ date,team,player_id,name,status
 2026-10-26,PHI,3904625,Tacko Fall,Out
 2026-10-26,PHI,4870562,Dominick Barlow,Out
 2026-10-26,PHI,4871141,Ariel Hukporti,Out
-2026-10-26,PHX,4601023,Oso Ighodaro,Day-To-Day
+2026-10-26,PHX,4601023,Oso Ighodaro,Out
 2026-10-26,PHX,4701232,Mark Williams,Out
 2026-10-26,POR,4706557,Chris Youngblood,Day-To-Day
 2026-10-26,POR,4592435,Branden Carlson,Day-To-Day
@@ -3221,6 +3220,7 @@ date,team,player_id,name,status
 2026-10-26,SAS,5101845,Jayden Quaintance,Out
 2026-10-26,TOR,6450,Kawhi Leonard,Day-To-Day
 2026-10-26,TOR,4432586,Nate Bittle,Out
+2026-10-26,UTA,4397077,Jaxson Hayes,Day-To-Day
 2026-10-26,UTA,4433268,Trey Alexander,Out
 2026-10-26,UTA,3102530,Jusuf Nurkic,Out
 2026-10-26,WAS,5142718,AJ Dybantsa,Out

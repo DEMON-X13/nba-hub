@@ -3145,6 +3145,7 @@ date,team,player_id,name,status
 2026-10-26,BOS,4433188,Devin Carter,Out
 2026-10-26,BKN,5101761,Mikel Brown Jr.,Day-To-Day
 2026-10-26,BKN,5105626,Tyler Bilodeau,Out
+2026-10-26,CHA,4396971,Naz Reid,Day-To-Day
 2026-10-26,CHA,5061575,Kon Knueppel,Out
 2026-10-26,CHA,4395651,Coby White,Out
 2026-10-26,CHA,4066218,Grant Williams,Out
@@ -3153,7 +3154,7 @@ date,team,player_id,name,status
 2026-10-26,CHI,5242496,Noa Essengue,Day-To-Day
 2026-10-26,CHI,4278067,Nic Claxton,Out
 2026-10-26,DAL,3138160,Caleb Martin,Out
-2026-10-26,DAL,5041939,Cooper Flagg,Out
+2026-10-26,DAL,5041939,Cooper Flagg,Day-To-Day
 2026-10-26,DAL,4278594,Naji Marshall,Out
 2026-10-26,DAL,5148538,Tarik Biberovic,Out
 2026-10-26,DAL,4593125,Santi Aldama,Out
@@ -3171,7 +3172,7 @@ date,team,player_id,name,status
 2026-10-26,GSW,3102531,Kristaps Porzingis,Out
 2026-10-26,GSW,4432171,Moses Moody,Out
 2026-10-26,GSW,6430,Jimmy Butler III,Out
-2026-10-26,HOU,2990992,Marcus Smart,Day-To-Day
+2026-10-26,HOU,2990992,Marcus Smart,Out
 2026-10-26,HOU,2991235,Steven Adams,Out
 2026-10-26,IND,4017837,Ivica Zubac,Day-To-Day
 2026-10-26,IND,2530530,T.J. McConnell,Out
@@ -3186,6 +3187,7 @@ date,team,player_id,name,status
 2026-10-26,LAL,5113969,Cameron Carr,Out
 2026-10-26,MEM,5231919,Karim Lopez,Day-To-Day
 2026-10-26,MEM,4600663,Zach Edey,Day-To-Day
+2026-10-26,MIN,4594268,Anthony Edwards,Day-To-Day
 2026-10-26,MIN,3934673,Donte DiVincenzo,Out
 2026-10-26,NOP,5061589,Yves Missi,Out
 2026-10-26,NYK,4277869,Jose Alvarado,Day-To-Day
@@ -3211,7 +3213,7 @@ date,team,player_id,name,status
 2026-10-26,POR,4706557,Chris Youngblood,Day-To-Day
 2026-10-26,POR,4592435,Branden Carlson,Day-To-Day
 2026-10-26,POR,4914336,Shaedon Sharpe,Out
-2026-10-26,SAC,4594327,Keegan Murray,Out
+2026-10-26,SAC,4594327,Keegan Murray,Day-To-Day
 2026-10-26,SAC,3907387,Ben Simmons,Out
 2026-10-26,SAC,4433174,Dylan Cardwell,Out
 2026-10-26,SAC,4898371,Maxime Raynaud,Out

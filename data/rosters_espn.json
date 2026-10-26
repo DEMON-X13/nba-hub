@@ -461,7 +461,7 @@
     "name": "Naz Reid",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5211176",
@@ -2141,7 +2141,7 @@
     "name": "Anthony Edwards",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5061585",

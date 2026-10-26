@@ -54,6 +54,15 @@
   ],
   "CHA": [
    {
+    "id": "4396971",
+    "name": "Naz Reid",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-10-26",
+    "returns": "2026-10-26"
+   },
+   {
     "id": "5061575",
     "name": "Kon Knueppel",
     "pos": "G",
@@ -126,16 +135,16 @@
     "pos": "F",
     "status": "Out",
     "detail": "Thumb Sprain",
-    "date": "2026-10-25",
+    "date": "2026-10-26",
     "returns": "2026-10-26"
    },
    {
     "id": "5041939",
     "name": "Cooper Flagg",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Shoulder Sprain",
-    "date": "2026-10-25",
+    "date": "2026-10-26",
     "returns": "2026-10-26"
    },
    {
@@ -303,10 +312,10 @@
     "id": "2990992",
     "name": "Marcus Smart",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Forearm Strain",
-    "date": "2026-10-25",
-    "returns": "2026-10-26"
+    "date": "2026-10-26",
+    "returns": "2026-10-28"
    },
    {
     "id": "2991235",
@@ -389,7 +398,7 @@
     "name": "Brandon Ingram",
     "pos": "F",
     "status": "Out",
-    "detail": "Heel Surgery",
+    "detail": "Achilles Surgery",
     "date": "2026-09-28",
     "returns": "2026-11-08"
    },
@@ -445,6 +454,15 @@
   ],
   "MIN": [
    {
+    "id": "4594268",
+    "name": "Anthony Edwards",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-26",
+    "returns": "2026-10-26"
+   },
+   {
     "id": "3934673",
     "name": "Donte DiVincenzo",
     "pos": "G",
@@ -484,7 +502,7 @@
     "status": "Out",
     "detail": "Ankle",
     "date": "2026-10-26",
-    "returns": "2026-11-02"
+    "returns": "2027-03-02"
    },
    {
     "id": "4432823",
@@ -689,9 +707,9 @@
     "id": "4594327",
     "name": "Keegan Murray",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-25",
+    "date": "2026-10-26",
     "returns": "2026-10-27"
    },
    {

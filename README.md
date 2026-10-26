@@ -1330,10 +1330,12 @@ two-leg pairs of every kind worked out here exactly from `data/corr.json` and `t
 file's own integration (to 0.02%), never above the product; eight more sets of three and four legs of one game priced
 one after another in one page session, each against that integration (four legs by its extension to a fourth, to 0.1%),
 three of them at one set of implied chances with other relations, priced apart; the summary and the card leading with
-the fair chance, est., the price est. beside the legs multiplied, what the stake pays to the cent (a stake typed into
-the Stake box, $37.50, not the $20 every store there starts on, followed by the summary, Lock in, the card, its Share
-text and the Bet Build), the why line, the model's chance labelled on trial (a second card, on a parlay with a model
-chance on every leg) or absent with its reason, and neither saying "edge" or "model says"; the suggested parlays and the
+the fair chance, est. (the summary's "model says …%, on trial" beside it, the card's "model (on trial) says …% · the
+price says …%" under it; the card's price the builder's same-game price, said to be an estimate, with the why), what the
+stake pays to the cent (a stake typed into the builder, $37.50, not the $20 every store there starts on, which the Bet
+amount box follows, then the summary, the card and its Share text), the why line, the model's chance labelled on trial
+(a second card, on a parlay with a model chance on every leg) or absent with its reason (a card with a player the props
+model does not project), and the game's sheet saying neither "edge" nor "model says"; the suggested parlays and the
 plan byte for byte the same with legs in and without; the card's legs, add-by-hand lines, betslip link and note, Share
 text (what the stake pays, to the cent), copy, Escape and focus, and the note and Share text dated by the older read
 when the legs it opens were read at two presses; Lock in (staked $37.50, to win the same-game price's profit on it); a
@@ -1832,8 +1834,14 @@ for word with no url field and every fallback, the image through a recorder canv
 down at $412,500, the tiles a second row at $41,250,000), the Tab order, Escape, the backdrop, Close, Start over, fourteen
 DraftKings cases one at a time, a press newer and older than `lines.json`, no leg on the slip (the game's page, the NBA
 page), a typed book price, a one-sided leg with no fair chance, a level's Finish through `PARLAY_CARD.from` and through `window.spTier` and `window.eloPicks` with none registered, the share
-sheet for the image, every control 44px, and nothing written or fetched by any of it. Section 9 and the Parlay Builder's
-section hold the card on their own parlays too. Twelve breaks planted in a copy of the built page each turn it red.
+sheet for the image, every control 44px, and nothing written or fetched by any of it. The model's chance is marked on
+trial wherever a player leg is in the parlay and nowhere else, its price called what it is, and the fair chance's est.
+given its own reason: two team legs of two games at the builder's price (a book price, "model says", no small print), a
+milestone beside a team leg of another game (est. for the one-sided reason, never the same-game one, and on trial), a
+level of a moneyline and a player leg (est., the same-game price, on trial) and a level of two team legs (neither). Start
+over after an Add the builder refused clears what was said of it at its row and in the builder, as Clear ALL does.
+Section 9 and the Parlay Builder's section hold the card on their own parlays too. Seventeen breaks planted in a copy of
+the built page each turn it red.
 
 In Chromium at 1280 and 390 wide, on the published `state.json` and that afternoon's `lines.json`, with four legs in the
 builder: every control in the window 44px or more (7), no sideways scroll, every text at 4.5:1 or better on what is under it
@@ -1867,24 +1875,40 @@ PROJECTED where the props model does not); his overall Elo with its tier shield 
 players at his position ("#15 of 182 rated guards", the Players tab's own numbers), or why the ladder does not rank him (not
 on a roster, under its ten minutes a game or its twenty games); the game and its tip-off in Eastern time; **Faces**: the
 opponent's defence as the player model rates it, the Teams tab's Defence column ranked as that column sorts ("TOR Defence
-+59 ranked 6th of 30"), or its offence for a steals, blocks or steals + blocks line, made at the other end of the floor;
++59 ranked 6th of 30", the figure rounded as the tab rounds it: −45.5 is −46), or its offence for a steals, blocks or steals + blocks line, made at the other end of the floor;
 the props model's projection for his minutes, points, rebounds, assists, threes and the leg's own stat (lit), marked on
 trial; and the leg: its line, the price its row shows, the model's chance (on trial) and DraftKings' fair chance. Where the
 NFL hub shows a season Elo by position, the ELO Ratings tab's units and the Mismatches, the NBA has the ladder's rating,
 the Teams tab's columns and the props model; it has no market + form or Elo matchup chance to show.
 
-**A team's or a game total's bubble**: the game and its tip-off; both clubs' records this season (the Pick'em Record's
-regular-season finals, the playoffs beside them once there are any); each club's strength with its tier shield and its rank
+**A team's or a game total's bubble**: the game and its tip-off; both clubs' records this season as the standings count
+them (the Pick'em Record's regular-season finals less the NBA Cup final and the play-in, which ESPN types as regular-season
+games and the standings leave out, the playoffs beside them once there are any); each club's strength with its tier shield and its rank
 on the Teams tab; the line the leg stands on, the Parlay Builder's own (DraftKings' as `lines.json` read it, or a press's
 where newer, dated; the published line where neither has one, else none yet); offence against defence each way, rated and
 ranked as the Teams tab's columns; and every model's pick and chance: Vegas (the moneyline favourite on that line with the
 margin out, else the spread's favourite), the Player Model and Team Elo (Tonight's numbers), and the Alpha Model, the Joker
-and the ELO Model (their calls as the Pick'em Record has them, "no call" where a model has none on the game). The leg's club
+and the ELO Model (their calls as the Pick'em Record has them, "no call" where a model has none on the game: on a game of
+the job's today or before, the call on its row of `pickem.json`'s games; on a game after it, which the record does not run
+to and the Parlay Builder lists all the same, the call in its `next`). The leg's club
 is marked "this leg" and, on a moneyline alone, each model picking it to win is ticked; then the leg and **Open game on
 Tonight**, which opens the board on the game's day with its card in focus. It reads `pickem.json` through the Pick'em
 Record's own loader (once a page load, no-store; asked for by the first team's bubble where the tab has not read it), and
 says in its own line while it is read or where it did not load, the rest drawn. Nothing else is fetched and nothing is
 stored; `build.js` stops if the part fetches or touches a browser store.
+
+Two things in `pickem.json` are the bubble's alone, written by `publish.js` beside the record's games and read by nothing
+else: `next`, the Alpha Model's, the Joker's and the ELO Model's calls (`pHome`, by game id) on the games after the job's
+today to the slate's horizon, ten days out, since the record runs to today while the Parlay Builder lists the next two
+Eastern dates (on a game day tomorrow's games, and between midnight and the first run of the day every game it lists);
+and `off` on a final a club's record leaves out (`offFinals`): `cup`, the NBA Cup final, a December final at a neutral
+site whose two clubs each played another neutral-site final, their semifinals, two games and neither against this
+opponent, in the four days before; and `playin`, a final past either club's 82nd of the season in tip order, the Cup
+final not counted. On every season in `data/games.csv` the rule marks exactly each season's Cup final (2024 to 2026) and
+every play-in game of 2022 to 2026, and leaves each club of those seasons its 82 games; the short seasons (2012, 2020, 2021) are not 82 games
+long and would need their own count. The record grades every game as before. `node tools/test_calls.js` holds both on
+made-up seasons (the horizon, a preseason game, a game no model called; a Cup's semifinals, a two-game series abroad in
+December, a neutral game six days after the last, a play-in game still to play).
 
 ### The checks
 
@@ -1895,10 +1919,12 @@ a spread, a total): every name its leg's button (kind and id, the leg it keeps, 
 and the Top 50, each leg drawn once in a place; every number in each bubble on this file's own reading (the rating, tier and
 rank at his position, the game, Faces against the Teams tab's own table sorted on its column, the projection, the leg's
 chances; the records, strength and ranks, the line, offence against defence, Vegas with the margin out and every model's
-call, the moneyline-only tick, "this leg"); the keys and focus; below, above and as a sheet; the reader's scroll; the
+call, the moneyline-only tick, "this leg"), on a `pickem.json` in the shape `publish.js` writes it (tomorrow's calls in
+`next`, and on game day on its games, the same picks), an NBA Cup final and a play-in counting in no club's record, and the
+Celtics' offence planted at −45.5, drawn −46 in the bubble as the Teams tab, read off the tab, draws it; the keys and focus; below, above and as a sheet; the reader's scroll; the
 builder redrawn, a price moved, the leg taken out, the Top 50 redrawn and a level card's names; Open game on Tonight; the
 Pick'em Record's file read once, no-store, still loading, missing and asked again; a press newer than `lines.json`; the
-observer connected only while a bubble is open; and nothing written or fetched beyond that file. Ten breaks planted in a
+observer connected only while a bubble is open; and nothing written or fetched beyond that file. Fourteen breaks planted in a
 copy of the built page each turn it red. In Chromium at 1280 and 390, a player's and a team's bubble: every control 44px,
 every name in the builder and the Top 50 44px tall (54), every text 5.0:1 or better, on the screen, a sheet at 390.
 

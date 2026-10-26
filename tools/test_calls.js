@@ -77,5 +77,49 @@ const g7 = [...games, G('2028_20271019_BOS_DET', '2027-10-19', '2027-10-19T23:00
 const d7 = build(d5, g7, { alpha: model({}, { '2028_20271019_BOS_DET': { pHome: 0.5 } }) }, '2027-10-12T12:00Z');
 ok(d7.season === 2028 && Object.keys(d7.calls.alpha).length === 1, 'last season\'s calls are not carried into the new one');
 
+/* what the calls feed besides the record: pickem.json (tools/publish.js pickemState), whose games run to today and
+   whose next carries the three models' calls on the games after it for the matchup bubble; and off on the finals a
+   club's record leaves out, as the standings do (offFinals) */
+const PUB = require('./publish');
+console.log("the Pick'em Record's file: the calls on the games after today, in next");
+{ const P = (id, date, status, type = 'REG', season = 2027) => ({ ...G(id, date, date + 'T23:30Z', status, type, season), home_score: status === 'final' ? '101' : '', away_score: status === 'final' ? '99' : '', neutral: 0, home_ml: '', away_ml: '', home_line: '' });
+  const gs = [P('2027_20261024_BOS_DET', '2026-10-24', 'final'), P('2027_20261025_LAL_GSW', '2026-10-25', 'scheduled'), P('2027_20261026_NYK_MIA', '2026-10-26', 'scheduled'),
+    P('2027_20261030_OKC_SAS', '2026-10-30', 'scheduled'), P('2027_20261104_PHX_POR', '2026-11-04', 'scheduled'), P('2027_20261105_CHI_TOR', '2026-11-05', 'scheduled'),
+    P('2027_20261026_ATL_ORL', '2026-10-26', 'scheduled', 'PRE')];
+  const c = (pHome) => ({ pick: pHome >= 0.5 ? 'H' : 'A', pHome, at: '2026-10-25T12:00Z', src: 'published' });
+  const calls = { alpha: { '2027_20261024_BOS_DET': c(0.6), '2027_20261025_LAL_GSW': c(0.4), '2027_20261026_NYK_MIA': c(0.55), '2027_20261104_PHX_POR': c(0.7), '2027_20261105_CHI_TOR': c(0.3), '2027_20261026_ATL_ORL': c(0.5) },
+    joker: { '2027_20261026_NYK_MIA': c(0.45) }, elo: { '2027_20261026_NYK_MIA': c(0.62), '2027_20261104_PHX_POR': c(0.66) } };
+  const pk = PUB.pickemState(gs, {}, 2027, '2026-10-25', calls);
+  ok(JSON.stringify(pk.games.map(g => g.id)) === JSON.stringify(['2027_20261024_BOS_DET', '2027_20261025_LAL_GSW']) && pk.games[1].c.alpha === 0.4, 'its games run to today, today\'s with its call, as before');
+  ok(JSON.stringify(pk.next) === JSON.stringify({ '2027_20261026_NYK_MIA': { alpha: 0.55, joker: 0.45, elo: 0.62 }, '2027_20261104_PHX_POR': { alpha: 0.7, elo: 0.66 } }),
+    `next: each model's call on the games after today to ten days out, the slate's horizon; none for a game no model called, one past the horizon or a preseason game (${JSON.stringify(pk.next)})`);
+  ok(!pk.games.some(g => g.off), 'no final of an ordinary week is left out of a record'); }
+
+console.log("the finals a club's record leaves out: the NBA Cup final and the play-in");
+{ /* four clubs, 82 rounds at home sites a day apart from 21 October, each club once a round; round 53 (13 December) the
+     Cup's semifinals at a neutral site, A-D and B-C; rounds 45 and 48 (5 and 8 December) a two-game series abroad, A-B
+     and C-D twice; then the Cup final, D-C on 16 December, and in April the play-in, A-C and then B-C, and one not
+     played yet */
+  const day = n => { const x = new Date('2025-10-21T12:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
+  const pairs = [[['A', 'B'], ['C', 'D']], [['A', 'C'], ['B', 'D']], [['A', 'D'], ['B', 'C']]];
+  const F = (a, h, date, neutral = 0, status = 'final') => ({ game_id: `2026_${date.replace(/-/g, '')}_${a}_${h}`, season: '2026', date, tip: date + 'T23:00Z', type: 'REG', away: a, home: h, status,
+    away_score: status === 'final' ? '100' : '', home_score: status === 'final' ? '104' : '', neutral, home_ml: '', away_ml: '', home_line: '' });
+  const gs = [];
+  for (let r = 0; r < 82; r++) for (const [a, h] of pairs[r % 3]) gs.push(F(a, h, day(r), r === 53 || r === 45 || r === 48 ? 1 : 0));
+  ok(day(53) === '2025-12-13' && day(45) === '2025-12-05' && day(48) === '2025-12-08' && pairs[53 % 3][0].join() === 'A,D' && pairs[45 % 3][0].join() === 'A,B' && pairs[48 % 3][0].join() === 'A,B', 'the made-up season falls as meant');
+  const cupF = F('D', 'C', '2025-12-16', 1), pi1 = F('A', 'C', '2026-04-15'), pi2 = F('B', 'C', '2026-04-17'), pi3 = F('A', 'D', '2026-04-19', 0, 'scheduled');
+  gs.push(cupF, pi1, pi2, pi3);
+  const off = PUB.offFinals(gs, 2026);
+  ok(JSON.stringify(off) === JSON.stringify({ [cupF.game_id]: 'cup', [pi1.game_id]: 'playin', [pi2.game_id]: 'playin' }),
+    `the Cup final and the two play-in games, nothing else: not the semifinals, not the series abroad, not a club's last regular-season game, not a game still to play (${JSON.stringify(off)})`);
+  const n = {}; for (const g of gs) if (g.status === 'final' && !off[g.game_id]) for (const t of [g.away, g.home]) n[t] = (n[t] || 0) + 1;
+  ok(Object.values(n).every(v => v === 82) && Object.keys(n).length === 4, `every club's record is its 82 games (${JSON.stringify(n)})`);
+  const lone = [...gs.filter(g => g !== cupF), F('D', 'C', '2025-12-19', 1)];
+  ok(!PUB.offFinals(lone, 2026)[`2026_20251219_D_C`], 'a neutral-site December game whose clubs played their last neutral game more than four days before is not the Cup final');
+  const pk = PUB.pickemState(gs, {}, 2026, '2026-04-18', {});
+  const byId = Object.fromEntries(pk.games.map(g => [g.id, g]));
+  ok(byId[cupF.game_id].off === 'cup' && byId[pi1.game_id].off === 'playin' && byId[pi2.game_id].off === 'playin' && pk.games.filter(g => g.off).length === 3 && !byId[pi3.game_id],
+    "pickem.json marks them off on its games, and the record's games are otherwise as before"); }
+
 console.log(fails ? `${fails} FAILED` : 'all good');
 process.exit(fails ? 1 : 0);

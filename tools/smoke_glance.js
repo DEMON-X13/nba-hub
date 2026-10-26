@@ -5,7 +5,9 @@
  * The bubble (app/parts/glance.html) is the NFL hub's (its nflbets/build/glance.js, held there by nflbets/build/smoke.js's
  * THE MATCHUP BUBBLE) on this page: every name on a leg the Parlay Builder draws is a button that opens a small window
  * with that leg's matchup. Here the built page boots in jsdom on made-up games tomorrow (so every case holds at any hour,
- * the off-season included), a made-up lines.json, a props block, rated players and a pickem.json of their own, and a
+ * the off-season included), a made-up lines.json, a props block, rated players and a pickem.json of their own (in the
+ * shape tools/publish.js writes it: its games to today, tomorrow's calls in its next, the NBA Cup final and the play-in
+ * marked off), the Celtics' offence planted at an exact half below zero (rounded as the Teams tab rounds it), and a
  * builder seeded with legs of every kind: a player's points, a steals line (made at the other end, so he faces the
  * other club's offence), a player the ladder does not rank, one the injury report has out, one the props model does
  * not project, a moneyline, a spread and a game total. Every name is held to its leg (its button, kind and id, the leg
@@ -38,7 +40,7 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
   /* ---------- this file's own readings ---------- */
   const imp = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100), pc0 = p => (p * 100).toFixed(0) + '%';
   const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)] || 'th');
-  const amTxt = v => (v > 0 ? '+' : '−') + Math.abs(Math.round(v)), sg0 = v => (Math.round(v) > 0 ? '+' : Math.round(v) < 0 ? '−' : '') + Math.abs(Math.round(v));
+  const amTxt = v => (v > 0 ? '+' : '−') + Math.abs(Math.round(v)), sg0 = v => { const s = Math.abs(v).toFixed(0); return (s === '0' ? '' : v > 0 ? '+' : '−') + s; };   // the Teams tab's rounding (toFixed), a true minus
   const kickOwn = g => { const x = new Date(g.date + 'T12:00:00Z'); return x.toLocaleDateString('en-US', { weekday: 'short', timeZone: 'UTC' }) + ' ' + x.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
     + ' · ' + new Date(g.tip).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET'; };
   const TIERS = [['HOF', 1750], ['Elite', 1700], ['Master', 1650], ['Diamond', 1600], ['Platinum', 1550], ['Gold', 1500], ['Silver', 1450], ['Bronze', 1400], ['Iron', 1350]];
@@ -97,7 +99,9 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
     { id: '9100005', name: 'Eli Rookie', pos: 'G', team: 'DET', o: -6, d: -4, min: 22, games: 12, prior: 'rookie', rating: 1440, d7: 0 },
     { id: '9100007', name: 'Gus Out', pos: 'G', team: 'DET', o: 8, d: 2, min: 28, games: 260, prior: 'raptor', rating: 1531, ranked: true, d7: -1 },
     { id: '9100003', name: 'Cy Center', pos: 'C', team: 'GSW', o: 10, d: 25, min: 30, games: 280, prior: 'raptor', rating: 1688, ranked: true, d7: 2 }];
-  const ST = (o = {}) => ({ ...clone(REAL), today: etDate(now), generated: at(now - 3 * H), injuriesAsOf: etDate(now), slate: [G1, G2].map(clone), props: clone(props), corr: PUB.corrState(), players: [...clone(REAL.players), ...clone(rated)], ...o });
+  /* the Celtics' offence planted at an exact half below zero, where Math.round (−45) and the Teams tab's toFixed (−46) part ways */
+  const TEAMS_P = { ...clone(REAL.teams), BOS: { ...clone(REAL.teams.BOS), offence: -45.5 } };
+  const ST = (o = {}) => ({ ...clone(REAL), today: etDate(now), generated: at(now - 3 * H), injuriesAsOf: etDate(now), slate: [G1, G2].map(clone), props: clone(props), corr: PUB.corrState(), players: [...clone(REAL.players), ...clone(rated)], teams: clone(TEAMS_P), ...o });
   const RD = at(now - 90 * MIN);
   const LINES = { v: 1, at: RD, games: {
     [G1.id]: { at: RD, espn: G1.espn, ml: { home: -130, away: 110 }, spread: { line: -2.5, home: -110, away: -110 }, total: { line: 226.5, over: -110, under: -110 },
@@ -106,14 +110,20 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
     [G2.id]: { at: RD, espn: G2.espn, ml: { home: 120, away: -140 }, spread: { line: 2.5, home: -110, away: -110 }, total: { line: 230.5, over: -110, under: -110 },
       ids: { event: '7002', ml: { home: '0ML7002_1', away: '0ML7002_3' }, spread: { home: '0HC7002P250_1', away: '0HC7002N250_3' }, total: { over: '0OU7002O23050_1', under: '0OU7002U23050_3' } },
       props: { at: RD, mains: [{ player: '9100003', stat: 'reb', line: 10.5, over: -120, under: 100 }], ladders: [], yes: [] } } } };
-  /* the Pick'em Record's file: three finals of each club (two regular-season wins for BOS, one loss; DET one win, two
-     losses), a preseason final that counts for nobody, and the calls on tomorrow's two games */
+  /* the Pick'em Record's file, in the shape tools/publish.js writes it: its games run to today, so tomorrow's two are
+     not among them and their calls are in next. Three finals of each club that count (two regular-season wins for
+     BOS, one loss; DET one win, two losses), a preseason final, a BOS NBA Cup final win and a DET play-in loss (off:
+     the standings leave both out) that count for nobody */
   const fin = (d, a, h, as, hs, type = 'REG') => ({ id: `${SEASON}_${ymd(d)}_${a}_${h}`, date: d, tip: d + 'T23:00Z', type, w: 0, away: a, home: h, score: [as, hs], ml: [-110, -110], line: -1.5, c: { player: 0.5, team: 0.5 } });
+  const NEXT = { [G1.id]: { alpha: 0.44, joker: 0.53, elo: 0.66 }, [G2.id]: { alpha: 0.71 } };
   const PICKEM = { v: 1, season: SEASON, today: etDate(now), models: PUB.PK_MODELS.map(([id, name, color]) => ({ id, name, color })), status: {}, weeks: [{ key: '1', label: 'Week 1', short: 'Wk 1', from: addDay(D1, -7), to: D1 }],
     games: [fin(addDay(D1, -6), 'BOS', 'MIA', 110, 101), fin(addDay(D1, -5), 'NYK', 'BOS', 99, 104), fin(addDay(D1, -4), 'BOS', 'DET', 98, 112), fin(addDay(D1, -3), 'DET', 'CHI', 95, 120), fin(addDay(D1, -2), 'ATL', 'DET', 101, 100),
-      fin(addDay(D1, -9), 'BOS', 'DET', 80, 120, 'PRE'),
-      { id: G1.id, date: G1.date, tip: G1.tip, type: 'REG', w: 0, away: 'BOS', home: 'DET', score: null, ml: null, line: null, c: { player: 0.61, team: 0.57, alpha: 0.44, joker: 0.53, elo: 0.66 } },
-      { id: G2.id, date: G2.date, tip: G2.tip, type: 'REG', w: 0, away: 'LAL', home: 'GSW', score: null, ml: null, line: null, c: { player: 0.4, alpha: 0.71 } }] };
+      fin(addDay(D1, -9), 'BOS', 'DET', 80, 120, 'PRE'), { ...fin(addDay(D1, -8), 'BOS', 'SAS', 120, 100), off: 'cup' }, { ...fin(addDay(D1, -7), 'DET', 'ORL', 90, 99), off: 'playin' }],
+    next: clone(NEXT) };
+  /* the same file on game day (its today tomorrow's date): the two games among its games, their calls on them */
+  const PICKEM_DAY = { ...clone(PICKEM), today: D1, next: {}, games: [...clone(PICKEM.games),
+    { id: G1.id, date: G1.date, tip: G1.tip, type: 'REG', w: 0, away: 'BOS', home: 'DET', score: null, ml: null, line: null, c: { player: 0.61, team: 0.57, ...NEXT[G1.id] } },
+    { id: G2.id, date: G2.date, tip: G2.tip, type: 'REG', w: 0, away: 'LAL', home: 'GSW', score: null, ml: null, line: null, c: { player: 0.4, ...NEXT[G2.id] } }] };
   const base = g => ({ id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip });
   const pl = (pid, name, team, stat, line, odds, other) => ({ ...base(G1), kind: 'prop', pid, name, team, at: RD, stat, mk: 'main', line, side: 'over', odds, other });
   const L_ACE = pl('9100001', 'Ace Guard', 'BOS', 'pts', 24.5, -115, -105), L_STL = pl('9100002', 'Bo Wing', 'DET', 'stl', 1.5, 130, -160), L_ELI = pl('9100005', 'Eli Rookie', 'DET', 'reb', 3.5, -110, -110);
@@ -163,6 +173,7 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
   const nameFor = (sel, leg) => [...d.querySelectorAll(sel + ' [data-glance]')].find(b => w.glanceLeg(b.dataset.glanceLeg).leg.sk === keyOwn(leg));
 
   /* ---------- 2. a player's bubble ---------- */
+  let TAB_BOS_OFF = null;
   const S0 = ST(), teams = S0.teams;
   const aceB = nameFor('#parlayBody', L_ACE); aceB.click(); await sleep(30);
   const B = box();
@@ -186,12 +197,16 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
     p2.d.querySelector('#nav button[data-tab=teams]').click(); await sleep(30);
     p2.d.querySelector('#teamsT th[data-k="defence"]').click(); await sleep(10);
     const order = [...p2.d.querySelectorAll('#teamsT tbody tr')].map(tr => tr.querySelector('[data-hx]').dataset.hx.slice(2));
-    check(order.indexOf('DET') + 1 === dDef.rank && order.length === dDef.n, `the Teams tab's table, sorted on Defence, puts the Pistons ${ord(order.indexOf('DET') + 1)} of ${order.length}, as the bubble does`); }
+    check(order.indexOf('DET') + 1 === dDef.rank && order.length === dDef.n, `the Teams tab's table, sorted on Defence, puts the Pistons ${ord(order.indexOf('DET') + 1)} of ${order.length}, as the bubble does`);
+    const oCol = [...p2.d.querySelectorAll('#teamsT thead th')].findIndex(th => th.dataset.k === 'offence'), bosTr = [...p2.d.querySelectorAll('#teamsT tbody tr')].find(tr => tr.querySelector('[data-hx="t:BOS"]'));
+    TAB_BOS_OFF = bosTr && oCol >= 0 ? txt(bosTr.children[oCol]).replace(/^-/, '−') : null;
+    check(TAB_BOS_OFF === sg0(-45.5) && sg0(-45.5) === '−46', `the Teams tab draws the Celtics' planted offence of −45.5 as ${TAB_BOS_OFF}, this file's own rounding`); }
   /* a steals line is made at the other end: Bo Wing faces the Celtics' offence */
   nameFor('#parlayBody', L_STL).click(); await sleep(30);
   const bOff = rankOwn(teams, 'offence', 'BOS');
   check(open() && txt(d.getElementById('glanceTitle')) === 'Bo Wing' && nOf('unit') === 'Offence' && nOf('uclub') === 'BOS' && nOf('urank') === ord(bOff.rank) && nOf('uval') === sg0(bOff.v) && nOf('ha') === 'vs' && box().querySelector('tr[data-glance-stat="stl"].glance-on') && nOf('proj:stl') === '1.6' && !aceB.hasAttribute('aria-expanded'),
-    `another name closes the first bubble and opens its own; a steals line faces the other club's offence (${nOf('uclub')} ${nOf('unit')} ${nOf('urank')}), his projection showing the steals he is down for`);
+    `another name closes the first bubble and opens its own; a steals line faces the other club's offence (${nOf('uclub')} ${nOf('unit')} ${nOf('uval')} ${nOf('urank')}), his projection showing the steals he is down for`);
+  check(nOf('uval') === TAB_BOS_OFF, `the figure he faces is the Teams tab's own cell for it, rounded as the tab rounds it (${nOf('uval')} against the tab's ${TAB_BOS_OFF})`);
   /* a player the ladder does not rank, one the report has out, one the props model does not project */
   nameFor('#parlayBody', L_ELI).click(); await sleep(30);
   check(nOf('norank') === "not ranked: 12 games, under the ladder's twenty" && nOf('elo') === '1440' && nOf('tier') === tierOwn(1440), `a player the ladder does not rank says why (${nOf('norank')})`);
@@ -202,10 +217,10 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
     'a player the props model does not project and the ratings do not know: NOT PROJECTED, no rating, no projection, no model chance');
 
   /* ---------- 3. a team's bubble and a game's ---------- */
-  const recOwn = t => { let wn = 0, ls = 0; for (const x of PICKEM.games) { if (!x.score || x.type !== 'REG' || (x.away !== t && x.home !== t)) continue; const m = x.home === t ? x.score[1] - x.score[0] : x.score[0] - x.score[1]; if (m > 0) wn++; else if (m < 0) ls++; } return wn + '-' + ls; };
+  const recOwn = t => { let wn = 0, ls = 0; for (const x of PICKEM.games) { if (!x.score || x.type !== 'REG' || x.off || (x.away !== t && x.home !== t)) continue; const m = x.home === t ? x.score[1] - x.score[0] : x.score[0] - x.score[1]; if (m > 0) wn++; else if (m < 0) ls++; } return wn + '-' + ls; };
   const vh = imp(-130) / (imp(-130) + imp(110)), clock = w.eval(`oddsClock(${JSON.stringify(RD)})`);
   const pickOf = (g, ph) => ph >= 0.5 ? g.home : g.away, chOf = ph => pc0(Math.max(ph, 1 - ph));
-  const pkG1 = PICKEM.games.find(x => x.id === G1.id).c;
+  const pkG1 = PICKEM.next[G1.id];
   const picksWant = g => [['vegas', 'DET', pc0(vh)], ['player', pickOf(g, g.model.pHome), chOf(g.model.pHome)], ['team', pickOf(g, g.team.pHome), chOf(g.team.pHome)], ['alpha', pickOf(g, pkG1.alpha), chOf(pkG1.alpha)], ['joker', pickOf(g, pkG1.joker), chOf(pkG1.joker)], ['elo', pickOf(g, pkG1.elo), chOf(pkG1.elo)]];
   const picksGot = () => [...box().querySelectorAll('[data-glance-model]')].map(li => [li.dataset.glanceModel, li.dataset.pick || null, nOf('p:' + li.dataset.glanceModel), !!li.querySelector('.glance-chk')]);
   const mlB = nameFor('#parlayBody', L_ML); mlB.click(); await sleep(30);
@@ -214,15 +229,16 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
   const tw = { kick: kickOwn(G1), 'rec:BOS': recOwn('BOS'), 'rec:DET': recOwn('DET'), 'str:BOS': String(Math.round(sA.v)), 'srk:BOS': '#' + sA.rank, 'str:DET': String(Math.round(sD.v)), 'srk:DET': '#' + sD.rank,
     spread: 'DET −2.5', total: '226.5', ml: 'BOS +110 / DET −130', lsrc: 'DraftKings, read ' + clock, label: 'To win', price: '−130', model: pc0(modelOwn(L_ML)), fair: pc0(fairOwn(L_ML)) };
   const gotT = Object.fromEntries(Object.keys(tw).map(k => [k, nOf(k)])), badT = Object.keys(tw).filter(k => gotT[k] !== tw[k]);
-  check(txt(d.getElementById('glanceTitle')) === 'Celtics at Pistons' && /^Regular season · /.test(txt(box().querySelector('.glance-sub'))) && !badT.length,
-    `a team's bubble: the game, both records (the Pick'em Record's regular-season finals, its preseason game left out), each club's strength and rank on the Teams tab, the line the leg stands on, DraftKings' and dated, and the leg (${Object.entries(tw).map(([k, v]) => `${k} ${v}`).join(', ')})${badT.length ? ' -- got ' + badT.map(k => `${k} ${gotT[k]}`).join(', ') : ''}`);
+  check(txt(d.getElementById('glanceTitle')) === 'Celtics at Pistons' && /^Regular season · /.test(txt(box().querySelector('.glance-sub'))) && !badT.length && !box().querySelector('.glance-trial'),
+    `a team's bubble: the game, both records as the standings count them (the Pick'em Record's regular-season finals, its preseason game, NBA Cup final and play-in left out), each club's strength and rank on the Teams tab, the line the leg stands on, DraftKings' and dated, and the leg, nothing marked on trial (${Object.entries(tw).map(([k, v]) => `${k} ${v}`).join(', ')})${badT.length ? ' -- got ' + badT.map(k => `${k} ${gotT[k]}`).join(', ') : ''}`);
+  check(nOf('rec:BOS') === '2-1' && nOf('rec:DET') === '1-2', `the NBA Cup final and the play-in (pickem.json's off) count in no club's record, as the standings leave them out (BOS ${nOf('rec:BOS')}, DET ${nOf('rec:DET')})`);
   const me = box().querySelector('th.glance-me');
   check(me && me.dataset.glanceTeam === 'DET' && /this leg/.test(txt(me)) && box().querySelectorAll('th.glance-me').length === 1, "the leg's club is marked \"this leg\"");
   const oBD = [rankOwn(teams, 'offence', 'BOS'), rankOwn(teams, 'defence', 'DET'), rankOwn(teams, 'offence', 'DET'), rankOwn(teams, 'defence', 'BOS')], poss = [...box().querySelectorAll('[data-glance-poss]')].map(txt);
   check(JSON.stringify(poss) === JSON.stringify([`BOS offence ${sg0(oBD[0].v)} ${ord(oBD[0].rank)} vs DET defence ${sg0(oBD[1].v)} ${ord(oBD[1].rank)}`, `DET offence ${sg0(oBD[2].v)} ${ord(oBD[2].rank)} vs BOS defence ${sg0(oBD[3].v)} ${ord(oBD[3].rank)}`]),
     `offence against defence each way, as the Teams tab's columns rate and rank them (${poss.join(' / ')})`);
   const pw = picksWant(G1).map(([id, pick, ch]) => [id, pick, ch, pick === 'DET']), pg = picksGot();
-  check(JSON.stringify(pg) === JSON.stringify(pw), `every model's pick and chance: Vegas on the line shown with the margin out, the Player Model's and Team Elo's numbers, the Alpha Model's, the Joker's and the ELO Model's calls; on a moneyline each picking the Pistons ticked (${JSON.stringify(pg)})`);
+  check(JSON.stringify(pg) === JSON.stringify(pw), `every model's pick and chance: Vegas on the line shown with the margin out, the Player Model's and Team Elo's numbers, the Alpha Model's, the Joker's and the ELO Model's calls (on a game after the file's today, from its next); on a moneyline each picking the Pistons ticked (${JSON.stringify(pg)})`);
   check([...box().querySelectorAll('.glance-chk')].every(x => x.getAttribute('role') === 'img' && x.getAttribute('aria-label') === 'picks this leg to win'), 'each tick is named for what it says');
   const pkReads = p.requests.filter(x => /pickem\.json/.test(x.url));
   check(pkReads.length === 1 && pkReads[0].opt && pkReads[0].opt.cache === 'no-store', `the Pick'em Record's file is read once, no-store, by the first team's bubble (${pkReads.length})`);
@@ -230,12 +246,20 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
   nameFor('#parlayBody', L_SP).click(); await sleep(30);
   const pg2 = picksGot();
   check(txt(d.getElementById('glanceTitle')) === 'Lakers at Warriors' && box().querySelector('th.glance-me').dataset.glanceTeam === 'GSW' && !box().querySelector('.glance-chk') && nOf('spread') === 'LAL −2.5'
-    && JSON.stringify(pg2.filter(x => ['joker', 'elo'].includes(x[0]))) === JSON.stringify([['joker', null, null, false], ['elo', null, null, false]]) && nOf('p:alpha') === pc0(0.71),
-    "a spread: its club marked, no model ticked, a model with no call on the game says so");
+    && JSON.stringify(pg2.filter(x => ['joker', 'elo'].includes(x[0]))) === JSON.stringify([['joker', null, null, false], ['elo', null, null, false]]) && nOf('p:alpha') === pc0(0.71) && !box().querySelector('.glance-trial'),
+    "a spread: its club marked, no model ticked, a model with no call on the game says so, nothing marked on trial");
   nameFor('#parlayBody', L_TO).click(); await sleep(30);
-  check(txt(d.getElementById('glanceTitle')) === 'Celtics at Pistons' && !box().querySelector('th.glance-me') && !box().querySelector('.glance-chk') && nOf('label') === 'Over 226.5 points' && nOf('model') === '50%',
-    "a game total: the game's bubble, no club marked, no tick, the total's chance the market's own");
+  check(txt(d.getElementById('glanceTitle')) === 'Celtics at Pistons' && !box().querySelector('th.glance-me') && !box().querySelector('.glance-chk') && nOf('label') === 'Over 226.5 points' && nOf('model') === '50%' && !box().querySelector('.glance-trial'),
+    "a game total: the game's bubble, no club marked, no tick, the total's chance the market's own, not marked on trial");
   check(p.requests.filter(x => /pickem\.json/.test(x.url)).length === 1 && p.requests.length === reqs0 + 1, 'no other bubble reads anything: the one request is the Pick\'em Record\'s file');
+  /* the same calls on game day, when the file's today is the game's and the game is among its games: the same picks */
+  { const q = load(ST(), { lines: LINES, mine: MINE([L_ML]), pickem: PICKEM_DAY }); await sleep(450);
+    q.d.querySelector('#parlayBody [data-glance]').click(); await sleep(20);
+    for (let i = 0; i < 40 && q.d.querySelector('#glanceBox [data-glance-n="pkwait"]'); i++) await sleep(20);
+    const qn = k => { const e = q.d.querySelector(`#glanceBox [data-glance-n="${k}"]`); return e ? txt(e) : null; };
+    const qg = [...q.d.querySelectorAll('#glanceBox [data-glance-model]')].map(li => [li.dataset.glanceModel, li.dataset.pick || null, qn('p:' + li.dataset.glanceModel), !!li.querySelector('.glance-chk')]);
+    check(JSON.stringify(qg) === JSON.stringify(pw) && qn('rec:BOS') === '2-1', `on game day the calls are read from the file's games, the same picks and chances (${JSON.stringify(qg)})`);
+    check(q.errors.length === 0, 'no script errors: ' + q.errors.join(' | ')); }
 
   /* ---------- 4. keys and focus ---------- */
   const key = (k, sh, at) => { const e = new w.KeyboardEvent('keydown', { key: k, shiftKey: !!sh, bubbles: true, cancelable: true }); (at || d.activeElement || d.body).dispatchEvent(e); return e; };

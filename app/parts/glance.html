@@ -91,10 +91,11 @@
    opponent's defence as the player model rates it (the Teams tab's Defence column, ranked as that column sorts; the
    opponent's offence for a steals or blocks line, made at the other end); the props model's projection for his minutes
    and the leg's stat, on trial; and the leg: its line, the price its row shows, the model's chance (on trial) and
-   DraftKings' fair chance. A team's or a game total's bubble: both records this season (the Pick'em Record's games), each
-   club's strength and its rank (the Teams tab), the line the leg stands on (the Parlay Builder's own: DraftKings' as the
+   DraftKings' fair chance. A team's or a game total's bubble: both records this season as the standings count them (the
+   Pick'em Record's finals, the NBA Cup final and the play-in left out), each club's strength and its rank (the Teams tab), the line the leg stands on (the Parlay Builder's own: DraftKings' as the
    job read it or a press, the newer), offence against defence each way, and each model's pick and chance (Vegas, the
-   Player Model, Team Elo, the Alpha Model, the Joker and the ELO Model), the leg's team marked "this leg" and, on a
+   Player Model, Team Elo, the Alpha Model, the Joker and the ELO Model: the last three from pickem.json, its games to
+   today and its next after them), the leg's team marked "this leg" and, on a
    moneyline alone, each model picking that team to win ticked; then the leg and a button to the game on Tonight. What a
    file has not given says so in its own line, and the rest draws */
 (function () {
@@ -108,7 +109,9 @@ const St = () => (typeof S === 'object' && S) ? S : null;
 const tag = t => `<b class="glance-tm">${H(t)}</b>`;
 const nickOf = t => (typeof TEAMS === 'object' && TEAMS[t]) ? TEAMS[t][1] : t;
 const amTxt = v => v == null || !isFinite(v) ? '–' : (v > 0 ? '+' : '−') + Math.abs(Math.round(v));
-const signed0 = v => v == null || !isFinite(v) ? '–' : (Math.round(v) > 0 ? '+' : Math.round(v) < 0 ? '−' : '') + Math.abs(Math.round(v));
+/* a rating in points with its sign, rounded as the Teams tab rounds it (toFixed, which rounds the size: −45.5 is −46,
+   where Math.round would say −45), with a true minus */
+const signed0 = v => { if (v == null || !isFinite(v)) return '–'; const s = Math.abs(v).toFixed(0); return (s === '0' ? '' : v > 0 ? '+' : '−') + s; };
 const game = gid => { const s = St(); return s && Array.isArray(s.slate) ? s.slate.find(g => g.id === gid) || null : null; };
 /* a tip-off in ET, the game's own Eastern date: "Sun Oct 25 · 7:00 PM ET" (in English, as the card writes it) */
 function kickOf(g) {
@@ -253,9 +256,10 @@ function teamHtml() {
   const sub = `<p class="glance-sub">${g.type === 'POST' ? 'Playoffs' : g.type === 'PRE' ? 'Preseason' : 'Regular season'} · <span data-glance-n="kick">${H(kickOf(g))}</span></p>`;
   const col = t => `<th scope="col" data-glance-team="${H(t)}"${t === me ? ' class="glance-me"' : ''}>${tag(t)}${t === me ? ' <small class="glance-mine">this leg</small>' : ''}</th>`;
   const K0 = pkData(), PK = K0.d || null, rows = [], notes = [];
-  /* both records this season: the Pick'em Record's finals, the regular season (the playoffs beside it once there are any) */
+  /* both records this season as the standings count them: the Pick'em Record's finals, the regular season less the NBA
+     Cup final and the play-in (pickem.json's off on them), the playoffs beside it once there are any */
   if (PK) { const rec = t => { const r = [0, 0], p = [0, 0];
-      for (const x of PK.games || []) { if (!x.score || (x.away !== t && x.home !== t)) continue; const mine = x.home === t ? x.score[1] - x.score[0] : x.score[0] - x.score[1]; if (!mine) continue;
+      for (const x of PK.games || []) { if (!x.score || x.off || (x.away !== t && x.home !== t)) continue; const mine = x.home === t ? x.score[1] - x.score[0] : x.score[0] - x.score[1]; if (!mine) continue;
         const into = x.type === 'POST' ? p : x.type === 'REG' ? r : null; if (into) into[mine > 0 ? 0 : 1]++; }
       return r[0] + '-' + r[1] + (p[0] + p[1] ? ' · playoffs ' + p[0] + '-' + p[1] : ''); };
     rows.push(`<tr data-glance-row="rec"><th scope="row">Record</th><td>${N('rec:' + a, rec(a))}</td><td>${N('rec:' + hm, rec(hm))}</td></tr>`); }
@@ -281,11 +285,12 @@ function teamHtml() {
     return `<li data-glance-poss="${H(o)}-${H(d)}">${H(o)} offence ${N('ov', signed0(uo.v))} <small class="glance-q">${N('ork', ordinal(uo.rank))}</small> <span class="glance-q">vs</span> ${H(d)} defence ${N('dv', signed0(ud.v))} <small class="glance-q">${N('drk', ordinal(ud.rank))}</small></li>`; };
   const both = one(a, hm) + one(hm, a), poss = both ? `<p class="glance-h4">Offence vs defence</p><ul class="glance-poss">${both}</ul>` : '';
   /* every model's pick and its chance: Vegas on the line shown, the Player Model's and Team Elo's numbers on Tonight, and
-     the Alpha Model's, the Joker's and the ELO Model's calls as the Pick'em Record has them */
-  const pkG = PK ? (PK.games || []).find(x => x.id === gid) : null;
+     the Alpha Model's, the Joker's and the ELO Model's calls as the Pick'em Record has them: its game to today, else
+     its next (the calls on the games after the job's today, which the record does not run to) */
+  const pkG = PK ? (PK.games || []).find(x => x.id === gid) : null, pkC = pkG && pkG.c ? pkG.c : PK && PK.next && PK.next[gid] ? PK.next[gid] : null;
   const call = ph => ph != null && isFinite(ph) ? { pick: ph >= 0.5 ? hm : a, p: Math.max(ph, 1 - ph) } : null;
   const MOD = [['vegas', 'Vegas', vegasOf(g, Ln)], ['player', 'Player Model', call(g.model && g.model.pHome)], ['team', 'Team Elo', call(g.team && g.team.pHome)]];
-  if (PK) for (const [id, lab] of [['alpha', 'Alpha Model'], ['joker', 'The Joker'], ['elo', 'ELO Model']]) MOD.push([id, lab, call(pkG && pkG.c ? pkG.c[id] : null)]);
+  if (PK) for (const [id, lab] of [['alpha', 'Alpha Model'], ['joker', 'The Joker'], ['elo', 'ELO Model']]) MOD.push([id, lab, call(pkC ? pkC[id] : null)]);
   const picks = `<p class="glance-h4">Picks</p><ul class="glance-picks">${MOD.map(([id, lab, x]) => {
     if (!x || (x.pick !== a && x.pick !== hm)) return `<li data-glance-model="${id}"><span>${lab}</span><span class="glance-q">no call</span></li>`;
     const mine = toWin && x.pick === me;

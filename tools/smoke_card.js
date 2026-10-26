@@ -314,12 +314,23 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
   check(!back.hidden, 'a click on the card itself does not');
   d.getElementById('pcClose').click();
   check(back.hidden && d.activeElement === d.getElementById('pFinish'), 'Close closes it');
-  /* Start over: the builder emptied, in this browser, the focus on the tab's first control */
+  /* Start over: the builder emptied, in this browser, the focus on the tab's first control. First a Top 50 line the
+     builder refuses (a second total of the Bulls at Raptors, whose Over 220.5 it holds), so the row and the builder say
+     why it was not added: Start over clears that with the legs, as Clear ALL does, since it names a leg no longer in it */
+  const held = new Set([L_ML, L_PL, L_SP, L_TO].map(keyOwn));
+  const refused = [...d.querySelectorAll('#pbPanel li.pb-trow [data-pb-leg]')].find(b => { const l = JSON.parse(w.eval(`JSON.stringify(PB_LEGS.get(${JSON.stringify(b.dataset.pbLeg)}) || null)`));
+    return l && l.kind === 'total' && l.id === G4.id && !held.has(keyOwn(l)); });
+  check(!!refused, 'the Top 50 lists a total of a game whose total the builder holds (the case Start over must clear)');
+  if (refused) { refused.click(); await sleep(20); }
+  check(!!refused && !!d.querySelector('#pbPanel .pb-no') && /^Not added: /.test(txt(d.getElementById('pbSaid'))) && mine(w).slip.legs.length === 4,
+    `a refused Add says so at its row and in the builder, and adds nothing (${txt(d.getElementById('pbSaid'))})`);
   d.getElementById('pFinish').click(); await sleep(20);
   check(!d.getElementById('pcAgain').hidden, 'a card from the builder offers Start over');
   d.getElementById('pcAgain').click(); await sleep(30);
   check(back.hidden && !mine(w).slip.legs.length && mine(w).bookPrice === null && !d.querySelectorAll('#parlayBody tr.legrow').length && d.activeElement === d.querySelector('#tab-parlay [data-pb-mix]'),
     'Start over empties the builder, closes the card and puts the focus on the tab\'s first control');
+  check(!d.querySelector('#pbPanel .pb-no') && txt(d.getElementById('pbSaid')) === '' && w.eval('PB_SAID') === null,
+    'and clears what the builder said of the refused Add, at its row and in the builder, as Clear ALL does');
   check(p.errors.length === 0, 'no script errors: ' + p.errors.join(' | '));
 
   /* ---------- 6. each DraftKings rule on its own case ---------- */
@@ -389,6 +400,26 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
       && sh && sh.text.split('\n').includes('DraftKings betslip (opens the 2 legs as DraftKings had them):') && !promises(n3 + ' ' + sh.text + ' ' + q3.d.getElementById('pcDk').title) && !q3.d.querySelector('#pcDkNote li[data-pc-dkmiss]'),
       `with every leg on the slip, the note and Share link open "the 2 legs" as DraftKings had them, never all of them for sure ("${n3}")`);
     q3.d.getElementById('pcClose').click();
+    /* the same two team legs of two games at the builder's own price: a book price, the model's chance with no on-trial
+       mark (no player leg in it), DraftKings' fair chance no estimate, no small print, Share link's title with no note */
+    q3.w.eval('M.bookPrice = null; renderParlay();');
+    q3.d.getElementById('pFinish').click(); await sleep(20);
+    { const OT = priceOwn(ordOwn([L_SP, L_TO])), cT = [...v3.querySelectorAll('.pc-chance > div')].map(txt), sT = [...v3.querySelectorAll('.pc-chance small')].map(txt);
+      sh = null; q3.d.getElementById('pcLink').click(); await sleep(20);
+      check(!OT.sg && txt(v3.querySelector('.pc-price')) === mlOwn(amOf(OT.dec)) && v3.querySelector('.pc-price').title === 'book price' && txt(v3.querySelector('.pc-sub')).endsWith(`${OT.dec.toFixed(2)} decimal · ${(100 / OT.dec).toFixed(1)}% implied · book price`)
+        && JSON.stringify(cT) === JSON.stringify([`Fair chance all 2 land ${pctOwn(OT.fair)}`, `model says ${pctOwn(OT.model)} · the price says ${pctOwn(1 / OT.dec)}`]) && !sT.length && sh && sh.title === `2-leg parlay ${mlTxt(amOf(OT.dec))}`,
+        `two team legs of two games at the builder's price: a book price, the model's chance with no on-trial mark, the fair chance no estimate, no small print, Share link titled with no note (${cT.join(' / ')} | ${sT.join(' / ')} | ${sh && sh.title})`); }
+    q3.d.getElementById('pcClose').click();
+    /* a milestone (DraftKings prices it on one side only) beside a team leg of another game: the fair chance an estimate
+       for the one-sided reason, never the same-game one, and the model's chance on trial */
+    { const L_MI = { ...base(G1), kind: 'prop', pid: '9100001', name: 'Ace Guard', team: 'BOS', at: RD, stat: 'pts', mk: 'mile', k: 25, side: 'yes', odds: 120, other: null };
+      q3.w.eval(`M.slip.legs = ${JSON.stringify([L_MI, L_SP])}; renderParlay();`);
+      q3.d.getElementById('pFinish').click(); await sleep(20);
+      const cM = [...v3.querySelectorAll('.pc-chance > div')].map(txt), sM = [...v3.querySelectorAll('.pc-chance small')].map(txt);
+      check(/^Fair chance all 2 land [\d.]+% \(est\.\)$/.test(cM[0]) && /^model \(on trial\) says [\d.]+% · the price says [\d.]+%$/.test(cM[1]) && v3.querySelector('.pc-price').title === 'book price'
+        && JSON.stringify(sM) === JSON.stringify(['Est.: a leg is priced on one side only (a milestone or a double- or triple-double), so its margin is taken out as measured on DraftKings’ archived milestones.']),
+        `a milestone beside a team leg of another game: the fair chance est. for the one-sided reason, not the same-game one, a book price, the model on trial (${cM.join(' / ')} | ${sM.join(' / ')})`);
+      q3.d.getElementById('pcClose').click(); }
     /* one leg, and a leg priced on one side only: no fair chance, and why */
     q3.w.eval(`M.slip.legs = ${JSON.stringify([{ ...L_TO, other: null }])}; M.bookPrice = null; renderParlay();`);
     q3.d.getElementById('pFinish').click(); await sleep(20);
@@ -405,7 +436,7 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
     const W4 = q4.w, D4 = q4.d;
     check(typeof W4.PARLAY_CARD.from === 'function' && W4.PARLAY_CARD.from('smoke', () => null) === true && W4.PARLAY_CARD.from('bad prefix', () => null) === false && W4.PARLAY_CARD.from('x', 'not a function') === false,
       'PARLAY_CARD.from registers a resolver for a prefix, and refuses a prefix with a space or a resolver that is no function');
-    W4.eval(`PARLAY_CARD.from('smoke', id => id === ${JSON.stringify(G1.id + ':med')} ? { legs: [${JSON.stringify(L_ML)}, ${JSON.stringify(L_PL)}], kicker: 'Medium parlay · BOS at DET' } : id === 'none' ? { legs: [], kicker: 'x' } : null)`);
+    W4.eval(`PARLAY_CARD.from('smoke', id => id === ${JSON.stringify(G1.id + ':med')} ? { legs: [${JSON.stringify(L_ML)}, ${JSON.stringify(L_PL)}], kicker: 'Medium parlay · BOS at DET' } : id === 'teams' ? { legs: [${JSON.stringify(L_SP)}, ${JSON.stringify(L_TO)}], kicker: 'Team legs' } : id === 'none' ? { legs: [], kicker: 'x' } : null)`);
     const host = D4.createElement('div'); host.innerHTML = `<button type="button" id="spFin" data-pc-finish="smoke|${G1.id}:med">Finish</button><button type="button" id="spNone" data-pc-finish="smoke|none">Finish</button><button type="button" id="spWho" data-pc-finish="nobody|x">Finish</button>`;
     D4.getElementById('pbPanel').appendChild(host);
     D4.getElementById('spNone').click(); D4.getElementById('spWho').click(); await sleep(20);
@@ -415,8 +446,16 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
     check(!D4.getElementById('pcBack').hidden && txt(v4.querySelector('.pc-kick')) === 'Medium parlay · BOS at DET' && D4.getElementById('pcAgain').hidden && txt(v4.querySelector('.pc-price')) === mlOwn(amOf(O4.dec))
       && [...v4.querySelectorAll('.pc-who')].map(txt).join('|') === L4.map(nameOwn).join('|') && txt(v4.querySelectorAll('.pc-money b')[1]) === moneyOwn(20 * O4.dec),
       `a level's Finish (data-pc-finish="smoke|<game>:med") opens the card on its legs in the builder's order, priced by the builder's own sums (${txt(v4.querySelector('.pc-price'))}), on the Bet amount, its kicker the level's, with no Start over`);
+    const ch4 = [...v4.querySelectorAll('.pc-chance > div')].map(txt);
+    check(JSON.stringify(ch4) === JSON.stringify([`Fair chance all 2 land ${pctOwn(O4.fair)} (est.)`, `model (on trial) says ${pctOwn(O4.model)} · the price says ${pctOwn(1 / O4.dec)}`]) && v4.querySelector('.pc-price').title === 'estimated same-game price',
+      `its chances: DraftKings' fair chance, est., then the model's, on trial with a player leg in (${ch4.join(' / ')})`);
     D4.dispatchEvent(new W4.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
     check(D4.getElementById('pcBack').hidden && D4.activeElement === b4, 'closing it gives the focus back to the level\'s Finish');
+    { W4.PARLAY_CARD.open(W4.PARLAY_CARD.fromTier('smoke', 'teams')); await sleep(20);
+      const OT = priceOwn(ordOwn([L_SP, L_TO])), chT = [...v4.querySelectorAll('.pc-chance > div')].map(txt);
+      check(!D4.getElementById('pcBack').hidden && JSON.stringify(chT) === JSON.stringify([`Fair chance all 2 land ${pctOwn(OT.fair)}`, `model says ${pctOwn(OT.model)} · the price says ${pctOwn(1 / OT.dec)}`]) && v4.querySelector('.pc-price').title === 'book price',
+        `a level of team legs of two games: a book price and the model's chance with no on-trial mark (${chT.join(' / ')})`);
+      W4.PARLAY_CARD.close(); }
     /* the Parlay Builder's own levels (pbTierCard's default "pb|<level>") finish the same way */
     const tiers = W4.getPbTiers().tiers.filter(t => t.legs);
     if (tiers.length) { const t = tiers[0], h2 = D4.createElement('div'); h2.innerHTML = W4.pbTierCard(t); D4.getElementById('pbPanel').appendChild(h2);

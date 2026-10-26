@@ -602,10 +602,12 @@ day's finals, so a model prices a final exactly as it would have that morning. (
 instead, three things would differ between a game's training row and its live one: the home edge after the day's
 earlier finals, Team Elo's spread rounded to the tenth the player model blends, and a team's first game of a season,
 whose naive lineup the player model prices on ratings not yet carried into the season where a game to come is priced on
-carried ones.) Nothing reads the injury report or the rosters. So a game's call is the same from the morning it is
-played to its final, a game under way or played today included, and `games`, which the Pick'em Record takes as the
-Joker's call for every game of the season played before its first published call, is pre-tip by construction; the
-games to come are called the same way, on the market's latest read. `tools/test_joker.js` rebuilds every day of a
+carried ones.) Nothing reads the injury report or the rosters. So the only input that moves once a game's day has begun
+is the market: the job reads it again on every run until tip-off and freezes it there (`fetch.js`'s `merge`), so a game's
+call is the call on its last read before tip-off, the same before and after its tip, a game under way or played today
+included, and `games`, which the Pick'em Record takes as the Joker's call for every game of the season played before its
+first published call, is pre-tip by construction; the games to come are called the same way, on the market's latest
+read. `tools/test_joker.js` rebuilds every day of a
 made-up season, the play-offs among them, as its morning saw it, and the job's own last day with finals, and holds every
 game's row to the row it has once final; with a day's finals reaching its own rows, the copies set after them, a coach
 change read on a game's own day, or the top player taken from the game's own box score, it fails.
@@ -687,8 +689,8 @@ The job's step is `node tools/joker.js`, then `node tools/test_gbm.js` and `node
 after `players.js` and before `calls.js`, with `models/joker.json` put back to the last commit's when the tests fail; the test runs whole, about ten seconds on the
 real data (twenty when the training rows have drifted, below), in every phase of a season. `node tools/joker.js`
 rebuilds the rows from the data and scores the season in play with them, in about five seconds: a call (`pHome`,
-`spread`) on every final and game not final that has a moneyline, a final's being the call it had the morning it was
-played (for the games before its first published call, the backtest the Pick'em Record counts as such), `upcoming` the
+`spread`) on every final and game not final that has a moneyline, a final's being the call on its last read before
+tip-off (for the games before its first published call, the backtest the Pick'em Record counts as such), `upcoming` the
 games not final, and each call's input row of the season in play logged in `inputs` while its game is still to tip, then
 frozen, so a later refit can train on what the job saw rather than on closing lines (a game that loses its line before
 tip keeps its last row; a postponed one leaves, and so does every row of an earlier season). A game with no moneyline
@@ -1141,8 +1143,10 @@ the page: the props view on a press against a stubbed ESPN (the recorded
 opening-night answer with made-up lines added, two pages, a 404, junk, a 503, a game ESPN has under way, one that
 tips while its props are read, one ESPN still calls scheduled with its own tip passed and the published one to come
 (dated by ESPN's tip, as the page's parse dates a row, so it holds across midnight Eastern), and on a second press a game whose page 2 is a 404, which keeps its earlier read whole); every line, rung and Yes price the sheet shows worked out on its own from
-`props_feed.js`, `props.js` and the state's props block; the on-trial wording; nothing suggested (the Parlay Builder
-drawn with the props read is byte for byte the one drawn without them, and names no player); nothing read before a
+`props_feed.js`, `props.js` and the state's props block; the on-trial wording; the props a press reads reaching the
+Parlay Builder's Top 50 lines, every player line marked on trial and no team line, never a player the report has out,
+none before a press and none once the read is taken away (since 25 October 2026, when props reached the Top 50 lines;
+until then the section held that nothing was suggested); nothing read before a
 press (on load, opening a sheet, switching its team, on every timer and event the page sets); nothing stored; a reload
 returning to the published page; a sheet left open while its game tips; the ledger's running numbers on made-up
 summaries (no verdict before the bar, then a FAIL and a PASS); the page's copies held to the tools' text and results;
@@ -1170,7 +1174,9 @@ unchecked, and the rest), the page's 22, and the review's fixes' 16:
 | the page summing a combo without rounding | the page's own means the ledger's open calls |
 | every column kept on a phone | the phone table drops Stl and Blk |
 
-The page's 22:
+The page's 22, planted on the page as it then stood, before 25 October 2026, when props reached the Top 50 lines (so the
+row "a prop put in the suggestions" is now the intended behaviour, which section 8 holds the other way: a press's props
+reach the Top 50 lines, each marked on trial):
 
 | Planted break (the page) | What failed |
 |---|---|
@@ -1181,7 +1187,7 @@ The page's 22:
 | props kept in localStorage | nothing stored, by the press and by the sheet |
 | ESPN's status and tip not read | the requests a press makes, the status line, the game under way taken |
 | a game that tips during its read taken | the status line, nothing taken |
-| a prop put in the suggestions | the Parlay Builder with props against without |
+| a prop put in the suggestions (before 25 October 2026) | the Parlay Builder with props against without (a check since replaced) |
 | the line worded "model edge" | every line, the "edge" and "model says" check |
 | the model's chance of the Under shown | every line |
 | a combo's mean not summed | the projections, every line and rung, the combo |
@@ -2084,8 +2090,9 @@ only with its betslip id where its game's lines carry ids), and besides:
 - one leg a player, one side bet (the moneyline or the spread) and one total a game, no line twice (the NFL's rule,
   stricter than the builder's one leg a player a stat), and each level is held to the builder's own same-game refusals
   (`slipWhy`), so a level is always a parlay the builder takes;
-- no player the injury report lists at all (`spOutWhy`): one on the game's out lists (the hub's availability rule) is ruled
-  out, anyone else today's report lists is held out ("listed day-to-day (ankle), so held out"), as the NFL's sets take no
+- no player the injury report lists at all (`spOutWhy`, the Parlay Builder's own `pbHeldWhy`, so the Top 50 lines hold out
+  the same players): one on the game's out lists (the hub's availability rule) is ruled out, anyone else today's report
+  lists is held out ("listed day-to-day (ankle), so held out"), a probable player playing, as the NFL's sets take no
   questionable player. `state.json`'s `report` carries the statuses (`publish.js`);
 - the prices are the Parlay Builder's (`lines.json`, or a Refresh odds press's newer read), and a press re-picks a set until
   its lock and never after.
@@ -2574,6 +2581,10 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   can differ either way, and the window says both. In the preseason the line runs to last season's end and today's
   carried rating. `history.json` is read when a window first opens, once a page load (a read that fails is made again
   by the next window), and kept in memory only.
+- **Pick'em Record** (`#pickem`, between Coaches and Record): every game model's straight-up record this season against
+  Vegas's, on the calls each published before tip-off (`data/calls.json`): Vegas's tiles, Wins against Vegas, the
+  week-by-week grid and Show every pick. It is read from `pickem.json` when the tab is first opened, never on load or on
+  a timer (README "Pick'em Record").
 - **Record**: the season graded straight up, against the spread and on totals, by month and game, from
   `predictions.csv`; the earlier Parlay Builder's suggested parlays (its rules until 25 October 2026, labelled so)
   and the model's picks against the closing line, season by season, from `research/backtest.json` (state.json's
@@ -2598,8 +2609,11 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
 Nothing a visitor does reaches the published files, and the one thing the page keeps of its own making is a locked
 Suggested Parlays set it built where the record had none (`nba_sp_lock_v1`, to tip-off, outside `M` and never sent
 anywhere), which the record's set replaces as soon as a load reads one. The job runs `publish.js`, `build.js` and the
-smoke test after the models, and commits `state.json`, `history.json` and both pages (and `liveparlays/parlays.json`
-when a finished parlay of X's cleared itself).
+smoke test after the models, and commits `state.json`, `pickem.json`, `history.json` and both pages (`index.html`,
+`admin.html`) when publishing and the tests pass. Whenever the pull succeeded it also commits the data folder
+(`data/calls.json` and `data/suggest_ledger.json` among it, from `main` alone), the model files and `lines.json` (put
+back when the feed's test fails), and `liveparlays/parlays.json` when a finished parlay of X's cleared itself (README
+"Runs").
 
 ## What comes next, in order
 

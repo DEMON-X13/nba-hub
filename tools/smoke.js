@@ -741,7 +741,7 @@ async function playerProps() {
    The legs a visitor adds from a game's Player props after a press, the builder's same-game rule, the price and the
    chances worked out here on their own from data/corr.json and tools/corr.js (two legs of one game exactly, three by
    this file's own integration), the grading from the box scores by this file's own sums, the card and its share text,
-   what is stored, a reload, a later press, a tip, and the suggested parlays and the plan unchanged by any of it. */
+   what is stored, a reload, a later press, a tip, and no Lock in, Bet Build, plan or suggestions on the tab. */
 const CJ = require('./corr');
 const PUB = require('./publish');
 const imp = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100);

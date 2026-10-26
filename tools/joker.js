@@ -35,8 +35,10 @@
  * included. The market is games.csv's, which fetch.js freezes at tip-off (the last read before it), and the schedule
  * terms read the schedule, whatever has been played. Nothing reads the injury report or the rosters (ESPN's coach list
  * stands in only for a club coaches.csv has no row for that season, which the job writes before the season's first game),
- * so the call on a game under way or played today is the call it had that morning: the replay the Pick'em Record takes
- * for a game played before the Joker's first published call is pre-tip by construction.
+ * so the only input that moves once a game's day has begun is the market, which fetch.js reads again on every run until
+ * tip-off and freezes there: the call on a game under way or played today is the call on its last read before tip-off,
+ * and the replay the Pick'em Record takes for a game played before the Joker's first published call is pre-tip by
+ * construction.
  *
  * A game with no moneyline posted gets no call: an imputed market would read as a typical favourite. Its spread is the
  * home margin its chance implies (the scale), so it never names the other side from the pick. The live trees are fitted

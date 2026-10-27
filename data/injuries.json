@@ -51,7 +51,7 @@
     "status": "Out",
     "detail": "Calf Strain",
     "date": "2026-10-26",
-    "returns": "2026-10-31"
+    "returns": "2026-11-02"
    },
    {
     "id": "5061575",
@@ -60,7 +60,7 @@
     "status": "Out",
     "detail": "Hamstring",
     "date": "2026-10-26",
-    "returns": "2026-10-31"
+    "returns": "2026-11-02"
    },
    {
     "id": "4066218",
@@ -69,7 +69,7 @@
     "status": "Out",
     "detail": "Hamstring",
     "date": "2026-10-26",
-    "returns": "2026-10-31"
+    "returns": "2026-11-02"
    },
    {
     "id": "4684269",
@@ -103,6 +103,15 @@
   ],
   "DAL": [
    {
+    "id": "4593125",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-10-27",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "4278594",
     "name": "Naji Marshall",
     "pos": "F",
@@ -135,15 +144,6 @@
     "pos": "F",
     "status": "Out",
     "detail": "Heel Inflammation",
-    "date": "2026-10-24",
-    "returns": "2026-11-02"
-   },
-   {
-    "id": "4593125",
-    "name": "Santi Aldama",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Surgery",
     "date": "2026-10-24",
     "returns": "2026-11-02"
    },
@@ -197,20 +197,20 @@
   ],
   "DET": [
    {
-    "id": "4395702",
-    "name": "Isaiah Joe",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hip Bruise",
-    "date": "2026-10-26",
-    "returns": "2026-10-27"
-   },
-   {
     "id": "4684742",
     "name": "Ausar Thompson",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
+    "date": "2026-10-27",
+    "returns": "2026-10-27"
+   },
+   {
+    "id": "4395702",
+    "name": "Isaiah Joe",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip Bruise",
     "date": "2026-10-26",
     "returns": "2026-10-27"
    },
@@ -413,6 +413,15 @@
   ],
   "OKC": [
    {
+    "id": "4433255",
+    "name": "Chet Holmgren",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
+   {
     "id": "2991350",
     "name": "Alex Caruso",
     "pos": "G",
@@ -451,15 +460,6 @@
    {
     "id": "5061603",
     "name": "Thomas Sorber",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee",
-    "date": "2026-10-26",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "4433255",
-    "name": "Chet Holmgren",
     "pos": "C",
     "status": "Out",
     "detail": "Knee",
@@ -700,10 +700,10 @@
     "id": "6450",
     "name": "Kawhi Leonard",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee Inflammation",
-    "date": "2026-10-26",
-    "returns": "2026-10-28"
+    "date": "2026-10-27",
+    "returns": "2026-11-23"
    },
    {
     "id": "4432586",

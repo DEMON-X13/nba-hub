@@ -1152,7 +1152,7 @@
     "name": "Yaxel Lendeborg",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4897449",
@@ -1287,7 +1287,7 @@
     "name": "Alperen Sengun",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4711272",
@@ -1508,7 +1508,7 @@
     "name": "Rui Hachimura",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3913176",
@@ -1885,7 +1885,7 @@
     "name": "Simone Fontecchio",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4431772",
@@ -1927,7 +1927,7 @@
     "name": "Pelle Larsson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278053",
@@ -2311,7 +2311,7 @@
     "name": "Jordan Poole",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4869780",
@@ -2974,7 +2974,7 @@
     "name": "Branden Carlson",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5081727",

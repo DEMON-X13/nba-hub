@@ -240,7 +240,7 @@
     "name": "Derrick White",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4702745",

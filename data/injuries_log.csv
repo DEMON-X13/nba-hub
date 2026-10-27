@@ -3226,6 +3226,7 @@ date,team,player_id,name,status
 2026-10-26,WAS,4606840,Jamir Watkins,Out
 2026-10-27,ATL,4712863,Mouhamed Gueye,Out
 2026-10-27,ATL,5105571,Henri Veesaar,Out
+2026-10-27,BOS,3078576,Derrick White,Day-To-Day
 2026-10-27,BOS,4433188,Devin Carter,Out
 2026-10-27,BKN,5105626,Tyler Bilodeau,Out
 2026-10-27,CHA,4395651,Coby White,Out
@@ -3278,10 +3279,10 @@ date,team,player_id,name,status
 2026-10-27,ORL,4432573,Paolo Banchero,Out
 2026-10-27,ORL,5214637,Noah Penda,Out
 2026-10-27,ORL,5107251,Izaiyah Nelson,Out
-2026-10-27,PHI,4432446,Jabari Walker,Day-To-Day
-2026-10-27,PHI,5124612,VJ Edgecombe,Day-To-Day
-2026-10-27,PHI,3059318,Joel Embiid,Day-To-Day
 2026-10-27,PHI,3904625,Tacko Fall,Out
+2026-10-27,PHI,5124612,VJ Edgecombe,Day-To-Day
+2026-10-27,PHI,4432446,Jabari Walker,Day-To-Day
+2026-10-27,PHI,3059318,Joel Embiid,Day-To-Day
 2026-10-27,PHI,4870562,Dominick Barlow,Out
 2026-10-27,PHI,4871141,Ariel Hukporti,Out
 2026-10-27,PHX,4601023,Oso Ighodaro,Day-To-Day

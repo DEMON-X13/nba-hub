@@ -1,5 +1,5 @@
 {
- "date": "2026-10-26",
+ "date": "2026-10-27",
  "teams": {
   "ATL": [
    {
@@ -33,15 +33,6 @@
    }
   ],
   "BKN": [
-   {
-    "id": "5101761",
-    "name": "Mikel Brown Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-10-26",
-    "returns": "2026-10-27"
-   },
    {
     "id": "5105626",
     "name": "Tyler Bilodeau",
@@ -92,6 +83,15 @@
   ],
   "CHI": [
    {
+    "id": "4431687",
+    "name": "Patrick Williams",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin Soreness",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
+   {
     "id": "4278067",
     "name": "Nic Claxton",
     "pos": "C",
@@ -99,18 +99,27 @@
     "detail": "Hamstring",
     "date": "2026-10-26",
     "returns": "2026-11-04"
-   },
-   {
-    "id": "4431687",
-    "name": "Patrick Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Groin Soreness",
-    "date": "2026-10-26",
-    "returns": "2026-10-28"
    }
   ],
   "DAL": [
+   {
+    "id": "4278594",
+    "name": "Naji Marshall",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
+   {
+    "id": "5279129",
+    "name": "Sergio de Larrea",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Strain",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
    {
     "id": "3138160",
     "name": "Caleb Martin",
@@ -119,15 +128,6 @@
     "detail": "Thumb Sprain",
     "date": "2026-10-26",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "4278594",
-    "name": "Naji Marshall",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Illness",
-    "date": "2026-10-25",
-    "returns": "2026-10-28"
    },
    {
     "id": "5148538",
@@ -159,22 +159,22 @@
   ],
   "DEN": [
    {
-    "id": "4065813",
-    "name": "Alpha Diallo",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Wrist",
-    "date": "2026-10-26",
-    "returns": "2026-10-28"
-   },
-   {
     "id": "3138196",
     "name": "Cameron Johnson",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-25",
-    "returns": "2026-10-26"
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
+   {
+    "id": "4065813",
+    "name": "Alpha Diallo",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Wrist",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
    },
    {
     "id": "4592427",
@@ -182,7 +182,7 @@
     "pos": "F",
     "status": "Out",
     "detail": "Hamstring Not Specified",
-    "date": "2026-10-25",
+    "date": "2026-10-27",
     "returns": "2026-10-28"
    },
    {
@@ -226,33 +226,6 @@
   ],
   "GSW": [
    {
-    "id": "4997536",
-    "name": "Gui Santos",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Tendinitis",
-    "date": "2026-10-25",
-    "returns": "2026-10-26"
-   },
-   {
-    "id": "4397040",
-    "name": "Brandon Williams",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
-    "date": "2026-10-25",
-    "returns": "2026-10-26"
-   },
-   {
-    "id": "4397886",
-    "name": "Charles Bassey",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-10-25",
-    "returns": "2026-10-26"
-   },
-   {
     "id": "3102531",
     "name": "Kristaps Porzingis",
     "pos": "C",
@@ -282,6 +255,15 @@
   ],
   "HOU": [
    {
+    "id": "2990992",
+    "name": "Marcus Smart",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Forearm Strain",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
+   {
     "id": "2991235",
     "name": "Steven Adams",
     "pos": "C",
@@ -289,26 +271,35 @@
     "detail": "Calf Strain",
     "date": "2026-10-26",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "2990992",
-    "name": "Marcus Smart",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Forearm Strain",
-    "date": "2026-10-26",
-    "returns": "2026-10-28"
    }
   ],
   "IND": [
    {
+    "id": "4017837",
+    "name": "Ivica Zubac",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
+   {
     "id": "4395712",
     "name": "Andrew Nembhard",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Soreness",
-    "date": "2026-10-26",
+    "date": "2026-10-27",
     "returns": "2026-10-28"
+   },
+   {
+    "id": "4433076",
+    "name": "Ben Sheppard",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee",
+    "date": "2026-10-26",
+    "returns": "2026-12-01"
    },
    {
     "id": "2530530",
@@ -318,24 +309,6 @@
     "detail": "Hamstring Strain",
     "date": "2026-10-26",
     "returns": "2026-10-28"
-   },
-   {
-    "id": "4017837",
-    "name": "Ivica Zubac",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-26",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "4433076",
-    "name": "Ben Sheppard",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Knee",
-    "date": "2026-10-23",
-    "returns": "2026-12-01"
    },
    {
     "id": "5157066",
@@ -401,37 +374,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Inflammation",
-    "date": "2026-10-24",
-    "returns": "2026-10-27"
-   },
-   {
-    "id": "5113969",
-    "name": "Cameron Carr",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Oblique Strain",
-    "date": "2026-10-24",
-    "returns": "2026-10-27"
-   }
-  ],
-  "MEM": [
-   {
-    "id": "4432810",
-    "name": "Isaiah Stewart",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-10-26",
-    "returns": "2026-10-26"
-   },
-   {
-    "id": "5231919",
-    "name": "Karim Lopez",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Bruise",
-    "date": "2026-10-26",
-    "returns": "2026-10-26"
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
    }
   ],
   "MIN": [
@@ -468,6 +412,15 @@
    }
   ],
   "OKC": [
+   {
+    "id": "2991350",
+    "name": "Alex Caruso",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
    {
     "id": "4593803",
     "name": "Jalen Williams",
@@ -631,9 +584,9 @@
     "id": "4601023",
     "name": "Oso Ighodaro",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Oblique Strain",
-    "date": "2026-10-26",
+    "date": "2026-10-27",
     "returns": "2026-10-30"
    },
    {
@@ -651,10 +604,10 @@
     "id": "4706557",
     "name": "Chris Youngblood",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Soreness",
-    "date": "2026-10-24",
-    "returns": "2026-10-27"
+    "date": "2026-10-27",
+    "returns": "2026-10-29"
    },
    {
     "id": "4592435",
@@ -662,7 +615,16 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Concussion Concussion",
-    "date": "2026-10-24",
+    "date": "2026-10-27",
+    "returns": "2026-10-27"
+   },
+   {
+    "id": "4683678",
+    "name": "Scoot Henderson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Soreness",
+    "date": "2026-10-27",
     "returns": "2026-10-27"
    },
    {
@@ -760,8 +722,26 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Shoulder Soreness",
-    "date": "2026-10-26",
-    "returns": "2026-10-26"
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
+   {
+    "id": "4066336",
+    "name": "Lauri Markkanen",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Wrist Not Specified",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
+   {
+    "id": "4277961",
+    "name": "Jaren Jackson Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Not Specified",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
    },
    {
     "id": "4433268",
@@ -783,6 +763,15 @@
    }
   ],
   "WAS": [
+   {
+    "id": "4432907",
+    "name": "Justin Champagnie",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Foot Not Specified",
+    "date": "2026-10-27",
+    "returns": "2026-10-28"
+   },
    {
     "id": "5142718",
     "name": "AJ Dybantsa",

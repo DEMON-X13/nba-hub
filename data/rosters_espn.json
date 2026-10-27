@@ -1,5 +1,5 @@
 {
- "date": "2026-10-26",
+ "date": "2026-10-27",
  "teams": {
   "ATL": [
    {
@@ -263,7 +263,7 @@
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4712896",
@@ -761,7 +761,7 @@
     "name": "Sergio de Larrea",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5041939",
@@ -1103,7 +1103,7 @@
     "name": "Charles Bassey",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6430",
@@ -1215,14 +1215,14 @@
     "name": "Gui Santos",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397040",
     "name": "Brandon Williams",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "HOU": [
@@ -1601,7 +1601,7 @@
     "name": "Cameron Carr",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3945274",
@@ -1785,7 +1785,7 @@
     "name": "Karim Lopez",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683934",
@@ -1841,7 +1841,7 @@
     "name": "Isaiah Stewart",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5112087",
@@ -2476,7 +2476,7 @@
     "name": "Alex Caruso",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5105800",
@@ -3002,7 +3002,7 @@
     "name": "Scoot Henderson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3995",
@@ -3514,14 +3514,14 @@
     "name": "Jaren Jackson Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4066336",
     "name": "Lauri Markkanen",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133602",
@@ -3586,7 +3586,7 @@
     "name": "Justin Champagnie",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5104155",
@@ -3689,35 +3689,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-10-26",
-  "BOS": "2026-10-26",
-  "BKN": "2026-10-26",
-  "CHA": "2026-10-26",
-  "CHI": "2026-10-26",
-  "CLE": "2026-10-26",
-  "DAL": "2026-10-26",
-  "DEN": "2026-10-26",
-  "DET": "2026-10-26",
-  "GSW": "2026-10-26",
-  "HOU": "2026-10-26",
-  "IND": "2026-10-26",
-  "LAC": "2026-10-26",
-  "LAL": "2026-10-26",
-  "MEM": "2026-10-26",
-  "MIA": "2026-10-26",
-  "MIL": "2026-10-26",
-  "MIN": "2026-10-26",
-  "NOP": "2026-10-26",
-  "NYK": "2026-10-26",
-  "OKC": "2026-10-26",
-  "ORL": "2026-10-26",
-  "PHI": "2026-10-26",
-  "PHX": "2026-10-26",
-  "POR": "2026-10-26",
-  "SAC": "2026-10-26",
-  "SAS": "2026-10-26",
-  "TOR": "2026-10-26",
-  "UTA": "2026-10-26",
-  "WAS": "2026-10-26"
+  "ATL": "2026-10-27",
+  "BOS": "2026-10-27",
+  "BKN": "2026-10-27",
+  "CHA": "2026-10-27",
+  "CHI": "2026-10-27",
+  "CLE": "2026-10-27",
+  "DAL": "2026-10-27",
+  "DEN": "2026-10-27",
+  "DET": "2026-10-27",
+  "GSW": "2026-10-27",
+  "HOU": "2026-10-27",
+  "IND": "2026-10-27",
+  "LAC": "2026-10-27",
+  "LAL": "2026-10-27",
+  "MEM": "2026-10-27",
+  "MIA": "2026-10-27",
+  "MIL": "2026-10-27",
+  "MIN": "2026-10-27",
+  "NOP": "2026-10-27",
+  "NYK": "2026-10-27",
+  "OKC": "2026-10-27",
+  "ORL": "2026-10-27",
+  "PHI": "2026-10-27",
+  "PHX": "2026-10-27",
+  "POR": "2026-10-27",
+  "SAC": "2026-10-27",
+  "SAS": "2026-10-27",
+  "TOR": "2026-10-27",
+  "UTA": "2026-10-27",
+  "WAS": "2026-10-27"
  }
 }

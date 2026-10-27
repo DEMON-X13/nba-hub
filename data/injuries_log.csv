@@ -3224,6 +3224,7 @@ date,team,player_id,name,status
 2026-10-26,WAS,5142718,AJ Dybantsa,Out
 2026-10-26,WAS,4997537,Tristan Vukcevic,Out
 2026-10-26,WAS,4606840,Jamir Watkins,Out
+2026-10-27,ATL,4397183,Aaron Wiggins,Day-To-Day
 2026-10-27,ATL,4712863,Mouhamed Gueye,Out
 2026-10-27,ATL,5105571,Henri Veesaar,Out
 2026-10-27,BOS,3078576,Derrick White,Day-To-Day
@@ -3234,16 +3235,18 @@ date,team,player_id,name,status
 2026-10-27,CHA,4066218,Grant Williams,Out
 2026-10-27,CHA,4684269,Kylan Boswell,Out
 2026-10-27,CHI,4431687,Patrick Williams,Day-To-Day
+2026-10-27,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-10-27,CHI,4278067,Nic Claxton,Out
-2026-10-27,DAL,4593125,Santi Aldama,Out
-2026-10-27,DAL,4278594,Naji Marshall,Day-To-Day
-2026-10-27,DAL,5279129,Sergio de Larrea,Day-To-Day
-2026-10-27,DAL,3138160,Caleb Martin,Out
 2026-10-27,DAL,5148538,Tarik Biberovic,Out
+2026-10-27,DAL,4593125,Santi Aldama,Out
+2026-10-27,DAL,5279129,Sergio de Larrea,Out
+2026-10-27,DAL,3138160,Caleb Martin,Out
+2026-10-27,DAL,4278594,Naji Marshall,Day-To-Day
+2026-10-27,DAL,6442,Kyrie Irving,Day-To-Day
 2026-10-27,DAL,4683688,Dereck Lively II,Out
-2026-10-27,DEN,3138196,Cameron Johnson,Day-To-Day
-2026-10-27,DEN,4065813,Alpha Diallo,Day-To-Day
 2026-10-27,DEN,4592427,Spencer Jones,Out
+2026-10-27,DEN,3138196,Cameron Johnson,Day-To-Day
+2026-10-27,DEN,4065813,Alpha Diallo,Out
 2026-10-27,DEN,4432181,Julian Strawther,Out
 2026-10-27,DET,4684742,Ausar Thompson,Day-To-Day
 2026-10-27,DET,4395702,Isaiah Joe,Day-To-Day
@@ -3255,10 +3258,13 @@ date,team,player_id,name,status
 2026-10-27,HOU,2990992,Marcus Smart,Day-To-Day
 2026-10-27,HOU,4871144,Alperen Sengun,Out
 2026-10-27,HOU,2991235,Steven Adams,Out
-2026-10-27,IND,4017837,Ivica Zubac,Day-To-Day
 2026-10-27,IND,4395712,Andrew Nembhard,Day-To-Day
-2026-10-27,IND,4433076,Ben Sheppard,Out
+2026-10-27,IND,4396993,Tyrese Haliburton,Day-To-Day
+2026-10-27,IND,4278355,Obi Toppin,Day-To-Day
+2026-10-27,IND,4396909,Aaron Nesmith,Day-To-Day
 2026-10-27,IND,2530530,T.J. McConnell,Out
+2026-10-27,IND,4017837,Ivica Zubac,Out
+2026-10-27,IND,4433076,Ben Sheppard,Out
 2026-10-27,IND,5157066,Johnny Furphy,Out
 2026-10-27,LAC,4066648,Rui Hachimura,Out
 2026-10-27,LAC,6580,Bradley Beal,Out
@@ -3269,16 +3275,18 @@ date,team,player_id,name,status
 2026-10-27,LAL,5060631,Adou Thiero,Out
 2026-10-27,MIA,4601025,Pelle Larsson,Day-To-Day
 2026-10-27,MIA,3899664,Simone Fontecchio,Day-To-Day
+2026-10-27,MIN,4594268,Anthony Edwards,Day-To-Day
 2026-10-27,MIN,3934673,Donte DiVincenzo,Out
 2026-10-27,NOP,4277956,Jordan Poole,Day-To-Day
 2026-10-27,NOP,5061589,Yves Missi,Out
 2026-10-27,NYK,4277869,Jose Alvarado,Out
-2026-10-27,OKC,4433255,Chet Holmgren,Day-To-Day
-2026-10-27,OKC,2991350,Alex Caruso,Day-To-Day
+2026-10-27,OKC,5061603,Thomas Sorber,Out
+2026-10-27,OKC,4433255,Chet Holmgren,Out
+2026-10-27,OKC,5159925,Nikola Topic,Out
+2026-10-27,OKC,4900671,Ajay Mitchell,Day-To-Day
+2026-10-27,OKC,2991350,Alex Caruso,Out
 2026-10-27,OKC,4593803,Jalen Williams,Out
 2026-10-27,OKC,4683692,Cason Wallace,Out
-2026-10-27,OKC,5159925,Nikola Topic,Out
-2026-10-27,OKC,5061603,Thomas Sorber,Out
 2026-10-27,OKC,5106270,Otega Oweh,Out
 2026-10-27,ORL,4065654,Jonathan Isaac,Out
 2026-10-27,ORL,4432165,Jalen Suggs,Out
@@ -3286,9 +3294,7 @@ date,team,player_id,name,status
 2026-10-27,ORL,5214637,Noah Penda,Out
 2026-10-27,ORL,5107251,Izaiyah Nelson,Out
 2026-10-27,PHI,3904625,Tacko Fall,Out
-2026-10-27,PHI,5124612,VJ Edgecombe,Day-To-Day
-2026-10-27,PHI,4432446,Jabari Walker,Day-To-Day
-2026-10-27,PHI,3059318,Joel Embiid,Day-To-Day
+2026-10-27,PHI,4432446,Jabari Walker,Out
 2026-10-27,PHI,4870562,Dominick Barlow,Out
 2026-10-27,PHI,4871141,Ariel Hukporti,Out
 2026-10-27,PHX,4601023,Oso Ighodaro,Day-To-Day
@@ -3309,7 +3315,7 @@ date,team,player_id,name,status
 2026-10-27,UTA,4397077,Jaxson Hayes,Day-To-Day
 2026-10-27,UTA,4433268,Trey Alexander,Out
 2026-10-27,UTA,3102530,Jusuf Nurkic,Out
-2026-10-27,WAS,4432907,Justin Champagnie,Day-To-Day
+2026-10-27,WAS,4432907,Justin Champagnie,Out
 2026-10-27,WAS,5142718,AJ Dybantsa,Out
 2026-10-27,WAS,4997537,Tristan Vukcevic,Out
 2026-10-27,WAS,4606840,Jamir Watkins,Out

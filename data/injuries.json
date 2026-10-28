@@ -130,11 +130,11 @@
   ],
   "DAL": [
    {
-    "id": "4593125",
-    "name": "Santi Aldama",
+    "id": "4278594",
+    "name": "Naji Marshall",
     "pos": "F",
-    "status": "Out",
-    "detail": "Knee Surgery",
+    "status": "Day-To-Day",
+    "detail": "Illness",
     "date": "2026-10-28",
     "returns": "2026-10-28"
    },
@@ -144,8 +144,17 @@
     "pos": "F",
     "status": "Out",
     "detail": "Heel Inflammation",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
+   },
+   {
+    "id": "4593125",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
    },
    {
     "id": "5279129",
@@ -162,15 +171,6 @@
     "pos": "F",
     "status": "Out",
     "detail": "Thumb Sprain",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "4278594",
-    "name": "Naji Marshall",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
     "date": "2026-10-27",
     "returns": "2026-10-28"
    },
@@ -262,6 +262,15 @@
   ],
   "GSW": [
    {
+    "id": "5175737",
+    "name": "Yaxel Lendeborg",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-10-28",
+    "returns": "2026-10-28"
+   },
+   {
     "id": "3102531",
     "name": "Kristaps Porzingis",
     "pos": "C",
@@ -269,15 +278,6 @@
     "detail": "Illness",
     "date": "2026-10-28",
     "returns": "2026-12-01"
-   },
-   {
-    "id": "5175737",
-    "name": "Yaxel Lendeborg",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
    },
    {
     "id": "4432171",
@@ -303,10 +303,10 @@
     "id": "2990992",
     "name": "Marcus Smart",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Forearm Strain",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
    },
    {
     "id": "4871144",
@@ -329,20 +329,20 @@
   ],
   "IND": [
    {
+    "id": "4396993",
+    "name": "Tyrese Haliburton",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Soreness",
+    "date": "2026-10-28",
+    "returns": "2026-11-09"
+   },
+   {
     "id": "4395712",
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Neck Soreness",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "4396993",
-    "name": "Tyrese Haliburton",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Soreness",
     "date": "2026-10-27",
     "returns": "2026-10-28"
    },
@@ -464,7 +464,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Oblique Strain",
-    "date": "2026-10-27",
+    "date": "2026-10-28",
     "returns": "2026-10-28"
    },
    {
@@ -510,15 +510,6 @@
   ],
   "NOP": [
    {
-    "id": "4277956",
-    "name": "Jordan Poole",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
-   },
-   {
     "id": "5061589",
     "name": "Yves Missi",
     "pos": "C",
@@ -533,13 +524,22 @@
     "id": "4277869",
     "name": "Jose Alvarado",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Sprain",
     "date": "2026-10-28",
-    "returns": "2026-10-28"
+    "returns": "2026-10-30"
    }
   ],
   "OKC": [
+   {
+    "id": "2991350",
+    "name": "Alex Caruso",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-10-28",
+    "returns": "2026-10-31"
+   },
    {
     "id": "5061603",
     "name": "Thomas Sorber",
@@ -575,15 +575,6 @@
     "detail": "Ankle",
     "date": "2026-10-27",
     "returns": "2026-10-28"
-   },
-   {
-    "id": "2991350",
-    "name": "Alex Caruso",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle",
-    "date": "2026-10-27",
-    "returns": "2026-10-31"
    },
    {
     "id": "4593803",
@@ -792,8 +783,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Calf Strain",
-    "date": "2026-10-26",
-    "returns": "2026-10-28"
+    "date": "2026-10-28",
+    "returns": "2026-10-31"
    },
    {
     "id": "5101845",
@@ -879,8 +870,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Foot Not Specified",
-    "date": "2026-10-27",
-    "returns": "2026-10-30"
+    "date": "2026-10-28",
+    "returns": "2027-02-25"
    },
    {
     "id": "4997537",

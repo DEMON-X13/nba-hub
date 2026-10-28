@@ -1198,8 +1198,8 @@
  },
  "upcoming": {
   "2027_20261028_CHA_DET": {
-   "pHome": 0.6275,
-   "spread": -4
+   "pHome": 0.601,
+   "spread": -3.1
   },
   "2027_20261028_DEN_NOP": {
    "pHome": 0.3649,
@@ -2101,5 +2101,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-10-28T14:03Z"
+ "generated": "2026-10-28T17:11Z"
 }

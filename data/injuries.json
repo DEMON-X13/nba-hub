@@ -8,7 +8,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Knee Bruise",
-    "date": "2026-10-27",
+    "date": "2026-10-28",
     "returns": "2026-10-28"
    },
    {
@@ -236,8 +236,17 @@
     "id": "4395702",
     "name": "Isaiah Joe",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hip Bruise",
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
+   },
+   {
+    "id": "4684742",
+    "name": "Ausar Thompson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
     "date": "2026-10-28",
     "returns": "2026-10-28"
    },
@@ -253,6 +262,15 @@
   ],
   "GSW": [
    {
+    "id": "3102531",
+    "name": "Kristaps Porzingis",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Illness",
+    "date": "2026-10-28",
+    "returns": "2026-12-01"
+   },
+   {
     "id": "5175737",
     "name": "Yaxel Lendeborg",
     "pos": "F",
@@ -260,15 +278,6 @@
     "detail": "Foot",
     "date": "2026-10-27",
     "returns": "2026-10-28"
-   },
-   {
-    "id": "3102531",
-    "name": "Kristaps Porzingis",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Illness",
-    "date": "2026-10-21",
-    "returns": "2026-12-01"
    },
    {
     "id": "4432171",
@@ -470,22 +479,13 @@
   ],
   "MIA": [
    {
-    "id": "4601025",
-    "name": "Pelle Larsson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
-   },
-   {
     "id": "3899664",
     "name": "Simone Fontecchio",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Illness",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
    }
   ],
   "MIN": [
@@ -615,6 +615,15 @@
   ],
   "ORL": [
    {
+    "id": "4712849",
+    "name": "Anthony Black",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Personal",
+    "date": "2026-10-28",
+    "returns": "2026-10-28"
+   },
+   {
     "id": "4065654",
     "name": "Jonathan Isaac",
     "pos": "F",
@@ -686,7 +695,7 @@
     "status": "Out",
     "detail": "Back Fracture",
     "date": "2026-10-19",
-    "returns": "2026-11-02"
+    "returns": "2026-11-04"
    },
    {
     "id": "4871141",
@@ -872,15 +881,6 @@
     "detail": "Foot Not Specified",
     "date": "2026-10-27",
     "returns": "2026-10-30"
-   },
-   {
-    "id": "5142718",
-    "name": "AJ Dybantsa",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
    },
    {
     "id": "4997537",

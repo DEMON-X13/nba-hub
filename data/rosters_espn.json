@@ -1094,7 +1094,7 @@
     "name": "Ausar Thompson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "GSW": [
@@ -1927,7 +1927,7 @@
     "name": "Pelle Larsson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278053",
@@ -2625,7 +2625,7 @@
     "name": "Anthony Black",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278572",
@@ -3614,7 +3614,7 @@
     "name": "AJ Dybantsa",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5174563",

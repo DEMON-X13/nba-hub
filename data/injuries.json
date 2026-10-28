@@ -3,15 +3,6 @@
  "teams": {
   "ATL": [
    {
-    "id": "4397183",
-    "name": "Aaron Wiggins",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Bruise",
-    "date": "2026-10-28",
-    "returns": "2026-10-28"
-   },
-   {
     "id": "4712863",
     "name": "Mouhamed Gueye",
     "pos": "F",
@@ -101,22 +92,22 @@
   ],
   "CHI": [
    {
-    "id": "4431687",
-    "name": "Patrick Williams",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin Soreness",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
-   },
-   {
     "id": "5105555",
     "name": "Tobe Awaka",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
+   },
+   {
+    "id": "4431687",
+    "name": "Patrick Williams",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Groin Soreness",
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
    },
    {
     "id": "4278067",
@@ -195,6 +186,15 @@
   ],
   "DEN": [
    {
+    "id": "3138196",
+    "name": "Cameron Johnson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
+   },
+   {
     "id": "4592427",
     "name": "Spencer Jones",
     "pos": "F",
@@ -202,15 +202,6 @@
     "detail": "Hamstring Not Specified",
     "date": "2026-10-27",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "3138196",
-    "name": "Cameron Johnson",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
    },
    {
     "id": "4065813",
@@ -242,15 +233,6 @@
     "returns": "2026-10-30"
    },
    {
-    "id": "4684742",
-    "name": "Ausar Thompson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-10-28",
-    "returns": "2026-10-28"
-   },
-   {
     "id": "4433621",
     "name": "Jalen Duren",
     "pos": "C",
@@ -262,13 +244,13 @@
   ],
   "GSW": [
    {
-    "id": "5175737",
-    "name": "Yaxel Lendeborg",
+    "id": "4997536",
+    "name": "Gui Santos",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Foot",
+    "status": "Out",
+    "detail": "Knee Tendinitis",
     "date": "2026-10-28",
-    "returns": "2026-10-28"
+    "returns": "2026-10-30"
    },
    {
     "id": "3102531",
@@ -329,49 +311,31 @@
   ],
   "IND": [
    {
+    "id": "2530530",
+    "name": "T.J. McConnell",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-10-28",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "4433076",
+    "name": "Ben Sheppard",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee",
+    "date": "2026-10-28",
+    "returns": "2027-01-02"
+   },
+   {
     "id": "4396993",
     "name": "Tyrese Haliburton",
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring Strain",
     "date": "2026-10-28",
-    "returns": "2026-11-09"
-   },
-   {
-    "id": "4395712",
-    "name": "Andrew Nembhard",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Neck Soreness",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "4278355",
-    "name": "Obi Toppin",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hand Sprain",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "4396909",
-    "name": "Aaron Nesmith",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Strain",
-    "date": "2026-10-27",
-    "returns": "2026-10-28"
-   },
-   {
-    "id": "2530530",
-    "name": "T.J. McConnell",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-10-27",
-    "returns": "2026-10-30"
+    "returns": "2026-11-13"
    },
    {
     "id": "4017837",
@@ -381,15 +345,6 @@
     "detail": "Ankle Sprain",
     "date": "2026-10-27",
     "returns": "2026-10-30"
-   },
-   {
-    "id": "4433076",
-    "name": "Ben Sheppard",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Knee",
-    "date": "2026-10-26",
-    "returns": "2026-12-01"
    },
    {
     "id": "5157066",
@@ -623,15 +578,6 @@
    }
   ],
   "ORL": [
-   {
-    "id": "4712849",
-    "name": "Anthony Black",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Personal",
-    "date": "2026-10-28",
-    "returns": "2026-10-28"
-   },
    {
     "id": "4065654",
     "name": "Jonathan Isaac",
@@ -882,6 +828,15 @@
    }
   ],
   "WAS": [
+   {
+    "id": "5238230",
+    "name": "Tre Johnson",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Achilles Soreness",
+    "date": "2026-10-28",
+    "returns": "2026-10-30"
+   },
    {
     "id": "4432907",
     "name": "Justin Champagnie",

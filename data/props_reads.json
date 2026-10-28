@@ -141,5 +141,9 @@
  "2027_20261026_MEM_UTA": {"at":"2026-10-27T13:15Z","status":"ok","lines":105,"tries":1},
  "2027_20261026_MIN_CLE": {"at":"2026-10-27T13:15Z","status":"ok","lines":94,"tries":1},
  "2027_20261026_PHX_OKC": {"at":"2026-10-27T13:15Z","status":"ok","lines":120,"tries":1},
- "2027_20261026_WAS_CHA": {"at":"2026-10-27T13:15Z","status":"ok","lines":98,"tries":1}
+ "2027_20261026_WAS_CHA": {"at":"2026-10-27T13:15Z","status":"ok","lines":98,"tries":1},
+ "2027_20261027_BKN_BOS": {"at":"2026-10-28T14:04Z","status":"ok","lines":137,"tries":1},
+ "2027_20261027_DET_NYK": {"at":"2026-10-28T14:04Z","status":"ok","lines":113,"tries":1},
+ "2027_20261027_POR_LAL": {"at":"2026-10-28T14:04Z","status":"ok","lines":104,"tries":1},
+ "2027_20261027_SAC_SAS": {"at":"2026-10-28T14:04Z","status":"ok","lines":84,"tries":1}
 }

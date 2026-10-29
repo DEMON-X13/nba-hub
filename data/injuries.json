@@ -54,6 +54,15 @@
   ],
   "CHA": [
    {
+    "id": "3032979",
+    "name": "Dennis Schroder",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
+   },
+   {
     "id": "5061575",
     "name": "Kon Knueppel",
     "pos": "G",
@@ -150,30 +159,12 @@
   ],
   "DAL": [
    {
-    "id": "5279129",
-    "name": "Sergio de Larrea",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Strain",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
-   {
-    "id": "4278594",
-    "name": "Naji Marshall",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
-   {
     "id": "5148538",
     "name": "Tarik Biberovic",
     "pos": "F",
     "status": "Out",
     "detail": "Heel Inflammation",
-    "date": "2026-10-28",
+    "date": "2026-10-29",
     "returns": "2026-10-30"
    },
    {
@@ -182,7 +173,25 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Surgery",
-    "date": "2026-10-28",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
+   },
+   {
+    "id": "5279129",
+    "name": "Sergio de Larrea",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Strain",
+    "date": "2026-10-29",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "4278594",
+    "name": "Naji Marshall",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-10-29",
     "returns": "2026-10-30"
    },
    {
@@ -396,15 +405,6 @@
   ],
   "LAC": [
    {
-    "id": "5108024",
-    "name": "Yanic Konan Niederhauser",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Foot Surgery",
-    "date": "2026-10-29",
-    "returns": "2026-11-08"
-   },
-   {
     "id": "4066648",
     "name": "Rui Hachimura",
     "pos": "F",
@@ -412,6 +412,15 @@
     "detail": "Quadriceps Soreness",
     "date": "2026-10-29",
     "returns": "2026-10-30"
+   },
+   {
+    "id": "5108024",
+    "name": "Yanic Konan Niederhauser",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot Surgery",
+    "date": "2026-10-29",
+    "returns": "2026-11-08"
    },
    {
     "id": "4065778",
@@ -521,13 +530,22 @@
   ],
   "NOP": [
    {
+    "id": "3907497",
+    "name": "Dejounte Murray",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Personal",
+    "date": "2026-10-29",
+    "returns": "2026-10-31"
+   },
+   {
     "id": "4277956",
     "name": "Jordan Poole",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle",
     "date": "2026-10-29",
-    "returns": "2026-10-29"
+    "returns": "2026-10-31"
    },
    {
     "id": "5061589",
@@ -546,8 +564,8 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-10-28",
-    "returns": "2026-10-30"
+    "date": "2026-10-29",
+    "returns": "2026-11-04"
    }
   ],
   "OKC": [
@@ -658,8 +676,17 @@
     "id": "4432446",
     "name": "Jabari Walker",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee Soreness",
+    "date": "2026-10-29",
+    "returns": "2026-10-31"
+   },
+   {
+    "id": "3917376",
+    "name": "Jaylen Brown",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
     "date": "2026-10-29",
     "returns": "2026-10-30"
    },

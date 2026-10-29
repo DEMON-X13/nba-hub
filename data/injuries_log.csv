@@ -3414,6 +3414,7 @@ date,team,player_id,name,status
 2026-10-29,BOS,4433188,Devin Carter,Out
 2026-10-29,BKN,5175643,Egor Demin,Out
 2026-10-29,BKN,5105626,Tyler Bilodeau,Out
+2026-10-29,CHA,3032979,Dennis Schroder,Day-To-Day
 2026-10-29,CHA,5061575,Kon Knueppel,Out
 2026-10-29,CHA,4395651,Coby White,Out
 2026-10-29,CHA,4066218,Grant Williams,Out
@@ -3424,10 +3425,10 @@ date,team,player_id,name,status
 2026-10-29,CHI,4278067,Nic Claxton,Out
 2026-10-29,CLE,5041951,Meleek Thomas,Day-To-Day
 2026-10-29,CLE,4683747,Jaylon Tyson,Day-To-Day
-2026-10-29,DAL,5279129,Sergio de Larrea,Day-To-Day
-2026-10-29,DAL,4278594,Naji Marshall,Day-To-Day
 2026-10-29,DAL,5148538,Tarik Biberovic,Out
 2026-10-29,DAL,4593125,Santi Aldama,Out
+2026-10-29,DAL,5279129,Sergio de Larrea,Out
+2026-10-29,DAL,4278594,Naji Marshall,Day-To-Day
 2026-10-29,DAL,4683688,Dereck Lively II,Out
 2026-10-29,DEN,3138196,Cameron Johnson,Out
 2026-10-29,DEN,4592427,Spencer Jones,Out
@@ -3450,8 +3451,8 @@ date,team,player_id,name,status
 2026-10-29,IND,4433076,Ben Sheppard,Out
 2026-10-29,IND,4396993,Tyrese Haliburton,Out
 2026-10-29,IND,5157066,Johnny Furphy,Out
-2026-10-29,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-10-29,LAC,4066648,Rui Hachimura,Day-To-Day
+2026-10-29,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-10-29,LAC,4065778,Max Strus,Out
 2026-10-29,LAC,3913176,Brandon Ingram,Out
 2026-10-29,LAC,6580,Bradley Beal,Out
@@ -3463,7 +3464,8 @@ date,team,player_id,name,status
 2026-10-29,MIA,3899664,Simone Fontecchio,Day-To-Day
 2026-10-29,MIN,4594268,Anthony Edwards,Out
 2026-10-29,MIN,3934673,Donte DiVincenzo,Out
-2026-10-29,NOP,4277956,Jordan Poole,Day-To-Day
+2026-10-29,NOP,3907497,Dejounte Murray,Out
+2026-10-29,NOP,4277956,Jordan Poole,Out
 2026-10-29,NOP,5061589,Yves Missi,Out
 2026-10-29,NYK,4277869,Jose Alvarado,Out
 2026-10-29,OKC,4433255,Chet Holmgren,Day-To-Day
@@ -3477,7 +3479,8 @@ date,team,player_id,name,status
 2026-10-29,ORL,4432573,Paolo Banchero,Out
 2026-10-29,ORL,5214637,Noah Penda,Out
 2026-10-29,ORL,5107251,Izaiyah Nelson,Out
-2026-10-29,PHI,4432446,Jabari Walker,Day-To-Day
+2026-10-29,PHI,4432446,Jabari Walker,Out
+2026-10-29,PHI,3917376,Jaylen Brown,Day-To-Day
 2026-10-29,PHI,3904625,Tacko Fall,Out
 2026-10-29,PHI,4870562,Dominick Barlow,Out
 2026-10-29,PHI,4871141,Ariel Hukporti,Out

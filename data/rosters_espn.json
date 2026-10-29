@@ -475,7 +475,7 @@
     "name": "Dennis Schroder",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5281370",
@@ -2311,7 +2311,7 @@
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4703115",
@@ -2739,7 +2739,7 @@
     "name": "Jaylen Brown",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2581018",

@@ -54,20 +54,20 @@
   ],
   "CHA": [
    {
-    "id": "4395651",
-    "name": "Coby White",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Calf Strain",
-    "date": "2026-10-26",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "5061575",
     "name": "Kon Knueppel",
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring",
+    "date": "2026-10-29",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "4395651",
+    "name": "Coby White",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Calf Strain",
     "date": "2026-10-26",
     "returns": "2026-11-02"
    },
@@ -360,15 +360,6 @@
   ],
   "LAC": [
    {
-    "id": "4066648",
-    "name": "Rui Hachimura",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Quadriceps Soreness",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
-   {
     "id": "5108024",
     "name": "Yanic Konan Niederhauser",
     "pos": "C",
@@ -376,6 +367,15 @@
     "detail": "Foot Surgery",
     "date": "2026-10-29",
     "returns": "2026-11-08"
+   },
+   {
+    "id": "4066648",
+    "name": "Rui Hachimura",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Quadriceps Soreness",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
    },
    {
     "id": "4065778",
@@ -470,7 +470,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Knee Surgery",
-    "date": "2026-10-27",
+    "date": "2026-10-29",
     "returns": "2026-12-21"
    },
    {
@@ -577,8 +577,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Not Specified",
-    "date": "2026-10-27",
-    "returns": "2026-10-30"
+    "date": "2026-10-29",
+    "returns": "2026-11-10"
    },
    {
     "id": "4432165",

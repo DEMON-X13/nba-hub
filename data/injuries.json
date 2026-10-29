@@ -49,7 +49,7 @@
     "status": "Out",
     "detail": "Shoulder Sprain",
     "date": "2026-10-25",
-    "returns": "2026-10-30"
+    "returns": "2026-11-01"
    }
   ],
   "CHA": [
@@ -92,21 +92,30 @@
   ],
   "CHI": [
    {
+    "id": "4431687",
+    "name": "Patrick Williams",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Groin Soreness",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
+   },
+   {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Finger",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
+   },
+   {
     "id": "5105555",
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle",
     "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
-   {
-    "id": "4431687",
-    "name": "Patrick Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Groin Soreness",
-    "date": "2026-10-28",
     "returns": "2026-10-30"
    },
    {
@@ -284,13 +293,13 @@
   ],
   "HOU": [
    {
-    "id": "4871144",
-    "name": "Alperen Sengun",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
+    "id": "4711272",
+    "name": "Reed Sheppard",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Back",
     "date": "2026-10-29",
-    "returns": "2026-10-30"
+    "returns": "2026-10-31"
    },
    {
     "id": "2990992",
@@ -298,7 +307,16 @@
     "pos": "G",
     "status": "Out",
     "detail": "Forearm Strain",
-    "date": "2026-10-28",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
+   },
+   {
+    "id": "4871144",
+    "name": "Alperen Sengun",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Back Soreness",
+    "date": "2026-10-29",
     "returns": "2026-10-30"
    },
    {
@@ -313,13 +331,31 @@
   ],
   "IND": [
    {
+    "id": "4395712",
+    "name": "Andrew Nembhard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Neck Soreness",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
+   },
+   {
+    "id": "4396909",
+    "name": "Aaron Nesmith",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
+   },
+   {
     "id": "4017837",
     "name": "Ivica Zubac",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Sprain",
     "date": "2026-10-29",
-    "returns": "2026-10-30"
+    "returns": "2026-11-01"
    },
    {
     "id": "2530530",
@@ -676,6 +712,15 @@
    }
   ],
   "POR": [
+   {
+    "id": "4066211",
+    "name": "Robert Williams III",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-29",
+    "returns": "2026-10-29"
+   },
    {
     "id": "4706557",
     "name": "Chris Youngblood",

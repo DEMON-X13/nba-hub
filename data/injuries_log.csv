@@ -3418,8 +3418,9 @@ date,team,player_id,name,status
 2026-10-29,CHA,4395651,Coby White,Out
 2026-10-29,CHA,4066218,Grant Williams,Out
 2026-10-29,CHA,4684269,Kylan Boswell,Out
-2026-10-29,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-10-29,CHI,4431687,Patrick Williams,Out
+2026-10-29,CHI,4397189,Jalen Smith,Day-To-Day
+2026-10-29,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-10-29,CHI,4278067,Nic Claxton,Out
 2026-10-29,CLE,5041951,Meleek Thomas,Day-To-Day
 2026-10-29,CLE,4683747,Jaylon Tyson,Day-To-Day
@@ -3438,10 +3439,13 @@ date,team,player_id,name,status
 2026-10-29,GSW,3102531,Kristaps Porzingis,Out
 2026-10-29,GSW,4432171,Moses Moody,Out
 2026-10-29,GSW,6430,Jimmy Butler III,Out
-2026-10-29,HOU,4871144,Alperen Sengun,Day-To-Day
+2026-10-29,HOU,4711272,Reed Sheppard,Out
 2026-10-29,HOU,2990992,Marcus Smart,Out
+2026-10-29,HOU,4871144,Alperen Sengun,Day-To-Day
 2026-10-29,HOU,2991235,Steven Adams,Out
-2026-10-29,IND,4017837,Ivica Zubac,Day-To-Day
+2026-10-29,IND,4395712,Andrew Nembhard,Day-To-Day
+2026-10-29,IND,4396909,Aaron Nesmith,Day-To-Day
+2026-10-29,IND,4017837,Ivica Zubac,Out
 2026-10-29,IND,2530530,T.J. McConnell,Out
 2026-10-29,IND,4433076,Ben Sheppard,Out
 2026-10-29,IND,4396993,Tyrese Haliburton,Out
@@ -3479,6 +3483,7 @@ date,team,player_id,name,status
 2026-10-29,PHI,4871141,Ariel Hukporti,Out
 2026-10-29,PHX,4601023,Oso Ighodaro,Day-To-Day
 2026-10-29,PHX,4701232,Mark Williams,Out
+2026-10-29,POR,4066211,Robert Williams III,Day-To-Day
 2026-10-29,POR,4706557,Chris Youngblood,Out
 2026-10-29,POR,4914336,Shaedon Sharpe,Out
 2026-10-29,SAC,4433174,Dylan Cardwell,Out

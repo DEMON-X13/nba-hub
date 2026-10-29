@@ -1294,7 +1294,7 @@
     "name": "Reed Sheppard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2990992",
@@ -1401,14 +1401,14 @@
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4396909",
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133603",
@@ -3072,7 +3072,7 @@
     "name": "Robert Williams III",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4706557",

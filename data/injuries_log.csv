@@ -3412,7 +3412,7 @@ date,team,player_id,name,status
 2026-10-29,ATL,4712863,Mouhamed Gueye,Out
 2026-10-29,ATL,5105571,Henri Veesaar,Out
 2026-10-29,BOS,4433188,Devin Carter,Out
-2026-10-29,BKN,5175643,Egor Demin,Day-To-Day
+2026-10-29,BKN,5175643,Egor Demin,Out
 2026-10-29,BKN,5105626,Tyler Bilodeau,Out
 2026-10-29,CHA,4395651,Coby White,Out
 2026-10-29,CHA,5061575,Kon Knueppel,Out
@@ -3421,6 +3421,8 @@ date,team,player_id,name,status
 2026-10-29,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-10-29,CHI,4431687,Patrick Williams,Out
 2026-10-29,CHI,4278067,Nic Claxton,Out
+2026-10-29,CLE,5041951,Meleek Thomas,Day-To-Day
+2026-10-29,CLE,4683747,Jaylon Tyson,Day-To-Day
 2026-10-29,DAL,5279129,Sergio de Larrea,Day-To-Day
 2026-10-29,DAL,4278594,Naji Marshall,Day-To-Day
 2026-10-29,DAL,5148538,Tarik Biberovic,Out
@@ -3485,8 +3487,8 @@ date,team,player_id,name,status
 2026-10-29,SAC,3907387,Ben Simmons,Out
 2026-10-29,SAS,6440,Tobias Harris,Out
 2026-10-29,SAS,5101845,Jayden Quaintance,Out
-2026-10-29,TOR,4432586,Nate Bittle,Out
 2026-10-29,TOR,6450,Kawhi Leonard,Out
+2026-10-29,TOR,4432586,Nate Bittle,Out
 2026-10-29,UTA,4066336,Lauri Markkanen,Day-To-Day
 2026-10-29,UTA,4277961,Jaren Jackson Jr.,Out
 2026-10-29,UTA,4433268,Trey Alexander,Out

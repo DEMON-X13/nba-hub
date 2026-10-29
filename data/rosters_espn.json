@@ -703,14 +703,14 @@
     "name": "Meleek Thomas",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4576087",

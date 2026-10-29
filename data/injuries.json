@@ -37,10 +37,10 @@
     "id": "5175643",
     "name": "Egor Demin",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Leg Bruise",
-    "date": "2026-10-28",
-    "returns": "2026-10-30"
+    "date": "2026-10-29",
+    "returns": "2026-11-07"
    },
    {
     "id": "5105626",
@@ -117,6 +117,26 @@
     "detail": "Hamstring",
     "date": "2026-10-26",
     "returns": "2026-11-04"
+   }
+  ],
+  "CLE": [
+   {
+    "id": "5041951",
+    "name": "Meleek Thomas",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-10-29",
+    "returns": "2026-10-29"
+   },
+   {
+    "id": "4683747",
+    "name": "Jaylon Tyson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Neck",
+    "date": "2026-10-29",
+    "returns": "2026-10-29"
    }
   ],
   "DAL": [
@@ -735,6 +755,15 @@
   ],
   "TOR": [
    {
+    "id": "6450",
+    "name": "Kawhi Leonard",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Inflammation",
+    "date": "2026-10-29",
+    "returns": "2026-11-23"
+   },
+   {
     "id": "4432586",
     "name": "Nate Bittle",
     "pos": "C",
@@ -742,15 +771,6 @@
     "detail": "Foot Fracture",
     "date": "2026-10-27",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "6450",
-    "name": "Kawhi Leonard",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Inflammation",
-    "date": "2026-10-27",
-    "returns": "2026-11-23"
    }
   ],
   "UTA": [

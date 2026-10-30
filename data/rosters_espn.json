@@ -270,7 +270,7 @@
     "name": "Noah Clowney",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5175643",
@@ -475,7 +475,7 @@
     "name": "Dennis Schroder",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5281370",
@@ -505,7 +505,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4711294",
@@ -596,7 +596,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4848625",
@@ -710,7 +710,7 @@
     "name": "Jaylon Tyson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5106261",
@@ -824,7 +824,7 @@
     "name": "Naji Marshall",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3138160",
@@ -1408,14 +1408,14 @@
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4396909",
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133603",
@@ -1515,7 +1515,7 @@
     "name": "Rui Hachimura",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3913176",
@@ -1799,7 +1799,7 @@
     "name": "Ty Jerome",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5231919",
@@ -1827,7 +1827,7 @@
     "name": "Scotty Pippen Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4593016",
@@ -1906,7 +1906,7 @@
     "name": "Simone Fontecchio",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431772",
@@ -2325,7 +2325,7 @@
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703115",
@@ -2481,7 +2481,7 @@
     "name": "Karl-Anthony Towns",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432808",
@@ -3656,7 +3656,7 @@
     "name": "Tre Johnson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432819",

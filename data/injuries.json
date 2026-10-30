@@ -34,15 +34,6 @@
   ],
   "BKN": [
    {
-    "id": "4712896",
-    "name": "Noah Clowney",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
-   {
     "id": "5175643",
     "name": "Egor Demin",
     "pos": "G",
@@ -62,15 +53,6 @@
    }
   ],
   "CHA": [
-   {
-    "id": "3032979",
-    "name": "Dennis Schroder",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
    {
     "id": "5061575",
     "name": "Kon Knueppel",
@@ -113,28 +95,10 @@
     "id": "4848625",
     "name": "Dailyn Swain",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Back Soreness",
     "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
-   {
-    "id": "4397189",
-    "name": "Jalen Smith",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
-   {
-    "id": "5105555",
-    "name": "Tobe Awaka",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
+    "returns": "2026-11-02"
    },
    {
     "id": "4278067",
@@ -148,6 +112,15 @@
   ],
   "CLE": [
    {
+    "id": "4683747",
+    "name": "Jaylon Tyson",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-30",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "5041951",
     "name": "Meleek Thomas",
     "pos": "G",
@@ -159,22 +132,13 @@
   ],
   "DAL": [
    {
-    "id": "4278594",
-    "name": "Naji Marshall",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
-   {
-    "id": "5148538",
-    "name": "Tarik Biberovic",
+    "id": "5279129",
+    "name": "Sergio de Larrea",
     "pos": "F",
     "status": "Out",
-    "detail": "Heel Inflammation",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
+    "detail": "Knee Strain",
+    "date": "2026-10-30",
+    "returns": "2026-11-04"
    },
    {
     "id": "4593125",
@@ -182,16 +146,16 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Surgery",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
+    "date": "2026-10-30",
+    "returns": "2026-11-02"
    },
    {
-    "id": "5279129",
-    "name": "Sergio de Larrea",
+    "id": "5148538",
+    "name": "Tarik Biberovic",
     "pos": "F",
     "status": "Out",
-    "detail": "Knee Strain",
-    "date": "2026-10-29",
+    "detail": "Heel Inflammation",
+    "date": "2026-10-30",
     "returns": "2026-11-02"
    },
    {
@@ -302,11 +266,11 @@
   ],
   "HOU": [
    {
-    "id": "4711272",
-    "name": "Reed Sheppard",
-    "pos": "G",
+    "id": "4871144",
+    "name": "Alperen Sengun",
+    "pos": "C",
     "status": "Out",
-    "detail": "Back",
+    "detail": "Back Soreness",
     "date": "2026-10-30",
     "returns": "2026-10-31"
    },
@@ -316,17 +280,17 @@
     "pos": "G",
     "status": "Out",
     "detail": "Forearm Strain",
-    "date": "2026-10-29",
+    "date": "2026-10-30",
     "returns": "2026-10-30"
    },
    {
-    "id": "4871144",
-    "name": "Alperen Sengun",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
+    "id": "4711272",
+    "name": "Reed Sheppard",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-10-30",
+    "returns": "2026-10-31"
    },
    {
     "id": "2991235",
@@ -371,18 +335,18 @@
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Neck Soreness",
+    "detail": "Nembhard (neck) is listed as probable for Friday's game against Miami.",
     "date": "2026-10-29",
-    "returns": "2026-10-30"
+    "returns": ""
    },
    {
     "id": "4396909",
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Hamstring",
+    "detail": "Nesmith (hamstring) is probable for Friday's game against the Heat.",
     "date": "2026-10-29",
-    "returns": "2026-10-30"
+    "returns": ""
    },
    {
     "id": "4017837",
@@ -413,15 +377,6 @@
    }
   ],
   "LAC": [
-   {
-    "id": "4066648",
-    "name": "Rui Hachimura",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Quadriceps Soreness",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
    {
     "id": "5108024",
     "name": "Yanic Konan Niederhauser",
@@ -490,6 +445,24 @@
   ],
   "MEM": [
    {
+    "id": "4431785",
+    "name": "Scotty Pippen Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back Soreness",
+    "date": "2026-10-30",
+    "returns": "2026-10-31"
+   },
+   {
+    "id": "4065733",
+    "name": "Ty Jerome",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back Soreness",
+    "date": "2026-10-30",
+    "returns": "2026-10-31"
+   },
+   {
     "id": "4593016",
     "name": "Quinten Post",
     "pos": "C",
@@ -497,17 +470,6 @@
     "detail": "Ankle Not Specified",
     "date": "2026-10-30",
     "returns": "2026-10-31"
-   }
-  ],
-  "MIA": [
-   {
-    "id": "3899664",
-    "name": "Simone Fontecchio",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
    }
   ],
   "MIN": [
@@ -532,43 +494,25 @@
   ],
   "NOP": [
    {
-    "id": "4277956",
-    "name": "Jordan Poole",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
-   },
-   {
-    "id": "3907497",
-    "name": "Dejounte Murray",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Personal",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
-   },
-   {
     "id": "5061589",
     "name": "Yves Missi",
     "pos": "C",
     "status": "Out",
     "detail": "Knee Bruise",
-    "date": "2026-10-24",
+    "date": "2026-10-30",
+    "returns": "2026-11-08"
+   },
+   {
+    "id": "4277956",
+    "name": "Jordan Poole",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-30",
     "returns": "2026-11-02"
    }
   ],
   "NYK": [
-   {
-    "id": "3136195",
-    "name": "Karl-Anthony Towns",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Wrist Sprain",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
    {
     "id": "4277869",
     "name": "Jose Alvarado",
@@ -584,10 +528,10 @@
     "id": "4433255",
     "name": "Chet Holmgren",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee",
-    "date": "2026-10-29",
-    "returns": "2026-10-31"
+    "date": "2026-10-30",
+    "returns": "2026-11-02"
    },
    {
     "id": "4593803",
@@ -687,10 +631,10 @@
     "id": "3917376",
     "name": "Jaylen Brown",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee",
     "date": "2026-10-30",
-    "returns": "2026-10-30"
+    "returns": "2026-10-31"
    },
    {
     "id": "4432446",
@@ -832,8 +776,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Calf Strain",
-    "date": "2026-10-28",
-    "returns": "2026-10-31"
+    "date": "2026-10-30",
+    "returns": "2026-11-06"
    },
    {
     "id": "5101845",
@@ -904,15 +848,6 @@
    }
   ],
   "WAS": [
-   {
-    "id": "5238230",
-    "name": "Tre Johnson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Achilles Soreness",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
    {
     "id": "4432907",
     "name": "Justin Champagnie",

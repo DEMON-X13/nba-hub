@@ -1,5 +1,5 @@
 {
- "date": "2026-10-29",
+ "date": "2026-10-30",
  "teams": {
   "ATL": [
    {
@@ -144,17 +144,8 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Foot",
-    "date": "2026-10-29",
-    "returns": "2026-10-29"
-   },
-   {
-    "id": "4683747",
-    "name": "Jaylon Tyson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Neck",
-    "date": "2026-10-29",
-    "returns": "2026-10-29"
+    "date": "2026-10-30",
+    "returns": "2026-10-31"
    }
   ],
   "DAL": [
@@ -206,12 +197,21 @@
   ],
   "DEN": [
    {
+    "id": "4065813",
+    "name": "Alpha Diallo",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Personal",
+    "date": "2026-10-29",
+    "returns": "2026-10-30"
+   },
+   {
     "id": "3138196",
     "name": "Cameron Johnson",
     "pos": "F",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-10-28",
+    "date": "2026-10-29",
     "returns": "2026-10-30"
    },
    {
@@ -222,15 +222,6 @@
     "detail": "Hamstring Not Specified",
     "date": "2026-10-27",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "4065813",
-    "name": "Alpha Diallo",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Personal",
-    "date": "2026-10-27",
-    "returns": "2026-10-30"
    },
    {
     "id": "4432181",
@@ -269,7 +260,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Knee Tendinitis",
-    "date": "2026-10-29",
+    "date": "2026-10-30",
     "returns": "2026-10-30"
    },
    {
@@ -461,31 +452,13 @@
   ],
   "LAL": [
    {
-    "id": "4433137",
-    "name": "Ziaire Williams",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
-   {
-    "id": "3945274",
-    "name": "Luka Doncic",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
-   {
     "id": "5113969",
     "name": "Cameron Carr",
     "pos": "G",
     "status": "Out",
     "detail": "Oblique Strain",
-    "date": "2026-10-28",
-    "returns": "2026-10-30"
+    "date": "2026-10-30",
+    "returns": "2026-11-01"
    },
    {
     "id": "5060631",
@@ -493,8 +466,28 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Inflammation",
-    "date": "2026-10-28",
+    "date": "2026-10-30",
+    "returns": "2026-11-01"
+   },
+   {
+    "id": "4433137",
+    "name": "Ziaire Williams",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-10-30",
     "returns": "2026-10-30"
+   }
+  ],
+  "MEM": [
+   {
+    "id": "4593016",
+    "name": "Quinten Post",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Ankle Not Specified",
+    "date": "2026-10-30",
+    "returns": "2026-10-31"
    }
   ],
   "MIA": [
@@ -530,21 +523,21 @@
   ],
   "NOP": [
    {
-    "id": "3907497",
-    "name": "Dejounte Murray",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Personal",
-    "date": "2026-10-29",
-    "returns": "2026-10-31"
-   },
-   {
     "id": "4277956",
     "name": "Jordan Poole",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-10-29",
+    "date": "2026-10-30",
+    "returns": "2026-10-31"
+   },
+   {
+    "id": "3907497",
+    "name": "Dejounte Murray",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Personal",
+    "date": "2026-10-30",
     "returns": "2026-10-31"
    },
    {
@@ -725,7 +718,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Oblique Strain",
-    "date": "2026-10-28",
+    "date": "2026-10-30",
     "returns": "2026-10-30"
    },
    {
@@ -745,8 +738,17 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-10-29",
-    "returns": "2026-10-29"
+    "date": "2026-10-30",
+    "returns": "2026-10-31"
+   },
+   {
+    "id": "4279888",
+    "name": "Ja Morant",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-10-30",
+    "returns": "2026-10-31"
    },
    {
     "id": "4706557",
@@ -755,7 +757,7 @@
     "status": "Out",
     "detail": "Ankle Soreness",
     "date": "2026-10-27",
-    "returns": "2026-10-29"
+    "returns": "2026-10-31"
    },
    {
     "id": "4914336",

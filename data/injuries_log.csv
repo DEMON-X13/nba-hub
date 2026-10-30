@@ -3516,20 +3516,21 @@ date,team,player_id,name,status
 2026-10-30,CHA,4395651,Coby White,Out
 2026-10-30,CHA,4066218,Grant Williams,Out
 2026-10-30,CHA,4684269,Kylan Boswell,Out
+2026-10-30,CHI,4848625,Dailyn Swain,Day-To-Day
 2026-10-30,CHI,4397189,Jalen Smith,Day-To-Day
 2026-10-30,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-10-30,CHI,4278067,Nic Claxton,Out
 2026-10-30,CLE,5041951,Meleek Thomas,Day-To-Day
+2026-10-30,DAL,4278594,Naji Marshall,Day-To-Day
 2026-10-30,DAL,5148538,Tarik Biberovic,Out
 2026-10-30,DAL,4593125,Santi Aldama,Out
 2026-10-30,DAL,5279129,Sergio de Larrea,Out
-2026-10-30,DAL,4278594,Naji Marshall,Day-To-Day
 2026-10-30,DAL,4683688,Dereck Lively II,Out
 2026-10-30,DEN,4065813,Alpha Diallo,Out
 2026-10-30,DEN,3138196,Cameron Johnson,Out
 2026-10-30,DEN,4592427,Spencer Jones,Out
 2026-10-30,DEN,4432181,Julian Strawther,Out
-2026-10-30,DET,4395702,Isaiah Joe,Day-To-Day
+2026-10-30,DET,4395702,Isaiah Joe,Out
 2026-10-30,DET,4433621,Jalen Duren,Out
 2026-10-30,GSW,4997536,Gui Santos,Day-To-Day
 2026-10-30,GSW,3102531,Kristaps Porzingis,Out
@@ -3539,21 +3540,22 @@ date,team,player_id,name,status
 2026-10-30,HOU,2990992,Marcus Smart,Out
 2026-10-30,HOU,4871144,Alperen Sengun,Day-To-Day
 2026-10-30,HOU,2991235,Steven Adams,Out
+2026-10-30,IND,4278355,Obi Toppin,Day-To-Day
+2026-10-30,IND,2530530,T.J. McConnell,Out
+2026-10-30,IND,5157066,Johnny Furphy,Out
 2026-10-30,IND,4395712,Andrew Nembhard,Day-To-Day
 2026-10-30,IND,4396909,Aaron Nesmith,Day-To-Day
 2026-10-30,IND,4017837,Ivica Zubac,Out
-2026-10-30,IND,2530530,T.J. McConnell,Out
 2026-10-30,IND,4433076,Ben Sheppard,Out
 2026-10-30,IND,4396993,Tyrese Haliburton,Out
-2026-10-30,IND,5157066,Johnny Furphy,Out
 2026-10-30,LAC,4066648,Rui Hachimura,Day-To-Day
 2026-10-30,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-10-30,LAC,4065778,Max Strus,Out
 2026-10-30,LAC,3913176,Brandon Ingram,Out
 2026-10-30,LAC,6580,Bradley Beal,Out
 2026-10-30,LAC,4396818,Jordan Miller,Out
+2026-10-30,LAL,4433137,Ziaire Williams,Out
 2026-10-30,LAL,5060631,Adou Thiero,Out
-2026-10-30,LAL,4433137,Ziaire Williams,Day-To-Day
 2026-10-30,MEM,4593016,Quinten Post,Day-To-Day
 2026-10-30,MIA,3899664,Simone Fontecchio,Day-To-Day
 2026-10-30,MIN,4594268,Anthony Edwards,Out
@@ -3561,6 +3563,7 @@ date,team,player_id,name,status
 2026-10-30,NOP,4277956,Jordan Poole,Day-To-Day
 2026-10-30,NOP,3907497,Dejounte Murray,Day-To-Day
 2026-10-30,NOP,5061589,Yves Missi,Out
+2026-10-30,NYK,3136195,Karl-Anthony Towns,Day-To-Day
 2026-10-30,NYK,4277869,Jose Alvarado,Out
 2026-10-30,OKC,4433255,Chet Holmgren,Day-To-Day
 2026-10-30,OKC,4593803,Jalen Williams,Out
@@ -3573,15 +3576,15 @@ date,team,player_id,name,status
 2026-10-30,ORL,4432573,Paolo Banchero,Out
 2026-10-30,ORL,5214637,Noah Penda,Out
 2026-10-30,ORL,5107251,Izaiyah Nelson,Out
-2026-10-30,PHI,4432446,Jabari Walker,Out
 2026-10-30,PHI,3917376,Jaylen Brown,Day-To-Day
+2026-10-30,PHI,4432446,Jabari Walker,Out
 2026-10-30,PHI,3904625,Tacko Fall,Out
 2026-10-30,PHI,4870562,Dominick Barlow,Out
 2026-10-30,PHI,4871141,Ariel Hukporti,Out
 2026-10-30,PHX,4601023,Oso Ighodaro,Day-To-Day
 2026-10-30,PHX,4701232,Mark Williams,Out
+2026-10-30,POR,4279888,Ja Morant,Out
 2026-10-30,POR,4066211,Robert Williams III,Day-To-Day
-2026-10-30,POR,4279888,Ja Morant,Day-To-Day
 2026-10-30,POR,4706557,Chris Youngblood,Out
 2026-10-30,POR,4914336,Shaedon Sharpe,Out
 2026-10-30,SAC,4433174,Dylan Cardwell,Out

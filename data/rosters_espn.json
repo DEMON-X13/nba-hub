@@ -603,7 +603,7 @@
     "name": "Dailyn Swain",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4431687",
@@ -1366,7 +1366,7 @@
     "name": "Johnny Furphy",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4396993",
@@ -1457,7 +1457,7 @@
     "name": "Obi Toppin",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5106060",
@@ -2481,7 +2481,7 @@
     "name": "Karl-Anthony Towns",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432808",
@@ -2492,6 +2492,13 @@
    }
   ],
   "OKC": [
+   {
+    "id": "4397018",
+    "name": "Ochai Agbaji",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
    {
     "id": "4684208",
     "name": "Brooks Barnhizer",

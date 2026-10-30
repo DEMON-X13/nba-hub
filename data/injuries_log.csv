@@ -3508,6 +3508,7 @@ date,team,player_id,name,status
 2026-10-30,ATL,4712863,Mouhamed Gueye,Out
 2026-10-30,ATL,5105571,Henri Veesaar,Out
 2026-10-30,BOS,4433188,Devin Carter,Out
+2026-10-30,BKN,4712896,Noah Clowney,Day-To-Day
 2026-10-30,BKN,5175643,Egor Demin,Out
 2026-10-30,BKN,5105626,Tyler Bilodeau,Out
 2026-10-30,CHA,3032979,Dennis Schroder,Day-To-Day
@@ -3515,7 +3516,6 @@ date,team,player_id,name,status
 2026-10-30,CHA,4395651,Coby White,Out
 2026-10-30,CHA,4066218,Grant Williams,Out
 2026-10-30,CHA,4684269,Kylan Boswell,Out
-2026-10-30,CHI,4431687,Patrick Williams,Out
 2026-10-30,CHI,4397189,Jalen Smith,Day-To-Day
 2026-10-30,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-10-30,CHI,4278067,Nic Claxton,Out
@@ -3552,7 +3552,6 @@ date,team,player_id,name,status
 2026-10-30,LAC,3913176,Brandon Ingram,Out
 2026-10-30,LAC,6580,Bradley Beal,Out
 2026-10-30,LAC,4396818,Jordan Miller,Out
-2026-10-30,LAL,5113969,Cameron Carr,Out
 2026-10-30,LAL,5060631,Adou Thiero,Out
 2026-10-30,LAL,4433137,Ziaire Williams,Day-To-Day
 2026-10-30,MEM,4593016,Quinten Post,Day-To-Day

@@ -34,6 +34,15 @@
   ],
   "BKN": [
    {
+    "id": "4712896",
+    "name": "Noah Clowney",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-10-30",
+    "returns": "2026-10-30"
+   },
+   {
     "id": "5175643",
     "name": "Egor Demin",
     "pos": "G",
@@ -59,7 +68,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Foot",
-    "date": "2026-10-29",
+    "date": "2026-10-30",
     "returns": "2026-10-30"
    },
    {
@@ -68,7 +77,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring",
-    "date": "2026-10-29",
+    "date": "2026-10-30",
     "returns": "2026-11-02"
    },
    {
@@ -100,15 +109,6 @@
    }
   ],
   "CHI": [
-   {
-    "id": "4431687",
-    "name": "Patrick Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Groin Soreness",
-    "date": "2026-10-29",
-    "returns": "2026-10-30"
-   },
    {
     "id": "4397189",
     "name": "Jalen Smith",
@@ -451,15 +451,6 @@
    }
   ],
   "LAL": [
-   {
-    "id": "5113969",
-    "name": "Cameron Carr",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Oblique Strain",
-    "date": "2026-10-30",
-    "returns": "2026-11-01"
-   },
    {
     "id": "5060631",
     "name": "Adou Thiero",

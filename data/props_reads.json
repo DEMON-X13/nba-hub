@@ -170,5 +170,6 @@
  "2027_20261030_LAC_MIN": {"at":"2026-10-31T04:20Z","status":"ok","lines":109,"tries":1},
  "2027_20261030_LAL_GSW": {"at":"2026-10-31T13:41Z","status":"ok","lines":111,"tries":1},
  "2027_20261030_NYK_PHI": {"at":"2026-10-31T04:20Z","status":"ok","lines":151,"tries":1},
- "2027_20261030_ORL_TOR": {"at":"2026-10-31T04:20Z","status":"ok","lines":113,"tries":1}
+ "2027_20261030_ORL_TOR": {"at":"2026-10-31T04:20Z","status":"ok","lines":113,"tries":1},
+ "2027_20261031_POR_UTA": {"at":"2026-10-31T22:30Z","status":"ok","lines":106,"tries":1}
 }

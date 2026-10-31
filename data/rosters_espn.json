@@ -212,7 +212,7 @@
     "name": "Mitchell Robinson",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4593841",
@@ -263,7 +263,7 @@
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4712896",
@@ -1415,7 +1415,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133603",
@@ -2325,7 +2325,7 @@
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4703115",
@@ -2753,7 +2753,7 @@
     "name": "Jaylen Brown",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2581018",
@@ -2788,7 +2788,7 @@
     "name": "Tacko Fall",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4871141",
@@ -2851,7 +2851,7 @@
     "name": "Jabari Walker",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "PHX": [

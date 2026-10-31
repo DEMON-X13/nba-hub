@@ -23,6 +23,15 @@
   ],
   "BOS": [
    {
+    "id": "4351852",
+    "name": "Mitchell Robinson",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-31",
+    "returns": "2026-11-01"
+   },
+   {
     "id": "4433188",
     "name": "Devin Carter",
     "pos": "G",
@@ -33,6 +42,15 @@
    }
   ],
   "BKN": [
+   {
+    "id": "5101761",
+    "name": "Mikel Brown Jr.",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-10-31",
+    "returns": "2026-11-02"
+   },
    {
     "id": "5175643",
     "name": "Egor Demin",
@@ -219,6 +237,24 @@
   ],
   "GSW": [
    {
+    "id": "4997536",
+    "name": "Gui Santos",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-10-31",
+    "returns": "2026-11-01"
+   },
+   {
+    "id": "6589",
+    "name": "Draymond Green",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-10-31",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "3975",
     "name": "Stephen Curry",
     "pos": "G",
@@ -286,6 +322,24 @@
   ],
   "IND": [
    {
+    "id": "4017837",
+    "name": "Ivica Zubac",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-10-31",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "4396909",
+    "name": "Aaron Nesmith",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Strain",
+    "date": "2026-10-31",
+    "returns": "2026-11-01"
+   },
+   {
     "id": "4278355",
     "name": "Obi Toppin",
     "pos": "F",
@@ -311,15 +365,6 @@
     "detail": "Knee Surgery",
     "date": "2026-10-30",
     "returns": "2027-01-02"
-   },
-   {
-    "id": "4017837",
-    "name": "Ivica Zubac",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-29",
-    "returns": "2026-11-01"
    },
    {
     "id": "4433076",
@@ -441,10 +486,10 @@
     "id": "3032976",
     "name": "Rudy Gobert",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Back Spasms",
     "date": "2026-10-31",
-    "returns": "2026-10-31"
+    "returns": "2026-11-02"
    },
    {
     "id": "4594268",
@@ -466,6 +511,15 @@
    }
   ],
   "NOP": [
+   {
+    "id": "3907497",
+    "name": "Dejounte Murray",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Personal",
+    "date": "2026-10-31",
+    "returns": "2026-11-02"
+   },
    {
     "id": "5061589",
     "name": "Yves Missi",
@@ -601,15 +655,6 @@
   ],
   "PHI": [
    {
-    "id": "4432446",
-    "name": "Jabari Walker",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Soreness",
-    "date": "2026-10-31",
-    "returns": "2026-10-31"
-   },
-   {
     "id": "1966",
     "name": "LeBron James",
     "pos": "F",
@@ -619,15 +664,6 @@
     "returns": "2026-11-02"
    },
    {
-    "id": "3904625",
-    "name": "Tacko Fall",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Quadriceps Strain",
-    "date": "2026-10-31",
-    "returns": "2026-10-31"
-   },
-   {
     "id": "3059318",
     "name": "Joel Embiid",
     "pos": "C",
@@ -635,15 +671,6 @@
     "detail": "Foot",
     "date": "2026-10-31",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "3917376",
-    "name": "Jaylen Brown",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-10-31",
-    "returns": "2026-10-31"
    },
    {
     "id": "4870562",

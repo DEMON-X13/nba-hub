@@ -2788,7 +2788,7 @@
     "name": "Joel Embiid",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3904625",
@@ -2809,7 +2809,7 @@
     "name": "LeBron James",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433144",

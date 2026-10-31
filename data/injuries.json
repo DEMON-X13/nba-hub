@@ -49,7 +49,7 @@
     "status": "Out",
     "detail": "Shoulder Sprain",
     "date": "2026-10-25",
-    "returns": "2026-11-01"
+    "returns": "2026-11-06"
    }
   ],
   "CHA": [
@@ -582,6 +582,24 @@
    }
   ],
   "PHI": [
+   {
+    "id": "3059318",
+    "name": "Joel Embiid",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-31",
+    "returns": "2026-10-31"
+   },
+   {
+    "id": "1966",
+    "name": "LeBron James",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-10-31",
+    "returns": "2026-10-31"
+   },
    {
     "id": "3917376",
     "name": "Jaylen Brown",

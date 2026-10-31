@@ -160,6 +160,14 @@ input[type=text],input[type=number],select{background:var(--panel);border:1px so
 input[type=number]{width:92px;text-align:right}
 .wrap{overflow-x:auto;border-radius:14px}
 .two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+/* the Record tab, the NHL hub's layout: a short note, five tiles, two tables, how it was fitted */
+#tab-record .rec-note{font-size:13px;line-height:1.55;max-width:860px;margin:0 0 14px}
+#tab-record .rec-tbl th{cursor:default}
+#tab-record .two>div{min-width:0}   /* a column may shrink below its table, which then scrolls in its own box */
+#tab-record .rec-tbl td{white-space:nowrap}   /* a record never breaks across lines: on a phone the table scrolls in its box instead */
+#tab-record .stat b.rose{color:#FF8FA9}   /* a losing record in the NHL hub's lighter rose: 5:1 on the tile */
+#tab-record .t-narrow{display:none}
+@media(max-width:520px){#tab-record .t-wide{display:none}#tab-record .t-narrow{display:inline}#tab-record .rec-tbl th,#tab-record .rec-tbl td{padding:9px 6px}#tab-record .rec-tbl th{letter-spacing:.04em}}
 @media(max-width:820px){.two{grid-template-columns:1fr}}
 
 /* ---------- parlay ---------- */
@@ -2525,43 +2533,50 @@ function vsMarketPooled() {
   return { tiers, twoFav, against, from: v.seasons[0].season, to: v.seasons[v.seasons.length - 1].season };
 }
 const signedU = u => `${u >= 0 ? '+' : '−'}${Math.abs(u).toFixed(1)}u`;
-function rec(list, k) { let w = 0, l = 0, p = 0; for (const g of list) { if (g[k] === true) w++; else if (g[k] === false) l++; else if (g[k] === null && g[k] !== undefined) p++; } return { w, l, p, s: w + l ? `${w}-${l}${p ? '-' + p : ''}` : '—', pct: w + l ? w / (w + l) : null }; }
-/* the Parlay Builder's suggestions and the model against the closing line, season by season, from the walk-forward
-   backtest (each season called by parameters that never saw it, lineups known). Units are per $1 a parlay */
-function marketTable() {
-  const v = S.vsMarket, P = vsMarketPooled(); if (!P) return '';
-  const T = [['safe', 'Safe'], ['med', 'Medium'], ['aggr', 'Aggressive'], ['value', 'Value']];
-  const cell = t => t && t.parlays ? `${t.won}/${t.parlays} <span class="muted">(${Math.round(t.exp)})</span> <span class="${t.units >= 0 ? 'lime' : 'rose'}">${signedU(t.units)}</span>` : '<span class="muted">–</span>';
-  const row = (label, get, pooled, note) => `<tr><td>${label}${note ? ` <span class="muted">${note}</span>` : ''}</td>${v.seasons.map(x => `<td class="num">${cell(get(x))}</td>`).join('')}<td class="num"><b>${cell(pooled)}</b></td></tr>`;
-  return `<h2 style="margin-top:22px">The earlier rules' backtest <small>the Parlay Builder's suggestions as they were until 25 October 2026, against the market, ${seasonName(P.from)} to ${seasonName(P.to)}, every season called by a model that never saw it, against the closing moneylines</small></h2>
-    <p class="muted" style="margin:0 0 10px;font-size:13px">Until 25 October 2026 the Parlay Builder suggested Safe, Medium and Aggressive parlays of team moneylines grown from one core, likeliest first, and a Value card; it is now the NFL hub's builder, and this table keeps the backtest of the rules it had (tools/backtest.js runs a frozen copy of them). Each cell: parlays won of those suggested, (how many the market expected, its margin taken out), and the profit on $1 a parlay at the book's prices. Every tier won about what the market expected, a few more, and lost a little to the book's cut; the same rule with no model in it, the day's two biggest favourites, did the same. None of the totals is more than luck would give either way.</p>
-    <div class="wrap"><table class="tbl"><thead><tr><th>Earlier rule</th>${v.seasons.map(x => `<th class="num">${seasonName(x.season)}</th>`).join('')}<th class="num">All</th></tr></thead><tbody>
-      ${T.map(([k, l]) => row(l, x => x.tiers[k], P.tiers[k])).join('')}
-      ${row('Two biggest favourites', x => x.twoFav, P.twoFav, 'no model: the baseline')}
-      <tr><td>Model's picks against the market <span class="muted">straight, at the book's price</span></td>${v.seasons.map(x => `<td class="num">${x.against.won}/${x.against.n} <span class="${x.against.units >= 0 ? 'lime' : 'rose'}">${signedU(x.against.units)}</span></td>`).join('')}<td class="num"><b>${P.against.won}/${P.against.n} <span class="${P.against.units >= 0 ? 'lime' : 'rose'}">${signedU(P.against.units)}</span></b></td></tr>
-      <tr><td>Win chance, log loss <span class="muted">model · market, lower is better</span></td>${v.seasons.map(x => `<td class="num">${x.logloss.model.toFixed(3)} · ${x.logloss.market.toFixed(3)}</td>`).join('')}<td></td></tr>
-    </tbody></table></div>`;
+/* ---------- the Record tab, laid out as the NHL hub's (the owner's call of 31 October 2026: "simple and cleaner") ----------
+   The Player Model's record: every game it called straight up, and every side it took on the moneyline, the spread or
+   the total where its chance beat the book's implied by 5 points (S.recordRule, the picks worked out by publish.js on
+   the numbers published before tip-off, README "The site"), by month and by the model's confidence, and how it was
+   fitted. The earlier suggestion rules' backtest (tools/backtest.js, research/backtest.json) and the props model's
+   shadow ledger (its numbers are in each game's props sheet) are no longer drawn here. */
+const recFresh = () => ({ su: { w: 0, l: 0 }, ml: { w: 0, l: 0, p: 0 }, sp: { w: 0, l: 0, p: 0 }, ou: { w: 0, l: 0, p: 0 } });
+/* the model's confidence on its straight-up call, as the NHL hub bands it */
+const recBand = p => { const c = Math.max(p, 1 - p); return c >= 0.7 ? '70+' : c >= 0.6 ? '60-70' : '50-60'; };
+function recTally(R) {
+  const all = recFresh(), byMonth = {}, bands = {};
+  for (const g of R) {
+    const bump = t => { if (g.su === true) t.su.w++; else if (g.su === false) t.su.l++;
+      for (const k of ['ml', 'sp', 'ou']) { const x = g.pk && g.pk[k]; if (!x) continue; if (x.res === 'win') t[k].w++; else if (x.res === 'loss') t[k].l++; else t[k].p++; } };
+    const mo = g.type === 'POST' ? 'playoffs' : g.date.slice(0, 7);
+    bump(all); bump(byMonth[mo] = byMonth[mo] || recFresh()); bump(bands[recBand(g.pHome)] = bands[recBand(g.pHome)] || recFresh());
+  }
+  return { all, byMonth, bands };
 }
 render.record = function () {
-  const R = S.record, su = rec(R, 'su'), ats = rec(R.filter(g => g.line !== null), 'ats'), ou = rec(R.filter(g => g.totalLine !== null), 'ou');
-  const bt = S.backtest;
-  const months = {}; for (const g of R) { const m = g.date.slice(0, 7); (months[m] = months[m] || []).push(g); }
-  const mrows = Object.entries(months).sort((a, b) => b[0] < a[0] ? -1 : 1).map(([m, gs]) => ({ m, n: gs.length, su: rec(gs, 'su').s, ats: rec(gs.filter(g => g.line !== null), 'ats').s, ou: rec(gs.filter(g => g.totalLine !== null), 'ou').s }));
-  const f = x => x ? `${x.logloss.toFixed(3)} · ${(x.acc * 100).toFixed(1)}% · ${x.mae.toFixed(1)} pts` : '—';
-  $('#tab-record').innerHTML = `<h2>Record <small>every number this site published before tip-off, graded</small></h2>
-    <div class="strip"><div class="stat"><b>${su.s}</b><span>Straight up${su.pct !== null ? ' · ' + fmtPct(su.pct) : ''}</span></div><div class="stat"><b>${ats.s}</b><span>Against the spread${ats.pct !== null ? ' · ' + fmtPct(ats.pct) : ''}</span></div><div class="stat"><b>${ou.s}</b><span>Totals${ou.pct !== null ? ' · ' + fmtPct(ou.pct) : ''}</span></div><div class="stat"><b>${R.length}</b><span>Games graded</span></div></div>
-    ${R.length ? `<div class="two"><div><h2>By month</h2><div class="wrap"><table class="tbl"><thead><tr><th>Month</th><th class="num">Games</th><th class="num">SU</th><th class="num">ATS</th><th class="num">O/U</th></tr></thead><tbody>${mrows.map(r => `<tr><td>${r.m}</td><td class="num">${r.n}</td><td class="num">${r.su}</td><td class="num">${r.ats}</td><td class="num">${r.ou}</td></tr>`).join('')}</tbody></table></div></div>
-      <div><h2>Latest</h2><div class="wrap"><table class="tbl"><thead><tr><th>Date</th><th>Game</th><th>Pick</th><th class="num">Said</th><th>Result</th></tr></thead><tbody>${[...R].sort((a, b) => b.date < a.date ? -1 : 1).slice(0, 40).map(g => `<tr><td class="muted">${dayNum(g.date)}</td><td>${pill(g.away)} <span class="muted">@</span> ${pill(g.home)} <span class="muted num">${g.awayScore}-${g.homeScore}</span></td><td>${pill(g.pick)} <span class="muted">${fmtSp(g.pick === g.home ? g.spread : -g.spread)}</span></td><td class="num">${fmtPct(g.pick === g.home ? g.pHome : 1 - g.pHome)}</td><td><span class="res ${g.su === null ? 'push' : g.su ? 'won' : 'lost'}">${g.su === null ? 'tie' : g.su ? 'hit' : 'miss'}</span>${g.ats !== null ? ` <span class="res ${g.ats ? 'won' : 'lost'}">ATS</span>` : ''}</td></tr>`).join('')}</tbody></table></div></div></div>` : `<div class="empty"><b>Nothing graded yet</b>The record starts on opening night. Every morning the job publishes a number on each game; once the game is final it is graded here against that number, never against a replay.</div>`}
-    ${marketTable()}
-    ${S.props && S.props.ledger ? `<h2 style="margin-top:22px" id="ppRecord">Player props, on trial <small>the props model's shadow ledger, graded on DraftKings' closing lines</small></h2>
-    <p class="muted" style="margin:0;font-size:13px;max-width:900px">Before each tip-off the props model's distribution for every expected player is frozen; once the game is final, each of DraftKings' closing main lines on him is graded from the box score, the model's chance of the Over against DraftKings' own fair chance. The bar it must clear was written down before its first call. ${ppLedger()}</p>` : ''}
-    <h2 style="margin-top:22px">Backtest <small>held out: ${fmtSeasons(bt.holdoutSeasons)}, fitted on ${fmtSeasons(bt.fitSeasons)} · log loss · straight up · spread error</small></h2>
-    <div class="wrap"><table class="tbl"><thead><tr><th>Model</th><th>Holdout</th></tr></thead><tbody>
-      <tr><td>Team Elo</td><td class="num">${f(bt.player.teamElo.holdout)}</td></tr>
-      <tr><td>Player model, previous game's lineup (no injury report)</td><td class="num">${f(bt.player.naive.holdout)}</td></tr>
-      <tr><td><b>Player model, lineup known, minutes projected</b> <span class="muted">a perfect injury report; what runs here is between this and no report</span></td><td class="num"><b>${f(bt.player.known.holdout)}</b></td></tr>
-      <tr><td>Player model, actual minutes</td><td class="num">${f(bt.player.actual.holdout)}</td></tr></tbody></table></div>`;
+  const R = S.record || [], U = S.recordRule, bt = S.backtest, T = recTally(R);
+  const wl = r => `${r.w}-${r.l}${r.p ? '-' + r.p : ''}`, rate = r => r.w + r.l ? (100 * r.w / (r.w + r.l)).toFixed(1) + '%' : '—';
+  const cls = r => r.w > r.l ? 'lime' : r.w < r.l ? 'rose' : '';
+  const stat = (k, v, c) => `<div class="stat"><b${c ? ` class="${c}"` : ''}>${v}</b><span>${k}</span></div>`;
+  const picks = (k, label) => U ? stat(label, wl(T.all[k]), cls(T.all[k])) : stat(label, '—');
+  const mName = (m, long) => m === 'playoffs' ? 'Playoffs' : new Date(m + '-15T12:00:00Z').toLocaleDateString('en-US', { month: long ? 'long' : 'short', year: 'numeric', timeZone: 'UTC' });
+  /* on a phone the long headings are written short, as the NHL hub writes its puck line PL, so every column fits */
+  const hw = (wide, narrow) => `<span class="t-wide">${wide}</span><span class="t-narrow">${narrow}</span>`;
+  const head = first => `<thead><tr><th>${first}</th><th class="num">SU</th><th class="num">Rate</th><th class="num">ML</th><th class="num">${hw('Spread', 'ATS')}</th><th class="num">${hw('Totals', 'O/U')}</th></tr></thead>`;
+  const cells = r => `<td class="num big">${r.su.w}-${r.su.l}</td><td class="num">${rate(r.su)}</td><td class="num">${U ? wl(r.ml) : '—'}</td><td class="num">${U ? wl(r.sp) : '—'}</td><td class="num">${U ? wl(r.ou) : '—'}</td>`;
+  const months = Object.keys(T.byMonth).sort((a, b) => (a === 'playoffs') - (b === 'playoffs') || a.localeCompare(b));
+  const note = `Every game the model called, straight up; and every side it took on the moneyline, the spread or the total, where its chance beat DraftKings' implied by ${U ? Math.round(U.edge * 100) : 5} points or more, each graded on the number published before tip-off.${U ? ` The spread and the total are taken at ${U.price} a side, since their closing prices are not kept; their chances are the model's margin and total about its own miss on the last finished season (${U.sigma} and ${U.sigmaTotal} points).` : ''}`;
+  const k = bt && bt.player && bt.player.known, fit = k && k.fit, ho = k && k.holdout, pct = v => (100 * v).toFixed(1) + '%';
+  const fitNote = fit && ho ? `Every player rated on offence and defence in Elo points, a team the sum of who plays weighted by his share of the minutes, plus its coach, with home court, rest, travel and pace; after each final the surprise in each side's efficiency moves the ratings of the players who were on the floor. Its constants were chosen by log loss on ${fmtSeasons(bt.fitSeasons)} (${fit.games.toLocaleString('en-US')} games, ${pct(fit.acc)} of winners called, each game's lineup known). Held out, ${fmtSeasons(bt.holdoutSeasons)}: ${pct(ho.acc)} of winners, the margin off by ${ho.mae.toFixed(1)} points on average${ho.totalMae ? `, the total by ${ho.totalMae.toFixed(1)}` : ''}.` : '';
+  $('#tab-record').innerHTML = `<h2>The model's record</h2>
+    <p class="muted rec-note" id="recordNote">${esc(note)}</p>
+    <div class="strip" id="recordTotals">${stat('Straight up', `${T.all.su.w}-${T.all.su.l}`)}${stat('SU rate', rate(T.all.su))}${picks('ml', 'Moneyline picks')}${picks('sp', 'Spread picks')}${picks('ou', 'Totals picks')}</div>
+    ${R.length ? `<div class="two">
+      <div><h2>By month</h2><div class="wrap"><table class="tbl rec-tbl" id="recMonth">${head('When')}<tbody>${months.map(m => `<tr><td>${m === 'playoffs' ? 'Playoffs' : `<span class="t-wide">${mName(m, true)}</span><span class="t-narrow">${mName(m, false)}</span>`}</td>${cells(T.byMonth[m])}</tr>`).join('')}</tbody></table></div></div>
+      <div><h2>By confidence</h2><div class="wrap"><table class="tbl rec-tbl" id="recBand">${head(hw('Model chance', 'Chance'))}<tbody>${['70+', '60-70', '50-60'].filter(b => T.bands[b]).map(b => `<tr><td>${b}%</td>${cells(T.bands[b])}</tr>`).join('')}</tbody></table></div></div>
+    </div>` : `<div class="empty"><b>Nothing graded yet</b>The record starts on opening night. Every morning the job publishes a number on each game; once the game is final it is graded here against that number, never against a replay.</div>`}
+    ${fitNote ? `<h2 style="margin-top:28px">How it was fitted</h2><p class="muted rec-note" id="fitNote">${esc(fitNote)}</p>` : ''}`;
 };
+window.NBA_RECORD = { tally: recTally, band: recBand };   // what the smoke test reads
 /* ---------- the Parlay Builder's pieces kept here ----------
    The Parlay Builder is app/parts/parlay.html (README "Parlay Builder"), the NFL hub's tab on the NBA's lines. Until 25
    October 2026 this tab was a day's plan (a confidence band, straight bets or a parlay of the model's picks, Lock in),

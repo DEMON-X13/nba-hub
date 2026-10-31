@@ -700,11 +700,13 @@ async function playerProps() {
   /* the shadow ledger, quietly, on made-up summaries: running numbers with no verdict before the bar; then a FAIL and a PASS */
   const lgOf = (summary, decision) => ({ ...st8, props: { ...props8, ledger: { ...props8.ledger, summary: { ...props8.ledger.summary, ...summary }, decision } } });
   const scores = { lines: 12345, model: { logloss: 0.69, brier: 0.249 }, market: { logloss: 0.68, brier: 0.244 } };
-  const ledgerText = async st => { ({ w, errors } = load('index.html', st)); await sleep(300); d = w.document; d.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
-    const rp = d.getElementById('ppRecord'); const t = rp ? rp.nextElementSibling.textContent : ''; cardBtn(p1).click(); await sleep(20); const tr = d.querySelector('[data-pp-trial]'); return [t, tr ? tr.textContent : '']; };
+  /* the ledger's numbers are in each game's props sheet (the Record tab, laid out as the NHL hub's since 31 October 2026,
+     no longer draws them) */
+  const ledgerText = async st => { ({ w, errors } = load('index.html', st)); await sleep(300); d = w.document;
+    cardBtn(p1).click(); await sleep(20); const tr = d.querySelector('[data-pp-trial]'), t = tr ? tr.textContent : ''; return [t, t]; };
   let [lt, tt] = await ledgerText(lgOf({ lines: 12345, gradedGames: 101, scores }, null));
   check(/12,345 of the 30,000 graded lines its bar is judged on are in, from 101 games; no verdict before 30,000\. So far on 12,345 lines, log loss model 0\.6900 · DraftKings 0\.6800, Brier model 0\.2490 · DraftKings 0\.2440/.test(lt) && tt.includes('12,345 of the 30,000'),
-    `before the bar, the Record tab and the sheet give the running numbers, model against DraftKings ("${lt.slice(-190)}")`);
+    `before the bar, the props sheet gives the running numbers, model against DraftKings ("${lt.slice(-190)}")`);
   check(!/PASS|FAIL|pass|fail/.test(lt + tt), 'and no verdict, nor a word of one');
   [lt] = await ledgerText(lgOf({ lines: 30000, gradedGames: 260, scores }, { verdict: 'FAIL', decidedAt: '2026-11-25T12:00Z', lines: 30000 }));
   check(/decided on Nov 25 at 30,000 lines: FAIL\. It stays on trial and suggests nothing/.test(lt), `a FAIL is said, and the model stays on trial ("${lt.slice(-140)}")`);
@@ -732,8 +734,7 @@ async function playerProps() {
     const calling = !(lg.decision && lg.decision.verdict === 'FAIL');       // once the bar has failed no call is made
     check(!Object.keys(RP.games || {}).length || !calling || (n > 0 && !diff.length), `the page's own means, combos included, are the shadow ledger's open calls to the digit (${n} players${calling ? '' : '; the bar failed, so no call is open'})${diff.length ? ': ' + diff.slice(0, 3).join('; ') : ''}`); }
   d.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
-  const recP = d.getElementById('ppRecord');
-  check(recP && /on trial/.test(recP.textContent) && /graded lines its bar is judged on are in|Its bar was decided/.test(recP.nextElementSibling.textContent) && !/passing/i.test(recP.nextElementSibling.textContent), "the Record tab gives the shadow ledger's running numbers quietly, with no verdict before its bar is decided");
+  check(!d.getElementById('ppRecord') && !/shadow ledger|on trial/i.test(d.getElementById('tab-record').textContent), "the Record tab, the NHL hub's layout, carries no props ledger: its numbers are in the props sheet");
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 }
 
@@ -1632,6 +1633,95 @@ async function linesFeed() {
   check(['', 'NBC', 'NBA TV', 'Peacock|NBC', 'ESPN|ABC|ESPN2'].every(v => tvSeen.has(v)), `and the cases meet every kind of listing: ${[...tvSeen].slice(0, 12).map(v => JSON.stringify(v)).join(', ')}`);
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 }
+/* ---------- the Record tab, laid out as the NHL hub's (README "The site") ----------
+   Worked out here on its own from the state's record: each game's picks from the numbers published before tip-off and
+   the lines (this file's own normal cdf, a Taylor series of erf, not the page's or publish.js's; the rule's edge, -110 on
+   a spread or a total), then the tiles, the months and the bands, against what the tab draws */
+const recErf = x => { if (x > 4.5) return 1; if (x < -4.5) return -1; let sum = 0, term = x; for (let n = 0; n < 120; n++) { sum += term / (2 * n + 1); term *= -x * x / (n + 1); } return 2 / Math.sqrt(Math.PI) * sum; };
+const recPhi = z => 0.5 * (1 + recErf(z / Math.SQRT2));
+const recImp = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100);
+function recOwnPicks(g, U) {
+  const mov = g.homeScore - g.awayScore, tot = g.homeScore + g.awayScore, out = {}, near = [];
+  const take = sides => { for (const [side, p, price] of sides) { const e = p - recImp(price); if (Math.abs(e - U.edge) < 1e-6) near.push(side); if (e >= U.edge) return { side, p }; } return null; };
+  if (g.ml && g.ml[0] && g.ml[1]) { const k = take([['home', g.pHome, g.ml[1]], ['away', 1 - g.pHome, g.ml[0]]]); if (k) out.ml = { side: k.side, res: mov === 0 ? 'push' : (mov > 0) === (k.side === 'home') ? 'win' : 'loss' }; }
+  if (g.line !== null) { const pc = recPhi((-g.spread + g.line) / U.sigma), k = take([['home', pc, U.price], ['away', 1 - pc, U.price]]), c = mov + g.line; if (k) out.sp = { side: k.side, res: c === 0 ? 'push' : (c > 0) === (k.side === 'home') ? 'win' : 'loss' }; }
+  if (g.totalLine !== null) { const po = recPhi((g.total - g.totalLine) / U.sigmaTotal), k = take([['over', po, U.price], ['under', 1 - po, U.price]]); if (k) out.ou = { side: k.side, res: tot === g.totalLine ? 'push' : (tot > g.totalLine) === (k.side === 'over') ? 'win' : 'loss' }; }
+  return { out, near: near.length > 0 };
+}
+function recOwnTally(R) {
+  const f = () => ({ su: [0, 0], ml: [0, 0, 0], sp: [0, 0, 0], ou: [0, 0, 0] }), all = f(), months = {}, bands = {};
+  const bandOf = p => { const c = Math.max(p, 1 - p); return c >= 0.7 ? '70+' : c >= 0.6 ? '60-70' : '50-60'; };
+  for (const g of R) { const add = t => { if (g.su === true) t.su[0]++; if (g.su === false) t.su[1]++; for (const k of ['ml', 'sp', 'ou']) { const x = g.pk && g.pk[k]; if (x) t[k][x.res === 'win' ? 0 : x.res === 'loss' ? 1 : 2]++; } };
+    add(all); add(months[g.type === 'POST' ? 'playoffs' : g.date.slice(0, 7)] = months[g.type === 'POST' ? 'playoffs' : g.date.slice(0, 7)] || f()); add(bands[bandOf(g.pHome)] = bands[bandOf(g.pHome)] || f()); }
+  return { all, months, bands };
+}
+const recWl = t => `${t[0]}-${t[1]}${t[2] ? '-' + t[2] : ''}`, recRate = t => t[0] + t[1] ? (100 * t[0] / (t[0] + t[1])).toFixed(1) + '%' : '—';
+async function recordChecks(d, st, what) {
+  d.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
+  const tab = d.getElementById('tab-record'), R = st.record || [], U = st.recordRule;
+  check(tab.querySelector('h2') && tab.querySelector('h2').textContent === "The model's record" && !d.getElementById('ppRecord') && ![...tab.querySelectorAll('h2')].some(h => /earlier rules|Latest|Backtest/.test(h.textContent)),
+    `${what}: the Record tab is the NHL hub's: "The model's record", no props ledger, no earlier rules' table, no latest games, no backtest table`);
+  if (U) { let bad = 0, n = 0; const why = [];
+    for (const g of R) { const o = recOwnPicks(g, U); if (o.near) continue; n++;
+      for (const k of ['ml', 'sp', 'ou']) { const a = o.out[k], b = g.pk && g.pk[k]; if (JSON.stringify(a ? [a.side, a.res] : null) !== JSON.stringify(b ? [b.side, b.res] : null)) { bad++; why.push(`${g.id} ${k}: own ${a ? a.side + ' ' + a.res : 'none'}, published ${b ? b.side + ' ' + b.res : 'none'}`); } } }
+    check(!bad, `${what}: every game's picks are the rule's, worked out here from its published numbers and lines (${n} games; ${U.edge * 100}-point edge, sigmas ${U.sigma} and ${U.sigmaTotal})${why.length ? ': ' + why.slice(0, 3).join('; ') : ''}`); }
+  const T = recOwnTally(R), tiles = [...tab.querySelectorAll('#recordTotals .stat')].map(x => [x.querySelector('b').textContent, x.querySelector('span').textContent, x.querySelector('b').className]);
+  const cl = t => t[0] > t[1] ? 'lime' : t[0] < t[1] ? 'rose' : '';
+  const want = [[recWl(T.all.su), 'Straight up', ''], [recRate(T.all.su), 'SU rate', '']].concat(U ? [[recWl(T.all.ml), 'Moneyline picks', cl(T.all.ml)], [recWl(T.all.sp), 'Spread picks', cl(T.all.sp)], [recWl(T.all.ou), 'Totals picks', cl(T.all.ou)]]
+    : [['—', 'Moneyline picks', ''], ['—', 'Spread picks', ''], ['—', 'Totals picks', '']]);
+  check(JSON.stringify(tiles) === JSON.stringify(want), `${what}: the five tiles, worked out here (${tiles.map(t => t[0] + ' ' + t[1]).join(' | ')})`);
+  if (R.length) {
+    const rowsOf = id => [...tab.querySelectorAll(`#${id} tbody tr`)].map(tr => [...tr.children].map((c, i) => i === 0 ? ((c.querySelector('.t-wide') || c).textContent) : c.textContent));
+    const mName = m => m === 'playoffs' ? 'Playoffs' : new Date(m + '-15T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+    const cells = t => [recWl(t.su), recRate(t.su), U ? recWl(t.ml) : '—', U ? recWl(t.sp) : '—', U ? recWl(t.ou) : '—'];
+    const mw = Object.keys(T.months).sort((a, b) => (a === 'playoffs') - (b === 'playoffs') || (a < b ? -1 : 1)).map(m => [mName(m)].concat(cells(T.months[m])));
+    const bw = ['70+', '60-70', '50-60'].filter(b => T.bands[b]).map(b => [b + '%'].concat(cells(T.bands[b])));
+    check(JSON.stringify(rowsOf('recMonth')) === JSON.stringify(mw), `${what}: By month, a row a month in order, the playoffs last: ${JSON.stringify(rowsOf('recMonth')).slice(0, 160)}`);
+    check(JSON.stringify(rowsOf('recBand')) === JSON.stringify(bw), `${what}: By confidence, 70+, 60-70 and 50-60 on the model's straight-up chance: ${JSON.stringify(rowsOf('recBand')).slice(0, 160)}`);
+    const th = n => [...tab.querySelectorAll('#recMonth thead th, #recBand thead th')].map(t => t.querySelector(n) ? t.querySelector(n).textContent : t.textContent).join('|');
+    check(th('.t-wide') === 'When|SU|Rate|ML|Spread|Totals|Model chance|SU|Rate|ML|Spread|Totals' && th('.t-narrow') === 'When|SU|Rate|ML|ATS|O/U|Chance|SU|Rate|ML|ATS|O/U',
+      `${what}: both tables headed When (Model chance), SU, Rate, ML, Spread, Totals, written short on a phone (Chance, ATS, O/U)`);
+  }
+  const note = (d.getElementById('recordNote') || {}).textContent || '';
+  check(/^Every game the model called, straight up; and every side it took on the moneyline, the spread or the total, where its chance beat DraftKings' implied by 5 points or more, each graded on the number published before tip-off\./.test(note)
+    && (!U || note.includes(`at ${U.price} a side`) && note.includes(`(${U.sigma} and ${U.sigmaTotal} points)`)), `${what}: the note says the rule (${note.slice(0, 80)}…)`);
+  const k = st.backtest && st.backtest.player && st.backtest.player.known, fit = (d.getElementById('fitNote') || {}).textContent || '';
+  check(!k || (fit.includes(`${(100 * k.fit.acc).toFixed(1)}% of winners called`) && fit.includes(`${(100 * k.holdout.acc).toFixed(1)}% of winners, the margin off by ${k.holdout.mae.toFixed(1)} points`) && fit.includes(k.fit.games.toLocaleString('en-US') + ' games')),
+    `${what}: How it was fitted gives the fit and the holdout as published (${fit.slice(-120)})`);
+}
+/* a made-up season the tab is held to at any hour: picks, pushes, two months and the playoffs, every band */
+async function recordMadeUp(real) {
+  const U = { edge: 0.05, price: -110, sigma: 14.5, sigmaTotal: 19.1 };
+  const G = (id, date, type, as, hs, pHome, spread, total, line, tl, ml) => { const [, , away, home] = id.split('_'); const g = { id, date, type, away, home, awayScore: as, homeScore: hs, pHome, spread, total, line, totalLine: tl, ml, pick: pHome >= 0.5 ? home : away };
+    g.su = hs === as ? null : (pHome >= 0.5) === (hs > as); g.pk = recOwnPicks(g, U).out; return g; };
+  const record = [
+    G('2027_20261021_BOS_NYK', '2026-10-21', 'REG', 100, 110, 0.74, -9, 220, -2.5, 210.5, [180, -220]),      // NYK by 10: SU hit, a cover on NYK, the over
+    G('2027_20261023_LAL_GSW', '2026-10-23', 'REG', 115, 101, 0.35, 4, 225, 6.5, 230.5, [-260, 210]),       // LAL by 14
+    G('2027_20261028_MIA_ORL', '2026-10-28', 'REG', 99, 103, 0.62, -12, 205, -4, 214, [150, -170]),         // ORL by 4: the model on ORL -4, a push
+    G('2027_20261102_DEN_PHX', '2026-11-02', 'REG', 120, 112, 0.55, -1, 236, 2.5, 228.5, [-130, 110]),      // DEN by 8
+    G('2027_20261104_CHI_MIL', '2026-11-04', 'REG', 98, 120, 0.66, -5, 240, -7.5, 218, [230, -280]),        // MIL by 22, the model's over landing on the number
+    G('2027_20270420_OKC_DAL', '2027-04-20', 'POST', 108, 104, 0.52, -0.5, 211, 1.5, 219.5, [-125, 105]),   // OKC by 4, a playoff game
+  ];
+  const st = { ...JSON.parse(JSON.stringify(real)), record, recordRule: U };
+  check(record.every(g => g.pk) && Object.values(record).some(g => g.pk.sp && g.pk.sp.res === 'push') && record.some(g => g.pk.ml) && record.some(g => g.pk.ou) && record.some(g => g.pk.ou && g.pk.ou.res === 'push'),
+    'the made-up season has moneyline, spread and total picks, a spread pushed and a total on the number');
+  let { w, errors } = load('index.html', st); await sleep(300);
+  await recordChecks(w.document, st, 'a made-up season');
+  const months = [...w.document.querySelectorAll('#recMonth tbody tr td:first-child')].map(c => c.querySelector('.t-narrow') ? c.querySelector('.t-narrow').textContent : c.textContent);
+  check(JSON.stringify(months) === '["Oct 2026","Nov 2026","Playoffs"]', `the months, short for a phone: ${months.join(', ')}`);
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  /* a state from before the picks (no recordRule): the straight-up record alone, the picks' tiles a dash, nothing thrown */
+  const old = { ...st, recordRule: undefined, record: record.map(g => { const x = { ...g }; delete x.pk; return x; }) };
+  ({ w, errors } = load('index.html', old)); await sleep(300);
+  await recordChecks(w.document, old, 'a state from before the picks');
+  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+  /* no game graded yet: the tiles at nothing and the empty line, no tables */
+  const none = { ...st, record: [] };
+  ({ w, errors } = load('index.html', none)); await sleep(300);
+  w.document.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
+  check(/Nothing graded yet/.test(w.document.getElementById('tab-record').textContent) && !w.document.getElementById('recMonth') && w.document.querySelector('#recordTotals .stat b').textContent === '0-0' && errors.length === 0, 'with nothing graded: the tiles at 0-0 and the empty line, no tables');
+}
+
 (async () => {
   let w, errors;
   if (run('base')) {
@@ -1704,16 +1794,7 @@ async function linesFeed() {
     check(d0.getElementById('tierDefs') && d0.getElementById('tierDefs').closest('section') === null && d0.querySelector('#tierDefs #tg-gold') && [...d0.querySelectorAll('.tier-hof')].every(b => { const f = b.querySelector('path[fill^="url"]'), id = f && f.getAttribute('fill').slice(5, -1); return id && b.querySelector('#' + id + ' animateTransform'); }), "the shields' gradients are in the page once, outside every hidden tab, and each HOF gem carries its own turning gradient");
     d0.querySelector('#nav button[data-tab=teams]').click(); await sleep(30);
     check(d0.querySelectorAll('#tab-teams .tbl tbody tr .elocell .tierbadge').length === 30, "every team's strength wears its shield");
-    if (real.vsMarket && real.vsMarket.seasons.length) {
-      d0.querySelector('#nav button[data-tab=record]').click(); await sleep(30);
-      const rt = d0.getElementById('tab-record');
-      const tbl = [...rt.querySelectorAll('h2')].find(h => /The earlier rules' backtest/.test(h.textContent) && /until 25 October 2026/.test(h.textContent));
-      const rowsT = tbl ? [...tbl.nextElementSibling.nextElementSibling.querySelectorAll('tbody tr')] : [];
-      const safe = rowsT.find(r => /^Safe/.test(r.textContent.trim()));
-      const sum = k => real.vsMarket.seasons.reduce((a, x) => a + (x.tiers.safe ? x.tiers.safe[k] : 0), 0);
-      check(tbl && rowsT.length === 7 && /Earlier rule/.test(tbl.nextElementSibling.nextElementSibling.querySelector('th').textContent), "the Record tab shows the earlier suggestion rules' backtest against the market, labelled as the earlier rules: four tiers, the baseline, the picks against the market and log loss");
-      check(safe && safe.lastElementChild.textContent.includes(`${sum('won')}/${sum('parlays')}`) && safe.lastElementChild.textContent.includes(`(${Math.round(sum('exp'))})`), "Safe's pooled cell is the seasons' sum, with the market's expectation");
-    }
+    await recordChecks(d0, real, 'the real state');
     if (real.slate.length) for (const b of [...d0.querySelectorAll('#days .day')]) { b.click(); await sleep(15); }
     check(errors.length === 0, 'every day of the real slate draws without a script error: ' + errors.join(' | '));
   }
@@ -1875,6 +1956,8 @@ async function linesFeed() {
   await guard('10', ratingHistory);
   await guard('12', pickemRecord);
   await guard('lines', linesFeed);
+  /* the Record tab, the NHL hub's layout, on a made-up season at any hour */
+  await guard('record', async () => { console.log('record. the Record tab, laid out as the NHL hub\'s'); await recordMadeUp(JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'))); });
   /* X Parlays (README "X Parlays"): its own file, tools/smoke_xparlays.js, on this harness's checks */
   await guard('xparlays', () => require('./smoke_xparlays')({ check, pageFile, ROOT }));
   /* the Parlay Builder (README "Parlay Builder"): its own file, tools/smoke_parlay.js, on this harness's checks */

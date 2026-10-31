@@ -51,13 +51,13 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `app/parts/suggested.html` | The Suggested Parlays tab (README "Suggested Parlays"): each game on national TV's four parlays, one night at a time, locked 2 hours before tip-off, the record's pills and the Elo picks, on the Parlay Builder's engine, set in at its `<!--part:suggested-->` marker |
 | `tools/suggest_ledger.js`, `tools/suggest_check.js`, `data/suggest_ledger.json` | The suggestions record (README "Suggested Parlays"): each featured game's set as the job last published it before its lock, taken from the built page in jsdom, graded after the game by the page's own settlement, one entry a line; and its guard, which holds it to the last commit |
 | `tools/test_suggest_ledger.js` | The record on made-up days: taken, rewritten, locked, a ruled-out level replaced, graded against settlements worked out from raw scores and box lines, and the guard on hand-made ledgers; it runs first in the record's step |
-| `tools/sigma.js`, `research/sigma.json` | The spread of the real margin about the player model's own number, which the Parlay Builder prices a cover from (14.5 points, the 2026 walk-forward fold), and what the Value rule's team picks were worth on each fold; run by hand |
+| `tools/sigma.js`, `research/sigma.json` | The spread of the real margin about the player model's own number, which the Parlay Builder prices a cover from (14.5 points, the 2026 walk-forward fold), the total's about the model's total (`sigmaTotal`, 19.1 points), which the Record tab's totals picks stand on, what the Value rule's team picks were worth on each fold and what the Record tab's rule would have been (`record`); run by hand |
 | `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays"), the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder"), the parlay card (`tools/smoke_card.js`, `SMOKE_ONLY=card`, README "The parlay card") the matchup bubble (`tools/smoke_glance.js`, `SMOKE_ONLY=glance`, README "The matchup bubble") and Suggested Parlays (`tools/smoke_suggested.js`, `SMOKE_ONLY=sp`, README "Suggested Parlays") |
 | `liveparlays/parlays.json` | X's placed parlays, kept by hand from the slips the owner sends (README "X Parlays"); the page reads it when its X Parlays tab opens, and the job's `tools/autoclear.js` marks a finished one cleared two Eastern days after its last game |
 | `app/parts/xparlays.html` | The X Parlays tab: its markup, its styles (all under `#lpCard`) and its script in a closure of its own, set into the page by `build.js` at its `<!--part:xparlays-->` marker |
 | `tools/autoclear.js`, `tools/test_autoclear.js` | X's finished parlays clear themselves (README "X Parlays"); the test runs first in the job's step |
 | `tools/corr.js`, `data/corr.json`, `research/corr.json` | The same-game correlation table (README "Same-game parlays"): measured on the finished seasons' box scores, written by the script only; the report beside it |
-| `tools/backtest.js`, `research/backtest.json`, `research/backtest_games.csv` | The walk-forward of the model's picks and the earlier Parlay Builder's suggested parlays (its rules kept in the file as a frozen copy since 25 October 2026) against the closing line, run by hand; `publish.js` reads its summary into state.json's `vsMarket` for the Record tab |
+| `tools/backtest.js`, `research/backtest.json`, `research/backtest_games.csv` | The walk-forward of the model's picks and the earlier Parlay Builder's suggested parlays (its rules kept in the file as a frozen copy since 25 October 2026) against the closing line, run by hand; `publish.js` reads its summary into state.json's `vsMarket` (no longer drawn on the Record tab since 31 October 2026) |
 | `tools/fetch_odds_hist.js`, `data/odds_hist.csv` | The closing lines on the 2023-2026 finals from ESPN's game summaries: a finished backfill, run by hand from a machine that reaches ESPN only to add a season (the daily job keeps each game's closing moneylines in `games.csv` from now on); its `check()` is shared with `backtest.js` and `corr.js` |
 | `tools/test_corr.js` | The bivariate normal, the fit, the lookup's sign rules, and the committed table held to its rules |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
@@ -192,7 +192,7 @@ The live parameters with travel beat the live parameters without it both ways (l
 no report 0.6007 against 0.6015). That choice looked at 2025-26, so 2025-26 is no longer untouched for it.
 
 The holdout, 2025-26 and the season in play so far (1,350 games to 23 October 2026, `players.json` `report`, which
-the Record tab's backtest table shows), four ways:
+the Record tab's backtest table showed until 31 October 2026; its How it was fitted line gives the lineup-known row), four ways:
 
 | | Log loss | Straight up | Spread error |
 |---|---|---|---|
@@ -1090,9 +1090,9 @@ DraftKings has no line on are listed under, folded.
 **On trial, everywhere it shows.** The sheet's head says Model on trial, and its note says the model has not been shown
 to beat DraftKings and its chances are marked on trial wherever they show (the Parlay Builder's Top 50 lines take its
 lines since 25 October 2026), with the walk-forward and the market test in brief and the shadow ledger's running
-numbers. The Record tab gives the ledger quietly: how many of the 30,000 graded lines are in, and the model
-against DraftKings on log loss and Brier, never a verdict or a word of one before the bar is decided (a PASS, when it
-comes, is said to move nothing by itself). Nothing in the view says "model says" or "edge". From the view a prop goes only into the
+numbers: how many of the 30,000 graded lines are in, and the model against DraftKings on log loss and Brier, never a
+verdict or a word of one before the bar is decided (a PASS, when it comes, is said to move nothing by itself). The
+Record tab drew the same until 31 October 2026, when it took the NHL hub's layout. Nothing in the view says "model says" or "edge". From the view a prop goes only into the
 visitor's own parlay, by their tap on DraftKings' price (README "Same-game parlays"); the Parlay Builder's Top 50 lines
 reach the same lines on their own rules, marked on trial (README "Parlay Builder").
 
@@ -1805,9 +1805,9 @@ Until 25 October 2026 the tab was a day's plan (a confidence band, straight bets
 in), Safe, Medium and Aggressive parlays of team moneylines grown from one core, a Value card and a Bet Build graded as
 games went final. What a browser kept for them (`M.build`, `M.bank`, `slip.stake`) stays in its storage, undrawn, and goes
 into a backup as before; a kept bet is still graded by the page's own settlement, `NBA_GRADE.gradeBet` (the one X Parlays
-grades by), and nothing writes its grades back. The Record tab's table of those rules against the market is labelled as
-the earlier rules' backtest, and `tools/backtest.js` keeps them as a frozen copy (it no longer reads the page), giving the
-same numbers.
+grades by), and nothing writes its grades back. `tools/backtest.js` keeps those rules as a frozen copy (it no longer reads
+the page), giving the same numbers, in `research/backtest.json`; the Record tab drew its table of them, labelled as the
+earlier rules' backtest, until 31 October 2026.
 
 ### The checks
 
@@ -2585,10 +2585,21 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   Vegas's, on the calls each published before tip-off (`data/calls.json`): Vegas's tiles, Wins against Vegas, the
   week-by-week grid and Show every pick. It is read from `pickem.json` when the tab is first opened, never on load or on
   a timer (README "Pick'em Record").
-- **Record**: the season graded straight up, against the spread and on totals, by month and game, from
-  `predictions.csv`; the earlier Parlay Builder's suggested parlays (its rules until 25 October 2026, labelled so)
-  and the model's picks against the closing line, season by season, from `research/backtest.json` (state.json's
-  `vsMarket`, beside the two-biggest-favourites baseline); and the backtest table.
+- **Record**: the NHL hub's record, laid out as its Record tab (the owner's call of 31 October 2026, "simple and
+  cleaner"): **The model's record**, a short note, five tiles (straight up, the straight-up rate, and the moneyline,
+  spread and totals picks), **By month** and **By confidence** side by side, and **How it was fitted**. The calls are the
+  Player Model's numbers as published before tip-off (`predictions.csv`). A pick is the NHL hub's rule: a side on the
+  moneyline, the spread or the total wherever the model's chance beat the chance the book's price implies (its margin
+  left in) by 5 points or more, worked out by `publish.js` into each game of state.json's `record` (`pk`, its rule in
+  `recordRule`): the moneyline at DraftKings' prices as `games.csv` froze them at tip, the spread and the total at -110
+  a side (the table keeps no price of theirs), a spread's chance Phi((m + h) / 14.5) for the home side at its line h, m
+  the model's expected home margin, a total's Phi((t - line) / 19.1) for the over, t the model's total, both sigmas the
+  model's own miss on the last finished season (`tools/sigma.js`); a push graded as one. Confidence is the model's
+  straight-up chance, banded 70+, 60-70 and 50-60 as the NHL hub bands it; the playoffs are a month of their own. How it
+  was fitted gives the fit and the holdout as `research.json` publishes them, lineups known. The same rule on the
+  walk-forward folds (`research/sigma.json`'s `record`) lost money on spreads and totals in each of 2023-24 to 2025-26
+  and on moneylines in two of the three, so a tile in green is a run, not an edge. The earlier rules' backtest table,
+  the latest games and the props model's shadow ledger (in each game's props sheet) are no longer drawn here.
 - **Parlay Builder**: the NFL hub's (README "Parlay Builder"). Its choices (the Bet amount, Refresh odds, All, Teams
   only or Players only, five bet types and the games of the lines feed's two dates, under their day), the Top 50 lines
   they make from DraftKings' prices (`lines.json`, or a press's newer read), Value picks first, then the other lines

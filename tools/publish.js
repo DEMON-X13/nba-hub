@@ -74,6 +74,30 @@ function main() {
       team: t ? { pHome: t.pHome, spread: t.spread } : p && p.team_pHome ? { pHome: +p.team_pHome } : null };
   });
 
+  /* THE RECORD'S PICKS (the Record tab, laid out as the NHL hub's): beside the straight-up call, a side on the moneyline,
+     the spread or the total wherever the model's chance, the number published before tip-off, beat the chance the book's
+     price implies (its margin left in) by RULE.edge, 5 points, the NHL hub's rule. The moneyline at the prices the games
+     table froze at tip; the spread and the total at -110 a side, since the table keeps no price of theirs. A spread's
+     chance is Phi((m + h) / sigma) for the home side at its line h, m the model's expected home margin (minus its
+     published spread); a total's Phi((t - line) / sigmaTotal) for the over, t the model's total: both sigmas the model's
+     own miss on the last finished season (research/sigma.json, tools/sigma.js). A push is graded as one */
+  const SG = (() => { try { return JSON.parse(fs.readFileSync(path.join(L.ROOT, 'research', 'sigma.json'), 'utf8')); } catch (e) { return null; } })();
+  const RULE = SG && SG.sigma > 0 && SG.sigmaTotal > 0 ? { edge: 0.05, price: -110, sigma: SG.sigma, sigmaTotal: SG.sigmaTotal } : null;
+  const impl = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100);
+  const sidePick = sides => { for (const [side, pr, price] of sides) if (pr - impl(price) >= RULE.edge) return { side, p: +pr.toFixed(4) }; return null; };
+  function picksOf(g, p, line, tl) {
+    if (!RULE) return null;
+    const mov = +g.home_score - +g.away_score, tot = +g.home_score + +g.away_score, out = {};
+    const hm = num(g.home_ml), am = num(g.away_ml), pH = +p.pHome, m = -+p.spread;
+    if (hm !== null && am !== null && hm && am) { const k = sidePick([['home', pH, hm], ['away', 1 - pH, am]]);
+      if (k) out.ml = { ...k, res: mov === 0 ? 'push' : (mov > 0) === (k.side === 'home') ? 'win' : 'loss' }; }
+    if (line !== null) { const pc = SG.Phi(m + line, RULE.sigma), k = sidePick([['home', pc, RULE.price], ['away', 1 - pc, RULE.price]]), c = mov + line;
+      if (k) out.sp = { ...k, res: c === 0 ? 'push' : (c > 0) === (k.side === 'home') ? 'win' : 'loss' }; }
+    if (tl !== null) { const po = SG.Phi(+p.total - tl, RULE.sigmaTotal), k = sidePick([['over', po, RULE.price], ['under', 1 - po, RULE.price]]);
+      if (k) out.ou = { ...k, res: tot === tl ? 'push' : (tot > tl) === (k.side === 'over') ? 'win' : 'loss' }; }
+    return out;
+  }
+  if (SG) { const { Phi } = require('./sigma'); SG.Phi = (x, sd) => Phi(x / sd); }
   /* the season's record: only games the site had a number on before tip-off */
   const record = games.filter(g => g.status === 'final' && g.type !== 'PRE' && +g.season === season && preds[g.game_id]).map(g => {
     const p = preds[g.game_id];
@@ -86,8 +110,9 @@ function main() {
     if (line !== null && +p.spread !== line) { const modelHome = +p.spread < line; const cover = mov + line; ats = cover === 0 ? null : modelHome === (cover > 0); }
     const tl = num(p.total_line); let ou = null;
     if (tl !== null && +p.total !== tl) { const tot = +g.home_score + +g.away_score; ou = tot === tl ? null : (+p.total > tl) === (tot > tl); }
-    return { id: g.game_id, date: g.date, away: g.away, home: g.home, awayScore: +g.away_score, homeScore: +g.home_score, pHome: +p.pHome, spread: +p.spread, total: +p.total,
-      line, totalLine: tl, pick, su, ats, ou };
+    const ml = num(g.home_ml) !== null && num(g.away_ml) !== null ? [+g.away_ml, +g.home_ml] : null;
+    return { id: g.game_id, date: g.date, type: g.type, away: g.away, home: g.home, awayScore: +g.away_score, homeScore: +g.home_score, pHome: +p.pHome, spread: +p.spread, total: +p.total,
+      line, totalLine: tl, ml, pick, su, ats, ou, pk: picksOf(g, p, line, tl) };
   });
 
   const teams = {};
@@ -147,7 +172,7 @@ function main() {
   const props = propsState(slate, nowIso);
   const boxes = boxesState(games, today), corr = corrState(), report = reportState(inj), eloPicks = eloPickState(slate);
   const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, report, eloPicks, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today,
-    slate, record, teams, players: plist, coaches,
+    slate, record, recordRule: RULE, teams, players: plist, coaches,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };
   const body = JSON.stringify(state);

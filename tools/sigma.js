@@ -22,6 +22,15 @@
  * page applies it (a side the model rates 15 points or more above the book's fair chance, its two prices with the margin
  * taken out in proportion, is not listed). The sigma is the 2026 fold's, so the 2026 cover rows use a number measured on
  * those same games. Shown for the owner to read: nothing on the page is chosen from these numbers.
+ *
+ * THE TOTAL'S SIGMA. The same on the total: the root mean square of the two clubs' points less the model's total, on the
+ * 2026 fold, lineup known (sigmaTotal). The Record tab takes the model's side of a total from Phi((t - line) / sigmaTotal),
+ * t the model's total, as it takes a spread's from the sigma above.
+ *
+ * THE RECORD'S RULE. The Record tab (README "The site", the NHL hub's record) grades every side the model took on the
+ * moneyline, the spread or the total, where its chance beat the chance the book's price implies (its margin left in) by 5
+ * points or more, the spread and the total at -110 a side. Here, the same rule on each fold, for the README: counted,
+ * the chance said on average, how often it won and the profit on $1. Nothing on the page is chosen from these numbers.
  */
 'use strict';
 const fs = require('fs');
@@ -30,7 +39,7 @@ const ROOT = path.resolve(__dirname, '..');
 const IN = path.join(ROOT, 'research', 'backtest_games.csv');
 const OUT = path.join(ROOT, 'research', 'sigma.json');
 const FOLDS = ['2024', '2025', '2026'], SIGMA_FOLD = '2026';
-const PMIN = 0.45, PMAX = 0.97, EDGE = 0.03, FAR = 0.15, SPREAD_PRICE = -110;
+const PMIN = 0.45, PMAX = 0.97, EDGE = 0.03, FAR = 0.15, SPREAD_PRICE = -110, REC_EDGE = 0.05;
 
 /* the page's own normal cdf (app/nba_hub.html Phi, by Abramowitz and Stegun's erf) */
 const erf = x => { const t = 1 / (1 + 0.3275911 * Math.abs(x)); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return x >= 0 ? y : -y; };
@@ -56,6 +65,23 @@ function main() {
     return { games: n, mean: r4(mean), rms: r4(Math.sqrt(x.reduce((a, b) => a + b * b, 0) / n)), sd: r4(Math.sqrt(x.reduce((a, b) => a + (b - mean) ** 2, 0) / n)) }; };
   const folds = Object.fromEntries(FOLDS.map(s => [s, spreadOf(s)]));
   const sigma = Math.round(folds[SIGMA_FOLD].rms * 10) / 10;
+  const totalOf = s => { const x = all.filter(r => r.season === s).map(r => (+r.home_score + +r.away_score) - +r.model_total), n = x.length, mean = x.reduce((a, b) => a + b, 0) / n;
+    return { games: n, mean: r4(mean), rms: r4(Math.sqrt(x.reduce((a, b) => a + b * b, 0) / n)), sd: r4(Math.sqrt(x.reduce((a, b) => a + (b - mean) ** 2, 0) / n)) }; };
+  const totals = Object.fromEntries(FOLDS.map(s => [s, totalOf(s)]));
+  const sigmaTotal = Math.round(totals[SIGMA_FOLD].rms * 10) / 10;
+  /* the Record tab's rule on each fold: a side where the model's chance beats the price's implied by REC_EDGE */
+  const record = {};
+  for (const s of FOLDS) {
+    const ml = [], sp = [], ou = [];
+    for (const r of all.filter(x => x.season === s)) {
+      const mov = +r.home_score - +r.away_score, tot = +r.home_score + +r.away_score, pH = +r.model_p_home, m = -+r.model_home_spread;
+      const take = (list, sides) => { for (const [p, price, won] of sides) if (p - imp(price) >= REC_EDGE) { list.push({ p, price, won }); break; } };
+      if (r.ml_used === '1') take(ml, [[pH, +r.home_ml, mov === 0 ? null : mov > 0], [1 - pH, +r.away_ml, mov === 0 ? null : mov < 0]]);
+      if (r.line_used === '1') { const h = +r.home_line, c = mov + h, pc = Phi((m + h) / sigma); take(sp, [[pc, SPREAD_PRICE, c === 0 ? null : c > 0], [1 - pc, SPREAD_PRICE, c === 0 ? null : c < 0]]); }
+      if (r.total_used === '1') { const t = +r.total, po = Phi((+r.model_total - t) / sigmaTotal); take(ou, [[po, SPREAD_PRICE, tot === t ? null : tot > t], [1 - po, SPREAD_PRICE, tot === t ? null : tot < t]]); }
+    }
+    record[s] = { ml: sum(ml), spread: sum(sp), total: sum(ou) };
+  }
   const picks = {};
   for (const s of FOLDS) {
     const ml = [], cover = [];
@@ -76,12 +102,16 @@ function main() {
     picks[s] = { ml: sum(ml), mlNear: sum(near(ml)), cover: sum(cover), coverNear: sum(near(cover)) };
   }
   const out = { about: 'tools/sigma.js: the spread of the home margin about the player model\'s own (walk-forward, lineup known, research/backtest_games.csv), and the Value rule\'s team picks on the folds', source: 'research/backtest_games.csv',
-    fold: +SIGMA_FOLD, lineup: 'known', sigma, folds, rule: { pmin: PMIN, pmax: PMAX, edge: EDGE, far: FAR, spreadPrice: SPREAD_PRICE }, picks };
+    fold: +SIGMA_FOLD, lineup: 'known', sigma, folds, sigmaTotal, totals, rule: { pmin: PMIN, pmax: PMAX, edge: EDGE, far: FAR, spreadPrice: SPREAD_PRICE }, picks,
+    record: { edge: REC_EDGE, price: SPREAD_PRICE, folds: record } };
   const body = JSON.stringify(out, null, 1) + '\n', before = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8') : '';
   if (body !== before) fs.writeFileSync(OUT, body);
   console.log(`sigma ${sigma} (2026 fold, lineup known: ${folds[SIGMA_FOLD].games} games, rms ${folds[SIGMA_FOLD].rms}, sd ${folds[SIGMA_FOLD].sd}, mean ${folds[SIGMA_FOLD].mean}) | research/sigma.json ${body !== before ? 'written' : 'unchanged'}`);
   for (const s of FOLDS) { const p = picks[s], f = x => `${x.n} picks, said ${(x.said * 100).toFixed(1)}%, won ${(x.rate * 100).toFixed(1)}%, ${x.units >= 0 ? '+' : ''}${x.units}u`;
     console.log(`  ${s}: moneyline ${f(p.ml)} (far-off guard: ${f(p.mlNear)}) | cover ${f(p.cover)} (far-off guard: ${f(p.coverNear)})`); }
+  console.log(`sigmaTotal ${sigmaTotal} (2026 fold: ${totals[SIGMA_FOLD].games} games, rms ${totals[SIGMA_FOLD].rms}, mean ${totals[SIGMA_FOLD].mean}); the Record tab's rule, a ${REC_EDGE * 100}-point edge:`);
+  for (const s of FOLDS) { const p = record[s], f = x => `${x.won}-${x.n - x.won}${x.pushes ? '-' + x.pushes : ''} (said ${(x.said * 100).toFixed(1)}%, ${x.units >= 0 ? '+' : ''}${x.units}u)`;
+    console.log(`  ${s}: moneyline ${f(p.ml)} | spread ${f(p.spread)} | total ${f(p.total)}`); }
 }
 if (require.main === module) main();
-module.exports = { Phi, imp };
+module.exports = { Phi, imp, REC_EDGE };

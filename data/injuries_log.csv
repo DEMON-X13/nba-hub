@@ -3607,8 +3607,8 @@ date,team,player_id,name,status
 2026-10-31,CHA,4684269,Kylan Boswell,Out
 2026-10-31,CHI,4848625,Dailyn Swain,Day-To-Day
 2026-10-31,CHI,4278067,Nic Claxton,Out
-2026-10-31,CLE,4683747,Jaylon Tyson,Out
 2026-10-31,CLE,5041951,Meleek Thomas,Day-To-Day
+2026-10-31,CLE,4683747,Jaylon Tyson,Out
 2026-10-31,DAL,5279129,Sergio de Larrea,Out
 2026-10-31,DAL,4593125,Santi Aldama,Out
 2026-10-31,DAL,5148538,Tarik Biberovic,Out
@@ -3618,6 +3618,7 @@ date,team,player_id,name,status
 2026-10-31,DEN,4432181,Julian Strawther,Out
 2026-10-31,DET,4395702,Isaiah Joe,Out
 2026-10-31,DET,4433621,Jalen Duren,Out
+2026-10-31,GSW,3975,Stephen Curry,Out
 2026-10-31,GSW,3102531,Kristaps Porzingis,Out
 2026-10-31,GSW,4432171,Moses Moody,Out
 2026-10-31,GSW,6430,Jimmy Butler III,Out
@@ -3640,6 +3641,7 @@ date,team,player_id,name,status
 2026-10-31,MEM,4431785,Scotty Pippen Jr.,Day-To-Day
 2026-10-31,MEM,4065733,Ty Jerome,Day-To-Day
 2026-10-31,MEM,4593016,Quinten Post,Day-To-Day
+2026-10-31,MIN,3032976,Rudy Gobert,Day-To-Day
 2026-10-31,MIN,4594268,Anthony Edwards,Out
 2026-10-31,MIN,3934673,Donte DiVincenzo,Out
 2026-10-31,NOP,5061589,Yves Missi,Out
@@ -3664,19 +3666,17 @@ date,team,player_id,name,status
 2026-10-31,PHI,4870562,Dominick Barlow,Out
 2026-10-31,PHI,4871141,Ariel Hukporti,Out
 2026-10-31,PHX,4701232,Mark Williams,Out
-2026-10-31,POR,4066211,Robert Williams III,Day-To-Day
-2026-10-31,POR,4706557,Chris Youngblood,Out
 2026-10-31,POR,4279888,Ja Morant,Out
 2026-10-31,POR,4914336,Shaedon Sharpe,Out
 2026-10-31,SAC,4433174,Dylan Cardwell,Out
 2026-10-31,SAC,4898371,Maxime Raynaud,Out
 2026-10-31,SAC,4594327,Keegan Murray,Out
 2026-10-31,SAC,3907387,Ben Simmons,Out
+2026-10-31,SAS,4845367,Stephon Castle,Day-To-Day
 2026-10-31,SAS,6440,Tobias Harris,Out
 2026-10-31,SAS,5101845,Jayden Quaintance,Out
 2026-10-31,TOR,6450,Kawhi Leonard,Out
 2026-10-31,TOR,4432586,Nate Bittle,Out
-2026-10-31,UTA,4066336,Lauri Markkanen,Day-To-Day
 2026-10-31,UTA,4277961,Jaren Jackson Jr.,Out
 2026-10-31,UTA,4433268,Trey Alexander,Out
 2026-10-31,UTA,3102530,Jusuf Nurkic,Out

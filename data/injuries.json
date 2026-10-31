@@ -112,6 +112,15 @@
   ],
   "CLE": [
    {
+    "id": "5041951",
+    "name": "Meleek Thomas",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-10-31",
+    "returns": "2026-10-31"
+   },
+   {
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
@@ -119,15 +128,6 @@
     "detail": "Ankle Sprain",
     "date": "2026-10-30",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "5041951",
-    "name": "Meleek Thomas",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
    }
   ],
   "DAL": [
@@ -218,6 +218,15 @@
    }
   ],
   "GSW": [
+   {
+    "id": "3975",
+    "name": "Stephen Curry",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-10-31",
+    "returns": "2026-11-02"
+   },
    {
     "id": "3102531",
     "name": "Kristaps Porzingis",
@@ -428,6 +437,15 @@
    }
   ],
   "MIN": [
+   {
+    "id": "3032976",
+    "name": "Rudy Gobert",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Back Spasms",
+    "date": "2026-10-31",
+    "returns": "2026-10-31"
+   },
    {
     "id": "4594268",
     "name": "Anthony Edwards",
@@ -659,24 +677,6 @@
   ],
   "POR": [
    {
-    "id": "4066211",
-    "name": "Robert Williams III",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
-   },
-   {
-    "id": "4706557",
-    "name": "Chris Youngblood",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle Soreness",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
-   },
-   {
     "id": "4279888",
     "name": "Ja Morant",
     "pos": "G",
@@ -735,6 +735,15 @@
   ],
   "SAS": [
    {
+    "id": "4845367",
+    "name": "Stephon Castle",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Head Mild",
+    "date": "2026-10-31",
+    "returns": "2026-10-31"
+   },
+   {
     "id": "6440",
     "name": "Tobias Harris",
     "pos": "F",
@@ -774,15 +783,6 @@
    }
   ],
   "UTA": [
-   {
-    "id": "4066336",
-    "name": "Lauri Markkanen",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist Not Specified",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
-   },
    {
     "id": "4277961",
     "name": "Jaren Jackson Jr.",

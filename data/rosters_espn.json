@@ -1131,14 +1131,14 @@
     "name": "Stephen Curry",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6589",
     "name": "Draymond Green",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3213",
@@ -1222,7 +1222,7 @@
     "name": "Gui Santos",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397040",
@@ -2183,7 +2183,7 @@
     "name": "Rudy Gobert",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4592492",
@@ -3086,14 +3086,14 @@
     "name": "Robert Williams III",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4706557",
     "name": "Chris Youngblood",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "SAC": [
@@ -3244,7 +3244,7 @@
     "name": "Stephon Castle",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4592479",
@@ -3482,6 +3482,13 @@
     "injured": false
    },
    {
+    "id": "4683736",
+    "name": "Kobe Bufkin",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4683766",
     "name": "Isaiah Collier",
     "pos": "G",
@@ -3517,13 +3524,6 @@
     "injured": false
    },
    {
-    "id": "4396963",
-    "name": "Blake Hinson",
-    "pos": "F",
-    "status": "active",
-    "injured": true
-   },
-   {
     "id": "4433618",
     "name": "Harrison Ingram",
     "pos": "F",
@@ -3542,7 +3542,7 @@
     "name": "Lauri Markkanen",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133602",

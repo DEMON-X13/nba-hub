@@ -1,5 +1,5 @@
 {
- "date": "2026-10-30",
+ "date": "2026-10-31",
  "teams": {
   "ATL": [
    {
@@ -175,17 +175,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Personal",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
-   {
-    "id": "3138196",
-    "name": "Cameron Johnson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
+    "date": "2026-10-31",
+    "returns": "2026-11-02"
    },
    {
     "id": "4592427",
@@ -228,15 +219,6 @@
   ],
   "GSW": [
    {
-    "id": "4997536",
-    "name": "Gui Santos",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Tendinitis",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
-   {
     "id": "3102531",
     "name": "Kristaps Porzingis",
     "pos": "C",
@@ -275,15 +257,6 @@
     "returns": "2026-10-31"
    },
    {
-    "id": "2990992",
-    "name": "Marcus Smart",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Forearm Strain",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
-   {
     "id": "4711272",
     "name": "Reed Sheppard",
     "pos": "G",
@@ -307,10 +280,10 @@
     "id": "4278355",
     "name": "Obi Toppin",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
+    "status": "Out",
+    "detail": "Back Soreness",
     "date": "2026-10-30",
-    "returns": "2026-10-30"
+    "returns": "2026-11-01"
    },
    {
     "id": "2530530",
@@ -329,24 +302,6 @@
     "detail": "Knee Surgery",
     "date": "2026-10-30",
     "returns": "2027-01-02"
-   },
-   {
-    "id": "4395712",
-    "name": "Andrew Nembhard",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Nembhard (neck) is listed as probable for Friday's game against Miami.",
-    "date": "2026-10-29",
-    "returns": ""
-   },
-   {
-    "id": "4396909",
-    "name": "Aaron Nesmith",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Nesmith (hamstring) is probable for Friday's game against the Heat.",
-    "date": "2026-10-29",
-    "returns": ""
    },
    {
     "id": "4017837",
@@ -525,13 +480,22 @@
   ],
   "OKC": [
    {
+    "id": "4683692",
+    "name": "Cason Wallace",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Shoulder Surgery",
+    "date": "2026-10-31",
+    "returns": "2027-03-02"
+   },
+   {
     "id": "4433255",
     "name": "Chet Holmgren",
     "pos": "C",
     "status": "Out",
     "detail": "Knee",
-    "date": "2026-10-30",
-    "returns": "2026-11-02"
+    "date": "2026-10-31",
+    "returns": "2027-01-02"
    },
    {
     "id": "4593803",
@@ -568,15 +532,6 @@
     "detail": "Back",
     "date": "2026-10-27",
     "returns": "2026-11-04"
-   },
-   {
-    "id": "4683692",
-    "name": "Cason Wallace",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Shoulder",
-    "date": "2026-10-26",
-    "returns": "2027-03-02"
    }
   ],
   "ORL": [
@@ -675,15 +630,6 @@
   ],
   "PHX": [
    {
-    "id": "4601023",
-    "name": "Oso Ighodaro",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Oblique Strain",
-    "date": "2026-10-30",
-    "returns": "2026-10-30"
-   },
-   {
     "id": "4701232",
     "name": "Mark Williams",
     "pos": "C",
@@ -694,15 +640,6 @@
    }
   ],
   "POR": [
-   {
-    "id": "4279888",
-    "name": "Ja Morant",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Not Specified",
-    "date": "2026-10-30",
-    "returns": "2026-12-01"
-   },
    {
     "id": "4066211",
     "name": "Robert Williams III",
@@ -718,8 +655,17 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Soreness",
-    "date": "2026-10-27",
+    "date": "2026-10-30",
     "returns": "2026-10-31"
+   },
+   {
+    "id": "4279888",
+    "name": "Ja Morant",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-10-30",
+    "returns": "2026-12-01"
    },
    {
     "id": "4914336",
@@ -816,7 +762,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Wrist Not Specified",
-    "date": "2026-10-29",
+    "date": "2026-10-30",
     "returns": "2026-10-31"
    },
    {

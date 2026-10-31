@@ -3605,7 +3605,7 @@ date,team,player_id,name,status
 2026-10-31,CHA,4395651,Coby White,Out
 2026-10-31,CHA,4066218,Grant Williams,Out
 2026-10-31,CHA,4684269,Kylan Boswell,Out
-2026-10-31,CHI,4848625,Dailyn Swain,Out
+2026-10-31,CHI,4848625,Dailyn Swain,Day-To-Day
 2026-10-31,CHI,4278067,Nic Claxton,Out
 2026-10-31,CLE,4683747,Jaylon Tyson,Out
 2026-10-31,CLE,5041951,Meleek Thomas,Day-To-Day
@@ -3621,10 +3621,10 @@ date,team,player_id,name,status
 2026-10-31,GSW,3102531,Kristaps Porzingis,Out
 2026-10-31,GSW,4432171,Moses Moody,Out
 2026-10-31,GSW,6430,Jimmy Butler III,Out
-2026-10-31,HOU,4871144,Alperen Sengun,Out
-2026-10-31,HOU,4711272,Reed Sheppard,Out
+2026-10-31,HOU,4711272,Reed Sheppard,Day-To-Day
+2026-10-31,HOU,4871144,Alperen Sengun,Day-To-Day
 2026-10-31,HOU,2991235,Steven Adams,Out
-2026-10-31,IND,4278355,Obi Toppin,Out
+2026-10-31,IND,4278355,Obi Toppin,Day-To-Day
 2026-10-31,IND,2530530,T.J. McConnell,Out
 2026-10-31,IND,5157066,Johnny Furphy,Out
 2026-10-31,IND,4017837,Ivica Zubac,Out
@@ -3635,7 +3635,7 @@ date,team,player_id,name,status
 2026-10-31,LAC,3913176,Brandon Ingram,Out
 2026-10-31,LAC,6580,Bradley Beal,Out
 2026-10-31,LAC,4396818,Jordan Miller,Out
-2026-10-31,LAL,4433137,Ziaire Williams,Out
+2026-10-31,LAL,4433137,Ziaire Williams,Day-To-Day
 2026-10-31,LAL,5060631,Adou Thiero,Out
 2026-10-31,MEM,4431785,Scotty Pippen Jr.,Day-To-Day
 2026-10-31,MEM,4065733,Ty Jerome,Day-To-Day
@@ -3656,7 +3656,7 @@ date,team,player_id,name,status
 2026-10-31,ORL,4432573,Paolo Banchero,Out
 2026-10-31,ORL,5214637,Noah Penda,Out
 2026-10-31,ORL,5107251,Izaiyah Nelson,Out
-2026-10-31,PHI,3917376,Jaylen Brown,Out
+2026-10-31,PHI,3917376,Jaylen Brown,Day-To-Day
 2026-10-31,PHI,4432446,Jabari Walker,Out
 2026-10-31,PHI,3904625,Tacko Fall,Out
 2026-10-31,PHI,4870562,Dominick Barlow,Out

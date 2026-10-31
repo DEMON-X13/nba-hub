@@ -95,9 +95,9 @@
     "id": "4848625",
     "name": "Dailyn Swain",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Soreness",
-    "date": "2026-10-30",
+    "date": "2026-10-31",
     "returns": "2026-11-02"
    },
    {
@@ -248,21 +248,21 @@
   ],
   "HOU": [
    {
-    "id": "4871144",
-    "name": "Alperen Sengun",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Back Soreness",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
-   },
-   {
     "id": "4711272",
     "name": "Reed Sheppard",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back",
-    "date": "2026-10-30",
+    "date": "2026-10-31",
+    "returns": "2026-10-31"
+   },
+   {
+    "id": "4871144",
+    "name": "Alperen Sengun",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Back Soreness",
+    "date": "2026-10-31",
     "returns": "2026-10-31"
    },
    {
@@ -280,9 +280,9 @@
     "id": "4278355",
     "name": "Obi Toppin",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Soreness",
-    "date": "2026-10-30",
+    "date": "2026-10-31",
     "returns": "2026-11-01"
    },
    {
@@ -383,9 +383,9 @@
     "id": "4433137",
     "name": "Ziaire Williams",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Foot",
-    "date": "2026-10-30",
+    "date": "2026-10-31",
     "returns": "2026-11-01"
    },
    {
@@ -586,9 +586,9 @@
     "id": "3917376",
     "name": "Jaylen Brown",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-10-30",
+    "date": "2026-10-31",
     "returns": "2026-10-31"
    },
    {

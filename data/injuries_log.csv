@@ -3621,8 +3621,8 @@ date,team,player_id,name,status
 2026-10-31,GSW,3102531,Kristaps Porzingis,Out
 2026-10-31,GSW,4432171,Moses Moody,Out
 2026-10-31,GSW,6430,Jimmy Butler III,Out
-2026-10-31,HOU,4711272,Reed Sheppard,Day-To-Day
-2026-10-31,HOU,4871144,Alperen Sengun,Day-To-Day
+2026-10-31,HOU,4711272,Reed Sheppard,Out
+2026-10-31,HOU,2991230,Fred VanVleet,Out
 2026-10-31,HOU,2991235,Steven Adams,Out
 2026-10-31,IND,4278355,Obi Toppin,Day-To-Day
 2026-10-31,IND,2530530,T.J. McConnell,Out
@@ -3656,11 +3656,11 @@ date,team,player_id,name,status
 2026-10-31,ORL,4432573,Paolo Banchero,Out
 2026-10-31,ORL,5214637,Noah Penda,Out
 2026-10-31,ORL,5107251,Izaiyah Nelson,Out
-2026-10-31,PHI,3059318,Joel Embiid,Day-To-Day
-2026-10-31,PHI,1966,LeBron James,Day-To-Day
-2026-10-31,PHI,3917376,Jaylen Brown,Day-To-Day
 2026-10-31,PHI,4432446,Jabari Walker,Out
+2026-10-31,PHI,1966,LeBron James,Out
 2026-10-31,PHI,3904625,Tacko Fall,Out
+2026-10-31,PHI,3059318,Joel Embiid,Out
+2026-10-31,PHI,3917376,Jaylen Brown,Day-To-Day
 2026-10-31,PHI,4870562,Dominick Barlow,Out
 2026-10-31,PHI,4871141,Ariel Hukporti,Out
 2026-10-31,PHX,4701232,Mark Williams,Out

@@ -251,19 +251,19 @@
     "id": "4711272",
     "name": "Reed Sheppard",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Back",
     "date": "2026-10-31",
-    "returns": "2026-10-31"
+    "returns": "2026-11-02"
    },
    {
-    "id": "4871144",
-    "name": "Alperen Sengun",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
+    "id": "2991230",
+    "name": "Fred VanVleet",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee",
     "date": "2026-10-31",
-    "returns": "2026-10-31"
+    "returns": "2026-11-02"
    },
    {
     "id": "2991235",
@@ -583,11 +583,11 @@
   ],
   "PHI": [
    {
-    "id": "3059318",
-    "name": "Joel Embiid",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
+    "id": "4432446",
+    "name": "Jabari Walker",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Soreness",
     "date": "2026-10-31",
     "returns": "2026-10-31"
    },
@@ -595,10 +595,28 @@
     "id": "1966",
     "name": "LeBron James",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-10-31",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "3904625",
+    "name": "Tacko Fall",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Quadriceps Strain",
     "date": "2026-10-31",
     "returns": "2026-10-31"
+   },
+   {
+    "id": "3059318",
+    "name": "Joel Embiid",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot",
+    "date": "2026-10-31",
+    "returns": "2026-11-02"
    },
    {
     "id": "3917376",
@@ -608,24 +626,6 @@
     "detail": "Knee",
     "date": "2026-10-31",
     "returns": "2026-10-31"
-   },
-   {
-    "id": "4432446",
-    "name": "Jabari Walker",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Soreness",
-    "date": "2026-10-29",
-    "returns": "2026-10-31"
-   },
-   {
-    "id": "3904625",
-    "name": "Tacko Fall",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Quadriceps Strain",
-    "date": "2026-10-27",
-    "returns": "2026-11-04"
    },
    {
     "id": "4870562",

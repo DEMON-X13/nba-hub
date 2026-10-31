@@ -1294,7 +1294,7 @@
     "name": "Alperen Sengun",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4711272",
@@ -1350,7 +1350,7 @@
     "name": "Fred VanVleet",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "IND": [
@@ -2492,13 +2492,6 @@
    }
   ],
   "OKC": [
-   {
-    "id": "4397018",
-    "name": "Ochai Agbaji",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
    {
     "id": "4684208",
     "name": "Brooks Barnhizer",

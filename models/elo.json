@@ -1301,12 +1301,12 @@
    "spread": -12.3
   },
   "2027_20261031_OKC_HOU": {
-   "pHome": 0.5859,
-   "spread": -2.7
+   "pHome": 0.5527,
+   "spread": -1.6
   },
   "2027_20261031_PHI_CHA": {
-   "pHome": 0.3313,
-   "spread": 5.4
+   "pHome": 0.4449,
+   "spread": 1.7
   },
   "2027_20261031_POR_UTA": {
    "pHome": 0.4356,
@@ -2180,5 +2180,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-10-31T13:40Z"
+ "generated": "2026-10-31T17:43Z"
 }

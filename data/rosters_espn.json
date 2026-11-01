@@ -1522,7 +1522,7 @@
     "name": "Brandon Ingram",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432170",
@@ -1571,7 +1571,7 @@
     "name": "Yanic Konan Niederhauser",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4398390",
@@ -2318,7 +2318,7 @@
     "name": "Trey Murphy III",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3907497",

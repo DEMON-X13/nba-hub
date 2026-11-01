@@ -331,6 +331,15 @@
   ],
   "IND": [
    {
+    "id": "4278355",
+    "name": "Obi Toppin",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back Soreness",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "2530530",
     "name": "T.J. McConnell",
     "pos": "G",
@@ -354,15 +363,6 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Hamstring Strain",
-    "date": "2026-10-31",
-    "returns": "2026-11-01"
-   },
-   {
-    "id": "4278355",
-    "name": "Obi Toppin",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
     "date": "2026-10-31",
     "returns": "2026-11-01"
    },
@@ -395,6 +395,24 @@
    }
   ],
   "LAC": [
+   {
+    "id": "5108024",
+    "name": "Yanic Konan Niederhauser",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot Surgery",
+    "date": "2026-11-01",
+    "returns": "2026-11-08"
+   },
+   {
+    "id": "3913176",
+    "name": "Brandon Ingram",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Achilles Surgery",
+    "date": "2026-11-01",
+    "returns": "2026-11-08"
+   },
    {
     "id": "4065778",
     "name": "Max Strus",
@@ -503,13 +521,22 @@
   ],
   "NOP": [
    {
+    "id": "4397688",
+    "name": "Trey Murphy III",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Not Specified",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "4277956",
     "name": "Jordan Poole",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Sprain",
     "date": "2026-11-01",
-    "returns": "2026-11-02"
+    "returns": "2026-11-04"
    },
    {
     "id": "3907497",

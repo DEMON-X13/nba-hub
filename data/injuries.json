@@ -128,6 +128,15 @@
   ],
   "CHI": [
    {
+    "id": "4278067",
+    "name": "Nic Claxton",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Hamstring",
+    "date": "2026-11-01",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "4848625",
     "name": "Dailyn Swain",
     "pos": "G",
@@ -135,15 +144,6 @@
     "detail": "Back Soreness",
     "date": "2026-10-31",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "4278067",
-    "name": "Nic Claxton",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Hamstring",
-    "date": "2026-10-26",
-    "returns": "2026-11-04"
    }
   ],
   "CLE": [

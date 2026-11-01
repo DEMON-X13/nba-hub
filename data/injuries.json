@@ -1,7 +1,25 @@
 {
- "date": "2026-10-31",
+ "date": "2026-11-01",
  "teams": {
   "ATL": [
+   {
+    "id": "3146557",
+    "name": "Jock Landale",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "4701230",
+    "name": "Jalen Johnson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
    {
     "id": "4712863",
     "name": "Mouhamed Gueye",
@@ -130,21 +148,12 @@
   ],
   "CLE": [
    {
-    "id": "5041951",
-    "name": "Meleek Thomas",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-10-31",
-    "returns": "2026-10-31"
-   },
-   {
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-10-30",
+    "date": "2026-11-01",
     "returns": "2026-11-02"
    }
   ],
@@ -293,21 +302,21 @@
   ],
   "HOU": [
    {
-    "id": "4711272",
-    "name": "Reed Sheppard",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Back",
-    "date": "2026-10-31",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "2991230",
     "name": "Fred VanVleet",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-10-31",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "4711272",
+    "name": "Reed Sheppard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-01",
     "returns": "2026-11-02"
    },
    {
@@ -439,7 +448,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Foot",
-    "date": "2026-10-31",
+    "date": "2026-11-01",
     "returns": "2026-11-01"
    },
    {
@@ -454,13 +463,22 @@
   ],
   "MEM": [
    {
+    "id": "4593016",
+    "name": "Quinten Post",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Ankle Not Specified",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "4431785",
     "name": "Scotty Pippen Jr.",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Back Soreness",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
    },
    {
     "id": "4065733",
@@ -468,17 +486,8 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Back Soreness",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
-   },
-   {
-    "id": "4593016",
-    "name": "Quinten Post",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle Not Specified",
-    "date": "2026-10-30",
-    "returns": "2026-10-31"
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
    }
   ],
   "MIN": [
@@ -486,9 +495,9 @@
     "id": "3032976",
     "name": "Rudy Gobert",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Spasms",
-    "date": "2026-10-31",
+    "date": "2026-11-01",
     "returns": "2026-11-02"
    },
    {
@@ -512,12 +521,21 @@
   ],
   "NOP": [
    {
+    "id": "4277956",
+    "name": "Jordan Poole",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "3907497",
     "name": "Dejounte Murray",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Personal",
-    "date": "2026-10-31",
+    "date": "2026-11-01",
     "returns": "2026-11-02"
    },
    {
@@ -528,15 +546,6 @@
     "detail": "Knee Bruise",
     "date": "2026-10-30",
     "returns": "2026-11-08"
-   },
-   {
-    "id": "4277956",
-    "name": "Jordan Poole",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-10-30",
-    "returns": "2026-11-02"
    }
   ],
   "NYK": [
@@ -655,21 +664,21 @@
   ],
   "PHI": [
    {
-    "id": "1966",
-    "name": "LeBron James",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back",
-    "date": "2026-10-31",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "3059318",
     "name": "Joel Embiid",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Foot",
-    "date": "2026-10-31",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "1966",
+    "name": "LeBron James",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-01",
     "returns": "2026-11-02"
    },
    {
@@ -761,15 +770,6 @@
    }
   ],
   "SAS": [
-   {
-    "id": "4845367",
-    "name": "Stephon Castle",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Head Mild",
-    "date": "2026-10-31",
-    "returns": "2026-10-31"
-   },
    {
     "id": "6440",
     "name": "Tobias Harris",

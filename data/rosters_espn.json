@@ -398,7 +398,7 @@
     "name": "Kylan Boswell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433249",
@@ -489,7 +489,7 @@
     "name": "Coby White",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4066218",
@@ -505,7 +505,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4711294",
@@ -596,7 +596,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4848625",
@@ -724,7 +724,7 @@
     "name": "Peyton Watson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "DAL": [
@@ -1252,7 +1252,7 @@
     "name": "Clint Capela",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683860",
@@ -1350,7 +1350,7 @@
     "name": "Fred VanVleet",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "IND": [
@@ -1415,7 +1415,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133603",
@@ -2325,7 +2325,7 @@
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703115",
@@ -2802,7 +2802,7 @@
     "name": "LeBron James",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433144",
@@ -3642,7 +3642,7 @@
     "name": "Anthony Gill",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5238230",
@@ -3684,7 +3684,7 @@
     "name": "Alex Sarr",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4997537",

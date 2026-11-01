@@ -3,15 +3,6 @@
  "teams": {
   "ATL": [
    {
-    "id": "3146557",
-    "name": "Jock Landale",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Hip",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "4701230",
     "name": "Jalen Johnson",
     "pos": "F",
@@ -19,6 +10,15 @@
     "detail": "Ankle",
     "date": "2026-11-01",
     "returns": "2026-11-02"
+   },
+   {
+    "id": "3146557",
+    "name": "Jock Landale",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Hip",
+    "date": "2026-11-01",
+    "returns": "2026-11-04"
    },
    {
     "id": "4712863",
@@ -90,43 +90,43 @@
   ],
   "CHA": [
    {
-    "id": "5061575",
-    "name": "Kon Knueppel",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring",
-    "date": "2026-10-30",
-    "returns": "2026-11-02"
-   },
-   {
-    "id": "4395651",
-    "name": "Coby White",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Calf Strain",
-    "date": "2026-10-26",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "4066218",
     "name": "Grant Williams",
     "pos": "F",
     "status": "Out",
     "detail": "Hamstring",
-    "date": "2026-10-26",
-    "returns": "2026-11-02"
+    "date": "2026-11-01",
+    "returns": "2026-11-09"
    },
    {
-    "id": "4684269",
-    "name": "Kylan Boswell",
+    "id": "5061575",
+    "name": "Kon Knueppel",
     "pos": "G",
     "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-10-20",
-    "returns": "2026-11-02"
+    "detail": "Hamstring",
+    "date": "2026-11-01",
+    "returns": "2026-11-09"
    }
   ],
   "CHI": [
+   {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Finger Sprain",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "5105555",
+    "name": "Tobe Awaka",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
    {
     "id": "4278067",
     "name": "Nic Claxton",
@@ -148,13 +148,22 @@
   ],
   "CLE": [
    {
+    "id": "4576087",
+    "name": "Peyton Watson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Soreness",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Sprain",
     "date": "2026-11-01",
-    "returns": "2026-11-02"
+    "returns": "2026-11-04"
    }
   ],
   "DAL": [
@@ -231,7 +240,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip Bruise",
-    "date": "2026-10-30",
+    "date": "2026-11-01",
     "returns": "2026-11-02"
    },
    {
@@ -302,11 +311,11 @@
   ],
   "HOU": [
    {
-    "id": "2991230",
-    "name": "Fred VanVleet",
-    "pos": "G",
+    "id": "3102529",
+    "name": "Clint Capela",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Knee",
+    "detail": "Ankle Sprain",
     "date": "2026-11-01",
     "returns": "2026-11-02"
    },
@@ -356,15 +365,6 @@
     "detail": "Ankle Sprain",
     "date": "2026-10-31",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "4396909",
-    "name": "Aaron Nesmith",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Strain",
-    "date": "2026-10-31",
-    "returns": "2026-11-01"
    },
    {
     "id": "5157066",
@@ -419,7 +419,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Foot Plantar Fasciitis",
-    "date": "2026-10-29",
+    "date": "2026-11-01",
     "returns": "2026-11-08"
    },
    {
@@ -443,6 +443,15 @@
   ],
   "LAL": [
    {
+    "id": "4433137",
+    "name": "Ziaire Williams",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Foot",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "5060631",
     "name": "Adou Thiero",
     "pos": "F",
@@ -450,15 +459,6 @@
     "detail": "Knee Inflammation",
     "date": "2026-11-01",
     "returns": "2026-11-09"
-   },
-   {
-    "id": "4433137",
-    "name": "Ziaire Williams",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-11-01",
-    "returns": "2026-11-01"
    }
   ],
   "MEM": [
@@ -539,15 +539,6 @@
     "returns": "2026-11-04"
    },
    {
-    "id": "3907497",
-    "name": "Dejounte Murray",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Personal",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "5061589",
     "name": "Yves Missi",
     "pos": "C",
@@ -564,8 +555,8 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-10-29",
-    "returns": "2026-11-04"
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
    }
   ],
   "OKC": [
@@ -678,15 +669,6 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
-   },
-   {
-    "id": "1966",
-    "name": "LeBron James",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
     "date": "2026-11-01",
     "returns": "2026-11-02"
    },
@@ -849,6 +831,33 @@
   ],
   "WAS": [
    {
+    "id": "4997537",
+    "name": "Tristan Vukcevic",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Hip Pinched Nerve",
+    "date": "2026-11-01",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "5160992",
+    "name": "Alex Sarr",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee Soreness",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "2581184",
+    "name": "Anthony Gill",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back Spasms",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
     "id": "4432907",
     "name": "Justin Champagnie",
     "pos": "F",
@@ -856,15 +865,6 @@
     "detail": "Foot Not Specified",
     "date": "2026-10-28",
     "returns": "2027-02-25"
-   },
-   {
-    "id": "4997537",
-    "name": "Tristan Vukcevic",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Hip Pinched Nerve",
-    "date": "2026-10-01",
-    "returns": "2026-11-02"
    },
    {
     "id": "4606840",

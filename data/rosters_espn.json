@@ -163,7 +163,7 @@
     "name": "Paul George",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5175647",
@@ -212,7 +212,7 @@
     "name": "Mitchell Robinson",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4593841",
@@ -263,7 +263,7 @@
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4712896",
@@ -1401,21 +1401,21 @@
     "name": "Larry Nance Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395712",
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4396909",
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133603",
@@ -1436,7 +1436,7 @@
     "name": "Pascal Siakam",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4398207",
@@ -1927,7 +1927,7 @@
     "name": "Tim Hardaway Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431786",
@@ -2127,7 +2127,7 @@
     "name": "LaMelo Ball",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5279133",
@@ -2225,7 +2225,7 @@
     "name": "Terrence Shannon Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4895758",
@@ -2318,14 +2318,14 @@
     "name": "Trey Murphy III",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3907497",
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4703115",
@@ -2639,7 +2639,7 @@
     "name": "Anthony Black",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278572",
@@ -3593,7 +3593,7 @@
     "name": "Reece Beekman",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4845374",

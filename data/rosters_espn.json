@@ -505,7 +505,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4711294",
@@ -596,7 +596,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4848625",
@@ -2383,7 +2383,7 @@
     "name": "Jose Alvarado",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3934719",

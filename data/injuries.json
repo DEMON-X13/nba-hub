@@ -3,6 +3,15 @@
  "teams": {
   "ATL": [
    {
+    "id": "4701230",
+    "name": "Jalen Johnson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "5149077",
     "name": "Kingston Flemings",
     "pos": "G",
@@ -10,15 +19,6 @@
     "detail": "Suspension",
     "date": "2026-11-02",
     "returns": "2026-11-04"
-   },
-   {
-    "id": "4701230",
-    "name": "Jalen Johnson",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
    },
    {
     "id": "3146557",
@@ -110,31 +110,13 @@
   ],
   "CHI": [
    {
-    "id": "4397189",
-    "name": "Jalen Smith",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger Sprain",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
-   },
-   {
-    "id": "5105555",
-    "name": "Tobe Awaka",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "4278067",
     "name": "Nic Claxton",
     "pos": "C",
     "status": "Out",
     "detail": "Hamstring",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
    }
   ],
   "CLE": [
@@ -142,10 +124,10 @@
     "id": "4576087",
     "name": "Peyton Watson",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hamstring Soreness",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
    },
    {
     "id": "4683747",
@@ -162,10 +144,19 @@
     "id": "6442",
     "name": "Kyrie Irving",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee",
     "date": "2026-11-02",
-    "returns": "2026-11-02"
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4593125",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
    },
    {
     "id": "5148538",
@@ -184,15 +175,6 @@
     "detail": "Foot Surgery",
     "date": "2026-11-01",
     "returns": "2026-11-12"
-   },
-   {
-    "id": "4593125",
-    "name": "Santi Aldama",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
    },
    {
     "id": "5279129",
@@ -340,6 +322,24 @@
   ],
   "IND": [
    {
+    "id": "2580365",
+    "name": "Larry Nance Jr.",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Illness",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4278355",
+    "name": "Obi Toppin",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Coach's Decision Soreness",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "2530530",
     "name": "T.J. McConnell",
     "pos": "G",
@@ -356,24 +356,6 @@
     "detail": "Ankle Sprain",
     "date": "2026-11-02",
     "returns": "2026-11-09"
-   },
-   {
-    "id": "2580365",
-    "name": "Larry Nance Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-02",
-    "returns": "2026-11-02"
-   },
-   {
-    "id": "4278355",
-    "name": "Obi Toppin",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
-    "date": "2026-11-02",
-    "returns": "2026-11-02"
    },
    {
     "id": "4396909",
@@ -522,10 +504,10 @@
     "id": "4432847",
     "name": "Terrence Shannon Jr.",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hip",
+    "status": "Out",
+    "detail": "Hip Bruise",
     "date": "2026-11-02",
-    "returns": "2026-11-02"
+    "returns": "2026-11-04"
    },
    {
     "id": "4432816",
@@ -560,10 +542,10 @@
     "id": "3907497",
     "name": "Dejounte Murray",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Personal",
     "date": "2026-11-02",
-    "returns": "2026-11-02"
+    "returns": "2026-11-04"
    },
    {
     "id": "4277956",
@@ -582,17 +564,6 @@
     "detail": "Knee Bruise",
     "date": "2026-10-30",
     "returns": "2026-11-08"
-   }
-  ],
-  "NYK": [
-   {
-    "id": "4277869",
-    "name": "Jose Alvarado",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
    }
   ],
   "OKC": [
@@ -709,6 +680,15 @@
   ],
   "PHI": [
    {
+    "id": "4870562",
+    "name": "Dominick Barlow",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back Fracture",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "3059318",
     "name": "Joel Embiid",
     "pos": "C",
@@ -716,15 +696,6 @@
     "detail": "Foot",
     "date": "2026-11-01",
     "returns": "2026-11-02"
-   },
-   {
-    "id": "4870562",
-    "name": "Dominick Barlow",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back Fracture",
-    "date": "2026-10-19",
-    "returns": "2026-11-04"
    },
    {
     "id": "4871141",

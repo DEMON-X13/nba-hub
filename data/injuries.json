@@ -1,7 +1,16 @@
 {
- "date": "2026-11-01",
+ "date": "2026-11-02",
  "teams": {
   "ATL": [
+   {
+    "id": "5149077",
+    "name": "Kingston Flemings",
+    "pos": "G",
+    "status": "Suspension",
+    "detail": "Suspension",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
+   },
    {
     "id": "4701230",
     "name": "Jalen Johnson",
@@ -44,9 +53,9 @@
     "id": "4351852",
     "name": "Mitchell Robinson",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest Not Specified",
-    "date": "2026-11-01",
+    "date": "2026-11-02",
     "returns": "2026-11-02"
    },
    {
@@ -64,9 +73,9 @@
     "id": "5101761",
     "name": "Mikel Brown Jr.",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-31",
+    "date": "2026-11-02",
     "returns": "2026-11-02"
    },
    {
@@ -134,15 +143,6 @@
     "status": "Out",
     "detail": "Hamstring",
     "date": "2026-11-01",
-    "returns": "2026-11-04"
-   },
-   {
-    "id": "4848625",
-    "name": "Dailyn Swain",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
-    "date": "2026-10-31",
     "returns": "2026-11-02"
    }
   ],
@@ -168,31 +168,13 @@
   ],
   "DAL": [
    {
-    "id": "5279129",
-    "name": "Sergio de Larrea",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Strain",
-    "date": "2026-10-30",
-    "returns": "2026-11-04"
-   },
-   {
-    "id": "4593125",
-    "name": "Santi Aldama",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-10-30",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "5148538",
     "name": "Tarik Biberovic",
     "pos": "F",
     "status": "Out",
     "detail": "Heel Inflammation",
-    "date": "2026-10-30",
-    "returns": "2026-11-02"
+    "date": "2026-11-01",
+    "returns": "2026-11-12"
    },
    {
     "id": "4683688",
@@ -200,27 +182,54 @@
     "pos": "C",
     "status": "Out",
     "detail": "Foot Surgery",
-    "date": "2026-10-22",
+    "date": "2026-11-01",
+    "returns": "2026-11-12"
+   },
+   {
+    "id": "6442",
+    "name": "Kyrie Irving",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-01",
     "returns": "2026-11-02"
+   },
+   {
+    "id": "4593125",
+    "name": "Santi Aldama",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "5279129",
+    "name": "Sergio de Larrea",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Strain",
+    "date": "2026-10-30",
+    "returns": "2026-11-04"
    }
   ],
   "DEN": [
-   {
-    "id": "4065813",
-    "name": "Alpha Diallo",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Personal",
-    "date": "2026-10-31",
-    "returns": "2026-11-02"
-   },
    {
     "id": "4592427",
     "name": "Spencer Jones",
     "pos": "F",
     "status": "Out",
     "detail": "Hamstring Not Specified",
-    "date": "2026-10-27",
+    "date": "2026-11-01",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4065813",
+    "name": "Alpha Diallo",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Wrist Sprain",
+    "date": "2026-11-01",
     "returns": "2026-11-02"
    },
    {
@@ -258,27 +267,27 @@
     "id": "4997536",
     "name": "Gui Santos",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee",
-    "date": "2026-10-31",
-    "returns": "2026-11-01"
+    "date": "2026-11-02",
+    "returns": "2026-11-05"
    },
    {
     "id": "6589",
     "name": "Draymond Green",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-31",
+    "date": "2026-11-02",
     "returns": "2026-11-02"
    },
    {
     "id": "3975",
     "name": "Stephen Curry",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-10-31",
+    "date": "2026-11-02",
     "returns": "2026-11-02"
    },
    {
@@ -343,9 +352,9 @@
     "id": "4278355",
     "name": "Obi Toppin",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Soreness",
-    "date": "2026-11-01",
+    "date": "2026-11-02",
     "returns": "2026-11-02"
    },
    {
@@ -401,7 +410,7 @@
     "pos": "C",
     "status": "Out",
     "detail": "Foot Surgery",
-    "date": "2026-11-01",
+    "date": "2026-11-02",
     "returns": "2026-11-08"
    },
    {
@@ -410,7 +419,7 @@
     "pos": "F",
     "status": "Out",
     "detail": "Achilles Surgery",
-    "date": "2026-11-01",
+    "date": "2026-11-02",
     "returns": "2026-11-08"
    },
    {
@@ -419,8 +428,17 @@
     "pos": "G",
     "status": "Out",
     "detail": "Foot Plantar Fasciitis",
-    "date": "2026-11-01",
+    "date": "2026-11-02",
     "returns": "2026-11-08"
+   },
+   {
+    "id": "3936099",
+    "name": "Derrick Jones Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-02",
+    "returns": "2026-11-02"
    },
    {
     "id": "6580",
@@ -463,15 +481,6 @@
   ],
   "MEM": [
    {
-    "id": "4593016",
-    "name": "Quinten Post",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle Not Specified",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "4431785",
     "name": "Scotty Pippen Jr.",
     "pos": "G",
@@ -481,25 +490,27 @@
     "returns": "2026-11-02"
    },
    {
-    "id": "4065733",
-    "name": "Ty Jerome",
-    "pos": "G",
+    "id": "4593016",
+    "name": "Quinten Post",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Back Soreness",
+    "detail": "Ankle Not Specified",
     "date": "2026-11-01",
     "returns": "2026-11-02"
    }
   ],
-  "MIN": [
+  "MIA": [
    {
-    "id": "3032976",
-    "name": "Rudy Gobert",
-    "pos": "C",
+    "id": "2528210",
+    "name": "Tim Hardaway Jr.",
+    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Back Spasms",
-    "date": "2026-11-01",
+    "detail": "Personal",
+    "date": "2026-11-02",
     "returns": "2026-11-02"
-   },
+   }
+  ],
+  "MIN": [
    {
     "id": "4594268",
     "name": "Anthony Edwards",
@@ -561,6 +572,15 @@
   ],
   "OKC": [
    {
+    "id": "5061603",
+    "name": "Thomas Sorber",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "4683692",
     "name": "Cason Wallace",
     "pos": "G",
@@ -597,15 +617,6 @@
     "returns": "2026-11-04"
    },
    {
-    "id": "5061603",
-    "name": "Thomas Sorber",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee",
-    "date": "2026-10-27",
-    "returns": "2026-11-04"
-   },
-   {
     "id": "5159925",
     "name": "Nikola Topic",
     "pos": "G",
@@ -622,7 +633,7 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Not Specified",
-    "date": "2026-10-29",
+    "date": "2026-11-02",
     "returns": "2026-11-10"
    },
    {
@@ -729,8 +740,17 @@
     "pos": "C",
     "status": "Out",
     "detail": "Calf Strain",
-    "date": "2026-10-26",
-    "returns": "2026-11-06"
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "3064440",
+    "name": "Zach LaVine",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Elbow Soreness",
+    "date": "2026-11-01",
+    "returns": "2026-11-02"
    },
    {
     "id": "4898371",
@@ -748,7 +768,7 @@
     "status": "Out",
     "detail": "Ankle",
     "date": "2026-10-26",
-    "returns": "2026-11-06"
+    "returns": "2026-11-10"
    },
    {
     "id": "3907387",
@@ -781,6 +801,15 @@
    }
   ],
   "TOR": [
+   {
+    "id": "3134908",
+    "name": "Jakob Poeltl",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Shoulder Inflammation",
+    "date": "2026-11-02",
+    "returns": "2026-11-02"
+   },
    {
     "id": "6450",
     "name": "Kawhi Leonard",

@@ -1,5 +1,5 @@
 {
- "date": "2026-11-01",
+ "date": "2026-11-02",
  "teams": {
   "ATL": [
    {
@@ -49,7 +49,7 @@
     "name": "Kingston Flemings",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4585618",
@@ -603,7 +603,7 @@
     "name": "Dailyn Swain",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431687",
@@ -796,7 +796,7 @@
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4873153",
@@ -1536,7 +1536,7 @@
     "name": "Derrick Jones Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3448",
@@ -1799,7 +1799,7 @@
     "name": "Ty Jerome",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5231919",
@@ -1927,7 +1927,7 @@
     "name": "Tim Hardaway Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4431786",
@@ -2183,7 +2183,7 @@
     "name": "Rudy Gobert",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4592492",
@@ -3151,7 +3151,7 @@
     "name": "Zach LaVine",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107897",
@@ -3421,7 +3421,7 @@
     "name": "Jakob Poeltl",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395724",
@@ -3710,35 +3710,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-11-01",
-  "BOS": "2026-11-01",
-  "BKN": "2026-11-01",
-  "CHA": "2026-11-01",
-  "CHI": "2026-11-01",
-  "CLE": "2026-11-01",
-  "DAL": "2026-11-01",
-  "DEN": "2026-11-01",
-  "DET": "2026-11-01",
-  "GSW": "2026-11-01",
-  "HOU": "2026-11-01",
-  "IND": "2026-11-01",
-  "LAC": "2026-11-01",
-  "LAL": "2026-11-01",
-  "MEM": "2026-11-01",
-  "MIA": "2026-11-01",
-  "MIL": "2026-11-01",
-  "MIN": "2026-11-01",
-  "NOP": "2026-11-01",
-  "NYK": "2026-11-01",
-  "OKC": "2026-11-01",
-  "ORL": "2026-11-01",
-  "PHI": "2026-11-01",
-  "PHX": "2026-11-01",
-  "POR": "2026-11-01",
-  "SAC": "2026-11-01",
-  "SAS": "2026-11-01",
-  "TOR": "2026-11-01",
-  "UTA": "2026-11-01",
-  "WAS": "2026-11-01"
+  "ATL": "2026-11-02",
+  "BOS": "2026-11-02",
+  "BKN": "2026-11-02",
+  "CHA": "2026-11-02",
+  "CHI": "2026-11-02",
+  "CLE": "2026-11-02",
+  "DAL": "2026-11-02",
+  "DEN": "2026-11-02",
+  "DET": "2026-11-02",
+  "GSW": "2026-11-02",
+  "HOU": "2026-11-02",
+  "IND": "2026-11-02",
+  "LAC": "2026-11-02",
+  "LAL": "2026-11-02",
+  "MEM": "2026-11-02",
+  "MIA": "2026-11-02",
+  "MIL": "2026-11-02",
+  "MIN": "2026-11-02",
+  "NOP": "2026-11-02",
+  "NYK": "2026-11-02",
+  "OKC": "2026-11-02",
+  "ORL": "2026-11-02",
+  "PHI": "2026-11-02",
+  "PHX": "2026-11-02",
+  "POR": "2026-11-02",
+  "SAC": "2026-11-02",
+  "SAS": "2026-11-02",
+  "TOR": "2026-11-02",
+  "UTA": "2026-11-02",
+  "WAS": "2026-11-02"
  }
 }

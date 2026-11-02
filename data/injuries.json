@@ -165,7 +165,7 @@
     "status": "Day-To-Day",
     "detail": "Knee",
     "date": "2026-11-02",
-    "returns": "2026-11-04"
+    "returns": "2026-11-02"
    },
    {
     "id": "5148538",
@@ -255,6 +255,24 @@
   ],
   "GSW": [
    {
+    "id": "4397040",
+    "name": "Brandon Williams",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Quadriceps Bruise",
+    "date": "2026-11-02",
+    "returns": "2026-11-02"
+   },
+   {
+    "id": "3213",
+    "name": "Al Horford",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-11-02",
+    "returns": "2026-11-05"
+   },
+   {
     "id": "4997536",
     "name": "Gui Santos",
     "pos": "F",
@@ -262,24 +280,6 @@
     "detail": "Knee",
     "date": "2026-11-02",
     "returns": "2026-11-05"
-   },
-   {
-    "id": "6589",
-    "name": "Draymond Green",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-11-02",
-    "returns": "2026-11-02"
-   },
-   {
-    "id": "3975",
-    "name": "Stephen Curry",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-11-02",
-    "returns": "2026-11-02"
    },
    {
     "id": "3102531",
@@ -432,6 +432,24 @@
   ],
   "LAC": [
    {
+    "id": "4066648",
+    "name": "Rui Hachimura",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Quadriceps Bruise",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "3936099",
+    "name": "Derrick Jones Jr.",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Soreness",
+    "date": "2026-11-02",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "5108024",
     "name": "Yanic Konan Niederhauser",
     "pos": "C",
@@ -448,24 +466,6 @@
     "detail": "Achilles Surgery",
     "date": "2026-11-02",
     "returns": "2026-11-08"
-   },
-   {
-    "id": "4065778",
-    "name": "Max Strus",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Foot Plantar Fasciitis",
-    "date": "2026-11-02",
-    "returns": "2026-11-08"
-   },
-   {
-    "id": "3936099",
-    "name": "Derrick Jones Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-11-02",
-    "returns": "2026-11-02"
    },
    {
     "id": "6580",
@@ -487,15 +487,6 @@
    }
   ],
   "LAL": [
-   {
-    "id": "4433137",
-    "name": "Ziaire Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Foot",
-    "date": "2026-11-01",
-    "returns": "2026-11-02"
-   },
    {
     "id": "5060631",
     "name": "Adou Thiero",
@@ -844,6 +835,15 @@
    }
   ],
   "TOR": [
+   {
+    "id": "4433134",
+    "name": "Scottie Barnes",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hip Soreness",
+    "date": "2026-11-02",
+    "returns": "2026-11-02"
+   },
    {
     "id": "3134908",
     "name": "Jakob Poeltl",

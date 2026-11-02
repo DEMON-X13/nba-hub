@@ -1131,21 +1131,21 @@
     "name": "Stephen Curry",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6589",
     "name": "Draymond Green",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3213",
     "name": "Al Horford",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4703396",
@@ -1229,7 +1229,7 @@
     "name": "Brandon Williams",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "HOU": [
@@ -1515,7 +1515,7 @@
     "name": "Rui Hachimura",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3913176",
@@ -1592,7 +1592,7 @@
     "name": "Max Strus",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5254165",
@@ -1741,7 +1741,7 @@
     "name": "Ziaire Williams",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "MEM": [
@@ -3351,7 +3351,7 @@
     "name": "Scottie Barnes",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395625",

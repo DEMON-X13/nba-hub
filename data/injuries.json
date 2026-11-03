@@ -41,8 +41,17 @@
   ],
   "BOS": [
    {
-    "id": "4251",
-    "name": "Paul George",
+    "id": "4066354",
+    "name": "Payton Pritchard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Shoulder",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4065648",
+    "name": "Jayson Tatum",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Rest",
@@ -106,7 +115,16 @@
     "pos": "C",
     "status": "Out",
     "detail": "Hamstring",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Finger",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    }
   ],
@@ -213,8 +231,8 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip Bruise",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
+    "date": "2026-11-03",
+    "returns": "2026-11-08"
    },
    {
     "id": "4433621",

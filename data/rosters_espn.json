@@ -163,7 +163,7 @@
     "name": "Paul George",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5175647",
@@ -198,7 +198,7 @@
     "name": "Payton Pritchard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397424",
@@ -226,7 +226,7 @@
     "name": "Jayson Tatum",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683689",
@@ -596,7 +596,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4848625",
@@ -2176,7 +2176,7 @@
     "name": "Enrique Freeman",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3032976",

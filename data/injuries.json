@@ -1,32 +1,23 @@
 {
- "date": "2026-11-02",
+ "date": "2026-11-03",
  "teams": {
   "ATL": [
-   {
-    "id": "4701230",
-    "name": "Jalen Johnson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
-   },
-   {
-    "id": "5149077",
-    "name": "Kingston Flemings",
-    "pos": "G",
-    "status": "Suspension",
-    "detail": "Suspension",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
-   },
    {
     "id": "3146557",
     "name": "Jock Landale",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Hip",
-    "date": "2026-11-01",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4701230",
+    "name": "Jalen Johnson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
@@ -53,9 +44,9 @@
     "id": "4251",
     "name": "Paul George",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
@@ -124,18 +115,18 @@
     "id": "4576087",
     "name": "Peyton Watson",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Hamstring Soreness",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-01",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    }
   ],
@@ -144,9 +135,18 @@
     "id": "6442",
     "name": "Kyrie Irving",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4432582",
+    "name": "Max Christie",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip Not Specified",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
@@ -231,8 +231,17 @@
     "id": "4397040",
     "name": "Brandon Williams",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Quadriceps Bruise",
+    "date": "2026-11-03",
+    "returns": "2026-11-05"
+   },
+   {
+    "id": "4997536",
+    "name": "Gui Santos",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
     "date": "2026-11-03",
     "returns": "2026-11-05"
    },
@@ -240,18 +249,9 @@
     "id": "3213",
     "name": "Al Horford",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-11-02",
-    "returns": "2026-11-05"
-   },
-   {
-    "id": "4997536",
-    "name": "Gui Santos",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "returns": "2026-11-05"
    },
    {
@@ -287,9 +287,9 @@
     "id": "3102529",
     "name": "Clint Capela",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
@@ -304,10 +304,37 @@
   ],
   "IND": [
    {
+    "id": "3149673",
+    "name": "Pascal Siakam",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4396909",
+    "name": "Aaron Nesmith",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4395712",
+    "name": "Andrew Nembhard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Neck",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "3133603",
     "name": "Kelly Oubre Jr.",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Bruise",
     "date": "2026-11-03",
     "returns": "2026-11-04"
@@ -316,9 +343,9 @@
     "id": "2580365",
     "name": "Larry Nance Jr.",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
@@ -347,33 +374,6 @@
     "detail": "Ankle Sprain",
     "date": "2026-11-02",
     "returns": "2026-11-09"
-   },
-   {
-    "id": "4396909",
-    "name": "Aaron Nesmith",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Rest",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
-   },
-   {
-    "id": "4395712",
-    "name": "Andrew Nembhard",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Neck",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
-   },
-   {
-    "id": "3149673",
-    "name": "Pascal Siakam",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Rest",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
    },
    {
     "id": "5157066",
@@ -405,21 +405,21 @@
   ],
   "LAC": [
    {
-    "id": "4066648",
-    "name": "Rui Hachimura",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Quadriceps Bruise",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
-   },
-   {
     "id": "3936099",
     "name": "Derrick Jones Jr.",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Soreness",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "4066648",
+    "name": "Rui Hachimura",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Quadriceps Bruise",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
@@ -466,26 +466,26 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Inflammation",
-    "date": "2026-11-01",
-    "returns": "2026-11-09"
+    "date": "2026-11-03",
+    "returns": "2026-11-06"
    }
   ],
   "MEM": [
    {
-    "id": "4431785",
-    "name": "Scotty Pippen Jr.",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Back Soreness",
+    "id": "4593016",
+    "name": "Quinten Post",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Ankle Not Specified",
     "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
-    "id": "4593016",
-    "name": "Quinten Post",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Ankle Not Specified",
+    "id": "4431785",
+    "name": "Scotty Pippen Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back Soreness",
     "date": "2026-11-03",
     "returns": "2026-11-04"
    }
@@ -495,9 +495,9 @@
     "id": "4432847",
     "name": "Terrence Shannon Jr.",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Hip Bruise",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {
@@ -609,9 +609,9 @@
     "id": "4712849",
     "name": "Anthony Black",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-11-02",
+    "date": "2026-11-03",
     "returns": "2026-11-05"
    },
    {
@@ -681,6 +681,15 @@
    }
   ],
   "PHX": [
+   {
+    "id": "4278402",
+    "name": "Jordan Goodwin",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Calf Not Specified",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
    {
     "id": "4701232",
     "name": "Mark Williams",
@@ -757,7 +766,7 @@
     "status": "Out",
     "detail": "Calf Strain",
     "date": "2026-10-30",
-    "returns": "2026-11-06"
+    "returns": "2026-11-09"
    },
    {
     "id": "5101845",
@@ -771,22 +780,13 @@
   ],
   "TOR": [
    {
-    "id": "4433134",
-    "name": "Scottie Barnes",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hip Soreness",
-    "date": "2026-11-02",
-    "returns": "2026-11-02"
-   },
-   {
     "id": "3134908",
     "name": "Jakob Poeltl",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Shoulder Inflammation",
-    "date": "2026-11-02",
-    "returns": "2026-11-02"
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
    },
    {
     "id": "4432586",
@@ -838,6 +838,24 @@
   ],
   "WAS": [
    {
+    "id": "5160992",
+    "name": "Alex Sarr",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee Soreness",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
+    "id": "2581184",
+    "name": "Anthony Gill",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back Spasms",
+    "date": "2026-11-03",
+    "returns": "2026-11-04"
+   },
+   {
     "id": "4432187",
     "name": "Reece Beekman",
     "pos": "G",
@@ -845,24 +863,6 @@
     "detail": "Shoulder",
     "date": "2026-11-02",
     "returns": "2026-12-03"
-   },
-   {
-    "id": "2581184",
-    "name": "Anthony Gill",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back Spasms",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
-   },
-   {
-    "id": "5160992",
-    "name": "Alex Sarr",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Soreness",
-    "date": "2026-11-02",
-    "returns": "2026-11-04"
    },
    {
     "id": "4997537",

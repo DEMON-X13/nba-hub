@@ -1357,8 +1357,8 @@
  },
  "upcoming": {
   "2027_20261102_ATL_IND": {
-   "pHome": 0.2925,
-   "spread": 6.8
+   "pHome": 0.2831,
+   "spread": 7.2
   },
   "2027_20261102_BKN_NYK": {
    "pHome": 0.8935,
@@ -1393,12 +1393,12 @@
    "spread": -2.3
   },
   "2027_20261102_PHX_GSW": {
-   "pHome": 0.5212,
-   "spread": -0.7
+   "pHome": 0.5059,
+   "spread": -0.2
   },
   "2027_20261102_POR_DEN": {
-   "pHome": 0.6806,
-   "spread": -5.8
+   "pHome": 0.677,
+   "spread": -5.7
   },
   "2027_20261102_SAC_DAL": {
    "pHome": 0.6959,
@@ -2272,5 +2272,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-02T23:37Z"
+ "generated": "2026-11-03T01:37Z"
 }

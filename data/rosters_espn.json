@@ -889,7 +889,7 @@
     "name": "Alpha Diallo",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3064290",
@@ -1301,7 +1301,7 @@
     "name": "Reed Sheppard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2990992",
@@ -1422,7 +1422,7 @@
     "name": "Kelly Oubre Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433076",
@@ -2127,7 +2127,7 @@
     "name": "LaMelo Ball",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5279133",
@@ -2781,7 +2781,7 @@
     "name": "Joel Embiid",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3904625",
@@ -3151,7 +3151,7 @@
     "name": "Zach LaVine",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107897",

@@ -3797,19 +3797,18 @@ date,team,player_id,name,status
 2026-11-02,DAL,4683688,Dereck Lively II,Out
 2026-11-02,DAL,5279129,Sergio de Larrea,Out
 2026-11-02,DEN,4592427,Spencer Jones,Out
-2026-11-02,DEN,4065813,Alpha Diallo,Out
 2026-11-02,DEN,4432181,Julian Strawther,Out
 2026-11-02,DET,4395702,Isaiah Joe,Out
 2026-11-02,DET,4433621,Jalen Duren,Out
-2026-11-02,GSW,4397040,Brandon Williams,Day-To-Day
+2026-11-02,GSW,4397040,Brandon Williams,Out
 2026-11-02,GSW,3213,Al Horford,Out
 2026-11-02,GSW,4997536,Gui Santos,Out
 2026-11-02,GSW,3102531,Kristaps Porzingis,Out
 2026-11-02,GSW,4432171,Moses Moody,Out
 2026-11-02,GSW,6430,Jimmy Butler III,Out
 2026-11-02,HOU,3102529,Clint Capela,Out
-2026-11-02,HOU,4711272,Reed Sheppard,Day-To-Day
 2026-11-02,HOU,2991235,Steven Adams,Out
+2026-11-02,IND,3133603,Kelly Oubre Jr.,Out
 2026-11-02,IND,2580365,Larry Nance Jr.,Out
 2026-11-02,IND,4278355,Obi Toppin,Out
 2026-11-02,IND,2530530,T.J. McConnell,Out
@@ -3827,10 +3826,9 @@ date,team,player_id,name,status
 2026-11-02,LAC,6580,Bradley Beal,Out
 2026-11-02,LAC,4396818,Jordan Miller,Out
 2026-11-02,LAL,5060631,Adou Thiero,Out
-2026-11-02,MEM,4431785,Scotty Pippen Jr.,Day-To-Day
-2026-11-02,MEM,4593016,Quinten Post,Day-To-Day
+2026-11-02,MEM,4431785,Scotty Pippen Jr.,Out
+2026-11-02,MEM,4593016,Quinten Post,Out
 2026-11-02,MIN,4432847,Terrence Shannon Jr.,Out
-2026-11-02,MIN,4432816,LaMelo Ball,Day-To-Day
 2026-11-02,MIN,4594268,Anthony Edwards,Out
 2026-11-02,MIN,3934673,Donte DiVincenzo,Out
 2026-11-02,NOP,3907497,Dejounte Murray,Out
@@ -3849,13 +3847,11 @@ date,team,player_id,name,status
 2026-11-02,ORL,5214637,Noah Penda,Out
 2026-11-02,ORL,5107251,Izaiyah Nelson,Out
 2026-11-02,PHI,4870562,Dominick Barlow,Out
-2026-11-02,PHI,3059318,Joel Embiid,Day-To-Day
 2026-11-02,PHI,4871141,Ariel Hukporti,Out
 2026-11-02,PHX,4701232,Mark Williams,Out
 2026-11-02,POR,4279888,Ja Morant,Out
 2026-11-02,POR,4914336,Shaedon Sharpe,Out
 2026-11-02,SAC,4433174,Dylan Cardwell,Out
-2026-11-02,SAC,3064440,Zach LaVine,Day-To-Day
 2026-11-02,SAC,4898371,Maxime Raynaud,Out
 2026-11-02,SAC,4594327,Keegan Murray,Out
 2026-11-02,SAC,3907387,Ben Simmons,Out

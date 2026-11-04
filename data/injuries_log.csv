@@ -3996,7 +3996,7 @@ date,team,player_id,name,status
 2026-11-04,GSW,3213,Al Horford,Day-To-Day
 2026-11-04,GSW,4432171,Moses Moody,Out
 2026-11-04,GSW,6430,Jimmy Butler III,Out
-2026-11-04,HOU,3102529,Clint Capela,Day-To-Day
+2026-11-04,HOU,3102529,Clint Capela,Out
 2026-11-04,HOU,2991235,Steven Adams,Out
 2026-11-04,IND,4017837,Ivica Zubac,Out
 2026-11-04,IND,3133603,Kelly Oubre Jr.,Day-To-Day
@@ -4005,6 +4005,7 @@ date,team,player_id,name,status
 2026-11-04,IND,5157066,Johnny Furphy,Out
 2026-11-04,IND,4433076,Ben Sheppard,Out
 2026-11-04,IND,4396993,Tyrese Haliburton,Out
+2026-11-04,LAC,4432170,Isaiah Jackson,Day-To-Day
 2026-11-04,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-11-04,LAC,3913176,Brandon Ingram,Out
 2026-11-04,LAC,6580,Bradley Beal,Out
@@ -4012,14 +4013,13 @@ date,team,player_id,name,status
 2026-11-04,LAL,5060631,Adou Thiero,Out
 2026-11-04,MEM,4593016,Quinten Post,Day-To-Day
 2026-11-04,MEM,4431785,Scotty Pippen Jr.,Out
-2026-11-04,MIA,4431772,Myron Gardner,Day-To-Day
 2026-11-04,MIA,3032977,Giannis Antetokounmpo,Day-To-Day
 2026-11-04,MIL,4697268,Kam Jones,Day-To-Day
 2026-11-04,MIN,4432847,Terrence Shannon Jr.,Out
 2026-11-04,MIN,4594268,Anthony Edwards,Out
 2026-11-04,MIN,3934673,Donte DiVincenzo,Out
-2026-11-04,NOP,4277956,Jordan Poole,Out
 2026-11-04,NOP,4397688,Trey Murphy III,Day-To-Day
+2026-11-04,NOP,4277956,Jordan Poole,Out
 2026-11-04,NOP,5061589,Yves Missi,Out
 2026-11-04,NYK,3062679,Josh Hart,Out
 2026-11-04,OKC,5159925,Nikola Topic,Out
@@ -4028,7 +4028,6 @@ date,team,player_id,name,status
 2026-11-04,OKC,4683692,Cason Wallace,Out
 2026-11-04,OKC,4433255,Chet Holmgren,Out
 2026-11-04,OKC,4593803,Jalen Williams,Out
-2026-11-04,ORL,4712849,Anthony Black,Day-To-Day
 2026-11-04,ORL,4065654,Jonathan Isaac,Out
 2026-11-04,ORL,4432165,Jalen Suggs,Out
 2026-11-04,ORL,4432573,Paolo Banchero,Out
@@ -4050,8 +4049,8 @@ date,team,player_id,name,status
 2026-11-04,TOR,6450,Kawhi Leonard,Out
 2026-11-04,TOR,3134908,Jakob Poeltl,Day-To-Day
 2026-11-04,TOR,4432586,Nate Bittle,Out
-2026-11-04,UTA,3102530,Jusuf Nurkic,Out
 2026-11-04,UTA,4277919,Mo Bamba,Day-To-Day
+2026-11-04,UTA,3102530,Jusuf Nurkic,Out
 2026-11-04,UTA,4277961,Jaren Jackson Jr.,Out
 2026-11-04,UTA,4433268,Trey Alexander,Out
 2026-11-04,WAS,5104155,Bilal Coulibaly,Day-To-Day

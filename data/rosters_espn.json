@@ -1529,7 +1529,7 @@
     "name": "Isaiah Jackson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3936099",
@@ -1913,7 +1913,7 @@
     "name": "Myron Gardner",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4700818",
@@ -2639,7 +2639,7 @@
     "name": "Anthony Black",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278572",

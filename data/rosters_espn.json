@@ -433,7 +433,7 @@
     "name": "Kon Knueppel",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5239590",
@@ -2048,7 +2048,7 @@
     "name": "Kam Jones",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3134907",
@@ -2565,6 +2565,13 @@
    {
     "id": "5241364",
     "name": "Bennett Stirtz",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4433159",
+    "name": "Dalen Terry",
     "pos": "G",
     "status": "active",
     "injured": false
@@ -3607,7 +3614,7 @@
     "name": "Bilal Coulibaly",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6583",

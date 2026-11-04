@@ -3870,7 +3870,7 @@ date,team,player_id,name,status
 2026-11-02,WAS,4997537,Tristan Vukcevic,Out
 2026-11-02,WAS,4432907,Justin Champagnie,Out
 2026-11-02,WAS,4606840,Jamir Watkins,Out
-2026-11-03,ATL,3146557,Jock Landale,Day-To-Day
+2026-11-03,ATL,3146557,Jock Landale,Out
 2026-11-03,ATL,4701230,Jalen Johnson,Day-To-Day
 2026-11-03,ATL,4712863,Mouhamed Gueye,Out
 2026-11-03,ATL,5105571,Henri Veesaar,Out
@@ -3879,18 +3879,19 @@ date,team,player_id,name,status
 2026-11-03,BOS,4433188,Devin Carter,Out
 2026-11-03,BKN,5175643,Egor Demin,Out
 2026-11-03,BKN,5105626,Tyler Bilodeau,Out
-2026-11-03,CHA,4066218,Grant Williams,Out
 2026-11-03,CHA,5061575,Kon Knueppel,Out
+2026-11-03,CHA,4395651,Coby White,Day-To-Day
+2026-11-03,CHA,4066218,Grant Williams,Out
 2026-11-03,CHI,4278067,Nic Claxton,Out
 2026-11-03,CHI,4397189,Jalen Smith,Day-To-Day
-2026-11-03,CLE,4576087,Peyton Watson,Day-To-Day
-2026-11-03,CLE,4683747,Jaylon Tyson,Day-To-Day
-2026-11-03,DAL,6442,Kyrie Irving,Day-To-Day
-2026-11-03,DAL,4432582,Max Christie,Day-To-Day
+2026-11-03,CLE,4683747,Jaylon Tyson,Out
+2026-11-03,CLE,4576087,Peyton Watson,Out
+2026-11-03,DAL,4432582,Max Christie,Out
 2026-11-03,DAL,4593125,Santi Aldama,Out
 2026-11-03,DAL,5148538,Tarik Biberovic,Out
 2026-11-03,DAL,4683688,Dereck Lively II,Out
 2026-11-03,DAL,5279129,Sergio de Larrea,Out
+2026-11-03,DEN,3138196,Cameron Johnson,Day-To-Day
 2026-11-03,DEN,4592427,Spencer Jones,Out
 2026-11-03,DEN,4432181,Julian Strawther,Out
 2026-11-03,DET,4395702,Isaiah Joe,Out
@@ -3903,14 +3904,10 @@ date,team,player_id,name,status
 2026-11-03,GSW,6430,Jimmy Butler III,Out
 2026-11-03,HOU,3102529,Clint Capela,Day-To-Day
 2026-11-03,HOU,2991235,Steven Adams,Out
-2026-11-03,IND,3149673,Pascal Siakam,Day-To-Day
-2026-11-03,IND,4396909,Aaron Nesmith,Day-To-Day
-2026-11-03,IND,4395712,Andrew Nembhard,Day-To-Day
+2026-11-03,IND,4017837,Ivica Zubac,Out
 2026-11-03,IND,3133603,Kelly Oubre Jr.,Day-To-Day
-2026-11-03,IND,2580365,Larry Nance Jr.,Day-To-Day
 2026-11-03,IND,4278355,Obi Toppin,Out
 2026-11-03,IND,2530530,T.J. McConnell,Out
-2026-11-03,IND,4017837,Ivica Zubac,Out
 2026-11-03,IND,5157066,Johnny Furphy,Out
 2026-11-03,IND,4433076,Ben Sheppard,Out
 2026-11-03,IND,4396993,Tyrese Haliburton,Out
@@ -3922,19 +3919,20 @@ date,team,player_id,name,status
 2026-11-03,LAC,4396818,Jordan Miller,Out
 2026-11-03,LAL,5060631,Adou Thiero,Out
 2026-11-03,MEM,4593016,Quinten Post,Day-To-Day
-2026-11-03,MEM,4431785,Scotty Pippen Jr.,Day-To-Day
+2026-11-03,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-03,MIN,4432847,Terrence Shannon Jr.,Day-To-Day
 2026-11-03,MIN,4594268,Anthony Edwards,Out
 2026-11-03,MIN,3934673,Donte DiVincenzo,Out
-2026-11-03,NOP,3907497,Dejounte Murray,Out
 2026-11-03,NOP,4277956,Jordan Poole,Out
+2026-11-03,NOP,4397688,Trey Murphy III,Day-To-Day
 2026-11-03,NOP,5061589,Yves Missi,Out
+2026-11-03,NYK,3062679,Josh Hart,Day-To-Day
+2026-11-03,OKC,5159925,Nikola Topic,Out
 2026-11-03,OKC,5061603,Thomas Sorber,Out
+2026-11-03,OKC,4432823,Jaylin Williams,Day-To-Day
 2026-11-03,OKC,4683692,Cason Wallace,Out
 2026-11-03,OKC,4433255,Chet Holmgren,Out
 2026-11-03,OKC,4593803,Jalen Williams,Out
-2026-11-03,OKC,2991350,Alex Caruso,Out
-2026-11-03,OKC,5159925,Nikola Topic,Out
 2026-11-03,ORL,4712849,Anthony Black,Day-To-Day
 2026-11-03,ORL,4065654,Jonathan Isaac,Out
 2026-11-03,ORL,4432165,Jalen Suggs,Out
@@ -3956,11 +3954,12 @@ date,team,player_id,name,status
 2026-11-03,TOR,3134908,Jakob Poeltl,Day-To-Day
 2026-11-03,TOR,4432586,Nate Bittle,Out
 2026-11-03,TOR,6450,Kawhi Leonard,Out
+2026-11-03,UTA,3102530,Jusuf Nurkic,Out
+2026-11-03,UTA,4277919,Mo Bamba,Day-To-Day
 2026-11-03,UTA,4277961,Jaren Jackson Jr.,Out
 2026-11-03,UTA,4433268,Trey Alexander,Out
-2026-11-03,UTA,3102530,Jusuf Nurkic,Out
-2026-11-03,WAS,5160992,Alex Sarr,Day-To-Day
 2026-11-03,WAS,2581184,Anthony Gill,Day-To-Day
+2026-11-03,WAS,5160992,Alex Sarr,Day-To-Day
 2026-11-03,WAS,4432187,Reece Beekman,Out
 2026-11-03,WAS,4997537,Tristan Vukcevic,Out
 2026-11-03,WAS,4432907,Justin Champagnie,Out

@@ -489,7 +489,7 @@
     "name": "Coby White",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4066218",
@@ -796,7 +796,7 @@
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4873153",
@@ -889,7 +889,7 @@
     "name": "Alpha Diallo",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3064290",
@@ -917,7 +917,7 @@
     "name": "Cameron Johnson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3112335",
@@ -1401,21 +1401,21 @@
     "name": "Larry Nance Jr.",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4395712",
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4396909",
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133603",
@@ -1436,7 +1436,7 @@
     "name": "Pascal Siakam",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4398207",
@@ -2318,14 +2318,14 @@
     "name": "Trey Murphy III",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3907497",
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703115",
@@ -2439,7 +2439,7 @@
     "name": "Josh Hart",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4897943",
@@ -2504,7 +2504,7 @@
     "name": "Alex Caruso",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5105800",
@@ -2602,7 +2602,7 @@
     "name": "Jaylin Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133626",
@@ -3472,7 +3472,7 @@
     "name": "Mo Bamba",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4065673",

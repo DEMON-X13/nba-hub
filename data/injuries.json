@@ -688,20 +688,20 @@
   ],
   "PHX": [
    {
+    "id": "5105977",
+    "name": "Rasheer Fleming",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-04",
+    "returns": "2026-11-05"
+   },
+   {
     "id": "4278402",
     "name": "Jordan Goodwin",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Calf Not Specified",
-    "date": "2026-11-04",
-    "returns": "2026-11-04"
-   },
-   {
-    "id": "5105977",
-    "name": "Rasheer Fleming",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
     "date": "2026-11-04",
     "returns": "2026-11-04"
    },
@@ -737,13 +737,13 @@
   ],
   "SAC": [
    {
-    "id": "4431679",
-    "name": "Precious Achiuwa",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Soreness",
+    "id": "4279318",
+    "name": "Daeqwon Plowden",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Illness",
     "date": "2026-11-04",
-    "returns": "2026-11-04"
+    "returns": "2026-11-06"
    },
    {
     "id": "4898371",
@@ -868,15 +868,6 @@
     "status": "Day-To-Day",
     "detail": "Illness",
     "date": "2026-11-04",
-    "returns": "2026-11-04"
-   },
-   {
-    "id": "2581184",
-    "name": "Anthony Gill",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back Spasms",
-    "date": "2026-11-03",
     "returns": "2026-11-04"
    },
    {

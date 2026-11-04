@@ -3102,7 +3102,7 @@
     "name": "Precious Achiuwa",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5142620",
@@ -3186,7 +3186,7 @@
     "name": "Daeqwon Plowden",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4898371",
@@ -3642,7 +3642,7 @@
     "name": "Anthony Gill",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5238230",

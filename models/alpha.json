@@ -1398,8 +1398,8 @@
    "spread": -9.9
   },
   "2027_20261104_LAL_SAC": {
-   "pHome": 0.317,
-   "spread": 5.9
+   "pHome": 0.3264,
+   "spread": 5.5
   },
   "2027_20261104_MIA_LAC": {
    "pHome": 0.5013,
@@ -2249,5 +2249,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-04T18:40Z"
+ "generated": "2026-11-04T21:57Z"
 }

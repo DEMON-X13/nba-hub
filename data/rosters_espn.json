@@ -98,7 +98,7 @@
     "name": "Asa Newell",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4431680",
@@ -198,7 +198,7 @@
     "name": "Payton Pritchard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397424",
@@ -270,7 +270,7 @@
     "name": "Noah Clowney",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5175643",
@@ -354,7 +354,7 @@
     "name": "Day'Ron Sharpe",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5279130",
@@ -433,7 +433,7 @@
     "name": "Kon Knueppel",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5239590",
@@ -526,7 +526,7 @@
     "name": "Zach Collins",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5242496",
@@ -596,7 +596,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4848625",
@@ -626,7 +626,7 @@
     "name": "Jarrett Allen",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3934723",
@@ -696,7 +696,7 @@
     "name": "Tyrese Proctor",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5041951",
@@ -882,14 +882,14 @@
     "name": "DeMar DeRozan",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4065813",
     "name": "Alpha Diallo",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3064290",
@@ -917,7 +917,7 @@
     "name": "Cameron Johnson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3112335",
@@ -1145,7 +1145,7 @@
     "name": "Al Horford",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703396",
@@ -1229,7 +1229,7 @@
     "name": "Brandon Williams",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "HOU": [
@@ -1457,7 +1457,7 @@
     "name": "Obi Toppin",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5106060",
@@ -1529,7 +1529,7 @@
     "name": "Isaiah Jackson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3936099",
@@ -1862,7 +1862,7 @@
     "name": "Isaiah Stewart",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5112087",
@@ -1885,7 +1885,7 @@
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107157",
@@ -2332,7 +2332,7 @@
     "name": "Jordan Poole",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4869780",
@@ -2746,7 +2746,7 @@
     "name": "Adem Bona",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3917376",
@@ -3044,7 +3044,7 @@
     "name": "Vit Krejci",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6606",
@@ -3421,7 +3421,7 @@
     "name": "Jakob Poeltl",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4395724",
@@ -3472,7 +3472,7 @@
     "name": "Mo Bamba",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4065673",

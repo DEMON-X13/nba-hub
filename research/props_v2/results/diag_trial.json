@@ -1,0 +1,4605 @@
+{
+ "generated": "2026-11-05T17:11Z",
+ "checks": {
+  "trialLines": 12298,
+  "pModelMismatch": 0,
+  "noReplayRow": 0,
+  "fits": [
+   "46d45d12a878"
+  ],
+  "reconMedianRelErr": 0.00125,
+  "reconP90": 0.0051,
+  "archiveLines": 11395,
+  "archiveReconMedian": 0,
+  "trial": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.48801,
+   "marketSaid": 0.4609,
+   "llDiff": 0.01844,
+   "brDiff": 0.00828,
+   "llModel": 0.70439,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 2796,
+     "won": 1343,
+     "units": -226.54437
+    },
+    "under": {
+     "bets": 3231,
+     "won": 1741,
+     "units": 3.72868
+    }
+   },
+   "llCi": [
+    0.01384,
+    0.02328
+   ]
+  },
+  "archive": {
+   "n": 11395,
+   "games": 83,
+   "overRate": 0.45924,
+   "modelSaid": 0.44573,
+   "marketSaid": 0.45606,
+   "llDiff": 0.01467,
+   "brDiff": 0.00644,
+   "llModel": 0.69342,
+   "llMarket": 0.67875,
+   "bias": 0.06547,
+   "muMinusLine": -0.01005,
+   "lineMinusY": 0.07552,
+   "flat": {
+    "over": {
+     "bets": 967,
+     "won": 442,
+     "units": -106.43646
+    },
+    "under": {
+     "bets": 4271,
+     "won": 2357,
+     "units": 135.27704
+    }
+   },
+   "llCi": [
+    0.00834,
+    0.02143
+   ]
+  }
+ },
+ "byStat": {
+  "All": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.48801,
+   "marketSaid": 0.4609,
+   "llDiff": 0.01844,
+   "brDiff": 0.00828,
+   "llModel": 0.70439,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 2796,
+     "won": 1343,
+     "units": -226.54437
+    },
+    "under": {
+     "bets": 3231,
+     "won": 1741,
+     "units": 3.72868
+    }
+   },
+   "llCi": [
+    0.01384,
+    0.02328
+   ]
+  },
+  "Points": {
+   "n": 1703,
+   "games": 121,
+   "overRate": 0.47974,
+   "modelSaid": 0.49652,
+   "marketSaid": 0.46922,
+   "llDiff": 0.01747,
+   "brDiff": 0.00808,
+   "llModel": 0.70949,
+   "llMarket": 0.69201,
+   "bias": 1.01169,
+   "muMinusLine": 0.95326,
+   "lineMinusY": 0.05843,
+   "flat": {
+    "over": {
+     "bets": 458,
+     "won": 231,
+     "units": -19.8698
+    },
+    "under": {
+     "bets": 497,
+     "won": 263,
+     "units": -1.1972
+    }
+   },
+   "llCi": [
+    0.00964,
+    0.02601
+   ]
+  },
+  "Rebounds": {
+   "n": 1583,
+   "games": 121,
+   "overRate": 0.49589,
+   "modelSaid": 0.49273,
+   "marketSaid": 0.45898,
+   "llDiff": 0.01262,
+   "brDiff": 0.00552,
+   "llModel": 0.70029,
+   "llMarket": 0.68767,
+   "bias": 0.12793,
+   "muMinusLine": 0.29944,
+   "lineMinusY": -0.17151,
+   "flat": {
+    "over": {
+     "bets": 363,
+     "won": 183,
+     "units": -10.85852
+    },
+    "under": {
+     "bets": 336,
+     "won": 182,
+     "units": -2.68514
+    }
+   },
+   "llCi": [
+    0.00377,
+    0.02122
+   ]
+  },
+  "Assists": {
+   "n": 1207,
+   "games": 121,
+   "overRate": 0.46645,
+   "modelSaid": 0.48107,
+   "marketSaid": 0.46085,
+   "llDiff": 0.02227,
+   "brDiff": 0.00946,
+   "llModel": 0.70649,
+   "llMarket": 0.68422,
+   "bias": 0.09948,
+   "muMinusLine": 0.17114,
+   "lineMinusY": -0.07167,
+   "flat": {
+    "over": {
+     "bets": 273,
+     "won": 128,
+     "units": -25.92065
+    },
+    "under": {
+     "bets": 360,
+     "won": 208,
+     "units": 28.37081
+    }
+   },
+   "llCi": [
+    0.01029,
+    0.03468
+   ]
+  },
+  "Threes": {
+   "n": 1381,
+   "games": 121,
+   "overRate": 0.46198,
+   "modelSaid": 0.47345,
+   "marketSaid": 0.44387,
+   "llDiff": 0.00713,
+   "brDiff": 0.00304,
+   "llModel": 0.68841,
+   "llMarket": 0.68129,
+   "bias": 0.09041,
+   "muMinusLine": 0.16753,
+   "lineMinusY": -0.07712,
+   "flat": {
+    "over": {
+     "bets": 226,
+     "won": 106,
+     "units": -3.81103
+    },
+    "under": {
+     "bets": 265,
+     "won": 141,
+     "units": -10.3277
+    }
+   },
+   "llCi": [
+    0.00037,
+    0.01456
+   ]
+  },
+  "Steals": {
+   "n": 582,
+   "games": 109,
+   "overRate": 0.47423,
+   "modelSaid": 0.4646,
+   "marketSaid": 0.45701,
+   "llDiff": 0.0026,
+   "brDiff": 0.00124,
+   "llModel": 0.65738,
+   "llMarket": 0.65478,
+   "bias": 0.00005,
+   "muMinusLine": 0.0894,
+   "lineMinusY": -0.08935,
+   "flat": {
+    "over": {
+     "bets": 30,
+     "won": 15,
+     "units": 2.64622
+    },
+    "under": {
+     "bets": 129,
+     "won": 75,
+     "units": 5.06655
+    }
+   },
+   "llCi": [
+    -0.00472,
+    0.01004
+   ]
+  },
+  "Blocks": {
+   "n": 320,
+   "games": 99,
+   "overRate": 0.4375,
+   "modelSaid": 0.47007,
+   "marketSaid": 0.43783,
+   "llDiff": 0.01238,
+   "brDiff": 0.00572,
+   "llModel": 0.64873,
+   "llMarket": 0.63635,
+   "bias": 0.0755,
+   "muMinusLine": 0.17237,
+   "lineMinusY": -0.09687,
+   "flat": {
+    "over": {
+     "bets": 47,
+     "won": 22,
+     "units": -4.67809
+    },
+    "under": {
+     "bets": 47,
+     "won": 26,
+     "units": -1.51738
+    }
+   },
+   "llCi": [
+    -0.0024,
+    0.02767
+   ]
+  },
+  "Pts+reb+ast": {
+   "n": 1308,
+   "games": 121,
+   "overRate": 0.46713,
+   "modelSaid": 0.49071,
+   "marketSaid": 0.46516,
+   "llDiff": 0.02828,
+   "brDiff": 0.01292,
+   "llModel": 0.71847,
+   "llMarket": 0.69019,
+   "bias": 1.11812,
+   "muMinusLine": 0.73203,
+   "lineMinusY": 0.38609,
+   "flat": {
+    "over": {
+     "bets": 333,
+     "won": 152,
+     "units": -47.93195
+    },
+    "under": {
+     "bets": 406,
+     "won": 215,
+     "units": -3.53941
+    }
+   },
+   "llCi": [
+    0.01959,
+    0.03732
+   ]
+  },
+  "Pts+reb": {
+   "n": 1593,
+   "games": 121,
+   "overRate": 0.48148,
+   "modelSaid": 0.50021,
+   "marketSaid": 0.46576,
+   "llDiff": 0.01819,
+   "brDiff": 0.00843,
+   "llModel": 0.71028,
+   "llMarket": 0.69209,
+   "bias": 1.11517,
+   "muMinusLine": 0.97362,
+   "lineMinusY": 0.14156,
+   "flat": {
+    "over": {
+     "bets": 447,
+     "won": 220,
+     "units": -35.38378
+    },
+    "under": {
+     "bets": 424,
+     "won": 227,
+     "units": -0.28061
+    }
+   },
+   "llCi": [
+    0.00859,
+    0.02772
+   ]
+  },
+  "Pts+ast": {
+   "n": 1234,
+   "games": 121,
+   "overRate": 0.46515,
+   "modelSaid": 0.49015,
+   "marketSaid": 0.46486,
+   "llDiff": 0.02998,
+   "brDiff": 0.01344,
+   "llModel": 0.72045,
+   "llMarket": 0.69046,
+   "bias": 0.91752,
+   "muMinusLine": 0.68251,
+   "lineMinusY": 0.23501,
+   "flat": {
+    "over": {
+     "bets": 313,
+     "won": 141,
+     "units": -48.37936
+    },
+    "under": {
+     "bets": 388,
+     "won": 206,
+     "units": -1.76486
+    }
+   },
+   "llCi": [
+    0.01973,
+    0.04103
+   ]
+  },
+  "Ast+reb": {
+   "n": 1212,
+   "games": 121,
+   "overRate": 0.48927,
+   "modelSaid": 0.49305,
+   "marketSaid": 0.46599,
+   "llDiff": 0.02233,
+   "brDiff": 0.00995,
+   "llModel": 0.71404,
+   "llMarket": 0.6917,
+   "bias": 0.22933,
+   "muMinusLine": 0.31679,
+   "lineMinusY": -0.08746,
+   "flat": {
+    "over": {
+     "bets": 290,
+     "won": 140,
+     "units": -25.59507
+    },
+    "under": {
+     "bets": 334,
+     "won": 177,
+     "units": -1.56944
+    }
+   },
+   "llCi": [
+    0.01139,
+    0.03361
+   ]
+  },
+  "Stl+blk": {
+   "n": 175,
+   "games": 61,
+   "overRate": 0.45714,
+   "modelSaid": 0.45449,
+   "marketSaid": 0.44759,
+   "llDiff": 0.02743,
+   "brDiff": 0.01245,
+   "llModel": 0.72278,
+   "llMarket": 0.69535,
+   "bias": -0.0424,
+   "muMinusLine": 0.04046,
+   "lineMinusY": -0.08286,
+   "flat": {
+    "over": {
+     "bets": 16,
+     "won": 5,
+     "units": -6.76234
+    },
+    "under": {
+     "bets": 45,
+     "won": 21,
+     "units": -6.82694
+    }
+   }
+  }
+ },
+ "archiveByStat": {
+  "All": {
+   "n": 11395,
+   "games": 83,
+   "overRate": 0.45924,
+   "modelSaid": 0.44573,
+   "marketSaid": 0.45606,
+   "llDiff": 0.01467,
+   "brDiff": 0.00644,
+   "llModel": 0.69342,
+   "llMarket": 0.67875,
+   "bias": 0.06547,
+   "muMinusLine": -0.01005,
+   "lineMinusY": 0.07552,
+   "flat": {
+    "over": {
+     "bets": 967,
+     "won": 442,
+     "units": -106.43646
+    },
+    "under": {
+     "bets": 4271,
+     "won": 2357,
+     "units": 135.27704
+    }
+   },
+   "llCi": [
+    0.00834,
+    0.02143
+   ]
+  },
+  "Points": {
+   "n": 1328,
+   "games": 83,
+   "overRate": 0.45783,
+   "modelSaid": 0.43832,
+   "marketSaid": 0.46935,
+   "llDiff": 0.0288,
+   "brDiff": 0.01291,
+   "llModel": 0.7172,
+   "llMarket": 0.6884,
+   "bias": 0.05732,
+   "muMinusLine": 0.08141,
+   "lineMinusY": -0.0241,
+   "flat": {
+    "over": {
+     "bets": 120,
+     "won": 50,
+     "units": -26.20917
+    },
+    "under": {
+     "bets": 657,
+     "won": 353,
+     "units": 8.00891
+    }
+   },
+   "llCi": [
+    0.01801,
+    0.03983
+   ]
+  },
+  "Rebounds": {
+   "n": 1234,
+   "games": 83,
+   "overRate": 0.49676,
+   "modelSaid": 0.48495,
+   "marketSaid": 0.46317,
+   "llDiff": 0.00823,
+   "brDiff": 0.00351,
+   "llModel": 0.70076,
+   "llMarket": 0.69253,
+   "bias": 0.14422,
+   "muMinusLine": 0.24957,
+   "lineMinusY": -0.10535,
+   "flat": {
+    "over": {
+     "bets": 218,
+     "won": 107,
+     "units": -9.23686
+    },
+    "under": {
+     "bets": 297,
+     "won": 148,
+     "units": -13.99287
+    }
+   },
+   "llCi": [
+    -0.00121,
+    0.01857
+   ]
+  },
+  "Assists": {
+   "n": 1094,
+   "games": 83,
+   "overRate": 0.45064,
+   "modelSaid": 0.43334,
+   "marketSaid": 0.46164,
+   "llDiff": 0.00921,
+   "brDiff": 0.0038,
+   "llModel": 0.68498,
+   "llMarket": 0.67577,
+   "bias": -0.01445,
+   "muMinusLine": -0.06656,
+   "lineMinusY": 0.0521,
+   "flat": {
+    "over": {
+     "bets": 61,
+     "won": 27,
+     "units": -9.4189
+    },
+    "under": {
+     "bets": 527,
+     "won": 302,
+     "units": 37.22605
+    }
+   },
+   "llCi": [
+    -0.00092,
+    0.01937
+   ]
+  },
+  "Threes": {
+   "n": 1079,
+   "games": 83,
+   "overRate": 0.46154,
+   "modelSaid": 0.44136,
+   "marketSaid": 0.44885,
+   "llDiff": 0.00834,
+   "brDiff": 0.00352,
+   "llModel": 0.6737,
+   "llMarket": 0.66536,
+   "bias": 0.00043,
+   "muMinusLine": 0.0667,
+   "lineMinusY": -0.06627,
+   "flat": {
+    "over": {
+     "bets": 54,
+     "won": 29,
+     "units": 5.17197
+    },
+    "under": {
+     "bets": 371,
+     "won": 195,
+     "units": -2.02647
+    }
+   },
+   "llCi": [
+    0.00018,
+    0.01657
+   ]
+  },
+  "Steals": {
+   "n": 888,
+   "games": 83,
+   "overRate": 0.48086,
+   "modelSaid": 0.47219,
+   "marketSaid": 0.46803,
+   "llDiff": -0.001,
+   "brDiff": -0.00037,
+   "llModel": 0.65293,
+   "llMarket": 0.65393,
+   "bias": -0.05083,
+   "muMinusLine": 0.13273,
+   "lineMinusY": -0.18356,
+   "flat": {
+    "over": {
+     "bets": 23,
+     "won": 11,
+     "units": -1.02367
+    },
+    "under": {
+     "bets": 212,
+     "won": 115,
+     "units": 4.32808
+    }
+   },
+   "llCi": [
+    -0.0064,
+    0.00425
+   ]
+  },
+  "Blocks": {
+   "n": 795,
+   "games": 83,
+   "overRate": 0.38868,
+   "modelSaid": 0.38947,
+   "marketSaid": 0.37852,
+   "llDiff": -0.00049,
+   "brDiff": -0.00013,
+   "llModel": 0.63446,
+   "llMarket": 0.63495,
+   "bias": 0.00872,
+   "muMinusLine": 0.02193,
+   "lineMinusY": -0.01321,
+   "flat": {
+    "over": {
+     "bets": 45,
+     "won": 22,
+     "units": 10.03597
+    },
+    "under": {
+     "bets": 158,
+     "won": 98,
+     "units": 12.82393
+    }
+   },
+   "llCi": [
+    -0.00719,
+    0.00562
+   ]
+  },
+  "Pts+reb+ast": {
+   "n": 1113,
+   "games": 82,
+   "overRate": 0.45373,
+   "modelSaid": 0.44208,
+   "marketSaid": 0.46594,
+   "llDiff": 0.0277,
+   "brDiff": 0.01206,
+   "llModel": 0.71601,
+   "llMarket": 0.68831,
+   "bias": 0.17765,
+   "muMinusLine": -0.29629,
+   "lineMinusY": 0.47394,
+   "flat": {
+    "over": {
+     "bets": 111,
+     "won": 46,
+     "units": -24.72571
+    },
+    "under": {
+     "bets": 521,
+     "won": 295,
+     "units": 31.44806
+    }
+   },
+   "llCi": [
+    0.01371,
+    0.04248
+   ]
+  },
+  "Pts+reb": {
+   "n": 1204,
+   "games": 82,
+   "overRate": 0.451,
+   "modelSaid": 0.4509,
+   "marketSaid": 0.46502,
+   "llDiff": 0.02393,
+   "brDiff": 0.01088,
+   "llModel": 0.71003,
+   "llMarket": 0.6861,
+   "bias": 0.19295,
+   "muMinusLine": 0.02933,
+   "lineMinusY": 0.16362,
+   "flat": {
+    "over": {
+     "bets": 129,
+     "won": 53,
+     "units": -29.97912
+    },
+    "under": {
+     "bets": 516,
+     "won": 284,
+     "units": 13.99537
+    }
+   },
+   "llCi": [
+    0.01233,
+    0.03547
+   ]
+  },
+  "Pts+ast": {
+   "n": 1029,
+   "games": 82,
+   "overRate": 0.44995,
+   "modelSaid": 0.43495,
+   "marketSaid": 0.46564,
+   "llDiff": 0.02674,
+   "brDiff": 0.01142,
+   "llModel": 0.71378,
+   "llMarket": 0.68704,
+   "bias": -0.03644,
+   "muMinusLine": -0.36151,
+   "lineMinusY": 0.32507,
+   "flat": {
+    "over": {
+     "bets": 75,
+     "won": 31,
+     "units": -16.57272
+    },
+    "under": {
+     "bets": 498,
+     "won": 285,
+     "units": 35.86859
+    }
+   },
+   "llCi": [
+    0.01263,
+    0.04248
+   ]
+  },
+  "Ast+reb": {
+   "n": 1041,
+   "games": 82,
+   "overRate": 0.47839,
+   "modelSaid": 0.45549,
+   "marketSaid": 0.46086,
+   "llDiff": 0.01265,
+   "brDiff": 0.00561,
+   "llModel": 0.70314,
+   "llMarket": 0.69049,
+   "bias": 0.13251,
+   "muMinusLine": -0.01975,
+   "lineMinusY": 0.15226,
+   "flat": {
+    "over": {
+     "bets": 114,
+     "won": 58,
+     "units": -4.18022
+    },
+    "under": {
+     "bets": 375,
+     "won": 202,
+     "units": 1.69742
+    }
+   },
+   "llCi": [
+    0.00199,
+    0.02378
+   ]
+  },
+  "Stl+blk": {
+   "n": 590,
+   "games": 73,
+   "overRate": 0.4678,
+   "modelSaid": 0.44517,
+   "marketSaid": 0.43843,
+   "llDiff": 0.00097,
+   "brDiff": 0.00048,
+   "llModel": 0.68744,
+   "llMarket": 0.68647,
+   "bias": 0.02544,
+   "muMinusLine": 0.03731,
+   "lineMinusY": -0.01186,
+   "flat": {
+    "over": {
+     "bets": 17,
+     "won": 8,
+     "units": -0.29803
+    },
+    "under": {
+     "bets": 139,
+     "won": 80,
+     "units": 5.89997
+    }
+   },
+   "llCi": [
+    -0.00667,
+    0.00856
+   ]
+  }
+ },
+ "bySide": {
+  "All": {
+   "over": {
+    "bets": 2796,
+    "said": 0.61395,
+    "won": 0.48033,
+    "fair": 0.45809,
+    "units": -226.54437
+   },
+   "under": {
+    "bets": 3231,
+    "said": 0.63357,
+    "won": 0.53884,
+    "fair": 0.5374,
+    "units": 3.72868
+   }
+  },
+  "Points": {
+   "over": {
+    "bets": 458,
+    "said": 0.62162,
+    "won": 0.50437,
+    "fair": 0.46681,
+    "units": -19.8698
+   },
+   "under": {
+    "bets": 497,
+    "said": 0.62574,
+    "won": 0.52918,
+    "fair": 0.53027,
+    "units": -1.1972
+   }
+  },
+  "Rebounds": {
+   "over": {
+    "bets": 363,
+    "said": 0.59995,
+    "won": 0.50413,
+    "fair": 0.45304,
+    "units": -10.85852
+   },
+   "under": {
+    "bets": 336,
+    "said": 0.636,
+    "won": 0.54167,
+    "fair": 0.54258,
+    "units": -2.68514
+   }
+  },
+  "Assists": {
+   "over": {
+    "bets": 273,
+    "said": 0.61427,
+    "won": 0.46886,
+    "fair": 0.45595,
+    "units": -25.92065
+   },
+   "under": {
+    "bets": 360,
+    "said": 0.64102,
+    "won": 0.57778,
+    "fair": 0.53567,
+    "units": 28.37081
+   }
+  },
+  "Threes": {
+   "over": {
+    "bets": 226,
+    "said": 0.55791,
+    "won": 0.46903,
+    "fair": 0.42158,
+    "units": -3.81103
+   },
+   "under": {
+    "bets": 265,
+    "said": 0.6267,
+    "won": 0.53208,
+    "fair": 0.54996,
+    "units": -10.3277
+   }
+  },
+  "Steals": {
+   "over": {
+    "bets": 30,
+    "said": 0.52621,
+    "won": 0.5,
+    "fair": 0.40539,
+    "units": 2.64622
+   },
+   "under": {
+    "bets": 129,
+    "said": 0.61356,
+    "won": 0.5814,
+    "fair": 0.55225,
+    "units": 5.06655
+   }
+  },
+  "Blocks": {
+   "over": {
+    "bets": 47,
+    "said": 0.58108,
+    "won": 0.46809,
+    "fair": 0.44469,
+    "units": -4.67809
+   },
+   "under": {
+    "bets": 47,
+    "said": 0.6485,
+    "won": 0.55319,
+    "fair": 0.57236,
+    "units": -1.51738
+   }
+  },
+  "Pts+reb+ast": {
+   "over": {
+    "bets": 333,
+    "said": 0.63111,
+    "won": 0.45646,
+    "fair": 0.4647,
+    "units": -47.93195
+   },
+   "under": {
+    "bets": 406,
+    "said": 0.63974,
+    "won": 0.52956,
+    "fair": 0.53496,
+    "units": -3.53941
+   }
+  },
+  "Pts+reb": {
+   "over": {
+    "bets": 447,
+    "said": 0.62725,
+    "won": 0.49217,
+    "fair": 0.46604,
+    "units": -35.38378
+   },
+   "under": {
+    "bets": 424,
+    "said": 0.63564,
+    "won": 0.53538,
+    "fair": 0.53438,
+    "units": -0.28061
+   }
+  },
+  "Pts+ast": {
+   "over": {
+    "bets": 313,
+    "said": 0.63042,
+    "won": 0.45048,
+    "fair": 0.4644,
+    "units": -48.37936
+   },
+   "under": {
+    "bets": 388,
+    "said": 0.63491,
+    "won": 0.53093,
+    "fair": 0.53391,
+    "units": -1.76486
+   }
+  },
+  "Ast+reb": {
+   "over": {
+    "bets": 290,
+    "said": 0.6205,
+    "won": 0.48276,
+    "fair": 0.46152,
+    "units": -25.59507
+   },
+   "under": {
+    "bets": 334,
+    "said": 0.63453,
+    "won": 0.52994,
+    "fair": 0.5324,
+    "units": -1.56944
+   }
+  },
+  "Stl+blk": {
+   "over": {
+    "bets": 16,
+    "said": 0.58927,
+    "won": 0.3125,
+    "fair": 0.46729,
+    "units": -6.76234
+   },
+   "under": {
+    "bets": 45,
+    "said": 0.63067,
+    "won": 0.46667,
+    "fair": 0.55603,
+    "units": -6.82694
+   }
+  },
+  "archive": {
+   "over": {
+    "bets": 967,
+    "said": 0.59115,
+    "won": 0.45708,
+    "fair": 0.44897,
+    "units": -106.43646
+   },
+   "under": {
+    "bets": 4271,
+    "said": 0.63146,
+    "won": 0.55186,
+    "fair": 0.53429,
+    "units": 135.27704
+   }
+  }
+ },
+ "byLineSize": {
+  "Smallest quarter": {
+   "n": 4831,
+   "games": 121,
+   "overRate": 0.48065,
+   "modelSaid": 0.51061,
+   "marketSaid": 0.46887,
+   "llDiff": 0.01462,
+   "brDiff": 0.00657,
+   "llModel": 0.69665,
+   "llMarket": 0.68203,
+   "bias": 0.68627,
+   "muMinusLine": 0.7998,
+   "lineMinusY": -0.11354,
+   "flat": {
+    "over": {
+     "bets": 1271,
+     "won": 633,
+     "units": -62.45307
+    },
+    "under": {
+     "bets": 1000,
+     "won": 535,
+     "units": 7.37528
+    }
+   },
+   "llCi": [
+    0.0074,
+    0.02233
+   ]
+  },
+  "Second": {
+   "n": 2576,
+   "games": 121,
+   "overRate": 0.4604,
+   "modelSaid": 0.48127,
+   "marketSaid": 0.4507,
+   "llDiff": 0.01055,
+   "brDiff": 0.00447,
+   "llModel": 0.69542,
+   "llMarket": 0.68487,
+   "bias": 0.71795,
+   "muMinusLine": 0.62595,
+   "lineMinusY": 0.092,
+   "flat": {
+    "over": {
+     "bets": 629,
+     "won": 316,
+     "units": -23.5391
+    },
+    "under": {
+     "bets": 648,
+     "won": 387,
+     "units": 56.33101
+    }
+   },
+   "llCi": [
+    0.00194,
+    0.02021
+   ]
+  },
+  "Third": {
+   "n": 2637,
+   "games": 121,
+   "overRate": 0.48578,
+   "modelSaid": 0.47387,
+   "marketSaid": 0.4549,
+   "llDiff": 0.02161,
+   "brDiff": 0.00945,
+   "llModel": 0.71233,
+   "llMarket": 0.69071,
+   "bias": 0.39565,
+   "muMinusLine": 0.3363,
+   "lineMinusY": 0.05935,
+   "flat": {
+    "over": {
+     "bets": 524,
+     "won": 246,
+     "units": -47.36874
+    },
+    "under": {
+     "bets": 735,
+     "won": 383,
+     "units": -25.52164
+    }
+   },
+   "llCi": [
+    0.0114,
+    0.03188
+   ]
+  },
+  "Largest quarter": {
+   "n": 2254,
+   "games": 121,
+   "overRate": 0.46806,
+   "modelSaid": 0.4638,
+   "marketSaid": 0.46247,
+   "llDiff": 0.03194,
+   "brDiff": 0.01492,
+   "llModel": 0.72195,
+   "llMarket": 0.69002,
+   "bias": 0.27868,
+   "muMinusLine": 0.00938,
+   "lineMinusY": 0.2693,
+   "flat": {
+    "over": {
+     "bets": 372,
+     "won": 148,
+     "units": -93.18346
+    },
+    "under": {
+     "bets": 848,
+     "won": 436,
+     "units": -34.45598
+    }
+   },
+   "llCi": [
+    0.02125,
+    0.04254
+   ]
+  }
+ },
+ "byPointsLine": {
+  "under 10": {
+   "n": 552,
+   "games": 119,
+   "overRate": 0.47101,
+   "modelSaid": 0.51816,
+   "marketSaid": 0.47208,
+   "llDiff": 0.01456,
+   "brDiff": 0.00668,
+   "llModel": 0.70462,
+   "llMarket": 0.69005,
+   "bias": 1.33417,
+   "muMinusLine": 1.47185,
+   "lineMinusY": -0.13768,
+   "flat": {
+    "over": {
+     "bets": 190,
+     "won": 98,
+     "units": -5.27388
+    },
+    "under": {
+     "bets": 127,
+     "won": 72,
+     "units": 10.12541
+    }
+   },
+   "llCi": [
+    -0.00175,
+    0.03075
+   ]
+  },
+  "10 to 15.5": {
+   "n": 613,
+   "games": 121,
+   "overRate": 0.46493,
+   "modelSaid": 0.49955,
+   "marketSaid": 0.46727,
+   "llDiff": 0.01322,
+   "brDiff": 0.00592,
+   "llModel": 0.70326,
+   "llMarket": 0.69005,
+   "bias": 1.37698,
+   "muMinusLine": 1.05643,
+   "lineMinusY": 0.32055,
+   "flat": {
+    "over": {
+     "bets": 172,
+     "won": 90,
+     "units": -0.11308
+    },
+    "under": {
+     "bets": 162,
+     "won": 93,
+     "units": 12.56789
+    }
+   },
+   "llCi": [
+    -0.0003,
+    0.02783
+   ]
+  },
+  "16 to 21.5": {
+   "n": 346,
+   "games": 118,
+   "overRate": 0.52601,
+   "modelSaid": 0.47574,
+   "marketSaid": 0.46849,
+   "llDiff": 0.02429,
+   "brDiff": 0.01138,
+   "llModel": 0.72317,
+   "llMarket": 0.69888,
+   "bias": 0.27211,
+   "muMinusLine": 0.46575,
+   "lineMinusY": -0.19364,
+   "flat": {
+    "over": {
+     "bets": 70,
+     "won": 34,
+     "units": -5.48762
+    },
+    "under": {
+     "bets": 128,
+     "won": 58,
+     "units": -19.07412
+    }
+   },
+   "llCi": [
+    0.00732,
+    0.04202
+   ]
+  },
+  "22 to 27.5": {
+   "n": 165,
+   "games": 110,
+   "overRate": 0.47273,
+   "modelSaid": 0.46697,
+   "marketSaid": 0.4691,
+   "llDiff": 0.03508,
+   "brDiff": 0.01685,
+   "llModel": 0.72859,
+   "llMarket": 0.69352,
+   "bias": 0.38291,
+   "muMinusLine": 0.14352,
+   "lineMinusY": 0.23939,
+   "flat": {
+    "over": {
+     "bets": 24,
+     "won": 8,
+     "units": -8.94761
+    },
+    "under": {
+     "bets": 65,
+     "won": 31,
+     "units": -6.48643
+    }
+   }
+  },
+  "28 and up": {
+   "n": 27,
+   "games": 26,
+   "overRate": 0.44444,
+   "modelSaid": 0.43231,
+   "marketSaid": 0.46524,
+   "llDiff": -0.02121,
+   "brDiff": -0.01022,
+   "llModel": 0.65828,
+   "llMarket": 0.67948,
+   "bias": -0.55444,
+   "muMinusLine": -0.79519,
+   "lineMinusY": 0.24074,
+   "flat": {
+    "over": {
+     "bets": 2,
+     "won": 1,
+     "units": -0.04762
+    },
+    "under": {
+     "bets": 15,
+     "won": 9,
+     "units": 1.67004
+    }
+   }
+  }
+ },
+ "byProjMin": {
+  "under 20": {
+   "n": 834,
+   "games": 97,
+   "overRate": 0.4952,
+   "modelSaid": 0.41969,
+   "marketSaid": 0.46301,
+   "llDiff": 0.02395,
+   "brDiff": 0.00901,
+   "llModel": 0.71078,
+   "llMarket": 0.68683,
+   "bias": -0.62335,
+   "muMinusLine": -0.17371,
+   "lineMinusY": -0.44964,
+   "flat": {
+    "over": {
+     "bets": 111,
+     "won": 63,
+     "units": 8.19804
+    },
+    "under": {
+     "bets": 437,
+     "won": 241,
+     "units": 10.05681
+    }
+   },
+   "llCi": [
+    -0.00657,
+    0.05733
+   ]
+  },
+  "20 to 26": {
+   "n": 2677,
+   "games": 120,
+   "overRate": 0.47105,
+   "modelSaid": 0.49226,
+   "marketSaid": 0.45936,
+   "llDiff": 0.01761,
+   "brDiff": 0.00767,
+   "llModel": 0.70702,
+   "llMarket": 0.68941,
+   "bias": 0.575,
+   "muMinusLine": 0.64915,
+   "lineMinusY": -0.07415,
+   "flat": {
+    "over": {
+     "bets": 746,
+     "won": 379,
+     "units": -14.77915
+    },
+    "under": {
+     "bets": 717,
+     "won": 389,
+     "units": 2.34858
+    }
+   },
+   "llCi": [
+    0.00439,
+    0.03112
+   ]
+  },
+  "26 to 30": {
+   "n": 3066,
+   "games": 120,
+   "overRate": 0.46608,
+   "modelSaid": 0.48976,
+   "marketSaid": 0.46177,
+   "llDiff": 0.02494,
+   "brDiff": 0.01161,
+   "llModel": 0.70677,
+   "llMarket": 0.68182,
+   "bias": 0.65655,
+   "muMinusLine": 0.52054,
+   "lineMinusY": 0.13601,
+   "flat": {
+    "over": {
+     "bets": 690,
+     "won": 316,
+     "units": -87.00854
+    },
+    "under": {
+     "bets": 846,
+     "won": 444,
+     "units": -21.62797
+    }
+   },
+   "llCi": [
+    0.01408,
+    0.036
+   ]
+  },
+  "30 to 34": {
+   "n": 3649,
+   "games": 120,
+   "overRate": 0.48452,
+   "modelSaid": 0.48863,
+   "marketSaid": 0.45989,
+   "llDiff": 0.01468,
+   "brDiff": 0.00668,
+   "llModel": 0.70149,
+   "llMarket": 0.68682,
+   "bias": 0.43517,
+   "muMinusLine": 0.47149,
+   "lineMinusY": -0.03631,
+   "flat": {
+    "over": {
+     "bets": 717,
+     "won": 344,
+     "units": -59.99379
+    },
+    "under": {
+     "bets": 834,
+     "won": 438,
+     "units": -23.00432
+    }
+   },
+   "llCi": [
+    0.00615,
+    0.02314
+   ]
+  },
+  "34 and up": {
+   "n": 2072,
+   "games": 103,
+   "overRate": 0.46959,
+   "modelSaid": 0.50632,
+   "marketSaid": 0.46251,
+   "llDiff": 0.01429,
+   "brDiff": 0.00664,
+   "llModel": 0.70002,
+   "llMarket": 0.68572,
+   "bias": 1.06946,
+   "muMinusLine": 0.71183,
+   "lineMinusY": 0.35763,
+   "flat": {
+    "over": {
+     "bets": 532,
+     "won": 241,
+     "units": -72.96093
+    },
+    "under": {
+     "bets": 397,
+     "won": 229,
+     "units": 35.95558
+    }
+   },
+   "llCi": [
+    0.00159,
+    0.02622
+   ]
+  }
+ },
+ "byActMin": {
+  "under 20": {
+   "n": 1336,
+   "games": 109,
+   "overRate": 0.23653,
+   "modelSaid": 0.51867,
+   "marketSaid": 0.46141,
+   "llDiff": 0.07285,
+   "brDiff": 0.03401,
+   "llModel": 0.73287,
+   "llMarket": 0.66002,
+   "bias": 3.78516,
+   "muMinusLine": 1.06286,
+   "lineMinusY": 2.72231,
+   "flat": {
+    "over": {
+     "bets": 457,
+     "won": 126,
+     "units": -216.01181
+    },
+    "under": {
+     "bets": 259,
+     "won": 205,
+     "units": 122.97566
+    }
+   },
+   "llCi": [
+    0.04898,
+    0.09724
+   ]
+  },
+  "20 to 26": {
+   "n": 2574,
+   "games": 117,
+   "overRate": 0.39044,
+   "modelSaid": 0.50472,
+   "marketSaid": 0.46004,
+   "llDiff": 0.02415,
+   "brDiff": 0.01125,
+   "llModel": 0.69599,
+   "llMarket": 0.67185,
+   "bias": 2.03307,
+   "muMinusLine": 0.81473,
+   "lineMinusY": 1.21834,
+   "flat": {
+    "over": {
+     "bets": 793,
+     "won": 343,
+     "units": -131.52244
+    },
+    "under": {
+     "bets": 553,
+     "won": 361,
+     "units": 117.2984
+    }
+   },
+   "llCi": [
+    0.01082,
+    0.03874
+   ]
+  },
+  "26 to 30": {
+   "n": 2290,
+   "games": 110,
+   "overRate": 0.4821,
+   "modelSaid": 0.4812,
+   "marketSaid": 0.46095,
+   "llDiff": 0.00129,
+   "brDiff": 0.00001,
+   "llModel": 0.68593,
+   "llMarket": 0.68464,
+   "bias": 0.5128,
+   "muMinusLine": 0.43638,
+   "lineMinusY": 0.07642,
+   "flat": {
+    "over": {
+     "bets": 475,
+     "won": 278,
+     "units": 55.35336
+    },
+    "under": {
+     "bets": 655,
+     "won": 377,
+     "units": 44.28625
+    }
+   },
+   "llCi": [
+    -0.01097,
+    0.01254
+   ]
+  },
+  "30 to 34": {
+   "n": 2852,
+   "games": 111,
+   "overRate": 0.52665,
+   "modelSaid": 0.47643,
+   "marketSaid": 0.46132,
+   "llDiff": 0.00882,
+   "brDiff": 0.00382,
+   "llModel": 0.70146,
+   "llMarket": 0.69264,
+   "bias": -0.19043,
+   "muMinusLine": 0.29729,
+   "lineMinusY": -0.48773,
+   "flat": {
+    "over": {
+     "bets": 513,
+     "won": 285,
+     "units": 30.44824
+    },
+    "under": {
+     "bets": 824,
+     "won": 398,
+     "units": -85.5779
+    }
+   },
+   "llCi": [
+    -0.00219,
+    0.01964
+   ]
+  },
+  "34 and up": {
+   "n": 3246,
+   "games": 101,
+   "overRate": 0.59057,
+   "modelSaid": 0.47711,
+   "marketSaid": 0.46094,
+   "llDiff": 0.01207,
+   "brDiff": 0.00508,
+   "llModel": 0.71492,
+   "llMarket": 0.70286,
+   "bias": -1.25848,
+   "muMinusLine": 0.31423,
+   "lineMinusY": -1.5727,
+   "flat": {
+    "over": {
+     "bets": 558,
+     "won": 311,
+     "units": 35.18828
+    },
+    "under": {
+     "bets": 940,
+     "won": 400,
+     "units": -195.25373
+    }
+   },
+   "llCi": [
+    0.00252,
+    0.02272
+   ]
+  }
+ },
+ "byMinErr": {
+  "8 or more under": {
+   "n": 1048,
+   "games": 83,
+   "overRate": 0.16985,
+   "modelSaid": 0.54639,
+   "marketSaid": 0.46169,
+   "llDiff": 0.1295,
+   "brDiff": 0.06099,
+   "llModel": 0.77585,
+   "llMarket": 0.64635,
+   "bias": 5.47602,
+   "muMinusLine": 1.33671,
+   "lineMinusY": 4.13931,
+   "flat": {
+    "over": {
+     "bets": 429,
+     "won": 76,
+     "units": -282.6198
+    },
+    "under": {
+     "bets": 106,
+     "won": 90,
+     "units": 62.61329
+    }
+   },
+   "llCi": [
+    0.10195,
+    0.15983
+   ]
+  },
+  "3 to 8 under": {
+   "n": 2308,
+   "games": 114,
+   "overRate": 0.32972,
+   "modelSaid": 0.51696,
+   "marketSaid": 0.4605,
+   "llDiff": 0.02926,
+   "brDiff": 0.01427,
+   "llModel": 0.69422,
+   "llMarket": 0.66496,
+   "bias": 2.70298,
+   "muMinusLine": 0.91745,
+   "lineMinusY": 1.78553,
+   "flat": {
+    "over": {
+     "bets": 724,
+     "won": 300,
+     "units": -151.50021
+    },
+    "under": {
+     "bets": 384,
+     "won": 279,
+     "units": 136.87345
+    }
+   },
+   "llCi": [
+    0.01773,
+    0.04087
+   ]
+  },
+  "within 3": {
+   "n": 5421,
+   "games": 120,
+   "overRate": 0.49142,
+   "modelSaid": 0.49133,
+   "marketSaid": 0.46048,
+   "llDiff": -0.00711,
+   "brDiff": -0.00359,
+   "llModel": 0.68008,
+   "llMarket": 0.68718,
+   "bias": 0.52761,
+   "muMinusLine": 0.57566,
+   "lineMinusY": -0.04805,
+   "flat": {
+    "over": {
+     "bets": 1224,
+     "won": 664,
+     "units": 45.03827
+    },
+    "under": {
+     "bets": 1273,
+     "won": 775,
+     "units": 169.91004
+    }
+   },
+   "llCi": [
+    -0.01406,
+    0.00009
+   ]
+  },
+  "3 to 8 over": {
+   "n": 2844,
+   "games": 108,
+   "overRate": 0.62482,
+   "modelSaid": 0.45845,
+   "marketSaid": 0.46156,
+   "llDiff": 0.00238,
+   "brDiff": 0.0003,
+   "llModel": 0.71074,
+   "llMarket": 0.70836,
+   "bias": -1.89482,
+   "muMinusLine": 0.089,
+   "lineMinusY": -1.98383,
+   "flat": {
+    "over": {
+     "bets": 383,
+     "won": 271,
+     "units": 137.46279
+    },
+    "under": {
+     "bets": 1074,
+     "won": 465,
+     "units": -215.95218
+    }
+   },
+   "llCi": [
+    -0.00911,
+    0.01418
+   ]
+  },
+  "8 or more over": {
+   "n": 677,
+   "games": 54,
+   "overRate": 0.68538,
+   "modelSaid": 0.39652,
+   "marketSaid": 0.46159,
+   "llDiff": 0.08164,
+   "brDiff": 0.03483,
+   "llModel": 0.79648,
+   "llMarket": 0.71484,
+   "bias": -3.85874,
+   "muMinusLine": -0.75018,
+   "lineMinusY": -3.10857,
+   "flat": {
+    "over": {
+     "bets": 36,
+     "won": 32,
+     "units": 25.07458
+    },
+    "under": {
+     "bets": 394,
+     "won": 132,
+     "units": -149.71592
+    }
+   },
+   "llCi": [
+    0.04545,
+    0.1256
+   ]
+  }
+ },
+ "archiveByProjMin": {
+  "under 20": {
+   "n": 1424,
+   "games": 80,
+   "overRate": 0.46067,
+   "modelSaid": 0.40231,
+   "marketSaid": 0.45591,
+   "llDiff": 0.00968,
+   "brDiff": 0.00399,
+   "llModel": 0.68966,
+   "llMarket": 0.67998,
+   "bias": -0.31666,
+   "muMinusLine": -0.08211,
+   "lineMinusY": -0.23455,
+   "flat": {
+    "over": {
+     "bets": 74,
+     "won": 29,
+     "units": -18.17491
+    },
+    "under": {
+     "bets": 849,
+     "won": 484,
+     "units": 51.78331
+    }
+   },
+   "llCi": [
+    -0.00832,
+    0.02922
+   ]
+  },
+  "20 to 26": {
+   "n": 1838,
+   "games": 77,
+   "overRate": 0.49184,
+   "modelSaid": 0.44869,
+   "marketSaid": 0.45974,
+   "llDiff": 0.03659,
+   "brDiff": 0.01606,
+   "llModel": 0.71721,
+   "llMarket": 0.68062,
+   "bias": -0.27409,
+   "muMinusLine": 0.14593,
+   "lineMinusY": -0.42002,
+   "flat": {
+    "over": {
+     "bets": 172,
+     "won": 72,
+     "units": -33.31296
+    },
+    "under": {
+     "bets": 721,
+     "won": 350,
+     "units": -63.65219
+    }
+   },
+   "llCi": [
+    0.02103,
+    0.05384
+   ]
+  },
+  "26 to 30": {
+   "n": 1369,
+   "games": 64,
+   "overRate": 0.47188,
+   "modelSaid": 0.43825,
+   "marketSaid": 0.45751,
+   "llDiff": 0.02418,
+   "brDiff": 0.00999,
+   "llModel": 0.70302,
+   "llMarket": 0.67884,
+   "bias": -0.4357,
+   "muMinusLine": -0.13293,
+   "lineMinusY": -0.30278,
+   "flat": {
+    "over": {
+     "bets": 123,
+     "won": 66,
+     "units": 1.52467
+    },
+    "under": {
+     "bets": 572,
+     "won": 296,
+     "units": -20.77658
+    }
+   },
+   "llCi": [
+    0.00357,
+    0.04503
+   ]
+  },
+  "30 to 34": {
+   "n": 2299,
+   "games": 79,
+   "overRate": 0.47542,
+   "modelSaid": 0.44422,
+   "marketSaid": 0.45559,
+   "llDiff": 0.01095,
+   "brDiff": 0.00488,
+   "llModel": 0.68925,
+   "llMarket": 0.67829,
+   "bias": -0.02619,
+   "muMinusLine": -0.0947,
+   "lineMinusY": 0.06851,
+   "flat": {
+    "over": {
+     "bets": 213,
+     "won": 109,
+     "units": -0.80267
+    },
+    "under": {
+     "bets": 902,
+     "won": 481,
+     "units": -6.62924
+    }
+   },
+   "llCi": [
+    -0.00121,
+    0.0232
+   ]
+  },
+  "34 and up": {
+   "n": 4465,
+   "games": 83,
+   "overRate": 0.43315,
+   "modelSaid": 0.46142,
+   "marketSaid": 0.45439,
+   "llDiff": 0.00623,
+   "brDiff": 0.00298,
+   "llModel": 0.68403,
+   "llMarket": 0.6778,
+   "bias": 0.52798,
+   "muMinusLine": 0.03,
+   "lineMinusY": 0.49798,
+   "flat": {
+    "over": {
+     "bets": 385,
+     "won": 166,
+     "units": -55.67059
+    },
+    "under": {
+     "bets": 1227,
+     "won": 746,
+     "units": 174.55173
+    }
+   },
+   "llCi": [
+    -0.00198,
+    0.01419
+   ]
+  }
+ },
+ "byStarter": {
+  "Started": {
+   "n": 9482,
+   "games": 121,
+   "overRate": 0.47775,
+   "modelSaid": 0.47405,
+   "marketSaid": 0.461,
+   "llDiff": 0.01508,
+   "brDiff": 0.0068,
+   "llModel": 0.70066,
+   "llMarket": 0.68558,
+   "bias": 0.35461,
+   "muMinusLine": 0.30114,
+   "lineMinusY": 0.05347,
+   "flat": {
+    "over": {
+     "bets": 1632,
+     "won": 781,
+     "units": -142.50479
+    },
+    "under": {
+     "bets": 2825,
+     "won": 1522,
+     "units": 1.68807
+    }
+   },
+   "llCi": [
+    0.01013,
+    0.02019
+   ]
+  },
+  "Came off the bench": {
+   "n": 2816,
+   "games": 121,
+   "overRate": 0.46662,
+   "modelSaid": 0.535,
+   "marketSaid": 0.46054,
+   "llDiff": 0.02974,
+   "brDiff": 0.01325,
+   "llModel": 0.71695,
+   "llMarket": 0.68721,
+   "bias": 1.23362,
+   "muMinusLine": 1.25315,
+   "lineMinusY": -0.01953,
+   "flat": {
+    "over": {
+     "bets": 1164,
+     "won": 562,
+     "units": -84.03958
+    },
+    "under": {
+     "bets": 406,
+     "won": 219,
+     "units": 2.04061
+    }
+   },
+   "llCi": [
+    0.01603,
+    0.04412
+   ]
+  }
+ },
+ "archiveByStarter": {
+  "Started": {
+   "n": 8389,
+   "games": 83,
+   "overRate": 0.45977,
+   "modelSaid": 0.44286,
+   "marketSaid": 0.45528,
+   "llDiff": 0.01268,
+   "brDiff": 0.00553,
+   "llModel": 0.69024,
+   "llMarket": 0.67756,
+   "bias": 0.04973,
+   "muMinusLine": -0.13676,
+   "lineMinusY": 0.18649,
+   "flat": {
+    "over": {
+     "bets": 601,
+     "won": 291,
+     "units": -28.67475
+    },
+    "under": {
+     "bets": 3077,
+     "won": 1699,
+     "units": 97.96652
+    }
+   },
+   "llCi": [
+    0.00542,
+    0.02075
+   ]
+  },
+  "Came off the bench": {
+   "n": 3006,
+   "games": 83,
+   "overRate": 0.45775,
+   "modelSaid": 0.45373,
+   "marketSaid": 0.45824,
+   "llDiff": 0.02021,
+   "brDiff": 0.00897,
+   "llModel": 0.70229,
+   "llMarket": 0.68208,
+   "bias": 0.10939,
+   "muMinusLine": 0.34359,
+   "lineMinusY": -0.2342,
+   "flat": {
+    "over": {
+     "bets": 366,
+     "won": 151,
+     "units": -77.76171
+    },
+    "under": {
+     "bets": 1194,
+     "won": 658,
+     "units": 37.31051
+    }
+   },
+   "llCi": [
+    0.01095,
+    0.03029
+   ]
+  }
+ },
+ "byGames": {
+  "0 to 5": {
+   "n": 9572,
+   "games": 116,
+   "overRate": 0.47921,
+   "modelSaid": 0.48734,
+   "marketSaid": 0.46078,
+   "llDiff": 0.01975,
+   "brDiff": 0.0088,
+   "llModel": 0.70578,
+   "llMarket": 0.68603,
+   "bias": 0.55116,
+   "muMinusLine": 0.51094,
+   "lineMinusY": 0.04022,
+   "flat": {
+    "over": {
+     "bets": 2233,
+     "won": 1066,
+     "units": -197.32298
+    },
+    "under": {
+     "bets": 2624,
+     "won": 1412,
+     "units": 3.36802
+    }
+   },
+   "llCi": [
+    0.01409,
+    0.02539
+   ]
+  },
+  "6 to 15": {
+   "n": 2726,
+   "games": 35,
+   "overRate": 0.46112,
+   "modelSaid": 0.49033,
+   "marketSaid": 0.46129,
+   "llDiff": 0.01383,
+   "brDiff": 0.00645,
+   "llModel": 0.69952,
+   "llMarket": 0.68569,
+   "bias": 0.57248,
+   "muMinusLine": 0.54791,
+   "lineMinusY": 0.02458,
+   "flat": {
+    "over": {
+     "bets": 563,
+     "won": 277,
+     "units": -29.22139
+    },
+    "under": {
+     "bets": 607,
+     "won": 329,
+     "units": 0.36066
+    }
+   },
+   "llCi": [
+    0.00336,
+    0.02401
+   ]
+  },
+  "16 or more": null,
+  "  of which 0 (his season opener)": {
+   "n": 1653,
+   "games": 26,
+   "overRate": 0.44586,
+   "modelSaid": 0.50175,
+   "marketSaid": 0.46066,
+   "llDiff": 0.04357,
+   "brDiff": 0.01961,
+   "llModel": 0.72411,
+   "llMarket": 0.68054,
+   "bias": 1.03575,
+   "muMinusLine": 0.71542,
+   "lineMinusY": 0.32033,
+   "flat": {
+    "over": {
+     "bets": 483,
+     "won": 221,
+     "units": -62.65454
+    },
+    "under": {
+     "bets": 447,
+     "won": 231,
+     "units": -17.86299
+    }
+   },
+   "llCi": [
+    0.02813,
+    0.05789
+   ]
+  },
+  "  1 to 2": {
+   "n": 3093,
+   "games": 50,
+   "overRate": 0.50921,
+   "modelSaid": 0.48039,
+   "marketSaid": 0.46091,
+   "llDiff": 0.00793,
+   "brDiff": 0.00286,
+   "llModel": 0.69624,
+   "llMarket": 0.68831,
+   "bias": 0.30542,
+   "muMinusLine": 0.39837,
+   "lineMinusY": -0.09295,
+   "flat": {
+    "over": {
+     "bets": 710,
+     "won": 376,
+     "units": 6.27105
+    },
+    "under": {
+     "bets": 933,
+     "won": 523,
+     "units": 37.37975
+    }
+   },
+   "llCi": [
+    -0.00263,
+    0.0181
+   ]
+  },
+  "  3 to 5": {
+   "n": 4826,
+   "games": 73,
+   "overRate": 0.4714,
+   "modelSaid": 0.48687,
+   "marketSaid": 0.46074,
+   "llDiff": 0.01917,
+   "brDiff": 0.0089,
+   "llModel": 0.70561,
+   "llMarket": 0.68644,
+   "bias": 0.54267,
+   "muMinusLine": 0.51304,
+   "lineMinusY": 0.02963,
+   "flat": {
+    "over": {
+     "bets": 1040,
+     "won": 469,
+     "units": -140.93948
+    },
+    "under": {
+     "bets": 1244,
+     "won": 658,
+     "units": -16.14873
+    }
+   },
+   "llCi": [
+    0.0118,
+    0.02628
+   ]
+  }
+ },
+ "byClub": {
+  "Same club": {
+   "n": 9111,
+   "games": 121,
+   "overRate": 0.46735,
+   "modelSaid": 0.48583,
+   "marketSaid": 0.4615,
+   "llDiff": 0.01537,
+   "brDiff": 0.00697,
+   "llModel": 0.70056,
+   "llMarket": 0.68519,
+   "bias": 0.60069,
+   "muMinusLine": 0.48528,
+   "lineMinusY": 0.11541,
+   "flat": {
+    "over": {
+     "bets": 1937,
+     "won": 916,
+     "units": -182.87277
+    },
+    "under": {
+     "bets": 2386,
+     "won": 1333,
+     "units": 94.72234
+    }
+   },
+   "llCi": [
+    0.00953,
+    0.02154
+   ]
+  },
+  "New club": {
+   "n": 2389,
+   "games": 113,
+   "overRate": 0.46756,
+   "modelSaid": 0.50056,
+   "marketSaid": 0.45826,
+   "llDiff": 0.02815,
+   "brDiff": 0.01234,
+   "llModel": 0.71064,
+   "llMarket": 0.68248,
+   "bias": 0.86308,
+   "muMinusLine": 0.71553,
+   "lineMinusY": 0.14755,
+   "flat": {
+    "over": {
+     "bets": 733,
+     "won": 354,
+     "units": -56.27546
+    },
+    "under": {
+     "bets": 591,
+     "won": 315,
+     "units": -9.71565
+    }
+   },
+   "llCi": [
+    0.01289,
+    0.04343
+   ]
+  },
+  "No game last season (rookie, back from a year out)": {
+   "n": 798,
+   "games": 75,
+   "overRate": 0.58772,
+   "modelSaid": 0.47532,
+   "marketSaid": 0.46193,
+   "llDiff": 0.02443,
+   "brDiff": 0.01107,
+   "llModel": 0.7294,
+   "llMarket": 0.70497,
+   "bias": -0.87536,
+   "muMinusLine": 0.31762,
+   "lineMinusY": -1.19298,
+   "flat": {
+    "over": {
+     "bets": 126,
+     "won": 73,
+     "units": 12.60386
+    },
+    "under": {
+     "bets": 254,
+     "won": 93,
+     "units": -81.27802
+    }
+   },
+   "llCi": [
+    0.0049,
+    0.04317
+   ]
+  }
+ },
+ "archiveByGames": {
+  "0 to 15": {
+   "n": 28,
+   "games": 4,
+   "overRate": 0.53571,
+   "modelSaid": 0.48576,
+   "marketSaid": 0.47323,
+   "llDiff": 0.00996,
+   "brDiff": 0.00518,
+   "llModel": 0.68144,
+   "llMarket": 0.67148,
+   "bias": -1.68307,
+   "muMinusLine": 0.45979,
+   "lineMinusY": -2.14286,
+   "flat": {
+    "over": {
+     "bets": 2,
+     "won": 1,
+     "units": -0.07407
+    },
+    "under": {
+     "bets": 5,
+     "won": 2,
+     "units": -1.6012
+    }
+   }
+  },
+  "16 or more": {
+   "n": 11367,
+   "games": 83,
+   "overRate": 0.45905,
+   "modelSaid": 0.44563,
+   "marketSaid": 0.45602,
+   "llDiff": 0.01468,
+   "brDiff": 0.00644,
+   "llModel": 0.69345,
+   "llMarket": 0.67877,
+   "bias": 0.06978,
+   "muMinusLine": -0.0112,
+   "lineMinusY": 0.08098,
+   "flat": {
+    "over": {
+     "bets": 965,
+     "won": 441,
+     "units": -106.36239
+    },
+    "under": {
+     "bets": 4266,
+     "won": 2355,
+     "units": 136.87823
+    }
+   },
+   "llCi": [
+    0.00829,
+    0.02142
+   ]
+  }
+ },
+ "byTeammate": {
+  "A teammate of 24+ usual minutes Out on the day's report": {
+   "n": 6610,
+   "games": 101,
+   "overRate": 0.48079,
+   "modelSaid": 0.47505,
+   "marketSaid": 0.46101,
+   "llDiff": 0.02023,
+   "brDiff": 0.0091,
+   "llModel": 0.70729,
+   "llMarket": 0.68706,
+   "bias": 0.28943,
+   "muMinusLine": 0.34344,
+   "lineMinusY": -0.05401,
+   "flat": {
+    "over": {
+     "bets": 1293,
+     "won": 621,
+     "units": -109.6075
+    },
+    "under": {
+     "bets": 2053,
+     "won": 1086,
+     "units": -34.29579
+    }
+   },
+   "llCi": [
+    0.01334,
+    0.02699
+   ]
+  },
+  "No such teammate on the report": {
+   "n": 5688,
+   "games": 87,
+   "overRate": 0.46871,
+   "modelSaid": 0.50306,
+   "marketSaid": 0.46076,
+   "llDiff": 0.01635,
+   "brDiff": 0.00733,
+   "llModel": 0.70102,
+   "llMarket": 0.68467,
+   "bias": 0.86553,
+   "muMinusLine": 0.7233,
+   "lineMinusY": 0.14223,
+   "flat": {
+    "over": {
+     "bets": 1503,
+     "won": 722,
+     "units": -116.93687
+    },
+    "under": {
+     "bets": 1178,
+     "won": 655,
+     "units": 38.02447
+    }
+   },
+   "llCi": [
+    0.00844,
+    0.0243
+   ]
+  },
+  "A called teammate (projected 20+) did not play: a late scratch": {
+   "n": 3037,
+   "games": 54,
+   "overRate": 0.49819,
+   "modelSaid": 0.48439,
+   "marketSaid": 0.46118,
+   "llDiff": 0.02796,
+   "brDiff": 0.01213,
+   "llModel": 0.7174,
+   "llMarket": 0.68943,
+   "bias": 0.38873,
+   "muMinusLine": 0.48109,
+   "lineMinusY": -0.09236,
+   "flat": {
+    "over": {
+     "bets": 689,
+     "won": 349,
+     "units": -19.27518
+    },
+    "under": {
+     "bets": 881,
+     "won": 433,
+     "units": -75.57438
+    }
+   },
+   "llCi": [
+    0.01622,
+    0.03868
+   ]
+  },
+  "A teammate played 15+ minutes with no call": {
+   "n": 3185,
+   "games": 54,
+   "overRate": 0.47127,
+   "modelSaid": 0.48721,
+   "marketSaid": 0.46139,
+   "llDiff": 0.02703,
+   "brDiff": 0.01217,
+   "llModel": 0.71145,
+   "llMarket": 0.68442,
+   "bias": 0.72233,
+   "muMinusLine": 0.50396,
+   "lineMinusY": 0.21837,
+   "flat": {
+    "over": {
+     "bets": 725,
+     "won": 338,
+     "units": -79.37668
+    },
+    "under": {
+     "bets": 882,
+     "won": 463,
+     "units": -21.07253
+    }
+   },
+   "llCi": [
+    0.01792,
+    0.03659
+   ]
+  },
+  "Neither surprise": {
+   "n": 7614,
+   "games": 102,
+   "overRate": 0.4694,
+   "modelSaid": 0.49142,
+   "marketSaid": 0.46109,
+   "llDiff": 0.01312,
+   "brDiff": 0.00596,
+   "llModel": 0.69836,
+   "llMarket": 0.68524,
+   "bias": 0.62695,
+   "muMinusLine": 0.56036,
+   "lineMinusY": 0.06659,
+   "flat": {
+    "over": {
+     "bets": 1789,
+     "won": 851,
+     "units": -163.86517
+    },
+    "under": {
+     "bets": 1881,
+     "won": 1061,
+     "units": 90.65542
+    }
+   },
+   "llCi": [
+    0.00671,
+    0.01955
+   ]
+  }
+ },
+ "byB2b": {
+  "His club on the second night of a back-to-back": {
+   "n": 1871,
+   "games": 30,
+   "overRate": 0.49546,
+   "modelSaid": 0.47509,
+   "marketSaid": 0.4611,
+   "llDiff": 0.02564,
+   "brDiff": 0.01105,
+   "llModel": 0.71604,
+   "llMarket": 0.6904,
+   "bias": 0.10664,
+   "muMinusLine": 0.31642,
+   "lineMinusY": -0.20978,
+   "flat": {
+    "over": {
+     "bets": 410,
+     "won": 201,
+     "units": -26.41667
+    },
+    "under": {
+     "bets": 579,
+     "won": 295,
+     "units": -30.33146
+    }
+   },
+   "llCi": [
+    0.01053,
+    0.04276
+   ]
+  },
+  "His club rested": {
+   "n": 10427,
+   "games": 113,
+   "overRate": 0.47156,
+   "modelSaid": 0.49032,
+   "marketSaid": 0.46086,
+   "llDiff": 0.01715,
+   "brDiff": 0.00778,
+   "llModel": 0.7023,
+   "llMarket": 0.68515,
+   "bias": 0.6365,
+   "muMinusLine": 0.5555,
+   "lineMinusY": 0.08099,
+   "flat": {
+    "over": {
+     "bets": 2386,
+     "won": 1142,
+     "units": -200.1277
+    },
+    "under": {
+     "bets": 2652,
+     "won": 1446,
+     "units": 34.06014
+    }
+   },
+   "llCi": [
+    0.01194,
+    0.02212
+   ]
+  },
+  "The opponent on a back-to-back": {
+   "n": 1980,
+   "games": 30,
+   "overRate": 0.52626,
+   "modelSaid": 0.47224,
+   "marketSaid": 0.46037,
+   "llDiff": 0.00592,
+   "brDiff": 0.00216,
+   "llModel": 0.69879,
+   "llMarket": 0.69288,
+   "bias": -0.02928,
+   "muMinusLine": 0.32274,
+   "lineMinusY": -0.35202,
+   "flat": {
+    "over": {
+     "bets": 350,
+     "won": 207,
+     "units": 51.53235
+    },
+    "under": {
+     "bets": 623,
+     "won": 319,
+     "units": -28.79447
+    }
+   },
+   "llCi": [
+    -0.0049,
+    0.01783
+   ]
+  },
+  "Neither": {
+   "n": 9303,
+   "games": 91,
+   "overRate": 0.46329,
+   "modelSaid": 0.49191,
+   "marketSaid": 0.46091,
+   "llDiff": 0.01908,
+   "brDiff": 0.00872,
+   "llModel": 0.70299,
+   "llMarket": 0.68391,
+   "bias": 0.71121,
+   "muMinusLine": 0.5726,
+   "lineMinusY": 0.13861,
+   "flat": {
+    "over": {
+     "bets": 2192,
+     "won": 1027,
+     "units": -230.76685
+    },
+    "under": {
+     "bets": 2338,
+     "won": 1285,
+     "units": 49.18443
+    }
+   },
+   "llCi": [
+    0.01383,
+    0.02452
+   ]
+  }
+ },
+ "bySpread": {
+  "Spread under 4": {
+   "n": 4703,
+   "games": 46,
+   "overRate": 0.47119,
+   "modelSaid": 0.48507,
+   "marketSaid": 0.46008,
+   "llDiff": 0.02071,
+   "brDiff": 0.00926,
+   "llModel": 0.70499,
+   "llMarket": 0.68428,
+   "bias": 0.56171,
+   "muMinusLine": 0.47187,
+   "lineMinusY": 0.08984,
+   "flat": {
+    "over": {
+     "bets": 1067,
+     "won": 516,
+     "units": -79.79404
+    },
+    "under": {
+     "bets": 1323,
+     "won": 715,
+     "units": 7.67034
+    }
+   },
+   "llCi": [
+    0.01256,
+    0.02934
+   ]
+  },
+  "4 to 7.5": {
+   "n": 4179,
+   "games": 41,
+   "overRate": 0.47643,
+   "modelSaid": 0.48603,
+   "marketSaid": 0.46112,
+   "llDiff": 0.01597,
+   "brDiff": 0.00726,
+   "llModel": 0.70308,
+   "llMarket": 0.68711,
+   "bias": 0.49104,
+   "muMinusLine": 0.4981,
+   "lineMinusY": -0.00706,
+   "flat": {
+    "over": {
+     "bets": 901,
+     "won": 429,
+     "units": -82.99601
+    },
+    "under": {
+     "bets": 1138,
+     "won": 619,
+     "units": 12.71032
+    }
+   },
+   "llCi": [
+    0.00765,
+    0.02415
+   ]
+  },
+  "8 or more": {
+   "n": 3416,
+   "games": 34,
+   "overRate": 0.47922,
+   "modelSaid": 0.49447,
+   "marketSaid": 0.46175,
+   "llDiff": 0.01832,
+   "brDiff": 0.00817,
+   "llModel": 0.70516,
+   "llMarket": 0.68684,
+   "bias": 0.6272,
+   "muMinusLine": 0.60993,
+   "lineMinusY": 0.01727,
+   "flat": {
+    "over": {
+     "bets": 828,
+     "won": 398,
+     "units": -63.75432
+    },
+    "under": {
+     "bets": 770,
+     "won": 407,
+     "units": -16.65199
+    }
+   },
+   "llCi": [
+    0.00941,
+    0.02676
+   ]
+  }
+ },
+ "byGapSd": {
+  "under -0.5 sd": {
+   "n": 301,
+   "games": 72,
+   "overRate": 0.46179,
+   "modelSaid": 0.22438,
+   "marketSaid": 0.43119,
+   "llDiff": 0.15052,
+   "brDiff": 0.06033,
+   "llModel": 0.8304,
+   "llMarket": 0.67988,
+   "bias": -3.46482,
+   "muMinusLine": -3.03458,
+   "lineMinusY": -0.43023,
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    },
+    "under": {
+     "bets": 299,
+     "won": 160,
+     "units": -17.89836
+    }
+   },
+   "llCi": [
+    0.07917,
+    0.21464
+   ]
+  },
+  "-0.5 to -0.15": {
+   "n": 2013,
+   "games": 121,
+   "overRate": 0.42126,
+   "modelSaid": 0.34274,
+   "marketSaid": 0.42761,
+   "llDiff": 0.02368,
+   "brDiff": 0.01088,
+   "llModel": 0.69631,
+   "llMarket": 0.67263,
+   "bias": -1.10959,
+   "muMinusLine": -1.31401,
+   "lineMinusY": 0.20442,
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    },
+    "under": {
+     "bets": 1646,
+     "won": 923,
+     "units": 19.88984
+    }
+   },
+   "llCi": [
+    0.01142,
+    0.03537
+   ]
+  },
+  "-0.15 to +0.15": {
+   "n": 4489,
+   "games": 121,
+   "overRate": 0.4589,
+   "modelSaid": 0.45067,
+   "marketSaid": 0.44808,
+   "llDiff": 0.00279,
+   "brDiff": 0.00136,
+   "llModel": 0.68895,
+   "llMarket": 0.68616,
+   "bias": 0.24195,
+   "muMinusLine": 0.07187,
+   "lineMinusY": 0.17008,
+   "flat": {
+    "over": {
+     "bets": 143,
+     "won": 58,
+     "units": -3.52
+    },
+    "under": {
+     "bets": 1181,
+     "won": 616,
+     "units": 7.41719
+    }
+   },
+   "llCi": [
+    -0.00015,
+    0.00588
+   ]
+  },
+  "+0.15 to +0.5": {
+   "n": 4688,
+   "games": 121,
+   "overRate": 0.5064,
+   "modelSaid": 0.56679,
+   "marketSaid": 0.48033,
+   "llDiff": 0.01171,
+   "brDiff": 0.00572,
+   "llModel": 0.70293,
+   "llMarket": 0.69122,
+   "bias": 1.44173,
+   "muMinusLine": 1.51916,
+   "lineMinusY": -0.07743,
+   "flat": {
+    "over": {
+     "bets": 2002,
+     "won": 956,
+     "units": -165.75799
+    },
+    "under": {
+     "bets": 105,
+     "won": 42,
+     "units": -5.68
+    }
+   },
+   "llCi": [
+    0.00401,
+    0.01982
+   ]
+  },
+  "over +0.5 sd": {
+   "n": 807,
+   "games": 116,
+   "overRate": 0.52416,
+   "modelSaid": 0.69873,
+   "marketSaid": 0.51344,
+   "llDiff": 0.08224,
+   "brDiff": 0.0357,
+   "llModel": 0.77193,
+   "llMarket": 0.6897,
+   "bias": 2.81024,
+   "muMinusLine": 3.09586,
+   "lineMinusY": -0.28563,
+   "flat": {
+    "over": {
+     "bets": 651,
+     "won": 329,
+     "units": -57.26638
+    },
+    "under": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    }
+   },
+   "llCi": [
+    0.04387,
+    0.11876
+   ]
+  }
+ },
+ "byDisagree": {
+  "DK 10+ points above the model": {
+   "n": 1186,
+   "games": 108,
+   "overRate": 0.48229,
+   "modelSaid": 0.30832,
+   "marketSaid": 0.46449,
+   "llDiff": 0.07756,
+   "brDiff": 0.03358,
+   "llModel": 0.76732,
+   "llMarket": 0.68976,
+   "bias": -2.47874,
+   "muMinusLine": -2.1752,
+   "lineMinusY": -0.30354,
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    },
+    "under": {
+     "bets": 1186,
+     "won": 614,
+     "units": -40.00925
+    }
+   },
+   "llCi": [
+    0.049,
+    0.10707
+   ]
+  },
+  "DK 5 to 10 above": {
+   "n": 1334,
+   "games": 120,
+   "overRate": 0.44153,
+   "modelSaid": 0.38987,
+   "marketSaid": 0.46275,
+   "llDiff": 0.00428,
+   "brDiff": 0.00204,
+   "llModel": 0.68295,
+   "llMarket": 0.67866,
+   "bias": -0.47967,
+   "muMinusLine": -0.77877,
+   "lineMinusY": 0.2991,
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    },
+    "under": {
+     "bets": 1334,
+     "won": 745,
+     "units": 47.96278
+    }
+   },
+   "llCi": [
+    -0.00509,
+    0.01408
+   ]
+  },
+  "within 5": {
+   "n": 4729,
+   "games": 121,
+   "overRate": 0.47262,
+   "modelSaid": 0.46484,
+   "marketSaid": 0.46117,
+   "llDiff": 0.0017,
+   "brDiff": 0.00079,
+   "llModel": 0.68294,
+   "llMarket": 0.68125,
+   "bias": 0.2675,
+   "muMinusLine": 0.21241,
+   "lineMinusY": 0.05509,
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    },
+    "under": {
+     "bets": 711,
+     "won": 382,
+     "units": -4.22485
+    }
+   },
+   "llCi": [
+    0.0001,
+    0.00329
+   ]
+  },
+  "model 5 to 10 above": {
+   "n": 2369,
+   "games": 120,
+   "overRate": 0.48881,
+   "modelSaid": 0.53403,
+   "marketSaid": 0.46058,
+   "llDiff": 0.00191,
+   "brDiff": 0.0009,
+   "llModel": 0.68973,
+   "llMarket": 0.68782,
+   "bias": 1.03392,
+   "muMinusLine": 1.06326,
+   "lineMinusY": -0.02934,
+   "flat": {
+    "over": {
+     "bets": 116,
+     "won": 53,
+     "units": -15.30579
+    },
+    "under": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    }
+   },
+   "llCi": [
+    -0.00518,
+    0.00955
+   ]
+  },
+  "model 10+ above": {
+   "n": 2680,
+   "games": 118,
+   "overRate": 0.48134,
+   "modelSaid": 0.61658,
+   "marketSaid": 0.45818,
+   "llDiff": 0.04348,
+   "brDiff": 0.01993,
+   "llModel": 0.73801,
+   "llMarket": 0.69453,
+   "bias": 2.50059,
+   "muMinusLine": 2.41775,
+   "lineMinusY": 0.08284,
+   "flat": {
+    "over": {
+     "bets": 2680,
+     "won": 1290,
+     "units": -211.23858
+    },
+    "under": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    }
+   },
+   "llCi": [
+    0.02672,
+    0.06008
+   ]
+  }
+ },
+ "archiveByDisagree": {
+  "DK 10+ points above the model": {
+   "n": 1500,
+   "games": 82,
+   "overRate": 0.48,
+   "modelSaid": 0.3048,
+   "marketSaid": 0.46991,
+   "llDiff": 0.07726,
+   "brDiff": 0.03273,
+   "llModel": 0.76478,
+   "llMarket": 0.68751,
+   "bias": -2.3238,
+   "muMinusLine": -2.28647,
+   "lineMinusY": -0.03733,
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    },
+    "under": {
+     "bets": 1500,
+     "won": 780,
+     "units": -30.37446
+    }
+   },
+   "llCi": [
+    0.04071,
+    0.11528
+   ]
+  },
+  "DK 5 to 10 above": {
+   "n": 1779,
+   "games": 83,
+   "overRate": 0.43395,
+   "modelSaid": 0.39181,
+   "marketSaid": 0.464,
+   "llDiff": 0.00285,
+   "brDiff": 0.00128,
+   "llModel": 0.67984,
+   "llMarket": 0.67699,
+   "bias": -0.32086,
+   "muMinusLine": -0.59152,
+   "lineMinusY": 0.27066,
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    },
+    "under": {
+     "bets": 1779,
+     "won": 1007,
+     "units": 95.85468
+    }
+   },
+   "llCi": [
+    -0.00521,
+    0.01102
+   ]
+  },
+  "within 5": {
+   "n": 5491,
+   "games": 83,
+   "overRate": 0.45292,
+   "modelSaid": 0.45361,
+   "marketSaid": 0.45296,
+   "llDiff": -0.0001,
+   "brDiff": -0.00007,
+   "llModel": 0.672,
+   "llMarket": 0.6721,
+   "bias": 0.33329,
+   "muMinusLine": 0.19224,
+   "lineMinusY": 0.14105,
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    },
+    "under": {
+     "bets": 992,
+     "won": 570,
+     "units": 69.79682
+    }
+   },
+   "llCi": [
+    -0.00164,
+    0.00151
+   ]
+  },
+  "model 5 to 10 above": {
+   "n": 1725,
+   "games": 83,
+   "overRate": 0.4887,
+   "modelSaid": 0.52022,
+   "marketSaid": 0.44845,
+   "llDiff": -0.00096,
+   "brDiff": -0.00033,
+   "llModel": 0.69142,
+   "llMarket": 0.69238,
+   "bias": 0.78061,
+   "muMinusLine": 0.90612,
+   "lineMinusY": -0.12551,
+   "flat": {
+    "over": {
+     "bets": 68,
+     "won": 32,
+     "units": 3.80512
+    },
+    "under": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    }
+   },
+   "llCi": [
+    -0.00858,
+    0.00669
+   ]
+  },
+  "model 10+ above": {
+   "n": 900,
+   "games": 79,
+   "overRate": 0.45667,
+   "modelSaid": 0.59635,
+   "marketSaid": 0.45078,
+   "llDiff": 0.05375,
+   "brDiff": 0.02552,
+   "llModel": 0.73586,
+   "llMarket": 0.68211,
+   "bias": 1.80654,
+   "muMinusLine": 1.94321,
+   "lineMinusY": -0.13667,
+   "flat": {
+    "over": {
+     "bets": 899,
+     "won": 410,
+     "units": -110.24158
+    },
+    "under": {
+     "bets": 0,
+     "won": 0,
+     "units": 0
+    }
+   },
+   "llCi": [
+    0.02461,
+    0.08208
+   ]
+  }
+ },
+ "lossShare": {
+  "trial": {
+   "lines": 3866,
+   "share": 0.91949,
+   "of": 12298
+  },
+  "archive": {
+   "lines": 2400,
+   "share": 0.983,
+   "of": 11395
+  }
+ },
+ "calibration": [
+  {
+   "lo": 0,
+   "hi": 0.3,
+   "model": [
+    588,
+    0.25202,
+    0.44558
+   ],
+   "market": [
+    94,
+    0.27645,
+    0.2766
+   ],
+   "archive": [
+    1062,
+    0.23698,
+    0.36347
+   ]
+  },
+  {
+   "lo": 0.3,
+   "hi": 0.4,
+   "model": [
+    2149,
+    0.35838,
+    0.4081
+   ],
+   "market": [
+    1316,
+    0.36186,
+    0.38146
+   ],
+   "archive": [
+    2566,
+    0.35857,
+    0.42634
+   ]
+  },
+  {
+   "lo": 0.4,
+   "hi": 0.45,
+   "model": [
+    1726,
+    0.42616,
+    0.46118
+   ],
+   "market": [
+    2789,
+    0.43211,
+    0.4464
+   ],
+   "archive": [
+    2059,
+    0.42459,
+    0.42302
+   ]
+  },
+  {
+   "lo": 0.45,
+   "hi": 0.5,
+   "model": [
+    2079,
+    0.47578,
+    0.47523
+   ],
+   "market": [
+    6057,
+    0.47182,
+    0.48473
+   ],
+   "archive": [
+    2114,
+    0.47488,
+    0.47162
+   ]
+  },
+  {
+   "lo": 0.5,
+   "hi": 0.55,
+   "model": [
+    2125,
+    0.52494,
+    0.49412
+   ],
+   "market": [
+    1437,
+    0.51995,
+    0.53723
+   ],
+   "archive": [
+    1725,
+    0.52385,
+    0.52232
+   ]
+  },
+  {
+   "lo": 0.55,
+   "hi": 0.6,
+   "model": [
+    1676,
+    0.57368,
+    0.51193
+   ],
+   "market": [
+    408,
+    0.57064,
+    0.57353
+   ],
+   "archive": [
+    1095,
+    0.57288,
+    0.51689
+   ]
+  },
+  {
+   "lo": 0.6,
+   "hi": 0.7,
+   "model": [
+    1631,
+    0.63822,
+    0.5187
+   ],
+   "market": [
+    197,
+    0.62398,
+    0.65482
+   ],
+   "archive": [
+    699,
+    0.63326,
+    0.53648
+   ]
+  },
+  {
+   "lo": 0.7,
+   "hi": 1.01,
+   "model": [
+    324,
+    0.74247,
+    0.51543
+   ],
+   "market": null,
+   "archive": [
+    75,
+    0.74108,
+    0.57333
+   ]
+  }
+ ],
+ "sharp": {
+  "model": 0.09013,
+  "market": 0.05243,
+  "archiveModel": 0.09502,
+  "archiveMarket": 0.0617
+ },
+ "biasByStat": {
+  "All": {
+   "n": 12298,
+   "total": 0.55588,
+   "minutes": 0.09249,
+   "pace": 0.21706,
+   "paceMiss": 0.10955,
+   "opp": 0.08542,
+   "post": 0,
+   "rate": 0.16377,
+   "resid": -0.00286,
+   "m": 28.77086,
+   "amin": 28.55074,
+   "rateAtPace": 0.27128
+  },
+  "Points": {
+   "n": 1703,
+   "total": 1.01169,
+   "minutes": 0.13547,
+   "pace": 0.27016,
+   "paceMiss": 0.12765,
+   "opp": 0.10899,
+   "post": 0,
+   "rate": 0.50043,
+   "resid": -0.00337,
+   "m": 27.60986,
+   "amin": 27.34762,
+   "rateAtPace": 0.64294
+  },
+  "Rebounds": {
+   "n": 1583,
+   "total": 0.12793,
+   "minutes": 0.04801,
+   "pace": 0.10033,
+   "paceMiss": 0.05183,
+   "opp": 0.02367,
+   "post": 0,
+   "rate": -0.0435,
+   "resid": -0.00058,
+   "m": 28.09015,
+   "amin": 27.84523,
+   "rateAtPace": 0.005
+  },
+  "Assists": {
+   "n": 1207,
+   "total": 0.09948,
+   "minutes": 0.02532,
+   "pace": 0.07174,
+   "paceMiss": 0.03678,
+   "opp": 0.05047,
+   "post": 0,
+   "rate": -0.04607,
+   "resid": -0.00199,
+   "m": 29.38724,
+   "amin": 29.16736,
+   "rateAtPace": -0.0111
+  },
+  "Threes": {
+   "n": 1381,
+   "total": 0.09041,
+   "minutes": 0.02306,
+   "pace": 0.03601,
+   "paceMiss": 0.01756,
+   "opp": 0.01227,
+   "post": 0,
+   "rate": 0.0195,
+   "resid": -0.00042,
+   "m": 28.47451,
+   "amin": 28.24475,
+   "rateAtPace": 0.03794
+  },
+  "Steals": {
+   "n": 582,
+   "total": 0.00005,
+   "minutes": 0.00574,
+   "pace": 0.02504,
+   "paceMiss": 0.00857,
+   "opp": 0.00649,
+   "post": 0,
+   "rate": -0.03728,
+   "resid": 0.00007,
+   "m": 30.85911,
+   "amin": 30.82302,
+   "rateAtPace": -0.02082
+  },
+  "Blocks": {
+   "n": 320,
+   "total": 0.0755,
+   "minutes": 0.00873,
+   "pace": 0.01988,
+   "paceMiss": 0.00634,
+   "opp": 0.00237,
+   "post": 0,
+   "rate": 0.04429,
+   "resid": 0.00023,
+   "m": 29.59813,
+   "amin": 29.58125,
+   "rateAtPace": 0.05784
+  },
+  "Pts+reb+ast": {
+   "n": 1308,
+   "total": 1.11812,
+   "minutes": 0.16609,
+   "pace": 0.46499,
+   "paceMiss": 0.24972,
+   "opp": 0.18277,
+   "post": 0,
+   "rate": 0.3108,
+   "resid": -0.00653,
+   "m": 29.10765,
+   "amin": 28.88838,
+   "rateAtPace": 0.52607
+  },
+  "Pts+reb": {
+   "n": 1593,
+   "total": 1.11517,
+   "minutes": 0.18698,
+   "pace": 0.37783,
+   "paceMiss": 0.18688,
+   "opp": 0.13609,
+   "post": 0,
+   "rate": 0.41881,
+   "resid": -0.00453,
+   "m": 28.07677,
+   "amin": 27.79535,
+   "rateAtPace": 0.60976
+  },
+  "Pts+ast": {
+   "n": 1234,
+   "total": 0.91752,
+   "minutes": 0.13159,
+   "pace": 0.37791,
+   "paceMiss": 0.19153,
+   "opp": 0.16289,
+   "post": 0,
+   "rate": 0.25096,
+   "resid": -0.00582,
+   "m": 29.29611,
+   "amin": 29.07212,
+   "rateAtPace": 0.43733
+  },
+  "Ast+reb": {
+   "n": 1212,
+   "total": 0.22933,
+   "minutes": 0.07254,
+   "pace": 0.17262,
+   "paceMiss": 0.08889,
+   "opp": 0.07452,
+   "post": 0,
+   "rate": -0.08783,
+   "resid": -0.00251,
+   "m": 29.50578,
+   "amin": 29.2401,
+   "rateAtPace": -0.0041
+  },
+  "Stl+blk": {
+   "n": 175,
+   "total": -0.0424,
+   "minutes": -0.01867,
+   "pace": 0.04333,
+   "paceMiss": 0.02166,
+   "opp": -0.01207,
+   "post": 0,
+   "rate": -0.05711,
+   "resid": 0.00211,
+   "m": 30.86343,
+   "amin": 31.26286,
+   "rateAtPace": -0.03544
+  }
+ },
+ "biasByMin": {
+  "under 20": {
+   "n": 834,
+   "total": -0.62335,
+   "minutes": -1.26115,
+   "pace": 0.12158,
+   "paceMiss": 0.13165,
+   "opp": 0.01733,
+   "post": 0,
+   "rate": 0.49659,
+   "resid": 0.0023,
+   "m": 17.65923,
+   "amin": 20.77818,
+   "rateAtPace": 0.48652
+  },
+  "20 to 26": {
+   "n": 2677,
+   "total": 0.575,
+   "minutes": -0.03711,
+   "pace": 0.14345,
+   "paceMiss": 0.08871,
+   "opp": 0.07839,
+   "post": 0,
+   "rate": 0.39396,
+   "resid": -0.00368,
+   "m": 23.4861,
+   "amin": 23.63429,
+   "rateAtPace": 0.4487
+  },
+  "26 to 30": {
+   "n": 3066,
+   "total": 0.65655,
+   "minutes": 0.08611,
+   "pace": 0.18104,
+   "paceMiss": 0.03567,
+   "opp": 0.09231,
+   "post": 0,
+   "rate": 0.30226,
+   "resid": -0.00517,
+   "m": 28.08787,
+   "amin": 27.82811,
+   "rateAtPace": 0.44763
+  },
+  "30 to 34": {
+   "n": 3649,
+   "total": 0.43517,
+   "minutes": 0.11741,
+   "pace": 0.2668,
+   "paceMiss": 0.09759,
+   "opp": 0.10419,
+   "post": 0,
+   "rate": -0.04992,
+   "resid": -0.0033,
+   "m": 31.91074,
+   "amin": 31.5322,
+   "rateAtPace": 0.11929
+  },
+  "34 and up": {
+   "n": 2072,
+   "total": 1.06946,
+   "minutes": 0.77031,
+   "pace": 0.31629,
+   "paceMiss": 0.258,
+   "opp": 0.07869,
+   "post": 0,
+   "rate": -0.09617,
+   "resid": 0.00033,
+   "m": 35.55222,
+   "amin": 33.8499,
+   "rateAtPace": -0.03788
+  }
+ },
+ "biasByMinPts": {
+  "under 20": {
+   "n": 188,
+   "total": -0.13511,
+   "minutes": -1.11187,
+   "pace": 0.11997,
+   "paceMiss": 0.09046,
+   "opp": 0.04889,
+   "post": 0,
+   "rate": 0.80671,
+   "resid": 0.00119,
+   "m": 17.65585,
+   "amin": 20.35106,
+   "rateAtPace": 0.83622
+  },
+  "20 to 26": {
+   "n": 463,
+   "total": 1.27363,
+   "minutes": 0.07508,
+   "pace": 0.17991,
+   "paceMiss": 0.08864,
+   "opp": 0.0956,
+   "post": 0,
+   "rate": 0.9253,
+   "resid": -0.00226,
+   "m": 23.33153,
+   "amin": 23.09719,
+   "rateAtPace": 1.01657
+  },
+  "26 to 30": {
+   "n": 394,
+   "total": 1.2332,
+   "minutes": 0.17447,
+   "pace": 0.23518,
+   "paceMiss": 0.0503,
+   "opp": 0.13219,
+   "post": 0,
+   "rate": 0.69862,
+   "resid": -0.00727,
+   "m": 28.05203,
+   "amin": 27.46954,
+   "rateAtPace": 0.8835
+  },
+  "30 to 34": {
+   "n": 422,
+   "total": 0.84268,
+   "minutes": 0.17672,
+   "pace": 0.36667,
+   "paceMiss": 0.12641,
+   "opp": 0.1358,
+   "post": 0,
+   "rate": 0.16857,
+   "resid": -0.00508,
+   "m": 31.88389,
+   "amin": 31.45261,
+   "rateAtPace": 0.40883
+  },
+  "34 and up": {
+   "n": 236,
+   "total": 1.34377,
+   "minutes": 1.10876,
+   "pace": 0.45271,
+   "paceMiss": 0.36518,
+   "opp": 0.09646,
+   "post": 0,
+   "rate": -0.31457,
+   "resid": 0.00041,
+   "m": 35.55212,
+   "amin": 33.7161,
+   "rateAtPace": -0.22704
+  }
+ },
+ "biasByStarter": {
+  "Started": {
+   "n": 9482,
+   "total": 0.35461,
+   "minutes": -0.07387,
+   "pace": 0.24084,
+   "paceMiss": 0.11192,
+   "opp": 0.0923,
+   "post": 0,
+   "rate": 0.09843,
+   "resid": -0.00309,
+   "m": 30.27522,
+   "amin": 30.49926,
+   "rateAtPace": 0.22734
+  },
+  "Came off the bench": {
+   "n": 2816,
+   "total": 1.23362,
+   "minutes": 0.65263,
+   "pace": 0.13699,
+   "paceMiss": 0.10158,
+   "opp": 0.06227,
+   "post": 0,
+   "rate": 0.3838,
+   "resid": -0.00206,
+   "m": 23.7054,
+   "amin": 21.9897,
+   "rateAtPace": 0.41921
+  }
+ },
+ "biasByGames": {
+  "0 to 2": {
+   "n": 4746,
+   "total": 0.55979,
+   "minutes": 0.09511,
+   "pace": 0.24551,
+   "paceMiss": -0.117,
+   "opp": 0.11015,
+   "post": 0,
+   "rate": 0.11714,
+   "resid": -0.00812,
+   "m": 28.63536,
+   "amin": 28.41319,
+   "rateAtPace": 0.47965
+  },
+  "3 to 5": {
+   "n": 4826,
+   "total": 0.54267,
+   "minutes": 0.126,
+   "pace": 0.22159,
+   "paceMiss": 0.2398,
+   "opp": 0.07248,
+   "post": 0,
+   "rate": 0.12214,
+   "resid": 0.00045,
+   "m": 28.784,
+   "amin": 28.46395,
+   "rateAtPace": 0.10393
+  },
+  "6 or more": {
+   "n": 2726,
+   "total": 0.57248,
+   "minutes": 0.02857,
+   "pace": 0.1595,
+   "paceMiss": 0.2734,
+   "opp": 0.06528,
+   "post": 0,
+   "rate": 0.31867,
+   "resid": 0.00045,
+   "m": 28.98349,
+   "amin": 28.94387,
+   "rateAtPace": 0.20478
+  }
+ },
+ "biasArchive": {
+  "All": {
+   "n": 11395,
+   "total": 0.06547,
+   "minutes": 0.21684,
+   "pace": -0.05691,
+   "paceMiss": 0.11948,
+   "opp": -0.25538,
+   "post": -0.81855,
+   "rate": 0.97946,
+   "resid": 0,
+   "m": 30.21038,
+   "amin": 29.49118,
+   "rateAtPace": 0.80308
+  },
+  "Points": {
+   "n": 1328,
+   "total": 0.05732,
+   "minutes": 0.30782,
+   "pace": -0.08102,
+   "paceMiss": 0.17605,
+   "opp": -0.38081,
+   "post": -1.28331,
+   "rate": 1.49464,
+   "resid": 0,
+   "m": 27.93067,
+   "amin": 27.29819,
+   "rateAtPace": 1.23757
+  },
+  "Rebounds": {
+   "n": 1234,
+   "total": 0.14422,
+   "minutes": 0.12661,
+   "pace": -0.03079,
+   "paceMiss": 0.06596,
+   "opp": -0.07965,
+   "post": -0.15534,
+   "rate": 0.2834,
+   "resid": 0,
+   "m": 28.91263,
+   "amin": 28.2423,
+   "rateAtPace": 0.18664
+  },
+  "Assists": {
+   "n": 1094,
+   "total": -0.01445,
+   "minutes": 0.06203,
+   "pace": -0.01923,
+   "paceMiss": 0.04586,
+   "opp": -0.1251,
+   "post": -0.44522,
+   "rate": 0.51307,
+   "resid": 0,
+   "m": 30.39177,
+   "amin": 29.70384,
+   "rateAtPace": 0.44798
+  },
+  "Threes": {
+   "n": 1079,
+   "total": 0.00043,
+   "minutes": 0.03509,
+   "pace": -0.00957,
+   "paceMiss": 0.02172,
+   "opp": -0.02158,
+   "post": -0.16825,
+   "rate": 0.16474,
+   "resid": 0,
+   "m": 29.86684,
+   "amin": 29.1418,
+   "rateAtPace": 0.13345
+  },
+  "Steals": {
+   "n": 888,
+   "total": -0.05083,
+   "minutes": 0.02108,
+   "pace": -0.00667,
+   "paceMiss": 0.01551,
+   "opp": -0.0269,
+   "post": -0.06805,
+   "rate": 0.02971,
+   "resid": 0,
+   "m": 32.13333,
+   "amin": 31.4223,
+   "rateAtPace": 0.00753
+  },
+  "Blocks": {
+   "n": 795,
+   "total": 0.00872,
+   "minutes": 0.01808,
+   "pace": -0.00463,
+   "paceMiss": 0.00934,
+   "opp": -0.02442,
+   "post": 0.00014,
+   "rate": 0.01954,
+   "resid": 0,
+   "m": 31.97619,
+   "amin": 31.01635,
+   "rateAtPace": 0.00557
+  },
+  "Pts+reb+ast": {
+   "n": 1113,
+   "total": 0.17765,
+   "minutes": 0.51647,
+   "pace": -0.13733,
+   "paceMiss": 0.2779,
+   "opp": -0.6218,
+   "post": -1.99526,
+   "rate": 2.41557,
+   "resid": 0,
+   "m": 29.93178,
+   "amin": 29.26235,
+   "rateAtPace": 2.00034
+  },
+  "Pts+reb": {
+   "n": 1204,
+   "total": 0.19295,
+   "minutes": 0.44417,
+   "pace": -0.11375,
+   "paceMiss": 0.23605,
+   "opp": -0.48011,
+   "post": -1.50663,
+   "rate": 1.84927,
+   "resid": 0,
+   "m": 29.12094,
+   "amin": 28.47176,
+   "rateAtPace": 1.49947
+  },
+  "Pts+ast": {
+   "n": 1029,
+   "total": -0.03644,
+   "minutes": 0.40799,
+   "pace": -0.10865,
+   "paceMiss": 0.22705,
+   "opp": -0.56585,
+   "post": -1.92908,
+   "rate": 2.15914,
+   "resid": 0,
+   "m": 31.04342,
+   "amin": 30.34597,
+   "rateAtPace": 1.82344
+  },
+  "Ast+reb": {
+   "n": 1041,
+   "total": 0.13251,
+   "minutes": 0.197,
+   "pace": -0.05165,
+   "paceMiss": 0.10611,
+   "opp": -0.20826,
+   "post": -0.61678,
+   "rate": 0.81222,
+   "resid": 0,
+   "m": 30.80014,
+   "amin": 30.12872,
+   "rateAtPace": 0.65445
+  },
+  "Stl+blk": {
+   "n": 590,
+   "total": 0.02544,
+   "minutes": 0.05521,
+   "pace": -0.01107,
+   "paceMiss": 0.02345,
+   "opp": -0.05665,
+   "post": -0.06898,
+   "rate": 0.10693,
+   "resid": 0,
+   "m": 33.32955,
+   "amin": 32.21864,
+   "rateAtPace": 0.0724
+  }
+ },
+ "biasArchiveMin": {
+  "under 20": {
+   "n": 1424,
+   "total": -0.31666,
+   "minutes": -0.28875,
+   "pace": -0.03923,
+   "paceMiss": 0.05336,
+   "opp": -0.1218,
+   "post": -0.42789,
+   "rate": 0.56101,
+   "resid": 0,
+   "m": 14.9581,
+   "amin": 15.98525,
+   "rateAtPace": 0.46842
+  },
+  "20 to 26": {
+   "n": 1838,
+   "total": -0.27409,
+   "minutes": -0.1059,
+   "pace": -0.04365,
+   "paceMiss": 0.07694,
+   "opp": -0.16835,
+   "post": -0.58091,
+   "rate": 0.62471,
+   "resid": 0,
+   "m": 23.12548,
+   "amin": 23.51959,
+   "rateAtPace": 0.50413
+  },
+  "26 to 30": {
+   "n": 1369,
+   "total": -0.4357,
+   "minutes": -0.14859,
+   "pace": -0.04638,
+   "paceMiss": 0.09532,
+   "opp": -0.21396,
+   "post": -0.72192,
+   "rate": 0.69515,
+   "resid": 0,
+   "m": 28.02349,
+   "amin": 28.40687,
+   "rateAtPace": 0.55344
+  },
+  "30 to 34": {
+   "n": 2299,
+   "total": -0.02619,
+   "minutes": 0.04935,
+   "pace": -0.04046,
+   "paceMiss": 0.14746,
+   "opp": -0.24618,
+   "post": -0.84324,
+   "rate": 1.05433,
+   "resid": 0,
+   "m": 32.18183,
+   "amin": 31.95607,
+   "rateAtPace": 0.86641
+  },
+  "34 and up": {
+   "n": 4465,
+   "total": 0.52798,
+   "minutes": 0.70922,
+   "pace": -0.0797,
+   "paceMiss": 0.15107,
+   "opp": -0.35124,
+   "post": -1.05787,
+   "rate": 1.30757,
+   "resid": 0,
+   "m": 37.6466,
+   "amin": 35.32004,
+   "rateAtPace": 1.07681
+  }
+ },
+ "biasBets": {
+  "Over bets": {
+   "n": 2796,
+   "total": 2.45079,
+   "minutes": 1.0913,
+   "pace": 0.24014,
+   "paceMiss": 0.10142,
+   "opp": 0.17045,
+   "post": 0,
+   "rate": 0.95492,
+   "resid": -0.00602,
+   "m": 29.03605,
+   "amin": 26.64592,
+   "rateAtPace": 1.09364
+  },
+  "Under bets": {
+   "n": 3231,
+   "total": -1.19917,
+   "minutes": -0.87639,
+   "pace": 0.241,
+   "paceMiss": 0.14372,
+   "opp": 0.0482,
+   "post": 0,
+   "rate": -0.61016,
+   "resid": -0.00182,
+   "m": 27.37558,
+   "amin": 29.45342,
+   "rateAtPace": -0.51288
+  },
+  "No bet": {
+   "n": 6271,
+   "total": 0.61528,
+   "minutes": 0.14635,
+   "pace": 0.19443,
+   "paceMiss": 0.09558,
+   "opp": 0.06669,
+   "post": 0,
+   "rate": 0.20979,
+   "resid": -0.00198,
+   "m": 29.3715,
+   "amin": 28.93494,
+   "rateAtPace": 0.30864
+  }
+ },
+ "betsMinutes": {
+  "over": {
+   "m": 29.03605,
+   "amin": 26.64592,
+   "mWf": 29.09852
+  },
+  "under": {
+   "m": 27.37558,
+   "amin": 29.45342,
+   "mWf": 27.56711
+  }
+ },
+ "minutes": {
+  "All": {
+   "n": 2383,
+   "m": 24.24859,
+   "amin": 23.31179,
+   "bias": 0.9368,
+   "mae": 4.78531,
+   "wfM": 24.33486,
+   "wfMae": 4.80256,
+   "b": 23.89067,
+   "scale": 1.01451
+  },
+  "under 20": {
+   "n": 750,
+   "m": 15.22627,
+   "amin": 14.512,
+   "bias": 0.71427,
+   "mae": 5.28893,
+   "wfM": 15.28333,
+   "wfMae": 5.30468,
+   "b": 14.93936,
+   "scale": 1.01632
+  },
+  "20 to 26": {
+   "n": 571,
+   "m": 23.09457,
+   "amin": 21.77058,
+   "bias": 1.32399,
+   "mae": 5.14116,
+   "wfM": 23.16979,
+   "wfMae": 5.1504,
+   "b": 22.73222,
+   "scale": 1.01355
+  },
+  "26 to 30": {
+   "n": 402,
+   "m": 28.0306,
+   "amin": 27.28109,
+   "bias": 0.7495,
+   "mae": 4.75796,
+   "wfM": 28.19982,
+   "wfMae": 4.74428,
+   "b": 27.65189,
+   "scale": 1.01375
+  },
+  "30 to 34": {
+   "n": 424,
+   "m": 31.88467,
+   "amin": 31.39858,
+   "bias": 0.48608,
+   "mae": 3.96769,
+   "wfM": 32.00532,
+   "wfMae": 4.03164,
+   "b": 31.57319,
+   "scale": 1.01012
+  },
+  "34 and up": {
+   "n": 236,
+   "m": 35.55212,
+   "amin": 33.7161,
+   "bias": 1.83602,
+   "mae": 3.83941,
+   "wfM": 35.55484,
+   "wfMae": 3.84953,
+   "b": 34.93116,
+   "scale": 1.01531
+  }
+ },
+ "sides": {
+  "n": 242,
+  "calledMin": 238.77851,
+  "calledActual": 229.55372,
+  "late": 64,
+  "uncalled": 65
+ },
+ "pace": {
+  "Trial games (2026-27)": {
+   "n": 121,
+   "exp": 103.23924,
+   "act": 102.31823
+  },
+  "2023-24: its first 15 game days": {
+   "n": 117,
+   "exp": 102.74801,
+   "act": 102.50094
+  },
+  "2024-25: its first 15 game days": {
+   "n": 120,
+   "exp": 101.64206,
+   "act": 101.94173
+  },
+  "2025-26: its first 15 game days": {
+   "n": 109,
+   "exp": 102.66211,
+   "act": 103.19897
+  },
+  "2023-24: whole regular season": {
+   "n": 1232,
+   "exp": 101.14494,
+   "act": 100.78556
+  },
+  "2024-25: whole regular season": {
+   "n": 1236,
+   "exp": 101.31441,
+   "act": 101.23136
+  },
+  "2025-26: whole regular season": {
+   "n": 1237,
+   "exp": 101.90961,
+   "act": 101.8465
+  },
+  "rate:Trial games (2026-27)": {
+   "n": 2664,
+   "pts": [
+    17.79939,
+    16.94432
+   ],
+   "reb": [
+    6.57163,
+    6.5916
+   ],
+   "ast": [
+    3.94251,
+    3.9042
+   ],
+   "tpm": [
+    2.00025,
+    1.96081
+   ]
+  },
+  "rate:2023-24: first 15 game days": {
+   "n": 2488,
+   "pts": [
+    17.44204,
+    16.91804
+   ],
+   "reb": [
+    6.55964,
+    6.61941
+   ],
+   "ast": [
+    3.80565,
+    3.82871
+   ],
+   "tpm": [
+    1.87759,
+    1.85084
+   ]
+  },
+  "rate:2024-25: first 15 game days": {
+   "n": 2584,
+   "pts": [
+    17.0126,
+    16.96805
+   ],
+   "reb": [
+    6.48276,
+    6.59218
+   ],
+   "ast": [
+    3.8741,
+    3.85515
+   ],
+   "tpm": [
+    1.88632,
+    1.97866
+   ]
+  },
+  "rate:2025-26: first 15 game days": {
+   "n": 2381,
+   "pts": [
+    17.30878,
+    17.46148
+   ],
+   "reb": [
+    6.6474,
+    6.51271
+   ],
+   "ast": [
+    3.79317,
+    3.91689
+   ],
+   "tpm": [
+    1.97684,
+    1.98195
+   ]
+  },
+  "rate:2023-24: whole regular season": {
+   "n": 26216,
+   "pts": [
+    17.22712,
+    17.03449
+   ],
+   "reb": [
+    6.49029,
+    6.49167
+   ],
+   "ast": [
+    3.92421,
+    3.9803
+   ],
+   "tpm": [
+    1.89883,
+    1.91479
+   ]
+  },
+  "rate:2024-25: whole regular season": {
+   "n": 26229,
+   "pts": [
+    16.85396,
+    16.98062
+   ],
+   "reb": [
+    6.53893,
+    6.57719
+   ],
+   "ast": [
+    3.92718,
+    3.96121
+   ],
+   "tpm": [
+    1.94697,
+    2.01936
+   ]
+  },
+  "rate:2025-26: whole regular season": {
+   "n": 26579,
+   "pts": [
+    17.0843,
+    17.25283
+   ],
+   "reb": [
+    6.55155,
+    6.52517
+   ],
+   "ast": [
+    3.92682,
+    3.98864
+   ],
+   "tpm": [
+    1.96029,
+    1.98559
+   ]
+  },
+  "rate:2026 play-in and playoffs (fold model's rates)": {
+   "n": 1876,
+   "pts": [
+    18.00796,
+    16.06574
+   ],
+   "reb": [
+    6.67167,
+    6.34998
+   ],
+   "ast": [
+    4.08008,
+    3.46991
+   ],
+   "tpm": [
+    1.97225,
+    1.79017
+   ]
+  }
+ },
+ "openers": {
+  "2024": {
+   "games": 117,
+   "ppg": 226.78632,
+   "posted": null,
+   "ofPts": 1.00498,
+   "ofReb": 1.00129,
+   "n": 2282,
+   "minBias": 0.62215,
+   "sideSaid": 239.82802,
+   "sidePlayed": 233.76068
+  },
+  "2025": {
+   "games": 120,
+   "ppg": 226.90833,
+   "posted": null,
+   "ofPts": 1.00918,
+   "ofReb": 1.00284,
+   "n": 2316,
+   "minBias": 0.65179,
+   "sideSaid": 237.93142,
+   "sidePlayed": 231.64167
+  },
+  "2026": {
+   "games": 109,
+   "ppg": 234.11009,
+   "posted": null,
+   "ofPts": 1.0056,
+   "ofReb": 1.0035,
+   "n": 2157,
+   "minBias": 0.93948,
+   "sideSaid": 240.58928,
+   "sidePlayed": 231.29358
+  },
+  "2027": {
+   "games": 121,
+   "ppg": 226.86777,
+   "posted": 229.91322,
+   "ofPts": 1.0077,
+   "ofReb": 1.00456,
+   "n": 2437,
+   "minBias": 1.00653,
+   "sideSaid": 242.40465,
+   "sidePlayed": 232.2686
+  },
+  "season2024": 228.36055,
+  "season2025": 227.58933,
+  "season2026": 231.18836
+ },
+ "spread": {
+  "pts": {
+   "trial": 0.83941,
+   "trialWf": 0.84135,
+   "wf2026": 0.87161,
+   "archive": 0.83745
+  },
+  "reb": {
+   "trial": 0.92074,
+   "trialWf": 0.9178,
+   "wf2026": 0.96523,
+   "archive": 0.93681
+  },
+  "ast": {
+   "trial": 0.96366,
+   "trialWf": 0.96104,
+   "wf2026": 1.02078,
+   "archive": 0.91915
+  },
+  "tpm": {
+   "trial": 0.92511,
+   "trialWf": 0.92222,
+   "wf2026": 0.98682,
+   "archive": 0.94589
+  },
+  "stl": {
+   "trial": 0.94199,
+   "trialWf": 0.93941,
+   "wf2026": 1.01648,
+   "archive": 1.1263
+  },
+  "blk": {
+   "trial": 1.03021,
+   "trialWf": 1.03122,
+   "wf2026": 0.99974,
+   "archive": 1.02064
+  },
+  "pra": {
+   "trial": 0.87933,
+   "trialWf": 0.88121,
+   "wf2026": 0.90627,
+   "archive": 0.86582
+  },
+  "pr": {
+   "trial": 0.86469,
+   "trialWf": 0.86729,
+   "wf2026": 0.89497,
+   "archive": 0.86243
+  },
+  "pa": {
+   "trial": 0.90048,
+   "trialWf": 0.90152,
+   "wf2026": 0.8868,
+   "archive": 0.84597
+  },
+  "ar": {
+   "trial": 0.9072,
+   "trialWf": 0.90477,
+   "wf2026": 0.97787,
+   "archive": 0.89885
+  },
+  "sb": {
+   "trial": 1.2301,
+   "trialWf": 1.2273,
+   "wf2026": 1.00485,
+   "archive": 0.99877
+  }
+ },
+ "whatIf": {
+  "call": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.48801,
+   "marketSaid": 0.4609,
+   "llDiff": 0.01844,
+   "brDiff": 0.00828,
+   "llModel": 0.70439,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 2796,
+     "won": 1343,
+     "units": -226.54437
+    },
+    "under": {
+     "bets": 3231,
+     "won": 1741,
+     "units": 3.72868
+    }
+   },
+   "llCi": [
+    0.01384,
+    0.02328
+   ]
+  },
+  "wf": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.49136,
+   "marketSaid": 0.4609,
+   "llDiff": 0.01854,
+   "brDiff": 0.00828,
+   "llModel": 0.70449,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 2902,
+     "won": 1395,
+     "units": -235.12407
+    },
+    "under": {
+     "bets": 3065,
+     "won": 1649,
+     "units": -3.5143
+    }
+   },
+   "llCi": [
+    0.01381,
+    0.0236
+   ]
+  },
+  "actual": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.48039,
+   "marketSaid": 0.4609,
+   "llDiff": -0.05596,
+   "brDiff": -0.02596,
+   "llModel": 0.62999,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 3636,
+     "won": 2370,
+     "units": 862.50495
+    },
+    "under": {
+     "bets": 4273,
+     "won": 2988,
+     "units": 1305.04821
+    }
+   },
+   "llCi": [
+    -0.06385,
+    -0.04797
+   ]
+  },
+  "noPaceOpp": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.4677,
+   "marketSaid": 0.4609,
+   "llDiff": 0.01673,
+   "brDiff": 0.00744,
+   "llModel": 0.70268,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 2134,
+     "won": 1055,
+     "units": -113.22934
+    },
+    "under": {
+     "bets": 4189,
+     "won": 2262,
+     "units": 20.38089
+    }
+   },
+   "llCi": [
+    0.01224,
+    0.0217
+   ]
+  },
+  "noPace": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.4731,
+   "marketSaid": 0.4609,
+   "llDiff": 0.01701,
+   "brDiff": 0.00759,
+   "llModel": 0.70297,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 2236,
+     "won": 1094,
+     "units": -138.24659
+    },
+    "under": {
+     "bets": 3900,
+     "won": 2098,
+     "units": -1.16528
+    }
+   },
+   "llCi": [
+    0.01237,
+    0.022
+   ]
+  },
+  "narrow": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.49149,
+   "marketSaid": 0.4609,
+   "llDiff": 0.0202,
+   "brDiff": 0.00904,
+   "llModel": 0.70615,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 3006,
+     "won": 1465,
+     "units": -207.80411
+    },
+    "under": {
+     "bets": 3174,
+     "won": 1710,
+     "units": 0.35012
+    }
+   },
+   "llCi": [
+    0.01543,
+    0.02534
+   ]
+  },
+  "half": {
+   "n": 12298,
+   "games": 121,
+   "overRate": 0.4752,
+   "modelSaid": 0.47445,
+   "marketSaid": 0.4609,
+   "llDiff": 0.00307,
+   "brDiff": 0.00148,
+   "llModel": 0.68903,
+   "llMarket": 0.68595,
+   "bias": 0.55588,
+   "muMinusLine": 0.51913,
+   "lineMinusY": 0.03675,
+   "flat": {
+    "over": {
+     "bets": 543,
+     "won": 274,
+     "units": -22.04291
+    },
+    "under": {
+     "bets": 2183,
+     "won": 1172,
+     "units": -1.30155
+    }
+   },
+   "llCi": [
+    0.00097,
+    0.0053
+   ]
+  },
+  "archiveNarrow": {
+   "n": 11395,
+   "games": 83,
+   "overRate": 0.45924,
+   "modelSaid": 0.44785,
+   "marketSaid": 0.45606,
+   "llDiff": 0.01569,
+   "brDiff": 0.00685,
+   "llModel": 0.69444,
+   "llMarket": 0.67875,
+   "bias": 0.06547,
+   "muMinusLine": -0.01005,
+   "lineMinusY": 0.07552,
+   "flat": {
+    "over": {
+     "bets": 1090,
+     "won": 500,
+     "units": -121.28524
+    },
+    "under": {
+     "bets": 4171,
+     "won": 2295,
+     "units": 119.87563
+    }
+   },
+   "llCi": [
+    0.00913,
+    0.02267
+   ]
+  }
+ }
+}

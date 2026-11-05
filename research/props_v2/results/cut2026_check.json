@@ -1,0 +1,50 @@
+{
+ "same": {
+  "games": true,
+  "boxes": true,
+  "teamBoxes": true,
+  "boxGames": 6599,
+  "teamBoxes_": 13198
+ },
+ "filesOpened": [
+  "box_2022.csv",
+  "box_2023.csv",
+  "box_2024.csv",
+  "box_2025.csv",
+  "box_2026.csv",
+  "teambox_2022.jsonl",
+  "teambox_2023.jsonl",
+  "teambox_2024.jsonl",
+  "teambox_2025.jsonl",
+  "teambox_2026.jsonl"
+ ],
+ "no2027FileOpened": true,
+ "planted": {
+  "boxRowIn2026File": {
+   "cut2026": {
+    "threw": true,
+    "message": "a box score after 2026 was read: 2027_20261021_GSW_LAL"
+   },
+   "oldGuardFired": false
+  },
+  "teamRowIn2026File": {
+   "cut2026": {
+    "threw": true,
+    "message": "a box score after 2026 was read: 2027_20261021_GSW_LAL:GSW"
+   },
+   "oldGuardFired": false
+  },
+  "box2027FileBeside": {
+   "cut2026": {
+    "threw": false,
+    "boxGames": [
+     "2026_20251021_GSW_LAL"
+    ],
+    "files": [
+     "box_2026.csv",
+     "teambox_2026.jsonl"
+    ]
+   }
+  }
+ }
+}

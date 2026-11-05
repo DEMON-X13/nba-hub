@@ -1,0 +1,51 @@
+{
+ "rowsDiffer": 0,
+ "folds": {
+  "2025": {
+   "constantsSame": true,
+   "scoresSame": true
+  },
+  "2026": {
+   "constantsSame": true,
+   "scoresSame": true
+  }
+ },
+ "archive": {
+  "lines": 11395,
+  "voids": 302,
+  "logloss": {
+   "model": 0.6934,
+   "market": 0.6788,
+   "marketMultiplicative": 0.6807,
+   "diff": 0.0147,
+   "diffCi90": [
+    0.008254,
+    0.021361
+   ]
+  },
+  "brier": {
+   "model": 0.2495,
+   "market": 0.243,
+   "diff": 0.0064,
+   "diffCi90": [
+    0.003596,
+    0.009387
+   ]
+  },
+  "flat3": {
+   "over": {
+    "bets": 967,
+    "won": 442,
+    "units": -106.44,
+    "roi": -0.1101
+   },
+   "under": {
+    "bets": 4271,
+    "won": 2357,
+    "units": 135.28,
+    "roi": 0.0317
+   }
+  }
+ },
+ "archiveSame": true
+}

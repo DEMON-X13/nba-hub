@@ -1,0 +1,227 @@
+{
+ "generated": "2026-11-05T17:27Z",
+ "what": "research/props_v2/espn_coverage.js: which past games ESPN answers DraftKings player props for (provider 100 now, 40 before); counts only",
+ "requests": 662,
+ "rows": [
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2021-10",
+   "provider": 40,
+   "asked": 24,
+   "withProps": 0,
+   "notFound": 24,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2021-10",
+   "provider": 100,
+   "asked": 24,
+   "withProps": 0,
+   "notFound": 24,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2021-11",
+   "provider": 40,
+   "asked": 56,
+   "withProps": 0,
+   "notFound": 56,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2021-11",
+   "provider": 100,
+   "asked": 56,
+   "withProps": 0,
+   "notFound": 56,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2021-12",
+   "provider": 40,
+   "asked": 52,
+   "withProps": 0,
+   "notFound": 52,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2021-12",
+   "provider": 100,
+   "asked": 52,
+   "withProps": 0,
+   "notFound": 52,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2022-01",
+   "provider": 40,
+   "asked": 58,
+   "withProps": 0,
+   "notFound": 58,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2022-01",
+   "provider": 100,
+   "asked": 58,
+   "withProps": 0,
+   "notFound": 58,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2022-02",
+   "provider": 40,
+   "asked": 41,
+   "withProps": 0,
+   "notFound": 41,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2022-02",
+   "provider": 100,
+   "asked": 41,
+   "withProps": 0,
+   "notFound": 41,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2022-03",
+   "provider": 40,
+   "asked": 57,
+   "withProps": 0,
+   "notFound": 57,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2022-03",
+   "provider": 100,
+   "asked": 57,
+   "withProps": 0,
+   "notFound": 57,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2022-04",
+   "provider": 40,
+   "asked": 21,
+   "withProps": 0,
+   "notFound": 21,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "regular season",
+   "month": "2022-04",
+   "provider": 100,
+   "asked": 21,
+   "withProps": 0,
+   "notFound": 21,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "playoffs",
+   "month": "2022-04",
+   "provider": 40,
+   "asked": 11,
+   "withProps": 0,
+   "notFound": 11,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "playoffs",
+   "month": "2022-04",
+   "provider": 100,
+   "asked": 11,
+   "withProps": 0,
+   "notFound": 11,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "playoffs",
+   "month": "2022-05",
+   "provider": 40,
+   "asked": 10,
+   "withProps": 1,
+   "notFound": 9,
+   "other": 0,
+   "medianItems": 116
+  },
+  {
+   "season": 2022,
+   "kind": "playoffs",
+   "month": "2022-05",
+   "provider": 100,
+   "asked": 10,
+   "withProps": 0,
+   "notFound": 10,
+   "other": 0,
+   "medianItems": null
+  },
+  {
+   "season": 2022,
+   "kind": "playoffs",
+   "month": "2022-06",
+   "provider": 40,
+   "asked": 1,
+   "withProps": 1,
+   "notFound": 0,
+   "other": 0,
+   "medianItems": 124
+  },
+  {
+   "season": 2022,
+   "kind": "playoffs",
+   "month": "2022-06",
+   "provider": 100,
+   "asked": 1,
+   "withProps": 0,
+   "notFound": 1,
+   "other": 0,
+   "medianItems": null
+  }
+ ]
+}

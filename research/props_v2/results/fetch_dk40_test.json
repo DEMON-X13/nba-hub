@@ -1,0 +1,301 @@
+{
+ "what": "research/props_v2/fetch_dk40_test.js: fetch_dk40.js on a local fake of the feed (no network)",
+ "checks": [
+  {
+   "name": "--dry makes no request",
+   "ok": true,
+   "detail": {
+    "requests": 0
+   }
+  },
+  {
+   "name": "--dry writes nothing",
+   "ok": true,
+   "detail": {
+    "cache": false
+   }
+  },
+  {
+   "name": "--dry lists the four games with ESPN ids",
+   "ok": true,
+   "detail": "4 games from 2023-10-24 to 2023-10-27 (by season {\"2024\":4}); a run would ask, for each, for the event and then the propBets pages, e.g."
+  },
+  {
+   "name": "a run writes the record's columns and last_updated",
+   "ok": true,
+   "detail": "game_id,player_id,stat,line,over,under,last_updated"
+  },
+  {
+   "name": "two games, four main lines each, turnovers left out",
+   "ok": true,
+   "detail": 8
+  },
+  {
+   "name": "the first item is the Over",
+   "ok": true,
+   "detail": [
+    [
+     "2024_20231024_AAA_BBB",
+     "9011",
+     "pts",
+     "20.5",
+     "-115",
+     "-105",
+     "2023-10-25T01:30Z"
+    ],
+    [
+     "2024_20231024_AAA_BBB",
+     "9011",
+     "reb",
+     "6.5",
+     "102",
+     "-124",
+     "2023-10-25T01:00Z"
+    ]
+   ]
+  },
+  {
+   "name": "last_updated is the later of the pair",
+   "ok": true,
+   "detail": [
+    [
+     "2024_20231024_AAA_BBB",
+     "9011",
+     "pts",
+     "20.5",
+     "-115",
+     "-105",
+     "2023-10-25T01:30Z"
+    ],
+    [
+     "2024_20231024_AAA_BBB",
+     "9011",
+     "reb",
+     "6.5",
+     "102",
+     "-124",
+     "2023-10-25T01:00Z"
+    ],
+    [
+     "2024_20231024_AAA_BBB",
+     "9012",
+     "pts",
+     "11.5",
+     "-115",
+     "-105",
+     "2023-10-25T01:30Z"
+    ],
+    [
+     "2024_20231024_AAA_BBB",
+     "9012",
+     "reb",
+     "3.5",
+     "102",
+     "-124",
+     "2023-10-25T01:00Z"
+    ]
+   ]
+  },
+  {
+   "name": "each read keeps the event's start",
+   "ok": true,
+   "detail": {
+    "status": "ok",
+    "lines": 4,
+    "start": "2023-10-25T23:00Z"
+   }
+  },
+  {
+   "name": "an overlapping range repeats no line",
+   "ok": true,
+   "detail": {
+    "rows": 16,
+    "unique": 16
+   }
+  },
+  {
+   "name": "four games, sixteen lines, in game order",
+   "ok": true,
+   "detail": 16
+  },
+  {
+   "name": "the same range again leaves the file the same to the byte",
+   "ok": true,
+   "detail": {
+    "before": 1060,
+    "after": 1060
+   }
+  },
+  {
+   "name": "a game read again replaces its lines",
+   "ok": true,
+   "detail": [
+    [
+     "2024_20231025_CCC_DDD",
+     "9021",
+     "pts",
+     "21.5",
+     "-115",
+     "-105",
+     "2023-10-25T02:30Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9021",
+     "reb",
+     "6.5",
+     "102",
+     "-124",
+     "2023-10-25T02:00Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9022",
+     "pts",
+     "11.5",
+     "-115",
+     "-105",
+     "2023-10-25T02:30Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9022",
+     "reb",
+     "4.5",
+     "102",
+     "-124",
+     "2023-10-25T02:00Z"
+    ]
+   ]
+  },
+  {
+   "name": "a game whose new read fails keeps its earlier lines and read",
+   "ok": true,
+   "detail": {
+    "rows": 4,
+    "read": {
+     "status": "ok",
+     "lines": 4,
+     "start": "2023-10-25T23:00Z"
+    }
+   }
+  },
+  {
+   "name": "still no line repeated",
+   "ok": true,
+   "detail": 16
+  },
+  {
+   "name": "a game whose new read has no main line keeps its earlier lines and read",
+   "ok": true,
+   "detail": {
+    "rows": 4,
+    "read": {
+     "status": "ok",
+     "lines": 4,
+     "start": "2023-10-25T23:00Z"
+    }
+   }
+  },
+  {
+   "name": "a first read with no main line is recorded ok with none, and writes no row",
+   "ok": true,
+   "detail": {
+    "rows": 0,
+    "read": {
+     "status": "ok",
+     "lines": 0,
+     "start": "2023-10-25T23:00Z"
+    }
+   }
+  },
+  {
+   "name": "a re-read whose event request fails still replaces its lines",
+   "ok": true,
+   "detail": [
+    [
+     "2024_20231025_CCC_DDD",
+     "9021",
+     "pts",
+     "22.5",
+     "-115",
+     "-105",
+     "2023-10-25T02:30Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9021",
+     "reb",
+     "6.5",
+     "102",
+     "-124",
+     "2023-10-25T02:00Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9022",
+     "pts",
+     "11.5",
+     "-115",
+     "-105",
+     "2023-10-25T02:30Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9022",
+     "reb",
+     "5.5",
+     "102",
+     "-124",
+     "2023-10-25T02:00Z"
+    ]
+   ]
+  },
+  {
+   "name": "a re-read whose event request fails keeps the event's start",
+   "ok": true,
+   "detail": {
+    "status": "ok",
+    "lines": 4,
+    "start": "2023-10-25T23:00Z"
+   }
+  },
+  {
+   "name": "a first read whose event request fails has no start",
+   "ok": true,
+   "detail": {
+    "status": "ok",
+    "lines": 4,
+    "start": null
+   }
+  },
+  {
+   "name": "a kept read gains the start a later run learned",
+   "ok": true,
+   "detail": {
+    "status": "ok",
+    "lines": 4,
+    "start": "2023-10-25T23:00Z"
+   }
+  },
+  {
+   "name": "no line repeated after all six steps",
+   "ok": true,
+   "detail": 20
+  },
+  {
+   "name": "no temporary file left behind",
+   "ok": true,
+   "detail": [
+    "props40_2024.csv",
+    "props40_reads.json"
+   ]
+  },
+  {
+   "name": "every request went to the local fake",
+   "ok": true,
+   "detail": 34
+  }
+ ],
+ "requests": 34
+}

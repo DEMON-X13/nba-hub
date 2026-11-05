@@ -1,0 +1,197 @@
+{
+ "generated": "2026-11-05T21:35Z",
+ "what": "research/props_v2/validity.js: DraftKings' prices, the feed's stamps and the box scores, with the walk-forward's projected minutes, naive forecaster and yardstick; no candidate is scored, and no model's chance of DraftKings' line",
+ "lines": "data/props_2026.csv (the 2026 play-in and playoffs)",
+ "fold": 2026,
+ "thresholds": {
+  "v1ShareBeforeStart": 0.95,
+  "v2MinProjected": 24,
+  "v2ExitUnder": 12,
+  "v2PlayedPrevious": true,
+  "v2MinExits": 40,
+  "v2Floor": -0.05,
+  "v3Slack": {
+   "pts": 0.025,
+   "reb": 0.015,
+   "ast": 0.02,
+   "tpm": 0.015,
+   "stl": 0.015,
+   "blk": 0.015
+  }
+ },
+ "graded": 6418,
+ "games": 83,
+ "v0": {
+  "pts": {
+   "n": 1328,
+   "firstIsOver": 0.6884,
+   "firstIsUnder": 0.6935
+  },
+  "reb": {
+   "n": 1234,
+   "firstIsOver": 0.6925,
+   "firstIsUnder": 0.7095
+  },
+  "ast": {
+   "n": 1094,
+   "firstIsOver": 0.6758,
+   "firstIsUnder": 0.7239
+  },
+  "tpm": {
+   "n": 1079,
+   "firstIsOver": 0.6654,
+   "firstIsUnder": 0.7848
+  },
+  "stl": {
+   "n": 888,
+   "firstIsOver": 0.6539,
+   "firstIsUnder": 0.788
+  },
+  "blk": {
+   "n": 795,
+   "firstIsOver": 0.6349,
+   "firstIsUnder": 0.8416
+  },
+  "holds": true
+ },
+ "v2": {
+  "byStat": {
+   "pts": {
+    "exitLines": 6,
+    "rest": 816,
+    "fairOverExits": 0.468,
+    "fairOverRest": 0.4693,
+    "diff": -0.0013,
+    "overHitExits": 0,
+    "overHitRest": 0.4473
+   },
+   "reb": {
+    "exitLines": 6,
+    "rest": 814,
+    "fairOverExits": 0.4909,
+    "fairOverRest": 0.464,
+    "diff": 0.0269,
+    "overHitExits": 0.1667,
+    "overHitRest": 0.5037
+   },
+   "ast": {
+    "exitLines": 6,
+    "rest": 797,
+    "fairOverExits": 0.466,
+    "fairOverRest": 0.4623,
+    "diff": 0.0037,
+    "overHitExits": 0.1667,
+    "overHitRest": 0.4429
+   },
+   "tpm": {
+    "exitLines": 6,
+    "rest": 752,
+    "fairOverExits": 0.4955,
+    "fairOverRest": 0.4417,
+    "diff": 0.0538,
+    "overHitExits": 0,
+    "overHitRest": 0.4641
+   },
+   "stl": {
+    "exitLines": 4,
+    "rest": 724,
+    "fairOverExits": 0.3424,
+    "fairOverRest": 0.4748,
+    "diff": -0.1324,
+    "overHitExits": 0.25,
+    "overHitRest": 0.4917
+   },
+   "blk": {
+    "exitLines": 2,
+    "rest": 638,
+    "fairOverExits": 0.2817,
+    "fairOverRest": 0.3808,
+    "diff": -0.0991,
+    "overHitExits": 0,
+    "overHitRest": 0.406
+   }
+  },
+  "exitLines": 30,
+  "exits": 6,
+  "leftOut": 287,
+  "diff": -0.0077
+ },
+ "v3": {
+  "pts": {
+   "n": 1328,
+   "draftKings": 0.6884,
+   "naive": 0.755,
+   "gain": 0.0666,
+   "yardstick": 0.0383,
+   "figure": 0.0283,
+   "figureCi90": [
+    0.015233,
+    0.04139
+   ]
+  },
+  "reb": {
+   "n": 1234,
+   "draftKings": 0.6925,
+   "naive": 0.7138,
+   "gain": 0.0213,
+   "yardstick": 0.0095,
+   "figure": 0.0118,
+   "figureCi90": [
+    0.002828,
+    0.021149
+   ]
+  },
+  "ast": {
+   "n": 1094,
+   "draftKings": 0.6758,
+   "naive": 0.7131,
+   "gain": 0.0374,
+   "yardstick": 0.0312,
+   "figure": 0.0062,
+   "figureCi90": [
+    -0.004638,
+    0.01688
+   ]
+  },
+  "tpm": {
+   "n": 1079,
+   "draftKings": 0.6654,
+   "naive": 0.6923,
+   "gain": 0.0269,
+   "yardstick": 0.0194,
+   "figure": 0.0074,
+   "figureCi90": [
+    -0.000907,
+    0.016149
+   ]
+  },
+  "stl": {
+   "n": 888,
+   "draftKings": 0.6539,
+   "naive": 0.6654,
+   "gain": 0.0115,
+   "yardstick": 0.0125,
+   "figure": -0.001,
+   "figureCi90": [
+    -0.007222,
+    0.005425
+   ]
+  },
+  "blk": {
+   "n": 795,
+   "draftKings": 0.6349,
+   "naive": 0.6504,
+   "gain": 0.0155,
+   "yardstick": 0.0165,
+   "figure": -0.0011,
+   "figureCi90": [
+    -0.00793,
+    0.005584
+   ]
+  }
+ },
+ "v1": {
+  "note": "the archive carries no stamps (data/props_2026.csv is the record's six columns)"
+ },
+ "note": "references only: the thresholds are applied to fetched lines, never to the archive"
+}

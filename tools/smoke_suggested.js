@@ -8,9 +8,8 @@
  * out here on its own, never read from the page: which games are featured and which night is set out (nightOwn, through
  * the time zone database, America/New_York, a DST turn of each kind among them), the wait line's words and instant, the
  * lock lines word for word, each level's numbers against the builder's own sums and the Safe pair against every pair of
- * its pool, the record's pills from made-up ledgers (spRecOwn), the Elo picks against a full enumeration of their own
- * candidates (eloOwn, on the ELO Model's own chance at its own margin's miss, pick.sigmaModel), the on-trial mark on every player leg and
- * nowhere else, Add, Add to builder and Finish, the browser's own lock across a reload and given way to the record's, a
+ * its pool, the record's pills from made-up ledgers (spRecOwn), no Elo picks (the owner's call of 5 November 2026) and
+ * nothing of them left, the on-trial mark on every player leg and nowhere else, Add, Add to builder and Finish, the browser's own lock across a reload and given way to the record's, a
  * ruled-out level built again alone, nothing stored but nba_sp_lock_v1 and nothing read but the record and lines.json,
  * each once and no-store; then the real files, on what the day offers. Every request is recorded.
  */
@@ -120,16 +119,14 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     }
     return out;
   }
-  const RECORD = { 2024: { ml: { picks: 334, said: 0.5907, won: 0.515, units: 9.12 }, spread: { picks: 626, said: 0.6043, won: 0.4936 } }, 2025: { ml: { picks: 393, said: 0.613, won: 0.5064, units: 7.04 }, spread: { picks: 753, said: 0.6143, won: 0.5219 } },
-    2026: { ml: { picks: 376, said: 0.5958, won: 0.4574, units: -17.85 }, spread: { picks: 784, said: 0.6158, won: 0.4936 } } };
-  const ELO_G = { [gA.id]: { pHome: 0.68, spread: -7.5 }, [gB.id]: { pHome: 0.52, spread: -0.6 }, [gC.id]: { pHome: 0.7, spread: -6.5 }, [gD.id]: { pHome: 0.33, spread: 6 }, [gE.id]: { pHome: 0.78, spread: -10.5 } };
   function stateOf(slate, o = {}) {
     const st = clone(REAL);
     st.slate = slate.map(clone); st.today = o.today || D1; st.generated = o.generated || T(D1, '13:00'); st.asOf = D0;
     st.props = { ...clone(REAL.props), games: Object.fromEntries(slate.filter(g => ROWS[g.id] && g.status === 'scheduled').map(g => [g.id, { tip: g.tip, away: g.away, home: g.home, players: clone(ROWS[g.id]) }])) };
     st.props.ledger = { ...st.props.ledger, decision: null };
     st.report = { date: st.today, players: o.report || { 9300007: ['BOS', 'Day-To-Day', 'Ankle', ''] } };
-    st.eloPicks = o.elo === null ? null : { version: 'test', generated: T(D1, '12:00'), status: { ok: true }, sigma: 14.6, pick: { wSpread: 0, wMl: 0, sigma: 13.722, sigmaModel: 14.133, chosenOn: '2024 and 2025' }, record: { chosenOn: '2024 and 2025', folds: RECORD }, games: clone(o.eloGames || ELO_G) };
+    /* the state as publish.js writes it since 5 November 2026: no eloPicks (a state.json from before carries one, unread) */
+    delete st.eloPicks;
     return st;
   }
 
@@ -202,7 +199,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     const sat = addDay(sun, -1);
     const a = { ...mk(sat, 'LAL', 'GSW', T(sun, '03:00'), ['ABC']), status: 'final', awayScore: 100, homeScore: 99 };
     const b = mk(sun, 'BOS', 'NYK', T(addDay(sun, 1), '00:00'), ['NBC']);
-    const stX = stateOf([a, b], { today: sun, eloGames: {} }), N = nightOwn(stX, Date.parse(T(sun, '05:00:00')));
+    const stX = stateOf([a, b], { today: sun }), N = nightOwn(stX, Date.parse(T(sun, '05:00:00')));
     const q = load(stX, { lines: linesOf([b]), record: null, tab: 'suggest' });
     NOW = Date.parse(T(sun, '05:00:00')); await settle(q); await openTab(q);
     const wl2 = q.d.querySelector('#spSets .sp-wait'), open = sixAm(sun);
@@ -214,7 +211,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   /* no featured game to come, and no game at all (the off-season) */
   { const q = load(stateOf([gY, gC, gE].map(g => g.id === gY.id ? g : g)), { lines: linesOf([gC, gE]), record: null, tab: 'suggest' }); NOW = Date.parse(T(D1, '15:00:00')); await settle(q); await openTab(q);
     check(txt(q.d.querySelector('#spSets [data-sp-none]')) === 'No game on national TV is still to tip in the schedule’s next ten days: a set comes for each one, never for a preseason game.' && !sets(q).length && q.errors.length === 0, 'with no featured game to come the tab says so, and draws no set');
-    const q2 = load(stateOf([gY], { eloGames: {} }), { lines: { v: 1, at: READ, games: {} }, record: null, tab: 'suggest' }); await settle(q2); await openTab(q2);
+    const q2 = load(stateOf([gY]), { lines: { v: 1, at: READ, games: {} }, record: null, tab: 'suggest' }); await settle(q2); await openTab(q2);
     check(txt(q2.d.querySelector('#spSets [data-sp-none]')) === 'No game is still to tip on the schedule: a set comes for each game on national TV once there is one.' && q2.errors.length === 0, 'with no game at all (the off-season) it says so, and throws nothing');
     const q3 = load(stateOf(SLATE.map(g => g.id === gD.id ? { ...g, type: 'PRE' } : g)), { lines: LINES1, record: null, tab: 'suggest' }); NOW = turn; await settle(q3); await openTab(q3);
     check(!sets(q3).includes(gD.id), 'a preseason game on national TV is never featured'); }
@@ -248,8 +245,8 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const ctlB = p.d.querySelector('#spHead [data-espn-refresh]');
   check(ctlB && /Refresh odds/.test(txt(ctlB)) && p.d.querySelector('#spHead [data-espn-status][role=status][aria-live=polite]'), 'Refresh odds and its status line are at the head');
   const h44 = el => el && p.w.getComputedStyle(el).minHeight === '44px';
-  const ctls = [...p.d.querySelectorAll('#spPanel [data-pb-leg], #spPanel [data-sp-add], #spPanel [data-pc-finish], #spPanel [data-pb-elo-add], #spPanel [data-espn-refresh]')];
-  check(ctls.length > 20 && ctls.every(h44), `every control on the tab is 44px (${ctls.length}; ${ctls.filter(b => !h44(b)).map(b => b.outerHTML.slice(0, 60)).join(' | ')})`);
+  const ctls = [...p.d.querySelectorAll('#spPanel [data-pb-leg], #spPanel [data-sp-add], #spPanel [data-pc-finish], #spPanel [data-espn-refresh]')];
+  check(ctls.length >= 15 && ctls.every(h44), `every control on the tab is 44px (${ctls.length}; ${ctls.filter(b => !h44(b)).map(b => b.outerHTML.slice(0, 60)).join(' | ')})`);
   /* the Bet amount: every level's payout follows it in place (pbPays), and its Finish pays on it */
   p.w.eval('M.stake = 37.5; pbPays()');
   check(tiersA.every(t => txt(card(gA.id, t.id).querySelector('[data-pb-pay] b')) === '$' + (37.5 * t.dec).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) && /\$37\.50 pays/.test(txt(card(gA.id, t.id).querySelector('[data-pb-pay]')))), 'the payouts follow the Bet amount as it is typed ($37.50)');
@@ -295,8 +292,9 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   { const C = p.w.PARLAY_CARD, m = C && C.current(), trial = med.legs.some(l => l.kind === 'prop');
     check(!p.d.getElementById('pcBack').hidden && m && m.kicker === 'Medium parlay · BOS at NYK' && m.legs.length === 3 && p.d.querySelectorAll('#pcView [data-pc-leg]').length === 3 && m.stake === 20,
       `Finish opens the parlay card on the level's legs at the Bet amount (${m && m.kicker}, ${m && m.legs.length} legs, $${m && m.stake})`);
-    check(m && m.source === 'sp' && m.chance === cpct(med.corr) && m.chanceBy === 'Model' && m.trial === trial && p.d.getElementById('pcAgain').hidden,
-      `the card states the level's own chance (${m && m.chance}, the level's ${cpct(med.corr)}), the model's${trial ? ', on trial' : ''}, and offers no Start over (the builder's alone)`); }
+    const ch = [...p.d.querySelectorAll('#pcView .pc-chance > div')].map(txt);
+    check(m && m.source === 'sp' && m.chance === cpct(med.corr) && m.trial === trial && ch[1] && ch[1].startsWith(`model${trial ? ' (on trial)' : ''} says ${cpct(med.corr)}`) && p.d.getElementById('pcAgain').hidden,
+      `the card states the level's own chance (${m && m.chance}, the level's ${cpct(med.corr)}), the model's${trial ? ', on trial' : ''}, and offers no Start over (the builder's alone): ${ch.join(' / ')}`); }
   p.d.getElementById('pcClose').click(); await sleep(20);
   check(p.d.activeElement === card(gA.id, 'med').querySelector('[data-pc-finish]') || p.d.activeElement === fin, 'closing it gives the focus back');
   /* the tab redrawn while the card is open (a tip-off anywhere, a lock, a read answering) replaces the Finish: closing
@@ -320,99 +318,26 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     check(!c.press && c.shown && c.url === 'https://sportsbook.draftkings.com/event/' + idsOf(gA).event && c.btn === 'Open game in DraftKings', `a one-game card of player legs opens the game's page from lines.json's event id (${c.btn}, ${c.url})`); }
   p.w.localStorage.setItem('nba_hub_2027', JSON.stringify({ ...mine(), slip: { legs: [], stake: 20 } }));
 
-  /* ---------- 5. the Elo picks: every parlay of their own candidates ---------- */
-  const st5 = stateOf(SLATE), LN = LINES1;
-  /* the candidates, this file's own: each game's moneyline and spread, the ELO Model's own chance (pHome; a cover
-     normCdf((m + h) / pick.sigmaModel), m minus its spread, h the home line: the model's own margin at its own miss, never
-     params.pick's sigma, the closing line's), beating the no-vig chance with a positive
-     return, -200 to +300, 30% or more, under 15 points over the fair chance, one a game (its best by value) */
-  function eloOwn(st, L, ticks) {
-    const out = [], sig = st.eloPicks.pick.sigmaModel;
-    for (const g of st.slate.filter(x => x.status === 'scheduled' && x.type !== 'PRE' && [D1, D2].includes(x.date) && Date.parse(x.tip) > NOW && !ticks.off.includes(x.id))) {
-      const e = L.games[g.id], c = st.eloPicks.games[g.id]; if (!e || !c) continue;
-      const cand = [];
-      if (ticks.ml) for (const s of ['home', 'away']) cand.push({ kind: 'ml', team: g[s], price: e.ml[s], other: e.ml[s === 'home' ? 'away' : 'home'], pe: s === 'home' ? c.pHome : 1 - c.pHome });
-      if (ticks.ats) for (const s of ['home', 'away']) { const h = e.spread.line, pH = PJ.normCdf((-c.spread + h) / sig); cand.push({ kind: 'spread', team: g[s], line: s === 'home' ? h : -h, price: e.spread[s], other: e.spread[s === 'home' ? 'away' : 'home'], pe: s === 'home' ? pH : 1 - pH }); }
-      for (const x of cand) { const f = imp(x.price) / (imp(x.price) + imp(x.other)), ev = x.pe * decOf(x.price) - 1;
-        if (x.price < -200 || x.price > 300 || !(x.pe > f) || !(ev > 0) || x.pe < 0.3 || x.pe - f >= 0.15) continue; out.push({ ...x, gid: g.id, ev, dec: decOf(x.price) }); }
-    }
-    out.sort((a, b) => b.ev - a.ev || (a.kind === 'ml' ? -1 : 1));
-    const one = []; for (const c of out) if (!one.some(x => x.gid === c.gid)) one.push(c);
-    return one;
-  }
-  function eloBest(C, n, floor) {
-    let best = null, likely = null;
-    const walk = (s, idx) => { if (idx.length === n) { const L = idx.map(i => C[i]), pr = L.reduce((t, c) => t * c.pe, 1), d = L.reduce((t, c) => t * c.dec, 1);
-      if (!likely || pr > likely.pr + 1e-15) likely = { pr, d, L }; if (floor && pr >= floor && (!best || pr * d > best.pr * best.d + 1e-15)) best = { pr, d, L }; return; }
-      for (let i = s; i <= C.length - (n - idx.length); i++) walk(i + 1, [...idx, i]); };
-    walk(0, []);
-    return floor ? (best ? { ...best, likeliest: false } : likely ? { ...likely, likeliest: true } : null) : likely;
-  }
-  const C5 = eloOwn(st5, LN, { ml: true, ats: true, off: [] });
-  const elo = () => ['elo-safe', 'elo-med', 'elo-aggr', 'elo-xtrm'].map(id => p.w.epTier(id));
-  const keyOwn = c => `${c.gid}|${c.kind}|${c.team}|${c.kind === 'spread' ? c.line : ''}`, keyPg = l => `${l.gid}|${l.kind}|${l.side}|${l.kind === 'spread' ? l.line : ''}`;
-  const E5 = elo();
-  check(C5.length >= 4 && JSON.stringify(p.w.epGet().all.map(keyPg).sort()) === JSON.stringify(C5.map(keyOwn).sort()), `the candidates are this file's own: ${C5.map(c => c.kind + ' ' + c.team).join(', ')}`);
-  check(p.w.epGet().all.every(l => Math.abs(l.pe - C5.find(c => keyOwn(c) === keyPg(l)).pe) < 1e-12) && p.w.epGet().all.some(l => l.kind === 'spread'), "each candidate's Elo chance is the ELO Model's own, a spread's at its own margin's miss, pick.sigmaModel (ELO_PICK_BLEND off)");
-  { const pub = require('./publish').eloPickState([]), rs = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'elo.json'), 'utf8')).pick.spread;
-    check(pub && pub.pick && pub.pick.sigmaModel === rs.sigmaModel && rs.sigmaModel > pub.pick.sigma, `publish.js hands the page research/elo.json's sigma of the model alone (pick.sigmaModel ${pub && pub.pick && pub.pick.sigmaModel}) beside params.pick's (${pub && pub.pick && pub.pick.sigma}, the closing line's)`); }
-  const wantE = [[2, 0], [3, 0.25], [4, 0.12], [5, 0.05]].map(([n, f]) => eloBest(C5, n, f));
-  check(E5.every((t, i) => wantE[i] ? t && JSON.stringify(t.legs.map(keyPg).sort()) === JSON.stringify(wantE[i].L.map(keyOwn).sort()) && Math.abs(t.corr - wantE[i].pr) < 1e-9 && Math.abs(t.dec - wantE[i].d) < 1e-9 && !!t.likeliest === !!(i && wantE[i].likeliest) : !t),
-    `the four Elo levels are every parlay's best of their candidates (${E5.map(t => t ? t.legs.length + (t.likeliest ? ' likeliest' : '') : '–').join(', ')})`);
-  /* the bubble on an Elo pick's leg (a page of its own, since a bubble reads the Pick'em Record's file): Model is the
-     player model's chance, the one the builder prices the same leg on, and the ELO Model's has a line of its own */
-  { const q = load(st5, { lines: LN, record: null }); await settle(q); await openTab(q);
-    const SIG = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'sigma.json'), 'utf8')).sigma, Phi = require('./sigma').Phi, pc0 = v => (v * 100).toFixed(0) + '%';
-    const pmOwn = l => { const g = st5.slate.find(x => x.id === l.gid), home = l.side === g.home;
-      return l.kind === 'ml' ? (home ? g.model.pHome : 1 - g.model.pHome) : Phi(((home ? -g.model.spread : g.model.spread) + l.line) / SIG); };
-    const res = [];
-    for (const t of E5.filter(Boolean)) for (const l of t.legs) {
-      const nb = [...q.d.querySelectorAll(`#pbElo [data-pb-tier="${t.id}"] [data-glance]`)].find(b => q.w.glanceLeg(b.dataset.glanceLeg).leg.sk === l.sk); if (!nb) { res.push(`${l.sk}: no name`); continue; }
-      nb.click(); await sleep(30);
-      const bx = q.d.getElementById('glanceBox'), n = k => { const e = bx && !bx.hidden ? bx.querySelector(`[data-glance-legbox] [data-glance-n="${k}"]`) : null; return e ? txt(e) : null; };
-      const want = { model: pc0(pmOwn(l)), elochance: pc0(C5.find(c => keyOwn(c) === keyPg(l)).pe) }, got = { model: n('model'), elochance: n('elochance') };
-      if (JSON.stringify(want) !== JSON.stringify(got)) res.push(`${l.sk}: want ${JSON.stringify(want)}, got ${JSON.stringify(got)}`);
-      q.d.querySelector('[data-glance-close]').click(); await sleep(10); }
-    check(E5.some(Boolean) && !res.length && q.errors.length === 0, `an Elo pick's bubble: Model the player model's chance on every leg, the ELO Model's on its own line${res.length ? ': ' + res.slice(0, 3).join(' | ') : ''}`); }
-  const eloBox = p.d.getElementById('pbElo'), lead = eloBox.querySelector('[data-pb-elo-lead]');
-  check(txt(lead) === 'Moneylines and spreads where the ELO Model’s chance beats DraftKings’ price, on the games and bet types ticked on the Parlay Builder tab.' && eloBox.querySelectorAll('.pb-lead').length === 1, 'the Elo picks lead with one sentence, word for word');
-  check(lead.title === "The ELO Model's own chance is no promise. On the walk-forward folds (2024, 2025 and 2026, each called by the model fitted on the seasons before it), its moneylines 3 points or more above the price said 59.1%, 61.3% and 59.6% and won 51.5%, 50.6% and 45.7% (334, 393 and 376 picks), and its spreads 3 points or more above -110 won 49.4%, 52.2% and 49.4% (626, 753 and 784), at the closing lines.",
-    'its title gives the measured record of such picks, fold by fold');
-  check(![...eloBox.querySelectorAll('.pb-legs li')].some(li => li.querySelector('.pb-valmark') || li.querySelector('.pb-trial')) && [...eloBox.querySelectorAll('.pb-model')].every(x => /^Elo says \d+%$/.test(txt(x))), 'its legs wear no Value or on-trial mark, its cards say "Elo says"');
-  check([...eloBox.querySelectorAll('[data-pb-tier]')].every(c => c.querySelector('[data-pb-elo-add]') && c.querySelector('[data-pc-finish^="elo|elo-"]') && c.querySelectorAll('[data-pb-leg]').length === c.querySelectorAll('.pb-legs li').length), 'each Elo level has Add on every leg, Add to builder and Finish');
-  { const ea = eloBox.querySelector('[data-pb-elo-add="elo-med"]'), tm = p.w.epTier('elo-med'); ea.click(); await sleep(30);
-    check(mine().slip.legs.length === tm.legs.length && tm.legs.every(l => mine().slip.legs.some(x => p.w.eval('slipKey')(x) === l.sk)), "an Elo level's Add to builder puts exactly its legs in the builder");
-    const ef = p.d.querySelector('#pbElo [data-pc-finish="elo|elo-med"]'); ef.click(); await sleep(30);
-    { const m = p.w.PARLAY_CARD.current(), ch = [...p.d.querySelectorAll('#pcView .pc-chance div')].map(txt).join(' | ');
-      check(m && m.kicker === 'Medium Elo pick' && m.source === 'elo' && m.legs.length === tm.legs.length, `and its Finish opens the card, the kicker "Medium Elo pick" (${m && m.kicker})`);
-      check(m && m.chance === cpct(tm.corr) && m.chanceBy === 'Elo' && /Elo/.test(ch),
-        `the card states the Elo chance the level was built on (${m && m.chance}, the level's ${cpct(tm.corr)}), said to be the Elo's, not the hub's model's: ${ch}`); }
-    p.d.getElementById('pcClose').click(); await sleep(10);
+  /* ---------- 5. no Elo picks (the owner's call of 5 November 2026), and nothing of them left ---------- */
+  { const gone = ['epChance', 'epCands', 'epBuild', 'epGet', 'epTier', 'eloPicksHtml', 'epRecordText'].filter(f => p.w.eval(`typeof ${f}`) !== 'undefined')
+      .concat(['ELO_PICK_BLEND', 'EP', 'EP_TIERS', 'EP_CACHE'].filter(v => p.w.eval(`typeof ${v}`) !== 'undefined'));
+    check(!p.d.getElementById('pbElo') && !p.d.querySelector('[data-pb-elo-add], [data-pb-elo-lead], [data-pb-elo-none], [data-pc-finish^="elo|"], .pb-elo') && !/Elo pick/i.test(txt(p.d.getElementById('spPanel'))) && !gone.length,
+      `no Elo picks on the tab: no section, no Add to builder or Finish of one, no words of one, and none of their code (${gone.join(', ') || 'none left'})`);
+    check(p.w.PARLAY_CARD.fromTier('elo', 'elo-med') === null && !/\bElo\b/.test(p.w.eval('PARLAY_CARD.chanceLines.toString()')), "the parlay card has no Elo picks' resolver and no Elo chance wording");
+    const pub = require('./publish'), pubSrc = fs.readFileSync(path.join(ROOT, 'tools', 'publish.js'), 'utf8');
+    check(pub.eloPickState === undefined && !/eloPick/.test(pubSrc), "publish.js writes no eloPicks into state.json (no page reads one)"); }
+  /* a state.json from before, which carries eloPicks, draws nothing of it */
+  { const old = { ...stateOf(SLATE), eloPicks: { version: 'old', status: { ok: true }, sigma: 14.6, pick: { wSpread: 0, wMl: 0, sigma: 13.722, sigmaModel: 14.133 }, record: null, games: { [gA.id]: { pHome: 0.68, spread: -7.5 }, [gB.id]: { pHome: 0.52, spread: -0.6 } } } };
+    const q = load(old, { lines: LINES1, record: null, tab: 'suggest' }); NOW = Date.parse(T(D1, '15:00:00')); await settle(q); await openTab(q);
+    check(JSON.stringify(sets(q)) === JSON.stringify(sets(p)) && !q.d.getElementById('pbElo') && !/Elo pick/i.test(txt(q.d.getElementById('spPanel'))) && q.errors.length === 0, "a state.json from before that still carries eloPicks draws the same sets and nothing of it"); }
+  /* the builder's own Finish parlay stays the builder's card: the model's chance, with Start over */
+  { p.w.eval(`M.slip.legs = []; pbPut(spTier(${JSON.stringify(gA.id + ':safe')}).legs, 'smoke')`);
     p.d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(40);
     const pf = p.d.getElementById('pFinish'); if (pf) { pf.click(); await sleep(20); }
-    { const m = p.w.PARLAY_CARD.current();
-      check(!!pf && m && m.source === 'builder' && m.chanceBy === 'Model' && !p.d.getElementById('pcAgain').hidden, "the builder's own Finish parlay is the builder's card again: the model's chance, with Start over"); }
+    const m = p.w.PARLAY_CARD.current(), ch = [...p.d.querySelectorAll('#pcView .pc-chance > div')].map(txt);
+    check(!!pf && m && m.source === 'builder' && ch.some(x => /^(model|Model)/.test(x) || / · model/.test(x)) && !ch.some(x => /\bElo\b/.test(x)) && !p.d.getElementById('pcAgain').hidden, `the builder's own Finish parlay is the builder's card: the model's chance, with Start over (${ch.join(' / ')})`);
     if (pf) { p.d.getElementById('pcClose').click(); await sleep(10); }
-    await openTab(p);
-    p.w.localStorage.setItem('nba_hub_2027', JSON.stringify({ ...mine(), slip: { legs: [], stake: 20 } })); }
-  /* the Parlay Builder's ticks: Spread unticked, the moneylines alone; no team box ticked, the reason */
-  { const m0 = mine(); p.w.localStorage.setItem('nba_hub_2027', JSON.stringify(m0));
-    p.w.eval("M.pb = pbClean({ k: { ml: true, ats: false, total: true, over: true, under: true }, off: [] }); saveMine();"); p.w.eval('EP_CACHE.clear(); renderSp()'); await sleep(20);
-    const C6 = eloOwn(st5, LN, { ml: true, ats: false, off: [] });
-    check(JSON.stringify(p.w.epGet().all.map(keyPg).sort()) === JSON.stringify(C6.map(keyOwn).sort()) && p.w.epGet().all.every(l => l.kind === 'ml'), 'with Spread unticked on the Parlay Builder tab the Elo picks take moneylines alone');
-    p.w.eval("M.pb = pbClean({ k: { ml: false, ats: false, total: true, over: true, under: true }, off: [] }); saveMine(); renderSp()"); await sleep(20);
-    check(txt(p.d.querySelector('#pbElo [data-pb-elo-none]')) === 'Tick Moneyline or Spread on the Parlay Builder tab for the Elo picks: every leg is a team’s moneyline or spread.', 'with neither ticked it says why there are none');
-    p.w.eval("M.pb = pbClean(null); saveMine(); renderSp()"); await sleep(20); }
-  /* no price to beat: the lines feed with no moneyline or spread posted, and lines.json not there, each said so, never
-     that no line beats DraftKings' price */
-  { const noGl = clone(LINES1); for (const e of Object.values(noGl.games)) { e.ml = null; e.spread = null; }
-    NOW = Date.parse(T(D1, '15:00:00'));
-    const q1 = load(stateOf(SLATE), { lines: noGl, record: null, tab: 'suggest' }); await settle(q1); await openTab(q1);
-    const n1 = txt(q1.d.querySelector('#pbElo [data-pb-elo-none]'));
-    check(n1 === 'No Elo picks yet: DraftKings had posted no moneyline or spread on the games and bet types ticked when its lines were read. The job reads them through the day, and Refresh odds reads the current ones.', `with no moneyline or spread posted, the Elo picks say there is none to beat ("${n1}")`);
-    const q2 = load(stateOf(SLATE), { lines: null, record: null, tab: 'suggest' }); await settle(q2); await openTab(q2);
-    const n2 = txt(q2.d.querySelector('#pbElo [data-pb-elo-none]'));
-    check(n2 === 'No Elo picks yet: DraftKings’ published lines did not load, so there is no price to beat. Refresh odds reads the current ones.' && q1.errors.length + q2.errors.length === 0, `with lines.json not there, that they did not load ("${n2}")`); }
+    p.w.eval('M.slip.legs = []; saveMine()'); await openTab(p); }
 
   /* ---------- 6. the lock: this browser's own, a reload, the record's, a press, a ruled-out level ---------- */
   const st6 = stateOf(SLATE), lockA = lockOwn(gA);

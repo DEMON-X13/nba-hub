@@ -1091,9 +1091,9 @@ foot();
    window.PARLAY_CARD: the window over the page, its card (the window's and the image's, drawn from one model), Open in
    DraftKings, Share link, Download image and Start over. It reads the page's globals (S, M, the Parlay Builder's pricing
    and lines) only when it is used, so it may sit anywhere in the page. A tab that draws a suggested level's Finish
-   (data-pc-finish="<prefix>|<id>": Suggested Parlays' "sp|<game id>:<level>", the Elo picks' "elo|<level>") registers a
-   resolver for its prefix, PARLAY_CARD.from(prefix, id => ({ legs, kicker, chance, chanceBy })), and one listener here
-   opens the card for whichever is pressed; the card prices the legs by the builder's own sums */
+   (data-pc-finish="<prefix>|<id>": Suggested Parlays' "sp|<game id>:<level>") registers a resolver for its prefix,
+   PARLAY_CARD.from(prefix, id => ({ legs, kicker, chance })), and one listener here opens the card for whichever is
+   pressed; the card prices the legs by the builder's own sums */
 window.PARLAY_CARD = (function () {
   'use strict';
   const SITE = 'demon-x13.github.io/nba-hub';
@@ -1189,12 +1189,12 @@ window.PARLAY_CARD = (function () {
   }
 
   /* the card: everything it shows, worked out once, drawn twice (the window, and the image) */
-  function card({ kicker, legs, dec, priceNote, chance, chanceBy, trial, fair, stake, source, sg }) {
+  function card({ kicker, legs, dec, priceNote, chance, trial, fair, stake, source, sg }) {
     const n = legs.length, first = legs.map(l => l.date).filter(Boolean).sort()[0] || '';
     const am = typeof decToAm === 'function' && dec > 1 ? decToAm(dec) : null;
     return { source, kicker, title: n + '-leg parlay', dateText: dates(legs), price: ml(am), dec: isFinite(dec) ? dec.toFixed(2) : '–', implied: dec > 1 ? pct(1 / dec) : '–', priceNote,
       legs: legs.map(x => x.card), stake: stake > 0 ? stake : 0, payout: stake > 0 ? stake * dec : 0, profit: stake > 0 ? stake * dec - stake : 0,
-      chance: chance != null && isFinite(chance) ? pct(chance) : null, chanceBy: chanceBy || 'Model', trial: !!trial,
+      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial,
       fair: fair && fair.p != null && isFinite(fair.p) ? pct(fair.p) : null, fairEst: !!(fair && fair.p != null && fair.est), sg: !!sg,
       oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'),
       made: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), site: SITE,
@@ -1206,11 +1206,11 @@ window.PARLAY_CARD = (function () {
     const legs = q.legs.map(l => Object.assign({}, l, { card: leg(l, l.odds) }));
     return card({ source: 'builder', kicker: 'Your parlay', legs, dec: q.useDec,
       priceNote: q.override != null ? 'your book’s price' : q.sg ? 'estimated same-game price' : 'book price',
-      chance: q.pr.corr, chanceBy: 'Model', trial: q.trial, fair: q.fair, stake: q.stake, sg: q.sg && q.override == null });
+      chance: q.pr.corr, trial: q.trial, fair: q.fair, stake: q.stake, sg: q.sg && q.override == null });
   }
   /* a suggested level's legs, from the resolver its tab registered: each leg as the builder draws it (pbView), in the
      builder's order, priced by the builder's own sums on the prices they carry; the chance the level's own where it
-     says so (an Elo pick's is the Elo's), else the model's */
+     says so (the model's on its legs as built or kept), else the model's on the legs as they stand */
   const FROM = {};
   function from(prefix, fn) { if (typeof prefix !== 'string' || !/^[\w-]+$/.test(prefix) || typeof fn !== 'function') return false; FROM[prefix] = fn; return true; }
   function fromTier(kind, id) {
@@ -1223,29 +1223,27 @@ window.PARLAY_CARD = (function () {
     const dec = parlayDec(L.map(l => ({ leg: l, ml: l.price }))), sg = new Set(L.map(l => l.id)).size < L.length;
     const chance = t.chance !== undefined ? t.chance : parlayProb(L).corr;
     return card({ source: kind, kicker: String(t.kicker || 'Suggested parlay'), legs: L, dec, priceNote: sg ? 'estimated same-game price' : 'book price',
-      chance, chanceBy: t.chanceBy === 'Elo' ? 'Elo' : 'Model', trial: L.some(l => l.kind === 'prop'), fair: parlayFair(L), stake: typeof pbStake === 'function' ? pbStake() : 20, sg });
+      chance, trial: L.some(l => l.kind === 'prop'), fair: parlayFair(L), stake: typeof pbStake === 'function' ? pbStake() : 20, sg });
   }
   /* the Parlay Builder's own four levels over the games ticked (getPbTiers), which a level's card drawn with no prefix
      of its own finishes (pbTierCard's default "pb|<level>") */
   from('pb', id => { const t = typeof getPbTiers === 'function' ? getPbTiers().tiers.find(x => x.id === id && x.legs) : null; return t ? { legs: t.legs, kicker: t.label + ' parlay' } : null; });
-  /* and, until a tab registers its own, the NFL hub's names for the two that draw levels: Suggested Parlays' window.spTier
-     ("<game id>:<level>", the level as the tab shows it, live or locked) and the Elo picks' window.eloPicks() (its levels,
-     their chance the Elo's) */
+  /* and, until the tab registers its own, the NFL hub's name for Suggested Parlays' levels: window.spTier ("<game
+     id>:<level>", the level as the tab shows it, live or locked). The NFL hub's other, the Elo picks' "elo|<level>", is
+     not here: the NBA hub took its Elo picks off on 5 November 2026 */
   from('sp', id => { const t = typeof window.spTier === 'function' ? window.spTier(id) : null;
     return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}`, chance: t.corr } : null; });
-  from('elo', id => { const E = typeof window.eloPicks === 'function' ? window.eloPicks() : null, t = E && Array.isArray(E.tiers) ? E.tiers.find(x => x.id === id) : null;
-    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: `${t.label} Elo pick`, chance: t.p, chanceBy: 'Elo' } : null; });
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
-     then whose chance the parlay is on (the model's, on trial with a player leg in it; an Elo pick's the Elo's) and the
-     price's; with no fair chance, the model's and the price's, then why there is none. Each line is a list of [text,
-     bold] pieces, so the window, the image and the share text say the same */
+     then the model's (on trial with a player leg in it) and the price's; with no fair chance, the model's and the
+     price's, then why there is none. Each line is a list of [text, bold] pieces, so the window, the image and the share
+     text say the same */
   function chanceLines(m) {
-    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && m.chanceBy !== 'Elo' ? ' (on trial)' : '';
-    const by = (m.chanceBy === 'Elo' ? 'Elo' : 'model') + tr, price = [[' · the price says '], [m.implied, 1]];
+    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial ? ' (on trial)' : '';
+    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]];
     if (m.fair) return [[['Fair chance ' + all], [m.fair, 1], ...(m.fairEst ? [[' (est.)']] : [])],
       [...(m.chance ? [[by + ' says '], [m.chance, 1]] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
-    return [[...(m.chance ? [[(m.chanceBy === 'Elo' ? 'Elo' : 'Model') + '’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
+    return [[...(m.chance ? [['Model’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
       [['No fair chance: a leg has only one of DraftKings’ two prices']]];
   }
   const lineText = l => l.map(x => x[0]).join('');
@@ -1449,7 +1447,7 @@ window.PARLAY_CARD = (function () {
         ty += TILE_H + TILE_GAP; });
       y += tilesH(t);
     }
-    /* the chance: DraftKings' fair chance first, then the model's (or the Elo's) and the price's */
+    /* the chance: DraftKings' fair chance first, then the model's and the price's */
     chanceLines(m).forEach((ln, i) => { let cx = L; const yy = y + 24 + i * 18;
       for (const [t1, b] of ln) cx += text(x, t1, cx, yy, (b ? '700 ' : '500 ') + '13px ' + FB, b ? C.ink : C.ink2); });
     y += CHANCE_H;
@@ -1554,8 +1552,8 @@ window.PARLAY_CARD = (function () {
   }
   /* the builder's Finish parlay (app/parts/parlay.html draws it and calls this) */
   function openBuilder(from) { const m = fromBuilder(); if (m) open(m, from); return !!m; }
-  /* a suggested level's Finish ("sp|<game id>:<level>", "elo|<level>"): one listener opens the card for whichever is
-     pressed; a page drawn before a game tipped off is redrawn rather than opening a parlay nobody saw */
+  /* a suggested level's Finish ("sp|<game id>:<level>"): one listener opens the card for whichever is pressed; a page
+     drawn before a game tipped off is redrawn rather than opening a parlay nobody saw */
   function finishFrom(btn) {
     if (typeof window.pbStale === 'function' && window.pbStale()) { if (typeof window.renderParlay === 'function') window.renderParlay(); return false; }
     const v = String(btn.getAttribute('data-pc-finish') || ''), i = v.indexOf('|');
@@ -1740,14 +1738,14 @@ const legOf = sig => sig && typeof window.glanceLeg === 'function' ? window.glan
 let cur = null, box = null;
 /* where a name is drawn, worked out from the page when the bubble opens, so a redraw finds the same copy of it: the
    builder (#parlayBody), the Top 50 lines (#pbPanel), or a level card (.pb-tier[data-pb-tier]) in its section, a set's
-   under its game ([data-sp-game]) and an Elo pick's under #pbElo; anywhere else the nearest element with an id. Within
-   one place a leg is drawn once: the builder holds one leg a stat, the list each bet once, a card one leg a player. A
-   leg is known there by its key, side and line (its signature less the price, its source and the model's chance, which
-   a Refresh odds press can move while the leg stays) */
+   under its game ([data-sp-game]); anywhere else the nearest element with an id. Within one place a leg is drawn once:
+   the builder holds one leg a stat, the list each bet once, a card one leg a player. A leg is known there by its key,
+   side and line (its signature less the price, its source and the model's chance, which a Refresh odds press can move
+   while the leg stays) */
 const qv = v => '"' + String(v).replace(/["\\]/g, '\\$&') + '"';
 const legId = sig => { const p = String(sig || '').split('|'); return p.length > 3 ? p.slice(0, -3).join('|') : p.join('|'); };
 function placeOf(btn) {
-  const sec = btn.closest('#parlayBody,#pbPanel,#pbElo,[data-sp-game]') || btn.closest('[id]'); if (!sec) return null;
+  const sec = btn.closest('#parlayBody,#pbPanel,[data-sp-game]') || btn.closest('[id]'); if (!sec) return null;
   const s = sec.id ? `[id=${qv(sec.id)}]` : `[data-sp-game=${qv(sec.dataset.spGame)}]`, card = btn.closest('.pb-tier[data-pb-tier]');
   return card && sec.contains(card) ? `${s} .pb-tier[data-pb-tier=${qv(card.dataset.pbTier)}]` : s;
 }
@@ -1770,12 +1768,9 @@ function legHtml(K) {
   if (!K || !K.leg) return '';
   const l = K.leg, out = [];
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
-  /* an Elo pick's leg carries the ELO Model's chance as its p (its level's sums stand on it) and the player model's as
-     pm: Model is always the player model's, the chance the builder prices the same leg on, and the ELO Model's has a line
-     of its own */
-  const elo = l.pe != null && isFinite(l.pe), pm = elo ? l.pm : l.p;
+  /* Model: the player model's chance, the one the builder prices the leg on */
+  const pm = l.p;
   out.push(`<div><dt>Model</dt><dd>${pm != null && isFinite(pm) ? N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark() : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`);
-  if (elo) out.push(`<div><dt>ELO Model</dt><dd>${N('elochance', pc0(l.pe))}</dd></div>`);
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
   out.push(`<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`);
   return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;
@@ -3864,7 +3859,7 @@ small.faroff{display:block;font-size:11px;font-weight:600;margin-top:2px;white-s
 .pb-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .pb-acts .btn{min-height:44px;padding:10px 16px;text-align:center}
 .pb-move td.up{color:var(--lime)} .pb-move td.down{color:var(--pb-trial)}
-/* a level's card (pbTierCard: Suggested Parlays and the Elo picks draw on it) */
+/* a level's card (pbTierCard: Suggested Parlays draws on it) */
 .pb-tiers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .pb-tier{background:var(--bg-2);border:1px solid var(--line);border-top:3px solid var(--line-2);border-radius:14px;padding:12px 13px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .pb-tier.safe{border-top-color:var(--lime)} .pb-tier.med{border-top-color:var(--gold)} .pb-tier.aggr{border-top-color:var(--hot)} .pb-tier.xtrm{border-top-color:#B49CFF}
@@ -4379,10 +4374,10 @@ function pbRuleOf(t) { const n = t.legs.length, pct = Math.round((t.floor || 0) 
 /* a level's chance: DraftKings' fair chance first, the model's beside it; where a leg is a player's, the props model's,
    said "model (on trial) 38%" (Suggested Parlays, the owner's call of 25 October 2026) */
 function pbChanceHtml(F, chance, o) {
-  const by = (o && o.by) || 'model', isTrial = !!(o && o.trial), trial = isTrial ? ' (on trial)' : '';
+  const isTrial = !!(o && o.trial), trial = isTrial ? ' (on trial)' : '';
   if (chance == null) return `<div class="pb-chance"><b${F && F.p != null ? ` data-pb-fair="${F.p}"` : ''}>${F && F.p != null ? pbPct(F.p) : '–'}</b><span>${F && F.p != null ? `fair chance${F.est ? ', est.' : ''}` : 'no chance'}</span><small class="pb-model">no model chance: a player in it is not projected</small></div>`;
-  if (F && F.p != null) return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: a leg is priced on one side only, or the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}">${isTrial ? `${esc(by)} (on trial) ${pbPct(chance)}` : `${esc(by)} says ${pbPct(chance)}`}</small></div>`;
-  return `<div class="pb-chance"><b data-pb-model="${chance}">${pbPct(chance)}</b><span>${(o && o.chanceBy) || 'model’s chance'}${trial}</span><small class="pb-model">no fair chance: a leg has one price only</small></div>`;
+  if (F && F.p != null) return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: a leg is priced on one side only, or the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}">${isTrial ? `model (on trial) ${pbPct(chance)}` : `model says ${pbPct(chance)}`}</small></div>`;
+  return `<div class="pb-chance"><b data-pb-model="${chance}">${pbPct(chance)}</b><span>model’s chance${trial}</span><small class="pb-model">no fair chance: a leg has one price only</small></div>`;
 }
 /* one leg's own Add: that leg alone into the builder (or out of it), Added while it is in */
 function pbLegAddBtn(l) {
@@ -4405,17 +4400,17 @@ function glanceName(l, shown) {
   return `<button type="button" class="glance-name" data-glance="${kind}:${esc(id)}" data-glance-game="${esc(l.gid || l.id)}" data-glance-leg="${esc(sig)}" aria-haspopup="dialog" aria-label="${nm}: ${what}">${nm}</button>`;
 }
 window.glanceLeg = sig => GLANCE_LEGS.get(String(sig)) || null;
-/* one level's card, or why it has none (Suggested Parlays and the Elo picks draw theirs with it): o.what the game, for
-   the buttons' names; o.legAdd false: no Add on each leg; o.quiet: no line saying why a leg is not a Value pick or why a
-   total is there; o.add the Add to builder's own attribute; o.kind and o.fid what its Finish names */
+/* one level's card, or why it has none (Suggested Parlays draws its levels with it): o.what the game, for the buttons'
+   names; o.legAdd false: no Add on each leg; o.quiet: no line saying why a leg is not a Value pick or why a total is
+   there; o.mktWhy why a total is there; o.add the Add to builder's own attribute; o.kind and o.fid what its Finish names */
 function pbTierCard(t, o) {
-  o = o || {}; const card = !!window.PARLAY_CARD, chance = o.chance !== undefined ? o.chance : t.corr, legAdd = o.legAdd !== false;
+  o = o || {}; const card = !!window.PARLAY_CARD, chance = t.corr, legAdd = o.legAdd !== false;
   if (t.why) return `<div class="pb-tier ${t.id} none"><div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.n} legs</span></div><p class="pb-why">${esc(t.why)}</p></div>`;
   const nm = o.what ? ` the ${esc(t.label)} parlay for ${esc(o.what)}` : '', inB = pbInBuilder(t.legs), trial = t.legs.some(l => l.kind === 'prop'), sg = new Set(t.legs.map(l => l.gid)).size < t.legs.length;
   return `<div class="pb-tier ${t.id}" data-pb-tier="${t.id}">
-    <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${o.rule || (t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : '')}</div>
+    <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : ''}</div>
     <div class="pb-nums">${pbChanceHtml(t.fair, chance, { ...o, trial })}<div><b>${fmtAm(decToAm(t.dec))}</b><span>price${sg ? ', est.' : ''}</span></div><div class="pb-pay" data-pb-pay="${t.dec}">${pbPayHtml(t.dec)}</div></div>
-    <ul class="pb-legs">${t.legs.map(l => { const ff = legFarOff(l); return `<li><span class="nm">${o.badge ? o.badge(l) : ''}${glanceName(l)}<small>${esc(l.label)}${pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em>${pbPct(o.legP ? o.legP(l) : l.p)}${pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
+    <ul class="pb-legs">${t.legs.map(l => { const ff = legFarOff(l); return `<li><span class="nm">${glanceName(l)}<small>${esc(l.label)}${pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em>${pbPct(l.p)}${pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
     ${t.thin && !o.quiet ? `<p class="pb-thin">${pbThinLine(t.legs)}</p>` : ''}${t.mkt && !o.quiet ? `<p class="pb-thin">${pbMktLine(t.legs, o.mktWhy)}</p>` : ''}
     <div class="pb-acts"><button type="button" class="btn ${card ? 'ghost' : 'hot'}" ${o.add || `data-pb-add="${t.id}"`}${nm ? ` aria-label="${inB ? 'In the builder:' : 'Add'}${nm}${inB ? '' : ' to the builder'}"` : ''}>${inB ? 'In the builder' : 'Add to builder'}</button>${card ? `<button type="button" class="btn hot" data-pc-finish="${o.kind || 'pb'}|${o.fid || t.id}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button>` : ''}</div></div>`;
 }
@@ -4745,17 +4740,13 @@ Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind
 .sp-odds{margin:0 0 4px}
 .sp-upd{color:var(--ink)}
 #spPanel .pb-said{margin:6px 0 0}
-.pb-elo:not(:empty){margin-top:22px;padding-top:14px;border-top:1px solid var(--line)}
-.pb-elo h3{margin:0 0 4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-family:var(--display);font-size:17px;font-weight:700}
-.pb-elo .pb-lead{margin:0 0 12px}
-.pb-elo .pb-lead[title]{cursor:help}
 </style>
 <script>
 'use strict';
 /* ---------- Suggested Parlays (README "Suggested Parlays") ----------
-   The NFL hub's Suggested Parlays tab (props/build/part3.js there, app v114: #suggest, its sets, the lock, the record and
-   the Elo picks) on this hub's games, adapted only where basketball or the NBA's data forces it, each adaptation said
-   where it is made:
+   The NFL hub's Suggested Parlays tab (props/build/part3.js there, app v114: #suggest, its sets, the lock and the record)
+   on this hub's games, adapted only where basketball or the NBA's data forces it, each adaptation said where it is made,
+   less the part the owner took off on 5 November 2026 (the Elo picks, below):
    - which games: a featured game is a game on national TV (the slate's tv, the networks ESPN's scoreboard lists in the
      national market: fetch.js national, README "The national networks"), never a preseason game, where the NFL's is a
      Thursday, Sunday or Monday night kickoff: the NBA has national games most nights at every hour, so a clock rule says
@@ -4774,8 +4765,10 @@ Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind
      this browser's own where the record has none (nba_sp_lock_v1), a level holding a player ruled out since built again;
    - the record is the job's (tools/suggest_ledger.js, data/suggest_ledger.json, its `featured` map), read no-store when
      the tab first opens and again at a lock;
-   - the Elo picks are the ELO Model's moneylines and spreads (the NBA has no per-stat player matchup to stand an Elo pick
-     on a prop), where its own chance beats DraftKings' price, four levels on that chance.
+   - no Elo picks: the NFL's stand on a player's Elo matchup, and the NBA's, the ELO Model's moneylines and spreads where
+     its own chance beat DraftKings' price, went on 5 November 2026 (the owner's call, "remove the Elo picks section": on
+     the walk-forward its picks lost against the market, its honest blend toward the market was the market alone, and its
+     team legs are the ones the sets and the Top 50 lines already offer).
    Nothing is read before the tab opens; nothing is stored but nba_sp_lock_v1, a locked set the page built itself. */
 const SP_LOCK_H = 2, SP_LOCK_MS = SP_LOCK_H * 3600e3, SP_OPEN_H = 6;
 /* every bet type, no game unticked: a set never follows the Parlay Builder's boxes, so the page and the record agree */
@@ -4834,9 +4827,9 @@ function spNight() {
 }
 /* THE one place the tab asks which games it sets out */
 function spOn() { const n = spNight(); return n.up ? n.games : []; }
-/* what the tab stands on beyond the data: each featured game's side of its lock, the games set out, and the games to
-   come the Elo picks are drawn from (a game that tips, a lock and the 6:00 AM turn each move it) */
-function spState() { const now = Date.now(); return spGames().map(g => g.id + (now < spLockAt(g) ? ':l' : ':k')).concat('on=' + spOn().map(g => g.id).join('+'), 'pb=' + pbGames().map(g => g.id).join('+')).join(); }
+/* what the tab stands on beyond the data: each featured game's side of its lock and the games set out (a game that tips,
+   a lock and the 6:00 AM turn each move it) */
+function spState() { const now = Date.now(); return spGames().map(g => g.id + (now < spLockAt(g) ? ':l' : ':k')).concat('on=' + spOn().map(g => g.id).join('+')).join(); }
 
 /* ---------- who the sets take: the injury report ----------
    Why a player is kept out of every suggested set, in a few words, or null when he plays: the Parlay Builder's own rule
@@ -5066,121 +5059,6 @@ function spTier(fid) {
   return t && t.legs ? { ...t, game: `${g.away} at ${g.home}` } : null;
 }
 
-/* ---------- the Elo picks: the ELO Model's moneylines and spreads ----------
-   The NFL hub's Elo picks stand on a player's Elo matchup; the NBA has none fitted to props, so its are the ELO Model's
-   team legs (README "The ELO Model"): every moneyline and spread of the lines feed's games still to tip, on the games and
-   bet types ticked on the Parlay Builder tab, whose Elo chance beats the price's no-vig chance with a positive expected
-   return (the chance times the decimal price, less 1), priced -200 to +300, the Elo chance 30% or more, the far-off guard
-   (15 points over DraftKings' fair chance: left out), DraftKings' betslip id where the game's lines carry ids, one leg a
-   game (its best by value). The Elo chance is the ELO Model's own: a moneyline its pHome; a spread Phi((m + h) / sigma),
-   m its home margin (minus its spread), h the home line, sigma that margin's own miss, pick.sigmaModel (14.133: research's
-   sigma of the model alone on 2024-2025, at which its picks' record in the lead's title was scored; params.pick.sigma,
-   13.722, is the blended margin's, at weight 0 the closing line's own, and prices only the blend). Priced honestly (params.pick, the blend
-   toward DraftKings' closing line the research chose on 2024 and 2025) a pick is the market's own chance and never beats
-   a price: ELO_PICK_BLEND true prices them so (and the section then shows none). Its picks' measured record is the lead's
-   title. Four levels on the Elo chance: Safe the likeliest pair; Medium, Aggressive and Extreme the 3-, 4- and 5-leg
-   parlay with the best expected return that lands 25%, 12% and 5% by it, else the likeliest of that size. The legs are
-   of different games, so a level's chance is the product and its price the prices multiplied (the builder's own sums
-   say so), and each level is found by trying every parlay of its size (EP.cap best by value with the EP.capP likeliest) */
-const ELO_PICK_BLEND = false;
-const EP = { lo: -200, hi: 300, floor: 0.30, cap: 30, capP: 10 };
-const EP_TIERS = [['elo-safe', 'safe'], ['elo-med', 'med'], ['elo-aggr', 'aggr'], ['elo-xtrm', 'xtrm']];
-let EP_CACHE = new Map();
-const epLogit = p => Math.log(p / (1 - p)), epSig = x => 1 / (1 + Math.exp(-x));
-/* the Elo chance of a team leg, or null */
-function epChance(l) {
-  const E = S.eloPicks, c = E && E.games ? E.games[l.id] : null, g = S.slate.find(x => x.id === l.id); if (!c || !g || !Number.isFinite(c.pHome)) return null;
-  const home = l.side === g.home;
-  if (l.kind === 'ml') {
-    let ph = c.pHome;
-    if (ELO_PICK_BLEND) { const w = E.pick ? E.pick.wMl : 0, gl = pbGl(l.id); if (!gl || !gl.ml) return null;
-      const ih = propImplied(gl.ml.home.odds), ia = propImplied(gl.ml.away.odds), q = ih / (ih + ia);
-      ph = epSig(w * epLogit(Math.min(Math.max(ph, 1e-6), 1 - 1e-6)) + (1 - w) * epLogit(q)); }
-    return home ? ph : 1 - ph;
-  }
-  /* each margin at its own miss: the model's alone at sigmaModel, the blend at params.pick's sigma */
-  const sd = E.pick ? (ELO_PICK_BLEND ? E.pick.sigma : E.pick.sigmaModel) : null;
-  if (l.kind !== 'spread' || !Number.isFinite(c.spread) || !Number.isFinite(l.line) || !E.pick || !(sd > 0)) return null;
-  const m = -c.spread, h = home ? l.line : -l.line, w = ELO_PICK_BLEND ? E.pick.wSpread : 1;
-  const pH = normCdf((w * m + (1 - w) * -h + h) / sd);
-  return home ? pH : 1 - pH;
-}
-function epCands() {
-  const u = pbUi(), games = pbGames().filter(g => !u.off.includes(g.id)), out = [];
-  let far = 0;
-  /* the ticked games whose DraftKings lines carry a ticked moneyline or spread: with none, there is no price to beat */
-  const priced = games.filter(g => { const gl = pbGl(g.id); return !!gl && ((u.k.ml && !!gl.ml) || (u.k.ats && !!gl.spread)); }).length;
-  for (const c of pbPriced(games)) {
-    if ((c.kind !== 'ml' && c.kind !== 'spread') || !pbAllows(c, u)) continue;
-    if (!Number.isFinite(c.price) || !(c.price >= EP.lo && c.price <= EP.hi) || Math.abs(c.price) < 100) continue;
-    if (c.dkOn && !c.dk) continue;
-    const pe = epChance(c), f = legFair(c); if (pe == null || !f) continue;
-    const dec = amToDec(c.price), ev = pe * dec - 1;
-    if (!(pe > f.p) || !(ev > 0) || pe < EP.floor) continue;
-    if (pe - f.p >= PB_FAR - 1e-9) { far++; continue; }
-    out.push({ ...c, pm: c.p, p: pe, pe, dec, ev, fc: f });
-  }
-  out.sort((a, b) => (b.ev - a.ev) || ((a.kind === 'ml' ? 0 : 1) - (b.kind === 'ml' ? 0 : 1)) || pbOrd(a, b));
-  const one = [], seen = new Set(); for (const c of out) if (!seen.has(c.gid)) { seen.add(c.gid); one.push(c); }
-  const keep = new Set([...one.slice(0, EP.cap), ...[...one].sort((a, b) => (b.pe - a.pe) || pbOrd(a, b)).slice(0, EP.capP)].map(c => c.sk));
-  return { all: one, keep: one.filter(c => keep.has(c.sk)), far, priced, games: games.length, kinds: !!(u.k.ml || u.k.ats) };
-}
-/* every parlay of n of the candidates, by the Elo chance (the product: one leg a game) and its price (the prices
-   multiplied): Safe the likeliest; a floor's level the best expected return over its floor, else the likeliest */
-function epBest(C, n, floor) {
-  if (C.length < n) return null;
-  let best = null, likely = null; const idx = [];
-  const walk = (s, pr, d) => {
-    if (idx.length === n) { const ev = pr * d, id = idx.map(i => C[i].sk).sort().join(',');
-      if (!likely || pr > likely.pr || (pr === likely.pr && id < likely.id)) likely = { pr, d, ev, id, legs: idx.map(i => C[i]) };
-      if (floor && pr >= floor && (!best || ev > best.ev || (ev === best.ev && id < best.id))) best = { pr, d, ev, id, legs: idx.map(i => C[i]) };
-      return; }
-    for (let i = s; i <= C.length - (n - idx.length); i++) { idx.push(i); walk(i + 1, pr * C[i].pe, d * C[i].dec); idx.pop(); }
-  };
-  walk(0, 1, 1);
-  return floor ? (best ? { ...best, likeliest: false } : likely ? { ...likely, likeliest: true } : null) : likely ? { ...likely, likeliest: false } : null;
-}
-function epBuild() {
-  const c = epCands(), memo = new Map();
-  const tiers = EP_TIERS.map(([eid, lid]) => { const [, label, n, floor] = PB_TIERS.find(t => t[0] === lid), r = epBest(c.keep, n, floor);
-    if (!r) return { id: eid, label, n, floor, why: `Only ${c.keep.length} leg${c.keep.length === 1 ? '' : 's'} on your picks ${c.keep.length === 1 ? 'qualifies' : 'qualify'}: this level takes ${n}.` };
-    const L = pbOrder(r.legs), pr = parlayProb(L);
-    return { id: eid, label, n, floor, legs: L, corr: pr.corr, indep: pr.indep, dec: parlayDec(L.map(l => ({ leg: l, ml: l.price }))), likeliest: r.likeliest && !!floor, fair: parlayFair(L), thin: 0, mkt: 0 }; });
-  return { ...c, tiers };
-}
-const epSigOf = () => [pbSig(), S.eloPicks ? S.eloPicks.generated : '', ELO_PICK_BLEND ? 1 : 0].join('|');
-function epGet() { const sig = epSigOf(); let r = EP_CACHE.get(sig);
-  if (!r) { r = { sig, ...epBuild() }; EP_CACHE.set(sig, r); if (EP_CACHE.size > 12) EP_CACHE.delete(EP_CACHE.keys().next().value); }
-  return r; }
-function epTier(id) { const t = epGet().tiers.find(x => x.id === String(id || '').replace(/^elo\|/, '')); return t && t.legs ? t : null; }
-const epRuleOf = t => { const n = t.legs.length, pct = Math.round((t.floor || 0) * 100); return t.likeliest ? `the likeliest ${n} legs` : t.floor ? `best value that lands ${pct}%+ by Elo` : 'the likeliest pair'; };
-/* what such picks have been worth: the research's 3-point-edge picks of the model alone on the closing line, each fold */
-function epRecordText() {
-  const R = S.eloPicks && S.eloPicks.record && S.eloPicks.record.folds; if (!R) return '';
-  const ks = Object.keys(R).sort(), pc = v => v == null ? '–' : (v * 100).toFixed(1) + '%', list = f => oddsAnd(ks.map(f));
-  const ml = ks.every(k => R[k].ml && R[k].ml.picks), sp = ks.every(k => R[k].spread && R[k].spread.picks);
-  return `The ELO Model's own chance is no promise. On the walk-forward folds (${oddsAnd(ks)}, each called by the model fitted on the seasons before it), its moneylines 3 points or more above the price${ml ? ` said ${list(k => pc(R[k].ml.said))} and won ${list(k => pc(R[k].ml.won))} (${list(k => R[k].ml.picks)} picks)` : ''}${sp ? `, and its spreads 3 points or more above -110 won ${list(k => pc(R[k].spread.won))} (${list(k => R[k].spread.picks)})` : ''}, at the closing lines.`;
-}
-function eloPicksHtml() {
-  const E = S.eloPicks, ds = pbDates(), pill = ds.length ? `<span class="pb-pill">${esc(ds.map(pbDayText).join(' & '))}</span>` : '';
-  const head = `<h3>Elo picks ${pill}</h3><p class="pb-lead" data-pb-elo-lead title="${esc(epRecordText())}">Moneylines and spreads where the ELO Model’s chance beats DraftKings’ price, on the games and bet types ticked on the Parlay Builder tab.</p>`;
-  const none = t => `${head}<p class="pb-why" data-pb-elo-none>${esc(t)}</p>`;
-  if (!E || !E.games) return none('The ELO Model’s calls are not in the published file, so there are no Elo picks.');
-  if (E.status && E.status.ok === false) return none(`The ELO Model could not run${E.status.why ? ` (${E.status.why})` : ''}: no Elo picks until it does.`);
-  if (!pbGames().length) return none('No game is still to tip on the lines feed’s two nights: no Elo picks.');
-  if (!LINES && !LINES_ERR) return none('Loading DraftKings’ lines…');
-  const r = epGet();
-  if (!r.kinds) return none('Tick Moneyline or Spread on the Parlay Builder tab for the Elo picks: every leg is a team’s moneyline or spread.');
-  if (!r.games) return none('No game ticked on the Parlay Builder tab: tick one there for the Elo picks.');
-  /* no DraftKings price to beat at all: lines.json did not load, or no moneyline or spread is posted yet (the sets' spWhy
-     says the same of their games), never "no line beats the price" */
-  if (!r.priced) return none(LINES_ERR && !Object.keys(SG_LINES).length ? 'No Elo picks yet: DraftKings’ published lines did not load, so there is no price to beat. Refresh odds reads the current ones.'
-    : 'No Elo picks yet: DraftKings had posted no moneyline or spread on the games and bet types ticked when its lines were read. The job reads them through the day, and Refresh odds reads the current ones.');
-  if (r.all.length < 2) return none(`No Elo picks on your picks yet: ${r.all.length ? 'only one moneyline or spread' : 'no moneyline or spread'} beats DraftKings’ price by the ELO Model’s chance on the games ticked${r.all.length ? ', and a pick takes two' : ''}.`);
-  return `${head}<div class="pb-tiers">${r.tiers.map(t => spCard(t, { chance: t.corr, chanceBy: 'Elo chance', by: 'Elo', kind: 'elo', fid: t.id, what: 'the Elo picks', add: `data-pb-elo-add="${t.id}"`,
-    rule: t.legs ? `<span class="pb-rule">${epRuleOf(t)}</span>` : '', legP: l => l.pe })).join('')}</div>`;
-}
-
 /* ---------- the tab's drawing ---------- */
 /* a level's card, the Parlay Builder's (pbTierCard). With the parlay card on the page (window.PARLAY_CARD, its own part)
    pbTierCard draws its Finish; without it, the Finish is drawn here, the same button, and answered by the page's own
@@ -5189,7 +5067,7 @@ function spCard(t, o) {
   const h = pbTierCard(t, o);
   if (window.PARLAY_CARD || t.why) return h;
   const nm = o.what ? ` the ${esc(t.label)} parlay for ${esc(o.what)}` : '';
-  return h.replace(/class="btn hot" (data-sp-add|data-pb-elo-add)/, 'class="btn ghost" $1')
+  return h.replace(/class="btn hot" data-sp-add/, 'class="btn ghost" data-sp-add')
     .replace(/<\/div><\/div>\s*$/, `<button type="button" class="btn hot" data-pc-finish="${o.kind}|${esc(o.fid)}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button></div></div>`);
 }
 const spNick = t => TEAMS[t] ? TEAMS[t][1] : t;
@@ -5233,22 +5111,21 @@ function spSetsHtml() {
 /* the tab: drawn only while it is on the screen (a hidden tab builds nothing, reads nothing, keeps nothing) */
 function renderSp() {
   const el = $('#spPanel'), tab = $('#tab-suggest'); if (!el || !S || !S.slate || !tab || tab.hidden) return;
-  if (!$('#spSets')) { el.innerHTML = '<div class="pb-card sp" id="spCard"><div id="spHead"></div><p class="pb-said" id="spSaid" role="status" aria-live="polite"></p><div id="spSets"></div><div id="pbElo" class="pb-elo"></div></div>'; spWire(el); }
+  if (!$('#spSets')) { el.innerHTML = '<div class="pb-card sp" id="spCard"><div id="spHead"></div><p class="pb-said" id="spSaid" role="status" aria-live="polite"></p><div id="spSets"></div></div>'; spWire(el); }
   /* a game this browser kept a locked set of that has tipped, left the slate or moved leaves the key */
   { const K = spKeep(), G = spGames(); if (Object.keys(K).some(id => !G.some(g => g.id === id && g.tip === K[id].tip))) spKeepSave(); }
   $('#spHead').innerHTML = spHeadHtml();
   $('#spSaid').textContent = SP_SAID;
   $('#spSets').innerHTML = spSetsHtml();
-  $('#pbElo').innerHTML = eloPicksHtml();
   SP_SHOWN = spState();
 }
 /* a redraw that keeps the reader's place: the control in focus (by what it is, and the set it is in) and the scroll */
 function spKeepPlace(draw) {
   const a = document.activeElement, y = window.scrollY || 0, inP = a && a.closest && a.closest('#spPanel');
   let sel = null;
-  if (inP && a.dataset) { const k = ['pbLeg', 'spAdd', 'pbEloAdd', 'pcFinish', 'espnRefresh'].find(x => a.dataset[x] != null);
+  if (inP && a.dataset) { const k = ['pbLeg', 'spAdd', 'pcFinish', 'espnRefresh'].find(x => a.dataset[x] != null);
     if (k) { const box = a.closest('[data-sp-game]'), tier = a.closest('[data-pb-tier]');
-      sel = `${box ? `[data-sp-game="${CSS.escape(box.dataset.spGame)}"] ` : a.closest('#pbElo') ? '#pbElo ' : ''}${tier ? `[data-pb-tier="${CSS.escape(tier.dataset.pbTier)}"] ` : ''}[data-${k.replace(/[A-Z]/g, c => '-' + c.toLowerCase())}="${CSS.escape(a.dataset[k])}"]`; } }
+      sel = `${box ? `[data-sp-game="${CSS.escape(box.dataset.spGame)}"] ` : ''}${tier ? `[data-pb-tier="${CSS.escape(tier.dataset.pbTier)}"] ` : ''}[data-${k.replace(/[A-Z]/g, c => '-' + c.toLowerCase())}="${CSS.escape(a.dataset[k])}"]`; } }
   draw();
   if (sel && !document.contains(a)) { const f = document.querySelector('#spPanel ' + sel); try { if (f) f.focus({ preventScroll: true }); } catch (e) {} }
   try { if ((window.scrollY || 0) !== y) window.scrollTo(0, y); } catch (e) {}
@@ -5261,7 +5138,7 @@ const spStale = () => { try { return SP_SHOWN != null && spState() !== SP_SHOWN;
    of it by the builder's own rules (slipToggle: a refusal said on the tab's status line), the focus kept on it */
 function spLegOf(b) {
   const key = b.dataset.pbLeg, gEl = b.closest('[data-sp-game]'), tEl = b.closest('[data-pb-tier]'); if (!tEl) return null;
-  const t = gEl ? spTier(`${gEl.dataset.spGame}:${tEl.dataset.pbTier}`) : b.closest('#pbElo') ? epTier(tEl.dataset.pbTier) : null;
+  const t = gEl ? spTier(`${gEl.dataset.spGame}:${tEl.dataset.pbTier}`) : null;
   return t ? t.legs.find(l => l.sk === key) || null : null;
 }
 function spLegClick(b) {
@@ -5279,14 +5156,14 @@ function spAddClick(b, t, what) {
 }
 /* Finish with no parlay card on the page: the page's own card (pcBuild, as the builder's Finish parlay opens it) on the
    level's legs, at its price and the Bet amount, the level named over it, stating the level's own chance as its card
-   does (an Elo pick's the ELO Model's, a set's the model's on its legs as built or as kept at the lock), with its way
-   back to this tab; the builder is left as it is */
+   does (the model's on its legs as built or as kept at the lock), with its way back to this tab; the builder is left as
+   it is */
 function spFinish(b) {
   if (spStale()) { spKeepPlace(renderSp); return; }
-  const [kind, id] = String(b.dataset.pcFinish).split('|'), t = kind === 'sp' ? spTier(id) : kind === 'elo' ? epTier(id) : null; if (!t) return;
-  const kicker = kind === 'sp' ? `${t.label} parlay · ${t.game}` : `${t.label} Elo pick`;
-  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null, { chance: t.corr, by: kind === 'elo' ? 'the ELO Model' : "the hub's model", back: 'Back to Suggested Parlays' });
-  $('#pcTitle').textContent = kind === 'elo' ? 'Elo pick' : 'Suggested parlay'; $('#pcSub').textContent = `${kicker} · ${PC.sub}`; $('#pcBody').innerHTML = PC.html;
+  const [kind, id] = String(b.dataset.pcFinish).split('|'), t = kind === 'sp' ? spTier(id) : null; if (!t) return;
+  const kicker = `${t.label} parlay · ${t.game}`;
+  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null, { chance: t.corr, by: "the hub's model", back: 'Back to Suggested Parlays' });
+  $('#pcTitle').textContent = 'Suggested parlay'; $('#pcSub').textContent = `${kicker} · ${PC.sub}`; $('#pcBody').innerHTML = PC.html;
   $('#pcShare').onclick = pcShare; $('#pcDone').onclick = () => pcClose();
   $('#pcBack').hidden = false; document.body.classList.add('pp-lock'); $('#pcSheet').scrollTop = 0; $('#pcClose').focus();
 }
@@ -5298,19 +5175,16 @@ function spWire(el) {
     if (leg) { e.preventDefault(); e.stopPropagation(); if (!leg.disabled) spLegClick(leg); return; }
     const add = t.closest('[data-sp-add]');
     if (add) { e.preventDefault(); const lv = spTier(add.dataset.spAdd); spAddClick(add, lv, lv ? `the ${lv.label} ${lv.legs.length}-leg parlay for ${lv.game}` : ''); return; }
-    const ea = t.closest('[data-pb-elo-add]');
-    if (ea) { e.preventDefault(); const lv = epTier(ea.dataset.pbEloAdd); spAddClick(ea, lv, lv ? `the ${lv.label} Elo pick` : ''); return; }
     const fin = t.closest('[data-pc-finish]');
     if (fin && !window.PARLAY_CARD) { e.preventDefault(); spFinish(fin); }
   });
 }
 /* the parlay card's own Finish (app/parts/card.html, where it is on the page) asks the tab for a level by its prefix (a
-   bare word: the card's data-pc-finish is "<prefix>|<id>"), the chance the level's own and whose (chanceBy): the model's
-   for a set, the ELO Model's for an Elo pick; the card prices the legs by the builder's own sums */
+   bare word: the card's data-pc-finish is "<prefix>|<id>"), the chance the level's own, the model's; the card prices the
+   legs by the builder's own sums */
 function spCardHook() {
   const C = window.PARLAY_CARD; if (!C || typeof C.from !== 'function' || spCardHook.on === C) return;
-  const ok = C.from('sp', id => { const t = spTier(id); return t ? { legs: t.legs, kicker: `${t.label} parlay · ${t.game}`, chance: t.corr, chanceBy: 'Model' } : null; })
-    && C.from('elo', id => { const t = epTier(id); return t ? { legs: t.legs, kicker: `${t.label} Elo pick`, chance: t.corr, chanceBy: 'Elo' } : null; });
+  const ok = C.from('sp', id => { const t = spTier(id); return t ? { legs: t.legs, kicker: `${t.label} parlay · ${t.game}`, chance: t.corr } : null; });
   if (ok) spCardHook.on = C;
 }
 /* the half-minute look, once the tab has been opened: the record read again where a set has reached its lock since it
@@ -5333,7 +5207,7 @@ render.suggest = function () {
 };
 /* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
 Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spState, spLockAt, spEtAt, spOutWhy, spWhyAtLock, spPool, spSet, spRebuild, spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier,
-  spLedgerOf, spRecSum, spRecLoad, spUpdLine, renderSp, spWatchTick, epChance, epCands, epBuild, epGet, epTier, FEATURED_TV, SP_LOCK_MS, SP_SEARCH, SP_KEEP_KEY, ELO_PICK_BLEND, EP });
+  spLedgerOf, spRecSum, spRecLoad, spUpdLine, renderSp, spWatchTick, FEATURED_TV, SP_LOCK_MS, SP_SEARCH, SP_KEEP_KEY });
 </script>
 
 <style>

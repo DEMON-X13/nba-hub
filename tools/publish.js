@@ -17,8 +17,8 @@
  *             the slate (pending: past games not yet read final)
  *   props, boxes, corr  the props model's block, the recent box lines a player's leg is graded from and the
  *             same-game table (README "Player props" and "Same-game parlays")
- *   report, eloPicks  the injury report's statuses and the ELO Model's calls on the games to come with the Elo picks'
- *             pricing and measured record, which Suggested Parlays stands on (README "Suggested Parlays")
+ *   report    the injury report's statuses, which Suggested Parlays and the Parlay Builder hold players out on (README
+ *             "Suggested Parlays")
  * Nothing a visitor does reaches this file; only the job writes it.
  *
  * And pickem.json, which the Pick'em Record tab reads when it first opens: every game of the season in play to today, with
@@ -170,8 +170,8 @@ function main() {
     season: x.season, games: x.priced, logloss: x.logloss, straightUp: x.straightUp, against: x.modelPicks.againstMarket,
     tiers: Object.fromEntries(['safe', 'med', 'aggr', 'value'].filter(k => x.parlays[k]).map(k => [k, tierOf(x.parlays[k])])), twoFav: tierOf(x.baseline && x.baseline.twoFavourites) })) } : null;
   const props = propsState(slate, nowIso);
-  const boxes = boxesState(games, today), corr = corrState(), report = reportState(inj), eloPicks = eloPickState(slate);
-  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, report, eloPicks, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today,
+  const boxes = boxesState(games, today), corr = corrState(), report = reportState(inj);
+  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, report, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today,
     slate, record, recordRule: RULE, teams, players: plist, coaches,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };
@@ -378,28 +378,5 @@ function reportState(inj) {
   for (const [team, list] of Object.entries((inj && inj.teams) || {})) for (const x of list || []) if (x && x.id) players[x.id] = [team, x.status || '', x.detail || '', x.returns || ''];
   return { date: (inj && inj.date) || null, players };
 }
-/* The ELO Model's calls on the slate's games still to come (models/elo.json's upcoming: {pHome, spread}, the spread a
-   home line), the Elo picks' pricing (its params: the model's own spread sigma and params.pick, the blend toward the
-   market research/elo.json measured, with research/elo.json's pick.spread.sigmaModel beside it as pick.sigmaModel: the
-   miss of the model's own margin on 2024-2025, the sigma its picks' record below was scored at and the one the page
-   prices the Elo picks' spreads at while ELO_PICK_BLEND is off; params.pick.sigma is the blended margin's, at weight 0
-   the closing line's own), whether it ran, and what such picks have been worth on the walk-forward folds
-   (research/elo.json's pick: the 3-point-edge picks of the model alone on the closing line), which the Elo picks'
-   lead says so nobody reads the Elo chance as a promise. null without the model's file */
-function eloPickState(slate) {
-  const f = path.join(L.ROOT, 'models', 'elo.json'); if (!fs.existsSync(f)) return null;
-  let m; try { m = JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { return { status: { ok: false, why: 'models/elo.json does not read' }, games: {} }; }
-  const up = m.upcoming || {}, games = {};
-  for (const g of slate) if (g.status !== 'final' && up[g.id] && Number.isFinite(up[g.id].pHome)) games[g.id] = { pHome: up[g.id].pHome, spread: Number.isFinite(up[g.id].spread) ? up[g.id].spread : null };
-  const P = m.params || {}, pk = P.pick || null;
-  let record = null, sigmaModel = null;
-  try { const r = JSON.parse(fs.readFileSync(path.join(L.ROOT, 'research', 'elo.json'), 'utf8')).pick;
-    if (r && r.spread && Number.isFinite(r.spread.sigmaModel) && r.spread.sigmaModel > 0) sigmaModel = r.spread.sigmaModel;
-    if (r && r.ml && r.spread) record = { chosenOn: r.chosenOn || null, folds: Object.fromEntries(Object.keys(r.ml.folds || {}).sort().map(s => {
-      const a = r.ml.folds[s].model, b = r.spread.folds[s] && r.spread.folds[s].model;
-      return [s, { ml: { picks: a.picks, said: a.said, won: a.won, units: a.units }, spread: b ? { picks: b.picks, said: b.said, won: b.won } : null }]; })) }; } catch (e) { record = null; }
-  return { version: m.version || null, generated: m.generated || null, status: m.status || { ok: true }, sigma: Number.isFinite(P.sigma) ? P.sigma : null,
-    pick: pk ? { wSpread: pk.wSpread, wMl: pk.wMl, sigma: pk.sigma, sigmaModel, chosenOn: pk.chosenOn || null } : null, record, games };
-}
-module.exports = { propsState, boxesState, corrState, pickemState, offFinals, reportState, eloPickState, PK_MODELS };
+module.exports = { propsState, boxesState, corrState, pickemState, offFinals, reportState, PK_MODELS };
 if (require.main === module) main();

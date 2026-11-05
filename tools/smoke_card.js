@@ -464,7 +464,9 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
         `a level card's Finish (pb|${t.id}) opens the card on that level at its own price`);
       W4.PARLAY_CARD.close(); }
     else check(false, 'the made-up games make a level to finish');
-    /* with no resolver registered, the NFL hub's names: Suggested Parlays' window.spTier and the Elo picks' window.eloPicks */
+    /* with no resolver registered, the NFL hub's name for Suggested Parlays' levels, window.spTier; and none for its other,
+       the Elo picks' window.eloPicks, which the NBA hub took off on 5 November 2026: an "elo|<level>" Finish opens nothing
+       though a page defines window.eloPicks */
     W4.eval(`window.spTier = id => id === 'g1:safe' ? { label: 'Safe', game: 'BOS at DET', legs: [${JSON.stringify(L_ML)}, ${JSON.stringify(L_PL)}] } : null;
       window.eloPicks = () => ({ tiers: [{ id: 'elo-med', label: 'Medium', p: 0.3125, legs: [${JSON.stringify(L_SP)}, ${JSON.stringify(L_TO)}] }] });`);
     const h3 = D4.createElement('div'); h3.innerHTML = '<button type="button" id="spT" data-pc-finish="sp|g1:safe">Finish</button><button type="button" id="eloT" data-pc-finish="elo|elo-med">Finish</button>'; D4.getElementById('pbPanel').appendChild(h3);
@@ -473,9 +475,8 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
       "with no resolver registered, a Suggested Parlays level's Finish (sp|<game>:<level>) is read through window.spTier, as on the NFL hub");
     W4.PARLAY_CARD.close();
     D4.getElementById('eloT').click(); await sleep(20);
-    const e4 = [...D4.querySelectorAll('#pcView .pc-chance > div')].map(txt);
-    check(!D4.getElementById('pcBack').hidden && txt(D4.querySelector('#pcView .pc-kick')) === 'Medium Elo pick' && e4.some(t => t.startsWith('Elo says 31.3%')),
-      `and an Elo pick's (elo|<level>) through window.eloPicks, its chance the Elo's (${e4.join(' / ')})`);
+    check(D4.getElementById('pcBack').hidden && W4.PARLAY_CARD.fromTier('elo', 'elo-med') === null && !/\bElo\b/.test(W4.eval('PARLAY_CARD.chanceLines.toString()')),
+      "and no Elo pick's: an elo|<level> Finish opens nothing though window.eloPicks is there, and the card's chance lines have no Elo wording left");
     W4.PARLAY_CARD.close();
     /* a page drawn before a game tipped off is redrawn, not finished */
     W4.eval('window.__stale = window.pbStale; window.pbStale = () => true;'); b4.click(); await sleep(20);

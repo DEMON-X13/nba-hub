@@ -112,7 +112,7 @@ small.faroff{display:block;font-size:11px;font-weight:600;margin-top:2px;white-s
 .pb-acts{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}
 .pb-acts .btn{min-height:44px;padding:10px 16px;text-align:center}
 .pb-move td.up{color:var(--lime)} .pb-move td.down{color:var(--pb-trial)}
-/* a level's card (pbTierCard: Suggested Parlays and the Elo picks draw on it) */
+/* a level's card (pbTierCard: Suggested Parlays draws on it) */
 .pb-tiers{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
 .pb-tier{background:var(--bg-2);border:1px solid var(--line);border-top:3px solid var(--line-2);border-radius:14px;padding:12px 13px;display:flex;flex-direction:column;gap:10px;min-width:0}
 .pb-tier.safe{border-top-color:var(--lime)} .pb-tier.med{border-top-color:var(--gold)} .pb-tier.aggr{border-top-color:var(--hot)} .pb-tier.xtrm{border-top-color:#B49CFF}
@@ -627,10 +627,10 @@ function pbRuleOf(t) { const n = t.legs.length, pct = Math.round((t.floor || 0) 
 /* a level's chance: DraftKings' fair chance first, the model's beside it; where a leg is a player's, the props model's,
    said "model (on trial) 38%" (Suggested Parlays, the owner's call of 25 October 2026) */
 function pbChanceHtml(F, chance, o) {
-  const by = (o && o.by) || 'model', isTrial = !!(o && o.trial), trial = isTrial ? ' (on trial)' : '';
+  const isTrial = !!(o && o.trial), trial = isTrial ? ' (on trial)' : '';
   if (chance == null) return `<div class="pb-chance"><b${F && F.p != null ? ` data-pb-fair="${F.p}"` : ''}>${F && F.p != null ? pbPct(F.p) : '–'}</b><span>${F && F.p != null ? `fair chance${F.est ? ', est.' : ''}` : 'no chance'}</span><small class="pb-model">no model chance: a player in it is not projected</small></div>`;
-  if (F && F.p != null) return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: a leg is priced on one side only, or the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}">${isTrial ? `${esc(by)} (on trial) ${pbPct(chance)}` : `${esc(by)} says ${pbPct(chance)}`}</small></div>`;
-  return `<div class="pb-chance"><b data-pb-model="${chance}">${pbPct(chance)}</b><span>${(o && o.chanceBy) || 'model’s chance'}${trial}</span><small class="pb-model">no fair chance: a leg has one price only</small></div>`;
+  if (F && F.p != null) return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: a leg is priced on one side only, or the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}">${isTrial ? `model (on trial) ${pbPct(chance)}` : `model says ${pbPct(chance)}`}</small></div>`;
+  return `<div class="pb-chance"><b data-pb-model="${chance}">${pbPct(chance)}</b><span>model’s chance${trial}</span><small class="pb-model">no fair chance: a leg has one price only</small></div>`;
 }
 /* one leg's own Add: that leg alone into the builder (or out of it), Added while it is in */
 function pbLegAddBtn(l) {
@@ -653,17 +653,17 @@ function glanceName(l, shown) {
   return `<button type="button" class="glance-name" data-glance="${kind}:${esc(id)}" data-glance-game="${esc(l.gid || l.id)}" data-glance-leg="${esc(sig)}" aria-haspopup="dialog" aria-label="${nm}: ${what}">${nm}</button>`;
 }
 window.glanceLeg = sig => GLANCE_LEGS.get(String(sig)) || null;
-/* one level's card, or why it has none (Suggested Parlays and the Elo picks draw theirs with it): o.what the game, for
-   the buttons' names; o.legAdd false: no Add on each leg; o.quiet: no line saying why a leg is not a Value pick or why a
-   total is there; o.add the Add to builder's own attribute; o.kind and o.fid what its Finish names */
+/* one level's card, or why it has none (Suggested Parlays draws its levels with it): o.what the game, for the buttons'
+   names; o.legAdd false: no Add on each leg; o.quiet: no line saying why a leg is not a Value pick or why a total is
+   there; o.mktWhy why a total is there; o.add the Add to builder's own attribute; o.kind and o.fid what its Finish names */
 function pbTierCard(t, o) {
-  o = o || {}; const card = !!window.PARLAY_CARD, chance = o.chance !== undefined ? o.chance : t.corr, legAdd = o.legAdd !== false;
+  o = o || {}; const card = !!window.PARLAY_CARD, chance = t.corr, legAdd = o.legAdd !== false;
   if (t.why) return `<div class="pb-tier ${t.id} none"><div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.n} legs</span></div><p class="pb-why">${esc(t.why)}</p></div>`;
   const nm = o.what ? ` the ${esc(t.label)} parlay for ${esc(o.what)}` : '', inB = pbInBuilder(t.legs), trial = t.legs.some(l => l.kind === 'prop'), sg = new Set(t.legs.map(l => l.gid)).size < t.legs.length;
   return `<div class="pb-tier ${t.id}" data-pb-tier="${t.id}">
-    <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${o.rule || (t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : '')}</div>
+    <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : ''}</div>
     <div class="pb-nums">${pbChanceHtml(t.fair, chance, { ...o, trial })}<div><b>${fmtAm(decToAm(t.dec))}</b><span>price${sg ? ', est.' : ''}</span></div><div class="pb-pay" data-pb-pay="${t.dec}">${pbPayHtml(t.dec)}</div></div>
-    <ul class="pb-legs">${t.legs.map(l => { const ff = legFarOff(l); return `<li><span class="nm">${o.badge ? o.badge(l) : ''}${glanceName(l)}<small>${esc(l.label)}${pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em>${pbPct(o.legP ? o.legP(l) : l.p)}${pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
+    <ul class="pb-legs">${t.legs.map(l => { const ff = legFarOff(l); return `<li><span class="nm">${glanceName(l)}<small>${esc(l.label)}${pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em>${pbPct(l.p)}${pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
     ${t.thin && !o.quiet ? `<p class="pb-thin">${pbThinLine(t.legs)}</p>` : ''}${t.mkt && !o.quiet ? `<p class="pb-thin">${pbMktLine(t.legs, o.mktWhy)}</p>` : ''}
     <div class="pb-acts"><button type="button" class="btn ${card ? 'ghost' : 'hot'}" ${o.add || `data-pb-add="${t.id}"`}${nm ? ` aria-label="${inB ? 'In the builder:' : 'Add'}${nm}${inB ? '' : ' to the builder'}"` : ''}>${inB ? 'In the builder' : 'Add to builder'}</button>${card ? `<button type="button" class="btn hot" data-pc-finish="${o.kind || 'pb'}|${o.fid || t.id}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button>` : ''}</div></div>`;
 }

@@ -143,14 +143,14 @@ const legOf = sig => sig && typeof window.glanceLeg === 'function' ? window.glan
 let cur = null, box = null;
 /* where a name is drawn, worked out from the page when the bubble opens, so a redraw finds the same copy of it: the
    builder (#parlayBody), the Top 50 lines (#pbPanel), or a level card (.pb-tier[data-pb-tier]) in its section, a set's
-   under its game ([data-sp-game]) and an Elo pick's under #pbElo; anywhere else the nearest element with an id. Within
-   one place a leg is drawn once: the builder holds one leg a stat, the list each bet once, a card one leg a player. A
-   leg is known there by its key, side and line (its signature less the price, its source and the model's chance, which
-   a Refresh odds press can move while the leg stays) */
+   under its game ([data-sp-game]); anywhere else the nearest element with an id. Within one place a leg is drawn once:
+   the builder holds one leg a stat, the list each bet once, a card one leg a player. A leg is known there by its key,
+   side and line (its signature less the price, its source and the model's chance, which a Refresh odds press can move
+   while the leg stays) */
 const qv = v => '"' + String(v).replace(/["\\]/g, '\\$&') + '"';
 const legId = sig => { const p = String(sig || '').split('|'); return p.length > 3 ? p.slice(0, -3).join('|') : p.join('|'); };
 function placeOf(btn) {
-  const sec = btn.closest('#parlayBody,#pbPanel,#pbElo,[data-sp-game]') || btn.closest('[id]'); if (!sec) return null;
+  const sec = btn.closest('#parlayBody,#pbPanel,[data-sp-game]') || btn.closest('[id]'); if (!sec) return null;
   const s = sec.id ? `[id=${qv(sec.id)}]` : `[data-sp-game=${qv(sec.dataset.spGame)}]`, card = btn.closest('.pb-tier[data-pb-tier]');
   return card && sec.contains(card) ? `${s} .pb-tier[data-pb-tier=${qv(card.dataset.pbTier)}]` : s;
 }
@@ -173,12 +173,9 @@ function legHtml(K) {
   if (!K || !K.leg) return '';
   const l = K.leg, out = [];
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
-  /* an Elo pick's leg carries the ELO Model's chance as its p (its level's sums stand on it) and the player model's as
-     pm: Model is always the player model's, the chance the builder prices the same leg on, and the ELO Model's has a line
-     of its own */
-  const elo = l.pe != null && isFinite(l.pe), pm = elo ? l.pm : l.p;
+  /* Model: the player model's chance, the one the builder prices the leg on */
+  const pm = l.p;
   out.push(`<div><dt>Model</dt><dd>${pm != null && isFinite(pm) ? N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark() : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`);
-  if (elo) out.push(`<div><dt>ELO Model</dt><dd>${N('elochance', pc0(l.pe))}</dd></div>`);
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
   out.push(`<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`);
   return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;

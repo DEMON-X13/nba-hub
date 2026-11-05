@@ -150,7 +150,7 @@ function stateOf(slate, o = {}) {
      record, or its finals for gZ, played and its final not read) must never settle them in the real one's place */
   delete st.finals[gZid]; st.record = (REAL.record || []).filter(g => g.id !== gZid && g.id !== gWid);
   st.report = { date: st.today, players: o.report || {} };
-  st.eloPicks = null;
+  delete st.eloPicks;
   return st;
 }
 /* the box lines ([pts, reb, ast, tpm, stl, blk]) of D0's finals; gY4's not read yet */

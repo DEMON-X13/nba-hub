@@ -91,9 +91,9 @@
    window.PARLAY_CARD: the window over the page, its card (the window's and the image's, drawn from one model), Open in
    DraftKings, Share link, Download image and Start over. It reads the page's globals (S, M, the Parlay Builder's pricing
    and lines) only when it is used, so it may sit anywhere in the page. A tab that draws a suggested level's Finish
-   (data-pc-finish="<prefix>|<id>": Suggested Parlays' "sp|<game id>:<level>", the Elo picks' "elo|<level>") registers a
-   resolver for its prefix, PARLAY_CARD.from(prefix, id => ({ legs, kicker, chance, chanceBy })), and one listener here
-   opens the card for whichever is pressed; the card prices the legs by the builder's own sums */
+   (data-pc-finish="<prefix>|<id>": Suggested Parlays' "sp|<game id>:<level>") registers a resolver for its prefix,
+   PARLAY_CARD.from(prefix, id => ({ legs, kicker, chance })), and one listener here opens the card for whichever is
+   pressed; the card prices the legs by the builder's own sums */
 window.PARLAY_CARD = (function () {
   'use strict';
   const SITE = 'demon-x13.github.io/nba-hub';
@@ -189,12 +189,12 @@ window.PARLAY_CARD = (function () {
   }
 
   /* the card: everything it shows, worked out once, drawn twice (the window, and the image) */
-  function card({ kicker, legs, dec, priceNote, chance, chanceBy, trial, fair, stake, source, sg }) {
+  function card({ kicker, legs, dec, priceNote, chance, trial, fair, stake, source, sg }) {
     const n = legs.length, first = legs.map(l => l.date).filter(Boolean).sort()[0] || '';
     const am = typeof decToAm === 'function' && dec > 1 ? decToAm(dec) : null;
     return { source, kicker, title: n + '-leg parlay', dateText: dates(legs), price: ml(am), dec: isFinite(dec) ? dec.toFixed(2) : '–', implied: dec > 1 ? pct(1 / dec) : '–', priceNote,
       legs: legs.map(x => x.card), stake: stake > 0 ? stake : 0, payout: stake > 0 ? stake * dec : 0, profit: stake > 0 ? stake * dec - stake : 0,
-      chance: chance != null && isFinite(chance) ? pct(chance) : null, chanceBy: chanceBy || 'Model', trial: !!trial,
+      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial,
       fair: fair && fair.p != null && isFinite(fair.p) ? pct(fair.p) : null, fairEst: !!(fair && fair.p != null && fair.est), sg: !!sg,
       oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'),
       made: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), site: SITE,
@@ -206,11 +206,11 @@ window.PARLAY_CARD = (function () {
     const legs = q.legs.map(l => Object.assign({}, l, { card: leg(l, l.odds) }));
     return card({ source: 'builder', kicker: 'Your parlay', legs, dec: q.useDec,
       priceNote: q.override != null ? 'your book’s price' : q.sg ? 'estimated same-game price' : 'book price',
-      chance: q.pr.corr, chanceBy: 'Model', trial: q.trial, fair: q.fair, stake: q.stake, sg: q.sg && q.override == null });
+      chance: q.pr.corr, trial: q.trial, fair: q.fair, stake: q.stake, sg: q.sg && q.override == null });
   }
   /* a suggested level's legs, from the resolver its tab registered: each leg as the builder draws it (pbView), in the
      builder's order, priced by the builder's own sums on the prices they carry; the chance the level's own where it
-     says so (an Elo pick's is the Elo's), else the model's */
+     says so (the model's on its legs as built or kept), else the model's on the legs as they stand */
   const FROM = {};
   function from(prefix, fn) { if (typeof prefix !== 'string' || !/^[\w-]+$/.test(prefix) || typeof fn !== 'function') return false; FROM[prefix] = fn; return true; }
   function fromTier(kind, id) {
@@ -223,29 +223,27 @@ window.PARLAY_CARD = (function () {
     const dec = parlayDec(L.map(l => ({ leg: l, ml: l.price }))), sg = new Set(L.map(l => l.id)).size < L.length;
     const chance = t.chance !== undefined ? t.chance : parlayProb(L).corr;
     return card({ source: kind, kicker: String(t.kicker || 'Suggested parlay'), legs: L, dec, priceNote: sg ? 'estimated same-game price' : 'book price',
-      chance, chanceBy: t.chanceBy === 'Elo' ? 'Elo' : 'Model', trial: L.some(l => l.kind === 'prop'), fair: parlayFair(L), stake: typeof pbStake === 'function' ? pbStake() : 20, sg });
+      chance, trial: L.some(l => l.kind === 'prop'), fair: parlayFair(L), stake: typeof pbStake === 'function' ? pbStake() : 20, sg });
   }
   /* the Parlay Builder's own four levels over the games ticked (getPbTiers), which a level's card drawn with no prefix
      of its own finishes (pbTierCard's default "pb|<level>") */
   from('pb', id => { const t = typeof getPbTiers === 'function' ? getPbTiers().tiers.find(x => x.id === id && x.legs) : null; return t ? { legs: t.legs, kicker: t.label + ' parlay' } : null; });
-  /* and, until a tab registers its own, the NFL hub's names for the two that draw levels: Suggested Parlays' window.spTier
-     ("<game id>:<level>", the level as the tab shows it, live or locked) and the Elo picks' window.eloPicks() (its levels,
-     their chance the Elo's) */
+  /* and, until the tab registers its own, the NFL hub's name for Suggested Parlays' levels: window.spTier ("<game
+     id>:<level>", the level as the tab shows it, live or locked). The NFL hub's other, the Elo picks' "elo|<level>", is
+     not here: the NBA hub took its Elo picks off on 5 November 2026 */
   from('sp', id => { const t = typeof window.spTier === 'function' ? window.spTier(id) : null;
     return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}`, chance: t.corr } : null; });
-  from('elo', id => { const E = typeof window.eloPicks === 'function' ? window.eloPicks() : null, t = E && Array.isArray(E.tiers) ? E.tiers.find(x => x.id === id) : null;
-    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: `${t.label} Elo pick`, chance: t.p, chanceBy: 'Elo' } : null; });
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
-     then whose chance the parlay is on (the model's, on trial with a player leg in it; an Elo pick's the Elo's) and the
-     price's; with no fair chance, the model's and the price's, then why there is none. Each line is a list of [text,
-     bold] pieces, so the window, the image and the share text say the same */
+     then the model's (on trial with a player leg in it) and the price's; with no fair chance, the model's and the
+     price's, then why there is none. Each line is a list of [text, bold] pieces, so the window, the image and the share
+     text say the same */
   function chanceLines(m) {
-    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && m.chanceBy !== 'Elo' ? ' (on trial)' : '';
-    const by = (m.chanceBy === 'Elo' ? 'Elo' : 'model') + tr, price = [[' · the price says '], [m.implied, 1]];
+    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial ? ' (on trial)' : '';
+    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]];
     if (m.fair) return [[['Fair chance ' + all], [m.fair, 1], ...(m.fairEst ? [[' (est.)']] : [])],
       [...(m.chance ? [[by + ' says '], [m.chance, 1]] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
-    return [[...(m.chance ? [[(m.chanceBy === 'Elo' ? 'Elo' : 'Model') + '’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
+    return [[...(m.chance ? [['Model’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
       [['No fair chance: a leg has only one of DraftKings’ two prices']]];
   }
   const lineText = l => l.map(x => x[0]).join('');
@@ -449,7 +447,7 @@ window.PARLAY_CARD = (function () {
         ty += TILE_H + TILE_GAP; });
       y += tilesH(t);
     }
-    /* the chance: DraftKings' fair chance first, then the model's (or the Elo's) and the price's */
+    /* the chance: DraftKings' fair chance first, then the model's and the price's */
     chanceLines(m).forEach((ln, i) => { let cx = L; const yy = y + 24 + i * 18;
       for (const [t1, b] of ln) cx += text(x, t1, cx, yy, (b ? '700 ' : '500 ') + '13px ' + FB, b ? C.ink : C.ink2); });
     y += CHANCE_H;
@@ -554,8 +552,8 @@ window.PARLAY_CARD = (function () {
   }
   /* the builder's Finish parlay (app/parts/parlay.html draws it and calls this) */
   function openBuilder(from) { const m = fromBuilder(); if (m) open(m, from); return !!m; }
-  /* a suggested level's Finish ("sp|<game id>:<level>", "elo|<level>"): one listener opens the card for whichever is
-     pressed; a page drawn before a game tipped off is redrawn rather than opening a parlay nobody saw */
+  /* a suggested level's Finish ("sp|<game id>:<level>"): one listener opens the card for whichever is pressed; a page
+     drawn before a game tipped off is redrawn rather than opening a parlay nobody saw */
   function finishFrom(btn) {
     if (typeof window.pbStale === 'function' && window.pbStale()) { if (typeof window.renderParlay === 'function') window.renderParlay(); return false; }
     const v = String(btn.getAttribute('data-pc-finish') || ''), i = v.indexOf('|');

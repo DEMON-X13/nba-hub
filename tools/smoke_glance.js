@@ -16,9 +16,10 @@
  * the Teams tab itself too, the props model's projection, the leg's model and fair chance, both records from the Pick'em
  * Record's games, the line the leg stands on, Vegas with the margin out and every model's call, the moneyline-only tick);
  * then the window's keys and focus, where it is placed (below, above, a sheet), the redraws it follows (the builder drawn
- * again, a price moved, the leg taken out, the Top 50 redrawn, a level card), the reader's scroll, a file that has not
- * loaded, a press newer than lines.json, Open game on Tonight, the observer connected only while open, and nothing
- * written or fetched but the Pick'em Record's own file, once.
+ * again, a price moved, the leg taken out, the Top 50 redrawn, a level card), no Elo pick's line left on a leg (the Elo
+ * picks went on 5 November 2026), the reader's scroll, a file that has not loaded, a press newer than lines.json, Open
+ * game on Tonight, the observer connected only while open, and nothing written or fetched but the Pick'em Record's own
+ * file, once.
  */
 'use strict';
 const fs = require('fs');
@@ -348,7 +349,15 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
   if (tier) { const host = d.createElement('div'); host.innerHTML = w.pbTierCard(tier); d.getElementById('pbPanel').appendChild(host);
     const cb = host.querySelector('.pb-tier [data-glance]'); cb.click(); await sleep(20);
     check(open() && cb.getAttribute('aria-haspopup') === 'dialog' && w.hubGlanceState().place === `[id="pbPanel"] .pb-tier[data-pb-tier="${tier.id}"]`, `a level card's names are the bubble's buttons, each bubble kept to its card (${w.hubGlanceState().place})`);
-    key('Escape'); host.remove(); }
+    key('Escape'); host.remove();
+    /* no Elo pick's line is left (the Elo picks went on 5 November 2026): a leg carrying an ELO Model chance beside the
+       model's, as an Elo pick's did (pe, pm), shows the model's chance as Model and no ELO Model line */
+    const L0 = tier.legs[0], el = { ...tier, legs: [{ ...L0, pe: 0.91, pm: 0.12 }, ...tier.legs.slice(1)] }, host2 = d.createElement('div');
+    host2.innerHTML = w.pbTierCard(el); d.getElementById('pbPanel').appendChild(host2);
+    const eb = [...host2.querySelectorAll('.pb-tier [data-glance]')].find(b => w.glanceLeg(b.dataset.glanceLeg).leg.pe === 0.91); if (eb) { eb.click(); await sleep(20); }
+    check(!!eb && open() && !box().querySelector('[data-glance-n="elochance"]') && ![...box().querySelectorAll('dt')].some(x => /ELO Model/.test(txt(x))) && nOf('model') === pc0(L0.p),
+      `no Elo pick's line in a leg's bubble: Model is the leg's own chance (${eb && open() ? nOf('model') : 'not opened'}) and there is no ELO Model line`);
+    key('Escape'); host2.remove(); }
   else check(false, 'the made-up games make a level to draw');
 
   check(stored(w) === before, 'nothing any of these bubbles did wrote to any store');

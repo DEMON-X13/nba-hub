@@ -4205,7 +4205,7 @@ function pbCap(list, cap) {
 }
 function pbPool(games, u, opt) { const r = pbLegs(games, u), cap = pbOpt(opt).cap; return { ...r, pref: pbCap(r.pref, cap), thin: pbCap(r.thin, cap), mkt: pbCap(r.mkt, cap) }; }
 
-/* ---------- the levels: Safe, Medium, Aggressive, Extreme (Suggested Parlays draws them, one set a game) ----------
+/* ---------- the levels: Safe, Medium, Aggressive, Extreme (Suggested Parlays draws the first three, one set a game) ----------
    The NFL hub's engine as it is: Safe the likeliest pair; Medium, Aggressive and Extreme the 3-, 4- and 5-leg parlay with
    the best expected return that lands 25%, 12% and 5% of the time by the model's chance, else the likeliest of that size;
    Value picks first, the fewest thin legs to fill, the totals only where the legs with an edge cannot make the size. One
@@ -4741,13 +4741,16 @@ Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind
 .sp-odds{margin:0 0 4px}
 .sp-upd{color:var(--ink)}
 #spPanel .pb-said{margin:6px 0 0}
+/* a set is three levels (SP_TIERS): three across, and one a row where three would crowd (no card left alone on a row) */
+#spPanel .pb-tiers{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:900px){#spPanel .pb-tiers{grid-template-columns:minmax(0,1fr)}}
 </style>
 <script>
 'use strict';
 /* ---------- Suggested Parlays (README "Suggested Parlays") ----------
    The NFL hub's Suggested Parlays tab (props/build/part3.js there, app v114: #suggest, its sets, the lock and the record)
    on this hub's games, adapted only where basketball or the NBA's data forces it, each adaptation said where it is made,
-   less the part the owner took off on 5 November 2026 (the Elo picks, below):
+   less the two parts the owner took off on 5 November 2026 (the Elo picks and each set's Extreme level, below):
    - which games: a featured game is a game on national TV (the slate's tv, the networks ESPN's scoreboard lists in the
      national market: fetch.js national, README "The national networks"), never a preseason game, where the NFL's is a
      Thursday, Sunday or Monday night kickoff: the NBA has national games most nights at every hour, so a clock rule says
@@ -4755,8 +4758,8 @@ Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind
    - one night at a time: the first Eastern date with a featured game to come, all its featured games (no cap), up from
      6:00 AM Eastern the morning after the latest featured date before it (any game of the slate, played or not), as the
      NFL's night rule with the Eastern date for its weekday;
-   - each set is the Parlay Builder's four levels (app/parts/parlay.html's engine as it is: pbLegs, pbTier, the searches)
-     on that one game's legs and every bet type, searched as hard as one game allows (SP_SEARCH, the NFL's widths); a
+   - each set is the Parlay Builder's levels but Extreme, Safe, Medium and Aggressive (SP_TIERS; app/parts/parlay.html's
+     engine as it is: pbLegs, pbTier, the searches) on that one game's legs and every bet type, searched as hard as one game allows (SP_SEARCH, the NFL's widths); a
      player's chance is the props model's, on trial, and every player leg says so; the Value rule is the 3-point edge
      alone (the NBA has no market + form); and a set takes no player the injury report lists at all (spOutWhy: Out,
      Doubtful, Questionable and Day-To-Day, ESPN's in-between status), as the NFL's takes no questionable player;
@@ -4765,13 +4768,19 @@ Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind
    - the lock is 2 hours before tip-off (the NFL's, from its kickoff), the record's set shown from the lock to tip-off and
      this browser's own where the record has none (nba_sp_lock_v1), a level holding a player ruled out since built again;
    - the record is the job's (tools/suggest_ledger.js, data/suggest_ledger.json, its `featured` map), read no-store when
-     the tab first opens and again at a lock;
+     the tab first opens and again at a lock; its entries taken before 5 November 2026 hold a fourth level, Extreme, which
+     the pills leave out;
    - no Elo picks: the NFL's stand on a player's Elo matchup, and the NBA's, the ELO Model's moneylines and spreads where
      its own chance beat DraftKings' price, went on 5 November 2026 (the owner's call, "remove the Elo picks section": on
      the walk-forward its picks lost against the market, its honest blend toward the market was the market alone, and its
      team legs are the ones the sets and the Top 50 lines already offer).
    Nothing is read before the tab opens; nothing is stored but nba_sp_lock_v1, a locked set the page built itself. */
 const SP_LOCK_H = 2, SP_LOCK_MS = SP_LOCK_H * 3600e3, SP_OPEN_H = 6;
+/* a set's levels: the Parlay Builder's (PB_TIERS) less Extreme, the 5-leg level, which the owner took off on 5 November
+   2026 ("get rid of the extreme section as well": 0-12 on the record by then). Everything the tab builds, shows, locks,
+   rebuilds, keeps in this browser and tallies is these three; a record entry or a browser's own lock from before holds a
+   fourth, which is read past (tools/suggest_check.js holds the record to the same three) */
+const SP_TIERS = PB_TIERS.filter(t => t[0] !== 'xtrm');
 /* every bet type, no game unticked: a set never follows the Parlay Builder's boxes, so the page and the record agree */
 const SP_ALL = { k: Object.fromEntries(PB_KINDS.map(([k]) => [k, true])), off: [], gx: null };
 /* one game's lists are short, so a set is searched far harder than the all-games levels: each list to 60 legs, a beam of
@@ -4798,7 +4807,7 @@ function spGames() {
     .sort((a, b) => (Date.parse(a[0].tip) || 0) - (Date.parse(b[0].tip) || 0) || a[1] - b[1]).map(x => x[0]);
 }
 /* the featured games the record takes: those on the lines feed's two dates (pbDates), the dates the job reads
-   DraftKings' lines for; a game further out has no line read yet, so its set would be four empty levels (README) */
+   DraftKings' lines for; a game further out has no line read yet, so its set would be three empty levels (README) */
 function spTakes() { const ds = pbDates(); return spGames().filter(g => ds.includes(g.date)); }
 function spLockAt(g) { const t = g && g.tip ? Date.parse(g.tip) : NaN; return Number.isFinite(t) ? t - SP_LOCK_MS : null; }
 /* a time in US Eastern, as the slate's dates are ("Tue 5:30 PM ET") */
@@ -4871,9 +4880,9 @@ function spWhy(n, pool, g) {
 const SP_NO_TABLE = 'The same-game table is not in the published file, so a parlay of one game’s legs cannot be priced.';
 function spBuild(g) {
   const head = t => ({ id: t[0], label: t[1], n: t[2], floor: t[3] });
-  if (!S.corr || !S.corr.rho || !S.corr.hold) return { gid: g.id, tiers: PB_TIERS.map(t => ({ ...head(t), why: SP_NO_TABLE })), pref: 0, thin: 0, mkt: 0, far: 0, noId: 0, held: 0, plGames: 0 };
+  if (!S.corr || !S.corr.rho || !S.corr.hold) return { gid: g.id, tiers: SP_TIERS.map(t => ({ ...head(t), why: SP_NO_TABLE })), pref: 0, thin: 0, mkt: 0, far: 0, noId: 0, held: 0, plGames: 0 };
   const pool = spPool(g), memo = new Map();
-  const tiers = PB_TIERS.map(t => { const r = pbTier(t, pool, memo, SP_SEARCH);
+  const tiers = SP_TIERS.map(t => { const r = pbTier(t, pool, memo, SP_SEARCH);
     return r && spSlipOk(r.legs) ? { ...head(t), ...r } : { ...head(t), why: r ? 'No parlay of this size in this game that the builder’s same-game rules take.' : spWhy(t[2], pool, g) }; });
   return { gid: g.id, tiers, pref: pool.pref.length, thin: pool.thin.length, mkt: pool.mkt.length, far: pool.far, noId: pool.noId || 0, held: pool.held, plGames: pool.plGames };
 }
@@ -4888,7 +4897,7 @@ function spSet(gid) {
 }
 /* one level of a game built again now, from the lines at hand (a locked level holding a player ruled out since) */
 function spRebuild(gid, id) {
-  const g = (S.slate || []).find(x => x.id === gid), t = PB_TIERS.find(s => s[0] === id); if (!g || !t) return null;
+  const g = (S.slate || []).find(x => x.id === gid), t = SP_TIERS.find(s => s[0] === id); if (!g || !t) return null;
   const head = { id: t[0], label: t[1], n: t[2], floor: t[3] };
   if (!S.corr || !S.corr.rho || !S.corr.hold) return { ...head, why: SP_NO_TABLE };
   const pool = spPool(g), r = pbTier(t, pool, new Map(), SP_SEARCH);
@@ -4919,7 +4928,7 @@ function spLegIn(l, g) {
   return v;
 }
 function spTierIn(t, g) {
-  const spec = t && PB_TIERS.find(s => s[0] === t.id); if (!spec) return null;
+  const spec = t && SP_TIERS.find(s => s[0] === t.id); if (!spec) return null;
   const head = { id: spec[0], label: spec[1], n: spec[2], floor: spec[3] };
   const U = spIsMap(t.updated) ? { updated: { pid: String(t.updated.pid || ''), name: String(t.updated.name || ''), reason: String(t.updated.reason || ''), at: String(t.updated.at || ''), ...(t.updated.by === 'page' ? { by: 'page' } : {}) } } : {};
   if (!Array.isArray(t.legs)) return { ...head, why: typeof t.why === 'string' && t.why ? t.why : 'No parlay of this size in this game.', ...U };
@@ -4966,7 +4975,7 @@ function spLedgerOf(g) {
    new key), from the entries' own grades: won or lost (a push, every leg a push or a void, is counted apart), the wins
    expected by DraftKings' fair chance and by the model's (the chances the set showed), units on $1 */
 function spRecSum(L) {
-  const out = PB_TIERS.map(([id, label]) => ({ id, label, graded: 0, won: 0, lost: 0, push: 0, fair: 0, fairN: 0, model: 0, units: 0 }));
+  const out = SP_TIERS.map(([id, label]) => ({ id, label, graded: 0, won: 0, lost: 0, push: 0, fair: 0, fairN: 0, model: 0, units: 0 }));
   let pending = 0, games = 0; const E = L && spIsMap(L.featured) ? L.featured : {}, last = new Map();
   for (const k of Object.keys(E).sort()) { const e = E[k]; if (!spIsMap(e) || !Array.isArray(e.tiers)) continue; games++;
     for (const t of e.tiers) { const g = spIsMap(e.grade) ? e.grade[t && t.id] : null; if (!spIsMap(g) || !out.some(x => t && x.id === t.id) || !Array.isArray(t.legs)) continue;
@@ -5020,16 +5029,16 @@ function spShown(g) {
   if (!SP_REC_DONE || (SP_REC_BUSY && !spLedgerOf(g))) return { phase: 'loading', lock, tiers: null };
   const K = spKeep(); let k = K[g.id] && K[g.id].tip === g.tip ? K[g.id] : null, dirty = false;
   const e = spLedgerOf(g); let tiers = null, own = false, at = null;
-  if (e) { const T = PB_TIERS.map(([id]) => spTierIn(e.tiers.find(t => t && t.id === id), g));
+  if (e) { const T = SP_TIERS.map(([id]) => spTierIn(e.tiers.find(t => t && t.id === id), g));
     if (T.every(Boolean)) { tiers = T; at = e.taken_at || null; if (k && k.own) { k = { tip: g.tip, rep: {} }; K[g.id] = k; dirty = true; } } }
-  if (!tiers && k && k.own && Array.isArray(k.tiers)) { const T = PB_TIERS.map(([id]) => spTierIn(k.tiers.find(t => t && t.id === id), g));
+  if (!tiers && k && k.own && Array.isArray(k.tiers)) { const T = SP_TIERS.map(([id]) => spTierIn(k.tiers.find(t => t && t.id === id), g));
     if (T.every(Boolean)) { tiers = T; own = true; at = k.at || null; } }
   /* the page's own set waits for DraftKings' lines (lines.json, read when the tab opened) as it waits for the record; one
      built with no published lines at all (lines.json did not load) is shown and not kept, so a reload tries again */
   const linesIn = !!LINES || !!LINES_ERR;
   if (!tiers && !linesIn) return { phase: 'loading', lock, tiers: null, lines: true };
   if (!tiers) { const s = spSet(g.id), out = s.tiers.map(spTierOut);
-    tiers = PB_TIERS.map(([id], i) => spTierIn(out.find(t => t.id === id), g) || s.tiers[i]);
+    tiers = SP_TIERS.map(([id], i) => spTierIn(out.find(t => t.id === id), g) || s.tiers[i]);
     k = { tip: g.tip, own: true, at: new Date(now).toISOString().slice(0, 19) + 'Z', tiers: out, rep: {} }; K[g.id] = k; dirty = !!LINES; own = true; at = k.at; }
   const rep = k && spIsMap(k.rep) ? k.rep : {};
   tiers = tiers.map(t => {
@@ -5208,7 +5217,7 @@ render.suggest = function () {
 };
 /* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
 Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spState, spLockAt, spEtAt, spOutWhy, spWhyAtLock, spPool, spSet, spRebuild, spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier,
-  spLedgerOf, spRecSum, spRecLoad, spUpdLine, renderSp, spWatchTick, FEATURED_TV, SP_LOCK_MS, SP_SEARCH, SP_KEEP_KEY });
+  spLedgerOf, spRecSum, spRecLoad, spUpdLine, renderSp, spWatchTick, FEATURED_TV, SP_TIERS, SP_LOCK_MS, SP_SEARCH, SP_KEEP_KEY });
 </script>
 
 <style>

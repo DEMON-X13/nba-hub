@@ -457,7 +457,7 @@ function pbCap(list, cap) {
 }
 function pbPool(games, u, opt) { const r = pbLegs(games, u), cap = pbOpt(opt).cap; return { ...r, pref: pbCap(r.pref, cap), thin: pbCap(r.thin, cap), mkt: pbCap(r.mkt, cap) }; }
 
-/* ---------- the levels: Safe, Medium, Aggressive, Extreme (Suggested Parlays draws them, one set a game) ----------
+/* ---------- the levels: Safe, Medium, Aggressive, Extreme (Suggested Parlays draws the first three, one set a game) ----------
    The NFL hub's engine as it is: Safe the likeliest pair; Medium, Aggressive and Extreme the 3-, 4- and 5-leg parlay with
    the best expected return that lands 25%, 12% and 5% of the time by the model's chance, else the likeliest of that size;
    Value picks first, the fewest thin legs to fill, the totals only where the legs with an edge cannot make the size. One

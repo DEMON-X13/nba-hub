@@ -13,9 +13,10 @@
  *     preseason game: FEATURED_TV below, this file's own copy of the page's, judges a set still to lock; a set past its
  *     lock stands on the rule it was taken under, so it needs only a network and no preseason, and a network dropped
  *     since never jams the record); its lock is not exactly 2 hours before its
- *     tip-off; it was taken at or after its lock; its levels are not the four (Safe 2 legs, Medium 3, Aggressive 4,
- *     Extreme 5) in order; a level holds a leg of another game, a count of legs not its own, a player twice, two side bets
- *     or two totals;
+ *     tip-off; it was taken at or after its lock; its levels are not the three (Safe 2 legs, Medium 3, Aggressive 4) in
+ *     order, or the four with Extreme (5 legs) after them of a set taken before the change that took Extreme off (THREE_FROM
+ *     below); a level holds a leg of another game, a count of legs not its own, a player twice, two side bets or two
+ *     totals;
  *   - a replacement (updates) names no level, player or time, or was made outside its lock to tip-off or after the clock;
  *     a level's mark (updated) is not the last replacement recorded for it, or the level still holds the player;
  *   - a grade is on an entry before its tip-off, or does not follow its legs (a leg lost loses and pays 0; every leg a push
@@ -36,8 +37,20 @@ const path = require('path');
 const cp = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const LEDGER_REL = 'data/suggest_ledger.json';
-/* the levels (the page's PB_TIERS: a page with others is refused by the job), and each one's legs */
-const TIERS = ['safe', 'med', 'aggr', 'xtrm'], LABELS = { safe: 'Safe', med: 'Medium', aggr: 'Aggressive', xtrm: 'Extreme' }, LEGS = { safe: 2, med: 3, aggr: 4, xtrm: 5 };
+/* the levels the record takes (the page's SP_TIERS: a page with others is refused by the job), and each one's legs.
+   OLD_TIERS are the four every set held until the owner took Extreme, the 5-leg level, off Suggested Parlays on 5 November
+   2026 ("get rid of the extreme section as well"): the entries taken before keep it, its legs and grades as they are, and
+   the summary keeps its record under its own key, from those entries alone */
+const TIERS = ['safe', 'med', 'aggr'], OLD_TIERS = [...TIERS, 'xtrm'];
+const LABELS = { safe: 'Safe', med: 'Medium', aggr: 'Aggressive', xtrm: 'Extreme' }, LEGS = { safe: 2, med: 3, aggr: 4, xtrm: 5 };
+/* THE CUTOVER. THREE_FROM is 03:00 UTC on 5 November 2026, just before the commit that took Extreme off: every set in the
+   ledger then was taken before it (the last at 00:29 that morning), by the page that drew four levels, and every run of the
+   new page takes three, after it. A set holds the four only where it was taken before THREE_FROM, or where the file it is
+   held to (the run's start, or the last commit's) already holds it with the four and the same time taken: a run of the
+   old page that landed after THREE_FROM, before the change reached main, is then never refused for it (no old set
+   refused), while a set new or taken again since that file must be the three (no new set carries Extreme). With no file
+   to hold it to (--no-prev), THREE_FROM alone */
+const THREE_FROM = '2026-11-05T03:00:00Z';
 const LOCK_MS = 2 * 3600e3;
 /* this file's own copy of the page's featured rule: a game on any national network ESPN lists, less those named here */
 const FEATURED_TV = { except: [] };
@@ -53,8 +66,9 @@ const etDateOf = ms => NYD.format(new Date(ms));
 const keyOf = e => `${e.season}|${e.date}|${e.tip}|${e.gid}`;
 const featuredOf = e => !!e && e.type !== 'PRE' && Array.isArray(e.tv) && e.tv.some(n => typeof n === 'string' && n && !FEATURED_TV.except.includes(n));
 const HOW = 'The suggestions record, written by tools/suggest_ledger.js in the job and held by tools/suggest_check.js. featured: each '
-  + 'game on national TV\'s four parlays on the Suggested Parlays tab (Safe, Medium, Aggressive, Extreme, 2 to 5 legs from that game '
-  + 'alone, every bet type; a player\'s chance is the props model\'s, on trial), taken from the published page on the state just '
+  + 'game on national TV\'s three parlays on the Suggested Parlays tab (Safe, Medium, Aggressive, 2 to 4 legs from that game alone, '
+  + 'every bet type; a player\'s chance is the props model\'s, on trial; a set taken before ' + THREE_FROM + ' holds a fourth, Extreme, '
+  + '5 legs, kept and graded as it was), taken from the published page on the state just '
   + 'published and DraftKings\' lines in lines.json, keyed season|date|tip|game, rewritten while the set\'s lock (2 hours before '
   + 'tip-off) is to come and locked from it, so each entry is the set as the job last published it before the lock; from the lock to '
   + 'tip-off a level holding a player the injury report has since listed is built again, that level alone, and recorded in updates. '
@@ -62,11 +76,13 @@ const HOW = 'The suggestions record, written by tools/suggest_ledger.js in the j
   + 'with none did not play, void): a leg lost loses; a push or void leg drops out and the rest are paid at the builder\'s price on '
   + 'the legs left; every leg a push or void is a push, the stake back; the payout on a $1 stake. featured_summary: per level, the '
   + 'parlays graded won or lost (each season\'s game and level once), won, the wins expected by DraftKings\' fair chance and by the '
-  + 'model\'s, and units on $1. Never edited by hand: the check refuses a ledger whose locked entries moved.';
+  + 'model\'s, and units on $1, Extreme\'s from the sets taken before ' + THREE_FROM + ' alone, kept as history. Never edited by hand: '
+  + 'the check refuses a ledger whose locked entries moved.';
 
 /* the summary, as the tab's record pills count it (spRecSum): each season's game and level once, from the last key that
-   holds it (a tip-off ESPN moved makes a new key) */
-const blankTiers = () => Object.fromEntries(TIERS.map(id => [id, { label: LABELS[id], graded: 0, won: 0, lost: 0, push: 0, exp_fair: 0, fair_n: 0, exp_model: 0, units: 0 }]));
+   holds it (a tip-off ESPN moved makes a new key). Extreme keeps its key, from the sets taken before THREE_FROM (no set
+   takes it since), and its levels still to settle count in pending; the pills draw the three */
+const blankTiers = () => Object.fromEntries(OLD_TIERS.map(id => [id, { label: LABELS[id], graded: 0, won: 0, lost: 0, push: 0, exp_fair: 0, fair_n: 0, exp_model: 0, units: 0 }]));
 function summarize(F) {
   const out = blankTiers(), last = new Map(); let graded = 0, updates = 0, pending = 0;
   for (const key of Object.keys(F || {}).sort()) {
@@ -82,7 +98,7 @@ function summarize(F) {
     s.exp_model += t.p; if (t.fair != null) { s.exp_fair += t.fair; s.fair_n++; }
     s.units += g.payout - 1;
   }
-  for (const id of TIERS) { const s = out[id]; s.exp_fair = r4(s.exp_fair); s.exp_model = r4(s.exp_model); s.units = r3(s.units); }
+  for (const id of OLD_TIERS) { const s = out[id]; s.exp_fair = r4(s.exp_fair); s.exp_model = r4(s.exp_model); s.units = r3(s.units); }
   const games = new Set(Object.values(F || {}).map(e => e.season + '|' + e.gid)).size;
   return { tiers: out, pending, games, entries: Object.keys(F || {}).length, graded_entries: graded, updates };
 }
@@ -112,8 +128,13 @@ function gradeBad(key, e) {
   return bad;
 }
 const holds = (t, pid) => !!(t && Array.isArray(t.legs) && t.legs.some(l => l && l.kind === 'prop' && l.pid === pid));
-/* one entry on its own: its key, its game, its night, its lock, its legs, its replacements, its grades */
-function entryBad(key, e, now) {
+/* the four levels a set may hold (THE CUTOVER): taken before THREE_FROM, or held so, taken at the same time, by the file it
+   is held to (pe: that file's entry under the same key) */
+const fourOk = (e, pe) => Date.parse(e.taken_at) < Date.parse(THREE_FROM)
+  || (isMap(pe) && Array.isArray(pe.tiers) && pe.tiers.map(x => x && x.id).join() === OLD_TIERS.join() && pe.taken_at === e.taken_at);
+/* one entry on its own: its key, its game, its night, its lock, its legs, its replacements, its grades. pe: the entry
+   under its key in the file it is held to, if any */
+function entryBad(key, e, now, pe) {
   const bad = [], t = s => Date.parse(s);
   if (!isMap(e) || !e.gid || !e.tip || !e.lock || !e.taken_at || !e.date || !Array.isArray(e.tiers) || !Array.isArray(e.tv)) return [`${key}: no game, tip-off, lock, date, networks, levels or time taken`];
   if (key !== keyOf(e)) bad.push(`${key}: not keyed on its own season, date, tip-off and game (${keyOf(e)})`);
@@ -130,7 +151,9 @@ function entryBad(key, e, now) {
      dropped later never fails every locked or graded set on it, which the record could then never get past */
   const lockedAt = isFinite(t(e.tip)) && t(e.tip) - LOCK_MS <= now;
   if (!(lockedAt ? e.type !== 'PRE' && e.tv.some(n => typeof n === 'string' && n) : featuredOf(e))) bad.push(`${key}: not a featured game by its own networks (${JSON.stringify(e.tv)}) and type (${e.type})`);
-  if (e.tiers.map(x => x && x.id).join() !== TIERS.join()) bad.push(`${key}: its levels are not the four`);
+  const ids = e.tiers.map(x => x && x.id).join();
+  if (ids === OLD_TIERS.join()) { if (!fourOk(e, pe)) bad.push(`${key}: taken at ${e.taken_at} with Extreme, a level the record has not taken since ${THREE_FROM}`); }
+  else if (ids !== TIERS.join()) bad.push(`${key}: its levels are not the three (Safe, Medium, Aggressive)`);
   for (const x of e.tiers) {
     if (!isMap(x)) continue;
     if (x.n !== LEGS[x.id]) bad.push(`${key} ${x.id}: a level of ${x.n} legs, not ${LEGS[x.id]}`);
@@ -144,7 +167,7 @@ function entryBad(key, e, now) {
   if (!Array.isArray(U)) bad.push(`${key}: its replacements are not a list`);
   else {
     for (const u of U) {
-      if (!isMap(u) || !TIERS.includes(u.tier) || !u.pid || !u.at) { bad.push(`${key}: a replacement that names no level, player or time`); continue; }
+      if (!isMap(u) || !OLD_TIERS.includes(u.tier) || !u.pid || !u.at) { bad.push(`${key}: a replacement that names no level, player or time`); continue; }
       if (!(t(u.at) >= t(e.tip) - LOCK_MS && t(u.at) < t(e.tip) && t(u.at) <= now)) bad.push(`${key} ${u.tier}: replaced at ${u.at}, not between its lock and its tip-off`);
     }
     for (const x of e.tiers) {
@@ -195,7 +218,8 @@ function lockedMoved(L, prev, now, runAt) {
 function check(L, prev, now, runAt, season) {
   const bad = [], F = (L && L.featured) || {};
   if (!isMap(L) || !isMap(L.featured)) return ['the ledger has no featured map'];
-  for (const [key, e] of Object.entries(F)) bad.push(...entryBad(key, e, now));
+  const PF = prev && isMap(prev.featured) ? prev.featured : {};
+  for (const [key, e] of Object.entries(F)) bad.push(...entryBad(key, e, now, PF[key]));
   if (prev && isMap(prev.featured)) {
     bad.push(...lockedMoved(L, prev, now, runAt));
     for (const [key, e] of Object.entries(F)) {
@@ -232,5 +256,5 @@ function main() {
   console.log(`suggest check: 0 failures (${s.entries} set${s.entries === 1 ? '' : 's'}, ${s.graded_entries} graded, ${s.updates} replacement${s.updates === 1 ? '' : 's'}${prev ? ', every locked set as the last commit had it' : ', no last commit to hold it to'})`);
   return 0;
 }
-module.exports = { check, entryBad, lockedMoved, gradeBad, summarize, dumps, canon, callOf, keyOf, featuredOf, etDateOf, minIso, TIERS, LABELS, LEGS, LOCK_MS, FEATURED_TV, HOW, LEDGER_REL };
+module.exports = { check, entryBad, lockedMoved, gradeBad, summarize, dumps, canon, callOf, keyOf, featuredOf, etDateOf, minIso, TIERS, OLD_TIERS, THREE_FROM, LABELS, LEGS, LOCK_MS, FEATURED_TV, HOW, LEDGER_REL };
 if (require.main === module) process.exit(main());

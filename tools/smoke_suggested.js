@@ -7,11 +7,13 @@
  * case needs (so every case holds at any hour on any day, the off-season included), and every rule it states is worked
  * out here on its own, never read from the page: which games are featured and which night is set out (nightOwn, through
  * the time zone database, America/New_York, a DST turn of each kind among them), the wait line's words and instant, the
- * lock lines word for word, each level's numbers against the builder's own sums and the Safe pair against every pair of
- * its pool, the record's pills from made-up ledgers (spRecOwn), no Elo picks (the owner's call of 5 November 2026) and
- * nothing of them left, the on-trial mark on every player leg and nowhere else, Add, Add to builder and Finish, the browser's own lock across a reload and given way to the record's, a
- * ruled-out level built again alone, nothing stored but nba_sp_lock_v1 and nothing read but the record and lines.json,
- * each once and no-store; then the real files, on what the day offers. Every request is recorded.
+ * lock lines word for word, a set's three levels (Safe, Medium, Aggressive: no Extreme since the owner's call of 5 November
+ * 2026), each level's numbers against the builder's own sums and the Safe pair against every pair of its pool, the
+ * record's pills from made-up ledgers (spRecOwn, the three levels, an old entry's Extreme left out), no Elo picks (gone the
+ * same day) and nothing of them left, the on-trial mark on every player leg and nowhere else, Add, Add to builder and
+ * Finish, the browser's own lock across a reload and given way to the record's (a four-level one from before read as
+ * three), a ruled-out level built again alone, nothing stored but nba_sp_lock_v1 and nothing read but the record and
+ * lines.json, each once and no-store; then the real files, on what the day offers. Every request is recorded.
  */
 'use strict';
 const fs = require('fs');
@@ -61,11 +63,14 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
       text: `Next up: ${what}. ${N.games.length > 1 ? 'Their sets go' : 'Its set goes'} up ${etWd(N.open)}, the morning after ${wdLong(N.prev)}’s featured ${pg > 1 ? 'games' : 'game'}.` };
   }
   const lockOwn = g => Date.parse(g.tip) - 2 * H;
-  /* the record a level: each season's game and level once, from the last key that holds it */
+  /* a set's levels since the owner's call of 5 November 2026: Safe, Medium and Aggressive, no Extreme */
+  const LV = ['safe', 'med', 'aggr'], LVN = [2, 3, 4];
+  /* the record a level: each season's game and level once, from the last key that holds it, the three alone (an entry from
+     before holds Extreme too, which the pills leave out, its pending among the rest) */
   function spRecOwn(L) {
     const out = {}, last = new Map(); let pending = 0;
-    for (const id of ['safe', 'med', 'aggr', 'xtrm']) out[id] = { g: 0, w: 0, l: 0, push: 0, f: 0, fn: 0, m: 0, u: 0 };
-    for (const k of Object.keys(L.featured || {}).sort()) { const e = L.featured[k]; for (const t of e.tiers || []) { const g = e.grade && e.grade[t.id]; if (g && t.legs) last.set(`${e.season}|${e.gid}|${t.id}`, [t, g]); } }
+    for (const id of LV) out[id] = { g: 0, w: 0, l: 0, push: 0, f: 0, fn: 0, m: 0, u: 0 };
+    for (const k of Object.keys(L.featured || {}).sort()) { const e = L.featured[k]; for (const t of e.tiers || []) { const g = e.grade && e.grade[t.id]; if (g && t.legs && LV.includes(t.id)) last.set(`${e.season}|${e.gid}|${t.id}`, [t, g]); } }
     for (const [t, g] of last.values()) { const s = out[t.id]; if (g.result === 'pending') { pending++; continue; } if (g.result === 'push') { s.push++; continue; }
       s.g++; if (g.result === 'won') s.w++; else s.l++; s.m += t.p; if (t.fair != null) { s.f += t.fair; s.fn++; } s.u += (g.result === 'won' ? g.payout : 0) - 1; }
     return { out, pending };
@@ -220,8 +225,15 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   NOW = Date.parse(T(D1, '15:00:00'));
   p = load(stateOf(SLATE), { lines: LINES1, record: null, tab: 'suggest' }); await settle(p); await openTab(p);
   const card = (gid, id) => p.d.querySelector(`#spSets [data-sp-game="${gid}"] [data-pb-tier="${id}"]`);
-  const tiersA = ['safe', 'med', 'aggr', 'xtrm'].map(id => p.w.spTier(`${gA.id}:${id}`));
-  check(tiersA.every((t, i) => t && t.legs.length === [2, 3, 4, 5][i]), "the first game's four levels are 2, 3, 4 and 5 legs");
+  const tiersA = LV.map(id => p.w.spTier(`${gA.id}:${id}`));
+  check(tiersA.every((t, i) => t && t.legs.length === LVN[i]), "the first game's three levels are 2, 3 and 4 legs");
+  /* no Extreme (the owner's call of 5 November 2026): three cards a set, no fourth level anywhere on the tab, and none to
+     Finish or Add */
+  { const cardsA = [...p.d.querySelectorAll(`#spSets [data-sp-game="${gA.id}"] .pb-tier`)].map(c => c.dataset.pbTier || [...c.classList].find(x => x !== 'pb-tier' && x !== 'none'));
+    const each = [...p.d.querySelectorAll('#spSets [data-sp-game]')].every(g => g.querySelectorAll('.pb-tier').length === 3);
+    check(JSON.stringify(cardsA) === JSON.stringify(LV) && each && !p.d.querySelector('#spPanel .pb-tier.xtrm, #spPanel [data-pb-tier="xtrm"], #spPanel [data-pc-finish$=":xtrm"], #spPanel [data-sp-add$=":xtrm"]')
+      && !/Extreme/.test(txt(p.d.getElementById('spPanel'))) && p.w.spTier(`${gA.id}:xtrm`) === null && JSON.stringify(p.w.SP_TIERS.map(t => t[0])) === JSON.stringify(LV),
+      `each set is three level cards, Safe, Medium and Aggressive, and no Extreme anywhere on the tab (${cardsA.join(', ')})`); }
   const sums = tiersA.map(t => JSON.parse(p.w.eval(`(() => { const L = spTier(${JSON.stringify(gA.id + ':' + t.id)}).legs; return JSON.stringify({ p: parlayProb(L).corr, d: parlayDec(L.map(l => ({ leg: l, ml: l.price }))), f: parlayFair(L) }); })()`)));
   check(tiersA.every((t, i) => Math.abs(t.corr - sums[i].p) < 1e-12 && Math.abs(t.dec - sums[i].d) < 1e-12 && Math.abs(t.fair.p - sums[i].f.p) < 1e-12), "each level's chance, price and fair chance are the builder's own parlayProb, parlayDec and parlayFair on its legs");
   check(tiersA.every(t => { const pl = t.legs.filter(l => l.kind === 'prop').map(l => l.pid); return new Set(pl).size === pl.length && t.legs.filter(l => l.kind === 'ml' || l.kind === 'spread').length <= 1 && t.legs.filter(l => l.kind === 'total').length <= 1 && t.legs.every(l => l.gid === gA.id); }), 'every level: one leg a player, one side bet and one total at most, every leg its own game');
@@ -253,7 +265,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   p.w.eval('M.stake = 20; pbPays()');
   /* gB: game lines only, so its larger levels say why */
   const whyB = [...p.d.querySelectorAll(`#spSets [data-sp-game="${gB.id}"] .pb-why`)].map(txt);
-  check(whyB.length === 3 && whyB.every(x => /^Only 2 legs in this game, and no player lines the props model prices: it has no projections for this game yet\.$/.test(x)), `a game with no player legs says why its larger levels are empty ("${whyB[0]}")`);
+  check(whyB.length === 2 && whyB.every(x => /^Only 2 legs in this game, and no player lines the props model prices: it has no projections for this game yet\.$/.test(x)), `a game with no player legs says why its larger levels are empty ("${whyB[0]}")`);
   /* nothing posted when the job read the game: the time is when the feed first held what it holds (tools/lines.js keeps a
      half's time while a read finds the same), so the words say "as of" it and that no read since found any */
   { const why = o => JSON.parse(p.w.eval(`(() => { const id = ${JSON.stringify(gD.id)}, was = LINES.games[id]; LINES.games[id] = ${JSON.stringify(o)};
@@ -345,8 +357,8 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   let q = load(st6, { lines: LINES1, record: null, tab: 'suggest' }); await settle(q); await openTab(q);
   const lnA = () => q.d.querySelector(`#spSets [data-sp-game="${gA.id}"] .sp-lock`);
   check(lnA().dataset.spPhase === 'own' && txt(lnA()) === `Locked since ${etWd(lockA)}. This browser’s own set: the site’s was not published in time, so the record does not grade it.`, `with no record, this browser's own set at the lock, its line word for word ("${txt(lnA())}")`);
-  const kept = JSON.parse(q.w.localStorage.getItem('nba_sp_lock_v1') || 'null'), ownT = ['safe', 'med', 'aggr', 'xtrm'].map(id => q.w.spTier(`${gA.id}:${id}`));
-  check(kept && kept.v === 1 && kept.season === SEASON && kept.games[gA.id] && kept.games[gA.id].own === true && kept.games[gA.id].tip === gA.tip && kept.games[gA.id].tiers.length === 4 && Object.keys(kept.games).length === 1, 'it is kept in nba_sp_lock_v1 ({v, season, games: {<game>: {tip, own, at, tiers, rep}}})');
+  const kept = JSON.parse(q.w.localStorage.getItem('nba_sp_lock_v1') || 'null'), ownT = LV.map(id => q.w.spTier(`${gA.id}:${id}`));
+  check(kept && kept.v === 1 && kept.season === SEASON && kept.games[gA.id] && kept.games[gA.id].own === true && kept.games[gA.id].tip === gA.tip && JSON.stringify(kept.games[gA.id].tiers.map(t => t.id)) === JSON.stringify(LV) && Object.keys(kept.games).length === 1, 'it is kept in nba_sp_lock_v1 ({v, season, games: {<game>: {tip, own, at, tiers, rep}}}), its three levels');
   check(Object.keys(dump(q.w.localStorage)).every(k => ['nba_sp_lock_v1', 'nba_hub_2027', 'nba_hub_2027:tab'].includes(k)) && !Object.keys(dump(q.w.sessionStorage)).length && !/lines|mains|featured/.test(q.w.localStorage.getItem('nba_hub_2027') || ''), 'nothing else is stored: the page key holds only the visitor\'s own');
   /* lines.json slow: the locked game waits for it, keeping nothing; lines.json not there: its set shown, never kept */
   { let release; const slow = new Promise(r => { release = r; });
@@ -362,8 +374,18 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const store = dump(q.w.localStorage);
   NOW = lockA + 20 * 60e3;
   q = load(st6, { lines: linesOf([gA, gB, gC, gD, gE], { shift: -0.02, at: T(D1, '22:40:00') }), record: null, tab: 'suggest', storage: store }); await settle(q); await openTab(q);
-  const again = ['safe', 'med', 'aggr', 'xtrm'].map(id => q.w.spTier(`${gA.id}:${id}`));
+  const again = LV.map(id => q.w.spTier(`${gA.id}:${id}`));
   check(again.every((t, i) => t && JSON.stringify(t.legs.map(l => [l.sk, l.price])) === JSON.stringify(ownT[i].legs.map(l => [l.sk, l.price])) && Math.abs(t.dec - ownT[i].dec) < 1e-12) && lnA().dataset.spPhase === 'own', 'a reload shows the same set, at its locked prices, though the prices have moved');
+  /* a browser's own lock from before 5 November 2026 holds a four-level set (Extreme, and a page-made replacement of it):
+     read as three, the same three, and nothing thrown */
+  { const K4 = JSON.parse(store.nba_sp_lock_v1), k4 = K4.games[gA.id], ag = k4.tiers.find(t => t.id === 'aggr'), md = k4.tiers.find(t => t.id === 'med');
+    const xt = { ...clone(ag), id: 'xtrm', label: 'Extreme', n: 5, floor: 0.05, legs: [...clone(ag.legs), clone(md.legs.find(l => !ag.legs.some(x => x.pid && x.pid === l.pid)) || md.legs[0])] };
+    k4.tiers = [...k4.tiers, xt]; k4.rep = { ...(k4.rep || {}), xtrm: { pid: '9300001', name: 'Ace Guard', reason: 'listed out', at: new Date(NOW - 60e3).toISOString().slice(0, 19) + 'Z', tier: clone(xt) } };
+    const q4 = load(st6, { lines: LINES1, record: null, tab: 'suggest', storage: { ...store, nba_sp_lock_v1: JSON.stringify(K4) } }); await settle(q4); await openTab(q4);
+    const t4 = LV.map(id => q4.w.spTier(`${gA.id}:${id}`)), l4 = q4.d.querySelector(`#spSets [data-sp-game="${gA.id}"] .sp-lock`);
+    check(t4.every((t, i) => t && JSON.stringify(t.legs.map(l => [l.sk, l.price])) === JSON.stringify(ownT[i].legs.map(l => [l.sk, l.price]))) && l4 && l4.dataset.spPhase === 'own' && q4.w.spTier(`${gA.id}:xtrm`) === null
+      && q4.d.querySelectorAll(`#spSets [data-sp-game="${gA.id}"] .pb-tier`).length === 3 && !/Extreme/.test(txt(q4.d.getElementById('spPanel'))) && q4.errors.length === 0,
+      "a browser's own four-level lock from before is read as its three levels, Extreme left out, nothing thrown"); }
   /* a leg's Add on a locked set: the leg as locked */
   { const b = q.d.querySelector(`#spSets [data-sp-game="${gA.id}"] [data-pb-tier="safe"] [data-pb-leg]`), lk = again[0].legs.find(l => l.sk === b.dataset.pbLeg); b.click(); await sleep(30);
     const m = JSON.parse(q.w.localStorage.getItem('nba_hub_2027')).slip.legs[0];
@@ -373,14 +395,14 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   { const liveB0 = q.w.spTier(`${gB.id}:safe`);
     q.w.eval(`SG_LINES[${JSON.stringify(gA.id)}] = Object.assign({ at: ${JSON.stringify(new Date(NOW).toISOString())} }, linesGl(${JSON.stringify(linesOf([gA], { shift: -0.04 }).games[gA.id])}));
       SG_LINES[${JSON.stringify(gB.id)}] = Object.assign({ at: ${JSON.stringify(new Date(NOW).toISOString())} }, linesGl(${JSON.stringify({ ...linesOf([gB]).games[gB.id], ml: { home: -105, away: -115 } })})); renderSp();`); await sleep(20);
-    const after = ['safe', 'med', 'aggr', 'xtrm'].map(id => q.w.spTier(`${gA.id}:${id}`)), liveB1 = q.w.spTier(`${gB.id}:safe`);
+    const after = LV.map(id => q.w.spTier(`${gA.id}:${id}`)), liveB1 = q.w.spTier(`${gB.id}:safe`);
     check(after.every((t, i) => JSON.stringify(t.legs.map(l => [l.sk, l.price])) === JSON.stringify(ownT[i].legs.map(l => [l.sk, l.price]))) && JSON.stringify(liveB1.legs.map(l => [l.sk, l.price])) !== JSON.stringify(liveB0.legs.map(l => [l.sk, l.price])),
       "a press's newer read moves nothing of a locked set, and re-picks a live one"); }
   /* a ruled-out player: that level alone built again, said in one line, kept */
-  { const T0 = ['safe', 'med', 'aggr', 'xtrm'].map(id => q.w.spTier(`${gA.id}:${id}`)), pl = T0.flatMap(t => t.legs.filter(l => l.kind === 'prop').map(l => [l.pid, l.name]));
+  { const T0 = LV.map(id => q.w.spTier(`${gA.id}:${id}`)), pl = T0.flatMap(t => t.legs.filter(l => l.kind === 'prop').map(l => [l.pid, l.name]));
     const byPid = pl.map(([pid, nm]) => [pid, nm, T0.filter(t => t.legs.some(l => l.pid === pid)).map(t => t.id)]).sort((a, b) => a[2].length - b[2].length)[0];
     q.w.eval(`S.report.players[${JSON.stringify(byPid[0])}] = ['BOS', 'Out', 'Knee', '']; SP_CACHE.clear(); renderSp();`); await sleep(30);
-    const T1 = ['safe', 'med', 'aggr', 'xtrm'].map(id => q.w.spTier(`${gA.id}:${id}`)), upd = [...q.d.querySelectorAll(`#spSets [data-sp-game="${gA.id}"] .sp-upd`)];
+    const T1 = LV.map(id => q.w.spTier(`${gA.id}:${id}`)), upd = [...q.d.querySelectorAll(`#spSets [data-sp-game="${gA.id}"] .sp-upd`)];
     const kept2 = JSON.parse(q.w.localStorage.getItem('nba_sp_lock_v1')).games[gA.id];
     check(T1.every((t, i) => byPid[2].includes(t.id) ? !t.legs.some(l => l.pid === byPid[0]) && t.updated && t.updated.by === 'page' : JSON.stringify(t.legs.map(l => l.sk)) === JSON.stringify(T0[i].legs.map(l => l.sk))) && byPid[2].every(id => kept2.rep[id] && kept2.rep[id].pid === byPid[0]),
       `a player listed Out after the lock: the level${byPid[2].length > 1 ? 's' : ''} holding him (${byPid[2].join(', ')}) built again without him, the rest as locked, kept in the browser`);
@@ -389,7 +411,9 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const recEntry = (g, tiers, o = {}) => ({ season: SEASON, date: g.date, gid: g.id, away: g.away, home: g.home, type: 'REG', tip: g.tip, lock: new Date(lockOwn(g)).toISOString().slice(0, 16) + 'Z', tv: g.tv, generated: T(D1, '13:00'),
     pool: {}, tiers, taken_at: T(D1, '16:00:00'), ...o });
   const recTiers = ownT.map(t => q.w.spTierOut(t));
-  const REC = { how: 'x', since: D0, updated: T(D1, '16:00:00'), featured_summary: null, featured: { [`${SEASON}|${gA.date}|${gA.tip}|${gA.id}`]: recEntry(gA, clone(recTiers).map(t => ({ ...t, legs: t.legs && t.legs.map(l => ({ ...l, odds: l.odds })) }))) } };
+  /* the record's entry as one taken before 5 November 2026 holds it: the three levels and Extreme after them */
+  const recX = { ...clone(recTiers[2]), id: 'xtrm', label: 'Extreme', n: 5, floor: 0.05, legs: [...clone(recTiers[2].legs), clone(recTiers[1].legs.find(l => !recTiers[2].legs.some(x => x.pid && x.pid === l.pid)) || recTiers[1].legs[0])] };
+  const REC = { how: 'x', since: D0, updated: T(D1, '16:00:00'), featured_summary: null, featured: { [`${SEASON}|${gA.date}|${gA.tip}|${gA.id}`]: recEntry(gA, [...clone(recTiers), recX].map(t => ({ ...t, legs: t.legs && t.legs.map(l => ({ ...l, odds: l.odds })) }))) } };
   { NOW = lockA + 30 * 60e3;
     let release; const waitRec = new Promise(r => { release = r; });
     const st6b = stateOf(SLATE);
@@ -398,22 +422,24 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     check(lnA() && lnA().dataset.spPhase === 'loading' && txt(lnA()) === `Locked since ${etWd(lockA)}. Loading the site’s set…`, `while the record is read, the locked game waits for it ("${lnA() && txt(lnA())}")`);
     release(); await sleep(80);
     const kp = JSON.parse(q.w.localStorage.getItem('nba_sp_lock_v1') || '{"games":{}}').games[gA.id];
-    check(lnA().dataset.spPhase === 'locked' && txt(lnA()) === `Locked since ${etWd(lockA)}.` && (!kp || !kp.own), `the record's set takes its place, its line word for word, the browser's own set dropped ("${txt(lnA())}")`); }
+    check(lnA().dataset.spPhase === 'locked' && txt(lnA()) === `Locked since ${etWd(lockA)}.` && (!kp || !kp.own), `the record's set takes its place, its line word for word, the browser's own set dropped ("${txt(lnA())}")`);
+    check(q.d.querySelectorAll(`#spSets [data-sp-game="${gA.id}"] .pb-tier`).length === 3 && q.w.spTier(`${gA.id}:xtrm`) === null && !/Extreme/.test(txt(q.d.getElementById('spPanel')))
+      && LV.every((id, i) => JSON.stringify(q.w.spTier(`${gA.id}:${id}`).legs.map(l => l.sk)) === JSON.stringify(ownT[i].legs.map(l => l.sk))), "a record entry from before, holding Extreme, is shown as its three levels"); }
   /* a level the record took empty: from the lock it says why as of the take, never that no read since has found any or
      that Refresh odds reads the current ones (a later run did read gA's props, which LINES1 carries, and a press cannot
      move a locked set); the record's own words are left as they are */
   { const rec3 = clone(REC), e = rec3.featured[Object.keys(rec3.featured)[0]];
     const W = { med: 'Only 2 legs in this game, and no player prices yet: DraftKings had posted no player props for it as of Tue 9:00 AM ET, and no read since has found any; it posts them a day or so before tip-off, and Refresh odds reads the current ones.',
       aggr: 'No legs in this game yet: DraftKings had posted neither its game lines nor its player props as of Tue 9:00 AM ET, and no read since has found any. The job reads them through the day, and Refresh odds reads the current ones.',
-      xtrm: 'Only 2 legs in this game, and no player prices yet: none have been read for it; the job reads DraftKings’ player props through the day, and Refresh odds reads them now.' };
+      safe: 'Only 1 leg in this game, and no player prices yet: none have been read for it; the job reads DraftKings’ player props through the day, and Refresh odds reads them now.' };
     const WANT = { med: 'Empty when the set locked: Only 2 legs in this game, and no player prices yet: DraftKings had posted no player props for it as of Tue 9:00 AM ET.',
       aggr: 'Empty when the set locked: No legs in this game yet: DraftKings had posted neither its game lines nor its player props as of Tue 9:00 AM ET.',
-      xtrm: 'Empty when the set locked: Only 2 legs in this game, and no player prices yet: none have been read for it.' };
+      safe: 'Empty when the set locked: Only 1 leg in this game, and no player prices yet: none have been read for it.' };
     e.tiers = e.tiers.map(x => W[x.id] ? { id: x.id, label: x.label, n: x.n, floor: x.floor, why: W[x.id] } : x);
     const keep = JSON.stringify(rec3);
     NOW = lockA + 30 * 60e3;
     const q3 = load(stateOf(SLATE), { lines: LINES1, record: rec3, tab: 'suggest' }); await settle(q3); await openTab(q3);
-    const why3 = Object.fromEntries(['med', 'aggr', 'xtrm'].map(id => [id, txt(q3.d.querySelector(`#spSets [data-sp-game="${gA.id}"] .pb-tier.none.${id} .pb-why`))]));
+    const why3 = Object.fromEntries(['med', 'aggr', 'safe'].map(id => [id, txt(q3.d.querySelector(`#spSets [data-sp-game="${gA.id}"] .pb-tier.none.${id} .pb-why`))]));
     const l3 = q3.d.querySelector(`#spSets [data-sp-game="${gA.id}"] .sp-lock`);
     check(l3 && l3.dataset.spPhase === 'locked' && JSON.stringify(why3) === JSON.stringify(WANT) && JSON.stringify(rec3) === keep && q3.errors.length === 0 && !/no read since|Refresh odds reads/.test(txt(q3.d.querySelector(`#spSets [data-sp-game="${gA.id}"]`))),
       `a level the record took empty says from the lock why as of the take, without "no read since" or the Refresh odds advice: ${Object.values(why3).join(' | ')}`); }
@@ -433,10 +459,12 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
 
   /* ---------- 7. the record's pills ---------- */
   const lvR = (id, n, p0, fair) => ({ id, label: LBL[id], n, floor: 0, legs: Array.from({ length: n }, () => ({})), p: p0, fair, dec: 3 });
-  const eR = (gid, tip, grade, season = SEASON) => ({ season, gid, tip, tiers: [lvR('safe', 2, 0.4, 0.3), lvR('med', 3, 0.25, null), lvR('aggr', 4, 0.12, 0.08), { id: 'xtrm', label: 'Extreme', n: 5, why: 'x' }], grade });
+  /* entries as those taken before 5 November 2026 hold them, Extreme after the three, graded (a win, a pending one): the
+     pills leave it out, its pending too */
+  const eR = (gid, tip, grade, season = SEASON) => ({ season, gid, tip, tiers: [lvR('safe', 2, 0.4, 0.3), lvR('med', 3, 0.25, null), lvR('aggr', 4, 0.12, 0.08), lvR('xtrm', 5, 0.06, 0.04)], grade });
   const RECX = { featured: {
-    'a1': eR('g1', '1', { safe: { result: 'won', payout: 2.5 }, med: { result: 'lost', payout: 0 }, aggr: { result: 'push', payout: 1 } }),
-    'a2': eR('g2', '1', { safe: { result: 'lost', payout: 0 }, med: { result: 'pending' }, aggr: { result: 'won', payout: 9.1 } }),
+    'a1': eR('g1', '1', { safe: { result: 'won', payout: 2.5 }, med: { result: 'lost', payout: 0 }, aggr: { result: 'push', payout: 1 }, xtrm: { result: 'won', payout: 31 } }),
+    'a2': eR('g2', '1', { safe: { result: 'lost', payout: 0 }, med: { result: 'pending' }, aggr: { result: 'won', payout: 9.1 }, xtrm: { result: 'pending' } }),
     'a3': eR('g2', '2', { safe: { result: 'won', payout: 1.8 }, med: { result: 'won', payout: 4 }, aggr: { result: 'lost', payout: 0 } }),
     'a4': eR('g3', '1', { safe: { result: 'won', payout: 2 } }, SEASON - 1), 'a5': eR('g4', '9', null) } };
   for (const [name, R] of [['a made-up record', RECX], ['the real record', fs.existsSync(path.join(ROOT, 'data', 'suggest_ledger.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'suggest_ledger.json'), 'utf8')) : null], ['an empty one', { featured: {} }]]) {
@@ -445,6 +473,8 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     const W2 = pillsOwn(R), got = [...q.d.querySelectorAll('#spRec .rec')];
     const ok = got.length === W2.pills.length + (W2.pending ? 1 : 0) && W2.pills.every(([id, text, title], i) => got[i].dataset.spRec === id && txt(got[i]) === text && (title == null || got[i].title === title)) && (!W2.pending || txt(got[got.length - 1]) === `Pending ${W2.pending}`);
     check(ok, `${name}: the pills, each number and title this file's own (${got.map(txt).join(' | ')})`);
+    check(!q.d.querySelector('#spRec [data-sp-rec="xtrm"]') && !/Extreme/.test(txt(q.d.getElementById('spRec'))) && got.filter(x => LV.includes(x.dataset.spRec)).length === (W2.pills[0][0] === 'none' ? 0 : 3),
+      `${name}: Safe, Medium and Aggressive alone, an entry's Extreme left out`);
   }
   q = load(stateOf(SLATE), { lines: LINES1, record: 'junk', tab: 'suggest' }); await settle(q); await openTab(q);
   check(q.d.getElementById('spRec') && q.d.getElementById('spRec').hidden && q.errors.length === 0, 'a record that is not JSON draws nothing and throws nothing');

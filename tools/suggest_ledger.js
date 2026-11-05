@@ -4,10 +4,12 @@
  *   now=$(date -u +%Y-%m-%dT%H:%M:%SZ) && SUGGEST_NOW=$now node tools/suggest_ledger.js && SUGGEST_NOW=$now node tools/suggest_check.js
  *                                                                     (the job, after the tests: one clock for the two)
  *
- * featured: each featured game's own four levels on the Suggested Parlays tab, Safe, Medium, Aggressive and Extreme, 2
- * to 5 legs from that game alone: a game on any national network ESPN's scoreboard lists (the slate's tv), never a
- * preseason game, on the lines feed's two dates (the dates the job reads DraftKings' lines for: a game further out has no
- * line yet, and would be four empty levels). Taken from the published page itself: index.html booted in jsdom on the
+ * featured: each featured game's own three levels on the Suggested Parlays tab, Safe, Medium and Aggressive, 2 to 4 legs
+ * from that game alone: a game on any national network ESPN's scoreboard lists (the slate's tv), never a preseason game,
+ * on the lines feed's two dates (the dates the job reads DraftKings' lines for: a game further out has no line yet, and
+ * would be three empty levels). Until the owner took it off on 5 November 2026 a set held a fourth, Extreme (5 legs): the
+ * sets taken before (tools/suggest_check.js THREE_FROM) keep it, its legs and grades, graded as before, and the summary
+ * keeps its record under its own key. Taken from the published page itself: index.html booted in jsdom on the
  * state.json just published and lines.json just read, the window's clock held at the run's time, read by the page's own
  * spTakes, spSet and spTierOut, so the record holds exactly the sets the tab shows (every featured game's, from its first
  * run, though the tab sets out one night at a time). Keyed season|date|tip|game id. A set LOCKS 2 hours before its
@@ -30,7 +32,7 @@
  * remainder priced together); every leg a push or void is a push, the stake back; pending while a game or its box is
  * out. A grade once complete is never undone by a state that can no longer settle it, and another season's entries keep
  * the grades they have. featured_summary per level, each season's game and level once, from the last key that holds it,
- * as the tab's record pills count it.
+ * as the tab's record pills count it (the pills draw the three).
  *
  * The guard (tools/suggest_check.js check, on its own rules): the new ledger against the file the run started from, then,
  * where that differs from it, against the last commit's (git show HEAD); a ledger that fails is not written, the file is
@@ -115,7 +117,7 @@ async function ready(w, errs, state) {
   const missing = ['spTakes', 'spSet', 'spTierOut', 'spLockAt', 'spOutWhy', 'spRebuild', 'pbLinesLoad', 'parlayDec', 'pbSlipOf'].filter(f => w.eval(`typeof ${f}`) !== 'function');
   if (missing.length) return [...why, 'the page has no Suggested Parlays sets to take (no ' + missing.join(', ') + ')'];
   if (!w.NBA_GRADE || typeof w.NBA_GRADE.legResult !== 'function') why.push('the page has no settlement to grade by (NBA_GRADE)');
-  if (w.eval('PB_TIERS').map(t => t[0] + ':' + t[1] + ':' + t[2]).join() !== TIERS.map(id => `${id}:${LABELS[id]}:${SC.LEGS[id]}`).join()) why.push("the page's levels are not the four this record keeps");
+  if (w.eval("typeof SP_TIERS !== 'undefined' ? SP_TIERS : []").map(t => t[0] + ':' + t[1] + ':' + t[2]).join() !== TIERS.map(id => `${id}:${LABELS[id]}:${SC.LEGS[id]}`).join()) why.push("the page's levels are not the three this record keeps");
   if (w.eval('SP_LOCK_MS') !== LOCK_MS) why.push('the page locks a set at another time than 2 hours before tip-off');
   try { await w.eval('pbLinesLoad()'); } catch (e) { why.push('lines.json threw: ' + e.message); }
   if (!w.eval('LINES')) why.push('lines.json did not load, so the page would build every set with no DraftKings line');

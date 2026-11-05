@@ -12,7 +12,8 @@
  *
  *   A  the morning of D1: a set taken for every featured game of the lines feed's two dates (D1 and D2), none for a game
  *      on local TV only, a preseason game on national TV, or a featured game on D3; keyed season|date|tip|game, locking 2
- *      hours before tip-off, its networks kept, every leg its own game's, every level its size.
+ *      hours before tip-off, its networks kept, every leg its own game's, its three levels (Safe, Medium, Aggressive: no
+ *      Extreme since the owner's call of 5 November 2026) each its size.
  *   B  hours later, the first game's player props gone: its set rewritten; a game moved off national TV dropped; one moved
  *      onto it before its lock taken. B2: the same again writes nothing. B3: a second before the first game's lock, the
  *      props back: rewritten (live to its lock).
@@ -27,15 +28,20 @@
  *      state's week), a player with no box line void, a push and a void dropping out (the one leg left paid its own price,
  *      two legs of the game paid at the same-game price tools/corr.js gives), every leg a push or void a push; a box not
  *      read yet pending; a grade kept when the state can no longer settle it; last season's entry never regraded; a
- *      game's level under two tip-offs counted once, from the last; the summary worked out here; the next day's set.
+ *      game's level under two tip-offs counted once, from the last; an entry taken before the change (THREE_FROM) with its
+ *      four levels kept byte for byte, its Extreme in the summary under its own key; the summary worked out here; the next
+ *      day's set.
  *   E  no featured game to come: nothing taken (E2: nothing written).
  *   F  the guard: a ledger on disk whose locked set was edited refused and the last commit's put back; an unlocked set
  *      rewritten since that commit, and a locked level an earlier run replaced, not refused; a state that is not there
  *      refused with the file untouched; check() on hand-made ledgers failing every rule; a network dropped from
- *      FEATURED_TV since sets on it locked failing only the set on it still to lock; and the job's step handing the
+ *      FEATURED_TV since sets on it locked failing only the set on it still to lock; the cutover (a set taken since
+ *      THREE_FROM with Extreme refused, new, rewritten or taken again; one taken before it, or held so at the same time
+ *      taken by the file it is held to, passing); a page drawing Extreme again refused; and the job's step handing the
  *      script and its check one clock (a set rewritten a second before its lock passing on it, failing on a later one).
  *   G  the real ledger, copied, on the real state and lines.json at the real clock, held at one instant for the script
- *      and the check: nothing refused.
+ *      and the check: the ledger as it stands passing the guard, nothing refused, every set taken since the change the
+ *      three levels and every locked one from before the levels it had.
  */
 'use strict';
 const fs = require('fs');
@@ -99,6 +105,9 @@ const gY2 = fin(mk(D0, 'DAL', 'SAS', T(D1, '01:30'), ['NBC'], { pHome: 0.55 }), 
 const gY3 = fin(mk(D0, 'PHX', 'POR', T(D1, '03:00'), ['Prime Video'], { pHome: 0.5 }), 106, 110);
 const gY4 = fin(mk(D0, 'NOP', 'MEM', T(D1, '01:00'), ['NBA TV'], { pHome: 0.5 }), 99, 103);
 const gZid = `${SEASON}_${ymd(D0)}_WAS_BKN`, gWid = `${SEASON}_${ymd(DW)}_IND_MIN`;
+/* gX: a featured game played three days before the change that took Extreme off (THREE_FROM), its set taken that morning
+   with the four levels and graded (D): kept as it is, byte for byte, its Extreme in the summary under its own key */
+const dX = etDate(Date.parse(SC.THREE_FROM) - 3 * 24 * H), sX = +dX.slice(0, 4) + (+dX.slice(5, 7) >= 8 ? 1 : 0), gXid = `${sX}_${ymd(dX)}_SAC_POR`;
 const OLD = `${SEASON - 1}_${Y}0301_ATL_BOS`;
 
 /* the props model's rows ([name, team, pos, min, pts, reb, ast, tpm, stl, blk, dd, td]) */
@@ -144,11 +153,12 @@ function stateOf(slate, o = {}) {
   st.props = { ...clone(REAL.props), games: Object.fromEntries(slate.filter(g => ROWS[g.id] && g.status === 'scheduled').map(g => [g.id, { tip: g.tip, away: g.away, home: g.home, players: clone(ROWS[g.id]) }])) };
   st.props.ledger = { ...st.props.ledger, decision: null };
   st.boxes = { from: addDay(D1, -7), days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: o.boxes || BOX0 };
-  st.finals = { ...REAL.finals, [gWid]: [101, 108], ...Object.fromEntries(slate.filter(g => g.status === 'final').map(g => [g.id, [g.awayScore, g.homeScore]])) };
+  st.finals = { ...REAL.finals, [gWid]: [101, 108], [gXid]: [110, 120], ...Object.fromEntries(slate.filter(g => g.status === 'final').map(g => [g.id, [g.awayScore, g.homeScore]])) };
   st.pending = [gZid];
-  /* gZ and gW are made up off the slate, in the season's own id space: a real game under either id (the real state's
-     record, or its finals for gZ, played and its final not read) must never settle them in the real one's place */
-  delete st.finals[gZid]; st.record = (REAL.record || []).filter(g => g.id !== gZid && g.id !== gWid);
+  /* gZ, gW and gX are made up off the slate, in the season's own id space: a real game under any of them (the real
+     state's record, or its finals for gZ, played and its final not read) must never settle them in its place; gW's and
+     gX's finals are this test's own */
+  delete st.finals[gZid]; st.record = (REAL.record || []).filter(g => g.id !== gZid && g.id !== gWid && g.id !== gXid);
   st.report = { date: st.today, players: o.report || {} };
   delete st.eloPicks;
   return st;
@@ -161,8 +171,11 @@ const BOX0 = {
 };
 /* the season's box file: gW's lines (a row with dnp 1 is no line) */
 const CSV_HEAD = 'game_id,date,team,opp,home,player_id,name,pos,starter,min,fgm,fga,tpm,tpa,ftm,fta,orb,drb,ast,stl,blk,tov,pf,pm,pts,dnp';
-const csvRow = (pid, nm, pts, reb, ast, tpm, stl, blk, dnp) => [gWid, DW, 'IND', 'MIN', 0, pid, nm, 'G', 1, 30, 0, 0, tpm, 0, 0, 0, 1, reb - 1, ast, stl, blk, 0, 0, 0, pts, dnp ? 1 : 0].join(',');
-fs.writeFileSync(path.join(DIR, 'data', `box_${SEASON}.csv`), [CSV_HEAD, csvRow(9200006, 'Mo Csv', 18, 4, 3, 2, 1, 0), csvRow(9200007, 'No Csv', 9, 2, 3, 1, 0, 0), csvRow(9200008, 'Oz Dnp', 0, 0, 0, 0, 0, 0, true)].join('\n') + '\n');
+const csvRow = (pid, nm, pts, reb, ast, tpm, stl, blk, dnp, g = [gWid, DW, 'IND', 'MIN']) => [...g, 0, pid, nm, 'G', 1, 30, 0, 0, tpm, 0, 0, 0, 1, reb - 1, ast, stl, blk, 0, 0, 0, pts, dnp ? 1 : 0].join(',');
+/* and gX's (SAC 110 at POR 120): Qa One's 18 points under his 20.5, Qb Two's 10 rebounds over his 8.5, Qc Three no line */
+const gXrow = (pid, nm, pts, reb, team) => csvRow(pid, nm, pts, reb, 3, 1, 0, 0, false, [gXid, dX, team, team === 'POR' ? 'SAC' : 'POR']);
+fs.writeFileSync(path.join(DIR, 'data', `box_${SEASON}.csv`), [CSV_HEAD, csvRow(9200006, 'Mo Csv', 18, 4, 3, 2, 1, 0), csvRow(9200007, 'No Csv', 9, 2, 3, 1, 0, 0), csvRow(9200008, 'Oz Dnp', 0, 0, 0, 0, 0, 0, true),
+  ...(sX === SEASON ? [gXrow(9200031, 'Qa One', 18, 4, 'POR'), gXrow(9200032, 'Qb Two', 12, 10, 'SAC')] : [])].join('\n') + '\n');
 
 /* ---------- one run ---------- */
 let seq = 0;
@@ -184,8 +197,8 @@ const entryLine = (text, g) => text.split('\n').find(l => l.startsWith(`  ${JSON
 function entryOk(e, g, at) {
   const lock = Date.parse(g.tip) - LOCK;
   return e && e.season === SEASON && e.gid === g.id && e.date === g.date && e.date === etDate(Date.parse(g.tip)) && e.tip === g.tip && e.lock === minIso(lock) && JSON.stringify(e.tv) === JSON.stringify(g.tv)
-    && e.type === g.type && (!at || e.taken_at === at) && Date.parse(e.taken_at) < lock && e.tiers.map(t => t.id).join() === 'safe,med,aggr,xtrm'
-    && e.tiers.every(t => t.n === { safe: 2, med: 3, aggr: 4, xtrm: 5 }[t.id] && (t.legs ? t.legs.length === t.n && t.legs.every(l => l.id === g.id) && new Set(t.legs.filter(l => l.kind === 'prop').map(l => l.pid)).size === t.legs.filter(l => l.kind === 'prop').length : typeof t.why === 'string' && t.why.length > 0));
+    && e.type === g.type && (!at || e.taken_at === at) && Date.parse(e.taken_at) < lock && e.tiers.map(t => t.id).join() === 'safe,med,aggr'
+    && e.tiers.every(t => t.n === { safe: 2, med: 3, aggr: 4 }[t.id] && (t.legs ? t.legs.length === t.n && t.legs.every(l => l.id === g.id) && new Set(t.legs.filter(l => l.kind === 'prop').map(l => l.pid)).size === t.legs.filter(l => l.kind === 'prop').length : typeof t.why === 'string' && t.why.length > 0));
 }
 
 (async () => {
@@ -197,9 +210,9 @@ function entryOk(e, g, at) {
   let L = read();
   const want = day1.filter(g => featuredOwn(g) && g.status === 'scheduled' && [D1, D2].includes(g.date));
   chk(JSON.stringify(Object.keys(L.featured).sort()) === JSON.stringify(want.map(keyOf).sort()), `A: one set for each featured game of D1 and D2 (${want.map(g => g.id.slice(-7)).join(', ')}), none for gC or gG (local TV), gP (preseason) or gF (D3): ${Object.keys(L.featured).map(k => k.slice(-7)).join(', ')}`);
-  chk(want.every(g => entryOk(entry(g), g, tA)), 'A: each keyed season|date|tip|game, locking 2 hours before tip-off, its networks and type kept, taken now, the four levels of their sizes, every leg its own game, one leg a player');
+  chk(want.every(g => entryOk(entry(g), g, tA)), 'A: each keyed season|date|tip|game, locking 2 hours before tip-off, its networks and type kept, taken now, the three levels of their sizes (no Extreme since 5 November 2026), every leg its own game, one leg a player');
   const eA = entry(gA);
-  chk(eA.tiers.every(t => t.legs) && eA.tiers.some(t => t.legs.some(l => l.kind === 'prop')), 'A: the first game makes all four levels, with player legs');
+  chk(eA.tiers.every(t => t.legs) && eA.tiers.some(t => t.legs.some(l => l.kind === 'prop')), 'A: the first game makes all three levels, with player legs');
   chk(eA.tiers.every(t => t.legs.every(l => { const ln = linesOf([gA]).games[gA.id]; if (l.kind === 'prop') { const m = ln.props.mains.find(x => x.player === l.pid && x.stat === l.stat); return m && m.line === l.line && l.odds === (l.side === 'over' ? m.over : m.under); }
     return l.kind === 'ml' ? l.odds === ln.ml[l.side === gA.home ? 'home' : 'away'] : l.kind === 'spread' ? l.odds === ln.spread[l.side === gA.home ? 'home' : 'away'] : l.odds === ln.total[l.side]; })), "A: every leg at DraftKings' price in lines.json");
   chk(SC.check(L, null, Date.parse(tA), tA, SEASON).length === 0 && L.featured_summary.entries === want.length, 'A: the ledger passes the guard, its summary counting the sets');
@@ -259,12 +272,14 @@ function entryOk(e, g, at) {
   const legP = (g, pid, nm, team, stat, mk1, line, s, odds, x = {}) => ({ id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip, kind: 'prop', pid: String(pid), name: nm, team, at: at0, stat, mk: mk1, line: mk1 === 'main' ? line : undefined, k: mk1 === 'mile' ? line : undefined, side: s, odds, other: mk1 === 'main' ? 110 : null, label: stat, p: 0.6, fair: 0.55, fair_est: false, thin: false, market: false, ...x });
   const lvl = (id, legs, o = {}) => ({ id, label: SC.LABELS[id], n: SC.LEGS[id], floor: { safe: 0, med: 0.25, aggr: 0.12, xtrm: 0.05 }[id], legs, p: 0.31, fair: 0.25, fair_est: true, dec: r3(legs.reduce((d, l) => d * dec(l.odds), 1)), likeliest: false, thin: 0, mkt: legs.filter(l => l.market).length, ...o });
   const why = id => ({ id, label: SC.LABELS[id], n: SC.LEGS[id], floor: { safe: 0, med: 0.25, aggr: 0.12, xtrm: 0.05 }[id], why: 'No legs in this game.' });
-  const ent = (g, tiers, o = {}) => ({ season: +g.id.slice(0, 4), date: g.date, gid: g.id, away: g.away, home: g.home, type: 'REG', tip: g.tip, lock: minIso(Date.parse(g.tip) - LOCK), tv: g.tv || ['ESPN'], generated: T(g.date, '12:00'),
-    pool: { pref: 3, thin: 0, mkt: 1, far: 0, held: 0 }, tiers: ['safe', 'med', 'aggr', 'xtrm'].map(id => tiers[id] || why(id)), taken_at: T(g.date, '15:00:00'), ...o });
+  /* an entry of three levels, as every set is taken since 5 November 2026; four (Extreme after them), as before it */
+  const ent = (g, tiers, { four, ...o } = {}) => ({ season: +g.id.slice(0, 4), date: g.date, gid: g.id, away: g.away, home: g.home, type: 'REG', tip: g.tip, lock: minIso(Date.parse(g.tip) - LOCK), tv: g.tv || ['ESPN'], generated: T(g.date, '12:00'),
+    pool: { pref: 3, thin: 0, mkt: 1, far: 0, held: 0 }, tiers: (four ? SC.OLD_TIERS : SC.TIERS).map(id => tiers[id] || why(id)), taken_at: T(g.date, '15:00:00'), ...o });
   const gZ = { id: gZid, date: D0, tip: T(D1, '00:30'), away: 'WAS', home: 'BKN', tv: ['ESPN'] };
   const gW = { id: gWid, date: DW, tip: T(addDay(DW, 1), '00:00'), away: 'IND', home: 'MIN', tv: ['NBA TV'] };
   const gO = { id: OLD, date: `${Y}-03-01`, tip: `${Y}-03-02T00:30Z`, away: 'ATL', home: 'BOS', tv: ['ESPN'] };
   const gY2old = { ...gY2, tip: T(D1, '00:30') };
+  const gX = { id: gXid, date: dX, tip: T(addDay(dX, 1), '02:00'), away: 'SAC', home: 'POR', tv: ['NBA TV'] };
   const P = {
     E1: ent(gY1, { safe: lvl('safe', [legT(gY1, 'ml', 'CLE', null, -150, 130), legT(gY1, 'total', 'under', 216, -110, -110)]),
       med: lvl('med', [legT(gY1, 'ml', 'CLE', null, -150, 130), legP(gY1, 9200001, 'Pa One', 'MIL', 'pts', 'main', 20.5, 'over', -115), legP(gY1, 9200099, 'Pb Dnp', 'CLE', 'reb', 'main', 4.5, 'over', 105)]) }),
@@ -276,14 +291,20 @@ function entryOk(e, g, at) {
     E6: ent(gW, { safe: lvl('safe', [legP(gW, 9200006, 'Mo Csv', 'IND', 'pts', 'main', 15.5, 'over', -110), legP(gW, 9200007, 'No Csv', 'IND', 'ast', 'main', 5.5, 'under', -125)]),
       med: lvl('med', [legP(gW, 9200006, 'Mo Csv', 'IND', 'reb', 'main', 4.5, 'under', -110), legP(gW, 9200007, 'No Csv', 'IND', 'pts', 'mile', 10, 'yes', 120), legP(gW, 9200008, 'Oz Dnp', 'IND', 'pts', 'main', 6.5, 'over', -110)]) }),
     E7: ent(gY4, { safe: lvl('safe', [legT(gY4, 'ml', 'MEM', null, -125, 105), legP(gY4, 9200009, 'Pf Wait', 'MEM', 'pts', 'main', 12.5, 'over', -110)]) }),
+    E8: ent(gX, { safe: lvl('safe', [legT(gX, 'ml', 'POR', null, -150, 130), legT(gX, 'total', 'over', 228.5, -110, -110)]),
+      xtrm: lvl('xtrm', [legT(gX, 'ml', 'POR', null, -150, 130), legT(gX, 'total', 'over', 228.5, -110, -110), legP(gX, 9200031, 'Qa One', 'POR', 'pts', 'main', 20.5, 'over', -115),
+        legP(gX, 9200032, 'Qb Two', 'SAC', 'reb', 'main', 8.5, 'over', -110), legP(gX, 9200033, 'Qc Three', 'SAC', 'ast', 'main', 5.5, 'under', -120)]) }, { four: true }),
   };
   /* grades planted: E4's complete grade, which a state that cannot settle it must keep; E5's, last season's, never redone */
   P.E4.grade = { safe: { result: 'won', legs: ['win', 'win'], payout: P.E4.tiers[0].dec } };
   P.E5.grade = { safe: { result: 'lost', legs: ['loss', 'win'], payout: 0 } };
+  P.E8.grade = { safe: { result: 'won', legs: ['win', 'win'], payout: P.E8.tiers[0].dec }, xtrm: { result: 'lost', legs: ['win', 'win', 'loss', 'win', 'void'], payout: 0 } };
   L = read();
   for (const e of Object.values(P)) L.featured[SC.keyOf(e)] = e;
   plant(L);
   chk(SC.check(read(), null, Date.parse(T(D2, '12:00:00')), null, SEASON).length === 0, 'D: the planted ledger passes the guard: ' + SC.check(read(), null, Date.parse(T(D2, '12:00:00')), null, SEASON).slice(0, 2).join('; '));
+  const lineX0 = bytes().split('\n').find(l => l.startsWith(`  ${JSON.stringify(SC.keyOf(P.E8))}:`));
+  chk(!!lineX0 && Date.parse(P.E8.taken_at) < Date.parse(SC.THREE_FROM) && P.E8.tiers.length === 4, `D: an entry taken before ${SC.THREE_FROM} with the four levels is accepted by the guard`);
   /* D1's finals and box lines: each player of gA's levels given a line, his legs landing or not by the plant */
   const eD0 = entry(gA), boxA = {};
   for (const t of eD0.tiers) for (const l of t.legs || []) if (l.kind === 'prop') { const row = boxA[l.pid] = boxA[l.pid] || [10, 5, 4, 1, 1, 0];
@@ -326,7 +347,7 @@ function entryOk(e, g, at) {
   }
   let graded = 0;
   for (const [k, e] of Object.entries(L.featured)) {
-    if (!(Date.parse(e.tip) <= Date.parse(tD)) || e.season !== SEASON) continue;
+    if (!(Date.parse(e.tip) <= Date.parse(tD)) || e.season !== SEASON || e.gid === gX.id) continue;
     for (const t of e.tiers) { if (!t.legs) continue;
       const res = t.legs.map(settle), want = e.gid === gZid ? { result: 'won', payout: t.dec } : payOwn(t, res), g = e.grade && e.grade[t.id];
       const ok = g && g.result === want.result && (want.payout === undefined || g.payout === want.payout) && (e.gid === gZid || JSON.stringify(g.legs) === JSON.stringify(res));
@@ -341,6 +362,9 @@ function entryOk(e, g, at) {
   chk(gr('E6').result === 'won' && gr('E6').payout === P.E6.tiers[0].dec && L.featured[SC.keyOf(P.E6)].grade.med.result === 'lost' && JSON.stringify(L.featured[SC.keyOf(P.E6)].grade.med.legs) === '["win","loss","void"]',
     "D: a game older than the state's week is graded from the season's box file (a milestone missed, a row marked did-not-play void)");
   chk(gr('E7').result === 'pending', 'D: a final whose box score is not read yet is pending');
+  { const lineX = bytes().split('\n').find(l => l.startsWith(`  ${JSON.stringify(SC.keyOf(P.E8))}:`)), eX = L.featured[SC.keyOf(P.E8)];
+    chk(lineX === lineX0 && eX.tiers.map(t => t.id).join() === 'safe,med,aggr,xtrm' && eX.grade.xtrm.result === 'lost',
+      `D: the entry taken before the change keeps its four levels, its Extreme legs and grades, byte for byte (${lineX === lineX0 ? 'the same line' : 'was ' + String(lineX0).slice(-300) + ' now ' + String(lineX).slice(-300)})`); }
   chk(graded >= 14, `D: every level of this season's played entries checked (${graded})`);
   /* the summary, worked out here: each season's game and level once, from the last key that holds it */
   const sum = { safe: { g: 0, w: 0, push: 0, u: 0, m: 0, f: 0, fn: 0 }, med: { g: 0, w: 0, push: 0, u: 0, m: 0, f: 0, fn: 0 }, aggr: { g: 0, w: 0, push: 0, u: 0, m: 0, f: 0, fn: 0 }, xtrm: { g: 0, w: 0, push: 0, u: 0, m: 0, f: 0, fn: 0 } }, lastOf = new Map(); let pend = 0;
@@ -348,6 +372,8 @@ function entryOk(e, g, at) {
   for (const [t, g] of lastOf.values()) { const s = sum[t.id]; if (g.result === 'pending') { pend++; continue; } if (g.result === 'push') { s.push++; continue; }
     s.g++; if (g.result === 'won') s.w++; s.m += t.p; if (t.fair != null) { s.f += t.fair; s.fn++; } s.u += g.payout - 1; }
   const q = L.featured_summary;
+  chk(Object.keys(q.tiers).join() === 'safe,med,aggr,xtrm' && q.tiers.xtrm.graded === 1 && q.tiers.xtrm.won === 0 && q.tiers.xtrm.units === -1
+    && L.featured_summary.tiers.xtrm.label === 'Extreme', `D: the summary keeps Extreme's record under its own key, from the entry taken before the change alone (0-1, -1 unit): ${JSON.stringify(q.tiers.xtrm)}`);
   chk(['safe', 'med', 'aggr', 'xtrm'].every(id => q.tiers[id].graded === sum[id].g && q.tiers[id].won === sum[id].w && q.tiers[id].push === sum[id].push && Math.abs(q.tiers[id].units - sum[id].u) < 0.0015 && Math.abs(q.tiers[id].exp_model - sum[id].m) < 0.0001 && q.tiers[id].fair_n === sum[id].fn) && q.pending === pend,
     `D: the summary is the grades', each game's level once from its last key (${['safe', 'med', 'aggr', 'xtrm'].map(id => `${id} ${q.tiers[id].won}/${q.tiers[id].graded}`).join(', ')}; ${q.pending} pending)`);
   chk(q.tiers.safe.graded === sum.safe.g && !lastOf.has(`${SEASON}|${gY2old.id}|med`) && [...lastOf.keys()].filter(k => k.startsWith(`${SEASON}|${gY2.id}|`)).length === 1, "D: gY2's Safe under two tip-offs is counted once, the later key's");
@@ -391,6 +417,13 @@ function entryOk(e, g, at) {
   fs.writeFileSync(LEDGER, good);
   r = run(null, null, tD);
   chk(r.code === 1 && /refused/.test(r.last) && bytes() === good, 'F: a state that is not there is refused, the file untouched: ' + r.last);
+  /* a page that draws Extreme again (its SP_TIERS the Parlay Builder's four): refused, the file untouched */
+  { const page = path.join(DIR, 'index.html'), was = fs.readFileSync(page, 'utf8'), from = "const SP_TIERS = PB_TIERS.filter(t => t[0] !== 'xtrm');";
+    if (was.split(from).length === 2) {
+      fs.writeFileSync(page, was.replace(from, 'const SP_TIERS = PB_TIERS;'));
+      try { r = run(stD, linesOf([gD, gE, gF]), tD); } finally { fs.writeFileSync(page, was); }
+      chk(r.code === 1 && /the page's levels are not the three this record keeps/.test(r.last) && bytes() === good, "F: a page whose sets draw Extreme again is refused, the file untouched: " + r.last);
+    } else chk(false, "F: the built page sets SP_TIERS, the Parlay Builder's levels less Extreme, exactly once"); }
   /* and the command line: the file against the last commit's (--prev) */
   const cl1 = cp.spawnSync('node', [CHECK, '--prev', goodFile, '--now', tD], { encoding: 'utf8', env: { ...process.env, SUGGEST_LEDGER: LEDGER, SUGGEST_STATE: path.join(DIR, 'state.json') } });
   chk(cl1.status === 0 && /suggest check: 0 failures/.test(cl1.stdout), 'F: the command line passes the good file: ' + cl1.stdout.trim());
@@ -411,7 +444,23 @@ function entryOk(e, g, at) {
   fails1(L => { L.featured[kD].type = 'PRE'; }, /not a featured game/, 'a preseason entry');
   fails1(L => { L.featured[kD].lock = minIso(Date.parse(gD.tip) - 3 * H); }, /not 2 hours before its tip-off/, 'a lock not 2 hours before tip-off');
   fails1(L => { L.featured[kD].taken_at = minIso(Date.parse(gD.tip) - H).replace('Z', ':00Z'); }, /at or after its lock/, 'a set taken after its lock');
-  fails1(L => { L.featured[kD].tiers.reverse(); }, /its levels are not the four/, 'levels out of order');
+  fails1(L => { L.featured[kD].tiers.reverse(); }, /its levels are not the three/, 'levels out of order');
+  fails1(L => { L.featured[kD].tiers.pop(); }, /its levels are not the three/, 'a level missing');
+  /* THE CUTOVER: no set taken since THREE_FROM holds Extreme, and none taken before it is refused for it */
+  const xtrmOf = () => ({ id: 'xtrm', label: 'Extreme', n: 5, floor: 0.05, why: 'No legs in this game.' });
+  fails1(L => { L.featured[kD].tiers.push(xtrmOf()); }, /with Extreme, a level the record has not taken since/, 'a set taken since the change holding Extreme');
+  fails1(L => { L.featured[kF].tiers.push(xtrmOf()); }, /with Extreme, a level the record has not taken since/, 'a set still to lock rewritten with Extreme', null);
+  { const L4 = clone(base); L4.featured[kD].tiers.push(xtrmOf()); L4.featured_summary = SC.summarize(L4.featured);
+    const held = SC.check(L4, L4, now, null, SEASON), alone = SC.check(L4, null, now, null, SEASON);
+    const again = clone(L4); again.featured[kF].tiers.push(xtrmOf()); again.featured[kF].taken_at = T(D2, '10:00:00'); again.featured_summary = SC.summarize(again.featured);
+    const prevF = clone(L4); prevF.featured[kF].tiers.push(xtrmOf()); prevF.featured_summary = SC.summarize(prevF.featured);
+    const retaken = SC.check(again, prevF, now, null, SEASON);
+    chk(!held.length && alone.some(x => x.startsWith(kD + ':') && /with Extreme/.test(x)) && retaken.some(x => x.startsWith(kF + ':') && /with Extreme/.test(x)),
+      `F: a set the file it is held to already holds with Extreme, at the same time taken (a run of the old page after ${SC.THREE_FROM}), passes; with no file to hold it to it fails on THREE_FROM, and taken again with Extreme it fails (${held.slice(0, 1).join('') || 'held: passes'} | ${alone.find(x => /Extreme/.test(x)) || 'alone: nothing'} | ${retaken.find(x => /Extreme/.test(x)) || 'retaken: nothing'})`); }
+  { const eO = clone(base.featured[kD]); eO.taken_at = new Date(Date.parse(SC.THREE_FROM) - 60e3).toISOString().replace(/\.000Z$/, 'Z');
+    eO.tiers.push(xtrmOf());
+    chk(Date.parse(eO.taken_at) < Date.parse(eO.tip) - LOCK && SC.entryBad(kD, eO, now).length === 0 && SC.entryBad(kD, { ...eO, taken_at: SC.THREE_FROM }, now).some(x => /with Extreme/.test(x)),
+      `F: a set holding Extreme taken a minute before ${SC.THREE_FROM} passes on its own, and one taken at it fails`); }
   fails1(L => { const t = L.featured[kA].tiers[1]; t.legs = t.legs.slice(0, 2); }, /2 legs on a level of 3/, 'a level short of its legs');
   fails1(L => { L.featured[kA].tiers[0].legs[0].id = gC.id; }, /a leg on another game/, 'a leg on another game');
   fails1(L => { const t = L.featured[kA].tiers.find(x => x.legs && x.legs.filter(l => l.kind === 'prop').length >= 2); const ps = t.legs.filter(l => l.kind === 'prop'); ps[1].pid = ps[0].pid; }, /a player twice/, 'a player twice in a level');
@@ -427,7 +476,7 @@ function entryOk(e, g, at) {
   fails1(L => { delete L.featured[kA]; }, /a set locked at .* is gone/, 'a locked set gone');
   fails1(L => { L.featured[kA].generated = 'x'; }, /locked at .*, and changed \(generated\)/, 'a locked set changed in a field');
   fails1(L => { L.featured[kA].updates = []; L.featured[kA].tiers.forEach(t => delete t.updated); }, /record of replacements rewritten/, 'its replacements rewritten');
-  fails1(L => { L.featured[kA].tiers[3].id = 'xx'; }, /its levels changed/, 'its levels changed');
+  fails1(L => { const T3 = L.featured[kA].tiers; T3[T3.length - 1].id = 'xx'; }, /its levels changed/, 'its levels changed');
   fails1(L => { const t = L.featured[kA].tiers.find(x => !x.updated && x.legs); t.dec = t.dec + 1; }, /changed with no player listed/, 'a locked level changed with no replacement');
   /* against a last commit holding gA as it was locked (B3's levels, before the replacement) */
   const asLocked = () => { const p = clone(base), e = p.featured[kA]; delete e.updates; delete e.grade; e.tiers = clone(eB3.tiers); return p; };
@@ -472,6 +521,10 @@ function entryOk(e, g, at) {
     for (const f of fs.readdirSync(path.join(ROOT, 'data')).filter(f => /^box_\d{4}\.csv$/.test(f))) fs.copyFileSync(path.join(ROOT, 'data', f), path.join(G, 'data', f));
     const gl = path.join(G, 'ledger.json'); if (fs.existsSync(realLedger)) fs.copyFileSync(realLedger, gl);
     const before = fs.existsSync(gl) ? fs.readFileSync(gl, 'utf8') : null;
+    /* the real ledger as it stands, its sets from before the change holding Extreme, accepted by the guard on its own and
+       against itself */
+    if (before) { const RL = JSON.parse(before), b1 = SC.check(RL, null, Date.now(), null, REAL.season), b2 = SC.check(RL, RL, Date.now(), null, REAL.season);
+      chk(!b1.length && !b2.length, `G: the real ledger as it stands passes the guard (${[...b1, ...b2].slice(0, 2).join(' | ') || 'no failure'})`); }
     /* one clock for the run and for which sets this check counts as locked (the real clock, held at one instant, as the
        job hands it): a lock passing while the script runs is then neither's */
     const tG = Date.now();
@@ -480,7 +533,10 @@ function entryOk(e, g, at) {
     chk(rg.status === 0 && /^suggest ledger: (written|unchanged)/.test(last), 'G: the real state and lines at the real clock: nothing refused: ' + last);
     if (before && rg.status === 0) { const was = JSON.parse(before), now1 = JSON.parse(fs.readFileSync(gl, 'utf8'));
       chk(Object.entries(was.featured || {}).filter(([, e]) => Date.parse(e.tip) - LOCK <= tG).every(([k, e]) => now1.featured[k] && JSON.stringify(SC.callOf(now1.featured[k])) === JSON.stringify(SC.callOf(e)) || (now1.featured[k] && (now1.featured[k].updates || []).length > (e.updates || []).length)),
-        'G: every locked set of the real ledger as it was, but for its grade'); }
+        'G: every locked set of the real ledger as it was, but for its grade');
+      chk(Object.values(now1.featured || {}).every(e => Date.parse(e.taken_at) < Date.parse(SC.THREE_FROM) || e.tiers.map(t => t.id).join() === SC.TIERS.join())
+        && Object.entries(now1.featured || {}).filter(([k]) => was.featured && was.featured[k] && Date.parse(was.featured[k].taken_at) < Date.parse(SC.THREE_FROM) && Date.parse(was.featured[k].tip) - LOCK <= tG).every(([k, e]) => e.tiers.length === was.featured[k].tiers.length),
+        `G: every set taken since ${SC.THREE_FROM} is the three levels, and every locked one from before keeps the levels it had`); }
   } else chk(true, 'G: no lines.json in this checkout: the real run is skipped');
   end();
 })();

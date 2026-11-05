@@ -14,10 +14,14 @@
  * press taking fresh lines into everything priced from them, a started game (by its tip, ESPN's status or ESPN's own
  * tip), a failed day and a game with no line left as they were and the status line saying what stands (published, an
  * earlier press's read, or no line yet), nothing stored, and the page's parse held to fetch.js's on the answers
- * recorded in tools/fixtures/. Section 8 is the player props view (README "Player props"): the props read on the same
- * press (by ESPN's ids, only games still to come, two pages, a 404, junk, a refusal, a game that tips during its read),
- * every line, rung and Yes price the sheet shows worked out here on its own, the model on trial (its lines reaching the
- * Parlay Builder's Top 50 lines marked so),
+ * recorded in tools/fixtures/. Section 8 is the player props view (README "Player props"), laid out as the NFL hub's
+ * game page: its window, bar, switches (Include backups, Milestones), Find a player, Refresh odds and what it stands on,
+ * the head card's numbers, Game bets (its chances the Parlay Builder's for the same legs), the team headers and a row a
+ * player (by projected minutes, the Players tab's rank and shield, Show stats from the published box scores, one open at
+ * a time), the props read on the same press (by ESPN's ids, only games still to come, two pages, a 404, junk, a refusal,
+ * a game that tips during its read) and the job's published lines.json shown before any press, every line, rung and Yes
+ * price the view shows worked out here on its own, the model on trial (its lines reaching the Parlay Builder's Top 50
+ * lines marked so),
  * nothing read before a press, nothing stored, a reload, the shadow ledger's running numbers, and the page's copies of
  * tools/props_feed.js and tools/props.js held to their text and results. Section 10 is the rating over time (publish.js
  * THE HISTORY): history.json worked out here on its own from players.json and the published ladders (every point, the
@@ -362,8 +366,8 @@ async function refreshOdds() {
 }
 
 /* ---------- 8. Player props ----------
-   DraftKings' player props on the Refresh odds press, and the props model on trial beside them (README "Player
-   props"). ESPN is the stub above: the scoreboard answers each game as scheduled with its published lines (so nothing
+   DraftKings' player props on the Refresh odds press or the job's published lines.json, and the props model on trial
+   beside them, in the NFL hub's game page's layout (README "Player props"). ESPN is the stub above: the scoreboard answers each game as scheduled with its published lines (so nothing
    priced from the lines moves), and each game's propBets answer is the recorded opening-night one
    (tools/fixtures/propbets_401909088.json, Tatum and Cunningham) with made-up items added, two pages, a 404, junk, a
    500, a game ESPN has under way and one that tips while its props are being read. Every number the view shows is
@@ -430,7 +434,15 @@ async function playerProps() {
     layout: ['name', 'team', 'pos', 'min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'dd', 'td'], dist: { kind: 'negative binomial', var: RP.dist && RP.dist.var ? RP.dist.var : VAR0 },
     fair: PJ.FAIR, ledger: RP.ledger || LEDGER0, research: RP.research || null };
   props8.games = { [p1.id]: { tip: p1.tip, away: 'BOS', home: 'DET', players: JSON.parse(JSON.stringify(bosDet.players)) }, [p2.id]: { tip: p2.tip, away: 'LAL', home: 'GSW', players: lal } };
-  const st8 = { ...state, generated: tipIn(-3600e3), injuriesAsOf: state.today, props: props8, slate: games.map(g => JSON.parse(JSON.stringify(g))) };
+  /* the rated players: the published ones, and two of the tests' own, Bos Guard ranked and Bos Center not, so the view's
+     rank and shield are held on both whatever the morning's file; the box scores: Bos Guard's two games this past week
+     alone, for Show stats */
+  const agoD = n => { const x = new Date(state.today + 'T12:00:00Z'); x.setUTCDate(x.getUTCDate() - n); return x.toISOString().slice(0, 10); };
+  const planted8 = [{ id: '3001', name: 'Bos Guard', pos: 'G', team: 'BOS', o: 5, d: 2, min: 31, games: 200, prior: 'raptor', rating: 1580, ranked: true, d7: 0 },
+    { id: '3002', name: 'Bos Center', pos: 'C', team: 'BOS', o: 1, d: 9, min: 23, games: 9, prior: 'raptor', rating: 1620, d7: 0 }];
+  const BOX8 = { from: agoD(6), days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: { [`${state.season}_${ymd(agoD(1))}_BOS_NYK`]: { '3001': [20, 5, 4, 2, 1, 0], '9000001': [1, 1, 1, 1, 1, 1] }, [`${state.season}_${ymd(agoD(3))}_MIA_BOS`]: { '3001': [10, 3, 6, 1, 0, 1] } } };
+  const st8 = { ...state, generated: tipIn(-3600e3), injuriesAsOf: state.today, props: props8, slate: games.map(g => JSON.parse(JSON.stringify(g))),
+    players: (state.players || []).filter(p => !['3001', '3002'].includes(p.id)).concat(planted8), boxes: BOX8 };
   /* the scoreboard: every game scheduled with the lines it was published with, p6 under way; its ids are ESPN's */
   const sameOdds = g => ({ details: `${ESPN_CODE[g.home] || g.home} ${g.line}`, total: g.totalLine, hml: String(g.ml.home), aml: (g.ml.away > 0 ? '+' : '') + g.ml.away });
   const sb = {};
@@ -455,43 +467,158 @@ async function playerProps() {
   const sheet = () => d.getElementById('ppBack'), body = () => d.getElementById('ppBody');
   const toDay = g => { const b = d.querySelector(`#days .day[data-d="${g.date}"]`); if (b && !b.classList.contains('on')) b.click(); };
   const cardBtn = g => { d.querySelector('#nav button[data-tab=slate]').click(); toDay(g); return d.querySelector(`.card[data-id="${g.id}"] [data-props]`); };
-  const banned = t => /\bedge\b|model says/i.test(t);
+  const banned = t => /\bedge\b|model says|\bvalue\b/i.test(t);
+  const L8 = props8.layout, at8 = (r, k) => r[L8.indexOf(k)];
+  const muOf = (r, k) => k in props8.combos ? Math.round(props8.combos[k].reduce((t, s) => t + at8(r, s), 0) * 100) / 100 : at8(r, k);   // a combo: its parts' sum, to two decimals, as the ledger's call holds it
+  const num1 = v => Number.isFinite(v) ? v.toFixed(1) : '–';
+  /* this file's own copies of the view's rules (README "Player props"): the NFL hub's confTier, the stat blocks' order */
+  const confOwn = p => p >= 0.70 ? 'high' : p >= 0.45 ? 'med' : 'low';
+  const ORDER_OWN = ['pts', 'reb', 'ast', 'tpm', 'pra', 'pr', 'pa', 'ar', 'stl', 'blk', 'sb'];
+  const NAMES_OWN = { pts: 'Points', reb: 'Rebounds', ast: 'Assists', tpm: 'Threes', stl: 'Steals', blk: 'Blocks', pra: 'Pts + reb + ast', pr: 'Pts + reb', pa: 'Pts + ast', ar: 'Ast + reb', sb: 'Stl + blk', dd: 'Double-double', td: 'Triple-double' };
+  const openRow = pid => { const b = body().querySelector(`[data-pp-open="${pid}"]`); if (b && b.getAttribute('aria-expanded') !== 'true') b.click(); return b; };
+  const blockRows = (pid, stat) => [...body().querySelectorAll(`[data-pp-body="${pid}"] [data-pp-stat="${stat}"] tr[data-pp-leg]`)];
+  /* one row as drawn, and what it must be: the bet, the model's chance (its bar, percentage and band), DraftKings' fair
+     chance ("book N%", est. where it is) and DraftKings' price */
+  const rowSays = tr => { const pc = tr.querySelector('.pct'), cf = tr.querySelector('.pp-conf'), fl = tr.querySelector('.pp-fill'), bx = tr.querySelector('input[type=checkbox]');
+    return { thr: tr.querySelector('.thr').textContent.trim(), p: pc.dataset.ppP === undefined ? null : +pc.dataset.ppP, pct: pc.textContent.trim(), conf: cf ? cf.className.replace('pp-conf ', '') : null,
+      bar: fl ? fl.style.width : null, fair: tr.querySelector('.fair').textContent.trim(), price: tr.querySelector('.price').textContent.trim(), box: !!bx && bx.closest('label.pp-pick') !== null }; };
+  const rowWant = (thr, p, fair, est, price) => ({ thr, p, pct: p == null ? '–' : ppPct(p), conf: p == null ? null : confOwn(p), bar: p == null ? null : Math.max(2, p * 100).toFixed(0) + '%',
+    fair: fair == null ? '' : `book ${ppPct(fair)}${est ? 'est.' : ''}`, price: ppAm(price), box: true });
+  const rowDiff = (tr, want) => { const got = rowSays(tr); return JSON.stringify(got) === JSON.stringify(want) ? null : `${JSON.stringify(got)} want ${JSON.stringify(want)}`; };
 
-  /* before any press: the model's projections, and nothing read */
+  /* before any press, with no lines.json served: the projections, laid out as the NFL hub's game page, and nothing read */
   check(!sheet() || sheet().hidden, 'the props sheet is closed on load');
   for (const g of [p1, p2, p3, p4, p6, p7, p8, p10]) { const b = cardBtn(g); check(b && b.tagName === 'BUTTON' && /^Player props$/.test(b.textContent.trim()) && b.getAttribute('aria-haspopup') === 'dialog', `${g.away} at ${g.home}'s card has a Player props button, a real button, before any press`); }
   check(!cardBtn(p5), 'a game that has tipped off has none');
   check(w.getComputedStyle(cardBtn(p1)).minHeight === '44px', 'it is 44px tall');
   const storedNoTab = win => { const o = JSON.parse(stored(win)); delete o[0]['nba_hub_2027:tab']; return JSON.stringify(o); };
   const before = storedNoTab(w);
-  const opener = cardBtn(p1); opener.focus(); opener.click(); await sleep(30);
-  check(!sheet().hidden && d.getElementById('ppSheet').getAttribute('role') === 'dialog' && d.getElementById('ppSheet').getAttribute('aria-modal') === 'true' && d.getElementById('ppSheet').getAttribute('aria-labelledby') === 'ppTitle', 'a tap opens a dialog over the page (role dialog, aria-modal, titled)');
-  check(d.activeElement === d.getElementById('ppClose') && w.getComputedStyle(d.getElementById('ppClose')).height === '44px' && /Close/.test(d.getElementById('ppClose').getAttribute('aria-label')), 'the focus moves to its 44px Close button');
+  let opener = cardBtn(p1); opener.focus(); opener.click(); await sleep(60);
+  const sh = d.getElementById('ppSheet'), css8 = [...d.querySelectorAll('style')].map(x => x.textContent).join('\n');
+  check(!sheet().hidden && sh.getAttribute('role') === 'dialog' && sh.getAttribute('aria-modal') === 'true' && sh.getAttribute('aria-labelledby') === 'ppTitle' && d.getElementById('ppTitle').textContent === 'Player props: BOS at DET',
+    `a tap opens a dialog over the page (role dialog, aria-modal, titled "${d.getElementById('ppTitle').textContent}")`);
+  check(/#ppSheet\{max-width:1100px;/.test(css8), "it is the NFL hub's game window, 1100px wide at most (its .modal-panel), the whole screen on a phone");
+  const close = d.getElementById('ppClose');
+  check(d.activeElement === close && close.textContent.trim() === '✕ Close' && w.getComputedStyle(close).minHeight === '44px' && /Close/.test(close.getAttribute('aria-label')) && close.closest('.pp-bar') && close.closest('.pp-bar').firstElementChild === close,
+    "the focus moves to its 44px ✕ Close, at the bar's left as the NFL's");
+  const swB = d.getElementById('ppBackups'), swR = d.getElementById('ppRungs');
+  check(swB && swR && swB.type === 'checkbox' && swR.type === 'checkbox' && !swB.checked && !swR.checked && /Include backups/.test(swB.closest('label').textContent) && /^\s*Milestones$/.test(swR.closest('label').textContent)
+    && w.getComputedStyle(swB.closest('label')).minHeight === '44px' && w.getComputedStyle(swR.closest('label')).minHeight === '44px' && !/Book's cut/.test(sh.textContent),
+    "at its right, the NFL's quiet switches: Include backups and Milestones (the NFL's Threshold ladders), both off, each in a 44px label; no Book's cut");
+  const find = d.getElementById('ppFind');
+  check(find && find.type === 'search' && find.placeholder === 'Find a player' && /Find a player/.test(find.getAttribute('aria-label')) && w.getComputedStyle(find).minHeight === '44px', 'then a 44px Find a player box');
+  const rf = body().querySelector('[data-pp-refresh]'), rst = d.getElementById('ppOddsSt');
+  check(rf && rf.textContent.trim() === 'Refresh odds' && rf.getAttribute('aria-describedby') === 'ppOddsSt' && rst && rst.getAttribute('role') === 'status' && w.getComputedStyle(rf).minHeight === '44px'
+    && /^The published lines did not load: Refresh odds reads DraftKings' from ESPN, for this visit only\.$/.test(rst.textContent),
+    `then Refresh odds with its status line beside it, saying what the view stands on: here no lines.json answers ("${rst && rst.textContent}")`);
+  /* the head card, every number worked out here */
+  { const hd = body().querySelector('[data-pp-head]'), m = p1.model, P = bosDet.players;
+    const lead = k => Object.entries(P).reduce((b, [pid, r]) => !b || at8(r, k) > at8(b[1], k) ? [pid, r] : b, null);
+    const leadOk = ['pts', 'reb', 'ast'].every(k => { const el = hd.querySelector(`[data-pp-lead="${k}"]`), [pid, r] = lead(k), nm = r[0].split(' ');
+      return el && el.dataset.ppPid === pid && el.querySelector('.nm').textContent === `${nm[0][0]}. ${nm.slice(1).join(' ')}` && el.querySelector('.v').textContent === `${num1(at8(r, k))}${k}`; });
+    const labs = [...hd.querySelectorAll('.pp-ghl')].map(x => x.firstChild.textContent.trim());
+    const fav = p1.line < 0 ? p1.home : p1.away;
+    check(hd && hd.classList.contains('pp-card') && JSON.stringify(labs) === JSON.stringify(['Tip-off', 'Matchup', 'Biggest projections', 'Expected score', 'Total pt', 'Vegas pick']),
+      `the head card, the NFL's with its stripe: ${labs.join(', ')} (Tip-off in the NFL's Kickoff place)`);
+    check(hd.querySelector('.when b').textContent === `${new Date(p1.date + 'T12:00:00Z').toLocaleDateString(undefined, { weekday: 'short', timeZone: 'UTC' })}, ${new Date(p1.date + 'T12:00:00Z').toLocaleDateString(undefined, { month: 'short', day: 'numeric', timeZone: 'UTC' })}`
+      && hd.querySelector('.when').textContent.endsWith(new Date(p1.tip).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET')
+      && [...hd.querySelectorAll('.pp-mt .pill')].map(x => x.textContent).join(' at ') === 'BOS at DET', `its tip-off (the day, the date and the tip in ET) and the matchup ("${hd.querySelector('.when').textContent}")`);
+    check(leadOk, "its biggest projections are the props model's top projected player in the game for points, rebounds and assists, short name and value");
+    check(/Model on trial/.test(hd.querySelector('.lead-c .pp-ghl').textContent) && hd.querySelector('.pp-trialtag'), 'and it keeps the Model on trial tag');
+    check(hd.querySelector('[data-pp-score] b').textContent === `${Math.round((m.total + m.spread) / 2)} – ${Math.round((m.total - m.spread) / 2)}` && hd.querySelector('[data-pp-score] small').textContent === 'BOS / DET'
+      && hd.querySelector('[data-pp-totpts] b').textContent === String(Math.round(m.total)) && hd.querySelector('[data-pp-vegas] .pill').textContent === fav && hd.querySelector('[data-pp-vegas] small').textContent === `by ${Math.abs(p1.line)}`,
+      `the expected score is the board model's, its total split by its spread (${hd.querySelector('[data-pp-score] b').textContent}), its total (${hd.querySelector('[data-pp-totpts] b').textContent}), and Vegas's pick the line's favourite by its number`); }
   let bt = body().textContent;
-  check(/Press Refresh odds for DraftKings' props/.test(bt) && body().querySelector('[data-pp-refresh]'), `before any press it says to press Refresh odds for DraftKings' props, with the button there ("${bt.slice(0, 90)}")`);
-  check(/Model on trial/.test(d.getElementById('ppSub').textContent) && /on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show/.test(bt) && /The Parlay Builder's Top 50 lines take a player's line where this model's chance clears their bar, marked on trial there and in the builder/.test(bt),
-    "the model is labelled on trial, not yet shown to beat DraftKings, its chances marked so wherever they show, the Top 50 lines taking its lines as the owner asked");
-  const projRows = [...body().querySelectorAll('[data-pp-proj]')];
-  check(projRows.length === Object.keys(bosDet.players).length, `and shows the model's projections for every expected player (${projRows.length} of ${Object.keys(bosDet.players).length})`);
-  const L8 = props8.layout, at8 = (r, k) => r[L8.indexOf(k)];
-  const projOk = projRows.every(tr => { const r = bosDet.players[tr.dataset.ppProj], td = [...tr.querySelectorAll('td')].map(x => x.textContent.trim());
-    return r && td[0].startsWith(r[0]) && td[1] === r[3].toFixed(1) && td[2] === at8(r, 'pts').toFixed(1) && td[3] === at8(r, 'reb').toFixed(1) && td[4] === at8(r, 'ast').toFixed(1) && td[5] === at8(r, 'tpm').toFixed(1)
-      && td[8] === (at8(r, 'pts') + at8(r, 'reb') + at8(r, 'ast')).toFixed(1) && td[9] === ppPct(at8(r, 'dd')); });
-  check(projOk, "each row is the published projection: minutes, points, rebounds, assists, threes, PRA the sum, the double-double chance");
-  const order = projRows.map(tr => bosDet.players[tr.dataset.ppProj]);
-  check([...body().querySelectorAll('.pp-proj tr')].every(tr => w.getComputedStyle(tr).display === 'table-row') && body().querySelector('.pp-proj tr.pp-team td[colspan="10"]'), "every row of the table is laid out as a table row, each team's heading across it (no card style reaches it)");
-  /* on a phone the table drops steals and blocks (jsdom lays nothing out: the rule and the classes are held here, the fit
-     in a real browser at 390) so points + rebounds + assists and the double-double chance are on the screen */
-  { const ths = [...body().querySelectorAll('.pp-proj thead th')].map(th => [th.textContent.trim(), th.classList.contains('pp-opt')]), css = [...d.querySelectorAll('style')].map(x => x.textContent).join('\n');
-    const tr = body().querySelector('.pp-proj tr[data-pp-proj]'), opt = [...tr.children].map(td => td.classList.contains('pp-opt'));
-    check(JSON.stringify(ths.filter(x => x[1]).map(x => x[0])) === '["Stl","Blk"]' && JSON.stringify(opt) === '[false,false,false,false,false,false,true,true,false,false]'
-      && /@media\(max-width:520px\)\{[^@]*?\.pp-proj \.pp-opt\{display:none\}/.test(css) && body().querySelector('.pp-optnote'),
-      'on a phone (520px and under) the projections table drops Stl and Blk, and says so, keeping PRA and DD'); }
-  check(order.slice(0, order.findIndex(r => r[1] === 'DET')).every(r => r[1] === 'BOS') && order.every((r, i) => i === 0 || r[1] !== order[i - 1][1] || r[3] <= order[i - 1][3]), 'away team first, each team by projected minutes');
-  check(!banned(bt), 'the view says neither "edge" nor "model says"');
-  const teamBtn = d.querySelector('[data-pp-team="home"]'); teamBtn.focus(); teamBtn.click(); await sleep(20);
-  check([...body().querySelectorAll('[data-pp-proj]')].every(tr => bosDet.players[tr.dataset.ppProj][1] === 'DET') && d.activeElement && d.activeElement.dataset.ppTeam === 'home', 'the team switch shows the Pistons alone, the focus kept on it');
-  check(/Not projected, on the injury report: Some Star/.test(body().textContent), "who the injury report has out is said, not projected");
+  check(/Model on trial/.test(bt) && /on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show/.test(bt) && /The Parlay Builder's Top 50 lines take a player's line where this model's chance clears their bar, marked on trial there and in the builder/.test(bt)
+    && body().querySelector('[data-pp-head] + details[data-pp-trial]') && !body().querySelector('details[data-pp-trial]').open,
+    "the model is labelled on trial, its note (folded, after the head card) saying it is not yet shown to beat DraftKings, its chances marked so wherever they show, the Top 50 lines taking its lines as the owner asked");
+  check(body().querySelector('[data-pp-gbets] h3').textContent === 'Game bets' && body().querySelector('[data-pp-gbets] [data-pp-noline]').textContent === 'No DraftKings line yet.' && !body().querySelector('[data-pp-gbets] input'),
+    'Game bets, with no line read, says "No DraftKings line yet." as the NFL\'s, and offers nothing');
+  /* the teams: away first, each its header and a row a projected player, by projected minutes */
+  const secs = [...body().querySelectorAll('section.pp-team')];
+  check(secs.length === 2 && secs[0].dataset.ppTeam === 'BOS' && secs[1].dataset.ppTeam === 'DET' && secs.every(s => s.querySelector('h3.pp-teamhdr .pill') && s.querySelector('.pp-teamhdr .pp-pill').textContent === `playing ${s.dataset.ppTeam === 'BOS' ? 'DET' : 'BOS'}`),
+    "each team in turn, away then home, under the NFL's team header (its pill, name and \"playing\" the other)");
+  const rowsNow = () => [...body().querySelectorAll('[data-pp-player]')];
+  check(rowsNow().length === Object.keys(bosDet.players).length && rowsNow().every(r => bosDet.players[r.dataset.ppPlayer]), `a row for every projected player (${rowsNow().length} of ${Object.keys(bosDet.players).length}), nobody else`);
+  check(!body().querySelector('[data-pp-bench]'), 'with Include backups off, no backup is shown');
+  { const ord = secs.map(s => [...s.querySelectorAll('[data-pp-player]')].map(r => bosDet.players[r.dataset.ppPlayer]));
+    check(ord.every((l, i) => l.every(r => r[1] === ['BOS', 'DET'][i]) && l.every((r, j) => !j || l[j - 1][3] >= r[3])), 'each team\'s rows are its players, by projected minutes'); }
+  const sumBad = rowsNow().filter(r => { const P = bosDet.players[r.dataset.ppPlayer], s = r.querySelector('.sum').textContent.replace(/\s+/g, ' ').trim();
+    return s !== `${num1(muOf(P, 'pts'))} pts · ${num1(muOf(P, 'reb'))} reb · ${num1(muOf(P, 'ast'))} ast` || r.querySelector('.who .nm').textContent !== P[0] || r.querySelector('.who .pos').textContent !== P[2]; });
+  check(!sumBad.length, `each row is the NFL's: his name and position, and at the right his projected points, rebounds and assists (${sumBad.map(r => r.dataset.ppPlayer).join(', ')})`);
+  const btn0 = rowsNow()[0].querySelector('.pp-plrbtn');
+  check(rowsNow().every(r => { const b = r.querySelector(':scope > button.pp-plrbtn'); return b && b.type === 'button' && b.getAttribute('aria-expanded') === 'false' && b.getAttribute('aria-controls') === `ppPb-${r.dataset.ppPlayer}` && b.getAttribute('aria-label').startsWith(bosDet.players[r.dataset.ppPlayer][0]); })
+    && !body().querySelector('.pp-plrbody') && /\.pp-plrbtn\{position:absolute;inset:0;/.test(css8) && r0Css(css8),
+    "each row is a full-width button (it covers the row) with aria-expanded, closed, named for the player and his projection");
+  function r0Css(c) { return /@media\(max-width:760px\)\{[^@]*?\.pp-plr\{grid-template-columns:minmax\(0,1fr\) 26px;grid-template-rows:auto auto;/.test(c) && /\.pp-plr \.sum\{grid-column:1;grid-row:2;text-align:left\}/.test(c) && /\.pp-rungs \.barcell\{display:none\}/.test(c); }
+  check(r0Css(css8), "on a phone (760px and under) a row stacks as the NFL's: the name line, the projection under it, the chevron at the right; the rows drop their bar (jsdom lays nothing out: the rules are held here, the fit in a real browser)");
+  btn0.focus(); btn0.click(); await sleep(20);
+  { const r0 = rowsNow()[0], pid = r0.dataset.ppPlayer, P = bosDet.players[pid], b = r0.querySelector('.pp-plrbtn'), pb = body().querySelector(`[data-pp-body="${pid}"]`);
+    const heads = [...pb.querySelectorAll('[data-pp-stat]')].map(x => x.dataset.ppStat);
+    const muBad = ORDER_OWN.filter(k => { const h = pb.querySelector(`[data-pp-stat="${k}"] h4`); return !h || h.firstChild.textContent.trim() !== NAMES_OWN[k] || +h.querySelector('[data-pp-mu]').dataset.ppMu !== muOf(P, k) || h.querySelector('[data-pp-mu]').textContent !== `projected ${num1(muOf(P, k))}`; });
+    const ynBad = ['dd', 'td'].filter(k => { const h = pb.querySelector(`[data-pp-stat="${k}"] h4`); return !h || h.querySelector('[data-pp-mu]').textContent !== `projected ${ppPct(at8(P, k))}`; });
+    check(b.getAttribute('aria-expanded') === 'true' && r0.classList.contains('open') && pb && pb.id === `ppPb-${pid}` && d.activeElement === d.querySelector(`[data-pp-open="${pid}"]`),
+      'a tap opens the row: aria-expanded, its body under it (the one it controls), the focus kept on it');
+    check(JSON.stringify(heads) === JSON.stringify(ORDER_OWN.concat(['dd', 'td'])) && !muBad.length && !ynBad.length,
+      `his body is a stat block a stat he is projected on, in the sheet's order, each headed "Points  projected 14.3", then his double- and triple-double ("projected 23%")${muBad.concat(ynBad).length ? ': ' + muBad.concat(ynBad).join(', ') : ''}`);
+    check([...pb.querySelectorAll('[data-pp-stat]')].every(x => x.querySelector('[data-pp-noline]') && x.querySelector('[data-pp-noline]').textContent === 'No DraftKings line yet.' && !x.querySelector('tr') && !x.querySelector('.pb-trial')),
+      'with no line read, each block says "No DraftKings line yet." and offers nothing, and no on-trial mark where no chance is drawn');
+    const other = rowsNow()[1]; other.querySelector('.pp-plrbtn').click(); await sleep(20);
+    check(!body().querySelector(`[data-pp-body="${pid}"]`) && body().querySelectorAll('.pp-plrbody').length === 1 && rowsNow()[0].querySelector('.pp-plrbtn').getAttribute('aria-expanded') === 'false', "one player open at a time, as the NFL's: opening another closes him");
+    rowsNow()[1].querySelector('.pp-plrbtn').click(); await sleep(20);
+    check(!body().querySelector('.pp-plrbody'), 'and a second tap closes it'); }
+  check(!banned(body().textContent), 'the view says neither "edge", "model says" nor "value"');
+  /* the rank and shield: the Players tab's own, read off that tab */
+  { const ranks = rowsNow().map(r => [r.dataset.ppPlayer, r.querySelector('[data-pp-rank]'), (r.querySelector('.pp-badge svg') || { getAttribute: () => null }).getAttribute('class')]);
+    d.getElementById('ppClose').click(); await sleep(20);
+    d.querySelector('#nav button[data-tab=players]').click(); await sleep(30);
+    const all = d.getElementById('pall'); all.checked = true; all.dispatchEvent(new w.Event('input', { bubbles: true })); await sleep(30);
+    const tab = new Map([...d.querySelectorAll('#playersT tbody tr')].map(tr => { const b = tr.querySelector('[data-hx^="p:"]'); return [b.dataset.hx.slice(2), { rk: tr.querySelector('.rk').textContent, sh: tr.querySelector('.tierbadge').getAttribute('class') }]; }));
+    const rated = new Map(st8.players.map(p => [p.id, p]));
+    const bad = ranks.filter(([pid, el, cls]) => { const p = rated.get(pid), t = tab.get(pid); if (!p || !p.ranked) return !!el; return !el || !t || el.dataset.ppRank !== t.rk || [...el.childNodes].filter(n => n.nodeType === 3).map(n => n.textContent).join('') !== '#' + t.rk || cls !== t.sh; });
+    check(!bad.length && ranks.some(([pid, el]) => el && pid === '3001') && ranks.some(([pid, el]) => !el && pid === '3002'),
+      `each player's rank and shield are the Players tab's (its # column and its shield, read off the tab), none for one the ladder does not rank (3002) or the tab does not have${bad.length ? ': ' + bad.map(x => x[0]).join(', ') : ''}`);
+    d.querySelector('#nav button[data-tab=slate]').click(); await sleep(20);
+    opener = cardBtn(p1); opener.click(); await sleep(30); }
+  /* Show stats: only for a player with games in the published box scores, his week as they have it */
+  { const withSt = rowsNow().filter(r => r.querySelector('[data-pp-stats]')).map(r => r.dataset.ppPlayer);
+    check(JSON.stringify(withSt) === JSON.stringify(['3001']), `Show stats is offered only where the page has his recent games (the published box scores): ${withSt.join(', ') || 'none'}`);
+    const sb1 = body().querySelector('[data-pp-stats="3001"]');
+    check(sb1.tagName === 'BUTTON' && sb1.getAttribute('aria-pressed') === 'false' && sb1.textContent === 'Show stats' && w.getComputedStyle(sb1).minHeight === '44px' && !sb1.closest('.pp-plrbtn') && sb1.closest('[data-pp-player="3001"]'),
+      "it is the NFL's chip after his name, a button of its own beside the row's (never inside it), 44px tall by its padding");
+    sb1.focus(); sb1.click(); await sleep(20);
+    const tb = body().querySelector('[data-pp-recent="3001"]'), trs = tb ? [...tb.querySelectorAll('tbody tr')].map(tr => [...tr.children].map(c => c.textContent)) : [];
+    const games = Object.entries(BOX8.games).filter(([, gm]) => gm['3001']).map(([gid, gm]) => ({ gid, ...(([, dd, a, h]) => ({ date: `${dd.slice(0, 4)}-${dd.slice(4, 6)}-${dd.slice(6, 8)}`, a, h }))(gid.split('_')), line: gm['3001'] })).sort((x, y) => x.date < y.date ? -1 : 1);
+    const want = games.map(gm => [new Date(gm.date + 'T12:00:00Z').toLocaleDateString(undefined, { month: 'short', day: 'numeric', timeZone: 'UTC' }), gm.a === 'BOS' ? `@ ${gm.h}` : `vs ${gm.a}`, ...gm.line.map(String)]);
+    const avg = [0, 1, 2, 3, 4, 5].map(i => (games.reduce((t, gm) => t + gm.line[i], 0) / games.length).toFixed(1));
+    check(tb && JSON.stringify(trs) === JSON.stringify(want) && JSON.stringify([...tb.querySelectorAll('tfoot td')].map(c => c.textContent)) === JSON.stringify([`Per game (${games.length})`, ...avg])
+      && d.activeElement === body().querySelector('[data-pp-stats="3001"]') && body().querySelector('[data-pp-stats="3001"]').getAttribute('aria-pressed') === 'true' && body().querySelector('[data-pp-stats="3001"]').textContent === 'Hide stats',
+      `a tap shows his games as the box scores have them, a line a game and the average a game (${trs.map(x => x.join(' ')).join(' / ')}), the chip now Hide stats, the focus kept on it`);
+    body().querySelector('[data-pp-stats="3001"]').click(); await sleep(20);
+    check(!body().querySelector('[data-pp-recent]'), 'and a second tap hides them'); }
+  /* who the report has out, Include backups and the search */
+  check(body().querySelectorAll('[data-pp-outs]').length === 2 && [...body().querySelectorAll('[data-pp-outs]')].every(p => p.textContent === 'Not projected, on the injury report: Some Star (Out).'), "who the injury report has out is said under each club, not projected (the NFL's \"Not shown\")");
+  swB.focus(); swB.click(); await sleep(20);
+  { const bench = [...body().querySelectorAll('[data-pp-bench]')].map(r => r.dataset.ppPlayer).sort();
+    const shownIds = new Set(Object.keys(bosDet.players).concat(['2']));
+    const want = [...new Set(['1'].concat(st8.players.filter(p => (p.team === 'BOS' || p.team === 'DET') && !shownIds.has(p.id)).map(p => p.id)))].sort();
+    check(swB.checked && JSON.stringify(bench) === JSON.stringify(want) && [...body().querySelectorAll('[data-pp-bench]')].every(r => !r.querySelector('.pp-plrbtn') && !r.querySelector('input') && /No projection: /.test(r.querySelector('.sum').textContent)),
+      `Include backups adds the rest of each club's expected rotation and its rated players (${bench.length}), each in his place with nothing to bet, not a button: no projection and why`);
+    check(d.activeElement === swB, 'the focus stays on the switch'); }
+  swB.click(); await sleep(20);
+  check(!body().querySelector('[data-pp-bench]'), 'and off again takes them away');
+  { const f0 = d.getElementById('ppFind'); f0.focus(); f0.value = 'cUN'; f0.dispatchEvent(new w.Event('input', { bubbles: true })); await sleep(20); }
+  { const vis = rowsNow().filter(r => !r.closest('[hidden]')).map(r => r.dataset.ppPlayer), secs2 = [...body().querySelectorAll('section.pp-team')];
+    check(JSON.stringify(vis) === '["4432166"]' && secs2.find(s => s.dataset.ppTeam === 'BOS').hidden && !secs2.find(s => s.dataset.ppTeam === 'DET').hidden && body().querySelector('section[data-pp-team="DET"] [data-pp-outs]').hidden && d.activeElement === d.getElementById('ppFind'),
+      `Find a player shows the rows whose name holds what is typed, whatever its case (${vis.join(', ')}), a club's heading only while it has one, the focus kept in the box`); }
+  d.getElementById('ppFind').value = ''; d.getElementById('ppFind').dispatchEvent(new w.Event('input', { bubbles: true })); await sleep(20);
+  check(rowsNow().every(r => !r.closest('[hidden]')), 'emptied, every row is back');
+  /* the Tab trap: the window's first and last controls, the boxes and the search among them */
+  { const f = [...sh.querySelectorAll('button, summary, a[href], input')].filter(el => !el.disabled && !el.closest('[hidden]') && !(el.tagName !== 'SUMMARY' && el.closest('details:not([open])')));
+    const tab = (shift) => { const ev = new w.KeyboardEvent('keydown', { key: 'Tab', shiftKey: shift, bubbles: true, cancelable: true }); d.activeElement.dispatchEvent(ev); return ev.defaultPrevented; };
+    f[f.length - 1].focus(); const p1t = tab(false), wentFirst = d.activeElement === f[0];
+    f[0].focus(); const p2t = tab(true), wentLast = d.activeElement === f[f.length - 1];
+    check(f[0] === close && f.includes(swB) && f.includes(swR) && f.includes(d.getElementById('ppFind')) && p1t && wentFirst && p2t && wentLast, `Tab stays inside: from the last control (${f[f.length - 1].id || f[f.length - 1].textContent.trim().slice(0, 20)}) to ✕ Close, and back`); }
   sheet().dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20);
   check(sheet().hidden && d.activeElement === opener, 'Escape closes it and the focus goes back to the button that opened it');
   cardBtn(p3).click(); await sleep(20);
@@ -500,11 +627,12 @@ async function playerProps() {
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
   check(d.getElementById('pbPanel') && !d.querySelector('#pbPanel .pb-trial') && !/Tatum|Cunningham|Lal Guard/.test(d.getElementById('pbPanel').textContent), "before a press (no lines.json is served here) the Parlay Builder's Top 50 lines have no player line");
   cardBtn(p2).click(); await sleep(20);
-  check(!sheet().hidden && /LAL/.test(d.getElementById('ppSub').textContent) && body().querySelectorAll('[data-pp-proj]').length === 3, "another game's button opens that game's sheet, with its projections");
+  check(!sheet().hidden && d.getElementById('ppTitle').textContent === 'Player props: LAL at GSW' && rowsNow().length === 3 && !d.getElementById('ppFind').value, "another game's button opens that game's own view, with its projections and an empty search");
   d.getElementById('ppClose').click(); await sleep(20);
   const nT = timers.length;
   await provoke(w, timers, errors);
-  check(espnReqs(requests).length === 0, `nothing is read before a press: not on load, opening a sheet, switching its team, closing it, nor on any timer or event (${nT} timers fired; ${espnReqs(requests).length} requests)`);
+  check(espnReqs(requests).length === 0, `nothing is read before a press: not on load, opening a sheet, its rows, switches or search, closing it, nor on any timer or event (${nT} timers fired; ${espnReqs(requests).length} requests)`);
+  check(requests.filter(x => /lines\.json/.test(x.url)).length === 1 && requests.filter(x => /lines\.json/.test(x.url)).every(x => x.opt && x.opt.cache === 'no-store'), "the published lines (lines.json) are asked for once a load, no-store, however many views open");
   check(storedNoTab(w) === before, 'and nothing is stored (the tab in view, which the page has always remembered, aside)');
 
   /* the press, from the board */
@@ -538,69 +666,77 @@ async function playerProps() {
   check(cardBtn(p3) && cardBtn(p3).textContent.trim() === 'Player props', 'a game with none posted shows no count');
   check(!cardBtn(p8) && !w.NBA_PROPS.live()[p8.id] && !w.NBA_PROPS.live()[p6.id] && !w.NBA_PROPS.live()[p5.id] && !w.NBA_PROPS.live()[p10.id], 'the game that tipped while its props were read has no button and nothing taken; nor have the three ESPN or the clock had started (p10 by ESPN\'s own tip alone)');
 
-  /* the sheet after the press: every line, every rung and every Yes price worked out here */
+  /* the view after the press: every line, every rung and every Yes price worked out here, one player opened at a time */
   cardBtn(p1).click(); await sleep(30);
-  bt = body().textContent;
-  check(/DraftKings' props from ESPN, read \d{1,2}:\d{2}/.test(bt) && /For this visit only: a reload shows the published page again/.test(bt), 'the sheet says when DraftKings\' props were read, for this visit only');
+  const e1at = w.NBA_PROPS.live()[p1.id].at, et = iso => new Date(iso).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET';
   const parsed1 = PF.propParse(p1Items), rows1 = props8.games[p1.id].players;
-  const muOf = (r, k) => k in props8.combos ? Math.round(props8.combos[k].reduce((t, s) => t + at8(r, s), 0) * 100) / 100 : at8(r, k);   // a combo: its parts' sum, to two decimals, as the ledger's call holds it
-  let lineBad = [], nLines = 0;
-  for (const m of parsed1.mains) {
-    const el = body().querySelector(`[data-pp-player="${m.player}"] [data-pp-line="${m.stat}"]`); nLines++;
-    if (!el) { lineBad.push(`${m.player} ${m.stat} missing`); continue; }
-    const r = rows1[m.player], fair = PF.propFairOver(m.over, m.under);
-    const md = r ? `projection ${muOf(r, m.stat).toFixed(1)} · model ${ppPct(PJ.pOver(m.line, muOf(r, m.stat), PJ.nbVar(muOf(r, m.stat), props8.dist.var[m.stat])))} · DraftKings ${ppPct(fair)}` : `DraftKings ${ppPct(fair)}`;
-    const t = [...el.children].map(c => c.textContent.trim());
-    if (t[1] !== String(m.line) || t[2] !== 'O' + ppAm(m.over) || t[3] !== 'U' + ppAm(m.under) || t[4] !== md) lineBad.push(`${m.player} ${m.stat}: ${t.join(' | ')} (want ${md})`);
+  check(d.getElementById('ppOddsSt').textContent === `DraftKings via ESPN, ${et(e1at)}: ${parsed1.mains.length} main lines, ${parsed1.ladders.length} milestone prices and ${parsed1.yes.length} double- and triple-double prices. For this visit only: a reload shows the published lines again.`,
+    `the status line beside Refresh odds says the view stands on the press, when, and how many lines ("${d.getElementById('ppOddsSt').textContent}")`);
+  const fair8 = props8.fair, lined = [...new Set(parsed1.mains.concat(parsed1.ladders, parsed1.yes).map(m => m.player))];
+  check(lined.every(pid => body().querySelector(`[data-pp-player="${pid}"]`)) && rowsNow().length === new Set(lined.concat(Object.keys(rows1))).size, `every player DraftKings lines has a row, beside every projected player (${rowsNow().length})`);
+  let lineBad = [], nLines = 0, rungBad = [], nRungs = 0, mono = true, yesBad = [], trialBad = [];
+  swR.click(); await sleep(20);
+  for (const pid of lined) {
+    openRow(pid); await sleep(5);
+    const r = rows1[pid];
+    for (const m of parsed1.mains.filter(x => x.player === pid)) {
+      const trs = blockRows(pid, m.stat).filter(tr => tr.classList.contains('mainline')), h4 = body().querySelector(`[data-pp-body="${pid}"] [data-pp-stat="${m.stat}"] h4`); nLines++;
+      const fo = PF.propFairOver(m.over, m.under), pO = r ? PJ.pOver(m.line, muOf(r, m.stat), PJ.nbVar(muOf(r, m.stat), props8.dist.var[m.stat])) : null;
+      const bad = trs.length !== 2 ? `${trs.length} rows` : rowDiff(trs[0], rowWant(`Over ${m.line}`, pO, fo, false, m.over)) || rowDiff(trs[1], rowWant(`Under ${m.line}`, pO == null ? null : 1 - pO, 1 - fo, false, m.under));
+      if (bad || h4.querySelector('.mline').textContent !== `book line ${m.line}`) lineBad.push(`${pid} ${m.stat}: ${bad || h4.textContent}`);
+      if (r ? !(h4.querySelector('.pb-trial') && h4.querySelector('.pb-trial').title === w.eval('pbTrialTitle()')) : h4.querySelector('.pb-trial')) trialBad.push(`${pid} ${m.stat}`);
+    }
+    for (const s of PF.PROP_STATS) {
+      const want8 = parsed1.ladders.filter(l => l.player === pid && l.stat === s); if (!want8.length) continue;
+      const trs = blockRows(pid, s).filter(tr => tr.classList.contains('rung'));
+      if (trs.length !== want8.length) rungBad.push(`${pid} ${s}: ${trs.length} rows for ${want8.length}`);
+      let last = 2;
+      trs.forEach((tr, i) => { const l = want8[i]; nRungs++;
+        const pm = r ? PJ.nbSf(l.k, muOf(r, s), PJ.nbVar(muOf(r, s), props8.dist.var[s])) : null;
+        const bad = rowDiff(tr, rowWant(`${l.k}+`, pm, PF.propFairRung(l.price, fair8.rung.a[s]), true, l.price)); if (bad) rungBad.push(`${pid} ${s} ${l.k}+: ${bad}`);
+        if (pm != null) { if (pm > last + 1e-12) mono = false; last = pm; } });
+    }
+    for (const y of parsed1.yes.filter(x => x.player === pid)) {
+      const trs = blockRows(pid, y.market), fy = PF.propFairRung(y.price, fair8.yes.a[y.market]);
+      const bad = trs.length !== 1 ? `${trs.length} rows` : rowDiff(trs[0], rowWant('Gets one', r ? at8(r, y.market) : null, fy, true, y.price));
+      if (bad || !/never measured on this market itself/.test(trs[0].querySelector('.fair').title) || !/read it as high/.test(trs[0].querySelector('.fair').title)) yesBad.push(`${pid} ${y.market}: ${bad || 'title'}`);
+    }
   }
-  check(nLines === nMain1 && !lineBad.length, `each of the ${nLines} main lines shows its line, DraftKings' Over and Under, and "projection · model · DraftKings" worked out from the published projection, tools/props.js's distribution and the whole margin on the Over${lineBad.length ? ': ' + lineBad.slice(0, 3).join('; ') : ''}`);
-  const cade = body().querySelector('[data-pp-player="4432166"] [data-pp-line="pts"] .md');
-  check(cade && /^projection 20\.8 · model \d+% · DraftKings \d+%$/.test(cade.textContent.trim()), `Cunningham's points: "${cade && cade.textContent.trim()}"`);
-  const fair8 = props8.fair;
-  let rungBad = [], nRungs = 0, mono = true;
-  for (const tb of body().querySelectorAll('[data-pp-player] [data-pp-ladder]')) {
-    const pid = tb.closest('[data-pp-player]').dataset.ppPlayer, s = tb.dataset.ppLadder, r = rows1[pid];
-    const want8 = parsed1.ladders.filter(l => l.player === pid && l.stat === s);
-    const trs = [...tb.querySelectorAll('tbody tr')];
-    if (trs.length !== want8.length) rungBad.push(`${pid} ${s}: ${trs.length} rows for ${want8.length}`);
-    let last = 2;
-    trs.forEach((tr, i) => { const l = want8[i], t = [...tr.children].map(c => c.textContent.trim()); nRungs++;
-      const pm = r ? PJ.nbSf(l.k, muOf(r, s), PJ.nbVar(muOf(r, s), props8.dist.var[s])) : null;
-      if (t[0] !== l.k + '+' || t[1] !== ppAm(l.price) || t[2] !== ppPct(PF.propFairRung(l.price, fair8.rung.a[s])) || (r && t[3] !== ppPct(pm))) rungBad.push(`${pid} ${s} ${l.k}+: ${t.join(' | ')}`);
-      if (pm != null) { if (pm > last + 1e-12) mono = false; last = pm; } });
-  }
-  check(nRungs === parsed1.ladders.length && !rungBad.length, `each of the ${nRungs} milestone prices shows k+, DraftKings' price, its fair chance est. (tools/props_feed.js's rung rule on the measured margin) and the model's chance of reaching it${rungBad.length ? ': ' + rungBad.slice(0, 3).join('; ') : ''}`);
+  check(nLines === nMain1 && !lineBad.length, `each of the ${nLines} main lines is its stat block's two rows, Over and Under: the box, the bet, the model's chance (tools/props.js's distribution on the published projection) as its bar, percentage and the NFL's band, "book N%" DraftKings' fair chance (the whole margin on the Over), and DraftKings' price; the heading "book line N"${lineBad.length ? ': ' + lineBad.slice(0, 3).join('; ') : ''}`);
+  check(!trialBad.length, `each stat block that draws a model chance wears one quiet "on trial" mark, titled as the Parlay Builder's; a player with no projection none${trialBad.length ? ': ' + trialBad.slice(0, 3).join('; ') : ''}`);
+  check(nRungs === parsed1.ladders.length && !rungBad.length, `with Milestones on, each of the ${nRungs} milestone prices is a row under its stat: k+, the model's chance of reaching it, DraftKings' fair chance est. (the rung rule on the measured margin) and its price${rungBad.length ? ': ' + rungBad.slice(0, 3).join('; ') : ''}`);
   check(mono && nRungs > 0, "the model's chance of each ladder falls as the rung rises");
-  check([...body().querySelectorAll('[data-pp-ladder] th')].some(th => /DraftKings, est\./.test(th.textContent)), 'the ladder columns are headed DraftKings, est.');
-  let yesBad = [];
-  for (const y of parsed1.yes) { const el = body().querySelector(`[data-pp-player="${y.player}"] [data-pp-yes="${y.market}"]`), r = rows1[y.player];
-    const want8 = `${y.market === 'dd' ? 'Double-double' : 'Triple-double'} ${ppAm(y.price)} · ${r ? `model ${ppPct(at8(r, y.market))} · ` : ''}DraftKings ${ppPct(PF.propFairRung(y.price, fair8.yes.a[y.market]))} est.`;
-    if (!el || el.textContent.trim() !== want8) yesBad.push(`${el && el.textContent.trim()} (want ${want8})`); }
-  check(parsed1.yes.length && !yesBad.length, `the double- and triple-double prices show the model's chance and DraftKings' fair chance, est., by the rung rule on the rungs' margin${yesBad.length ? ': ' + yesBad.join('; ') : ''}`);
-  const yesEst = body().querySelector('[data-pp-yes] .muted');
-  check(yesEst && /never measured on this market itself/.test(yesEst.title) && /read it as high/.test(yesEst.title) && /never measured on those markets/.test(body().querySelector('[data-pp-trial]').textContent),
-    "their est. says the margin was never measured on those markets and the figure may run high, and so does the on-trial note");
-  const star = body().querySelector('[data-pp-player="2"]');
-  check(star && /Some Star/.test(star.textContent) && star.querySelector('.tag.rose') && /No projection: Out on the injury report/.test(star.textContent) && star.querySelector('[data-pp-line="pts"] .md').textContent.trim() === `DraftKings ${ppPct(PF.propFairOver(-120, -110))}`,
-    "a player DraftKings lines whom the report has out is named from the game's absentees, marked Out, with no projection and DraftKings' fair chance alone");
-  check(body().querySelector('[data-pp-player="4065648"] .pp-pl-h').textContent.includes(`${rows1['4065648'][3].toFixed(1)} min projected`), "a player's projected minutes are beside his name");
-  check(body().querySelector('details[data-pp-more]') && body().querySelectorAll('details[data-pp-more] [data-pp-proj]').length === Object.keys(rows1).length - 2, "the projected players with no DraftKings line are listed apart, folded");
+  check(parsed1.yes.length && !yesBad.length, `the double- and triple-double prices are the NFL's touchdown block: the model's chance, DraftKings' fair chance est. by the rung rule on the rungs' margin, its title saying that margin was never measured there and may run high${yesBad.length ? ': ' + yesBad.join('; ') : ''}`);
+  swR.click(); await sleep(20);
+  openRow('4065648'); await sleep(5);
+  check(swR.checked === false && !body().querySelector('[data-pp-body="4065648"] tr.rung') && blockRows('4065648', 'pts').length === 2, 'with Milestones off again, only the main lines are rows (the NFL hides its ladders the same way)');
+  openRow('2'); await sleep(5);
+  { const sr = blockRows('2', 'pts'), star = body().querySelector('[data-pp-player="2"]');
+    const tx = el => el ? el.textContent : null;
+    check(star && star.closest('section').dataset.ppTeam === 'BOS' && tx(body().querySelector('[data-pp-player="2"] [data-pp-inj]')) === 'Out' && /^No projection: Out on the injury report\./.test(tx(body().querySelector('[data-pp-body="2"] [data-pp-noproj]')))
+      && sr.length === 2 && !rowDiff(sr[0], rowWant('Over 18.5', null, PF.propFairOver(-120, -110), false, -120)),
+      "a player DraftKings lines whom the report has out is named from the game's absentees, wears his Out chip, has no projection and his lines show DraftKings' fair chance alone"); }
+  openRow('3006'); await sleep(5);
+  check([...body().querySelectorAll('[data-pp-body="3006"] [data-pp-stat]')].every(x => x.querySelector('[data-pp-noline]')) && !body().querySelector('[data-pp-body="3006"] input'), 'a projected player DraftKings does not line keeps his row, each block "No DraftKings line yet."');
+  check(!body().querySelector('[data-pp-outs]') || ![...body().querySelectorAll('[data-pp-outs]')].some(p => /Some Star/.test(p.textContent)), "a player out whom DraftKings lines is drawn, so the out line no longer names him");
   bt = body().textContent;
-  check(!banned(bt), 'the view says neither "edge" nor "model says" on a prop');
+  check(!banned(bt), 'the view says neither "edge", "model says" nor "value" on a prop');
   check(storedNoTab(w) === before, 'nothing stored by opening the sheet');
   d.getElementById('ppClose').click(); await sleep(20);
   cardBtn(p2).click(); await sleep(20);
-  const pts2 = body().querySelector('[data-pp-player="9000001"] [data-pp-line="pts"]'), reb2 = body().querySelector('[data-pp-player="9000002"] [data-pp-line="reb"]');
-  check(pts2 && reb2 && /^projection 25\.3 · model \d+% · DraftKings \d+%$/.test(pts2.querySelector('.md').textContent.trim()), 'p2 read on both pages, its ESPN id from the scoreboard: a pair split across the pages is still a line');
-  check(/ESPN athlete 99999999/.test(body().textContent), 'an athlete no file knows is shown by his ESPN id');
-  const pra2 = body().querySelector('[data-pp-player="9000002"] [data-pp-line="pra"] .md');
-  check(pra2 && pra2.textContent.trim().startsWith(`projection ${(15.5 + 11.8 + 2.1).toFixed(1)} `), "a combo's projection is the sum of its parts'");
+  openRow('9000001'); await sleep(5);
+  const pts2 = blockRows('9000001', 'pts'); openRow('9000002'); await sleep(5); const reb2 = blockRows('9000002', 'reb');
+  check(pts2.length === 2 && reb2.length === 2 && body().querySelector('[data-pp-body="9000002"] [data-pp-stat="pra"] [data-pp-mu]').textContent === `projected ${(15.5 + 11.8 + 2.1).toFixed(1)}`,
+    "p2 read on both pages, its ESPN id from the scoreboard: a pair split across the pages is still a line, and a combo's projection is the sum of its parts'");
+  check(body().querySelector('section[data-pp-team="other"] [data-pp-player="99999999"]') && /ESPN athlete 99999999/.test(body().querySelector('section[data-pp-team="other"]').textContent) && /Other DraftKings lines/.test(body().querySelector('section[data-pp-team="other"] h3').textContent),
+    'an athlete no file knows is shown by his ESPN id, last, under Other DraftKings lines');
   d.getElementById('ppClose').click(); await sleep(20);
   cardBtn(p3).click(); await sleep(20);
-  check(/DraftKings has posted no player props for this game yet/.test(body().textContent) && /No projection for this game yet/.test(body().textContent), 'a 404 is "none posted yet", and a game the model has not projected says so');
+  check(/DraftKings has posted no player props for this game yet/.test(d.getElementById('ppOddsSt').textContent) && /No projection for this game yet/.test(body().textContent) && /No projections for this game yet/.test(body().querySelector('[data-pp-head]').textContent),
+    'a 404 is "none posted yet", and a game the model has not projected says so, its head card too');
   d.getElementById('ppClose').click(); await sleep(20);
   cardBtn(p4).click(); await sleep(20);
-  check(/could not be read at/.test(body().textContent), 'a junk answer is "could not be read"');
+  check(/could not be read at/.test(d.getElementById('ppOddsSt').textContent), `a junk answer is "could not be read" ("${d.getElementById('ppOddsSt').textContent}")`);
   d.getElementById('ppClose').click(); await sleep(20);
 
   /* the press's props reach the Parlay Builder's Top 50 lines (README "Parlay Builder"): every player line there is
@@ -623,14 +759,17 @@ async function playerProps() {
   propsAns['401900002'] = [page(p2Items.slice(0, half), 1, 2), 404];
   d.querySelector('#nav button[data-tab=slate]').click(); await sleep(20);
   cardBtn(p1).click(); await sleep(20);
-  d.querySelector('#ppBody [data-pp-refresh]').click();
-  check(/Reading DraftKings' lines and player props from ESPN/.test(body().textContent), "the sheet's own Refresh odds button is the same press, and the sheet says it is reading");
+  const own = d.querySelector('#ppBody [data-pp-refresh]'); own.focus(); own.click();
+  check(/Reading DraftKings' lines and player props from ESPN/.test(d.getElementById('ppOddsSt').textContent) && d.querySelector('#ppBody [data-pp-refresh]').getAttribute('aria-busy') === 'true' && d.activeElement === d.querySelector('#ppBody [data-pp-refresh]'),
+    "the view's own Refresh odds is the same press: at once its status line says it is reading, the button busy, the focus kept on it");
   await idle();
-  check(/4 could not be read \(2 keep their props read earlier\)/.test(d.getElementById('propsSt').textContent) && w.NBA_PROPS.live()[p1.id].at === firstAt && body().querySelector('[data-pp-line="pts"]'),
-    `a failed read keeps the earlier press's props for its game ("${d.getElementById('propsSt').textContent}")`);
+  openRow('4065648'); await sleep(5);
+  check(/4 could not be read \(2 keep their props read earlier\)/.test(d.getElementById('propsSt').textContent) && w.NBA_PROPS.live()[p1.id].at === firstAt && blockRows('4065648', 'pts').length === 2
+    && d.getElementById('ppOddsSt').textContent.startsWith(`DraftKings via ESPN, ${et(firstAt)}:`),
+    `a failed read keeps the earlier press's props for its game, and the view says when they were read ("${d.getElementById('ppOddsSt').textContent.slice(0, 60)}")`);
   check(w.NBA_PROPS.live()[p2.id].status === 'ok' && w.NBA_PROPS.live()[p2.id].at === firstAt2 && w.NBA_PROPS.live()[p2.id].mains.length === lines2 && lines2 > 0,
     "a game whose page 2 is a 404 after page 1 answered keeps its earlier props whole, never page 1's alone nor \"none posted\"");
-  check(d.getElementById('ppSub').textContent.includes('BOS') && !sheet().hidden, 'the open sheet is redrawn in place after the press');
+  check(d.getElementById('ppTitle').textContent.includes('BOS') && !sheet().hidden, 'the open sheet is redrawn in place after the press');
   d.getElementById('ppClose').click(); await sleep(20);
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
@@ -638,9 +777,10 @@ async function playerProps() {
   ({ w, errors, requests, timers } = load('index.html', st8, null, espnStub(sb, () => 0, propsAns)));
   await sleep(300); d = w.document;
   await provoke(w, timers, errors);
-  cardBtn(p1).click(); await sleep(20);
-  check(/Press Refresh odds for DraftKings' props/.test(body().textContent) && !body().querySelector('[data-pp-line]') && d.getElementById('propsSt').hidden && !Object.keys(w.NBA_PROPS.live()).length && !espnReqs(requests).length,
-    'a reload shows the projections again with no DraftKings line, reads nothing, and holds nothing from before');
+  cardBtn(p1).click(); await sleep(30);
+  check(/^The published lines did not load/.test(d.getElementById('ppOddsSt').textContent) && !body().querySelector('[data-sg-add]') && d.getElementById('propsSt').hidden && !Object.keys(w.NBA_PROPS.live()).length && !espnReqs(requests).length
+    && body().querySelectorAll('[data-pp-player]').length === Object.keys(bosDet.players).length,
+    'a reload shows the projections again with no DraftKings line, reads nothing from ESPN, and holds nothing from before');
   d.getElementById('ppClose').click();
 
   /* a sheet left open while its game tips says so, at the page's once-a-minute look */
@@ -648,12 +788,47 @@ async function playerProps() {
   ({ w, errors, requests, timers } = load('index.html', { ...st8, slate: [p9, p1].map(g => JSON.parse(JSON.stringify(g))) }, null, espnStub(sb, () => 0, propsAns)));
   await sleep(300); d = w.document;
   cardBtn(p9).click(); await sleep(20);
-  check(/Press Refresh odds/.test(body().textContent), 'p9 opens before its tip');
+  check(body().querySelector('[data-pp-refresh]') && body().querySelector('[data-pp-head]'), 'p9 opens before its tip');
   await sleep(1700);
   for (const t of timers.filter(t => t.k === 'setInterval')) t.fn();
   await sleep(20);
-  check(/This game has tipped off/.test(body().textContent) && !body().querySelector('[data-pp-refresh]'), 'once it tips, the open sheet says so and offers nothing');
+  check(/This game has tipped off/.test(body().textContent) && !body().querySelector('[data-pp-refresh]') && !body().querySelector('input') && d.getElementById('ppSwitches').hidden, 'once it tips, the open sheet says so and offers nothing');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  /* the published lines (lines.json, README "The lines feed"), read as the Parlay Builder reads them: shown with no
+     press, every leg dated by the job's read; a press's newer read takes its place, and its legs carry the press's time */
+  { const T0 = new Date(Date.now() - 2 * 3600e3).toISOString(), P0 = PF.propParse(rec.items);
+    const pubLines = { v: 1, at: T0, games: { [p1.id]: { at: T0, espn: '401909088', ml: { home: -150, away: 130 }, spread: { line: -3.5, home: -108, away: -112 }, total: { line: 219.5, over: -110, under: -110 },
+      ids: { event: '34510070', ml: { home: '0ML1_1', away: '0ML1_3' }, spread: { home: '0HC1N350_1', away: '0HC1P350_3' }, total: { over: '0OU1O21950_1', under: '0OU1U21950_3' } }, props: { at: T0, mains: P0.mains, ladders: P0.ladders, yes: P0.yes } } } };
+    JSONS = [[/lines\.json/, pubLines]];
+    const ansPub = { ...propsAns, '401909088': page(p1Items, 1, 1) };
+    ({ w, errors, requests, timers } = load('index.html', st8, null, espnStub(sb, () => 0, ansPub)));
+    await sleep(300); d = w.document;
+    cardBtn(p1).click(); await sleep(60);
+    check(d.getElementById('ppOddsSt').textContent === `DraftKings as published, ${et(T0)}: ${P0.mains.length} main lines, ${P0.ladders.length} milestone prices and ${P0.yes.length} double- and triple-double prices.` && !espnReqs(requests).length,
+      `with no press, the view stands on the job's published lines, as the Parlay Builder does ("${d.getElementById('ppOddsSt').textContent}"), and nothing is read from ESPN`);
+    openRow('4065648'); await sleep(5);
+    const tp = blockRows('4065648', 'pts'), m0 = P0.mains.find(m => m.player === '4065648' && m.stat === 'pts');
+    check(tp.length === 2 && rowSays(tp[0]).price === ppAm(m0.over) && JSON.parse(w.eval(`JSON.stringify(PP_OFFER[${tp[0].querySelector('input').dataset.sgAdd}])`)).at === T0,
+      "its lines show with no press, each box's leg dated by the job's read");
+    const gb = [...d.querySelectorAll('[data-pp-gbets] tr[data-pp-leg]')];
+    const glsrc = (d.querySelector('[data-pp-glsrc]') || {}).textContent;
+    check(glsrc === `Lines: DraftKings', as published ${et(T0)}.` && gb.length === 6, `Game bets reads the published game lines too ("${glsrc}")`);
+    /* the Game bets card's chances are the Parlay Builder's own for the same legs (pbPriced, pbTotals: legModel and legFair) */
+    const pbl = JSON.parse(w.eval(`JSON.stringify(pbPriced([S.slate.find(g => g.id === ${JSON.stringify(p1.id)})]).concat(pbTotals(S.slate.find(g => g.id === ${JSON.stringify(p1.id)}))).filter(l => l.kind !== 'prop').map(l => [l.sk, l.p, legFair(l)]))`));
+    const byKey = new Map(pbl.map(x => [x[0], x])), gbBad = gb.filter(tr => { const x = byKey.get(tr.dataset.ppLeg), s = rowSays(tr); return !x || s.p !== x[1] || s.fair !== `book ${ppPct(x[2].p)}`; });
+    check(pbl.length === 6 && !gbBad.length, `each of the six Game bets rows draws the very chance and fair chance the Parlay Builder gives the same leg${gbBad.length ? ': ' + gbBad.map(tr => tr.dataset.ppLeg).join(', ') : ''}`);
+    /* a press's newer read takes the published one's place: Tatum's points line moved to 27.5 */
+    const moved = JSON.parse(JSON.stringify(p1Items)); for (const it of moved) if (/athletes\/4065648/.test(it.athlete.$ref) && String(it.type.id) === '1') it.current.target.value = 27.5;
+    ansPub['401909088'] = page(moved, 1, 1);
+    d.querySelector('#ppBody [data-pp-refresh]').click(); await idle();
+    openRow('4065648'); await sleep(5);
+    const pAt = w.NBA_PROPS.live()[p1.id].at, tp2 = blockRows('4065648', 'pts');
+    check(Date.parse(pAt) > Date.parse(T0) && d.getElementById('ppOddsSt').textContent.startsWith(`DraftKings via ESPN, ${et(pAt)}:`) && rowSays(tp2[0]).thr === 'Over 27.5'
+      && JSON.parse(w.eval(`JSON.stringify(PP_OFFER[${tp2[0].querySelector('input').dataset.sgAdd}])`)).at === pAt,
+      "a press's newer read takes the published one's place: the moved line shows, its leg dated by the press");
+    check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+    JSONS = []; }
 
   /* the page's copies are tools/props_feed.js's and tools/props.js's: the text, then the results */
   const pageSrc = fs.readFileSync(pageFile('index.html'), 'utf8');
@@ -720,8 +895,8 @@ async function playerProps() {
   const withProj = real.slate.filter(g => RP.games && RP.games[g.id] && !(g.tip && Date.parse(g.tip) <= Date.now()) && g.status === 'scheduled');
   let realBad = [];
   for (const g of withProj) { w.eval(`propsOpen(${JSON.stringify(g.id)})`); await sleep(5);
-    const n = body().querySelectorAll('[data-pp-proj]').length, t = body().textContent;
-    if (n !== Object.keys(RP.games[g.id].players).length || /\bNaN\b|\bundefined\b/.test(t) || banned(t)) realBad.push(`${g.id}: ${n} rows`);
+    const ids = [...body().querySelectorAll('[data-pp-player]')].map(r => r.dataset.ppPlayer), t = body().textContent;
+    if (!Object.keys(RP.games[g.id].players).every(pid => ids.includes(pid)) || /\bNaN\b|\bundefined\b/.test(t) || banned(t)) realBad.push(`${g.id}: ${ids.length} rows`);
     w.eval('propsClose()'); }
   check(!realBad.length, `on the real published state, every game the model projects opens with all its projections, no NaN or undefined (${withProj.length} games)${realBad.length ? ': ' + realBad.slice(0, 3).join('; ') : ''}`);
   /* the means the page prices a line on, its own ppMean, are the shadow ledger's open call to the digit, combos included */
@@ -775,6 +950,7 @@ function quad4(ps, R, N = 400) {
   for (let i = 1; i < N; i++) sum += f(a + i * h) * (i % 2 ? 4 : 2);
   return sum * h / 3;
 }
+let S9 = null;
 async function builder() {
   console.log('9. Your parlay: player props and same-game legs');
   const FIX = path.join(ROOT, 'tools', 'fixtures');
@@ -799,7 +975,7 @@ async function builder() {
   /* Moved Wing: a rated player the hub's tables put on MIA, whom DraftKings prices in LAL at GSW (a trade the tables have
      not caught up with); 9000099: an athlete no table names */
   const movedWing = { id: '9000088', name: 'Moved Wing', pos: 'F', team: 'MIA', o: 0, d: 0, elo: 0, min: 20, games: 50, last: '2026-04-01', prior: 'raptor' };
-  const st9 = { ...state, generated: tipIn(-3600e3), injuriesAsOf: state.today, props: props9, corr: CORR, boxes: { from: state.today, days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: {} }, slate: [q1, q2, q3].map(g => JSON.parse(JSON.stringify(g))),
+  const st9 = S9 = { ...state, generated: tipIn(-3600e3), injuriesAsOf: state.today, props: props9, corr: CORR, boxes: { from: state.today, days: 7, line: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], games: {} }, slate: [q1, q2, q3].map(g => JSON.parse(JSON.stringify(g))),
     players: [...(state.players || []), movedWing] };
   /* the scoreboard: q1 is the recorded opening-night answer (DraftKings' moneylines, spread and total with their
      betslip links) moved to its tip; q2 and q3 made in the same shape */
@@ -828,10 +1004,18 @@ async function builder() {
   const shut = () => w.eval('propsClose()');
   const slip = () => (JSON.parse(w.localStorage.getItem('nba_hub_2027') || '{}').slip || {}).legs || [];
   const say = () => d.getElementById('ppSlipSt').textContent;
-  const main = (pid, stat, i) => body().querySelectorAll(`[data-pp-player="${pid}"] [data-pp-line="${stat}"] .pp-add`)[i];
-  const rung = (pid, stat, k) => { const tr = [...body().querySelectorAll(`[data-pp-player="${pid}"] [data-pp-ladder="${stat}"] tbody tr`)].find(r => r.firstElementChild.textContent.trim() === k + '+'); return tr && tr.querySelector('.pp-add'); };
-  const yesB = (pid, m) => body().querySelector(`[data-pp-player="${pid}"] [data-pp-yes="${m}"] .pp-add`);
-  const glB = (label, i) => { const r = [...body().querySelectorAll('[data-pp-gl] .pp-glr')].find(x => x.querySelector('.st').textContent.trim().startsWith(label)); return r && r.querySelectorAll('.pp-add')[i]; };
+  /* a line's box in the view (README "Player props"): his row opened first (one player open at a time), a milestone with
+     Milestones on; a game line's in Game bets, the away side first */
+  const openPl = pid => { const b = body().querySelector(`[data-pp-open="${pid}"]`); if (b && b.getAttribute('aria-expanded') !== 'true') b.click(); };
+  const boxIn = (pid, stat, f) => { openPl(pid); return [...body().querySelectorAll(`[data-pp-body="${pid}"] [data-pp-stat="${stat}"] tr[data-pp-leg]`)].filter(f || (() => true)).map(tr => tr.querySelector('input[type=checkbox]')); };
+  const main = (pid, stat, i) => boxIn(pid, stat, tr => tr.classList.contains('mainline'))[i];
+  const rung = (pid, stat, k) => { const sw = d.getElementById('ppRungs'); if (!sw.checked) sw.click(); openPl(pid);
+    const tr = [...body().querySelectorAll(`[data-pp-body="${pid}"] [data-pp-stat="${stat}"] tr.rung`)].find(r => r.querySelector('.thr').textContent.trim() === k + '+'); return tr && tr.querySelector('input'); };
+  const yesB = (pid, m) => boxIn(pid, m)[0];
+  const glB = (label, i) => { const g = S9.slate.find(x => x.id === ppOpenId()), team = i ? g.home : g.away;
+    const trs = label === 'Total' ? [...body().querySelectorAll('[data-pp-total] tr[data-pp-leg]')] : [...body().querySelectorAll(`[data-pp-side="${team}"] tr[data-pp-leg]`)].filter(tr => tr.querySelector('.thr').textContent.startsWith(label === 'Moneyline' ? 'To win' : 'To cover'));
+    const tr = label === 'Total' ? trs[i] : trs[0]; return tr && tr.querySelector('input'); };
+  const ppOpenId = () => w.eval('ppOpen');
   const banned = t => /\bedge\b|model says/i.test(t);
   const css = [...d.querySelectorAll('style')].map(x => x.textContent).join('\n');
 
@@ -842,16 +1026,35 @@ async function builder() {
   d.getElementById('oddsBtn').click(); await idle();
   open(q1); await sleep(20);
   const P1 = PF.propParse(rec.items), e1 = w.NBA_PROPS.live()[q1.id], gl1 = w.NBA_SLIP.lines()[q1.id];
-  const adds = [...body().querySelectorAll('[data-sg-add]')];
-  check(adds.length === 2 * P1.mains.length + P1.ladders.length + P1.yes.length + 6, `after a press every DraftKings price in the sheet is an add control: each main line's Over and Under, each milestone, each double- and triple-double, and the game's six lines (${adds.length})`);
-  check(adds.every(b => b.tagName === 'BUTTON' && b.type === 'button' && !b.disabled && b.getAttribute('tabindex') !== '-1' && /^Add to your parlay: /.test(b.getAttribute('aria-label')) && b.getAttribute('aria-pressed') === 'false'),
-    'each is a real button, in the tab order, named for what it adds, not pressed');
-  check(/\.pp-add\{min-height:44px;min-width:44px/.test(css) && adds.every(b => w.getComputedStyle(b).minHeight === '44px'), 'each is at least 44px tall (jsdom lays nothing out: the rule and the computed style)');
+  /* every line DraftKings has is a box: each player's, his row opened in turn and Milestones on, and the game's six */
+  d.getElementById('ppRungs').click(); await sleep(10);
+  const adds = [...body().querySelectorAll('[data-pp-gbets] [data-sg-add]')], perPl = [];
+  for (const pid of [...new Set(P1.mains.concat(P1.ladders, P1.yes).map(m => m.player))]) { openPl(pid); await sleep(2);
+    const bx = [...body().querySelectorAll(`[data-pp-body="${pid}"] [data-sg-add]`)], want = 2 * P1.mains.filter(m => m.player === pid).length + P1.ladders.filter(m => m.player === pid).length + P1.yes.filter(m => m.player === pid).length;
+    if (bx.length !== want) perPl.push(`${pid}: ${bx.length} for ${want}`); adds.push(...bx); }
+  d.getElementById('ppRungs').click(); await sleep(10);
+  check(adds.length === 2 * P1.mains.length + P1.ladders.length + P1.yes.length + 6 && !perPl.length, `after a press every DraftKings line in the view is a box that adds it: each main line's Over and Under, each milestone (Milestones on), each double- and triple-double under its player, and the game's six lines in Game bets (${adds.length})${perPl.length ? ': ' + perPl.join('; ') : ''}`);
+  check(adds.every(b => b.tagName === 'INPUT' && b.type === 'checkbox' && !b.disabled && b.getAttribute('tabindex') !== '-1' && /^Add to your parlay: /.test(b.getAttribute('aria-label')) && !b.checked),
+    'each is a real checkbox, in the tab order, named for what it adds, not ticked');
+  check(/\.pp-pick\{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px/.test(css) && adds.every(b => b.closest('label.pp-pick') && w.getComputedStyle(b.closest('label.pp-pick')).minHeight === '44px'),
+    "each sits in a 44px label, the NFL's box in its 44px cell (jsdom lays nothing out: the rule and the computed style)");
   check(gl1 && gl1.ml && gl1.spread && gl1.total && gl1.ml.home.odds === -115 && gl1.ml.away.odds === -105 && gl1.spread.home.line === -1.5 && gl1.spread.home.odds === -108 && gl1.spread.away.odds === -112 && gl1.total.line === 221.5 && gl1.total.over.odds === -115 && gl1.total.under.odds === -105
     && gl1.ml.home.id === '0ML85841510_1' && gl1.ml.away.id === '0ML85841510_3' && gl1.spread.home.id === '0HC85841510N150_1' && gl1.spread.away.id === '0HC85841510P150_3' && gl1.total.over.id === '0OU85841510O22150_1' && gl1.total.under.id === '0OU85841510U22150_3' && gl1.event === '34510070',
     "the recorded answer's game lines read as ESPN has them: moneylines, spread and total with their two prices, each outcome's DraftKings id and the event");
-  const glTxt = [...body().querySelectorAll('[data-pp-gl] .pp-glr')].map(r => [...r.children].map(c => c.textContent.trim()).join(' '));
-  check(JSON.stringify(glTxt) === JSON.stringify(['Moneyline BOS -105 DET -115', 'Spread BOS +1.5 -112 DET -1.5 -108', 'Total 221.5 Over -115 Under -105']), `the sheet's game lines: ${glTxt.join(' / ')}`);
+  const glTxt = [...body().querySelectorAll('[data-pp-gbets] tr[data-pp-leg]')].map(tr => `${tr.closest('[data-pp-side]') ? tr.closest('[data-pp-side]').dataset.ppSide + ' ' : ''}${tr.querySelector('.thr').textContent.trim()} ${tr.querySelector('.price').textContent.trim()}`);
+  check(JSON.stringify(glTxt) === JSON.stringify(['BOS To win -105', 'BOS To cover +1.5 -112', 'DET To win -115', 'DET To cover -1.5 -108', 'Over 221.5 -115', 'Under 221.5 -105'])
+    && [...body().querySelectorAll('[data-pp-side] h4 .mline')].map(x => x.textContent).join('|') === 'book line +1.5|book line -1.5' && body().querySelector('[data-pp-total] h4 .mline').textContent === 'book line 221.5'
+    && body().querySelector('[data-pp-glsrc]').textContent === `Lines: DraftKings', read from ESPN ${new Date(gl1.at).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' })} ET.`,
+    `Game bets, the NFL's card: each team to win and to cover, then the total, at the press's prices, each heading's book line, and whose lines they are (${glTxt.join(' / ')})`);
+  /* the Game bets card's chances: the Parlay Builder's (legModel, legFair), worked out here on their own: a moneyline the
+     player model's win chance, a spread Phi((m + h) / sigma), a total the market's own, the band the NFL's */
+  { const SIGg = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'sigma.json'), 'utf8')).sigma, SGg = require('./sigma'), m = q1.model, confOwn = p => p >= 0.70 ? 'high' : p >= 0.45 ? 'med' : 'low';
+    const want = [['BOS', 1 - m.pHome, -105, -115], ['BOS', SGg.Phi((m.spread + 1.5) / SIGg), -112, -108], ['DET', m.pHome, -115, -105], ['DET', SGg.Phi((-m.spread - 1.5) / SIGg), -108, -112], [null, imp(-115) / (imp(-115) + imp(-105)), -115, -105], [null, imp(-105) / (imp(-105) + imp(-115)), -105, -115]];
+    const rows = [...body().querySelectorAll('[data-pp-gbets] tr[data-pp-leg]')], bad = rows.filter((tr, i) => { const [, p, o, x] = want[i], pc = tr.querySelector('.pct');
+      return Math.abs(+pc.dataset.ppP - p) > 1e-12 || pc.textContent !== ppPct(p) || !tr.querySelector(`.pp-conf.${confOwn(p)}`) || tr.querySelector('.fair').textContent !== `book ${ppPct(imp(o) / (imp(o) + imp(x)))}` || tr.querySelector('.pp-fill').style.width !== Math.max(2, p * 100).toFixed(0) + '%'; });
+    const mg = [...body().querySelectorAll('[data-pp-side] [data-pp-margin]')].map(x => x.textContent);
+    check(rows.length === 6 && !bad.length && JSON.stringify(mg) === JSON.stringify([`our margin ${m.spread > 0 ? '+' : ''}${m.spread.toFixed(1)}`, `our margin ${-m.spread > 0 ? '+' : ''}${(-m.spread).toFixed(1)}`]) && body().querySelector('[data-pp-total] .mpts').textContent === `model's points ${m.total.toFixed(1)}`,
+      `each Game bets row's chance is the Parlay Builder's for that leg, worked out here (the moneyline the player model's, the spread at sigma ${SIGg}, the total the market's own), with the NFL's band and DraftKings' fair chance; each team's "our margin" and the total's "model's points" the board model's${bad.length ? ': rows ' + bad.map(tr => tr.dataset.ppLeg).join(', ') : ''}`); }
   /* the junk an answer can carry: a provider not DraftKings, a spread on another number than the line shown, links that
      are not DraftKings' or carry an id in another shape */
   { const r0 = { home_ml: '-115', away_ml: '-105', home_line: '-1.5', total: '221.5' }, x = JSON.parse(JSON.stringify(ev1));
@@ -871,11 +1074,12 @@ async function builder() {
 
   /* adding: Tatum's points Over, then his rebounds Over (two stats of one player) */
   const tatPts = main('4065648', 'pts', 0); tatPts.focus(); tatPts.click(); await sleep(20);
+  const tatNow = () => main('4065648', 'pts', 0);
   let legs = slip();
   const A = legs[0];
   check(legs.length === 1 && A.id === q1.id && A.kind === 'prop' && A.pid === '4065648' && A.name === 'Jayson Tatum' && A.team === 'BOS' && A.stat === 'pts' && A.mk === 'main' && A.line === 26.5 && A.side === 'over' && A.odds === -111 && A.other === -114 && A.at === e1.at && A.away === 'BOS' && A.home === 'DET',
     "a tap on Tatum's points Over puts that leg in your parlay, stored in the page's own key: the game, the player, his club, the stat, the line, the side, DraftKings' price as read (-111, the Under's -114 beside it) and the read's time");
-  check(say() === 'Added: Jayson Tatum, Points Over 26.5 at -111.' && d.activeElement && d.activeElement.dataset.ppKey === tatPts.dataset.ppKey && d.activeElement.getAttribute('aria-pressed') === 'true', `the sheet says so ("${say()}"), and the control, redrawn pressed, keeps the focus`);
+  check(say() === 'Added: Jayson Tatum, Points Over 26.5 at -111.' && d.activeElement && d.activeElement.dataset.ppKey === tatPts.dataset.ppKey && d.activeElement.checked && d.activeElement.closest('tr').classList.contains('on'), `the sheet says so ("${say()}"), and the box, redrawn ticked (its row marked), keeps the focus`);
   const foot = () => d.getElementById('ppSlipSum').textContent;
   check(!d.getElementById('ppSlipBar').hidden && foot() === 'Your parlay: 1 leg, -111', `the sheet's foot shows your parlay, a single leg at DraftKings' price with no est. ("${foot()}")`);
   main('4065648', 'reb', 0).click(); await sleep(20);
@@ -885,7 +1089,8 @@ async function builder() {
   { const pl = (stat, side) => ({ game: q1.id, kind: stat, player: '4065648', team: 'BOS', side, home: 'DET' });
     const dec2 = Math.min(decOf(-111) * decOf(-143), HOLD / CJ.joint2(imp(-111), imp(-143), CJ.rhoFor(CT, pl('pts', 'over'), pl('reb', 'over'))));
     check(foot() === `Your parlay: 2 legs, ${fmtA(amOfDec(dec2))} est.`, `with two legs of one game the foot's price is the same-game estimate, marked est. ("${foot()}")`); }
-  const refuse = async (btn, re, what) => { const n0 = slip().length; btn.click(); await sleep(20); check(slip().length === n0 && re.test(say()), `${what} is refused with a plain reason ("${say()}")`); };
+  const refuse = async (btn, re, what) => { const n0 = slip().length, key = btn.dataset.ppKey; btn.click(); await sleep(20); const now = body().querySelector(`[data-pp-key="${key}"]`);
+    check(slip().length === n0 && re.test(say()) && now && !now.checked, `${what} is refused with a plain reason, its box left unticked ("${say()}")`); };
   await refuse(main('4065648', 'pra', 0), /^Not added: Jayson Tatum's points over 26\.5 and pts \+ reb \+ ast share a part: DraftKings publishes no list of what it takes on one same-game ticket, so the builder takes one of them\.$/, "his points + rebounds + assists (it holds his points)");
   await refuse(rung('4065648', 'pts', 25), /^Not added: One leg per player per stat: Jayson Tatum already has Points Over 26\.5\.$/, 'his points 25+ milestone (one leg per player per stat)');
   await refuse(main('4065648', 'pts', 1), /^Not added: One leg per player per stat/, 'his points Under beside the Over');
@@ -903,9 +1108,18 @@ async function builder() {
   await refuse(glB('Moneyline', 0), /^Not added: One side bet a game/, "the Celtics' moneyline beside it");
   glB('Moneyline', 1).click(); await sleep(20);
   check(slip().length === 3, 'and it comes out again');
+  /* a milestone in your parlay stays in sight with Milestones off, as the NFL keeps a rung on its parlay shown */
+  { const k = P1.ladders.find(l => l.player === '4432166' && l.stat === 'pts').k;
+    rung('4432166', 'pts', k).click(); await sleep(20);
+    d.getElementById('ppRungs').click(); await sleep(20); openPl('4432166');
+    const rows = [...body().querySelectorAll('[data-pp-body="4432166"] tr.rung')];
+    check(slip().length === 4 && !d.getElementById('ppRungs').checked && rows.length === 1 && rows[0].querySelector('.thr').textContent === `${k}+` && rows[0].querySelector('input').checked && body().querySelector('.pp-lnote') && /shown under its player even with Milestones off/.test(body().querySelector('.pp-lnote').textContent),
+      `with Milestones off, the milestone in your parlay (Cunningham's ${k}+) is still shown under his points, ticked, and the view says why; no other rung is`);
+    rows[0].querySelector('input').click(); await sleep(20);
+    check(slip().length === 3 && !body().querySelector('[data-pp-body="4432166"] tr.rung') && !body().querySelector('.pp-lnote'), 'taken out, it goes from sight with the rest'); }
   check(!banned(body().textContent + d.getElementById('ppSlipBar').textContent), 'the sheet says neither "edge" nor "model says"');
   shut(); open(q3); await sleep(20);
-  await refuse(body().querySelector('[data-pp-player="7000001"] [data-pp-line="pts"] .pp-add'), /^Not added: Preseason games get no box score here, so a player leg on one could never be graded\.$/, 'a player leg on a preseason game');
+  await refuse(main('7000001', 'pts', 0), /^Not added: Preseason games get no box score here, so a player leg on one could never be graded\.$/, 'a player leg on a preseason game');
   shut(); open(q2); await sleep(20);
   /* a player the hub places on neither club of the game goes alone in it: no table names 9000099, and the tables put Moved
      Wing on MIA. Each is taken on his own; another leg of the game beside him is refused, whichever comes first */

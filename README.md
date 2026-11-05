@@ -1053,16 +1053,59 @@ A player DraftKings lines with no game on record has no projection, and is said 
 
 ### On the page (`app/nba_hub.html`)
 
-Every game still to come has a **Player props** button on its card on Tonight (44px, beside Lineups). It opens that game's props in a sheet: a window over the page on a wide screen, the whole
-screen on a phone. Escape, Close (44px) or a tap outside closes it, Tab stays inside, and the focus goes back to the
-button that opened it. Nothing in it is saved, not even the team switch.
+Every game still to come has a **Player props** button on its card on Tonight (44px, beside Lineups). It opens the
+game's own page, laid out as the NFL hub's game page (its Props tab, a game opened; `renderGame` in its
+`props/build/part3.js`) since the owner's call of 5 November 2026 ("when I click the player props in the nba, i want the
+layout to look as much like the nfl huub one"): the same window (1,100px at most, the whole screen on a phone), the same
+pieces in the same order, on this hub's numbers and colours (the NFL's gold stripe this hub's orange; the bars lime, gold
+and grey for High, Med and Low). Escape, ✕ Close (44px) or a tap outside closes it, Tab stays inside, and the focus goes
+back to the button that opened it. Top to bottom:
 
-**Before any press** the sheet says to press Refresh odds for DraftKings' props, with the button in it, and shows the
-model's projections for the players expected to play (each projected 8 minutes or more): minutes, points, rebounds,
-assists, threes, steals, blocks, points + rebounds + assists and the double-double chance, both teams or one, and who
-the injury report has out (on a phone, 520px and under, steals and blocks are left out of the table, which says so, so
-points + rebounds + assists and the double-double chance stay on the screen). A game the model does not project says
-why (preseason, or beyond the next five game days).
+- **The bar**: ✕ Close at the left; at the right the NFL's quiet switches, **Include backups** (the rest of each club's
+  expected rotation, the board model's lineup, and its rated players: each in his place with nothing to bet, not a
+  button, saying why he has no projection) and **Milestones** (each player's k+ rungs under his stats, the NFL's
+  Threshold ladders; off to start, as there). No Book's cut: every price here is DraftKings' own.
+- **Find a player**, which keeps the rows whose name holds what is typed, a club's heading only while it has one.
+- **Refresh odds**, the board's press, with its status line saying what the view stands on: "DraftKings as published,
+  Thu 11:22 AM ET: 89 main lines, 668 milestone prices and 15 double- and triple-double prices." (the job's lines.json)
+  or "DraftKings via ESPN, Thu 4:32 PM ET: …" after a press, for this visit only; none posted yet, a read that failed
+  (the lines before it stand), lines.json still loading or not loaded.
+- **The head card**: Tip-off (the day, the date, the tip in ET; the NFL's Kickoff), Matchup, Biggest projections (the
+  props model's top projected player in the game for points, rebounds and assists, with the Model on trial tag), Expected
+  score (the board model's total split by its spread, "114 – 117"), Total pt (the board model's) and Vegas pick (the
+  line's favourite, "GSW by 7.5"). Then the model's on-trial note, folded.
+- **Game bets**, the NFL's card: each team (its pill, nickname, "our margin", the board model's, and "book line") with
+  **To win** and **To cover**, then the **Game total** ("model's points", "book line") over and under, on DraftKings' game
+  lines as the Parlay Builder has them (`pbGl`). Each row: the box, the bet, the chance as a bar, its percentage and
+  band (the NFL's: High from 70%, Med from 45%, else Low), "book 51%" (DraftKings' fair chance, `legFair`) and
+  DraftKings' price. The chances are the Parlay Builder's own for the same legs (`legModel`: the player model's win
+  chance, its margin against the line at the measured sigma, the total the market's own). With no line, "No DraftKings
+  line yet."
+- **Each team**, away then home, under the NFL's team header ("MIA Heat playing GSW"), who the report rules out said under
+  it ("Not projected, on the injury report: …"), then a row a player by projected minutes: every player the props model
+  projects and every one DraftKings lines (a player DraftKings lines whom the hub places on neither club comes last, under
+  Other DraftKings lines). A row is the NFL's: his tier shield and rank exactly as the Players tab draws them (its #
+  column, none for a player the ladder does not rank), his name, position and injury chip, **Show stats** where the
+  page has his recent games (the published box scores, the last week's: a line a game and the average; no fetch), and at
+  the right his projected points, rebounds and assists; on a phone the name line, the projection under it, the chevron
+  at the right. The whole row is the button that opens him (`aria-expanded`), one player open at a time, as the NFL's.
+- **A player opened**: a stat block a stat he is projected on (points, rebounds, assists, threes, the four combos,
+  steals, blocks, steals + blocks), headed "Points  projected 14.3 … book line 12.5" with one quiet on-trial mark where a
+  chance is drawn, its Over and Under as the NFL's rows (the box, the bet, the props model's chance as bar, percentage
+  and band, "book 48%", DraftKings' price), and with Milestones on its rungs ("25+ points", "book 15% est.").
+  His double- and triple-double are the NFL's touchdown block ("Double-double  projected 23%", a row "Gets one" with its
+  price and "book 19% est."). A stat with no line says "No DraftKings line yet." A player DraftKings lines with no
+  projection shows his lines with DraftKings' chance alone and says why (out on the injury report, projected under 8
+  minutes or no game on record).
+- **Your parlay**, the sheet's foot, as before.
+
+**Its lines are the Parlay Builder's.** The player props and game lines are `pbPr` and `pbGl`: the job's published read
+(lines.json, read once a load, no-store, when the view first opens or the Parlay Builder or Suggested Parlays does) or
+a press's, whichever is newer, so the view shows DraftKings' lines before any press; a press's newer read takes the
+published one's place. Each box puts that leg in the visitor's own parlay exactly as the price buttons did (`slipToggle`:
+the same leg, the same refusals, said on the foot), dated by the read it came from. Nothing in the view is saved: the
+switches hold for the visit, the search, the open player and the stats shown are the game's. A game that has tipped off
+says so and offers nothing.
 
 **The press.** Refresh odds reads DraftKings' player props with the lines, never on load or on a timer: once the
 scoreboard has answered, one request for each game still to come (a second only if an answer runs past a page), six at
@@ -1075,28 +1118,22 @@ nothing is stored, and a reload is the published page again. A second status lin
 ("DraftKings' player props, read 5:36 AM: 3 games, 167 main lines, under Player props on each game. 54 have none posted
 yet."), and each card's button counts its game's main lines.
 
-**After a press**, for each player DraftKings lines (matched by ESPN athlete id; his name from the projections, the
-game's lineups and absentees or the rated players), each main line: the line, DraftKings' Over and Under, and
+**What each number is.** A player is matched by ESPN athlete id (his name from the projections, the game's lineups and
+absentees or the rated players). A main line's chance is the props model's of the Over (`pOver` on the published mean and
+the fitted spread; a combo's mean the sum of its parts', to two decimals, the ledger's call to the digit), the Under its
+complement; DraftKings' fair chance of the Over is its two prices with the whole margin on the Over. A milestone's chance
+is the model's of reaching it, its fair chance an estimate (est.); a double- or triple-double's the model's, its fair
+chance est. by the rungs' margin, its title saying that margin was never measured on these markets and the figure may
+run high.
 
-```
-Points   24.5   O -104   U -123   projection 20.8 · model 29% · DraftKings 45%
-```
-
-the model's mean, its chance of the Over (`pOver` on the published mean and the fitted spread; a combo's mean the sum
-of its parts', to two decimals, the ledger's call to the digit) and DraftKings' fair chance of the Over (the whole margin
-on the Over). Then his milestones (k+), folded, each with its price, DraftKings' fair chance (est.) and the model's chance
-of reaching it; and his double- and triple-double prices with the model's chance and DraftKings' (est., the rungs' margin
-taken out, its title saying that margin was never measured on these markets and the figure may run high). A player with no projection says why (out on the
-injury report, projected under 8 minutes or no game on record) and shows DraftKings' chance alone. The projected players
-DraftKings has no line on are listed under, folded.
-
-**On trial, everywhere it shows.** The sheet's head says Model on trial, and its note says the model has not been shown
-to beat DraftKings and its chances are marked on trial wherever they show (the Parlay Builder's Top 50 lines take its
+**On trial, everywhere it shows.** The head card says Model on trial, each stat block that draws a chance wears the
+on-trial mark (the Parlay Builder's, titled with the ledger's count), and the note after the head card says the model has
+not been shown to beat DraftKings and its chances are marked on trial wherever they show (the Parlay Builder's Top 50 lines take its
 lines since 25 October 2026), with the walk-forward and the market test in brief and the shadow ledger's running
 numbers: how many of the 30,000 graded lines are in, and the model against DraftKings on log loss and Brier, never a
 verdict or a word of one before the bar is decided (a PASS, when it comes, is said to move nothing by itself). The
-Record tab drew the same until 31 October 2026, when it took the NHL hub's layout. Nothing in the view says "model says" or "edge". From the view a prop goes only into the
-visitor's own parlay, by their tap on DraftKings' price (README "Same-game parlays"); the Parlay Builder's Top 50 lines
+Record tab drew the same until 31 October 2026, when it took the NHL hub's layout. Nothing in the view says "model says", "edge" or "value". From the view a prop goes only into the
+visitor's own parlay, by their tick of its box (README "Same-game parlays"); the Parlay Builder's Top 50 lines
 reach the same lines on their own rules, marked on trial (README "Parlay Builder").
 
 The parse and the fair chances are `tools/props_feed.js`'s and the distribution `tools/props.js`'s (`propParse`,
@@ -1145,16 +1182,26 @@ and the committed ledger's bar being `BAR`, every call made after its registrati
 the page: the props view on a press against a stubbed ESPN (the recorded
 opening-night answer with made-up lines added, two pages, a 404, junk, a 503, a game ESPN has under way, one that
 tips while its props are read, one ESPN still calls scheduled with its own tip passed and the published one to come
-(dated by ESPN's tip, as the page's parse dates a row, so it holds across midnight Eastern), and on a second press a game whose page 2 is a 404, which keeps its earlier read whole); every line, rung and Yes price the sheet shows worked out on its own from
-`props_feed.js`, `props.js` and the state's props block; the on-trial wording; the props a press reads reaching the
+(dated by ESPN's tip, as the page's parse dates a row, so it holds across midnight Eastern), and on a second press a game whose page 2 is a 404, which keeps its earlier read whole); the view laid
+out as the NFL hub's game page (since 5 November 2026: its window, ✕ Close at the bar's left and the two switches at its
+right, Find a player, Refresh odds with its status line, the head card's every number worked out on its own, Game bets
+with no line, the team headers away then home, a row for every projected player by projected minutes, each the NFL's
+row and a full-width button with `aria-expanded`, one open at a time, his body's stat blocks in the sheet's order with
+their projections, the rank and shield read off the Players tab itself, Show stats only where the box scores have his
+games and its table and average, who is out said under each club, Include backups' bench rows, the search, the Tab trap
+over the boxes and the search, the phone layout's rules); the published lines.json shown before any press (its status,
+each box's leg dated by the job's read, Game bets' six chances the Parlay Builder's own for the same legs, lines.json read
+once a load and no-store) and a press's newer read taking its place; every line, rung and Yes price the view shows worked
+out on its own from `props_feed.js`, `props.js` and the state's props block (each row's box, bet, chance, bar, band,
+fair chance and price), the one on-trial mark a block that draws a chance; the on-trial wording; the props a press reads reaching the
 Parlay Builder's Top 50 lines, every player line marked on trial and no team line, never a player the report has out,
 none before a press and none once the read is taken away (since 25 October 2026, when props reached the Top 50 lines;
 until then the section held that nothing was suggested); nothing read before a
-press (on load, opening a sheet, switching its team, on every timer and event the page sets); nothing stored; a reload
+press (on load, opening a sheet, its rows, switches or search, on every timer and event the page sets); nothing stored; a reload
 returning to the published page; a sheet left open while its game tips; the ledger's running numbers on made-up
 summaries (no verdict before the bar, then a FAIL and a PASS); the page's copies held to the tools' text and results;
-every game the real state projects opening without a NaN; the page's own means, combos included, the ledger's open calls
-to the digit; the phone table's dropped columns. Each check was shown to fail on a planted break, in a scratch copy: the
+every game the real state projects opening with a row for each of its projected players and without a NaN; the page's
+own means, combos included, the ledger's open calls to the digit. Each check was shown to fail on a planted break, in a scratch copy: the
 job side's 24 (the Over read second, the rung cross-check removed, a 404 read as a failure, a game asked for again, rows
 rewritten, the negative binomial off by one, a frozen call recomputed, the bar's verdict a line early, a moved call
 unchecked, and the rest), the page's 22, and the review's fixes' 16:
@@ -1205,6 +1252,65 @@ reach the Top 50 lines, each marked on trial):
 | a main line's chance from the rung rule | every line |
 | the on-trial label taken off | the model labelled on trial |
 
+The view laid out as the NFL hub's game page (5 November 2026) was held the same way: each of its new checks shown to
+fail on a break planted in a scratch copy of the built page (`NBA_HTML`), 51 breaks, every one caught by the check
+named (§8 or §9 is the smoke's section). The checks of the old sheet's projections table, its team switch and its
+phone columns went with them (the rows above that name them were planted on the page as it then stood):
+
+| Planted break (the view, 5 November 2026) | The check that failed |
+|---|---|
+| the window 900px wide, not the NFL's 1,100 | §8: NFL hub's game window… |
+| Close a bare × | §8: focus moves to its 44px ✕ Close… |
+| Milestones called Threshold ladders | §8: NFL's quiet switches… |
+| the search box's placeholder changed | §8: then a 44px Find a player box… |
+| the status line's wording with no lines.json | §8: then Refresh odds with its status line… |
+| a head card label changed | §8: head card, the NFL… |
+| the smallest projection taken as the biggest | §8: its biggest projections are… |
+| the expected score's two sides swapped | §8: expected score is the board model… |
+| Vegas's pick the underdog | §8: expected score is the board model… |
+| the Model on trial tag gone | §8: and it keeps the Model on trial tag… |
+| the on-trial note after Game bets | §8: model is labelled on trial… |
+| Game bets with no line worded otherwise | §8: Game bets, with no line read… |
+| the home team first | §8: each team in turn, away then home… |
+| players projected 10 minutes or less left out | §8: a row for every projected player… |
+| rows by minutes, low to high | §8: each team's rows are its players, by projected minutes… |
+| the summary's assists its rebounds | §8: each row is the NFL's: his name and position… |
+| a row with aria-pressed, not aria-expanded | §8: each row is a full-width button… |
+| the phone rule putting the summary beside the name | §8: on a phone (760px and under) a row stacks… |
+| the stat blocks in the old order | §8: his body is a stat block a stat… |
+| a block's projection off by 0.1 | §8: his body is a stat block a stat… |
+| a second player opened beside the first | §8: one player open at a time… |
+| every rank one too high | §8: each player's rank and shield are the Players tab… |
+| a shield and rank for an unranked player | §8: each player's rank and shield are the Players tab… |
+| Show stats on every row | §8: Show stats is offered only where… |
+| the stats' average off | §8: a tap shows his games as the box scores have them… |
+| who is out worded otherwise | §8: who the injury report has out is said under each club… |
+| the home club's bench left out | §8: Include backups adds the rest… |
+| Include backups on to start | §8: with Include backups off, no backup is shown… |
+| the search case-sensitive | §8: Find a player shows the rows… |
+| Tab from the last control not taken back to the first | §8: Tab stays inside… |
+| lines.json read again on each open | §8: published lines (lines.json) are asked for once… |
+| the press's status line without "for this visit only" | §8: status line beside Refresh odds says the view stands on the press… |
+| the model's chance of a main line a point off | §8: each of the … |
+| High from 60% | §8: main lines is its stat block… |
+| the bar half the chance | §8: main lines is its stat block… |
+| the fair chance of the other side | §8: main lines is its stat block… |
+| no on-trial mark on a stat block | §8: each stat block that draws a model chance wears… |
+| the rungs shown with Milestones off | §8: with Milestones off again… |
+| the Yes price's title not saying it may run high | §8: double- and triple-double prices are the NFL… |
+| no injury chip | §8: a player DraftKings lines whom the report has out… |
+| the unplaced players' heading changed | §8: an athlete no file knows is shown by his ESPN id… |
+| the view's Refresh odds never busy | §8: view's own Refresh odds is the same press… |
+| a box's leg dated now, not by its read | §8: its lines show with no press, each box… |
+| the view on a press's read alone | §8: with no press, the view stands on the job… |
+| Game bets on a press's lines alone | §8: Game bets reads the published game lines too… |
+| a spread's chance with the line's sign turned | §9: each Game bets row's chance is the Parlay Builder… |
+| "our margin" without its + | §9: each Game bets row's chance is the Parlay Builder… |
+| a box that is not a checkbox | §9: each is a real checkbox… |
+| a box's label 24px | §9: each sits in a 44px label… |
+| a refused box left ticked | §9: is refused with a plain reason, its box left unticked… |
+| a milestone in the parlay hidden with Milestones off | §9: with Milestones off, the milestone in your parlay… |
+
 ```
 node tools/props.js               # the job's step: closing lines, projections, ledger; writes props.json
 node tools/props_check.js         # the ledger against the last commit's; ends "props check: 0 failures"
@@ -1225,15 +1331,17 @@ same rules and price it by the same engine; every leg in a visitor's parlay is s
 
 ### Your parlay, on the page (`app/nba_hub.html`)
 
-**Adding a leg.** After a Refresh odds press, every DraftKings price in a game's Player props is the control that adds
-that leg: each main line's Over and Under (points, rebounds, assists, threes, steals, blocks and the five combos), each
-milestone (k+), each double- and triple-double, and a Game lines block over the players with the game's moneylines,
-spreads and total, read from the same press's scoreboard answer (`oddsGameLines`: DraftKings' own two prices on each,
-the spread and the total only where their number is the one the page shows, and each outcome's betslip id from ESPN's
-link, kept only in its side's shape and naming the line's own number, as the NHL hub keeps them). Each is a real button,
-44px, in the tab order, named for what it adds and pressed while that leg is in. A tap puts the leg in at DraftKings'
-price as read, dated by the read; a second tap takes it out; the sheet's foot says what the tap did and shows the parlay
-in a line ("Your parlay: 3 legs, +441 est."), with a button to it. Before a press there is nothing to add.
+**Adding a leg.** Every DraftKings line in a game's Player props is a box that adds that leg (the NFL hub's game page,
+since 5 November 2026; until then a price button, and only after a Refresh odds press): each main line's Over and Under
+(points, rebounds, assists, threes, steals, blocks and the five combos), each milestone (k+, with Milestones on), each
+double- and triple-double, and Game bets' moneylines, spreads and total, on the lines the Parlay Builder has (the job's
+lines.json, or a press's scoreboard answer where newer: `oddsGameLines`, DraftKings' own two prices on each, the spread
+and the total only where their number is the one the page shows, and each outcome's betslip id from ESPN's link, kept
+only in its side's shape and naming the line's own number, as the NHL hub keeps them). Each is a real checkbox in a
+44px label, in the tab order, named for what it adds and ticked while that leg is in. A tick puts the leg in at
+DraftKings' price as read, dated by the read; unticking takes it out; a refused leg's box stays unticked; the sheet's foot
+says what the tick did and shows the parlay in a line ("Your parlay: 3 legs, +441 est."), with a button to it. With no
+line read for a game there is nothing to add.
 
 **Kept, and read again.** The legs are the visitor's own, in the page's one key (`nba_hub_2027`, `slip`): the game, its
 clubs, date and tip, the player (ESPN athlete id, name, club), the stat, the line or the milestone, the side, DraftKings'
@@ -1412,8 +1520,12 @@ four figures, rows and same-game note against the sums below, the Bet amount typ
 Build undrawn and graded by `NBA_GRADE.gradeBet`, and no Lock in; the levels, the plan and Lock in it names below are
 gone, and the breaks in the table were planted on the page as it then stood. `node tools/smoke.js` section 9 holds it
 all with rules of its own, on a stubbed ESPN (the recorded opening-night props
-and scoreboard answers, and made-up games in their shapes): nothing to add before a press; after one, every price an add
-control, 44px, named, in the tab order; the recorded game lines and ids read as ESPN has them, another book's odds, a
+and scoreboard answers, and made-up games in their shapes): nothing to add before a press where no lines.json answers; after one, every line a
+box (each player's row opened in turn, Milestones on), a checkbox in a 44px label, named, in the tab order, a refused
+one left unticked; Game bets' rows, their prices and book lines, and their chances worked out on their own as the
+Parlay Builder's (the moneyline the player model's, the spread at the measured sigma, the total the market's own), the
+NFL's band, the fair chance, "our margin" and "model's points"; a milestone in the parlay kept in sight with Milestones
+off; the recorded game lines and ids read as ESPN has them, another book's odds, a
 spread on another number, a total on another number or with its Over and Under on two, and ids in the wrong shape
 refused; every leg added stored with its read time and nothing else of the read; the sheet's foot (a single leg at its
 price, two legs of one game at the same-game price worked out here and marked est., a leg in each of two games at their
@@ -2592,8 +2704,9 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   it costs in points, a lineups drawer with projected minutes and each player's contribution and the
   coach (the two sides side by side on a wide card, one above the other on a narrow one, so nothing is cut
   off), a Parlay Builder button on each game the builder lists that opens it with that game alone ticked, and a
-  Player props button that opens the game's props: the model's projections, and DraftKings' player lines beside them
-  once Refresh odds has read them (README "Player props"; the model on trial). Finals
+  Player props button that opens the game's own page, laid out as the NFL hub's game page: its head card, Game bets
+  and a row a player, the model's projections and DraftKings' lines as published or read by Refresh odds (README
+  "Player props"; the model on trial). Finals
   show the score and whether the model hit. Before the schedule appears the tab counts down to
   opening night over the preseason board.
 - **Refresh odds**, over Tonight (the Parlay Builder has its own in its controls and its builder, Suggested Parlays at its head): the job's lines are as old as its last run, so a

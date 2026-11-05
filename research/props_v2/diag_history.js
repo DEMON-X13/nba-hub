@@ -4,9 +4,9 @@
  *                                                      results/diag_history_tables.md (the tables diag_history.md quotes)
  *   node research/props_v2/diag_history.js --refit    fit the three folds' constants again instead of reading the cache
  *
- * Seasons 2022-2026 only. data/games.csv is cut to season <= 2026 before anything is read, and the box scores and team
- * boxes to those games, so no row, rate, pace or opponent figure of 2026-27 (season 2027) enters. Nothing is fitted here
- * but tools/props.js's own walk-forward fit (fit(), exported, unchanged): each test season 2024, 2025 and 2026 is
+ * Seasons 2022-2026 only. cut2026.js drops games.csv's rows after 2026, opens only the box files of seasons up to 2026,
+ * and cuts the box scores and team boxes to the games kept, so no row, rate, pace or opponent figure of 2026-27 (season
+ * 2027) enters. Nothing is fitted here but tools/props.js's own walk-forward fit (fit(), exported, unchanged): each test season 2024, 2025 and 2026 is
  * projected by constants fitted on the seasons before it (2023 on; 2022 warms the ratings up), exactly as
  * `node tools/props.js research` does, and those fitted constants are checked against the ones research/props.json
  * stores. A second view, "live", applies the constants on trial (props.json params, fitted on 2023-2026) to 2023-2026:
@@ -51,11 +51,8 @@ const r2 = x => x == null || !isFinite(x) ? null : Math.round(x * 100) / 100;
 const log = (...a) => console.log(new Date().toISOString().slice(11, 19), ...a);
 
 /* ---------- 1. the data, cut to 2022-2026 ---------- */
-const games = PR.loadGames().filter(g => g.season <= LAST);
-const gset = new Set(games.map(g => g.game_id));
-const boxes = {}; for (const [k, v] of Object.entries(PR.loadBoxes())) if (gset.has(k)) boxes[k] = v;
-const tbox = {}; for (const [k, v] of Object.entries(PR.loadTeamBoxes())) if (gset.has(k.split(':')[0])) tbox[k] = v;
-if (Object.keys(boxes).some(k => !k.startsWith('202') || +k.slice(0, 4) > LAST)) throw new Error('a box score after 2026 was read');
+/* cut2026.js: only the box files of seasons up to 2026 are opened; its guard sees their raw rows */
+const { games, boxes, tbox } = require('./cut2026.js').loadTo2026();
 log(`games ${games.length} (seasons ${games[0].season}-${games[games.length - 1].season}), box scores ${Object.keys(boxes).length}`);
 const R = PR.replay(games, boxes, tbox, { collect: true, from: PR.FIRST + 1 });
 const rows = R.rows;

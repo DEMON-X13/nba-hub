@@ -2,6 +2,10 @@
 
 ## The rule, written down before it was scored (5 November 2026, 17:42 UTC)
 
+> *Added after the review:* that this section came before the scoring run is the writer's account. The repository cannot
+> show it: the section and the results share this file, last saved after the run, and git keeps no file times (README,
+> "The rules kept", rule 4).
+
 This section was written before `cand_blend.js` produced any score for a candidate on the archive. The script was then
 run once for the scores (its `--check` mode, run before that, reproduces the published model and market numbers and
 tests the fitting on made-up data, and prints no candidate score).
@@ -26,7 +30,9 @@ w is fitted by maximum likelihood on log loss (Newton's method, on a convex obje
 **The model.** The walk-forward's 2026 fold (`research/props.json`, constants fitted on 2023-2025), projected as the
 walk-forward projects it, with the box's list as the side. This must reproduce the README: 11,395 graded lines, log loss
 0.6934 against 0.6788. The data is cut to seasons up to 2026 before anything is read. No line, box score or call of
-2026-27 is read.
+2026-27 is read. *(Corrected after the run: the box files of 2026-27 were parsed whole and dropped before any use, not
+left unread. Since the review the script loads through `cut2026.js`, which does not open them, and every number is the
+same: README, "The rules kept".)*
 
 **Out of sample.** Leave one game out (83 folds): each game's lines are scored at the w fitted on the other 82 games.
 
@@ -96,7 +102,8 @@ resampling games:
 | C, the control: model tempered, no market | +0.0066 [+0.0035, +0.0097] | +0.0031 [+0.0017, +0.0046] | 47.2% | 4.9 pts |
 
 **The fitted share.** It is small and stable: w = 0.09 in every fold (leave one game out 0.073 to 0.127, series 0.042 to
-0.150, round 0.060 to 0.175), and never clamped.
+0.150, round 0.060 to 0.175), and never clamped. Those ranges say how much the fit moves when a game, series or round is
+held out, not how uncertain it is: that is the bootstrap interval below, which takes in zero.
 
 **The archive's own optimum**, in sample: w* = 0.091 with a 90% interval of −0.066 to +0.253, which takes in zero. Even
 in sample, w* gains only −0.0002 [−0.0007, +0.0004] on DraftKings.
@@ -145,11 +152,12 @@ B almost never bets, and that is built into it, not a finding:
 | Stl+blk | +0.0010 | −0.0004 | +0.0008 [−0.0021, +0.0039] | 0.419 [−0.223, +1.024] |
 
 **The useful finding here is a diagnosis, not a candidate.**
-- **Points and its combos.** The model's disagreement with DraftKings carries no information: the share is −0.10 to
-  0.00, and B2 drops points altogether. These are the lines the model loses most on, through the minutes and scoring
-  rate the trial diagnosis found.
-- **Rebounds, steals and blocks.** It does carry some. Their in-sample shares are 0.27, 0.59 and 0.54, with intervals
-  above zero. The model alone is already level with DraftKings on steals and blocks.
+- **Points and its combos.** The model's disagreement with DraftKings carries no information that shows: the share is
+  −0.10 to 0.00 (points −0.10 [−0.30, +0.11]), and B2 drops points altogether. These are the lines the model loses most
+  on, through the minutes and scoring rate the trial diagnosis found.
+- **Rebounds, steals and blocks.** It may carry some. Their in-sample shares are 0.27 [+0.03, +0.52], 0.59 [+0.10,
+  +1.12] and 0.54 [+0.08, +1.01]: above zero, but wide, in sample, and three stats of eleven. The model alone is already
+  level with DraftKings on steals and blocks.
 - **Out of sample**, per-stat weights do not turn that into a gain that can be measured. B2 is level with B1, and its
   intervals all cross zero, except where fitting a share near zero costs a little: threes and the points combos.
 - **The one stat interval below zero.** B1's steals interval, −0.0005 [−0.0010, −0.0001], is wholly below zero. That is
@@ -161,8 +169,8 @@ Shrinking the model's chance toward 50% with no market (C, t ≈ 0.48 in every f
 +0.0066, but leaves it clearly behind DraftKings. It also pushes the Over up (47.2% said where 45.9% happened), and its
 Overs then lose −155.8 units, because DraftKings shades the Over.
 
-So the model's overconfidence explains about half the gap. The rest is information DraftKings has and the model lacks.
-Tempering cannot fix that, and anchoring to the market only hides it.
+So the model's overconfidence explains about half the gap. The rest is what DraftKings' price carries and the model's
+chance does not. Tempering cannot fix that, and anchoring to the market only hides it.
 
 ### The box-score walk-forward
 
@@ -198,8 +206,9 @@ blend's.
      if it passed, there would be nothing to bet.
 3. **What B is good for is a yardstick.** The share a model earns against DraftKings measures what it knows that the
    market does not:
-   - props.js earns about 0.09 overall, about zero on points and its combos, and 0.3 to 0.6 on rebounds, steals and
-     blocks.
+   - props.js earns about 0.09 overall (in sample 0.091 [−0.066, +0.253]), about zero on points and its combos, and,
+     in sample with wide intervals, 0.27 [+0.03, +0.52] on rebounds, 0.59 [+0.10, +1.12] on steals and 0.54 [+0.08,
+     +1.01] on blocks.
    - A second model is worth a trial only if it earns a share clearly above zero. On points, where the money and the
      loss are, it earns none now.
    - The minutes and rate fixes the diagnosis points to are where that has to come from. Recalibration alone does not

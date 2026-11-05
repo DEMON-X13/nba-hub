@@ -2,6 +2,10 @@
 
 ## The rules, written down before any was scored (5 November 2026, 18:03 UTC)
 
+> *Added after the review:* that this section came before the scoring run is the writer's account. The repository cannot
+> show it: the section and the results share this file, last saved after the run, and git keeps no file times (README,
+> "The rules kept", rule 4).
+
 This section was written before `cand_select.js` read a single outcome on the archive. What it was written from is
 `results/cand_select_explore.md` (`cand_select_explore.js`: box scores of 2022-2026 only; it never opens
 `data/props_2026.csv`), plus `diag_history.md` (the same seasons).
@@ -23,6 +27,18 @@ So:
   in this folder, though, so a reader should treat even these as weaker than a blind test.
 
 The trial (2026-27) informs none of the rules (brief, rule 1).
+
+> **Corrected after the scoring run** (5 November 2026, after an independent review; the rules themselves are unchanged).
+> Two statements above are looser than the facts:
+> - **"Unseen" is unseen in prices only.** The history the rules were written from (`results/cand_select_explore.md`)
+>   checks each rule on the 2025 and 2026 folds, and the 2026 fold holds the 2026 play-in and playoff box scores: the
+>   archive's own games' outcomes. Its playoff rows ("playoffs, model above the naive: share 0.41 / 0.29", and the rest)
+>   include them. So the four rules on minutes tier, line size and role change are unseen in the archive's prices and
+>   its scores against them, not in its outcomes. They are labelled "prices unseen" below and in the tables. That could
+>   only flatter them, and they failed anyway.
+> - **"The trial informs none of the rules"** means none was chosen on the trial's lines: each comes from the box-score
+>   history. But the writer had read the trial's diagnosis (`diag_trial.md`'s findings and the brief's headline
+>   numbers), so the trial was in view, as the README's cautions say.
 
 ### What history can and cannot say
 
@@ -64,15 +80,15 @@ chance and bet nothing).
 The archive is the play-in and the playoffs, so wherever a rule turns on the phase, the archive gets its playoff
 branch. Its line size is DraftKings' line against the 2024 cut points above (`results/cand_select_explore.md`).
 
-| Rule | Selects | Archive branch | Seen? |
+| Rule | Selects | Archive branch | Seen? (label corrected after the run: it read "unseen") |
 |---|---|---|---|
-| **C-A (primary)** | projected minutes 15 to under 35; no return after 3+ missed games, no 20+ minute teammate back, no new club; the line at or under the stat's median (Q1-Q2); both sides | the same | unseen |
+| **C-A (primary)** | projected minutes 15 to under 35; no return after 3+ missed games, no 20+ minute teammate back, no new club; the line at or under the stat's median (Q1-Q2); both sides | the same | prices unseen |
 | C-B | C-A, then the model's side by phase: Unders only in the playoffs, Overs only in the regular season | C-A, Unders only | **seen** (side) |
 | C-side | every line, side by phase as C-B | Unders only | **seen** |
 | C-stat | the non-points stats (reb, ast, tpm, stl, blk, ar, sb), both sides | the same | **seen** |
-| C-tier | projected 15 to under 35 minutes, both sides | the same | unseen |
-| C-size | lines at or under the stat's median (Q1-Q2), both sides | the same | unseen |
-| C-role | no return after 3+ missed, no 20+ minute teammate back, no new club, both sides | the same | unseen |
+| C-tier | projected 15 to under 35 minutes, both sides | the same | prices unseen |
+| C-size | lines at or under the stat's median (Q1-Q2), both sides | the same | prices unseen |
+| C-role | no return after 3+ missed, no 20+ minute teammate back, no new club, both sides | the same | prices unseen |
 
 Projected minutes are the model's own (the walk-forward's minutes on the box's list, as the archive's projections have
 always been made). The role flags are `diag_history.js`'s and known before tip-off. A coach's decision not to play a
@@ -97,7 +113,7 @@ The model's chances must reproduce the README first.
 - A rule's lines carry information DraftKings lacks only if the log-loss difference on them has a 90% interval wholly
   below zero.
 - They are worth betting only if a side's units have a 90% interval wholly above zero.
-- A rule **survives** if either holds at the Bonferroni level too and it is unseen.
+- A rule **survives** if either holds at the Bonferroni level too and it is unseen (in prices: see the correction above).
 - A seen rule that clears either bar is reported as "clears, but seen". It is not evidence.
 - If none survives, the answer is that no rule survives.
 
@@ -135,13 +151,13 @@ games:
 | Rule | Seen? | Lines | Log loss diff [90%] | Brier diff [90%] | Overs: bets, units [90%] | Unders: bets, units [90%] |
 |---|---|---|---|---|---|---|
 | The model, every line | | 11,395 | +0.0147 [+0.0083, +0.0214] | +0.0064 [+0.0036, +0.0094] | 967, −106.4 [−181.4, −32.0] | 4,271, +135.3 [−47.0, +315.6] |
-| **C-A (primary)** | unseen | 4,979 | **+0.0178 [+0.0098, +0.0259]** | +0.0080 [+0.0043, +0.0118] | 502, −36.5 [−94.7, +20.9] | 1,791, −81.7 [−205.9, +39.9] |
+| **C-A (primary)** | prices unseen | 4,979 | **+0.0178 [+0.0098, +0.0259]** | +0.0080 [+0.0043, +0.0118] | 502, −36.5 [−94.7, +20.9] | 1,791, −81.7 [−205.9, +39.9] |
 | C-B (C-A, Unders only) | seen | 4,979 | +0.0178 (its lines are C-A's) | +0.0080 | not bet | 1,791, −81.7 [−205.9, +39.9] |
 | C-side (Unders only) | seen | 11,395 | +0.0147 (every line) | +0.0064 | not bet | 4,271, +135.3 [−47.0, +315.6] |
 | C-stat (non-points) | seen | 6,721 | +0.0062 [+0.0015, +0.0110] | +0.0027 [+0.0005, +0.0048] | 532, −8.9 [−52.8, +34.6] | 2,079, +46.0 [−40.0, +131.9] |
-| C-tier (15-35 min) | unseen | 7,054 | +0.0215 [+0.0124, +0.0311] | +0.0094 [+0.0054, +0.0136] | 655, −69.8 [−139.3, −1.3] | 2,861, −49.9 [−213.8, +109.2] |
-| C-size (line at or under the median) | unseen | 7,562 | +0.0150 [+0.0084, +0.0219] | +0.0068 [+0.0037, +0.0099] | 698, −58.4 [−124.6, +7.2] | 2,671, −9.7 [−149.6, +129.0] |
-| C-role (no return, teammate back or new club) | unseen | 10,781 | +0.0137 [+0.0074, +0.0204] | +0.0060 [+0.0032, +0.0090] | 899, −85.9 [−160.4, −13.3] | 3,997, +114.1 [−60.0, +289.7] |
+| C-tier (15-35 min) | prices unseen | 7,054 | +0.0215 [+0.0124, +0.0311] | +0.0094 [+0.0054, +0.0136] | 655, −69.8 [−139.3, −1.3] | 2,861, −49.9 [−213.8, +109.2] |
+| C-size (line at or under the median) | prices unseen | 7,562 | +0.0150 [+0.0084, +0.0219] | +0.0068 [+0.0037, +0.0099] | 698, −58.4 [−124.6, +7.2] | 2,671, −9.7 [−149.6, +129.0] |
+| C-role (no return, teammate back or new club) | prices unseen | 10,781 | +0.0137 [+0.0074, +0.0204] | +0.0060 [+0.0032, +0.0090] | 899, −85.9 [−160.4, −13.3] | 3,997, +114.1 [−60.0, +289.7] |
 
 **On information.**
 - No rule's lines show a log-loss or Brier interval below zero, even at 90%.
@@ -157,11 +173,11 @@ games:
 **At the family level.** At the Bonferroni level for seven rules nothing changes, except that C-stat's interval reaches
 zero from above ([−0.0009, +0.0134]). That is the bar for being worse than DraftKings, not better.
 
-**The primary rule points the wrong way.** C-A is the history composite on dimensions the rule writer had not seen. It
-picks the lines where the model's disagreement with its own average was right-sized in history. In the walk-forward
-those rows have a share of 1.006 and a slope of 0.99-1.01, against all rows' 0.95-0.96 and 0.93-0.94 (table F). Yet on the
-archive, DraftKings beats the model by more there than on the whole: +0.0178 against +0.0147. Its minutes tier is the
-largest part of that (C-tier +0.0215).
+**The primary rule points the wrong way.** C-A is the history composite on dimensions whose archive prices the rule
+writer had not seen. It picks the lines where the model's disagreement with its own average was right-sized in history.
+In the walk-forward those rows have a share of 1.006 and a slope of 0.99-1.01, against all rows' 0.95-0.96 and 0.93-0.94
+(table F). Yet on the archive, DraftKings beats the model by more there than on the whole: +0.0178 against +0.0147. Its
+minutes tier is the largest part of that (C-tier +0.0215).
 
 The lines C-tier leaves out (players projected 35+ or under 15 minutes, 4,341 lines) work out from table A at about
 +0.0036, where the model is least far behind DraftKings. That is arithmetic on the scored rows, not a test. History's
@@ -211,19 +227,19 @@ These checks are not independent of the rules. The 2025 and 2026 folds were in v
 
 ### Honest read
 
-1. **No selection rule survives.** Seven were written down from 2022-2026 box scores before the archive was scored. On
-   the lines each selects, DraftKings is ahead of the model with an interval wholly above zero, and no side of any rule
-   makes money with an interval above zero.
-2. **The primary rule, the one clean test, is worse than the model as a whole.** It took the lines where history says
-   the model's own adjustments are right-sized, and those are where DraftKings beat it by more (+0.0178). History has no
-   prices, so it measures the model against its own average. That says nothing about what DraftKings knows, and here it
-   pointed the wrong way.
+1. **No selection rule survives.** Seven were written down from 2022-2026 box scores (the archive's own games' box
+   scores among them) before the archive's lines were scored. On the lines each selects, DraftKings is ahead of the
+   model with an interval wholly above zero, and no side of any rule makes money with an interval above zero.
+2. **The primary rule, the one test unseen in prices, is worse than the model as a whole.** It took the lines where
+   history says the model's own adjustments are right-sized, and those are where DraftKings beat it by more (+0.0178).
+   History has no prices, so it measures the model against its own average. That says nothing about what DraftKings
+   knows, and here it pointed the wrong way.
 3. **What does narrow the gap is already known**: the non-points stats (+0.0062), and in the playoffs the Unders. Both
    were in the README before this study, so neither is evidence. The Unders flip to the losing side in the regular
    season (the trial's Overs −226.5).
 4. **A selection rule cannot rescue a model that DraftKings beats on every subset.** It only helps on top of a model that
-   earns a share of the disagreement above zero against DraftKings (`cand_blend.md`'s yardstick: about 0.09 now, zero
-   on points).
+   earns a share of the disagreement above zero against DraftKings (`cand_blend.md`'s yardstick: about 0.09 now, its
+   90% interval −0.066 to +0.253 even in sample, and about zero on points).
    - I do not recommend C, or any rule here, for a new shadow trial on its own.
    - A second model that earns that share would be the candidate. A selection rule for it should be written on its own
      walk-forward and then registered with its trial.

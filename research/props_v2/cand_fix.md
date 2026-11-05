@@ -1,11 +1,16 @@
 # Candidate A: fix the model's own parts
 
 Research only, 5 November 2026. Nothing here is fitted, chosen or scored on the 2026-27 season (season 2027):
-`cand_fix_lib.js` cuts `data/games.csv` to season 2026 and earlier before it reads a box score, and throws if a later row
-appears. The trial's graded lines were read only by the diagnosis (`diag_trial.md`). That diagnosis suggested which parts
-to try changing, and nothing more. `tools/props.js` is required and never changed.
+`cand_fix_lib.js` loads through `cut2026.js`, which drops `data/games.csv`'s rows after 2026, opens only the box files of
+seasons up to 2026, and throws if one of them holds a row of a later game (README, "The rules kept"). The trial's graded
+lines were read only by the diagnosis (`diag_trial.md`). That diagnosis suggested which parts to try changing (`debut`,
+`kappa` and `vm` among them), and nothing more. `tools/props.js` is required and never changed.
 
 ## The rule (written before the archive was scored)
+
+> *Added after the review:* of this rule, what a reader can check is `results/cand_fix_rule.json`, written by `--select`
+> with its own stamp (18:41Z) before `--score` read it (its log begins 18:42:58). This prose, saved with the results at
+> 18:57, is the writer's account (README, "The rules kept", rule 4).
 
 The candidate is `tools/props.js` with eleven changes. Each one was fitted on the seasons before each fold. A change was
 kept only if the walk-forward's **mean log score over the 11 stats** (the negative binomial's, on the rows `tools/props.js
@@ -95,7 +100,10 @@ The baseline in every row below is `tools/props.js` as it stands. Each fold is f
 
 The intervals are 90%, resampling games. The book-like line is his own average floored, plus a half.
 
-- **Every fold improves.** That includes 2024, which the selection never saw, by about as much as the folds it chose on.
+- **Every fold's log score improves.** That includes 2024, which the selection never used, by about as much as the folds
+  it chose on. 2024 is no clean hold-out, though: it is the fold `tools/props.js`'s structure was chosen on
+  (`research/props.json`), and its box scores trained both folds the selection used (2025 on 2023-2024, 2026 on
+  2023-2025). Mean absolute error improves on the three regular-season folds, not in the playoffs (below).
 - **Every stat's log score improves** on every regular-season fold. Mean absolute error falls on nearly every stat:
   points 4.55 → 4.52 on the 2025 fold and 4.53 → 4.51 on the 2026 regular season.
 - **In the playoffs the log score improves most** while mean absolute error gets slightly worse. The candidate's playoff
@@ -152,15 +160,23 @@ this candidate changes the shape.
 
 | Edge | tools/props.js: Overs | tools/props.js: Unders | Candidate A: Overs | Candidate A: Unders |
 |---|---|---|---|---|
-| 3 points | 967 bets, -106.4 (-11.0%) | 4,271, +135.3 (+3.2%) | 1,201, -120.3 (-10.0%) | 3,579, +159.0 (+4.4%) |
+| 3 points | 967 bets, -106.4 (-11.0%) [-181.4, -32.0] | 4,271, +135.3 (+3.2%) [-47.0, +315.6] | 1,201, -120.3 (-10.0%) [-198.7, -42.0] | 3,579, +159.0 (+4.4%) [-14.5, +332.9] |
 | 5 points | 616, -101.3 (-16.4%) | 3,279, +65.5 (+2.0%) | 770, -106.8 (-13.9%) | 2,659, +76.7 (+2.9%) |
 | 8 points | 316, -86.3 (-27.3%) | 2,063, -6.8 (-0.3%) | 393, -87.9 (-22.4%) | 1,626, -2.9 (-0.2%) |
+
+The 3-point row's brackets are 90% intervals on the units, from 10,000 resamples of the 83 games (seed 0), as
+`cand_blend.js` and `cand_select.js` give `tools/props.js`'s (the same brackets come back here). They were added after the
+one scoring run, by running `--score` again for them alone; every other number in `results/cand_fix_score.json` is the
+same (`results/cand_fix_score_units.log`). On the same resamples, A less `tools/props.js`: Overs -13.8 [-65.5, +37.4],
+Unders +23.7 [-30.9, +76.0]. (Until then the brackets here and in the README were scaled from a per-bet spread: about
+-213 to -27 and -2 to +320.)
 
 These playoff flat bets are no more evidence of an edge than the old model's were:
 
 - The Overs still lose at every bar.
 - The Unders' return is in line with every Under in this run returning -0.7% (README), and is level at 8 points.
-- `data.md` puts a flat-bet return's standard error at about 2.3% by game.
+- No side's interval clears zero upward, and A's two sides together (+38.7 units, [-149.8, +230.4]) are "up" as
+  `tools/props.js`'s are (+28.8 [-166.5, +224.8]), while both trail DraftKings clearly on log loss.
 
 ### The constants a new shadow trial would freeze (fitted 2023-2026; `results/cand_fix_score.json` `frozen`)
 
@@ -213,8 +229,9 @@ Each is known before tip from the replay state and the schedule.
 
 ## Honest read
 
-**The parts can be fixed.** The fixes hold across folds: the 2024 fold, which the selection never saw, improves about as
-much as the folds it chose on, and so do the playoffs.
+**The parts can be fixed.** The fixes hold across folds: the 2024 fold, which the selection never used (but which is not
+blind: above), improves about as much as the folds it chose on, and the playoffs' log score improves too, though their
+mean absolute error does not (2.535 to 2.547).
 
 - The biggest gains are in minutes:
   - aim at the mean, not the median, and calibrate the result;
@@ -233,10 +250,10 @@ The early-season over-projection of points is gone in every past season.
 - Points and the points combos are still about 0.025 behind.
 
 Gains on box scores turn into gains against DraftKings only weakly. The playoffs' log score improves by 0.055, the playoff
-lines by 0.002. Most of what the market knows that this model does not is not in the box score:
-
-- who actually plays, and for how long, tonight;
-- the rotation news.
+lines by 0.002. What the market knows that this model does not is not shown here. The trial's diagnosis puts minutes
+and the scoring rate about level in the Over misses (`diag_trial.md` table 11g), and its hindsight figure on the minutes
+actually played is an upper bound inflated by the game's own results. Who plays tonight, and for how long, is one
+candidate, not a finding.
 
 **What the candidate leaves:**
 

@@ -10,8 +10,8 @@
  *   node research/props_v2/cand_select.js           the one scoring run: results/cand_select.json and
  *                                                   results/cand_select_tables.md (the tables cand_select.md quotes)
  *
- * Seasons 2022-2026 only (cand_select_lib.js cuts games.csv to season <= 2026 before anything is read). Nothing of
- * 2026-27 is read. tools/props.js is required, never changed.
+ * Seasons 2022-2026 only (cand_select_lib.js loads through cut2026.js: games.csv's rows after 2026 are dropped and only
+ * the box files of seasons up to 2026 are opened). No box score or line of 2026-27 is read. tools/props.js is required, never changed.
  */
 'use strict';
 const fs = require('fs');
@@ -206,7 +206,7 @@ const T = [];
 const all = [OUT.model, ...RULES.map(r => OUT.rules[r.id])];
 T.push('## A. On the lines each rule selects: the model against DraftKings\' fair chance (90% from resampling the 83 games; Bonferroni level for seven rules beside it)', '',
   '| Rule | Seen? | Lines (share) | Over said / hit / DraftKings | Gap from DraftKings | Log loss diff [90%] [Bonferroni] | Brier diff [90%] [Bonferroni] |', '|---|---|---|---|---|---|---|');
-for (const r of all) T.push(`| ${r.name} | ${r.seen ? 'seen' : 'unseen'} | ${r.lines} (${pc(r.share)}) | ${pc(r.said)} / ${pc(r.hit)} / ${pc(r.marketSaid)} | ${(100 * r.meanGap).toFixed(1)} pts | ${sg(r.selected.logloss.diff)} ${ci(r.selected.logloss.ci90)} ${ci(r.selected.logloss.ciBonf)} | ${sg(r.selected.brier.diff)} ${ci(r.selected.brier.ci90)} ${ci(r.selected.brier.ciBonf)} |`);
+for (const r of all) T.push(`| ${r.name} | ${r.seen ? 'seen' : 'prices unseen'} | ${r.lines} (${pc(r.share)}) | ${pc(r.said)} / ${pc(r.hit)} / ${pc(r.marketSaid)} | ${(100 * r.meanGap).toFixed(1)} pts | ${sg(r.selected.logloss.diff)} ${ci(r.selected.logloss.ci90)} ${ci(r.selected.logloss.ciBonf)} | ${sg(r.selected.brier.diff)} ${ci(r.selected.brier.ci90)} ${ci(r.selected.brier.ciBonf)} |`);
 T.push('', '## B. The candidate\'s chance over all 11,395 lines (the model\'s on the selected lines, DraftKings\' elsewhere), against DraftKings alone', '',
   '| Rule | Log loss diff [90%] | Brier diff [90%] |', '|---|---|---|');
 for (const r of all) T.push(`| ${r.id || 'model'} | ${sg(r.allLines.logloss.diff)} ${ci(r.allLines.logloss.ci90)} | ${sg(r.allLines.brier.diff)} ${ci(r.allLines.brier.ci90)} |`);
@@ -217,7 +217,7 @@ T.push('', '## D. The bets by edge, described, not tested (bets, won, units)', '
 const bd = b => b.bets ? `${b.bets}, ${b.won}, ${sg(b.units, 1)}` : '';
 for (const r of all) T.push(`| ${r.id || 'model'} | ${bd(r.bands['over 3-5'])} | ${bd(r.bands['over 5-8'])} | ${bd(r.bands['over 8+'])} | ${bd(r.bands['under 3-5'])} | ${bd(r.bands['under 5-8'])} | ${bd(r.bands['under 8+'])} |`);
 T.push('', '## E. The verdict, by the rule written before the run', '', '| Rule | Seen? | Log loss interval below 0: 90% / Bonferroni | Units interval above 0: 90% / Bonferroni | Verdict |', '|---|---|---|---|---|');
-for (const r of RULES.map(x => OUT.rules[x.id])) T.push(`| ${r.id} | ${r.seen ? 'seen' : 'unseen'} | ${r.verdict.logloss90 ? 'yes' : 'no'} / ${r.verdict.loglossBonf ? 'yes' : 'no'} | ${r.verdict.units90.join(', ') || 'no'} / ${r.verdict.unitsBonf.join(', ') || 'no'} | ${r.verdict.word} |`);
+for (const r of RULES.map(x => OUT.rules[x.id])) T.push(`| ${r.id} | ${r.seen ? 'seen' : 'prices unseen'} | ${r.verdict.logloss90 ? 'yes' : 'no'} / ${r.verdict.loglossBonf ? 'yes' : 'no'} | ${r.verdict.units90.join(', ') || 'no'} / ${r.verdict.unitsBonf.join(', ') || 'no'} | ${r.verdict.word} |`);
 T.push('', '## F. The box-score walk-forward: tools/props.js on the rows each rule selects, and on the rest (rows projected 8+)', '',
   'The candidate is tools/props.js on its rows (no mean moves), so its difference from tools/props.js is zero by construction; what a rule can do is pick rows. "Line" is the book-like line: the model\'s log loss of the Over, the naive forecaster\'s, and the share and slope on the selected rows.', '',
   '| Rule | Fold | Share of rows | Points MAE / log score: selected; rest | PRA MAE / log score: selected; rest | Mean of 11 stats MAE / log score: selected; rest | Line: model / naive log loss; share; slope |', '|---|---|---|---|---|---|---|');

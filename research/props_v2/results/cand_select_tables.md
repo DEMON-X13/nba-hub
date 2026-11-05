@@ -3,13 +3,13 @@
 | Rule | Seen? | Lines (share) | Over said / hit / DraftKings | Gap from DraftKings | Log loss diff [90%] [Bonferroni] | Brier diff [90%] [Bonferroni] |
 |---|---|---|---|---|---|---|
 | the model on every line | seen | 11395 (100.0%) | 44.6% / 45.9% / 45.6% | 6.7 pts | +0.0147 [+0.0083, +0.0214] [+0.0053, +0.0247] | +0.0064 [+0.0036, +0.0094] [+0.0023, +0.0109] |
-| C-A (primary): 15-35 min, no return / teammate back / new club, line at or under the median | unseen | 4979 (43.7%) | 45.9% / 49.6% / 46.1% | 6.3 pts | +0.0178 [+0.0098, +0.0259] [+0.0062, +0.0302] | +0.0080 [+0.0043, +0.0118] [+0.0027, +0.0138] |
+| C-A (primary): 15-35 min, no return / teammate back / new club, line at or under the median | prices unseen | 4979 (43.7%) | 45.9% / 49.6% / 46.1% | 6.3 pts | +0.0178 [+0.0098, +0.0259] [+0.0062, +0.0302] | +0.0080 [+0.0043, +0.0118] [+0.0027, +0.0138] |
 | C-B: C-A, side by phase (archive: Unders only) | seen | 4979 (43.7%) | 45.9% / 49.6% / 46.1% | 6.3 pts | +0.0178 [+0.0098, +0.0259] [+0.0062, +0.0302] | +0.0080 [+0.0043, +0.0118] [+0.0027, +0.0138] |
 | C-side: every line, side by phase (archive: Unders only) | seen | 11395 (100.0%) | 44.6% / 45.9% / 45.6% | 6.7 pts | +0.0147 [+0.0083, +0.0214] [+0.0053, +0.0247] | +0.0064 [+0.0036, +0.0094] [+0.0023, +0.0109] |
 | C-stat: the non-points stats | seen | 6721 (59.0%) | 44.9% / 46.3% / 44.9% | 5.8 pts | +0.0062 [+0.0015, +0.0110] [−0.0009, +0.0134] | +0.0027 [+0.0005, +0.0048] [−0.0006, +0.0059] |
-| C-tier: projected 15 to under 35 minutes | unseen | 7054 (61.9%) | 44.4% / 47.9% / 45.8% | 6.9 pts | +0.0215 [+0.0124, +0.0311] [+0.0084, +0.0357] | +0.0094 [+0.0054, +0.0136] [+0.0036, +0.0156] |
-| C-size: line at or under the stat's median | unseen | 7562 (66.4%) | 45.6% / 47.9% / 46.0% | 6.4 pts | +0.0150 [+0.0084, +0.0219] [+0.0052, +0.0254] | +0.0068 [+0.0037, +0.0099] [+0.0023, +0.0115] |
-| C-role: no return after 3+ missed, no 20+ min teammate back, no new club | unseen | 10781 (94.6%) | 44.6% / 46.1% / 45.6% | 6.6 pts | +0.0137 [+0.0074, +0.0204] [+0.0044, +0.0237] | +0.0060 [+0.0032, +0.0090] [+0.0019, +0.0104] |
+| C-tier: projected 15 to under 35 minutes | prices unseen | 7054 (61.9%) | 44.4% / 47.9% / 45.8% | 6.9 pts | +0.0215 [+0.0124, +0.0311] [+0.0084, +0.0357] | +0.0094 [+0.0054, +0.0136] [+0.0036, +0.0156] |
+| C-size: line at or under the stat's median | prices unseen | 7562 (66.4%) | 45.6% / 47.9% / 46.0% | 6.4 pts | +0.0150 [+0.0084, +0.0219] [+0.0052, +0.0254] | +0.0068 [+0.0037, +0.0099] [+0.0023, +0.0115] |
+| C-role: no return after 3+ missed, no 20+ min teammate back, no new club | prices unseen | 10781 (94.6%) | 44.6% / 46.1% / 45.6% | 6.6 pts | +0.0137 [+0.0074, +0.0204] [+0.0044, +0.0237] | +0.0060 [+0.0032, +0.0090] [+0.0019, +0.0104] |
 
 ## B. The candidate's chance over all 11,395 lines (the model's on the selected lines, DraftKings' elsewhere), against DraftKings alone
 
@@ -54,13 +54,13 @@
 
 | Rule | Seen? | Log loss interval below 0: 90% / Bonferroni | Units interval above 0: 90% / Bonferroni | Verdict |
 |---|---|---|---|---|
-| C-A | unseen | no / no | no / no | does not clear |
+| C-A | prices unseen | no / no | no / no | does not clear |
 | C-B | seen | no / no | no / no | does not clear |
 | C-side | seen | no / no | no / no | does not clear |
 | C-stat | seen | no / no | no / no | does not clear |
-| C-tier | unseen | no / no | no / no | does not clear |
-| C-size | unseen | no / no | no / no | does not clear |
-| C-role | unseen | no / no | no / no | does not clear |
+| C-tier | prices unseen | no / no | no / no | does not clear |
+| C-size | prices unseen | no / no | no / no | does not clear |
+| C-role | prices unseen | no / no | no / no | does not clear |
 
 ## F. The box-score walk-forward: tools/props.js on the rows each rule selects, and on the rest (rows projected 8+)
 

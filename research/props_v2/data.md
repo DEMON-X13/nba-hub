@@ -8,8 +8,8 @@ candidate is scored anywhere in this note. `data/props_2027.csv` is counted (row
 **The headline: ESPN's feed keeps far more than the README says.** DraftKings' player props for about 2,340 regular-season
 games of 2022-23 and 2023-24, and about 100 playoff games from 2022 to April 2024, are still on ESPN's free feed under
 DraftKings' older provider id, **40** (the README's "ESPN keeps no regular-season lines" holds only for provider 100 in
-2025-26). They are main-line pairs on the six base stats, read by the hub's own `propParse`, and they look like pre-game
-prices (below). That is about 180,000 gradable regular-season lines: sixteen times the 2026 archive, in the regime the trial
+2025-26). They are main-line pairs on the six base stats, read by the hub's own `propParse`. That they are pre-game prices is
+inferred, not shown (below), so a test on them first checks it (README, "The validity check"). That is about 180,000 gradable regular-season lines: sixteen times the 2026 archive, in the regime the trial
 runs in, and never yet scored by any model. Backfilling them is the owner's call (they are third-party prices on an
 unlicensed feed, the same one `data/props_2026.csv` came from). Without them, a second model can be fitted only lightly
 inside the 2026 archive, and its 90% interval can tell a difference from DraftKings only once that difference is about 0.01
@@ -24,7 +24,9 @@ Scripts and outputs, all in `research/props_v2/`:
 | `espn_shape.js` → `results/espn_shape.json` | 11 (game, provider) answers read whole in memory: market types, `propParse` counts, Over orientation (counts only) |
 | `espn_coverage.js` (`--early`) → `results/espn_coverage*.{tsv,json}` | Which past games answer for DraftKings: every 2025-26 game (provider 100), one in four of 2020-21 to 2024-25 (providers 40 and 100) |
 | `espn_validate40.js` → `results/espn_validate40.json` | 85 provider-40 games read whole in memory: lines a game, players on the box, margins, orientation, whether pre-game |
-| `fetch_dk40.js` | How to fetch provider 40 into the record's columns, into `cache/` (gitignored). Tested with `--dry` on one day; not run |
+| `fetch_dk40.js` | How to fetch provider 40 into the record's columns (and each line's `lastUpdated`, and the event's start), into `cache/` (gitignored). Not run on the real feed. Its first version was tried with `--dry` on one day, which then still downloaded that day's answers (only the write was skipped) |
+| `fetch_dk40_test.js` → `results/fetch_dk40_test.json` | The recipe on a local fake of the feed, no network: `--dry` requests nothing; a range run again, or two that overlap, repeat no line |
+| `validity.js` → `results/validity_ref.json` | The validity check a test on these lines must pass before its bar (README), and its references on the 2026 archive (DraftKings and the box scores only) |
 
 No price or line from ESPN or anyone else is saved or committed by any of these. The results hold game ids, counts and
 DraftKings' own aggregate scores only.
@@ -207,21 +209,30 @@ answering playoff game; 6,527 graded lines; DraftKings' own scores only, no mode
 - **The first item is the Over.** DraftKings' fair chance scores 0.639 / 0.650 / 0.659 / 0.651 log loss (2022-23 regular
   season / 2023 playoffs / 2023-24 regular season / 2024 playoffs) reading the first item as the Over, and 0.815 / 0.797 /
   0.771 / 0.782 reading it as the Under, on every stat.
-- **Pre-game prices.** By stat they score as the 2026 archive does: points 0.675-0.694 against 0.688, rebounds 0.678-0.690
-  against 0.693, threes 0.609-0.676 against 0.665, blocks 0.546-0.628 against 0.635. A price taken during the game would
-  know part of the result and score far lower. Their lower overall figure is the stat mix: a third of the lines are steals
-  and blocks at 0.5, priced long. Overs went in 36% to 45% where the fair chance said 38% to 44%. The margin is 6.1% to 6.8%
-  at the median (4.3% on the five 2024 playoff games). The items' `lastUpdated` reads about 5.4 hours after the scheduled
-  start (provider 100's runs about three hours ahead of UTC while labelled Z, which would make this the game's end, when
-  the market closed). A few games read 22 and 71 hours after. That an answer is exactly the last price before tip cannot be
-  proven from the feed; that it is a pre-game price is what the scores say.
+- **Pre-game prices? Inferred, not shown.** By stat, points and rebounds score as the 2026 archive does (points
+  0.675-0.694 against 0.688, rebounds 0.678-0.690 against 0.693). Threes and blocks score lower: threes 0.609-0.676
+  against 0.665, blocks 0.546-0.628 against 0.635; on 2023-24's 29 sampled regular-season games, 0.647 and 0.606, and on
+  2022-23's 31, 0.609 and 0.590 (its 2023 playoff blocks 0.546). In 2022-23 those stats' prices are more lopsided (the
+  share of fair chances between 40% and 60%: threes 36% and blocks 12%, against the archive's 58% and 40%), which lowers
+  the score of a pre-game price. That does not explain 2023-24's threes, which are less lopsided than the archive's
+  (70%) and still score lower. A price taken during the game, knowing part of the result, would score lower too. The raw
+  scores cannot tell the two apart, which is why the test's validity check (README) sets DraftKings against a forecaster
+  that knows only the box scores before the game. Their lower overall figure is mostly the stat mix: a third of the
+  lines are steals and blocks at 0.5, priced long.
+- **Over rates, margins and stamps.** Overs went in 36% to 45% where the fair chance said 38% to 44%. The margin is 6.1%
+  to 6.8% at the median (4.3% on the five 2024 playoff games). The items' `lastUpdated` reads about 5.4 hours after the
+  scheduled start (provider 100's runs about three hours ahead of UTC while labelled Z, which would make this the game's
+  end, when the market closed). A few games read 22 and 71 hours after. So the stamps cannot show that a price is
+  pre-game, let alone the last before tip; that it is pre-game is what the scores suggest, and the test's validity check
+  has to hold before its bar is read.
 - **Size.** Scaled from the sample: about 1,210 games of 2022-23's regular season, 1,130 of 2023-24's, about 80 of the 2023
   playoffs, about 20 of the 2024 playoffs and a few of the late 2022 playoffs. At about 80 lines a game and 95% gradable,
   that is about 180,000 graded regular-season lines and about 8,500 playoff ones.
 
 **How to fetch** (the owner's call): `node research/props_v2/fetch_dk40.js 2022-10-18 2023-06-12` and `... 2023-10-24
-2024-04-30`. That is one or two requests a game, about 2,500 games in all, into `research/props_v2/cache/props40_<season>.csv`
-in the record's columns, gitignored here. `tools/props_record.js` reads provider 100 only; backfilling into `data/` as
+2024-04-30`. That is the event and one or two propBets pages a game, about 2,500 games in all, into
+`research/props_v2/cache/props40_<season>.csv` in the record's columns and each line's `lastUpdated`, gitignored here.
+A range run again, or two that overlap, repeats no line, and `--dry` requests nothing (`fetch_dk40_test.js`). `tools/props_record.js` reads provider 100 only; backfilling into `data/` as
 `data/props_2026.csv` was would be a change of its own.
 
 **What it would allow, and its limits.** `tools/props.js`' box scores start in 2021-22, which only warms the ratings up
@@ -232,7 +243,9 @@ and test it once on 2023-24's regular-season lines with the 2024 fold's constant
 regime, on the 2026 playoff archive, and only then shadow it on games after the freeze. All of that sits inside the brief's
 seasons. The same 2023-24 lines would give the current model its first regular-season market test (the 2024 fold, out of
 sample). 2023-24 is also the fold the current model's structure was chosen on in box-score terms (never against lines), so
-that test set's outcomes have been seen, though not its prices. Five limits come with it:
+that test set's outcomes have been seen, though not its prices. They have been seen more since this note was written:
+candidate A's selection folds were fitted on 2023-24's box scores among others, `diag_history.js` read its outcomes,
+and C's rules were derived on its fold (README, "It is not a blind test"). Five limits come with it:
 
 - The six base stats only: about 40% of the trial's lines are combos, which this set cannot test.
 - DraftKings of 2022-24 may price differently from DraftKings of 2026-27.

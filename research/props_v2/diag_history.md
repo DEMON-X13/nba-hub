@@ -6,8 +6,10 @@ writes `results/diag_history.json` and `results/diag_history_tables.md`, which h
 
 ## What was done, and on what
 
-- **Seasons 2022-2026 only.** `data/games.csv` is cut to season 2026 and earlier before anything is read, and the box
-  scores and team boxes to those games, so nothing of 2026-27 enters a row, a rate, a pace or an opponent figure. Nothing
+- **Seasons 2022-2026 only.** `data/games.csv`'s rows after 2026 are dropped, and the box scores and team boxes are cut
+  to the games kept, so nothing of 2026-27 enters a row, a rate, a pace or an opponent figure. (When this was written,
+  every box file was parsed whole, 2026-27's included, and cut afterwards; since the review the script loads through
+  `cut2026.js`, which opens only the files of seasons up to 2026. Every number is the same: README, "The rules kept".) Nothing
   here reads the trial's ledger or this season's lines; the trial's figures quoted below are the brief's.
 - **The walk-forward folds**, exactly as `node tools/props.js research` makes them: 2024 projected by constants fitted on
   2023, 2025 on 2023-2024, 2026 on 2023-2025 (2022 warms the ratings up), by `tools/props.js`'s own exported `replay`,

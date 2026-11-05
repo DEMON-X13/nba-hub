@@ -2,8 +2,9 @@
  * changeable, every change off by default and, off, the same to the bit as tools/props.js (checked by cand_fix.js
  * --verify before anything is scored).
  *
- * Nothing here reads a game of 2026-27 (season 2027): loadData() cuts games.csv to season <= 2026 before the box scores
- * and team boxes are read, and throws if a row of a later season appears. tools/props.js is required, never changed.
+ * Nothing here reads a box score of 2026-27 (season 2027): loadData() is cut2026.js's loader, which drops games.csv's
+ * rows after 2026, opens only the box files of seasons up to 2026, and throws if one of them holds a row of a later
+ * game. tools/props.js is required, never changed.
  *
  * What a row carries beyond tools/props.js's (row.x, all known before the game, all computable live the same way):
  *   teamN    the club's games this season before this one
@@ -31,11 +32,8 @@ const zeros = () => Object.fromEntries(STATS.map(k => [k, 0]));
 const POS = ['G', 'F', 'C'];
 
 function loadData() {
-  const games = PR.loadGames().filter(g => g.season <= LAST);
-  const gset = new Set(games.map(g => g.game_id));
-  const boxes = {}; for (const [k, v] of Object.entries(PR.loadBoxes())) if (gset.has(k)) boxes[k] = v;
-  const tbox = {}; for (const [k, v] of Object.entries(PR.loadTeamBoxes())) if (gset.has(k.split(':')[0])) tbox[k] = v;
-  if (Object.keys(boxes).some(k => +k.slice(0, 4) > LAST)) throw new Error('a box score after 2026 was read');
+  /* cut2026.js: only the box files of seasons up to 2026 are opened; its guard sees their raw rows */
+  const { games, boxes, tbox } = require('./cut2026.js').loadTo2026();
   return { games, boxes, tbox };
 }
 

@@ -3,10 +3,10 @@
  *
  *   node research/props_v2/data_describe.js        writes results/data_describe.json and prints the tables data.md quotes
  *
- * Seasons 2022-2026 only, as diag_history.js reads them: data/games.csv is cut to season <= 2026 before anything is read,
- * and the box scores and team boxes to those games. Nothing is fitted. The one model used is the walk-forward's 2026 fold
- * (constants fitted on 2023-2025, read from research/props.json, not refitted), the model the README's archive test
- * scored, so the archive's lines are graded exactly as `node tools/props.js research` grades them and the totals are
+ * Seasons 2022-2026 only, as diag_history.js reads them (cut2026.js: games.csv's rows after 2026 are dropped, only the
+ * box files of seasons up to 2026 are opened, and the box scores and team boxes are cut to the games kept). Nothing is
+ * fitted. The one model used is the walk-forward's 2026 fold (constants fitted on 2023-2025, read from
+ * research/props.json, not refitted), the model the README's archive test scored, so the archive's lines are graded exactly as `node tools/props.js research` grades them and the totals are
  * checked against the published ones before anything else is printed.
  *
  * What it measures, and what it does not:
@@ -45,11 +45,8 @@ const mean = a => a.reduce((s, x) => s + x, 0) / a.length;
 const countBy = (a, f) => { const m = {}; for (const x of a) { const k = f(x); m[k] = (m[k] || 0) + 1; } return m; };
 
 /* ---------- 1. the data, cut to 2022-2026 ---------- */
-const games = PR.loadGames().filter(g => g.season <= LAST);
-const gset = new Set(games.map(g => g.game_id));
-const boxes = {}; for (const [k, v] of Object.entries(PR.loadBoxes())) if (gset.has(k)) boxes[k] = v;
-const tbox = {}; for (const [k, v] of Object.entries(PR.loadTeamBoxes())) if (gset.has(k.split(':')[0])) tbox[k] = v;
-if (Object.keys(boxes).some(k => +k.slice(0, 4) > LAST)) throw new Error('a box score after 2026 was read');
+/* cut2026.js: only the box files of seasons up to 2026 are opened; its guard sees their raw rows */
+const { games, boxes, tbox } = require('./cut2026.js').loadTo2026();
 const gameOf = Object.fromEntries(games.map(g => [g.game_id, g]));
 
 /* ---------- 2. the archive: rounds and series ---------- */

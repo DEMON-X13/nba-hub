@@ -9,8 +9,8 @@
  *   node research/props_v2/cand_blend.js           the one scoring run: results/cand_blend.json and
  *                                                  results/cand_blend_tables.md (the tables cand_blend.md quotes)
  *
- * Seasons 2022-2026 only: data/games.csv is cut to season <= 2026 before anything is read, and the box scores and team
- * boxes to those games. The archive is data/props_2026.csv (the 2026 play-in and playoffs), graded as tools/props.js
+ * Seasons 2022-2026 only (cut2026.js: games.csv's rows after 2026 are dropped, only the box files of seasons up to 2026
+ * are opened, and the box scores and team boxes are cut to the games kept). The archive is data/props_2026.csv (the 2026 play-in and playoffs), graded as tools/props.js
  * marketTest grades it, with the 2026 fold's constants (research/props.json, fitted on 2023-2025). Nothing of 2026-27
  * is read. tools/props.js is required, never changed.
  */
@@ -38,12 +38,8 @@ const quant = (a, q) => { const s = Float64Array.from(a).sort(); if (!s.length) 
 const clamp01 = w => Math.min(1, Math.max(0, w));
 
 /* ---------- 1. the data, cut to 2022-2026 ---------- */
-const games = PR.loadGames().filter(g => g.season <= LAST);
-const gset = new Set(games.map(g => g.game_id));
-const boxes = {}; for (const [k, v] of Object.entries(PR.loadBoxes())) if (gset.has(k)) boxes[k] = v;
-const tbox = {}; for (const [k, v] of Object.entries(PR.loadTeamBoxes())) if (gset.has(k.split(':')[0])) tbox[k] = v;
-if (Object.keys(boxes).some(k => +k.slice(0, 4) > LAST)) throw new Error('a box score after 2026 was read');
-if (games.some(g => g.season > LAST)) throw new Error('a game after 2026 was read');
+/* cut2026.js: only the box files of seasons up to 2026 are opened; its guard sees their raw rows */
+const { games, boxes, tbox } = require('./cut2026.js').loadTo2026();
 
 /* ---------- 2. the archive: its series and rounds (as data_describe.js reads them) ---------- */
 const rec = REC.readRecord(2026);

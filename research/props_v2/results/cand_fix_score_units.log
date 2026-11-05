@@ -1,0 +1,15 @@
+19:37:10 games 6605, box scores 6599
+19:37:16 replay: 137883 rows
+19:37:16 the frozen rule (2026-11-05T18:41Z): sq, cal, open, ret, nt, debut, kappa, dE, shrink, phase, vm
+19:37:16 fold 2024: fitting the candidate on 2023-2023
+19:38:46 fold 2025: fitting the candidate on 2023-2024
+19:41:21 fold 2026: fitting the candidate on 2023-2025
+19:45:33 walk-forward 2024: mean log score {"meanLogScore":-0.0133,"ci90":[-0.01872,-0.008923],"meanLineLogloss":-0.00647,"lineCi90":[-0.00927,-0.00405],"meanMae":-0.0133,"minutesMae":-0.0252}
+19:45:35 walk-forward 2025: mean log score {"meanLogScore":-0.01644,"ci90":[-0.024461,-0.010714],"meanLineLogloss":-0.00698,"lineCi90":[-0.009387,-0.00493],"meanMae":-0.018,"minutesMae":-0.0388}
+19:45:36 walk-forward 2026R: mean log score {"meanLogScore":-0.00832,"ci90":[-0.009815,-0.007014],"meanLineLogloss":-0.00452,"lineCi90":[-0.00553,-0.00359],"meanMae":-0.0134,"minutesMae":-0.0552}
+19:45:36 walk-forward 2026P: mean log score {"meanLogScore":-0.05504,"ci90":[-0.084463,-0.028134],"meanLineLogloss":-0.02215,"lineCi90":[-0.036884,-0.00936],"meanMae":0.0127,"minutesMae":-0.0882}
+19:45:36 the archive, once
+19:45:37 archive: log loss baseline 0.6934, candidate 0.6913, DraftKings 0.6788; candidate - DraftKings 0.0125 [0.006512,0.018881]
+19:45:37 archive units at a 3-point edge [90%]: candidate Overs -120.29 [-198.73,-42.03], Unders 158.99 [-14.47,332.94]; baseline Overs [-181.45,-31.97], Unders [-47,315.56] (as published)
+19:45:37 the constants a new shadow trial would freeze: fit on 2023-2026
+19:50:49 results/cand_fix_score.json written

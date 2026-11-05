@@ -18,12 +18,8 @@ const tierOf = m => m < 8 ? '<8' : m < 15 ? '8-15' : m < 20 ? '15-20' : m < 25 ?
 
 /* ---------- the data, cut to 2022-2026 ---------- */
 function loadAll() {
-  const games = PR.loadGames().filter(g => g.season <= LAST);
-  const gset = new Set(games.map(g => g.game_id));
-  const boxes = {}; for (const [k, v] of Object.entries(PR.loadBoxes())) if (gset.has(k)) boxes[k] = v;
-  const tbox = {}; for (const [k, v] of Object.entries(PR.loadTeamBoxes())) if (gset.has(k.split(':')[0])) tbox[k] = v;
-  if (games.some(g => g.season > LAST)) throw new Error('a game after 2026 was read');
-  if (Object.keys(boxes).some(k => +k.slice(0, 4) > LAST)) throw new Error('a box score after 2026 was read');
+  /* cut2026.js: only the box files of seasons up to 2026 are opened; its guard sees their raw rows */
+  const { games, boxes, tbox } = require('./cut2026.js').loadTo2026();
   const R = PR.replay(games, boxes, tbox, { collect: true, from: PR.FIRST + 1 });
   if (R.rows.some(r => r.season > LAST)) throw new Error('a row after 2026');
   return { games, boxes, tbox, rows: R.rows, flags: roleFlags(games, boxes) };

@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-05T18:43Z",
+ "generated": "2026-11-05T19:37Z",
  "rule": [
   "sq",
   "cal",
@@ -1626,6 +1626,78 @@
      "baseline": 0.6874,
      "candidate": 0.6858,
      "market": 0.6865
+    }
+   }
+  },
+  "units": {
+   "edge": 0.03,
+   "resamples": 10000,
+   "seed": 0,
+   "games": 83,
+   "over": {
+    "baseline": {
+     "bets": 967,
+     "units": -106.44,
+     "ci90": [
+      -181.45,
+      -31.97
+     ]
+    },
+    "candidate": {
+     "bets": 1201,
+     "units": -120.29,
+     "ci90": [
+      -198.73,
+      -42.03
+     ]
+    },
+    "candidateMinusBaseline": {
+     "units": -13.85,
+     "ci90": [
+      -65.5,
+      37.38
+     ]
+    }
+   },
+   "under": {
+    "baseline": {
+     "bets": 4271,
+     "units": 135.28,
+     "ci90": [
+      -47,
+      315.56
+     ]
+    },
+    "candidate": {
+     "bets": 3579,
+     "units": 158.99,
+     "ci90": [
+      -14.47,
+      332.94
+     ]
+    },
+    "candidateMinusBaseline": {
+     "units": 23.71,
+     "ci90": [
+      -30.85,
+      75.96
+     ]
+    }
+   },
+   "bothSides": {
+    "baseline": {
+     "units": 28.84,
+     "ci90": [
+      -166.48,
+      224.85
+     ]
+    },
+    "candidate": {
+     "units": 38.7,
+     "ci90": [
+      -149.76,
+      230.41
+     ]
     }
    }
   }

@@ -22,6 +22,7 @@
 const fs = require('fs');
 const path = require('path');
 const PR = require('../../tools/props.js');
+const F = require('../../tools/props_feed.js');
 const C = require('./cand_fix_lib.js');
 
 const OUTD = path.join(__dirname, 'results');
@@ -210,6 +211,44 @@ function sureness(lines) {
   return { modelFrom50: r4(lines.reduce((s, x) => s + Math.abs(x.pModel - 0.5), 0) / lines.length), marketFrom50: r4(lines.reduce((s, x) => s + Math.abs(x.pMarket - 0.5), 0) / lines.length),
     far10: { share: r4(far.length / lines.length), deficitShare: r4(def(far) / tot), perLine: r4(def(far) / far.length) }, near5: { share: r4(near.length / lines.length), perLine: r4(def(near) / near.length) } };
 }
+/* flat one-unit bets at a 3-point edge (flatBets's rule, line by line), each side's units summed a game, and a 90%
+   interval on them from 10,000 resamples of the archive's games (seed 0): cand_blend.js bootSum's method, games in the
+   archive's order, which gives tools/props.js's published intervals back; the candidate less the baseline on the same
+   resamples, paired. Added after the one scoring run (README, "Re-running"); it changes no other number. */
+const UNITS_BOOT = 10000;
+function betUnits(x, edge = 0.03) {
+  const eo = x.pModel - F.propImplied(x.over), eu = (1 - x.pModel) - F.propImplied(x.under);
+  const side = eo >= edge && eo >= eu ? 'over' : eu >= edge ? 'under' : null;
+  if (!side) return null;
+  const price = side === 'over' ? x.over : x.under;
+  return { side, units: x.result === side ? (price > 0 ? price / 100 : 100 / -price) : -1 };
+}
+function unitsByGame(lines, gk) {
+  const u = { over: new Map(gk.map(g => [g, 0])), under: new Map(gk.map(g => [g, 0])) }, n = { over: 0, under: 0 };
+  for (const x of lines) { const b = betUnits(x); if (!b) continue; n[b.side]++; u[b.side].set(x.game, u[b.side].get(x.game) + b.units); }
+  return { bets: n, over: gk.map(g => u.over.get(g)), under: gk.map(g => u.under.get(g)) };
+}
+function bootSum(vals, seed = 0) {
+  const Rg = PR.rng(seed), n = vals.length, out = new Float64Array(UNITS_BOOT);
+  for (let b = 0; b < UNITS_BOOT; b++) { let s = 0; for (let j = 0; j < n; j++) s += vals[Math.floor(Rg() * n)]; out[b] = s; }
+  out.sort(); return [r2(out[Math.floor(0.05 * UNITS_BOOT)]), r2(out[Math.floor(0.95 * UNITS_BOOT)])];
+}
+function unitsCompare(ab, ac, mb, mc) {
+  const gk = [...new Set(ab.map(x => x.game))];
+  const ub = unitsByGame(ab, gk), uc = unitsByGame(ac, gk), out = { edge: 0.03, resamples: UNITS_BOOT, seed: 0, games: gk.length };
+  for (const s of ['over', 'under']) {
+    const tb = r2(ub[s].reduce((a, v) => a + v, 0)), tc = r2(uc[s].reduce((a, v) => a + v, 0));
+    if (ub.bets[s] !== mb.flat.edge3[s].bets || tb !== mb.flat.edge3[s].units || uc.bets[s] !== mc.flat.edge3[s].bets || tc !== mc.flat.edge3[s].units) throw new Error('the units by game do not add up to flatBets');
+    out[s] = { baseline: { bets: ub.bets[s], units: tb, ci90: bootSum(ub[s]) }, candidate: { bets: uc.bets[s], units: tc, ci90: bootSum(uc[s]) },
+      candidateMinusBaseline: { units: r2(tc - tb), ci90: bootSum(uc[s].map((v, j) => v - ub[s][j])) } };
+  }
+  const both = side => side.over.map((v, j) => v + side.under[j]);
+  out.bothSides = { baseline: { units: r2(out.over.baseline.units + out.under.baseline.units), ci90: bootSum(both(ub)) }, candidate: { units: r2(out.over.candidate.units + out.under.candidate.units), ci90: bootSum(both(uc)) } };
+  /* the baseline's intervals must be the ones published for tools/props.js (results/cand_blend.json) */
+  const pub = JSON.parse(fs.readFileSync(path.join(OUTD, 'cand_blend.json'), 'utf8')).model.flat;
+  if (JSON.stringify(out.over.baseline.ci90) !== JSON.stringify(pub.over.unitsCi90) || JSON.stringify(out.under.baseline.ci90) !== JSON.stringify(pub.under.unitsCi90)) throw new Error('the baseline\'s units intervals are not the published ones');
+  return out;
+}
 function archiveCompare(Pb, Pc, Xc) {
   const ab = C.archiveLines(rows, sides, Pb, {}, D.boxes), ac = C.archiveLines(rows, sides, Pc, Xc, D.boxes);
   if (ab.lines.length !== ac.lines.length || ab.lines.some((x, i) => x.game !== ac.lines[i].game || x.stat !== ac.lines[i].stat || x.line !== ac.lines[i].line)) throw new Error('the two models graded different lines');
@@ -224,7 +263,8 @@ function archiveCompare(Pb, Pc, Xc) {
     byStat[k] = { lines: ib.length, overRate: sb.overRate, said: { baseline: sb.modelSaid, candidate: sc.modelSaid, market: sb.marketSaid }, logloss: { baseline: sb.logloss.model, candidate: sc.logloss.model, market: sb.logloss.market } }; }
   const strip = m => ({ lines: m.lines, games: m.games, overRate: m.overRate, modelSaid: m.modelSaid, marketSaid: m.marketSaid, logloss: m.logloss, brier: m.brier, guess: m.guess, flat: m.flat });
   return { voids: ab.voids, noCall: ab.noCall, baseline: { ...strip(mb), sureness: sureness(ab.lines) }, candidate: { ...strip(mc), sureness: sureness(ac.lines) },
-    candidateMinusBaseline: { logloss: r4(mc.logloss.model - mb.logloss.model), ci90: PR.bootCI([...g.values()]), brier: r4(mc.brier.model - mb.brier.model), brierCi90: PR.bootCI([...gB.values()], 10000, 3) }, byStat };
+    candidateMinusBaseline: { logloss: r4(mc.logloss.model - mb.logloss.model), ci90: PR.bootCI([...g.values()]), brier: r4(mc.brier.model - mb.brier.model), brierCi90: PR.bootCI([...gB.values()], 10000, 3) }, byStat,
+    units: unitsCompare(ab.lines, ac.lines, mb, mc) };
 }
 if (mode === '--score') {
   const rule = JSON.parse(fs.readFileSync(path.join(OUTD, 'cand_fix_rule.json'), 'utf8'));
@@ -243,6 +283,7 @@ if (mode === '--score') {
   log('the archive, once');
   out.archive = archiveCompare(foldP[2026], cand[2026].P, cand[2026].X);
   log(`archive: log loss baseline ${out.archive.baseline.logloss.model}, candidate ${out.archive.candidate.logloss.model}, DraftKings ${out.archive.baseline.logloss.market}; candidate - DraftKings ${out.archive.candidate.logloss.diff} ${JSON.stringify(out.archive.candidate.logloss.diffCi90)}`);
+  { const u = out.archive.units; log(`archive units at a 3-point edge [90%]: candidate Overs ${u.over.candidate.units} ${JSON.stringify(u.over.candidate.ci90)}, Unders ${u.under.candidate.units} ${JSON.stringify(u.under.candidate.ci90)}; baseline Overs ${JSON.stringify(u.over.baseline.ci90)}, Unders ${JSON.stringify(u.under.baseline.ci90)} (as published)`); }
   log('the constants a new shadow trial would freeze: fit on 2023-2026');
   const fr = C.fitAllX(rows, sides, r => r.season >= 2023 && r.season <= 2026, rule.X, rule.grids, { fitRho: true });
   out.frozen = { fitOn: '2023-2026', P: fr.P, X: fr.X };

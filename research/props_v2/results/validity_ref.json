@@ -1,0 +1,175 @@
+{
+ "generated": "2026-11-05T20:17Z",
+ "what": "research/props_v2/validity.js: DraftKings' prices, the feed's stamps and the box scores only; no candidate is scored",
+ "lines": "data/props_2026.csv (the 2026 play-in and playoffs)",
+ "fold": 2026,
+ "thresholds": {
+  "v1ShareBeforeStart": 0.95,
+  "v2MinProjected": 24,
+  "v2ExitUnder": 12,
+  "v2Floor": -0.05,
+  "v2MinExits": 100,
+  "v3Slack": 0.02
+ },
+ "graded": 6418,
+ "games": 83,
+ "v0": {
+  "pts": {
+   "n": 1328,
+   "firstIsOver": 0.6884,
+   "firstIsUnder": 0.6935
+  },
+  "reb": {
+   "n": 1234,
+   "firstIsOver": 0.6925,
+   "firstIsUnder": 0.7095
+  },
+  "ast": {
+   "n": 1094,
+   "firstIsOver": 0.6758,
+   "firstIsUnder": 0.7239
+  },
+  "tpm": {
+   "n": 1079,
+   "firstIsOver": 0.6654,
+   "firstIsUnder": 0.7848
+  },
+  "stl": {
+   "n": 888,
+   "firstIsOver": 0.6539,
+   "firstIsUnder": 0.788
+  },
+  "blk": {
+   "n": 795,
+   "firstIsOver": 0.6349,
+   "firstIsUnder": 0.8416
+  },
+  "holds": true
+ },
+ "v2": {
+  "byStat": {
+   "pts": {
+    "exits": 7,
+    "rest": 865,
+    "fairOverExits": 0.4663,
+    "fairOverRest": 0.4694,
+    "diff": -0.003,
+    "overHitExits": 0,
+    "overHitRest": 0.4532
+   },
+   "reb": {
+    "exits": 8,
+    "rest": 863,
+    "fairOverExits": 0.4959,
+    "fairOverRest": 0.4634,
+    "diff": 0.0325,
+    "overHitExits": 0.125,
+    "overHitRest": 0.5029
+   },
+   "ast": {
+    "exits": 8,
+    "rest": 846,
+    "fairOverExits": 0.4551,
+    "fairOverRest": 0.4611,
+    "diff": -0.0059,
+    "overHitExits": 0.125,
+    "overHitRest": 0.4515
+   },
+   "tpm": {
+    "exits": 8,
+    "rest": 798,
+    "fairOverExits": 0.4777,
+    "fairOverRest": 0.4423,
+    "diff": 0.0354,
+    "overHitExits": 0,
+    "overHitRest": 0.4637
+   },
+   "stl": {
+    "exits": 6,
+    "rest": 766,
+    "fairOverExits": 0.3822,
+    "fairOverRest": 0.4748,
+    "diff": -0.0926,
+    "overHitExits": 0.3333,
+    "overHitRest": 0.4922
+   },
+   "blk": {
+    "exits": 4,
+    "rest": 679,
+    "fairOverExits": 0.2406,
+    "fairOverRest": 0.3819,
+    "diff": -0.1413,
+    "overHitExits": 0.25,
+    "overHitRest": 0.4035
+   }
+  },
+  "exits": 41,
+  "diff": -0.0158
+ },
+ "v3": {
+  "pts": {
+   "n": 1328,
+   "draftKings": 0.6884,
+   "naive": 0.755,
+   "gain": 0.0666,
+   "gainCi90": [
+    0.049509,
+    0.084273
+   ]
+  },
+  "reb": {
+   "n": 1234,
+   "draftKings": 0.6925,
+   "naive": 0.7138,
+   "gain": 0.0213,
+   "gainCi90": [
+    0.008742,
+    0.034197
+   ]
+  },
+  "ast": {
+   "n": 1094,
+   "draftKings": 0.6758,
+   "naive": 0.7131,
+   "gain": 0.0374,
+   "gainCi90": [
+    0.023872,
+    0.050949
+   ]
+  },
+  "tpm": {
+   "n": 1079,
+   "draftKings": 0.6654,
+   "naive": 0.6923,
+   "gain": 0.0269,
+   "gainCi90": [
+    0.015047,
+    0.038931
+   ]
+  },
+  "stl": {
+   "n": 888,
+   "draftKings": 0.6539,
+   "naive": 0.6654,
+   "gain": 0.0115,
+   "gainCi90": [
+    0.003394,
+    0.019546
+   ]
+  },
+  "blk": {
+   "n": 795,
+   "draftKings": 0.6349,
+   "naive": 0.6504,
+   "gain": 0.0155,
+   "gainCi90": [
+    0.00581,
+    0.025246
+   ]
+  }
+ },
+ "v1": {
+  "note": "the archive carries no stamps (data/props_2026.csv is the record's six columns)"
+ },
+ "note": "references only: the thresholds are applied to fetched lines, never to the archive"
+}

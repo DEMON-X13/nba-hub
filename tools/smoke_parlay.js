@@ -14,7 +14,8 @@
  * and fair chance (tools/props_feed.js's rules), the order (pbTopOwn: the Value picks, then the thin-edge lines, then the
  * totals, each by what $1 is expected to make), each bet once (sameBetOwn: a milestone k+ is the main Over at k - 0.5),
  * the 50-line cut (PB_TOP_N_OWN) on sixty made-up games, no player line once the props trial is stopped early as a FAIL
- * (a made-up decision with early, tools/props_ledger.js EARLY_STOP), the on-trial mark on every player leg and nowhere else, the
+ * (a made-up decision with early, tools/props_ledger.js EARLY_STOP: the notes, the lead, the foot and a player leg's mark
+ * saying the trial was stopped early, word for word, and the bar's own FAIL said as that), the on-trial mark on every player leg and nowhere else, the
  * Value mark on every Value pick and nowhere else, the Bet amount, the builder's numbers by data/corr.json and
  * tools/corr.js (two legs of one game exactly), the same-game refusals with their reasons, Add, Added and Remove, a game
  * that tips while the page is open, nothing read before the tab opens and nothing stored by a press; then the real
@@ -310,7 +311,19 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     const ownF = pbTopOwn(candidatesOwn(stF, LINES), TICKS_ALL), gotF = rows(pf).map(rowRead), notesF = [...pf.d.querySelectorAll('#pbPanel .pb-note')].map(txt).join(' | ');
     check(own.rows.some(r => r.kind === 'prop') && ownF.rows.length > 0 && !ownF.rows.some(r => r.kind === 'prop') && gotF.length === ownF.rows.length && gotF.every((g, i) => g.key === keyOwn(ownF.rows[i]) && !g.trial) && !pf.d.querySelector('#pbPanel [data-pb-leg*="|prop|"], #pbPanel .pb-trial'),
       `after the early stop's FAIL the list has no player line (${gotF.length} lines, every one a game line, where ${own.rows.filter(r => r.kind === 'prop').length} player lines stood before it)`);
-    check(/The list has no player lines: the props model failed its shadow ledger’s bar, so the list takes none/.test(notesF.replace(/'/g, '’')) && !pf.errors.length, `and the notes say why (${notesF.slice(0, 120)})${pf.errors.length ? ': ' + pf.errors.join(' | ') : ''}`);
+    check(notesF.replace(/'/g, '’').includes('The list has no player lines: the props model’s trial was stopped early as a FAIL on 5 November 2026, so the list takes none.') && !/failed its shadow ledger/.test(notesF) && !pf.errors.length,
+      `and the notes say why, word for word: the trial stopped early, not a bar failed (${notesF.slice(0, 140)})${pf.errors.length ? ': ' + pf.errors.join(' | ') : ''}`);
+    const leadF = txt(pf.d.querySelector('#pbPanel .pb-lead')), footF = txt(pf.d.querySelector('#pbPanel .pb-foot'));
+    check(leadF && !/on trial/.test(leadF) && /lines at most\. Add any of them to the builder below\.$/.test(leadF) && footF && !/on trial/.test(footF) && footF.includes('a total’s is the book’s own; it takes no player’s line: the props model’s trial was stopped early as a FAIL on 5 November 2026. The Value picks come first'),
+      `the lead and the foot no longer call the model on trial, the foot saying why it takes no player's line ("${leadF.slice(-60)}" / "${footF.slice(footF.indexOf('a total’s'), footF.indexOf('a total’s') + 130)}")`);
+    /* a player's leg the reader adds by hand still shows the model's chance, marked: its title says the trial stopped and
+       that no list or set takes it; the bar's own FAIL (no early) is said as that, in the notes and the title alike */
+    const T_EARLY = 'The props model’s trial was stopped early as a FAIL on 5 November 2026, the owner’s call: it was not shown to beat DraftKings’ closing lines, so this chance is the model’s, for reference only, and no list or set takes it';
+    const markF = pf.d.createElement('div'); markF.innerHTML = pf.w.pbTrialMark({ kind: 'prop' });
+    check(pf.w.pbTrialTitle() === T_EARLY && markF.querySelector('.pb-trial') && markF.querySelector('.pb-trial').title === T_EARLY, `a player leg's mark is titled with the stop ("${pf.w.pbTrialTitle().slice(0, 100)}")`);
+    const [noPlBar, titleBar] = JSON.parse(pf.w.eval('(() => { const d = S.props.ledger.decision, e = d.early; delete d.early; try { return JSON.stringify([pbNoPl([]), pbTrialTitle()]); } finally { d.early = e; } })()'));
+    check(noPlBar === 'no player lines: the props model failed its shadow ledger’s bar, so the list takes none.' && titleBar === 'The props model failed its shadow ledger’s bar against DraftKings’ closing lines, so this chance is the model’s, for reference only, and no list or set takes it',
+      `the bar's own FAIL is said as a failed bar ("${noPlBar}" / "${titleBar.slice(0, 80)}")`);
   }
 
   /* the engine the levels are built by (drawn nowhere on this tab: Suggested Parlays will draw them), on the same legs:

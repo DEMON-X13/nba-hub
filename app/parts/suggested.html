@@ -135,7 +135,7 @@ function spSlipOk(legs) { const have = []; for (const l of legs) { const s = pbS
    is when the lines feed first held what it holds now (tools/lines.js keeps a half's time while a read finds the same),
    so the words say "as of" it and that no read since has found any, never that it was the last read */
 function spNoPl(g) {
-  if (!pbPropsOn()) return 'no player lines: the props model failed its shadow ledger’s bar, so the sets take none.';
+  if (!pbPropsOn()) return `no player lines: ${pbPropsOffWhy()}, so the sets take none.`;
   if (!ppGame(g.id)) return 'no player lines the props model prices: it has no projections for this game yet.';
   const r = pbPr(g.id);
   if (r && (r.mains.length || r.ladders.length || r.yes.length)) return 'no player lines the props model prices: it projects none of the players DraftKings lines here.';

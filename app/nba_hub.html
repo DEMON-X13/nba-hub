@@ -1447,7 +1447,7 @@ function ppEarly(dec) {
   const scores = behind.length === 2 ? 'behind DraftKings on both scores' : behind.length ? `behind DraftKings on ${behind[0]}` : 'not ahead of DraftKings on both scores';
   const u = fl ? Math.round(Math.abs(fl.units)) : 0;
   const bets = !fl || !fl.bets ? 'no flat bets at its edge' : fl.units < 0 ? `its flat bets down ${u.toLocaleString('en-US')} unit${u === 1 ? '' : 's'}` : fl.units > 0 ? `its flat bets up ${u.toLocaleString('en-US')} unit${u === 1 ? '' : 's'}` : 'its flat bets level';
-  return `Stopped early${day ? ` on ${day}` : ''}, ${esc(e.by || 'the owner')}'s call, at ${Number(dec.lines || 0).toLocaleString('en-US')} graded lines: ${scores} and ${bets}. FAIL: its chances are no longer used in the Parlay Builder or Suggested Parlays, and its calls have stopped; the projections stay for reference.`;
+  return `Stopped early${day ? ` on ${day}` : ''}, ${esc(e.by || 'the owner')}'s call, at ${Number(dec.lines || 0).toLocaleString('en-US')} graded lines: ${scores} and ${bets}. FAIL: its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested Parlays, and its calls have stopped; the projections stay for reference.`;
 }
 /* the shadow ledger's running numbers, quietly: never a verdict, nor a word of one, before its bar is decided or the
    trial is stopped early */

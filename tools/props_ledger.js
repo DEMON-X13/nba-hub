@@ -39,13 +39,17 @@
  * 30,000 lines merely level on log loss, the other 17,702 would have had to beat DraftKings by 0.0128 a line, where it
  * had been 0.0184 a line behind), so the owner stopped the trial there as a FAIL rather than wait for 30,000. It is a
  * futility stop and can only fail: the first run at or after EARLY_STOP.at with no decision writes verdict FAIL on every
- * line graded and compared by then (in grading order, all of them), its numbers worked by the bar's own functions
- * (scores, flat) on exactly those lines as decide works them on the first 30,000, and carries early: { at, by, why },
- * copied from EARLY_STOP. It never writes a PASS, the bar in the ledger is not changed, and the record is not edited:
- * from then on the FAIL path is the bar's own (the calls stop, frozen calls are still graded, the summary keeps
- * counting) and the decision is never revisited. If the bar's 30,000 were in first, the bar's own decision stands and
- * the early stop does nothing. props_check.js accepts a decision of fewer than bar.lines lines only as this one: early
- * exactly EARLY_STOP, FAIL, decided at or after its time, on every line graded by then.
+ * line graded and compared by then (in grading order, all of them: 12,298 on the day's data, more if a run grades
+ * another game first, so its why names no count and its lines are the count), its numbers worked by the bar's own
+ * functions (scores, flat) on exactly those lines as decide works them on the first 30,000, and carries early:
+ * { at, by, why }, copied from EARLY_STOP. It never writes a PASS, the bar in the ledger is not changed, and the record is
+ * not edited: from then on the FAIL path is the bar's own (the calls stop, frozen calls are still graded, the summary
+ * keeps counting) and the decision is never revisited. It ends this trial alone: the ledger whose bar was registered at
+ * EARLY_STOP.bar_registered (2026-10-15T11:35Z, stopsLedger), never a ledger registered since (a new model's, with a bar
+ * of its own), and never on no graded line. If the bar's 30,000 were in first, the bar's own decision stands and the
+ * early stop does nothing. props_check.js accepts a decision of fewer than bar.lines lines only as this one: early
+ * exactly EARLY_STOP, FAIL, on this ledger, decided at or after its time by the run that wrote it, on every line graded
+ * by then.
  *
  * Files: data/props_shadow.json (the bar, the fits, the calls, the verdict, the summary; one call a line) and
  * data/props_shadow_lines.csv (the graded lines). Never edited by hand: they are the record.
@@ -87,11 +91,14 @@ const BAR = {
 };
 /* The early stop: the owner's call of 5 November 2026 (the header). A futility stop, registered in the code: it can
    only end the trial as FAIL, on every line graded and compared by the first run at or after `at`; it changes nothing
-   in the bar and nothing in the record. props_check.js holds a decision short of bar.lines to it exactly. */
+   in the bar and nothing in the record. It ends the one trial whose bar was registered at bar_registered (the ledger the
+   job has kept since 15 October 2026), and no other. props_check.js holds a decision short of bar.lines to it exactly.
+   Its why names no count of lines: the decision's lines are the count, whatever a run had graded by then. */
 const EARLY_STOP = {
   at: '2026-11-05T18:00:00Z',
   by: 'the owner',
-  why: 'behind DraftKings on both scores with 90% intervals wholly above zero, and the flat bets down, at 12,298 graded lines; stopped early as a FAIL rather than wait for 30,000',
+  why: 'behind DraftKings on both scores with 90% intervals wholly above zero, and the flat bets down, on the lines graded by then; stopped early as a FAIL rather than wait for 30,000',
+  bar_registered: '2026-10-15T11:35Z',
 };
 /* the bar's own bootstrap (not the research code's): groups = [[sum of differences, count]] one a game; bar.boot
    resamples of the games with replacement, drawn by mulberry32 seeded with bar.seed (each draw the game at
@@ -227,10 +234,11 @@ function decide(rows, at, bar = BAR) {
 }
 /* the early stop's decision: FAIL on every compared line in (rows, in grading order), at or after stop.at and only while
    the bar's sample is not in (then decide's verdict stands), its numbers the bar's own functions' on exactly those
-   lines; never a PASS */
+   lines; never a PASS, and never on no line. It is for the ledger stopsLedger names alone (run() asks it first) */
 const stopDue = (at, stop = EARLY_STOP) => !!stop && new Date(at).getTime() >= Date.parse(stop.at);
+const stopsLedger = (Lg, stop = EARLY_STOP) => !!stop && !!Lg && !!stop.bar_registered && Lg.bar_registered === stop.bar_registered;
 function stopEarly(rows, at, bar = BAR, stop = EARLY_STOP) {
-  if (!stopDue(at, stop) || rows.length >= bar.lines) return null;
+  if (!stopDue(at, stop) || !rows.length || rows.length >= bar.lines) return null;
   const sc = scores(rows, bar), fl = flat(rows, bar);
   return { verdict: 'FAIL', decided_at: iso(at), lines: rows.length, games: sc ? sc.games : 0, last_game: rows.length ? rows[rows.length - 1].game : null, scores: sc, flat: fl,
     early: { at: stop.at, by: stop.by, why: stop.why } };
@@ -297,9 +305,9 @@ function run({ upcoming, params, games, now = new Date(), boxes = null, log = L.
     }
   }
   const lines = readLines().concat(fresh);
-  /* 3. the verdict, once the sample is in, or the early stop's FAIL once its time has come (the bar's own decision first,
-     should its sample be in); never revisited */
-  if (!Lg.decision) { const cmp = compared(lines, recIdx); Lg.decision = decide(cmp, now, Lg.bar) || stopEarly(cmp, now, Lg.bar); }
+  /* 3. the verdict, once the sample is in, or, on the ledger the early stop ends, its FAIL once its time has come (the bar's
+     own decision first, should its sample be in); never revisited */
+  if (!Lg.decision) { const cmp = compared(lines, recIdx); Lg.decision = decide(cmp, now, Lg.bar) || (stopsLedger(Lg) ? stopEarly(cmp, now, Lg.bar) : null); }
   const stopped = !!Lg.decision && Lg.decision.verdict === 'FAIL';
   /* 4. a call for every game to come (none once the bar has failed) */
   if (stopped) { for (const gid of Object.keys(Lg.calls)) if (!Lg.calls[gid].frozen) { delete Lg.calls[gid]; n.dropped++; } }
@@ -334,7 +342,7 @@ function run({ upcoming, params, games, now = new Date(), boxes = null, log = L.
   return { ledger: Lg, n, changed };
 }
 
-module.exports = { BAR, EARLY_STOP, stopDue, stopEarly, barCI, barRng, LEDGER, LINES, LEDGER_REL, LINE_COLS, CALL_LAYOUT, CALL_FIELDS, fitId, newLedger, readLedger, stringify, readLines, lineText, recordIndex, gradeGame, gradeable, compared, scores, flat, decide, summarize, started, callOf, run };
+module.exports = { BAR, EARLY_STOP, stopDue, stopsLedger, stopEarly, barCI, barRng, LEDGER, LINES, LEDGER_REL, LINE_COLS, CALL_LAYOUT, CALL_FIELDS, fitId, newLedger, readLedger, stringify, readLines, lineText, recordIndex, gradeGame, gradeable, compared, scores, flat, decide, summarize, started, callOf, run };
 
 /* node tools/props_ledger.js init: write the ledger with the bar and no call, so the bar is on record before the first
    call is made (the job's first run then makes them); refuses if a ledger is already there */

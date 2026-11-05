@@ -722,13 +722,12 @@ async function playerProps() {
   const earlyOf = (lines, ll, br, units, bets) => ({ verdict: 'FAIL', decidedAt: '2026-11-05T18:30Z', lines, games: Math.round(lines / 100),
     scores: { lines, logloss_diff: ll, brier_diff: br }, flat: { edge: 0.03, all: { bets, won: Math.round(bets / 2), units } }, early });
   [lt] = await ledgerText(lgOf({ lines: 12298, gradedGames: 121, scores: { ...scores, lines: 12298 } }, earlyOf(12298, 0.018439, 0.008278, -222.81, 6027)));
-  check(lt.includes("Stopped early on 5 November 2026, the owner's call, at 12,298 graded lines: behind DraftKings on both scores and its flat bets down 223 units. FAIL: its chances are no longer used in the Parlay Builder or Suggested Parlays, and its calls have stopped; the projections stay for reference. So far on 12,298 lines,") && !/decided on|stays on trial and suggests nothing|PASS|\bpass/.test(lt),
+  check(lt.includes("Stopped early on 5 November 2026, the owner's call, at 12,298 graded lines: behind DraftKings on both scores and its flat bets down 223 units. FAIL: its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested Parlays, and its calls have stopped; the projections stay for reference. So far on 12,298 lines,") && !/decided on|stays on trial and suggests nothing|PASS|\bpass/.test(lt),
     `an early stop is said plainly, from its decision ("${lt.slice(lt.indexOf('Stopped'), lt.indexOf('Stopped') + 240)}")`);
   [lt] = await ledgerText(lgOf({ lines: 4567, gradedGames: 45, scores: { ...scores, lines: 4567 } }, earlyOf(4567, 0.0042, -0.0011, 12.4, 300)));
   check(lt.includes("Stopped early on 5 November 2026, the owner's call, at 4,567 graded lines: behind DraftKings on log loss and its flat bets up 12 units. FAIL:"), `and its words follow the decision's numbers, not the real ones ("${lt.slice(lt.indexOf('Stopped'), lt.indexOf('Stopped') + 130)}")`);
   [lt] = await ledgerText(lgOf({ lines: 4567, gradedGames: 45, scores: { ...scores, lines: 4567 } }, earlyOf(4567, -0.0042, 0.0011, 0, 0)));
   check(lt.includes('at 4,567 graded lines: behind DraftKings on Brier and no flat bets at its edge. FAIL:'), 'one score behind and no bet at the edge are said so');
-  check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   /* the real published state: every game's sheet draws */

@@ -11,7 +11,8 @@
  * 2026), each level's numbers against the builder's own sums and the Safe pair against every pair of its pool, the
  * record's pills from made-up ledgers (spRecOwn, the three levels, an old entry's Extreme left out), no Elo picks (gone the
  * same day) and nothing of them left, the on-trial mark on every player leg and nowhere else, no player leg once the props
- * trial is stopped early as a FAIL (a made-up decision with early, tools/props_ledger.js EARLY_STOP), Add, Add to builder and
+ * trial is stopped early as a FAIL (a made-up decision with early, tools/props_ledger.js EARLY_STOP: the Safe pair on the
+ * game's own lines, each larger level empty saying why word for word, and the bar's own FAIL said as that), Add, Add to builder and
  * Finish, the browser's own lock across a reload and given way to the record's (a four-level one from before read as
  * three), a ruled-out level built again alone, nothing stored but nba_sp_lock_v1 and nothing read but the record and
  * lines.json, each once and no-store; then the real files, on what the day offers. Every request is recorded.
@@ -248,7 +249,16 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     const pf = load(stF, { lines: LINES1, record: null, tab: 'suggest' }); await settle(pf); await openTab(pf);
     const tF = LV.map(id => pf.w.spTier(`${gA.id}:${id}`)), none = [...pf.d.querySelectorAll(`#spSets [data-sp-game="${gA.id}"] .pb-tier`)].filter(c => !c.dataset.pbTier || c.classList.contains('none')).map(txt).join(' | ');
     check(tiersA.some(t => t.legs.some(l => l.kind === 'prop')) && tF.every(t => !t || t.legs.every(l => l.kind !== 'prop')) && !pf.d.querySelector('#spSets .pb-trial, #spSets [data-pb-leg*="|prop|"]') && JSON.parse(pf.w.eval(`JSON.stringify((() => { const pool = spPool(S.slate.find(g => g.id === ${JSON.stringify(gA.id)})); return [...pool.pref, ...pool.thin].map(l => l.kind); })())`)).every(k => k !== 'prop') && !pf.errors.length,
-      `after the early stop's FAIL no level of a set takes a player line (${tF.map(t => t ? t.legs.length + ' legs' : 'empty').join(', ')}${none ? `; "${none.slice(0, 120)}"` : ''})${pf.errors.length ? ': ' + pf.errors.join(' | ') : ''}`); }
+      `after the early stop's FAIL no level of a set takes a player line (${tF.map(t => t ? t.legs.length + ' legs' : 'empty').join(', ')}${none ? `; "${none.slice(0, 120)}"` : ''})${pf.errors.length ? ': ' + pf.errors.join(' | ') : ''}`);
+    /* not by building nothing: the Safe pair stands, a side bet and the total of the game's own lines, and each larger level
+       is empty saying why word for word, which the record keeps (spBuild's why, as spTierOut takes it, and the card's) */
+    const WHY_F = 'Only 2 legs in this game, and no player lines: the props model’s trial was stopped early as a FAIL on 5 November 2026, so the sets take none.';
+    const whyF = [...pf.d.querySelectorAll(`#spSets [data-sp-game="${gA.id}"] .pb-why`)].map(txt), recF = JSON.parse(pf.w.eval(`JSON.stringify(spBuild(S.slate.find(g => g.id === ${JSON.stringify(gA.id)})).tiers.map(t => t.why || null))`));
+    check(tF[0] && tF[0].legs.length === 2 && tF[0].legs.every(l => l.gid === gA.id && ['ml', 'spread', 'total'].includes(l.kind)) && tF[0].legs.filter(l => l.kind === 'total').length === 1 && !tF[1] && !tF[2],
+      `the Safe pair stands on the game's own lines (${tF[0] ? tF[0].legs.map(l => l.kind).join(' + ') : 'none'}), Medium and Aggressive empty`);
+    check(whyF.length === 2 && whyF.every(x => x === WHY_F) && recF[0] === null && recF[1] === WHY_F && recF[2] === WHY_F, `and each empty level says why, word for word, on its card and in what the record keeps ("${whyF[0]}")`);
+    const noPlBar = pf.w.eval(`(() => { const d = S.props.ledger.decision, e = d.early; delete d.early; try { return spNoPl(S.slate.find(g => g.id === ${JSON.stringify(gA.id)})); } finally { d.early = e; } })()`);
+    check(noPlBar === 'no player lines: the props model failed its shadow ledger’s bar, so the sets take none.', `the bar's own FAIL (no early) is said as a failed bar ("${noPlBar}")`); }
   check(tiersA.every(t => t.legs.every(l => { const f = p.w.legFair(l); return !f || l.p - f.p < 0.15; })), 'no leg 15 points or more over DraftKings’ fair chance');
   /* the Safe pair: the likeliest pair of the pool's Value picks the builder takes, worked out over every pair */
   const best = JSON.parse(p.w.eval(`(() => { const pool = spPool(S.slate.find(g => g.id === ${JSON.stringify(gA.id)})), P = pool.pref; let b = null;

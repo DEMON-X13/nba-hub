@@ -1,7 +1,9 @@
 /* DraftKings' older closing main lines from ESPN's feed (provider 40: the 2022 conference finals to April 2024), in the
  * record's own columns. NOT RUN BY ANY JOB, and its output is never committed: it writes only to research/props_v2/cache/
  * (gitignored here), for a study to read. Whether to backfill these, and whether into data/ as data/props_2026.csv was,
- * is the owner's call (data.md, "ESPN's feed"). It has not been run on the real feed.
+ * is the owner's call (data.md, "ESPN's feed"). This version has never been run on the real feed. Its first version,
+ * whose --dry still downloaded (it only skipped the write), was tried once with --dry on one day, which downloaded that
+ * day's answers and wrote nothing.
  *
  *   node research/props_v2/fetch_dk40.js <from YYYY-MM-DD> <to YYYY-MM-DD> [--dry]
  *     e.g. 2022-10-18 2023-06-12 (2022-23), 2023-10-24 2024-04-30 (2023-24)
@@ -20,11 +22,16 @@
  * Written to cache/props40_<season>.csv as game_id,player_id,stat,line,over,under (the record's columns), then
  * last_updated (the later of the pair's two items' lastUpdated, as the feed gives it: the README's validity check reads
  * it), one row a game, player and stat; and each game's read to cache/props40_reads.json (when, ok with its count and
- * the event's start, none for a 404, failed). The cache is kept a game at a time, never appended to: a game read ok
- * replaces whatever an earlier run wrote for it, a game whose read failed or found nothing keeps an earlier run's good
- * read, and each file is rewritten whole, in game order, through a temporary file. So running a range again, or two
- * ranges that overlap, never repeats a line. research/props_v2/fetch_dk40_test.js holds both rules on a local fake of the
- * feed.
+ * the event's start, none for a 404, failed). The cache is kept a game at a time, never appended to, and each file is
+ * rewritten whole, in game order, through a temporary file, so running a range again, or two ranges that overlap, never
+ * repeats a line:
+ *   - a read that finds main lines replaces whatever an earlier run wrote for that game;
+ *   - a read that finds none (a 404, a failure, or an answer with no main line in it) keeps an earlier run's read that
+ *     found lines, its rows and its record; with no such read, the game is recorded as this read found it, with no rows;
+ *   - the event's start is the event's, not the read's: a run whose request for the event fails keeps the start an
+ *     earlier read recorded (validity.js's V1 counts a line with no start as not shown before it), and a run that learns
+ *     a start an earlier kept read lacked adds it.
+ * research/props_v2/fetch_dk40_test.js holds each rule on a local fake of the feed.
  *
  * For that test only, three settings can point elsewhere: DK40_BASE (the feed's events address), DK40_CACHE (the
  * cache folder) and DK40_GAMES (the schedule).
@@ -86,10 +93,13 @@ function flush() {
   writeWhole(readsFile, JSON.stringify(Object.fromEntries(keys.map(k => [k, reads[k]])), null, 1) + '\n');
 }
 
+const found = r => !!(r && r.status === 'ok' && r.lines > 0);       // a read that found main lines
 let n = 0;
 for (const g of games) {
+  const prev = reads[g.id] || null;
   const pages = []; let status = 'ok', start = null;
   try { start = getJSON(eventUrl(g.espn)).date || null; } catch (e) { start = null; }
+  if (!start && prev && prev.start) start = prev.start;                // the event's start, kept from an earlier read
   try {
     for (let page = 1; page <= 20; page++) { const j = getJSON(pageUrl(g.espn, page)); pages.push(j); if (page >= (+j.pageCount || 1)) break; }
   } catch (e) { status = /HTTP 404/.test(e.message) ? 'none' : 'failed'; }
@@ -105,13 +115,13 @@ for (const g of games) {
   }
   const read = { at: new Date().toISOString().slice(0, 16) + 'Z', status, lines: mains.length, start };
   const m = seasonRows(g.season);
-  if (status === 'ok') {
+  if (status === 'ok' && mains.length) {
     m.set(g.id, mains.map(x => [g.id, x.player, x.stat, x.line, x.over, x.under, stamp.get(x.stat + '|' + x.player + '|' + x.line) || ''].join(',')));
-    if (!mains.length) m.delete(g.id);
     reads[g.id] = read;
     console.log(g.id, status, mains.length);
-  } else if (reads[g.id] && reads[g.id].status === 'ok') {
-    console.log(g.id, status, `(kept the earlier read of ${reads[g.id].at}, ${reads[g.id].lines} lines)`);
+  } else if (found(prev)) {
+    if (!prev.start && start) prev.start = start;
+    console.log(g.id, status, mains.length, `(kept the earlier read of ${prev.at}, ${prev.lines} lines)`);
   } else {
     m.delete(g.id); reads[g.id] = read;
     console.log(g.id, status, 0);

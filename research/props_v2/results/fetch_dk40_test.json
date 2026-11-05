@@ -186,6 +186,104 @@
    "detail": 16
   },
   {
+   "name": "a game whose new read has no main line keeps its earlier lines and read",
+   "ok": true,
+   "detail": {
+    "rows": 4,
+    "read": {
+     "status": "ok",
+     "lines": 4,
+     "start": "2023-10-25T23:00Z"
+    }
+   }
+  },
+  {
+   "name": "a first read with no main line is recorded ok with none, and writes no row",
+   "ok": true,
+   "detail": {
+    "rows": 0,
+    "read": {
+     "status": "ok",
+     "lines": 0,
+     "start": "2023-10-25T23:00Z"
+    }
+   }
+  },
+  {
+   "name": "a re-read whose event request fails still replaces its lines",
+   "ok": true,
+   "detail": [
+    [
+     "2024_20231025_CCC_DDD",
+     "9021",
+     "pts",
+     "22.5",
+     "-115",
+     "-105",
+     "2023-10-25T02:30Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9021",
+     "reb",
+     "6.5",
+     "102",
+     "-124",
+     "2023-10-25T02:00Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9022",
+     "pts",
+     "11.5",
+     "-115",
+     "-105",
+     "2023-10-25T02:30Z"
+    ],
+    [
+     "2024_20231025_CCC_DDD",
+     "9022",
+     "reb",
+     "5.5",
+     "102",
+     "-124",
+     "2023-10-25T02:00Z"
+    ]
+   ]
+  },
+  {
+   "name": "a re-read whose event request fails keeps the event's start",
+   "ok": true,
+   "detail": {
+    "status": "ok",
+    "lines": 4,
+    "start": "2023-10-25T23:00Z"
+   }
+  },
+  {
+   "name": "a first read whose event request fails has no start",
+   "ok": true,
+   "detail": {
+    "status": "ok",
+    "lines": 4,
+    "start": null
+   }
+  },
+  {
+   "name": "a kept read gains the start a later run learned",
+   "ok": true,
+   "detail": {
+    "status": "ok",
+    "lines": 4,
+    "start": "2023-10-25T23:00Z"
+   }
+  },
+  {
+   "name": "no line repeated after all six steps",
+   "ok": true,
+   "detail": 20
+  },
+  {
    "name": "no temporary file left behind",
    "ok": true,
    "detail": [
@@ -196,8 +294,8 @@
   {
    "name": "every request went to the local fake",
    "ok": true,
-   "detail": 22
+   "detail": 34
   }
  ],
- "requests": 22
+ "requests": 34
 }

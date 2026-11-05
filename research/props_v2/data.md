@@ -24,9 +24,10 @@ Scripts and outputs, all in `research/props_v2/`:
 | `espn_shape.js` → `results/espn_shape.json` | 11 (game, provider) answers read whole in memory: market types, `propParse` counts, Over orientation (counts only) |
 | `espn_coverage.js` (`--early`) → `results/espn_coverage*.{tsv,json}` | Which past games answer for DraftKings: every 2025-26 game (provider 100), one in four of 2020-21 to 2024-25 (providers 40 and 100) |
 | `espn_validate40.js` → `results/espn_validate40.json` | 85 provider-40 games read whole in memory: lines a game, players on the box, margins, orientation, whether pre-game |
-| `fetch_dk40.js` | How to fetch provider 40 into the record's columns (and each line's `lastUpdated`, and the event's start), into `cache/` (gitignored). Not run on the real feed. Its first version was tried with `--dry` on one day, which then still downloaded that day's answers (only the write was skipped) |
-| `fetch_dk40_test.js` → `results/fetch_dk40_test.json` | The recipe on a local fake of the feed, no network: `--dry` requests nothing; a range run again, or two that overlap, repeat no line |
-| `validity.js` → `results/validity_ref.json` | The validity check a test on these lines must pass before its bar (README), and its references on the 2026 archive (DraftKings and the box scores only) |
+| `fetch_dk40.js` | How to fetch provider 40 into the record's columns (and each line's `lastUpdated`, and the event's start), into `cache/` (gitignored). Its present version has never been run on the real feed. Its first version was, once: its `--dry` still downloaded, and a try of it on one day read that day's answers and wrote none |
+| `fetch_dk40_test.js` → `results/fetch_dk40_test.json` | The recipe on a local fake of the feed, no network: `--dry` requests nothing; a range run again, or two that overlap, repeat no line; a read that finds no main line keeps an earlier read that found some; the event's start is kept when a re-read cannot get it |
+| `validity.js` → `results/validity_ref.json` | The validity check a test on these lines must pass before its bar (README), and its references on the 2026 archive (DraftKings, the box scores and the walk-forward's pre-game projections; no candidate) |
+| `validity_calib.js` → `results/validity_calib.{json,md}` | How its thresholds were set: the archive's noise, the regime (box scores only), and what planted in-game prices do to each check |
 
 No price or line from ESPN or anyone else is saved or committed by any of these. The results hold game ids, counts and
 DraftKings' own aggregate scores only.
@@ -232,7 +233,8 @@ answering playoff game; 6,527 graded lines; DraftKings' own scores only, no mode
 **How to fetch** (the owner's call): `node research/props_v2/fetch_dk40.js 2022-10-18 2023-06-12` and `... 2023-10-24
 2024-04-30`. That is the event and one or two propBets pages a game, about 2,500 games in all, into
 `research/props_v2/cache/props40_<season>.csv` in the record's columns and each line's `lastUpdated`, gitignored here.
-A range run again, or two that overlap, repeats no line, and `--dry` requests nothing (`fetch_dk40_test.js`). `tools/props_record.js` reads provider 100 only; backfilling into `data/` as
+A range run again, or two that overlap, repeats no line, a read that finds no main line keeps an earlier read that found
+some, a re-read that cannot get the event keeps its start, and `--dry` requests nothing (`fetch_dk40_test.js`). `tools/props_record.js` reads provider 100 only; backfilling into `data/` as
 `data/props_2026.csv` was would be a change of its own.
 
 **What it would allow, and its limits.** `tools/props.js`' box scores start in 2021-22, which only warms the ratings up

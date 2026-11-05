@@ -176,7 +176,8 @@ These playoff flat bets are no more evidence of an edge than the old model's wer
 - The Overs still lose at every bar.
 - The Unders' return is in line with every Under in this run returning -0.7% (README), and is level at 8 points.
 - No side's interval clears zero upward, and A's two sides together (+38.7 units, [-149.8, +230.4]) are "up" as
-  `tools/props.js`'s are (+28.8 [-166.5, +224.8]), while both trail DraftKings clearly on log loss.
+  `tools/props.js`'s are (+28.8 [-166.5, +224.8]), while both trail DraftKings clearly on log loss. (`tools/props.js`'s
+  sides are -106.44 and +135.28 before rounding: the table's -106.4 and +135.3 add to +28.9.)
 
 ### The constants a new shadow trial would freeze (fitted 2023-2026; `results/cand_fix_score.json` `frozen`)
 

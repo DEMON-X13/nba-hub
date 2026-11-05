@@ -41,9 +41,9 @@ games after it is frozen.
      - `cut2026_check.js` parses every box file the old way, once, to show the new loader returns the same.
      - `data/games.csv` is one file for every season. Every script reads it whole and drops its 2026-27 rows (the
        schedule and the finals so far) before anything else uses it.
-   - Every other script that reads box scores (the candidates', `diag_history.js`, `data_describe.js`, `validity.js`)
-     loads through `cut2026.js`. It opens only the box files of seasons up to 2026, never `box_2027.csv` or
-     `teambox_2027.jsonl`, and its guard throws if one of those files holds a row of a later game.
+   - Every other script that reads box scores (the candidates', `diag_history.js`, `data_describe.js`, `validity.js`,
+     `validity_calib.js`) loads through `cut2026.js`. It opens only the box files of seasons up to 2026, never
+     `box_2027.csv` or `teambox_2027.jsonl`, and its guard throws if one of those files holds a row of a later game.
    - That loader is a fix. Until then the scripts parsed every box file whole, 2026-27's included, and cut them to the
      games kept afterwards; the guard ran after that cut, so it could never fire. No 2026-27 value was used either way:
      - `cut2026_check.js` (`results/cut2026_check.json`) shows the new loader returns what the old way did, to the byte;
@@ -63,7 +63,9 @@ games after it is frozen.
    never changed. `research/props.json`, `state.json` and `data/*` are untouched.
 3. **No paid data, no account, no third-party data committed.** The search for more historical lines read ESPN's
    free feed in memory and saved game ids, counts and DraftKings' aggregate scores only; no price is in this folder. The
-   fetch recipe writes only to a gitignored `cache/`, and has not been run on the real feed.
+   fetch recipe writes only to a gitignored `cache/`. Its present version has never been run on the real feed. Its first
+   version was, once: its `--dry` still downloaded, and a try of it on one day read that day's answers and wrote nothing
+   (below).
 4. **Each candidate's rule was written down before it was scored, then scored once.** That is the study's own account;
    for B, C and A's prose the repository cannot show the order:
 
@@ -245,14 +247,19 @@ from DraftKings as the current one):
   - 2024-25 is a gap (ESPN BET's alternate lines only);
   - ESPN publishes no licence. It is the same feed `data/props_2026.csv` came from, with no account. Fetching it is the
     owner's call.
-- `fetch_dk40.js` is the recipe. It writes only to the gitignored `cache/`, and has not been run on the real feed.
+- `fetch_dk40.js` is the recipe. It writes only to the gitignored `cache/`.
+  - Its present version has never been run on the real feed. Its first version was, once: that version's `--dry` still
+    downloaded every answer and only skipped the write, and it was tried that way on one day, so that day's answers were
+    read and none written. `--dry` now requests nothing.
   - It keeps the cache a game at a time and rewrites each file whole, so running a range again, or two ranges that
     overlap, never repeats a line. Its first version appended, and would have written a game's lines once per run that
     read it.
-  - Its `--dry` now requests nothing. The first version's `--dry` still downloaded every answer and only skipped the
-    write; it was tried that way on one day.
-  - Both rules are held by `fetch_dk40_test.js` on a local fake of the feed (`results/fetch_dk40_test.json`, 16 checks,
-    no network).
+  - A read that finds no main line (a 404, a failure, or an answer with none in it) keeps an earlier run's read that
+    found lines; until the second review an answer with none in it replaced them with nothing. The event's start is kept
+    from an earlier read when a re-read's request for the event fails; until then it was written over with nothing,
+    which V1 below would count as not shown before the start.
+  - Each rule is held by `fetch_dk40_test.js` on a local fake of the feed (`results/fetch_dk40_test.json`, 23 checks,
+    no network), and each new check fails on the version before it.
 
 **Nothing else is usable.**
 - The Odds API's history is for paid plans only.
@@ -381,25 +388,72 @@ Why:
      DraftKings on prices they never saw, in a season whose outcomes helped shape them.
    - Fetching them is the owner's call. The feed publishes no licence, though it is the one `data/props_2026.csv` came
      from and needs no account. The lines would stay in the gitignored `cache/`, never committed.
-   - **The validity check, applied before the bar.** It is in `validity.js`, with its thresholds, written before any of
-     these lines is fetched (the 29 sampled games apart). It reads DraftKings' prices, the feed's stamps and the box
-     scores only, and nothing a model says. That the lines are pre-game prices is inferred, not shown (above: the stamps
-     fall at about the game's end, and threes and blocks score below the archive). So, once, on the fetched lines:
+   - **The validity check, applied before the bar.** It is in `validity.js`, its thresholds in `validity_lib.js`, set by
+     `validity_calib.js` (`results/validity_calib.md`), all before any of these lines is fetched (the 29 sampled games
+     apart). It reads DraftKings' prices, the feed's stamps and the box scores, and three things `tools/props.js`'s
+     walk-forward makes from the box scores before tip: a player's projected minutes (which pick V2's lines), the naive
+     forecaster and V3's yardstick (both below). It scores no candidate, and no model's chance of DraftKings' line. That
+     the lines are pre-game prices is inferred, not shown (above: the stamps fall at about the game's end, and threes and
+     blocks score below the archive). So, once, on the fetched lines:
      - **V0, the Over is the first item.** On every stat, reading the first item as the Over scores the lower log loss.
      - **V1, timing from the feed.** `fetch_dk40.js` keeps each line's `lastUpdated` and the event's scheduled start.
        - If 95% or more of the graded lines are stamped before the start, the lines are shown pre-game.
        - Otherwise, which the sample predicts, the feed cannot show it. Pre-game then rests on V2 and V3, and every
          report of the result says "pre-game inferred, not shown".
-     - **V2, the prices know nothing of the minutes played.** Take lines of players projected 24+ minutes. DraftKings'
-       mean fair chance of the Over where he then played under 12 (an early exit: an injury, foul trouble, a blowout),
-       less its mean where he played 12 or more, weighted by stat, must be −0.05 or above, on 100 early-exit lines or
-       more (fewer cannot decide it). A price made after the exit would sit tens of points lower. The archive's figure
-       is −0.016, on 41 early-exit lines (`results/validity_ref.json`), a reference rather than a test.
-     - **V3, score-likeness, threes and blocks named.** On every stat, DraftKings' gain over the naive forecaster in log
-       loss must be no more than the archive's gain on that stat plus 0.02. The naive forecaster is the player's own
-       average before the game, priced at DraftKings' line on the walk-forward's spread.
-       - The archive's gains: points 0.067, rebounds 0.021, assists 0.037, threes 0.027, steals 0.012, blocks 0.016.
-       - Lower, more lopsided lines lower both scores alike. A price that saw part of the game gains far more.
+     - **V2, the prices know nothing of the minutes played.** Take lines of players projected 24+ minutes who played
+       their side's previous game. DraftKings' mean fair chance of the Over where he then played under 12 (an early
+       exit: an injury, foul trouble, a blowout), less its mean where he played 12 or more, weighted by stat, must be
+       −0.05 or above, on 40 early exits (player-games) or more; fewer cannot decide it.
+       - A player back from a missed game is left out, since he may be on a minutes limit a pre-game price knows of. In
+         the 2023-24 regular season such players left early 2.8% of the time, the rest 0.8%.
+       - The archive's figure is −0.008 on its 6 such exits, 30 lines (−0.016 on 8 with the players back from a missed
+         game, as the first version read it): a reference, not a test. 2023-24 should give about 86 exits
+         (`results/validity_ref.json`, `results/validity_calib.md`).
+       - A price read after the exit sits far lower. With every archive line read a quarter of the way into its game the
+         figure moves by −0.23; at half time, by −0.37.
+     - **V3, score-likeness, set against the season's own yardstick.** On every stat, DraftKings' gain over the naive
+       forecaster in log loss, less the yardstick's gain on the same players, games and stats, must be no more than the
+       archive's same figure plus the stat's slack: points 0.025, assists 0.02, rebounds, threes, steals and blocks 0.015.
+       - The naive forecaster is the player's own average before the game, priced at DraftKings' line on the
+         walk-forward's spread. The yardstick is `tools/props.js`'s walk-forward against that same naive forecaster at
+         its own median line (no price, and not DraftKings' line).
+       - The archive's figures: points +0.028, rebounds +0.012, assists +0.006, threes +0.007, steals −0.001, blocks
+         −0.001. DraftKings' gains alone: 0.067, 0.021, 0.037, 0.027, 0.012, 0.016.
+       - Why the yardstick: the archive is the playoffs and the test the regular season. On the box scores alone, on the
+         archive's mix of projected minutes, the yardstick gains more over the naive in a regular season than on the
+         archive's games: in 2023-24 by 0.015 on rebounds, 0.025 on steals and 0.017 on blocks (2025-26: 0.016, 0.026,
+         0.020), and 0.007 less on points.
+       - If DraftKings' gain moves as the yardstick's does, the first version of this check (the gain alone, against the
+         archive's plus 0.02) would have read a genuine 2023-24 set as in-game on steals more often than not, and come
+         within 0.005 of doing so on rebounds and blocks. That DraftKings' gain does move with the yardstick's is an
+         assumption the data in hand cannot check.
+     - **How the thresholds were set** (`validity_calib.js`, after the second review; the first version's were judged).
+       - A genuine pre-game set is voided at most 5% of the time across the seven checks (one-sided, 2.45 standard
+         deviations each).
+         - Each V3 slack is 2.45 times the spread of a test's figure about the archive's: the archive's own noise, from a
+           bootstrap of its 83 games, and a 500-game test's, scaled from it (the fetch expects about 1,000).
+         - V2's floor is the archive's figure less 2.45 times the same spread at 6 exits and at 40. That spread is read
+           from a null, exits drawn at random from the archive's player-games, since 6 exits are too few for a bootstrap.
+           Its minimum, 40, is about half the 86 expected.
+         - V3's slacks are rounded up to 0.005 and V2's floor down to 0.01. Worked out, V2's floor is −0.047, which the
+           first version's judged −0.05 happens to match.
+       - What the checks catch was measured on planted in-game prices. Every archive line was repriced as if read a share
+         of the way into its game: DraftKings' own pre-game distribution, the player's stat so far drawn from his final
+         one, and the rest of his game at the pre-game rate. That is a model, not a measurement:
+         - read 5% of the way in: DraftKings' gain moves up 0.020 to 0.025 on each stat. V3 flags it once 59% of the
+           games are read then (where its expected figure crosses the limit), and 9% would move DraftKings' log loss by
+           the bar's resolution, 0.002;
+         - 10% of the way in: up 0.039 to 0.051. V3 flags 30% of the games; 4.5% would move the bar;
+         - a quarter of the way in: up 0.105 to 0.131. V3 flags 11%, V2 19%; 1.7% would move the bar;
+         - at half time: up 0.231 to 0.276. V3 flags 5%, V2 11%; 0.8% would move the bar.
+       - V2 sees almost nothing in a game's first tenth: a regular season's early exits are over by then 2-7% of the
+         time.
+       - So the check catches gross contamination, such as a tenth of the games read at half time or a third read a tenth
+         of the way in. It cannot see contamination that would still matter to the bar, which is six to seven times
+         smaller.
+       - Contamination can only make DraftKings look better. It can turn a PASS into a FAIL, never a FAIL into a PASS.
+         So a PASS on lines that pass the check stands, and a FAIL on them is open to the reading that a small share of
+         prices was read early in their games.
      - **If V0, V2 or V3 fails, the test is VOID.** The bar is not applied, neither PASS nor FAIL is read, and the lines
        settle nothing. No new trial follows from a VOID; what to do next is the owner's call.
    - The bar, written now, before any of those lines is fetched for the test:
@@ -417,10 +471,11 @@ Why:
        3. flat one-unit bets at a 3-point edge over the price's implied chance (margin left in) are up.
 
        Otherwise FAIL. Test 3 is weak on its own. On the archive, models well behind DraftKings already meet it: A's two
-       sides came to +38.7 units and `tools/props.js`'s to +28.8, at 0.0125 and 0.0147 log loss behind. It only guards
-       against a model that scores well but bets the wrong lines; tests 1 and 2 carry the bar. `tools/props.js`'s own
-       score, A minus `tools/props.js`, and the share of A's disagreement a blend keeps (B's yardstick, by stat) are
-       reported beside it and decide nothing.
+       sides came to +38.7 units and `tools/props.js`'s to +28.8, at 0.0125 and 0.0147 log loss behind. (Before rounding
+       the reference's sides are −106.44 and +135.28, which the table shows as −106.4 and +135.3, adding to +28.9.) It
+       only guards against a model that scores well but bets the wrong lines; tests 1 and 2 carry the bar.
+       `tools/props.js`'s own score, A minus `tools/props.js`, and the share of A's disagreement a blend keeps (B's
+       yardstick, by stat) are reported beside it and decide nothing.
    - **The odds.** At about 85,000 lines this test can tell a difference of about 0.002 four times in five. A would need
      to be about 0.002 ahead of DraftKings; on these six stats in the playoffs it was about 0.008 behind. I expect FAIL,
      and I'd put the chance of a PASS at under 1 in 20.
@@ -430,6 +485,9 @@ Why:
        Minutes and the scoring rate weigh about equally in the trial's Over misses, and the gain from better minutes is
        unmeasured: the hindsight figure is only an upper bound.
      - Its first step would be to measure that on the 2022-23 lines, its development set, before building anything.
+     - A FAIL is that answer only as far as the lines are pre-game. The validity check cannot rule out a small share of
+       prices read early in their games, which would make DraftKings look better than it was. A FAIL and a VOID lead to
+       the same step, so this changes how firmly the answer reads, not what is done.
    - **On VOID:** no new shadow trial on this evidence. The lines are not shown to be pre-game prices, so they can
      neither pass nor fail A.
    - **On PASS:** a new shadow trial of A, with nothing on the page. Its bar is written into a new ledger before its
@@ -465,9 +523,11 @@ From the repository's root (the scripts need no package from `tools/node_modules
 | `node research/props_v2/cut2026_check.js` | the loader against the old way, and its guard on planted rows | a few seconds |
 | `node research/props_v2/fetch_dk40_test.js` | the fetch recipe on a local fake of the feed (no network) | a few seconds |
 | `node research/props_v2/validity.js` | the validity check's references on the archive (`--lines ... --season 2024` runs the check on fetched lines) | about a minute |
+| `node research/props_v2/validity_calib.js` | how its thresholds were set: the noise, the regime, the planted in-game prices; exits 1 unless `validity_lib.js` carries them | about 2 minutes |
 
 `espn_probe.sh`, `espn_shape.js`, `espn_coverage.js` and `espn_validate40.js` query ESPN's feed. `fetch_dk40.js` is the
-recipe for provider 40 and has not been run on the real feed.
+recipe for provider 40. Its present version has never been run on the real feed; its first version's `--dry`, which still
+downloaded, read one day's answers and wrote none.
 
 **After the review (5 November 2026, from 19:37 UTC).** Every script that loads through `cut2026.js` was run again on it:
 - `cand_fix.js --verify`, `--select` and `--score`, `cand_blend.js`, `cand_select_explore.js`, `cand_select.js --check`
@@ -485,6 +545,16 @@ recipe for provider 40 and has not been run on the real feed.
 - `diag_trial.js` was run again for its text (it reads the trial's lines to diagnose, as before). No other script was
   changed in a way that moves a number.
 
+**After the second review (5 November 2026, from 21:14 UTC).** Only the validity check and the fetch recipe changed. No
+candidate script was run, and no candidate's number moved.
+- `validity.js` now grades its lines through `validity_lib.js`. They are the same lines (6,418 graded), and V0 and
+  DraftKings' gains come back to the digit. V2 now leaves out players back from a missed game and counts exits as
+  player-games, and V3 now subtracts the yardstick. `results/validity_ref.json` was written again.
+- `validity_calib.js` is new. Its run set the thresholds `validity_lib.js` carries (`results/validity_calib.json` and
+  `.md`).
+- `fetch_dk40.js` keeps an earlier read that found lines when a new one finds none, and keeps the event's start. Its test
+  was run again: 23 checks (`results/fetch_dk40_test.json`). Nothing was fetched from ESPN or anywhere else.
+
 ## Files
 
 | File | What |
@@ -492,7 +562,8 @@ recipe for provider 40 and has not been run on the real feed.
 | `diag_trial.md`, `diag_trial.js`, `results/diag_trial.json` | why the trial lost |
 | `diag_history.md`, `diag_history.js`, `results/diag_history_tables.md`, `results/diag_history.json`, `results/fold_params.json` | the model on 2022-2026, no lines |
 | `data.md`, `data_describe.js`, `espn_*.{sh,js}`, `fetch_dk40.js`, `fetch_dk40_test.js`, `results/data_describe.json`, `results/espn_*`, `results/fetch_dk40_test.json` | the data there is, and the recipe and its test |
-| `validity.js`, `results/validity_ref.json` | the validity check the 2023-24 test must pass before its bar, and its references on the archive |
+| `validity.js`, `validity_lib.js`, `results/validity_ref.json` | the validity check the 2023-24 test must pass before its bar, its thresholds, and its references on the archive |
+| `validity_calib.js`, `results/validity_calib.json`, `results/validity_calib.md` | how the thresholds were set, and what the check can and cannot see |
 | `cut2026.js`, `cut2026_check.js`, `results/cut2026_check.json` | the loader every candidate script uses (seasons up to 2026 only), and its check |
 | `cand_fix.md`, `cand_fix.js`, `cand_fix_lib.js`, `results/cand_fix_*` | candidate A |
 | `cand_blend.md`, `cand_blend.js`, `results/cand_blend*` | candidate B |

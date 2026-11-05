@@ -1,0 +1,368 @@
+{
+ "generated": "2026-11-05T21:34Z",
+ "what": "research/props_v2/validity_calib.js: the validity check's thresholds, set on the 2026 archive and the box scores of 2023-24 and 2025-26 (no provider-40 line, no candidate, nothing of 2026-27)",
+ "z": 2.45,
+ "alpha": 0.05,
+ "checks": 7,
+ "testGames": 500,
+ "games": 83,
+ "graded": 6418,
+ "ref": {
+  "v3": {
+   "pts": {
+    "n": 1328,
+    "v3": 0.0283,
+    "sd": 0.008,
+    "gain": 0.0666,
+    "yardstick": 0.0383
+   },
+   "reb": {
+    "n": 1234,
+    "v3": 0.0118,
+    "sd": 0.0056,
+    "gain": 0.0213,
+    "yardstick": 0.0095
+   },
+   "ast": {
+    "n": 1094,
+    "v3": 0.0062,
+    "sd": 0.0066,
+    "gain": 0.0374,
+    "yardstick": 0.0312
+   },
+   "tpm": {
+    "n": 1079,
+    "v3": 0.0074,
+    "sd": 0.0052,
+    "gain": 0.0269,
+    "yardstick": 0.0194
+   },
+   "stl": {
+    "n": 888,
+    "v3": -0.001,
+    "sd": 0.0039,
+    "gain": 0.0115,
+    "yardstick": 0.0125
+   },
+   "blk": {
+    "n": 795,
+    "v3": -0.0011,
+    "sd": 0.0041,
+    "gain": 0.0155,
+    "yardstick": 0.0165
+   }
+  },
+  "v2": {
+   "lines": 4571,
+   "playerGames": 823,
+   "exitLines": 30,
+   "exits": 6,
+   "diff": -0.0077,
+   "sdNull": 0.0149,
+   "sdBoot": 0.0086,
+   "allPlayers": {
+    "exits": 8,
+    "diff": -0.0158
+   }
+  }
+ },
+ "regime": {
+  "archive": {
+   "pts": 0.0383,
+   "reb": 0.0095,
+   "ast": 0.0312,
+   "tpm": 0.0194,
+   "stl": 0.0125,
+   "blk": 0.0165
+  },
+  "seasons": [
+   {
+    "season": 2024,
+    "to": "2024-04-14",
+    "yardstick": {
+     "pts": 0.0315,
+     "reb": 0.0246,
+     "ast": 0.0333,
+     "tpm": 0.0266,
+     "stl": 0.0379,
+     "blk": 0.0334
+    },
+    "v2": {
+     "projected24": 12808,
+     "exits": 115,
+     "exitRate": 0.009,
+     "missedPrevious": 714,
+     "exitsMissedPrevious": 20,
+     "exitRateMissed": 0.028,
+     "exitRateOthers": 0.0079,
+     "exitsRead": 91,
+     "doneBy": {
+      "0.05": 0.022,
+      "0.1": 0.0659,
+      "0.25": 0.4286,
+      "0.5": 1,
+      "0.75": 1
+     }
+    }
+   },
+   {
+    "season": 2026,
+    "to": "2026-04-12",
+    "yardstick": {
+     "pts": 0.0326,
+     "reb": 0.0251,
+     "ast": 0.0318,
+     "tpm": 0.0244,
+     "stl": 0.0385,
+     "blk": 0.0364
+    },
+    "v2": {
+     "projected24": 12755,
+     "exits": 130,
+     "exitRate": 0.0102,
+     "missedPrevious": 870,
+     "exitsMissedPrevious": 21,
+     "exitRateMissed": 0.0241,
+     "exitRateOthers": 0.0092,
+     "exitsRead": 108,
+     "doneBy": {
+      "0.05": 0.0185,
+      "0.1": 0.0463,
+      "0.25": 0.4167,
+      "0.5": 1,
+      "0.75": 1
+     }
+    }
+   }
+  ],
+  "archiveV2": {
+   "projected24": 874,
+   "exits": 8,
+   "missedPrevious": 51,
+   "exitsMissedPrevious": 2,
+   "exitsRead": 6,
+   "doneBy": {
+    "0.05": 0.1667,
+    "0.1": 0.1667,
+    "0.25": 0.5,
+    "0.5": 1,
+    "0.75": 1
+   }
+  },
+  "shift": {
+   "pts": [
+    -0.0068,
+    -0.0057
+   ],
+   "reb": [
+    0.0151,
+    0.0156
+   ],
+   "ast": [
+    0.0021,
+    0.0006
+   ],
+   "tpm": [
+    0.0072,
+    0.005
+   ],
+   "stl": [
+    0.0254,
+    0.026
+   ],
+   "blk": [
+    0.0169,
+    0.0199
+   ]
+  },
+  "firstVersionRoom": {
+   "pts": 0.0268,
+   "reb": 0.0049,
+   "ast": 0.0179,
+   "tpm": 0.0128,
+   "stl": -0.0054,
+   "blk": 0.0031
+  }
+ },
+ "plantCheck": {
+  "tau0MaxAbsDiff": 2.55351295663786e-15
+ },
+ "planted": {
+  "0.05": {
+   "byStat": {
+    "pts": {
+     "gainMove": 0.0231
+    },
+    "reb": {
+     "gainMove": 0.0196
+    },
+    "ast": {
+     "gainMove": 0.0201
+    },
+    "tpm": {
+     "gainMove": 0.0222
+    },
+    "stl": {
+     "gainMove": 0.0254
+    },
+    "blk": {
+     "gainMove": 0.0242
+    }
+   },
+   "v2Diff": -0.0853,
+   "v2Move": -0.0776,
+   "logLossMove": -0.0222
+  },
+  "0.1": {
+   "byStat": {
+    "pts": {
+     "gainMove": 0.046
+    },
+    "reb": {
+     "gainMove": 0.0393
+    },
+    "ast": {
+     "gainMove": 0.0403
+    },
+    "tpm": {
+     "gainMove": 0.0445
+    },
+    "stl": {
+     "gainMove": 0.0508
+    },
+    "blk": {
+     "gainMove": 0.0488
+    }
+   },
+   "v2Diff": -0.091,
+   "v2Move": -0.0833,
+   "logLossMove": -0.0445
+  },
+  "0.25": {
+   "byStat": {
+    "pts": {
+     "gainMove": 0.1209
+    },
+    "reb": {
+     "gainMove": 0.1052
+    },
+    "ast": {
+     "gainMove": 0.1068
+    },
+    "tpm": {
+     "gainMove": 0.1184
+    },
+    "stl": {
+     "gainMove": 0.1314
+    },
+    "blk": {
+     "gainMove": 0.1272
+    }
+   },
+   "v2Diff": -0.2356,
+   "v2Move": -0.2279,
+   "logLossMove": -0.1173
+  },
+  "0.5": {
+   "byStat": {
+    "pts": {
+     "gainMove": 0.2576
+    },
+    "reb": {
+     "gainMove": 0.2314
+    },
+    "ast": {
+     "gainMove": 0.2403
+    },
+    "tpm": {
+     "gainMove": 0.2574
+    },
+    "stl": {
+     "gainMove": 0.276
+    },
+    "blk": {
+     "gainMove": 0.2682
+    }
+   },
+   "v2Diff": -0.3761,
+   "v2Move": -0.3684,
+   "logLossMove": -0.2534
+  },
+  "0.75": {
+   "byStat": {
+    "pts": {
+     "gainMove": 0.4387
+    },
+    "reb": {
+     "gainMove": 0.4256
+    },
+    "ast": {
+     "gainMove": 0.427
+    },
+    "tpm": {
+     "gainMove": 0.4367
+    },
+    "stl": {
+     "gainMove": 0.455
+    },
+    "blk": {
+     "gainMove": 0.4407
+    }
+   },
+   "v2Diff": -0.3692,
+   "v2Move": -0.3615,
+   "logLossMove": -0.4364
+  }
+ },
+ "derived": {
+  "v3Slack": {
+   "pts": 0.025,
+   "reb": 0.015,
+   "ast": 0.02,
+   "tpm": 0.015,
+   "stl": 0.015,
+   "blk": 0.015
+  },
+  "v3Raw": {
+   "pts": 0.0212,
+   "reb": 0.0148,
+   "ast": 0.0175,
+   "tpm": 0.0138,
+   "stl": 0.0103,
+   "blk": 0.0108
+  },
+  "v2ExpectedExits": 86,
+  "v2MinExits": 40,
+  "v2SdAtMin": 0.0059,
+  "v2FloorRaw": -0.0469,
+  "v2Floor": -0.05
+ },
+ "sees": {
+  "0.05": {
+   "v3FlagsShare": 0.5906,
+   "v2FlagsShare": 0.5451,
+   "barShare": 0.0901
+  },
+  "0.1": {
+   "v3FlagsShare": 0.2953,
+   "v2FlagsShare": 0.5078,
+   "barShare": 0.0449
+  },
+  "0.25": {
+   "v3FlagsShare": 0.1142,
+   "v2FlagsShare": 0.1856,
+   "barShare": 0.0171
+  },
+  "0.5": {
+   "v3FlagsShare": 0.0543,
+   "v2FlagsShare": 0.1148,
+   "barShare": 0.0079
+  },
+  "0.75": {
+   "v3FlagsShare": 0.033,
+   "v2FlagsShare": 0.117,
+   "barShare": 0.0046
+  }
+ },
+ "carried": true
+}

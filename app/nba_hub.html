@@ -356,6 +356,9 @@ body.pp-lock{overflow:hidden}
 @media(max-width:760px){
   .pp-plr{grid-template-columns:minmax(0,1fr) 26px;grid-template-rows:auto auto;gap:3px 10px;padding:11px 12px}
   .pp-plr .who{grid-column:1;grid-row:1;overflow-wrap:anywhere}
+  /* his position line moves down whole when the line runs out (the NFL's .plrbtn .who span here), never split "G ·" over
+     "31 min" beside a MISMATCH tag */
+  .pp-plr .who .pos{display:inline-block}
   .pp-plr .sum{grid-column:1;grid-row:2;text-align:left}
   .pp-plr .arrow{grid-column:2;grid-row:1/3;align-self:center}
   .pp-stbtn{margin-left:6px}
@@ -2005,7 +2008,11 @@ $('#ppRefresh').addEventListener('click', () => refreshOdds());
 $('#ppFind').addEventListener('input', e => { PPV.q = e.target.value; ppSearchApply(); });
 $('#ppBackups').addEventListener('change', e => { PPV.backups = e.target.checked; propsDraw(); });
 $('#ppRungs').addEventListener('change', e => { PPV.rungs = e.target.checked; propsDraw(); });
-$('#ppBack').addEventListener('click', e => { if (e.target === e.currentTarget) propsClose(); });
+/* a click outside closes the view only where the press began outside too: a selection dragged from the sheet onto the
+   backdrop is no click outside (a click with no press before it still closes it) */
+let PP_DOWN = null;
+$('#ppBack').addEventListener('pointerdown', e => { PP_DOWN = e.target; });
+$('#ppBack').addEventListener('click', e => { const from = PP_DOWN; PP_DOWN = null; if (e.target === e.currentTarget && (!from || from === e.currentTarget)) propsClose(); });
 $('#ppBack').addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); propsClose(); return; }
   if (e.key !== 'Tab') return;

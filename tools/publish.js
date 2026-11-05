@@ -393,8 +393,9 @@ function reportState(inj) {
 }
 /* THE TEAM STATS, for a game's Team Stats window in the Player props view (README "The game's three windows"): each club's
    season in play so far, from its box scores, the NFL hub's Team Stats window on the NBA's numbers. The games: the
-   season's finals ESPN types regular season, the NBA Cup's among them (its final too), never a preseason game, a play-in
-   game (offFinals: the standings leave it out, and it is a playoff-seeding game) or a playoff game; a final is counted
+   season's finals ESPN types regular season as the standings count them, the NBA Cup's group and knockout games among
+   them; never the NBA Cup final or a play-in game (offFinals: the standings and the NBA's season statistics leave both
+   out, and the club's record beside the window counts neither), a preseason game or a playoff game; a final is counted
    once both its clubs' rows are in data/teambox_<season>.jsonl (the team box ESPN gives with the box score, both sides
    of every game), and its score is data/games.csv's. Per club, over those games:
      pd    point differential a game        (points for less points against) / games
@@ -436,7 +437,7 @@ function teamStatsState(games, season, dir = DATA) {
   const off = offFinals(games, season), acc = {};
   let through = null, n = 0;
   for (const g of games) {
-    if (+g.season !== season || g.type !== 'REG' || g.status !== 'final' || off[g.game_id] === 'playin') continue;
+    if (+g.season !== season || g.type !== 'REG' || g.status !== 'final' || off[g.game_id]) continue;
     const hs = tsNum(g.home_score), as = tsNum(g.away_score), H = tsSide(rows[g.game_id + ':' + g.home]), A = tsSide(rows[g.game_id + ':' + g.away]);
     if (hs === null || as === null || !H || !A) continue;
     const poss = x => x.fga - x.orb + x.tov + 0.44 * x.fta, p = (poss(H) + poss(A)) / 2;

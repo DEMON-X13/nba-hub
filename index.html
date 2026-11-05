@@ -356,6 +356,9 @@ body.pp-lock{overflow:hidden}
 @media(max-width:760px){
   .pp-plr{grid-template-columns:minmax(0,1fr) 26px;grid-template-rows:auto auto;gap:3px 10px;padding:11px 12px}
   .pp-plr .who{grid-column:1;grid-row:1;overflow-wrap:anywhere}
+  /* his position line moves down whole when the line runs out (the NFL's .plrbtn .who span here), never split "G ·" over
+     "31 min" beside a MISMATCH tag */
+  .pp-plr .who .pos{display:inline-block}
   .pp-plr .sum{grid-column:1;grid-row:2;text-align:left}
   .pp-plr .arrow{grid-column:2;grid-row:1/3;align-self:center}
   .pp-stbtn{margin-left:6px}
@@ -3735,7 +3738,11 @@ $('#ppRefresh').addEventListener('click', () => refreshOdds());
 $('#ppFind').addEventListener('input', e => { PPV.q = e.target.value; ppSearchApply(); });
 $('#ppBackups').addEventListener('change', e => { PPV.backups = e.target.checked; propsDraw(); });
 $('#ppRungs').addEventListener('change', e => { PPV.rungs = e.target.checked; propsDraw(); });
-$('#ppBack').addEventListener('click', e => { if (e.target === e.currentTarget) propsClose(); });
+/* a click outside closes the view only where the press began outside too: a selection dragged from the sheet onto the
+   backdrop is no click outside (a click with no press before it still closes it) */
+let PP_DOWN = null;
+$('#ppBack').addEventListener('pointerdown', e => { PP_DOWN = e.target; });
+$('#ppBack').addEventListener('click', e => { const from = PP_DOWN; PP_DOWN = null; if (e.target === e.currentTarget && (!from || from === e.currentTarget)) propsClose(); });
 $('#ppBack').addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); propsClose(); return; }
   if (e.key !== 'Tab') return;
@@ -5878,21 +5885,23 @@ Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spS
 <style>
 /* ---------- a game's three windows (app/parts/gamewin.html) ----------
    The NFL's window (its #gsModal.gs-one: 720px at most, a bar with the matchup and the window's name over one card) on
-   this page's tokens. Small text that must hold 4.5:1 is --ink-2 or --pb-q, never --muted. It sits over the Player props
-   view (.pp-back, z-index 20) and scrolls inside when taller than the screen */
+   this page's tokens. Small text that must hold 4.5:1 is --ink-2 or --pb-q, never --muted: the NFL's quiet --muted text
+   (its theme's #B3B9CB) is --pb-q here. Its panel is the NFL's, panel-2 to panel under a bar of bg-2, with 39px from the
+   card's foot to the panel's (the NFL's card margin 14, panel padding 24 and border). It sits over the Player props view
+   (.pp-back, z-index 20) and scrolls inside when taller than the screen; at 760px and under, the NFL's phone window */
 .gw-back{position:fixed;inset:0;z-index:30;background:rgba(14,17,27,.6);display:flex;justify-content:center;align-items:flex-start;padding:28px 16px}
-.gw-sheet{position:relative;width:100%;max-width:720px;max-height:calc(100vh - 56px);max-height:calc(100dvh - 56px);overflow-y:auto;overscroll-behavior:contain;background:var(--bg-2);border:1px solid var(--line-2);border-radius:var(--r);box-shadow:0 30px 80px -30px rgba(0,0,0,.8);outline:none;color-scheme:dark}
+.gw-sheet{position:relative;width:100%;max-width:720px;max-height:calc(100vh - 56px);max-height:calc(100dvh - 56px);overflow-y:auto;overscroll-behavior:contain;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line-2);border-radius:var(--r);box-shadow:0 30px 80px -30px rgba(0,0,0,.8);outline:none;color-scheme:dark}
 .gw-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;min-height:64px;box-sizing:border-box;padding:8px 12px 8px 20px;background:var(--bg-2);border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0}
 .gw-h{flex:1 1 auto;min-width:0;margin:0;display:flex;flex-direction:column;gap:4px;line-height:1.15}
-.gw-tm{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:15px;font-weight:600;color:var(--ink-2)}
+.gw-tm{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:15px;font-weight:600;color:var(--pb-q)}
 .gw-tm .pill{font-size:12px;padding:3px 7px}
 .gw-tsub{font-family:var(--body);font-size:13px;font-weight:600;color:var(--ink-2)}
 .gw-close{flex:none;min-height:44px;padding:10px 16px;font-size:14px;border-radius:12px}
-.gw-body{padding:16px 20px 20px}
+.gw-body{padding:16px 20px 38px}
 .gw-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:18px 20px 20px}
 .gw-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--hot),transparent);pointer-events:none}
 .gw-msg{margin:0;font-size:15px;color:var(--ink-2);line-height:1.55}
-.gw-note{margin:14px 0 0;font-size:13px;color:var(--ink-2);line-height:1.6}
+.gw-note{margin:14px 0 0;font-size:13px;color:var(--pb-q);line-height:1.6}
 .gw-sheet .pill{color:color-mix(in srgb,var(--tc,#888) 40%,#fff)}
 .gw-sheet button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
 .gw-sheet .gw-better b,.gw-sheet b.gw-better{color:var(--lime)}
@@ -5924,7 +5933,7 @@ Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spS
 .gw-units{display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
 .gw-uhd{margin:0 0 12px;text-align:center;font-family:var(--display);font-size:18px;font-weight:600;color:var(--ink);line-height:1.25}
 .gw-duel{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:stretch}
-.gw-vsx{align-self:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.gw-vsx{align-self:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pb-q)}
 .gw-ubox{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;padding:14px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel);text-align:center;cursor:help}
 .gw-ubox.gw-better{background:var(--lime-soft);border-color:transparent}
 .gw-lab{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
@@ -5943,34 +5952,36 @@ Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spS
    right the lift in standard deviations with the tag (white on #2563EB to #1E4FA8, 5.2:1 and up) */
 .gw-mmnote{margin:0 0 12px;font-size:13px;color:var(--ink-2);line-height:1.5}
 ul.gw-mm{list-style:none;margin:0;padding:0;display:grid;gap:10px}
-ul.gw-mm li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;margin:0;border:1px solid var(--line);border-radius:14px;padding:12px 14px;line-height:1.4;background:var(--panel)}
+ul.gw-mm li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;margin:0;border:1px solid var(--line);border-radius:14px;padding:12px 14px;line-height:1.4}
 .gw-mmn{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:28px;padding:0 6px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line-2);font-family:var(--display);font-weight:700;font-size:13px;color:var(--ink)}
-.gw-mmwho{display:block;font-weight:700;font-size:15px;color:var(--ink)}
-.gw-mmwho small{color:var(--ink-2);font-weight:600;font-size:13px}
+.gw-mmwho{display:block;font-weight:600;font-size:15px;color:var(--ink)}
+.gw-mmwho .tierbadge{width:16px;height:18px;vertical-align:-3px;margin-right:4px}
+.gw-mmwho small{color:var(--pb-q);font-weight:600;font-size:13px}
 .gw-mmvs{display:inline-flex;align-items:center;gap:6px;margin-left:6px;vertical-align:1px;white-space:nowrap}
-.gw-mmvs small{font-size:12px}
 .gw-mmvs .pill{font-size:11px;padding:2px 6px}
 .gw-mmsub{display:block;font-size:13px;color:var(--ink-2);margin-top:4px;line-height:1.5}
 .gw-mmsub b{color:var(--ink);font-weight:700}
-.gw-mmsc{display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:72px}
+.gw-mmsc{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:72px}
 .gw-mmsc b{font-family:var(--display);font-size:18px;line-height:1;color:var(--ink);white-space:nowrap}
 .gw-mmsc b small{font-family:var(--body);font-size:12px;font-weight:700;color:var(--ink-2);margin-left:3px}
 .gw-mmtag{display:inline-block;padding:2px 8px;border-radius:999px;background:linear-gradient(135deg,#2563EB,#1E4FA8);color:#fff;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;line-height:1.3;white-space:nowrap}
-@media(max-width:620px){
-  .gw-back{padding:10px 8px}
+/* the NFL's phone window, at its 760px: 10px of the page around it, a 58px bar, the card 12px in and 14px inside, the
+   Team Stats names dropped, a mismatch's rank on its own row and the two clubs on their own line 6px under his name */
+@media(max-width:760px){
+  .gw-back{padding:10px}
   .gw-sheet{max-height:calc(100vh - 20px);max-height:calc(100dvh - 20px)}
-  .gw-top{padding:8px 8px 8px 14px}
-  .gw-body{padding:12px 10px 14px}
-  .gw-card{padding:14px 12px 16px}
+  .gw-top{min-height:58px;padding:0 12px}
+  .gw-body{padding:12px 12px 38px}
+  .gw-card{padding:14px 14px 16px}
   .gw-sbar{grid-template-columns:62px minmax(0,1fr) 62px;gap:8px}
   .gw-teams .gw-tnm{display:none}
   .gw-v{padding:3px 5px} .gw-v b{font-size:14px}
-  .gw-duel{gap:8px} .gw-ubox{padding:12px 6px} .gw-uval{font-size:20px}
+  .gw-duel{gap:8px} .gw-ubox{padding:12px 8px} .gw-uval{font-size:20px}
   .gw-uhd{font-size:15px}
   .gw-pboxes{gap:6px} .gw-pbox{padding:10px 4px} .gw-pbox b{font-size:17px}
-  ul.gw-mm li{grid-template-columns:minmax(0,1fr) auto;gap:6px 10px;padding:11px 12px}
-  ul.gw-mm li .gw-mmn{grid-column:1/-1;justify-self:start;height:24px;min-width:34px}
-  .gw-mmvs{margin-left:0} }
+  ul.gw-mm li{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:11px 12px}
+  ul.gw-mm li .gw-mmn{grid-column:1/-1;justify-self:start;height:24px}
+  .gw-mmvs{display:flex;margin:6px 0 0} }
 @media(max-width:340px){ .gw-sbar{grid-template-columns:56px minmax(0,1fr) 56px;gap:6px} .gw-v b{font-size:13px} .gw-slb small{display:block;margin:2px 0 0} }
 </style>
 <div class="gw-back" id="gwBack" hidden><div class="gw-sheet" id="gwSheet" role="dialog" aria-modal="true" aria-labelledby="gwSub gwTm" tabindex="-1"><div class="gw-top"><h2 class="gw-h" id="gwTitle"><span class="gw-tm" id="gwTm"></span><span class="gw-tsub" id="gwSub"></span></h2><button type="button" class="btn gw-close" id="gwClose">Close</button></div><div class="gw-body" id="gwBody"></div></div></div>
@@ -6008,11 +6019,11 @@ function unitsBody(g) {
     const title = `${t}'s ${word} for the lineup the board model expects in this game, in rating points (each player's, for a player on the floor all game, weighted by his share of the minutes): ${v > 0 ? '+' : ''}${v.toFixed(1)}.`
       + (r ? ` Its rank is the Teams tab's ${Col} column (today's lineup, ${r.v > 0 ? '+' : ''}${r.v.toFixed(1)}): ${ord(r.rank)} of ${r.n}.` : '')
       + ' Of this possession\'s offence and defence, the higher rating is tinted.';
-    return `<div class="gw-ubox${better ? ' gw-better' : ''}" data-gw-unit="${what}:${H(t)}" title="${H(title)}"><span class="gw-lab">${H(t)} ${word}</span><span class="gw-uval" data-gw-uval>${sg0(v)}</span>`
+    return `<div class="gw-ubox${better ? ' gw-better' : ''}" data-gw-unit="${what}:${H(t)}" title="${H(title)}"><span class="gw-lab">${H(t)} ${word}</span><span class="gw-uval" data-gw-uval>${sg0(v)}</span>${better ? '<span class="sr"> (the higher)</span>' : ''}`
       + (r ? `<span class="gw-urk" data-gw-urk>Teams tab ${differs ? `<span data-gw-tab>${sg0(r.v)}</span>, ` : ''}${ord(r.rank)} of ${r.n}</span>` : '<span class="gw-urk">not on the Teams tab</span>') + '</div>';
   };
   const poss = (o, O, d, D) => { const b = O.offence === D.defence ? null : O.offence > D.defence ? 'off' : 'def';
-    return `<div class="gw-unit" data-gw-poss="${H(o)}-${H(d)}"><h3 class="gw-uhd">${H(nick(o))} possession</h3><div class="gw-duel">${box(o, 'off', O.offence, b === 'off')}<span class="gw-vsx" aria-hidden="true">vs</span>${box(d, 'def', D.defence, b === 'def')}</div></div>`; };
+    return `<div class="gw-unit" data-gw-poss="${H(o)}-${H(d)}"><h3 class="gw-uhd">${H(nick(o))} Possession</h3><div class="gw-duel">${box(o, 'off', O.offence, b === 'off')}<span class="gw-vsx" aria-hidden="true">vs</span>${box(d, 'def', D.defence, b === 'def')}</div></div>`; };
   const pbox = t => { const r = tabRank('pace', t);
     return `<div class="gw-pbox" data-gw-pace="${H(t)}" title="${H(`${t}'s pace on the Teams tab: its running possessions per 48 minutes, ${r ? ord(r.rank) + ' fastest of ' + r.n : 'not listed'}.`)}"><span class="gw-lab">${H(t)}</span><b>${r ? r.v.toFixed(1) : '–'}</b><small>${r ? `${ord(r.rank)} fastest of ${r.n}` : 'not on the Teams tab'}</small></div>`; };
   const gp = Number.isFinite(m.pace) ? m.pace : null;
@@ -6055,7 +6066,10 @@ function statsBody(g) {
     const ca = cell(SA, k), ch = cell(SH, k), x = ca ? ca.v : null, y = ch ? ch.v : null, [pa, ph] = split(x, y, dir < 0);
     const ba = !!dir && x != null && y != null && x !== y && (dir < 0 ? x < y : x > y), bh = !!dir && x != null && y != null && x !== y && !ba;
     if (ba) na++; if (bh) nh++;
-    const v = (t, c, b) => `<span class="gw-v${b ? ' gw-better' : ''}" data-gw-sval="${H(t)}"><b>${fmt(c ? c.v : null, sign, pc)}</b>${c ? `<small data-gw-srk>#${c.rank}</small>` : ''}</span>`;
+    /* the club, the rank in words and the better side are said to a screen reader (the clubs' header is hidden from it,
+       and the mark is a colour): "MIA: −4.9, 21st in the league, the better" */
+    const v = (t, c, b) => `<span class="gw-v${b ? ' gw-better' : ''}" data-gw-sval="${H(t)}"><span class="sr" data-gw-ssr>${H(t)}: </span><b>${fmt(c ? c.v : null, sign, pc)}</b>`
+      + `${c ? `<small data-gw-srk aria-hidden="true">#${c.rank}</small><span class="sr" data-gw-ssr>, ${ord(c.rank)} in the league</span>` : ''}${b ? '<span class="sr" data-gw-ssr>, the better</span>' : ''}</span>`;
     const tip = k === 'ortg' || k === 'drtg' || k === 'pace' ? ` title="${H(POSS)}"` : '';
     return `<div class="gw-sbar" data-gw-srow="${k}"><span class="gw-sva">${v(a, ca, ba)}</span>
       <div class="gw-smid"><span class="gw-slb"${tip}>${lab}${note ? `<small>${note}</small>` : ''}</span><span class="gw-strack" aria-hidden="true"><span class="gw-shalf gw-shl"><i style="width:${pa}%;--gw-tc:${tcol(a)}"></i></span><span class="gw-shalf gw-shr"><i style="width:${ph}%;--gw-tc:${tcol(h)}"></i></span></span></div>
@@ -6066,15 +6080,16 @@ function statsBody(g) {
     <div class="gw-teams" aria-hidden="true"><span class="gw-thn">${pill(a)}<span class="gw-tnm">${H(nick(a))}</span></span><span class="gw-thn"><span class="gw-tnm">${H(nick(h))}</span>${pill(h)}</span></div>
     <div class="gw-sbars">${rows}</div>
     ${missing.length ? `<p class="gw-note" data-gw-none>No game counted yet this season: ${H(missing[0])}.</p>` : ''}
-    <p class="gw-note" data-gw-basis title="${H(`Regular-season finals, the NBA Cup's among them; no preseason, play-in or playoff game. Each rank is in the league, 1 the best (pace: 1 the fastest). ${POSS}`)}">${H(seasonName(T.season))} season${T.through ? ' through ' + H(dayNum(T.through)) : ''}: ${H(counts)}.</p>`;
+    <p class="gw-note" data-gw-basis title="${H(`Regular-season finals as the standings count them, the NBA Cup's group and knockout games among them; never the NBA Cup final, a play-in, preseason or playoff game. Each rank is in the league, 1 the best (pace: 1 the fastest). ${POSS}`)}">${H(seasonName(T.season))} season${T.through ? ' through ' + H(dayNum(T.through)) : ''}: ${H(counts)}.</p>`;
 }
 
 /* ---- Mismatches: the props model's opponent term. A player's projected stat is multiplied by the opponent's
    multiplier on it (props.js means: ratio^opp[k], published by club in the game's props as [ratio, mult, rank],
    oppCols), so his projection without the matchup is mean / mult and the matchup's lift mean - mean / mult. The game's
-   players projected 20 minutes or more, not out, are ranked by that lift in standard deviations of the stat at his mean
-   (sqrt(nbVar(mean, var[k])), the props model's spread) over points, rebounds, assists and threes, each player at his
-   best stat, positive lifts only, the top five ---- */
+   players shown at 20 minutes or more (his row's minutes, as the view prints them: 19.8 is "20 min" and counts), not
+   out, are ranked by that lift in standard deviations of the stat at his mean (sqrt(nbVar(mean, var[k])), the props
+   model's spread) over points, rebounds, assists and threes, each player at his best stat, positive lifts only, the top
+   five ---- */
 const MM_STATS = ['pts', 'reb', 'ast', 'tpm'], MM_MIN = 20, MM_TOP = 5;
 const MM_DEF = { pts: 'scoring defence', reb: 'rebounding defence', ast: 'assist defence', tpm: 'three-point defence' };
 const MM_NOUN = { pts: 'points', reb: 'rebounds', ast: 'assists', tpm: 'threes' };
@@ -6082,6 +6097,11 @@ const MM_UNIT = { pts: 'pts', reb: 'reb', ast: 'ast', tpm: 'threes' };
 const mmNote = () => (typeof ppFail === 'function' && ppFail())
   ? 'From the props model\'s opponent adjustment; the model lost to DraftKings in its trial, so read these as context, not picks.'
   : 'From the props model\'s opponent adjustment; the model is on trial against DraftKings, so read these as context, not picks.';
+/* a small positive figure at the fewest decimals, from `min` to 3, that do not round it to nothing: a lift of 0.017 is
+   "+0.02", never "+0.0"; null where even 3 decimals would ("under 0.001") */
+const fine = (x, min) => { for (let d = min; d <= 3; d++) { const s = x.toFixed(d); if (+s !== 0) return s; } return null; };
+const liftTxt = l => { const s = fine(l, 1); return s ? '+' + s : 'under 0.001'; };
+const zTxt = z => { const s = fine(z, 2); return s ? '+' + s : '<0.001'; };
 const pctMore = (r, noun) => { const p = (r - 1) * 100, q = Math.abs(p);
   return q < 0.05 ? `about as many ${noun} a minute as average` : `${q >= 0.5 ? Math.round(q) : q.toFixed(1)}% ${p > 0 ? 'more' : 'fewer'} ${noun} a minute than average`; };
 let MM_MEMO = { of: null, gid: null, val: null };
@@ -6101,7 +6121,7 @@ function mmWork(g, P) {
   if (!V) return { why: 'The props model\'s spreads are not published.' };
   const out = [];
   for (const [pid, row] of Object.entries(pg.players || {})) {
-    const team = row[1], min = row[3]; if (!(min >= MM_MIN) || (team !== g.away && team !== g.home) || ppOut(g, pid)) continue;
+    const team = row[1], min = row[3]; if (!(Number.isFinite(min) && +min.toFixed(0) >= MM_MIN) || (team !== g.away && team !== g.home) || ppOut(g, pid)) continue;
     const opp = team === g.away ? g.home : g.away, D = O[opp];
     let best = null;
     for (const k of MM_STATS) {
@@ -6118,8 +6138,8 @@ function mmWork(g, P) {
   list.forEach((v, i) => { v.n = i + 1;
     v.vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`;
     v.proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
-    v.sz = `${v.z >= 0 ? '+' : '−'}${Math.abs(v.z).toFixed(2)}`;
-    v.say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${v.vs} (allows ${pctMore(v.ratio, MM_NOUN[v.k])}). ${v.proj} projected (+${v.lift.toFixed(1)} from the matchup).`;
+    v.sz = zTxt(v.z); v.lt = liftTxt(v.lift);
+    v.say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${v.vs} (allows ${pctMore(v.ratio, MM_NOUN[v.k])}). ${v.proj} projected (${v.lt} from the matchup).`;
     v.title = `Mismatch #${v.n} in this game: ${v.say} Ranked by that lift over the spread of his ${MM_NOUN[v.k]} at his projection, ${v.sz} of a standard deviation (${v.sd.toFixed(1)}). ${note}`; });
   return { list, note };
 }
@@ -6128,9 +6148,12 @@ function mismBody(g) {
   if (!R.list) return `<p class="gw-msg" data-gw-why>${H(R.why)}</p>`;
   const note = `<p class="gw-mmnote" data-gw-mmnote>${H(R.note)}</p>`;
   if (!R.list.length) return note + `<p class="gw-msg" data-gw-why>No player projected ${MM_MIN} minutes or more gets a lift from this matchup on points, rebounds, assists or threes.</p>`;
+  /* each player's season shield before his name, as the NFL's row and the view's own rows wear it (the Players tab's
+     ranking, ppRankOf); none for a player it does not rank. Read as drawn, never kept with the list */
+  const shield = pid => { const rk = typeof ppRankOf === 'function' ? ppRankOf(pid) : null; return rk ? tierBadge(rk.rating) : ''; };
   return note + `<ul class="gw-mm">${R.list.map(v => `<li data-gw-mm="${H(v.pid)}" title="${H(v.title)}"><span class="gw-mmn" title="Mismatch rank in this game">#${v.n}</span>
-      <div><span class="gw-mmwho">${H(v.name)} <small>${H(v.pos)}</small><span class="gw-mmvs">${pill(v.team)}<small>${v.home ? 'vs' : 'at'}</small>${pill(v.opp)}</span></span>
-      <span class="gw-mmsub" data-gw-mmsub>${H(v.vs)} (allows ${H(pctMore(v.ratio, MM_NOUN[v.k]))}). <b>${H(v.proj)}</b> projected (+${v.lift.toFixed(1)} from the matchup).</span></div>
+      <div><span class="gw-mmwho">${shield(v.pid)}${H(v.name)} <small>${H(v.pos)}</small><span class="gw-mmvs">${pill(v.team)}<small>${v.home ? 'vs' : 'at'}</small>${pill(v.opp)}</span></span>
+      <span class="gw-mmsub" data-gw-mmsub>${H(v.vs)} (allows ${H(pctMore(v.ratio, MM_NOUN[v.k]))}). <b>${H(v.proj)}</b> projected (${H(v.lt)} from the matchup).</span></div>
       <div class="gw-mmsc"><b data-gw-z>${v.sz}<small>SD</small></b><span class="gw-mmtag">Mismatch</span></div></li>`).join('')}</ul>`;
 }
 
@@ -6165,7 +6188,12 @@ function close() {
   if (live(to)) to.focus();
 }
 document.getElementById('gwClose').addEventListener('click', close);
-document.getElementById('gwBack').addEventListener('click', e => { if (e.target === e.currentTarget) close(); });
+/* a click outside closes it only where the press began outside too: a selection dragged from the window out onto the
+   backdrop ends in a click on the backdrop, and is no click outside (a click with no press before it, a script's,
+   still closes it) */
+let DOWN = null;
+document.getElementById('gwBack').addEventListener('pointerdown', e => { DOWN = e.target; });
+document.getElementById('gwBack').addEventListener('click', e => { const from = DOWN; DOWN = null; if (e.target === e.currentTarget && (!from || from === e.currentTarget)) close(); });
 document.getElementById('gwBack').addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); return; }
   if (e.key !== 'Tab') return;

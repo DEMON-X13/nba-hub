@@ -4,12 +4,14 @@
  *   node tools/test_gamewin.js
  *
  * 1. publish.js teamStatsState (THE TEAM STATS) on a made-up season's team boxes, scores and box minutes: the games it
- *    counts (regular-season finals and the NBA Cup final; never a preseason, play-in or playoff game, a final missing a
- *    side's team box or a figure in it, a game still to play or another season's), every stat and its rank (fewer is
- *    better where it is, ties by club code), an overtime's minutes from the box and 48 where the box has none.
+ *    counts (regular-season finals as the standings count them; never the NBA Cup final, a preseason, play-in or playoff
+ *    game, a final missing a side's team box or a figure in it, a game still to play or another season's), every stat
+ *    and its rank (fewer is better where it is, ties by club code), an overtime's minutes from the box and 48 where the
+ *    box has none.
  * 2. props.js oppTable: each club's defence as the projections take it, from oppFactor: the ratio, the multiplier
  *    ratio^opp[k] and the rank (1 allows the least, ties by club code), and no multiplier with no exponent fitted.
- * 3. props.js liveProjections on a made-up replay: each game's opp is oppTable's for the game's season (a new season's
+ * 3. props.js liveProjections on a made-up replay, on exponents of its own (never the published fit's, which a refit may
+ *    move to 0 on a stat): each game's opp is oppTable's for the game's season (a new season's
  *    allowed halved, as the projections take it), the club defending under its own code, and its multiplier is the one
  *    the projections used: a player's mean with the matchup is his mean without it times the opponent's multiplier.
  * 4. publish.js propsState carries opp to the page compactly ([ratio, mult, rank], oppCols), and nothing on a props.json
@@ -31,11 +33,11 @@ part('1. the team stats (publish.js teamStatsState)', () => {
   const S = 2031;
   const G = (id, date, type, away, home, as, hs, o = {}) => ({ game_id: `${S}_${date.replace(/-/g, '')}_${away}_${home}_${id}`, season: String(o.season || S), date, type, away, home,
     away_score: as === null ? '' : String(as), home_score: hs === null ? '' : String(hs), neutral: o.neutral ? '1' : '0', status: o.status || 'final', tip: date + 'T23:00Z' });
-  /* the four finals counted */
+  /* the three finals counted */
   const g1 = G('g1', '2030-10-21', 'REG', 'BOS', 'NYK', 110, 100);                 // BOS 110 at NYK 100, box 240 a side
   const g2 = G('g2', '2030-10-23', 'REG', 'MIA', 'BOS', 120, 118);                 // MIA 120 at BOS 118, one overtime (box 265 a side)
   const g3 = G('g3', '2030-10-25', 'REG', 'NYK', 'MIA', 99, 105);                  // NYK 99 at MIA 105, no box: 48 minutes
-  const cupF = G('cf', '2030-12-16', 'REG', 'BOS', 'NYK', 115, 108, { neutral: 1 }); // the NBA Cup final: counted
+  const cupF = G('cf', '2030-12-16', 'REG', 'BOS', 'NYK', 115, 108, { neutral: 1 }); // the NBA Cup final: never counted, as the standings and the NBA's season stats leave it out
   /* the Cup's semifinals (no team box, so not counted; they make the final the Cup's), and what is never counted */
   const semi1 = G('s1', '2030-12-13', 'REG', 'BOS', 'PHX', 101, 99, { neutral: 1 }), semi2 = G('s2', '2030-12-13', 'REG', 'MIA', 'NYK', 98, 104, { neutral: 1 });
   const pre = G('pre', '2030-10-10', 'PRE', 'LAL', 'NYK', 90, 140);                 // preseason, team boxes in
@@ -56,10 +58,9 @@ part('1. the team stats (publish.js teamStatsState)', () => {
   const B = {
     [g1.game_id]: { BOS: [40, 85, 12, 30, 18, 22, 10, 12, 45, 25, 8, 5], NYK: [38, 88, 10, 32, 14, 20, 12, 14, 44, 22, 7, 4] },
     [g2.game_id]: { MIA: [44, 95, 14, 35, 18, 24, 11, 13, 50, 28, 9, 6], BOS: [43, 97, 13, 38, 19, 25, 13, 15, 49, 26, 7, 3] },
-    [g3.game_id]: { NYK: [36, 84, 9, 29, 18, 22, 9, 16, 40, 20, 10, 6], MIA: [39, 86, 12, 33, 15, 20, 10, 11, 46, 24, 9, 5] },
-    [cupF.game_id]: { BOS: [42, 90, 15, 36, 16, 20, 12, 10, 48, 27, 6, 7], NYK: [40, 89, 11, 31, 17, 23, 10, 13, 42, 23, 8, 4] } };
+    [g3.game_id]: { NYK: [36, 84, 9, 29, 18, 22, 9, 16, 40, 20, 10, 6], MIA: [39, 86, 12, 33, 15, 20, 10, 11, 46, 24, 9, 5] } };
   const big = [60, 90, 30, 40, 40, 40, 30, 1, 80, 60, 30, 30];                       // a line that would move every number were it counted
-  for (const g of [pre, post, other, playin]) B[g.game_id] = { [g.away]: big, [g.home]: big };
+  for (const g of [cupF, pre, post, other, playin]) B[g.game_id] = { [g.away]: big, [g.home]: big };
   B[noSide.game_id] = { BOS: big };
   B[noAst.game_id] = { BOS: big, MIA: big };
   const lines = [];
@@ -76,23 +77,22 @@ part('1. the team stats (publish.js teamStatsState)', () => {
        g1   BOS 85-10+12+9.68 = 96.68   NYK 88-12+14+8.80 = 98.80    -> 97.74,  48 min
        g2   MIA 95-11+13+10.56 = 107.56 BOS 97-13+15+11.00 = 110.00  -> 108.78, 53 min
        g3   NYK 84-9+16+9.68 = 100.68   MIA 86-10+11+8.80 = 95.80    -> 98.24,  48 min (no box)
-       cup  BOS 90-12+10+8.80 = 96.80   NYK 89-10+13+10.12 = 102.12  -> 99.46,  48 min
-     BOS  g1, g2, cup: 343 for, 328 against, 305.98 possessions, 149 minutes
-       pd 15/3 = 5.0  ppg 114.333 -> 114.3  pa 109.333 -> 109.3  ortg 112.099 -> 112.1  drtg 107.196 -> 107.2  pace 98.571 -> 98.6
-       fg 125/272 = 45.956 -> 46.0  tp 40/104 = 38.462 -> 38.5  tpm 13.333 -> 13.3  reb 142/3 = 47.3  ast 78/3 = 26.0  tov 37/3 = 12.3
-       stl 21/3 = 7.0  blk 15/3 = 5.0
-     NYK  g1, g3, cup: 307 for, 330 against, 295.44 possessions, 144 minutes
-       pd -23/3 = -7.667 -> -7.7  ppg 102.3  pa 110.0  ortg 103.913 -> 103.9  drtg 111.698 -> 111.7  pace 98.48 -> 98.5
-       fg 114/261 = 43.678 -> 43.7  tp 30/92 = 32.609 -> 32.6  tpm 10.0  reb 42.0  ast 65/3 = 21.7  tov 43/3 = 14.3  stl 25/3 = 8.3  blk 14/3 = 4.7
+     BOS  g1, g2: 228 for, 220 against, 206.52 possessions, 101 minutes
+       pd 8/2 = 4.0  ppg 114.0  pa 110.0  ortg 110.401 -> 110.4  drtg 106.527 -> 106.5  pace 98.148 -> 98.1
+       fg 83/182 = 45.604 -> 45.6  tp 25/68 = 36.765 -> 36.8  tpm 12.5  reb 94/2 = 47.0  ast 51/2 = 25.5  tov 27/2 = 13.5
+       stl 15/2 = 7.5  blk 8/2 = 4.0
+     NYK  g1, g3: 199 for, 215 against, 195.98 possessions, 96 minutes
+       pd -16/2 = -8.0  ppg 99.5  pa 107.5  ortg 101.541 -> 101.5  drtg 109.705 -> 109.7  pace 97.99 -> 98.0
+       fg 74/172 = 43.023 -> 43.0  tp 19/61 = 31.148 -> 31.1  tpm 9.5  reb 84/2 = 42.0  ast 42/2 = 21.0  tov 30/2 = 15.0  stl 17/2 = 8.5  blk 10/2 = 5.0
      MIA  g2, g3: 225 for, 217 against, 207.02 possessions, 101 minutes
        pd 4.0  ppg 112.5  pa 108.5  ortg 108.685 -> 108.7  drtg 104.821 -> 104.8  pace 98.386 -> 98.4
        fg 83/181 = 45.856 -> 45.9  tp 26/68 = 38.235 -> 38.2  tpm 13.0  reb 48.0  ast 26.0  tov 12.0  stl 9.0  blk 5.5
-     ranks, 1 the best: ast BOS 26.0 and MIA 26.0 level, BOS first by code; pa, drtg and tov the fewest first; pace the fastest */
+     ranks, 1 the best: pd BOS 4.0 and MIA 4.0 level, BOS first by code; pa, drtg and tov the fewest first; pace the fastest */
   const want = {
-    BOS: { g: 3, last: '2030-12-16', pd: [5, 1], ppg: [114.3, 1], pa: [109.3, 2], ortg: [112.1, 1], drtg: [107.2, 2], pace: [98.6, 1], fg: [46, 1], tp: [38.5, 1], tpm: [13.3, 1], reb: [47.3, 2], ast: [26, 1], tov: [12.3, 2], stl: [7, 3], blk: [5, 2] },
-    MIA: { g: 2, last: '2030-10-25', pd: [4, 2], ppg: [112.5, 2], pa: [108.5, 1], ortg: [108.7, 2], drtg: [104.8, 1], pace: [98.4, 3], fg: [45.9, 2], tp: [38.2, 2], tpm: [13, 2], reb: [48, 1], ast: [26, 2], tov: [12, 1], stl: [9, 1], blk: [5.5, 1] },
-    NYK: { g: 3, last: '2030-12-16', pd: [-7.7, 3], ppg: [102.3, 3], pa: [110, 3], ortg: [103.9, 3], drtg: [111.7, 3], pace: [98.5, 2], fg: [43.7, 3], tp: [32.6, 3], tpm: [10, 3], reb: [42, 3], ast: [21.7, 3], tov: [14.3, 3], stl: [8.3, 2], blk: [4.7, 3] } };
-  ok(T.v === 1 && T.season === S && T.games === 4 && T.through === '2030-12-16', `four finals counted (the Cup final among them), through its date (${T.games}, ${T.through})`);
+    BOS: { g: 2, last: '2030-10-23', pd: [4, 1], ppg: [114, 1], pa: [110, 3], ortg: [110.4, 1], drtg: [106.5, 2], pace: [98.1, 2], fg: [45.6, 2], tp: [36.8, 2], tpm: [12.5, 2], reb: [47, 2], ast: [25.5, 2], tov: [13.5, 2], stl: [7.5, 3], blk: [4, 3] },
+    MIA: { g: 2, last: '2030-10-25', pd: [4, 2], ppg: [112.5, 2], pa: [108.5, 2], ortg: [108.7, 2], drtg: [104.8, 1], pace: [98.4, 1], fg: [45.9, 1], tp: [38.2, 1], tpm: [13, 1], reb: [48, 1], ast: [26, 1], tov: [12, 1], stl: [9, 1], blk: [5.5, 1] },
+    NYK: { g: 2, last: '2030-10-25', pd: [-8, 3], ppg: [99.5, 3], pa: [107.5, 1], ortg: [101.5, 3], drtg: [109.7, 3], pace: [98, 3], fg: [43, 3], tp: [31.1, 3], tpm: [9.5, 3], reb: [42, 3], ast: [21, 3], tov: [15, 3], stl: [8.5, 2], blk: [5, 2] } };
+  ok(T.v === 1 && T.season === S && T.games === 3 && T.through === '2030-10-25', `three finals counted (the NBA Cup final, whose team boxes would move every number, not among them), through the last's date (${T.games}, ${T.through})`);
   ok(eq(Object.keys(T.clubs), ['BOS', 'MIA', 'NYK']), `only the clubs with a game counted, LAL none (${Object.keys(T.clubs).join(', ')})`);
   for (const t of ['BOS', 'MIA', 'NYK']) { const bad = Object.keys(want[t]).filter(k => !eq(T.clubs[t][k], want[t][k]));
     ok(!bad.length && eq(Object.keys(T.clubs[t]), Object.keys(want[t])), `${t}: every stat and its rank as worked by hand${bad.length ? ': ' + bad.map(k => `${k} ${JSON.stringify(T.clubs[t][k])} not ${JSON.stringify(want[t][k])}`).join(', ') : ''}`); }
@@ -141,7 +141,9 @@ part('2. each club\'s defence (props.js oppTable)', () => {
 });
 
 part('3. the projections\' own multiplier (props.js liveProjections)', () => {
-  const P = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'props.json'), 'utf8')).params;
+  /* the published fit's other constants, and exponents of this part's own: a refit may set one to 0 (GRID.opp has it), and
+     with no opponent term on points the check of the wrong club's multiplier below could tell nothing apart */
+  const P = { ...JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'props.json'), 'utf8')).params, opp: { pts: 1, reb: 0.75, ast: 1, tpm: 0.75, stl: 1, blk: 1 } };
   /* a made-up season: four clubs, eight players each, ten finals, then a game to come this season and one the next */
   const S = 2031, clubs = ['BOS', 'LAL', 'MIA', 'NYK'], pos = ['G', 'G', 'F', 'F', 'C', 'G', 'F', 'C'];
   const games = [], boxes = {};

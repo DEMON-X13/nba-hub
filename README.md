@@ -1142,7 +1142,8 @@ game's own page, laid out as the NFL hub's game page (its Props tab, a game open
 `props/build/part3.js`) since the owner's call of 5 November 2026 ("when I click the player props in the nba, i want the
 layout to look as much like the nfl huub one"): the same window (1,100px at most, the whole screen on a phone), the same
 pieces in the same order, on this hub's numbers and colours (the NFL's gold stripe this hub's orange; the bars lime, gold
-and grey for High, Med and Low). Escape, ✕ Close (44px) or a tap outside closes it, Tab stays inside, and the focus goes
+and grey for High, Med and Low). Escape, ✕ Close (44px) or a tap outside closes it (a press that begins on the sheet and
+is let go outside, a selection dragged past its edge, is no tap outside), Tab stays inside, and the focus goes
 back to the button that opened it; a redraw (a press landing, a switch, a box ticked) keeps the focus on its control, or,
 where that control is gone (a milestone taken out with Milestones off, a box whose line a press moved), on the next box
 of the same stat block, the player's row or the nearest control still drawn, brought into view, never on the page or on a
@@ -1193,7 +1194,8 @@ Top to bottom:
   the NFL's **MISMATCH** tag beside his name where he is one of the game's top five in the Mismatches window (titled with
   his row there, "mismatch #2 in this game" in the row's name; a tap on it opens the row as the row would), and at the
   right his projected points, rebounds and assists; on a phone the name line, the projection under it, the
-  chevron at the right. The whole row is the button that opens him (`aria-expanded`, named in full for a screen reader:
+  chevron at the right, the position line moving down whole where the name line runs out (the NFL's), never split "G ·"
+  over "31 min" beside a MISMATCH tag. The whole row is the button that opens him (`aria-expanded`, named in full for a screen reader:
   name, position, rank, projected minutes, points, rebounds and assists), one player open at a time, as the NFL's.
 - **A player opened**: a stat block a stat he is projected on (points, rebounds, assists, threes, the four combos,
   steals, blocks, steals + blocks), headed "Points  projected 14.3 … DraftKings line 12.5" as the NFL's (its words for
@@ -1569,15 +1571,20 @@ place (`ppWinBtns` in `app/nba_hub.html`: `div.gwin[role=group][aria-label="More
 the page (`window.gameWindow`, `app/parts/gamewin.html`, set in by `build.js`, which stops if the part fetches or stores
 anything). Each is a dialog over the view, the NFL's: 720px at most, the matchup's two pills and "Team Stats · Thu, Nov 5"
 over one card (labelled by both), Close (44px); Escape, Close or a click outside closes it back to the view (Escape never
-closes the view too) with the focus on the button that opened it, Tab stays inside, and a window taller than the screen
-scrolls inside. A redraw of the view under an open window (a read answering, a box ticked) binds it to its button as drawn
+closes the view too) with the focus on the button that opened it (a press that begins in the window and is let go
+outside, a selection dragged past its edge, is no click outside), Tab stays inside, and a window taller than the screen
+scrolls inside. Its look is the NFL's window rule by rule: the panel panel-2 to panel under a darker bg-2 bar, 39px from
+the card's foot to the panel's, its quiet text (the matchup line, the "vs" between the boxes, the foot, a mismatch's
+position and its "vs") the NFL's muted #B3B9CB (`--pb-q`), and at 760px and under the NFL's phone window: 10px of the
+page around it, a 58px bar 12px in, the body 12px in and the card 14px in. A redraw of the view under an open window (a read answering, a box ticked) binds it to its button as drawn
 now; a game that tips off under it closes it, the focus on the view's Close. Nothing in them is computed beyond what is
 said below: every number is read from `state.json` as the page has it.
 
 **Team Stats**: the two clubs' season so far side by side, the NFL's rows: each club's number at its side with its league
 rank under it ("#4"), a bar between them split in the two clubs' colours (the NFL's split: where fewer is better each side
 by the inverse of its number, else both shifted up by the lower of the two and 0, so a negative still splits), the better
-side's number marked (lime on a lime tint), "MIA better on 5, GSW on 8" at the top, and under them "2026-27 season through
+side's number marked (lime on a lime tint; a screen reader hears each value with its club, its rank in words and the
+better side: "MIA: −4.9, 21st in the league", "GSW: +2.9, 12th in the league, the better"), "MIA better on 5, GSW on 8" at the top, and under them "2026-27 season through
 Nov 4: MIA 8 games, GSW 8 games." Fourteen rows: point differential, points, points allowed (each a game), offensive rating
 (points per 100 possessions), defensive rating (allowed per 100), pace (possessions per 48 minutes), field goal %,
 three-point %, threes made, rebounds, assists, turnovers (fewer is better) and steals and blocks (each a game). Fewer is
@@ -1592,8 +1599,10 @@ teamStats: { v: 1, season: 2027, through: "2026-11-04", games: 121,
     pace: [105.3, 2], fg: [47.2, 9], tp: [33.5, 20], tpm: [13, 17], reb: [43.3, 19], ast: [29.5, 2], tov: [15.1, 11], stl: [8.4, 17], blk: [5, 15] }, ... } }
 ```
 
-The games: the season's finals typed regular season, the NBA Cup's among them (its final too); never a preseason game, a
-play-in game (`offFinals`: the standings leave it out) or a playoff game. A final counts once both its clubs' team boxes
+The games: the season's finals typed regular season as the standings count them, the NBA Cup's group and knockout games
+among them; never the NBA Cup final or a play-in game (`offFinals`: the standings, the NBA's season statistics and the
+club's record in the matchup bubble leave both out, so a finalist's game count is its record's), a preseason game or a
+playoff game (until the review of 5 November 2026 the Cup final was counted, a game more than the finalists' records). A final counts once both its clubs' team boxes
 are read and carry every figure used. A game's possessions are the usual estimate, field-goal attempts less offensive
 rebounds plus turnovers plus 0.44 of free-throw attempts, each side's averaged with its opponent's, so both clubs of a game
 are given the same number (the window says so in the foot's and the ratings' titles); its minutes are 48 plus 5 an overtime,
@@ -1604,8 +1613,9 @@ to four decimals, ties by club code. A club with no game counted is not listed: 
 says "No game counted yet this season: GSW.", or "Neither club has a game counted yet this season."; another season's
 stats are never shown as this game's. On 5 November 2026 the file is 7.7 KB for the 30 clubs and 121 finals.
 
-**Matchup**: the NFL's Offense vs defense card, each side with the ball ("Heat possession"): the offence's rating against
-the other club's defence, two boxes either side of "vs", the higher of the two tinted. The ratings are the board model's
+**Matchup**: the NFL's Offense vs defense card, each side with the ball ("Heat Possession", the NFL's "Seahawks
+Possession"): the offence's rating against the other club's defence, two boxes either side of "vs", the higher of the two
+tinted (and said "(the higher)" to a screen reader). The ratings are the board model's
 for the lineups it expects in this game (the slate's `model.away`/`model.home` `offence` and `defence`): each player's
 offence and defence in rating points, for a player on the floor all game, weighted by his share of the minutes, as the
 Players and Teams tabs give them, drawn rounded as the Teams tab rounds them (−45.5 is −46). Under each, its rank in the
@@ -1624,12 +1634,19 @@ on what the club allowed read for the game's season as the projections read it, 
 multiplier and the club's rank in the league on that stat, 1 the club that allows the least, on the ratio to four
 decimals, ties by club code; `publish.js` carries it compactly into the game's props block (`opp`, by the club defending,
 `[ratio, mult, rank]` as `oppCols` names them). Nothing projected moved: on today's data `props.json` was the same to the
-byte but for `opp`. The window ranks the game's players projected 20 minutes or more, both sides, none on the game's out
-lists, each at his stat among points, rebounds, assists and threes with the largest lift in standard deviations of the stat
+byte but for `opp`. The window ranks the game's players shown at 20 minutes or more, both sides, none on the game's out
+lists (the minutes as his row in the view prints them, whole: 19.8 is "20 min" and counts, 19.4 is "19 min" and does not;
+until the review of 5 November 2026 the bar read the published 19.8 as under 20 while his row said 20), each at his stat among points, rebounds, assists and threes with the largest lift in standard deviations of the stat
 at his mean (the props model's own spread, the square root of `nbVar(mean, var[k])`), positive lifts only, the top five,
-ties by the lift and then the player's id; each row the NFL's: "#1 Stephen Curry G GSW vs MIA · vs MIA three-point defence
+ties by the lift and then the player's id; each row the NFL's: his season shield where the Players tab ranks him (none
+where it does not), "#1 Stephen Curry G GSW vs MIA · vs MIA three-point defence
 #30 (allows 12% more threes a minute than average). 4.8 threes projected (+0.4 from the matchup).", at its right "+0.16 SD"
-and the MISMATCH tag, its title the row's sentence, what it is ranked by and the note. The note is one line: "From the props
+and the MISMATCH tag, its title the row's sentence, what it is ranked by and the note. A lift is printed to one decimal
+and the spread to two, more where that would round a figure to nothing: a lift of 0.017 is "+0.02", of 0.003 "+0.003",
+under 0.0005 "under 0.001" (SAS at POR on 7 November reads "+0.04" and "+0.02" where it read "+0.0"; on 5 November 21 of
+the 165 rows across the 33 projected games read "+0.0"). Any positive lift counts, as the ask had it: in a game whose
+defences are near average the five are lifts of a few hundredths, each still listed and tagged; a floor under which a
+game has "no real mismatch" would be a new rule, the owner's to set. The note is one line: "From the props
 model's opponent adjustment; the model lost to DraftKings in its trial, so read these as context, not picks." (on trial,
 before a decision: "the model is on trial against DraftKings"). Nothing in the window, its titles included, says edge,
 value or model says. On the player rows of the view, each of the five wears the NFL's MISMATCH tag beside his name, the
@@ -1648,34 +1665,51 @@ ratings for this game's lineups yet."
 
 `node tools/test_gamewin.js` (in the job's tests, before the smoke) holds the job's numbers on made-up data, each figure
 worked by hand in its comments: the team
-stats of a made-up season's team boxes (four finals counted, the NBA Cup final among them; a preseason game, a play-in, a
-playoff game, a final missing a side's team box or its assists, a game to play and last season's never; an overtime read
-from the box and 48 minutes where it has none; two overtimes read as 58; every stat and rank of three clubs, a tie in
-assists and in pace ranked by club code); `oppTable` on made-up allowed figures (the ratio, the multiplier with the
-fitted exponents and with none, the rank, ties by code, the league's 30 by default); `liveProjections` on a made-up replay
+stats of a made-up season's team boxes (three finals counted; the NBA Cup final, whose boxes would move every number, a
+preseason game, a play-in, a playoff game, a final missing a side's team box or its assists, a game to play and last
+season's never; an overtime read from the box and 48 minutes where it has none; two overtimes read as 58; every stat and
+rank of three clubs, a tie in point differential and in pace ranked by club code); `oppTable` on made-up allowed figures (the ratio, the multiplier with the
+fitted exponents and with none, the rank, ties by code, the league's 30 by default); `liveProjections` on a made-up replay, on
+exponents of its own (1 on points, assists, steals and blocks, 0.75 on rebounds and threes), never the published fit's,
+which a refit may set to 0 on points and so leave the check below nothing to tell apart
 (each game's `opp` is `oppTable`'s for its season, a new season's halved, the club defending under its own code, and each
 of its 96 projected stats is the player's mean without the matchup times that multiplier, within rounding, where the wrong
 club's misses by 0.77); and `propsState` carrying it as `[ratio, mult, rank]`, and nothing on a `props.json` from before.
 
 `SMOKE_ONLY=gw node tools/smoke.js` (`tools/smoke_gamewin.js`), blocking, boots the built page on made-up games tomorrow
 (any hour, any day of the season, the off-season): a props block whose opponent table and means are its own (eight
-players with a lift, two of them alike to the digit, one at 19.9 minutes and one out each strong enough to be in the five
-were he counted, one with no lift), the job's team stats and the Teams tab made up with level values and a tie the file's
+players with a lift, two of them alike to the digit, one at 19.4 minutes ("19 min") and one out each strong enough to be
+in the five were he counted, one with no lift; two rated players ranked and one rated but not ranked, for the shields),
+a second game for the small figures and the bar (NYK at PHI: a guard at 19.5 minutes, "20 min", counted and one at 19.4
+left out whose lift would put him second; lifts of 0.016, 0.003 and 0.0004 and spreads to match, printed "+0.02",
+"+0.003" and "under 0.001", "+0.003", "+0.001" and "<0.001"; a defence 0.42% over average, "0.4% more", each figure also
+worked by hand in its comments), the job's team stats and the Teams tab made up with level values and a tie the file's
 order breaks, a club with no game counted, a game with no projection, one with no opponent table and one with no board
 numbers, a failed ledger and one on trial; then on the real state, one of its projected games moved to three hours from
 now, its team stats as published (else as `publish.js` writes them from today's files) and its opponent table as
 published (else `oppTable` on a replay of today's boxes). Every number a window states is worked out there on its own: the
 team stats from `data/teambox_<season>.jsonl`, `data/games.csv` and `data/box_<season>.csv` (equal to the job's to the
 digit), the Teams tab's ranks as its table sorts, each mismatch's lift, spread and place from the published multipliers and
-means; never by calling the page's functions. And the buttons (under the head card, their roles and names, 44px), the
-dialog's name, Escape, Close and a click outside (the focus back on the button, the view still open), a click inside, Tab
+means; never by calling the page's functions; each mismatch's shield from the published players (none where they do
+not rank him), no figure that rounds to nothing, and what a screen reader hears of each Team Stats value (its club, its
+rank in words, the better side) and of the higher Matchup box. The window's look, rule by rule as the page's CSSOM has it
+(jsdom lays nothing out), against the NFL's values: its panel and the 39px under the card, its quiet text, a mismatch
+row (unfilled, 600, 4px, the shield 16 by 18), the phone window at 760px (no rule of it at another width) and its
+geometry, and the view's position line kept whole on a phone. And the buttons (under the head card, their roles and names, 44px), the
+dialog's name, Escape, Close and a click outside (the focus back on the button, the view still open), a press inside let
+go on the backdrop (no click outside: open; section 8 holds the view's own backdrop the same), a click inside, Tab
 kept inside, the focus after a redraw, a window over a game that tips off, the tags (exactly the five, beside the name,
 titled with the row, said in the row's name, a tap opening the row), the words a failed model may not use, every window
 before the job's next run, and nothing fetched or stored. Section 8's checks of the folded note now find it after the
 three buttons. In Chromium, on the real state with the fields the job will write, at 360, 390, 914 and 1280 with each
 window open and the view under them (a tagged player opened): no text under 4.5:1 (the lowest 4.87 in the view, 5.17 in
-the windows, once the ranks on the lime tint took the full ink: the quiet ink was 4.43:1 there), nothing wider than the
-screen, the window or its cards, and every control 44px.
+the windows, once the ranks on the lime tint took the full ink: the quiet ink was 4.43:1 there; 4.87 in the windows too
+since their quiet text took the NFL's #B3B9CB), nothing wider than the screen, the window or its cards, and every control
+44px. After the review of 5 November 2026, against the live NFL page (JAX at BAL) at 1280 and 390: the panel's gradient,
+the bar, the quiet text, the mismatch rows and the phone geometry computed alike; 39px from the card's foot to the panel's
+at every width from 320 to 1280; from 320 to 760 the NFL's phone window, each mismatch's clubs on their own line 27px
+under his name (from 761 on the line, never touching the position); no player's position line split at 320, 360, 390,
+414, 914 or 1280; a selection dragged from a window or the view past its edge leaving it open with the text selected.
 
 Breaks planted one at a time, each failing the check it aims at (the page's in a copy of `index.html` through `NBA_HTML`,
 the job's in `tools/publish.js` or `tools/props.js`, put back after):
@@ -1698,6 +1732,21 @@ the job's in `tools/publish.js` or `tools/props.js`, put back after):
 | Tab not kept inside; a click outside doing nothing; a click inside closing it | Tab; a click outside and inside |
 | the focus lost after a redraw; the window left open over a tipped game | the focus after a redraw; a tipped game |
 | the window keeping something in storage | nothing stored and nothing fetched |
+| after the review of 5 November 2026: a lift printed to one place ("+0.0"); the spread to two ("+0.00") | NYK at PHI's Mismatches and its tags' titles |
+| the 20-minute bar on the minutes as published (19.5, "20 min" on his row, left out); the bar past 20, not at it | NYK at PHI's Mismatches and tags |
+| a defence under half a percent over average rounded whole ("0%") | NYK at PHI's Mismatches and tags |
+| no shield in Mismatches; a shield on a player the players do not rank; the shield after the name; the shield at the badge's own size | the Mismatches' rows (and on trial); a mismatch row is the NFL's |
+| "Heat possession" in lower case | Matchup's boxes (made-up, level and real) |
+| the panel flat bg-2; 20px under the card | the window's panel is the NFL's |
+| the matchup line or the foot in ink-2; a mismatch row's "vs" at 12px | its quiet text is the NFL's muted |
+| a mismatch row filled; its name at 700; its score column 5px apart | a mismatch row is the NFL's |
+| the clubs left on the name's line on a phone; the phone window at 620px | at 760px and under, the NFL's phone window (and its geometry) |
+| the phone bar 64px and 8px in; the body 10px in; the card 12px in | on a phone the NFL's geometry |
+| a Team Stats value not naming its club; the better side unsaid; the rank read as "#21"; the higher Matchup box unsaid | what a screen reader hears, made-up and real |
+| the position line free to split on a phone | on a phone a player's position line moves down whole |
+| the window, or the view, closed by a selection dragged onto its backdrop; the window never closed by a click with no press | a press inside let go on the backdrop (gw and section 8); a click outside |
+| the job counting the NBA Cup final | `test_gamewin.js`: the team stats (three finals; BOS's and NYK's every stat) |
+| `props.json`'s points exponent set to 0, as a refit may, or its `opp` taken out | nothing, rightly: `test_gamewin.js`'s part 3 stands on exponents of its own (until the review it failed on both, and the job's tests would have held back every publish) |
 | the job's possessions at 0.4 of free throws; its ties ranked against the club code; its overtime minutes ignored | the job's team stats are the smoke's own reading of the files |
 | the job counting the play-in or a preseason game; a game missing a side; turnovers without the team's; turnovers ranked the most first | `test_gamewin.js`: the team stats |
 | each club's defence ranked the most first; its ties against the code; the multiplier without its exponent | `test_gamewin.js`: `oppTable` |

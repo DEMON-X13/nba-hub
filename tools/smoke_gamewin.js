@@ -75,7 +75,8 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
       return Object.values(o).some(v => v === null || v === undefined) ? null : o; };
     const sum = {}; let through = null, counted = 0;
     for (const g of games) {
-      if (Number(g.season) !== season || g.type !== 'REG' || g.status !== 'final' || off[g.game_id] === 'playin' || g.home_score === '' || g.away_score === '') continue;
+      /* the standings' games: never a final offFinals marks (the NBA Cup final, a play-in game) */
+      if (Number(g.season) !== season || g.type !== 'REG' || g.status !== 'final' || off[g.game_id] || g.home_score === '' || g.away_score === '') continue;
       const h = side(box[`${g.game_id}|${g.home}`]), a = side(box[`${g.game_id}|${g.away}`]); if (!h || !a) continue;
       const est = x => x.fga - x.orb + x.tov + 0.44 * x.fta, poss = (est(h) + est(a)) / 2;
       const pm = Math.max(pmin[`${g.game_id}|${g.home}`] || 0, pmin[`${g.game_id}|${g.away}`] || 0), ots = pm > 0 ? Math.max(0, Math.round((pm - 240) / 25)) : 0;
@@ -95,14 +96,20 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     }
     return { v: 1, season, through, games: counted, clubs };
   }
-  /* the game's mismatches, this file's own reading: each player of the game projected 20 minutes or more and not on its
-     out lists, at his stat (points, rebounds, assists, threes) with the largest lift over its spread, the lift his mean
+  /* the game's mismatches, this file's own reading: each player of the game shown at 20 minutes or more on his row
+     (the view prints his minutes whole, so 19.5 and up) and not on its out lists, at his stat (points, rebounds, assists, threes) with the largest lift over its spread, the lift his mean
      less his mean over the opponent's published multiplier, the spread the square root of A x mean^B; positive lifts
      only, the top five, ties by the lift then the player's id */
   const MM_DEF = { pts: 'scoring defence', reb: 'rebounding defence', ast: 'assist defence', tpm: 'three-point defence' };
   const MM_NOUN = { pts: 'points', reb: 'rebounds', ast: 'assists', tpm: 'threes' }, MM_UNIT = { pts: 'pts', reb: 'reb', ast: 'ast', tpm: 'threes' };
   const NOTE_FAIL = 'From the props model\'s opponent adjustment; the model lost to DraftKings in its trial, so read these as context, not picks.';
   const NOTE_TRIAL = 'From the props model\'s opponent adjustment; the model is on trial against DraftKings, so read these as context, not picks.';
+  /* a figure at the fewest decimals from `from` to 3 at which it is at least one in the last place; none under that */
+  const fineOwn = (x, from) => { for (const dd of [1, 2, 3]) if (dd >= from && Math.round(x * Math.pow(10, dd)) >= 1) return x.toFixed(dd); return null; };
+  const liftOwn = l => fineOwn(l, 1) ? '+' + fineOwn(l, 1) : 'under 0.001', zOwn = z => fineOwn(z, 2) ? '+' + fineOwn(z, 2) : '<0.001';
+  /* the shield a player wears: the tier of his overall Elo where the published players rank him, none otherwise */
+  const TIER_AT = [['HOF', 1750], ['Elite', 1700], ['Master', 1650], ['Diamond', 1600], ['Platinum', 1550], ['Gold', 1500], ['Silver', 1450], ['Bronze', 1400], ['Iron', 1350], ['Wood', -Infinity]];
+  const shieldOwn = (st, pid) => { const p = (st.players || []).find(x => String(x.id) === String(pid)); return p && p.ranked && Number.isFinite(p.rating) ? TIER_AT.find(t => p.rating >= t[1])[0] : null; };
   const moreOwn = (ratio, noun) => { const p = 100 * (ratio - 1), a = Math.abs(p); return a < 0.05 ? `about as many ${noun} a minute as average` : `${a >= 0.5 ? Math.round(a) : a.toFixed(1)}% ${p > 0 ? 'more' : 'fewer'} ${noun} a minute than average`; };
   function mmOwn(st, g, top = 5) {
     const P = st.props, pg = P.games[g.id], cols = P.oppCols, at = k => P.layout.indexOf(k), V = P.dist.var;
@@ -110,7 +117,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     const fail = !!(P.ledger && P.ledger.decision && P.ledger.decision.verdict === 'FAIL'), note = fail ? NOTE_FAIL : NOTE_TRIAL;
     const rows = [];
     for (const pid of Object.keys(pg.players)) { const r = pg.players[pid], team = r[1];
-      if (r[3] < 20 || outs.has(pid) || (team !== g.away && team !== g.home)) continue;
+      if (!(r[3] >= 19.5) || outs.has(pid) || (team !== g.away && team !== g.home)) continue;
       const opp = team === g.home ? g.away : g.home, tab = pg.opp[opp];
       const cand = ['pts', 'reb', 'ast', 'tpm'].map(k => { const e = tab[k], mu = r[at(k)], mult = e[cols.indexOf('mult')], lift = mu - mu / mult, sd = Math.sqrt(V[k][0] * Math.pow(Math.max(mu, 1e-9), V[k][1]));
         return { k, mu, lift, sd, z: lift / sd, ratio: e[cols.indexOf('ratio')], rank: e[cols.indexOf('rank')] }; }).filter(c => c.mu > 0 && c.lift > 0);
@@ -119,10 +126,10 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
       rows.push({ pid, name: r[0], pos: r[2], team, opp, home: team === g.home, ...cand[0] });
     }
     rows.sort((a, b) => b.z - a.z || b.lift - a.lift || (a.pid < b.pid ? -1 : 1));
-    return rows.slice(0, top).map((v, i) => { const n = i + 1, sz = (v.z >= 0 ? '+' : '−') + Math.abs(v.z).toFixed(2), vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`, proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
-      const sub = `${vs} (allows ${moreOwn(v.ratio, MM_NOUN[v.k])}). ${proj} projected (+${v.lift.toFixed(1)} from the matchup).`;
+    return rows.slice(0, top).map((v, i) => { const n = i + 1, sz = zOwn(v.z), vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`, proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
+      const sub = `${vs} (allows ${moreOwn(v.ratio, MM_NOUN[v.k])}). ${proj} projected (${liftOwn(v.lift)} from the matchup).`;
       const say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${sub}`;
-      return { ...v, n, sz, sub, title: `Mismatch #${n} in this game: ${say} Ranked by that lift over the spread of his ${MM_NOUN[v.k]} at his projection, ${sz} of a standard deviation (${v.sd.toFixed(1)}). ${note}`, note }; });
+      return { ...v, n, sz, sub, shield: shieldOwn(st, v.pid), title: `Mismatch #${n} in this game: ${say} Ranked by that lift over the spread of his ${MM_NOUN[v.k]} at his projection, ${sz} of a standard deviation (${v.sd.toFixed(1)}). ${note}`, note }; });
   }
 
   /* ---------- the harness ---------- */
@@ -170,7 +177,12 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
         if (!v) { bad.push(`${k} ${t}: no value`); continue; }
         if (txt(v.querySelector('b')) !== want) bad.push(`${k} ${t}: "${txt(v.querySelector('b'))}" where ${want}`);
         if (txt(v.querySelector('[data-gw-srk]')) !== wr) bad.push(`${k} ${t}: rank "${txt(v.querySelector('[data-gw-srk]'))}" where ${wr}`);
-        if (v.classList.contains('gw-better') !== b) bad.push(`${k} ${t}: marked ${v.classList.contains('gw-better')} where ${b}`); }
+        if (v.classList.contains('gw-better') !== b) bad.push(`${k} ${t}: marked ${v.classList.contains('gw-better')} where ${b}`);
+        /* what a screen reader hears of the cell (the clubs' header is hidden from it, and the mark is a colour): its club,
+           the value, its rank in words and whether it is the better: the cell's text less what it hides */
+        const heard = [...v.childNodes].filter(n => !(n.nodeType === 1 && n.getAttribute('aria-hidden') === 'true')).map(n => n.textContent).join('').replace(/\s+/g, ' ').trim();
+        const wantH = `${t}: ${want}${c ? `, ${ord(c[1])} in the league` : ''}${b ? ', the better' : ''}`;
+        if (heard !== wantH) bad.push(`${k} ${t}: a screen reader hears "${heard}" where "${wantH}"`); }
       const [pa, ph] = splitOwn(x, y, dir < 0), bars = [...row.querySelectorAll('.gw-shalf i')].map(i => i.style.width);
       if (bars.join() !== `${pa}%,${ph}%`) bad.push(`${k}: bars ${bars.join()} where ${pa}%,${ph}%`);
     }
@@ -179,6 +191,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     const foot = `${seasonNm(T.season)} season${T.through ? ' through ' + dayNo(T.through) : ''}: ${a} ${A.g} game${A.g === 1 ? '' : 's'}, ${h} ${Hm.g} game${Hm.g === 1 ? '' : 's'}.`;
     if (txt(body.querySelector('[data-gw-basis]')) !== foot) bad.push(`foot "${txt(body.querySelector('[data-gw-basis]'))}" where "${foot}"`);
     if (!/0\.44 of free-throw attempts/.test((body.querySelector('[data-gw-basis]') || { title: '' }).title)) bad.push('the foot\'s title does not say how possessions are estimated');
+    if (!/never the NBA Cup final, a play-in, preseason or playoff game/.test((body.querySelector('[data-gw-basis]') || { title: '' }).title)) bad.push('the foot\'s title does not say the NBA Cup final and the play-in are left out, as the standings leave them');
     if (body.querySelectorAll('[data-gw-srow]').length !== TS.length) bad.push(`${body.querySelectorAll('[data-gw-srow]').length} rows where ${TS.length}`);
     return bad.map(s => `${tag}: ${s}`);
   }
@@ -187,7 +200,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     const poss = (o, O, dd, D) => {
       const el = body.querySelector(`[data-gw-poss="${o}-${dd}"]`); if (!el) return bad.push(`${o} with the ball: no possession`);
       const nick = { BOS: 'Celtics', DET: 'Pistons', LAL: 'Lakers', GSW: 'Warriors', MIA: 'Heat', ORL: 'Magic' }[o];
-      if (nick && txt(el.querySelector('.gw-uhd')) !== `${nick} possession`) bad.push(`${o}: title "${txt(el.querySelector('.gw-uhd'))}"`);
+      if (nick && txt(el.querySelector('.gw-uhd')) !== `${nick} Possession`) bad.push(`${o}: title "${txt(el.querySelector('.gw-uhd'))}"`);
       const tint = O.offence === D.defence ? null : O.offence > D.defence ? 'off' : 'def';
       for (const [what, t, v, col] of [['off', o, O.offence, 'offence'], ['def', dd, D.defence, 'defence']]) {
         const b = el.querySelector(`[data-gw-unit="${what}:${t}"]`); if (!b) { bad.push(`${t} ${col}: no box`); continue; }
@@ -196,6 +209,9 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
         const r = tabOwn(teams, col, t), want = r ? `Teams tab ${sg0(r.v) !== sg0(v) ? sg0(r.v) + ', ' : ''}${ord(r.rank)} of ${r.n}` : 'not on the Teams tab';
         if (txt(b.querySelector('.gw-urk')) !== want) bad.push(`${t} ${col}: "${txt(b.querySelector('.gw-urk'))}" where "${want}"`);
         if (b.classList.contains('gw-better') !== (tint === what)) bad.push(`${t} ${col}: tinted ${b.classList.contains('gw-better')} where ${tint === what}`);
+        /* the tint said to a screen reader too, on the higher box alone */
+        const said = [...b.querySelectorAll('.sr')].map(txt).join('|');
+        if (said !== (tint === what ? '(the higher)' : '')) bad.push(`${t} ${col}: said "${said}" to a screen reader where "${tint === what ? '(the higher)' : ''}"`);
       } };
     poss(g.away, m.away, g.home, m.home); poss(g.home, m.home, g.away, m.away);
     const parts = b => b ? [b.querySelector('.gw-lab'), b.querySelector('b'), b.querySelector('small')].map(txt).join(' | ') : 'none';
@@ -212,8 +228,17 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     own.forEach((v, i) => { const li = lis[i]; if (!li) return;
       if (li.dataset.gwMm !== v.pid) bad.push(`#${v.n}: ${li.dataset.gwMm} where ${v.pid} (${v.name})`);
       if (txt(li.querySelector('.gw-mmn')) !== `#${v.n}`) bad.push(`#${v.n}: numbered "${txt(li.querySelector('.gw-mmn'))}"`);
-      const who = `${v.name} ${v.pos}${v.team}${v.home ? 'vs' : 'at'}${v.opp}`;
-      if (txt(li.querySelector('.gw-mmwho')).replace(/\s/g, '') !== who.replace(/\s/g, '')) bad.push(`#${v.n}: "${txt(li.querySelector('.gw-mmwho'))}" where "${who}"`);
+      const who = `${v.name} ${v.pos}${v.team}${v.home ? 'vs' : 'at'}${v.opp}`, wEl = li.querySelector('.gw-mmwho'), wNo = wEl ? wEl.cloneNode(true) : null;
+      if (wNo) wNo.querySelectorAll('svg').forEach(x => x.remove());
+      if (txt(wNo).replace(/\s/g, '') !== who.replace(/\s/g, '')) bad.push(`#${v.n}: "${txt(wNo)}" where "${who}"`);
+      /* his season shield first in the line where the players rank him, as the NFL's row and the view's own row wear it;
+         none where they do not */
+      const sh = wEl ? wEl.querySelectorAll('svg.tierbadge') : [];
+      if (v.shield ? !(sh.length === 1 && wEl.firstChild === sh[0] && sh[0].classList.contains(`tier-${v.shield.toLowerCase()}`) && sh[0].getAttribute('aria-label') === `${v.shield} tier`) : sh.length)
+        bad.push(`#${v.n} ${v.name}: shield ${sh.length ? sh[0].getAttribute('class') : 'none'} where ${v.shield ? v.shield + ', before his name' : 'none (not ranked)'}`);
+      /* no figure the row states rounds to nothing: no "+0.0 from the matchup", no "+0.00 SD" */
+      const subT = txt(li.querySelector('[data-gw-mmsub]')), zT = txt(li.querySelector('[data-gw-z]'));
+      if (/\(\+0\.0+ from the matchup\)/.test(subT) || /^[+−]0\.0+SD$/.test(zT)) bad.push(`#${v.n}: a figure that rounds to nothing ("${subT}", "${zT}")`);
       if (txt(li.querySelector('[data-gw-mmsub]')) !== v.sub) bad.push(`#${v.n}: "${txt(li.querySelector('[data-gw-mmsub]'))}" where "${v.sub}"`);
       if (txt(li.querySelector('[data-gw-z]')) !== `${v.sz}SD`) bad.push(`#${v.n}: "${txt(li.querySelector('[data-gw-z]'))}" where "${v.sz}SD"`);
       if (txt(li.querySelector('.gw-mmtag')) !== 'Mismatch') bad.push(`#${v.n}: no Mismatch tag`);
@@ -237,6 +262,37 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     for (const v of want.values()) bad.push(`${v.name}: no row`);
     return bad.map(s => `${tag}: ${s}`);
   }
+  /* the NFL's look, rule by rule, as the browser's CSSOM parses the page's styles (jsdom lays nothing out: README says
+     what Chromium measured). Each [media, selector, property, value]: the value the last rule for that selector in that
+     media declares, '' none at all. The NFL's values are its nflbets/build/snapshot.html's #gsModal.gs-one under its
+     theme.css: the panel panel-2 to panel under a bg-2 bar, 14 + 24 + 1 = 39px under the card; its quiet text --muted,
+     #B3B9CB in its theme, this page's --pb-q; a mismatch row unfilled, its name 600, its score column 4px apart, the
+     shield 16 by 18 before the name; and at 760px and under its phone window: 10px of page around it, a 58px bar 12px in,
+     the body 12px in, the card 14px in, a mismatch row 8px by 12px apart with its clubs on a line of their own 6px down,
+     the boxes 12px by 8px; and the props view's position line kept whole there (its part1.html .plrbtn .who span) */
+  const rulesOf = d => { const out = []; const walk = (list, media) => { for (const r of list) { if (r.media && r.cssRules) walk(r.cssRules, r.media.mediaText.replace(/\s+/g, ''));
+    else if (r.selectorText) for (const sel of r.selectorText.split(',')) out.push({ media, sel: sel.trim().replace(/\s+/g, ' '), style: r.style }); } };
+    for (const sh of d.styleSheets) walk(sh.cssRules, ''); return out; };
+  const declOf = (R, media, sel, prop) => R.filter(r => r.media === media && r.sel === sel).map(r => r.style.getPropertyValue(prop)).filter(Boolean).pop() || '';
+  const LOOK = {
+    "the window's panel is the NFL's, panel-2 to panel under its bg-2 bar, with 39px under the card": [['', '.gw-sheet', 'background', 'linear-gradient(180deg,var(--panel-2),var(--panel))'], ['', '.gw-top', 'background', 'var(--bg-2)'], ['', '.gw-body', 'padding', '16px 20px 38px'], ['', '.gw-card', 'margin', ''], ['', '.gw-card', 'margin-bottom', '']],
+    "its quiet text is the NFL's muted (--pb-q, #B3B9CB): the matchup line, the \"vs\" between the boxes, the foot, the position and the \"vs\" of a mismatch row at 13px": [['', '.gw-tm', 'color', 'var(--pb-q)'], ['', '.gw-vsx', 'color', 'var(--pb-q)'], ['', '.gw-note', 'color', 'var(--pb-q)'], ['', '.gw-mmwho small', 'color', 'var(--pb-q)'], ['', '.gw-mmwho small', 'font-size', '13px'], ['', '.gw-mmvs small', 'font-size', ''], ['', '.gw-mmvs small', 'color', '']],
+    "a mismatch row is the NFL's: unfilled, the name at 600, the score column 4px apart, the shield 16 by 18 before the name": [['', 'ul.gw-mm li', 'background', ''], ['', 'ul.gw-mm li', 'background-color', ''], ['', '.gw-mmwho', 'font-weight', '600'], ['', '.gw-mmsc', 'gap', '4px'],
+      ['', '.gw-mmwho .tierbadge', 'width', '16px'], ['', '.gw-mmwho .tierbadge', 'height', '18px'], ['', '.gw-mmwho .tierbadge', 'vertical-align', '-3px'], ['', '.gw-mmwho .tierbadge', 'margin-right', '4px']],
+    "at 760px and under, the NFL's phone window: Team Stats' names dropped, the boxes 12px by 8px, a mismatch's rank on a row of its own (40px wide) and its clubs on a line of their own 6px under his name, 8px by 12px apart": [['(max-width:760px)', '.gw-teams .gw-tnm', 'display', 'none'], ['(max-width:760px)', '.gw-ubox', 'padding', '12px 8px'],
+      ['(max-width:760px)', 'ul.gw-mm li .gw-mmn', 'grid-column', '1/-1'], ['(max-width:760px)', 'ul.gw-mm li .gw-mmn', 'min-width', ''], ['(max-width:760px)', 'ul.gw-mm li', 'gap', '8px 12px'], ['(max-width:760px)', '.gw-mmvs', 'display', 'flex'], ['(max-width:760px)', '.gw-mmvs', 'margin', '6px 0 0'], ['(max-width:760px)', '.gw-mmvs', 'margin-left', '']],
+    "on a phone the NFL's geometry: 10px of page around the window, its bar 58px and 12px in, the body 12px in, the card 14px in": [['(max-width:760px)', '.gw-back', 'padding', '10px'], ['(max-width:760px)', '.gw-top', 'min-height', '58px'], ['(max-width:760px)', '.gw-top', 'padding', '0 12px'], ['(max-width:760px)', '.gw-body', 'padding', '12px 12px 38px'], ['(max-width:760px)', '.gw-card', 'padding', '14px 14px 16px']],
+    "on a phone a player's position line moves down whole beside a MISMATCH tag, never split (the NFL's .plrbtn .who span)": [['(max-width:760px)', '.pp-plr .who .pos', 'display', 'inline-block']] };
+  function holdLook(d) {
+    const R = rulesOf(d), out = {};
+    for (const [what, rows] of Object.entries(LOOK)) out[what] = rows.map(([m, sel, prop, want]) => { const got = declOf(R, m, sel, prop); return got === want ? null : `${m || 'all widths'} ${sel} ${prop}: "${got}" where "${want || 'none'}"`; }).filter(Boolean);
+    /* the window's whole phone layout at the NFL's 760px: no rule of it left at another width */
+    out["at 760px and under, the NFL's phone window: Team Stats' names dropped, the boxes 12px by 8px, a mismatch's rank on a row of its own (40px wide) and its clubs on a line of their own 6px under his name, 8px by 12px apart"]
+      .push(...R.filter(r => /\.gw-/.test(r.sel) && r.media && !['(max-width:760px)', '(max-width:340px)'].includes(r.media)).map(r => `${r.sel} at ${r.media}, not the NFL's 760px`));
+    const root = R.filter(r => r.media === '' && r.sel === ':root').map(r => r.style.getPropertyValue('--pb-q').trim()).filter(Boolean).pop();
+    if (root !== '#B3B9CB') out[Object.keys(LOOK)[1]].push(`--pb-q is "${root}" where #B3B9CB`);
+    return out;
+  }
   const WORDS = /\bedges?\b|\bvalue\b|model says/i;
   const wordsIn = el => [txt(el), ...[...el.querySelectorAll('[title]')].map(x => x.title), el.title || ''].join(' | ');
 
@@ -256,28 +312,40 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   const G2 = game('LAL', 'GSW', { pace: 98, away: side('LAL', 3, 3), home: side('GSW', 3, 3) });
   const G3 = game('MIA', 'ORL', { away: side('MIA', 1, 2), home: side('ORL', -4, 6) });
   const G4 = { ...game('PHX', 'SAC', {}), model: null };
+  /* NYK at PHI: the Mismatches' small figures and the minutes bar. PHI's defence leaks rebounds a shade (ratio 1.0042,
+     "0.4% more") and threes; NYK's allows 0.2% more points, so PHI's three listed players have lifts of 0.016, 0.003 and
+     0.0004 (each at the decimals that show it, the last "under 0.001"); one NYK guard at 19.5 minutes (his row "20 min":
+     counted) and one at 19.4 ("19 min": left out) whose lift would put him second */
+  const G5 = game('NYK', 'PHI', { pace: 99, away: side('NYK', 2, 1), home: side('PHI', -1, 0) });
   const LAY = ['name', 'team', 'pos', 'min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'dd', 'td'];
   const VAR = { pts: [7.6017, 0.7213], reb: [1.6148, 0.9528], ast: [1.3344, 0.9826], tpm: [1.2473, 0.9867], stl: [1.1, 0.97], blk: [1.13, 1.01], pra: [10.65, 0.65], pr: [8.8, 0.7], pa: [8.7, 0.67], ar: [2.41, 0.83], sb: [1.19, 0.85] };
   const row = (name, team, pos, min, pts, reb, ast, tpm) => [name, team, pos, min, pts, reb, ast, tpm, 1, 0.5, 0.1, 0.01];
   /* BOS's players face DET's defence and DET's face BOS's: eight qualify for a lift, so the top five cut three; two of
-     them alike to the digit (ranked by id); one at 19.9 minutes and one out, each with a lift that would put him in the
-     top five were he counted; one whose every lift is below zero */
+     them alike to the digit (ranked by id); one at 19.4 minutes (his row "19 min") and one out, each with a lift that
+     would put him in the top five were he counted; one whose every lift is below zero */
   const PLAYERS = {
     '9300001': row('Bos Star', 'BOS', 'F', 36, 27.4, 8.1, 4.6, 3.1), '9300002': row('Bos Guard', 'BOS', 'G', 33, 18.2, 3.9, 7.4, 2.6),
     '9300003': row('Bos Center', 'BOS', 'C', 29, 12.5, 10.6, 2.1, 0.2), '9300004': row('Bos Twin B', 'BOS', 'G', 24, 9.3, 2.8, 3.1, 2.9),
-    '9300005': row('Bos Twin A', 'BOS', 'G', 24, 9.3, 2.8, 3.1, 2.9), '9300006': row('Bos Bench', 'BOS', 'F', 19.9, 8.8, 4.1, 1.2, 4.0),
+    '9300005': row('Bos Twin A', 'BOS', 'G', 24, 9.3, 2.8, 3.1, 2.9), '9300006': row('Bos Bench', 'BOS', 'F', 19.4, 8.8, 4.1, 1.2, 4.0),
     '9300007': row('Det Star', 'DET', 'G', 35, 24.9, 4.4, 8.6, 2.3), '9300008': row('Det Out', 'DET', 'F', 30, 15.5, 12, 2.5, 1.4),
     '9300009': row('Det Big', 'DET', 'C', 31, 14.1, 11.9, 2.8, 0.1), '9300010': row('Det Wing', 'DET', 'F', 27, 11.6, 4.8, 1.9, 2.4),
     '9300012': row('Det Shooter', 'DET', 'G', 22, 10.2, 0, 1.5, 2.2) };
   /* [ratio, mult, rank]: DET's defence (BOS's players) leaks points and threes; BOS's (DET's players) rebounds only */
   const tab = (pts, reb, ast, tpm) => Object.fromEntries([['pts', pts], ['reb', reb], ['ast', ast], ['tpm', tpm], ['stl', [1, 1, 15]], ['blk', [1, 1, 15]]]);
   const OPP = { DET: tab([1.0612, 1.0612, 27], [1.0187, 1.014, 21], [0.9721, 0.9721, 6], [1.1048, 1.0777, 30]), BOS: tab([0.9531, 0.9531, 2], [1.0702, 1.0522, 28], [0.9902, 0.9902, 11], [0.998, 0.9985, 14]) };
+  const PLAYERS5 = { '9300021': row('Nyk Big', 'NYK', 'C', 30, 12, 11, 2, 0.3), '9300022': row('Nyk Bar', 'NYK', 'G', 19.5, 9, 2, 3, 3.0), '9300023': row('Nyk Under', 'NYK', 'G', 19.4, 9, 2, 3, 4.0),
+    '9300024': row('Phi Tiny', 'PHI', 'F', 28, 8, 3, 1, 0.5), '9300025': row('Phi Tinier', 'PHI', 'C', 21, 1.5, 6, 1, 0.1), '9300026': row('Phi Least', 'PHI', 'G', 20, 0.2, 1, 2, 0.1) };
+  const OPP5 = { PHI: tab([0.97, 0.97, 3], [1.0042, 1.0522, 25], [0.99, 0.99, 8], [1.06, 1.045, 27]), NYK: tab([1.002, 1.002, 18], [0.99, 0.99, 11], [0.98, 0.98, 4], [0.995, 0.995, 10]) };
+  /* the published players with some of the made-up ones rated: Bos Star a Master and Det Big a Silver, Nyk Big a Platinum,
+     Bos Guard rated but not ranked; the rest not on the ladder */
+  const rated = (id, name, team, rating, ranked = true) => ({ id, name, pos: 'G', team, o: 0, d: 0, min: 30, games: 100, prior: 'raptor', rating, ranked, d7: 0 });
+  const PLAYERS_RATED = [rated('9300001', 'Bos Star', 'BOS', 1662), rated('9300009', 'Det Big', 'DET', 1488), rated('9300021', 'Nyk Big', 'NYK', 1555), rated('9300002', 'Bos Guard', 'BOS', 1530, false)];
   const LEDGER_FAIL = { registered: '2026-10-15T11:35Z', bar: { lines: 30000 }, decision: { verdict: 'FAIL', decidedAt: '2026-11-05T19:16Z', lines: 12298, games: 121, scores: { logloss_diff: 0.018, brier_diff: 0.008 }, flat: { all: { bets: 900, units: -223 } }, early: { at: '2026-11-05T19:16Z', by: 'the owner', why: 'test' } },
     summary: { standing: '', gradedGames: 121, lines: 12298, voids: 0, scores: null, flat: null, toCome: 0 } };
   const props = (decision = true) => ({ onTrial: true, build: 'test', asOf: D1, fitSeasons: '2023-2026', horizonGameDays: 5, minShown: 8, stats: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'],
     combos: { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] }, layout: LAY, oppCols: ['ratio', 'mult', 'rank'], dist: { kind: 'negative binomial', var: VAR }, fair: require('./props').FAIR,
     ledger: decision ? clone(LEDGER_FAIL) : { ...clone(LEDGER_FAIL), decision: null }, research: null,
-    games: { [G.id]: { tip: G.tip, away: 'BOS', home: 'DET', players: clone(PLAYERS), opp: clone(OPP) }, [G2.id]: { tip: G2.tip, away: 'LAL', home: 'GSW', players: { '9300011': row('Lal Guard', 'LAL', 'G', 34, 22, 4, 6, 2.5) } } } });
+    games: { [G.id]: { tip: G.tip, away: 'BOS', home: 'DET', players: clone(PLAYERS), opp: clone(OPP) }, [G5.id]: { tip: G5.tip, away: 'NYK', home: 'PHI', players: clone(PLAYERS5), opp: clone(OPP5) }, [G2.id]: { tip: G2.tip, away: 'LAL', home: 'GSW', players: { '9300011': row('Lal Guard', 'LAL', 'G', 34, 22, 4, 6, 2.5) } } } });
   /* the job's team stats: BOS and DET with level values (no mark), every kind of row; LAL alone of its game */
   const tsRow = vals => Object.fromEntries(TS.map(([k], i) => [k, vals[i]]));
   const TSTATS = { v: 1, season: SEASON, through: addDay(D1, -2), games: 120, clubs: {
@@ -289,13 +357,13 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   const TEAMS0 = clone(REAL.teams), first = Object.keys(TEAMS0).find(t => !['BOS', 'DET', 'LAL', 'GSW', 'MIA', 'ORL'].includes(t));
   Object.assign(TEAMS0.BOS, { offence: TEAMS0[first].offence, defence: 4.2, pace: 99.9 }); Object.assign(TEAMS0.DET, { offence: 5.2, defence: 8.1, pace: 103.2 });
   Object.assign(TEAMS0.LAL, { offence: -45.5, defence: -1, pace: 97.4 }); Object.assign(TEAMS0.GSW, { offence: 3.4, defence: 2.6, pace: 101.1 });
-  const ST = (o = {}) => ({ ...clone(REAL), today: etDate(now), generated: new Date(now - 3 * H).toISOString().slice(0, 16) + 'Z', injuriesAsOf: etDate(now), slate: [G, G2, G3, G4].map(clone), props: props(true), teamStats: clone(TSTATS), teams: clone(TEAMS0), ...o });
+  const ST = (o = {}) => ({ ...clone(REAL), today: etDate(now), generated: new Date(now - 3 * H).toISOString().slice(0, 16) + 'Z', injuriesAsOf: etDate(now), slate: [G, G2, G3, G4, G5].map(clone), props: props(true), teamStats: clone(TSTATS), teams: clone(TEAMS0), players: [...clone(REAL.players || []), ...clone(PLAYERS_RATED)], ...o });
 
   {
     const st = ST(), own = mmOwn(st, G);
     const qual = mmOwn(st, G, 99);
     check(own.length === 5 && own.some(v => v.pid === '9300004') && own.findIndex(v => v.pid === '9300004') + 1 === own.findIndex(v => v.pid === '9300005') && !own.some(v => ['9300006', '9300008', '9300012', '9300003', '9300010', '9300007'].includes(v.pid)) && qual.length === 8,
-      `gw: the made-up game's top five of the ${qual.length} with a lift are worked here (${own.map(v => `${v.name} ${v.k} ${v.sz}`).join(', ')}): the twins in id order, three who have one cut, the bench player under 20 minutes, the player out and the one with no lift left out`);
+      `gw: the made-up game's top five of the ${qual.length} with a lift are worked here (${own.map(v => `${v.name} ${v.k} ${v.sz}`).join(', ')}): the twins in id order, three who have one cut, the bench player at 19.4 minutes ("19 min"), the player out and the one with no lift left out`);
     const { w, d, errors, requests } = load(st);
     await sleep(350);
     check(await openView(w, G), 'gw: the made-up game\'s Player props view opens from its card');
@@ -306,6 +374,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     check(!!grp && grp.matches('div.gwin[role="group"][aria-label="More on this game"]') && bs.map(b => `${b.dataset.gpPop}:${txt(b)}`).join() === 'units:Matchup,mism:Mismatches,stats:Team Stats'
       && bs.every(b => b.matches('button.btn.quiet.gwin-btn[type="button"][aria-haspopup="dialog"]') && b.dataset.gpGame === G.id),
       `gw: under the game's head card, the NFL's three buttons, Matchup, Mismatches and Team Stats, each opening a dialog (${grp ? grp.outerHTML.slice(0, 160) : 'none'})`);
+    for (const [what, bad] of Object.entries(holdLook(d))) check(!bad.length, `gw: ${what}${bad.length ? ': ' + bad.join('; ') : ''}`);
     const css = [...d.querySelectorAll('style')].map(s => s.textContent).join('\n');
     check(/\.gwin \.gwin-btn\{min-height:44px/.test(css) && /\.gw-close\{[^}]*min-height:44px/.test(css), 'gw: the three buttons and the window\'s Close are 44px tall');
     /* Team Stats */
@@ -315,7 +384,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
       && txt(d.getElementById('gwSub')) === `Team Stats · ${dayNm(D1)}, ${dayNo(D1)}` && txt(d.getElementById('gwTm')) === 'BOSatDET' && d.activeElement === d.getElementById('gwClose'),
       `gw: Team Stats opens a dialog labelled "${txt(d.getElementById('gwSub'))}" and "${txt(d.getElementById('gwTm'))}", the focus on its Close`);
     let bad = holdStats(d, G, st.teamStats, 'made-up');
-    check(!bad.length, `gw: Team Stats states every value, rank, mark, bar, the count and the foot as the job's stats give them${bad.length ? ': ' + bad.slice(0, 6).join('; ') : ''}`);
+    check(!bad.length, `gw: Team Stats states every value, rank, mark, bar, the count and the foot as the job's stats give them, and a screen reader hears each value's club, its rank and the better side${bad.length ? ': ' + bad.slice(0, 6).join('; ') : ''}`);
     check(['pace'].every(k => !d.querySelector(`[data-gw-srow="${k}"] .gw-better`)) && !d.querySelector('[data-gw-srow="stl"] .gw-better'), 'gw: pace marks neither side, nor does a level row (steals 8.1 and 8.1)');
     /* Escape: the window closes, the view stays, the focus back on its button */
     key(w, d.getElementById('gwClose'), 'Escape');
@@ -323,7 +392,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     /* Matchup */
     b = await press(w, 'units');
     bad = holdUnits(d, G, st.teams, 'made-up BOS at DET');
-    check(!bad.length, `gw: Matchup states each side with the ball, its ratings, the Teams tab's ranks and figures, the tint and the pace as worked here${bad.length ? ': ' + bad.slice(0, 6).join('; ') : ''}`);
+    check(!bad.length, `gw: Matchup states each side with the ball ("Celtics Possession"), its ratings, the Teams tab's ranks and figures, the tint (said to a screen reader too) and the pace as worked here${bad.length ? ': ' + bad.slice(0, 6).join('; ') : ''}`);
     check(txt(d.getElementById('gwSub')) === `Matchup · ${dayNm(D1)}, ${dayNo(D1)}`, 'gw: the Matchup window is so named');
     /* the keys: Tab and Shift+Tab kept inside (Close the only control), the sheet itself sending Tab to it */
     const tab1 = key(w, d.getElementById('gwClose'), 'Tab'), tab2 = key(w, d.getElementById('gwClose'), 'Tab', true);
@@ -334,10 +403,18 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     const stillOpen = gwOpen(w);
     d.getElementById('gwBack').dispatchEvent(new w.MouseEvent('click', { bubbles: true })); await sleep(5);
     check(stillOpen && !gwOpen(w) && !d.getElementById('ppBack').hidden && d.activeElement === b, 'gw: a click inside leaves the window open; a click outside closes it, the focus back on Matchup');
+    /* a press that begins inside the window and ends on the backdrop (a selection dragged past the window's edge, which the
+       browser ends in a click on the backdrop) is no click outside; a press and click on the backdrop is */
+    b = await press(w, 'units');
+    const pdown = el => el.dispatchEvent(new w.MouseEvent('pointerdown', { bubbles: true })), clickBack = () => d.getElementById('gwBack').dispatchEvent(new w.MouseEvent('click', { bubbles: true }));
+    pdown(d.querySelector('#gwBody .gw-uhd')); clickBack(); await sleep(5);
+    const dragKept = gwOpen(w);
+    pdown(d.getElementById('gwBack')); clickBack(); await sleep(5);
+    check(dragKept && !gwOpen(w) && !d.getElementById('ppBack').hidden && d.activeElement === b, `gw: a press inside the window let go on the backdrop leaves it open (${dragKept}); a press and click on the backdrop closes it, the focus back on Matchup`);
     /* Mismatches */
     b = await press(w, 'mism');
     bad = holdMism(d, own, 'made-up');
-    check(!bad.length, `gw: Mismatches lists the game's top five as worked here, each row's numbers and words, the failed model's note${bad.length ? ': ' + bad.slice(0, 6).join('; ') : ''}`);
+    check(!bad.length, `gw: Mismatches lists the game's top five as worked here, each row's numbers and words, his season shield before his name where the players rank him (Bos Star's Master, Det Big's Silver; Bos Guard, rated but not ranked, none), the failed model's note${bad.length ? ': ' + bad.slice(0, 6).join('; ') : ''}`);
     check(!WORDS.test(wordsIn(sheet)), `gw: no word of edge, value or model says in the window, its titles included (${(wordsIn(sheet).match(WORDS) || [''])[0]})`);
     /* Close, the focus back */
     d.getElementById('gwClose').click(); await sleep(5);
@@ -398,7 +475,27 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     check(await openView(w, G4), 'gw: PHX at SAC\'s view opens');
     await press(w, 'units');
     check(txt(body()) === 'The board model has no ratings for this game\'s lineups yet.', `gw: a game with no board numbers says so (${txt(body())})`);
+    d.getElementById('gwClose').click(); w.propsClose(); await sleep(10);
+    /* NYK at PHI: the minutes bar on the minutes his row shows, and the small figures at the decimals that show them,
+       worked by hand: Nyk Big's rebounds 11 - 11/1.0522 = 0.546 over sqrt(1.6148 x 11^0.9528) = 3.98, +0.14; Nyk Bar's
+       threes 3 - 3/1.045 = 0.129 over 1.92, +0.07; Phi Tiny's points 8 - 8/1.002 = 0.016 ("+0.02") over 5.84, 0.0027
+       ("+0.003"); Phi Tinier's 1.5 - 1.5/1.002 = 0.0030 ("+0.003") over 3.19, 0.00094 ("+0.001"); Phi Least's 0.2 -
+       0.2/1.002 = 0.0004 ("under 0.001") over 1.54, 0.00026 ("<0.001"). Nyk Under's threes, 4 - 4/1.045 = 0.172 over 2.21,
+       +0.08, would be second, but his row shows 19 minutes */
+    const own5 = mmOwn(st, G5);
+    const hand5 = 'Nyk Big reb +0.5 +0.14 0.4% more rebounds|Nyk Bar tpm +0.1 +0.07 6% more threes|Phi Tiny pts +0.02 +0.003 0.2% more points|Phi Tinier pts +0.003 +0.001 0.2% more points|Phi Least pts under 0.001 <0.001 0.2% more points';
+    const got5 = own5.map(v => `${v.name} ${v.k} ${(/\(([^)]*) from the matchup/.exec(v.sub) || [])[1]} ${v.sz} ${(/allows ([\d.]+% \w+ \w+)/.exec(v.sub) || [])[1]}`).join('|');
+    check(got5 === hand5, `gw: this file's reading of NYK at PHI is the figures worked by hand (${got5})`);
+    check(await openView(w, G5), 'gw: NYK at PHI\'s view opens');
+    const posOf = pid => txt(d.querySelector(`#ppBody .pp-plr[data-pp-player="${pid}"] .who .pos`));
+    check(posOf('9300022') === 'G · 20 min' && posOf('9300023') === 'G · 19 min', `gw: the two guards' rows show "${posOf('9300022')}" and "${posOf('9300023')}"`);
+    await press(w, 'mism');
+    let bad5 = holdMism(d, own5, 'NYK at PHI');
+    const li5 = [...body().querySelectorAll('ul.gw-mm > li')].map(li => li.dataset.gwMm);
+    check(!bad5.length && li5.includes('9300022') && !li5.includes('9300023'), `gw: Mismatches counts the guard whose row shows 20 minutes (19.5) and leaves out the one whose row shows 19 (19.4), lists each small lift and spread at the decimals that show it ("+0.02", "+0.003", "under 0.001"), never "+0.0", and the 0.4% a shade over average${bad5.length ? ': ' + bad5.slice(0, 6).join('; ') : ''}`);
     d.getElementById('gwClose').click();
+    bad5 = holdTags(d, own5, 'NYK at PHI tags');
+    check(!bad5.length, `gw: NYK at PHI's five wear MISMATCH, titled with the same figures${bad5.length ? ': ' + bad5.slice(0, 4).join('; ') : ''}`);
     check(errors.length === 0, 'gw: no script errors: ' + errors.join(' | '));
   }
   /* before the job's next run: no teamStats, no oppCols or opp, and the model on trial (its note says so) */

@@ -694,7 +694,11 @@ async function playerProps() {
     check(swB.checked && pos.length > 0 && !pos.some(t => /backup/.test(t)), `a game the props model has not projected: Include backups shows its lineups and rated players, and marks none a backup, the starters among them (${pos.length})`); }
   swB.click(); await sleep(20);
   w.eval(`S.slate.find(g => g.id === ${JSON.stringify(p3.id)}).line = ${JSON.stringify(p3.line)}`);
-  sheet().click(); await sleep(20);
+  /* a press that begins on the sheet and is let go on the backdrop (a selection dragged past its edge, which the browser
+     ends in a click on the backdrop) is no click outside: the view stays open */
+  d.getElementById('ppTitle').dispatchEvent(new w.MouseEvent('pointerdown', { bubbles: true })); sheet().click(); await sleep(20);
+  check(!sheet().hidden, 'a press on the sheet let go on the backdrop does not close the view');
+  sheet().dispatchEvent(new w.MouseEvent('pointerdown', { bubbles: true })); sheet().click(); await sleep(20);
   check(sheet().hidden, 'a click outside the sheet closes it');
   d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(30);
   check(d.getElementById('pbPanel') && !d.querySelector('#pbPanel .pb-trial') && !/Tatum|Cunningham|Lal Guard/.test(d.getElementById('pbPanel').textContent), "before a press (no lines.json is served here) the Parlay Builder's Top 50 lines have no player line");

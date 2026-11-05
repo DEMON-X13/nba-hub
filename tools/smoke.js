@@ -18,7 +18,8 @@
  * press (by ESPN's ids, only games still to come, two pages, a 404, junk, a refusal, a game that tips during its read),
  * every line, rung and Yes price the sheet shows worked out here on its own, the model on trial (its lines reaching the
  * Parlay Builder's Top 50 lines marked so),
- * nothing read before a press, nothing stored, a reload, the shadow ledger's running numbers, and the page's copies of
+ * nothing read before a press, nothing stored, a reload, the shadow ledger's running numbers (and the early stop's FAIL,
+ * said from made-up decisions' own numbers), and the page's copies of
  * tools/props_feed.js and tools/props.js held to their text and results. Section 10 is the rating over time (publish.js
  * THE HISTORY): history.json worked out here on its own from players.json and the published ladders (every point, the
  * changes over 7 and 30 days and this season, today's point the table's rating), the 7d columns, the window a name opens
@@ -397,7 +398,9 @@ async function playerProps() {
   check(real.props && real.props.games && real.props.layout && real.props.dist && real.props.dist.var && real.props.fair && real.props.ledger, "the published state carries the props model's block (games, layout, distribution, fair-chance rules, ledger)");
   /* the tests' own props block: the published distribution and ledger where there are, made-up projections for the two
      games (so the section holds on any morning's state, whichever games it projects), the fair-chance rules props.js
-     writes */
+     writes. Its ledger has no verdict whatever the published one says (the trial was stopped early as a FAIL on 5
+     November 2026, which takes every prop off the Top 50): the section holds the model on trial, and the ledger's own
+     cases below set each verdict themselves */
   const RP = real.props || {};
   const VAR0 = { pts: [7.2, 0.73], reb: [1.76, 0.88], ast: [1.3, 0.99], tpm: [1.23, 1.0], stl: [1.1, 0.98], blk: [1.25, 1.12], pra: [9.66, 0.67], pr: [8.17, 0.72], pa: [6.43, 0.78], ar: [2.7, 0.76], sb: [1.2, 0.97] };
   const LEDGER0 = { registered: '2026-10-15T11:35Z', bar: { lines: 30000 }, decision: null, summary: { standing: '', gradedGames: 0, lines: 0, voids: 0, scores: null, flat: null, toCome: 0 } };
@@ -428,7 +431,7 @@ async function playerProps() {
   const props8 = { onTrial: true, build: RP.build || '2026-10-15T09:09Z', asOf: RP.asOf || '2026-06-13', fitSeasons: RP.fitSeasons || '2023-2026', horizonGameDays: 5, minShown: 8,
     stats: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'], combos: { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] },
     layout: ['name', 'team', 'pos', 'min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'dd', 'td'], dist: { kind: 'negative binomial', var: RP.dist && RP.dist.var ? RP.dist.var : VAR0 },
-    fair: PJ.FAIR, ledger: RP.ledger || LEDGER0, research: RP.research || null };
+    fair: PJ.FAIR, ledger: RP.ledger ? { ...RP.ledger, decision: null } : LEDGER0, research: RP.research || null };
   props8.games = { [p1.id]: { tip: p1.tip, away: 'BOS', home: 'DET', players: JSON.parse(JSON.stringify(bosDet.players)) }, [p2.id]: { tip: p2.tip, away: 'LAL', home: 'GSW', players: lal } };
   const st8 = { ...state, generated: tipIn(-3600e3), injuriesAsOf: state.today, props: props8, slate: games.map(g => JSON.parse(JSON.stringify(g))) };
   /* the scoreboard: every game scheduled with the lines it was published with, p6 under way; its ids are ESPN's */
@@ -712,6 +715,19 @@ async function playerProps() {
   check(/decided on Nov 25 at 30,000 lines: FAIL\. It stays on trial and suggests nothing/.test(lt), `a FAIL is said, and the model stays on trial ("${lt.slice(-140)}")`);
   [lt] = await ledgerText(lgOf({ lines: 30000, gradedGames: 260, scores }, { verdict: 'PASS', decidedAt: '2026-11-25T12:00Z', lines: 30000 }));
   check(/PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial/.test(lt), 'a PASS moves nothing by itself: the model stays on trial');
+  /* the early stop (tools/props_ledger.js EARLY_STOP, the owner's call of 5 November 2026), on made-up decisions in the
+     shape publish.js writes: said plainly from the decision's own numbers, a FAIL that takes the model's chances out of
+     the Parlay Builder and Suggested Parlays */
+  const PLx = require('./props_ledger'), early = { at: PLx.EARLY_STOP.at, by: PLx.EARLY_STOP.by, why: PLx.EARLY_STOP.why };
+  const earlyOf = (lines, ll, br, units, bets) => ({ verdict: 'FAIL', decidedAt: '2026-11-05T18:30Z', lines, games: Math.round(lines / 100),
+    scores: { lines, logloss_diff: ll, brier_diff: br }, flat: { edge: 0.03, all: { bets, won: Math.round(bets / 2), units } }, early });
+  [lt] = await ledgerText(lgOf({ lines: 12298, gradedGames: 121, scores: { ...scores, lines: 12298 } }, earlyOf(12298, 0.018439, 0.008278, -222.81, 6027)));
+  check(lt.includes("Stopped early on 5 November 2026, the owner's call, at 12,298 graded lines: behind DraftKings on both scores and its flat bets down 223 units. FAIL: its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested Parlays, and its calls have stopped; the projections stay for reference. So far on 12,298 lines,") && !/decided on|stays on trial and suggests nothing|PASS|\bpass/.test(lt),
+    `an early stop is said plainly, from its decision ("${lt.slice(lt.indexOf('Stopped'), lt.indexOf('Stopped') + 240)}")`);
+  [lt] = await ledgerText(lgOf({ lines: 4567, gradedGames: 45, scores: { ...scores, lines: 4567 } }, earlyOf(4567, 0.0042, -0.0011, 12.4, 300)));
+  check(lt.includes("Stopped early on 5 November 2026, the owner's call, at 4,567 graded lines: behind DraftKings on log loss and its flat bets up 12 units. FAIL:"), `and its words follow the decision's numbers, not the real ones ("${lt.slice(lt.indexOf('Stopped'), lt.indexOf('Stopped') + 130)}")`);
+  [lt] = await ledgerText(lgOf({ lines: 4567, gradedGames: 45, scores: { ...scores, lines: 4567 } }, earlyOf(4567, -0.0042, 0.0011, 0, 0)));
+  check(lt.includes('at 4,567 graded lines: behind DraftKings on Brier and no flat bets at its edge. FAIL:'), 'one score behind and no bet at the edge are said so');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 
   /* the real published state: every game's sheet draws */

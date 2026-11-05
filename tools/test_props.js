@@ -15,9 +15,21 @@
  *    has out projected
  * 4. the ledger: the bar on record before the first call; a call made, rewritten before tip-off, frozen at it and never
  *    moved after; graded against the closing lines and the box score as worked out here on their own; the check clean
- *    on each honest run and failing on each planted change
+ *    on each honest run and failing on each planted change, the run's own stamps among them (a time new since the last
+ *    commit not the run's, one after the run, the run after the check's clock, back from the last commit's, or a ledger
+ *    the run changed on another clock than the check's)
  * 5. the bar on made-up lines: no verdict one short; PASS; FAIL level, FAIL with no bets, FAIL with the bets down, FAIL
  *    when only one score's interval is below 0; the calls stopping after a FAIL
+ * 6. the early stop (props_ledger.EARLY_STOP, the owner's call of 5 November 2026), on made-up games either side of its
+ *    time: no decision before it; the first run at it a FAIL on every line graded by then, its numbers worked out here
+ *    on their own and the bar's functions' on exactly those lines; the calls stopping, a frozen call graded after it,
+ *    the decision never revisited; never a PASS, nothing once a decision is made or the bar's sample is in; the check
+ *    clean on each honest run and refusing a tampered early decision (its early, a PASS, its numbers, its time, more or
+ *    fewer lines than were graded, none written, a grade of its own stamped out of it, a run dated back past what it
+ *    graded or before the stop to keep calling, a call left open, no line at all); the job handing props.js and its check
+ *    one clock, and a tip-off between two clocks judged on it; with no earlier ledger, the stop read off the ledger's run
+ *    time and a decision of an earlier run passing; the stop ending this trial alone (a new trial's ledger calling on
+ *    through it, an early decision planted on it refused) and never on no line
  */
 'use strict';
 const fs = require('fs'), path = require('path'), os = require('os');
@@ -199,7 +211,13 @@ function sfOwn(k, mu, v) {
     check(Object.entries(ps.games).every(([gid, g]) => onSlate.has(gid) && onSlate.get(gid).status === 'scheduled' && !(g.tip && g.tip <= nowIso) && Object.values(g.players).every(a => a.length === ps.layout.length && [g.away, g.home].includes(a[1]))),
       'only the slate\'s games not yet started, each player on one of its two sides');
     check(!firstProps || (!ps.games[firstProps] && (Object.keys(pj.upcoming).length === 1 || Object.keys(ps.games).length > 0)), 'a game that has tipped since the job\'s run is left out');
-    check(ps.ledger && ps.ledger.bar.lines === PL.BAR.lines && !(ps.ledger.decision) && !/pass/i.test(ps.ledger.summary.standing), 'the ledger\'s running numbers, no verdict and no word of passing before the bar is judged');
+    /* before the bar is judged no verdict; the one verdict that can come before it is the early stop's FAIL (the owner's call
+       of 5 November 2026), carried with its early, its lines and its numbers as the ledger wrote them */
+    { const dec = ps.ledger && ps.ledger.decision, lgR = JSON.parse(fs.readFileSync(path.join(REAL, 'props_shadow.json'), 'utf8')), D = lgR.decision;
+      const carried = !dec ? !D : !!D && dec.verdict === 'FAIL' && JSON.stringify(dec.early) === JSON.stringify({ at: PL.EARLY_STOP.at, by: PL.EARLY_STOP.by, why: PL.EARLY_STOP.why }) && JSON.stringify(dec.early) === JSON.stringify(D.early)
+        && dec.decidedAt === D.decided_at && dec.lines === D.lines && dec.lines < PL.BAR.lines && dec.games === D.games && JSON.stringify(dec.scores) === JSON.stringify(D.scores) && JSON.stringify(dec.flat) === JSON.stringify(D.flat);
+      check(ps.ledger && ps.ledger.bar.lines === PL.BAR.lines && !/pass/i.test(ps.ledger.summary.standing) && carried,
+        dec ? `the ledger's verdict is the early stop's FAIL, at ${dec.lines} lines on ${dec.decidedAt}, carried with its early and its numbers, and no word of passing` : "the ledger's running numbers, no verdict and no word of passing before the bar is judged"); }
     check(ps.fair && ps.fair.rung && PM.STATS.filter(k => k !== 'stl' && k !== 'blk').every(k => ps.fair.rung.a[k] > 0) && ps.fair.yes.a.dd > 0 && ps.fair.yes.a.td > 0, 'the measured fair-chance constants for rungs and Yes markets');
     /* the page prices a line on state.props; the ledger freezes its own copy: every number the page reads, the combos
        worked the page's way, is the open call's, to the digit */
@@ -286,6 +304,7 @@ function sfOwn(k, mu, v) {
     const lineText = () => fs.existsSync(PL.LINES()) ? fs.readFileSync(PL.LINES(), 'utf8') : '';
     const runAt = (t, u) => PL.run({ upcoming: u, params, games, now: T(t), boxes, log: quiet });
     const checkAt = (t, prev) => PC.check({ Lg: PL.readLedger(), lineText: lineText(), prev, games, boxes, now: T(t) });
+    const clean4 = (b, m) => check(!b.length, m + (b.length ? ': ' + b.join('; ') : ''));
 
     /* the bar on record first */
     const Lg0 = PL.newLedger(T('2026-10-15T09:00:00Z')); Lg0.summary = PL.summarize(Lg0, [], { by: new Map(), reads: {} }); fs.writeFileSync(PL.LEDGER(), PL.stringify(Lg0));
@@ -316,7 +335,21 @@ function sfOwn(k, mu, v) {
       plant('a call open in the last commit frozen with a new call stamped after its tip-off', (c, Lx) => { c.players['101'][1] += 3; c.called_at = Lx.run_at; });
       /* the call open in the last commit, its tip passed, rewritten by this run as a delay would: a later tip, new numbers */
       plant('a call open in the last commit and past its tip-off, rewritten by the run with a later tip and new numbers', (c, Lx) => { c.frozen = false; c.frozen_at = null; c.tip = '2026-10-21T01:00Z'; c.called_at = Lx.run_at; c.players['101'][1] += 3; });
-      fs.writeFileSync(PL.LEDGER(), frozenText); }
+      fs.writeFileSync(PL.LEDGER(), frozenText);
+      /* the run's own time: every stamp new since the last commit is the run's, the run at or before the check's clock,
+         never back from the last commit's (the job hands props.js and its check one clock) */
+      const stamp = (what, fn, re) => { const Lx = JSON.parse(frozenText); fn(Lx); fs.writeFileSync(PL.LEDGER(), PL.stringify(Lx));
+        const b = checkAt('2026-10-20T23:45:00Z', prevOf(s2)); check(b.some(x => re.test(x)), `${what} fails the check${b.length ? ` ("${b.find(x => re.test(x)) || b[0]}")` : ' (it passed)'}`); };
+      stamp('a call frozen by this run stamped with another time (after its tip-off, before the run)', x => { x.calls[G1].frozen_at = '2026-10-20T23:40Z'; }, /frozen at 2026-10-20T23:40Z since the last commit, not at the time of the run that wrote the ledger \(2026-10-20T23:45Z\)/);
+      stamp('a call still to tip re-stamped with a time that is not the run\'s', x => { x.calls[G2].called_at = '2026-10-20T23:00Z'; }, /made at 2026-10-20T23:00Z since the last commit, not at the time of the run/);
+      stamp('a call stamped after the run that wrote the ledger', x => { x.calls[G1].frozen_at = '2026-10-20T23:50Z'; }, /frozen at 2026-10-20T23:50Z, after the run that wrote the ledger/);
+      stamp('a fit new since the last commit registered at another time than the run\'s', x => { x.fits.f0f0f0f0f0f0 = { var: params.var, rho: 0.3, registered: '2026-10-20T23:00Z' }; }, /fit f0f0f0f0f0f0: new since the last commit, registered at 2026-10-20T23:00Z, not at the time of the run/);
+      stamp('a fit registered after the run that wrote the ledger', x => { x.fits.f0f0f0f0f0f0 = { var: params.var, rho: 0.3, registered: '2026-10-20T23:50Z' }; }, /fit f0f0f0f0f0f0: registered at 2026-10-20T23:50Z, after the run that wrote the ledger/);
+      stamp('the ledger dated after the check\'s clock', x => { x.run_at = '2026-10-20T23:50Z'; }, /written at 2026-10-20T23:50Z, after this check's clock/);
+      stamp('the ledger dated back past the last commit\'s run', x => { x.run_at = '2026-10-20T11:00Z'; x.calls[G1].frozen_at = x.run_at; }, /run time went back, to 2026-10-20T11:00Z from the last commit's 2026-10-20T12:00Z/);
+      stamp('a ledger this run changed, dated a minute before the check\'s clock', x => { x.run_at = '2026-10-20T23:44Z'; x.calls[G1].frozen_at = x.run_at; }, /changed by a run at 2026-10-20T23:44Z, not at this check's clock \(2026-10-20T23:45Z\)/);
+      fs.writeFileSync(PL.LEDGER(), frozenText);
+      clean4(checkAt('2026-10-20T23:45:00Z', prevOf(s2)), 'and the honest freeze passes again'); }
     /* the final, its box score and its closing lines */
     games = games.map(g => g.game_id === G1 ? { ...g, status: 'final' } : g);
     let s3 = snap();
@@ -488,6 +521,219 @@ function sfOwn(k, mu, v) {
     const r = PL.run({ upcoming: { '2027_20261023_NYK_BOS': { tip: '2026-10-24T00:00Z', players: { NYK: [{ id: 'z', min: 30, mu: Object.fromEntries(PM.ALL.map(k => [k, 5])), dd: 0, td: 0 }] } } }, params: { var: Object.fromEntries(PM.ALL.map(k => [k, [1.4, 0.95]])), rho: 0.3 },
       games: [{ game_id: '2027_20261023_NYK_BOS', status: 'scheduled', tip: '2026-10-24T00:00Z' }], now: new Date('2026-10-22T12:00:00Z'), boxes: {}, log: quiet, write: false });
     check(!r.ledger.calls['2027_20261023_NYK_BOS'] && !Object.values(r.ledger.calls).some(c => !c.frozen), 'after a FAIL no new call is made and the open ones are dropped');
+  }
+
+  console.log('6. the early stop');
+  {
+    const T = s => new Date(s), E = PL.EARLY_STOP, ES = { at: E.at, by: E.by, why: E.why };
+    check(E.at === '2026-11-05T18:00:00Z' && E.by === 'the owner' && /FAIL/.test(E.why) && /behind DraftKings on both scores/.test(E.why) && !/\d/.test(E.why.replace('90%', '').replace('30,000', '')) && Date.parse(E.at) % 60000 === 0,
+      `the early stop is registered in the code: ${E.at}, ${E.by}, and why ("${E.why}", naming no count of lines: the decision's lines are the count), on a whole minute as the ledger writes its times`);
+    { const realReg = JSON.parse(fs.readFileSync(path.join(REAL, 'props_shadow.json'), 'utf8')).bar_registered;
+      check(E.bar_registered === '2026-10-15T11:35Z' && E.bar_registered === realReg && PL.stopsLedger({ bar_registered: realReg }) && !PL.stopsLedger({ bar_registered: '2026-11-20T12:00Z' }) && !PL.stopsLedger(null),
+        `it ends the one trial whose bar was registered at ${E.bar_registered}, the ledger the job keeps (registered ${realReg}), and no other`); }
+    /* the job hands props.js and its check one clock, as the calls and suggestions steps hand theirs */
+    { const wf = fs.readFileSync(path.resolve(__dirname, '..', '.github', 'workflows', 'update.yml'), 'utf8');
+      check(/\n\s*now=\$\(date -u \+%Y-%m-%dT%H:%M:%SZ\)\n\s*if ! NBA_NOW=\$now node tools\/props\.js;[^\n]*\n\s*if ! NBA_NOW=\$now node tools\/props_check\.js;/.test(wf) && (wf.match(/node tools\/props(_check)?\.js/g) || []).length === 2,
+        'the job runs props.js and its check on one clock (NBA_NOW, to the second), and nowhere else'); }
+    check(!PL.stopDue(T('2026-11-05T17:59:59.999Z')) && PL.stopDue(T(E.at)) && PL.stopDue(T('2026-11-20T00:00:00Z')), 'it is due from its time on, not a millisecond before');
+    const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-early-')), keep = [process.env.NBA_PROPS_LEDGER, process.env.NBA_PROPS_LINES];
+    process.env.NBA_PROPS_LEDGER = path.join(dir, 'props_shadow.json'); process.env.NBA_PROPS_LINES = path.join(dir, 'props_shadow_lines.csv');
+    const params = { var: Object.fromEntries(PM.ALL.map(k => [k, k === 'pts' ? [7.5, 0.72] : [1.4, 0.95]])), rho: 0.35 };
+    const mus = (pts, reb) => ({ pts, reb, ast: 4, tpm: 2, stl: 1, blk: 0.5, pra: pts + reb + 4, pr: pts + reb, pa: pts + 4, ar: reb + 4, sb: 1.5 });
+    const P = (id, min, pts, reb) => ({ id, name: id, pos: 'G', min, mu: mus(pts, reb), dd: 0.1, td: 0.01 });
+    const G5 = '2027_20261104_BOS_DET', G6 = '2027_20261105_NYK_MIA', G6b = '2027_20261105_CHI_ATL', G7 = '2027_20261106_GSW_LAL', G8 = '2027_20261107_DEN_PHX';
+    const gm = (id, date, tip, away, home, espn) => ({ game_id: id, season: 2027, date, type: 'REG', status: 'scheduled', tip, home, away, espn_id: espn });
+    let games = [gm(G5, '2026-11-04', '2026-11-04T23:30Z', 'BOS', 'DET', '601'), gm(G6, '2026-11-05', '2026-11-05T17:30Z', 'NYK', 'MIA', '602'), gm(G6b, '2026-11-05', '2026-11-05T17:45Z', 'CHI', 'ATL', '603'),
+      gm(G7, '2026-11-06', '2026-11-07T00:00Z', 'GSW', 'LAL', '604'), gm(G8, '2026-11-07', '2026-11-08T02:00Z', 'DEN', 'PHX', '605')];
+    const final = (...ids) => { games = games.map(g => ids.includes(g.game_id) ? { ...g, status: 'final' } : g); };
+    const upOf = g => ({ date: g.date, tip: g.tip, type: 'REG', away: g.away, home: g.home });
+    const UP = { [G5]: { BOS: [P('501', 34, 22, 6), P('502', 20, 9, 3)], DET: [P('503', 30, 16, 9), P('504', 12, 4, 2)] }, [G6]: { NYK: [P('601', 35, 29, 4), P('602', 18, 7, 2)], MIA: [P('603', 31, 13, 11)] },
+      [G6b]: { CHI: [P('701', 33, 18, 5)], ATL: [P('702', 34, 21, 6)] }, [G7]: { GSW: [P('801', 33, 25, 5)], LAL: [P('802', 35, 27, 8)] }, [G8]: { DEN: [P('901', 36, 28, 12)], PHX: [P('902', 34, 24, 4)] } };
+    const up = ids => Object.fromEntries(ids.map(id => [id, { ...upOf(games.find(g => g.game_id === id)), players: UP[id] }]));
+    const y = (pts, reb) => ({ pts, reb, ast: 3, tpm: 2, stl: 1, blk: 0 });
+    const boxes = { [G5]: { BOS: [{ id: '501', min: 35, dnp: false, y: y(25, 5) }, { id: '502', min: 18, dnp: false, y: y(8, 4) }], DET: [{ id: '503', min: 30, dnp: false, y: y(15, 9) }, { id: '504', min: 0, dnp: true, y: y(0, 0) }] },
+      [G6]: { NYK: [{ id: '601', min: 36, dnp: false, y: y(30, 3) }, { id: '602', min: 16, dnp: false, y: y(5, 2) }], MIA: [{ id: '603', min: 32, dnp: false, y: y(12, 12) }] },
+      [G6b]: { CHI: [{ id: '701', min: 33, dnp: false, y: y(18, 4) }], ATL: [{ id: '702', min: 34, dnp: false, y: y(20, 6) }] } };
+    const pages = { 601: page([item(1, '501', 23.5, '-118'), item(1, '501', 23.5, '-104'), item(3, '501', 5.5, '+115'), item(3, '501', 5.5, '-145'), item(1, '502', 8.5, '-110'), item(1, '502', 8.5, '-110'),
+        item(1, '503', 14.5, '-110'), item(1, '503', 14.5, '-110'), item(1, '504', 10.5, '-110'), item(1, '504', 10.5, '-110')]),
+      602: page([item(1, '601', 27.5, '-110'), item(1, '601', 27.5, '-110'), item(3, '603', 10.5, '+105'), item(3, '603', 10.5, '-125'), item(1, '602', 6.5, '-110'), item(1, '602', 6.5, '-110')]),
+      603: page([item(1, '701', 17.5, '-110'), item(1, '701', 17.5, '-110'), item(1, '702', 19.5, '-120'), item(1, '702', 19.5, '+100')]) };
+    const readClosing = (ids, t) => REC.recordClosing({ games: games.filter(g => ids.includes(g.game_id)), getJSON: async url => pages[url.match(/events\/(\d+)\//)[1]], now: () => T(t), log: quiet });
+    const recFiles = () => fs.readdirSync(tmp).filter(f => /^props_\d{4}\.csv$|^props_reads\.json$/.test(f));
+    const snapE = () => { const d = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-early-prev-'));
+      for (const f of ['props_shadow.json', 'props_shadow_lines.csv']) if (fs.existsSync(path.join(dir, f))) fs.copyFileSync(path.join(dir, f), path.join(d, f));
+      for (const f of recFiles()) fs.copyFileSync(path.join(tmp, f), path.join(d, f)); return d; };
+    const prevOf = d => { const get = n => fs.existsSync(path.join(d, n)) ? fs.readFileSync(path.join(d, n), 'utf8') : null; const rec = {}; for (const f of fs.readdirSync(d)) if (/^props_\d{4}\.csv$/.test(f)) rec[f] = get(f);
+      return get('props_shadow.json') ? { ledger: JSON.parse(get('props_shadow.json')), lines: get('props_shadow_lines.csv') || '', reads: JSON.parse(get('props_reads.json') || '{}'), record: rec } : null; };
+    const lineText = () => fs.existsSync(PL.LINES()) ? fs.readFileSync(PL.LINES(), 'utf8') : '';
+    const runAt = (t, ids) => PL.run({ upcoming: up(ids), params, games, now: T(t), boxes, log: quiet });
+    const checkAt = (t, prev, Lx = PL.readLedger(), lt = lineText()) => PC.check({ Lg: Lx, lineText: lt, prev, games, boxes, now: T(t) });
+    const clean = (b, m) => check(!b.length, m + (b.length ? ': ' + b.join('; ') : ''));
+
+    const Lg0 = PL.newLedger(T('2026-10-15T11:35:00Z')); Lg0.summary = PL.summarize(Lg0, [], { by: new Map(), reads: {} }); fs.writeFileSync(PL.LEDGER(), PL.stringify(Lg0));
+    let s = snapE();
+    runAt('2026-11-04T12:00:00Z', [G5, G6, G6b, G7]);
+    clean(checkAt('2026-11-04T12:00:00Z', prevOf(s)), 'the calls made the day before: the check is clean');
+    /* G5 final and read; graded before the stop */
+    final(G5); await readClosing([G5], '2026-11-05T09:00:00Z'); s = snapE();
+    runAt('2026-11-05T10:00:00Z', [G6, G6b, G7]);
+    let Lg = PL.readLedger();
+    check(Lg.calls[G5].graded && Lg.calls[G5].graded.lines === 4 && !Lg.decision && /^4 of 30000 graded lines toward the verdict/.test(Lg.summary.standing), 'a game graded before the stop: running numbers, no decision');
+    clean(checkAt('2026-11-05T10:00:00Z', prevOf(s)), 'and the check is clean');
+    /* the last run before the stop freezes the two early games: still no decision */
+    s = snapE();
+    runAt('2026-11-05T17:59:00Z', [G7]);
+    Lg = PL.readLedger();
+    check(Lg.calls[G6].frozen && Lg.calls[G6b].frozen && !Lg.decision && !Lg.calls[G7].frozen && Lg.run_at === '2026-11-05T17:59Z', 'a run a minute before the stop writes no decision (the games that tipped frozen, the next one still called)');
+    clean(checkAt('2026-11-05T17:59:00Z', prevOf(s)), 'and the check is clean');
+    /* the stop is read off the ledger's own run time: with no earlier ledger to hold it to, the run a minute before it
+       passes a check just after it; held to the last commit's, a check on another clock than the run's refuses it for that
+       alone (the job hands the two one clock), never for the stop */
+    clean(checkAt('2026-11-05T18:00:30Z', null), 'with no earlier ledger, the run at 17:59 passes a check at 18:00:30 (the stop read off the ledger\'s run time, not the check\'s clock)');
+    { const b = checkAt('2026-11-05T18:00:30Z', prevOf(s));
+      check(b.length === 1 && /changed by a run at 2026-11-05T17:59Z, not at this check's clock \(2026-11-05T18:00Z\)/.test(b[0]), `held to the last commit's, a check at 18:00:30 refuses the 17:59 run for its clock alone, not for the stop (${b.join('; ')})`); }
+    /* a tip-off between the run and its check: the run's clock 23:59:55 on 6 November, ${G7} tipping at 00:00 on the 7th;
+       the run writes the early FAIL (on the 4 lines graded) and drops ${G7}, still to tip by its clock. On the run's one
+       clock the check passes; on a clock ten seconds later it would take ${G7} as tipped and gone, which is why the job
+       hands the two one clock */
+    { const keepL = fs.readFileSync(PL.LEDGER(), 'utf8'), keepLn = lineText(), sT = snapE();
+      runAt('2026-11-06T23:59:55Z', [G7, G8]);
+      const Lt = PL.readLedger();
+      check(Lt.decision && Lt.decision.lines === 4 && Lt.decision.decided_at === '2026-11-06T23:59Z' && !Lt.calls[G7] && !Lt.calls[G8] && Lt.run_at === '2026-11-06T23:59Z',
+        `a run at 23:59:55 writes the early FAIL (${Lt.decision && Lt.decision.lines} lines) and drops ${G7}, which tips at 00:00`);
+      clean(checkAt('2026-11-06T23:59:55Z', prevOf(sT)), 'on the run\'s one clock the check passes');
+      const late = checkAt('2026-11-07T00:00:05Z', prevOf(sT));
+      check(late.some(x => new RegExp(`${G7}: a call frozen at tip-off \\(2026-11-07T00:00Z\\) is gone`).test(x)) && late.some(x => /not at this check's clock \(2026-11-07T00:00Z\)/.test(x)), `on a clock ten seconds later it refuses it (${late.join('; ')})`);
+      fs.writeFileSync(PL.LEDGER(), keepL); fs.writeFileSync(PL.LINES(), keepLn); }
+    /* the first run at the stop: G6 final and read in it, G6b final with its closing lines not read yet */
+    final(G6, G6b); await readClosing([G6], '2026-11-05T17:59:30Z');
+    const sPre = snapE();
+    runAt('2026-11-05T18:00:00Z', [G7, G8]);
+    Lg = PL.readLedger();
+    const D = Lg.decision, lines = PL.readLines();
+    /* the compared lines worked out here on their own: each graded line joined to its closing line in the record */
+    const recRows = new Map(REC.readRecord(2027).map(r => [r.game_id + '|' + r.player_id + '|' + r.stat, r]));
+    const own = lines.map(l => { const r = recRows.get(l.game_id + '|' + l.player_id + '|' + l.stat); return { game: l.game_id, stat: l.stat, pModel: l.p_model, pMarket: l.p_market, over: r.over, under: r.under, result: l.y > r.line ? 'over' : 'under' }; });
+    const impl = a => a < 0 ? -a / (-a + 100) : 100 / (a + 100), cl = p => Math.min(Math.max(p, 1e-6), 1 - 1e-6), avg = f => own.reduce((t, x) => t + f(x), 0) / own.length;
+    const ll = p => x => x.result === 'over' ? -Math.log(cl(p(x))) : -Math.log(1 - cl(p(x))), br = p => x => (p(x) - (x.result === 'over' ? 1 : 0)) ** 2;
+    const fl = { bets: 0, won: 0, units: 0 };
+    for (const x of own) { const eo = x.pModel - impl(x.over), eu = (1 - x.pModel) - impl(x.under), side = eo >= 0.03 && eo >= eu ? 'over' : eu >= 0.03 ? 'under' : null; if (!side) continue;
+      const pr = side === 'over' ? x.over : x.under; fl.bets++; if (x.result === side) { fl.won++; fl.units += pr > 0 ? pr / 100 : 100 / -pr; } else fl.units -= 1; }
+    const near = (a, b) => Math.abs(a - b) < 1.5e-6;
+    check(own.length === 7 && D && D.verdict === 'FAIL' && D.lines === 7 && D.decided_at === '2026-11-05T18:00Z' && D.games === 2 && D.last_game === G6 && JSON.stringify(D.early) === JSON.stringify(ES),
+      `the first run at the stop writes the decision: FAIL on all ${own.length} lines graded by then (this run's own game among them), ${D && D.games} games, the last ${D && D.last_game}, and early copied from EARLY_STOP`);
+    check(D && near(D.scores.model.logloss, avg(ll(x => x.pModel))) && near(D.scores.market.logloss, avg(ll(x => x.pMarket))) && near(D.scores.model.brier, avg(br(x => x.pModel))) && near(D.scores.market.brier, avg(br(x => x.pMarket)))
+      && near(D.scores.logloss_diff, avg(ll(x => x.pModel)) - avg(ll(x => x.pMarket))) && D.flat.all.bets === fl.bets && D.flat.all.won === fl.won && Math.abs(D.flat.all.units - Math.round(fl.units * 100) / 100) < 1e-9 && fl.bets > 0,
+      `its numbers are those lines', worked out here on their own (log loss ${D && D.scores.model.logloss} against ${D && D.scores.market.logloss}, Brier ${D && D.scores.model.brier} against ${D && D.scores.market.brier}, ${fl.bets} flat bets, ${D && D.flat.all.units} units)`);
+    check(D && JSON.stringify(D.scores) === JSON.stringify(PL.scores(own, PL.BAR)) && JSON.stringify(D.flat) === JSON.stringify(PL.flat(own, PL.BAR)) && Array.isArray(D.scores.logloss_diff_ci90),
+      "and exactly the bar's own functions' (scores, its bootstrap interval among them, and flat) on exactly those lines");
+    check(!Object.values(Lg.calls).some(c => !c.frozen) && !Lg.calls[G7] && !Lg.calls[G8] && Lg.calls[G6b].frozen && !Lg.calls[G6b].graded, 'the calls stop: the open call dropped, no new call made, the frozen call awaiting its closing lines kept');
+    check(/^decided at 7 lines on 2026-11-05T18:00Z: FAIL, stopped early by the owner before the 30000 the bar is judged at$/.test(Lg.summary.standing) && !/pass/i.test(Lg.summary.standing), `the summary's standing says so ("${Lg.summary.standing}")`);
+    clean(checkAt('2026-11-05T18:00:00Z', prevOf(sPre)), 'and the check is clean on the run that wrote it');
+    { const st = require('./publish').decisionState(D);
+      check(st.verdict === 'FAIL' && st.decidedAt === D.decided_at && st.lines === 7 && st.games === 2 && JSON.stringify(st.early) === JSON.stringify(ES) && JSON.stringify(st.scores) === JSON.stringify(D.scores) && JSON.stringify(st.flat) === JSON.stringify(D.flat),
+        "what state.json carries for the page (publish.js): the verdict, its time, lines and games, its scores and flat bets, and early as the code registered it"); }
+    /* every tamper with the early decision fails the check (the summary re-worked each time, so the decision alone is wrong) */
+    const good = { ledger: fs.readFileSync(PL.LEDGER(), 'utf8'), lines: lineText() };
+    const tamper = (what, fn, re, t = '2026-11-05T18:00:00Z') => { const Lx = JSON.parse(good.ledger); fn(Lx); Lx.summary = PL.summarize(Lx, PL.readLines(), PL.recordIndex([2027]));
+      const b = checkAt(t, prevOf(sPre), Lx, good.lines); check(b.some(x => re.test(x)), `${what} fails the check${b.length ? ` ("${b.find(x => re.test(x)) || b[0]}")` : ' (it passed)'}`); };
+    tamper('an early decision whose why is not the code\'s', x => { x.decision.early.why = 'the model was behind'; }, /not the early stop's/);
+    tamper('an early decision by someone else', x => { x.decision.early.by = 'the job'; }, /not the early stop's/);
+    tamper('an early decision at another time', x => { x.decision.early.at = '2026-11-04T18:00:00Z'; }, /not the early stop's/);
+    tamper('a decision short of the bar\'s sample with no early', x => { delete x.decision.early; }, /not the early stop's/);
+    tamper('an early PASS', x => { x.decision.verdict = 'PASS'; }, /can only be FAIL/);
+    tamper('its log loss edited', x => { x.decision.scores.logloss_diff = +(x.decision.scores.logloss_diff - 0.01).toFixed(6); }, /does not follow from the first 7/);
+    tamper('its interval edited', x => { x.decision.scores.brier_diff_ci90 = [-0.01, -0.001]; }, /does not follow from the first 7/);
+    tamper('its flat bets edited', x => { x.decision.flat.all.units = 5; }, /does not follow from the first 7/);
+    tamper('its game count edited', x => { x.decision.games = 1; }, /does not follow from the first 7/);
+    tamper('its last game edited', x => { x.decision.last_game = G5; }, /does not follow from the first 7/);
+    tamper('decided before the stop', x => { x.decision.decided_at = '2026-11-05T17:59Z'; }, /before its time/);
+    tamper('decided after the check\'s clock', x => { x.decision.decided_at = '2026-11-05T18:05Z'; }, /after this check's clock/);
+    tamper('on more lines than were graded', x => { x.decision.lines = 8; }, /more than the 7 graded and compared by/);
+    /* backdated: a run at 18:01 writing a decision dated 18:00 could leave out what it graded itself */
+    tamper('dated before the run that wrote it', x => { x.run_at = '2026-11-05T18:01Z'; }, /not the time of the run that wrote it \(2026-11-05T18:01Z\)/, '2026-11-05T18:01:00Z');
+    /* a cherry-picked earlier stop: the lines before this run's game, its numbers re-worked on them, still refused */
+    tamper('on fewer lines than were graded by then (the numbers re-worked on them)', x => { const r = PL.stopEarly(own.slice(0, 4), T('2026-11-05T18:00:00Z')); x.decision = r; }, /fewer than the 7 graded and compared by/);
+    tamper('no decision on a ledger written at the stop', x => { x.decision = null; }, /at or after the early stop .* no verdict was written/);
+    /* the run stamps its own work with its own time, and that time is the check's clock: a run cannot leave a grade of its
+       own out of the lines it decides on, date itself back past what it graded, or back before the stop to keep calling */
+    const shortOf = () => PL.stopEarly(own.slice(0, 4), T('2026-11-05T18:00:00Z'));
+    tamper('its own new grade stamped after the check\'s clock, the decision on the 4 lines before it', x => { x.calls[G6].graded.at = '2026-11-05T18:01Z'; x.decision = shortOf(); }, /graded at 2026-11-05T18:01Z, after the run that wrote the ledger/);
+    tamper('a run at 20:00 dated 18:00, its own grade left at 20:00, deciding on the 4 lines before it', x => { x.calls[G6].graded.at = '2026-11-05T20:00Z'; x.decision = shortOf(); }, /changed by a run at 2026-11-05T18:00Z, not at this check's clock \(2026-11-05T20:00Z\)/, '2026-11-05T20:00:00Z');
+    const keepCalling = (at, graded) => x => { const P0 = prevOf(sPre).ledger; x.decision = null; x.run_at = at; x.calls[G6].graded.at = graded;
+      for (const k of Object.keys(P0.calls)) if (!P0.calls[k].frozen) x.calls[k] = P0.calls[k]; };
+    tamper('a run at 18:05 dated 17:59 with no decision, its open calls kept', keepCalling('2026-11-05T17:59Z', '2026-11-05T17:59Z'), /changed by a run at 2026-11-05T17:59Z, not at this check's clock \(2026-11-05T18:05Z\)/, '2026-11-05T18:05:00Z');
+    tamper('a run on 6 November left at the last commit\'s run time with no decision', keepCalling('2026-11-05T17:59Z', '2026-11-05T17:59Z'), /not at this check's clock \(2026-11-06T10:00Z\)/, '2026-11-06T10:00:00Z');
+    tamper('the FAIL with a call still open', x => { const fid = Object.keys(x.fits)[0]; x.calls[G8] = PL.callOf(up([G8])[G8], fid, T('2026-11-05T18:00:00Z')); }, /a FAIL with 1 call not frozen .*the calls stop/);
+    { const Lx = JSON.parse(good.ledger); Lx.decision = PL.stopEarly(own, T('2026-11-05T18:03:00Z')); Lx.summary = PL.summarize(Lx, PL.readLines(), PL.recordIndex([2027]));
+      const b = checkAt('2026-11-05T18:05:00Z', null, Lx, good.lines);
+      check(b.some(x => /the early stop decided at 2026-11-05T18:03Z, after the run that wrote the ledger \(2026-11-05T18:00Z\)/.test(x)), `with no earlier ledger, a decision dated after the run that wrote the ledger (though before the check's clock) fails the check (${b.join('; ') || 'it passed'})`); }
+    tamper('an early decision on no graded line', x => { x.decision = { ...x.decision, lines: 0 }; }, /the early stop on 0 graded lines: it is never on none/);
+    { const Lx = JSON.parse(good.ledger); Lx.decision = PL.stopEarly(own.slice(0, 4), T('2026-11-05T18:00:00Z')); Lx.summary = PL.summarize(Lx, PL.readLines(), PL.recordIndex([2027]));
+      check(Lx.decision && Lx.decision.lines === 4 && JSON.stringify(Lx.decision.early) === JSON.stringify(ES) && Lx.decision.verdict === 'FAIL', '(the fewer-lines tamper is a well-formed early stop on its own 4 lines, so the line count alone refuses it)'); }
+    clean(checkAt('2026-11-05T18:00:00Z', prevOf(sPre)), 'and the honest files pass again');
+    /* a frozen call graded after the stop; the decision never revisited, the summary counting on */
+    await readClosing([G6b], '2026-11-06T09:00:00Z');
+    const sDec = snapE();
+    runAt('2026-11-06T10:00:00Z', [G7, G8]);
+    Lg = PL.readLedger();
+    check(Lg.calls[G6b].graded && Lg.calls[G6b].graded.lines === 2 && JSON.stringify(Lg.decision) === JSON.stringify(D) && Lg.summary.compared === 9 && Lg.summary.graded_games === 3 && !Lg.calls[G7] && !Lg.calls[G8],
+      `a call frozen before the stop is graded after it (${Lg.calls[G6b].graded && Lg.calls[G6b].graded.lines} lines), the decision as it was, the summary counting on (${Lg.summary.compared} lines), and still no call`);
+    clean(checkAt('2026-11-06T10:00:00Z', prevOf(sDec)), 'and the check is clean on the later run');
+    clean(checkAt('2026-11-06T10:00:00Z', null), 'and with no earlier ledger to hold it to (--no-prev), the decision made by an earlier run passes');
+    { const Lx = PL.readLedger(); Lx.decision = { ...Lx.decision, early: { ...Lx.decision.early, why: 'x' } }; Lx.summary = PL.summarize(Lx, PL.readLines(), PL.recordIndex([2027]));
+      check(checkAt('2026-11-06T10:00:00Z', prevOf(sDec), Lx).some(x => /differs from the last commit/.test(x)), 'the early decision changed after the commit that wrote it fails the check'); }
+    /* never a PASS; nothing once a decision is made or the bar's sample is in */
+    const R = () => { let a = 7; return () => { a = (a * 16807) % 2147483647; return a / 2147483647; }; };
+    const make = (n, f) => { const r = R(); const rows = []; for (let i = 0; i < n; i++) rows.push(f(i, r, 'g' + Math.floor(i / 120))); return rows; };
+    const sharp = (i, r, g) => { const p = i % 2 ? 0.3 : 0.7; return { game: g, stat: 'pts', pModel: p, pMarket: 0.5, over: -110, under: -110, result: r() < p ? 'over' : 'under' }; };
+    const after = T('2026-11-20T12:00:00Z'), sh = make(1200, sharp), es = PL.stopEarly(sh, after);
+    check(es && es.verdict === 'FAIL' && es.scores.logloss_diff_ci90[1] < 0 && es.scores.brier_diff_ci90[1] < 0 && es.flat.all.units > 0 && es.lines === 1200,
+      'never a PASS: on lines where the model beats the market on both scores and the bets are up, the early stop is still a FAIL');
+    check(PL.stopEarly(sh, T('2026-11-05T17:59:59Z')) === null, 'and before its time it writes nothing');
+    const full = make(PL.BAR.lines, sharp), dFull = PL.decide(full, after);
+    check(PL.stopEarly(full, after) === null && dFull.verdict === 'PASS' && !dFull.early && PL.stopEarly(make(PL.BAR.lines + 10, sharp), after) === null,
+      "with the bar's 30,000 in, the early stop does nothing: the bar's own decision stands (here a PASS)");
+    { const Lx = PL.readLedger(), made = { verdict: 'PASS', decided_at: '2026-10-30T18:00Z', lines: 30000 }; Lx.decision = made; fs.writeFileSync(PL.LEDGER(), PL.stringify(Lx));
+      const r = PL.run({ upcoming: up([G7, G8]), params, games, now: after, boxes, log: quiet, write: false });
+      check(JSON.stringify(r.ledger.decision) === JSON.stringify(made), 'a decision already made is kept by a run after the stop: the early stop writes nothing over it'); }
+    /* the stop ends this trial alone: a new trial's ledger, its bar registered since (a second props model's, say), calls
+       on through the stop, grades with no verdict, and the check is clean; an early decision planted on it is refused */
+    { const dir2 = fs.mkdtempSync(path.join(os.tmpdir(), 'nba-early-new-'));
+      process.env.NBA_PROPS_LEDGER = path.join(dir2, 'props_shadow.json'); process.env.NBA_PROPS_LINES = path.join(dir2, 'props_shadow_lines.csv');
+      const gl = st => games.map(g => ({ ...g, status: st.includes(g.game_id) ? 'final' : 'scheduled' }));
+      const prevNow = () => ({ ledger: PL.readLedger(), lines: lineText(), reads: JSON.parse(fs.readFileSync(path.join(tmp, 'props_reads.json'), 'utf8')),
+        record: Object.fromEntries(fs.readdirSync(tmp).filter(f => /^props_\d{4}\.csv$/.test(f)).map(f => [f, fs.readFileSync(path.join(tmp, f), 'utf8')])) });
+      const run2 = (t, ids, g2) => PL.run({ upcoming: up(ids), params, games: g2, now: T(t), boxes, log: quiet });
+      const ck2 = (t, prev, g2, Lx = PL.readLedger()) => PC.check({ Lg: Lx, lineText: lineText(), prev, games: g2, boxes, now: T(t) });
+      const N0 = PL.newLedger(T('2026-11-04T11:00:00Z')); N0.summary = PL.summarize(N0, [], { by: new Map(), reads: {} }); fs.writeFileSync(PL.LEDGER(), PL.stringify(N0));
+      let pv = prevNow();
+      run2('2026-11-04T12:00:00Z', [G5, G6, G6b, G7], gl([]));
+      clean(ck2('2026-11-04T12:00:00Z', pv, gl([])), 'a new trial\'s ledger (its bar registered 2026-11-04T11:00Z) makes its calls');
+      pv = prevNow();
+      run2('2026-11-05T19:00:00Z', [G7, G8], gl([G5]));
+      const N1 = PL.readLedger();
+      check(!PL.stopsLedger(N1) && !N1.decision && N1.calls[G5].graded && N1.calls[G5].graded.lines === 4 && N1.calls[G7] && !N1.calls[G7].frozen && N1.calls[G8] && N1.summary.compared === 4,
+        `after the stop's time it grades (${N1.calls[G5].graded && N1.calls[G5].graded.lines} lines), writes no verdict and calls on (${Object.values(N1.calls).filter(c => !c.frozen).length} calls open): the stop is not its own`);
+      clean(ck2('2026-11-05T19:00:00Z', pv, gl([G5])), 'and the check is clean, a line graded after the stop with no verdict');
+      { const Lx = PL.readLedger(), cmpN = PL.compared(PL.readLines(), PL.recordIndex([2027]));
+        Lx.decision = PL.stopEarly(cmpN, T('2026-11-05T19:00:00Z')); for (const k of Object.keys(Lx.calls)) if (!Lx.calls[k].frozen) delete Lx.calls[k];
+        Lx.summary = PL.summarize(Lx, PL.readLines(), PL.recordIndex([2027]));
+        const b = ck2('2026-11-05T19:00:00Z', pv, gl([G5]), Lx);
+        check(Lx.decision && Lx.decision.lines === 4 && b.some(x => /on a ledger the early stop does not end \(its bar registered at 2026-11-04T11:00Z; the stop ends the one registered at 2026-10-15T11:35Z\)/.test(x)),
+          `the early stop's FAIL planted on it is refused (${b.find(x => /does not end/.test(x)) || b.join('; ')})`); }
+      /* this trial's ledger with no line graded: the stop writes nothing on none, and the check asks for no verdict */
+      const Z0 = PL.newLedger(T('2026-10-15T11:35:00Z')); Z0.summary = PL.summarize(Z0, [], { by: new Map(), reads: {} }); fs.writeFileSync(PL.LEDGER(), PL.stringify(Z0)); fs.rmSync(PL.LINES(), { force: true });
+      pv = prevNow();
+      run2('2026-11-05T19:00:00Z', [G7, G8], gl([]));
+      const Z1 = PL.readLedger();
+      check(PL.stopsLedger(Z1) && !Z1.decision && Z1.calls[G7] && PL.stopEarly([], T('2026-11-20T12:00:00Z')) === null, 'on this trial\'s ledger with no line graded, the stop writes nothing (it is never on none) and the calls go on');
+      clean(ck2('2026-11-05T19:00:00Z', pv, gl([])), 'and the check asks for no verdict on none');
+      process.env.NBA_PROPS_LEDGER = path.join(dir, 'props_shadow.json'); process.env.NBA_PROPS_LINES = path.join(dir, 'props_shadow_lines.csv');
+      fs.rmSync(dir2, { recursive: true, force: true }); }
+    if (keep[0] === undefined) delete process.env.NBA_PROPS_LEDGER; else process.env.NBA_PROPS_LEDGER = keep[0];
+    if (keep[1] === undefined) delete process.env.NBA_PROPS_LINES; else process.env.NBA_PROPS_LINES = keep[1];
+    fs.rmSync(dir, { recursive: true, force: true });
   }
 
   fs.rmSync(tmp, { recursive: true, force: true });

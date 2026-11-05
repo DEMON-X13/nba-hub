@@ -807,6 +807,11 @@ Parlay Builder's Top 50 lines and Suggested Parlays' sets take a player's line w
 picks among them, each marked **on trial** beside its chance there, in the builder and on a level's card, whose chance
 reads "model (on trial)" (README "Parlay Builder", "Suggested Parlays"); a failed bar takes every prop off them. A DraftKings price in the view is also the control that puts that leg in the visitor's own
 parlay in the Parlay Builder, at DraftKings' price (the owner's go-ahead, 15 October 2026, README "Same-game parlays").
+**On 5 November 2026 the owner stopped the trial early as a FAIL** ("The early stop", under the shadow ledger below): at
+12,298 graded lines the model was behind DraftKings on both scores with its intervals wholly above zero and its flat bets
+down 223 units. The job's first run with the stop in its code, at or after 18:00 UTC that day, writes the FAIL into the
+ledger; from then its chances are out of the Parlay Builder's Top 50 lines and Suggested Parlays, its calls stop, and its
+projections stay in the Player props view for reference.
 
 ### DraftKings' props on ESPN's feed (`tools/props_feed.js`)
 
@@ -1008,17 +1013,90 @@ re-registration, only while the old bar has no call frozen or past its tip-off, 
   says "model says" or "edge" on one.
 - **A PASS** makes the model a candidate to be shown as more than on trial, by a change of its own; nothing moves by
   itself (`state.json` `props.onTrial` stays true).
-- **Before 30,000**: running numbers and how many are in, never a verdict or a word of passing.
+- **Before 30,000**: running numbers and how many are in, never a verdict or a word of passing, but for the one early
+  stop below.
 
-The check runs right after the job's props step and fails it (putting every props data file back as the last commit
-had it, and turning the run red) when the bar is not the registered one or the last commit's (but for a re-registration
+**The early stop** (`EARLY_STOP` in `props_ledger.js`, the owner's call of 5 November 2026). At 12,298 graded lines
+(121 games, the last 4 November) the model was behind DraftKings' fair chance on both scores with its 90% intervals
+wholly above zero, log loss +0.0184 [+0.0136, +0.0233] (0.7044 against 0.6860) and Brier +0.0083 [+0.0060, +0.0105]
+(0.2547 against 0.2465), and its flat bets at the 3-point edge were down 222.81 units on 6,027 (Overs -226.54 on 2,796,
+Unders +3.73 on 3,231). To finish 30,000 lines merely level on log loss the other 17,702 would have had to beat
+DraftKings by 0.0128 a line, where it had been 0.0184 a line behind. The owner asked to stop then rather than wait
+("if its going to fail anyway shouldnt we pivot"), so the stop is registered in the code beside the bar:
+`{ at: '2026-11-05T18:00:00Z', by: 'the owner', why: 'behind DraftKings on both scores with 90% intervals wholly above
+zero, and the flat bets down, on the lines graded by then; stopped early as a FAIL rather than wait for 30,000',
+bar_registered: '2026-10-15T11:35Z' }`. The figures above are those at the owner's call; the decision is on every line
+graded by the job's first run with the stop in its code, which is 12,298 unless a run grades another game first, so the
+`why` it carries names no count and the decision's own `lines`, `scores` and `flat` are its numbers (the page reads
+those). The rule:
+
+- It is a futility stop and can only fail. The first run at or after `at` with no decision writes `verdict: 'FAIL'`,
+  `decided_at` the run's time, `lines` every line graded and compared by then (in grading order, that run's own grades
+  among them), `games`, `last_game`, and `scores` and `flat` worked by the bar's own functions on exactly those lines, as
+  `decide` works them on the first 30,000 (`stopEarly`), and `early: { at, by, why }` copied from `EARLY_STOP`. It never
+  writes a PASS, even on lines the model wins, and never on no graded line.
+- It ends this trial alone: the ledger whose bar was registered at `bar_registered`, 2026-10-15T11:35Z, the one the job
+  has kept since (`stopsLedger`). A ledger registered since, a new props model's with a bar of its own, calls, grades
+  and is judged on its own bar through and after the stop's time, and an early decision on it is refused.
+- The bar in the ledger is not changed, and nothing in the record is edited by hand: the decision is the job's, written
+  by its run.
+- From then on it is the bar's own FAIL path: no new call, every call not yet frozen dropped, frozen calls still graded
+  when their games are final, the summary counting on (its standing "decided at <lines> lines on <time>: FAIL, stopped
+  early by the owner before the 30000 the bar is judged at"), and the decision never revisited.
+- Had the bar's 30,000 been in first, the bar's own decision would stand and the early stop would do nothing; once any
+  decision is written it does nothing either.
+
+What follows on the page: the Parlay Builder's Top 50 lines, their Value picks and Suggested Parlays' sets take no
+player line (`pbPropsOn`, which reads any FAIL), and the Player props view says so from the decision's own numbers:
+"Stopped early on 5 November 2026, the owner's call, at 12,298 graded lines: behind DraftKings on both scores and its
+flat bets down 223 units. FAIL: its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested
+Parlays, and its calls have stopped; the projections stay for reference." The Top 50's note and a set's empty level say
+why in the same terms (`pbPropsOffWhy`): "no player lines: the props model's trial was stopped early as a FAIL on 5
+November 2026, so the sets take none." (the bar's own FAIL, never reached now, would read "failed its shadow ledger's
+bar"), and those words are what the suggestions record keeps for a level it locks empty. The Parlay Builder's lead no
+longer calls the model on trial, and a player's leg a visitor adds by hand from the Player props view still shows the
+model's chance with its mark, titled that the trial was stopped early as a FAIL, the owner's call, and that the chance is
+the model's, for reference only, which no list or set takes. The Player props view's own on-trial summary, its first
+paragraph and its header's "Model on trial" tag are unchanged: they change with that view's rewrite. Run end to end on a scratch copy of 5 November's data at 18:05 UTC
+(`NBA_DATA_DIR`, `NBA_PROPS_LEDGER`, `NBA_PROPS_LINES`, `NBA_PROPS_OUT` and `NBA_NOW`, the real files untouched), the run
+wrote that decision on 12,298 lines and 121 games, dropped the 33 open calls, and the check passed; a run at 17:59 UTC
+on another copy changed nothing. On the built page the Top 50 went from 50 lines, 49 of them a player's, to 6 game lines
+and none, and that evening's set from 8 player legs to none: with only one side bet and one total a game, it kept its
+Safe pair and left Medium and Aggressive empty, saying why. Run again at 18:55 UTC, the run and
+its check on one clock, the decision was the same (12,298 lines, 121 games, the last MIA at LAC on 4 November; log loss
+0.70439 against 0.685951, Brier 0.254732 against 0.246454; 6,027 flat bets down 222.81 units) and the check passed,
+where the same ledger checked on a clock of 02:00:05 the next morning was refused, Orlando at Phoenix's call (tip-off
+02:00) taken as tipped and gone: why the job hands the two one clock. The suggestions record then rewrote that evening's
+Heat at Warriors set to a Safe pair of its spread and total, Medium and Aggressive empty with "Only 2 legs in this game,
+and no player lines: the props model's trial was stopped early as a FAIL on 5 November 2026, so the sets take none."
+A new props model would be a change of its own, with a bar
+of its own written down before its first call.
+
+The check runs right after `props.js` in the job's props step, the two handed one clock (`NBA_NOW`, the run's time to
+the second, as the calls and suggestions steps hand theirs), so a tip-off that turns in the moment between the run and
+its check (the early stop's run dropping a call that tips in the next minute, say) is judged as the run judged it. It
+fails the step (putting every props data file back as the last commit had it, and turning the run red) when the
+ledger was written after the check's clock, its run time went back from the last commit's, or a ledger this run changed
+carries another time than the check's clock; a time it stamps (a call made, frozen or graded, a fit registered, a
+verdict) is after the run that wrote it, or one new since the last commit is not that run's own; the bar is not the registered one or the last commit's (but for a re-registration
 as above), or was registered after a call; a call was made at or after its tip-off; a call the last commit had frozen, or whose tip-off has passed, is
 gone, open again or changed in any field (the one change allowed: this run's rewrite, before tip-off, of a call not yet
 frozen); a fit, a freeze time or a grade once written changed; the last commit's graded lines are not, byte for byte,
 the start of the file; a graded line is not what the frozen call, the fit, the closing line and the box score give; a
 game's lines are not exactly its closing lines on players with a call who played; a game graded is not final, frozen and
-read, or one that can be graded is left ungraded; a verdict is early, missing, not the first 30,000's, or changed; the
-summary does not follow; or the record lost or changed a game it had read.
+read, or one that can be graded is left ungraded; a verdict is early, missing, not the first 30,000's, or changed; a
+FAIL leaves a call open; the summary does not follow; or the record lost or changed a game it had read. The one verdict
+it accepts before 30,000 is the early stop's: a decision of fewer than `bar.lines` lines passes only on the ledger the
+stop ends (`stopsLedger`), with its `early` exactly `EARLY_STOP`, FAIL, decided at or after `EARLY_STOP.at` and not
+after the run that wrote the ledger (at that run's time, where the last commit had no verdict), on exactly the lines
+graded and compared by then and at least one (no more and no fewer: the run grades first and stamps its grades with its
+own time, which is the check's clock, so it can neither leave a grade of its own out nor date itself back past what it
+graded), its scores, flat bets, games and last game what `stopEarly` gives on them, re-worked; and a ledger the stop
+ends, written at or after `EARLY_STOP.at` with a line graded and no verdict, fails. That last is read off the ledger's
+own `run_at`, which the check holds to its clock wherever this run changed the ledger: so a run at or after the stop
+cannot date itself back before it to keep calling, and with no earlier ledger to hold it to (`--no-prev`), where the
+run's time is not known, a run just before the stop checked just after it passes. A check by hand after a run by hand
+needs the run's clock too (below). A decision of 30,000 lines is checked as before.
 
 ### What `state.json` carries for the page (`props`, from `props.json` and the ledger)
 
@@ -1031,7 +1109,9 @@ props: {
   dist: { kind: "negative binomial", var: { pts: [A, B], ... every stat and combo }, rule },
   fair: { main, mainWhy, rung: { form, a: { pts: 0.061, ... }, measured }, yes: { form, a: { dd: 0.068, td: 0.068 }, measured, playoffs }, estimated },
   games: { <game_id>: { tip, away, home, players: { <ESPN athlete id>: [ ...layout ] } } },   // the slate's games not yet started
-  ledger: { registered, bar: { lines, passIf, otherwise, before }, decision, summary: { standing, gradedGames, lines, voids, scores, flat, toCome } },
+  ledger: { registered, bar: { lines, passIf, otherwise, before },
+    decision: { verdict, decidedAt, lines, games, scores, flat, early: { at, by, why } } | null,   // early only on the early stop's FAIL
+    summary: { standing, gradedGames, lines, voids, scores, flat, toCome } },
   research: { market: {...the archive test} }
 }
 ```
@@ -1094,7 +1174,9 @@ DraftKings has no line on are listed under, folded.
 to beat DraftKings and its chances are marked on trial wherever they show (the Parlay Builder's Top 50 lines take its
 lines since 25 October 2026), with the walk-forward and the market test in brief and the shadow ledger's running
 numbers: how many of the 30,000 graded lines are in, and the model against DraftKings on log loss and Brier, never a
-verdict or a word of one before the bar is decided (a PASS, when it comes, is said to move nothing by itself). The
+verdict or a word of one before the bar is decided (a PASS, when it comes, is said to move nothing by itself). Once
+the early stop's FAIL is written it says that instead, from the decision (`ppEarly`: the day, whose call, the lines, which
+scores were behind DraftKings and the flat bets' units, rounded), then the running numbers as before. The
 Record tab drew the same until 31 October 2026, when it took the NHL hub's layout. Nothing in the view says "model says" or "edge". From the view a prop goes only into the
 visitor's own parlay, by their tap on DraftKings' price (README "Same-game parlays"); the Parlay Builder's Top 50 lines
 reach the same lines on their own rules, marked on trial (README "Parlay Builder").
@@ -1141,7 +1223,19 @@ fixture of 15 October 2026 (3b: every side's scale in the backtest's range, the 
 bodies leaving a scale as it is); a call open in the last commit and past its tip, rewritten with a later tip as a delay
 would, failing the check; a re-registration of the bar passing before anything is on record and refused once a call is
 frozen or past its tip, a line graded, a verdict written, its time not later, a call made before it or a bar not `BAR`;
-and the committed ledger's bar being `BAR`, every call made after its registration. `node tools/smoke.js` section 8 holds
+and the committed ledger's bar being `BAR`, every call made after its registration. Its section 6 is the early stop, on
+made-up games either side of 18:00 UTC on 5 November 2026: no decision a minute before; the first run at it a FAIL on
+all 7 lines graded by then (its own game among them), the numbers worked out there on their own and exactly `scores`'s
+and `flat`'s on those lines, `early` the code's; the open call dropped, no new one, a call frozen before the stop graded
+after it with the decision as it was; never a PASS, even where the model wins; nothing with the bar's 30,000 in or a
+decision already made; what `publish.js` carries; the check clean on each honest run and refusing a tampered early
+decision (its `why`, `by` or `at`, no `early`, a PASS, its log loss, interval, units, games or last game, decided before
+the stop, after the check's clock or before the run that wrote it, a line more than were graded, the first 4 lines alone
+with their numbers re-worked,
+no decision on a ledger written at the stop, the decision changed after its commit). Twenty planted breaks, each
+failing its test: 16 in the ledger, the check and `publish.js` (`test_props.js`), 3 in the page's sentence (section 8),
+and the page's reading of a FAIL made to pass over an early one (`pbPropsOn`), which the Parlay Builder's and Suggested
+Parlays' sections catch. `node tools/smoke.js` section 8 holds
 the page: the props view on a press against a stubbed ESPN (the recorded
 opening-night answer with made-up lines added, two pages, a 404, junk, a 503, a game ESPN has under way, one that
 tips while its props are read, one ESPN still calls scheduled with its own tip passed and the published one to come
@@ -1152,7 +1246,10 @@ none before a press and none once the read is taken away (since 25 October 2026,
 until then the section held that nothing was suggested); nothing read before a
 press (on load, opening a sheet, switching its team, on every timer and event the page sets); nothing stored; a reload
 returning to the published page; a sheet left open while its game tips; the ledger's running numbers on made-up
-summaries (no verdict before the bar, then a FAIL and a PASS); the page's copies held to the tools' text and results;
+summaries (no verdict before the bar, then a FAIL and a PASS, and the early stop's FAIL word for word, its words
+following made-up decisions' numbers: one score behind, the bets up or none; the section's own props block carries the
+published ledger with its verdict taken off, so the rest of it holds the model on trial after the early stop as before);
+the page's copies held to the tools' text and results;
 every game the real state projects opening without a NaN; the page's own means, combos included, the ledger's open calls
 to the digit; the phone table's dropped columns. Each check was shown to fail on a planted break, in a scratch copy: the
 job side's 24 (the Over read second, the rung cross-check removed, a 404 read as a failure, a game asked for again, rows
@@ -1206,8 +1303,9 @@ reach the Top 50 lines, each marked on trial):
 | the on-trial label taken off | the model labelled on trial |
 
 ```
-node tools/props.js               # the job's step: closing lines, projections, ledger; writes props.json
-node tools/props_check.js         # the ledger against the last commit's; ends "props check: 0 failures"
+now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+NBA_NOW=$now node tools/props.js        # the job's step: closing lines, projections, ledger; writes props.json
+NBA_NOW=$now node tools/props_check.js  # the ledger against the last commit's, on the run's clock; ends "props check: 0 failures"
 node tools/props.js research      # the walk-forward and market tests (about seven minutes)
 node tools/props.js fit           # refit the constants on the finished seasons (between seasons only)
 node tools/props_ledger.js init   # once: the ledger with its bar and no call
@@ -1765,7 +1863,7 @@ a rule of their own, a leg's chance of their own) went with them on 5 November 2
 | The payload's prices, a Refresh odds press over them | `lines.json`, read once a page load, no-store, the first time the tab opens (never on load or a timer), and a press's read, the newer of the two for each game's lines and its props; every price DraftKings' real one, nothing estimated | The NBA's prices come from the lines feed, which carries both prices on every line |
 | A moneyline's or a cover's chance from the NFL's game model | A moneyline's the player model's win chance (the number Tonight shows); a spread's Phi((m + h) / sigma), m the side's expected margin (minus the model's spread for the home side) and h its line, sigma 14.5 points | The NBA's game model gives a margin; sigma is measured, below. Until this change the page put no chance on a spread |
 | A total at the market's own chance | The same: its two prices with the margin out in proportion (50% where one is missing), never a Value pick, last | The NBA's total has never been tested against the market |
-| A player's chance from the props model, on a book price | The props model's (README "Player props"), which is **on trial**: marked so beside its chance on every Top 50 row, builder row and level card, the mark titled with the shadow ledger's count, and said once in the lead; never a player it does not project or today's report lists, Probable aside (the next row); none at all once its ledger fails its bar | The owner's call of 25 October 2026: props in the Top 50, Value picks allowed, every one marked |
+| A player's chance from the props model, on a book price | The props model's (README "Player props"), which is **on trial**: marked so beside its chance on every Top 50 row, builder row and level card, the mark titled with the shadow ledger's count, and said once in the lead; never a player it does not project or today's report lists, Probable aside (the next row); none at all once its ledger fails its bar, or the trial is stopped early as a FAIL (5 November 2026, README "Player props"), which `tools/smoke.js`'s Parlay Builder and Suggested Parlays sections hold on a made-up early decision | The owner's call of 25 October 2026: props in the Top 50, Value picks allowed, every one marked |
 | A questionable, doubtful or out player never listed (`pricedLegs` skips `!suggestable`), a Q on a leg on him added by hand | The game's out lists and every other listing on today's report, Day-To-Day included, a probable player playing (`pbHeldWhy`, read by `pbWho`: the one rule the Top 50 lines, the all-games levels and Suggested Parlays' sets keep, as the NFL's `pricedLegs` is theirs), the lines left out counted in a note; a leg on him added by hand wears his status (DAY-TO-DAY) in the builder and in his bubble, titled with why | ESPN's NBA feed has no Questionable or Doubtful: every status between playing and out is Day-To-Day |
 | Value: the 3-point edge with market + form agreeing on a player's line | The 3-point edge alone, which the panel says | The NBA has no market + form (no player Elo is fitted to the props) |
 | DraftKings' fair chance by `legFair` | The NBA's `legFair`: a main line's whole margin on the Over (measured on DraftKings' archived lines), a milestone's and a Yes price's by the rung rule, est., a team line's two prices in proportion | The NBA's measured rule |
@@ -2095,7 +2193,8 @@ builder's same-game sums, which a redraw on the same data takes from their cache
 the Parlay Builder's Top 50 would take (DraftKings' real price, the model's chance from 45% to 97% and at or above the
 price's implied chance, a Value pick 3 points above it, none 15 points or more over DraftKings' fair chance, a game line
 only with its betslip id where its game's lines carry ids), and besides:
-- a player's chance is the props model's, which is on trial (README "Player props"): every player leg wears the Parlay
+- a player's chance is the props model's, which is on trial (README "Player props"; since the early stop of 5 November
+  2026 a FAIL, so a set takes no player leg and says so on a level it leaves empty): every player leg wears the Parlay
   Builder's on-trial mark, with its title, and a card holding one gives the model's chance as "model (on trial) 38%";
 - one leg a player, one side bet (the moneyline or the spread) and one total a game, no line twice (the NFL's rule,
   stricter than the builder's one leg a player a stat), and each level is held to the builder's own same-game refusals
@@ -2656,8 +2755,8 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
 - **Parlay Builder**: the NFL hub's (README "Parlay Builder"). Its choices (the Bet amount, Refresh odds, All, Teams
   only or Players only, five bet types and the games of the lines feed's two dates, under their day), the Top 50 lines
   they make from DraftKings' prices (`lines.json`, or a press's newer read), Value picks first, then the other lines
-  with the game totals last, each ranked by what $1 is expected to make, every player's line marked on trial, each with
-  its own Add; and the builder under them: the visitor's own parlay, from the list or a game's Player props, priced by
+  with the game totals last, each ranked by what $1 is expected to make, every player's line marked on trial (none since
+  the props trial was stopped early as a FAIL, 5 November 2026, README "Player props"), each with its own Add; and the builder under them: the visitor's own parlay, from the list or a game's Player props, priced by
   the same-game engine, DraftKings' fair chance first and the model's beside it, what the Bet amount returns, Finish
   parlay (a card to download, place at DraftKings or share, README "The parlay card") and Clear ALL. Every name on a leg
   opens its matchup bubble (README "The matchup bubble").
@@ -2665,7 +2764,8 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
 - **Suggested Parlays** (`#suggest`, after Tonight): each game on national TV's own three parlays, Safe, Medium and
   Aggressive, from that game's legs, set out one night at a time from 6:00 AM Eastern, live until 2 hours before tip-off
   and then the record's locked set (or this browser's own, said so), with the record's pills and Refresh odds; every
-  player leg the props model's, on trial (README "Suggested Parlays").
+  player leg the props model's, on trial (README "Suggested Parlays"), and none since its trial was stopped early as a
+  FAIL (5 November 2026).
 - **X Parlays**: the parlays X placed at the book, the same on every device and read only, each followed live through
   its games; read from `liveparlays/parlays.json` and ESPN when the tab is first opened in a visit and on Refresh now,
   never on load before that or on a timer (README "X Parlays").
@@ -2685,5 +2785,6 @@ back when the feed's test fails), and `liveparlays/parlays.json` when a finished
    free throws) as a fitted term on the residual, on top of pace and efficiency.
 2. **The same-game hold**: the price of two legs of one game uses the NFL hub's hold, untested here (README "Same-game
    parlays"). A few real DraftKings same-game tickets on NBA games, recorded with their legs' own prices, would test it;
-   until then it stays an estimate and says so. The props model's lines are on the Parlay Builder's Top 50, marked on
-   trial, until its shadow ledger decides its bar; a FAIL takes them off.
+   until then it stays an estimate and says so. The props model's lines were on the Parlay Builder's Top 50, marked on
+   trial, until the owner stopped its trial early as a FAIL on 5 November 2026 (README "Player props"), which takes
+   them off.

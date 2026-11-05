@@ -230,6 +230,20 @@ function oppFactor(a, lg) {
   for (const k of STATS) { const lr = lg.m ? lg.y[k] / lg.m : 0; f[k] = a && lr > 0 ? ((a.y[k] + OPP_SHRINK * lr) / (a.m + OPP_SHRINK)) / lr : 1; }
   return f;
 }
+/* each club's defence on each base stat for a game to come, as the projections take it, for the game's Mismatches window
+   (README "The game's three windows"): oppFactor on what the club allowed (allowedOf, read for the game's season as
+   liveProjections reads it), the ratio its opponents made per minute over the league's, shrunk; the multiplier a player
+   facing it gets on that stat, ratio^opp[k] (1 with no exponent fitted, as means() takes it); and its rank in the
+   league on that stat, 1 the club that allows the least, on the ratio to four decimals, ties by club code. Every club
+   is ranked, one with nothing on record at 1 */
+function oppTable(allowedOf, lg, exps, teams = L.TEAMS) {
+  const F = Object.fromEntries(teams.map(t => [t, oppFactor(allowedOf(t), lg)])), out = Object.fromEntries(teams.map(t => [t, {}]));
+  for (const k of STATS) {
+    const order = [...teams].sort((a, b) => r4(F[a][k]) - r4(F[b][k]) || (a < b ? -1 : a > b ? 1 : 0));
+    order.forEach((t, i) => { out[t][k] = { ratio: r4(F[t][k]), mult: r4(exps && exps[k] != null ? Math.pow(F[t][k], exps[k]) : 1), rank: i + 1 }; });
+  }
+  return out;
+}
 
 /* ---------- distributions (no dependencies: the page carries nbSf and nbVar line for line) ---------- */
 /* the variance of a stat with mean mu: A x mu^B, the constants fitted per stat (var in props.json) */
@@ -676,7 +690,7 @@ function liveProjections(R, P, games, now = new Date(), dir = DATA, horizon = HO
     const paceOfTeam = t => R.seasonOfTeam[t] === g.season ? R.pace[t] : R.lgPace + EARLY_PACE;
     const expPace = (paceOfTeam(g.home) + paceOfTeam(g.away)) / 2;
     const oppAllowed = t => { const a = R.allowed[t]; if (!a || a.season === g.season) return a; return { m: a.m * 0.5, y: Object.fromEntries(STATS.map(k => [k, a.y[k] * 0.5])) }; };
-    const sides = {}, scale = {};
+    const sides = {}, scale = {}, D = oppTable(oppAllowed, R.lgAll, P.opp);
     for (const [t, opp] of [[g.home, g.away], [g.away, g.home]]) {
       const av = avail(g, t, R.players);
       const list = [];
@@ -697,8 +711,9 @@ function liveProjections(R, P, games, now = new Date(), dir = DATA, horizon = HO
         return { id: x.p.id, name: x.p.name, pos: x.p.pos, min: r1(m), mu: publishedMeans(mu), dd: r4(d.dd), td: r4(d.td) }; })
         .filter(x => x.min >= MIN_SHOWN).sort((a, b) => b.min - a.min);
     }
+    /* opp: each club's defence as its opponent's players are projected against it (oppTable), for the Mismatches window */
     out[g.game_id] = { date: g.date, tip: g.tip || '', type: g.type, away: g.away, home: g.home, pace: r1(expPace), scale,
-      players: { [g.away]: sides[g.away], [g.home]: sides[g.home] } };
+      players: { [g.away]: sides[g.away], [g.home]: sides[g.home] }, opp: { [g.away]: D[g.away], [g.home]: D[g.home] } };
   }
   return out;
 }
@@ -765,6 +780,6 @@ function summarizeResearch(rs) {
     stats: Object.fromEntries(Object.entries(f.stats).map(([k, v]) => [k, { mae: v.mae, naiveMae: v.naiveMae, bias: v.bias, logScore: v.logScore, naiveLogScore: v.naiveLogScore }])),
     market: f.market ? { lines: f.market.all.lines, games: f.market.all.games, logloss: f.market.all.logloss, brier: f.market.all.brier, flat: f.market.all.flat } : null })) };
 }
-module.exports = { fairMethods, HORIZON, LIVE_SIDE, ROT, sideS, publishedMeans, availability, liveProjections, research, marketTest, marketScores, flatBets, gradeLine, bootCI, rng, oppFactor, FAIR, rollSeason, STATS, COMBOS, ALL, H_SET, GRID, MIN_SHOWN, posOf, loadBoxes, loadTeamBoxes, gamePace, loadGames, replay, features, nbVar, nbPmf, nbSf, pOver, nbLogPmf, lgamma, normCdf, normInv, doublesProb, baseMin, sideScale, finalMin, means, backtestMinutes, sidesOf, fit, fitVar, score, fitNaiveVar, project, yOf, doubles, FIRST, DATA, OUT, RESEARCH };
+module.exports = { fairMethods, HORIZON, LIVE_SIDE, ROT, sideS, publishedMeans, availability, liveProjections, research, marketTest, marketScores, flatBets, gradeLine, bootCI, rng, oppFactor, oppTable, OPP_H, OPP_SHRINK, FAIR, rollSeason, STATS, COMBOS, ALL, H_SET, GRID, MIN_SHOWN, posOf, loadBoxes, loadTeamBoxes, gamePace, loadGames, replay, features, nbVar, nbPmf, nbSf, pOver, nbLogPmf, lgamma, normCdf, normInv, doublesProb, baseMin, sideScale, finalMin, means, backtestMinutes, sidesOf, fit, fitVar, score, fitNaiveVar, project, yOf, doubles, FIRST, DATA, OUT, RESEARCH };
 
 if (require.main === module) main().catch(e => { console.error(e.stack || e.message || e); process.exit(1); });

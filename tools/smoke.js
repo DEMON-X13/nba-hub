@@ -41,7 +41,10 @@
  * Section card is the parlay card (README "The parlay card", tools/smoke_card.js): the window, its image, Open in
  * DraftKings with its conversions and Share link, on made-up games and ids, every word and figure worked out there; and
  * section glance the matchup bubble (README "The matchup bubble", tools/smoke_glance.js): every name its leg's button and
- * every number in each bubble on that file's own reading, its keys, placing and redraws.
+ * every number in each bubble on that file's own reading, its keys, placing and redraws; and section gw a game's three
+ * windows in the Player props view (README "The game's three windows", tools/smoke_gamewin.js): Matchup, Mismatches and
+ * Team Stats, every number worked out there on its own (the team stats from the team boxes), on made-up games and the
+ * real state, their keys and focus, and the MISMATCH tags on the player rows.
  */
 'use strict';
 const fs = require('fs');
@@ -51,7 +54,7 @@ const ROOT = path.resolve(__dirname, '..');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let fails = 0; const check = (c, m) => { if (!c) { fails++; console.log('  FAIL', m); } else console.log('  ok  ', m); };
 /* NBA_HTML tries another page in place of index.html (a deliberately broken copy, to show a check fails on it);
-   SMOKE_ONLY=base,7,8,9,10,12,lines,xparlays,pb,card,glance,sp runs those sections alone (base is 0 to 6; xparlays is X
+   SMOKE_ONLY=base,7,8,9,10,12,lines,xparlays,pb,card,glance,sp,gw runs those sections alone (base is 0 to 6; xparlays is X
    Parlays, tools/smoke_xparlays.js; pb the Parlay Builder, tools/smoke_parlay.js; card the parlay card,
    tools/smoke_card.js; glance the matchup bubble, tools/smoke_glance.js; sp Suggested Parlays, tools/smoke_suggested.js) */
 const pageFile = page => page === 'index.html' && process.env.NBA_HTML ? path.resolve(process.env.NBA_HTML) : path.join(ROOT, page);
@@ -561,8 +564,8 @@ async function playerProps() {
       "with no DraftKings line read, Vegas's pick is the board's line and says so, so it never reads as the DraftKings line Game bets lacks"); }
   let bt = body().textContent;
   check(/Model on trial/.test(bt) && /on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show/.test(bt) && /The Parlay Builder's Top 50 lines take a player's line where this model's chance clears their bar, marked on trial there and in the builder/.test(bt)
-    && body().querySelector('[data-pp-head] + details[data-pp-trial]') && !body().querySelector('details[data-pp-trial]').open,
-    "the model is labelled on trial, its note (folded, after the head card) saying it is not yet shown to beat DraftKings, its chances marked so wherever they show, the Top 50 lines taking its lines as the owner asked");
+    && body().querySelector('[data-pp-head] + .gwin + details[data-pp-trial]') && !body().querySelector('details[data-pp-trial]').open,
+    "the model is labelled on trial, its note (folded, after the head card and the game's three buttons) saying it is not yet shown to beat DraftKings, its chances marked so wherever they show, the Top 50 lines taking its lines as the owner asked");
   { const tn = body().querySelector('[data-pp-trial]').textContent;
     check(/Double- and triple-doubles take out the same margin, never measured on those markets/.test(tn) && /so their DraftKings figure is a high estimate/.test(tn) && /Milestone \(k\+\) fair chances are estimates \(est\.\)/.test(tn),
       "and the note says the milestones' fair chances are estimates, and that the double- and triple-doubles' margin was never measured on those markets, so their figure is a high estimate"); }
@@ -1071,9 +1074,9 @@ async function playerProps() {
       const hd = body().querySelector('[data-pp-head]'), tg = hd && hd.querySelector('[data-pp-failtag]');
       check(tg && tg.textContent === FAIL_TAG && tg.title === tagTitleOwn(dec) && !/on trial/i.test(hd.querySelector('.lead-c .pp-ghl').textContent),
         `${name}: the head card's tag reads "${FAIL_TAG}", titled with why ("${tg && tg.title.slice(0, 90)}…")`);
-      const tr = body().querySelector('[data-pp-head] + details[data-pp-trial][data-pp-fail]'), ps = tr ? [...tr.querySelectorAll('p')].map(p => p.textContent) : [];
+      const tr = body().querySelector('[data-pp-head] + .gwin + details[data-pp-trial][data-pp-fail]'), ps = tr ? [...tr.querySelectorAll('p')].map(p => p.textContent) : [];
       check(tr && !tr.open && tr.querySelector('summary').textContent === FAIL_SUM && tr.querySelector('summary').getAttribute('data-pp-key') === 'trial' && ps[0] === noteOwn(dec, sm) && tr.querySelector('p[data-pp-failnote]') === tr.querySelector('p') && ps[1] === FAIL_HOW,
-        `${name}: the folded note after the head card is the FAIL's, word for word: its summary, then the decision's own sentence ("${(ps[0] || '').slice(0, 150)}…"), then what the view shows${ps[0] !== noteOwn(dec, sm) ? ` | want "${noteOwn(dec, sm).slice(0, 200)}"` : ''}`);
+        `${name}: the folded note after the head card and the game's three buttons is the FAIL's, word for word: its summary, then the decision's own sentence ("${(ps[0] || '').slice(0, 150)}…"), then what the view shows${ps[0] !== noteOwn(dec, sm) ? ` | want "${noteOwn(dec, sm).slice(0, 200)}"` : ''}`);
       const lined = [...new Set(PA.mains.concat(PA.ladders, PA.yes).map(m => m.player).concat(Object.keys(rowsP)))];
       let bad = [], nRow = 0, nNo = 0, nEst = 0, nMd = 0, nNoMd = 0, hBad = [], lnBad = [];
       for (const pid of lined) {
@@ -2522,6 +2525,8 @@ async function recordMadeUp(real) {
   await guard('glance', () => require('./smoke_glance')({ check, pageFile, ROOT }));
   /* Suggested Parlays (README "Suggested Parlays"): its own file, tools/smoke_suggested.js, on this harness's checks */
   await guard('sp', () => require('./smoke_suggested')({ check, pageFile, ROOT }));
+  /* a game's three windows (README "The game's three windows"): its own file, tools/smoke_gamewin.js */
+  await guard('gw', () => require('./smoke_gamewin')({ check, pageFile, ROOT }));
 
   console.log(fails ? `${fails} FAILED` : 'all good');
   process.exit(fails ? 1 : 0);

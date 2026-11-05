@@ -19,6 +19,8 @@
  *             same-game table (README "Player props" and "Same-game parlays")
  *   report    the injury report's statuses, which Suggested Parlays and the Parlay Builder hold players out on (README
  *             "Suggested Parlays")
+ *   teamStats each club's season so far from its box scores, for a game's Team Stats window in the Player props view
+ *             (THE TEAM STATS below; README "The game's three windows")
  * Nothing a visitor does reaches this file; only the job writes it.
  *
  * And pickem.json, which the Pick'em Record tab reads when it first opens: every game of the season in play to today, with
@@ -38,7 +40,7 @@ const OUT = path.join(L.ROOT, 'state.json');
 const HIST_OUT = path.join(L.ROOT, 'history.json');
 const PICKEM_OUT = path.join(L.ROOT, 'pickem.json');
 const read = f => JSON.parse(fs.readFileSync(path.join(L.ROOT, f), 'utf8'));
-const csv = f => { const p = path.join(DATA, f); if (!fs.existsSync(p)) return []; const lines = fs.readFileSync(p, 'utf8').trim().split('\n'); const h = lines.shift().split(','); return lines.filter(Boolean).map(l => { const v = l.split(','); const o = {}; h.forEach((k, i) => { o[k] = v[i] === undefined ? '' : v[i]; }); return o; }); };
+const csv = (f, dir = DATA) => { const p = path.join(dir, f); if (!fs.existsSync(p)) return []; const lines = fs.readFileSync(p, 'utf8').trim().split('\n'); const h = lines.shift().split(','); return lines.filter(Boolean).map(l => { const v = l.split(','); const o = {}; h.forEach((k, i) => { o[k] = v[i] === undefined ? '' : v[i]; }); return o; }); };
 const num = v => v === '' || v === undefined ? null : +v;
 
 function main() {
@@ -170,8 +172,8 @@ function main() {
     season: x.season, games: x.priced, logloss: x.logloss, straightUp: x.straightUp, against: x.modelPicks.againstMarket,
     tiers: Object.fromEntries(['safe', 'med', 'aggr', 'value'].filter(k => x.parlays[k]).map(k => [k, tierOf(x.parlays[k])])), twoFav: tierOf(x.baseline && x.baseline.twoFavourites) })) } : null;
   const props = propsState(slate, nowIso);
-  const boxes = boxesState(games, today), corr = corrState(), report = reportState(inj);
-  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, report, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today,
+  const boxes = boxesState(games, today), corr = corrState(), report = reportState(inj), teamStats = teamStatsState(games, season);
+  const state = { season, opening: opener, finals, pending, injuriesAsOf: inj.date || null, vsMarket, props, boxes, corr, report, teamStats, generated: new Date().toISOString().slice(0, 16) + 'Z', asOf: players.asOf, today,
     slate, record, recordRule: RULE, teams, players: plist, coaches,
     backtest: { player: players.report, fitSeasons: players.fitSeasons, holdoutSeasons: players.holdoutSeasons, team: { fit: model.fit, holdout: model.holdout, fitSeasons: model.fitSeasons, holdoutSeasons: model.holdoutSeasons } },
     params: { player: players.params, team: model.params } };
@@ -320,10 +322,10 @@ function decisionState(d) {
   if (d.early) out.early = { at: d.early.at, by: d.early.by, why: d.early.why };
   return out;
 }
-function propsState(slate, nowIso) {
+function propsState(slate, nowIso, given = null) {
   const f = path.join(L.ROOT, 'props.json');
-  if (!fs.existsSync(f)) return null;
-  const pj = JSON.parse(fs.readFileSync(f, 'utf8'));
+  if (!given && !fs.existsSync(f)) return null;
+  const pj = given || JSON.parse(fs.readFileSync(f, 'utf8'));          // given: a props.json's content, for a test
   const open = new Set(slate.filter(g => g.status === 'scheduled' && !(g.tip && g.tip <= nowIso)).map(g => g.id));
   const games = {};
   for (const [gid, g] of Object.entries(pj.upcoming || {})) {
@@ -331,6 +333,9 @@ function propsState(slate, nowIso) {
     const players = {};
     for (const [team, list] of Object.entries(g.players)) for (const p of list) players[p.id] = [p.name, team, p.pos, p.min, ...PROPS_BASE.map(k => p.mu[k]), p.dd, p.td];
     games[gid] = { tip: g.tip, away: g.away, home: g.home, players };
+    /* each club's defence as the projections take it (props.js oppTable), for the Mismatches window: by club, the club
+       defending, each base stat [ratio, multiplier, rank] (oppCols); none on a props.json written before it */
+    if (g.opp && typeof g.opp === 'object') games[gid].opp = Object.fromEntries(Object.entries(g.opp).map(([t, d]) => [t, Object.fromEntries(PROPS_BASE.filter(k => d && d[k]).map(k => [k, [d[k].ratio, d[k].mult, d[k].rank]]))]));
   }
   const lf = path.join(DATA, 'props_shadow.json');
   const lg = fs.existsSync(lf) ? JSON.parse(fs.readFileSync(lf, 'utf8')) : null;
@@ -341,7 +346,7 @@ function propsState(slate, nowIso) {
   /* on trial until a change of its own says otherwise: a PASS makes the model a candidate, it never moves the page by itself */
   return { onTrial: true, build: pj.generated, asOf: pj.asOf, fitSeasons: pj.fitSeasons,
     stats: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'], combos: { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] },
-    layout: ['name', 'team', 'pos', 'min'].concat(PROPS_BASE, ['dd', 'td']), horizonGameDays: 5, minShown: 8,
+    layout: ['name', 'team', 'pos', 'min'].concat(PROPS_BASE, ['dd', 'td']), oppCols: ['ratio', 'mult', 'rank'], horizonGameDays: 5, minShown: 8,
     dist: { kind: 'negative binomial', var: pj.params.var, rule: pj.distribution },
     fair: pj.fair, games, ledger, research };
 }
@@ -386,5 +391,74 @@ function reportState(inj) {
   for (const [team, list] of Object.entries((inj && inj.teams) || {})) for (const x of list || []) if (x && x.id) players[x.id] = [team, x.status || '', x.detail || '', x.returns || ''];
   return { date: (inj && inj.date) || null, players };
 }
-module.exports = { decisionState, propsState, boxesState, corrState, pickemState, offFinals, reportState, PK_MODELS };
+/* THE TEAM STATS, for a game's Team Stats window in the Player props view (README "The game's three windows"): each club's
+   season in play so far, from its box scores, the NFL hub's Team Stats window on the NBA's numbers. The games: the
+   season's finals ESPN types regular season, the NBA Cup's among them (its final too), never a preseason game, a play-in
+   game (offFinals: the standings leave it out, and it is a playoff-seeding game) or a playoff game; a final is counted
+   once both its clubs' rows are in data/teambox_<season>.jsonl (the team box ESPN gives with the box score, both sides
+   of every game), and its score is data/games.csv's. Per club, over those games:
+     pd    point differential a game        (points for less points against) / games
+     ppg   points a game                    points for / games
+     pa    points allowed a game            points against / games                      (fewer is better)
+     ortg  offensive rating                 100 x points for / possessions
+     drtg  defensive rating                 100 x points against / possessions          (fewer is better)
+     pace  possessions per 48 minutes       48 x possessions / minutes played            (neither better)
+     fg    field goal %                     100 x made / attempted
+     tp    three-point %                    100 x threes made / attempted
+     tpm   threes made a game
+     reb   rebounds a game                  the team box's total rebounds
+     ast   assists a game
+     tov   turnovers a game                 the team box's total turnovers (team turnovers in)  (fewer is better)
+     stl   steals a game
+     blk   blocks a game
+   A game's possessions are the usual estimate, field-goal attempts less offensive rebounds plus turnovers plus 0.44 of
+   free-throw attempts, each side's averaged with its opponent's (so both clubs of a game are given the same number);
+   its minutes 48 plus 5 an overtime, the overtimes read from the players' minutes in data/box_<season>.csv (240 a side
+   in regulation, 25 more an overtime; 48 where the box has none). Each value is published to one decimal with its rank
+   in the league, 1 the best (the most, or the fewest where fewer is better; pace 1 the fastest), on the value to four
+   decimals, ties by club code; a club with no game counted is not listed. Shape: { v: 1, season, through (the last
+   final counted), games (finals counted), clubs: { MIA: { g, last, pd: [3.4, 8], ... } } } */
+const TS_STATS = [['pd', 1], ['ppg', 1], ['pa', -1], ['ortg', 1], ['drtg', -1], ['pace', 0], ['fg', 1], ['tp', 1], ['tpm', 1], ['reb', 1], ['ast', 1], ['tov', -1], ['stl', 1], ['blk', 1]];
+const tsPair = v => { const m = /^\s*(\d+)\s*-\s*(\d+)\s*$/.exec(String(v == null ? '' : v)); return m ? [+m[1], +m[2]] : null; };
+const tsNum = v => v === '' || v === null || v === undefined || !isFinite(+v) ? null : +v;
+/* one side's box line, or null where the team box lacks a figure the stats need */
+function tsSide(s) {
+  if (!s) return null;
+  const fg = tsPair(s['fieldGoalsMade-fieldGoalsAttempted']), tp = tsPair(s['threePointFieldGoalsMade-threePointFieldGoalsAttempted']), ft = tsPair(s['freeThrowsMade-freeThrowsAttempted']);
+  const tov = tsNum(s.totalTurnovers) !== null ? tsNum(s.totalTurnovers) : tsNum(s.turnovers);
+  const x = { fgm: fg && fg[0], fga: fg && fg[1], tpm: tp && tp[0], tpa: tp && tp[1], fta: ft && ft[1], orb: tsNum(s.offensiveRebounds), tov, reb: tsNum(s.totalRebounds), ast: tsNum(s.assists), stl: tsNum(s.steals), blk: tsNum(s.blocks) };
+  return Object.values(x).every(v => v !== null && v !== undefined) ? x : null;
+}
+function teamStatsState(games, season, dir = DATA) {
+  const rows = {}, f = path.join(dir, `teambox_${season}.jsonl`);
+  if (fs.existsSync(f)) for (const l of fs.readFileSync(f, 'utf8').split('\n')) { if (!l.trim()) continue; let t; try { t = JSON.parse(l); } catch (e) { continue; } if (t && t.game_id && t.team && t.stats) rows[t.game_id + ':' + t.team] = t.stats; }
+  const mins = {}; for (const r of csv(`box_${season}.csv`, dir)) { const k = r.game_id + ':' + r.team; mins[k] = (mins[k] || 0) + (+r.min || 0); }
+  const off = offFinals(games, season), acc = {};
+  let through = null, n = 0;
+  for (const g of games) {
+    if (+g.season !== season || g.type !== 'REG' || g.status !== 'final' || off[g.game_id] === 'playin') continue;
+    const hs = tsNum(g.home_score), as = tsNum(g.away_score), H = tsSide(rows[g.game_id + ':' + g.home]), A = tsSide(rows[g.game_id + ':' + g.away]);
+    if (hs === null || as === null || !H || !A) continue;
+    const poss = x => x.fga - x.orb + x.tov + 0.44 * x.fta, p = (poss(H) + poss(A)) / 2;
+    const m = Math.max(mins[g.game_id + ':' + g.home] || 0, mins[g.game_id + ':' + g.away] || 0), min = 48 + 5 * (m > 0 ? Math.max(0, Math.round((m - 240) / 25)) : 0);
+    for (const [t, x, pf, pa] of [[g.home, H, hs, as], [g.away, A, as, hs]]) {
+      const a = acc[t] = acc[t] || { g: 0, last: '', pf: 0, pa: 0, poss: 0, min: 0, fgm: 0, fga: 0, tpm: 0, tpa: 0, reb: 0, ast: 0, tov: 0, stl: 0, blk: 0 };
+      a.g++; if (g.date > a.last) a.last = g.date; a.pf += pf; a.pa += pa; a.poss += p; a.min += min;
+      for (const k of ['fgm', 'fga', 'tpm', 'tpa', 'reb', 'ast', 'tov', 'stl', 'blk']) a[k] += x[k];
+    }
+    n++; if (!through || g.date > through) through = g.date;
+  }
+  const val = a => ({ pd: (a.pf - a.pa) / a.g, ppg: a.pf / a.g, pa: a.pa / a.g, ortg: a.poss > 0 ? 100 * a.pf / a.poss : null, drtg: a.poss > 0 ? 100 * a.pa / a.poss : null,
+    pace: a.min > 0 ? 48 * a.poss / a.min : null, fg: a.fga > 0 ? 100 * a.fgm / a.fga : null, tp: a.tpa > 0 ? 100 * a.tpm / a.tpa : null, tpm: a.tpm / a.g,
+    reb: a.reb / a.g, ast: a.ast / a.g, tov: a.tov / a.g, stl: a.stl / a.g, blk: a.blk / a.g });
+  const V = Object.fromEntries(Object.entries(acc).map(([t, a]) => [t, val(a)]));
+  const r1 = x => Math.round(x * 10) / 10, r4 = x => Math.round(x * 1e4) / 1e4;
+  const clubs = Object.fromEntries(Object.keys(V).sort().map(t => [t, { g: acc[t].g, last: acc[t].last }]));
+  for (const [k, sgn] of TS_STATS) {
+    const order = Object.keys(V).filter(t => V[t][k] !== null).sort((a, b) => (sgn < 0 ? r4(V[a][k]) - r4(V[b][k]) : r4(V[b][k]) - r4(V[a][k])) || (a < b ? -1 : a > b ? 1 : 0));
+    order.forEach((t, i) => { clubs[t][k] = [r1(V[t][k]), i + 1]; });
+  }
+  return { v: 1, season, through, games: n, clubs };
+}
+module.exports = { decisionState, propsState, boxesState, corrState, pickemState, offFinals, reportState, teamStatsState, TS_STATS, PK_MODELS };
 if (require.main === module) main();

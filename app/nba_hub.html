@@ -257,6 +257,13 @@ body.pp-lock{overflow:hidden}
 .pp-gh .tot,.pp-gh .totpts,.pp-gh .winner{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.2}
 .pp-gh .tot b,.pp-gh .totpts b,.pp-gh .none{display:block;white-space:nowrap;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.3px;color:var(--ink);font-variant-numeric:tabular-nums}
 .pp-gh small{display:block;font-size:11px;color:var(--ink-2);line-height:1.3;margin-top:4px}
+/* the game's three windows, under the head card (the NFL's gameWinBtns, its .gwin: three quiet buttons a row, 44px; the
+   windows themselves are app/parts/gamewin.html) */
+.gwin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 14px}
+.gwin .gwin-btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:8px 10px;border-radius:12px;font-size:14px;font-weight:600;text-align:center;line-height:1.2}
+/* a player in the game's top five Mismatches wears the NFL's tag beside his name (white on #2563EB to #1E4FA8, 5.2:1 and
+   up), titled with his row; it takes the pointer so its title shows, and a tap on it opens the row as the row would */
+.pp-mmtag{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#2563EB,#1E4FA8);color:#fff;font-family:var(--body);font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;line-height:1.3;vertical-align:2px;white-space:nowrap;box-shadow:0 0 0 1px rgba(59,130,246,.35),0 2px 6px rgba(37,99,235,.35);pointer-events:auto;cursor:help}
 .pp-trialtag{display:inline-block;margin-left:6px;font-size:9.5px;font-weight:800;letter-spacing:.06em;padding:1px 6px;border:1px solid var(--pb-trial);border-radius:999px;color:var(--pb-trial);vertical-align:1px;white-space:nowrap;cursor:help}
 #ppSheet .pp-trial{margin:0 0 14px;padding:0 14px}
 #ppSheet .pp-trial[open]{padding-bottom:10px}
@@ -373,7 +380,7 @@ body.pp-lock{overflow:hidden}
   #ppSheet .pp-top{position:sticky;top:0;z-index:3;padding:10px 12px;margin:0 0 12px;background:var(--panel-2);border-bottom:1px solid var(--line)}
   #ppSheet .pp-bar{margin:0;gap:4px 12px} .pp-sws{gap:4px 12px}
   .pp-fixed{padding:0 12px} #ppSheet .pp-body{padding:0 12px 24px} .pp-card{padding:16px 14px} .pp-nomatch{margin:-12px 12px 22px} }
-@media(max-width:400px){ .pp-gh .tot b,.pp-gh .totpts b{font-size:16px} .pp-sw{font-size:13px} }
+@media(max-width:400px){ .pp-gh .tot b,.pp-gh .totpts b{font-size:16px} .pp-sw{font-size:13px} .gwin{gap:6px} .gwin .gwin-btn{padding:8px 4px;font-size:13px} }
 /* the narrowest phones (320): the stat rows give back a little padding, so nothing runs past the card */
 @media(max-width:340px){ .pp-rungs td{padding:7px 3px} .pp-rungs .pct{width:38px;font-size:13px} .pp-conf{padding:3px 5px;letter-spacing:.02em} .pp-rungs .fair{white-space:normal}
   .pp-close{padding:10px 10px} #ppSheet .pp-bar,.pp-sws{gap:4px 8px} .pp-sw{gap:6px;font-size:12px} }
@@ -1729,6 +1736,13 @@ function ppFairTitle(l, f) {
   if (l.mk === 'yes') return "DraftKings' fair chance, est.: one price with no other side, so the margin measured on the milestones is taken out, never measured on this market itself; on the 2026 playoff prices double- and triple-doubles came in well below what that leaves, so read it as high";
   return "DraftKings' fair chance, est.: DraftKings gives a single price here, so its margin is taken out as measured on the archive's milestones";
 }
+/* the NFL's three buttons under the game's head (its gameWinBtns): Matchup, Mismatches and Team Stats, each opening one
+   small window over the view (window.gameWindow, app/parts/gamewin.html); none where that part is not on the page */
+function ppWinBtns(g) {
+  if (typeof window.gameWindow !== 'function') return '';
+  const b = (k, l) => `<button type="button" class="btn quiet gwin-btn" data-gp-pop="${k}" data-gp-game="${esc(g.id)}" data-pp-key="gwin-${k}" aria-haspopup="dialog">${l}</button>`;
+  return `<div class="gwin" role="group" aria-label="More on this game">${b('units', 'Matchup')}${b('mism', 'Mismatches')}${b('stats', 'Team Stats')}</div>`;
+}
 const ppLoading = () => !LINES && !LINES_ERR;
 const ppNoLine = (t = ppLoading() ? "Loading DraftKings' lines…" : 'No DraftKings line yet.') => `<p class="pp-noline" data-pp-noline>${t}</p>`;
 /* the NFL's Game bets card: each team to win and to cover, then the game total over or under, on DraftKings' game lines
@@ -1813,15 +1827,19 @@ function ppRow1(g, x, pr) {
   const posLine = [who.pos, mins != null && `${mins} min`, backup && 'backup'].filter(Boolean).join(' · ');
   const sumSr = row ? `projected ${mins != null ? `${mins} minutes, ` : ''}${['pts', 'reb', 'ast'].map(k => `${ppNumTxt(ppMean(row, k))} ${{ pts: 'points', reb: 'rebounds', ast: 'assists' }[k]}`).join(', ')}` : 'no projection';
   const hasStats = ppRecent(pid).length > 0;
+  /* in the game's top five Mismatches (app/parts/gamewin.html's own list, the window's): the NFL's tag beside his name,
+     titled with his row there, and said in the row's name */
+  const mm = typeof window.gwMismatch === 'function' ? window.gwMismatch(g.id, pid) : null;
+  const mmTag = mm ? `<span class="pp-mmtag" data-pp-mm="${mm.n}" title="${esc(mm.title)}">Mismatch</span>` : '';
   /* Show stats is named by its own words (Show stats or Hide stats, then whose), which say its state: no aria-pressed
      beside them; it names the table it controls only while the table is drawn */
   const stWord = st ? 'Hide stats' : 'Show stats';
   const stBtn = hasStats ? `<button type="button" class="pp-stbtn${st ? ' on' : ''}" data-pp-stats="${esc(pid)}" data-pp-key="stats-${esc(pid)}"${st ? ` aria-controls="ppSt-${esc(pid)}"` : ''} aria-label="${esc(`${stWord}: ${who.name}'s games this past week`)}"><span>${stWord}</span></button>` : '';
-  const whoHtml = `<span class="who"><span aria-hidden="true">${badge}<span class="nm">${esc(who.name)}</span>${posLine ? `<span class="pos">${esc(posLine)}</span>` : ''}${inj}</span>${stBtn}</span>`;
+  const whoHtml = `<span class="who"><span aria-hidden="true">${badge}<span class="nm">${esc(who.name)}</span>${mmTag}${posLine ? `<span class="pos">${esc(posLine)}</span>` : ''}${inj}</span>${stBtn}</span>`;
   const bench = !row && !nLines;
   let h = `<div class="pp-pwrap" data-pp-name="${esc(String(who.name).toLowerCase())}">`;
   if (bench) h += `<div class="pp-plr bench" data-pp-player="${esc(pid)}" data-pp-bench>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow"></span><span class="sr">${esc(who.name)}${posLine ? ', ' + esc(posLine) : ''}: no projection and no DraftKings line</span></div>`;
-  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}"${open ? ` aria-controls="ppPb-${esc(pid)}"` : ''} aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${backup ? ', backup' : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
+  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}"${open ? ` aria-controls="ppPb-${esc(pid)}"` : ''} aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${backup ? ', backup' : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}${mm ? `, mismatch #${mm.n} in this game` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
   if (st && hasStats) h += ppStats(x);
   if (open && !bench) h += ppBody(g, x, pr);
   return h + '</div>';
@@ -1925,7 +1943,7 @@ function propsDraw(anchor) {
   if (!g) h = '<p class="pp-q">This game is no longer on the board.</p>';
   else if (!live) h = `<div class="note"><b>This game has tipped off.</b> Its props are off the board here.</div>`;
   else {
-    h += ppHead(g) + ppTrial() + ppBets(g);
+    h += ppHead(g) + ppWinBtns(g) + ppTrial() + ppBets(g);
     if (!ppGame(g.id)) h += `<p class="pp-q pp-nogame" data-pp-nogame>${esc(ppNoGame(g))}</p>`;
     if (M.slip.legs.some(l => l.id === g.id && l.kind === 'prop' && l.mk === 'mile') && !PPV.rungs) h += `<p class="pp-q pp-lnote">A milestone leg in your parlay is shown under its player even with Milestones off, so nothing counts out of sight.</p>`;
     h += ppTeams(g);
@@ -1935,11 +1953,16 @@ function propsDraw(anchor) {
   body.querySelectorAll('[data-sg-add]').forEach(b => b.onchange = () => ppToggle(+b.dataset.sgAdd));
   body.querySelectorAll('[data-pp-open]').forEach(b => b.onclick = () => { const id = b.dataset.ppOpen; PPV.row = PPV.row === id ? null : id; propsDraw(id); });
   body.querySelectorAll('[data-pp-stats]').forEach(b => b.onclick = () => { const id = b.dataset.ppStats; if (PPV.stats.has(id)) PPV.stats.delete(id); else PPV.stats.add(id); propsDraw(id); });
+  body.querySelectorAll('[data-gp-pop]').forEach(b => b.onclick = () => { if (typeof window.gameWindow === 'function') window.gameWindow(b.dataset.gpPop, b.dataset.gpGame, b); });
+  body.querySelectorAll('.pp-mmtag').forEach(t => t.onclick = () => { const r = t.closest('.pp-plr'), o = r && r.querySelector('[data-pp-open]'); if (o) o.click(); });
   if (live) ppSearchApply(); else $('#ppNoMatch').textContent = '';
   ppSlipSync();
   sc.scrollTop = y;
   if (pinTop != null) { const nb = body.querySelector(`[data-pp-player="${CSS.escape(anchor)}"]`); if (nb) sc.scrollTop += nb.getBoundingClientRect().top - pinTop; }
   ppFocusBack(sc, plan);
+  /* a game's window open over the view follows the redraw: bound to its button as drawn now, or closed where the view
+     no longer draws one (its game has tipped off) */
+  if (typeof window.gameWindowSync === 'function') window.gameWindowSync();
 }
 function propsOpen(gid, from) {
   if (!S || !S.slate.some(x => x.id === gid)) return;
@@ -2432,5 +2455,6 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
 <!--part:parlay-->
 <!--part:suggested-->
 <!--part:pickem-->
+<!--part:gamewin-->
 </body>
 </html>

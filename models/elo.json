@@ -1381,8 +1381,8 @@
    "spread": -3.6
   },
   "2027_20261105_ORL_PHX": {
-   "pHome": 0.4652,
-   "spread": 1.1
+   "pHome": 0.4709,
+   "spread": 0.9
   },
   "2027_20261106_BOS_CHA": {
    "pHome": 0.3783,
@@ -2196,5 +2196,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-05T15:30Z"
+ "generated": "2026-11-05T20:39Z"
 }

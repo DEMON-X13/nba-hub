@@ -4059,7 +4059,6 @@ date,team,player_id,name,status
 2026-11-05,ATL,4873201,Asa Newell,Day-To-Day
 2026-11-05,ATL,4712863,Mouhamed Gueye,Out
 2026-11-05,ATL,5105571,Henri Veesaar,Out
-2026-11-05,BOS,4065648,Jayson Tatum,Day-To-Day
 2026-11-05,BOS,4066354,Payton Pritchard,Day-To-Day
 2026-11-05,BOS,4433188,Devin Carter,Out
 2026-11-05,BKN,4712896,Noah Clowney,Day-To-Day
@@ -4107,8 +4106,8 @@ date,team,player_id,name,status
 2026-11-05,MIN,4432847,Terrence Shannon Jr.,Day-To-Day
 2026-11-05,MIN,4594268,Anthony Edwards,Out
 2026-11-05,MIN,3934673,Donte DiVincenzo,Out
-2026-11-05,NOP,4397688,Trey Murphy III,Day-To-Day
 2026-11-05,NOP,5061589,Yves Missi,Out
+2026-11-05,NOP,4397688,Trey Murphy III,Day-To-Day
 2026-11-05,NYK,3062679,Josh Hart,Day-To-Day
 2026-11-05,OKC,4432823,Jaylin Williams,Day-To-Day
 2026-11-05,OKC,5159925,Nikola Topic,Out
@@ -4124,8 +4123,8 @@ date,team,player_id,name,status
 2026-11-05,PHI,5105637,Adem Bona,Day-To-Day
 2026-11-05,PHI,4870562,Dominick Barlow,Out
 2026-11-05,PHI,4871141,Ariel Hukporti,Out
-2026-11-05,PHX,4278402,Jordan Goodwin,Day-To-Day
-2026-11-05,PHX,5105977,Rasheer Fleming,Day-To-Day
+2026-11-05,PHX,5105977,Rasheer Fleming,Out
+2026-11-05,PHX,4278402,Jordan Goodwin,Out
 2026-11-05,PHX,4701232,Mark Williams,Out
 2026-11-05,POR,4578893,Vit Krejci,Out
 2026-11-05,POR,4279888,Ja Morant,Out

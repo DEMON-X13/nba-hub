@@ -1,0 +1,369 @@
+{
+ "frozen": "2026-11-05T18:41Z",
+ "kept": [
+  "sq",
+  "cal",
+  "open",
+  "ret",
+  "nt",
+  "debut",
+  "kappa",
+  "dE",
+  "shrink",
+  "phase",
+  "vm"
+ ],
+ "X": {
+  "sq": true,
+  "cal": [
+   0,
+   0
+  ],
+  "open": 1,
+  "ret": {
+   "a": 1,
+   "b": 1
+  },
+  "nt": [
+   1,
+   1,
+   1
+  ],
+  "debut": 0,
+  "kappa": 1,
+  "dE": 0,
+  "shrink": {},
+  "phase": {},
+  "vm": {}
+ },
+ "grids": {
+  "open": [
+   0.8,
+   0.85,
+   0.9,
+   0.95,
+   1
+  ],
+  "ret": [
+   {
+    "a": 0.8,
+    "b": 0.75
+   },
+   {
+    "a": 0.8,
+    "b": 0.8
+   },
+   {
+    "a": 0.8,
+    "b": 0.85
+   },
+   {
+    "a": 0.8,
+    "b": 0.9
+   },
+   {
+    "a": 0.8,
+    "b": 0.95
+   },
+   {
+    "a": 0.8,
+    "b": 1
+   },
+   {
+    "a": 0.85,
+    "b": 0.75
+   },
+   {
+    "a": 0.85,
+    "b": 0.8
+   },
+   {
+    "a": 0.85,
+    "b": 0.85
+   },
+   {
+    "a": 0.85,
+    "b": 0.9
+   },
+   {
+    "a": 0.85,
+    "b": 0.95
+   },
+   {
+    "a": 0.85,
+    "b": 1
+   },
+   {
+    "a": 0.9,
+    "b": 0.75
+   },
+   {
+    "a": 0.9,
+    "b": 0.8
+   },
+   {
+    "a": 0.9,
+    "b": 0.85
+   },
+   {
+    "a": 0.9,
+    "b": 0.9
+   },
+   {
+    "a": 0.9,
+    "b": 0.95
+   },
+   {
+    "a": 0.9,
+    "b": 1
+   },
+   {
+    "a": 0.95,
+    "b": 0.75
+   },
+   {
+    "a": 0.95,
+    "b": 0.8
+   },
+   {
+    "a": 0.95,
+    "b": 0.85
+   },
+   {
+    "a": 0.95,
+    "b": 0.9
+   },
+   {
+    "a": 0.95,
+    "b": 0.95
+   },
+   {
+    "a": 0.95,
+    "b": 1
+   },
+   {
+    "a": 1,
+    "b": 0.75
+   },
+   {
+    "a": 1,
+    "b": 0.8
+   },
+   {
+    "a": 1,
+    "b": 0.85
+   },
+   {
+    "a": 1,
+    "b": 0.9
+   },
+   {
+    "a": 1,
+    "b": 0.95
+   },
+   {
+    "a": 1,
+    "b": 1
+   }
+  ],
+  "nt": [
+   [
+    0.7,
+    0.95,
+    1
+   ],
+   [
+    0.7,
+    1,
+    1
+   ],
+   [
+    0.7,
+    1.05,
+    1
+   ],
+   [
+    0.75,
+    0.95,
+    1
+   ],
+   [
+    0.75,
+    1,
+    1
+   ],
+   [
+    0.75,
+    1.05,
+    1
+   ],
+   [
+    0.8,
+    0.95,
+    1
+   ],
+   [
+    0.8,
+    1,
+    1
+   ],
+   [
+    0.8,
+    1.05,
+    1
+   ],
+   [
+    0.85,
+    0.95,
+    1
+   ],
+   [
+    0.85,
+    1,
+    1
+   ],
+   [
+    0.85,
+    1.05,
+    1
+   ],
+   [
+    0.9,
+    0.95,
+    1
+   ],
+   [
+    0.9,
+    1,
+    1
+   ],
+   [
+    0.9,
+    1.05,
+    1
+   ],
+   [
+    0.95,
+    0.95,
+    1
+   ],
+   [
+    0.95,
+    1,
+    1
+   ],
+   [
+    0.95,
+    1.05,
+    1
+   ],
+   [
+    1,
+    0.95,
+    1
+   ],
+   [
+    1,
+    1,
+    1
+   ],
+   [
+    1,
+    1.05,
+    1
+   ]
+  ],
+  "debut": [
+   0,
+   2,
+   4,
+   6,
+   8,
+   10,
+   12
+  ],
+  "kappa": [
+   0,
+   0.25,
+   0.5,
+   0.75,
+   1
+  ],
+  "lam": [
+   0,
+   0.25,
+   0.5,
+   0.75,
+   1
+  ],
+  "dE": [
+   -1.5,
+   -0.75,
+   0,
+   0.75,
+   1.5
+  ],
+  "vm": [
+   -0.6,
+   -0.45,
+   -0.3,
+   -0.15,
+   0,
+   0.15
+  ],
+  "vEarly": [
+   1,
+   1.1,
+   1.2,
+   1.35,
+   1.5
+  ]
+ },
+ "stages": [
+  {
+   "key": "sq",
+   "what": "every minutes constant fitted on squared error (aimed at the mean) instead of absolute error (the median)"
+  },
+  {
+   "key": "cal",
+   "what": "a straight-line calibration of the projected minutes, m + c0 + c1 (m - 24), by least squares"
+  },
+  {
+   "key": "open",
+   "what": "the season-opening prior (his whole last regular season's minutes) times a factor"
+  },
+  {
+   "key": "ret",
+   "what": "his first game back after missing 3-9 (10+) of the club's games: b times a (b)"
+  },
+  {
+   "key": "nt",
+   "what": "a new club: b times r0 on his first game for it, r1 on his 2nd-5th"
+  },
+  {
+   "key": "debut",
+   "what": "each listed player with no game on record claims d minutes in the side's scale"
+  },
+  {
+   "key": "kappa",
+   "what": "the side's change of minutes handed out in proportion to b^kappa (kappa 1: as now)"
+  },
+  {
+   "key": "dE",
+   "what": "the season-start pace bump EARLY_PACE (1.5) moved by dE, fitted with the pace exponent"
+  },
+  {
+   "key": "shrink",
+   "what": "each stat's mean pulled toward his own average a game: naive + beta (mu - naive), beta per stat by least squares"
+  },
+  {
+   "key": "phase",
+   "what": "per stat, the regular season's mean times what happened over what was projected, by the club's games played (0-9, 10-29, 30-59, 60+)"
+  },
+  {
+   "key": "vm",
+   "what": "each spread times (projected minutes / 24)^C, C per stat by maximum likelihood"
+  }
+ ],
+ "fit": "for a fold S: cand_fix_lib.js fitAllX on the rows of seasons 2023 to S-1 (2022 warms up), with these X (initial values) and grids; the archive is scored once with the 2026 fold (fit 2023-2025); a new shadow trial would freeze the fit on 2023-2026"
+}

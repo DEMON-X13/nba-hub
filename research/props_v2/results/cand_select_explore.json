@@ -1,0 +1,3856 @@
+{
+ "generated": "2026-11-05T18:00Z",
+ "cuts": {
+  "pts": [
+   11.5,
+   14.5,
+   20.5
+  ],
+  "reb": [
+   3.5,
+   4.5,
+   6.5
+  ],
+  "ast": [
+   1.5,
+   3.5,
+   5.5
+  ],
+  "tpm": [
+   1.5,
+   1.5,
+   2.5
+  ],
+  "stl": [
+   0.5,
+   0.5,
+   1.5
+  ],
+  "blk": [
+   0.5,
+   0.5,
+   0.5
+  ],
+  "pra": [
+   18.5,
+   23.5,
+   30.5
+  ],
+  "pr": [
+   15.5,
+   20.5,
+   26.5
+  ],
+  "pa": [
+   13.5,
+   17.5,
+   25.5
+  ],
+  "ar": [
+   6.5,
+   8.5,
+   10.5
+  ],
+  "sb": [
+   1.5,
+   1.5,
+   1.5
+  ]
+ },
+ "margin": 0.07,
+ "edge": 0.03,
+ "groups": {
+  "all": {
+   "derive": {
+    "n": 279642,
+    "said": 0.4322,
+    "hit": 0.4375,
+    "naiveSaid": 0.3974,
+    "llModel": 0.6431,
+    "llNaive": 0.6843,
+    "skill": 0.0411,
+    "share": 0.961,
+    "slope": 0.939,
+    "shift": 0.009,
+    "meanGap": 0.097,
+    "over": {
+     "bets": 71644,
+     "said": 0.5718,
+     "won": 0.5682,
+     "roi": 0.385
+    },
+    "under": {
+     "bets": 79003,
+     "said": 0.6825,
+     "won": 0.6627,
+     "roi": 0.1487
+    }
+   },
+   "check": {
+    "n": 570152,
+    "said": 0.4314,
+    "hit": 0.4386,
+    "naiveSaid": 0.3995,
+    "llModel": 0.6439,
+    "llNaive": 0.6847,
+    "skill": 0.0409,
+    "share": 0.954,
+    "slope": 0.938,
+    "shift": 0.017,
+    "meanGap": 0.0973,
+    "over": {
+     "bets": 141927,
+     "said": 0.5755,
+     "won": 0.575,
+     "roi": 0.3937
+    },
+    "under": {
+     "bets": 168688,
+     "said": 0.6805,
+     "won": 0.6563,
+     "roi": 0.1429
+    }
+   }
+  },
+  "stat:pts": {
+   "derive": {
+    "n": 25422,
+    "said": 0.4563,
+    "hit": 0.4736,
+    "naiveSaid": 0.4115,
+    "llModel": 0.6675,
+    "llNaive": 0.7102,
+    "skill": 0.0427,
+    "share": 0.966,
+    "slope": 0.896,
+    "shift": 0.055,
+    "meanGap": 0.103,
+    "over": {
+     "bets": 7441,
+     "said": 0.5885,
+     "won": 0.5995,
+     "roi": 0.3567
+    },
+    "under": {
+     "bets": 6882,
+     "said": 0.677,
+     "won": 0.6459,
+     "roi": 0.1231
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.4489,
+    "hit": 0.4733,
+    "naiveSaid": 0.4119,
+    "llModel": 0.6677,
+    "llNaive": 0.7113,
+    "skill": 0.0437,
+    "share": 0.985,
+    "slope": 0.895,
+    "shift": 0.083,
+    "meanGap": 0.1029,
+    "over": {
+     "bets": 14304,
+     "said": 0.5881,
+     "won": 0.6075,
+     "roi": 0.38
+    },
+    "under": {
+     "bets": 15532,
+     "said": 0.6792,
+     "won": 0.6417,
+     "roi": 0.1184
+    }
+   }
+  },
+  "stat:reb": {
+   "derive": {
+    "n": 25422,
+    "said": 0.4636,
+    "hit": 0.462,
+    "naiveSaid": 0.4282,
+    "llModel": 0.661,
+    "llNaive": 0.6952,
+    "skill": 0.0342,
+    "share": 0.944,
+    "slope": 0.921,
+    "shift": -0.018,
+    "meanGap": 0.0977,
+    "over": {
+     "bets": 6739,
+     "said": 0.6024,
+     "won": 0.5897,
+     "roi": 0.2683
+    },
+    "under": {
+     "bets": 6974,
+     "said": 0.674,
+     "won": 0.6632,
+     "roi": 0.1726
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.4657,
+    "hit": 0.4611,
+    "naiveSaid": 0.4285,
+    "llModel": 0.6624,
+    "llNaive": 0.6961,
+    "skill": 0.0337,
+    "share": 0.914,
+    "slope": 0.9,
+    "shift": -0.032,
+    "meanGap": 0.0987,
+    "over": {
+     "bets": 13747,
+     "said": 0.6062,
+     "won": 0.5922,
+     "roi": 0.2792
+    },
+    "under": {
+     "bets": 14110,
+     "said": 0.6711,
+     "won": 0.6545,
+     "roi": 0.162
+    }
+   }
+  },
+  "stat:ast": {
+   "derive": {
+    "n": 25422,
+    "said": 0.4471,
+    "hit": 0.4474,
+    "naiveSaid": 0.4122,
+    "llModel": 0.6559,
+    "llNaive": 0.6974,
+    "skill": 0.0414,
+    "share": 0.966,
+    "slope": 0.915,
+    "shift": -0.015,
+    "meanGap": 0.0983,
+    "over": {
+     "bets": 6943,
+     "said": 0.5717,
+     "won": 0.5567,
+     "roi": 0.3621
+    },
+    "under": {
+     "bets": 7194,
+     "said": 0.6782,
+     "won": 0.6664,
+     "roi": 0.1683
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.4521,
+    "hit": 0.451,
+    "naiveSaid": 0.4141,
+    "llModel": 0.6589,
+    "llNaive": 0.6984,
+    "skill": 0.0395,
+    "share": 0.928,
+    "slope": 0.886,
+    "shift": -0.025,
+    "meanGap": 0.1007,
+    "over": {
+     "bets": 14641,
+     "said": 0.5747,
+     "won": 0.5596,
+     "roi": 0.3511
+    },
+    "under": {
+     "bets": 14505,
+     "said": 0.6775,
+     "won": 0.6572,
+     "roi": 0.1537
+    }
+   }
+  },
+  "stat:tpm": {
+   "derive": {
+    "n": 25422,
+    "said": 0.3721,
+    "hit": 0.3713,
+    "naiveSaid": 0.3453,
+    "llModel": 0.5885,
+    "llNaive": 0.623,
+    "skill": 0.0344,
+    "share": 0.906,
+    "slope": 1.086,
+    "shift": 0.03,
+    "meanGap": 0.0776,
+    "over": {
+     "bets": 4692,
+     "said": 0.4854,
+     "won": 0.4693,
+     "roi": 0.4846
+    },
+    "under": {
+     "bets": 6463,
+     "said": 0.6862,
+     "won": 0.6793,
+     "roi": 0.1493
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.376,
+    "hit": 0.3808,
+    "naiveSaid": 0.3532,
+    "llModel": 0.5956,
+    "llNaive": 0.6305,
+    "skill": 0.0349,
+    "share": 0.905,
+    "slope": 1.033,
+    "shift": 0.036,
+    "meanGap": 0.0806,
+    "over": {
+     "bets": 9313,
+     "said": 0.5143,
+     "won": 0.5045,
+     "roi": 0.5288
+    },
+    "under": {
+     "bets": 14874,
+     "said": 0.6815,
+     "won": 0.6581,
+     "roi": 0.1233
+    }
+   }
+  },
+  "stat:stl": {
+   "derive": {
+    "n": 25422,
+    "said": 0.3987,
+    "hit": 0.4032,
+    "naiveSaid": 0.3798,
+    "llModel": 0.6372,
+    "llNaive": 0.6867,
+    "skill": 0.0495,
+    "share": 1.005,
+    "slope": 0.932,
+    "shift": -0.005,
+    "meanGap": 0.0831,
+    "over": {
+     "bets": 4690,
+     "said": 0.4628,
+     "won": 0.4616,
+     "roi": 0.7343
+    },
+    "under": {
+     "bets": 7870,
+     "said": 0.6864,
+     "won": 0.6718,
+     "roi": 0.146
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.3993,
+    "hit": 0.4125,
+    "naiveSaid": 0.3929,
+    "llModel": 0.6447,
+    "llNaive": 0.6919,
+    "skill": 0.0472,
+    "share": 1,
+    "slope": 0.917,
+    "shift": 0.027,
+    "meanGap": 0.0821,
+    "over": {
+     "bets": 8097,
+     "said": 0.4634,
+     "won": 0.4784,
+     "roi": 0.839
+    },
+    "under": {
+     "bets": 18840,
+     "said": 0.6764,
+     "won": 0.6528,
+     "roi": 0.1336
+    }
+   }
+  },
+  "stat:blk": {
+   "derive": {
+    "n": 25422,
+    "said": 0.2985,
+    "hit": 0.3047,
+    "naiveSaid": 0.2847,
+    "llModel": 0.5689,
+    "llNaive": 0.611,
+    "skill": 0.0421,
+    "share": 1.019,
+    "slope": 0.911,
+    "shift": -0.035,
+    "meanGap": 0.0676,
+    "over": {
+     "bets": 3173,
+     "said": 0.3679,
+     "won": 0.3672,
+     "roi": 0.8056
+    },
+    "under": {
+     "bets": 6994,
+     "said": 0.718,
+     "won": 0.7003,
+     "roi": 0.1234
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.2995,
+    "hit": 0.2904,
+    "naiveSaid": 0.2732,
+    "llModel": 0.5573,
+    "llNaive": 0.5966,
+    "skill": 0.0393,
+    "share": 0.977,
+    "slope": 0.923,
+    "shift": -0.106,
+    "meanGap": 0.0682,
+    "over": {
+     "bets": 7893,
+     "said": 0.3854,
+     "won": 0.3653,
+     "roi": 0.6161
+    },
+    "under": {
+     "bets": 11455,
+     "said": 0.7306,
+     "won": 0.7353,
+     "roi": 0.1485
+    }
+   }
+  },
+  "stat:pra": {
+   "derive": {
+    "n": 25422,
+    "said": 0.4801,
+    "hit": 0.4862,
+    "naiveSaid": 0.4303,
+    "llModel": 0.6596,
+    "llNaive": 0.7031,
+    "skill": 0.0435,
+    "share": 0.942,
+    "slope": 0.913,
+    "shift": 0.019,
+    "meanGap": 0.117,
+    "over": {
+     "bets": 8516,
+     "said": 0.6228,
+     "won": 0.6197,
+     "roi": 0.2836
+    },
+    "under": {
+     "bets": 7156,
+     "said": 0.6755,
+     "won": 0.6504,
+     "roi": 0.1588
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.475,
+    "hit": 0.4891,
+    "naiveSaid": 0.4315,
+    "llModel": 0.6608,
+    "llNaive": 0.7045,
+    "skill": 0.0436,
+    "share": 0.94,
+    "slope": 0.894,
+    "shift": 0.05,
+    "meanGap": 0.1167,
+    "over": {
+     "bets": 16532,
+     "said": 0.6252,
+     "won": 0.6282,
+     "roi": 0.2986
+    },
+    "under": {
+     "bets": 15737,
+     "said": 0.6755,
+     "won": 0.6403,
+     "roi": 0.1449
+    }
+   }
+  },
+  "stat:pr": {
+   "derive": {
+    "n": 25422,
+    "said": 0.4732,
+    "hit": 0.481,
+    "naiveSaid": 0.4254,
+    "llModel": 0.6633,
+    "llNaive": 0.7035,
+    "skill": 0.0402,
+    "share": 0.944,
+    "slope": 0.902,
+    "shift": 0.023,
+    "meanGap": 0.1111,
+    "over": {
+     "bets": 8143,
+     "said": 0.6119,
+     "won": 0.6105,
+     "roi": 0.2859
+    },
+    "under": {
+     "bets": 7066,
+     "said": 0.6743,
+     "won": 0.6468,
+     "roi": 0.1436
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.4676,
+    "hit": 0.4834,
+    "naiveSaid": 0.4264,
+    "llModel": 0.6632,
+    "llNaive": 0.7052,
+    "skill": 0.042,
+    "share": 0.956,
+    "slope": 0.901,
+    "shift": 0.055,
+    "meanGap": 0.1109,
+    "over": {
+     "bets": 15668,
+     "said": 0.6146,
+     "won": 0.621,
+     "roi": 0.3087
+    },
+    "under": {
+     "bets": 15479,
+     "said": 0.6759,
+     "won": 0.642,
+     "roi": 0.1384
+    }
+   }
+  },
+  "stat:pa": {
+   "derive": {
+    "n": 25422,
+    "said": 0.4698,
+    "hit": 0.4825,
+    "naiveSaid": 0.421,
+    "llModel": 0.6632,
+    "llNaive": 0.707,
+    "skill": 0.0438,
+    "share": 0.958,
+    "slope": 0.912,
+    "shift": 0.044,
+    "meanGap": 0.1118,
+    "over": {
+     "bets": 8188,
+     "said": 0.6056,
+     "won": 0.613,
+     "roi": 0.3224
+    },
+    "under": {
+     "bets": 6979,
+     "said": 0.6766,
+     "won": 0.6489,
+     "roi": 0.1446
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.4634,
+    "hit": 0.4822,
+    "naiveSaid": 0.4218,
+    "llModel": 0.6637,
+    "llNaive": 0.7081,
+    "skill": 0.0444,
+    "share": 0.959,
+    "slope": 0.901,
+    "shift": 0.066,
+    "meanGap": 0.1118,
+    "over": {
+     "bets": 15803,
+     "said": 0.6069,
+     "won": 0.6174,
+     "roi": 0.3361
+    },
+    "under": {
+     "bets": 15593,
+     "said": 0.6769,
+     "won": 0.6429,
+     "roi": 0.1388
+    }
+   }
+  },
+  "stat:ar": {
+   "derive": {
+    "n": 25422,
+    "said": 0.4773,
+    "hit": 0.479,
+    "naiveSaid": 0.4352,
+    "llModel": 0.6603,
+    "llNaive": 0.6986,
+    "skill": 0.0383,
+    "share": 0.911,
+    "slope": 0.889,
+    "shift": -0.002,
+    "meanGap": 0.1126,
+    "over": {
+     "bets": 8098,
+     "said": 0.6215,
+     "won": 0.6111,
+     "roi": 0.2565
+    },
+    "under": {
+     "bets": 7372,
+     "said": 0.6757,
+     "won": 0.6512,
+     "roi": 0.1661
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.4778,
+    "hit": 0.4745,
+    "naiveSaid": 0.4363,
+    "llModel": 0.6595,
+    "llNaive": 0.6983,
+    "skill": 0.0388,
+    "share": 0.913,
+    "slope": 0.91,
+    "shift": -0.022,
+    "meanGap": 0.1118,
+    "over": {
+     "bets": 16066,
+     "said": 0.623,
+     "won": 0.6109,
+     "roi": 0.2589
+    },
+    "under": {
+     "bets": 15143,
+     "said": 0.6707,
+     "won": 0.6526,
+     "roi": 0.1769
+    }
+   }
+  },
+  "stat:sb": {
+   "derive": {
+    "n": 25422,
+    "said": 0.4181,
+    "hit": 0.4221,
+    "naiveSaid": 0.3977,
+    "llModel": 0.6489,
+    "llNaive": 0.6914,
+    "skill": 0.0425,
+    "share": 0.975,
+    "slope": 0.931,
+    "shift": -0.003,
+    "meanGap": 0.0872,
+    "over": {
+     "bets": 5021,
+     "said": 0.5301,
+     "won": 0.5298,
+     "roi": 0.5726
+    },
+    "under": {
+     "bets": 8053,
+     "said": 0.6858,
+     "won": 0.6662,
+     "roi": 0.1396
+    }
+   },
+   "check": {
+    "n": 51832,
+    "said": 0.4198,
+    "hit": 0.4261,
+    "naiveSaid": 0.4043,
+    "llModel": 0.6486,
+    "llNaive": 0.691,
+    "skill": 0.0424,
+    "share": 1,
+    "slope": 0.941,
+    "shift": 0.01,
+    "meanGap": 0.086,
+    "over": {
+     "bets": 9863,
+     "said": 0.5446,
+     "won": 0.5525,
+     "roi": 0.5714
+    },
+    "under": {
+     "bets": 17420,
+     "said": 0.683,
+     "won": 0.6632,
+     "roi": 0.1392
+    }
+   }
+  },
+  "family:points (pts, pra, pr, pa)": {
+   "derive": {
+    "n": 101688,
+    "said": 0.4699,
+    "hit": 0.4808,
+    "naiveSaid": 0.422,
+    "llModel": 0.6634,
+    "llNaive": 0.7059,
+    "skill": 0.0425,
+    "share": 0.953,
+    "slope": 0.904,
+    "shift": 0.035,
+    "meanGap": 0.1107,
+    "over": {
+     "bets": 32288,
+     "said": 0.6078,
+     "won": 0.611,
+     "roi": 0.3109
+    },
+    "under": {
+     "bets": 28083,
+     "said": 0.6759,
+     "won": 0.648,
+     "roi": 0.1427
+    }
+   },
+   "check": {
+    "n": 207328,
+    "said": 0.4637,
+    "hit": 0.482,
+    "naiveSaid": 0.4229,
+    "llModel": 0.6639,
+    "llNaive": 0.7073,
+    "skill": 0.0434,
+    "share": 0.96,
+    "slope": 0.896,
+    "shift": 0.063,
+    "meanGap": 0.1106,
+    "over": {
+     "bets": 62307,
+     "said": 0.6094,
+     "won": 0.6189,
+     "roi": 0.3293
+    },
+    "under": {
+     "bets": 62341,
+     "said": 0.6769,
+     "won": 0.6417,
+     "roi": 0.1352
+    }
+   }
+  },
+  "family:the rest": {
+   "derive": {
+    "n": 177954,
+    "said": 0.4108,
+    "hit": 0.4128,
+    "naiveSaid": 0.3833,
+    "llModel": 0.6315,
+    "llNaive": 0.6719,
+    "skill": 0.0404,
+    "share": 0.965,
+    "slope": 0.945,
+    "shift": -0.008,
+    "meanGap": 0.0892,
+    "over": {
+     "bets": 39356,
+     "said": 0.5422,
+     "won": 0.5331,
+     "roi": 0.4459
+    },
+    "under": {
+     "bets": 50920,
+     "said": 0.6862,
+     "won": 0.6709,
+     "roi": 0.152
+    }
+   },
+   "check": {
+    "n": 362824,
+    "said": 0.4129,
+    "hit": 0.4138,
+    "naiveSaid": 0.3861,
+    "llModel": 0.6324,
+    "llNaive": 0.6718,
+    "skill": 0.0394,
+    "share": 0.952,
+    "slope": 0.943,
+    "shift": -0.013,
+    "meanGap": 0.0897,
+    "over": {
+     "bets": 79620,
+     "said": 0.549,
+     "won": 0.5407,
+     "roi": 0.4441
+    },
+    "under": {
+     "bets": 106347,
+     "said": 0.6827,
+     "won": 0.6649,
+     "roi": 0.1474
+    }
+   }
+  },
+  "tier:8-15": {
+   "derive": {
+    "n": 46563,
+    "said": 0.3506,
+    "hit": 0.364,
+    "naiveSaid": 0.3399,
+    "llModel": 0.6071,
+    "llNaive": 0.6753,
+    "skill": 0.0682,
+    "share": 1.024,
+    "slope": 0.976,
+    "shift": 0.051,
+    "meanGap": 0.1085,
+    "over": {
+     "bets": 10878,
+     "said": 0.4868,
+     "won": 0.5115,
+     "roi": 0.716
+    },
+    "under": {
+     "bets": 17783,
+     "said": 0.7288,
+     "won": 0.7112,
+     "roi": 0.1825
+    }
+   },
+   "check": {
+    "n": 89683,
+    "said": 0.3562,
+    "hit": 0.3703,
+    "naiveSaid": 0.3463,
+    "llModel": 0.6159,
+    "llNaive": 0.6798,
+    "skill": 0.0639,
+    "share": 0.972,
+    "slope": 0.902,
+    "shift": 0.015,
+    "meanGap": 0.1124,
+    "over": {
+     "bets": 21167,
+     "said": 0.4991,
+     "won": 0.5073,
+     "roi": 0.6607
+    },
+    "under": {
+     "bets": 34710,
+     "said": 0.729,
+     "won": 0.7027,
+     "roi": 0.1783
+    }
+   }
+  },
+  "tier:15-20": {
+   "derive": {
+    "n": 45859,
+    "said": 0.406,
+    "hit": 0.4062,
+    "naiveSaid": 0.3782,
+    "llModel": 0.6321,
+    "llNaive": 0.6782,
+    "skill": 0.0461,
+    "share": 0.96,
+    "slope": 0.949,
+    "shift": -0.016,
+    "meanGap": 0.1038,
+    "over": {
+     "bets": 11881,
+     "said": 0.5491,
+     "won": 0.5446,
+     "roi": 0.4199
+    },
+    "under": {
+     "bets": 15060,
+     "said": 0.6962,
+     "won": 0.6815,
+     "roi": 0.1687
+    }
+   },
+   "check": {
+    "n": 94083,
+    "said": 0.4148,
+    "hit": 0.4179,
+    "naiveSaid": 0.382,
+    "llModel": 0.6357,
+    "llNaive": 0.6831,
+    "skill": 0.0474,
+    "share": 0.969,
+    "slope": 0.943,
+    "shift": -0.003,
+    "meanGap": 0.1034,
+    "over": {
+     "bets": 24782,
+     "said": 0.56,
+     "won": 0.5575,
+     "roi": 0.4407
+    },
+    "under": {
+     "bets": 29299,
+     "said": 0.6919,
+     "won": 0.6771,
+     "roi": 0.1646
+    }
+   }
+  },
+  "tier:20-25": {
+   "derive": {
+    "n": 45232,
+    "said": 0.4401,
+    "hit": 0.439,
+    "naiveSaid": 0.3958,
+    "llModel": 0.6433,
+    "llNaive": 0.6877,
+    "skill": 0.0444,
+    "share": 0.944,
+    "slope": 0.946,
+    "shift": -0.016,
+    "meanGap": 0.1038,
+    "over": {
+     "bets": 12980,
+     "said": 0.5803,
+     "won": 0.566,
+     "roi": 0.3624
+    },
+    "under": {
+     "bets": 12565,
+     "said": 0.6765,
+     "won": 0.6671,
+     "roi": 0.1638
+    }
+   },
+   "check": {
+    "n": 107514,
+    "said": 0.4398,
+    "hit": 0.4489,
+    "naiveSaid": 0.4004,
+    "llModel": 0.6415,
+    "llNaive": 0.6854,
+    "skill": 0.0439,
+    "share": 0.985,
+    "slope": 0.993,
+    "shift": 0.039,
+    "meanGap": 0.1012,
+    "over": {
+     "bets": 29589,
+     "said": 0.5874,
+     "won": 0.5952,
+     "roi": 0.3735
+    },
+    "under": {
+     "bets": 31174,
+     "said": 0.6742,
+     "won": 0.6576,
+     "roi": 0.15
+    }
+   }
+  },
+  "tier:25-30": {
+   "derive": {
+    "n": 51645,
+    "said": 0.4531,
+    "hit": 0.4652,
+    "naiveSaid": 0.4131,
+    "llModel": 0.6556,
+    "llNaive": 0.6879,
+    "skill": 0.0323,
+    "share": 0.934,
+    "slope": 0.914,
+    "shift": 0.038,
+    "meanGap": 0.0906,
+    "over": {
+     "bets": 13170,
+     "said": 0.593,
+     "won": 0.587,
+     "roi": 0.3137
+    },
+    "under": {
+     "bets": 13102,
+     "said": 0.6599,
+     "won": 0.6346,
+     "roi": 0.1205
+    }
+   },
+   "check": {
+    "n": 118250,
+    "said": 0.4526,
+    "hit": 0.4637,
+    "naiveSaid": 0.4139,
+    "llModel": 0.6503,
+    "llNaive": 0.6869,
+    "skill": 0.0366,
+    "share": 0.957,
+    "slope": 0.958,
+    "shift": 0.042,
+    "meanGap": 0.0945,
+    "over": {
+     "bets": 30320,
+     "said": 0.5997,
+     "won": 0.6037,
+     "roi": 0.3398
+    },
+    "under": {
+     "bets": 32090,
+     "said": 0.6613,
+     "won": 0.6316,
+     "roi": 0.1193
+    }
+   }
+  },
+  "tier:30-35": {
+   "derive": {
+    "n": 57343,
+    "said": 0.4633,
+    "hit": 0.4729,
+    "naiveSaid": 0.425,
+    "llModel": 0.6585,
+    "llNaive": 0.6891,
+    "skill": 0.0306,
+    "share": 0.942,
+    "slope": 0.931,
+    "shift": 0.032,
+    "meanGap": 0.0879,
+    "over": {
+     "bets": 13746,
+     "said": 0.602,
+     "won": 0.6007,
+     "roi": 0.3026
+    },
+    "under": {
+     "bets": 14324,
+     "said": 0.653,
+     "won": 0.6184,
+     "roi": 0.1041
+    }
+   },
+   "check": {
+    "n": 110781,
+    "said": 0.4573,
+    "hit": 0.4657,
+    "naiveSaid": 0.4254,
+    "llModel": 0.6597,
+    "llNaive": 0.6862,
+    "skill": 0.0265,
+    "share": 0.9,
+    "slope": 0.916,
+    "shift": 0.023,
+    "meanGap": 0.0849,
+    "over": {
+     "bets": 24410,
+     "said": 0.6005,
+     "won": 0.5932,
+     "roi": 0.2924
+    },
+    "under": {
+     "bets": 29899,
+     "said": 0.652,
+     "won": 0.616,
+     "roi": 0.0992
+    }
+   }
+  },
+  "tier:35+": {
+   "derive": {
+    "n": 33000,
+    "said": 0.4865,
+    "hit": 0.4782,
+    "naiveSaid": 0.4348,
+    "llModel": 0.6628,
+    "llNaive": 0.6866,
+    "skill": 0.0238,
+    "share": 0.877,
+    "slope": 0.925,
+    "shift": -0.039,
+    "meanGap": 0.0877,
+    "over": {
+     "bets": 8989,
+     "said": 0.6147,
+     "won": 0.5939,
+     "roi": 0.2016
+    },
+    "under": {
+     "bets": 6169,
+     "said": 0.6446,
+     "won": 0.6311,
+     "roi": 0.1347
+    }
+   },
+   "check": {
+    "n": 49841,
+    "said": 0.4716,
+    "hit": 0.4582,
+    "naiveSaid": 0.4342,
+    "llModel": 0.664,
+    "llNaive": 0.6866,
+    "skill": 0.0226,
+    "share": 0.857,
+    "slope": 0.902,
+    "shift": -0.067,
+    "meanGap": 0.0841,
+    "over": {
+     "bets": 11659,
+     "said": 0.6022,
+     "won": 0.5715,
+     "roi": 0.2128
+    },
+    "under": {
+     "bets": 11516,
+     "said": 0.6502,
+     "won": 0.6342,
+     "roi": 0.1403
+    }
+   }
+  },
+  "tier:25-35": {
+   "derive": {
+    "n": 108988,
+    "said": 0.4585,
+    "hit": 0.4692,
+    "naiveSaid": 0.4194,
+    "llModel": 0.6571,
+    "llNaive": 0.6885,
+    "skill": 0.0314,
+    "share": 0.938,
+    "slope": 0.922,
+    "shift": 0.035,
+    "meanGap": 0.0892,
+    "over": {
+     "bets": 26916,
+     "said": 0.5976,
+     "won": 0.594,
+     "roi": 0.308
+    },
+    "under": {
+     "bets": 27426,
+     "said": 0.6563,
+     "won": 0.6262,
+     "roi": 0.112
+    }
+   },
+   "check": {
+    "n": 229031,
+    "said": 0.4549,
+    "hit": 0.4647,
+    "naiveSaid": 0.4195,
+    "llModel": 0.6549,
+    "llNaive": 0.6865,
+    "skill": 0.0317,
+    "share": 0.932,
+    "slope": 0.939,
+    "shift": 0.033,
+    "meanGap": 0.0899,
+    "over": {
+     "bets": 54730,
+     "said": 0.6,
+     "won": 0.599,
+     "roi": 0.3186
+    },
+    "under": {
+     "bets": 61989,
+     "said": 0.6568,
+     "won": 0.6241,
+     "roi": 0.1096
+    }
+   }
+  },
+  "tier:25+": {
+   "derive": {
+    "n": 141988,
+    "said": 0.465,
+    "hit": 0.4713,
+    "naiveSaid": 0.4229,
+    "llModel": 0.6584,
+    "llNaive": 0.6881,
+    "skill": 0.0296,
+    "share": 0.926,
+    "slope": 0.918,
+    "shift": 0.017,
+    "meanGap": 0.0889,
+    "over": {
+     "bets": 35905,
+     "said": 0.6019,
+     "won": 0.594,
+     "roi": 0.2814
+    },
+    "under": {
+     "bets": 33595,
+     "said": 0.6541,
+     "won": 0.6271,
+     "roi": 0.1161
+    }
+   },
+   "check": {
+    "n": 278872,
+    "said": 0.4579,
+    "hit": 0.4635,
+    "naiveSaid": 0.4221,
+    "llModel": 0.6565,
+    "llNaive": 0.6866,
+    "skill": 0.0301,
+    "share": 0.92,
+    "slope": 0.93,
+    "shift": 0.014,
+    "meanGap": 0.0889,
+    "over": {
+     "bets": 66389,
+     "said": 0.6004,
+     "won": 0.5942,
+     "roi": 0.3
+    },
+    "under": {
+     "bets": 73505,
+     "said": 0.6558,
+     "won": 0.6257,
+     "roi": 0.1144
+    }
+   }
+  },
+  "role:none known before tip": {
+   "derive": {
+    "n": 174933,
+    "said": 0.4291,
+    "hit": 0.4316,
+    "naiveSaid": 0.4037,
+    "llModel": 0.6442,
+    "llNaive": 0.6717,
+    "skill": 0.0276,
+    "share": 0.934,
+    "slope": 0.956,
+    "shift": 0,
+    "meanGap": 0.0881,
+    "over": {
+     "bets": 38525,
+     "said": 0.5718,
+     "won": 0.5635,
+     "roi": 0.2609
+    },
+    "under": {
+     "bets": 51618,
+     "said": 0.6748,
+     "won": 0.6595,
+     "roi": 0.1502
+    }
+   },
+   "check": {
+    "n": 330913,
+    "said": 0.4269,
+    "hit": 0.432,
+    "naiveSaid": 0.4057,
+    "llModel": 0.6446,
+    "llNaive": 0.673,
+    "skill": 0.0284,
+    "share": 0.94,
+    "slope": 0.956,
+    "shift": 0.011,
+    "meanGap": 0.0888,
+    "over": {
+     "bets": 70440,
+     "said": 0.5745,
+     "won": 0.5715,
+     "roi": 0.2771
+    },
+    "under": {
+     "bets": 103505,
+     "said": 0.6746,
+     "won": 0.6562,
+     "roi": 0.1492
+    }
+   }
+  },
+  "role:any": {
+   "derive": {
+    "n": 104709,
+    "said": 0.4374,
+    "hit": 0.4474,
+    "naiveSaid": 0.3867,
+    "llModel": 0.6414,
+    "llNaive": 0.7052,
+    "skill": 0.0638,
+    "share": 0.98,
+    "slope": 0.915,
+    "shift": 0.026,
+    "meanGap": 0.1119,
+    "over": {
+     "bets": 33119,
+     "said": 0.5717,
+     "won": 0.5737,
+     "roi": 0.5294
+    },
+    "under": {
+     "bets": 27385,
+     "said": 0.697,
+     "won": 0.6688,
+     "roi": 0.1458
+    }
+   },
+   "check": {
+    "n": 239239,
+    "said": 0.4375,
+    "hit": 0.4477,
+    "naiveSaid": 0.3908,
+    "llModel": 0.6428,
+    "llNaive": 0.7009,
+    "skill": 0.0581,
+    "share": 0.963,
+    "slope": 0.916,
+    "shift": 0.027,
+    "meanGap": 0.1091,
+    "over": {
+     "bets": 71487,
+     "said": 0.5765,
+     "won": 0.5785,
+     "roi": 0.5086
+    },
+    "under": {
+     "bets": 65183,
+     "said": 0.6899,
+     "won": 0.6565,
+     "roi": 0.1327
+    }
+   }
+  },
+  "role:ret (back after 3+ missed)": {
+   "derive": {
+    "n": 7304,
+    "said": 0.3769,
+    "hit": 0.3352,
+    "naiveSaid": 0.3645,
+    "llModel": 0.6053,
+    "llNaive": 0.6563,
+    "skill": 0.051,
+    "share": 0.945,
+    "slope": 0.888,
+    "shift": -0.247,
+    "meanGap": 0.1029,
+    "over": {
+     "bets": 1592,
+     "said": 0.5098,
+     "won": 0.4548,
+     "roi": 0.438
+    },
+    "under": {
+     "bets": 2766,
+     "said": 0.706,
+     "won": 0.7339,
+     "roi": 0.2487
+    }
+   },
+   "check": {
+    "n": 15642,
+    "said": 0.3818,
+    "hit": 0.345,
+    "naiveSaid": 0.3795,
+    "llModel": 0.6156,
+    "llNaive": 0.652,
+    "skill": 0.0363,
+    "share": 0.842,
+    "slope": 0.827,
+    "shift": -0.245,
+    "meanGap": 0.1054,
+    "over": {
+     "bets": 3208,
+     "said": 0.5327,
+     "won": 0.4629,
+     "roi": 0.3177
+    },
+    "under": {
+     "bets": 6457,
+     "said": 0.7036,
+     "won": 0.7088,
+     "roi": 0.2218
+    }
+   }
+  },
+  "role:tmOutAbs (20+ min teammate inactive)": {
+   "derive": {
+    "n": 56078,
+    "said": 0.4507,
+    "hit": 0.4868,
+    "naiveSaid": 0.3926,
+    "llModel": 0.6514,
+    "llNaive": 0.7027,
+    "skill": 0.0513,
+    "share": 1.015,
+    "slope": 0.907,
+    "shift": 0.143,
+    "meanGap": 0.1071,
+    "over": {
+     "bets": 18943,
+     "said": 0.5788,
+     "won": 0.6069,
+     "roi": 0.4278
+    },
+    "under": {
+     "bets": 12517,
+     "said": 0.6881,
+     "won": 0.6191,
+     "roi": 0.0616
+    }
+   },
+   "check": {
+    "n": 133375,
+    "said": 0.4484,
+    "hit": 0.4845,
+    "naiveSaid": 0.3955,
+    "llModel": 0.6529,
+    "llNaive": 0.7033,
+    "skill": 0.0504,
+    "share": 1.022,
+    "slope": 0.906,
+    "shift": 0.141,
+    "meanGap": 0.1037,
+    "over": {
+     "bets": 41528,
+     "said": 0.5833,
+     "won": 0.6116,
+     "roi": 0.4416
+    },
+    "under": {
+     "bets": 31945,
+     "said": 0.679,
+     "won": 0.6137,
+     "roi": 0.0624
+    }
+   }
+  },
+  "role:tmRet (20+ min teammate back)": {
+   "derive": {
+    "n": 24343,
+    "said": 0.4405,
+    "hit": 0.4297,
+    "naiveSaid": 0.3956,
+    "llModel": 0.6475,
+    "llNaive": 0.6798,
+    "skill": 0.0323,
+    "share": 0.872,
+    "slope": 0.859,
+    "shift": -0.077,
+    "meanGap": 0.1014,
+    "over": {
+     "bets": 7109,
+     "said": 0.5759,
+     "won": 0.5354,
+     "roi": 0.2574
+    },
+    "under": {
+     "bets": 6377,
+     "said": 0.6783,
+     "won": 0.6756,
+     "roi": 0.1753
+    }
+   },
+   "check": {
+    "n": 59983,
+    "said": 0.4374,
+    "hit": 0.4227,
+    "naiveSaid": 0.4007,
+    "llModel": 0.6458,
+    "llNaive": 0.6681,
+    "skill": 0.0223,
+    "share": 0.796,
+    "slope": 0.882,
+    "shift": -0.09,
+    "meanGap": 0.0957,
+    "over": {
+     "bets": 15683,
+     "said": 0.5787,
+     "won": 0.5405,
+     "roi": 0.2138
+    },
+    "under": {
+     "bets": 16891,
+     "said": 0.6712,
+     "won": 0.6516,
+     "roi": 0.1407
+    }
+   }
+  },
+  "role:newTeam": {
+   "derive": {
+    "n": 2057,
+    "said": 0.4086,
+    "hit": 0.3388,
+    "naiveSaid": 0.3797,
+    "llModel": 0.6434,
+    "llNaive": 0.6468,
+    "skill": 0.0034,
+    "share": 0.578,
+    "slope": 0.581,
+    "shift": -0.453,
+    "meanGap": 0.0718,
+    "over": {
+     "bets": 300,
+     "said": 0.5424,
+     "won": 0.4,
+     "roi": 0.2175
+    },
+    "under": {
+     "bets": 450,
+     "said": 0.6746,
+     "won": 0.7133,
+     "roi": 0.2286
+    }
+   },
+   "check": {
+    "n": 3641,
+    "said": 0.4085,
+    "hit": 0.3142,
+    "naiveSaid": 0.3903,
+    "llModel": 0.6299,
+    "llNaive": 0.6394,
+    "skill": 0.0094,
+    "share": 0.704,
+    "slope": 0.674,
+    "shift": -0.534,
+    "meanGap": 0.0687,
+    "over": {
+     "bets": 492,
+     "said": 0.5338,
+     "won": 0.4167,
+     "roi": 0.1389
+    },
+    "under": {
+     "bets": 887,
+     "said": 0.6762,
+     "won": 0.7182,
+     "roi": 0.2409
+    }
+   }
+  },
+  "role:club games 1-10": {
+   "derive": {
+    "n": 32076,
+    "said": 0.4234,
+    "hit": 0.4164,
+    "naiveSaid": 0.371,
+    "llModel": 0.6249,
+    "llNaive": 0.7439,
+    "skill": 0.119,
+    "share": 0.99,
+    "slope": 0.92,
+    "shift": -0.052,
+    "meanGap": 0.1351,
+    "over": {
+     "bets": 10696,
+     "said": 0.562,
+     "won": 0.5547,
+     "roi": 0.9277
+    },
+    "under": {
+     "bets": 9816,
+     "said": 0.7232,
+     "won": 0.7159,
+     "roi": 0.2133
+    }
+   },
+   "check": {
+    "n": 64295,
+    "said": 0.4279,
+    "hit": 0.4188,
+    "naiveSaid": 0.3703,
+    "llModel": 0.6241,
+    "llNaive": 0.7432,
+    "skill": 0.119,
+    "share": 0.974,
+    "slope": 0.929,
+    "shift": -0.059,
+    "meanGap": 0.1382,
+    "over": {
+     "bets": 22211,
+     "said": 0.5653,
+     "won": 0.5547,
+     "roi": 0.8958
+    },
+    "under": {
+     "bets": 19048,
+     "said": 0.7238,
+     "won": 0.7185,
+     "roi": 0.2173
+    }
+   }
+  },
+  "phase:regular season": {
+   "derive": {
+    "n": 263967,
+    "said": 0.4358,
+    "hit": 0.4413,
+    "naiveSaid": 0.3962,
+    "llModel": 0.6442,
+    "llNaive": 0.6866,
+    "skill": 0.0424,
+    "share": 0.972,
+    "slope": 0.945,
+    "shift": 0.012,
+    "meanGap": 0.0967,
+    "over": {
+     "bets": 70140,
+     "said": 0.5714,
+     "won": 0.5698,
+     "roi": 0.3938
+    },
+    "under": {
+     "bets": 70957,
+     "said": 0.6789,
+     "won": 0.6594,
+     "roi": 0.1419
+    }
+   },
+   "check": {
+    "n": 535326,
+    "said": 0.4364,
+    "hit": 0.4448,
+    "naiveSaid": 0.3983,
+    "llModel": 0.646,
+    "llNaive": 0.6876,
+    "skill": 0.0416,
+    "share": 0.961,
+    "slope": 0.939,
+    "shift": 0.024,
+    "meanGap": 0.0967,
+    "over": {
+     "bets": 139278,
+     "said": 0.5755,
+     "won": 0.5772,
+     "roi": 0.4021
+    },
+    "under": {
+     "bets": 148647,
+     "said": 0.6761,
+     "won": 0.6493,
+     "roi": 0.1289
+    }
+   }
+  },
+  "phase:playoffs": {
+   "derive": {
+    "n": 15675,
+    "said": 0.3717,
+    "hit": 0.3737,
+    "naiveSaid": 0.4178,
+    "llModel": 0.6256,
+    "llNaive": 0.645,
+    "skill": 0.0194,
+    "share": 0.716,
+    "slope": 0.831,
+    "shift": -0.069,
+    "meanGap": 0.1019,
+    "over": {
+     "bets": 1504,
+     "said": 0.5876,
+     "won": 0.4927,
+     "roi": -0.023
+    },
+    "under": {
+     "bets": 8046,
+     "said": 0.7143,
+     "won": 0.6919,
+     "roi": 0.209
+    }
+   },
+   "check": {
+    "n": 34826,
+    "said": 0.3548,
+    "hit": 0.3425,
+    "naiveSaid": 0.4167,
+    "llModel": 0.6101,
+    "llNaive": 0.6399,
+    "skill": 0.0298,
+    "share": 0.825,
+    "slope": 0.844,
+    "shift": -0.141,
+    "meanGap": 0.1063,
+    "over": {
+     "bets": 2649,
+     "said": 0.5781,
+     "won": 0.4617,
+     "roi": -0.049
+    },
+    "under": {
+     "bets": 20041,
+     "said": 0.7137,
+     "won": 0.7087,
+     "roi": 0.246
+    }
+   }
+  },
+  "size:Q1": {
+   "derive": {
+    "n": 186789,
+    "said": 0.4313,
+    "hit": 0.4359,
+    "naiveSaid": 0.3789,
+    "llModel": 0.6365,
+    "llNaive": 0.6876,
+    "skill": 0.0511,
+    "share": 0.989,
+    "slope": 0.96,
+    "shift": 0.011,
+    "meanGap": 0.1006,
+    "over": {
+     "bets": 55343,
+     "said": 0.5594,
+     "won": 0.5597,
+     "roi": 0.4496
+    },
+    "under": {
+     "bets": 43225,
+     "said": 0.683,
+     "won": 0.669,
+     "roi": 0.1467
+    }
+   },
+   "check": {
+    "n": 378835,
+    "said": 0.4366,
+    "hit": 0.4439,
+    "naiveSaid": 0.383,
+    "llModel": 0.6375,
+    "llNaive": 0.6894,
+    "skill": 0.0519,
+    "share": 0.984,
+    "slope": 0.965,
+    "shift": 0.025,
+    "meanGap": 0.1021,
+    "over": {
+     "bets": 113543,
+     "said": 0.5684,
+     "won": 0.5721,
+     "roi": 0.4533
+    },
+    "under": {
+     "bets": 87931,
+     "said": 0.6783,
+     "won": 0.6577,
+     "roi": 0.1373
+    }
+   }
+  },
+  "size:Q2": {
+   "derive": {
+    "n": 29929,
+    "said": 0.4595,
+    "hit": 0.4649,
+    "naiveSaid": 0.4389,
+    "llModel": 0.6598,
+    "llNaive": 0.6884,
+    "skill": 0.0286,
+    "share": 0.923,
+    "slope": 0.928,
+    "shift": 0.012,
+    "meanGap": 0.0966,
+    "over": {
+     "bets": 7193,
+     "said": 0.6177,
+     "won": 0.6139,
+     "roi": 0.2072
+    },
+    "under": {
+     "bets": 9627,
+     "said": 0.6753,
+     "won": 0.658,
+     "roi": 0.1711
+    }
+   },
+   "check": {
+    "n": 61152,
+    "said": 0.4517,
+    "hit": 0.4559,
+    "naiveSaid": 0.4365,
+    "llModel": 0.6629,
+    "llNaive": 0.6872,
+    "skill": 0.0243,
+    "share": 0.897,
+    "slope": 0.905,
+    "shift": 0.001,
+    "meanGap": 0.092,
+    "over": {
+     "bets": 13369,
+     "said": 0.609,
+     "won": 0.6018,
+     "roi": 0.1924
+    },
+    "under": {
+     "bets": 20557,
+     "said": 0.6721,
+     "won": 0.651,
+     "roi": 0.1572
+    }
+   }
+  },
+  "size:Q3": {
+   "derive": {
+    "n": 34929,
+    "said": 0.4276,
+    "hit": 0.4334,
+    "naiveSaid": 0.4267,
+    "llModel": 0.6554,
+    "llNaive": 0.6731,
+    "skill": 0.0177,
+    "share": 0.825,
+    "slope": 0.886,
+    "shift": -0.006,
+    "meanGap": 0.0845,
+    "over": {
+     "bets": 5760,
+     "said": 0.6108,
+     "won": 0.5875,
+     "roi": 0.1475
+    },
+    "under": {
+     "bets": 13079,
+     "said": 0.6844,
+     "won": 0.6598,
+     "roi": 0.1433
+    }
+   },
+   "check": {
+    "n": 74056,
+    "said": 0.4117,
+    "hit": 0.4223,
+    "naiveSaid": 0.4263,
+    "llModel": 0.6553,
+    "llNaive": 0.6719,
+    "skill": 0.0166,
+    "share": 0.824,
+    "slope": 0.878,
+    "shift": 0.006,
+    "meanGap": 0.0818,
+    "over": {
+     "bets": 9206,
+     "said": 0.6011,
+     "won": 0.5904,
+     "roi": 0.1584
+    },
+    "under": {
+     "bets": 32143,
+     "said": 0.684,
+     "won": 0.6561,
+     "roi": 0.1379
+    }
+   }
+  },
+  "size:Q4": {
+   "derive": {
+    "n": 27995,
+    "said": 0.4151,
+    "hit": 0.4247,
+    "naiveSaid": 0.4398,
+    "llModel": 0.6542,
+    "llNaive": 0.6713,
+    "skill": 0.0171,
+    "share": 0.754,
+    "slope": 0.837,
+    "shift": -0.008,
+    "meanGap": 0.0892,
+    "over": {
+     "bets": 3348,
+     "said": 0.6106,
+     "won": 0.5768,
+     "roi": 0.1084
+    },
+    "under": {
+     "bets": 13072,
+     "said": 0.6844,
+     "won": 0.6485,
+     "roi": 0.1442
+    }
+   },
+   "check": {
+    "n": 56109,
+    "said": 0.4002,
+    "hit": 0.4056,
+    "naiveSaid": 0.435,
+    "llModel": 0.6509,
+    "llNaive": 0.6674,
+    "skill": 0.0164,
+    "share": 0.733,
+    "slope": 0.802,
+    "shift": -0.049,
+    "meanGap": 0.0911,
+    "over": {
+     "bets": 5809,
+     "said": 0.5969,
+     "won": 0.5459,
+     "roi": 0.0644
+    },
+    "under": {
+     "bets": 28057,
+     "said": 0.6898,
+     "won": 0.6562,
+     "roi": 0.1553
+    }
+   }
+  },
+  "gap:0-3 pts, model above": {
+   "derive": {
+    "n": 33661,
+    "said": 0.3987,
+    "hit": 0.4033,
+    "naiveSaid": 0.3835,
+    "llModel": 0.6335,
+    "llNaive": 0.6342,
+    "skill": 0.0007,
+    "share": 0.842,
+    "slope": 1.044,
+    "shift": 0.035,
+    "meanGap": 0.0151,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 68078,
+    "said": 0.3993,
+    "hit": 0.4014,
+    "naiveSaid": 0.3841,
+    "llModel": 0.6328,
+    "llNaive": 0.6334,
+    "skill": 0.0007,
+    "share": 0.825,
+    "slope": 1.033,
+    "shift": 0.02,
+    "meanGap": 0.0151,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "gap:0-3 pts, model below": {
+   "derive": {
+    "n": 29368,
+    "said": 0.392,
+    "hit": 0.3975,
+    "naiveSaid": 0.4065,
+    "llModel": 0.6539,
+    "llNaive": 0.654,
+    "skill": 0.0002,
+    "share": 0.629,
+    "slope": 0.98,
+    "shift": 0.016,
+    "meanGap": 0.0146,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 60815,
+    "said": 0.3943,
+    "hit": 0.4009,
+    "naiveSaid": 0.4089,
+    "llModel": 0.655,
+    "llNaive": 0.6552,
+    "skill": 0.0002,
+    "share": 0.632,
+    "slope": 0.985,
+    "shift": 0.023,
+    "meanGap": 0.0146,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "gap:3-5 pts, model above": {
+   "derive": {
+    "n": 21867,
+    "said": 0.4263,
+    "hit": 0.4269,
+    "naiveSaid": 0.3865,
+    "llModel": 0.6467,
+    "llNaive": 0.6503,
+    "skill": 0.0036,
+    "share": 0.892,
+    "slope": 1.033,
+    "shift": 0.01,
+    "meanGap": 0.0399,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 42832,
+    "said": 0.4281,
+    "hit": 0.4292,
+    "naiveSaid": 0.3882,
+    "llModel": 0.6523,
+    "llNaive": 0.6565,
+    "skill": 0.0043,
+    "share": 0.97,
+    "slope": 0.977,
+    "shift": -0.001,
+    "meanGap": 0.0399,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "gap:3-5 pts, model below": {
+   "derive": {
+    "n": 16494,
+    "said": 0.3732,
+    "hit": 0.3908,
+    "naiveSaid": 0.413,
+    "llModel": 0.6561,
+    "llNaive": 0.6564,
+    "skill": 0.0004,
+    "share": 0.55,
+    "slope": 0.947,
+    "shift": 0.05,
+    "meanGap": 0.0397,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 16494,
+     "said": 0.6268,
+     "won": 0.6092,
+     "roi": 0.039
+    }
+   },
+   "check": {
+    "n": 34532,
+    "said": 0.3769,
+    "hit": 0.391,
+    "naiveSaid": 0.4167,
+    "llModel": 0.6546,
+    "llNaive": 0.6557,
+    "skill": 0.0011,
+    "share": 0.659,
+    "slope": 1.008,
+    "shift": 0.065,
+    "meanGap": 0.0397,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 34532,
+     "said": 0.6231,
+     "won": 0.609,
+     "roi": 0.0443
+    }
+   }
+  },
+  "gap:5-8 pts, model above": {
+   "derive": {
+    "n": 28171,
+    "said": 0.4573,
+    "hit": 0.4511,
+    "naiveSaid": 0.3928,
+    "llModel": 0.6609,
+    "llNaive": 0.6699,
+    "skill": 0.009,
+    "share": 0.919,
+    "slope": 0.991,
+    "shift": -0.027,
+    "meanGap": 0.0645,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 56546,
+    "said": 0.455,
+    "hit": 0.4484,
+    "naiveSaid": 0.3905,
+    "llModel": 0.659,
+    "llNaive": 0.6676,
+    "skill": 0.0085,
+    "share": 0.895,
+    "slope": 1.011,
+    "shift": -0.027,
+    "meanGap": 0.0645,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "gap:5-8 pts, model below": {
+   "derive": {
+    "n": 19767,
+    "said": 0.3539,
+    "hit": 0.3704,
+    "naiveSaid": 0.4182,
+    "llModel": 0.6458,
+    "llNaive": 0.6503,
+    "skill": 0.0045,
+    "share": 0.744,
+    "slope": 1.045,
+    "shift": 0.099,
+    "meanGap": 0.0643,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 19767,
+     "said": 0.6461,
+     "won": 0.6296,
+     "roi": 0.0825
+    }
+   },
+   "check": {
+    "n": 41725,
+    "said": 0.3562,
+    "hit": 0.3758,
+    "naiveSaid": 0.4206,
+    "llModel": 0.6495,
+    "llNaive": 0.6531,
+    "skill": 0.0036,
+    "share": 0.693,
+    "slope": 1.023,
+    "shift": 0.1,
+    "meanGap": 0.0643,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 41725,
+     "said": 0.6438,
+     "won": 0.6242,
+     "roi": 0.0778
+    }
+   }
+  },
+  "gap:8-12 pts, model above": {
+   "derive": {
+    "n": 29350,
+    "said": 0.4927,
+    "hit": 0.4933,
+    "naiveSaid": 0.3938,
+    "llModel": 0.6717,
+    "llNaive": 0.6969,
+    "skill": 0.0252,
+    "share": 1.019,
+    "slope": 0.93,
+    "shift": 0.002,
+    "meanGap": 0.0989,
+    "over": {
+     "bets": 13422,
+     "said": 0.5042,
+     "won": 0.5042,
+     "roi": 0.1029
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 57164,
+    "said": 0.4945,
+    "hit": 0.493,
+    "naiveSaid": 0.3957,
+    "llModel": 0.6718,
+    "llNaive": 0.6949,
+    "skill": 0.0231,
+    "share": 0.987,
+    "slope": 0.958,
+    "shift": -0.006,
+    "meanGap": 0.0988,
+    "over": {
+     "bets": 25898,
+     "said": 0.5063,
+     "won": 0.5078,
+     "roi": 0.0994
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "gap:8-12 pts, model below": {
+   "derive": {
+    "n": 18030,
+    "said": 0.3251,
+    "hit": 0.3468,
+    "naiveSaid": 0.4235,
+    "llModel": 0.6341,
+    "llNaive": 0.646,
+    "skill": 0.0119,
+    "share": 0.773,
+    "slope": 1.053,
+    "shift": 0.137,
+    "meanGap": 0.0984,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 18030,
+     "said": 0.6749,
+     "won": 0.6532,
+     "roi": 0.1339
+    }
+   },
+   "check": {
+    "n": 38879,
+    "said": 0.3265,
+    "hit": 0.3554,
+    "naiveSaid": 0.425,
+    "llModel": 0.6395,
+    "llNaive": 0.6485,
+    "skill": 0.009,
+    "share": 0.704,
+    "slope": 1.081,
+    "shift": 0.189,
+    "meanGap": 0.0985,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 38879,
+     "said": 0.6735,
+     "won": 0.6446,
+     "roi": 0.121
+    }
+   }
+  },
+  "gap:12- pts, model above": {
+   "derive": {
+    "n": 58222,
+    "said": 0.5873,
+    "hit": 0.5829,
+    "naiveSaid": 0.3755,
+    "llModel": 0.6509,
+    "llNaive": 0.7967,
+    "skill": 0.1458,
+    "share": 0.992,
+    "slope": 0.918,
+    "shift": 0.009,
+    "meanGap": 0.2119,
+    "over": {
+     "bets": 58222,
+     "said": 0.5873,
+     "won": 0.5829,
+     "roi": 0.4501
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 116029,
+    "said": 0.591,
+    "hit": 0.59,
+    "naiveSaid": 0.3772,
+    "llModel": 0.647,
+    "llNaive": 0.7991,
+    "skill": 0.1521,
+    "share": 1.001,
+    "slope": 0.968,
+    "shift": 0.007,
+    "meanGap": 0.2137,
+    "over": {
+     "bets": 116029,
+     "said": 0.591,
+     "won": 0.59,
+     "roi": 0.4594
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "gap:12- pts, model below": {
+   "derive": {
+    "n": 24712,
+    "said": 0.2456,
+    "hit": 0.2681,
+    "naiveSaid": 0.4301,
+    "llModel": 0.5635,
+    "llNaive": 0.6286,
+    "skill": 0.0651,
+    "share": 0.86,
+    "slope": 1,
+    "shift": 0.122,
+    "meanGap": 0.1845,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 24712,
+     "said": 0.7544,
+     "won": 0.7319,
+     "roi": 0.2856
+    }
+   },
+   "check": {
+    "n": 53552,
+    "said": 0.2486,
+    "hit": 0.2796,
+    "naiveSaid": 0.4329,
+    "llModel": 0.5777,
+    "llNaive": 0.635,
+    "skill": 0.0573,
+    "share": 0.812,
+    "slope": 0.942,
+    "shift": 0.103,
+    "meanGap": 0.1842,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 53552,
+     "said": 0.7514,
+     "won": 0.7204,
+     "roi": 0.2729
+    }
+   }
+  },
+  "lean:model above the naive": {
+   "derive": {
+    "n": 171271,
+    "said": 0.4921,
+    "hit": 0.4907,
+    "naiveSaid": 0.3845,
+    "llModel": 0.6522,
+    "llNaive": 0.7081,
+    "skill": 0.056,
+    "share": 0.99,
+    "slope": 0.966,
+    "shift": -0.006,
+    "meanGap": 0.1076,
+    "over": {
+     "bets": 71644,
+     "said": 0.5718,
+     "won": 0.5682,
+     "roi": 0.385
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 340649,
+    "said": 0.4934,
+    "hit": 0.4923,
+    "naiveSaid": 0.3853,
+    "llModel": 0.651,
+    "llNaive": 0.7087,
+    "skill": 0.0578,
+    "share": 0.995,
+    "slope": 0.988,
+    "shift": -0.005,
+    "meanGap": 0.1081,
+    "over": {
+     "bets": 141927,
+     "said": 0.5755,
+     "won": 0.575,
+     "roi": 0.3937
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "lean:model below the naive": {
+   "derive": {
+    "n": 108371,
+    "said": 0.3377,
+    "hit": 0.3536,
+    "naiveSaid": 0.4178,
+    "llModel": 0.6288,
+    "llNaive": 0.6466,
+    "skill": 0.0177,
+    "share": 0.829,
+    "slope": 0.958,
+    "shift": 0.047,
+    "meanGap": 0.0802,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 79003,
+     "said": 0.6825,
+     "won": 0.6627,
+     "roi": 0.1487
+    }
+   },
+   "check": {
+    "n": 229503,
+    "said": 0.3393,
+    "hit": 0.3588,
+    "naiveSaid": 0.4205,
+    "llModel": 0.6333,
+    "llNaive": 0.649,
+    "skill": 0.0158,
+    "share": 0.783,
+    "slope": 0.932,
+    "shift": 0.047,
+    "meanGap": 0.0812,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 168688,
+     "said": 0.6805,
+     "won": 0.6563,
+     "roi": 0.1429
+    }
+   }
+  },
+  "tier 8-15, model above": {
+   "derive": {
+    "n": 24466,
+    "said": 0.4111,
+    "hit": 0.4223,
+    "naiveSaid": 0.2976,
+    "llModel": 0.6239,
+    "llNaive": 0.7275,
+    "skill": 0.1036,
+    "share": 1.072,
+    "slope": 1.014,
+    "shift": 0.055,
+    "meanGap": 0.1135,
+    "over": {
+     "bets": 10878,
+     "said": 0.4868,
+     "won": 0.5115,
+     "roi": 0.716
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 46990,
+    "said": 0.4232,
+    "hit": 0.4289,
+    "naiveSaid": 0.3065,
+    "llModel": 0.6341,
+    "llNaive": 0.7325,
+    "skill": 0.0985,
+    "share": 1.028,
+    "slope": 0.937,
+    "shift": 0.01,
+    "meanGap": 0.1168,
+    "over": {
+     "bets": 21167,
+     "said": 0.4991,
+     "won": 0.5073,
+     "roi": 0.6607
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "tier 8-15, model below": {
+   "derive": {
+    "n": 22097,
+    "said": 0.2837,
+    "hit": 0.2994,
+    "naiveSaid": 0.3867,
+    "llModel": 0.5885,
+    "llNaive": 0.6175,
+    "skill": 0.0291,
+    "share": 0.839,
+    "slope": 0.919,
+    "shift": 0.009,
+    "meanGap": 0.103,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 17783,
+     "said": 0.7288,
+     "won": 0.7112,
+     "roi": 0.1825
+    }
+   },
+   "check": {
+    "n": 42693,
+    "said": 0.2824,
+    "hit": 0.3059,
+    "naiveSaid": 0.3901,
+    "llModel": 0.5959,
+    "llNaive": 0.6218,
+    "skill": 0.0258,
+    "share": 0.774,
+    "slope": 0.881,
+    "shift": 0.014,
+    "meanGap": 0.1077,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 34710,
+     "said": 0.729,
+     "won": 0.7027,
+     "roi": 0.1783
+    }
+   }
+  },
+  "tier 15-20, model above": {
+   "derive": {
+    "n": 26198,
+    "said": 0.4705,
+    "hit": 0.4631,
+    "naiveSaid": 0.3553,
+    "llModel": 0.646,
+    "llNaive": 0.7085,
+    "skill": 0.0624,
+    "share": 0.974,
+    "slope": 0.976,
+    "shift": -0.034,
+    "meanGap": 0.1152,
+    "over": {
+     "bets": 11881,
+     "said": 0.5491,
+     "won": 0.5446,
+     "roi": 0.4199
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 55221,
+    "said": 0.4782,
+    "hit": 0.4753,
+    "naiveSaid": 0.3621,
+    "llModel": 0.6475,
+    "llNaive": 0.7136,
+    "skill": 0.0661,
+    "share": 0.993,
+    "slope": 0.97,
+    "shift": -0.014,
+    "meanGap": 0.1161,
+    "over": {
+     "bets": 24782,
+     "said": 0.56,
+     "won": 0.5575,
+     "roi": 0.4407
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "tier 15-20, model below": {
+   "derive": {
+    "n": 19661,
+    "said": 0.3201,
+    "hit": 0.3305,
+    "naiveSaid": 0.4087,
+    "llModel": 0.6136,
+    "llNaive": 0.6379,
+    "skill": 0.0243,
+    "share": 0.902,
+    "slope": 0.984,
+    "shift": 0.037,
+    "meanGap": 0.0886,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 15060,
+     "said": 0.6962,
+     "won": 0.6815,
+     "roi": 0.1687
+    }
+   },
+   "check": {
+    "n": 38862,
+    "said": 0.3249,
+    "hit": 0.3363,
+    "naiveSaid": 0.4103,
+    "llModel": 0.6189,
+    "llNaive": 0.6396,
+    "skill": 0.0208,
+    "share": 0.86,
+    "slope": 0.935,
+    "shift": 0.008,
+    "meanGap": 0.0854,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 29299,
+     "said": 0.6919,
+     "won": 0.6771,
+     "roi": 0.1646
+    }
+   }
+  },
+  "tier 20-25, model above": {
+   "derive": {
+    "n": 28136,
+    "said": 0.5004,
+    "hit": 0.4931,
+    "naiveSaid": 0.3814,
+    "llModel": 0.6516,
+    "llNaive": 0.7115,
+    "skill": 0.0598,
+    "share": 0.951,
+    "slope": 0.974,
+    "shift": -0.031,
+    "meanGap": 0.119,
+    "over": {
+     "bets": 12980,
+     "said": 0.5803,
+     "won": 0.566,
+     "roi": 0.3624
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 65481,
+    "said": 0.5016,
+    "hit": 0.5061,
+    "naiveSaid": 0.3861,
+    "llModel": 0.6467,
+    "llNaive": 0.7074,
+    "skill": 0.0606,
+    "share": 1.01,
+    "slope": 1.031,
+    "shift": 0.019,
+    "meanGap": 0.1155,
+    "over": {
+     "bets": 29589,
+     "said": 0.5874,
+     "won": 0.5952,
+     "roi": 0.3735
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "tier 20-25, model below": {
+   "derive": {
+    "n": 17096,
+    "said": 0.3408,
+    "hit": 0.35,
+    "naiveSaid": 0.4195,
+    "llModel": 0.6296,
+    "llNaive": 0.6485,
+    "skill": 0.019,
+    "share": 0.9,
+    "slope": 0.956,
+    "shift": 0.014,
+    "meanGap": 0.0787,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 12565,
+     "said": 0.6765,
+     "won": 0.6671,
+     "roi": 0.1638
+    }
+   },
+   "check": {
+    "n": 42033,
+    "said": 0.3436,
+    "hit": 0.3598,
+    "naiveSaid": 0.4227,
+    "llModel": 0.6333,
+    "llNaive": 0.6512,
+    "skill": 0.0179,
+    "share": 0.869,
+    "slope": 1.007,
+    "shift": 0.078,
+    "meanGap": 0.0791,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 31174,
+     "said": 0.6742,
+     "won": 0.6576,
+     "roi": 0.15
+    }
+   }
+  },
+  "tier 25-30, model above": {
+   "derive": {
+    "n": 32527,
+    "said": 0.5073,
+    "hit": 0.5131,
+    "naiveSaid": 0.4036,
+    "llModel": 0.6595,
+    "llNaive": 0.7049,
+    "skill": 0.0454,
+    "share": 0.97,
+    "slope": 0.914,
+    "shift": 0.029,
+    "meanGap": 0.1037,
+    "over": {
+     "bets": 13170,
+     "said": 0.593,
+     "won": 0.587,
+     "roi": 0.3137
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 73136,
+    "said": 0.5104,
+    "hit": 0.5138,
+    "naiveSaid": 0.4027,
+    "llModel": 0.6509,
+    "llNaive": 0.7039,
+    "skill": 0.053,
+    "share": 1.009,
+    "slope": 1.016,
+    "shift": 0.014,
+    "meanGap": 0.1077,
+    "over": {
+     "bets": 30320,
+     "said": 0.5997,
+     "won": 0.6037,
+     "roi": 0.3398
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "tier 25-30, model below": {
+   "derive": {
+    "n": 19118,
+    "said": 0.3609,
+    "hit": 0.3836,
+    "naiveSaid": 0.4292,
+    "llModel": 0.649,
+    "llNaive": 0.6591,
+    "skill": 0.0101,
+    "share": 0.751,
+    "slope": 0.974,
+    "shift": 0.087,
+    "meanGap": 0.0684,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 13102,
+     "said": 0.6599,
+     "won": 0.6346,
+     "roi": 0.1205
+    }
+   },
+   "check": {
+    "n": 45114,
+    "said": 0.3589,
+    "hit": 0.3827,
+    "naiveSaid": 0.432,
+    "llModel": 0.6494,
+    "llNaive": 0.6592,
+    "skill": 0.0099,
+    "share": 0.718,
+    "slope": 0.951,
+    "shift": 0.078,
+    "meanGap": 0.0731,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 32090,
+     "said": 0.6613,
+     "won": 0.6316,
+     "roi": 0.1193
+    }
+   }
+  },
+  "tier 30-35, model above": {
+   "derive": {
+    "n": 36566,
+    "said": 0.5169,
+    "hit": 0.5154,
+    "naiveSaid": 0.418,
+    "llModel": 0.6589,
+    "llNaive": 0.7022,
+    "skill": 0.0433,
+    "share": 0.995,
+    "slope": 1.01,
+    "shift": -0.007,
+    "meanGap": 0.0989,
+    "over": {
+     "bets": 13746,
+     "said": 0.602,
+     "won": 0.6007,
+     "roi": 0.3026
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 67250,
+    "said": 0.5141,
+    "hit": 0.5101,
+    "naiveSaid": 0.4178,
+    "llModel": 0.6598,
+    "llNaive": 0.6995,
+    "skill": 0.0397,
+    "share": 0.962,
+    "slope": 1.015,
+    "shift": -0.018,
+    "meanGap": 0.0963,
+    "over": {
+     "bets": 24410,
+     "said": 0.6005,
+     "won": 0.5932,
+     "roi": 0.2924
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "tier 30-35, model below": {
+   "derive": {
+    "n": 20777,
+    "said": 0.3689,
+    "hit": 0.3981,
+    "naiveSaid": 0.4374,
+    "llModel": 0.6577,
+    "llNaive": 0.666,
+    "skill": 0.0083,
+    "share": 0.698,
+    "slope": 0.955,
+    "shift": 0.105,
+    "meanGap": 0.0685,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 14324,
+     "said": 0.653,
+     "won": 0.6184,
+     "roi": 0.1041
+    }
+   },
+   "check": {
+    "n": 43531,
+    "said": 0.3697,
+    "hit": 0.3972,
+    "naiveSaid": 0.4371,
+    "llModel": 0.6596,
+    "llNaive": 0.6656,
+    "skill": 0.0061,
+    "share": 0.645,
+    "slope": 0.896,
+    "shift": 0.067,
+    "meanGap": 0.0674,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 29899,
+     "said": 0.652,
+     "won": 0.616,
+     "roi": 0.0992
+    }
+   }
+  },
+  "tier 35+, model above": {
+   "derive": {
+    "n": 23378,
+    "said": 0.5311,
+    "hit": 0.5202,
+    "naiveSaid": 0.4327,
+    "llModel": 0.6684,
+    "llNaive": 0.6972,
+    "skill": 0.0288,
+    "share": 0.881,
+    "slope": 0.927,
+    "shift": -0.037,
+    "meanGap": 0.0984,
+    "over": {
+     "bets": 8989,
+     "said": 0.6147,
+     "won": 0.5939,
+     "roi": 0.2016
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 32571,
+    "said": 0.5234,
+    "hit": 0.5001,
+    "naiveSaid": 0.4304,
+    "llModel": 0.6716,
+    "llNaive": 0.6987,
+    "skill": 0.027,
+    "share": 0.858,
+    "slope": 0.974,
+    "shift": -0.095,
+    "meanGap": 0.093,
+    "over": {
+     "bets": 11659,
+     "said": 0.6022,
+     "won": 0.5715,
+     "roi": 0.2128
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "tier 35+, model below": {
+   "derive": {
+    "n": 9622,
+    "said": 0.3781,
+    "hit": 0.376,
+    "naiveSaid": 0.4398,
+    "llModel": 0.649,
+    "llNaive": 0.6608,
+    "skill": 0.0117,
+    "share": 0.851,
+    "slope": 0.887,
+    "shift": -0.063,
+    "meanGap": 0.0617,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 6169,
+     "said": 0.6446,
+     "won": 0.6311,
+     "roi": 0.1347
+    }
+   },
+   "check": {
+    "n": 17270,
+    "said": 0.3738,
+    "hit": 0.3791,
+    "naiveSaid": 0.4412,
+    "llModel": 0.6497,
+    "llNaive": 0.6638,
+    "skill": 0.0142,
+    "share": 0.853,
+    "slope": 0.904,
+    "shift": -0.024,
+    "meanGap": 0.0674,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 11516,
+     "said": 0.6502,
+     "won": 0.6342,
+     "roi": 0.1403
+    }
+   }
+  },
+  "size Q1, model above": {
+   "derive": {
+    "n": 124880,
+    "said": 0.4788,
+    "hit": 0.4801,
+    "naiveSaid": 0.3644,
+    "llModel": 0.6427,
+    "llNaive": 0.7114,
+    "skill": 0.0686,
+    "share": 1.003,
+    "slope": 0.974,
+    "shift": 0.005,
+    "meanGap": 0.1144,
+    "over": {
+     "bets": 55343,
+     "said": 0.5594,
+     "won": 0.5597,
+     "roi": 0.4496
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 252850,
+    "said": 0.4846,
+    "hit": 0.487,
+    "naiveSaid": 0.3679,
+    "llModel": 0.6412,
+    "llNaive": 0.7122,
+    "skill": 0.071,
+    "share": 1.006,
+    "slope": 0.997,
+    "shift": 0.01,
+    "meanGap": 0.1166,
+    "over": {
+     "bets": 113543,
+     "said": 0.5684,
+     "won": 0.5721,
+     "roi": 0.4533
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "size Q1, model below": {
+   "derive": {
+    "n": 61909,
+    "said": 0.3356,
+    "hit": 0.3467,
+    "naiveSaid": 0.4082,
+    "llModel": 0.6239,
+    "llNaive": 0.6397,
+    "skill": 0.0158,
+    "share": 0.868,
+    "slope": 0.955,
+    "shift": 0.023,
+    "meanGap": 0.0726,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 43225,
+     "said": 0.683,
+     "won": 0.669,
+     "roi": 0.1467
+    }
+   },
+   "check": {
+    "n": 125985,
+    "said": 0.3402,
+    "hit": 0.3573,
+    "naiveSaid": 0.4132,
+    "llModel": 0.63,
+    "llNaive": 0.6434,
+    "skill": 0.0134,
+    "share": 0.801,
+    "slope": 0.951,
+    "shift": 0.048,
+    "meanGap": 0.073,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 87931,
+     "said": 0.6783,
+     "won": 0.6577,
+     "roi": 0.1373
+    }
+   }
+  },
+  "size Q2, model above": {
+   "derive": {
+    "n": 17219,
+    "said": 0.5411,
+    "hit": 0.5382,
+    "naiveSaid": 0.4391,
+    "llModel": 0.6753,
+    "llNaive": 0.7072,
+    "skill": 0.032,
+    "share": 0.954,
+    "slope": 0.946,
+    "shift": -0.004,
+    "meanGap": 0.1019,
+    "over": {
+     "bets": 7193,
+     "said": 0.6177,
+     "won": 0.6139,
+     "roi": 0.2072
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 33867,
+    "said": 0.5329,
+    "hit": 0.5275,
+    "naiveSaid": 0.4361,
+    "llModel": 0.677,
+    "llNaive": 0.7059,
+    "skill": 0.0289,
+    "share": 0.954,
+    "slope": 0.982,
+    "shift": -0.02,
+    "meanGap": 0.0968,
+    "over": {
+     "bets": 13369,
+     "said": 0.609,
+     "won": 0.6018,
+     "roi": 0.1924
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "size Q2, model below": {
+   "derive": {
+    "n": 12710,
+    "said": 0.3491,
+    "hit": 0.3655,
+    "naiveSaid": 0.4385,
+    "llModel": 0.6389,
+    "llNaive": 0.663,
+    "skill": 0.024,
+    "share": 0.872,
+    "slope": 1.006,
+    "shift": 0.078,
+    "meanGap": 0.0894,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 9627,
+     "said": 0.6753,
+     "won": 0.658,
+     "roi": 0.1711
+    }
+   },
+   "check": {
+    "n": 27285,
+    "said": 0.351,
+    "hit": 0.3671,
+    "naiveSaid": 0.437,
+    "llModel": 0.6453,
+    "llNaive": 0.664,
+    "skill": 0.0187,
+    "share": 0.813,
+    "slope": 0.894,
+    "shift": 0.009,
+    "meanGap": 0.086,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 20557,
+     "said": 0.6721,
+     "won": 0.651,
+     "roi": 0.1572
+    }
+   }
+  },
+  "size Q3, model above": {
+   "derive": {
+    "n": 17496,
+    "said": 0.5178,
+    "hit": 0.5086,
+    "naiveSaid": 0.4325,
+    "llModel": 0.6766,
+    "llNaive": 0.6953,
+    "skill": 0.0186,
+    "share": 0.86,
+    "slope": 0.933,
+    "shift": -0.033,
+    "meanGap": 0.0853,
+    "over": {
+     "bets": 5760,
+     "said": 0.6108,
+     "won": 0.5875,
+     "roi": 0.1475
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 32338,
+    "said": 0.5089,
+    "hit": 0.5021,
+    "naiveSaid": 0.432,
+    "llModel": 0.6779,
+    "llNaive": 0.6963,
+    "skill": 0.0184,
+    "share": 0.935,
+    "slope": 0.973,
+    "shift": -0.027,
+    "meanGap": 0.0769,
+    "over": {
+     "bets": 9206,
+     "said": 0.6011,
+     "won": 0.5904,
+     "roi": 0.1584
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "size Q3, model below": {
+   "derive": {
+    "n": 17433,
+    "said": 0.3372,
+    "hit": 0.3578,
+    "naiveSaid": 0.4209,
+    "llModel": 0.6341,
+    "llNaive": 0.6509,
+    "skill": 0.0168,
+    "share": 0.79,
+    "slope": 0.956,
+    "shift": 0.067,
+    "meanGap": 0.0837,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 13079,
+     "said": 0.6844,
+     "won": 0.6598,
+     "roi": 0.1433
+    }
+   },
+   "check": {
+    "n": 41718,
+    "said": 0.3364,
+    "hit": 0.3605,
+    "naiveSaid": 0.4219,
+    "llModel": 0.6378,
+    "llNaive": 0.653,
+    "skill": 0.0153,
+    "share": 0.756,
+    "slope": 0.922,
+    "shift": 0.06,
+    "meanGap": 0.0856,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 32143,
+     "said": 0.684,
+     "won": 0.6561,
+     "roi": 0.1379
+    }
+   }
+  },
+  "size Q4, model above": {
+   "derive": {
+    "n": 11676,
+    "said": 0.5238,
+    "hit": 0.507,
+    "naiveSaid": 0.4465,
+    "llModel": 0.6823,
+    "llNaive": 0.6938,
+    "skill": 0.0115,
+    "share": 0.767,
+    "slope": 0.909,
+    "shift": -0.061,
+    "meanGap": 0.0773,
+    "over": {
+     "bets": 3348,
+     "said": 0.6106,
+     "won": 0.5768,
+     "roi": 0.1084
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 21594,
+    "said": 0.5119,
+    "hit": 0.4854,
+    "naiveSaid": 0.4388,
+    "llModel": 0.6842,
+    "llNaive": 0.6907,
+    "skill": 0.0065,
+    "share": 0.672,
+    "slope": 0.857,
+    "shift": -0.102,
+    "meanGap": 0.0731,
+    "over": {
+     "bets": 5809,
+     "said": 0.5969,
+     "won": 0.5459,
+     "roi": 0.0644
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "size Q4, model below": {
+   "derive": {
+    "n": 16319,
+    "said": 0.3372,
+    "hit": 0.3658,
+    "naiveSaid": 0.435,
+    "llModel": 0.6341,
+    "llNaive": 0.6552,
+    "skill": 0.0211,
+    "share": 0.748,
+    "slope": 0.937,
+    "shift": 0.092,
+    "meanGap": 0.0977,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 13072,
+     "said": 0.6844,
+     "won": 0.6485,
+     "roi": 0.1442
+    }
+   },
+   "check": {
+    "n": 34515,
+    "said": 0.3303,
+    "hit": 0.3556,
+    "naiveSaid": 0.4326,
+    "llModel": 0.6301,
+    "llNaive": 0.6528,
+    "skill": 0.0227,
+    "share": 0.752,
+    "slope": 0.904,
+    "shift": 0.054,
+    "meanGap": 0.1023,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 28057,
+     "said": 0.6898,
+     "won": 0.6562,
+     "roi": 0.1553
+    }
+   }
+  },
+  "points family, model above": {
+   "derive": {
+    "n": 64391,
+    "said": 0.5412,
+    "hit": 0.5439,
+    "naiveSaid": 0.416,
+    "llModel": 0.6727,
+    "llNaive": 0.7299,
+    "skill": 0.0572,
+    "share": 0.996,
+    "slope": 0.918,
+    "shift": 0.024,
+    "meanGap": 0.1252,
+    "over": {
+     "bets": 32288,
+     "said": 0.6078,
+     "won": 0.611,
+     "roi": 0.3109
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 125844,
+    "said": 0.5407,
+    "hit": 0.5506,
+    "naiveSaid": 0.416,
+    "llModel": 0.6707,
+    "llNaive": 0.7329,
+    "skill": 0.0622,
+    "share": 1.038,
+    "slope": 0.943,
+    "shift": 0.05,
+    "meanGap": 0.1247,
+    "over": {
+     "bets": 62307,
+     "said": 0.6094,
+     "won": 0.6189,
+     "roi": 0.3293
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "points family, model below": {
+   "derive": {
+    "n": 37297,
+    "said": 0.3468,
+    "hit": 0.3718,
+    "naiveSaid": 0.4325,
+    "llModel": 0.6474,
+    "llNaive": 0.6646,
+    "skill": 0.0173,
+    "share": 0.793,
+    "slope": 0.992,
+    "shift": 0.107,
+    "meanGap": 0.0857,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 28083,
+     "said": 0.6759,
+     "won": 0.648,
+     "roi": 0.1427
+    }
+   },
+   "check": {
+    "n": 81484,
+    "said": 0.3449,
+    "hit": 0.3761,
+    "naiveSaid": 0.4336,
+    "llModel": 0.6533,
+    "llNaive": 0.6677,
+    "skill": 0.0144,
+    "share": 0.723,
+    "slope": 0.872,
+    "shift": 0.06,
+    "meanGap": 0.0887,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 62341,
+     "said": 0.6769,
+     "won": 0.6417,
+     "roi": 0.1352
+    }
+   }
+  },
+  "the rest, model above": {
+   "derive": {
+    "n": 106880,
+    "said": 0.4625,
+    "hit": 0.4586,
+    "naiveSaid": 0.3655,
+    "llModel": 0.6398,
+    "llNaive": 0.695,
+    "skill": 0.0552,
+    "share": 0.987,
+    "slope": 0.968,
+    "shift": -0.021,
+    "meanGap": 0.0971,
+    "over": {
+     "bets": 39356,
+     "said": 0.5422,
+     "won": 0.5331,
+     "roi": 0.4459
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 214805,
+    "said": 0.4657,
+    "hit": 0.4582,
+    "naiveSaid": 0.3673,
+    "llModel": 0.6394,
+    "llNaive": 0.6946,
+    "skill": 0.0551,
+    "share": 0.978,
+    "slope": 0.981,
+    "shift": -0.035,
+    "meanGap": 0.0984,
+    "over": {
+     "bets": 79620,
+     "said": 0.549,
+     "won": 0.5407,
+     "roi": 0.4441
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "the rest, model below": {
+   "derive": {
+    "n": 71074,
+    "said": 0.3329,
+    "hit": 0.344,
+    "naiveSaid": 0.4101,
+    "llModel": 0.6191,
+    "llNaive": 0.6371,
+    "skill": 0.018,
+    "share": 0.852,
+    "slope": 0.945,
+    "shift": 0.016,
+    "meanGap": 0.0772,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 50920,
+     "said": 0.6862,
+     "won": 0.6709,
+     "roi": 0.152
+    }
+   },
+   "check": {
+    "n": 148019,
+    "said": 0.3362,
+    "hit": 0.3493,
+    "naiveSaid": 0.4133,
+    "llModel": 0.6222,
+    "llNaive": 0.6388,
+    "skill": 0.0165,
+    "share": 0.824,
+    "slope": 0.948,
+    "shift": 0.028,
+    "meanGap": 0.0771,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 106347,
+     "said": 0.6827,
+     "won": 0.6649,
+     "roi": 0.1474
+    }
+   }
+  },
+  "playoffs, model above": {
+   "derive": {
+    "n": 6099,
+    "said": 0.4792,
+    "hit": 0.4552,
+    "naiveSaid": 0.4075,
+    "llModel": 0.661,
+    "llNaive": 0.6574,
+    "skill": -0.0036,
+    "share": 0.407,
+    "slope": 0.832,
+    "shift": -0.108,
+    "meanGap": 0.0717,
+    "over": {
+     "bets": 1504,
+     "said": 0.5876,
+     "won": 0.4927,
+     "roi": -0.023
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 11071,
+    "said": 0.4667,
+    "hit": 0.4236,
+    "naiveSaid": 0.3969,
+    "llModel": 0.6582,
+    "llNaive": 0.6498,
+    "skill": -0.0084,
+    "share": 0.287,
+    "slope": 0.783,
+    "shift": -0.202,
+    "meanGap": 0.0698,
+    "over": {
+     "bets": 2649,
+     "said": 0.5781,
+     "won": 0.4617,
+     "roi": -0.049
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "playoffs, model below": {
+   "derive": {
+    "n": 9576,
+    "said": 0.3032,
+    "hit": 0.3217,
+    "naiveSaid": 0.4244,
+    "llModel": 0.6031,
+    "llNaive": 0.6371,
+    "skill": 0.034,
+    "share": 0.794,
+    "slope": 0.909,
+    "shift": 0.021,
+    "meanGap": 0.1212,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 8046,
+     "said": 0.7143,
+     "won": 0.6919,
+     "roi": 0.209
+    }
+   },
+   "check": {
+    "n": 23755,
+    "said": 0.3026,
+    "hit": 0.3047,
+    "naiveSaid": 0.426,
+    "llModel": 0.5877,
+    "llNaive": 0.6353,
+    "skill": 0.0475,
+    "share": 0.932,
+    "slope": 0.962,
+    "shift": -0.019,
+    "meanGap": 0.1233,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 20041,
+     "said": 0.7137,
+     "won": 0.7087,
+     "roi": 0.246
+    }
+   }
+  },
+  "playoffs, 25+ min, no role change": {
+   "derive": {
+    "n": 7876,
+    "said": 0.4436,
+    "hit": 0.4582,
+    "naiveSaid": 0.4365,
+    "llModel": 0.6758,
+    "llNaive": 0.6802,
+    "skill": 0.0044,
+    "share": 0.608,
+    "slope": 0.725,
+    "shift": 0.003,
+    "meanGap": 0.0741,
+    "over": {
+     "bets": 1124,
+     "said": 0.5936,
+     "won": 0.5338,
+     "roi": 0.0532
+    },
+    "under": {
+     "bets": 2549,
+     "said": 0.6507,
+     "won": 0.5987,
+     "roi": 0.0842
+    }
+   },
+   "check": {
+    "n": 16566,
+    "said": 0.4182,
+    "hit": 0.4175,
+    "naiveSaid": 0.4311,
+    "llModel": 0.662,
+    "llNaive": 0.6705,
+    "skill": 0.0085,
+    "share": 0.713,
+    "slope": 0.792,
+    "shift": -0.067,
+    "meanGap": 0.0732,
+    "over": {
+     "bets": 1702,
+     "said": 0.5837,
+     "won": 0.5358,
+     "roi": 0.0729
+    },
+    "under": {
+     "bets": 6860,
+     "said": 0.6531,
+     "won": 0.6309,
+     "roi": 0.1404
+    }
+   }
+  },
+  "regular season, 25-35 min, no role change": {
+   "derive": {
+    "n": 66726,
+    "said": 0.4588,
+    "hit": 0.4686,
+    "naiveSaid": 0.4233,
+    "llModel": 0.6614,
+    "llNaive": 0.6822,
+    "skill": 0.0208,
+    "share": 0.914,
+    "slope": 0.923,
+    "shift": 0.03,
+    "meanGap": 0.0794,
+    "over": {
+     "bets": 14606,
+     "said": 0.5965,
+     "won": 0.5934,
+     "roi": 0.2273
+    },
+    "under": {
+     "bets": 16370,
+     "said": 0.6416,
+     "won": 0.6101,
+     "roi": 0.0912
+    }
+   },
+   "check": {
+    "n": 127897,
+    "said": 0.4543,
+    "hit": 0.469,
+    "naiveSaid": 0.4233,
+    "llModel": 0.6602,
+    "llNaive": 0.6816,
+    "skill": 0.0215,
+    "share": 0.922,
+    "slope": 0.944,
+    "shift": 0.054,
+    "meanGap": 0.0799,
+    "over": {
+     "bets": 26994,
+     "said": 0.5959,
+     "won": 0.5997,
+     "roi": 0.2422
+    },
+    "under": {
+     "bets": 33818,
+     "said": 0.6454,
+     "won": 0.6078,
+     "roi": 0.0858
+    }
+   }
+  },
+  "25-35 min, no role change": {
+   "derive": {
+    "n": 70158,
+    "said": 0.4567,
+    "hit": 0.4674,
+    "naiveSaid": 0.4235,
+    "llModel": 0.6617,
+    "llNaive": 0.6819,
+    "skill": 0.0202,
+    "share": 0.908,
+    "slope": 0.918,
+    "shift": 0.033,
+    "meanGap": 0.079,
+    "over": {
+     "bets": 14968,
+     "said": 0.5959,
+     "won": 0.5921,
+     "roi": 0.2241
+    },
+    "under": {
+     "bets": 17721,
+     "said": 0.6431,
+     "won": 0.611,
+     "roi": 0.0926
+    }
+   },
+   "check": {
+    "n": 136752,
+    "said": 0.4506,
+    "hit": 0.4646,
+    "naiveSaid": 0.4234,
+    "llModel": 0.6598,
+    "llNaive": 0.6805,
+    "skill": 0.0206,
+    "share": 0.91,
+    "slope": 0.938,
+    "shift": 0.049,
+    "meanGap": 0.0796,
+    "over": {
+     "bets": 27696,
+     "said": 0.5954,
+     "won": 0.5978,
+     "roi": 0.2386
+    },
+    "under": {
+     "bets": 38107,
+     "said": 0.6469,
+     "won": 0.6118,
+     "roi": 0.0937
+    }
+   }
+  },
+  "25-35 min, no role change, model above": {
+   "derive": {
+    "n": 43586,
+    "said": 0.5059,
+    "hit": 0.5076,
+    "naiveSaid": 0.4155,
+    "llModel": 0.6612,
+    "llNaive": 0.691,
+    "skill": 0.0298,
+    "share": 0.972,
+    "slope": 0.963,
+    "shift": 0.009,
+    "meanGap": 0.0904,
+    "over": {
+     "bets": 14968,
+     "said": 0.5959,
+     "won": 0.5921,
+     "roi": 0.2241
+    },
+    "under": {
+     "bets": 0
+    }
+   },
+   "check": {
+    "n": 81193,
+    "said": 0.5042,
+    "hit": 0.5081,
+    "naiveSaid": 0.4143,
+    "llModel": 0.658,
+    "llNaive": 0.6901,
+    "skill": 0.0321,
+    "share": 1.005,
+    "slope": 1.014,
+    "shift": 0.016,
+    "meanGap": 0.0899,
+    "over": {
+     "bets": 27696,
+     "said": 0.5954,
+     "won": 0.5978,
+     "roi": 0.2386
+    },
+    "under": {
+     "bets": 0
+    }
+   }
+  },
+  "25-35 min, no role change, model below": {
+   "derive": {
+    "n": 26572,
+    "said": 0.376,
+    "hit": 0.4016,
+    "naiveSaid": 0.4364,
+    "llModel": 0.6625,
+    "llNaive": 0.667,
+    "skill": 0.0045,
+    "share": 0.66,
+    "slope": 0.94,
+    "shift": 0.081,
+    "meanGap": 0.0604,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 17721,
+     "said": 0.6431,
+     "won": 0.611,
+     "roi": 0.0926
+    }
+   },
+   "check": {
+    "n": 55559,
+    "said": 0.3723,
+    "hit": 0.4011,
+    "naiveSaid": 0.4367,
+    "llModel": 0.6625,
+    "llNaive": 0.6664,
+    "skill": 0.0039,
+    "share": 0.617,
+    "slope": 0.93,
+    "shift": 0.089,
+    "meanGap": 0.0645,
+    "over": {
+     "bets": 0
+    },
+    "under": {
+     "bets": 38107,
+     "said": 0.6469,
+     "won": 0.6118,
+     "roi": 0.0937
+    }
+   }
+  }
+ }
+}

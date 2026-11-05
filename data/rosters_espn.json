@@ -226,7 +226,7 @@
     "name": "Jayson Tatum",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683689",
@@ -3405,6 +3405,13 @@
    {
     "id": "4702656",
     "name": "Alijah Martin",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4411057",
+    "name": "Kevin McCullar Jr.",
     "pos": "G",
     "status": "active",
     "injured": false

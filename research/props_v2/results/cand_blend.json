@@ -1,0 +1,3264 @@
+{
+ "generated": "2026-11-05T17:48Z",
+ "what": "Candidate B, anchor to the market (research/props_v2/cand_blend.js; the rule in cand_blend.md was written before this run)",
+ "lines": 11395,
+ "games": 83,
+ "walkForward": {
+  "2025": {
+   "players": 28007,
+   "minutesMae": 4.83,
+   "stats": {
+    "pts": {
+     "mae": 4.55,
+     "logScore": 3.0147
+    },
+    "reb": {
+     "mae": 1.89,
+     "logScore": 2.1743
+    },
+    "ast": {
+     "mae": 1.31,
+     "logScore": 1.7429
+    },
+    "tpm": {
+     "mae": 0.88,
+     "logScore": 1.3069
+    },
+    "stl": {
+     "mae": 0.7,
+     "logScore": 1.1268
+    },
+    "blk": {
+     "mae": 0.52,
+     "logScore": 0.8111
+    },
+    "pra": {
+     "mae": 5.96,
+     "logScore": 3.3617
+    },
+    "pr": {
+     "mae": 5.48,
+     "logScore": 3.2624
+    },
+    "pa": {
+     "mae": 4.99,
+     "logScore": 3.1686
+    },
+    "ar": {
+     "mae": 2.59,
+     "logScore": 2.515
+    },
+    "sb": {
+     "mae": 0.91,
+     "logScore": 1.3992
+    }
+   }
+  },
+  "2026": {
+   "players": 28463,
+   "minutesMae": 4.82,
+   "stats": {
+    "pts": {
+     "mae": 4.51,
+     "logScore": 3.0192
+    },
+    "reb": {
+     "mae": 1.86,
+     "logScore": 2.1567
+    },
+    "ast": {
+     "mae": 1.32,
+     "logScore": 1.7474
+    },
+    "tpm": {
+     "mae": 0.88,
+     "logScore": 1.2986
+    },
+    "stl": {
+     "mae": 0.71,
+     "logScore": 1.1336
+    },
+    "blk": {
+     "mae": 0.51,
+     "logScore": 0.7983
+    },
+    "pra": {
+     "mae": 5.92,
+     "logScore": 3.363
+    },
+    "pr": {
+     "mae": 5.43,
+     "logScore": 3.2599
+    },
+    "pa": {
+     "mae": 4.97,
+     "logScore": 3.1493
+    },
+    "ar": {
+     "mae": 2.56,
+     "logScore": 2.5054
+    },
+    "sb": {
+     "mae": 0.92,
+     "logScore": 1.402
+    }
+   }
+  }
+ },
+ "model": {
+  "lines": 11395,
+  "overHit": 0.4592,
+  "said": 0.4457,
+  "marketSaid": 0.4561,
+  "meanGapFromMarket": 0.0669,
+  "logloss": {
+   "cand": 0.6934,
+   "market": 0.6788,
+   "diff": 0.0147,
+   "diffCi90": [
+    0.008254,
+    0.021361
+   ]
+  },
+  "brier": {
+   "cand": 0.2495,
+   "market": 0.243,
+   "diff": 0.0064,
+   "diffCi90": [
+    0.003596,
+    0.009387
+   ]
+  },
+  "flat": {
+   "over": {
+    "bets": 967,
+    "won": 442,
+    "units": -106.44,
+    "roi": -0.1101,
+    "unitsCi90": [
+     -181.45,
+     -31.97
+    ]
+   },
+   "under": {
+    "bets": 4271,
+    "won": 2357,
+    "units": 135.28,
+    "roi": 0.0317,
+    "unitsCi90": [
+     -47,
+     315.56
+    ]
+   }
+  }
+ },
+ "marketAlone": {
+  "lines": 11395,
+  "overHit": 0.4592,
+  "said": 0.4561,
+  "marketSaid": 0.4561,
+  "meanGapFromMarket": 0,
+  "logloss": {
+   "cand": 0.6788,
+   "market": 0.6788,
+   "diff": 0,
+   "diffCi90": [
+    0,
+    0
+   ]
+  },
+  "brier": {
+   "cand": 0.243,
+   "market": 0.243,
+   "diff": 0,
+   "diffCi90": [
+    0,
+    0
+   ]
+  },
+  "flat": {
+   "over": {
+    "bets": 0,
+    "won": 0,
+    "units": 0,
+    "roi": null,
+    "unitsCi90": null
+   },
+   "under": {
+    "bets": 0,
+    "won": 0,
+    "units": 0,
+    "roi": null,
+    "unitsCi90": null
+   }
+  }
+ },
+ "cv": {
+  "game": {
+   "groups": 83,
+   "B1": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.4548,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.0064,
+    "logloss": {
+     "cand": 0.6789,
+     "market": 0.6788,
+     "diff": 0.0002,
+     "diffCi90": [
+      -0.000377,
+      0.000793
+     ]
+    },
+    "brier": {
+     "cand": 0.2431,
+     "market": 0.243,
+     "diff": 0.0001,
+     "diffCi90": [
+      -0.000181,
+      0.000396
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 0,
+      "won": 0,
+      "units": 0,
+      "roi": null,
+      "unitsCi90": null
+     },
+     "under": {
+      "bets": 115,
+      "won": 52,
+      "units": -18.67,
+      "roi": -0.1623,
+      "unitsCi90": [
+       -54.5,
+       13.07
+      ]
+     }
+    },
+    "weights": {
+     "folds": 83,
+     "raw": {
+      "min": 0.0728,
+      "median": 0.0914,
+      "max": 0.1274
+     },
+     "clampedAtZero": 0,
+     "clampedAtOne": 0
+    },
+    "byStat": {
+     "pts": {
+      "lines": 1328,
+      "logloss": {
+       "cand": 0.6895,
+       "market": 0.6884,
+       "diff": 0.0011,
+       "diffCi90": [
+        0.000166,
+        0.002119
+       ]
+      },
+      "brier": {
+       "cand": 0.2482,
+       "market": 0.2476,
+       "diff": 0.0006,
+       "diffCi90": [
+        0.000083,
+        0.001051
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 21,
+        "won": 8,
+        "units": -5.9,
+        "roi": -0.281,
+        "unitsCi90": [
+         -13.62,
+         1.27
+        ]
+       }
+      }
+     },
+     "reb": {
+      "lines": 1234,
+      "logloss": {
+       "cand": 0.692,
+       "market": 0.6925,
+       "diff": -0.0006,
+       "diffCi90": [
+        -0.001391,
+        0.000292
+       ]
+      },
+      "brier": {
+       "cand": 0.2494,
+       "market": 0.2496,
+       "diff": -0.0003,
+       "diffCi90": [
+        -0.000678,
+        0.000151
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 6,
+        "won": 4,
+        "units": 1.77,
+        "roi": 0.295,
+        "unitsCi90": [
+         -1.5,
+         5.31
+        ]
+       }
+      }
+     },
+     "ast": {
+      "lines": 1094,
+      "logloss": {
+       "cand": 0.6754,
+       "market": 0.6758,
+       "diff": -0.0004,
+       "diffCi90": [
+        -0.00124,
+        0.000516
+       ]
+      },
+      "brier": {
+       "cand": 0.2412,
+       "market": 0.2414,
+       "diff": -0.0002,
+       "diffCi90": [
+        -0.000609,
+        0.000246
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 13,
+        "won": 6,
+        "units": -2.33,
+        "roi": -0.1792,
+        "unitsCi90": [
+         -6.4,
+         1.52
+        ]
+       }
+      }
+     },
+     "tpm": {
+      "lines": 1079,
+      "logloss": {
+       "cand": 0.6655,
+       "market": 0.6654,
+       "diff": 0.0001,
+       "diffCi90": [
+        -0.000613,
+        0.000914
+       ]
+      },
+      "brier": {
+       "cand": 0.2371,
+       "market": 0.2371,
+       "diff": 0.0001,
+       "diffCi90": [
+        -0.000304,
+        0.000424
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 2,
+        "won": 0,
+        "units": -2,
+        "roi": -1,
+        "unitsCi90": [
+         -4,
+         0
+        ]
+       }
+      }
+     },
+     "stl": {
+      "lines": 888,
+      "logloss": {
+       "cand": 0.6534,
+       "market": 0.6539,
+       "diff": -0.0005,
+       "diffCi90": [
+        -0.001015,
+        -0.000053
+       ]
+      },
+      "brier": {
+       "cand": 0.2304,
+       "market": 0.2306,
+       "diff": -0.0003,
+       "diffCi90": [
+        -0.000482,
+        -0.000025
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       }
+      }
+     },
+     "blk": {
+      "lines": 795,
+      "logloss": {
+       "cand": 0.6344,
+       "market": 0.6349,
+       "diff": -0.0005,
+       "diffCi90": [
+        -0.001148,
+        0.000033
+       ]
+      },
+      "brier": {
+       "cand": 0.2224,
+       "market": 0.2227,
+       "diff": -0.0002,
+       "diffCi90": [
+        -0.000489,
+        0.000018
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       }
+      }
+     },
+     "pra": {
+      "lines": 1113,
+      "logloss": {
+       "cand": 0.6892,
+       "market": 0.6883,
+       "diff": 0.0009,
+       "diffCi90": [
+        -0.000318,
+        0.002242
+       ]
+      },
+      "brier": {
+       "cand": 0.2481,
+       "market": 0.2476,
+       "diff": 0.0005,
+       "diffCi90": [
+        -0.000156,
+        0.00111
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 22,
+        "won": 9,
+        "units": -5.19,
+        "roi": -0.2359,
+        "unitsCi90": [
+         -14.08,
+         2.9
+        ]
+       }
+      }
+     },
+     "pr": {
+      "lines": 1204,
+      "logloss": {
+       "cand": 0.6869,
+       "market": 0.6861,
+       "diff": 0.0008,
+       "diffCi90": [
+        -0.0003,
+        0.001844
+       ]
+      },
+      "brier": {
+       "cand": 0.2469,
+       "market": 0.2465,
+       "diff": 0.0004,
+       "diffCi90": [
+        -0.000147,
+        0.000916
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 19,
+        "won": 11,
+        "units": 1.35,
+        "roi": 0.0711,
+        "unitsCi90": [
+         -6.5,
+         8.6
+        ]
+       }
+      }
+     },
+     "pa": {
+      "lines": 1029,
+      "logloss": {
+       "cand": 0.688,
+       "market": 0.687,
+       "diff": 0.0009,
+       "diffCi90": [
+        -0.000367,
+        0.002319
+       ]
+      },
+      "brier": {
+       "cand": 0.2474,
+       "market": 0.247,
+       "diff": 0.0005,
+       "diffCi90": [
+        -0.000184,
+        0.001146
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 20,
+        "won": 8,
+        "units": -4.86,
+        "roi": -0.243,
+        "unitsCi90": [
+         -12.87,
+         2.55
+        ]
+       }
+      }
+     },
+     "ar": {
+      "lines": 1041,
+      "logloss": {
+       "cand": 0.6904,
+       "market": 0.6905,
+       "diff": -0.0001,
+       "diffCi90": [
+        -0.001103,
+        0.00091
+       ]
+      },
+      "brier": {
+       "cand": 0.2486,
+       "market": 0.2487,
+       "diff": -0.0001,
+       "diffCi90": [
+        -0.000539,
+        0.000456
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 12,
+        "won": 6,
+        "units": -1.51,
+        "roi": -0.1258,
+        "unitsCi90": [
+         -6.9,
+         3.3
+        ]
+       }
+      }
+     },
+     "sb": {
+      "lines": 590,
+      "logloss": {
+       "cand": 0.6861,
+       "market": 0.6865,
+       "diff": -0.0004,
+       "diffCi90": [
+        -0.001076,
+        0.00036
+       ]
+      },
+      "brier": {
+       "cand": 0.2466,
+       "market": 0.2468,
+       "diff": -0.0002,
+       "diffCi90": [
+        -0.000512,
+        0.000177
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       }
+      }
+     }
+    }
+   },
+   "B2": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.4564,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.0099,
+    "logloss": {
+     "cand": 0.6789,
+     "market": 0.6788,
+     "diff": 0.0001,
+     "diffCi90": [
+      -0.000615,
+      0.000833
+     ]
+    },
+    "brier": {
+     "cand": 0.2431,
+     "market": 0.243,
+     "diff": 0.0001,
+     "diffCi90": [
+      -0.000285,
+      0.000407
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 3,
+      "won": 1,
+      "units": -0.94,
+      "roi": -0.3133,
+      "unitsCi90": [
+       -4,
+       2.12
+      ]
+     },
+     "under": {
+      "bets": 511,
+      "won": 270,
+      "units": -15.76,
+      "roi": -0.0308,
+      "unitsCi90": [
+       -62.17,
+       29.48
+      ]
+     }
+    },
+    "weights": {
+     "pts": {
+      "folds": 83,
+      "raw": {
+       "min": -0.1259,
+       "median": -0.096,
+       "max": -0.0656
+      },
+      "clampedAtZero": 83,
+      "clampedAtOne": 0
+     },
+     "reb": {
+      "folds": 83,
+      "raw": {
+       "min": 0.2261,
+       "median": 0.2717,
+       "max": 0.3171
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "ast": {
+      "folds": 83,
+      "raw": {
+       "min": 0.1862,
+       "median": 0.2297,
+       "max": 0.2754
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "tpm": {
+      "folds": 83,
+      "raw": {
+       "min": 0.0074,
+       "median": 0.0975,
+       "max": 0.1747
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "stl": {
+      "folds": 83,
+      "raw": {
+       "min": 0.4907,
+       "median": 0.5935,
+       "max": 0.6845
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "blk": {
+      "folds": 83,
+      "raw": {
+       "min": 0.4237,
+       "median": 0.5382,
+       "max": 0.6049
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "pra": {
+      "folds": 82,
+      "raw": {
+       "min": -0.0364,
+       "median": -0.0054,
+       "max": 0.0411
+      },
+      "clampedAtZero": 55,
+      "clampedAtOne": 0
+     },
+     "pr": {
+      "folds": 82,
+      "raw": {
+       "min": -0.0327,
+       "median": -0.0004,
+       "max": 0.0431
+      },
+      "clampedAtZero": 41,
+      "clampedAtOne": 0
+     },
+     "pa": {
+      "folds": 82,
+      "raw": {
+       "min": -0.0561,
+       "median": -0.0229,
+       "max": 0.0377
+      },
+      "clampedAtZero": 75,
+      "clampedAtOne": 0
+     },
+     "ar": {
+      "folds": 82,
+      "raw": {
+       "min": 0.138,
+       "median": 0.1769,
+       "max": 0.2262
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "sb": {
+      "folds": 73,
+      "raw": {
+       "min": 0.213,
+       "median": 0.4214,
+       "max": 0.5399
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     }
+    },
+    "byStat": {
+     "pts": {
+      "lines": 1328,
+      "logloss": {
+       "cand": 0.6884,
+       "market": 0.6884,
+       "diff": 0,
+       "diffCi90": [
+        0,
+        0
+       ]
+      },
+      "brier": {
+       "cand": 0.2476,
+       "market": 0.2476,
+       "diff": 0,
+       "diffCi90": [
+        0,
+        0
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       }
+      }
+     },
+     "reb": {
+      "lines": 1234,
+      "logloss": {
+       "cand": 0.6919,
+       "market": 0.6925,
+       "diff": -0.0006,
+       "diffCi90": [
+        -0.00314,
+        0.002012
+       ]
+      },
+      "brier": {
+       "cand": 0.2494,
+       "market": 0.2496,
+       "diff": -0.0003,
+       "diffCi90": [
+        -0.001527,
+        0.000996
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 2,
+        "won": 1,
+        "units": 0.06,
+        "roi": 0.03,
+        "unitsCi90": [
+         -2,
+         2.18
+        ]
+       },
+       "under": {
+        "bets": 88,
+        "won": 48,
+        "units": 3.81,
+        "roi": 0.0433,
+        "unitsCi90": [
+         -11.28,
+         19.21
+        ]
+       }
+      }
+     },
+     "ast": {
+      "lines": 1094,
+      "logloss": {
+       "cand": 0.6757,
+       "market": 0.6758,
+       "diff": 0,
+       "diffCi90": [
+        -0.002255,
+        0.002227
+       ]
+      },
+      "brier": {
+       "cand": 0.2414,
+       "market": 0.2414,
+       "diff": 0,
+       "diffCi90": [
+        -0.001116,
+        0.001058
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 1,
+        "won": 0,
+        "units": -1,
+        "roi": -1,
+        "unitsCi90": [
+         -3,
+         0
+        ]
+       },
+       "under": {
+        "bets": 116,
+        "won": 57,
+        "units": -11.65,
+        "roi": -0.1004,
+        "unitsCi90": [
+         -28.05,
+         4.17
+        ]
+       }
+      }
+     },
+     "tpm": {
+      "lines": 1079,
+      "logloss": {
+       "cand": 0.6665,
+       "market": 0.6654,
+       "diff": 0.0011,
+       "diffCi90": [
+        0.000208,
+        0.002104
+       ]
+      },
+      "brier": {
+       "cand": 0.2376,
+       "market": 0.2371,
+       "diff": 0.0005,
+       "diffCi90": [
+        0.00009,
+        0.000988
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 7,
+        "won": 1,
+        "units": -4.97,
+        "roi": -0.71,
+        "unitsCi90": [
+         -9.91,
+         -1
+        ]
+       }
+      }
+     },
+     "stl": {
+      "lines": 888,
+      "logloss": {
+       "cand": 0.6531,
+       "market": 0.6539,
+       "diff": -0.0008,
+       "diffCi90": [
+        -0.004028,
+        0.002444
+       ]
+      },
+      "brier": {
+       "cand": 0.2303,
+       "market": 0.2306,
+       "diff": -0.0004,
+       "diffCi90": [
+        -0.001882,
+        0.001194
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 111,
+        "won": 60,
+        "units": 1.45,
+        "roi": 0.0131,
+        "unitsCi90": [
+         -16.12,
+         19.98
+        ]
+       }
+      }
+     },
+     "blk": {
+      "lines": 795,
+      "logloss": {
+       "cand": 0.6341,
+       "market": 0.6349,
+       "diff": -0.0008,
+       "diffCi90": [
+        -0.004191,
+        0.002437
+       ]
+      },
+      "brier": {
+       "cand": 0.2223,
+       "market": 0.2227,
+       "diff": -0.0003,
+       "diffCi90": [
+        -0.001812,
+        0.001096
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 79,
+        "won": 49,
+        "units": 7.84,
+        "roi": 0.0992,
+        "unitsCi90": [
+         -6.18,
+         22.06
+        ]
+       }
+      }
+     },
+     "pra": {
+      "lines": 1113,
+      "logloss": {
+       "cand": 0.6887,
+       "market": 0.6883,
+       "diff": 0.0004,
+       "diffCi90": [
+        0.000202,
+        0.000724
+       ]
+      },
+      "brier": {
+       "cand": 0.2478,
+       "market": 0.2476,
+       "diff": 0.0002,
+       "diffCi90": [
+        0.000101,
+        0.000359
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       }
+      }
+     },
+     "pr": {
+      "lines": 1204,
+      "logloss": {
+       "cand": 0.6866,
+       "market": 0.6861,
+       "diff": 0.0005,
+       "diffCi90": [
+        0.000289,
+        0.000751
+       ]
+      },
+      "brier": {
+       "cand": 0.2467,
+       "market": 0.2465,
+       "diff": 0.0003,
+       "diffCi90": [
+        0.000144,
+        0.000373
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       }
+      }
+     },
+     "pa": {
+      "lines": 1029,
+      "logloss": {
+       "cand": 0.6873,
+       "market": 0.687,
+       "diff": 0.0003,
+       "diffCi90": [
+        0.00009,
+        0.000575
+       ]
+      },
+      "brier": {
+       "cand": 0.2471,
+       "market": 0.247,
+       "diff": 0.0002,
+       "diffCi90": [
+        0.000045,
+        0.000286
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       }
+      }
+     },
+     "ar": {
+      "lines": 1041,
+      "logloss": {
+       "cand": 0.6908,
+       "market": 0.6905,
+       "diff": 0.0003,
+       "diffCi90": [
+        -0.001585,
+        0.002364
+       ]
+      },
+      "brier": {
+       "cand": 0.2489,
+       "market": 0.2487,
+       "diff": 0.0002,
+       "diffCi90": [
+        -0.000764,
+        0.001176
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 65,
+        "won": 31,
+        "units": -8.93,
+        "roi": -0.1374,
+        "unitsCi90": [
+         -23.27,
+         4.47
+        ]
+       }
+      }
+     },
+     "sb": {
+      "lines": 590,
+      "logloss": {
+       "cand": 0.6873,
+       "market": 0.6865,
+       "diff": 0.0008,
+       "diffCi90": [
+        -0.00213,
+        0.003877
+       ]
+      },
+      "brier": {
+       "cand": 0.2472,
+       "market": 0.2468,
+       "diff": 0.0004,
+       "diffCi90": [
+        -0.001022,
+        0.001872
+       ]
+      },
+      "flat": {
+       "over": {
+        "bets": 0,
+        "won": 0,
+        "units": 0,
+        "roi": null,
+        "unitsCi90": null
+       },
+       "under": {
+        "bets": 45,
+        "won": 24,
+        "units": -3.31,
+        "roi": -0.0736,
+        "unitsCi90": [
+         -12.34,
+         5.75
+        ]
+       }
+      }
+     }
+    }
+   },
+   "C": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.4722,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.0487,
+    "logloss": {
+     "cand": 0.6854,
+     "market": 0.6788,
+     "diff": 0.0066,
+     "diffCi90": [
+      0.003536,
+      0.009718
+     ]
+    },
+    "brier": {
+     "cand": 0.2462,
+     "market": 0.243,
+     "diff": 0.0031,
+     "diffCi90": [
+      0.001651,
+      0.004603
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 953,
+      "won": 319,
+      "units": -155.76,
+      "roi": -0.1634,
+      "unitsCi90": [
+       -231.4,
+       -81.28
+      ]
+     },
+     "under": {
+      "bets": 2347,
+      "won": 1122,
+      "units": -59.82,
+      "roi": -0.0255,
+      "unitsCi90": [
+       -194.64,
+       73.43
+      ]
+     }
+    },
+    "weights": {
+     "folds": 83,
+     "raw": {
+      "min": 0.4692,
+      "median": 0.4806,
+      "max": 0.5098
+     },
+     "clampedAtZero": 0,
+     "clampedAtOne": 0
+    }
+   }
+  },
+  "series": {
+   "groups": 17,
+   "B1": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.4547,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.0064,
+    "logloss": {
+     "cand": 0.6789,
+     "market": 0.6788,
+     "diff": 0.0002,
+     "diffCi90": [
+      -0.000443,
+      0.000849
+     ]
+    },
+    "brier": {
+     "cand": 0.2431,
+     "market": 0.243,
+     "diff": 0.0001,
+     "diffCi90": [
+      -0.000214,
+      0.000423
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 0,
+      "won": 0,
+      "units": 0,
+      "roi": null,
+      "unitsCi90": null
+     },
+     "under": {
+      "bets": 160,
+      "won": 80,
+      "units": -10.36,
+      "roi": -0.0647,
+      "unitsCi90": [
+       -58.13,
+       34.04
+      ]
+     }
+    },
+    "weights": {
+     "folds": 17,
+     "raw": {
+      "min": 0.0419,
+      "median": 0.0883,
+      "max": 0.1497
+     },
+     "clampedAtZero": 0,
+     "clampedAtOne": 0
+    }
+   },
+   "B2": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.4562,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.0101,
+    "logloss": {
+     "cand": 0.6789,
+     "market": 0.6788,
+     "diff": 0.0002,
+     "diffCi90": [
+      -0.000597,
+      0.000925
+     ]
+    },
+    "brier": {
+     "cand": 0.2431,
+     "market": 0.243,
+     "diff": 0.0001,
+     "diffCi90": [
+      -0.000281,
+      0.000452
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 5,
+      "won": 1,
+      "units": -2.64,
+      "roi": -0.528,
+      "unitsCi90": [
+       -7.64,
+       1.72
+      ]
+     },
+     "under": {
+      "bets": 507,
+      "won": 273,
+      "units": -1.58,
+      "roi": -0.0031,
+      "unitsCi90": [
+       -49.58,
+       44.86
+      ]
+     }
+    },
+    "weights": {
+     "pts": {
+      "folds": 17,
+      "raw": {
+       "min": -0.1502,
+       "median": -0.1008,
+       "max": -0.0423
+      },
+      "clampedAtZero": 17,
+      "clampedAtOne": 0
+     },
+     "reb": {
+      "folds": 17,
+      "raw": {
+       "min": 0.2261,
+       "median": 0.2765,
+       "max": 0.312
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "ast": {
+      "folds": 17,
+      "raw": {
+       "min": 0.1375,
+       "median": 0.2244,
+       "max": 0.2957
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "tpm": {
+      "folds": 17,
+      "raw": {
+       "min": -0.1089,
+       "median": 0.088,
+       "max": 0.2866
+      },
+      "clampedAtZero": 1,
+      "clampedAtOne": 0
+     },
+     "stl": {
+      "folds": 17,
+      "raw": {
+       "min": 0.4353,
+       "median": 0.5834,
+       "max": 0.8554
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "blk": {
+      "folds": 17,
+      "raw": {
+       "min": 0.293,
+       "median": 0.5359,
+       "max": 0.6259
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "pra": {
+      "folds": 17,
+      "raw": {
+       "min": -0.0517,
+       "median": -0.0109,
+       "max": 0.0463
+      },
+      "clampedAtZero": 11,
+      "clampedAtOne": 0
+     },
+     "pr": {
+      "folds": 17,
+      "raw": {
+       "min": -0.0498,
+       "median": -0.0021,
+       "max": 0.0641
+      },
+      "clampedAtZero": 11,
+      "clampedAtOne": 0
+     },
+     "pa": {
+      "folds": 17,
+      "raw": {
+       "min": -0.0662,
+       "median": -0.0202,
+       "max": 0.0574
+      },
+      "clampedAtZero": 13,
+      "clampedAtOne": 0
+     },
+     "ar": {
+      "folds": 17,
+      "raw": {
+       "min": 0.1196,
+       "median": 0.1881,
+       "max": 0.2445
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "sb": {
+      "folds": 17,
+      "raw": {
+       "min": 0.1354,
+       "median": 0.4237,
+       "max": 0.6066
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     }
+    }
+   },
+   "C": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.4722,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.0489,
+    "logloss": {
+     "cand": 0.6855,
+     "market": 0.6788,
+     "diff": 0.0068,
+     "diffCi90": [
+      0.003638,
+      0.009962
+     ]
+    },
+    "brier": {
+     "cand": 0.2462,
+     "market": 0.243,
+     "diff": 0.0032,
+     "diffCi90": [
+      0.00169,
+      0.004708
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 952,
+      "won": 317,
+      "units": -159.3,
+      "roi": -0.1673,
+      "unitsCi90": [
+       -234.17,
+       -85.2
+      ]
+     },
+     "under": {
+      "bets": 2363,
+      "won": 1127,
+      "units": -66.86,
+      "roi": -0.0283,
+      "unitsCi90": [
+       -200.87,
+       67.4
+      ]
+     }
+    },
+    "weights": {
+     "folds": 17,
+     "raw": {
+      "min": 0.4572,
+      "median": 0.4786,
+      "max": 0.5414
+     },
+     "clampedAtZero": 0,
+     "clampedAtOne": 0
+    }
+   }
+  },
+  "round": {
+   "groups": 5,
+   "B1": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.454,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.009,
+    "logloss": {
+     "cand": 0.6788,
+     "market": 0.6788,
+     "diff": 0.0001,
+     "diffCi90": [
+      -0.000789,
+      0.001
+     ]
+    },
+    "brier": {
+     "cand": 0.2431,
+     "market": 0.243,
+     "diff": 0,
+     "diffCi90": [
+      -0.000381,
+      0.000496
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 0,
+      "won": 0,
+      "units": 0,
+      "roi": null,
+      "unitsCi90": null
+     },
+     "under": {
+      "bets": 414,
+      "won": 215,
+      "units": -10.07,
+      "roi": -0.0243,
+      "unitsCi90": [
+       -73.62,
+       51.13
+      ]
+     }
+    },
+    "weights": {
+     "folds": 5,
+     "raw": {
+      "min": 0.0598,
+      "median": 0.0953,
+      "max": 0.1752
+     },
+     "clampedAtZero": 0,
+     "clampedAtOne": 0
+    }
+   },
+   "B2": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.4554,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.012,
+    "logloss": {
+     "cand": 0.679,
+     "market": 0.6788,
+     "diff": 0.0002,
+     "diffCi90": [
+      -0.00072,
+      0.001189
+     ]
+    },
+    "brier": {
+     "cand": 0.2432,
+     "market": 0.243,
+     "diff": 0.0001,
+     "diffCi90": [
+      -0.000345,
+      0.000576
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 20,
+      "won": 5,
+      "units": -9.31,
+      "roi": -0.4655,
+      "unitsCi90": [
+       -17.81,
+       -1.19
+      ]
+     },
+     "under": {
+      "bets": 685,
+      "won": 380,
+      "units": 26.39,
+      "roi": 0.0385,
+      "unitsCi90": [
+       -28.55,
+       80.37
+      ]
+     }
+    },
+    "weights": {
+     "pts": {
+      "folds": 5,
+      "raw": {
+       "min": -0.1444,
+       "median": -0.1064,
+       "max": 0.054
+      },
+      "clampedAtZero": 4,
+      "clampedAtOne": 0
+     },
+     "reb": {
+      "folds": 5,
+      "raw": {
+       "min": 0.1757,
+       "median": 0.2734,
+       "max": 0.3196
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "ast": {
+      "folds": 5,
+      "raw": {
+       "min": 0.2049,
+       "median": 0.2163,
+       "max": 0.3739
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "tpm": {
+      "folds": 5,
+      "raw": {
+       "min": -0.0846,
+       "median": 0.1073,
+       "max": 0.3764
+      },
+      "clampedAtZero": 1,
+      "clampedAtOne": 0
+     },
+     "stl": {
+      "folds": 5,
+      "raw": {
+       "min": 0.2204,
+       "median": 0.5239,
+       "max": 1.0214
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 1
+     },
+     "blk": {
+      "folds": 5,
+      "raw": {
+       "min": 0.293,
+       "median": 0.5698,
+       "max": 0.6755
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "pra": {
+      "folds": 5,
+      "raw": {
+       "min": -0.0543,
+       "median": -0.0108,
+       "max": 0.1357
+      },
+      "clampedAtZero": 4,
+      "clampedAtOne": 0
+     },
+     "pr": {
+      "folds": 5,
+      "raw": {
+       "min": -0.036,
+       "median": 0.0075,
+       "max": 0.0482
+      },
+      "clampedAtZero": 2,
+      "clampedAtOne": 0
+     },
+     "pa": {
+      "folds": 5,
+      "raw": {
+       "min": -0.044,
+       "median": -0.0235,
+       "max": 0.0949
+      },
+      "clampedAtZero": 4,
+      "clampedAtOne": 0
+     },
+     "ar": {
+      "folds": 5,
+      "raw": {
+       "min": 0.1405,
+       "median": 0.1881,
+       "max": 0.2629
+      },
+      "clampedAtZero": 0,
+      "clampedAtOne": 0
+     },
+     "sb": {
+      "folds": 5,
+      "raw": {
+       "min": -0.0944,
+       "median": 0.4071,
+       "max": 0.6951
+      },
+      "clampedAtZero": 1,
+      "clampedAtOne": 0
+     }
+    }
+   },
+   "C": {
+    "lines": 11395,
+    "overHit": 0.4592,
+    "said": 0.4694,
+    "marketSaid": 0.4561,
+    "meanGapFromMarket": 0.0499,
+    "logloss": {
+     "cand": 0.6857,
+     "market": 0.6788,
+     "diff": 0.007,
+     "diffCi90": [
+      0.003578,
+      0.010509
+     ]
+    },
+    "brier": {
+     "cand": 0.2463,
+     "market": 0.243,
+     "diff": 0.0033,
+     "diffCi90": [
+      0.001668,
+      0.004939
+     ]
+    },
+    "flat": {
+     "over": {
+      "bets": 903,
+      "won": 313,
+      "units": -138.32,
+      "roi": -0.1532,
+      "unitsCi90": [
+       -214.26,
+       -61.83
+      ]
+     },
+     "under": {
+      "bets": 2559,
+      "won": 1238,
+      "units": -65.55,
+      "roi": -0.0256,
+      "unitsCi90": [
+       -209.54,
+       80.15
+      ]
+     }
+    },
+    "weights": {
+     "folds": 5,
+     "raw": {
+      "min": 0.4397,
+      "median": 0.4791,
+      "max": 0.5914
+     },
+     "clampedAtZero": 0,
+     "clampedAtOne": 0
+    }
+   }
+  }
+ },
+ "inSample": {
+  "pooled": {
+   "w": 0.091,
+   "ci90": [
+    -0.0664,
+    0.2525
+   ]
+  },
+  "byStat": {
+   "pts": {
+    "w": -0.0976,
+    "ci90": [
+     -0.2965,
+     0.1112
+    ]
+   },
+   "reb": {
+    "w": 0.2719,
+    "ci90": [
+     0.0265,
+     0.523
+    ]
+   },
+   "ast": {
+    "w": 0.2317,
+    "ci90": [
+     -0.0298,
+     0.5212
+    ]
+   },
+   "tpm": {
+    "w": 0.1002,
+    "ci90": [
+     -0.2726,
+     0.4896
+    ]
+   },
+   "stl": {
+    "w": 0.5923,
+    "ci90": [
+     0.1011,
+     1.121
+    ]
+   },
+   "blk": {
+    "w": 0.5365,
+    "ci90": [
+     0.0769,
+     1.0096
+    ]
+   },
+   "pra": {
+    "w": -0.0051,
+    "ci90": [
+     -0.2234,
+     0.2326
+    ]
+   },
+   "pr": {
+    "w": 0.0012,
+    "ci90": [
+     -0.2092,
+     0.2256
+    ]
+   },
+   "pa": {
+    "w": -0.0199,
+    "ci90": [
+     -0.2647,
+     0.2254
+    ]
+   },
+   "ar": {
+    "w": 0.1794,
+    "ci90": [
+     -0.0615,
+     0.4377
+    ]
+   },
+   "sb": {
+    "w": 0.4192,
+    "ci90": [
+     -0.2228,
+     1.024
+    ]
+   }
+  },
+  "pooledScore": {
+   "lines": 11395,
+   "overHit": 0.4592,
+   "said": 0.4549,
+   "marketSaid": 0.4561,
+   "meanGapFromMarket": 0.0063,
+   "logloss": {
+    "cand": 0.6786,
+    "market": 0.6788,
+    "diff": -0.0002,
+    "diffCi90": [
+     -0.000688,
+     0.000386
+    ]
+   },
+   "brier": {
+    "cand": 0.243,
+    "market": 0.243,
+    "diff": -0.0001,
+    "diffCi90": [
+     -0.000332,
+     0.000195
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "roi": null,
+     "unitsCi90": null
+    },
+    "under": {
+     "bets": 94,
+     "won": 52,
+     "units": 3.35,
+     "roi": 0.0356,
+     "unitsCi90": [
+      -23.91,
+      31.08
+     ]
+    }
+   }
+  },
+  "byStatScore": {
+   "lines": 11395,
+   "overHit": 0.4592,
+   "said": 0.4565,
+   "marketSaid": 0.4561,
+   "meanGapFromMarket": 0.0098,
+   "logloss": {
+    "cand": 0.6781,
+    "market": 0.6788,
+    "diff": -0.0007,
+    "diffCi90": [
+     -0.001373,
+     0.000024
+    ]
+   },
+   "brier": {
+    "cand": 0.2427,
+    "market": 0.243,
+    "diff": -0.0003,
+    "diffCi90": [
+     -0.000651,
+     0.000021
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "roi": null,
+     "unitsCi90": null
+    },
+    "under": {
+     "bets": 507,
+     "won": 294,
+     "units": 34.93,
+     "roi": 0.0689,
+     "unitsCi90": [
+      -9.93,
+      78.91
+     ]
+    }
+   }
+  }
+ },
+ "curve": [
+  {
+   "w": 0,
+   "logloss": 0,
+   "ci90": [
+    0,
+    0
+   ],
+   "brier": 0,
+   "brierCi90": [
+    0,
+    0
+   ],
+   "said": 0.4561,
+   "over": {
+    "bets": 0,
+    "won": 0,
+    "units": 0,
+    "roi": null,
+    "unitsCi90": null
+   },
+   "under": {
+    "bets": 0,
+    "won": 0,
+    "units": 0,
+    "roi": null,
+    "unitsCi90": null
+   }
+  },
+  {
+   "w": 0.05,
+   "logloss": -0.0001,
+   "ci90": [
+    -0.000416,
+    0.000172
+   ],
+   "brier": -0.0001,
+   "brierCi90": [
+    -0.000202,
+    0.000088
+   ],
+   "said": 0.4554,
+   "over": {
+    "bets": 0,
+    "won": 0,
+    "units": 0,
+    "roi": null,
+    "unitsCi90": null
+   },
+   "under": {
+    "bets": 6,
+    "won": 6,
+    "units": 5.35,
+    "roi": 0.8917,
+    "unitsCi90": [
+     0,
+     11.18
+    ]
+   }
+  },
+  {
+   "w": 0.1,
+   "logloss": -0.0002,
+   "ci90": [
+    -0.000739,
+    0.000442
+   ],
+   "brier": -0.0001,
+   "brierCi90": [
+    -0.000356,
+    0.000223
+   ],
+   "said": 0.4548,
+   "over": {
+    "bets": 0,
+    "won": 0,
+    "units": 0,
+    "roi": null,
+    "unitsCi90": null
+   },
+   "under": {
+    "bets": 134,
+    "won": 71,
+    "units": 0.03,
+    "roi": 0.0002,
+    "unitsCi90": [
+     -35.72,
+     35.97
+    ]
+   }
+  },
+  {
+   "w": 0.15,
+   "logloss": -0.0001,
+   "ci90": [
+    -0.00097,
+    0.00081
+   ],
+   "brier": 0,
+   "brierCi90": [
+    -0.000466,
+    0.000406
+   ],
+   "said": 0.4542,
+   "over": {
+    "bets": 0,
+    "won": 0,
+    "units": 0,
+    "roi": null,
+    "unitsCi90": null
+   },
+   "under": {
+    "bets": 413,
+    "won": 230,
+    "units": 19.96,
+    "roi": 0.0483,
+    "unitsCi90": [
+     -42.53,
+     79.34
+    ]
+   }
+  },
+  {
+   "w": 0.2,
+   "logloss": 0.0001,
+   "ci90": [
+    -0.001111,
+    0.001275
+   ],
+   "brier": 0,
+   "brierCi90": [
+    -0.000532,
+    0.000634
+   ],
+   "said": 0.4536,
+   "over": {
+    "bets": 0,
+    "won": 0,
+    "units": 0,
+    "roi": null,
+    "unitsCi90": null
+   },
+   "under": {
+    "bets": 785,
+    "won": 409,
+    "units": -17.43,
+    "roi": -0.0222,
+    "unitsCi90": [
+     -97.53,
+     60.4
+    ]
+   }
+  },
+  {
+   "w": 0.25,
+   "logloss": 0.0003,
+   "ci90": [
+    -0.001159,
+    0.001834
+   ],
+   "brier": 0.0002,
+   "brierCi90": [
+    -0.000551,
+    0.000911
+   ],
+   "said": 0.453,
+   "over": {
+    "bets": 3,
+    "won": 0,
+    "units": -3,
+    "roi": -1,
+    "unitsCi90": [
+     -7,
+     0
+    ]
+   },
+   "under": {
+    "bets": 1173,
+    "won": 601,
+    "units": -44.36,
+    "roi": -0.0378,
+    "unitsCi90": [
+     -144.72,
+     52.62
+    ]
+   }
+  },
+  {
+   "w": 0.3,
+   "logloss": 0.0007,
+   "ci90": [
+    -0.001113,
+    0.002497
+   ],
+   "brier": 0.0003,
+   "brierCi90": [
+    -0.000525,
+    0.00123
+   ],
+   "said": 0.4524,
+   "over": {
+    "bets": 16,
+    "won": 6,
+    "units": -4.39,
+    "roi": -0.2744,
+    "unitsCi90": [
+     -16.03,
+     5.52
+    ]
+   },
+   "under": {
+    "bets": 1550,
+    "won": 812,
+    "units": -23.49,
+    "roi": -0.0152,
+    "unitsCi90": [
+     -141.45,
+     90.41
+    ]
+   }
+  },
+  {
+   "w": 0.35,
+   "logloss": 0.0011,
+   "ci90": [
+    -0.000986,
+    0.003251
+   ],
+   "brier": 0.0005,
+   "brierCi90": [
+    -0.000458,
+    0.001592
+   ],
+   "said": 0.4518,
+   "over": {
+    "bets": 30,
+    "won": 14,
+    "units": -3.6,
+    "roi": -0.12,
+    "unitsCi90": [
+     -21.17,
+     13.21
+    ]
+   },
+   "under": {
+    "bets": 1922,
+    "won": 1015,
+    "units": -16.11,
+    "roi": -0.0084,
+    "unitsCi90": [
+     -143.82,
+     108.57
+    ]
+   }
+  },
+  {
+   "w": 0.4,
+   "logloss": 0.0016,
+   "ci90": [
+    -0.00076,
+    0.004106
+   ],
+   "brier": 0.0008,
+   "brierCi90": [
+    -0.000351,
+    0.001994
+   ],
+   "said": 0.4512,
+   "over": {
+    "bets": 51,
+    "won": 24,
+    "units": -6.58,
+    "roi": -0.129,
+    "unitsCi90": [
+     -28.34,
+     14.16
+    ]
+   },
+   "under": {
+    "bets": 2279,
+    "won": 1216,
+    "units": -0.83,
+    "roi": -0.0004,
+    "unitsCi90": [
+     -135.71,
+     132.58
+    ]
+   }
+  },
+  {
+   "w": 0.45,
+   "logloss": 0.0022,
+   "ci90": [
+    -0.000458,
+    0.005046
+   ],
+   "brier": 0.0011,
+   "brierCi90": [
+    -0.000209,
+    0.002434
+   ],
+   "said": 0.4507,
+   "over": {
+    "bets": 80,
+    "won": 36,
+    "units": -13.41,
+    "roi": -0.1676,
+    "unitsCi90": [
+     -38.53,
+     10.86
+    ]
+   },
+   "under": {
+    "bets": 2581,
+    "won": 1387,
+    "units": 16.56,
+    "roi": 0.0064,
+    "unitsCi90": [
+     -132.32,
+     165.03
+    ]
+   }
+  },
+  {
+   "w": 0.5,
+   "logloss": 0.003,
+   "ci90": [
+    -0.000081,
+    0.006071
+   ],
+   "brier": 0.0014,
+   "brierCi90": [
+    -0.000028,
+    0.002913
+   ],
+   "said": 0.4502,
+   "over": {
+    "bets": 122,
+    "won": 48,
+    "units": -33.01,
+    "roi": -0.2706,
+    "unitsCi90": [
+     -63.56,
+     -2.73
+    ]
+   },
+   "under": {
+    "bets": 2849,
+    "won": 1536,
+    "units": 27.41,
+    "roi": 0.0096,
+    "unitsCi90": [
+     -131.16,
+     185.31
+    ]
+   }
+  },
+  {
+   "w": 0.55,
+   "logloss": 0.0037,
+   "ci90": [
+    0.000385,
+    0.0072
+   ],
+   "brier": 0.0018,
+   "brierCi90": [
+    0.00019,
+    0.003423
+   ],
+   "said": 0.4496,
+   "over": {
+    "bets": 180,
+    "won": 61,
+    "units": -66.16,
+    "roi": -0.3676,
+    "unitsCi90": [
+     -103.16,
+     -29.38
+    ]
+   },
+   "under": {
+    "bets": 3099,
+    "won": 1675,
+    "units": 35.85,
+    "roi": 0.0116,
+    "unitsCi90": [
+     -128.46,
+     198.84
+    ]
+   }
+  },
+  {
+   "w": 0.6,
+   "logloss": 0.0046,
+   "ci90": [
+    0.000934,
+    0.008409
+   ],
+   "brier": 0.0022,
+   "brierCi90": [
+    0.000441,
+    0.00397
+   ],
+   "said": 0.4491,
+   "over": {
+    "bets": 242,
+    "won": 83,
+    "units": -85.52,
+    "roi": -0.3534,
+    "unitsCi90": [
+     -127.85,
+     -43.46
+    ]
+   },
+   "under": {
+    "bets": 3289,
+    "won": 1794,
+    "units": 67.19,
+    "roi": 0.0204,
+    "unitsCi90": [
+     -100.29,
+     234.39
+    ]
+   }
+  },
+  {
+   "w": 0.65,
+   "logloss": 0.0056,
+   "ci90": [
+    0.001567,
+    0.009719
+   ],
+   "brier": 0.0026,
+   "brierCi90": [
+    0.000732,
+    0.004549
+   ],
+   "said": 0.4487,
+   "over": {
+    "bets": 307,
+    "won": 122,
+    "units": -76.02,
+    "roi": -0.2476,
+    "unitsCi90": [
+     -119.92,
+     -32.15
+    ]
+   },
+   "under": {
+    "bets": 3442,
+    "won": 1885,
+    "units": 84.24,
+    "roi": 0.0245,
+    "unitsCi90": [
+     -83.69,
+     253.46
+    ]
+   }
+  },
+  {
+   "w": 0.7,
+   "logloss": 0.0066,
+   "ci90": [
+    0.002287,
+    0.011107
+   ],
+   "brier": 0.0031,
+   "brierCi90": [
+    0.00105,
+    0.00516
+   ],
+   "said": 0.4482,
+   "over": {
+    "bets": 389,
+    "won": 157,
+    "units": -91.75,
+    "roi": -0.2359,
+    "unitsCi90": [
+     -141.25,
+     -42.47
+    ]
+   },
+   "under": {
+    "bets": 3580,
+    "won": 1963,
+    "units": 89.38,
+    "roi": 0.025,
+    "unitsCi90": [
+     -87.05,
+     265.28
+    ]
+   }
+  },
+  {
+   "w": 0.75,
+   "logloss": 0.0078,
+   "ci90": [
+    0.003087,
+    0.012606
+   ],
+   "brier": 0.0036,
+   "brierCi90": [
+    0.001408,
+    0.005799
+   ],
+   "said": 0.4477,
+   "over": {
+    "bets": 465,
+    "won": 195,
+    "units": -95.06,
+    "roi": -0.2044,
+    "unitsCi90": [
+     -148.95,
+     -42.18
+    ]
+   },
+   "under": {
+    "bets": 3721,
+    "won": 2045,
+    "units": 101.87,
+    "roi": 0.0274,
+    "unitsCi90": [
+     -76.73,
+     280.59
+    ]
+   }
+  },
+  {
+   "w": 0.8,
+   "logloss": 0.009,
+   "ci90": [
+    0.003957,
+    0.014195
+   ],
+   "brier": 0.0041,
+   "brierCi90": [
+    0.001789,
+    0.006466
+   ],
+   "said": 0.4473,
+   "over": {
+    "bets": 567,
+    "won": 247,
+    "units": -94.88,
+    "roi": -0.1673,
+    "unitsCi90": [
+     -152.67,
+     -36.73
+    ]
+   },
+   "under": {
+    "bets": 3848,
+    "won": 2113,
+    "units": 103.8,
+    "roi": 0.027,
+    "unitsCi90": [
+     -73.02,
+     280.81
+    ]
+   }
+  },
+  {
+   "w": 0.85,
+   "logloss": 0.0103,
+   "ci90": [
+    0.004929,
+    0.015876
+   ],
+   "brier": 0.0046,
+   "brierCi90": [
+    0.002206,
+    0.007157
+   ],
+   "said": 0.4469,
+   "over": {
+    "bets": 655,
+    "won": 293,
+    "units": -94.74,
+    "roi": -0.1446,
+    "unitsCi90": [
+     -157.99,
+     -32.32
+    ]
+   },
+   "under": {
+    "bets": 3974,
+    "won": 2183,
+    "units": 106.16,
+    "roi": 0.0267,
+    "unitsCi90": [
+     -73.71,
+     283.91
+    ]
+   }
+  },
+  {
+   "w": 0.9,
+   "logloss": 0.0117,
+   "ci90": [
+    0.005962,
+    0.017634
+   ],
+   "brier": 0.0052,
+   "brierCi90": [
+    0.002644,
+    0.007876
+   ],
+   "said": 0.4465,
+   "over": {
+    "bets": 750,
+    "won": 339,
+    "units": -99.31,
+    "roi": -0.1324,
+    "unitsCi90": [
+     -163.19,
+     -35.76
+    ]
+   },
+   "under": {
+    "bets": 4082,
+    "won": 2250,
+    "units": 123.25,
+    "roi": 0.0302,
+    "unitsCi90": [
+     -55.42,
+     301.31
+    ]
+   }
+  },
+  {
+   "w": 0.95,
+   "logloss": 0.0131,
+   "ci90": [
+    0.007074,
+    0.019451
+   ],
+   "brier": 0.0058,
+   "brierCi90": [
+    0.003108,
+    0.008623
+   ],
+   "said": 0.4461,
+   "over": {
+    "bets": 853,
+    "won": 390,
+    "units": -98.27,
+    "roi": -0.1152,
+    "unitsCi90": [
+     -166.31,
+     -30.1
+    ]
+   },
+   "under": {
+    "bets": 4181,
+    "won": 2305,
+    "units": 127.31,
+    "roi": 0.0304,
+    "unitsCi90": [
+     -51.25,
+     305.61
+    ]
+   }
+  },
+  {
+   "w": 1,
+   "logloss": 0.0147,
+   "ci90": [
+    0.008254,
+    0.021361
+   ],
+   "brier": 0.0064,
+   "brierCi90": [
+    0.003596,
+    0.009387
+   ],
+   "said": 0.4457,
+   "over": {
+    "bets": 967,
+    "won": 442,
+    "units": -106.44,
+    "roi": -0.1101,
+    "unitsCi90": [
+     -181.45,
+     -31.97
+    ]
+   },
+   "under": {
+    "bets": 4271,
+    "won": 2357,
+    "units": 135.28,
+    "roi": 0.0317,
+    "unitsCi90": [
+     -47,
+     315.56
+    ]
+   }
+  }
+ ],
+ "dist": {
+  "model": {
+   "mae": 3.194,
+   "logScore": 2.4622
+  },
+  "modelReinverted": {
+   "mae": 3.194,
+   "logScore": 2.4622,
+   "unreached": 0
+  },
+  "B1": {
+   "mae": 3.099,
+   "logScore": 2.4423,
+   "unreached": 0
+  },
+  "B2": {
+   "mae": 3.099,
+   "logScore": 2.4421,
+   "unreached": 0
+  },
+  "marketShape": {
+   "mae": 3.098,
+   "logScore": 2.4425,
+   "unreached": 0
+  },
+  "line": {
+   "mae": 3.109
+  }
+ },
+ "modelByStat": {
+  "pts": {
+   "lines": 1328,
+   "logloss": {
+    "cand": 0.7172,
+    "market": 0.6884,
+    "diff": 0.0288,
+    "diffCi90": [
+     0.018288,
+     0.039786
+    ]
+   },
+   "brier": {
+    "cand": 0.2605,
+    "market": 0.2476,
+    "diff": 0.0129,
+    "diffCi90": [
+     0.008172,
+     0.017781
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 120,
+     "won": 50,
+     "units": -26.21,
+     "roi": -0.2184,
+     "unitsCi90": [
+      -43.09,
+      -9.54
+     ]
+    },
+    "under": {
+     "bets": 657,
+     "won": 353,
+     "units": 8.01,
+     "roi": 0.0122,
+     "unitsCi90": [
+      -32.35,
+      47.48
+     ]
+    }
+   }
+  },
+  "reb": {
+   "lines": 1234,
+   "logloss": {
+    "cand": 0.7008,
+    "market": 0.6925,
+    "diff": 0.0082,
+    "diffCi90": [
+     -0.001301,
+     0.017962
+    ]
+   },
+   "brier": {
+    "cand": 0.2532,
+    "market": 0.2496,
+    "diff": 0.0035,
+    "diffCi90": [
+     -0.000962,
+     0.008019
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 218,
+     "won": 107,
+     "units": -9.24,
+     "roi": -0.0424,
+     "unitsCi90": [
+      -32.34,
+      12.73
+     ]
+    },
+    "under": {
+     "bets": 297,
+     "won": 148,
+     "units": -13.99,
+     "roi": -0.0471,
+     "unitsCi90": [
+      -44.33,
+      17.33
+     ]
+    }
+   }
+  },
+  "ast": {
+   "lines": 1094,
+   "logloss": {
+    "cand": 0.685,
+    "market": 0.6758,
+    "diff": 0.0092,
+    "diffCi90": [
+     -0.000754,
+     0.019275
+    ]
+   },
+   "brier": {
+    "cand": 0.2452,
+    "market": 0.2414,
+    "diff": 0.0038,
+    "diffCi90": [
+     -0.000819,
+     0.008423
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 61,
+     "won": 27,
+     "units": -9.42,
+     "roi": -0.1544,
+     "unitsCi90": [
+      -21.16,
+      2.11
+     ]
+    },
+    "under": {
+     "bets": 527,
+     "won": 302,
+     "units": 37.23,
+     "roi": 0.0706,
+     "unitsCi90": [
+      0.47,
+      74.83
+     ]
+    }
+   }
+  },
+  "tpm": {
+   "lines": 1079,
+   "logloss": {
+    "cand": 0.6737,
+    "market": 0.6654,
+    "diff": 0.0083,
+    "diffCi90": [
+     0.000201,
+     0.016824
+    ]
+   },
+   "brier": {
+    "cand": 0.2406,
+    "market": 0.2371,
+    "diff": 0.0035,
+    "diffCi90": [
+     -0.000202,
+     0.007375
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 54,
+     "won": 29,
+     "units": 5.17,
+     "roi": 0.0957,
+     "unitsCi90": [
+      -6.55,
+      17.47
+     ]
+    },
+    "under": {
+     "bets": 371,
+     "won": 195,
+     "units": -2.03,
+     "roi": -0.0055,
+     "unitsCi90": [
+      -32.5,
+      27.53
+     ]
+    }
+   }
+  },
+  "stl": {
+   "lines": 888,
+   "logloss": {
+    "cand": 0.6529,
+    "market": 0.6539,
+    "diff": -0.001,
+    "diffCi90": [
+     -0.006506,
+     0.004492
+    ]
+   },
+   "brier": {
+    "cand": 0.2302,
+    "market": 0.2306,
+    "diff": -0.0004,
+    "diffCi90": [
+     -0.002981,
+     0.002219
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 23,
+     "won": 11,
+     "units": -1.02,
+     "roi": -0.0443,
+     "unitsCi90": [
+      -9.56,
+      7.11
+     ]
+    },
+    "under": {
+     "bets": 212,
+     "won": 115,
+     "units": 4.33,
+     "roi": 0.0204,
+     "unitsCi90": [
+      -19.92,
+      28.08
+     ]
+    }
+   }
+  },
+  "blk": {
+   "lines": 795,
+   "logloss": {
+    "cand": 0.6345,
+    "market": 0.6349,
+    "diff": -0.0005,
+    "diffCi90": [
+     -0.007077,
+     0.005773
+    ]
+   },
+   "brier": {
+    "cand": 0.2225,
+    "market": 0.2227,
+    "diff": -0.0001,
+    "diffCi90": [
+     -0.003003,
+     0.002592
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 45,
+     "won": 22,
+     "units": 10.04,
+     "roi": 0.2231,
+     "unitsCi90": [
+      -3.32,
+      23.51
+     ]
+    },
+    "under": {
+     "bets": 158,
+     "won": 98,
+     "units": 12.82,
+     "roi": 0.0811,
+     "unitsCi90": [
+      -5.82,
+      31.38
+     ]
+    }
+   }
+  },
+  "pra": {
+   "lines": 1113,
+   "logloss": {
+    "cand": 0.716,
+    "market": 0.6883,
+    "diff": 0.0277,
+    "diffCi90": [
+     0.014041,
+     0.041956
+    ]
+   },
+   "brier": {
+    "cand": 0.2597,
+    "market": 0.2476,
+    "diff": 0.0121,
+    "diffCi90": [
+     0.00607,
+     0.018255
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 111,
+     "won": 46,
+     "units": -24.73,
+     "roi": -0.2228,
+     "unitsCi90": [
+      -40.99,
+      -8.89
+     ]
+    },
+    "under": {
+     "bets": 521,
+     "won": 295,
+     "units": 31.45,
+     "roi": 0.0604,
+     "unitsCi90": [
+      -4.78,
+      68.51
+     ]
+    }
+   }
+  },
+  "pr": {
+   "lines": 1204,
+   "logloss": {
+    "cand": 0.71,
+    "market": 0.6861,
+    "diff": 0.0239,
+    "diffCi90": [
+     0.012675,
+     0.03567
+    ]
+   },
+   "brier": {
+    "cand": 0.2574,
+    "market": 0.2465,
+    "diff": 0.0109,
+    "diffCi90": [
+     0.005813,
+     0.016152
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 129,
+     "won": 53,
+     "units": -29.98,
+     "roi": -0.2324,
+     "unitsCi90": [
+      -48.66,
+      -12.08
+     ]
+    },
+    "under": {
+     "bets": 516,
+     "won": 284,
+     "units": 14,
+     "roi": 0.0271,
+     "unitsCi90": [
+      -21.75,
+      49.8
+     ]
+    }
+   }
+  },
+  "pa": {
+   "lines": 1029,
+   "logloss": {
+    "cand": 0.7138,
+    "market": 0.687,
+    "diff": 0.0267,
+    "diffCi90": [
+     0.012999,
+     0.041832
+    ]
+   },
+   "brier": {
+    "cand": 0.2584,
+    "market": 0.247,
+    "diff": 0.0114,
+    "diffCi90": [
+     0.005402,
+     0.017912
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 75,
+     "won": 31,
+     "units": -16.57,
+     "roi": -0.2209,
+     "unitsCi90": [
+      -29.47,
+      -3.67
+     ]
+    },
+    "under": {
+     "bets": 498,
+     "won": 285,
+     "units": 35.87,
+     "roi": 0.072,
+     "unitsCi90": [
+      -0.26,
+      70.71
+     ]
+    }
+   }
+  },
+  "ar": {
+   "lines": 1041,
+   "logloss": {
+    "cand": 0.7031,
+    "market": 0.6905,
+    "diff": 0.0127,
+    "diffCi90": [
+     0.001445,
+     0.024136
+    ]
+   },
+   "brier": {
+    "cand": 0.2543,
+    "market": 0.2487,
+    "diff": 0.0056,
+    "diffCi90": [
+     0.00043,
+     0.010859
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 114,
+     "won": 58,
+     "units": -4.18,
+     "roi": -0.0367,
+     "unitsCi90": [
+      -20.8,
+      12.48
+     ]
+    },
+    "under": {
+     "bets": 375,
+     "won": 202,
+     "units": 1.7,
+     "roi": 0.0045,
+     "unitsCi90": [
+      -25.88,
+      29.45
+     ]
+    }
+   }
+  },
+  "sb": {
+   "lines": 590,
+   "logloss": {
+    "cand": 0.6874,
+    "market": 0.6865,
+    "diff": 0.001,
+    "diffCi90": [
+     -0.006748,
+     0.008568
+    ]
+   },
+   "brier": {
+    "cand": 0.2473,
+    "market": 0.2468,
+    "diff": 0.0005,
+    "diffCi90": [
+     -0.003189,
+     0.004096
+    ]
+   },
+   "flat": {
+    "over": {
+     "bets": 17,
+     "won": 8,
+     "units": -0.3,
+     "roi": -0.0176,
+     "unitsCi90": [
+      -7.9,
+      7.25
+     ]
+    },
+    "under": {
+     "bets": 139,
+     "won": 80,
+     "units": 5.9,
+     "roi": 0.0424,
+     "unitsCi90": [
+      -10.45,
+      22.08
+     ]
+    }
+   }
+  }
+ }
+}

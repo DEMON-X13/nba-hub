@@ -1,0 +1,31 @@
+17:59:16 games 6605, box scores 6599
+17:59:24 replay: 137883 rows
+17:59:24 baseline
+18:01:28 baseline: 2025 2.17123, 2026R 2.17071
+18:01:28 stage sq
+18:04:12   sq: mean log score change {"2025":-0.00395,"2026R":-0.00045} -> kept; fitted {"2025":true,"2026R":true}
+18:04:12 stage cal
+18:06:12   cal: mean log score change {"2025":-0.00628,"2026R":-0.00129} -> kept; fitted {"2025":[0.1736,-0.0284],"2026R":[0.2113,-0.0334]}
+18:06:12 stage open
+18:09:40   open: mean log score change {"2025":-0.00016,"2026R":-0.00028} -> kept; fitted {"2025":0.95,"2026R":0.95}
+18:09:40 stage ret
+18:12:38   ret: mean log score change {"2025":-0.00139,"2026R":-0.00046} -> kept; fitted {"2025":{"a":0.9,"b":0.8},"2026R":{"a":0.9,"b":0.8}}
+18:12:38 stage nt
+18:15:10   nt: mean log score change {"2025":-0.00012,"2026R":-0.00005} -> kept; fitted {"2025":[0.85,1,1],"2026R":[0.85,1,1]}
+18:15:10 stage debut
+18:17:56   debut: mean log score change {"2025":-0.00006,"2026R":-0.00029} -> kept; fitted {"2025":2,"2026R":4}
+18:17:56 stage kappa
+18:20:49   kappa: mean log score change {"2025":-0.00212,"2026R":-0.00358} -> kept; fitted {"2025":0,"2026R":0}
+18:20:49 stage lam
+18:24:50   lam: mean log score change {"2025":0.00006,"2026R":-0.00012} -> dropped; fitted {"2025":{"pts":0.5,"reb":0.5,"ast":1,"tpm":0.25,"stl":0,"blk":0.25},"2026R":{"pts":0.75,"reb":0.5,"ast":0.75,"tpm":0.75,"stl":0.25,"blk":0.25}}
+18:24:50 stage dE
+18:27:35   dE: mean log score change {"2025":-0.00008,"2026R":-0.00012} -> kept; fitted {"2025":-1.5,"2026R":-1.5}
+18:27:35 stage shrink
+18:30:21   shrink: mean log score change {"2025":-0.00087,"2026R":-0.00054} -> kept; fitted {"2025":{"pts":0.8941,"reb":0.8841,"ast":0.8998,"tpm":0.9184,"stl":0.9361,"blk":0.8921},"2026R":{"pts":0.8835,"reb":0.8821,"ast":0.8898,"tpm":0.8907,"stl":0.953,"blk":0.9312}}
+18:30:21 stage phase
+18:33:19   phase: mean log score change {"2025":-0.00021,"2026R":-0.00026} -> kept; fitted {"2025":{"pts":[0.9639,1.0031,1.0004,1.0288],"reb":[0.9724,0.9823,0.9955,1.0215],"ast":[0.9908,1.0133,1.0094,1.0414],"tpm":[0.9774,1.0047,1.0015,1.0311],"stl":[1.0031,0.978,0.9861,1.0225],"blk":[1.0338,0.9858,0.9976,1.017]},"2026R":{"pts":[0.9708,0.9968,1.0034,1.0363],"reb":[0.9795,0.9855,0.9997,1.0203],"ast":[0.9862,1.0067,1.0107,1.042],"tpm":[0.9935,1.0196,1.0053,1.0463],"stl":[1.0289,1.0248,1.0054,1.0288],"blk":[1.0167,0.9865,0.9869,0.9907]}}
+18:33:19 stage vm
+18:36:59   vm: mean log score change {"2025":-0.0012,"2026R":-0.00101} -> kept; fitted {"2025":{"pts":-0.15,"reb":-0.15,"ast":-0.15,"tpm":-0.15,"stl":0,"blk":-0.15,"pra":-0.15,"pr":-0.15,"pa":0,"ar":-0.15,"sb":-0.15},"2026R":{"pts":-0.15,"reb":-0.3,"ast":-0.15,"tpm":0,"stl":0,"blk":-0.15,"pra":-0.15,"pr":0,"pa":0,"ar":-0.15,"sb":-0.15}}
+18:36:59 stage vEarly
+18:41:32   vEarly: mean log score change {"2025":0,"2026R":0} -> dropped; fitted {"2025":{"pts":1,"reb":1,"ast":1,"tpm":1,"stl":1,"blk":1,"pra":1,"pr":1,"pa":1,"ar":1,"sb":1},"2026R":{"pts":1,"reb":1,"ast":1,"tpm":1,"stl":1,"blk":1,"pra":1,"pr":1,"pa":1,"ar":1,"sb":1}}
+18:41:32 kept: sq, cal, open, ret, nt, debut, kappa, dE, shrink, phase, vm; the rule is written

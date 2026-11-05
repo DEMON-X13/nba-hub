@@ -3,8 +3,14 @@
  *
  *   node tools/props_check.js [--prev-dir DIR | --no-prev] [--now ISO]
  *
- * The job runs it right after tools/props.js; a failure fails that step, which puts the props data files back as the
- * last commit had them (so a broken ledger is never committed) and turns the run red. It fails when:
+ * The job runs it right after tools/props.js, the two handed one clock (NBA_NOW, the run's time to the second, as the
+ * calls and suggestions steps hand theirs), so this check's clock is the run's: a tip-off that falls between the run and
+ * its check is judged as the run judged it. A failure fails that step, which puts the props data files back as the last
+ * commit had them (so a broken ledger is never committed) and turns the run red. It fails when:
+ *   - the ledger was written after this check's clock, its run time went back from the last commit's, or a ledger this
+ *     run changed (from the last commit's, its graded lines among it) carries another time than this check's clock
+ *     (the run's, the job handing the two one clock); a time the ledger stamps (a call made, frozen or graded, a fit
+ *     registered, a verdict) is after the run that wrote it, or one new since the last commit is not that run's own;
  *   - the bar is not the one registered (props_ledger.BAR), its numbers not lines 30000, edge 0.03, ci [0.05, 0.95],
  *     boot 10000, seed 0 (held here on their own, so an edit to BAR and the ledger together still fails), or not the last
  *     commit's, or registered after a call. One change of bar is allowed, a re-registration: a later registration time,
@@ -21,7 +27,16 @@
  *     chance, the stat); a game's lines are not exactly its closing lines on players with a call who played; a game
  *     graded is not final, frozen and read; a frozen call that can be graded is left ungraded;
  *   - a verdict is written before the sample is in, is missing once it is, does not follow from the first 30,000
- *     graded lines, or differs from the last commit's;
+ *     graded lines, or differs from the last commit's; a FAIL leaves a call open (the calls stop). The one verdict
+ *     allowed before the sample is in is the early stop's (props_ledger.EARLY_STOP, the owner's call of 5 November
+ *     2026): a decision of fewer than bar.lines lines passes only on the ledger the stop ends (its bar registered at
+ *     EARLY_STOP.bar_registered, props_ledger.stopsLedger), with its early exactly EARLY_STOP, FAIL, decided at or after
+ *     EARLY_STOP.at and not after the run that wrote the ledger (at that run's time, when the last commit had no
+ *     verdict), on every line graded and compared by then and at least one (no more and no fewer: the run that writes
+ *     it grades first, and stamps its grades with its own time), and its numbers exactly what the bar's own functions
+ *     give on those first lines (props_ledger.stopEarly, re-worked here); and a ledger the stop ends, written at or after
+ *     EARLY_STOP.at with a line graded and no verdict, fails (read off the ledger's run_at, which a run this check holds
+ *     is this check's clock: so with no earlier ledger to hold it to, a run before the stop checked after it passes);
  *   - the summary does not follow from the calls and the lines;
  *   - the record (data/props_<season>.csv, data/props_reads.json) lost or changed a game the last commit had read.
  * Without --prev-dir the last commit's files are read with git show HEAD:<file> (none there: the first run, held to
@@ -63,6 +78,29 @@ function check({ Lg, lineText, prev, games, boxes, now }) {
   bad.notes = notes;
   const nowIso = new Date(now).toISOString().slice(0, 16) + 'Z';
   const byId = new Map(games.map(g => [g.game_id, g]));
+  /* the run's time: at or before this check's clock, never back from the last commit's, and, where this run changed the
+     ledger or its lines, this check's clock exactly (the job hands props.js and this check one clock, NBA_NOW) */
+  const runAt = Lg.run_at, minuteRe = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}Z$/;
+  const written = !!prev && (JSON.stringify(Lg) !== JSON.stringify(prev.ledger) || lineText !== (prev.lines || ''));
+  if (typeof runAt !== 'string' || !minuteRe.test(runAt)) bad.push(`the ledger's run time is not a minute (${runAt})`);
+  else if (runAt > nowIso) bad.push(`the ledger was written at ${runAt}, after this check's clock (${nowIso})`);
+  if (prev && runAt < (prev.ledger.run_at || '')) bad.push(`the ledger's run time went back, to ${runAt} from the last commit's ${prev.ledger.run_at}`);
+  if (written && runAt !== nowIso) bad.push(`the ledger was changed by a run at ${runAt}, not at this check's clock (${nowIso}): the job hands props.js and this check one clock (NBA_NOW)`);
+  /* every time the ledger stamps is at or before the run that wrote it; one new since the last commit is that run's own */
+  for (const [id, f] of Object.entries(Lg.fits || {})) {
+    if (!(f && f.registered <= runAt)) bad.push(`fit ${id}: registered at ${f && f.registered}, after the run that wrote the ledger (${runAt})`);
+    else if (prev && !(prev.ledger.fits || {})[id] && f.registered !== runAt) bad.push(`fit ${id}: new since the last commit, registered at ${f.registered}, not at the time of the run that wrote the ledger (${runAt})`);
+  }
+  for (const [gid, c] of Object.entries(Lg.calls || {})) {
+    const st = [['made', c.called_at], ['frozen', c.frozen ? c.frozen_at : null], ['graded', c.graded ? c.graded.at : null]];
+    const late = st.filter(([k, t]) => (k === 'made' || t != null) && !(t <= runAt));
+    if (late.length) { bad.push(`${gid}: ${late.map(([k, t]) => `${k} at ${t}`).join(', ')}, after the run that wrote the ledger (${runAt})`); continue; }
+    if (!prev) continue;
+    const pc = (prev.ledger.calls || {})[gid];
+    const fresh = st.filter(([k]) => k === 'made' ? !pc || pc.called_at !== c.called_at : k === 'frozen' ? c.frozen && !(pc && pc.frozen) : c.graded && !(pc && pc.graded));
+    const other = fresh.filter(([, t]) => t !== runAt);
+    if (other.length) bad.push(`${gid}: ${other.map(([k, t]) => `${k} at ${t}`).join(', ')} since the last commit, not at the time of the run that wrote the ledger (${runAt})`);
+  }
   /* the bar */
   if (JSON.stringify(Lg.bar) !== JSON.stringify(PL.BAR)) bad.push('the bar in the ledger is not the one registered (props_ledger.BAR)');
   /* its numbers, which the verdict is worked from: a 90% interval of 10,000 resamples, seed 0, a 3-point edge, 30,000 lines */
@@ -135,12 +173,36 @@ function check({ Lg, lineText, prev, games, boxes, now }) {
       if (c.graded.lines !== want.rows.length || c.graded.voids !== want.voids || c.graded.noCall !== want.noCall) bad.push(`${gid}: its grade's counts are not the lines'`);
     } else if (c.frozen && PL.gradeable(gid, g, boxes, recIdx.reads)) bad.push(`${gid}: final, box score and closing lines in, and left ungraded`);
   }
-  /* the verdict */
-  const cmp = PL.compared(rows, recIdx);
-  if (Lg.decision) {
-    const want = PL.decide(cmp, new Date(Lg.decision.decided_at.replace('Z', ':00Z')), Lg.bar);
-    if (JSON.stringify(want) !== JSON.stringify(Lg.decision)) bad.push(`the verdict does not follow from the first ${Lg.bar.lines} graded lines`);
+  /* the verdict: decided by the run that wrote the ledger or one before it, at that run's time where the last commit had
+     none; a FAIL holds no open call (the calls stop) */
+  const cmp = PL.compared(rows, recIdx), dec = Lg.decision, minute = x => Date.parse(String(x || '').replace(/Z$/, ':00Z'));
+  if (dec) {
+    const what = dec.early ? 'the early stop' : 'the verdict';
+    if (!(typeof dec.decided_at === 'string' && dec.decided_at <= runAt)) bad.push(`${what} decided at ${dec.decided_at}, after the run that wrote the ledger (${runAt})`);
+    else if (prev && !prev.ledger.decision && dec.decided_at !== runAt) bad.push(`${what} decided at ${dec.decided_at}, not the time of the run that wrote it (${runAt})`);
+    if (dec.verdict === 'FAIL') { const open = Object.keys(Lg.calls).filter(gid => !Lg.calls[gid].frozen); if (open.length) bad.push(`a FAIL with ${open.length} call${open.length === 1 ? '' : 's'} not frozen (${open.slice(0, 3).join(', ')}): the calls stop`); }
+  }
+  if (dec && typeof dec.lines === 'number' && dec.lines < Lg.bar.lines) {
+    /* short of the bar's sample: only the early stop's FAIL, exactly as props_ledger.stopEarly writes it, on every line
+       graded and compared by the run that wrote it */
+    const E = PL.EARLY_STOP, decAt = minute(dec.decided_at), gat = x => ((Lg.calls[x.game] || {}).graded || {}).at || '';
+    const byThen = cmp.filter(x => gat(x) <= dec.decided_at).length;
+    if (JSON.stringify(dec.early) !== JSON.stringify({ at: E.at, by: E.by, why: E.why })) bad.push(`a verdict at ${dec.lines} lines, short of the bar's ${Lg.bar.lines}, that is not the early stop's (its early is not props_ledger.EARLY_STOP)`);
+    if (!PL.stopsLedger(Lg)) bad.push(`a verdict at ${dec.lines} lines, short of the bar's ${Lg.bar.lines}, on a ledger the early stop does not end (its bar registered at ${Lg.bar_registered}; the stop ends the one registered at ${E.bar_registered})`);
+    if (dec.verdict !== 'FAIL') bad.push(`the early stop's verdict is ${dec.verdict}: it can only be FAIL`);
+    if (!(dec.lines > 0)) bad.push(`the early stop on ${dec.lines} graded lines: it is never on none`);
+    if (!(decAt >= Date.parse(E.at))) bad.push(`the early stop decided at ${dec.decided_at}, before its time (${E.at})`);
+    if (decAt > new Date(now).getTime()) bad.push(`the early stop decided at ${dec.decided_at}, after this check's clock (${nowIso})`);
+    /* decided by the run that wrote it at its own time (held above, with the run's grades stamped at that time), so no
+       line it graded is left out */
+    if (dec.lines !== byThen) bad.push(`the early stop on ${dec.lines} lines, ${dec.lines > byThen ? 'more' : 'fewer'} than the ${byThen} graded and compared by ${dec.decided_at}: it is judged on all of them`);
+    const want = PL.stopEarly(cmp.slice(0, dec.lines), new Date(decAt), Lg.bar, E);
+    if (JSON.stringify(want) !== JSON.stringify(dec)) bad.push(`the early stop's verdict does not follow from the first ${dec.lines} graded lines`);
+  } else if (dec) {
+    const want = PL.decide(cmp, new Date(dec.decided_at.replace('Z', ':00Z')), Lg.bar);
+    if (JSON.stringify(want) !== JSON.stringify(dec)) bad.push(`the verdict does not follow from the first ${Lg.bar.lines} graded lines`);
   } else if (cmp.length >= Lg.bar.lines) bad.push(`${Lg.bar.lines} lines are in and no verdict was written`);
+  else if (PL.stopsLedger(Lg) && cmp.length && PL.stopDue(new Date(minute(Lg.run_at)))) bad.push(`the ledger was written at ${Lg.run_at}, at or after the early stop (${PL.EARLY_STOP.at}), and no verdict was written`);
   /* the summary */
   const want = PL.summarize(Lg, rows, recIdx);
   if (JSON.stringify(want) !== JSON.stringify(Lg.summary)) bad.push('the summary does not follow from the calls and the lines');

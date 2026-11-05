@@ -150,7 +150,10 @@ jobs:
       # shadow ledger (data/props_shadow.json and its graded lines, data/props_shadow_lines.csv), then the ledger's check
       # against the last commit. When either fails, every props data file and props.json go back to the last commit's (a
       # file new since then is removed), so a broken ledger or record is never committed and the page never publishes
-      # projections the ledger did not freeze, and the run is red
+      # projections the ledger did not freeze, and the run is red. The two are handed the run's one clock (NBA_NOW, to the
+      # second): the check judges which games have tipped, and holds the ledger's stamps, at the time the run wrote it, so
+      # a tip-off that turns in the moment between the two (a call the run dropped or rewrote just before it) is judged as
+      # the run judged it, never as a frozen call gone
       - name: The props model, DraftKings' closing lines and the shadow ledger
         id: props
         continue-on-error: true
@@ -161,8 +164,9 @@ jobs:
               if git cat-file -e "HEAD:$f" 2>/dev/null; then git checkout HEAD -- "$f"; else rm -f "$f"; fi
             done
           }
-          if ! node tools/props.js; then echo "::error::the props step failed: its data files are put back"; restore; exit 1; fi
-          if ! node tools/props_check.js; then echo "::error::the props ledger's check failed: its data files are put back"; restore; exit 1; fi
+          now=$(date -u +%Y-%m-%dT%H:%M:%SZ)
+          if ! NBA_NOW=$now node tools/props.js; then echo "::error::the props step failed: its data files are put back"; restore; exit 1; fi
+          if ! NBA_NOW=$now node tools/props_check.js; then echo "::error::the props ledger's check failed: its data files are put back"; restore; exit 1; fi
       # DraftKings' lines on the next two nights' games, read from ESPN's free feed (README "The lines feed"): the game
       # lines with their prices and ids and each game's player props, into lines.json, which the Parlay Builder and
       # Suggested Parlays read. A half that fails for every game keeps its last good reads and marks this step alone;

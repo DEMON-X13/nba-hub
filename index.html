@@ -3292,11 +3292,24 @@ function ppNoGame(g) {
   return `No projection for this game yet: the model projects the regular season and the playoffs, the next ${S.props.horizonGameDays} game days.`;
 }
 const ppNumTxt = v => Number.isFinite(v) ? v.toFixed(1) : '–';
-/* the shadow ledger's running numbers, quietly: never a verdict, nor a word of one, before its bar is decided */
+/* the early stop's FAIL (the owner's call of 5 November 2026, tools/props_ledger.js EARLY_STOP), plainly, from the
+   decision's own numbers: when and by whom, on how many lines, the two scores against DraftKings and the flat bets */
+const PP_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function ppEarly(dec) {
+  const e = dec.early, d = String(e.at || dec.decidedAt || '').slice(0, 10), sc = dec.scores || {}, fl = dec.flat && dec.flat.all;
+  const day = /^\d{4}-\d{2}-\d{2}$/.test(d) ? `${+d.slice(8, 10)} ${PP_MONTHS[+d.slice(5, 7) - 1]} ${d.slice(0, 4)}` : '';
+  const behind = [sc.logloss_diff > 0 && 'log loss', sc.brier_diff > 0 && 'Brier'].filter(Boolean);
+  const scores = behind.length === 2 ? 'behind DraftKings on both scores' : behind.length ? `behind DraftKings on ${behind[0]}` : 'not ahead of DraftKings on both scores';
+  const u = fl ? Math.round(Math.abs(fl.units)) : 0;
+  const bets = !fl || !fl.bets ? 'no flat bets at its edge' : fl.units < 0 ? `its flat bets down ${u.toLocaleString('en-US')} unit${u === 1 ? '' : 's'}` : fl.units > 0 ? `its flat bets up ${u.toLocaleString('en-US')} unit${u === 1 ? '' : 's'}` : 'its flat bets level';
+  return `Stopped early${day ? ` on ${day}` : ''}, ${esc(e.by || 'the owner')}'s call, at ${Number(dec.lines || 0).toLocaleString('en-US')} graded lines: ${scores} and ${bets}. FAIL: its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested Parlays, and its calls have stopped; the projections stay for reference.`;
+}
+/* the shadow ledger's running numbers, quietly: never a verdict, nor a word of one, before its bar is decided or the
+   trial is stopped early */
 function ppLedger() {
   const lg = S.props && S.props.ledger; if (!lg || !lg.bar) return '';
   const sm = lg.summary || {}, sc = sm.scores, N = lg.bar.lines, dec = lg.decision, fmtN = v => Number(v || 0).toLocaleString('en-US');
-  let s = dec ? `Its bar was decided on ${dayNum(String(dec.decidedAt).slice(0, 10))} at ${fmtN(dec.lines)} lines: ${dec.verdict === 'PASS' ? 'PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial.' : 'FAIL. It stays on trial and suggests nothing, and its calls have stopped.'}`
+  let s = dec && dec.early && dec.verdict === 'FAIL' ? ppEarly(dec) : dec ? `Its bar was decided on ${dayNum(String(dec.decidedAt).slice(0, 10))} at ${fmtN(dec.lines)} lines: ${dec.verdict === 'PASS' ? 'PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial.' : 'FAIL. It stays on trial and suggests nothing, and its calls have stopped.'}`
     : `Shadow ledger: ${fmtN(Math.min(sm.lines || 0, N))} of the ${fmtN(N)} graded lines its bar is judged on are in${sm.gradedGames ? `, from ${fmtN(sm.gradedGames)} game${sm.gradedGames === 1 ? '' : 's'}` : ''}; no verdict before ${fmtN(N)}.`;
   if (sc && sc.model && sc.market) s += ` So far on ${fmtN(sc.lines)} lines, log loss model ${sc.model.logloss.toFixed(4)} · DraftKings ${sc.market.logloss.toFixed(4)}, Brier model ${sc.model.brier.toFixed(4)} · DraftKings ${sc.market.brier.toFixed(4)} (lower is better).`;
   return s;
@@ -4454,6 +4467,17 @@ function pbWho(g, pid) {
 /* the props model's legs go on the list while its shadow ledger has not failed its bar (a FAIL: the page puts no prop in
    a suggestion, as the bar registered) */
 const pbPropsOn = () => !(S.props && S.props.ledger && S.props.ledger.decision && S.props.ledger.decision.verdict === 'FAIL');
+/* why no list or set takes a player line once the ledger has failed: the trial stopped early as a FAIL (the owner's call
+   of 5 November 2026, tools/props_ledger.js EARLY_STOP; its day the decision's early.at, read as written, never in the
+   visitor's time zone) or the bar's own FAIL. Suggested Parlays' empty levels say it, and the suggestions record keeps
+   their words, so they read the same anywhere */
+const PB_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function pbPropsOffWhy() {
+  const d = S.props && S.props.ledger && S.props.ledger.decision;
+  if (!d || !d.early) return 'the props model failed its shadow ledger’s bar';
+  const at = String(d.early.at || ''), day = /^\d{4}-(0[1-9]|1[0-2])-\d{2}/.test(at) ? ` on ${+at.slice(8, 10)} ${PB_MONTHS[+at.slice(5, 7) - 1]} ${at.slice(0, 4)}` : '';
+  return `the props model’s trial was stopped early as a FAIL${day}`;
+}
 /* every line with DraftKings' price on these games, unjudged: each side's moneyline and spread, every main line's Over
    and Under, every milestone and double- and triple-double on a player the props model prices (pbWho). The totals are
    their own list (pbTotals): they have no edge */
@@ -4668,7 +4692,7 @@ function pbTier(t, pool, memo, opt) { return pbWithFair(pbTierOf(t, pool, memo, 
    DraftKings posts a game's player props a day or so before tip-off; the job reads them through the day into lines.json,
    and Refresh odds reads them now. Which of the reasons holds for the ticked games */
 function pbNoPl(games) {
-  if (!pbPropsOn()) return 'no player lines: the props model failed its shadow ledger\'s bar, so the list takes none.';
+  if (!pbPropsOn()) return `no player lines: ${pbPropsOffWhy()}, so the list takes none.`;
   if (!S.props || !games.some(g => ppGame(g.id))) return 'no player lines the props model prices: it has no projections for these games yet.';
   const reads = games.map(g => pbPr(g.id)), posted = reads.filter(r => r && (r.mains.length || r.ladders.length || r.yes.length));
   if (posted.length) return 'no player lines the props model prices: it projects none of the players DraftKings lines here.';
@@ -4714,9 +4738,11 @@ function getPbTiers() {
 /* ---------- the marks, the money and a level's card ---------- */
 const pbIsValue = l => !!l && l.thin === false && !l.market;
 const pbValMark = l => pbIsValue(l) ? ' <i class="pb-valmark">Value</i>' : '';
-/* a player's leg: its chance is the props model's, on trial (state.json's props.ledger: its bar not yet passed) */
+/* a player's leg: its chance is the props model's, on trial (state.json's props.ledger: its bar not yet passed); once the
+   ledger has failed (the trial stopped early, or the bar), the model's for reference, which no list or set takes */
 function pbTrialTitle() {
   const lg = S.props && S.props.ledger, N = lg && lg.bar && lg.bar.lines ? lg.bar.lines : 30000, n = lg && lg.summary ? Math.min(lg.summary.lines || 0, N) : 0;
+  if (!pbPropsOn()) { const w = pbPropsOffWhy(); return `${w[0].toUpperCase() + w.slice(1)}${lg.decision.early ? ', the owner’s call: it was not shown to beat DraftKings’ closing lines' : ' against DraftKings’ closing lines'}, so this chance is the model’s, for reference only, and no list or set takes it`; }
   return `The props model is on trial: its shadow ledger has ${n.toLocaleString('en-US')} of the ${N.toLocaleString('en-US')} graded lines its bar against DraftKings' closing lines is judged on, and it has not been shown to beat DraftKings, so this chance is the model's on trial`;
 }
 const pbTrialMark = l => l && l.kind === 'prop' ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>` : '';
@@ -4877,7 +4903,7 @@ function pbPanel() {
       + (O.length ? secHd('other', 'Other lines', O.length) + `<p class="pb-topsub">These miss a Value pick’s bar (3 points above the chance the price implies; the NBA has no market + form), though the model still rates each at or above the book’s price${u.k.total ? '; the game totals, at the book’s own chance, come last' : ''}. A suggested parlay takes them only where its Value picks run out.</p><ol class="pb-top" data-pb-sec="other"${nV ? ` start="${nV + 1}"` : ''} aria-label="${nV ? 'Then ' : ''}${O.length} other line${O.length === 1 ? '' : 's'} on your picks, by expected profit on $1">${O.map((l, i) => pbTopRow(l, nV + i)).join('')}</ol>` : '')
     : `<p class="pb-none pb-top-none">${esc(pbTopWhy(r, u))}</p>`;
   return `<div class="pb-card" id="pbCard">${head}
-    <p class="pb-lead">Choose what to build from: the list below takes only the bet types and games ticked here, every line that qualifies as a suggested leg does: first the Value picks, marked Value, then the other lines${u.k.total ? ', the game totals last' : ''}, each part ranked by what $1 on it is expected to make at the model’s chance, best first, ${PB_TOP_N} lines at most. A player’s chance is the props model’s, which is on trial, not yet shown to beat DraftKings, and every player’s line says so. Add any of them to the builder below.</p>
+    <p class="pb-lead">Choose what to build from: the list below takes only the bet types and games ticked here, every line that qualifies as a suggested leg does: first the Value picks, marked Value, then the other lines${u.k.total ? ', the game totals last' : ''}, each part ranked by what $1 on it is expected to make at the model’s chance, best first, ${PB_TOP_N} lines at most.${pbPropsOn() ? ' A player’s chance is the props model’s, which is on trial, not yet shown to beat DraftKings, and every player’s line says so.' : ''} Add any of them to the builder below.</p>
     <div class="pb-ctl">
       <div class="pb-row pb-amt-row"><label class="pb-lbl" for="pbStake">Bet amount</label><span class="pb-amt"><span aria-hidden="true">$</span><input type="number" id="pbStake" inputmode="decimal" min="${STAKE_MIN}" max="${STAKE_MAX}" step="1" value="${stakeText(pbStake())}" autocomplete="off" aria-describedby="pbStakeHint"></span><span class="pb-amt-hint" id="pbStakeHint">The builder below uses this amount${sp ? ', and every parlay on Suggested Parlays pays on it' : ''}.</span></div>
       <div class="pb-row pb-odds-row"><span class="pb-lbl">Odds</span>${espnCtl('pb')}</div>
@@ -4889,7 +4915,7 @@ function pbPanel() {
     </div>
     ${notes.map(t => `<p class="pb-note">${t}</p>`).join('')}
     ${list}
-    <p class="pb-foot">Every line has DraftKings’ real price, as the job read it from ESPN’s free feed or as your Refresh odds press read it, the newer of the two, and a model chance between 45% and 97%, at or above the chance that price implies: 3 points above it or more is a Value pick (the 3-point edge alone: the NBA has no market + form), and a game total, priced at the book’s own chance, is never one. A moneyline’s chance is the player model’s, the number Tonight shows; a spread’s is the player model’s margin against the line, give or take ${SIGMA} points (the spread of its walk-forward margins about its own number); a total’s is the book’s own; a player’s is the props model’s, on trial. The Value picks come first, marked Value, then the other lines (the ones a suggested parlay takes only where the Value picks cannot fill it), each part ranked by what $1 on it is expected to make, any game totals last, ${PB_TOP_N} lines at most in all. Each bet is listed once: a milestone that is the same bet as the player’s main line (25+ points and Over 24.5) is shown as the main line. Wins on $1 is what $1 wins if the line lands; expected on $1 is the model’s chance times what $1 returns, less the $1, so it is only as good as the model’s chance. Each line gives DraftKings’ fair chance beside the model’s, its prices with the margin taken out (est. where it is priced on one side only), and a line the model rates ${Math.round(PB_FAR * 100)} points or more above it is left out, as is a line on a player today’s injury report lists, Day-To-Day among them (a probable player plays), as every suggested parlay leaves him out.</p></div>`;
+    <p class="pb-foot">Every line has DraftKings’ real price, as the job read it from ESPN’s free feed or as your Refresh odds press read it, the newer of the two, and a model chance between 45% and 97%, at or above the chance that price implies: 3 points above it or more is a Value pick (the 3-point edge alone: the NBA has no market + form), and a game total, priced at the book’s own chance, is never one. A moneyline’s chance is the player model’s, the number Tonight shows; a spread’s is the player model’s margin against the line, give or take ${SIGMA} points (the spread of its walk-forward margins about its own number); a total’s is the book’s own; ${pbPropsOn() ? 'a player’s is the props model’s, on trial' : `it takes no player’s line: ${pbPropsOffWhy()}`}. The Value picks come first, marked Value, then the other lines (the ones a suggested parlay takes only where the Value picks cannot fill it), each part ranked by what $1 on it is expected to make, any game totals last, ${PB_TOP_N} lines at most in all. Each bet is listed once: a milestone that is the same bet as the player’s main line (25+ points and Over 24.5) is shown as the main line. Wins on $1 is what $1 wins if the line lands; expected on $1 is the model’s chance times what $1 returns, less the $1, so it is only as good as the model’s chance. Each line gives DraftKings’ fair chance beside the model’s, its prices with the margin taken out (est. where it is priced on one side only), and a line the model rates ${Math.round(PB_FAR * 100)} points or more above it is left out, as is a line on a player today’s injury report lists, Day-To-Day among them (a probable player plays), as every suggested parlay leaves him out.</p></div>`;
 }
 function renderPb() {
   const el = $('#pbPanel'); if (!el || !S || !S.slate) return;
@@ -5081,7 +5107,7 @@ render.parlay = function () {
   renderParlay();
 };
 /* what Suggested Parlays, the checks and the next pieces stand on */
-Object.assign(window, { pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
+Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
   PB_TIERS, PB_KINDS, PB_MIXES, PB_TOP_N, PB_SEARCH, getPbTiers, getPbTop, pbTopBuild, pbTierCard, pbValMark, pbIsValue, pbTrialMark, pbOrder, pbOrd, parlayProb, parlayDec, parlayFair, legFair, legFarOff, legModel,
   pbView, pbSlipOf, pbLegAddBtn, pbPut, pbStale, pbWatchTick, stakeRead, pbStake, renderParlay, renderPb, pbLinesLoad, linesGl, pbGl, pbPr, pbCarries, pbQuote, dkSlipRows, dkSlipLine, glanceName,
   toggleLeg: l => slipToggle(pbSlipOf(l)), pbLines: () => LINES });
@@ -5224,7 +5250,7 @@ function spSlipOk(legs) { const have = []; for (const l of legs) { const s = pbS
    is when the lines feed first held what it holds now (tools/lines.js keeps a half's time while a read finds the same),
    so the words say "as of" it and that no read since has found any, never that it was the last read */
 function spNoPl(g) {
-  if (!pbPropsOn()) return 'no player lines: the props model failed its shadow ledger’s bar, so the sets take none.';
+  if (!pbPropsOn()) return `no player lines: ${pbPropsOffWhy()}, so the sets take none.`;
   if (!ppGame(g.id)) return 'no player lines the props model prices: it has no projections for this game yet.';
   const r = pbPr(g.id);
   if (r && (r.mains.length || r.ladders.length || r.yes.length)) return 'no player lines the props model prices: it projects none of the players DraftKings lines here.';

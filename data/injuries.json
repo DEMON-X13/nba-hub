@@ -120,7 +120,7 @@
     "id": "5061575",
     "name": "Kon Knueppel",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Leg Soreness",
     "date": "2026-11-05",
     "returns": "2026-11-06"
@@ -137,6 +137,15 @@
   ],
   "CHI": [
    {
+    "id": "4278067",
+    "name": "Nic Claxton",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-05",
+    "returns": "2026-11-08"
+   },
+   {
     "id": "4066650",
     "name": "Zach Collins",
     "pos": "F",
@@ -152,15 +161,6 @@
     "status": "Day-To-Day",
     "detail": "Hand",
     "date": "2026-11-05",
-    "returns": "2026-11-08"
-   },
-   {
-    "id": "4278067",
-    "name": "Nic Claxton",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-04",
     "returns": "2026-11-08"
    }
   ],
@@ -448,7 +448,7 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Inflammation",
-    "date": "2026-11-04",
+    "date": "2026-11-05",
     "returns": "2026-11-06"
    }
   ],

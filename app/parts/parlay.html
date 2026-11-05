@@ -196,6 +196,8 @@ function pbLinesLoad() {
     if (j && typeof j === 'object' && j.v === 1 && j.games && typeof j.games === 'object' && !Array.isArray(j.games)) LINES = j; else LINES_ERR = true;
     PB_TOP_CACHE.clear(); PB_CACHE.clear();
     if (tabNow() === 'parlay') pbKeep(() => render.parlay()); else if (tabNow() === 'suggest' && render.suggest) render.suggest(); else pbOddsSync();
+    /* the board's Player props buttons count these lines, and an open Player props view stands on them */
+    if (typeof window.ppLinesIn === 'function') window.ppLinesIn();
   })());
 }
 /* tools/lines_feed.js linesGl, line for line: a lines.json entry -> the shape oddsGameLines gives (what the page keeps

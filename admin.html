@@ -212,23 +212,28 @@ body.pp-lock{overflow:hidden}
    tokens, which are the NFL's dark look already: the NFL's gold stripe is this hub's orange, its bars lime, gold and grey
    for High, Med and Low. Small text that must hold 4.5:1 is --ink-2 or the quiet --pb-q (#B3B9CB), never --muted; every
    control is 44px tall (a box sits in a 44px label, Show stats takes its 44px from padding a negative margin gives back) */
-#ppSheet{max-width:1100px;background:linear-gradient(180deg,var(--panel-2),var(--panel));border-color:var(--line-2)}
+#ppSheet{max-width:1100px;background:linear-gradient(180deg,var(--panel-2),var(--panel));border-color:var(--line-2);scroll-padding-bottom:96px}
+/* the hub has the dark look alone: its boxes and the search's clear button are drawn dark, as the NFL's theme.css has them */
+#ppBack,#ppSheet{color-scheme:dark}
 #ppSheet .pp-top{padding:18px 20px 0}
 #ppSheet .pp-body{padding:0 20px 26px}
 .pp-bar{display:flex;align-items:center;gap:4px 18px;flex-wrap:wrap;margin:0 0 12px}
-.pp-bar .grow{flex:1}
+.pp-bar .pp-sws{margin-left:auto}
 .pp-close{min-height:44px;padding:10px 16px;font-size:14px;border-radius:12px}
 .pp-sws{display:flex;align-items:center;gap:4px 18px;flex-wrap:wrap}
 .pp-sw{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:14px;color:var(--ink-2);cursor:pointer;user-select:none;-webkit-user-select:none}
 .pp-sw input,.pp-pick input{width:18px;height:18px;margin:0;flex:none;accent-color:var(--hot);cursor:pointer}
 .pp-search{margin:0 0 12px}
-.pp-search input{width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel);color:var(--ink);font-size:15px}
+.pp-fixed{padding:0 20px}
+/* 16px, so a phone does not zoom in on it (the NFL's Bet amount box, and this page's own) */
+.pp-search input{width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel);color:var(--ink);font-size:16px}
 .pp-search input::placeholder{color:var(--ink-2);opacity:1}
 .pp-search input:focus{outline:none;border-color:var(--hot);box-shadow:0 0 0 2px rgba(255,106,31,.4)}
 .pp-espn{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin:0 0 14px}
 .pp-espn .btn{min-height:44px;padding:10px 16px;font-size:14px;border-radius:12px;display:inline-flex;align-items:center;gap:8px}
 .pp-espn .btn[aria-disabled=true]{opacity:.7;cursor:progress;transform:none}
 .pp-espnst{flex:1 1 170px;min-width:0;font-size:12px;line-height:1.4;color:var(--ink-2)}
+.pp-nomatch{margin:-12px 20px 22px;font-size:14px;color:var(--ink-2)} .pp-nomatch:empty{display:none}
 .pp-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:0 0 14px}
 .pp-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--hot),transparent);pointer-events:none}
 .pp-q{color:var(--pb-q)}
@@ -250,7 +255,7 @@ body.pp-lock{overflow:hidden}
 .pp-gh .lead .v{font-family:var(--display);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
 .pp-gh .lead .v em{font-style:normal;font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-2);margin-left:3px}
 .pp-gh .tot,.pp-gh .totpts,.pp-gh .winner{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.2}
-.pp-gh .tot b,.pp-gh .totpts b,.pp-gh .none{display:block;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.3px;color:var(--ink);font-variant-numeric:tabular-nums}
+.pp-gh .tot b,.pp-gh .totpts b,.pp-gh .none{display:block;white-space:nowrap;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.3px;color:var(--ink);font-variant-numeric:tabular-nums}
 .pp-gh small{display:block;font-size:11px;color:var(--ink-2);line-height:1.3;margin-top:4px}
 .pp-trialtag{display:inline-block;margin-left:6px;font-size:9.5px;font-weight:800;letter-spacing:.06em;padding:1px 6px;border:1px solid var(--pb-trial);border-radius:999px;color:var(--pb-trial);vertical-align:1px;white-space:nowrap;cursor:help}
 #ppSheet .pp-trial{margin:0 0 14px;padding:0 14px}
@@ -268,19 +273,19 @@ body.pp-lock{overflow:hidden}
 .pp-stat h4 .pill{align-self:center}
 .pp-stat h4 em{font-style:normal;font-family:var(--body);font-size:12px;font-weight:400;color:var(--ink-2)}
 .pp-stat h4 em.mline{margin-left:auto;color:var(--lime);font-weight:600}
-.pp-stat h4 .pb-trial{margin-left:0;align-self:center}
+.pp-trialln{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:12px;color:var(--ink-2)} .pp-trialln .pb-trial{margin-left:0}
 .pp-rungs{width:100%;border-collapse:collapse}
 .pp-rungs td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
 .pp-rungs tr:last-child td{border-bottom:0}
 .pp-rungs td.pick{width:44px;padding:0}
 .pp-pick{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;cursor:pointer}
-.pp-rungs .thr{width:120px;font-family:var(--display);font-size:14px;font-weight:600;color:var(--ink)}
+.pp-rungs .thr{width:120px;font-family:var(--display);font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap}
 .pp-rungs tr.mainline .thr{font-size:13px}
 .pp-rungs .barcell{width:46%}
 .pp-track{height:12px;border-radius:999px;overflow:hidden;background:var(--panel-3)}
 .pp-fill{height:100%;border-radius:999px}
 .pp-fill.high{background:var(--lime)} .pp-fill.med{background:var(--gold)} .pp-fill.low{background:var(--muted)}
-.pp-rungs .pct{width:56px;text-align:right;font-family:var(--display);font-size:16px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pp-rungs .pct{width:56px;text-align:right;font-family:var(--display);font-size:15px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
 .pp-rungs td.cf{width:84px}
 .pp-conf{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:60px;padding:4px 9px 4px 7px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;background:var(--panel-3);color:var(--ink-2)}
 .pp-conf::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.75;flex:none}
@@ -313,19 +318,20 @@ body.pp-lock{overflow:hidden}
 .pp-stbtn{pointer-events:auto;display:inline-flex;align-items:center;min-height:44px;margin:-12px 0 -12px 10px;padding:0 2px;border:0;background:none;cursor:pointer;vertical-align:middle;font:inherit;color:inherit}
 .pp-stbtn span{display:inline-block;padding:3px 9px;border:1px solid var(--line-2);border-radius:999px;background:var(--bg-2);font-family:var(--body);font-size:11px;font-weight:600;line-height:1.3;letter-spacing:0;color:var(--ink-2)}
 .pp-stbtn:hover span{border-color:var(--ink-2);color:var(--ink)}
-.pp-stbtn[aria-pressed=true] span{background:var(--ink);border-color:var(--ink);color:#1E2230}
+.pp-stbtn.on span{background:var(--ink);border-color:var(--ink);color:#1E2230}
 .pp-stbtn:focus-visible{outline:none} .pp-stbtn:focus-visible span{outline:2px solid var(--hot);outline-offset:2px}
 .pp-plr .sum{font-size:12px;line-height:1.4;text-align:right;color:var(--ink-2)}
 .pp-plr .sum b{font-family:var(--display);font-size:14px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
-.pp-plr .arrow{text-align:right;font-size:18px;line-height:1;color:var(--pb-q)}
+.pp-plr .arrow{text-align:right;font-size:18px;color:var(--pb-q)}
 .pp-plrbody{margin:0 0 10px;padding:0 14px 14px;background:var(--panel);border:1px solid var(--ink);border-top:0;border-radius:0 0 14px 14px}
 .pp-plrbody::before{content:"";display:block;height:1px;margin:0 -14px 12px;background:var(--line)}
 .pp-wkstats{margin:-2px 0 10px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
 .pp-wkstats table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
-.pp-wkstats th{padding:4px 8px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;color:var(--pb-q);border-bottom:1px solid var(--line)}
+.pp-wkstats th{padding:4px 8px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--pb-q);border-bottom:1px solid var(--line)}
 .pp-wkstats td{padding:5px 8px;border-bottom:1px solid var(--line);color:var(--ink)}
-.pp-wkstats .num{text-align:right}
+.pp-wkstats .num{text-align:right} .pp-wkstats .pill{font-size:11px;padding:2px 6px}
 .pp-wkstats tfoot td{border-bottom:0;color:var(--ink-2)}
+@media(max-width:900px){.pp-rungs td{font-size:13px}}
 @media(max-width:980px){
   .pp-gh{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
   .pp-gh .when{grid-column:1;grid-row:1} .pp-gh .match{grid-column:2/4;grid-row:1}
@@ -341,15 +347,28 @@ body.pp-lock{overflow:hidden}
   .pp-stbtn{margin-left:6px}
   .pp-plrbody{padding:0 12px 12px} .pp-plrbody::before{margin:0 -12px 12px}
   .pp-rungs .barcell{display:none}
-  .pp-rungs .thr{width:auto;font-size:13px}
+  .pp-rungs .thr{width:auto;font-size:13px;white-space:normal}
   .pp-rungs .pct{width:44px;font-size:14px}
   .pp-rungs td{padding:7px 4px}
   .pp-rungs td.cf{width:auto}
   .pp-conf{min-width:0;padding:3px 7px;font-size:9px} .pp-conf::before{display:none}
-  .pp-rungs .fair{width:auto;white-space:normal;font-size:11.5px}
+  .pp-rungs .fair{width:auto;font-size:11px}
+  .pp-rungs .fair em{display:block;margin:1px 0 0;line-height:1.2}
+  .pp-stat h4{flex-wrap:nowrap} .pp-stat h4 em.mline{margin-left:8px}
+  .pp-rungs td.pick{width:36px} .pp-pick{min-width:36px}
   .pp-rungs .price{width:auto}
   .pp-wkstats{padding:8px 6px} .pp-wkstats th,.pp-wkstats td{padding:4px 4px} }
-@media(max-width:620px){#ppSheet .pp-top{padding:12px 12px 0} #ppSheet .pp-body{padding:0 12px 24px} .pp-card{padding:16px 14px}}
+/* a phone: the sheet is the whole screen, with no backdrop to tap and no Escape key, so its bar (Close and the two
+   switches, on one line) stays at the top as the sheet scrolls; a control the focus moves to is kept clear of it */
+@media(max-width:620px){
+  #ppSheet{scroll-padding-top:76px}
+  #ppSheet .pp-top{position:sticky;top:0;z-index:3;padding:10px 12px;margin:0 0 12px;background:var(--panel-2);border-bottom:1px solid var(--line)}
+  #ppSheet .pp-bar{margin:0;gap:4px 12px} .pp-sws{gap:4px 12px}
+  .pp-fixed{padding:0 12px} #ppSheet .pp-body{padding:0 12px 24px} .pp-card{padding:16px 14px} .pp-nomatch{margin:-12px 12px 22px} }
+@media(max-width:400px){ .pp-gh .tot b,.pp-gh .totpts b{font-size:16px} .pp-sw{font-size:13px} }
+/* the narrowest phones (320): the stat rows give back a little padding, so nothing runs past the card */
+@media(max-width:340px){ .pp-rungs td{padding:7px 3px} .pp-rungs .pct{width:38px;font-size:13px} .pp-conf{padding:3px 5px;letter-spacing:.02em} .pp-rungs .fair{white-space:normal}
+  .pp-close{padding:10px 10px} #ppSheet .pp-bar,.pp-sws{gap:4px 8px} .pp-sw{gap:6px;font-size:12px} }
 /* ---------- Your parlay: player props and same-game legs ---------- */
 .pp-slipbar{position:sticky;bottom:0;z-index:2;display:flex;gap:6px 12px;align-items:center;flex-wrap:wrap;padding:10px 18px;background:var(--bg-2);border-top:1px solid var(--line);border-radius:0 0 var(--r) var(--r)}
 .pp-slipbar .btn{min-height:44px}
@@ -1099,7 +1118,7 @@ foot();
 </main>
 <footer>Rebuilt in the morning from the previous night's box scores, and again through the afternoon for the day's lines and injury report. Your bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
 <div class="toast" id="toast"></div>
-<div class="pp-back" id="ppBack" hidden><div class="pp-sheet" id="ppSheet" role="dialog" aria-modal="true" aria-labelledby="ppTitle" tabindex="-1"><h2 id="ppTitle" class="sr">Player props</h2><div class="pp-top"><div class="pp-bar"><button type="button" class="btn pp-close" id="ppClose" aria-label="Close player props">✕ Close</button><span class="grow"></span><span class="pp-sws" id="ppSwitches"><label class="pp-sw"><input type="checkbox" id="ppBackups" data-pp-key="backups"> Include backups</label><label class="pp-sw"><input type="checkbox" id="ppRungs" data-pp-key="rungs"> Milestones</label></span></div></div><div class="pp-body" id="ppBody"></div><div class="pp-slipbar" id="ppSlipBar" hidden><span class="pp-slipst" id="ppSlipSt" role="status" aria-live="polite"></span><span class="pp-slipsum" id="ppSlipSum"></span><button type="button" class="btn" id="ppSlipGo">Your parlay</button></div></div></div>
+<div class="pp-back" id="ppBack" hidden><div class="pp-sheet" id="ppSheet" role="dialog" aria-modal="true" aria-labelledby="ppTitle" tabindex="-1"><h2 id="ppTitle" class="sr">Player props</h2><div class="pp-top"><div class="pp-bar"><button type="button" class="btn pp-close" id="ppClose" aria-label="Close player props">✕ Close</button><span class="pp-sws" id="ppSwitches"><label class="pp-sw"><input type="checkbox" id="ppBackups" data-pp-key="backups"> Include backups</label><label class="pp-sw"><input type="checkbox" id="ppRungs" data-pp-key="rungs"> Milestones</label></span></div></div><div class="pp-fixed" id="ppFixed" hidden><div class="pp-search"><input type="search" id="ppFind" placeholder="Find a player" aria-label="Find a player in this game" autocomplete="off" data-pp-key="search"></div><div class="pp-espn"><button type="button" class="btn pp-refresh" id="ppRefresh" data-pp-refresh data-pp-key="refresh" aria-describedby="ppOddsSt">Refresh odds</button><span class="pp-espnst" id="ppOddsSt" role="status" aria-live="polite"></span></div></div><div class="pp-body" id="ppBody"></div><p class="pp-nomatch" id="ppNoMatch" role="status" aria-live="polite"></p><div class="pp-slipbar" id="ppSlipBar" hidden><span class="pp-slipst" id="ppSlipSt" role="status" aria-live="polite"></span><span class="pp-slipsum" id="ppSlipSum"></span><button type="button" class="btn" id="ppSlipGo">Your parlay</button></div></div></div>
 <div class="pp-back" id="hxBack" hidden><div class="pp-sheet hx-sheet" id="hxSheet" role="dialog" aria-modal="true" aria-labelledby="hxTitle" aria-describedby="hxSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="hxTitle">Rating over time</h2><div class="pp-sub" id="hxSub"></div></div><button type="button" class="pp-x" id="hxClose" aria-label="Close the rating window">×</button></div><div class="pp-body hx-body" id="hxBody"></div></div></div>
 <!-- The parlay card (README "The parlay card"): the NFL hub's (its nflbets/build/card.html at app v114) on this page, set
      in by build.js at its part:card marker: its styles, its window and its script, every class and id prefixed
@@ -3286,7 +3305,7 @@ function ppLedger() {
 function ppTrial() {
   const P = S.props, mk = P && P.research && P.research.market;
   const lost = mk && mk.logloss ? ` On DraftKings' closing lines for the 2026 play-in and playoffs (${Number(mk.lines).toLocaleString('en-US')} lines) it lost: log loss ${mk.logloss.model.toFixed(4)} against DraftKings' ${mk.logloss.market.toFixed(4)}, lower being better.` : '';
-  return `<details class="pp-trial" data-pp-trial><summary>The props model is on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show</summary>
+  return `<details class="pp-trial" data-pp-trial><summary data-pp-key="trial">The props model is on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show</summary>
     <p>Under each player, each DraftKings line's bar and percentage are the props model's chance of it, from his projection; "book" beside it is DraftKings' fair chance, its two prices with the book's margin taken out (all of it on the Over, the way that scored best on DraftKings' archived closing lines). The Parlay Builder's Top 50 lines take a player's line where this model's chance clears their bar, marked on trial there and in the builder (the owner's call of 25 October 2026). Ticking a line's box here puts that leg in your own parlay in the Parlay Builder, at DraftKings' price.</p>
     <p>Walk-forward on 2024 to 2026 it beat each player's own average on every stat.${lost}</p>
     ${ppLedger() ? `<p>${ppLedger()}</p>` : ''}
@@ -3328,21 +3347,30 @@ let ppOpen = null, ppFrom = null;
 /* the view's own state, in memory only, never saved: its two switches hold for the visit, the search, the open player
    and the stats shown are the game's */
 const PPV = { backups: false, rungs: false, gid: null, q: '', row: null, stats: new Set() };
-/* what the view stands on, beside its Refresh odds: the published read (lines.json) or a press's, when, and how much */
+/* what the view stands on, beside its Refresh odds, short as the NFL's ("DraftKings via ESPN, Thu 4:32 PM ET"): the
+   published read (lines.json) or a press's, when, and how many main lines; every kind's count in its title. A press's
+   read is this visit's alone, which the line says ("this visit only") */
 function ppReadSaid(g) {
-  if (oddsBusy) return "Reading DraftKings' lines and player props from ESPN…";
+  if (oddsBusy) return { t: "Reading DraftKings' lines from ESPN…", title: '' };
   const pr = ppPr(g.id), live = PP_LIVE[g.id];
   const press = !!pr && !!live && (live.status === 'ok' || live.status === 'none') && live.at === pr.at;
-  const n = (a, one, many) => `${a.length} ${a.length === 1 ? one : many}`;
-  const got = pr && (pr.mains.length + pr.ladders.length + pr.yes.length)
-    ? oddsAnd([n(pr.mains, 'main line', 'main lines'), pr.ladders.length && n(pr.ladders, 'milestone price', 'milestone prices'), pr.yes.length && n(pr.yes, 'double- or triple-double price', 'double- and triple-double prices')].filter(Boolean))
-    : 'DraftKings has posted no player props for this game yet';
-  let s = pr ? `${press ? 'DraftKings via ESPN' : 'DraftKings as published'}, ${ppEt(pr.at)}: ${got}.`
-    : LINES_ERR ? "The published lines did not load: Refresh odds reads DraftKings' from ESPN, for this visit only."
-    : !LINES ? "Loading DraftKings' published lines…" : "No DraftKings player props read for this game yet: Refresh odds reads them from ESPN, for this visit only.";
-  if (live && live.status === 'failed' && (!pr || pbT(live.at) > pbT(pr.at))) s += ` DraftKings' player props could not be read at ${ppEt(live.at)}${pr ? ', so these stand' : ''}.`;
-  if (press) s += ' For this visit only: a reload shows the published lines again.';
-  return s;
+  const n = (k, one, many) => `${k} ${k === 1 ? one : many}`, all = pr ? pr.mains.length + pr.ladders.length + pr.yes.length : 0;
+  const kinds = all ? oddsAnd([n(pr.mains.length, 'main line', 'main lines'), pr.ladders.length && n(pr.ladders.length, 'milestone price', 'milestone prices'), pr.yes.length && n(pr.yes.length, 'double- or triple-double price', 'double- and triple-double prices')].filter(Boolean)) : '';
+  let t = pr ? `${press ? 'DraftKings via ESPN' : 'DraftKings as published'}, ${ppEt(pr.at)} · ${!all ? 'no player props posted yet' : pr.mains.length ? n(pr.mains.length, 'main line', 'main lines') : n(all, 'price', 'prices')}`
+    : LINES_ERR ? 'Published lines did not load · Refresh odds reads them from ESPN'
+    : !LINES ? "Loading DraftKings' published lines…" : 'No DraftKings player props for this game yet';
+  if (live && live.status === 'failed' && (!pr || pbT(live.at) > pbT(pr.at))) t += ` · could not be read at ${ppEt(live.at)}${pr ? ', these stand' : ''}`;
+  if (press) t += ' · this visit only';
+  const title = (kinds ? `DraftKings: ${kinds}.` : '') + (press ? ' Read by Refresh odds for this visit only: a reload shows the published lines again.' : '');
+  return { t, title: title.trim() };
+}
+/* Vegas's line for the head card: DraftKings' spread as Game bets has it (pbGl), else the line the board shows (the
+   game's published line, which can be newer than DraftKings' prices), marked as the board's; null without either.
+   `line` is the home side's */
+function ppVegas(g) {
+  const gl = pbGl(g.id);
+  if (gl && gl.spread && Number.isFinite(gl.spread.home.line)) return { line: gl.spread.home.line, board: false };
+  return g.line != null && Number.isFinite(g.line) ? { line: g.line, board: true } : null;
 }
 /* the game's head, the NFL's: tip-off, the matchup, the props model's biggest projections (on trial), the board
    model's expected score and total, and Vegas's pick from the line the board shows */
@@ -3353,14 +3381,14 @@ function ppHead(g) {
     for (const [pid, r] of Object.entries(pg.players)) { const v = ppAt(r, k); if (Number.isFinite(v) && (!best || v > best.v)) best = { pid, r, v }; }
     return best ? `<div data-pp-lead="${k}" data-pp-pid="${esc(best.pid)}"><span class="cat">${cat}</span><span class="nm" title="${esc(best.r[0])}">${esc(ppShort(best.r[0]))}</span><span class="v">${ppNumTxt(best.v)}<em>${k}</em></span></div>` : ''; }).join('') : '';
   const sc = m && Number.isFinite(m.total) && Number.isFinite(m.spread) ? { a: Math.round((m.total + m.spread) / 2), h: Math.round((m.total - m.spread) / 2) } : null;
-  const fav = g.line == null || !Number.isFinite(g.line) || g.line === 0 ? null : g.line < 0 ? g.home : g.away;
+  const vg = ppVegas(g), fav = vg && vg.line !== 0 ? (vg.line < 0 ? g.home : g.away) : null;
   return `<div class="pp-card pp-ghcard" data-pp-head><div class="pp-gh">
     <div class="when">${lab('Tip-off')}<b>${esc(dayName(g.date))}, ${esc(dayNum(g.date))}</b>${esc(tipTime(g.tip))}</div>
     <div class="match">${lab('Matchup')}<div class="pp-mt">${pill(g.away)} <span class="at">at</span> ${pill(g.home)}</div></div>
     <div class="lead-c">${lab('Biggest projections <span class="pp-trialtag" title="Not yet shown to beat DraftKings: its chances are marked on trial wherever they show">Model on trial</span>')}<div class="lead">${lead || '<span class="pp-q">No projections for this game yet</span>'}</div></div>
     <div class="tot" data-pp-score>${lab('Expected score')}${sc ? `<b>${sc.a} – ${sc.h}</b><small>${esc(g.away)} / ${esc(g.home)}</small>` : '<b>–</b>'}</div>
     <div class="totpts" data-pp-totpts>${lab('Total pt')}${m && Number.isFinite(m.total) ? `<b>${Math.round(m.total)}</b><small>our model</small>` : '<b>–</b>'}</div>
-    <div class="winner" data-pp-vegas>${lab('Vegas pick')}${fav ? `${pill(fav)}<small>by ${Math.abs(g.line)}</small>` : `<span class="none">–</span>${g.line === 0 ? '<small>even</small>' : ''}`}</div>
+    <div class="winner" data-pp-vegas>${lab('Vegas pick')}${fav ? `${pill(fav)}<small>by ${Math.abs(vg.line)}</small>` : `<span class="none">–</span>${vg && vg.line === 0 ? '<small>even</small>' : ''}`}${vg && vg.board ? `<small data-pp-vegas-src="board">the board's line</small>` : ''}</div>
   </div></div>`;
 }
 /* one line of a stat block or of Game bets, the NFL's rung row: the box that puts this leg in your parlay (checked while
@@ -3385,13 +3413,15 @@ function ppFairTitle(l, f) {
   if (l.mk === 'yes') return "DraftKings' fair chance, est.: one price with no other side, so the margin measured on the milestones is taken out, never measured on this market itself; on the 2026 playoff prices double- and triple-doubles came in well below what that leaves, so read it as high";
   return "DraftKings' fair chance, est.: DraftKings gives a single price here, so its margin is taken out as measured on the archive's milestones";
 }
-const ppNoLine = (t = 'No DraftKings line yet.') => `<p class="pp-noline" data-pp-noline>${t}</p>`;
+const ppLoading = () => !LINES && !LINES_ERR;
+const ppNoLine = (t = ppLoading() ? "Loading DraftKings' lines…" : 'No DraftKings line yet.') => `<p class="pp-noline" data-pp-noline>${t}</p>`;
 /* the NFL's Game bets card: each team to win and to cover, then the game total over or under, on DraftKings' game lines
    as the Parlay Builder has them (pbGl: the newer of the job's read and a press's) */
 function ppBets(g) {
   const gl = pbGl(g.id), m = g.model;
   let h = `<div class="pp-card pp-gbets" data-pp-gbets><h3>Game bets</h3>`;
-  if (!gl || !(gl.ml || gl.spread || gl.total)) return h + ppNoLine() + '</div>';
+  if (!gl || !(gl.ml || gl.spread || gl.total)) { const vg = ppVegas(g);
+    return h + ppNoLine(ppLoading() || !vg ? undefined : `No DraftKings prices yet: the board's line is ${vg.line === 0 ? 'even' : `${vg.line < 0 ? g.home : g.away} ${fmtSp(-Math.abs(vg.line))}`}.`) + '</div>'; }
   h += `<p class="pp-src" data-pp-glsrc>Lines: DraftKings', ${SG_LINES[g.id] === gl ? 'read from ESPN' : 'as published'} ${esc(ppEt(gl.at))}.</p>`;
   const b = { id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip, at: gl.at };
   for (const s of ['away', 'home']) {
@@ -3409,14 +3439,17 @@ function ppBets(g) {
 const ppWhyNone = (g, out) => out ? `${out} on the injury report` : !ppGame(g.id) ? 'none for this game' : `projected under ${S.props.minShown} minutes, or no game on record`;
 /* one player opened: a stat block for each stat he is projected on (or DraftKings lines without a projection), the
    NFL's: "Points  projected 14.3  book line 12.5", its Over and Under, and with Milestones on its k+ rungs; then his
-   double- and triple-double, the NFL's touchdown block. A rung in your parlay is shown whatever the switch */
+   double- and triple-double, the NFL's touchdown block. A rung in your parlay is shown whatever the switch. A player
+   the props model projects has its chances in every block (his lines' and his double- and triple-double's, line or
+   none), so his body opens on one quiet on-trial line that covers them all, and no heading carries a mark of its own
+   (the NFL's headings, which have none) */
 function ppBody(g, x, pr) {
   const row = x.who.row, pid = x.pid, out = ppOut(g, pid), on = l => M.slip.legs.some(y => slipKey(y) === slipKey(l));
   const mains = pr ? pr.mains.filter(m => m.player === pid) : [], lads = pr ? pr.ladders.filter(m => m.player === pid) : [], yes = pr ? pr.yes.filter(m => m.player === pid) : [];
   const base = { id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip, kind: 'prop', pid, name: x.who.name, team: x.who.team || '', at: pr ? pr.at : null };
-  const trial = typeof pbTrialTitle === 'function' ? ` <i class="pb-trial" data-pp-trialmark title="${esc(pbTrialTitle())}">on trial</i>` : '';
   let h = `<div class="pp-plrbody" id="ppPb-${esc(pid)}" data-pp-body="${esc(pid)}">`;
-  if (!row) h += `<p class="pp-noproj" data-pp-noproj>No projection: ${esc(ppWhyNone(g, out))}. DraftKings' fair chance alone.</p>`;
+  if (row) h += `<p class="pp-trialln" data-pp-trialln><i class="pb-trial" data-pp-trialmark title="${esc(typeof pbTrialTitle === 'function' ? pbTrialTitle() : 'On trial')}">on trial</i><span>His chances here are the props model's.</span></p>`;
+  else h += `<p class="pp-noproj" data-pp-noproj>No projection: ${esc(ppWhyNone(g, out))}. DraftKings' fair chance alone.</p>`;
   for (const s of PP_ORDER) {
     const mm = mains.find(y => y.stat === s), L = lads.filter(y => y.stat === s), mu = row ? ppMean(row, s) : null;
     if (!row && !mm && !L.length) continue;
@@ -3424,14 +3457,14 @@ function ppBody(g, x, pr) {
     let rows = '';
     if (mm) rows += ['over', 'under'].map(sd => ppLegRow({ ...base, stat: s, mk: 'main', line: mm.line, side: sd, odds: sd === 'over' ? mm.over : mm.under, other: sd === 'over' ? mm.under : mm.over }, `${sd === 'over' ? 'Over' : 'Under'} ${mm.line}`, 'mainline')).join('');
     rows += rungs.map(r => ppLegRow(r.leg, `${r.l.k}+`, 'rung')).join('');
-    h += `<div class="pp-stat" data-pp-stat="${s}"><h4>${PP_NAMES[s]}${mu != null ? ` <em data-pp-mu="${mu}">projected ${ppNumTxt(mu)}</em>` : ' <em>no projection</em>'}${rows && row ? trial : ''}${mm ? `<em class="mline">book line ${mm.line}</em>` : ''}</h4>`
+    h += `<div class="pp-stat" data-pp-stat="${s}"><h4>${PP_NAMES[s]}${mu != null ? ` <em data-pp-mu="${mu}">projected ${ppNumTxt(mu)}</em>` : ' <em>no projection</em>'}${mm ? `<em class="mline">book line ${mm.line}</em>` : ''}</h4>`
       + (rows ? `<table class="pp-rungs">${rows}</table>` : ppNoLine(L.length ? `No DraftKings main line yet: Milestones shows its ${L.length} milestone price${L.length === 1 ? '' : 's'}.` : undefined)) + '</div>';
   }
   for (const k of ['dd', 'td']) {
     const y = yes.find(v => v.market === k), p = row ? ppAt(row, k) : null;
     if (!row && !y) continue;
     const rows = y ? ppLegRow({ ...base, stat: k, mk: 'yes', side: 'yes', odds: y.price, other: null }, 'Gets one') : '';
-    h += `<div class="pp-stat" data-pp-stat="${k}"><h4>${PP_NAMES[k]}${Number.isFinite(p) ? ` <em data-pp-mu="${p}">projected ${ppPct(p)}</em>` : ' <em>no projection</em>'}${rows && row ? trial : ''}</h4>${rows ? `<table class="pp-rungs">${rows}</table>` : ppNoLine()}</div>`;
+    h += `<div class="pp-stat" data-pp-stat="${k}"><h4>${PP_NAMES[k]}${Number.isFinite(p) ? ` <em data-pp-mu="${p}">projected ${ppPct(p)}</em>` : ' <em>no projection</em>'}</h4>${rows ? `<table class="pp-rungs">${rows}</table>` : ppNoLine()}</div>`;
   }
   return h + '</div>';
 }
@@ -3439,28 +3472,35 @@ function ppBody(g, x, pr) {
 function ppStats(x) {
   const games = ppRecent(x.pid); if (!games.length) return '';
   const cols = [['pts', 'PTS'], ['reb', 'REB'], ['ast', 'AST'], ['tpm', '3PM'], ['stl', 'STL'], ['blk', 'BLK']], I = k => ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'].indexOf(k);
-  const team = x.who.team, opp = r => team === r.away ? `@ ${r.home}` : team === r.home ? `vs ${r.away}` : `${r.away} @ ${r.home}`;
-  const rows = games.map(r => `<tr><td>${esc(dayNum(r.date))}</td><td>${esc(opp(r))}</td>${cols.map(([k]) => `<td class="num">${r.line[I(k)]}</td>`).join('')}</tr>`).join('');
+  const team = x.who.team, opp = r => team === r.away ? `@ ${pill(r.home)}` : team === r.home ? `vs ${pill(r.away)}` : `${pill(r.away)} @ ${pill(r.home)}`;
+  const rows = games.map(r => `<tr><td>${esc(dayNum(r.date))}</td><td>${opp(r)}</td>${cols.map(([k]) => `<td class="num">${r.line[I(k)]}</td>`).join('')}</tr>`).join('');
   const avg = cols.map(([k]) => { const v = games.reduce((t, r) => t + r.line[I(k)], 0) / games.length; return `<td class="num"><b>${v.toFixed(1)}</b></td>`; }).join('');
   return `<div class="pp-wkstats" id="ppSt-${esc(x.pid)}" data-pp-recent="${esc(x.pid)}"><table><thead><tr><th>Date</th><th>Opp</th>${cols.map(([, l]) => `<th class="num">${l}</th>`).join('')}</tr></thead><tbody>${rows}</tbody><tfoot><tr><td colspan="2">Per game (${games.length})</td>${avg}</tr></tfoot></table></div>`;
 }
 /* one player's row, the NFL's: the button that opens him covers the row (aria-expanded), his rank and shield as the
-   Players tab draws them, his name, position and injury, Show stats where the page has his recent games, and his
-   projected points, rebounds and assists. A backup with nothing to project or bet is shown in his place, not a button */
+   Players tab draws them, his name, his position line (the NFL's depth label's place: his projected minutes, the sheet
+   has always shown them, and "· backup" for a player Include backups adds, as the NFL marks one) and injury, Show stats
+   where the page has his recent games, and his projected points, rebounds and assists. A backup with nothing to project
+   or bet is shown in his place, not a button */
 function ppRow1(g, x, pr) {
   const pid = x.pid, who = x.who, row = who.row, out = ppOut(g, pid), rk = ppRankOf(pid), open = PPV.row === pid, st = PPV.stats.has(pid);
   const badge = rk ? `<span class="pp-badge" data-pp-rank="${rk.rank}">${tierBadge(rk.rating)}#${rk.rank}</span>` : '';
   const inj = out ? `<span class="pp-inj" data-pp-inj>${esc(out)}</span>` : '';
   const nLines = pr ? pr.mains.filter(m => m.player === pid).length + pr.ladders.filter(m => m.player === pid).length + pr.yes.filter(m => m.player === pid).length : 0;
   const sum = row ? [['pts', 'pts'], ['reb', 'reb'], ['ast', 'ast']].map(([k, u]) => `<b>${ppNumTxt(ppMean(row, k))}</b> ${u}`).join(' &nbsp;·&nbsp; ') : `<span class="pp-q">No projection${nLines ? '' : `: ${esc(ppWhyNone(g, out))}`}</span>`;
-  const sumSr = row ? `projected ${['pts', 'reb', 'ast'].map(k => `${ppNumTxt(ppMean(row, k))} ${{ pts: 'points', reb: 'rebounds', ast: 'assists' }[k]}`).join(', ')}` : 'no projection';
+  const mins = row && Number.isFinite(row[3]) ? row[3].toFixed(0) : null, backup = !!x.backup && !!ppGame(g.id);
+  const posLine = [who.pos, mins != null && `${mins} min`, backup && 'backup'].filter(Boolean).join(' · ');
+  const sumSr = row ? `projected ${mins != null ? `${mins} minutes, ` : ''}${['pts', 'reb', 'ast'].map(k => `${ppNumTxt(ppMean(row, k))} ${{ pts: 'points', reb: 'rebounds', ast: 'assists' }[k]}`).join(', ')}` : 'no projection';
   const hasStats = ppRecent(pid).length > 0;
-  const stBtn = hasStats ? `<button type="button" class="pp-stbtn" data-pp-stats="${esc(pid)}" data-pp-key="stats-${esc(pid)}" aria-pressed="${st}" aria-controls="ppSt-${esc(pid)}" aria-label="${st ? 'Hide' : 'Show'} ${esc(who.name)}'s games this past week"><span>${st ? 'Hide stats' : 'Show stats'}</span></button>` : '';
-  const whoHtml = `<span class="who"><span aria-hidden="true">${badge}<span class="nm">${esc(who.name)}</span>${who.pos ? `<span class="pos">${esc(who.pos)}</span>` : ''}${inj}</span>${stBtn}</span>`;
+  /* Show stats is named by its own words (Show stats or Hide stats, then whose), which say its state: no aria-pressed
+     beside them; it names the table it controls only while the table is drawn */
+  const stWord = st ? 'Hide stats' : 'Show stats';
+  const stBtn = hasStats ? `<button type="button" class="pp-stbtn${st ? ' on' : ''}" data-pp-stats="${esc(pid)}" data-pp-key="stats-${esc(pid)}"${st ? ` aria-controls="ppSt-${esc(pid)}"` : ''} aria-label="${esc(`${stWord}: ${who.name}'s games this past week`)}"><span>${stWord}</span></button>` : '';
+  const whoHtml = `<span class="who"><span aria-hidden="true">${badge}<span class="nm">${esc(who.name)}</span>${posLine ? `<span class="pos">${esc(posLine)}</span>` : ''}${inj}</span>${stBtn}</span>`;
   const bench = !row && !nLines;
   let h = `<div class="pp-pwrap" data-pp-name="${esc(String(who.name).toLowerCase())}">`;
-  if (bench) h += `<div class="pp-plr bench" data-pp-player="${esc(pid)}" data-pp-bench>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow"></span><span class="sr">${esc(who.name)}${who.pos ? ', ' + esc(who.pos) : ''}: no projection and no DraftKings line</span></div>`;
-  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}" aria-controls="ppPb-${esc(pid)}" aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
+  if (bench) h += `<div class="pp-plr bench" data-pp-player="${esc(pid)}" data-pp-bench>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow"></span><span class="sr">${esc(who.name)}${posLine ? ', ' + esc(posLine) : ''}: no projection and no DraftKings line</span></div>`;
+  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}"${open ? ` aria-controls="ppPb-${esc(pid)}"` : ''} aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${backup ? ', backup' : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
   if (st && hasStats) h += ppStats(x);
   if (open && !bench) h += ppBody(g, x, pr);
   return h + '</div>';
@@ -3496,35 +3536,74 @@ function ppTeams(g) {
   if (other.length) h += `<section class="pp-team" data-pp-team="other"><h3 class="pp-teamhdr">Other DraftKings lines <span class="pp-pill">placed on neither club</span></h3>${other.map(x => ppRow1(g, x, pr)).join('')}</section>`;
   return h;
 }
-/* the Find a player box, the NFL's: rows whose name holds what is typed, a club's heading only while it has one */
+/* the Find a player box, the NFL's: rows whose name holds what is typed, a club's heading only while it has one; a
+   search no row matches says so, in a line of its own that stays on the page (#ppNoMatch, a status, so it is heard) */
 function ppSearchApply() {
   const body = $('#ppBody'); if (!body) return;
   const q = PPV.q.trim().toLowerCase();
+  let any = 0;
   body.querySelectorAll('.pp-team').forEach(sec => {
     let shown = 0;
     sec.querySelectorAll('.pp-pwrap').forEach(w => { const hide = !!q && !w.dataset.ppName.includes(q); w.hidden = hide; if (!hide) shown++; });
-    sec.hidden = !!q && !shown;
+    sec.hidden = !!q && !shown; any += shown;
     sec.querySelectorAll('.pp-outs,.pp-empty').forEach(p => { p.hidden = !!q; });
   });
+  const nm = $('#ppNoMatch'), say = q && !any && body.querySelector('.pp-team') ? `No player in this game matches "${PPV.q.trim()}".` : '';
+  if (nm && nm.textContent !== say) nm.textContent = say;
+}
+/* where the focus was before a redraw, so it can be put back after: its own key, then (where that control is gone, a
+   rung that left with Milestones off, a box whose line a press moved) the first box of the same stat block, the
+   player's row, the nearest control that is still drawn, and last the sheet itself, never a control scrolled off the
+   screen without bringing it back into view */
+function ppFocusPlan(sc, act) {
+  if (!act || act === sc || !sc.contains(act)) return null;
+  const key = act.getAttribute('data-pp-key'), body = $('#ppBody');
+  if (!body.contains(act)) return { el: act };                // the bar, the search, Refresh odds: drawn once, they stay
+  const near = [], cell = act.closest('.pp-stat'), pb = act.closest('[data-pp-body]'), wrap = act.closest('.pp-pwrap');
+  if (cell) { const sel = pb ? `[data-pp-body="${CSS.escape(pb.dataset.ppBody)}"] [data-pp-stat="${CSS.escape(cell.dataset.ppStat || '')}"]`
+      : cell.dataset.ppSide ? `[data-pp-gbets] [data-pp-side="${CSS.escape(cell.dataset.ppSide)}"]` : cell.hasAttribute('data-pp-total') ? '[data-pp-gbets] [data-pp-total]' : null;
+    if (sel) near.push(sel + ' [data-pp-key]'); }
+  if (pb) near.push(`[data-pp-open="${CSS.escape(pb.dataset.ppBody)}"]`);
+  else if (wrap) { const r = wrap.querySelector('[data-pp-open]'); if (r) near.push(`[data-pp-open="${CSS.escape(r.dataset.ppOpen)}"]`); }
+  /* the controls around it, nearest first */
+  const all = [...body.querySelectorAll('[data-pp-key]')], i = all.indexOf(act);
+  for (let k = 1; i >= 0 && k <= 8; k++) for (const j of [i + k, i - k]) if (all[j]) near.push(`[data-pp-key="${CSS.escape(all[j].getAttribute('data-pp-key'))}"]`);
+  return { key, near };
+}
+function ppFocusBack(sc, plan) {
+  if (!plan) return;
+  const ok = el => el && !el.disabled && !el.closest('[hidden]') && !(el.tagName !== 'SUMMARY' && el.closest('details:not([open])'));
+  if (plan.el) { if (!ok(plan.el)) $('#ppClose').focus({ preventScroll: true }); return; }   // hidden with its game's tip: the bar's Close, at the top
+  let el = plan.key ? sc.querySelector(`[data-pp-key="${CSS.escape(plan.key)}"]`) : null, moved = false;
+  if (!ok(el)) { el = null; moved = true; for (const q of plan.near) { const c = $('#ppBody').querySelector(q); if (ok(c)) { el = c; break; } } }
+  if (!el) el = sc;
+  el.focus({ preventScroll: true });
+  /* a stand-in the focus moved to is brought into view where it is off the screen */
+  if (moved && el !== sc && typeof el.scrollIntoView === 'function') { const r = el.getBoundingClientRect(), v = sc.getBoundingClientRect(); if (r.bottom > v.bottom || r.top < v.top) el.scrollIntoView({ block: 'nearest' }); }
 }
 function propsDraw(anchor) {
   if (!ppOpen) return;
   const sc = $('#ppSheet'), body = $('#ppBody');
-  const y = sc.scrollTop, act = document.activeElement, key = act && sc.contains(act) ? act.getAttribute('data-pp-key') : null;
-  const caret = key === 'search' && typeof act.selectionStart === 'number' ? [act.selectionStart, act.selectionEnd] : null;
+  const y = sc.scrollTop, plan = ppFocusPlan(sc, document.activeElement);
   const trialOpen = !!body.querySelector('details[data-pp-trial][open]');
   const pin = anchor && body.querySelector(`[data-pp-player="${CSS.escape(anchor)}"]`), pinTop = pin ? pin.getBoundingClientRect().top : null;
-  const g = S.slate.find(x => x.id === ppOpen);
+  const g = S.slate.find(x => x.id === ppOpen), live = !!g && !started(g);
   PP_OFFER = [];
   $('#ppTitle').textContent = g ? `Player props: ${g.away} at ${g.home}` : 'Player props';
   $('#ppBackups').checked = PPV.backups; $('#ppRungs').checked = PPV.rungs;
-  $('#ppSwitches').hidden = !g || started(g);
+  $('#ppSwitches').hidden = !live;
+  /* the search and Refresh odds with its status are the sheet's own, drawn once and changed in place, so a redraw never
+     takes the focus or the caret from them and the status line is a live region that stays (its changes are heard) */
+  $('#ppFixed').hidden = !live;
+  if (live) {
+    const find = $('#ppFind'); if (find.value !== PPV.q) find.value = PPV.q;
+    const rf = $('#ppRefresh'); if (oddsBusy) { rf.setAttribute('aria-busy', 'true'); rf.setAttribute('aria-disabled', 'true'); } else { rf.removeAttribute('aria-busy'); rf.removeAttribute('aria-disabled'); }
+    const st = $('#ppOddsSt'), rs = ppReadSaid(g); if (st.textContent !== rs.t) st.textContent = rs.t; if (rs.title) st.title = rs.title; else st.removeAttribute('title');
+  }
   let h = '';
   if (!g) h = '<p class="pp-q">This game is no longer on the board.</p>';
-  else if (started(g)) h = `<div class="note"><b>This game has tipped off.</b> Its props are off the board here.</div>`;
+  else if (!live) h = `<div class="note"><b>This game has tipped off.</b> Its props are off the board here.</div>`;
   else {
-    h += `<div class="pp-search"><input type="search" id="ppFind" placeholder="Find a player" aria-label="Find a player in this game" autocomplete="off" data-pp-key="search" value="${esc(PPV.q)}"></div>`;
-    h += `<div class="pp-espn"><button type="button" class="btn pp-refresh" data-pp-refresh data-pp-key="refresh" aria-describedby="ppOddsSt"${oddsBusy ? ' aria-busy="true" aria-disabled="true"' : ''}>${typeof PB_REFRESH_SVG === 'string' ? PB_REFRESH_SVG : ''}Refresh odds</button><span class="pp-espnst" id="ppOddsSt" role="status" aria-live="polite">${esc(ppReadSaid(g))}</span></div>`;
     h += ppHead(g) + ppTrial() + ppBets(g);
     if (!ppGame(g.id)) h += `<p class="pp-q pp-nogame" data-pp-nogame>${esc(ppNoGame(g))}</p>`;
     if (M.slip.legs.some(l => l.id === g.id && l.kind === 'prop' && l.mk === 'mile') && !PPV.rungs) h += `<p class="pp-q pp-lnote">A milestone leg in your parlay is shown under its player even with Milestones off, so nothing counts out of sight.</p>`;
@@ -3532,16 +3611,14 @@ function propsDraw(anchor) {
   }
   body.innerHTML = h;
   if (trialOpen) { const d = body.querySelector('details[data-pp-trial]'); if (d) d.open = true; }
-  body.querySelectorAll('[data-pp-refresh]').forEach(b => b.onclick = () => refreshOdds());
   body.querySelectorAll('[data-sg-add]').forEach(b => b.onchange = () => ppToggle(+b.dataset.sgAdd));
   body.querySelectorAll('[data-pp-open]').forEach(b => b.onclick = () => { const id = b.dataset.ppOpen; PPV.row = PPV.row === id ? null : id; propsDraw(id); });
   body.querySelectorAll('[data-pp-stats]').forEach(b => b.onclick = () => { const id = b.dataset.ppStats; if (PPV.stats.has(id)) PPV.stats.delete(id); else PPV.stats.add(id); propsDraw(id); });
-  const find = $('#ppFind'); if (find) find.oninput = () => { PPV.q = find.value; ppSearchApply(); };
-  ppSearchApply();
+  if (live) ppSearchApply(); else $('#ppNoMatch').textContent = '';
   ppSlipSync();
   sc.scrollTop = y;
   if (pinTop != null) { const nb = body.querySelector(`[data-pp-player="${CSS.escape(anchor)}"]`); if (nb) sc.scrollTop += nb.getBoundingClientRect().top - pinTop; }
-  if (key) { const el = sc.querySelector(`[data-pp-key="${CSS.escape(key)}"]`); (el && !el.closest('[hidden]') ? el : $('#ppClose')).focus({ preventScroll: true }); if (el && caret) try { el.setSelectionRange(caret[0], caret[1]); } catch (e) {} }
+  ppFocusBack(sc, plan);
 }
 function propsOpen(gid, from) {
   if (!S || !S.slate.some(x => x.id === gid)) return;
@@ -3549,8 +3626,9 @@ function propsOpen(gid, from) {
   ppOpen = gid; ppFrom = from || null;
   const back = $('#ppBack'); $('#ppBody').innerHTML = ''; back.hidden = false; document.body.classList.add('pp-lock');
   propsDraw(); $('#ppSheet').scrollTop = 0; $('#ppClose').focus();
-  /* DraftKings' published lines (lines.json), read once a load, as the Parlay Builder reads them: drawn when they answer */
-  if (typeof pbLinesLoad === 'function' && !LINES && !LINES_ERR) pbLinesLoad().then(() => { if (ppOpen) propsDraw(); });
+  /* DraftKings' published lines (lines.json), read once a load, as the Parlay Builder reads them: drawn when they
+     answer (ppLinesIn, which the read calls) */
+  if (typeof pbLinesLoad === 'function' && !LINES && !LINES_ERR) pbLinesLoad();
 }
 function propsClose() {
   if (!ppOpen) return;
@@ -3558,15 +3636,29 @@ function propsClose() {
   const to = ppFrom && document.contains(ppFrom) ? ppFrom : document.querySelector(`main [data-props="${gid}"]`);
   ppFrom = null; if (to) to.focus();
 }
-/* a game's button, on its card and its plan row; it counts the main lines a press read */
+/* a game's button, on its card and its plan row; it counts the main lines its view shows: DraftKings' as the Parlay
+   Builder has them (pbPr: the job's published read, lines.json, or a newer press), so the count is the view's */
+function propsCount(g) {
+  const e = ppPr(g.id), n = e ? e.mains.length : 0, c = e ? e.mains.length + e.ladders.length + e.yes.length : 0;
+  return { n, c, label: `Player props${n ? ` · ${n} line${n === 1 ? '' : 's'}` : c ? ` · ${c} price${c === 1 ? '' : 's'}` : ''}` };
+}
 function propsBtn(g, mini) {
-  const e = PP_LIVE[g.id], n = e && e.status === 'ok' ? e.mains.length : 0, c = ppCount(e);
-  const label = `Player props${n ? ` · ${n} line${n === 1 ? '' : 's'}` : c ? ` · ${c} price${c === 1 ? '' : 's'}` : ''}`;
+  const { c, label } = propsCount(g);
   return mini ? `<button type="button" class="pp-mini" data-props="${g.id}" aria-haspopup="dialog">${label}</button>`
     : `<button type="button" class="btn ghost pp-btn${c ? ' has' : ''}" data-props="${g.id}" aria-haspopup="dialog">${label}</button>`;
 }
+/* lines.json has answered (pbLinesLoad calls it): every game button on the page counts what it now has, in place, and
+   an open view is drawn on it */
+window.ppLinesIn = function () {
+  if (!S || !S.slate) return;
+  document.querySelectorAll('main [data-props]').forEach(b => { const g = S.slate.find(x => x.id === b.dataset.props); if (!g) return;
+    const { c, label } = propsCount(g); if (b.textContent !== label) b.textContent = label; if (b.classList.contains('pp-btn')) b.classList.toggle('has', !!c); });
+  if (ppOpen) propsDraw();
+};
 document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-props]'); if (b) propsOpen(b.dataset.props, b); });
 $('#ppClose').addEventListener('click', propsClose);
+$('#ppRefresh').addEventListener('click', () => refreshOdds());
+$('#ppFind').addEventListener('input', e => { PPV.q = e.target.value; ppSearchApply(); });
 $('#ppBackups').addEventListener('change', e => { PPV.backups = e.target.checked; propsDraw(); });
 $('#ppRungs').addEventListener('change', e => { PPV.rungs = e.target.checked; propsDraw(); });
 $('#ppBack').addEventListener('click', e => { if (e.target === e.currentTarget) propsClose(); });
@@ -3957,6 +4049,8 @@ function ppSlipSync() {
   if (!legs.length) $('#ppSlipSum').innerHTML = 'Your parlay is empty: tick a line to add it.';
   else { const P = slipDec(legs); $('#ppSlipSum').innerHTML = `Your parlay: <b>${legs.length} leg${legs.length === 1 ? '' : 's'}</b>${here && here !== legs.length ? ` (${here} in this game)` : ''}, <b>${fmtAm(decToAm(P.dec))}${P.sg ? ' est.' : ''}</b>`; }
   bar.hidden = !legs.length && !$('#ppSlipSt').textContent && !PP_OFFER.length;
+  const sc = $('#ppSheet'), hb = bar.hidden ? 0 : bar.offsetHeight;
+  if (sc) sc.style.scrollPaddingBottom = hb ? `${hb + 16}px` : '';
 }
 /* a line's box in the view (ppLegRow): puts that leg in your parlay, or takes it out, by slipToggle's rules, and says so */
 function ppToggle(i) {
@@ -4212,6 +4306,8 @@ function pbLinesLoad() {
     if (j && typeof j === 'object' && j.v === 1 && j.games && typeof j.games === 'object' && !Array.isArray(j.games)) LINES = j; else LINES_ERR = true;
     PB_TOP_CACHE.clear(); PB_CACHE.clear();
     if (tabNow() === 'parlay') pbKeep(() => render.parlay()); else if (tabNow() === 'suggest' && render.suggest) render.suggest(); else pbOddsSync();
+    /* the board's Player props buttons count these lines, and an open Player props view stands on them */
+    if (typeof window.ppLinesIn === 'function') window.ppLinesIn();
   })());
 }
 /* tools/lines_feed.js linesGl, line for line: a lines.json entry -> the shape oddsGameLines gives (what the page keeps

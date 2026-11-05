@@ -2356,7 +2356,6 @@ render.players = function () {
     { key: 'd', label: 'Defence', num: true, fmt: signed, wide: true },
     { key: 'min', label: 'Min', num: true, fmt: v => v.toFixed(0), wide: true, mid: true },
     { key: 'games', label: 'GP', num: true, wide: true, mid: true },
-    { key: 'prior', label: 'Prior', fmt: v => `<span class="muted">${v === 'raptor' ? 'RAPTOR' : 'rookie'}</span>`, wide: true, mid: true },
   ], rows, 'rating');
 };
 render.coaches = function () {

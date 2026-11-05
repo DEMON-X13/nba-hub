@@ -13,7 +13,8 @@
  * cover chance on research/sigma.json's sigma, the market's own on a total, tools/props.js's distribution on a player)
  * and fair chance (tools/props_feed.js's rules), the order (pbTopOwn: the Value picks, then the thin-edge lines, then the
  * totals, each by what $1 is expected to make), each bet once (sameBetOwn: a milestone k+ is the main Over at k - 0.5),
- * the 50-line cut (PB_TOP_N_OWN) on sixty made-up games, the on-trial mark on every player leg and nowhere else, the
+ * the 50-line cut (PB_TOP_N_OWN) on sixty made-up games, no player line once the props trial is stopped early as a FAIL
+ * (a made-up decision with early, tools/props_ledger.js EARLY_STOP), the on-trial mark on every player leg and nowhere else, the
  * Value mark on every Value pick and nowhere else, the Bet amount, the builder's numbers by data/corr.json and
  * tools/corr.js (two legs of one game exactly), the same-game refusals with their reasons, Add, Added and Remove, a game
  * that tips while the page is open, nothing read before the tab opens and nothing stored by a press; then the real
@@ -299,6 +300,18 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   check(/1 line is left out: the model rates it 15 points or more above DraftKings’ fair chance/.test(notes) && /1 line is left out: the list takes a game’s moneyline, spread or total only with DraftKings’ betslip id/.test(notes) && /Game totals are never Value picks/.test(notes), `the notes say what was left out and why, and that the totals come last (${notes.slice(0, 160)})`);
   check(/the props model’s, which is on trial/.test(txt(p.d.querySelector('#pbPanel .pb-lead'))) && (txt(panel).match(/on trial, not yet shown to beat DraftKings/g) || []).length === 1, 'the lead says once that a player\'s chance is the props model\'s, on trial');
   check(own.same === 2 && p.w.getPbTop().same === 2, `two milestones are left out as the same bet as their main line (${p.w.getPbTop().same})`);
+  /* the early stop (tools/props_ledger.js EARLY_STOP, the owner's call of 5 November 2026): its FAIL, in the shape
+     publish.js writes, takes every player line off the list, as the bar's own FAIL does; the game lines stay */
+  {
+    const PLx = require('./props_ledger'), stF = ST();
+    stF.props.ledger = { ...stF.props.ledger, decision: { verdict: 'FAIL', decidedAt: '2026-11-05T18:00Z', lines: 12298, games: 121, scores: { lines: 12298, logloss_diff: 0.018439, brier_diff: 0.008278 },
+      flat: { edge: 0.03, all: { bets: 6027, won: 3084, units: -222.81 } }, early: { at: PLx.EARLY_STOP.at, by: PLx.EARLY_STOP.by, why: PLx.EARLY_STOP.why } } };
+    const pf = load(stF, { lines: LINES }); await sleep(300); await openTab(pf);
+    const ownF = pbTopOwn(candidatesOwn(stF, LINES), TICKS_ALL), gotF = rows(pf).map(rowRead), notesF = [...pf.d.querySelectorAll('#pbPanel .pb-note')].map(txt).join(' | ');
+    check(own.rows.some(r => r.kind === 'prop') && ownF.rows.length > 0 && !ownF.rows.some(r => r.kind === 'prop') && gotF.length === ownF.rows.length && gotF.every((g, i) => g.key === keyOwn(ownF.rows[i]) && !g.trial) && !pf.d.querySelector('#pbPanel [data-pb-leg*="|prop|"], #pbPanel .pb-trial'),
+      `after the early stop's FAIL the list has no player line (${gotF.length} lines, every one a game line, where ${own.rows.filter(r => r.kind === 'prop').length} player lines stood before it)`);
+    check(/The list has no player lines: the props model failed its shadow ledger’s bar, so the list takes none/.test(notesF.replace(/'/g, '’')) && !pf.errors.length, `and the notes say why (${notesF.slice(0, 120)})${pf.errors.length ? ': ' + pf.errors.join(' | ') : ''}`);
+  }
 
   /* the engine the levels are built by (drawn nowhere on this tab: Suggested Parlays will draw them), on the same legs:
      each level's chance, price and fair chance the builder's own sums, and its card marking every player leg on trial

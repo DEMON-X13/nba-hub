@@ -3168,11 +3168,24 @@ function ppNoGame(g) {
   return `No projection for this game yet: the model projects the regular season and the playoffs, the next ${S.props.horizonGameDays} game days.`;
 }
 const ppNumTxt = v => Number.isFinite(v) ? v.toFixed(1) : '–';
-/* the shadow ledger's running numbers, quietly: never a verdict, nor a word of one, before its bar is decided */
+/* the early stop's FAIL (the owner's call of 5 November 2026, tools/props_ledger.js EARLY_STOP), plainly, from the
+   decision's own numbers: when and by whom, on how many lines, the two scores against DraftKings and the flat bets */
+const PP_MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+function ppEarly(dec) {
+  const e = dec.early, d = String(e.at || dec.decidedAt || '').slice(0, 10), sc = dec.scores || {}, fl = dec.flat && dec.flat.all;
+  const day = /^\d{4}-\d{2}-\d{2}$/.test(d) ? `${+d.slice(8, 10)} ${PP_MONTHS[+d.slice(5, 7) - 1]} ${d.slice(0, 4)}` : '';
+  const behind = [sc.logloss_diff > 0 && 'log loss', sc.brier_diff > 0 && 'Brier'].filter(Boolean);
+  const scores = behind.length === 2 ? 'behind DraftKings on both scores' : behind.length ? `behind DraftKings on ${behind[0]}` : 'not ahead of DraftKings on both scores';
+  const u = fl ? Math.round(Math.abs(fl.units)) : 0;
+  const bets = !fl || !fl.bets ? 'no flat bets at its edge' : fl.units < 0 ? `its flat bets down ${u.toLocaleString('en-US')} unit${u === 1 ? '' : 's'}` : fl.units > 0 ? `its flat bets up ${u.toLocaleString('en-US')} unit${u === 1 ? '' : 's'}` : 'its flat bets level';
+  return `Stopped early${day ? ` on ${day}` : ''}, ${esc(e.by || 'the owner')}'s call, at ${Number(dec.lines || 0).toLocaleString('en-US')} graded lines: ${scores} and ${bets}. FAIL: its chances are no longer used in the Parlay Builder or Suggested Parlays, and its calls have stopped; the projections stay for reference.`;
+}
+/* the shadow ledger's running numbers, quietly: never a verdict, nor a word of one, before its bar is decided or the
+   trial is stopped early */
 function ppLedger() {
   const lg = S.props && S.props.ledger; if (!lg || !lg.bar) return '';
   const sm = lg.summary || {}, sc = sm.scores, N = lg.bar.lines, dec = lg.decision, fmtN = v => Number(v || 0).toLocaleString('en-US');
-  let s = dec ? `Its bar was decided on ${dayNum(String(dec.decidedAt).slice(0, 10))} at ${fmtN(dec.lines)} lines: ${dec.verdict === 'PASS' ? 'PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial.' : 'FAIL. It stays on trial and suggests nothing, and its calls have stopped.'}`
+  let s = dec && dec.early && dec.verdict === 'FAIL' ? ppEarly(dec) : dec ? `Its bar was decided on ${dayNum(String(dec.decidedAt).slice(0, 10))} at ${fmtN(dec.lines)} lines: ${dec.verdict === 'PASS' ? 'PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial.' : 'FAIL. It stays on trial and suggests nothing, and its calls have stopped.'}`
     : `Shadow ledger: ${fmtN(Math.min(sm.lines || 0, N))} of the ${fmtN(N)} graded lines its bar is judged on are in${sm.gradedGames ? `, from ${fmtN(sm.gradedGames)} game${sm.gradedGames === 1 ? '' : 's'}` : ''}; no verdict before ${fmtN(N)}.`;
   if (sc && sc.model && sc.market) s += ` So far on ${fmtN(sc.lines)} lines, log loss model ${sc.model.logloss.toFixed(4)} · DraftKings ${sc.market.logloss.toFixed(4)}, Brier model ${sc.model.brier.toFixed(4)} · DraftKings ${sc.market.brier.toFixed(4)} (lower is better).`;
   return s;

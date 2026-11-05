@@ -21,7 +21,13 @@
  *     chance, the stat); a game's lines are not exactly its closing lines on players with a call who played; a game
  *     graded is not final, frozen and read; a frozen call that can be graded is left ungraded;
  *   - a verdict is written before the sample is in, is missing once it is, does not follow from the first 30,000
- *     graded lines, or differs from the last commit's;
+ *     graded lines, or differs from the last commit's. The one verdict allowed before the sample is in is the early
+ *     stop's (props_ledger.EARLY_STOP, the owner's call of 5 November 2026): a decision of fewer than bar.lines lines
+ *     passes only with its early exactly EARLY_STOP, FAIL, decided at or after EARLY_STOP.at and not after this check's
+ *     clock (and, when the last commit had no verdict, at the time of the run that wrote it), on every line graded and
+ *     compared by then (no more and no fewer: the run that writes it grades first), and
+ *     its numbers exactly what the bar's own functions give on those first lines (props_ledger.stopEarly, re-worked
+ *     here); and a ledger a run wrote at or after EARLY_STOP.at with no verdict fails;
  *   - the summary does not follow from the calls and the lines;
  *   - the record (data/props_<season>.csv, data/props_reads.json) lost or changed a game the last commit had read.
  * Without --prev-dir the last commit's files are read with git show HEAD:<file> (none there: the first run, held to
@@ -136,11 +142,26 @@ function check({ Lg, lineText, prev, games, boxes, now }) {
     } else if (c.frozen && PL.gradeable(gid, g, boxes, recIdx.reads)) bad.push(`${gid}: final, box score and closing lines in, and left ungraded`);
   }
   /* the verdict */
-  const cmp = PL.compared(rows, recIdx);
-  if (Lg.decision) {
-    const want = PL.decide(cmp, new Date(Lg.decision.decided_at.replace('Z', ':00Z')), Lg.bar);
-    if (JSON.stringify(want) !== JSON.stringify(Lg.decision)) bad.push(`the verdict does not follow from the first ${Lg.bar.lines} graded lines`);
+  const cmp = PL.compared(rows, recIdx), dec = Lg.decision, minute = x => Date.parse(String(x || '').replace(/Z$/, ':00Z'));
+  if (dec && typeof dec.lines === 'number' && dec.lines < Lg.bar.lines) {
+    /* short of the bar's sample: only the early stop's FAIL, exactly as props_ledger.stopEarly writes it, on every line
+       graded and compared by the run that wrote it */
+    const E = PL.EARLY_STOP, decAt = minute(dec.decided_at), gat = x => ((Lg.calls[x.game] || {}).graded || {}).at || '';
+    const byThen = cmp.filter(x => gat(x) <= dec.decided_at).length;
+    if (JSON.stringify(dec.early) !== JSON.stringify({ at: E.at, by: E.by, why: E.why })) bad.push(`a verdict at ${dec.lines} lines, short of the bar's ${Lg.bar.lines}, that is not the early stop's (its early is not props_ledger.EARLY_STOP)`);
+    if (dec.verdict !== 'FAIL') bad.push(`the early stop's verdict is ${dec.verdict}: it can only be FAIL`);
+    if (!(decAt >= Date.parse(E.at))) bad.push(`the early stop decided at ${dec.decided_at}, before its time (${E.at})`);
+    if (decAt > new Date(now).getTime()) bad.push(`the early stop decided at ${dec.decided_at}, after this check's clock (${nowIso})`);
+    /* written by this run (the last commit had no verdict): decided at the run's own time, so no line it graded is left out */
+    if (!(prev && prev.ledger.decision) && dec.decided_at !== Lg.run_at) bad.push(`the early stop decided at ${dec.decided_at}, not the time of the run that wrote it (${Lg.run_at})`);
+    if (dec.lines !== byThen) bad.push(`the early stop on ${dec.lines} lines, ${dec.lines > byThen ? 'more' : 'fewer'} than the ${byThen} graded and compared by ${dec.decided_at}: it is judged on all of them`);
+    const want = PL.stopEarly(cmp.slice(0, dec.lines), new Date(decAt), Lg.bar, E);
+    if (JSON.stringify(want) !== JSON.stringify(dec)) bad.push(`the early stop's verdict does not follow from the first ${dec.lines} graded lines`);
+  } else if (dec) {
+    const want = PL.decide(cmp, new Date(dec.decided_at.replace('Z', ':00Z')), Lg.bar);
+    if (JSON.stringify(want) !== JSON.stringify(dec)) bad.push(`the verdict does not follow from the first ${Lg.bar.lines} graded lines`);
   } else if (cmp.length >= Lg.bar.lines) bad.push(`${Lg.bar.lines} lines are in and no verdict was written`);
+  else if (PL.stopDue(new Date(minute(Lg.run_at)))) bad.push(`the ledger was written at ${Lg.run_at}, at or after the early stop (${PL.EARLY_STOP.at}), and no verdict was written`);
   /* the summary */
   const want = PL.summarize(Lg, rows, recIdx);
   if (JSON.stringify(want) !== JSON.stringify(Lg.summary)) bad.push('the summary does not follow from the calls and the lines');

@@ -312,6 +312,14 @@ function pickemState(games, preds, season, today, calls = readCalls()) {
    measured fair-chance rules, the walk-forward and market tests in brief, and the shadow ledger's running numbers. The
    model is on trial: nothing here is a suggestion, and the page says so */
 const PROPS_BASE = ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'];
+/* the ledger's verdict as the page reads it: when, on how many lines and games, the scores and the flat bets it was
+   judged on, and, for the early stop (props_ledger.EARLY_STOP, the owner's call of 5 November 2026), when it was
+   called, by whom and why */
+function decisionState(d) {
+  const out = { verdict: d.verdict, decidedAt: d.decided_at, lines: d.lines, games: d.games, scores: d.scores || null, flat: d.flat || null };
+  if (d.early) out.early = { at: d.early.at, by: d.early.by, why: d.early.why };
+  return out;
+}
 function propsState(slate, nowIso) {
   const f = path.join(L.ROOT, 'props.json');
   if (!fs.existsSync(f)) return null;
@@ -326,7 +334,7 @@ function propsState(slate, nowIso) {
   }
   const lf = path.join(DATA, 'props_shadow.json');
   const lg = fs.existsSync(lf) ? JSON.parse(fs.readFileSync(lf, 'utf8')) : null;
-  const ledger = lg ? { registered: lg.bar_registered, bar: { lines: lg.bar.lines, passIf: lg.bar.pass_if, otherwise: lg.bar.otherwise, before: lg.bar.before }, decision: lg.decision ? { verdict: lg.decision.verdict, decidedAt: lg.decision.decided_at, lines: lg.decision.lines } : null,
+  const ledger = lg ? { registered: lg.bar_registered, bar: { lines: lg.bar.lines, passIf: lg.bar.pass_if, otherwise: lg.bar.otherwise, before: lg.bar.before }, decision: lg.decision ? decisionState(lg.decision) : null,
     summary: lg.summary ? { standing: lg.summary.standing, gradedGames: lg.summary.graded_games, lines: lg.summary.compared, voids: lg.summary.voids, scores: lg.summary.scores, flat: lg.summary.flat, toCome: lg.summary.to_come } : null } : null;
   const rs = pj.research;
   const research = rs ? { market: (rs.folds.find(x => x.market) || {}).market || null } : null;   // the page shows the archive test
@@ -378,5 +386,5 @@ function reportState(inj) {
   for (const [team, list] of Object.entries((inj && inj.teams) || {})) for (const x of list || []) if (x && x.id) players[x.id] = [team, x.status || '', x.detail || '', x.returns || ''];
   return { date: (inj && inj.date) || null, players };
 }
-module.exports = { propsState, boxesState, corrState, pickemState, offFinals, reportState, PK_MODELS };
+module.exports = { decisionState, propsState, boxesState, corrState, pickemState, offFinals, reportState, PK_MODELS };
 if (require.main === module) main();

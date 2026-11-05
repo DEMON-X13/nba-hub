@@ -23,7 +23,9 @@
  * price the view shows worked out here on its own, the model on trial (its lines reaching the Parlay Builder's Top 50
  * lines marked so),
  * nothing read before a press, nothing stored, a reload, the shadow ledger's running numbers (and the early stop's FAIL,
- * said from made-up decisions' own numbers), and the page's copies of
+ * said from made-up decisions' own numbers), the view on a FAIL (every player line at DraftKings' fair chance, the props
+ * model's small beside it, its tags and note the FAIL's and never "on trial", Game bets and the box's leg as before; on
+ * made-up decisions, the real ledger's and the real state with its lines.json), and the page's copies of
  * tools/props_feed.js and tools/props.js held to their text and results. Section 10 is the rating over time (publish.js
  * THE HISTORY): history.json worked out here on its own from players.json and the published ladders (every point, the
  * changes over 7 and 30 days and this season, today's point the table's rating), the 7d columns, the window a name opens
@@ -484,7 +486,7 @@ async function playerProps() {
      chance ("book N%", est. where it is) and DraftKings' price */
   const rowSays = tr => { const pc = tr.querySelector('.pct'), cf = tr.querySelector('.pp-conf'), fl = tr.querySelector('.pp-fill'), bx = tr.querySelector('input[type=checkbox]');
     return { thr: tr.querySelector('.thr').textContent.trim(), p: pc.dataset.ppP === undefined ? null : +pc.dataset.ppP, pct: pc.textContent.trim(), conf: cf ? cf.className.replace('pp-conf ', '') : null,
-      bar: fl ? fl.style.width : null, fair: tr.querySelector('.fair').textContent.trim(), price: tr.querySelector('.price').textContent.trim(), box: !!bx && bx.closest('label.pp-pick') !== null }; };
+      bar: fl ? fl.style.width : null, fair: (tr.querySelector('.fair') || { textContent: '(no book cell)' }).textContent.trim(), price: tr.querySelector('.price').textContent.trim(), box: !!bx && bx.closest('label.pp-pick') !== null }; };
   const rowWant = (thr, p, fair, est, price) => ({ thr, p, pct: p == null ? '–' : ppPct(p), conf: p == null ? null : confOwn(p), bar: p == null ? null : Math.max(2, p * 100).toFixed(0) + '%',
     fair: fair == null ? '' : `book ${ppPct(fair)}${est ? 'est.' : ''}`, price: ppAm(price), box: true });
   const rowDiff = (tr, want) => { const got = rowSays(tr); return JSON.stringify(got) === JSON.stringify(want) ? null : `${JSON.stringify(got)} want ${JSON.stringify(want)}`; };
@@ -530,7 +532,7 @@ async function playerProps() {
     check(/white-space:nowrap/.test(thr) && /\.pp-rungs \.thr\{[^}]*white-space:normal/.test(m760) && /white-space:nowrap/.test(fair),
       'Over 23.5 and its book chance keep their line on a wide screen (914 among them), as the NFL\'s; on a phone the bet may wrap, as the NFL\'s does');
     check(!/\.pp-rungs \.fair\{[^}]*white-space:normal/.test(m760) && /\.pp-rungs \.fair em\{display:block/.test(m760) && /\.pp-stat h4\{flex-wrap:nowrap\}/.test(m760) && /\.pp-stat h4 em\.mline\{margin-left:8px\}/.test(m760) && /\.pp-rungs td\.pick\{width:36px\}/.test(m760),
-      '"book 29%" keeps its line on a phone (its est. on a small line under it), and "book line" follows "projected" in the heading, as the NFL\'s (its h4 does not wrap; the box cell narrower, the NFL\'s 34px)');
+      '"book 29%" keeps its line on a phone (its est. on a small line under it), and "DraftKings line" follows "projected" in the heading, as the NFL\'s (its h4 does not wrap; the box cell narrower, the NFL\'s 34px)');
     check(/font-size:15px/.test(pct) && /\.pp-rungs td\{font-size:13px\}/.test(m900) && /\.pp-rungs \.pct\{[^}]*font-size:14px/.test(m760), "the NFL's type in the rows: the percentage 15px (14px on a phone) and the cells 13px from 900px down");
     check(arrow && !/line-height/.test(arrow), "the chevron's line box is the NFL's (inherited, not 1), so a closed row is its 52px");
     check(/#ppSheet\{[^}]*scroll-padding-bottom:96px/.test(css8) && /#ppSheet\{scroll-padding-top:76px\}/.test(m620), 'a control the focus moves to is kept clear of the sticky foot bar (and on a phone of the sticky top bar)');
@@ -553,8 +555,8 @@ async function playerProps() {
     check(leadOk, "its biggest projections are the props model's top projected player in the game for points, rebounds and assists, short name and value");
     check(/Model on trial/.test(hd.querySelector('.lead-c .pp-ghl').textContent) && hd.querySelector('.pp-trialtag'), 'and it keeps the Model on trial tag');
     check(hd.querySelector('[data-pp-score] b').textContent === `${Math.round((m.total + m.spread) / 2)} – ${Math.round((m.total - m.spread) / 2)}` && hd.querySelector('[data-pp-score] small').textContent === 'BOS / DET'
-      && hd.querySelector('[data-pp-totpts] b').textContent === String(Math.round(m.total)) && hd.querySelector('[data-pp-vegas] .pill').textContent === fav && hd.querySelector('[data-pp-vegas] small').textContent === `by ${Math.abs(p1.line)}`,
-      `the expected score is the board model's, its total split by its spread (${hd.querySelector('[data-pp-score] b').textContent}), its total (${hd.querySelector('[data-pp-totpts] b').textContent}), and Vegas's pick the line's favourite by its number`);
+      && hd.querySelector('[data-pp-totpts] b').textContent === String(Math.round(m.total)) && hd.querySelector('[data-pp-totpts] small').textContent === 'points' && hd.querySelector('[data-pp-vegas] .pill').textContent === fav && hd.querySelector('[data-pp-vegas] small').textContent === `by ${Math.abs(p1.line)}`,
+      `the expected score is the board model's, its total split by its spread (${hd.querySelector('[data-pp-score] b').textContent}), its total (${hd.querySelector('[data-pp-totpts] b').textContent}, "points" under it, the NFL's word), and Vegas's pick the line's favourite by its number`);
     check(hd.querySelector('[data-pp-vegas] [data-pp-vegas-src="board"]') && hd.querySelector('[data-pp-vegas] [data-pp-vegas-src="board"]').textContent === "the board's line",
       "with no DraftKings line read, Vegas's pick is the board's line and says so, so it never reads as the DraftKings line Game bets lacks"); }
   let bt = body().textContent;
@@ -592,7 +594,7 @@ async function playerProps() {
   { const r0 = rowsNow()[0], pid = r0.dataset.ppPlayer, P = bosDet.players[pid], b = r0.querySelector('.pp-plrbtn'), pb = body().querySelector(`[data-pp-body="${pid}"]`);
     const heads = [...pb.querySelectorAll('[data-pp-stat]')].map(x => x.dataset.ppStat);
     const muBad = ORDER_OWN.filter(k => { const h = pb.querySelector(`[data-pp-stat="${k}"] h4`); return !h || h.firstChild.textContent.trim() !== NAMES_OWN[k] || +h.querySelector('[data-pp-mu]').dataset.ppMu !== muOf(P, k) || h.querySelector('[data-pp-mu]').textContent !== `projected ${num1(muOf(P, k))}`; });
-    const ynBad = ['dd', 'td'].filter(k => { const h = pb.querySelector(`[data-pp-stat="${k}"] h4`); return !h || h.querySelector('[data-pp-mu]').textContent !== `projected ${ppPct(at8(P, k))}`; });
+    const ynBad = ['dd', 'td'].filter(k => { const h = pb.querySelector(`[data-pp-stat="${k}"] h4`); return !h || (h.querySelector('[data-pp-mu]') || {}).textContent !== `projected ${ppPct(at8(P, k))}`; });
     check(b.getAttribute('aria-expanded') === 'true' && b.getAttribute('aria-controls') === `ppPb-${pid}` && r0.classList.contains('open') && pb && pb.id === `ppPb-${pid}` && d.activeElement === d.querySelector(`[data-pp-open="${pid}"]`),
       'a tap opens the row: aria-expanded, its body under it (the one it controls), the focus kept on it');
     check(JSON.stringify(heads) === JSON.stringify(ORDER_OWN.concat(['dd', 'td'])) && !muBad.length && !ynBad.length,
@@ -751,7 +753,7 @@ async function playerProps() {
       const trs = blockRows(pid, m.stat).filter(tr => tr.classList.contains('mainline')), h4 = body().querySelector(`[data-pp-body="${pid}"] [data-pp-stat="${m.stat}"] h4`); nLines++;
       const fo = PF.propFairOver(m.over, m.under), pO = r ? PJ.pOver(m.line, muOf(r, m.stat), PJ.nbVar(muOf(r, m.stat), props8.dist.var[m.stat])) : null;
       const bad = trs.length !== 2 ? `${trs.length} rows` : rowDiff(trs[0], rowWant(`Over ${m.line}`, pO, fo, false, m.over)) || rowDiff(trs[1], rowWant(`Under ${m.line}`, pO == null ? null : 1 - pO, 1 - fo, false, m.under));
-      if (bad || h4.querySelector('.mline').textContent !== `book line ${m.line}`) lineBad.push(`${pid} ${m.stat}: ${bad || h4.textContent}`);
+      if (bad || h4.querySelector('.mline').textContent !== `DraftKings line ${m.line}`) lineBad.push(`${pid} ${m.stat}: ${bad || h4.textContent}`);
       if (h4.querySelector('.pb-trial')) trialBad.push(`${pid} ${m.stat}: a heading's own mark`);
     }
     { const pb = body().querySelector(`[data-pp-body="${pid}"]`), mk = pb.querySelectorAll('.pb-trial');
@@ -769,10 +771,10 @@ async function playerProps() {
     for (const y of parsed1.yes.filter(x => x.player === pid)) {
       const trs = blockRows(pid, y.market), fy = PF.propFairRung(y.price, fair8.yes.a[y.market]);
       const bad = trs.length !== 1 ? `${trs.length} rows` : rowDiff(trs[0], rowWant('Gets one', r ? at8(r, y.market) : null, fy, true, y.price));
-      if (bad || !/never measured on this market itself/.test(trs[0].querySelector('.fair').title) || !/read it as high/.test(trs[0].querySelector('.fair').title)) yesBad.push(`${pid} ${y.market}: ${bad || 'title'}`);
+      if (bad || !/never measured on this market itself/.test((trs[0].querySelector('.fair') || {}).title) || !/read it as high/.test((trs[0].querySelector('.fair') || {}).title)) yesBad.push(`${pid} ${y.market}: ${bad || 'title'}`);
     }
   }
-  check(nLines === nMain1 && !lineBad.length, `each of the ${nLines} main lines is its stat block's two rows, Over and Under: the box, the bet, the model's chance (tools/props.js's distribution on the published projection) as its bar, percentage and the NFL's band, "book N%" DraftKings' fair chance (the whole margin on the Over), and DraftKings' price; the heading "book line N"${lineBad.length ? ': ' + lineBad.slice(0, 3).join('; ') : ''}`);
+  check(nLines === nMain1 && !lineBad.length, `each of the ${nLines} main lines is its stat block's two rows, Over and Under: the box, the bet, the model's chance (tools/props.js's distribution on the published projection) as its bar, percentage and the NFL's band, "book N%" DraftKings' fair chance (the whole margin on the Over), and DraftKings' price; the heading "DraftKings line N", the NFL's words${lineBad.length ? ': ' + lineBad.slice(0, 3).join('; ') : ''}`);
   check(!trialBad.length, `each projected player's body, its lines' chances and his double- and triple-double's, opens on one quiet "on trial" line titled as the Parlay Builder's, and no heading carries one; a player with no projection none${trialBad.length ? ': ' + trialBad.slice(0, 3).join('; ') : ''}`);
   check(nRungs === parsed1.ladders.length && !rungBad.length, `with Milestones on, each of the ${nRungs} milestone prices is a row under its stat: k+, the model's chance of reaching it, DraftKings' fair chance est. (the rung rule on the measured margin) and its price${rungBad.length ? ': ' + rungBad.slice(0, 3).join('; ') : ''}`);
   check(mono && nRungs > 0, "the model's chance of each ladder falls as the rung rises");
@@ -988,7 +990,7 @@ async function playerProps() {
     `before the bar, the props sheet gives the running numbers, model against DraftKings ("${lt.slice(-190)}")`);
   check(!/PASS|FAIL|pass|fail/.test(lt + tt), 'and no verdict, nor a word of one');
   [lt] = await ledgerText(lgOf({ lines: 30000, gradedGames: 260, scores }, { verdict: 'FAIL', decidedAt: '2026-11-25T12:00Z', lines: 30000 }));
-  check(/decided on Nov 25 at 30,000 lines: FAIL\. It stays on trial and suggests nothing/.test(lt), `a FAIL is said, and the model stays on trial ("${lt.slice(-140)}")`);
+  check(/decided on Nov 25 at 30,000 lines: FAIL\. Its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested Parlays, and its calls have stopped; the projections stay for reference\./.test(lt) && !/on trial/i.test(lt), `a FAIL is said, and the model is no longer called on trial ("${lt.slice(-140)}")`);
   [lt] = await ledgerText(lgOf({ lines: 30000, gradedGames: 260, scores }, { verdict: 'PASS', decidedAt: '2026-11-25T12:00Z', lines: 30000 }));
   check(/PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial/.test(lt), 'a PASS moves nothing by itself: the model stays on trial');
   /* the early stop (tools/props_ledger.js EARLY_STOP, the owner's call of 5 November 2026), on made-up decisions in the
@@ -1005,6 +1007,217 @@ async function playerProps() {
   [lt] = await ledgerText(lgOf({ lines: 4567, gradedGames: 45, scores: { ...scores, lines: 4567 } }, earlyOf(4567, -0.0042, 0.0011, 0, 0)));
   check(lt.includes('at 4,567 graded lines: behind DraftKings on Brier and no flat bets at its edge. FAIL:'), 'one score behind and no bet at the edge are said so');
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+
+  /* the props model's FAIL (README "Player props", "What a FAIL changes"): once the ledger's decision is a FAIL
+     (pbPropsOn false: the early stop of 5 November 2026, or the bar's own), every player line in the view is drawn at
+     DraftKings' fair chance (its bar, percentage and band; est. where one-sided; none where there is no fair chance), the
+     props model's chance small and muted beside it ("props model 61%"), titled with why it is not used; the tags and the
+     folded note say it failed, never "on trial", and nothing says a list or set takes a player's line; Game bets and the
+     box's leg are as before. Before a FAIL the same code draws the trial's view. Held here on made-up decisions (none, a
+     PASS, an early FAIL with one stat's milestone margin taken away, a full-bar FAIL) and the real ledger's own, each
+     number worked out on its own from tools/props_feed.js's fair-chance rule and tools/props.js's distribution, on the
+     job's published lines (lines.json) for this file's own game, so it holds at any hour and in the off-season */
+  { const T0 = new Date(Date.now() - 2 * 3600e3).toISOString(), PA = PF.propParse(p1Items), rowsP = props8.games[p1.id].players;
+    const pubF = { v: 1, at: T0, games: { [p1.id]: { at: T0, espn: '401909088', ml: { home: -150, away: 130 }, spread: { line: -3.5, home: -108, away: -112 }, total: { line: 219.5, over: -110, under: -110 },
+      props: { at: T0, mains: PA.mains, ladders: PA.ladders, yes: PA.yes } } } };
+    JSONS = [[/lines\.json/, pubF]];
+    const MONTHS_OWN = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    const dayOwn = iso => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(String(iso || '')); return m && +m[2] >= 1 && +m[2] <= 12 ? `${+m[3]} ${MONTHS_OWN[+m[2] - 1]} ${m[1]}` : ''; };
+    const fmtN = v => Number(v || 0).toLocaleString('en-US');
+    /* this file's own words for the FAIL, from the decision: why the model's chances are not used, the tags' and the
+       muted chance's titles, and the note (the early stop's sentence from its own numbers, or the bar's) */
+    const offOwn = dec => dec.early ? `the props model’s trial was stopped early as a FAIL${dayOwn(dec.early.at) ? ' on ' + dayOwn(dec.early.at) : ''}` : 'the props model failed its shadow ledger’s bar';
+    const cap = t => t[0].toUpperCase() + t.slice(1);
+    const tagTitleOwn = dec => `${cap(offOwn(dec))}${dec.early ? ', the owner’s call' : ''}: it was not shown to beat DraftKings’ closing lines, so the chances in this view are DraftKings’ fair chances, and its projections and its own chances are shown for reference only`;
+    const mdlTitleOwn = dec => `${cap(offOwn(dec))}${dec.early ? ', the owner’s call: it was not shown to beat DraftKings’ closing lines' : ' against DraftKings’ closing lines'}, so this chance is the model’s, for reference only, and no list or set takes it`;
+    const noteOwn = (dec, sm) => {
+      const tail = "its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested Parlays, and its calls have stopped; the projections stay for reference.";
+      let s;
+      if (dec.early) { const sc = dec.scores || {}, fl = dec.flat && dec.flat.all, bh = [sc.logloss_diff > 0 && 'log loss', sc.brier_diff > 0 && 'Brier'].filter(Boolean), u = fl ? Math.round(Math.abs(fl.units)) : 0;
+        const bets = !fl || !fl.bets ? 'no flat bets at its edge' : fl.units === 0 ? 'its flat bets level' : `its flat bets ${fl.units < 0 ? 'down' : 'up'} ${fmtN(u)} unit${u === 1 ? '' : 's'}`;
+        s = `Stopped early on ${dayOwn(dec.early.at || dec.decidedAt)}, ${dec.early.by || 'the owner'}'s call, at ${fmtN(dec.lines)} graded lines: ${bh.length === 2 ? 'behind DraftKings on both scores' : bh.length ? 'behind DraftKings on ' + bh[0] : 'not ahead of DraftKings on both scores'} and ${bets}. FAIL: ${tail}`; }
+      else s = `Its bar was decided on ${new Date(String(dec.decidedAt).slice(0, 10) + 'T12:00:00Z').toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })} at ${fmtN(dec.lines)} lines: FAIL. ${tail[0].toUpperCase() + tail.slice(1)}`;
+      const sc = sm && sm.scores; if (sc && sc.model && sc.market) s += ` So far on ${fmtN(sc.lines)} lines, log loss model ${sc.model.logloss.toFixed(4)} · DraftKings ${sc.market.logloss.toFixed(4)}, Brier model ${sc.model.brier.toFixed(4)} · DraftKings ${sc.market.brier.toFixed(4)} (lower is better).`;
+      return s; };
+    const FAIL_TAG = 'Props model: failed trial', FAIL_SUM = "The props model failed its trial against DraftKings: the chances here are DraftKings' own, its projections for reference";
+    const FAIL_LINE = "His chances here are DraftKings' fair chances; the props model's own, small beside them, are for reference.";
+    const FAIL_HOW = "Under each player, each DraftKings line's bar, percentage and band are DraftKings' fair chance of it, its prices with the book's margin taken out (all of it on the Over, the way that scored best on DraftKings' archived closing lines), est. where DraftKings gives one price. Each stat's heading keeps the props model's projection, and its own chance of each line is shown small beside DraftKings', for reference only. Ticking a line's box here puts that leg in your own parlay in the Parlay Builder, at DraftKings' price.";
+    /* one FAIL row as drawn, and what it must be: the bet, DraftKings' fair chance (bar, percentage, band; its est.; the
+       hidden words that name it; "no DraftKings chance" where there is none), the props model's muted chance and its
+       title, no "book" cell and no model percentage of its own, DraftKings' price */
+    const failSays = tr => { const pc = tr.querySelector('.pct'), cf = tr.querySelector('.pp-conf'), fl = tr.querySelector('.pp-fill'), md = tr.querySelector('td.mdl');
+      return { thr: tr.querySelector('.thr').textContent.trim(), dk: pc.dataset.ppDk ? +pc.dataset.ppDk : null, pct: [...pc.childNodes].filter(x => x.nodeType === 3).map(x => x.textContent).join('').trim(),
+        est: !!pc.querySelector('em') && pc.querySelector('em').textContent === 'est.', sr: (pc.querySelector('.sr') || {}).textContent || '', conf: cf ? cf.className.replace('pp-conf ', '') : null,
+        nodk: (tr.querySelector('[data-pp-nodk]') || {}).textContent || '', bar: fl ? fl.style.width : null, mdl: md ? md.textContent.replace(/\s+/g, ' ').trim() : null,
+        mp: md && md.dataset.ppMdl !== undefined ? +md.dataset.ppMdl : null, mt: md ? md.title : null, fair: !!tr.querySelector('.fair'), p: pc.dataset.ppP === undefined ? null : +pc.dataset.ppP, price: tr.querySelector('.price').textContent.trim() }; };
+    const failWant = (thr, f, est, p, price, mt) => ({ thr, dk: f == null ? null : f, pct: f == null ? '–' : ppPct(f), est: f != null && est, sr: f == null ? '' : `DraftKings' fair chance${est ? ', est.' : ''}: `,
+      conf: f == null ? null : confOwn(f), nodk: f == null ? 'no DraftKings chance' : '', bar: f == null ? null : Math.max(2, f * 100).toFixed(0) + '%', mdl: p == null ? '' : `props model ${ppPct(p)}`,
+      mp: p == null ? null : p, mt: p == null ? '' : mt, fair: false, p: null, price: ppAm(price) });
+    const failDiff = (tr, want) => { const got = failSays(tr); return JSON.stringify(got) === JSON.stringify(want) ? null : `${JSON.stringify(got)} want ${JSON.stringify(want)}`; };
+    /* every text a reader or a screen reader meets in the sheet: its words, every title and every name */
+    const sheetWords = () => { const sh = d.getElementById('ppSheet'); return [sh.textContent].concat([...sh.querySelectorAll('[title],[aria-label]')].map(el => `${el.getAttribute('title') || ''} ${el.getAttribute('aria-label') || ''}`)).join(' \n '); };
+    const TAKES = /Top 50 lines take|\btakes? (a|its|their) player|\btake its lines/i;
+    /* a state of this file's own with the ledger's decision set, the milestones' margin of one stat taken away where asked */
+    const stOf = (decision, summary, dropRung) => { const fair = JSON.parse(JSON.stringify(props8.fair)); if (dropRung) delete fair.rung.a[dropRung];
+      return { ...st8, props: { ...props8, fair, ledger: { ...props8.ledger, summary: { ...props8.ledger.summary, ...(summary || {}) }, decision } } }; };
+    const openAll = async () => { ({ w, errors } = load('index.html', st)); await sleep(300); d = w.document;
+      cardBtn(p1).click(); await sleep(60); for (let i = 0; i < 40 && !w.eval('!!LINES'); i++) await sleep(20);
+      const sw = d.getElementById('ppRungs'); if (!sw.checked) { sw.click(); await sleep(20); } };
+    let st = null;
+    /* the FAIL view, held whole: every player DraftKings lines, every row and heading, the tags, the note, the words */
+    const holdFail = async (name, dec, sm, dropRung) => {
+      const mt = mdlTitleOwn(dec), fair = JSON.parse(JSON.stringify(props8.fair)); if (dropRung) delete fair.rung.a[dropRung];
+      check(w.eval('pbPropsOn()') === false && w.eval('ppFail()') === true, `${name}: the page's own rule reads the decision as a FAIL (pbPropsOn false), and the view draws the FAIL's`);
+      const hd = body().querySelector('[data-pp-head]'), tg = hd && hd.querySelector('[data-pp-failtag]');
+      check(tg && tg.textContent === FAIL_TAG && tg.title === tagTitleOwn(dec) && !/on trial/i.test(hd.querySelector('.lead-c .pp-ghl').textContent),
+        `${name}: the head card's tag reads "${FAIL_TAG}", titled with why ("${tg && tg.title.slice(0, 90)}…")`);
+      const tr = body().querySelector('[data-pp-head] + details[data-pp-trial][data-pp-fail]'), ps = tr ? [...tr.querySelectorAll('p')].map(p => p.textContent) : [];
+      check(tr && !tr.open && tr.querySelector('summary').textContent === FAIL_SUM && tr.querySelector('summary').getAttribute('data-pp-key') === 'trial' && ps[0] === noteOwn(dec, sm) && tr.querySelector('p[data-pp-failnote]') === tr.querySelector('p') && ps[1] === FAIL_HOW,
+        `${name}: the folded note after the head card is the FAIL's, word for word: its summary, then the decision's own sentence ("${(ps[0] || '').slice(0, 150)}…"), then what the view shows${ps[0] !== noteOwn(dec, sm) ? ` | want "${noteOwn(dec, sm).slice(0, 200)}"` : ''}`);
+      const lined = [...new Set(PA.mains.concat(PA.ladders, PA.yes).map(m => m.player).concat(Object.keys(rowsP)))];
+      let bad = [], nRow = 0, nNo = 0, nEst = 0, nMd = 0, nNoMd = 0, hBad = [], lnBad = [];
+      for (const pid of lined) {
+        openRow(pid); await sleep(5);
+        const r = rowsP[pid], pb = body().querySelector(`[data-pp-body="${pid}"]`); if (!pb) { bad.push(`${pid}: no body`); continue; }
+        { const fl = pb.querySelector('[data-pp-failln]'), mk = pb.querySelectorAll('.pb-trial');
+          if (r ? !(fl && pb.firstElementChild === fl && mk.length === 1 && fl.contains(mk[0]) && mk[0].textContent === FAIL_TAG && mk[0].title === tagTitleOwn(dec) && fl.querySelector('span').textContent === FAIL_LINE) : (mk.length || fl))
+            lnBad.push(`${pid}: ${fl ? fl.textContent : 'no line'}`); }
+        for (const m of PA.mains.filter(x => x.player === pid)) {
+          const trs = blockRows(pid, m.stat).filter(t => t.classList.contains('mainline')), h4 = body().querySelector(`[data-pp-body="${pid}"] [data-pp-stat="${m.stat}"] h4`);
+          const fo = PF.propFairOver(m.over, m.under), pO = r ? PJ.pOver(m.line, muOf(r, m.stat), PJ.nbVar(muOf(r, m.stat), props8.dist.var[m.stat])) : null;
+          const b = trs.length !== 2 ? `${trs.length} rows` : failDiff(trs[0], failWant(`Over ${m.line}`, fo, false, pO, m.over, mt)) || failDiff(trs[1], failWant(`Under ${m.line}`, 1 - fo, false, pO == null ? null : 1 - pO, m.under, mt));
+          nRow += 2; if (b) bad.push(`${pid} ${m.stat}: ${b}`);
+          const mu = h4 && h4.querySelector('[data-pp-mu]');
+          if (!h4 || h4.querySelector('.mline').textContent !== `DraftKings line ${m.line}` || (r ? !(mu && +mu.dataset.ppMu === muOf(r, m.stat) && mu.textContent === `projected ${num1(muOf(r, m.stat))}`) : mu) || h4.querySelector('.pp-mdl, .pb-trial'))
+            hBad.push(`${pid} ${m.stat}: ${h4 && h4.textContent}`);
+        }
+        if (r) for (const s of ORDER_OWN) { if (PA.mains.some(x => x.player === pid && x.stat === s)) continue;
+          const h4 = body().querySelector(`[data-pp-body="${pid}"] [data-pp-stat="${s}"] h4`), mu = h4 && h4.querySelector('[data-pp-mu]');
+          if (!mu || +mu.dataset.ppMu !== muOf(r, s) || mu.textContent !== `projected ${num1(muOf(r, s))}` || h4.querySelector('.mline, .pp-mdl, .pb-trial')) hBad.push(`${pid} ${s}: ${h4 && h4.textContent}`); }
+        for (const s of PF.PROP_STATS) {
+          const want = PA.ladders.filter(l => l.player === pid && l.stat === s); if (!want.length) continue;
+          const trs = blockRows(pid, s).filter(t => t.classList.contains('rung'));
+          if (trs.length !== want.length) { bad.push(`${pid} ${s}: ${trs.length} rungs for ${want.length}`); continue; }
+          trs.forEach((t, i) => { const l = want[i], f = PF.propFairRung(l.price, fair.rung.a[s]), pm = r ? PJ.nbSf(l.k, muOf(r, s), PJ.nbVar(muOf(r, s), props8.dist.var[s])) : null; nRow++;
+            if (f == null) nNo++; else nEst++;
+            const b = failDiff(t, failWant(`${l.k}+`, f, true, pm, l.price, mt)); if (b) bad.push(`${pid} ${s} ${l.k}+: ${b}`); });
+        }
+        for (const k of ['dd', 'td']) {
+          const y = PA.yes.find(v => v.player === pid && v.market === k), h4 = body().querySelector(`[data-pp-body="${pid}"] [data-pp-stat="${k}"] h4`), trs = blockRows(pid, k);
+          if (!h4) { if (r || y) hBad.push(`${pid} ${k}: no block`); continue; }
+          const pk = r ? at8(r, k) : null, em = h4.querySelector('.pp-mdl');
+          if (y) { const f = PF.propFairRung(y.price, fair.yes.a[k]); nRow++; nEst++; const b = trs.length !== 1 ? `${trs.length} rows` : failDiff(trs[0], failWant('Gets one', f, true, pk, y.price, mt)); if (b) bad.push(`${pid} ${k}: ${b}`);
+            if (em || h4.querySelector('[data-pp-mu]')) hBad.push(`${pid} ${k}: the heading carries a chance beside the row's (${h4.textContent})`); }
+          else if (r) { nNoMd++; if (!(em && em.textContent === `props model ${ppPct(pk)}` && +em.dataset.ppMdl === pk && em.title === mt && !h4.querySelector('[data-pp-mu]')) || trs.length || !body().querySelector(`[data-pp-body="${pid}"] [data-pp-stat="${k}"] [data-pp-noline]`)) hBad.push(`${pid} ${k}: ${h4.textContent}`); }
+          else if (em) hBad.push(`${pid} ${k}: a muted chance with no projection`);
+        }
+        nMd += [...pb.querySelectorAll('td.mdl[data-pp-mdl]')].length;
+      }
+      check(nRow > 20 && !bad.length, `${name}: each of the ${nRow} player rows is drawn at DraftKings' fair chance (the whole margin on the Over; a milestone's and a Yes price's est., said so), its bar, percentage and the NFL's band, with the props model's chance beside it small and muted ("props model 61%"), titled with why it is not used, and DraftKings' price; no "book" cell and no model percentage of its own${bad.length ? ': ' + bad.slice(0, 2).join('; ') : ''}`);
+      check(nMd > 0 && nEst > 0 && !lnBad.length, `${name}: each projected player's body opens on one line that his chances here are DraftKings', the props model's own small beside them, under the "${FAIL_TAG}" mark titled with why (${nMd} muted chances, ${nEst} est.)${lnBad.length ? ': ' + lnBad.slice(0, 2).join('; ') : ''}`);
+      check(!hBad.length && nNoMd > 0, `${name}: each heading keeps the projection ("projected 21.0", the props model's mean) and "DraftKings line 21.5", the NFL's words; a double- or triple-double DraftKings has not priced carries the model's chance in its heading, small and muted, with "No DraftKings line yet." (${nNoMd}), and one it has priced carries none there${hBad.length ? ': ' + hBad.slice(0, 2).join('; ') : ''}`);
+      if (dropRung) check(nNo > 0, `${name}: a milestone with no fair chance (this state's ${dropRung} margin taken away) shows no chance, a dash and "no DraftKings chance", its bar empty, the props model's beside it still (${nNo})`);
+      const words = sheetWords();
+      check(!/on trial/i.test(words) && !TAKES.test(words), `${name}: no word, title or name in the view says "on trial", nor that a list or set takes a player's line${/on trial/i.test(words) ? ` ("${words.slice(Math.max(0, words.search(/on trial/i) - 80), words.search(/on trial/i) + 20)}")` : TAKES.test(words) ? ` ("${(TAKES.exec(words) || [''])[0]}")` : ''}`);
+      /* Game bets: the board model's and DraftKings' as before, the Parlay Builder's own chances for the same legs */
+      const gb = [...body().querySelectorAll('[data-pp-gbets] tr[data-pp-leg]')];
+      const pbl = JSON.parse(w.eval(`JSON.stringify(pbPriced([S.slate.find(g => g.id === ${JSON.stringify(p1.id)})]).concat(pbTotals(S.slate.find(g => g.id === ${JSON.stringify(p1.id)}))).filter(l => l.kind !== 'prop').map(l => [l.sk, l.p, legFair(l)]))`));
+      const byKey = new Map(pbl.map(x => [x[0], x])), gbBad = gb.filter(t => { const x = byKey.get(t.dataset.ppLeg), s = rowSays(t); return !x || s.p !== x[1] || s.fair !== `book ${ppPct(x[2].p)}` || t.querySelector('td.mdl'); });
+      check(gb.length === 6 && pbl.length === 6 && !gbBad.length, `${name}: Game bets are as before, the board model's chances and "book N%" beside them, the Parlay Builder's own for the same legs${gbBad.length ? ': ' + gbBad.map(t => t.dataset.ppLeg).join(', ') : ''}`);
+      check(!banned(body().textContent.replace('no flat bets at its edge', '')), `${name}: the view says neither "edge", "model says" nor "value" on a prop`);
+      check(errors.length === 0, `${name}: nothing thrown${errors.length ? ': ' + errors.join(' | ') : ''}`);
+    };
+    /* the box's leg: exactly the trial's, whichever view draws it (the Parlay Builder prices a hand-added leg) */
+    const tick = async key => { const b = body().querySelector(`[data-pp-leg="${CSS_ESC(key)}"] input[data-sg-add]`); const leg = w.eval(`JSON.stringify(PP_OFFER[${b.dataset.sgAdd}])`);
+      b.click(); await sleep(20); return { leg, slip: w.eval('JSON.stringify(M.slip.legs)'), said: d.getElementById('ppSlipSt').textContent, on: body().querySelector(`[data-pp-leg="${CSS_ESC(key)}"] input[data-sg-add]`).checked }; };
+    const CSS_ESC = v => String(v).replace(/["\\]/g, '\\$&');
+    const tat = PA.mains.find(m => m.player === '4065648' && m.stat === 'pts'), tatKey = [p1.id, 'prop', '4065648', 'pts', 'main', tat.line, 'over'].join('|');
+    const rung1 = PA.ladders.find(l => l.player === '4065648' && l.stat !== 'pts'), rungKey = [p1.id, 'prop', '4065648', rung1.stat, 'mile', rung1.k, 'yes'].join('|');
+
+    /* no decision: the trial's view, drawn by the same code (pbPropsOn true) */
+    st = stOf(null); await openAll();
+    check(w.eval('pbPropsOn()') === true && w.eval('ppFail()') === false && body().querySelector('.pp-trialtag') && /Model on trial/.test(body().querySelector('.lead-c .pp-ghl').textContent) && !body().querySelector('[data-pp-failtag], [data-pp-fail], td.mdl, .pp-mdl')
+      && body().querySelector('details[data-pp-trial] summary').textContent === 'The props model is on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show',
+      'with no decision (the trial running) the view is the trial\'s: Model on trial, its on-trial note, no muted chance and no FAIL mark');
+    openRow('4065648'); await sleep(5);
+    const trialRows = [...body().querySelectorAll('[data-pp-body="4065648"] tr[data-pp-leg]')].map(t => t.dataset.ppLeg);
+    { const trs = blockRows('4065648', 'pts').filter(t => t.classList.contains('mainline')), r = rowsP['4065648'];
+      const fo = PF.propFairOver(tat.over, tat.under), pO = PJ.pOver(tat.line, muOf(r, 'pts'), PJ.nbVar(muOf(r, 'pts'), props8.dist.var.pts));
+      check(trs.length === 2 && !rowDiff(trs[0], rowWant(`Over ${tat.line}`, pO, fo, false, tat.over)) && !rowDiff(trs[1], rowWant(`Under ${tat.line}`, 1 - pO, 1 - fo, false, tat.under))
+        && body().querySelector('[data-pp-body="4065648"] [data-pp-trialln] .pb-trial').textContent === 'on trial' && body().querySelector('[data-pp-body="4065648"] [data-pp-stat="pts"] .mline').textContent === `DraftKings line ${tat.line}`,
+        `and its rows are the trial's: the props model's chance as bar, percentage and band, "book N%" beside it, on the published lines; the heading "DraftKings line ${tat.line}", the NFL's words`); }
+    const tickTrial = await tick(tatKey); const tickTrialR = await tick(rungKey);
+    check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
+    /* a PASS moves nothing by itself: still the trial's view */
+    st = stOf({ verdict: 'PASS', decidedAt: '2026-11-25T12:00Z', lines: 30000 }); await openAll();
+    check(w.eval('pbPropsOn()') === true && body().querySelector('.pp-trialtag') && !body().querySelector('[data-pp-failtag], [data-pp-fail]'), 'a PASS draws the trial\'s view, Model on trial, no FAIL mark');
+    /* an early FAIL, its words from made-up numbers, with the points milestones' margin taken away */
+    const PLy = require('./props_ledger'), earlyMk = { at: PLy.EARLY_STOP.at, by: PLy.EARLY_STOP.by, why: PLy.EARLY_STOP.why };
+    const decE = { verdict: 'FAIL', decidedAt: '2026-11-05T18:30Z', lines: 4567, games: 45, scores: { lines: 4567, logloss_diff: 0.0042, brier_diff: -0.0011 }, flat: { edge: 0.03, all: { bets: 300, won: 150, units: 12.4 } }, early: earlyMk };
+    const smE = { lines: 4567, gradedGames: 45, scores: { lines: 4567, model: { logloss: 0.6901, brier: 0.2481 }, market: { logloss: 0.6859, brier: 0.2465 } } };
+    st = stOf(decE, smE, 'pts'); await openAll();
+    await holdFail('an early FAIL', decE, { ...props8.ledger.summary, ...smE }, 'pts');
+    { openRow('4065648'); await sleep(5); const keys = [...body().querySelectorAll('[data-pp-body="4065648"] tr[data-pp-leg]')].map(t => t.dataset.ppLeg);
+      check(trialRows.length > 2 && JSON.stringify(keys) === JSON.stringify(trialRows), `the FAIL's view offers Tatum the very lines the trial's does, in its order (${keys.length})`); }
+    { const a = await tick(tatKey), b = await tick(rungKey);
+      check(a.leg === tickTrial.leg && a.slip === tickTrial.slip && a.said === tickTrial.said && a.on && tickTrial.on && b.leg === tickTrialR.leg && b.slip === tickTrialR.slip && b.said === tickTrialR.said && b.on === tickTrialR.on,
+        `ticking a FAIL row's box puts in your parlay exactly the leg the trial's view put in, at DraftKings' price and the read's time, and says so the same ("${a.said}" / "${b.said}")`); }
+    /* a full-bar FAIL (no early stop): the bar's own words */
+    const decB = { verdict: 'FAIL', decidedAt: '2026-11-25T12:00Z', lines: 30000 };
+    const smB = { lines: 30000, gradedGames: 260, scores: { lines: 30000, model: { logloss: 0.69, brier: 0.249 }, market: { logloss: 0.68, brier: 0.244 } } };
+    st = stOf(decB, smB); await openAll();
+    await holdFail('a full-bar FAIL', decB, { ...props8.ledger.summary, ...smB });
+    /* the real ledger, its own decision and numbers, on this file's game */
+    const RL = RP.ledger || LEDGER0;
+    st = { ...st8, props: { ...props8, ledger: RL } }; await openAll();
+    if (RL.decision && RL.decision.verdict === 'FAIL') await holdFail('the real ledger', RL.decision, RL.summary);
+    else check(w.eval('pbPropsOn()') === true && body().querySelector('.pp-trialtag') && !body().querySelector('[data-pp-fail]'), "the real ledger has no FAIL: the trial's view");
+    /* the real state and the job's real lines.json: with the real ledger's FAIL (the early stop of 5 November 2026) every
+       game the props model projects that is still to come opens on the FAIL's view, and every player line DraftKings has
+       posted for it is drawn at its fair chance with the props model's beside it, worked out here from the real
+       projections, prices and fair-chance rules (a stat whose milestones have no measured margin: no chance, said so).
+       With no game to come (late at night, the off-season) there is nothing to hold */
+    { const RD = RL.decision, realFail = !!(RD && RD.verdict === 'FAIL');
+      let LJ = null; try { LJ = JSON.parse(fs.readFileSync(path.join(ROOT, 'lines.json'), 'utf8')); } catch (e) { LJ = null; }
+      JSONS = LJ ? [[/lines\.json/, LJ]] : [];
+      ({ w, errors } = load('index.html', real)); await sleep(300); d = w.document;
+      w.eval('pbLinesLoad()'); for (let i = 0; i < 60 && !w.eval('!!LINES || LINES_ERR'); i++) await sleep(20);
+      const lay = RP.layout || [], comb = RP.combos || {}, atR = (r, k) => r[lay.indexOf(k)], muR = (r, k) => k in comb ? Math.round(comb[k].reduce((t, x) => t + atR(r, x), 0) * 100) / 100 : atR(r, k);
+      const va = k => RP.dist && RP.dist.var && RP.dist.var[k], mtR = realFail ? mdlTitleOwn(RD) : '';
+      const toCome = real.slate.filter(g => RP.games && RP.games[g.id] && g.status === 'scheduled' && Date.parse(g.tip) > Date.now() + 120e3);
+      let nG = 0, nR = 0, nNo = 0; const bad = [];
+      for (const g of toCome) {
+        if (!(Date.parse(g.tip) > Date.now() + 60e3)) continue;
+        w.eval(`propsOpen(${JSON.stringify(g.id)})`); await sleep(5);
+        const pr = LJ && LJ.games && LJ.games[g.id] && LJ.games[g.id].props, words = sheetWords();
+        if (realFail && (!body().querySelector('[data-pp-failtag]') || body().querySelector('[data-pp-failtag]').textContent !== FAIL_TAG || /on trial/i.test(words) || TAKES.test(words) || !body().querySelector('details[data-pp-fail]')))
+          bad.push(`${g.id}: the FAIL's marks or words`);
+        if (realFail && pr && (pr.mains.length || pr.ladders.length || pr.yes.length)) { nG++;
+          const sw = d.getElementById('ppRungs'); if (!sw.checked) { sw.click(); await sleep(10); }
+          const rg = RP.games[g.id].players;
+          for (const pid of [...new Set(pr.mains.concat(pr.ladders, pr.yes).map(m => m.player))]) {
+            openRow(pid); await sleep(3); const r = rg[pid];
+            for (const m of pr.mains.filter(x => x.player === pid)) { if (!ORDER_OWN.includes(m.stat)) continue;
+              const trs = blockRows(pid, m.stat).filter(t => t.classList.contains('mainline')), fo = PF.propFairOver(m.over, m.under), pO = r && va(m.stat) ? PJ.pOver(m.line, muR(r, m.stat), PJ.nbVar(muR(r, m.stat), va(m.stat))) : null;
+              nR += 2; const b = trs.length !== 2 ? `${trs.length} rows` : failDiff(trs[0], failWant(`Over ${m.line}`, fo, false, pO, m.over, mtR)) || failDiff(trs[1], failWant(`Under ${m.line}`, 1 - fo, false, pO == null ? null : 1 - pO, m.under, mtR));
+              if (b) bad.push(`${g.id} ${pid} ${m.stat}: ${b}`); }
+            for (const st0 of ORDER_OWN) { const want = pr.ladders.filter(l => l.player === pid && l.stat === st0); if (!want.length) continue;
+              const trs = blockRows(pid, st0).filter(t => t.classList.contains('rung'));
+              if (trs.length !== want.length) { bad.push(`${g.id} ${pid} ${st0}: ${trs.length} rungs for ${want.length}`); continue; }
+              trs.forEach((t, i) => { const l = want[i], f = PF.propFairRung(l.price, RP.fair.rung.a[st0]), pm = r && va(st0) ? PJ.nbSf(l.k, muR(r, st0), PJ.nbVar(muR(r, st0), va(st0))) : null; nR++; if (f == null) nNo++;
+                const b = failDiff(t, failWant(`${l.k}+`, f, true, pm, l.price, mtR)); if (b) bad.push(`${g.id} ${pid} ${st0} ${l.k}+: ${b}`); }); }
+            for (const y of pr.yes.filter(x => x.player === pid)) { const trs = blockRows(pid, y.market), f = PF.propFairRung(y.price, RP.fair.yes.a[y.market]), pk = r ? atR(r, y.market) : null; nR++;
+              const b = trs.length !== 1 ? `${trs.length} rows` : failDiff(trs[0], failWant('Gets one', f, true, Number.isFinite(pk) ? pk : null, y.price, mtR)); if (b) bad.push(`${g.id} ${pid} ${y.market}: ${b}`); }
+          }
+        }
+        w.eval('propsClose()');
+      }
+      check(!realFail || !bad.length, `on the real state${realFail ? ', whose ledger has the FAIL,' : ' (no FAIL in its ledger: nothing of the FAIL to hold)'} every game to come opens on the FAIL's view, and on the job's real lines.json each of its ${nR} player rows (${nG} games with lines; ${nNo} milestones with no measured margin, so no chance) is DraftKings' fair chance with the props model's small beside it, worked out here${bad.length ? ': ' + bad.slice(0, 2).join('; ') : ''}`);
+      check(errors.length === 0, 'the real state: nothing thrown' + (errors.length ? ': ' + errors.join(' | ') : '')); }
+    /* the FAIL's phone rules: the muted chance wraps under its words, the est. on a line of its own */
+    check(/\.pp-rungs \.mdl\{width:auto;white-space:normal;/.test(mediaRules(css8, 760)) && /\.pp-rungs \.mdl \.v\{display:block\}/.test(mediaRules(css8, 760)) && /\.pp-rungs \.pct em\{display:block;/.test(css8) && /white-space:nowrap/.test(ruleOf(css8, '.pp-rungs .mdl') || ''),
+      'on a phone the muted chance wraps under its words ("props model" over "61%") and the est. sits under the percentage, so a row keeps to the card at 360');
+    JSONS = []; }
 
   /* the real published state: every game's sheet draws */
   ({ w, errors } = load('index.html', real));
@@ -1178,7 +1391,7 @@ async function builder() {
   { const SIGg = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'sigma.json'), 'utf8')).sigma, SGg = require('./sigma'), m = q1.model, confOwn = p => p >= 0.70 ? 'high' : p >= 0.45 ? 'med' : 'low';
     const want = [['BOS', 1 - m.pHome, -105, -115], ['BOS', SGg.Phi((m.spread + 1.5) / SIGg), -112, -108], ['DET', m.pHome, -115, -105], ['DET', SGg.Phi((-m.spread - 1.5) / SIGg), -108, -112], [null, imp(-115) / (imp(-115) + imp(-105)), -115, -105], [null, imp(-105) / (imp(-105) + imp(-115)), -105, -115]];
     const rows = [...body().querySelectorAll('[data-pp-gbets] tr[data-pp-leg]')], bad = rows.filter((tr, i) => { const [, p, o, x] = want[i], pc = tr.querySelector('.pct');
-      return Math.abs(+pc.dataset.ppP - p) > 1e-12 || pc.textContent !== ppPct(p) || !tr.querySelector(`.pp-conf.${confOwn(p)}`) || tr.querySelector('.fair').textContent !== `book ${ppPct(imp(o) / (imp(o) + imp(x)))}` || tr.querySelector('.pp-fill').style.width !== Math.max(2, p * 100).toFixed(0) + '%'; });
+      return Math.abs(+pc.dataset.ppP - p) > 1e-12 || pc.textContent !== ppPct(p) || !tr.querySelector(`.pp-conf.${confOwn(p)}`) || (tr.querySelector('.fair') || {}).textContent !== `book ${ppPct(imp(o) / (imp(o) + imp(x)))}` || tr.querySelector('.pp-fill').style.width !== Math.max(2, p * 100).toFixed(0) + '%'; });
     const mg = [...body().querySelectorAll('[data-pp-side] [data-pp-margin]')].map(x => x.textContent);
     check(rows.length === 6 && !bad.length && JSON.stringify(mg) === JSON.stringify([`our margin ${m.spread > 0 ? '+' : ''}${m.spread.toFixed(1)}`, `our margin ${-m.spread > 0 ? '+' : ''}${(-m.spread).toFixed(1)}`]) && body().querySelector('[data-pp-total] .mpts').textContent === `model's points ${m.total.toFixed(1)}`,
       `each Game bets row's chance is the Parlay Builder's for that leg, worked out here (the moneyline the player model's, the spread at sigma ${SIGg}, the total the market's own), with the NFL's band and DraftKings' fair chance; each team's "our margin" and the total's "model's points" the board model's${bad.length ? ': rows ' + bad.map(tr => tr.dataset.ppLeg).join(', ') : ''}`); }

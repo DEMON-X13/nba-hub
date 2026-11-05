@@ -1160,11 +1160,12 @@ Top to bottom:
   before it stand), lines.json still loading or not loaded are said there too. The search, the button and its status are
   drawn once and changed in place (the status is a live region that stays, so each change is heard).
 - **The head card**: Tip-off (the day, the date, the tip in ET; the NFL's Kickoff), Matchup, Biggest projections (the
-  props model's top projected player in the game for points, rebounds and assists, with the Model on trial tag), Expected
-  score (the board model's total split by its spread, "114 – 117"), Total pt (the board model's) and Vegas pick (the
+  props model's top projected player in the game for points, rebounds and assists, with the Model on trial tag, or once
+  the trial has failed "Props model: failed trial"), Expected score (the board model's total split by its spread,
+  "114 – 117"), Total pt (the board model's, "points" under it, the NFL's word) and Vegas pick (the
   favourite on DraftKings' spread as Game bets has it, "GSW by 7.5"; where DraftKings' prices are not read yet, the
   board's line, marked "the board's line", so it never reads as the line Game bets lacks). Then the model's on-trial
-  note, folded.
+  note (the FAIL's, once it has failed: below), folded.
 - **Game bets**, the NFL's card: each team (its pill, nickname, "our margin", the board model's, and "book line") with
   **To win** and **To cover**, then the **Game total** ("model's points", "book line") over and under, on DraftKings' game
   lines as the Parlay Builder has them (`pbGl`). Each row: the box, the bet, the chance as a bar, its percentage and
@@ -1187,8 +1188,8 @@ Top to bottom:
   chevron at the right. The whole row is the button that opens him (`aria-expanded`, named in full for a screen reader:
   name, position, rank, projected minutes, points, rebounds and assists), one player open at a time, as the NFL's.
 - **A player opened**: a stat block a stat he is projected on (points, rebounds, assists, threes, the four combos,
-  steals, blocks, steals + blocks), headed "Points  projected 14.3 … book line 12.5" as the NFL's (no mark on a
-  heading), his body opening on one quiet on-trial line ("on trial", titled as the Parlay Builder's) that covers every
+  steals, blocks, steals + blocks), headed "Points  projected 14.3 … DraftKings line 12.5" as the NFL's (its words for
+  DraftKings' line read from ESPN; "book line" until 5 November 2026; no mark on a heading), his body opening on one quiet on-trial line ("on trial", titled as the Parlay Builder's) that covers every
   chance in it, his lines' and his double- and triple-double's, line or none; its Over and Under as the NFL's rows (the box, the bet, the props model's chance as bar, percentage
   and band, "book 48%", DraftKings' price), and with Milestones on its rungs ("25+ points", "book 15% est.").
   His double- and triple-double are the NFL's touchdown block ("Double-double  projected 23%", a row "Gets one" with its
@@ -1235,7 +1236,42 @@ the early stop's FAIL is written it says that instead, from the decision (`ppEar
 scores were behind DraftKings and the flat bets' units, rounded), then the running numbers as before. The
 Record tab drew the same until 31 October 2026, when it took the NHL hub's layout. Nothing in the view says "model says", "edge" or "value". From the view a prop goes only into the
 visitor's own parlay, by their tick of its box (README "Same-game parlays"); the Parlay Builder's Top 50 lines
-reach the same lines on their own rules, marked on trial (README "Parlay Builder").
+reach the same lines on their own rules, marked on trial (README "Parlay Builder"), until the trial failed.
+
+**What a FAIL changes** (since 5 November 2026, when the trial was stopped early as a FAIL, the owner's call). Once the
+ledger's decision is a FAIL (`pbPropsOn()` false: the early stop's, or the bar's own at 30,000 lines), the view no longer
+presents the props model's chance as a number to bet on. The same code draws both views, chosen by `pbPropsOn()`
+(`ppFail`); before a FAIL (no decision, the trial running, or a PASS, which moves nothing by itself) the view is the
+trial's, as above. On a FAIL:
+
+- **Every player line is drawn at DraftKings' fair chance**, the NFL hub's row since its app v138: the bar, the
+  percentage and the band (High, Med, Low) are `legFair`'s, the very function the Parlay Builder gives the leg (a main
+  line's two prices with the whole margin on the Over; a milestone's or a double- or triple-double's one price with the
+  measured margin out, its "est." under the percentage), named "DraftKings' fair chance" in its title and for a screen
+  reader; a line with no fair chance (a milestone on a stat the published rules hold no margin for: none today, since
+  every milestone market the feed reads has one) shows a dash and "no DraftKings chance". No "book N%" cell: the chance
+  is DraftKings' already.
+- **The props model's chance is small and muted beside it**, where "book" stood: "props model 61%", in the quiet ink,
+  titled with why it is not used (`pbTrialTitle`, the Parlay Builder's: the trial stopped early as a FAIL, not shown to
+  beat DraftKings' closing lines, for reference only, no list or set takes it); on a phone "props model" over "61%". Its
+  projections stay as information: each stat's heading keeps "projected 14.3", each row's summary his points, rebounds
+  and assists. A double- or triple-double's projection is itself a chance, so on a FAIL its heading carries it only
+  where DraftKings has no price, small and muted the same way ("props model 19%", over "No DraftKings line yet."); with a
+  price it is the row's.
+- **The tags and the note say it failed.** The head card's tag and the mark that opens each projected player's body read
+  "Props model: failed trial", titled with why; the body's line says "His chances here are DraftKings' fair chances; the
+  props model's own, small beside them, are for reference." The folded note is the FAIL's: its summary "The props model
+  failed its trial against DraftKings: the chances here are DraftKings' own, its projections for reference", then the
+  decision's own sentence and the running numbers (`ppLedger`: the early stop's from its numbers, `ppEarly`, "Stopped
+  early on 5 November 2026, the owner's call, at 12,298 graded lines: behind DraftKings on both scores and its flat bets
+  down 223 units. FAIL: its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested Parlays, and its
+  calls have stopped; the projections stay for reference."; the bar's own, "Its bar was decided on Nov 25 at 30,000
+  lines: FAIL. Its chances are no longer used …", which until this change said it "stays on trial"), then what the view
+  shows, the walk-forward and the est. note. No word, title or name in the view says "on trial", nor that a list or set
+  takes a player's line.
+- **Unchanged**: Game bets (the moneyline's and the spread's chances are the board's player model's, which did not fail;
+  the total's DraftKings' own; "book N%" beside them), and each box, which puts in your parlay exactly the leg the trial's
+  view did, at DraftKings' price and its read's time (how the Parlay Builder prices a hand-added leg is its own).
 
 The parse and the fair chances are `tools/props_feed.js`'s and the distribution `tools/props.js`'s (`propParse`,
 `propRead`, `propFairOver`, `propFairRung`, `nbVar`, `nbPmf`, `nbSf`, `pOver` and their pieces), copied
@@ -1317,7 +1353,15 @@ following made-up decisions' numbers: one score behind, the bets up or none; the
 published ledger with its verdict taken off, so the rest of it holds the model on trial after the early stop as before);
 the page's copies held to the tools' text and results;
 every game the real state projects opening with a row for each of its projected players and without a NaN; the page's
-own means, combos included, the ledger's open calls to the digit. Each check was shown to fail on a planted break, in a scratch copy: the
+own means, combos included, the ledger's open calls to the digit; and the view on a FAIL (since 5 November 2026), on the
+job's published lines for the section's own game, so at any hour and in the off-season: no decision and a PASS drawing
+the trial's view, an early FAIL from made-up numbers (with one stat's milestone margin taken away, so a line with no fair
+chance is met), a full-bar FAIL and the real ledger's own decision each drawing the FAIL's, every row's DraftKings fair
+chance, est. and band and the props model's muted chance and its title worked out on its own from `props_feed.js` and
+`props.js`, the headings, the tags and the note word for word from the decision, no "on trial" and no list taking a
+player's line in any word, title or name, Game bets the Parlay Builder's as before, Tatum offered the very lines of the
+trial's view and a box putting in the very leg it did, nothing thrown; then the real state with the job's real
+lines.json, every game to come on the FAIL's view and each of its player rows worked out the same way. Each check was shown to fail on a planted break, in a scratch copy: the
 job side's 24 (the Over read second, the rung cross-check removed, a 404 read as a failure, a game asked for again, rows
 rewritten, the negative binomial off by one, a frozen call recomputed, the bar's verdict a line early, a moved call
 unchecked, and the rest), the page's 22, and the review's fixes' 16:
@@ -1464,6 +1508,36 @@ others; each fix came with a check, shown to fail on a break planted in a scratc
 | the bar not sticky on a phone | §8: on a phone … the bar with ✕ Close stays at the top… |
 | a search no player matches saying nothing | §8: a search no player matches says so… |
 | the expected score free to wrap | §8: the expected score keeps its line… |
+
+The view after the props model's FAIL (5 November 2026) was held the same way: each of its new checks shown to fail on
+a break planted in a scratch copy of the built page (`NBA_HTML`, section 8), 22 breaks, every one caught by the check
+named (two of them first ended the section with a throw where the trial's checks met a FAIL row, so those reads were
+made to fail rather than throw, and the two caught again):
+
+| Planted break (the FAIL's view, 5 November 2026) | The check that failed |
+|---|---|
+| a FAIL row's bar and percentage the model's chance | §8: an early FAIL: each of the … player rows is drawn at DraftKings' fair chance… |
+| a FAIL row's band the model's | §8: an early FAIL: each of the … player rows… |
+| the muted chance without "props model" | §8: an early FAIL: each of the … player rows… |
+| the muted chance untitled | §8: an early FAIL: each of the … player rows… |
+| a one-sided fair chance not marked est. | §8: an early FAIL: each of the … player rows… |
+| no "no DraftKings chance" where there is none | §8: an early FAIL: each of the … player rows… |
+| the head card's tag still Model on trial | §8: the head card's tag reads "Props model: failed trial"… |
+| the tag's title not saying why | §8: the head card's tag reads… |
+| the note's summary changed | §8: the folded note after the head card is the FAIL's… |
+| the note without the decision's sentence | §8: the folded note after the head card is the FAIL's… |
+| the bar's own FAIL saying the model stays on trial | §8: a full-bar FAIL: the folded note…; a FAIL is said… |
+| the body's mark reading "on trial" | §8: each projected player's body opens on one line that his chances here are DraftKings'… |
+| a double-double heading "projected 23%" on a FAIL | §8: an early FAIL: each heading keeps the projection… |
+| the heading "book line" | §8: an early FAIL: each heading keeps the projection… |
+| "on trial" in the FAIL's note | §8: an early FAIL: no word, title or name in the view says "on trial"… |
+| the FAIL's note saying the Top 50 lines take a player's line | §8: an early FAIL: no word, title or name … nor that a list or set takes a player's line |
+| Game bets drawn at DraftKings' chance on a FAIL | §8: an early FAIL: Game bets are as before… |
+| a FAIL row's box putting in a leg with no read time | §8: ticking a FAIL row's box puts in your parlay exactly the leg… |
+| the trial's view drawn as a FAIL | §8: with no decision (the trial running) the view is the trial's… |
+| the early stop read as no FAIL | §8: on the real state, whose ledger has the FAIL, every game to come opens on the FAIL's view… |
+| the muted chance kept on one line on a phone | §8: on a phone the muted chance wraps under its words… |
+| Total pt's label "our model" | §8: the expected score is the board model's… |
 
 ```
 now=$(date -u +%Y-%m-%dT%H:%M:%SZ)

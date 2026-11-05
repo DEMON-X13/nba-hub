@@ -2220,7 +2220,7 @@ levels than the three (its `SP_TIERS`) or another lock, no lines.json, or one th
       season, date, gid, away, home, type, tip, lock, tv, generated, pool: { pref, thin, mkt, far, held },
       tiers: [ { id, label, n, floor, legs: [ <the builder's own leg> + name, label, p, fair, fair_est, thin, market ],
                  p, fair, fair_est, dec, likeliest, thin, mkt[, updated] } | { id, label, n, floor, why } ] x3
-             (x4, Extreme last, on a set taken before 5 November 2026: THE CUTOVER below),
+             (x4, Extreme last, on a set the page that drew four took: THE CUTOVER below),
       taken_at[, grade: { <level>: { result, legs: [win|loss|push|void|null ...], payout } }][, updates: [...]] } } }
 ```
 
@@ -2237,7 +2237,8 @@ price on the legs left (`parlayDec`, a same-game remainder priced together); eve
 back; pending while a game or its box is out. A grade once complete is never undone by a state that can no longer settle
 it, and another season's entries keep theirs. The summary counts each season's game and level once, from the last key,
 as the pills do; it keeps Extreme's record under its own key (`featured_summary.tiers.xtrm`, 0-12 when it went), from the
-sets taken before the change alone, which are graded on their four levels as before, so the file as it stood that day passes
+sets that hold it (taken by the page that drew four: before the change, or by a run of it that landed after), which are
+graded on their four levels as before, so the file as it stood that day passes
 the guard unchanged, and its `pending` counts their Extreme levels still to settle beside the rest (the pills count the
 three).
 
@@ -2247,7 +2248,11 @@ every run of the new page takes three, after it. A set holds the four (Extreme f
 (the run's start, or the last commit's) already holds it with the four and the same time taken: a run of the old page that
 lands after `THREE_FROM`, before the change reaches `main`, is then never refused for its sets (no old set refused), while a
 set new or taken again since that file must be the three (no new set carries Extreme). With no file to hold it to
-(`--no-prev`), `THREE_FROM` alone. Every other rule is as it was. Run on a scratch copy of that morning's real ledger
+(`--no-prev`), `THREE_FROM` alone, so a ledger holding a set a late run of the old page took fails `--no-prev`; the job
+never runs that (its check holds the file to the last commit's), and the test holds the real ledger to itself, as the job
+does, never to no file, so a late run of the old page can never turn the record's step red before the script takes its
+sets still to lock again as three (G2 plants one). A replacement (`updates`) must name a level its set holds, so Extreme
+only on a set of four. Every other rule is as it was. Run on a scratch copy of that morning's real ledger
 (02:42 UTC), the new page rewrote the one set still to lock (Heat at Warriors, 5 November, taken on 3 November with four
 empty levels) as three, left the other fourteen, their four levels and grades, as they were, and the guard passed it and the
 ledger as it stood.
@@ -2300,13 +2305,17 @@ the last commit's put back, an unlocked set an earlier run rewrote and a locked 
 state refused, the command line, `check()` failing every rule on hand-made ledgers, a network dropped from `FEATURED_TV`
 since sets on it locked failing only the set on it still to lock, the cutover (a set taken since `THREE_FROM` holding
 Extreme refused, new, rewritten or taken again; one taken before it, or held so at the same time taken by the file it is
-held to, passing; one a minute before it passing and one at it failing), a page whose sets draw Extreme again refused with
+held to, passing; one a minute before it passing and one at it failing; a replacement naming Extreme on a set of three
+refused), a page whose sets draw Extreme again refused with
 the file untouched, and the job's step reading one clock after the test for
 both the script and its check, a set rewritten a second before its lock passing its check on that clock and failing on one
 read five seconds later); G the real ledger, copied, on the real state and lines at the real clock, held at one instant for
 the script and the check (the made-up off-slate games never settled by a real game under their ids): the ledger as it
-stands passing the guard, every set taken since the cutover the three levels, every locked one from before the levels it
-had. Four breaks planted in copies each turn it red: a locked set rewritten, a void graded
+stands passing the guard held to itself (as the job holds it to the last commit's), every set taken since the cutover the
+three levels but a locked one the file already held with four at the same time taken, every locked one from before the
+levels it had; G2 the same on the made-up nights, of a ledger as a run of the old page landing after the cutover would
+leave it (two sets with four levels): before the first lock both taken again as three, after it that one standing with its
+four and the other taken again as three, nothing refused. Four breaks planted in copies each turn it red: a locked set rewritten, a void graded
 a loss, the guard letting a locked set change, the report not read.
 
 `SMOKE_ONLY=sp node tools/smoke.js` (`tools/smoke_suggested.js`), blocking, boots the built page on a made-up November of

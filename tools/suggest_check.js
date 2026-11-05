@@ -14,11 +14,12 @@
  *     lock stands on the rule it was taken under, so it needs only a network and no preseason, and a network dropped
  *     since never jams the record); its lock is not exactly 2 hours before its
  *     tip-off; it was taken at or after its lock; its levels are not the three (Safe 2 legs, Medium 3, Aggressive 4) in
- *     order, or the four with Extreme (5 legs) after them of a set taken before the change that took Extreme off (THREE_FROM
+ *     order, or the four with Extreme (5 legs) after them of a set the page that drew four took (THE CUTOVER, THREE_FROM
  *     below); a level holds a leg of another game, a count of legs not its own, a player twice, two side bets or two
  *     totals;
- *   - a replacement (updates) names no level, player or time, or was made outside its lock to tip-off or after the clock;
- *     a level's mark (updated) is not the last replacement recorded for it, or the level still holds the player;
+ *   - a replacement (updates) names no level the set holds (Extreme on a set of three among them), no player or no time,
+ *     or was made outside its lock to tip-off or after the clock; a level's mark (updated) is not the last replacement
+ *     recorded for it, or the level still holds the player;
  *   - a grade is on an entry before its tip-off, or does not follow its legs (a leg lost loses and pays 0; every leg a push
  *     or void is a push and pays 1; otherwise won, paying over 1, and exactly its price when every leg won);
  *   - against the file the run started from (or, by the command line, the last commit's): an entry whose lock had passed
@@ -49,7 +50,8 @@ const LABELS = { safe: 'Safe', med: 'Medium', aggr: 'Aggressive', xtrm: 'Extreme
    held to (the run's start, or the last commit's) already holds it with the four and the same time taken: a run of the
    old page that landed after THREE_FROM, before the change reached main, is then never refused for it (no old set
    refused), while a set new or taken again since that file must be the three (no new set carries Extreme). With no file
-   to hold it to (--no-prev), THREE_FROM alone */
+   to hold it to (--no-prev), THREE_FROM alone: a ledger holding such a late old-page set then fails, which the job never
+   runs (it always holds the file to the last commit's), and the test holds the real ledger to itself, never to no file */
 const THREE_FROM = '2026-11-05T03:00:00Z';
 const LOCK_MS = 2 * 3600e3;
 /* this file's own copy of the page's featured rule: a game on any national network ESPN lists, less those named here */
@@ -67,21 +69,23 @@ const keyOf = e => `${e.season}|${e.date}|${e.tip}|${e.gid}`;
 const featuredOf = e => !!e && e.type !== 'PRE' && Array.isArray(e.tv) && e.tv.some(n => typeof n === 'string' && n && !FEATURED_TV.except.includes(n));
 const HOW = 'The suggestions record, written by tools/suggest_ledger.js in the job and held by tools/suggest_check.js. featured: each '
   + 'game on national TV\'s three parlays on the Suggested Parlays tab (Safe, Medium, Aggressive, 2 to 4 legs from that game alone, '
-  + 'every bet type; a player\'s chance is the props model\'s, on trial; a set taken before ' + THREE_FROM + ' holds a fourth, Extreme, '
-  + '5 legs, kept and graded as it was), taken from the published page on the state just '
-  + 'published and DraftKings\' lines in lines.json, keyed season|date|tip|game, rewritten while the set\'s lock (2 hours before '
+  + 'every bet type; a player\'s chance is the props model\'s, on trial; a set taken by the page that drew four, before ' + THREE_FROM
+  + ' or by a run of it that landed after, holds a fourth, Extreme, 5 legs, kept and graded as it was), taken from the published '
+  + 'page on the state just published and DraftKings\' lines in lines.json, keyed season|date|tip|game, rewritten while the set\'s lock (2 hours before '
   + 'tip-off) is to come and locked from it, so each entry is the set as the job last published it before the lock; from the lock to '
   + 'tip-off a level holding a player the injury report has since listed is built again, that level alone, and recorded in updates. '
   + 'From tip-off it is graded as a book settles it, by the page\'s own settlement (the scores, and each player\'s box line: a player '
   + 'with none did not play, void): a leg lost loses; a push or void leg drops out and the rest are paid at the builder\'s price on '
   + 'the legs left; every leg a push or void is a push, the stake back; the payout on a $1 stake. featured_summary: per level, the '
   + 'parlays graded won or lost (each season\'s game and level once), won, the wins expected by DraftKings\' fair chance and by the '
-  + 'model\'s, and units on $1, Extreme\'s from the sets taken before ' + THREE_FROM + ' alone, kept as history. Never edited by hand: '
+  + 'model\'s, and units on $1, Extreme\'s from the sets that hold it (taken by the page that drew four: before ' + THREE_FROM + ', or by a '
+  + 'run of it that landed after), kept as history. Never edited by hand: '
   + 'the check refuses a ledger whose locked entries moved.';
 
 /* the summary, as the tab's record pills count it (spRecSum): each season's game and level once, from the last key that
-   holds it (a tip-off ESPN moved makes a new key). Extreme keeps its key, from the sets taken before THREE_FROM (no set
-   takes it since), and its levels still to settle count in pending; the pills draw the three */
+   holds it (a tip-off ESPN moved makes a new key). Extreme keeps its key, from the sets that hold it (the page that drew
+   four took them: before THREE_FROM, or in a run of it that landed after; no run of the new page takes it), and its levels
+   still to settle count in pending; the pills draw the three */
 const blankTiers = () => Object.fromEntries(OLD_TIERS.map(id => [id, { label: LABELS[id], graded: 0, won: 0, lost: 0, push: 0, exp_fair: 0, fair_n: 0, exp_model: 0, units: 0 }]));
 function summarize(F) {
   const out = blankTiers(), last = new Map(); let graded = 0, updates = 0, pending = 0;
@@ -167,7 +171,9 @@ function entryBad(key, e, now, pe) {
   if (!Array.isArray(U)) bad.push(`${key}: its replacements are not a list`);
   else {
     for (const u of U) {
-      if (!isMap(u) || !OLD_TIERS.includes(u.tier) || !u.pid || !u.at) { bad.push(`${key}: a replacement that names no level, player or time`); continue; }
+      /* a level of this set's own: Extreme only on a set that holds it (on a three-level set a replacement naming it belongs
+         to no level, so no rule below would ever look at it) */
+      if (!isMap(u) || !OLD_TIERS.includes(u.tier) || !e.tiers.some(x => isMap(x) && x.id === u.tier) || !u.pid || !u.at) { bad.push(`${key}: a replacement that names no level of its set, player or time`); continue; }
       if (!(t(u.at) >= t(e.tip) - LOCK_MS && t(u.at) < t(e.tip) && t(u.at) <= now)) bad.push(`${key} ${u.tier}: replaced at ${u.at}, not between its lock and its tip-off`);
     }
     for (const x of e.tiers) {

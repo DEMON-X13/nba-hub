@@ -37,11 +37,16 @@
  *      refused with the file untouched; check() on hand-made ledgers failing every rule; a network dropped from
  *      FEATURED_TV since sets on it locked failing only the set on it still to lock; the cutover (a set taken since
  *      THREE_FROM with Extreme refused, new, rewritten or taken again; one taken before it, or held so at the same time
- *      taken by the file it is held to, passing); a page drawing Extreme again refused; and the job's step handing the
- *      script and its check one clock (a set rewritten a second before its lock passing on it, failing on a later one).
+ *      taken by the file it is held to, passing; a replacement naming Extreme on a set of three refused); a page drawing
+ *      Extreme again refused; and the job's step handing the script and its check one clock (a set rewritten a second
+ *      before its lock passing on it, failing on a later one).
  *   G  the real ledger, copied, on the real state and lines.json at the real clock, held at one instant for the script
- *      and the check: the ledger as it stands passing the guard, nothing refused, every set taken since the change the
- *      three levels and every locked one from before the levels it had.
+ *      and the check: the ledger as it stands passing the guard held to itself (as the job holds it to the last commit's,
+ *      never to no file), nothing refused, every set taken since the change the three levels, unless the file it started
+ *      from already held it with four at the same time taken and it has locked, and every locked one from before the
+ *      levels it had. G2: the same on the made-up nights, of D's ledger with two sets as a run of the old page would
+ *      leave them had it landed after THREE_FROM (four levels, taken at tD): before the first one's lock both taken again
+ *      as three; after it, that one standing with its four and the other taken again as three; nothing refused either way.
  */
 'use strict';
 const fs = require('fs');
@@ -464,7 +469,13 @@ function entryOk(e, g, at) {
   fails1(L => { const t = L.featured[kA].tiers[1]; t.legs = t.legs.slice(0, 2); }, /2 legs on a level of 3/, 'a level short of its legs');
   fails1(L => { L.featured[kA].tiers[0].legs[0].id = gC.id; }, /a leg on another game/, 'a leg on another game');
   fails1(L => { const t = L.featured[kA].tiers.find(x => x.legs && x.legs.filter(l => l.kind === 'prop').length >= 2); const ps = t.legs.filter(l => l.kind === 'prop'); ps[1].pid = ps[0].pid; }, /a player twice/, 'a player twice in a level');
-  fails1(L => { L.featured[kA].updates = [{ tier: 'med', pid: '', at: '' }]; }, /names no level, player or time/, 'a replacement naming nobody');
+  fails1(L => { L.featured[kA].updates = [{ tier: 'med', pid: '', at: '' }]; }, /names no level of its set, player or time/, 'a replacement naming nobody');
+  /* a replacement naming Extreme on a set of the three: a level the set does not hold, which no rule on its levels would
+     ever look at (the summary's updates would count it), refused against the file before it, as a run, and with none */
+  { const xU = L => { L.featured[kA].updates.push({ tier: 'xtrm', pid: 'x9', name: 'Fake Player', reason: 'Out', at: T(D1, '23:00:00') }); };
+    fails1(xU, /names no level of its set, player or time/, 'a replacement naming Extreme on a set of three, against the file before it');
+    fails1(xU, /names no level of its set, player or time/, 'a replacement naming Extreme on a set of three, as a run', base, T(D1, '23:00:00'));
+    fails1(xU, /names no level of its set, player or time/, 'a replacement naming Extreme on a set of three, held to no file', null); }
   fails1(L => { L.featured[kA].updates.push({ tier: 'safe', pid: 'x', name: 'x', reason: 'r', at: T(D1, '12:00:00') }); }, /not between its lock and its tip-off/, 'a replacement before the lock');
   fails1(L => { const t = L.featured[kA].tiers.find(x => x.updated); t.updated = { ...t.updated, reason: 'other' }; }, /not the last one recorded/, "a level's mark not its last replacement");
   fails1(L => { const t = L.featured[kA].tiers.find(x => x.updated); t.legs[t.legs.findIndex(l => l.kind === 'prop')].pid = t.updated.pid; }, /and still holds him/, 'a replaced level still holding the player');
@@ -514,29 +525,68 @@ function entryOk(e, g, at) {
     fs.writeFileSync(LEDGER, good); }
 
   console.log('G. the real ledger, copied, on the real state');
+  /* G's holding of a ledger, as the job's record step holds it: a folder (G: index.html, state.json, lines.json, its box
+     files), the ledger copied into it (gl), the file the job checked out beside it (prevFile, the last commit's), and one
+     clock (tG) for the script and for which sets this counts as locked, as the job hands one to the script and its check */
+  function holdLedger(tag, G, gl, prevFile, tG, season) {
+    const before = fs.existsSync(gl) ? fs.readFileSync(gl, 'utf8') : null;
+    /* the ledger as it stands passes the guard held to itself, as the job's check holds the file to the last commit's
+       (which is the file the job starts from); never to no file, where a set a run of the old page took after THREE_FROM
+       (which the cutover lets stand, held to the file that holds it) would fail on THREE_FROM alone and turn the record's
+       step red before the script could take it again as three */
+    if (before) { const RL = JSON.parse(before), b2 = SC.check(RL, RL, tG, null, season);
+      chk(!b2.length, `${tag}: the ledger as it stands passes the guard (${b2.slice(0, 2).join(' | ') || 'no failure'})`); }
+    const rg = cp.spawnSync('node', [SCRIPT], { encoding: 'utf8', env: { ...process.env, SUGGEST_NOW: new Date(tG).toISOString(), SUGGEST_ROOT: G, SUGGEST_LEDGER: gl, SUGGEST_PREV: prevFile && fs.existsSync(prevFile) ? prevFile : 'none' } });
+    const last = ((rg.stdout || '') + (rg.stderr || '')).trim().split('\n').pop();
+    chk(rg.status === 0 && /^suggest ledger: (written|unchanged)/.test(last), `${tag}: the state and lines at its clock: nothing refused: ` + last);
+    if (!(before && rg.status === 0)) return null;
+    const was = JSON.parse(before), now1 = JSON.parse(fs.readFileSync(gl, 'utf8'));
+    const lockedAt = e => Date.parse(e.tip) - LOCK <= tG, idsOf = e => (e.tiers || []).map(t => t && t.id).join();
+    chk(Object.entries(was.featured || {}).filter(([, e]) => lockedAt(e)).every(([k, e]) => now1.featured[k] && JSON.stringify(SC.callOf(now1.featured[k])) === JSON.stringify(SC.callOf(e)) || (now1.featured[k] && (now1.featured[k].updates || []).length > (e.updates || []).length)),
+      `${tag}: every locked set of the ledger as it was, but for its grade`);
+    /* every set taken since THREE_FROM the three, but one locked at tG that the file the run started from already held
+       with the four at the same time taken (a run of the old page that landed after THREE_FROM: the cutover lets it
+       stand); one of those still to lock is taken again, as three */
+    const oldLate = (k, e) => lockedAt(e) && was.featured && was.featured[k] && was.featured[k].taken_at === e.taken_at && idsOf(was.featured[k]) === SC.OLD_TIERS.join();
+    chk(Object.entries(now1.featured || {}).every(([k, e]) => Date.parse(e.taken_at) < Date.parse(SC.THREE_FROM) || idsOf(e) === SC.TIERS.join() || oldLate(k, e))
+      && Object.entries(now1.featured || {}).filter(([k]) => was.featured && was.featured[k] && Date.parse(was.featured[k].taken_at) < Date.parse(SC.THREE_FROM) && lockedAt(was.featured[k])).every(([k, e]) => e.tiers.length === was.featured[k].tiers.length),
+      `${tag}: every set taken since ${SC.THREE_FROM} is the three levels (but one locked that a late run of the old page took), and every locked one from before keeps the levels it had`);
+    return { was, now1 };
+  }
   const realLedger = path.join(ROOT, SC.LEDGER_REL), realLines = path.join(ROOT, 'lines.json');
   if (fs.existsSync(realLines)) {
     const G = path.join(DIR, 'real'); fs.mkdirSync(path.join(G, 'data'), { recursive: true });
     for (const f of ['index.html', 'state.json', 'lines.json']) fs.copyFileSync(path.join(ROOT, f), path.join(G, f));
     for (const f of fs.readdirSync(path.join(ROOT, 'data')).filter(f => /^box_\d{4}\.csv$/.test(f))) fs.copyFileSync(path.join(ROOT, 'data', f), path.join(G, 'data', f));
     const gl = path.join(G, 'ledger.json'); if (fs.existsSync(realLedger)) fs.copyFileSync(realLedger, gl);
-    const before = fs.existsSync(gl) ? fs.readFileSync(gl, 'utf8') : null;
-    /* the real ledger as it stands, its sets from before the change holding Extreme, accepted by the guard on its own and
-       against itself */
-    if (before) { const RL = JSON.parse(before), b1 = SC.check(RL, null, Date.now(), null, REAL.season), b2 = SC.check(RL, RL, Date.now(), null, REAL.season);
-      chk(!b1.length && !b2.length, `G: the real ledger as it stands passes the guard (${[...b1, ...b2].slice(0, 2).join(' | ') || 'no failure'})`); }
-    /* one clock for the run and for which sets this check counts as locked (the real clock, held at one instant, as the
-       job hands it): a lock passing while the script runs is then neither's */
-    const tG = Date.now();
-    const rg = cp.spawnSync('node', [SCRIPT], { encoding: 'utf8', env: { ...process.env, SUGGEST_NOW: new Date(tG).toISOString(), SUGGEST_ROOT: G, SUGGEST_LEDGER: gl, SUGGEST_PREV: realLedger && fs.existsSync(realLedger) ? realLedger : 'none' } });
-    const last = ((rg.stdout || '') + (rg.stderr || '')).trim().split('\n').pop();
-    chk(rg.status === 0 && /^suggest ledger: (written|unchanged)/.test(last), 'G: the real state and lines at the real clock: nothing refused: ' + last);
-    if (before && rg.status === 0) { const was = JSON.parse(before), now1 = JSON.parse(fs.readFileSync(gl, 'utf8'));
-      chk(Object.entries(was.featured || {}).filter(([, e]) => Date.parse(e.tip) - LOCK <= tG).every(([k, e]) => now1.featured[k] && JSON.stringify(SC.callOf(now1.featured[k])) === JSON.stringify(SC.callOf(e)) || (now1.featured[k] && (now1.featured[k].updates || []).length > (e.updates || []).length)),
-        'G: every locked set of the real ledger as it was, but for its grade');
-      chk(Object.values(now1.featured || {}).every(e => Date.parse(e.taken_at) < Date.parse(SC.THREE_FROM) || e.tiers.map(t => t.id).join() === SC.TIERS.join())
-        && Object.entries(now1.featured || {}).filter(([k]) => was.featured && was.featured[k] && Date.parse(was.featured[k].taken_at) < Date.parse(SC.THREE_FROM) && Date.parse(was.featured[k].tip) - LOCK <= tG).every(([k, e]) => e.tiers.length === was.featured[k].tiers.length),
-        `G: every set taken since ${SC.THREE_FROM} is the three levels, and every locked one from before keeps the levels it had`); }
+    /* the real clock, held at one instant: a lock passing while the script runs is then neither's */
+    holdLedger('G', G, gl, realLedger, Date.now(), REAL.season);
   } else chk(true, 'G: no lines.json in this checkout: the real run is skipped');
+
+  /* G2: the same holding on the made-up nights, of a ledger as a run of the old page (four levels) would leave it had it
+     landed after THREE_FROM and before the change reached main: D's ledger with gD's and gF's sets as that run took them at
+     tD, Extreme fifth, committed (the file the job checks out). Before gD's lock both are taken again as three; between
+     gD's lock and its tip-off gD stands as it was, with the four, and gF (still to lock) is taken again as three. Either
+     way nothing is refused, so the record's step never jams on a late run of the old page */
+  { const G2 = path.join(DIR, 'late'); fs.mkdirSync(path.join(G2, 'data'), { recursive: true });
+    fs.copyFileSync(path.join(DIR, 'index.html'), path.join(G2, 'index.html'));
+    for (const f of fs.readdirSync(path.join(DIR, 'data')).filter(f => /^box_\d{4}\.csv$/.test(f))) fs.copyFileSync(path.join(DIR, 'data', f), path.join(G2, 'data', f));
+    const L4 = JSON.parse(good), kF4 = keyOf(gF), kD4 = keyOf(gD), xtrm = { id: 'xtrm', label: 'Extreme', n: 5, floor: 0.05, why: 'No legs in this game.' };
+    for (const k of [kD4, kF4]) { L4.featured[k].tiers.push(clone(xtrm)); L4.featured[k].taken_at = tD; }
+    L4.featured_summary = SC.summarize(L4.featured);
+    const late = SC.dumps(L4) + '\n', lateFile = path.join(G2, 'committed.json'), gl2 = path.join(G2, 'ledger.json');
+    fs.writeFileSync(lateFile, late);
+    chk(Date.parse(tD) > Date.parse(SC.THREE_FROM) && SC.check(L4, null, Date.parse(tD), null, SEASON).some(x => x.startsWith(kD4 + ':') && /with Extreme/.test(x)),
+      `G2: the late old-page ledger's sets are taken after ${SC.THREE_FROM} with Extreme (held to no file, they fail)`);
+    const stage = (tag, st, lines, at, want) => {
+      fs.writeFileSync(path.join(G2, 'state.json'), JSON.stringify(st)); fs.writeFileSync(path.join(G2, 'lines.json'), JSON.stringify(lines)); fs.writeFileSync(gl2, late);
+      const h = holdLedger(tag, G2, gl2, lateFile, Date.parse(at), SEASON);
+      if (h) chk(want(h.now1.featured), `${tag}: the sets as the cutover leaves them (${[kD4, kF4].map(k => h.now1.featured[k] ? h.now1.featured[k].tiers.map(t => t.id).join('+') + ' at ' + h.now1.featured[k].taken_at : 'none').join(' | ')})`);
+    };
+    const ids3 = e => !!e && e.tiers.map(t => t.id).join() === SC.TIERS.join();
+    const tL1 = T(D2, '13:00:00'), tL2 = T(D3, '01:00:00');
+    stage('G2 before the lock', stD, linesOf([gD, gE, gF]), tL1, F => ids3(F[kD4]) && F[kD4].taken_at === tL1 && ids3(F[kF4]) && F[kF4].taken_at === tL1);
+    stage('G2 after gD\'s lock', stateOf(day2, { today: D2, generated: T(D3, '00:30'), boxes: BOXD }), linesOf([gD, gF]), tL2,
+      F => !!F[kD4] && JSON.stringify(SC.callOf(F[kD4])) === JSON.stringify(SC.callOf(L4.featured[kD4])) && ids3(F[kF4]) && F[kF4].taken_at === tL2); }
   end();
 })();

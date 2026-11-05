@@ -226,7 +226,7 @@
     "name": "Jayson Tatum",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683689",

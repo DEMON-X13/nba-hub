@@ -50,15 +50,6 @@
   ],
   "BOS": [
    {
-    "id": "4065648",
-    "name": "Jayson Tatum",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
-   },
-   {
     "id": "4066354",
     "name": "Payton Pritchard",
     "pos": "G",
@@ -514,6 +505,15 @@
   ],
   "NOP": [
    {
+    "id": "5061589",
+    "name": "Yves Missi",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee Bruise",
+    "date": "2026-11-05",
+    "returns": "2026-11-08"
+   },
+   {
     "id": "4397688",
     "name": "Trey Murphy III",
     "pos": "F",
@@ -521,15 +521,6 @@
     "detail": "Knee",
     "date": "2026-11-05",
     "returns": "2026-11-06"
-   },
-   {
-    "id": "5061589",
-    "name": "Yves Missi",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Bruise",
-    "date": "2026-10-30",
-    "returns": "2026-11-08"
    }
   ],
   "NYK": [

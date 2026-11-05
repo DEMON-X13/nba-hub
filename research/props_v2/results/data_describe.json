@@ -1,0 +1,931 @@
+{
+ "generated": "2026-11-05T17:35Z",
+ "what": "data/props_2026.csv described, and how much a test inside it can tell (research/props_v2/data_describe.js)",
+ "describe": {
+  "reads": {
+   "askedFor": 91,
+   "ok": 83,
+   "none": [
+    {
+     "game": "2026_20260414_MIA_CHA",
+     "round": "play-in"
+    },
+    {
+     "game": "2026_20260414_POR_PHX",
+     "round": "play-in"
+    },
+    {
+     "game": "2026_20260415_GSW_LAC",
+     "round": "play-in"
+    },
+    {
+     "game": "2026_20260415_ORL_PHI",
+     "round": "play-in"
+    },
+    {
+     "game": "2026_20260430_DEN_MIN",
+     "round": "first round"
+    },
+    {
+     "game": "2026_20260507_CLE_DET",
+     "round": "second round"
+    },
+    {
+     "game": "2026_20260513_CLE_DET",
+     "round": "second round"
+    },
+    {
+     "game": "2026_20260523_NYK_CLE",
+     "round": "conference finals"
+    }
+   ],
+   "readAt": [
+    "2026-10-15T08:16Z"
+   ],
+   "lastRegularSeasonDate": "2026-04-12"
+  },
+  "games": {
+   "total": 83,
+   "dates": [
+    "2026-04-17",
+    "2026-06-13"
+   ],
+   "byRound": [
+    {
+     "round": "play-in",
+     "scheduled": 6,
+     "read": 2,
+     "series": 6,
+     "lines": 288,
+     "from": "2026-04-17",
+     "to": "2026-04-17"
+    },
+    {
+     "round": "first round",
+     "scheduled": 48,
+     "read": 47,
+     "series": 8,
+     "lines": 6211,
+     "from": "2026-04-18",
+     "to": "2026-05-03"
+    },
+    {
+     "round": "second round",
+     "scheduled": 21,
+     "read": 19,
+     "series": 4,
+     "lines": 2690,
+     "from": "2026-05-04",
+     "to": "2026-05-17"
+    },
+    {
+     "round": "conference finals",
+     "scheduled": 11,
+     "read": 10,
+     "series": 2,
+     "lines": 1664,
+     "from": "2026-05-18",
+     "to": "2026-05-30"
+    },
+    {
+     "round": "finals",
+     "scheduled": 5,
+     "read": 5,
+     "series": 1,
+     "lines": 844,
+     "from": "2026-06-03",
+     "to": "2026-06-13"
+    }
+   ],
+   "teams": 18
+  },
+  "lines": {
+   "rows": 11697,
+   "perGame": {
+    "min": 74,
+    "median": 138,
+    "max": 186,
+    "mean": 140.9
+   },
+   "duplicates": 0,
+   "wholeNumberLines": 0,
+   "status": {
+    "graded": 11395,
+    "listed, did not play": 80,
+    "not on the box": 222
+   }
+  },
+  "players": {
+   "distinct": 173,
+   "playerGames": 1374,
+   "playersPerGame": 16.6,
+   "linesPerPlayerGame": {
+    "min": 1,
+    "median": 10,
+    "max": 11,
+    "mean": 8.51
+   },
+   "linesPerPlayer": {
+    "min": 1,
+    "median": 53,
+    "max": 244
+   },
+   "gamesPerPlayer": {
+    "median": 7,
+    "max": 23,
+    "withOneGame": 22
+   },
+   "top10ShareOfLines": 0.185,
+   "minutesOfGraded": {
+    "p10": 16,
+    "median": 31,
+    "p90": 40
+   },
+   "startersShareOfGraded": 0.736
+  },
+  "byStat": [
+   {
+    "stat": "pts",
+    "lines": 1369,
+    "players": 172,
+    "lineMin": 0.5,
+    "lineMedian": 11.5,
+    "lineMax": 31.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0605,
+    "graded": 1328,
+    "overRate": 0.4578,
+    "dkFairOver": 0.4694,
+    "pushes": 0
+   },
+   {
+    "stat": "reb",
+    "lines": 1270,
+    "players": 166,
+    "lineMin": 0.5,
+    "lineMedian": 4.5,
+    "lineMax": 14.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0681,
+    "graded": 1234,
+    "overRate": 0.4968,
+    "dkFairOver": 0.4632,
+    "pushes": 0
+   },
+   {
+    "stat": "ast",
+    "lines": 1122,
+    "players": 155,
+    "lineMin": 0.5,
+    "lineMedian": 2.5,
+    "lineMax": 10.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0677,
+    "graded": 1094,
+    "overRate": 0.4506,
+    "dkFairOver": 0.4616,
+    "pushes": 0
+   },
+   {
+    "stat": "tpm",
+    "lines": 1112,
+    "players": 155,
+    "lineMin": 0.5,
+    "lineMedian": 1.5,
+    "lineMax": 4.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0673,
+    "graded": 1079,
+    "overRate": 0.4615,
+    "dkFairOver": 0.4489,
+    "pushes": 0
+   },
+   {
+    "stat": "stl",
+    "lines": 907,
+    "players": 130,
+    "lineMin": 0.5,
+    "lineMedian": 0.5,
+    "lineMax": 2.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0687,
+    "graded": 888,
+    "overRate": 0.4809,
+    "dkFairOver": 0.468,
+    "pushes": 0
+   },
+   {
+    "stat": "blk",
+    "lines": 810,
+    "players": 123,
+    "lineMin": 0.5,
+    "lineMedian": 0.5,
+    "lineMax": 4.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0684,
+    "graded": 795,
+    "overRate": 0.3887,
+    "dkFairOver": 0.3785,
+    "pushes": 0
+   },
+   {
+    "stat": "pra",
+    "lines": 1142,
+    "players": 159,
+    "lineMin": 3.5,
+    "lineMedian": 20.5,
+    "lineMax": 55.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0683,
+    "graded": 1113,
+    "overRate": 0.4537,
+    "dkFairOver": 0.4659,
+    "pushes": 0
+   },
+   {
+    "stat": "pr",
+    "lines": 1237,
+    "players": 164,
+    "lineMin": 3.5,
+    "lineMedian": 17.5,
+    "lineMax": 44.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0683,
+    "graded": 1204,
+    "overRate": 0.451,
+    "dkFairOver": 0.465,
+    "pushes": 0
+   },
+   {
+    "stat": "pa",
+    "lines": 1058,
+    "players": 150,
+    "lineMin": 3.5,
+    "lineMedian": 15.5,
+    "lineMax": 40.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0683,
+    "graded": 1029,
+    "overRate": 0.45,
+    "dkFairOver": 0.4656,
+    "pushes": 0
+   },
+   {
+    "stat": "ar",
+    "lines": 1070,
+    "players": 150,
+    "lineMin": 2.5,
+    "lineMedian": 8.5,
+    "lineMax": 24.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0683,
+    "graded": 1041,
+    "overRate": 0.4784,
+    "dkFairOver": 0.4609,
+    "pushes": 0
+   },
+   {
+    "stat": "sb",
+    "lines": 600,
+    "players": 107,
+    "lineMin": 1.5,
+    "lineMedian": 1.5,
+    "lineMax": 5.5,
+    "wholeNumber": 0,
+    "marginMedian": 0.0695,
+    "graded": 590,
+    "overRate": 0.4678,
+    "dkFairOver": 0.4384,
+    "pushes": 0
+   }
+  ],
+  "prices": {
+   "marginP10": 0.061,
+   "marginMedian": 0.0679,
+   "marginP90": 0.0697,
+   "overFavouredShare": 0.463,
+   "priceRange": [
+    -10000,
+    6600
+   ]
+  },
+  "overall": {
+   "graded": 11395,
+   "overRate": 0.4592,
+   "dkFairOver": 0.4561
+  },
+  "baseStatsOnly": {
+   "lines": 6418,
+   "games": 83,
+   "llSeGame": 0.0029,
+   "llSeLine": 0.0022,
+   "brSeGame": 0.0013,
+   "perLineSigmaEff": 0.234,
+   "llMde80At": [
+    {
+     "games": 1000,
+     "lines": 80000,
+     "byGames": 0.0021,
+     "byLines": 0.0021
+    },
+    {
+     "games": 2340,
+     "lines": 184000,
+     "byGames": 0.0014,
+     "byLines": 0.0014
+    }
+   ]
+  },
+  "scale": [
+   {
+    "games": 83,
+    "llMde80Archive": 0.0099,
+    "llMde80Trial": 0.0089,
+    "brMde80Archive": 0.0045,
+    "brMde80Trial": 0.0041
+   },
+   {
+    "games": 121,
+    "llMde80Archive": 0.0082,
+    "llMde80Trial": 0.0073,
+    "brMde80Archive": 0.0037,
+    "brMde80Trial": 0.0034
+   },
+   {
+    "games": 250,
+    "llMde80Archive": 0.0057,
+    "llMde80Trial": 0.0051,
+    "brMde80Archive": 0.0026,
+    "brMde80Trial": 0.0024
+   },
+   {
+    "games": 300,
+    "llMde80Archive": 0.0052,
+    "llMde80Trial": 0.0047,
+    "brMde80Archive": 0.0024,
+    "brMde80Trial": 0.0022
+   },
+   {
+    "games": 600,
+    "llMde80Archive": 0.0037,
+    "llMde80Trial": 0.0033,
+    "brMde80Archive": 0.0017,
+    "brMde80Trial": 0.0015
+   },
+   {
+    "games": 1230,
+    "llMde80Archive": 0.0026,
+    "llMde80Trial": 0.0023,
+    "brMde80Archive": 0.0012,
+    "brMde80Trial": 0.0011
+   }
+  ],
+  "scaleNote": {
+   "archiveSeLL": 0.004,
+   "archiveGames": 83,
+   "trialSeLL": 0.0029,
+   "trialGames": 121,
+   "trialSeBrier": 0.0014
+  },
+  "flat": {
+   "bets": 5238,
+   "overs": 967,
+   "units": 28.84,
+   "roi": 0.0055,
+   "sdPerBet": 0.952,
+   "roiSeByGame": 0.0226,
+   "roiSeIid": 0.0132,
+   "designEffect": 2.96,
+   "returnAtFairChance": -0.0244,
+   "pUpIfTrueRoi": [
+    {
+     "trueRoi": -0.04,
+     "at6000Bets": 0.029
+    },
+    {
+     "trueRoi": -0.02,
+     "at6000Bets": 0.172
+    },
+    {
+     "trueRoi": 0,
+     "at6000Bets": 0.5
+    },
+    {
+     "trueRoi": 0.02,
+     "at6000Bets": 0.828
+    }
+   ]
+  },
+  "cv": {
+   "leaveOneRoundOut": [
+    {
+     "round": "play-in",
+     "graded": 270,
+     "games": 2
+    },
+    {
+     "round": "first round",
+     "graded": 6025,
+     "games": 47
+    },
+    {
+     "round": "second round",
+     "graded": 2650,
+     "games": 19
+    },
+    {
+     "round": "conference finals",
+     "graded": 1606,
+     "games": 10
+    },
+    {
+     "round": "finals",
+     "graded": 844,
+     "games": 5
+    }
+   ],
+   "leaveOneSeriesOut": [
+    {
+     "series": "play-in CHA@ORL",
+     "round": "play-in",
+     "graded": 134,
+     "games": 1
+    },
+    {
+     "series": "play-in GSW@PHX",
+     "round": "play-in",
+     "graded": 136,
+     "games": 1
+    },
+    {
+     "series": "ATL-NYK",
+     "round": "first round",
+     "graded": 773,
+     "games": 6
+    },
+    {
+     "series": "BOS-PHI",
+     "round": "first round",
+     "graded": 932,
+     "games": 7
+    },
+    {
+     "series": "CLE-TOR",
+     "round": "first round",
+     "graded": 912,
+     "games": 7
+    },
+    {
+     "series": "DEN-MIN",
+     "round": "first round",
+     "graded": 664,
+     "games": 5
+    },
+    {
+     "series": "DET-ORL",
+     "round": "first round",
+     "graded": 945,
+     "games": 7
+    },
+    {
+     "series": "HOU-LAL",
+     "round": "first round",
+     "graded": 640,
+     "games": 6
+    },
+    {
+     "series": "OKC-PHX",
+     "round": "first round",
+     "graded": 510,
+     "games": 4
+    },
+    {
+     "series": "POR-SAS",
+     "round": "first round",
+     "graded": 649,
+     "games": 5
+    },
+    {
+     "series": "CLE-DET",
+     "round": "second round",
+     "graded": 703,
+     "games": 5
+    },
+    {
+     "series": "LAL-OKC",
+     "round": "second round",
+     "graded": 576,
+     "games": 4
+    },
+    {
+     "series": "MIN-SAS",
+     "round": "second round",
+     "graded": 888,
+     "games": 6
+    },
+    {
+     "series": "NYK-PHI",
+     "round": "second round",
+     "graded": 483,
+     "games": 4
+    },
+    {
+     "series": "CLE-NYK",
+     "round": "conference finals",
+     "graded": 440,
+     "games": 3
+    },
+    {
+     "series": "OKC-SAS",
+     "round": "conference finals",
+     "graded": 1166,
+     "games": 7
+    },
+    {
+     "series": "NYK-SAS",
+     "round": "finals",
+     "graded": 844,
+     "games": 5
+    }
+   ],
+   "playerReach": [
+    {
+     "round": "play-in",
+     "shareOnPlayersSeenElsewhere": 0.481
+    },
+    {
+     "round": "first round",
+     "shareOnPlayersSeenElsewhere": 0.608
+    },
+    {
+     "round": "second round",
+     "shareOnPlayersSeenElsewhere": 0.995
+    },
+    {
+     "round": "conference finals",
+     "shareOnPlayersSeenElsewhere": 0.994
+    },
+    {
+     "round": "finals",
+     "shareOnPlayersSeenElsewhere": 1
+    }
+   ],
+   "withinPlayerGame": {
+    "anyTwoLines": 0.283,
+    "pointsAndPra": 0.741,
+    "pointsAndRebounds": 0.216,
+    "stealsAndBlocks": 0.037
+   },
+   "samePlayerSeriesPoints": -0.018
+  },
+  "season2027Counts": {
+   "rows": 12856,
+   "games": 121,
+   "rowsPerGame": 106.2,
+   "byStatShare": {
+    "pts": 0.139,
+    "reb": 0.129,
+    "ast": 0.098,
+    "tpm": 0.113,
+    "stl": 0.046,
+    "blk": 0.026,
+    "pra": 0.106,
+    "pr": 0.13,
+    "pa": 0.1,
+    "ar": 0.099,
+    "sb": 0.014
+   },
+   "archiveByStatShare": {
+    "pts": 0.117,
+    "reb": 0.109,
+    "ast": 0.096,
+    "tpm": 0.095,
+    "stl": 0.078,
+    "blk": 0.069,
+    "pra": 0.098,
+    "pr": 0.106,
+    "pa": 0.09,
+    "ar": 0.091,
+    "sb": 0.051
+   },
+   "playersPerGame": 14.8
+  }
+ },
+ "power": [
+  {
+   "candidate": "the walk-forward model (2026 fold) against DraftKings' fair chance",
+   "logloss": {
+    "line": {
+     "se": 0.0018,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0034,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0038,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.004,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0043,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0032,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0066,
+    "diff": 0.0147,
+    "ci90": [
+     0.008254,
+     0.021361
+    ],
+    "mde50": 0.0066,
+    "mde80": 0.0099
+   },
+   "brier": {
+    "line": {
+     "se": 0.0008,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0015,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0017,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0018,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0018,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0014,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0029,
+    "diff": 0.0064,
+    "ci90": [
+     0.003596,
+     0.009387
+    ],
+    "mde50": 0.003,
+    "mde80": 0.0045
+   }
+  },
+  {
+   "candidate": "a blend w = 0.5 of the way from DraftKings' fair chance to the model, in logit (spread only)",
+   "logloss": {
+    "line": {
+     "se": 0.0009,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0017,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0018,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0019,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0019,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0012,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0031,
+    "mde50": 0.0031,
+    "mde80": 0.0047
+   },
+   "brier": {
+    "line": {
+     "se": 0.0004,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0008,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0008,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0009,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0009,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0006,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0015,
+    "mde50": 0.0015,
+    "mde80": 0.0022
+   }
+  },
+  {
+   "candidate": "a blend w = 0.25 of the way from DraftKings' fair chance to the model, in logit (spread only)",
+   "logloss": {
+    "line": {
+     "se": 0.0005,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0008,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0009,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0009,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0009,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0005,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0015,
+    "mde50": 0.0015,
+    "mde80": 0.0022
+   },
+   "brier": {
+    "line": {
+     "se": 0.0002,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0004,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0004,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0004,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0004,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0003,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0007,
+    "mde50": 0.0007,
+    "mde80": 0.001
+   }
+  },
+  {
+   "candidate": "a blend w = 0.1 of the way from DraftKings' fair chance to the model, in logit (spread only)",
+   "logloss": {
+    "line": {
+     "se": 0.0002,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0003,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0003,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0004,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0003,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0002,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0006,
+    "mde50": 0.0007,
+    "mde80": 0.001
+   },
+   "brier": {
+    "line": {
+     "se": 0.0001,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0002,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0002,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0002,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0002,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0001,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0003,
+    "mde50": 0.0003,
+    "mde80": 0.0005
+   }
+  },
+  {
+   "candidate": "two box-score models a little apart (the model against itself with every mean x 1.03; spread only)",
+   "logloss": {
+    "line": {
+     "se": 0.0004,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0009,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0009,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0009,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.001,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0011,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0015,
+    "mde50": 0.0015,
+    "mde80": 0.0022
+   },
+   "brier": {
+    "line": {
+     "se": 0.0002,
+     "clusters": 11395
+    },
+    "player-game": {
+     "se": 0.0004,
+     "clusters": 1333
+    },
+    "player": {
+     "se": 0.0004,
+     "clusters": 170
+    },
+    "game": {
+     "se": 0.0004,
+     "clusters": 83
+    },
+    "series": {
+     "se": 0.0005,
+     "clusters": 17
+    },
+    "round": {
+     "se": 0.0005,
+     "clusters": 5
+    },
+    "bootHalfWidth": 0.0007,
+    "mde50": 0.0007,
+    "mde80": 0.001
+   }
+  }
+ ]
+}

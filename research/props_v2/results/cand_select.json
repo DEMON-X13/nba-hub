@@ -1,0 +1,1970 @@
+{
+ "generated": "2026-11-05T18:12Z",
+ "what": "Candidate C, selection rules (research/props_v2/cand_select.js; the rules in cand_select.md were written before this run)",
+ "lines": 11395,
+ "games": 83,
+ "bonferroni": [
+  0.0071428571428571435,
+  0.9928571428571429
+ ],
+ "cuts": {
+  "pts": [
+   11.5,
+   14.5,
+   20.5
+  ],
+  "reb": [
+   3.5,
+   4.5,
+   6.5
+  ],
+  "ast": [
+   1.5,
+   3.5,
+   5.5
+  ],
+  "tpm": [
+   1.5,
+   1.5,
+   2.5
+  ],
+  "stl": [
+   0.5,
+   0.5,
+   1.5
+  ],
+  "blk": [
+   0.5,
+   0.5,
+   0.5
+  ],
+  "pra": [
+   18.5,
+   23.5,
+   30.5
+  ],
+  "pr": [
+   15.5,
+   20.5,
+   26.5
+  ],
+  "pa": [
+   13.5,
+   17.5,
+   25.5
+  ],
+  "ar": [
+   6.5,
+   8.5,
+   10.5
+  ],
+  "sb": [
+   1.5,
+   1.5,
+   1.5
+  ]
+ },
+ "walkForwardPublished": {
+  "2025": {
+   "players": 28007,
+   "stats": {
+    "pts": {
+     "mae": 4.55,
+     "logScore": 3.0147
+    },
+    "reb": {
+     "mae": 1.89,
+     "logScore": 2.1743
+    },
+    "ast": {
+     "mae": 1.31,
+     "logScore": 1.7429
+    },
+    "tpm": {
+     "mae": 0.88,
+     "logScore": 1.3069
+    },
+    "stl": {
+     "mae": 0.7,
+     "logScore": 1.1268
+    },
+    "blk": {
+     "mae": 0.52,
+     "logScore": 0.8111
+    },
+    "pra": {
+     "mae": 5.96,
+     "logScore": 3.3617
+    },
+    "pr": {
+     "mae": 5.48,
+     "logScore": 3.2624
+    },
+    "pa": {
+     "mae": 4.99,
+     "logScore": 3.1686
+    },
+    "ar": {
+     "mae": 2.59,
+     "logScore": 2.515
+    },
+    "sb": {
+     "mae": 0.91,
+     "logScore": 1.3992
+    }
+   }
+  },
+  "2026": {
+   "players": 28463,
+   "stats": {
+    "pts": {
+     "mae": 4.51,
+     "logScore": 3.0192
+    },
+    "reb": {
+     "mae": 1.86,
+     "logScore": 2.1567
+    },
+    "ast": {
+     "mae": 1.32,
+     "logScore": 1.7474
+    },
+    "tpm": {
+     "mae": 0.88,
+     "logScore": 1.2986
+    },
+    "stl": {
+     "mae": 0.71,
+     "logScore": 1.1336
+    },
+    "blk": {
+     "mae": 0.51,
+     "logScore": 0.7983
+    },
+    "pra": {
+     "mae": 5.92,
+     "logScore": 3.363
+    },
+    "pr": {
+     "mae": 5.43,
+     "logScore": 3.2599
+    },
+    "pa": {
+     "mae": 4.97,
+     "logScore": 3.1493
+    },
+    "ar": {
+     "mae": 2.56,
+     "logScore": 2.5054
+    },
+    "sb": {
+     "mae": 0.92,
+     "logScore": 1.402
+    }
+   }
+  }
+ },
+ "model": {
+  "id": "model",
+  "name": "the model on every line",
+  "seen": true,
+  "sides": "both",
+  "lines": 11395,
+  "share": 1,
+  "games": 83,
+  "stats": {
+   "pts": 1328,
+   "reb": 1234,
+   "tpm": 1079,
+   "pra": 1113,
+   "pr": 1204,
+   "ast": 1094,
+   "stl": 888,
+   "blk": 795,
+   "pa": 1029,
+   "ar": 1041,
+   "sb": 590
+  },
+  "said": 0.4457,
+  "hit": 0.4592,
+  "marketSaid": 0.4561,
+  "meanGap": 0.0669,
+  "selected": {
+   "logloss": {
+    "diff": 0.0147,
+    "ci90": [
+     0.008254,
+     0.021361
+    ],
+    "ciBonf": [
+     0.005324,
+     0.024688
+    ]
+   },
+   "brier": {
+    "diff": 0.0064,
+    "ci90": [
+     0.003596,
+     0.009387
+    ],
+    "ciBonf": [
+     0.002303,
+     0.010864
+    ]
+   }
+  },
+  "allLines": {
+   "logloss": {
+    "diff": 0.0147,
+    "ci90": [
+     0.008254,
+     0.021361
+    ]
+   },
+   "brier": {
+    "diff": 0.0064,
+    "ci90": [
+     0.003596,
+     0.009387
+    ]
+   }
+  },
+  "flat": {
+   "over": {
+    "bets": 967,
+    "won": 442,
+    "units": -106.44,
+    "said": 0.5911,
+    "roi": -0.1101,
+    "winRate": 0.4571,
+    "ci90": [
+     -181.45,
+     -31.97
+    ],
+    "ciBonf": [
+     -220.21,
+     7.3
+    ]
+   },
+   "under": {
+    "bets": 4271,
+    "won": 2357,
+    "units": 135.28,
+    "said": 0.6315,
+    "roi": 0.0317,
+    "winRate": 0.5519,
+    "ci90": [
+     -47,
+     315.56
+    ],
+    "ciBonf": [
+     -137.98,
+     406.03
+    ]
+   }
+  },
+  "bands": {
+   "over 3-5": {
+    "bets": 351,
+    "won": 173,
+    "units": -5.17,
+    "roi": -0.0147
+   },
+   "over 5-8": {
+    "bets": 300,
+    "won": 148,
+    "units": -14.93,
+    "roi": -0.0498
+   },
+   "over 8+": {
+    "bets": 316,
+    "won": 121,
+    "units": -86.34,
+    "roi": -0.2732
+   },
+   "under 3-5": {
+    "bets": 992,
+    "won": 570,
+    "units": 69.8,
+    "roi": 0.0704
+   },
+   "under 5-8": {
+    "bets": 1216,
+    "won": 693,
+    "units": 72.26,
+    "roi": 0.0594
+   },
+   "under 8+": {
+    "bets": 2063,
+    "won": 1094,
+    "units": -6.78,
+    "roi": -0.0033
+   }
+  }
+ },
+ "rules": {
+  "C-A": {
+   "id": "C-A",
+   "name": "C-A (primary): 15-35 min, no return / teammate back / new club, line at or under the median",
+   "seen": false,
+   "sides": "both",
+   "lines": 4979,
+   "share": 0.4369,
+   "games": 83,
+   "stats": {
+    "pts": 622,
+    "reb": 463,
+    "tpm": 506,
+    "pra": 497,
+    "pr": 577,
+    "ast": 540,
+    "blk": 332,
+    "ar": 407,
+    "sb": 235,
+    "stl": 336,
+    "pa": 464
+   },
+   "said": 0.4586,
+   "hit": 0.4957,
+   "marketSaid": 0.4607,
+   "meanGap": 0.0632,
+   "selected": {
+    "logloss": {
+     "diff": 0.0178,
+     "ci90": [
+      0.009821,
+      0.025921
+     ],
+     "ciBonf": [
+      0.0062,
+      0.030181
+     ]
+    },
+    "brier": {
+     "diff": 0.008,
+     "ci90": [
+      0.004347,
+      0.011805
+     ],
+     "ciBonf": [
+      0.002654,
+      0.013758
+     ]
+    }
+   },
+   "allLines": {
+    "logloss": {
+     "diff": 0.0078,
+     "ci90": [
+      0.00423,
+      0.011452
+     ]
+    },
+    "brier": {
+     "diff": 0.0035,
+     "ci90": [
+      0.001883,
+      0.005215
+     ]
+    }
+   },
+   "flat": {
+    "over": {
+     "bets": 502,
+     "won": 244,
+     "units": -36.51,
+     "said": 0.6011,
+     "roi": -0.0727,
+     "winRate": 0.4861,
+     "ci90": [
+      -94.7,
+      20.93
+     ],
+     "ciBonf": [
+      -125.6,
+      47.1
+     ]
+    },
+    "under": {
+     "bets": 1791,
+     "won": 905,
+     "units": -81.65,
+     "said": 0.6121,
+     "roi": -0.0456,
+     "winRate": 0.5053,
+     "ci90": [
+      -205.92,
+      39.9
+     ],
+     "ciBonf": [
+      -266.06,
+      100.64
+     ]
+    }
+   },
+   "bands": {
+    "over 3-5": {
+     "bets": 181,
+     "won": 101,
+     "units": 15.04,
+     "roi": 0.0831
+    },
+    "over 5-8": {
+     "bets": 131,
+     "won": 70,
+     "units": 2.73,
+     "roi": 0.0208
+    },
+    "over 8+": {
+     "bets": 190,
+     "won": 73,
+     "units": -54.28,
+     "roi": -0.2857
+    },
+    "under 3-5": {
+     "bets": 479,
+     "won": 248,
+     "units": -9.88,
+     "roi": -0.0206
+    },
+    "under 5-8": {
+     "bets": 590,
+     "won": 326,
+     "units": 19.53,
+     "roi": 0.0331
+    },
+    "under 8+": {
+     "bets": 722,
+     "won": 331,
+     "units": -91.3,
+     "roi": -0.1265
+    }
+   },
+   "verdict": {
+    "logloss90": false,
+    "loglossBonf": false,
+    "units90": [],
+    "unitsBonf": [],
+    "word": "does not clear"
+   }
+  },
+  "C-B": {
+   "id": "C-B",
+   "name": "C-B: C-A, side by phase (archive: Unders only)",
+   "seen": true,
+   "sides": "under",
+   "lines": 4979,
+   "share": 0.4369,
+   "games": 83,
+   "stats": {
+    "pts": 622,
+    "reb": 463,
+    "tpm": 506,
+    "pra": 497,
+    "pr": 577,
+    "ast": 540,
+    "blk": 332,
+    "ar": 407,
+    "sb": 235,
+    "stl": 336,
+    "pa": 464
+   },
+   "said": 0.4586,
+   "hit": 0.4957,
+   "marketSaid": 0.4607,
+   "meanGap": 0.0632,
+   "selected": {
+    "logloss": {
+     "diff": 0.0178,
+     "ci90": [
+      0.009821,
+      0.025921
+     ],
+     "ciBonf": [
+      0.0062,
+      0.030181
+     ]
+    },
+    "brier": {
+     "diff": 0.008,
+     "ci90": [
+      0.004347,
+      0.011805
+     ],
+     "ciBonf": [
+      0.002654,
+      0.013758
+     ]
+    }
+   },
+   "allLines": {
+    "logloss": {
+     "diff": 0.0078,
+     "ci90": [
+      0.00423,
+      0.011452
+     ]
+    },
+    "brier": {
+     "diff": 0.0035,
+     "ci90": [
+      0.001883,
+      0.005215
+     ]
+    }
+   },
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "said": null,
+     "roi": null,
+     "winRate": null,
+     "ci90": null,
+     "ciBonf": null
+    },
+    "under": {
+     "bets": 1791,
+     "won": 905,
+     "units": -81.65,
+     "said": 0.6121,
+     "roi": -0.0456,
+     "winRate": 0.5053,
+     "ci90": [
+      -205.92,
+      39.9
+     ],
+     "ciBonf": [
+      -266.06,
+      100.64
+     ]
+    }
+   },
+   "bands": {
+    "over 3-5": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "roi": null
+    },
+    "over 5-8": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "roi": null
+    },
+    "over 8+": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "roi": null
+    },
+    "under 3-5": {
+     "bets": 479,
+     "won": 248,
+     "units": -9.88,
+     "roi": -0.0206
+    },
+    "under 5-8": {
+     "bets": 590,
+     "won": 326,
+     "units": 19.53,
+     "roi": 0.0331
+    },
+    "under 8+": {
+     "bets": 722,
+     "won": 331,
+     "units": -91.3,
+     "roi": -0.1265
+    }
+   },
+   "verdict": {
+    "logloss90": false,
+    "loglossBonf": false,
+    "units90": [],
+    "unitsBonf": [],
+    "word": "does not clear"
+   }
+  },
+  "C-side": {
+   "id": "C-side",
+   "name": "C-side: every line, side by phase (archive: Unders only)",
+   "seen": true,
+   "sides": "under",
+   "lines": 11395,
+   "share": 1,
+   "games": 83,
+   "stats": {
+    "pts": 1328,
+    "reb": 1234,
+    "tpm": 1079,
+    "pra": 1113,
+    "pr": 1204,
+    "ast": 1094,
+    "stl": 888,
+    "blk": 795,
+    "pa": 1029,
+    "ar": 1041,
+    "sb": 590
+   },
+   "said": 0.4457,
+   "hit": 0.4592,
+   "marketSaid": 0.4561,
+   "meanGap": 0.0669,
+   "selected": {
+    "logloss": {
+     "diff": 0.0147,
+     "ci90": [
+      0.008254,
+      0.021361
+     ],
+     "ciBonf": [
+      0.005324,
+      0.024688
+     ]
+    },
+    "brier": {
+     "diff": 0.0064,
+     "ci90": [
+      0.003596,
+      0.009387
+     ],
+     "ciBonf": [
+      0.002303,
+      0.010864
+     ]
+    }
+   },
+   "allLines": {
+    "logloss": {
+     "diff": 0.0147,
+     "ci90": [
+      0.008254,
+      0.021361
+     ]
+    },
+    "brier": {
+     "diff": 0.0064,
+     "ci90": [
+      0.003596,
+      0.009387
+     ]
+    }
+   },
+   "flat": {
+    "over": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "said": null,
+     "roi": null,
+     "winRate": null,
+     "ci90": null,
+     "ciBonf": null
+    },
+    "under": {
+     "bets": 4271,
+     "won": 2357,
+     "units": 135.28,
+     "said": 0.6315,
+     "roi": 0.0317,
+     "winRate": 0.5519,
+     "ci90": [
+      -47,
+      315.56
+     ],
+     "ciBonf": [
+      -137.98,
+      406.03
+     ]
+    }
+   },
+   "bands": {
+    "over 3-5": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "roi": null
+    },
+    "over 5-8": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "roi": null
+    },
+    "over 8+": {
+     "bets": 0,
+     "won": 0,
+     "units": 0,
+     "roi": null
+    },
+    "under 3-5": {
+     "bets": 992,
+     "won": 570,
+     "units": 69.8,
+     "roi": 0.0704
+    },
+    "under 5-8": {
+     "bets": 1216,
+     "won": 693,
+     "units": 72.26,
+     "roi": 0.0594
+    },
+    "under 8+": {
+     "bets": 2063,
+     "won": 1094,
+     "units": -6.78,
+     "roi": -0.0033
+    }
+   },
+   "verdict": {
+    "logloss90": false,
+    "loglossBonf": false,
+    "units90": [],
+    "unitsBonf": [],
+    "word": "does not clear"
+   }
+  },
+  "C-stat": {
+   "id": "C-stat",
+   "name": "C-stat: the non-points stats",
+   "seen": true,
+   "sides": "both",
+   "lines": 6721,
+   "share": 0.5898,
+   "games": 83,
+   "stats": {
+    "reb": 1234,
+    "tpm": 1079,
+    "ast": 1094,
+    "stl": 888,
+    "blk": 795,
+    "ar": 1041,
+    "sb": 590
+   },
+   "said": 0.4485,
+   "hit": 0.4633,
+   "marketSaid": 0.4487,
+   "meanGap": 0.0576,
+   "selected": {
+    "logloss": {
+     "diff": 0.0062,
+     "ci90": [
+      0.00148,
+      0.010971
+     ],
+     "ciBonf": [
+      -0.000852,
+      0.013408
+     ]
+    },
+    "brier": {
+     "diff": 0.0027,
+     "ci90": [
+      0.000515,
+      0.004844
+     ],
+     "ciBonf": [
+      -0.000562,
+      0.005924
+     ]
+    }
+   },
+   "allLines": {
+    "logloss": {
+     "diff": 0.0037,
+     "ci90": [
+      0.000874,
+      0.006469
+     ]
+    },
+    "brier": {
+     "diff": 0.0016,
+     "ci90": [
+      0.000302,
+      0.002856
+     ]
+    }
+   },
+   "flat": {
+    "over": {
+     "bets": 532,
+     "won": 262,
+     "units": -8.95,
+     "said": 0.5724,
+     "roi": -0.0168,
+     "winRate": 0.4925,
+     "ci90": [
+      -52.8,
+      34.61
+     ],
+     "ciBonf": [
+      -77.14,
+      56.25
+     ]
+    },
+    "under": {
+     "bets": 2079,
+     "won": 1140,
+     "units": 45.96,
+     "said": 0.6212,
+     "roi": 0.0221,
+     "winRate": 0.5483,
+     "ci90": [
+      -39.99,
+      131.91
+     ],
+     "ciBonf": [
+      -83.81,
+      174.99
+     ]
+    }
+   },
+   "bands": {
+    "over 3-5": {
+     "bets": 214,
+     "won": 111,
+     "units": 15.32,
+     "roi": 0.0716
+    },
+    "over 5-8": {
+     "bets": 169,
+     "won": 83,
+     "units": -6.28,
+     "roi": -0.0372
+    },
+    "over 8+": {
+     "bets": 149,
+     "won": 68,
+     "units": -17.98,
+     "roi": -0.1207
+    },
+    "under 3-5": {
+     "bets": 595,
+     "won": 334,
+     "units": 26.05,
+     "roi": 0.0438
+    },
+    "under 5-8": {
+     "bets": 652,
+     "won": 353,
+     "units": -0.47,
+     "roi": -0.0007
+    },
+    "under 8+": {
+     "bets": 832,
+     "won": 453,
+     "units": 20.38,
+     "roi": 0.0245
+    }
+   },
+   "verdict": {
+    "logloss90": false,
+    "loglossBonf": false,
+    "units90": [],
+    "unitsBonf": [],
+    "word": "does not clear"
+   }
+  },
+  "C-tier": {
+   "id": "C-tier",
+   "name": "C-tier: projected 15 to under 35 minutes",
+   "seen": false,
+   "sides": "both",
+   "lines": 7054,
+   "share": 0.619,
+   "games": 83,
+   "stats": {
+    "pts": 822,
+    "reb": 784,
+    "tpm": 666,
+    "pra": 696,
+    "pr": 772,
+    "ast": 690,
+    "stl": 523,
+    "blk": 452,
+    "pa": 664,
+    "ar": 654,
+    "sb": 331
+   },
+   "said": 0.4442,
+   "hit": 0.479,
+   "marketSaid": 0.4577,
+   "meanGap": 0.0693,
+   "selected": {
+    "logloss": {
+     "diff": 0.0215,
+     "ci90": [
+      0.012386,
+      0.0311
+     ],
+     "ciBonf": [
+      0.008364,
+      0.035703
+     ]
+    },
+    "brier": {
+     "diff": 0.0094,
+     "ci90": [
+      0.005376,
+      0.0136
+     ],
+     "ciBonf": [
+      0.003555,
+      0.015622
+     ]
+    }
+   },
+   "allLines": {
+    "logloss": {
+     "diff": 0.0133,
+     "ci90": [
+      0.007574,
+      0.019531
+     ]
+    },
+    "brier": {
+     "diff": 0.0058,
+     "ci90": [
+      0.003266,
+      0.00854
+     ]
+    }
+   },
+   "flat": {
+    "over": {
+     "bets": 655,
+     "won": 305,
+     "units": -69.78,
+     "said": 0.6017,
+     "roi": -0.1065,
+     "winRate": 0.4656,
+     "ci90": [
+      -139.29,
+      -1.25
+     ],
+     "ciBonf": [
+      -173.87,
+      32.4
+     ]
+    },
+    "under": {
+     "bets": 2861,
+     "won": 1502,
+     "units": -49.87,
+     "said": 0.63,
+     "roi": -0.0174,
+     "winRate": 0.525,
+     "ci90": [
+      -213.75,
+      109.17
+     ],
+     "ciBonf": [
+      -293.02,
+      188.64
+     ]
+    }
+   },
+   "bands": {
+    "over 3-5": {
+     "bets": 222,
+     "won": 118,
+     "units": 8.54,
+     "roi": 0.0385
+    },
+    "over 5-8": {
+     "bets": 175,
+     "won": 87,
+     "units": -8.2,
+     "roi": -0.0469
+    },
+    "over 8+": {
+     "bets": 258,
+     "won": 100,
+     "units": -70.12,
+     "roi": -0.2718
+    },
+    "under 3-5": {
+     "bets": 660,
+     "won": 356,
+     "units": 5.93,
+     "roi": 0.009
+    },
+    "under 5-8": {
+     "bets": 835,
+     "won": 469,
+     "units": 37.31,
+     "roi": 0.0447
+    },
+    "under 8+": {
+     "bets": 1366,
+     "won": 677,
+     "units": -93.11,
+     "roi": -0.0682
+    }
+   },
+   "verdict": {
+    "logloss90": false,
+    "loglossBonf": false,
+    "units90": [],
+    "unitsBonf": [],
+    "word": "does not clear"
+   }
+  },
+  "C-size": {
+   "id": "C-size",
+   "name": "C-size: line at or under the stat's median",
+   "seen": false,
+   "sides": "both",
+   "lines": 7562,
+   "share": 0.6636,
+   "games": 83,
+   "stats": {
+    "pts": 896,
+    "reb": 753,
+    "tpm": 798,
+    "pra": 685,
+    "pr": 791,
+    "ast": 788,
+    "blk": 660,
+    "ar": 608,
+    "sb": 449,
+    "stl": 538,
+    "pa": 596
+   },
+   "said": 0.4558,
+   "hit": 0.4787,
+   "marketSaid": 0.4601,
+   "meanGap": 0.0642,
+   "selected": {
+    "logloss": {
+     "diff": 0.015,
+     "ci90": [
+      0.008379,
+      0.02192
+     ],
+     "ciBonf": [
+      0.005205,
+      0.025378
+     ]
+    },
+    "brier": {
+     "diff": 0.0068,
+     "ci90": [
+      0.003732,
+      0.009906
+     ],
+     "ciBonf": [
+      0.002323,
+      0.011487
+     ]
+    }
+   },
+   "allLines": {
+    "logloss": {
+     "diff": 0.01,
+     "ci90": [
+      0.005556,
+      0.01456
+     ]
+    },
+    "brier": {
+     "diff": 0.0045,
+     "ci90": [
+      0.002472,
+      0.006578
+     ]
+    }
+   },
+   "flat": {
+    "over": {
+     "bets": 698,
+     "won": 331,
+     "units": -58.4,
+     "said": 0.5966,
+     "roi": -0.0837,
+     "winRate": 0.4742,
+     "ci90": [
+      -124.63,
+      7.21
+     ],
+     "ciBonf": [
+      -157.73,
+      39.6
+     ]
+    },
+    "under": {
+     "bets": 2671,
+     "won": 1412,
+     "units": -9.68,
+     "said": 0.6202,
+     "roi": -0.0036,
+     "winRate": 0.5286,
+     "ci90": [
+      -149.62,
+      129
+     ],
+     "ciBonf": [
+      -222.82,
+      196.24
+     ]
+    }
+   },
+   "bands": {
+    "over 3-5": {
+     "bets": 246,
+     "won": 132,
+     "units": 16.11,
+     "roi": 0.0655
+    },
+    "over 5-8": {
+     "bets": 203,
+     "won": 103,
+     "units": -6.71,
+     "roi": -0.0331
+    },
+    "over 8+": {
+     "bets": 249,
+     "won": 96,
+     "units": -67.8,
+     "roi": -0.2723
+    },
+    "under 3-5": {
+     "bets": 705,
+     "won": 387,
+     "units": 22.67,
+     "roi": 0.0322
+    },
+    "under 5-8": {
+     "bets": 816,
+     "won": 443,
+     "units": 11.11,
+     "roi": 0.0136
+    },
+    "under 8+": {
+     "bets": 1150,
+     "won": 582,
+     "units": -43.45,
+     "roi": -0.0378
+    }
+   },
+   "verdict": {
+    "logloss90": false,
+    "loglossBonf": false,
+    "units90": [],
+    "unitsBonf": [],
+    "word": "does not clear"
+   }
+  },
+  "C-role": {
+   "id": "C-role",
+   "name": "C-role: no return after 3+ missed, no 20+ min teammate back, no new club",
+   "seen": false,
+   "sides": "both",
+   "lines": 10781,
+   "share": 0.9461,
+   "games": 83,
+   "stats": {
+    "pts": 1259,
+    "reb": 1166,
+    "tpm": 1021,
+    "pra": 1054,
+    "pr": 1144,
+    "ast": 1030,
+    "stl": 839,
+    "blk": 753,
+    "pa": 973,
+    "ar": 983,
+    "sb": 559
+   },
+   "said": 0.4462,
+   "hit": 0.4607,
+   "marketSaid": 0.4556,
+   "meanGap": 0.0659,
+   "selected": {
+    "logloss": {
+     "diff": 0.0137,
+     "ci90": [
+      0.007388,
+      0.020379
+     ],
+     "ciBonf": [
+      0.004377,
+      0.023749
+     ]
+    },
+    "brier": {
+     "diff": 0.006,
+     "ci90": [
+      0.003207,
+      0.008992
+     ],
+     "ciBonf": [
+      0.001853,
+      0.010423
+     ]
+    }
+   },
+   "allLines": {
+    "logloss": {
+     "diff": 0.013,
+     "ci90": [
+      0.007015,
+      0.019273
+     ]
+    },
+    "brier": {
+     "diff": 0.0057,
+     "ci90": [
+      0.003031,
+      0.008503
+     ]
+    }
+   },
+   "flat": {
+    "over": {
+     "bets": 899,
+     "won": 417,
+     "units": -85.89,
+     "said": 0.5883,
+     "roi": -0.0955,
+     "winRate": 0.4638,
+     "ci90": [
+      -160.38,
+      -13.34
+     ],
+     "ciBonf": [
+      -196.78,
+      23.47
+     ]
+    },
+    "under": {
+     "bets": 3997,
+     "won": 2201,
+     "units": 114.07,
+     "said": 0.6301,
+     "roi": 0.0285,
+     "winRate": 0.5507,
+     "ci90": [
+      -60.01,
+      289.71
+     ],
+     "ciBonf": [
+      -149.09,
+      371.3
+     ]
+    }
+   },
+   "bands": {
+    "over 3-5": {
+     "bets": 337,
+     "won": 169,
+     "units": 1.24,
+     "roi": 0.0037
+    },
+    "over 5-8": {
+     "bets": 284,
+     "won": 143,
+     "units": -8.23,
+     "roi": -0.029
+    },
+    "over 8+": {
+     "bets": 278,
+     "won": 105,
+     "units": -78.9,
+     "roi": -0.2838
+    },
+    "under 3-5": {
+     "bets": 939,
+     "won": 536,
+     "units": 59.52,
+     "roi": 0.0634
+    },
+    "under 5-8": {
+     "bets": 1156,
+     "won": 661,
+     "units": 70.93,
+     "roi": 0.0614
+    },
+    "under 8+": {
+     "bets": 1902,
+     "won": 1004,
+     "units": -16.39,
+     "roi": -0.0086
+    }
+   },
+   "verdict": {
+    "logloss90": false,
+    "loglossBonf": false,
+    "units90": [],
+    "unitsBonf": [],
+    "word": "does not clear"
+   }
+  }
+ },
+ "walkForward": {
+  "C-A": {
+   "2025": {
+    "sel": {
+     "statRows": 140275,
+     "pts": {
+      "mae": 4.544,
+      "logScore": 3.0858
+     },
+     "pra": {
+      "mae": 5.965,
+      "logScore": 3.4025
+     },
+     "meanOf11": {
+      "mae": 2.673,
+      "logScore": 2.1793
+     },
+     "line": {
+      "llModel": 0.6477,
+      "llNaive": 0.6943,
+      "share": 1.006,
+      "slope": 0.989
+     }
+    },
+    "rest": {
+     "statRows": 140412,
+     "pts": {
+      "mae": 4.966,
+      "logScore": 3.1177
+     },
+     "pra": {
+      "mae": 6.431,
+      "logScore": 3.448
+     },
+     "meanOf11": {
+      "mae": 2.972,
+      "logScore": 2.2768
+     },
+     "line": {
+      "llModel": 0.6441,
+      "llNaive": 0.6768
+     }
+    },
+    "shareOfRows": 0.4998
+   },
+   "2026": {
+    "sel": {
+     "statRows": 148569,
+     "pts": {
+      "mae": 4.499,
+      "logScore": 3.085
+     },
+     "pra": {
+      "mae": 5.928,
+      "logScore": 3.4021
+     },
+     "meanOf11": {
+      "mae": 2.661,
+      "logScore": 2.179
+     },
+     "line": {
+      "llModel": 0.6442,
+      "llNaive": 0.6929,
+      "share": 1.006,
+      "slope": 1.005
+     }
+    },
+    "rest": {
+     "statRows": 140896,
+     "pts": {
+      "mae": 4.876,
+      "logScore": 3.0931
+     },
+     "pra": {
+      "mae": 6.303,
+      "logScore": 3.4207
+     },
+     "meanOf11": {
+      "mae": 2.913,
+      "logScore": 2.25
+     },
+     "line": {
+      "llModel": 0.6393,
+      "llNaive": 0.6744
+     }
+    },
+    "shareOfRows": 0.5133
+   }
+  },
+  "C-B": {
+   "2025": {
+    "sel": {
+     "statRows": 96132,
+     "pts": {
+      "mae": 4.573,
+      "logScore": 3.0947
+     },
+     "pra": {
+      "mae": 6.019,
+      "logScore": 3.4118
+     },
+     "meanOf11": {
+      "mae": 2.693,
+      "logScore": 2.1831
+     },
+     "line": {
+      "llModel": 0.6467,
+      "llNaive": 0.7119,
+      "share": 1.036,
+      "slope": 1.023
+     }
+    },
+    "rest": {
+     "statRows": 184555,
+     "pts": {
+      "mae": 4.855,
+      "logScore": 3.1056
+     },
+     "pra": {
+      "mae": 6.292,
+      "logScore": 3.4322
+     },
+     "meanOf11": {
+      "mae": 2.893,
+      "logScore": 2.2522
+     },
+     "line": {
+      "llModel": 0.6455,
+      "llNaive": 0.6718
+     }
+    },
+    "shareOfRows": 0.3425
+   },
+   "2026": {
+    "sel": {
+     "statRows": 103800,
+     "pts": {
+      "mae": 4.539,
+      "logScore": 3.0965
+     },
+     "pra": {
+      "mae": 5.98,
+      "logScore": 3.4113
+     },
+     "meanOf11": {
+      "mae": 2.68,
+      "logScore": 2.1806
+     },
+     "line": {
+      "llModel": 0.642,
+      "llNaive": 0.7081,
+      "share": 1.024,
+      "slope": 1.038
+     }
+    },
+    "rest": {
+     "statRows": 185665,
+     "pts": {
+      "mae": 4.763,
+      "logScore": 3.0848
+     },
+     "pra": {
+      "mae": 6.186,
+      "logScore": 3.4112
+     },
+     "meanOf11": {
+      "mae": 2.844,
+      "logScore": 2.2328
+     },
+     "line": {
+      "llModel": 0.6418,
+      "llNaive": 0.6704
+     }
+    },
+    "shareOfRows": 0.3586
+   }
+  },
+  "C-side": {
+   "2025": {
+    "sel": {
+     "statRows": 173130,
+     "pts": {
+      "mae": 4.739,
+      "logScore": 3.0972
+     },
+     "pra": {
+      "mae": 6.211,
+      "logScore": 3.4246
+     },
+     "meanOf11": {
+      "mae": 2.808,
+      "logScore": 2.21
+     },
+     "line": {
+      "llModel": 0.649,
+      "llNaive": 0.7071,
+      "share": 1.015,
+      "slope": 0.986
+     }
+    },
+    "rest": {
+     "statRows": 107557,
+     "pts": {
+      "mae": 4.781,
+      "logScore": 3.1099
+     },
+     "pra": {
+      "mae": 6.168,
+      "logScore": 3.4258
+     },
+     "meanOf11": {
+      "mae": 2.849,
+      "logScore": 2.2575
+     },
+     "line": {
+      "llModel": 0.641,
+      "llNaive": 0.6507
+     }
+    },
+    "shareOfRows": 0.6168
+   },
+   "2026": {
+    "sel": {
+     "statRows": 180203,
+     "pts": {
+      "mae": 4.606,
+      "logScore": 3.0684
+     },
+     "pra": {
+      "mae": 6.054,
+      "logScore": 3.3988
+     },
+     "meanOf11": {
+      "mae": 2.742,
+      "logScore": 2.1892
+     },
+     "line": {
+      "llModel": 0.6441,
+      "llNaive": 0.7042,
+      "share": 0.986,
+      "slope": 0.997
+     }
+    },
+    "rest": {
+     "statRows": 109262,
+     "pts": {
+      "mae": 4.811,
+      "logScore": 3.1226
+     },
+     "pra": {
+      "mae": 6.211,
+      "logScore": 3.4326
+     },
+     "meanOf11": {
+      "mae": 2.859,
+      "logScore": 2.2557
+     },
+     "line": {
+      "llModel": 0.6381,
+      "llNaive": 0.6505
+     }
+    },
+    "shareOfRows": 0.6225
+   }
+  },
+  "C-stat": {
+   "2025": {
+    "sel": {
+     "statRows": 178619,
+     "pts": null,
+     "pra": null,
+     "meanOf11": null,
+     "line": {
+      "llModel": 0.6342,
+      "llNaive": 0.6731,
+      "share": 0.959,
+      "slope": 0.938
+     }
+    },
+    "rest": {
+     "statRows": 102068,
+     "pts": {
+      "mae": 4.754,
+      "logScore": 3.1017
+     },
+     "pra": {
+      "mae": 6.196,
+      "logScore": 3.425
+     },
+     "meanOf11": null,
+     "line": {
+      "llModel": 0.6665,
+      "llNaive": 0.7073
+     }
+    },
+    "shareOfRows": 0.6364
+   },
+   "2026": {
+    "sel": {
+     "statRows": 184205,
+     "pts": null,
+     "pra": null,
+     "meanOf11": null,
+     "line": {
+      "llModel": 0.6307,
+      "llNaive": 0.6706,
+      "share": 0.946,
+      "slope": 0.949
+     }
+    },
+    "rest": {
+     "statRows": 105260,
+     "pts": {
+      "mae": 4.684,
+      "logScore": 3.0889
+     },
+     "pra": {
+      "mae": 6.112,
+      "logScore": 3.4112
+     },
+     "meanOf11": null,
+     "line": {
+      "llModel": 0.6613,
+      "llNaive": 0.7072
+     }
+    },
+    "shareOfRows": 0.6364
+   }
+  },
+  "C-tier": {
+   "2025": {
+    "sel": {
+     "statRows": 208769,
+     "pts": {
+      "mae": 4.818,
+      "logScore": 3.1561
+     },
+     "pra": {
+      "mae": 6.244,
+      "logScore": 3.457
+     },
+     "meanOf11": {
+      "mae": 2.855,
+      "logScore": 2.2623
+     },
+     "line": {
+      "llModel": 0.6484,
+      "llNaive": 0.6862,
+      "share": 0.959,
+      "slope": 0.953
+     }
+    },
+    "rest": {
+     "statRows": 71918,
+     "pts": {
+      "mae": 4.566,
+      "logScore": 2.9438
+     },
+     "pra": {
+      "mae": 6.056,
+      "logScore": 3.3322
+     },
+     "meanOf11": {
+      "mae": 2.732,
+      "logScore": 2.1303
+     },
+     "line": {
+      "llModel": 0.6386,
+      "llNaive": 0.6837
+     }
+    },
+    "shareOfRows": 0.7438
+   },
+   "2026": {
+    "sel": {
+     "statRows": 221859,
+     "pts": {
+      "mae": 4.801,
+      "logScore": 3.1633
+     },
+     "pra": {
+      "mae": 6.218,
+      "logScore": 3.4605
+     },
+     "meanOf11": {
+      "mae": 2.846,
+      "logScore": 2.2631
+     },
+     "line": {
+      "llModel": 0.6463,
+      "llNaive": 0.6849,
+      "share": 0.954,
+      "slope": 0.96
+     }
+    },
+    "rest": {
+     "statRows": 67606,
+     "pts": {
+      "mae": 4.297,
+      "logScore": 2.8447
+     },
+     "pra": {
+      "mae": 5.762,
+      "logScore": 3.2496
+     },
+     "meanOf11": {
+      "mae": 2.587,
+      "logScore": 2.0529
+     },
+     "line": {
+      "llModel": 0.6272,
+      "llNaive": 0.6807
+     }
+    },
+    "shareOfRows": 0.7664
+   }
+  },
+  "C-size": {
+   "2025": {
+    "sel": {
+     "statRows": 215959,
+     "pts": {
+      "mae": 4.33,
+      "logScore": 2.9832
+     },
+     "pra": {
+      "mae": 5.819,
+      "logScore": 3.3434
+     },
+     "meanOf11": {
+      "mae": 2.592,
+      "logScore": 2.1229
+     },
+     "line": {
+      "llModel": 0.6435,
+      "llNaive": 0.6899,
+      "share": 0.983,
+      "slope": 0.949
+     }
+    },
+    "rest": {
+     "statRows": 64728,
+     "pts": {
+      "mae": 6.059,
+      "logScore": 3.4669
+     },
+     "pra": {
+      "mae": 7.374,
+      "logScore": 3.6803
+     },
+     "meanOf11": {
+      "mae": 3.565,
+      "logScore": 2.5943
+     },
+     "line": {
+      "llModel": 0.6539,
+      "llNaive": 0.671
+     }
+    },
+    "shareOfRows": 0.7694
+   },
+   "2026": {
+    "sel": {
+     "statRows": 224028,
+     "pts": {
+      "mae": 4.281,
+      "logScore": 2.9715
+     },
+     "pra": {
+      "mae": 5.758,
+      "logScore": 3.3314
+     },
+     "meanOf11": {
+      "mae": 2.566,
+      "logScore": 2.1115
+     },
+     "line": {
+      "llModel": 0.6386,
+      "llNaive": 0.6883,
+      "share": 0.973,
+      "slope": 0.969
+     }
+    },
+    "rest": {
+     "statRows": 65437,
+     "pts": {
+      "mae": 5.917,
+      "logScore": 3.4484
+     },
+     "pra": {
+      "mae": 7.212,
+      "logScore": 3.6596
+     },
+     "meanOf11": {
+      "mae": 3.507,
+      "logScore": 2.5836
+     },
+     "line": {
+      "llModel": 0.6529,
+      "llNaive": 0.669
+     }
+    },
+    "shareOfRows": 0.7739
+   }
+  },
+  "C-role": {
+   "2025": {
+    "sel": {
+     "statRows": 242055,
+     "pts": {
+      "mae": 4.774,
+      "logScore": 3.114
+     },
+     "pra": {
+      "mae": 6.204,
+      "logScore": 3.4328
+     },
+     "meanOf11": {
+      "mae": 2.832,
+      "logScore": 2.238
+     },
+     "line": {
+      "llModel": 0.6464,
+      "llNaive": 0.6886,
+      "share": 0.98,
+      "slope": 0.944
+     }
+    },
+    "rest": {
+     "statRows": 38632,
+     "pts": {
+      "mae": 4.624,
+      "logScore": 3.0243
+     },
+     "pra": {
+      "mae": 6.145,
+      "logScore": 3.3761
+     },
+     "meanOf11": {
+      "mae": 2.772,
+      "logScore": 2.1688
+     },
+     "line": {
+      "llModel": 0.6428,
+      "llNaive": 0.666
+     }
+    },
+    "shareOfRows": 0.8624
+   },
+   "2026": {
+    "sel": {
+     "statRows": 250866,
+     "pts": {
+      "mae": 4.698,
+      "logScore": 3.1021
+     },
+     "pra": {
+      "mae": 6.114,
+      "logScore": 3.4182
+     },
+     "meanOf11": {
+      "mae": 2.792,
+      "logScore": 2.2235
+     },
+     "line": {
+      "llModel": 0.6427,
+      "llNaive": 0.6872,
+      "share": 0.969,
+      "slope": 0.95
+     }
+    },
+    "rest": {
+     "statRows": 38599,
+     "pts": {
+      "mae": 4.592,
+      "logScore": 3.0034
+     },
+     "pra": {
+      "mae": 6.096,
+      "logScore": 3.366
+     },
+     "meanOf11": {
+      "mae": 2.741,
+      "logScore": 2.1527
+     },
+     "line": {
+      "llModel": 0.6362,
+      "llNaive": 0.6625
+     }
+    },
+    "shareOfRows": 0.8667
+   }
+  },
+  "all": {
+   "2025": {
+    "sel": {
+     "statRows": 280687,
+     "pts": {
+      "mae": 4.754,
+      "logScore": 3.1017
+     },
+     "pra": {
+      "mae": 6.196,
+      "logScore": 3.425
+     },
+     "meanOf11": {
+      "mae": 2.823,
+      "logScore": 2.2285
+     },
+     "line": {
+      "llModel": 0.6459,
+      "llNaive": 0.6855,
+      "share": 0.96,
+      "slope": 0.933
+     }
+    },
+    "rest": {
+     "statRows": 0,
+     "pts": null,
+     "pra": null,
+     "meanOf11": null,
+     "line": {
+      "llModel": null,
+      "llNaive": null
+     }
+    },
+    "shareOfRows": 1
+   },
+   "2026": {
+    "sel": {
+     "statRows": 289465,
+     "pts": {
+      "mae": 4.684,
+      "logScore": 3.0889
+     },
+     "pra": {
+      "mae": 6.112,
+      "logScore": 3.4112
+     },
+     "meanOf11": {
+      "mae": 2.785,
+      "logScore": 2.214
+     },
+     "line": {
+      "llModel": 0.6418,
+      "llNaive": 0.6839,
+      "share": 0.949,
+      "slope": 0.944
+     }
+    },
+    "rest": {
+     "statRows": 0,
+     "pts": null,
+     "pra": null,
+     "meanOf11": null,
+     "line": {
+      "llModel": null,
+      "llNaive": null
+     }
+    },
+    "shareOfRows": 1
+   }
+  }
+ }
+}

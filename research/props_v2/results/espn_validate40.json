@@ -1,0 +1,1186 @@
+{
+ "generated": "2026-11-05T17:33Z",
+ "what": "research/props_v2/espn_validate40.js: DraftKings provider 40 on ESPN, a sample checked (counts and DraftKings' own scores only)",
+ "groups": {
+  "2023 regular season": {
+   "games": 31,
+   "itemsPerGame": 182,
+   "mainsPerGame": 79,
+   "byStat": {
+    "pts": 441,
+    "reb": 439,
+    "ast": 393,
+    "tpm": 415,
+    "stl": 378,
+    "blk": 376
+   },
+   "nonMainItems": {
+    "Total Turnovers": 758
+   },
+   "onPlayersWhoPlayed": 2305,
+   "onPlayersListedNotPlaying": 23,
+   "onPlayersNotOnBox": 114,
+   "graded": 2305,
+   "marginMedian": 0.0678,
+   "marginP10": 0.0491,
+   "marginP90": 0.073,
+   "loglossFirstIsOver": 0.6392,
+   "loglossFirstIsUnder": 0.8147,
+   "brier": 0.2244,
+   "overRate": 0.3644,
+   "meanFairOver": 0.3833,
+   "byStatScores": {
+    "pts": {
+     "n": 418,
+     "llFirstIsOver": 0.6775,
+     "llFirstIsUnder": 0.692,
+     "overRate": 0.3923,
+     "meanFairOver": 0.4665,
+     "shareFair40to60": 0.9187
+    },
+    "reb": {
+     "n": 415,
+     "llFirstIsOver": 0.6776,
+     "llFirstIsUnder": 0.7081,
+     "overRate": 0.3928,
+     "meanFairOver": 0.438,
+     "shareFair40to60": 0.6771
+    },
+    "ast": {
+     "n": 373,
+     "llFirstIsOver": 0.6523,
+     "llFirstIsUnder": 0.7594,
+     "overRate": 0.4102,
+     "meanFairOver": 0.4104,
+     "shareFair40to60": 0.4531
+    },
+    "tpm": {
+     "n": 392,
+     "llFirstIsOver": 0.6086,
+     "llFirstIsUnder": 0.8602,
+     "overRate": 0.3265,
+     "meanFairOver": 0.3777,
+     "shareFair40to60": 0.3571
+    },
+    "stl": {
+     "n": 354,
+     "llFirstIsOver": 0.6184,
+     "llFirstIsUnder": 0.87,
+     "overRate": 0.3588,
+     "meanFairOver": 0.3312,
+     "shareFair40to60": 0.2458
+    },
+    "blk": {
+     "n": 353,
+     "llFirstIsOver": 0.59,
+     "llFirstIsUnder": 1.0379,
+     "overRate": 0.2975,
+     "meanFairOver": 0.2504,
+     "shareFair40to60": 0.1161
+    }
+   },
+   "lastUpdatedHoursAfterStart": {
+    "p10": 5.2333,
+    "median": 5.4167,
+    "p90": 5.7833
+   }
+  },
+  "2023 playoffs": {
+   "games": 20,
+   "itemsPerGame": 195,
+   "mainsPerGame": 82,
+   "byStat": {
+    "pts": 259,
+    "reb": 285,
+    "ast": 165,
+    "tpm": 286,
+    "stl": 318,
+    "blk": 318
+   },
+   "nonMainItems": {
+    "Total Turnovers": 636
+   },
+   "onPlayersWhoPlayed": 1589,
+   "onPlayersListedNotPlaying": 30,
+   "onPlayersNotOnBox": 12,
+   "graded": 1589,
+   "marginMedian": 0.0613,
+   "marginP10": 0.0466,
+   "marginP90": 0.0698,
+   "loglossFirstIsOver": 0.6501,
+   "loglossFirstIsUnder": 0.7969,
+   "brier": 0.2303,
+   "overRate": 0.4235,
+   "meanFairOver": 0.4241,
+   "byStatScores": {
+    "pts": {
+     "n": 253,
+     "llFirstIsOver": 0.6874,
+     "llFirstIsUnder": 0.6953,
+     "overRate": 0.4466,
+     "meanFairOver": 0.4675,
+     "shareFair40to60": 0.9763
+    },
+    "reb": {
+     "n": 278,
+     "llFirstIsOver": 0.6829,
+     "llFirstIsUnder": 0.7117,
+     "overRate": 0.4604,
+     "meanFairOver": 0.4669,
+     "shareFair40to60": 0.8885
+    },
+    "ast": {
+     "n": 162,
+     "llFirstIsOver": 0.684,
+     "llFirstIsUnder": 0.7198,
+     "overRate": 0.4691,
+     "meanFairOver": 0.4579,
+     "shareFair40to60": 0.8333
+    },
+    "tpm": {
+     "n": 278,
+     "llFirstIsOver": 0.6764,
+     "llFirstIsUnder": 0.7583,
+     "overRate": 0.4712,
+     "meanFairOver": 0.4496,
+     "shareFair40to60": 0.6655
+    },
+    "stl": {
+     "n": 309,
+     "llFirstIsOver": 0.6525,
+     "llFirstIsUnder": 0.7916,
+     "overRate": 0.4239,
+     "meanFairOver": 0.4348,
+     "shareFair40to60": 0.4628
+    },
+    "blk": {
+     "n": 309,
+     "llFirstIsOver": 0.546,
+     "llFirstIsUnder": 1.037,
+     "overRate": 0.3042,
+     "meanFairOver": 0.2985,
+     "shareFair40to60": 0.2039
+    }
+   },
+   "lastUpdatedHoursAfterStart": {
+    "p10": 5.2317,
+    "median": 5.4417,
+    "p90": 5.8383
+   }
+  },
+  "2024 regular season": {
+   "games": 29,
+   "itemsPerGame": 190,
+   "mainsPerGame": 80,
+   "byStat": {
+    "pts": 382,
+    "reb": 414,
+    "ast": 254,
+    "tpm": 386,
+    "stl": 440,
+    "blk": 434
+   },
+   "nonMainItems": {
+    "Total Turnovers": 880
+   },
+   "onPlayersWhoPlayed": 2226,
+   "onPlayersListedNotPlaying": 39,
+   "onPlayersNotOnBox": 45,
+   "graded": 2226,
+   "marginMedian": 0.0613,
+   "marginP10": 0.054,
+   "marginP90": 0.0693,
+   "loglossFirstIsOver": 0.6585,
+   "loglossFirstIsUnder": 0.7707,
+   "brier": 0.2335,
+   "overRate": 0.4461,
+   "meanFairOver": 0.4399,
+   "byStatScores": {
+    "pts": {
+     "n": 368,
+     "llFirstIsOver": 0.6944,
+     "llFirstIsUnder": 0.6971,
+     "overRate": 0.4891,
+     "meanFairOver": 0.4677,
+     "shareFair40to60": 1
+    },
+    "reb": {
+     "n": 398,
+     "llFirstIsOver": 0.6899,
+     "llFirstIsUnder": 0.7023,
+     "overRate": 0.4598,
+     "meanFairOver": 0.4637,
+     "shareFair40to60": 0.907
+    },
+    "ast": {
+     "n": 244,
+     "llFirstIsOver": 0.6763,
+     "llFirstIsUnder": 0.7181,
+     "overRate": 0.4467,
+     "meanFairOver": 0.456,
+     "shareFair40to60": 0.8279
+    },
+    "tpm": {
+     "n": 374,
+     "llFirstIsOver": 0.647,
+     "llFirstIsUnder": 0.7708,
+     "overRate": 0.4679,
+     "meanFairOver": 0.4605,
+     "shareFair40to60": 0.6979
+    },
+    "stl": {
+     "n": 424,
+     "llFirstIsOver": 0.6499,
+     "llFirstIsUnder": 0.7832,
+     "overRate": 0.467,
+     "meanFairOver": 0.4642,
+     "shareFair40to60": 0.5755
+    },
+    "blk": {
+     "n": 418,
+     "llFirstIsOver": 0.6058,
+     "llFirstIsUnder": 0.9185,
+     "overRate": 0.3541,
+     "meanFairOver": 0.3402,
+     "shareFair40to60": 0.3086
+    }
+   },
+   "lastUpdatedHoursAfterStart": {
+    "p10": 5.1933,
+    "median": 5.35,
+    "p90": 5.6733
+   }
+  },
+  "2024 playoffs": {
+   "games": 5,
+   "itemsPerGame": 202,
+   "mainsPerGame": 84,
+   "byStat": {
+    "pts": 62,
+    "reb": 74,
+    "ast": 39,
+    "tpm": 78,
+    "stl": 86,
+    "blk": 81
+   },
+   "nonMainItems": {
+    "Total Turnovers": 172
+   },
+   "onPlayersWhoPlayed": 407,
+   "onPlayersListedNotPlaying": 7,
+   "onPlayersNotOnBox": 6,
+   "graded": 407,
+   "marginMedian": 0.043,
+   "marginP10": 0.0411,
+   "marginP90": 0.0471,
+   "loglossFirstIsOver": 0.6508,
+   "loglossFirstIsUnder": 0.7818,
+   "brier": 0.2288,
+   "overRate": 0.4054,
+   "meanFairOver": 0.4368,
+   "byStatScores": {
+    "pts": {
+     "n": 61,
+     "llFirstIsOver": 0.6745,
+     "llFirstIsUnder": 0.7098,
+     "overRate": 0.459,
+     "meanFairOver": 0.4735,
+     "shareFair40to60": 1
+    },
+    "reb": {
+     "n": 71,
+     "llFirstIsOver": 0.6891,
+     "llFirstIsUnder": 0.7188,
+     "overRate": 0.5352,
+     "meanFairOver": 0.4608,
+     "shareFair40to60": 0.8451
+    },
+    "ast": {
+     "n": 38,
+     "llFirstIsOver": 0.6361,
+     "llFirstIsUnder": 0.7448,
+     "overRate": 0.3947,
+     "meanFairOver": 0.4682,
+     "shareFair40to60": 0.8947
+    },
+    "tpm": {
+     "n": 76,
+     "llFirstIsOver": 0.6601,
+     "llFirstIsUnder": 0.7458,
+     "overRate": 0.4079,
+     "meanFairOver": 0.4723,
+     "shareFair40to60": 0.7237
+    },
+    "stl": {
+     "n": 83,
+     "llFirstIsOver": 0.6209,
+     "llFirstIsUnder": 0.7892,
+     "overRate": 0.3012,
+     "meanFairOver": 0.4424,
+     "shareFair40to60": 0.506
+    },
+    "blk": {
+     "n": 78,
+     "llFirstIsOver": 0.6276,
+     "llFirstIsUnder": 0.9405,
+     "overRate": 0.359,
+     "meanFairOver": 0.3306,
+     "shareFair40to60": 0.3718
+    }
+   },
+   "lastUpdatedHoursAfterStart": {
+    "p10": 5.2833,
+    "median": 5.45,
+    "p90": 5.8167
+   }
+  },
+  "2026 play-in and playoffs archive (provider 100), for comparison": {
+   "byStatScores": {
+    "pts": {
+     "n": 1328,
+     "ll": 0.6884,
+     "overRate": 0.4578,
+     "meanFairOver": 0.4694,
+     "shareFair40to60": 0.997
+    },
+    "reb": {
+     "n": 1234,
+     "ll": 0.6925,
+     "overRate": 0.4968,
+     "meanFairOver": 0.4632,
+     "shareFair40to60": 0.8784
+    },
+    "tpm": {
+     "n": 1079,
+     "ll": 0.6654,
+     "overRate": 0.4615,
+     "meanFairOver": 0.4489,
+     "shareFair40to60": 0.582
+    },
+    "pra": {
+     "n": 1113,
+     "ll": 0.6883,
+     "overRate": 0.4537,
+     "meanFairOver": 0.4659,
+     "shareFair40to60": 1
+    },
+    "pr": {
+     "n": 1204,
+     "ll": 0.6861,
+     "overRate": 0.451,
+     "meanFairOver": 0.465,
+     "shareFair40to60": 1
+    },
+    "ast": {
+     "n": 1094,
+     "ll": 0.6758,
+     "overRate": 0.4506,
+     "meanFairOver": 0.4616,
+     "shareFair40to60": 0.7495
+    },
+    "stl": {
+     "n": 888,
+     "ll": 0.6539,
+     "overRate": 0.4809,
+     "meanFairOver": 0.468,
+     "shareFair40to60": 0.4977
+    },
+    "blk": {
+     "n": 795,
+     "ll": 0.6349,
+     "overRate": 0.3887,
+     "meanFairOver": 0.3785,
+     "shareFair40to60": 0.3975
+    },
+    "pa": {
+     "n": 1029,
+     "ll": 0.687,
+     "overRate": 0.45,
+     "meanFairOver": 0.4656,
+     "shareFair40to60": 0.999
+    },
+    "ar": {
+     "n": 1041,
+     "ll": 0.6905,
+     "overRate": 0.4784,
+     "meanFairOver": 0.4609,
+     "shareFair40to60": 0.9587
+    },
+    "sb": {
+     "n": 590,
+     "ll": 0.6865,
+     "overRate": 0.4678,
+     "meanFairOver": 0.4384,
+     "shareFair40to60": 0.6661
+    }
+   }
+  }
+ },
+ "games": [
+  {
+   "gid": "2023_20221018_LAL_GSW",
+   "E": "401468017",
+   "items": 54,
+   "mains": 27,
+   "start": "2022-10-19T02:00Z",
+   "lastUpdatedMax": "2022-10-19T09:21Z",
+   "hoursAfterStart": 7.35
+  },
+  {
+   "gid": "2023_20221023_SAC_GSW",
+   "E": "401468197",
+   "items": 118,
+   "mains": 59,
+   "start": "2022-10-24T00:30Z",
+   "lastUpdatedMax": "2022-10-24T22:46Z",
+   "hoursAfterStart": 22.27
+  },
+  {
+   "gid": "2023_20221029_ATL_MIL",
+   "E": "401468240",
+   "items": 116,
+   "mains": 58,
+   "start": "2022-10-30T00:00Z",
+   "lastUpdatedMax": "2022-10-30T05:25Z",
+   "hoursAfterStart": 5.42
+  },
+  {
+   "gid": "2023_20221104_CHA_MEM",
+   "E": "401468280",
+   "items": 122,
+   "mains": 61,
+   "start": "2022-11-05T00:00Z",
+   "lastUpdatedMax": "2022-11-05T05:16Z",
+   "hoursAfterStart": 5.27
+  },
+  {
+   "gid": "2023_20221109_DEN_IND",
+   "E": "401468315",
+   "items": 112,
+   "mains": 56,
+   "start": "2022-11-10T00:00Z",
+   "lastUpdatedMax": "2022-11-10T05:22Z",
+   "hoursAfterStart": 5.37
+  },
+  {
+   "gid": "2023_20221114_LAC_HOU",
+   "E": "401468358",
+   "items": 194,
+   "mains": 83,
+   "start": "2022-11-15T01:00Z",
+   "lastUpdatedMax": "2022-11-15T06:28Z",
+   "hoursAfterStart": 5.47
+  },
+  {
+   "gid": "2023_20221120_DEN_DAL",
+   "E": "401468401",
+   "items": 177,
+   "mains": 75,
+   "start": "2022-11-21T00:30Z",
+   "lastUpdatedMax": "2022-11-21T05:54Z",
+   "hoursAfterStart": 5.4
+  },
+  {
+   "gid": "2023_20221125_PHI_ORL",
+   "E": "401468428",
+   "items": 192,
+   "mains": 82,
+   "start": "2022-11-26T00:00Z",
+   "lastUpdatedMax": "2022-11-26T05:23Z",
+   "hoursAfterStart": 5.38
+  },
+  {
+   "gid": "2023_20221130_POR_LAL",
+   "E": "401468479",
+   "items": 222,
+   "mains": 95,
+   "start": "2022-12-01T03:30Z",
+   "lastUpdatedMax": "2022-12-04T02:48Z",
+   "hoursAfterStart": 71.3
+  },
+  {
+   "gid": "2023_20221206_DET_MIA",
+   "E": "401468516",
+   "items": 194,
+   "mains": 83,
+   "start": "2022-12-07T00:30Z",
+   "lastUpdatedMax": "2022-12-07T05:51Z",
+   "hoursAfterStart": 5.35
+  },
+  {
+   "gid": "2023_20221211_TOR_ORL",
+   "E": "401468553",
+   "items": 194,
+   "mains": 83,
+   "start": "2022-12-11T23:00Z",
+   "lastUpdatedMax": "2022-12-12T04:33Z",
+   "hoursAfterStart": 5.55
+  },
+  {
+   "gid": "2023_20221217_NOP_PHX",
+   "E": "401468599",
+   "items": 222,
+   "mains": 96,
+   "start": "2022-12-18T02:00Z",
+   "lastUpdatedMax": "2022-12-18T07:21Z",
+   "hoursAfterStart": 5.35
+  },
+  {
+   "gid": "2023_20221223_DAL_HOU",
+   "E": "401468642",
+   "items": 166,
+   "mains": 71,
+   "start": "2022-12-24T01:00Z",
+   "lastUpdatedMax": "2022-12-24T06:29Z",
+   "hoursAfterStart": 5.48
+  },
+  {
+   "gid": "2023_20221228_PHX_WAS",
+   "E": "401468671",
+   "items": 220,
+   "mains": 94,
+   "start": "2022-12-29T00:00Z",
+   "lastUpdatedMax": "2022-12-29T05:25Z",
+   "hoursAfterStart": 5.42
+  },
+  {
+   "gid": "2023_20230103_BOS_OKC",
+   "E": "401468717",
+   "items": 224,
+   "mains": 96,
+   "start": "2023-01-04T01:00Z",
+   "lastUpdatedMax": "2023-01-04T06:16Z",
+   "hoursAfterStart": 5.27
+  },
+  {
+   "gid": "2023_20230108_MIN_HOU",
+   "E": "401468756",
+   "items": 236,
+   "mains": 101,
+   "start": "2023-01-09T00:00Z",
+   "lastUpdatedMax": "2023-01-09T05:18Z",
+   "hoursAfterStart": 5.3
+  },
+  {
+   "gid": "2023_20230114_ATL_TOR",
+   "E": "401468799",
+   "items": 156,
+   "mains": 66,
+   "start": "2023-01-15T00:30Z",
+   "lastUpdatedMax": "2023-01-15T05:49Z",
+   "hoursAfterStart": 5.32
+  },
+  {
+   "gid": "2023_20230119_PHI_POR",
+   "E": "401468837",
+   "items": 206,
+   "mains": 87,
+   "start": "2023-01-20T03:00Z",
+   "lastUpdatedMax": "2023-01-20T08:21Z",
+   "hoursAfterStart": 5.35
+  },
+  {
+   "gid": "2023_20230125_BKN_PHI",
+   "E": "401468876",
+   "items": 182,
+   "mains": 77,
+   "start": "2023-01-26T00:30Z",
+   "lastUpdatedMax": "2023-01-26T06:17Z",
+   "hoursAfterStart": 5.78
+  },
+  {
+   "gid": "2023_20230130_SAC_MIN",
+   "E": "401468913",
+   "items": 214,
+   "mains": 90,
+   "start": "2023-01-31T01:00Z",
+   "lastUpdatedMax": "2023-01-31T06:30Z",
+   "hoursAfterStart": 5.5
+  },
+  {
+   "gid": "2023_20230205_CLE_IND",
+   "E": "401468958",
+   "items": 200,
+   "mains": 85,
+   "start": "2023-02-05T22:00Z",
+   "lastUpdatedMax": "2023-02-06T03:14Z",
+   "hoursAfterStart": 5.23
+  },
+  {
+   "gid": "2023_20230210_OKC_POR",
+   "E": "401468998",
+   "items": 180,
+   "mains": 77,
+   "start": "2023-02-11T03:00Z",
+   "lastUpdatedMax": "2023-02-11T08:33Z",
+   "hoursAfterStart": 5.55
+  },
+  {
+   "gid": "2023_20230215_UTA_MEM",
+   "E": "401469034",
+   "items": 200,
+   "mains": 85,
+   "start": "2023-02-16T01:00Z",
+   "lastUpdatedMax": "2023-02-16T06:25Z",
+   "hoursAfterStart": 5.42
+  },
+  {
+   "gid": "2023_20230227_ORL_NOP",
+   "E": "401469077",
+   "items": 226,
+   "mains": 96,
+   "start": "2023-02-28T01:00Z",
+   "lastUpdatedMax": "2023-02-28T06:30Z",
+   "hoursAfterStart": 5.5
+  },
+  {
+   "gid": "2023_20230308_ATL_WAS",
+   "E": "401469140",
+   "items": 148,
+   "mains": 63,
+   "start": "2023-03-09T00:00Z",
+   "lastUpdatedMax": "2023-03-09T03:10Z",
+   "hoursAfterStart": 3.17
+  },
+  {
+   "gid": "2023_20230313_PHX_GSW",
+   "E": "401469180",
+   "items": 178,
+   "mains": 76,
+   "start": "2023-03-14T02:00Z",
+   "lastUpdatedMax": "2023-03-14T07:31Z",
+   "hoursAfterStart": 5.52
+  },
+  {
+   "gid": "2023_20230319_LAC_POR",
+   "E": "401469224",
+   "items": 222,
+   "mains": 94,
+   "start": "2023-03-20T01:00Z",
+   "lastUpdatedMax": "2023-03-20T06:16Z",
+   "hoursAfterStart": 5.27
+  },
+  {
+   "gid": "2023_20230324_PHX_SAC",
+   "E": "401469260",
+   "items": 202,
+   "mains": 86,
+   "start": "2023-03-25T02:00Z",
+   "lastUpdatedMax": "2023-03-25T07:30Z",
+   "hoursAfterStart": 5.5
+  },
+  {
+   "gid": "2023_20230329_UTA_SAS",
+   "E": "401469298",
+   "items": 194,
+   "mains": 82,
+   "start": "2023-03-30T00:00Z",
+   "lastUpdatedMax": "2023-03-30T05:08Z",
+   "hoursAfterStart": 5.13
+  },
+  {
+   "gid": "2023_20230404_POR_MEM",
+   "E": "401469339",
+   "items": 188,
+   "mains": 80,
+   "start": "2023-04-05T00:00Z",
+   "lastUpdatedMax": "2023-04-05T05:08Z",
+   "hoursAfterStart": 5.13
+  },
+  {
+   "gid": "2023_20230409_NOP_MIN",
+   "E": "401469380",
+   "items": 184,
+   "mains": 78,
+   "start": "2023-04-09T19:30Z",
+   "lastUpdatedMax": "2023-04-10T01:00Z",
+   "hoursAfterStart": 5.5
+  },
+  {
+   "gid": "2023_20230415_ATL_BOS",
+   "E": "401540751",
+   "items": 214,
+   "mains": 90,
+   "start": "2023-04-15T19:30Z",
+   "lastUpdatedMax": "2023-04-16T00:57Z",
+   "hoursAfterStart": 5.45
+  },
+  {
+   "gid": "2023_20230416_LAC_PHX",
+   "E": "401540757",
+   "items": 206,
+   "mains": 87,
+   "start": "2023-04-17T00:00Z",
+   "lastUpdatedMax": "2023-04-17T05:50Z",
+   "hoursAfterStart": 5.83
+  },
+  {
+   "gid": "2023_20230417_BKN_PHI",
+   "E": "401541173",
+   "items": 208,
+   "mains": 86,
+   "start": "2023-04-17T23:30Z",
+   "lastUpdatedMax": "2023-04-18T04:55Z",
+   "hoursAfterStart": 5.42
+  },
+  {
+   "gid": "2023_20230418_NYK_CLE",
+   "E": "401541174",
+   "items": 198,
+   "mains": 83,
+   "start": "2023-04-18T23:30Z",
+   "lastUpdatedMax": "2023-04-19T04:56Z",
+   "hoursAfterStart": 5.43
+  },
+  {
+   "gid": "2023_20230420_PHI_BKN",
+   "E": "401541181",
+   "items": 198,
+   "mains": 82,
+   "start": "2023-04-20T23:30Z",
+   "lastUpdatedMax": "2023-04-21T04:59Z",
+   "hoursAfterStart": 5.48
+  },
+  {
+   "gid": "2023_20230421_CLE_NYK",
+   "E": "401541182",
+   "items": 194,
+   "mains": 81,
+   "start": "2023-04-22T00:30Z",
+   "lastUpdatedMax": "2023-04-22T05:43Z",
+   "hoursAfterStart": 5.22
+  },
+  {
+   "gid": "2023_20230422_PHI_BKN",
+   "E": "401541189",
+   "items": 190,
+   "mains": 80,
+   "start": "2023-04-22T17:00Z",
+   "lastUpdatedMax": "2023-04-22T22:19Z",
+   "hoursAfterStart": 5.32
+  },
+  {
+   "gid": "2023_20230423_DEN_MIN",
+   "E": "401541183",
+   "items": 196,
+   "mains": 82,
+   "start": "2023-04-24T01:30Z",
+   "lastUpdatedMax": "2023-04-24T07:24Z",
+   "hoursAfterStart": 5.9
+  },
+  {
+   "gid": "2023_20230425_ATL_BOS",
+   "E": "401541243",
+   "items": 204,
+   "mains": 86,
+   "start": "2023-04-25T23:30Z",
+   "lastUpdatedMax": "2023-04-26T04:44Z",
+   "hoursAfterStart": 5.23
+  },
+  {
+   "gid": "2023_20230426_LAL_MEM",
+   "E": "401541231",
+   "items": 218,
+   "mains": 91,
+   "start": "2023-04-26T23:30Z",
+   "lastUpdatedMax": "2023-04-27T04:55Z",
+   "hoursAfterStart": 5.42
+  },
+  {
+   "gid": "2023_20230428_MEM_LAL",
+   "E": "401541232",
+   "items": 198,
+   "mains": 83,
+   "start": "2023-04-29T02:50Z",
+   "lastUpdatedMax": "2023-04-29T08:04Z",
+   "hoursAfterStart": 5.23
+  },
+  {
+   "gid": "2023_20230502_MIA_NYK",
+   "E": "401544974",
+   "items": 158,
+   "mains": 67,
+   "start": "2023-05-02T23:30Z",
+   "lastUpdatedMax": "2023-05-03T05:05Z",
+   "hoursAfterStart": 5.58
+  },
+  {
+   "gid": "2023_20230505_DEN_PHX",
+   "E": "401544336",
+   "items": 176,
+   "mains": 73,
+   "start": "2023-05-06T02:00Z",
+   "lastUpdatedMax": "2023-05-06T07:53Z",
+   "hoursAfterStart": 5.88
+  },
+  {
+   "gid": "2023_20230507_DEN_PHX",
+   "E": "401544337",
+   "items": 192,
+   "mains": 79,
+   "start": "2023-05-08T00:00Z",
+   "lastUpdatedMax": "2023-05-08T05:26Z",
+   "hoursAfterStart": 5.43
+  },
+  {
+   "gid": "2023_20230509_PHX_DEN",
+   "E": "401544338",
+   "items": 140,
+   "mains": 59,
+   "start": "2023-05-10T02:00Z",
+   "lastUpdatedMax": "2023-05-10T07:19Z",
+   "hoursAfterStart": 5.32
+  },
+  {
+   "gid": "2023_20230511_DEN_PHX",
+   "E": "401544339",
+   "items": 214,
+   "mains": 89,
+   "start": "2023-05-12T02:00Z",
+   "lastUpdatedMax": "2023-05-12T07:28Z",
+   "hoursAfterStart": 5.47
+  },
+  {
+   "gid": "2023_20230516_LAL_DEN",
+   "E": "401547679",
+   "items": 198,
+   "mains": 83,
+   "start": "2023-05-17T00:30Z",
+   "lastUpdatedMax": "2023-05-17T06:20Z",
+   "hoursAfterStart": 5.83
+  },
+  {
+   "gid": "2023_20230520_DEN_LAL",
+   "E": "401547683",
+   "items": 190,
+   "mains": 80,
+   "start": "2023-05-21T00:30Z",
+   "lastUpdatedMax": "2023-05-21T05:57Z",
+   "hoursAfterStart": 5.45
+  },
+  {
+   "gid": "2023_20230525_MIA_BOS",
+   "E": "401547675",
+   "items": 212,
+   "mains": 89,
+   "start": "2023-05-26T00:30Z",
+   "lastUpdatedMax": "2023-05-26T05:37Z",
+   "hoursAfterStart": 5.12
+  },
+  {
+   "gid": "2023_20230604_MIA_DEN",
+   "E": "401544847",
+   "items": 194,
+   "mains": 81,
+   "start": "2023-06-05T00:00Z",
+   "lastUpdatedMax": "2023-06-05T05:32Z",
+   "hoursAfterStart": 5.53
+  },
+  {
+   "gid": "2024_20231024_LAL_DEN",
+   "E": "401584689",
+   "items": 196,
+   "mains": 84,
+   "start": "2023-10-24T23:30Z",
+   "lastUpdatedMax": "2023-10-25T04:47Z",
+   "hoursAfterStart": 5.28
+  },
+  {
+   "gid": "2024_20231030_BKN_CHA",
+   "E": "401584729",
+   "items": 194,
+   "mains": 81,
+   "start": "2023-10-30T23:00Z",
+   "lastUpdatedMax": "2023-10-31T04:23Z",
+   "hoursAfterStart": 5.38
+  },
+  {
+   "gid": "2024_20231104_CHA_IND",
+   "E": "401584761",
+   "items": 224,
+   "mains": 94,
+   "start": "2023-11-04T23:00Z",
+   "lastUpdatedMax": "2023-11-05T04:40Z",
+   "hoursAfterStart": 5.67
+  },
+  {
+   "gid": "2024_20231110_LAC_DAL",
+   "E": "401584102",
+   "items": 188,
+   "mains": 78,
+   "start": "2023-11-11T01:30Z",
+   "lastUpdatedMax": "2023-11-11T07:00Z",
+   "hoursAfterStart": 5.5
+  },
+  {
+   "gid": "2024_20231115_MIN_PHX",
+   "E": "401584825",
+   "items": 190,
+   "mains": 80,
+   "start": "2023-11-16T02:00Z",
+   "lastUpdatedMax": "2023-11-16T07:04Z",
+   "hoursAfterStart": 5.07
+  },
+  {
+   "gid": "2024_20231124_CHI_TOR",
+   "E": "401584134",
+   "items": 208,
+   "mains": 87,
+   "start": "2023-11-25T00:30Z",
+   "lastUpdatedMax": "2023-11-25T05:51Z",
+   "hoursAfterStart": 5.35
+  },
+  {
+   "gid": "2024_20231129_PHX_TOR",
+   "E": "401584888",
+   "items": 108,
+   "mains": 46,
+   "start": "2023-11-30T00:30Z",
+   "lastUpdatedMax": "2023-11-30T05:48Z",
+   "hoursAfterStart": 5.3
+  },
+  {
+   "gid": "2024_20231206_ORL_CLE",
+   "E": "401616459",
+   "items": 198,
+   "mains": 83,
+   "start": "2023-12-07T00:00Z",
+   "lastUpdatedMax": "2023-12-07T05:35Z",
+   "hoursAfterStart": 5.58
+  },
+  {
+   "gid": "2024_20231213_IND_MIL",
+   "E": "401584943",
+   "items": 198,
+   "mains": 83,
+   "start": "2023-12-14T01:00Z",
+   "lastUpdatedMax": "2023-12-14T06:55Z",
+   "hoursAfterStart": 5.92
+  },
+  {
+   "gid": "2024_20231218_DET_ATL",
+   "E": "401584980",
+   "items": 174,
+   "mains": 73,
+   "start": "2023-12-19T00:30Z",
+   "lastUpdatedMax": "2023-12-19T06:05Z",
+   "hoursAfterStart": 5.58
+  },
+  {
+   "gid": "2024_20231223_LAL_OKC",
+   "E": "401585025",
+   "items": 182,
+   "mains": 77,
+   "start": "2023-12-24T01:00Z",
+   "lastUpdatedMax": "2023-12-24T06:15Z",
+   "hoursAfterStart": 5.25
+  },
+  {
+   "gid": "2024_20231229_NYK_ORL",
+   "E": "401585057",
+   "items": 196,
+   "mains": 83,
+   "start": "2023-12-30T00:00Z",
+   "lastUpdatedMax": "2023-12-30T05:42Z",
+   "hoursAfterStart": 5.7
+  },
+  {
+   "gid": "2024_20240103_ORL_SAC",
+   "E": "401585104",
+   "items": 214,
+   "mains": 90,
+   "start": "2024-01-04T03:00Z",
+   "lastUpdatedMax": "2024-01-04T09:04Z",
+   "hoursAfterStart": 6.07
+  },
+  {
+   "gid": "2024_20240109_MIN_ORL",
+   "E": "401585141",
+   "items": 192,
+   "mains": 80,
+   "start": "2024-01-10T00:00Z",
+   "lastUpdatedMax": "2024-01-10T05:10Z",
+   "hoursAfterStart": 5.17
+  },
+  {
+   "gid": "2024_20240126_HOU_CHA",
+   "E": "401585263",
+   "items": 190,
+   "mains": 80,
+   "start": "2024-01-27T00:00Z",
+   "lastUpdatedMax": "2024-01-27T05:21Z",
+   "hoursAfterStart": 5.35
+  },
+  {
+   "gid": "2024_20240131_DEN_OKC",
+   "E": "401585310",
+   "items": 206,
+   "mains": 87,
+   "start": "2024-02-01T01:00Z",
+   "lastUpdatedMax": "2024-02-01T06:26Z",
+   "hoursAfterStart": 5.43
+  },
+  {
+   "gid": "2024_20240205_LAL_CHA",
+   "E": "401585341",
+   "items": 166,
+   "mains": 70,
+   "start": "2024-02-06T00:00Z",
+   "lastUpdatedMax": "2024-02-06T05:12Z",
+   "hoursAfterStart": 5.2
+  },
+  {
+   "gid": "2024_20240210_PHI_WAS",
+   "E": "401585381",
+   "items": 168,
+   "mains": 71,
+   "start": "2024-02-11T00:00Z",
+   "lastUpdatedMax": "2024-02-11T05:25Z",
+   "hoursAfterStart": 5.42
+  },
+  {
+   "gid": "2024_20240222_NYK_PHI",
+   "E": "401585422",
+   "items": 176,
+   "mains": 74,
+   "start": "2024-02-23T00:00Z",
+   "lastUpdatedMax": "2024-02-23T05:20Z",
+   "hoursAfterStart": 5.33
+  },
+  {
+   "gid": "2024_20240227_NOP_NYK",
+   "E": "401585465",
+   "items": 200,
+   "mains": 84,
+   "start": "2024-02-28T00:30Z",
+   "lastUpdatedMax": "2024-02-28T05:49Z",
+   "hoursAfterStart": 5.32
+  },
+  {
+   "gid": "2024_20240304_CHI_SAC",
+   "E": "401585511",
+   "items": 170,
+   "mains": 72,
+   "start": "2024-03-05T03:00Z",
+   "lastUpdatedMax": "2024-03-05T08:28Z",
+   "hoursAfterStart": 5.47
+  },
+  {
+   "gid": "2024_20240309_UTA_DEN",
+   "E": "401585550",
+   "items": 182,
+   "mains": 76,
+   "start": "2024-03-10T02:00Z",
+   "lastUpdatedMax": "2024-03-10T07:17Z",
+   "hoursAfterStart": 5.28
+  },
+  {
+   "gid": "2024_20240315_LAC_NOP",
+   "E": "401585592",
+   "items": 216,
+   "mains": 90,
+   "start": "2024-03-16T00:00Z",
+   "lastUpdatedMax": "2024-03-16T05:19Z",
+   "hoursAfterStart": 5.32
+  },
+  {
+   "gid": "2024_20240321_ATL_PHX",
+   "E": "401585638",
+   "items": 180,
+   "mains": 75,
+   "start": "2024-03-22T02:30Z",
+   "lastUpdatedMax": "2024-03-22T07:59Z",
+   "hoursAfterStart": 5.48
+  },
+  {
+   "gid": "2024_20240326_DAL_SAC",
+   "E": "401585675",
+   "items": 202,
+   "mains": 84,
+   "start": "2024-03-27T02:00Z",
+   "lastUpdatedMax": "2024-03-27T07:15Z",
+   "hoursAfterStart": 5.25
+  },
+  {
+   "gid": "2024_20240331_OKC_NYK",
+   "E": "401585710",
+   "items": 202,
+   "mains": 84,
+   "start": "2024-03-31T23:00Z",
+   "lastUpdatedMax": "2024-04-01T04:40Z",
+   "hoursAfterStart": 5.67
+  },
+  {
+   "gid": "2024_20240405_SAC_BOS",
+   "E": "401585746",
+   "items": 198,
+   "mains": 84,
+   "start": "2024-04-05T23:30Z",
+   "lastUpdatedMax": "2024-04-06T04:42Z",
+   "hoursAfterStart": 5.2
+  },
+  {
+   "gid": "2024_20240410_PHX_LAC",
+   "E": "401585793",
+   "items": 202,
+   "mains": 85,
+   "start": "2024-04-11T02:30Z",
+   "lastUpdatedMax": "2024-04-11T07:32Z",
+   "hoursAfterStart": 5.03
+  },
+  {
+   "gid": "2024_20240417_ATL_CHI",
+   "E": "401654658",
+   "items": 180,
+   "mains": 75,
+   "start": "2024-04-18T01:48Z",
+   "lastUpdatedMax": "2024-04-18T07:04Z",
+   "hoursAfterStart": 5.27
+  },
+  {
+   "gid": "2024_20240420_LAL_DEN",
+   "E": "401654758",
+   "items": 196,
+   "mains": 81,
+   "start": "2024-04-21T00:30Z",
+   "lastUpdatedMax": "2024-04-21T05:53Z",
+   "hoursAfterStart": 5.38
+  },
+  {
+   "gid": "2024_20240421_DAL_LAC",
+   "E": "401654763",
+   "items": 218,
+   "mains": 90,
+   "start": "2024-04-21T19:30Z",
+   "lastUpdatedMax": "2024-04-22T00:57Z",
+   "hoursAfterStart": 5.45
+  },
+  {
+   "gid": "2024_20240422_LAL_DEN",
+   "E": "401655082",
+   "items": 200,
+   "mains": 82,
+   "start": "2024-04-23T02:00Z",
+   "lastUpdatedMax": "2024-04-23T07:31Z",
+   "hoursAfterStart": 5.52
+  },
+  {
+   "gid": "2024_20240425_CLE_ORL",
+   "E": "401655119",
+   "items": 218,
+   "mains": 91,
+   "start": "2024-04-25T23:00Z",
+   "lastUpdatedMax": "2024-04-26T04:13Z",
+   "hoursAfterStart": 5.22
+  },
+  {
+   "gid": "2024_20240426_MIL_IND",
+   "E": "401655113",
+   "items": 180,
+   "mains": 76,
+   "start": "2024-04-26T21:30Z",
+   "lastUpdatedMax": "2024-04-27T03:31Z",
+   "hoursAfterStart": 6.02
+  }
+ ]
+}

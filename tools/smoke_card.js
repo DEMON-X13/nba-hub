@@ -85,7 +85,7 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
         get(t, k) {
           if (k in t) return t[k];
           if (k === 'measureText') return x => ({ width: em(x, t.font) });
-          if (k === 'fillText') return x => { rec.texts.push(String(x)); rec.draws.push({ t: String(x), font: String(t.font), color: String(t.fillStyle) }); };
+          if (k === 'fillText') return (x, a, b) => { rec.texts.push(String(x)); rec.draws.push({ t: String(x), font: String(t.font), color: String(t.fillStyle), x: a, y: b, align: t.textAlign || 'start' }); };
           if (k === 'createLinearGradient') return () => ({ addColorStop() {} });
           return () => {};
         },
@@ -95,6 +95,7 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
     w.URL.createObjectURL = b => { rec.urls.push(b); return 'blob:http://localhost/card'; };
     w.URL.revokeObjectURL = () => {};
     w.HTMLAnchorElement.prototype.click = function () { rec.clicks.push({ href: this.href, download: this.download, attached: this.isConnected }); };
+    rec.em = em;
     return rec;
   }
 
@@ -499,5 +500,41 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
     check(got && Array.isArray(got.files) && got.files.length === 1 && got.files[0].name === `parlay-${D1}-2legs.png` && got.files[0].type === 'image/png' && got.title === 'NBA Hub: 2-leg parlay' && !r5.clicks.length,
       'it hands the share sheet the image as a PNG file, titled for the parlay, and downloads nothing');
     check(q5.errors.length === 0, 'no script errors: ' + q5.errors.join(' | '));
+  }
+
+  /* ---------- 10. after the FAIL: the image's chance lines kept inside the card ----------
+     The FAIL's words make the model's line long ("model says 17.6%, its player legs the props model's, which failed its
+     trial · the price says 20.0%"): on one row the image ran it past the card's edge and cut the price's chance off (the
+     review of 6 November 2026). Each line is laid out by measure, a row broken before a word that would pass the text's
+     right edge (R, 498 on the 540 canvas: its 18px margin and 24px padding), the card taller by 18px a row past two. Held
+     on the recorder canvas's own measure, on a parlay of one player leg, one with a moneyline, two player legs and one
+     with no fair chance: every 13px chance piece starts at or after L (42) and ends at or before R, the rows the image
+     draws joined are the window's lines word for word, the height the card's own, and the words counted */
+  {
+    const stF = ST(); stF.props.ledger.decision = { verdict: 'FAIL', decidedAt: '2026-11-25T12:00Z', lines: 30000 };
+    const q6 = load(stF, { lines: LINES, mine: MINE([L_PL]) }); await sleep(400);
+    const r6 = stubDraw(q6.w), W6 = q6.w, L = 18 + 24, R = 540 - 18 - 24;
+    const L2 = { ...L_PL, pid: '9100002', name: 'Bo Wing', team: 'DET', stat: 'reb', line: 7.5, odds: -110, other: -110 };
+    const cases = [['one player leg', [L_PL], 'leg'], ['a player leg and a moneyline', [L_PL, L_ML], 'leg'], ['two player legs', [L_PL, L2], 'legs'], ['no fair chance (a team leg with one price)', [L_PL, { ...L_TO, other: null }], 'leg']];
+    let wrapped = 0;
+    for (const [name, legs, word] of cases) {
+      W6.eval(`M.slip.legs = ${JSON.stringify(legs)}; M.bookPrice = null; renderParlay();`);
+      q6.d.getElementById('pFinish').click(); await sleep(20);
+      const m = W6.PARLAY_CARD.current(), lines = W6.PARLAY_CARD.chanceLines(m).map(l => l.map(x => x[0]).join(''));
+      r6.draws.length = 0; r6.canvases.length = 0;
+      const cv = await W6.PARLAY_CARD.draw(m, 2);
+      const ch = r6.draws.filter(x => /^(500|700) 13px /.test(x.font)), ys = [...new Set(ch.map(x => x.y))].sort((a, b) => a - b);
+      const out = ch.filter(x => !(x.align === 'left' && x.x >= L - 1e-9 && x.x + r6.em(x.t, x.font) <= R + 1e-9));
+      const rows = ys.map(y => ch.filter(x => x.y === y).sort((a, b) => a.x - b.x).map(x => x.t).join(''));
+      const H = 364 + 74 * legs.length + 18 * Math.max(0, ys.length - 2);
+      const bold = W6.PARLAY_CARD.chanceLines(m).flat().filter(x => x[1]).map(x => x[0]);
+      if (ys.length > 2) wrapped++;
+      check(m.failed && !out.length && rows.join(' ') === lines.join(' ') && ys.every((y, i) => !i || y - ys[i - 1] === 18) && cv && cv.height === 2 * H
+        && bold.every(b => ch.some(x => /^700 /.test(x.font) && x.t.includes(b))) && lines.some(t => t.includes(`, its player ${word} the props model’s, which failed its trial`)) && lines.some(t => / · the price says [\d.]+%$/.test(t) || /^the price says/.test(t)),
+        `after the FAIL, ${name}: the image keeps every chance piece inside the card (${L} to ${R}), on ${ys.length} rows of 18px, the card ${H}px tall, the rows the window's lines word for word ("${rows.join(' | ')}")${out.length ? `: past the edge ${out.map(x => `"${x.t}" ${Math.round(x.x)} to ${Math.round(x.x + r6.em(x.t, x.font))}`).join(', ')}` : ''}`);
+      W6.PARLAY_CARD.close();
+    }
+    check(wrapped >= 3, `the FAIL's words wrap the model's line onto a row of its own on ${wrapped} of the ${cases.length} parlays (the cases bite)`);
+    check(q6.errors.length === 0, 'no script errors: ' + q6.errors.join(' | '));
   }
 };

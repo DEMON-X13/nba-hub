@@ -205,49 +205,188 @@ body.pp-lock{overflow:hidden}
 .pp-trial{font-size:12.5px;color:var(--ink-2);background:var(--panel);border:1px dashed var(--line-2);border-radius:12px;padding:10px 14px;margin:0 0 12px;line-height:1.5}
 .pp-trial summary{cursor:pointer;color:var(--ink);font-weight:700;min-height:28px}
 .pp-trial p{margin:8px 0 0}
-.pp-ctl{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin:0 0 12px}
-.pp-ctl .seg button{min-height:40px}
-.pp-pl{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin:0 0 10px}
-.pp-pl-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 6px}
-.pp-pl-h b{font-family:var(--display);font-size:14px;font-weight:700}
-.pp-pl-h .muted{font-size:12px}
-.pp-ln{display:grid;grid-template-columns:minmax(0,1fr) 52px 72px 72px;gap:2px 8px;align-items:center;padding:7px 0;border-top:1px solid var(--line);font-size:13px}
-.pp-ln .st{color:var(--ink);font-weight:700;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.pp-ln .ln{font-family:var(--display);font-weight:700;text-align:right}
-.pp-ln .px{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums} .pp-ln .px i{font-style:normal;color:var(--muted);font-size:11px;margin-right:3px}
-.pp-ln .md{grid-column:1/-1;color:var(--ink-2);font-size:12px;font-variant-numeric:tabular-nums}
-@media(min-width:760px){.pp-ln{grid-template-columns:150px 52px 72px 72px minmax(0,1fr)}.pp-ln .md{grid-column:auto;padding-left:10px}}
-.pp-ln.head{border-top:0;padding:0 0 4px;font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
-.pp-ln.head .md{color:var(--muted);font-size:10.5px}
-.pp-yes{display:flex;flex-direction:column;gap:2px;padding:7px 0 0;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-2)}
-.pp-yes b{color:var(--ink)}
-.pp-lad{margin-top:6px;border-top:1px solid var(--line);padding-top:6px}
-.pp-lad summary{cursor:pointer;font-size:12.5px;font-weight:700;color:var(--ink-2);min-height:32px;display:flex;align-items:center;list-style:none}
-.pp-lad summary::-webkit-details-marker,.pp-more summary::-webkit-details-marker{display:none}
-.pp-lad summary::before,.pp-more summary::before{content:"";width:0;height:0;border-left:5px solid currentColor;border-top:4px solid transparent;border-bottom:4px solid transparent;margin-right:8px;transition:transform .15s var(--ease)}
-.pp-lad[open] summary::before,.pp-more[open] summary::before{transform:rotate(90deg)}
-.pp-lgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px;margin-top:6px}
-.pp-lt{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}
-.pp-lt th{font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:right;padding:3px 6px;font-weight:800}
-.pp-lt th:first-child,.pp-lt td:first-child{text-align:left}
-.pp-lt td{text-align:right;padding:3px 6px;border-top:1px solid var(--line)}
-.pp-proj{font-size:12.5px} .pp-proj td,.pp-proj th{padding:7px 9px}
-.pp-proj tr.pp-team td{background:var(--panel-2);font-weight:800;color:var(--ink-2)}
-.pp-optnote{display:none;margin:6px 0 0;font-size:12px}
-@media(max-width:520px){.pp-proj td,.pp-proj th{padding:7px 5px}.pp-proj .pp-opt{display:none}.pp-proj th{letter-spacing:.02em}.pp-optnote{display:block}}
-.pp-more{margin-top:12px} .pp-more summary{cursor:pointer;font-weight:700;color:var(--ink-2);min-height:36px;display:flex;align-items:center;list-style:none}
 @media(max-width:620px){.pp-back{padding:0}.pp-sheet{border-radius:0;max-height:none;height:100%;border:0}.pp-head{border-radius:0;padding:12px 16px 10px}.pp-body{padding:12px 16px 28px}}
+/* ---------- Player props: a game's page, laid out as the NFL hub's (README "Player props") ----------
+   The NFL hub's game page (its props/build/part1.html rules under nflbets/build/theme.css: the window, its bar, Find a
+   player, Refresh odds, the head card, Game bets, the team headers, the player rows and their stat blocks) on this page's
+   tokens, which are the NFL's dark look already: the NFL's gold stripe is this hub's orange, its bars lime, gold and grey
+   for High, Med and Low. Small text that must hold 4.5:1 is --ink-2 or the quiet --pb-q (#B3B9CB), never --muted; every
+   control is 44px tall (a box sits in a 44px label, Show stats takes its 44px from padding a negative margin gives back) */
+#ppSheet{max-width:1100px;background:linear-gradient(180deg,var(--panel-2),var(--panel));border-color:var(--line-2);scroll-padding-bottom:96px}
+/* the hub has the dark look alone: its boxes and the search's clear button are drawn dark, as the NFL's theme.css has them */
+#ppBack,#ppSheet{color-scheme:dark}
+#ppSheet .pp-top{padding:18px 20px 0}
+#ppSheet .pp-body{padding:0 20px 26px}
+.pp-bar{display:flex;align-items:center;gap:4px 18px;flex-wrap:wrap;margin:0 0 12px}
+.pp-bar .pp-sws{margin-left:auto}
+.pp-close{min-height:44px;padding:10px 16px;font-size:14px;border-radius:12px}
+.pp-sws{display:flex;align-items:center;gap:4px 18px;flex-wrap:wrap}
+.pp-sw{display:inline-flex;align-items:center;gap:8px;min-height:44px;font-size:14px;color:var(--ink-2);cursor:pointer;user-select:none;-webkit-user-select:none}
+.pp-sw input,.pp-pick input{width:18px;height:18px;margin:0;flex:none;accent-color:var(--hot);cursor:pointer}
+.pp-search{margin:0 0 12px}
+.pp-fixed{padding:0 20px}
+/* 16px, so a phone does not zoom in on it (the NFL's Bet amount box, and this page's own) */
+.pp-search input{width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--line-2);border-radius:10px;background:var(--panel);color:var(--ink);font-size:16px}
+.pp-search input::placeholder{color:var(--ink-2);opacity:1}
+.pp-search input:focus{outline:none;border-color:var(--hot);box-shadow:0 0 0 2px rgba(255,106,31,.4)}
+.pp-espn{display:flex;align-items:center;gap:8px 14px;flex-wrap:wrap;margin:0 0 14px}
+.pp-espn .btn{min-height:44px;padding:10px 16px;font-size:14px;border-radius:12px;display:inline-flex;align-items:center;gap:8px}
+.pp-espn .btn[aria-disabled=true]{opacity:.7;cursor:progress;transform:none}
+.pp-espnst{flex:1 1 170px;min-width:0;font-size:12px;line-height:1.4;color:var(--ink-2)}
+.pp-nomatch{margin:-12px 20px 22px;font-size:14px;color:var(--ink-2)} .pp-nomatch:empty{display:none}
+.pp-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:18px 20px;margin:0 0 14px}
+.pp-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--hot),transparent);pointer-events:none}
+.pp-q{color:var(--pb-q)}
+/* the head card */
+.pp-gh{display:grid;grid-template-columns:minmax(104px,auto) minmax(130px,auto) minmax(250px,1fr) 120px 76px 108px;gap:12px 16px;align-items:start}
+.pp-gh>div{min-width:0}
+.pp-ghl{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--pb-q);margin:0 0 8px;line-height:1.25}
+.pp-gh .tot .pp-ghl,.pp-gh .totpts .pp-ghl,.pp-gh .winner .pp-ghl,.pp-gh .lead-c .pp-ghl{text-align:center}
+.pp-gh .when{font-size:12px;line-height:1.35;color:var(--ink-2)}
+.pp-gh .when b{display:block;color:var(--ink);font-weight:600;font-size:13px;margin-bottom:5px}
+.pp-mt{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.pp-mt .pill,.pp-gh .winner .pill{font-size:13px;padding:5px 8px}
+.pp-mt .at{color:var(--ink-2);font-size:15px}
+.pp-gh .lead-c{display:flex;flex-direction:column;align-items:center}
+.pp-gh .lead{display:flex;flex-direction:column;gap:3px;width:100%;max-width:300px;min-width:0}
+.pp-gh .lead div{display:grid;grid-template-columns:40px minmax(0,1fr) auto;gap:8px;align-items:baseline;font-size:13px}
+.pp-gh .lead .cat{font-size:10.5px;font-weight:700;letter-spacing:.08em;color:var(--pb-q)}
+.pp-gh .lead .nm{color:var(--ink);min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pp-gh .lead .v{font-family:var(--display);font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap;text-align:right}
+.pp-gh .lead .v em{font-style:normal;font-family:var(--body);font-weight:500;font-size:11px;color:var(--ink-2);margin-left:3px}
+.pp-gh .tot,.pp-gh .totpts,.pp-gh .winner{display:flex;flex-direction:column;align-items:center;text-align:center;line-height:1.2}
+.pp-gh .tot b,.pp-gh .totpts b,.pp-gh .none{display:block;white-space:nowrap;font-family:var(--display);font-weight:700;font-size:20px;letter-spacing:-.3px;color:var(--ink);font-variant-numeric:tabular-nums}
+.pp-gh small{display:block;font-size:11px;color:var(--ink-2);line-height:1.3;margin-top:4px}
+/* the game's three windows, under the head card (the NFL's gameWinBtns, its .gwin: three quiet buttons a row, 44px; the
+   windows themselves are app/parts/gamewin.html) */
+.gwin{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 14px}
+.gwin .gwin-btn{min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:8px 10px;border-radius:12px;font-size:14px;font-weight:600;text-align:center;line-height:1.2}
+/* a player in the game's top five Mismatches wears the NFL's tag beside his name (white on #2563EB to #1E4FA8, 5.2:1 and
+   up), titled with his row; it takes the pointer so its title shows, and a tap on it opens the row as the row would */
+.pp-mmtag{display:inline-block;margin-left:8px;padding:3px 9px;border-radius:999px;background:linear-gradient(135deg,#2563EB,#1E4FA8);color:#fff;font-family:var(--body);font-size:10.5px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;line-height:1.3;vertical-align:2px;white-space:nowrap;box-shadow:0 0 0 1px rgba(59,130,246,.35),0 2px 6px rgba(37,99,235,.35);pointer-events:auto;cursor:help}
+.pp-trialtag{display:inline-block;margin-left:6px;font-size:9.5px;font-weight:800;letter-spacing:.06em;padding:1px 6px;border:1px solid var(--pb-trial);border-radius:999px;color:var(--pb-trial);vertical-align:1px;white-space:nowrap;cursor:help}
+#ppSheet .pp-trial{margin:0 0 14px;padding:0 14px}
+#ppSheet .pp-trial[open]{padding-bottom:10px}
+#ppSheet .pp-trial summary{min-height:44px;padding:12px 0}
+/* a club's pill keeps its colour in its ring and lifts its letters toward white, so they hold 4.5:1 on the window's
+   panels for every club (the darkest, Cleveland's wine, 4.8:1 at this mix; at full strength it is 1.5:1) */
+#ppSheet .pill{color:color-mix(in srgb,var(--tc,#888) 40%,#fff)}
+/* Game bets and a player's stat blocks: the NFL's statblk and its rungs table */
+.pp-gbets h3{font-family:var(--display);font-size:21px;font-weight:700;letter-spacing:-.01em;margin:0 0 10px;color:var(--ink)}
+.pp-src{margin:0 0 8px;font-size:12px;color:var(--ink-2)}
+.pp-stat{margin-top:14px}
+.pp-plrbody .pp-stat:first-of-type,.pp-gbets .pp-src+.pp-stat{margin-top:0}
+.pp-stat h4{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 6px;font-family:var(--display);font-size:14px;font-weight:600;letter-spacing:-.1px;color:var(--ink)}
+.pp-stat h4 .pill{align-self:center}
+.pp-stat h4 em{font-style:normal;font-family:var(--body);font-size:12px;font-weight:400;color:var(--ink-2)}
+.pp-stat h4 em.mline{margin-left:auto;color:var(--lime);font-weight:600}
+.pp-trialln{display:flex;align-items:center;gap:8px;margin:0 0 10px;font-size:12px;color:var(--ink-2)} .pp-trialln .pb-trial{margin-left:0}
+.pp-rungs{width:100%;border-collapse:collapse}
+.pp-rungs td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+.pp-rungs tr:last-child td{border-bottom:0}
+.pp-rungs td.pick{width:44px;padding:0}
+.pp-pick{display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;cursor:pointer}
+.pp-rungs .thr{width:120px;font-family:var(--display);font-size:14px;font-weight:600;color:var(--ink);white-space:nowrap}
+.pp-rungs tr.mainline .thr{font-size:13px}
+.pp-rungs .barcell{width:46%}
+.pp-track{height:12px;border-radius:999px;overflow:hidden;background:var(--panel-3)}
+.pp-fill{height:100%;border-radius:999px}
+.pp-fill.high{background:var(--lime)} .pp-fill.med{background:var(--gold)} .pp-fill.low{background:var(--muted)}
+.pp-rungs .pct{width:56px;text-align:right;font-family:var(--display);font-size:15px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pp-rungs td.cf{width:84px}
+.pp-conf{display:inline-flex;align-items:center;justify-content:center;gap:5px;min-width:60px;padding:4px 9px 4px 7px;border-radius:999px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;background:var(--panel-3);color:var(--ink-2)}
+.pp-conf::before{content:"";width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.75;flex:none}
+.pp-conf.high{background:var(--lime-soft);color:var(--lime)} .pp-conf.med{background:rgba(255,209,102,.14);color:var(--gold)}
+.pp-rungs .fair{width:96px;text-align:right;font-size:12px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums;white-space:nowrap}
+.pp-rungs .fair em{font-style:normal;font-size:10px;font-weight:500;color:var(--pb-q);margin-left:3px}
+.pp-rungs .price{width:64px;text-align:right;font-weight:700;color:var(--lime);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* a FAIL's row (ppLegRow): DraftKings' fair chance, its est. on a small line under it; the props model's chance where
+   "book" stood, small and in the quiet ink (4.5:1 on the card all the same); "no DraftKings chance" where there is none */
+.pp-rungs .pct em{display:block;margin:1px 0 0;font-family:var(--body);font-style:normal;font-size:10px;font-weight:500;line-height:1.2;color:var(--pb-q)}
+.pp-rungs .mdl{width:112px;text-align:right;font-size:11px;font-weight:500;color:var(--pb-q);font-variant-numeric:tabular-nums;white-space:nowrap;cursor:help}
+.pp-rungs .mdl .v{font-weight:600}
+.pp-nodk{font-size:11px;line-height:1.25;color:var(--ink-2)}
+.pp-stat h4 em.pp-mdl{font-size:11px;font-weight:500;color:var(--pb-q);cursor:help}
+.pp-rungs tr.mainline td{background:var(--panel-2)}
+.pp-rungs tr.on td{background:var(--hot-soft)}
+.pp-noline{margin:0 0 4px;font-size:14px;color:var(--ink-2)}
+.pp-noproj{margin:0 0 10px;font-size:13px;color:var(--ink-2)}
+.pp-nogame,.pp-lnote{margin:0 0 12px;font-size:13px}
+/* the teams and their players */
+.pp-teamhdr{display:flex;align-items:center;flex-wrap:wrap;gap:10px;margin:20px 0 10px;font-family:var(--display);font-size:18px;font-weight:600;letter-spacing:-.3px;color:var(--ink)}
+.pp-pill{font-family:var(--body);font-size:11px;font-weight:700;letter-spacing:.02em;padding:3px 9px;border-radius:999px;background:var(--panel-3);color:var(--ink-2)}
+.pp-outs{margin:-2px 0 8px;font-size:13px;color:var(--ink-2)} .pp-outs b{color:var(--ink)}
+.pp-empty{margin:0 0 8px;padding:14px;text-align:center;font-size:13px;color:var(--ink-2);background:var(--panel);border:1px dashed var(--line-2);border-radius:14px}
+.pp-plr{position:relative;display:grid;grid-template-columns:minmax(0,1fr) auto 34px;gap:14px;align-items:center;min-height:44px;margin:0 0 8px;padding:12px 16px;background:var(--panel);border:1px solid transparent;border-radius:14px;transition:box-shadow .2s var(--ease)}
+.pp-plr:hover{box-shadow:0 18px 40px -24px rgba(0,0,0,.6)}
+.pp-plrbtn{position:absolute;inset:0;z-index:0;width:100%;height:100%;margin:0;padding:0;border:0;border-radius:inherit;background:transparent;cursor:pointer}
+.pp-plrbtn:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
+.pp-plr>.who,.pp-plr>.sum,.pp-plr>.arrow{position:relative;z-index:1;pointer-events:none;min-width:0}
+.pp-plr.open{margin-bottom:0;border-color:var(--ink);border-bottom-color:transparent;border-radius:14px 14px 0 0;box-shadow:none}
+.pp-plr.bench{cursor:default}
+.pp-plr .who{font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:-.2px;line-height:1.15;color:var(--ink)}
+.pp-plr .who .pos{margin-left:8px;font-family:var(--body);font-size:12px;font-weight:500;color:var(--ink-2)}
+.pp-badge{display:inline-flex;align-items:center;gap:3px;margin-right:6px;vertical-align:middle;font-family:var(--body);font-size:11px;font-weight:600;color:var(--pb-q);white-space:nowrap}
+.pp-badge .tierbadge{width:16px;height:18px}
+.pp-inj{display:inline-block;margin-left:8px;padding:2px 7px;border-radius:6px;font-family:var(--body);font-size:10.5px;font-weight:700;letter-spacing:.04em;background:var(--rose-soft);color:var(--pb-trial);vertical-align:2px}
+.pp-stbtn{pointer-events:auto;display:inline-flex;align-items:center;min-height:44px;margin:-12px 0 -12px 10px;padding:0 2px;border:0;background:none;cursor:pointer;vertical-align:middle;font:inherit;color:inherit}
+.pp-stbtn span{display:inline-block;padding:3px 9px;border:1px solid var(--line-2);border-radius:999px;background:var(--bg-2);font-family:var(--body);font-size:11px;font-weight:600;line-height:1.3;letter-spacing:0;color:var(--ink-2)}
+.pp-stbtn:hover span{border-color:var(--ink-2);color:var(--ink)}
+.pp-stbtn.on span{background:var(--ink);border-color:var(--ink);color:#1E2230}
+.pp-stbtn:focus-visible{outline:none} .pp-stbtn:focus-visible span{outline:2px solid var(--hot);outline-offset:2px}
+.pp-plr .sum{font-size:12px;line-height:1.4;text-align:right;color:var(--ink-2)}
+.pp-plr .sum b{font-family:var(--display);font-size:14px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.pp-plr .arrow{text-align:right;font-size:18px;color:var(--pb-q)}
+.pp-plrbody{margin:0 0 10px;padding:0 14px 14px;background:var(--panel);border:1px solid var(--ink);border-top:0;border-radius:0 0 14px 14px}
+.pp-plrbody::before{content:"";display:block;height:1px;margin:0 -14px 12px;background:var(--line)}
+.pp-wkstats{margin:-2px 0 10px;padding:10px 14px;background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.pp-wkstats table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.pp-wkstats th{padding:4px 8px;text-align:left;font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--pb-q);border-bottom:1px solid var(--line)}
+.pp-wkstats td{padding:5px 8px;border-bottom:1px solid var(--line);color:var(--ink)}
+.pp-wkstats .num{text-align:right} .pp-wkstats .pill{font-size:11px;padding:2px 6px}
+.pp-wkstats tfoot td{border-bottom:0;color:var(--ink-2)}
+@media(max-width:900px){.pp-rungs td{font-size:13px}}
+@media(max-width:980px){
+  .pp-gh{grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+  .pp-gh .when{grid-column:1;grid-row:1} .pp-gh .match{grid-column:2/4;grid-row:1}
+  .pp-gh .lead-c{grid-column:1/-1;grid-row:2;align-items:stretch;padding:10px 0;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .pp-gh .lead-c .pp-ghl{text-align:left} .pp-gh .lead{max-width:none}
+  .pp-gh .tot{grid-column:1;grid-row:3} .pp-gh .totpts{grid-column:2;grid-row:3} .pp-gh .winner{grid-column:3;grid-row:3}
+  .pp-gh .tot b,.pp-gh .totpts b{font-size:18px} }
+@media(max-width:760px){
+  .pp-plr{grid-template-columns:minmax(0,1fr) 26px;grid-template-rows:auto auto;gap:3px 10px;padding:11px 12px}
+  .pp-plr .who{grid-column:1;grid-row:1;overflow-wrap:anywhere}
+  /* his position line moves down whole when the line runs out (the NFL's .plrbtn .who span here), never split "G ·" over
+     "31 min" beside a MISMATCH tag */
+  .pp-plr .who .pos{display:inline-block}
+  .pp-plr .sum{grid-column:1;grid-row:2;text-align:left}
+  .pp-plr .arrow{grid-column:2;grid-row:1/3;align-self:center}
+  .pp-stbtn{margin-left:6px}
+  .pp-plrbody{padding:0 12px 12px} .pp-plrbody::before{margin:0 -12px 12px}
+  .pp-rungs .barcell{display:none}
+  .pp-rungs .thr{width:auto;font-size:13px;white-space:normal}
+  .pp-rungs .pct{width:44px;font-size:14px}
+  .pp-rungs td{padding:7px 4px}
+  .pp-rungs td.cf{width:auto}
+  .pp-conf{min-width:0;padding:3px 7px;font-size:9px} .pp-conf::before{display:none}
+  .pp-rungs .fair{width:auto;font-size:11px}
+  .pp-rungs .fair em{display:block;margin:1px 0 0;line-height:1.2}
+  .pp-rungs .mdl{width:auto;white-space:normal;line-height:1.25} .pp-rungs .mdl .v{display:block}
+  .pp-stat h4{flex-wrap:nowrap} .pp-stat h4 em.mline{margin-left:8px}
+  .pp-rungs .price{width:auto}
+  .pp-wkstats{padding:8px 6px} .pp-wkstats th,.pp-wkstats td{padding:4px 4px} }
+/* a phone: the sheet is the whole screen, with no backdrop to tap and no Escape key, so its bar (Close and the two
+   switches, on one line) stays at the top as the sheet scrolls; a control the focus moves to is kept clear of it */
+@media(max-width:620px){
+  #ppSheet{scroll-padding-top:76px}
+  #ppSheet .pp-top{position:sticky;top:0;z-index:3;padding:10px 12px;margin:0 0 12px;background:var(--panel-2);border-bottom:1px solid var(--line)}
+  #ppSheet .pp-bar{margin:0;gap:4px 12px} .pp-sws{gap:4px 12px}
+  .pp-fixed{padding:0 12px} #ppSheet .pp-body{padding:0 12px 24px} .pp-card{padding:16px 14px} .pp-nomatch{margin:-12px 12px 22px} }
+@media(max-width:400px){ .pp-gh .tot b,.pp-gh .totpts b{font-size:16px} .pp-sw{font-size:13px} .gwin{gap:6px} .gwin .gwin-btn{padding:8px 4px;font-size:13px} }
+/* the narrowest phones (320): the stat rows give back a little padding, so nothing runs past the card */
+@media(max-width:340px){ .pp-rungs td{padding:7px 3px} .pp-rungs .pct{width:38px;font-size:13px} .pp-conf{padding:3px 5px;letter-spacing:.02em} .pp-rungs .fair{white-space:normal}
+  .pp-close{padding:10px 10px} #ppSheet .pp-bar,.pp-sws{gap:4px 8px} .pp-sw{gap:6px;font-size:12px} }
 /* ---------- Your parlay: player props and same-game legs ---------- */
-.pp-add{min-height:44px;min-width:44px;padding:0 8px;border:1px solid var(--line-2);background:var(--panel-2);color:var(--ink);border-radius:10px;cursor:pointer;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;transition:border-color .15s var(--ease),background .15s var(--ease)}
-.pp-add:hover{border-color:var(--hot)}
-.pp-add:focus-visible{outline:2px solid var(--hot);outline-offset:2px}
-.pp-add.in{background:var(--hot);border-color:var(--hot);color:#1E2230}
-.pp-ln .pp-add.in i{color:#1E2230}
-.pp-yes>span{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.pp-lt td .pp-add{min-width:56px}
-.pp-gl .pp-glr{display:grid;grid-template-columns:86px minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:center;padding:6px 0;border-top:1px solid var(--line);font-size:13px}
-.pp-gl .pp-glr .st{font-weight:700}
-.pp-gl .pp-glr .pp-add{width:100%}
 .pp-slipbar{position:sticky;bottom:0;z-index:2;display:flex;gap:6px 12px;align-items:center;flex-wrap:wrap;padding:10px 18px;background:var(--bg-2);border-top:1px solid var(--line);border-radius:0 0 var(--r) var(--r)}
 .pp-slipbar .btn{min-height:44px}
 .pp-slipsum{flex:1 1 200px;font-size:13px;color:var(--ink-2)} .pp-slipsum b{color:var(--ink)}
@@ -996,7 +1135,7 @@ foot();
 </main>
 <footer>Rebuilt in the morning from the previous night's box scores, and again through the afternoon for the day's lines and injury report. Your bets stay in this browser. Nothing here is advice; the market is very good at this.</footer>
 <div class="toast" id="toast"></div>
-<div class="pp-back" id="ppBack" hidden><div class="pp-sheet" id="ppSheet" role="dialog" aria-modal="true" aria-labelledby="ppTitle" aria-describedby="ppSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="ppTitle">Player props</h2><div class="pp-sub" id="ppSub"></div></div><button type="button" class="pp-x" id="ppClose" aria-label="Close player props">×</button></div><div class="pp-body" id="ppBody"></div><div class="pp-slipbar" id="ppSlipBar" hidden><span class="pp-slipst" id="ppSlipSt" role="status" aria-live="polite"></span><span class="pp-slipsum" id="ppSlipSum"></span><button type="button" class="btn" id="ppSlipGo">Your parlay</button></div></div></div>
+<div class="pp-back" id="ppBack" hidden><div class="pp-sheet" id="ppSheet" role="dialog" aria-modal="true" aria-labelledby="ppTitle" tabindex="-1"><h2 id="ppTitle" class="sr">Player props</h2><div class="pp-top"><div class="pp-bar"><button type="button" class="btn pp-close" id="ppClose" aria-label="Close player props">✕ Close</button><span class="pp-sws" id="ppSwitches"><label class="pp-sw"><input type="checkbox" id="ppBackups" data-pp-key="backups"> Include backups</label><label class="pp-sw"><input type="checkbox" id="ppRungs" data-pp-key="rungs"> Milestones</label></span></div></div><div class="pp-fixed" id="ppFixed" hidden><div class="pp-search"><input type="search" id="ppFind" placeholder="Find a player" aria-label="Find a player in this game" autocomplete="off" data-pp-key="search"></div><div class="pp-espn"><button type="button" class="btn pp-refresh" id="ppRefresh" data-pp-refresh data-pp-key="refresh" aria-describedby="ppOddsSt">Refresh odds</button><span class="pp-espnst" id="ppOddsSt" role="status" aria-live="polite"></span></div></div><div class="pp-body" id="ppBody"></div><p class="pp-nomatch" id="ppNoMatch" role="status" aria-live="polite"></p><div class="pp-slipbar" id="ppSlipBar" hidden><span class="pp-slipst" id="ppSlipSt" role="status" aria-live="polite"></span><span class="pp-slipsum" id="ppSlipSum"></span><button type="button" class="btn" id="ppSlipGo">Your parlay</button></div></div></div>
 <div class="pp-back" id="hxBack" hidden><div class="pp-sheet hx-sheet" id="hxSheet" role="dialog" aria-modal="true" aria-labelledby="hxTitle" aria-describedby="hxSub" tabindex="-1"><div class="pp-head"><div class="grow"><h2 id="hxTitle">Rating over time</h2><div class="pp-sub" id="hxSub"></div></div><button type="button" class="pp-x" id="hxClose" aria-label="Close the rating window">×</button></div><div class="pp-body hx-body" id="hxBody"></div></div></div>
 <!-- The parlay card (README "The parlay card"): the NFL hub's (its nflbets/build/card.html at app v114) on this page, set
      in by build.js at its part:card marker: its styles, its window and its script, every class and id prefixed
@@ -1194,9 +1333,9 @@ window.PARLAY_CARD = (function () {
     const am = typeof decToAm === 'function' && dec > 1 ? decToAm(dec) : null;
     return { source, kicker, title: n + '-leg parlay', dateText: dates(legs), price: ml(am), dec: isFinite(dec) ? dec.toFixed(2) : '–', implied: dec > 1 ? pct(1 / dec) : '–', priceNote,
       legs: legs.map(x => x.card), stake: stake > 0 ? stake : 0, payout: stake > 0 ? stake * dec : 0, profit: stake > 0 ? stake * dec - stake : 0,
-      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial,
+      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial, failed: !!trial && typeof pbPropsOn === 'function' && !pbPropsOn(),
       fair: fair && fair.p != null && isFinite(fair.p) ? pct(fair.p) : null, fairEst: !!(fair && fair.p != null && fair.est), sg: !!sg,
-      oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'),
+      oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'), props: legs.filter(l => l.kind === 'prop').length,
       made: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), site: SITE,
       file: 'parlay-' + (first ? first + '-' : '') + n + (n === 1 ? 'leg' : 'legs') + '.png', dk: dkPlan(legs) };
   }
@@ -1236,13 +1375,17 @@ window.PARLAY_CARD = (function () {
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
      then the model's (on trial with a player leg in it) and the price's; with no fair chance, the model's and the
-     price's, then why there is none. Each line is a list of [text, bold] pieces, so the window, the image and the share
-     text say the same */
+     price's, then why there is none. Once the props model has failed its trial, a parlay with a player leg says its
+     player legs are the failed model's, never on trial, and with no fair chance says why first, the model's after it.
+     Each line is a list of [text, bold] pieces, so the window, the image and the share text say the same */
   function chanceLines(m) {
-    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial ? ' (on trial)' : '';
-    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]];
+    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && !m.failed ? ' (on trial)' : '';
+    /* the failed model's words, counted as the builder counts them (pbFailedSay: "its player leg" for one) */
+    const k = m.props != null ? m.props : 2, say = typeof pbFailedSay === 'function' ? pbFailedSay(k) : `its player leg${k === 1 ? '' : 's'} the props model’s, which failed its trial`;
+    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + say]] : [];
     if (m.fair) return [[['Fair chance ' + all], [m.fair, 1], ...(m.fairEst ? [[' (est.)']] : [])],
-      [...(m.chance ? [[by + ' says '], [m.chance, 1]] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
+      [...(m.chance ? [[by + ' says '], [m.chance, 1], ...fx] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
+    if (m.failed && m.chance) return [[['No fair chance: a leg has only one of DraftKings’ two prices']], [['model says '], [m.chance, 1], ...fx, ...price]];
     return [[...(m.chance ? [['Model’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
       [['No fair chance: a leg has only one of DraftKings’ two prices']]];
   }
@@ -1369,7 +1512,31 @@ window.PARLAY_CARD = (function () {
     while (t.length > 1 && x.measureText(t + '…').width > max) t = t.slice(0, -1); return t + '…'; }
   function text(x, t, a, b, font, color, align, max) { x.font = font; x.fillStyle = color; x.textAlign = align || 'left'; x.textBaseline = 'alphabetic';
     const s = max ? fit(x, t, max) : String(t); x.fillText(s, a, b); return x.measureText(s).width; }
-  const LEG_H = 74, HEAD_H = 134, TILE_H = 58, TILE_GAP = 8, CHANCE_H = 58;
+  const LEG_H = 74, HEAD_H = 134, TILE_H = 58, TILE_GAP = 8, CHANCE_H = 58, CHANCE_ROW = 18;
+  /* the chance lines laid out by measure, at the card's 13px, to the text's right edge R: each line's pieces split at
+     its spaces, a row broken before a word that would run past R (a word alone wider than the row is kept whole), runs of
+     one weight drawn together. Rows of {t, b, x}, every run ending at or before R (the review of 6 November 2026: on a
+     FAIL, "model says 17.6%, its player legs the props model's, which failed its trial · the price says 20.0%" ran 110px
+     past the card's edge, the price's chance cut off in the image) */
+  const CHANCE_FONT = b => (b ? '700 ' : '500 ') + '13px ' + FB;
+  function chanceRows(x, m, L, R) {
+    const rows = [], w = (t, b) => { x.font = CHANCE_FONT(b); return x.measureText(t).width; };
+    for (const ln of chanceLines(m)) {
+      let row = [], cx = L, gap = '';
+      const put = (t, b) => { const last = row[row.length - 1];
+        if (last && last.b === b) { const e = last.x + w(last.t + t, b); if (e > R) return false; last.t += t; cx = e; return true; }
+        const e = cx + w(t, b); if (e > R) return false; row.push({ t, b, x: cx }); cx = e; return true; };
+      for (const [t, b] of ln) for (const tok of String(t).split(/(\s+)/)) {
+        if (!tok) continue;
+        if (/^\s+$/.test(tok)) { gap += tok; continue; }
+        if (!put(gap + tok, !!b)) { if (row.length) { rows.push(row); row = []; cx = L; } row.push({ t: tok, b: !!b, x: L }); cx = L + w(tok, !!b); }
+        gap = '';
+      }
+      if (row.length) rows.push(row);
+    }
+    return rows;
+  }
+  const chanceH = n => CHANCE_H + CHANCE_ROW * Math.max(0, n - 2);
   /* what it pays: Stake, Pays and Profit, every figure whole. Three across, the figures step down from 19px to 14px
      until each fits its tile; if one still does not, the tiles take two rows (Stake and Pays, then Profit the card's
      width), then one to a row; only past anything a real stake makes does the font go under 14px. Never an ellipsis
@@ -1386,15 +1553,15 @@ window.PARLAY_CARD = (function () {
     return { rows, px: Math.min(14, Math.floor(19 * (rows[0][0].tw - 20) / w * 10) / 10) };
   }
   const tilesH = t => t ? 4 + t.rows.length * TILE_H + (t.rows.length - 1) * TILE_GAP + 12 : 0;
-  function size(m, t) { return HEAD_H + 10 + m.legs.length * LEG_H + tilesH(t) + CHANCE_H + 52; }
+  function size(m, t, rows) { return HEAD_H + 10 + m.legs.length * LEG_H + tilesH(t) + chanceH(rows) + 52; }
   async function draw(m, scale) {
     scale = scale || 2;
     await fonts();
     const c = document.createElement('canvas');
     const x = c.getContext && c.getContext('2d'); if (!x) return null;
-    /* the tiles are laid out first, by measure, since their rows set the card's height; sizing the canvas then resets
-       the context, so the scale comes after */
-    const CW = W - 2 * MG, L = MG + P, R = MG + CW - P, t = tiles(x, m, L, R), CH = size(m, t), H = CH + 2 * MG;
+    /* the tiles and the chance lines are laid out first, by measure, since their rows set the card's height; sizing the
+       canvas then resets the context, so the scale comes after */
+    const CW = W - 2 * MG, L = MG + P, R = MG + CW - P, t = tiles(x, m, L, R), cr = chanceRows(x, m, L, R), CH = size(m, t, cr.length), H = CH + 2 * MG;
     c.width = Math.round(W * scale); c.height = Math.round(H * scale);
     x.scale(scale, scale);
     x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
@@ -1448,9 +1615,8 @@ window.PARLAY_CARD = (function () {
       y += tilesH(t);
     }
     /* the chance: DraftKings' fair chance first, then the model's and the price's */
-    chanceLines(m).forEach((ln, i) => { let cx = L; const yy = y + 24 + i * 18;
-      for (const [t1, b] of ln) cx += text(x, t1, cx, yy, (b ? '700 ' : '500 ') + '13px ' + FB, b ? C.ink : C.ink2); });
-    y += CHANCE_H;
+    cr.forEach((row, i) => { const yy = y + 24 + i * CHANCE_ROW; for (const r of row) text(x, r.t, r.x, yy, CHANCE_FONT(r.b), r.b ? C.ink : C.ink2); });
+    y += chanceH(cr.length);
     /* the site's mark */
     x.fillStyle = C.line; x.fillRect(MG, y, CW, 1);
     text(x, 'Made ' + m.made, R, y + 31, '500 12px ' + FB, C.muted, 'right');
@@ -1619,6 +1785,8 @@ window.pcClose = () => window.PARLAY_CARD.close();
 .glance-sub{margin:0 0 8px;color:var(--ink-2);font-size:12.5px}
 .glance-inj{display:inline-block;margin-left:6px;font-size:10px;font-weight:800;letter-spacing:.05em;padding:1px 6px;border-radius:6px;border:1px solid #FFA2B8;color:#FFA2B8;vertical-align:1px}
 .glance-q{color:var(--ink-2);font-weight:500}
+/* the failed props model's chance on a player's leg, muted whole: its figure in the quiet ink too, as the view's "props model 50%" */
+.glance-nums dd.glance-q b{color:var(--ink-2);font-weight:600}
 .glance-kv{margin:0 0 8px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:4px 12px}
 .glance-kv>div{display:contents}
 .glance-kv dt{color:var(--ink-2);font-size:12px;font-weight:600;white-space:nowrap}
@@ -1627,7 +1795,7 @@ window.pcClose = () => window.PARLAY_CARD.close();
 .glance-sh{display:inline-flex;vertical-align:-4px;margin-right:4px}
 .glance-sh .tierbadge{width:16px;height:18px}
 .glance-tm{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.02em;color:var(--ink)}
-.glance-trial{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 5px;border:1px solid #FFA2B8;border-radius:999px;color:#FFA2B8;white-space:nowrap;margin-left:5px;vertical-align:1px}
+.glance-trial{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 5px;border:1px solid #FFA2B8;border-radius:999px;color:#FFA2B8;white-space:nowrap;margin-left:2px;vertical-align:1px}
 .glance-pop table.glance-t,.glance-pop table.glance-vs{width:100%;border-collapse:collapse;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible;margin:0 0 8px;font-size:12.5px}
 .glance-pop .glance-t th,.glance-pop .glance-t td,.glance-pop .glance-vs th,.glance-pop .glance-vs td{padding:4px 6px;background:none;border:0;border-top:1px solid var(--line);text-align:left;vertical-align:middle;font-size:12.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);white-space:normal}
 .glance-pop .glance-t thead th,.glance-pop .glance-vs thead th,.glance-pop .glance-vs thead td{border-top:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
@@ -1698,6 +1866,10 @@ window.pcClose = () => window.PARLAY_CARD.close();
 const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ordinal = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)] || 'th');
 const pc0 = p => (p * 100).toFixed(0) + '%';
+/* a chance as the Player props view prints it (ppPct: whole, "<1%" and ">99%" at the ends): a player's leg after the FAIL,
+   whose builder row prints it so too, and the projected double- and triple-double, so the bubble never says "props
+   model 100%" beside their ">99%" (the review of 6 November 2026); elsewhere the builder's own (pc0, its pbPct) */
+const pcL = p => typeof ppPct === 'function' ? ppPct(p) : pc0(p);
 const N = (key, v) => `<b data-glance-n="${H(key)}">${H(v)}</b>`;
 const St = () => (typeof S === 'object' && S) ? S : null;
 /* a club by its code, in the bubble's ink (a club's own colour on the panel falls under 4.5:1 for several clubs) */
@@ -1763,16 +1935,23 @@ function anchor() {
 }
 
 /* ---- the leg it was opened from ---- */
-const trialMark = () => '<i class="glance-trial" title="The props model is on trial: not yet shown to beat DraftKings">on trial</i>';
+/* the props model's mark: on trial, or, once it has failed (pbPropsOn false), "failed trial", titled with why its
+   numbers are for reference only */
+const propsFailed = () => typeof pbPropsOn === 'function' && !pbPropsOn();
+const trialMark = what => propsFailed()
+  ? `<i class="glance-trial" data-glance-failed title="${H(`${typeof pbPropsOffWhy === 'function' ? pbPropsOffWhy().replace(/^./, c => c.toUpperCase()) : 'The props model failed its trial'}: it was not shown to beat DraftKings’ closing lines, so its ${what === 'proj' ? 'projections are' : 'chance is'} for reference only`)}">failed trial</i>`
+  : '<i class="glance-trial" title="The props model is on trial: not yet shown to beat DraftKings">on trial</i>';
 function legHtml(K) {
   if (!K || !K.leg) return '';
   const l = K.leg, out = [];
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
-  /* Model: the player model's chance, the one the builder prices the leg on */
-  const pm = l.p;
-  out.push(`<div><dt>Model</dt><dd>${pm != null && isFinite(pm) ? N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark() : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`);
+  /* Model: the player model's chance, the one the builder prices the leg on; once the props model has failed its trial,
+     a player's leg leads with DraftKings' fair chance, the props model's after it, muted and marked failed */
+  const pm = l.p, failed = l.kind === 'prop' && propsFailed(), pf = failed ? pcL : pc0;
+  const model = `<div><dt>Model</dt><dd${failed ? ' class="glance-q"' : ''}>${pm != null && isFinite(pm) ? (failed ? 'props model ' : '') + N('model', pf(pm)) + (l.kind === 'prop' ? ' ' + trialMark('chance') : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`;
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
-  out.push(`<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`);
+  const fairRow = `<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pf(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`;
+  if (failed) out.push(fairRow, model); else out.push(model, fairRow);
   return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;
 }
 function tonightBtn(gid) {
@@ -1822,9 +2001,9 @@ function playerHtml() {
     const st = L && L.kind === 'prop' && L.stat ? L.stat : null, ks = STATS.map(x => x[0]);
     const want = st && !ks.includes(st) ? [...STATS, [st, (typeof PP_NAMES === 'object' && PP_NAMES[st]) || st]] : STATS;
     const val = k => { if (k === 'min') return isFinite(row[3]) ? (+row[3]).toFixed(0) : '–';
-      if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pc0(v) : '–'; }
+      if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pcL(v) : '–'; }
       const v = typeof ppMean === 'function' ? ppMean(row, k) : null; return v == null || !isFinite(v) ? '–' : (+v).toFixed(1); };
-    table = `<table class="glance-t" aria-label="The props model's projection for him in this game, on trial"><thead><tr><th scope="col">Projected${trialMark()}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
+    table = `<table class="glance-t" aria-label="${propsFailed() ? 'The props model’s projection for him in this game, for reference: the model failed its trial' : 'The props model\'s projection for him in this game, on trial'}"><thead><tr><th scope="col">Projected ${trialMark('proj')}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
       `<tr data-glance-stat="${H(k)}"${st === k ? ' class="glance-on"' : ''}><th scope="row">${H(lab)}</th><td class="glance-n" data-glance-n="proj:${H(k)}">${H(val(k))}</td></tr>`).join('')}</tbody></table>`;
   } else table = `<p class="glance-q glance-none" data-glance-n="noproj">No projection: ${out ? 'he is on the injury report' : gameProj ? 'the props model does not project him for this game' : 'the props model has no projections for this game yet'}.</p>`;
   return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${tonightBtn(gid)}` };
@@ -2896,12 +3075,14 @@ window.NBA_ODDS = { parseDay: oddsParseDay, take: oddsTake, teams: ODDS_TEAMS, e
    contradicts is dropped, and a main line's fair chance is DraftKings' with the whole margin on the Over (the method
    that scored best on the archive); a rung's and a Yes price's are estimates from the measured margins (state.json's
    props.fair), marked est. Players are matched by ESPN's athlete id, which is this hub's player id.
-   The props model is ON TRIAL. Beside each line the view shows its projection and its chance of the Over, and
-   DraftKings' fair chance: "projection 20.8 · model 23% · DraftKings 45%"; nothing in the view says "model says" or
-   "edge". Since 25 October 2026 (the owner's call) the Parlay Builder's Top 50 lines take a player's line where this
-   model's chance clears their bar, every one marked on trial (app/parts/parlay.html), until the shadow ledger has
-   decided its bar (state.json's props.ledger; a FAIL takes them out). Each DraftKings price in the view is the control
-   that puts that leg in the visitor's own parlay (the Parlay Builder's builder, below). */
+   The props model is ON TRIAL. The view is the NFL hub's game page (the owner's call of 5 November 2026): under each
+   player each DraftKings line is a row, its bar and percentage the props model's chance of it, "book 48%" beside it
+   DraftKings' fair chance, then DraftKings' price; each stat block's heading wears the on-trial mark, and nothing in the
+   view says "model says", "edge" or "value". Its lines are the Parlay Builder's (pbPr, pbGl: the job's published
+   lines.json, or a press's newer read), so they show before any press. Since 25 October 2026 (the owner's call) the
+   Parlay Builder's Top 50 lines take a player's line where this model's chance clears their bar, every one marked on
+   trial (app/parts/parlay.html), until the shadow ledger has decided its bar (state.json's props.ledger; a FAIL takes
+   them out). Each line's box in the view puts that leg in the visitor's own parlay (the Parlay Builder's builder, below). */
 /* ---- tools/props_feed.js, line for line ---- */
 const PROP_URL = (e, page) => `https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/${e}/competitions/${e}/odds/100/propBets?lang=en&region=us&limit=1000&page=${page}`;
 /* market type id -> this hub's stat code (pts points, reb rebounds, ast assists, tpm threes made, stl steals, blk
@@ -3134,7 +3315,8 @@ function propsSaid(at, x) {
     + (said ? ` ${said[0].toUpperCase()}${said.slice(1)}.` : '');
 }
 
-/* ---- the view: a sheet a game, from its card on Tonight and its row in the Parlay Builder's plan ---- */
+/* ---- the view: a game's page, from its card on Tonight, laid out as the NFL hub's game page (its props/build/part3.js
+   renderGame), on DraftKings' lines as the Parlay Builder has them (pbPr, pbGl: the job's published read or a newer press) ---- */
 const PP_NAMES = { pts: 'Points', reb: 'Rebounds', ast: 'Assists', tpm: 'Threes', stl: 'Steals', blk: 'Blocks', pra: 'Pts + reb + ast', pr: 'Pts + reb', pa: 'Pts + ast', ar: 'Ast + reb', sb: 'Stl + blk', dd: 'Double-double', td: 'Triple-double' };
 const ppPct = p => p == null || !Number.isFinite(p) ? '–' : p < 0.005 ? '<1%' : p > 0.995 ? '>99%' : Math.round(p * 100) + '%';
 const ppGame = gid => (S.props && S.props.games && S.props.games[gid]) || null;
@@ -3185,103 +3367,387 @@ function ppEarly(dec) {
 function ppLedger() {
   const lg = S.props && S.props.ledger; if (!lg || !lg.bar) return '';
   const sm = lg.summary || {}, sc = sm.scores, N = lg.bar.lines, dec = lg.decision, fmtN = v => Number(v || 0).toLocaleString('en-US');
-  let s = dec && dec.early && dec.verdict === 'FAIL' ? ppEarly(dec) : dec ? `Its bar was decided on ${dayNum(String(dec.decidedAt).slice(0, 10))} at ${fmtN(dec.lines)} lines: ${dec.verdict === 'PASS' ? 'PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial.' : 'FAIL. It stays on trial and suggests nothing, and its calls have stopped.'}`
+  let s = dec && dec.early && dec.verdict === 'FAIL' ? ppEarly(dec) : dec ? `Its bar was decided on ${dayNum(String(dec.decidedAt).slice(0, 10))} at ${fmtN(dec.lines)} lines: ${dec.verdict === 'PASS' ? 'PASS, which makes it a candidate to be shown as more than on trial, by a change of its own; until then it stays on trial.' : 'FAIL. Its chances are no longer used in the Parlay Builder\'s Top 50 lines or Suggested Parlays, and its calls have stopped; the projections stay for reference.'}`
     : `Shadow ledger: ${fmtN(Math.min(sm.lines || 0, N))} of the ${fmtN(N)} graded lines its bar is judged on are in${sm.gradedGames ? `, from ${fmtN(sm.gradedGames)} game${sm.gradedGames === 1 ? '' : 's'}` : ''}; no verdict before ${fmtN(N)}.`;
   if (sc && sc.model && sc.market) s += ` So far on ${fmtN(sc.lines)} lines, log loss model ${sc.model.logloss.toFixed(4)} · DraftKings ${sc.market.logloss.toFixed(4)}, Brier model ${sc.model.brier.toFixed(4)} · DraftKings ${sc.market.brier.toFixed(4)} (lower is better).`;
   return s;
 }
+/* the props model has failed its trial (pbPropsOn false: the ledger's FAIL, the early stop's or the bar's own): the view
+   then draws every player line at DraftKings' fair chance (legFair, the Parlay Builder's), and the props model's own
+   chance only small and muted beside it, for reference; its projections stay. Before a FAIL the view is as it was */
+const ppFail = () => typeof pbPropsOn === 'function' && !pbPropsOn();
+const PP_FAIL_TAG = 'Props model: failed trial';
+function ppFailTitle() {
+  const w = pbPropsOffWhy(), dec = S.props && S.props.ledger && S.props.ledger.decision;
+  return `${w[0].toUpperCase()}${w.slice(1)}${dec && dec.early ? ', the owner’s call' : ''}: it was not shown to beat DraftKings’ closing lines, so the chances in this view are DraftKings’ fair chances, and its projections and its own chances are shown for reference only`;
+}
 function ppTrial() {
   const P = S.props, mk = P && P.research && P.research.market;
   const lost = mk && mk.logloss ? ` On DraftKings' closing lines for the 2026 play-in and playoffs (${Number(mk.lines).toLocaleString('en-US')} lines) it lost: log loss ${mk.logloss.model.toFixed(4)} against DraftKings' ${mk.logloss.market.toFixed(4)}, lower being better.` : '';
-  return `<details class="pp-trial" data-pp-trial><summary>The props model is on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show</summary>
-    <p>Beside each DraftKings line: the hub's projection and its chance of the Over, then DraftKings' fair chance of the Over, its two prices with the book's margin taken out (all of it on the Over, the way that scored best on DraftKings' archived closing lines). The Parlay Builder's Top 50 lines take a player's line where this model's chance clears their bar, marked on trial there and in the builder (the owner's call of 25 October 2026). Tapping a DraftKings price here puts that leg in your own parlay in the Parlay Builder, at DraftKings' price.</p>
+  const est = `<p>Milestone (k+) fair chances are estimates (est.): DraftKings gives one price there, and the margin taken out is the one measured on the archive's milestones. Double- and triple-doubles take out the same margin, never measured on those markets: on the 2026 playoff prices they came in well below what that leaves, so their DraftKings figure is a high estimate.</p>`;
+  if (ppFail()) { const lg = ppLedger();
+    return `<details class="pp-trial" data-pp-trial data-pp-fail><summary data-pp-key="trial">The props model failed its trial against DraftKings: the chances here are DraftKings' own, its projections for reference</summary>
+    ${lg ? `<p data-pp-failnote>${lg}</p>` : ''}
+    <p>Under each player, each DraftKings line's bar, percentage and band are DraftKings' fair chance of it, its prices with the book's margin taken out (all of it on the Over, the way that scored best on DraftKings' archived closing lines), est. where DraftKings gives one price. Each stat's heading keeps the props model's projection, and its own chance of each line is shown small beside DraftKings', for reference only. Ticking a line's box here puts that leg in your own parlay in the Parlay Builder, at DraftKings' price.</p>
+    <p>Walk-forward on 2024 to 2026 it beat each player's own average on every stat.${lost}</p>
+    ${est}</details>`; }
+  return `<details class="pp-trial" data-pp-trial><summary data-pp-key="trial">The props model is on trial: not yet shown to beat DraftKings, its chances are marked on trial wherever they show</summary>
+    <p>Under each player, each DraftKings line's bar and percentage are the props model's chance of it, from his projection; "book" beside it is DraftKings' fair chance, its two prices with the book's margin taken out (all of it on the Over, the way that scored best on DraftKings' archived closing lines). The Parlay Builder's Top 50 lines take a player's line where this model's chance clears their bar, marked on trial there and in the builder (the owner's call of 25 October 2026). Ticking a line's box here puts that leg in your own parlay in the Parlay Builder, at DraftKings' price.</p>
     <p>Walk-forward on 2024 to 2026 it beat each player's own average on every stat.${lost}</p>
     ${ppLedger() ? `<p>${ppLedger()}</p>` : ''}
-    <p>Milestone (k+) fair chances are estimates (est.): DraftKings gives one price there, and the margin taken out is the one measured on the archive's milestones. Double- and triple-doubles take out the same margin, never measured on those markets: on the 2026 playoff prices they came in well below what that leaves, so their DraftKings figure is a high estimate.</p></details>`;
+    ${est}</details>`;
 }
-/* the model's projections for a game's expected players, a table a team */
-function ppProjTable(g, keep) {
-  const pg = ppGame(g.id); if (!pg) return `<p class="muted" style="margin:0">${ppNoGame(g)}</p>`;
-  const teams = [g.away, g.home].filter(t => ppTeam === 'all' || t === (ppTeam === 'away' ? g.away : g.home));
-  const rows = Object.entries(pg.players).filter(([pid]) => !keep || keep(pid)).map(([pid, r]) => ({ pid, r }));
-  const cols = ['min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk'], opt = k => k === 'stl' || k === 'blk' ? ' pp-opt' : '';
-  const body = teams.map(t => { const list = rows.filter(x => x.r[1] === t).sort((a, b) => b.r[3] - a.r[3]); if (!list.length) return '';
-    return `<tr class="pp-team"><td colspan="10">${pill(t)} ${esc((TEAMS[t] || [t, t])[1])}</td></tr>` + list.map(({ pid, r }) => `<tr data-pp-proj="${esc(pid)}"><td><b>${esc(r[0])}</b> <span class="muted">${esc(r[2])}</span></td>${cols.map(k => `<td class="num${opt(k)}">${ppNumTxt(ppAt(r, k))}</td>`).join('')}<td class="num">${ppNumTxt(ppMean(r, 'pra'))}</td><td class="num">${ppPct(ppAt(r, 'dd'))}</td></tr>`).join(''); }).join('');
-  const outs = ppSides(g).filter(s => teams.includes(s.team)).flatMap(s => (s.out || []).map(o => `${esc(o.name)} <span class="muted">${s.team} · ${esc(o.status)}</span>`));
-  return body ? `<div class="wrap"><table class="tbl pp-proj"><thead><tr><th>Player</th><th class="num" title="minutes projected">Min</th><th class="num">Pts</th><th class="num">Reb</th><th class="num">Ast</th><th class="num" title="threes made">3PM</th><th class="num pp-opt">Stl</th><th class="num pp-opt">Blk</th><th class="num" title="points + rebounds + assists">PRA</th><th class="num" title="chance of a double-double">DD</th></tr></thead><tbody>${body}</tbody></table></div><p class="muted pp-optnote">Steals and blocks are shown on a wider screen.</p>`
-    + (outs.length ? `<p class="muted" style="margin:8px 0 0;font-size:12px">Not projected, on the injury report: ${outs.join(', ')}.</p>` : '') : `<p class="muted" style="margin:0">No player projected here.</p>`;
+/* ---- the view's pieces, the NFL hub's game page on this hub's numbers ---- */
+/* the stat blocks a player's page draws, in the sheet's order (README "Player props") */
+const PP_ORDER = ['pts', 'reb', 'ast', 'tpm', 'pra', 'pr', 'pa', 'ar', 'stl', 'blk', 'sb'];
+/* the NFL hub's confTier (props/build/part2.js there): High from 70%, Med from 45%, else Low, worked on the chance as it
+   is shown, the whole percent beside it (ppPct), so a chance printed 45% is Med however it rounds there (0.4488 was
+   Low beside "45%"): 70% and up High, 45% to 69% Med */
+const ppConf = p => { const r = Math.round(p * 100); return r >= 70 ? ['high', 'High'] : r >= 45 ? ['med', 'Med'] : ['low', 'Low']; };
+/* a time in US Eastern with its weekday: "Thu 4:32 PM ET" */
+const ppEt = iso => { const t = Date.parse(iso); return Number.isFinite(t) ? new Date(t).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET' : ''; };
+/* "Giannis Antetokounmpo" -> "G. Antetokounmpo", as the NFL's head card shortens a name */
+const ppShort = n => { const p = String(n || '').trim().split(/\s+/); return p.length > 1 ? `${p[0][0]}. ${p.slice(1).join(' ')}` : p[0] || ''; };
+/* a player's rank and shield as the Players tab draws them: its # column is his place in the rated players sorted by
+   overall Elo, high to low (the table's own sort, ties in the file's order), its shield tierBadge of that Elo; none for
+   a player the ladder does not rank. Worked once a published file */
+let PP_RANKS = null, PP_RANKS_OF = null;
+function ppRankOf(pid) {
+  if (PP_RANKS_OF !== S.players) {
+    PP_RANKS_OF = S.players; PP_RANKS = new Map();
+    const cmp = (a, b) => { const x = a.rating, y = b.rating; if (x === y) return 0; if (x === null || x === undefined) return 1; if (y === null || y === undefined) return -1; return x < y ? 1 : -1; };
+    [...(S.players || [])].sort(cmp).forEach((p, i) => PP_RANKS.set(String(p.id), { rank: i + 1, p }));
+  }
+  const r = PP_RANKS.get(String(pid));
+  return r && r.p.ranked && Number.isFinite(r.p.rating) ? { rank: r.rank, rating: r.p.rating } : null;
 }
-/* one player's DraftKings lines, each with the model beside it */
-function ppPlayerHtml(g, pid, e) {
-  const who = ppWho(g, pid), row = who.row, out = ppOut(g, pid), F = (S.props && S.props.fair) || {};
-  const mains = e.mains.filter(m => m.player === pid), lads = e.ladders.filter(m => m.player === pid), yes = e.yes.filter(m => m.player === pid);
-  /* each DraftKings price is the control that puts that leg in your parlay, at the price as read */
-  const base = { id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip, kind: 'prop', pid, name: who.name, team: who.team || '', at: e.at };
-  const head = `<div class="pp-pl-h"><b>${esc(who.name)}</b>${who.team ? pill(who.team) : ''}<span class="muted">${esc(who.pos)}${row ? ` · ${ppNumTxt(row[3])} min projected` : ''}</span>${out ? `<span class="tag rose">${esc(out)}</span>` : ''}</div>`
-    + (row ? '' : `<p class="muted" style="margin:0 0 6px;font-size:12px">No projection: ${out ? `${esc(out)} on the injury report` : !ppGame(g.id) ? 'none for this game' : `projected under ${S.props.minShown} minutes, or no game on record`}.</p>`);
-  const lines = mains.length ? `<div class="pp-ln head"><span>Stat</span><span class="ln">Line</span><span class="px">Over</span><span class="px">Under</span><span class="md">${row ? 'Chance of the Over' : "DraftKings' chance of the Over"}</span></div>`
-    + mains.map(m => { const fair = propFairOver(m.over, m.under), pm = row ? ppModelOver(row, m.stat, m.line) : null;
-      return `<div class="pp-ln" data-pp-line="${m.stat}"><span class="st">${PP_NAMES[m.stat]}</span><span class="ln">${m.line}</span>${ppAdd({ ...base, stat: m.stat, mk: 'main', line: m.line, side: 'over', odds: m.over, other: m.under }, `<i>O</i>${fmtAm(m.over)}`, ' px')}${ppAdd({ ...base, stat: m.stat, mk: 'main', line: m.line, side: 'under', odds: m.under, other: m.over }, `<i>U</i>${fmtAm(m.under)}`, ' px')}`
-        + `<span class="md">${row ? `projection ${ppNumTxt(ppMean(row, m.stat))} · model ${ppPct(pm)} · ` : ''}DraftKings ${ppPct(fair)}</span></div>`; }).join('') : '';
-  const estT = 'est.: DraftKings gives a single price here, so its margin is taken out as measured on the archive\'s milestones';
-  const estY = 'est.: one price with no other side, so the margin measured on the milestones is taken out, never measured on this market itself; on the 2026 playoff prices double- and triple-doubles came in well below what that leaves, so read it as high';
-  const yesH = yes.length ? `<div class="pp-yes">${yes.map(y => { const fair = propFairRung(y.price, F.yes && F.yes.a ? F.yes.a[y.market] : null), pm = row ? ppAt(row, y.market) : null;
-    return `<span data-pp-yes="${y.market}"><b>${PP_NAMES[y.market]}</b> ${ppAdd({ ...base, stat: y.market, mk: 'yes', side: 'yes', odds: y.price, other: null }, fmtAm(y.price))} · ${row ? `model ${ppPct(pm)} · ` : ''}DraftKings ${ppPct(fair)} <span class="muted" title="${estY}">est.</span></span>`; }).join('')}</div>` : '';
-  const stats = PROP_STATS.filter(s => lads.some(l => l.stat === s));
-  const ladH = lads.length ? `<details class="pp-lad" data-pp-lad><summary>Milestones (k+): ${lads.length} price${lads.length === 1 ? '' : 's'}</summary><div class="pp-lgrid">${stats.map(s => `<table class="pp-lt" data-pp-ladder="${s}"><thead><tr><th>${PP_NAMES[s]}</th><th>Price</th><th title="${estT}">DraftKings, est.</th>${row ? '<th>Model</th>' : ''}</tr></thead><tbody>`
-    + lads.filter(l => l.stat === s).map(l => `<tr><td>${l.k}+</td><td>${ppAdd({ ...base, stat: s, mk: 'mile', k: l.k, side: 'yes', odds: l.price, other: null }, fmtAm(l.price))}</td><td>${ppPct(propFairRung(l.price, F.rung && F.rung.a ? F.rung.a[s] : null))}</td>${row ? `<td>${ppPct(ppModelAtLeast(row, s, l.k))}</td>` : ''}</tr>`).join('') + '</tbody></table>').join('')}</div></details>` : '';
-  return `<div class="pp-pl" data-pp-player="${esc(pid)}">${head}${lines}${yesH}${ladH}</div>`;
+/* his games in the published box scores (state.json's boxes, the last week's): the only recent games the page has, so
+   Show stats is offered only where there is one */
+function ppRecent(pid) {
+  const B = S.boxes; if (!B || !B.games) return [];
+  return Object.entries(B.games).filter(([, gm]) => gm && Array.isArray(gm[pid])).map(([gid, gm]) => { const [, d, away, home] = gid.split('_');
+    return { gid, date: d && d.length === 8 ? `${d.slice(0, 4)}-${d.slice(4, 6)}-${d.slice(6, 8)}` : '', away, home, line: gm[pid] }; }).sort((a, b) => a.date < b.date ? -1 : a.date > b.date ? 1 : 0);
 }
-let ppOpen = null, ppTeam = 'all', ppFrom = null;
-function propsDraw() {
-  if (!ppOpen) return;
-  const sc = $('#ppSheet'), body = $('#ppBody'), sub = $('#ppSub');
-  const y = sc.scrollTop, act = document.activeElement, key = act && body.contains(act) ? act.getAttribute('data-pp-key') : null;
-  const open = new Set([...body.querySelectorAll('details[open]')].map(d => d.closest('[data-pp-player]') ? 'l' + d.closest('[data-pp-player]').dataset.ppPlayer : d.hasAttribute('data-pp-trial') ? 'trial' : 'more'));
-  const g = S.slate.find(x => x.id === ppOpen);
-  PP_OFFER = [];
-  if (!g) { sub.innerHTML = ''; body.innerHTML = '<p class="muted">This game is no longer on the board.</p>'; ppSlipSync(); return; }
-  sub.innerHTML = `<span>${pill(g.away)} <span class="muted">at</span> ${pill(g.home)}</span><span>${g.tip ? `${tipTime(g.tip)} · ` : ''}${dayName(g.date)} ${dayNum(g.date)}</span><span class="tag rose" title="Not yet shown to beat DraftKings: its chances are marked on trial wherever they show">Model on trial</span>`;
+/* a game's player props as the Parlay Builder has them (pbPr: the newer of the job's read and a press's), each list
+   present */
+const ppPr = gid => { const p = typeof pbPr === 'function' ? pbPr(gid) : null; return p ? { at: p.at, mains: p.mains || [], ladders: p.ladders || [], yes: p.yes || [] } : null; };
+let ppOpen = null, ppFrom = null;
+/* the view's own state, in memory only, never saved: its two switches hold for the visit, the search, the open player
+   and the stats shown are the game's */
+const PPV = { backups: false, rungs: false, gid: null, q: '', row: null, stats: new Set() };
+/* what the view stands on, beside its Refresh odds, short as the NFL's ("DraftKings via ESPN, Thu 4:32 PM ET"): the
+   published read (lines.json) or a press's, when, and how many main lines; every kind's count in its title. A press's
+   read is this visit's alone, which the line says ("this visit only") */
+function ppReadSaid(g) {
+  if (oddsBusy) return { t: "Reading DraftKings' lines from ESPN…", title: '' };
+  const pr = ppPr(g.id), live = PP_LIVE[g.id];
+  const press = !!pr && !!live && (live.status === 'ok' || live.status === 'none') && live.at === pr.at;
+  const n = (k, one, many) => `${k} ${k === 1 ? one : many}`, all = pr ? pr.mains.length + pr.ladders.length + pr.yes.length : 0;
+  const kinds = all ? oddsAnd([n(pr.mains.length, 'main line', 'main lines'), pr.ladders.length && n(pr.ladders.length, 'milestone price', 'milestone prices'), pr.yes.length && n(pr.yes.length, 'double- or triple-double price', 'double- and triple-double prices')].filter(Boolean)) : '';
+  let t = pr ? `${press ? 'DraftKings via ESPN' : 'DraftKings as published'}, ${ppEt(pr.at)} · ${!all ? 'no player props posted yet' : pr.mains.length ? n(pr.mains.length, 'main line', 'main lines') : n(all, 'price', 'prices')}`
+    : LINES_ERR ? 'Published lines did not load · Refresh odds reads them from ESPN'
+    : !LINES ? "Loading DraftKings' published lines…" : 'No DraftKings player props for this game yet';
+  if (live && live.status === 'failed' && (!pr || pbT(live.at) > pbT(pr.at))) t += ` · could not be read at ${ppEt(live.at)}${pr ? ', these stand' : ''}`;
+  if (press) t += ' · this visit only';
+  const title = (kinds ? `DraftKings: ${kinds}.` : '') + (press ? ' Read by Refresh odds for this visit only: a reload shows the published lines again.' : '');
+  return { t, title: title.trim() };
+}
+/* Vegas's line for the head card: DraftKings' spread as Game bets has it (pbGl), else the line the board shows (the
+   game's published line, which can be newer than DraftKings' prices), marked as the board's; null without either.
+   `line` is the home side's */
+function ppVegas(g) {
+  const gl = pbGl(g.id);
+  if (gl && gl.spread && Number.isFinite(gl.spread.home.line)) return { line: gl.spread.home.line, board: false };
+  return g.line != null && Number.isFinite(g.line) ? { line: g.line, board: true } : null;
+}
+/* the game's head, the NFL's: tip-off, the matchup, the props model's biggest projections (on trial), the board
+   model's expected score and total, and Vegas's pick from the line the board shows */
+function ppHead(g) {
+  const m = g.model, pg = ppGame(g.id), lab = t => `<span class="pp-ghl">${t}</span>`;
+  const lead = pg ? [['pts', 'PTS'], ['reb', 'REB'], ['ast', 'AST']].map(([k, cat]) => {
+    let best = null;
+    for (const [pid, r] of Object.entries(pg.players)) { const v = ppAt(r, k); if (Number.isFinite(v) && (!best || v > best.v)) best = { pid, r, v }; }
+    return best ? `<div data-pp-lead="${k}" data-pp-pid="${esc(best.pid)}"><span class="cat">${cat}</span><span class="nm" title="${esc(best.r[0])}">${esc(ppShort(best.r[0]))}</span><span class="v">${ppNumTxt(best.v)}<em>${k}</em></span></div>` : ''; }).join('') : '';
+  const sc = m && Number.isFinite(m.total) && Number.isFinite(m.spread) ? { a: Math.round((m.total + m.spread) / 2), h: Math.round((m.total - m.spread) / 2) } : null;
+  const vg = ppVegas(g), fav = vg && vg.line !== 0 ? (vg.line < 0 ? g.home : g.away) : null;
+  return `<div class="pp-card pp-ghcard" data-pp-head><div class="pp-gh">
+    <div class="when">${lab('Tip-off')}<b>${esc(dayName(g.date))}, ${esc(dayNum(g.date))}</b>${esc(tipTime(g.tip))}</div>
+    <div class="match">${lab('Matchup')}<div class="pp-mt">${pill(g.away)} <span class="at">at</span> ${pill(g.home)}</div></div>
+    <div class="lead-c">${lab(`Biggest projections ${ppFail() ? `<span class="pp-trialtag" data-pp-failtag title="${esc(ppFailTitle())}">${PP_FAIL_TAG}</span>` : '<span class="pp-trialtag" title="Not yet shown to beat DraftKings: its chances are marked on trial wherever they show">Model on trial</span>'}`)}<div class="lead">${lead || '<span class="pp-q">No projections for this game yet</span>'}</div></div>
+    <div class="tot" data-pp-score>${lab('Expected score')}${sc ? `<b>${sc.a} – ${sc.h}</b><small>${esc(g.away)} / ${esc(g.home)}</small>` : '<b>–</b>'}</div>
+    <div class="totpts" data-pp-totpts>${lab('Total pt')}${m && Number.isFinite(m.total) ? `<b>${Math.round(m.total)}</b><small title="The board model's points for the two sides">points</small>` : '<b>–</b>'}</div>
+    <div class="winner" data-pp-vegas>${lab('Vegas pick')}${fav ? `${pill(fav)}<small>by ${Math.abs(vg.line)}</small>` : `<span class="none">–</span>${vg && vg.line === 0 ? '<small>even</small>' : ''}`}${vg && vg.board ? `<small data-pp-vegas-src="board">the board's line</small>` : ''}</div>
+  </div></div>`;
+}
+/* one line of a stat block or of Game bets, the NFL's rung row: the box that puts this leg in your parlay (checked while
+   it is in: ppToggle, through slipToggle's rules), the bet, the model's chance (the Parlay Builder's legModel: a player's
+   the props model's, on trial) as a bar, its percentage and band, DraftKings' fair chance (legFair: "book 48%", est. where
+   it is) and DraftKings' price. Once the props model has failed its trial (ppFail), a player's line is the NFL's row at
+   DraftKings' fair chance (its app v138): the bar, percentage and band are legFair's (est. where it is, and said so; a
+   dash and "no DraftKings chance" where there is none), and the props model's chance sits where "book" stood, small and
+   muted ("props model 61%"), titled with why it is not used. Game bets are the board model's and DraftKings' as before */
+function ppLegRow(l, label, cls) {
+  const i = PP_OFFER.push(l) - 1, on = M.slip.legs.some(x => slipKey(x) === slipKey(l));
+  const p = legModel(l), f = legFair(l), fail = l.kind === 'prop' && ppFail();
+  const q = fail ? (f ? f.p : null) : p, has = q != null && Number.isFinite(q), [c, lbl] = has ? ppConf(q) : ['', ''], hasP = p != null && Number.isFinite(p);
+  const box = `<tr class="${cls || ''}${on ? ' on' : ''}" data-pp-leg="${esc(slipKey(l))}">
+    <td class="pick"><label class="pp-pick"><input type="checkbox" data-sg-add="${i}" data-pp-key="sg-${esc(slipKey(l))}"${on ? ' checked' : ''} aria-label="${esc(`Add to your parlay: ${slipWho(l)}, ${slipWhat(l)} at ${fmtAm(l.odds)}`)}"></label></td>
+    <td class="thr">${label}</td>
+    <td class="barcell"><div class="pp-track">${has ? `<div class="pp-fill ${c}" style="width:${Math.max(2, q * 100).toFixed(0)}%"></div>` : ''}</div></td>`;
+  const price = `<td class="price" data-pp-price="${l.odds}">${fmtAm(l.odds)}</td></tr>`;
+  if (fail) return box + `
+    <td class="pct" data-pp-dk${has ? `="${q}" title="${esc(ppFairTitle(l, f))}"` : ''}>${has ? `<span class="sr">DraftKings' fair chance${f.est ? ', est.' : ''}: </span>${ppPct(q)}${f.est ? '<em aria-hidden="true">est.</em>' : ''}` : '–'}</td><td class="cf">${has ? `<span class="pp-conf ${c}">${lbl}</span>` : '<span class="pp-nodk" data-pp-nodk>no DraftKings chance</span>'}</td>
+    <td class="mdl"${hasP ? ` data-pp-mdl="${p}" title="${esc(pbTrialTitle())}"` : ''}>${hasP ? `props model <span class="v">${ppPct(p)}</span>` : ''}</td>
+    ${price}`;
+  return box + `
+    <td class="pct"${has ? ` data-pp-p="${p}"` : ''}>${has ? ppPct(p) : '–'}</td><td class="cf">${has ? `<span class="pp-conf ${c}">${lbl}</span>` : ''}</td>
+    <td class="fair"${f ? ` data-pp-fair="${f.p}" title="${esc(ppFairTitle(l, f))}"` : ''}>${f ? `book ${ppPct(f.p)}${f.est ? '<em>est.</em>' : ''}` : ''}</td>
+    ${price}`;
+}
+/* what "book" is, by the kind of line: a main line's two prices with the margin out; a milestone's and a Yes price's one
+   price with the archive's margin out, an estimate, the Yes markets' a high one */
+function ppFairTitle(l, f) {
+  if (!f.est) return "DraftKings' fair chance: its two prices with the book's margin taken out";
+  if (l.mk === 'yes') return "DraftKings' fair chance, est.: one price with no other side, so the margin measured on the milestones is taken out, never measured on this market itself; on the 2026 playoff prices double- and triple-doubles came in well below what that leaves, so read it as high";
+  return "DraftKings' fair chance, est.: DraftKings gives a single price here, so its margin is taken out as measured on the archive's milestones";
+}
+/* the NFL's three buttons under the game's head (its gameWinBtns): Matchup, Mismatches and Team Stats, each opening one
+   small window over the view (window.gameWindow, app/parts/gamewin.html); none where that part is not on the page */
+function ppWinBtns(g) {
+  if (typeof window.gameWindow !== 'function') return '';
+  const b = (k, l) => `<button type="button" class="btn quiet gwin-btn" data-gp-pop="${k}" data-gp-game="${esc(g.id)}" data-pp-key="gwin-${k}" aria-haspopup="dialog">${l}</button>`;
+  return `<div class="gwin" role="group" aria-label="More on this game">${b('units', 'Matchup')}${b('mism', 'Mismatches')}${b('stats', 'Team Stats')}</div>`;
+}
+const ppLoading = () => !LINES && !LINES_ERR;
+const ppNoLine = (t = ppLoading() ? "Loading DraftKings' lines…" : 'No DraftKings line yet.') => `<p class="pp-noline" data-pp-noline>${t}</p>`;
+/* the NFL's Game bets card: each team to win and to cover, then the game total over or under, on DraftKings' game lines
+   as the Parlay Builder has them (pbGl: the newer of the job's read and a press's) */
+function ppBets(g) {
+  const gl = pbGl(g.id), m = g.model;
+  let h = `<div class="pp-card pp-gbets" data-pp-gbets><h3>Game bets</h3>`;
+  if (!gl || !(gl.ml || gl.spread || gl.total)) { const vg = ppVegas(g);
+    return h + ppNoLine(ppLoading() || !vg ? undefined : `No DraftKings prices yet: the board's line is ${vg.line === 0 ? 'even' : `${vg.line < 0 ? g.home : g.away} ${fmtSp(-Math.abs(vg.line))}`}.`) + '</div>'; }
+  h += `<p class="pp-src" data-pp-glsrc>Lines: DraftKings', ${SG_LINES[g.id] === gl ? 'read from ESPN' : 'as published'} ${esc(ppEt(gl.at))}.</p>`;
+  const b = { id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip, at: gl.at };
+  for (const s of ['away', 'home']) {
+    const o = s === 'home' ? 'away' : 'home', team = g[s], rows = [];
+    if (gl.ml) rows.push(ppLegRow({ ...b, kind: 'ml', side: team, line: null, odds: gl.ml[s].odds, other: gl.ml[o].odds, dk: gl.ml[s].id || null }, 'To win'));
+    if (gl.spread) rows.push(ppLegRow({ ...b, kind: 'spread', side: team, line: gl.spread[s].line, odds: gl.spread[s].odds, other: gl.spread[o].odds, dk: gl.spread[s].id || null }, `To cover ${fmtSp(gl.spread[s].line)}`));
+    if (!rows.length) continue;
+    const mu = m && Number.isFinite(m.spread) ? (s === 'home' ? -m.spread : m.spread) : null;
+    h += `<div class="pp-stat" data-pp-side="${esc(team)}"><h4>${pill(team)} ${esc(TEAMS[team] ? TEAMS[team][1] : team)}${mu != null ? ` <em data-pp-margin="${mu}">our margin ${mu > 0 ? '+' : ''}${mu.toFixed(1)}</em>` : ''}${gl.spread ? `<em class="mline">book line ${fmtSp(gl.spread[s].line)}</em>` : ''}</h4><table class="pp-rungs">${rows.join('')}</table></div>`;
+  }
+  if (gl.total) h += `<div class="pp-stat" data-pp-total><h4>Game total${m && Number.isFinite(m.total) ? ` <em class="mpts" title="The board model's own points for the two sides: shown, not used in the chance, which is the market's own">model's points ${m.total.toFixed(1)}</em>` : ''}<em class="mline">book line ${gl.total.line}</em></h4><table class="pp-rungs">${['over', 'under'].map(t => ppLegRow({ ...b, kind: 'total', side: t, line: gl.total.line, odds: gl.total[t].odds, other: gl.total[t === 'over' ? 'under' : 'over'].odds, dk: gl.total[t].id || null }, `${t === 'over' ? 'Over' : 'Under'} ${gl.total.line}`)).join('')}</table></div>`;
+  return h + '</div>';
+}
+/* why a player has no projection, as the sheet has always said it */
+const ppWhyNone = (g, out) => out ? `${out} on the injury report` : !ppGame(g.id) ? 'none for this game' : `projected under ${S.props.minShown} minutes, or no game on record`;
+/* one player opened: a stat block for each stat he is projected on (or DraftKings lines without a projection), the
+   NFL's: "Points  projected 14.3  book line 12.5", its Over and Under, and with Milestones on its k+ rungs; then his
+   double- and triple-double, the NFL's touchdown block. A rung in your parlay is shown whatever the switch. A player
+   the props model projects has its chances in every block (his lines' and his double- and triple-double's, line or
+   none), so his body opens on one quiet on-trial line that covers them all, and no heading carries a mark of its own
+   (the NFL's headings, which have none) */
+function ppBody(g, x, pr) {
+  const row = x.who.row, pid = x.pid, out = ppOut(g, pid), on = l => M.slip.legs.some(y => slipKey(y) === slipKey(l));
+  const mains = pr ? pr.mains.filter(m => m.player === pid) : [], lads = pr ? pr.ladders.filter(m => m.player === pid) : [], yes = pr ? pr.yes.filter(m => m.player === pid) : [];
+  const base = { id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip, kind: 'prop', pid, name: x.who.name, team: x.who.team || '', at: pr ? pr.at : null };
+  let h = `<div class="pp-plrbody" id="ppPb-${esc(pid)}" data-pp-body="${esc(pid)}">`;
+  const fail = ppFail();
+  if (row && fail) h += `<p class="pp-trialln" data-pp-trialln data-pp-failln><i class="pb-trial" data-pp-trialmark title="${esc(ppFailTitle())}">${PP_FAIL_TAG}</i><span>His chances here are DraftKings' fair chances; the props model's own, small beside them, are for reference.</span></p>`;
+  else if (row) h += `<p class="pp-trialln" data-pp-trialln><i class="pb-trial" data-pp-trialmark title="${esc(typeof pbTrialTitle === 'function' ? pbTrialTitle() : 'On trial')}">on trial</i><span>His chances here are the props model's.</span></p>`;
+  else h += `<p class="pp-noproj" data-pp-noproj>No projection: ${esc(ppWhyNone(g, out))}. DraftKings' fair chance alone.</p>`;
+  for (const s of PP_ORDER) {
+    const mm = mains.find(y => y.stat === s), L = lads.filter(y => y.stat === s), mu = row ? ppMean(row, s) : null;
+    if (!row && !mm && !L.length) continue;
+    const rungs = L.map(l => ({ l, leg: { ...base, stat: s, mk: 'mile', k: l.k, side: 'yes', odds: l.price, other: null } })).filter(r => PPV.rungs || on(r.leg));
+    let rows = '';
+    if (mm) rows += ['over', 'under'].map(sd => ppLegRow({ ...base, stat: s, mk: 'main', line: mm.line, side: sd, odds: sd === 'over' ? mm.over : mm.under, other: sd === 'over' ? mm.under : mm.over }, `${sd === 'over' ? 'Over' : 'Under'} ${mm.line}`, 'mainline')).join('');
+    rows += rungs.map(r => ppLegRow(r.leg, `${r.l.k}+`, 'rung')).join('');
+    h += `<div class="pp-stat" data-pp-stat="${s}"><h4>${PP_NAMES[s]}${mu != null ? ` <em data-pp-mu="${mu}">projected ${ppNumTxt(mu)}</em>` : ' <em>no projection</em>'}${mm ? `<em class="mline">DraftKings line ${mm.line}</em>` : ''}</h4>`
+      + (rows ? `<table class="pp-rungs">${rows}</table>` : ppNoLine(L.length ? `No DraftKings main line yet: Milestones shows its ${L.length} milestone price${L.length === 1 ? '' : 's'}.` : undefined)) + '</div>';
+  }
+  for (const k of ['dd', 'td']) {
+    const y = yes.find(v => v.market === k), p = row ? ppAt(row, k) : null;
+    if (!row && !y) continue;
+    const rows = y ? ppLegRow({ ...base, stat: k, mk: 'yes', side: 'yes', odds: y.price, other: null }, 'Gets one') : '';
+    /* its projection is a chance: on a FAIL it is the props model's, small and muted, in the heading only where DraftKings
+       has no price (with one, it sits beside DraftKings' on the row) */
+    const hp = !Number.isFinite(p) ? ' <em>no projection</em>' : !fail ? ` <em data-pp-mu="${p}">projected ${ppPct(p)}</em>` : rows ? '' : ` <em class="pp-mdl" data-pp-mdl="${p}" title="${esc(pbTrialTitle())}">props model ${ppPct(p)}</em>`;
+    h += `<div class="pp-stat" data-pp-stat="${k}"><h4>${PP_NAMES[k]}${hp}</h4>${rows ? `<table class="pp-rungs">${rows}</table>` : ppNoLine()}</div>`;
+  }
+  return h + '</div>';
+}
+/* his games this past week, the NFL's Show stats table */
+function ppStats(x) {
+  const games = ppRecent(x.pid); if (!games.length) return '';
+  const cols = [['pts', 'PTS'], ['reb', 'REB'], ['ast', 'AST'], ['tpm', '3PM'], ['stl', 'STL'], ['blk', 'BLK']], I = k => ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'].indexOf(k);
+  const team = x.who.team, opp = r => team === r.away ? `@ ${pill(r.home)}` : team === r.home ? `vs ${pill(r.away)}` : `${pill(r.away)} @ ${pill(r.home)}`;
+  const rows = games.map(r => `<tr><td>${esc(dayNum(r.date))}</td><td>${opp(r)}</td>${cols.map(([k]) => `<td class="num">${r.line[I(k)]}</td>`).join('')}</tr>`).join('');
+  const avg = cols.map(([k]) => { const v = games.reduce((t, r) => t + r.line[I(k)], 0) / games.length; return `<td class="num"><b>${v.toFixed(1)}</b></td>`; }).join('');
+  return `<div class="pp-wkstats" id="ppSt-${esc(x.pid)}" data-pp-recent="${esc(x.pid)}"><table><thead><tr><th>Date</th><th>Opp</th>${cols.map(([, l]) => `<th class="num">${l}</th>`).join('')}</tr></thead><tbody>${rows}</tbody><tfoot><tr><td colspan="2">Per game (${games.length})</td>${avg}</tr></tfoot></table></div>`;
+}
+/* one player's row, the NFL's: the button that opens him covers the row (aria-expanded), his rank and shield as the
+   Players tab draws them, his name, his position line (the NFL's depth label's place: his projected minutes, the sheet
+   has always shown them, and "· backup" for a player Include backups adds, as the NFL marks one) and injury, Show stats
+   where the page has his recent games, and his projected points, rebounds and assists. A backup with nothing to project
+   or bet is shown in his place, not a button */
+function ppRow1(g, x, pr) {
+  const pid = x.pid, who = x.who, row = who.row, out = ppOut(g, pid), rk = ppRankOf(pid), open = PPV.row === pid, st = PPV.stats.has(pid);
+  const badge = rk ? `<span class="pp-badge" data-pp-rank="${rk.rank}">${tierBadge(rk.rating)}#${rk.rank}</span>` : '';
+  const inj = out ? `<span class="pp-inj" data-pp-inj>${esc(out)}</span>` : '';
+  const nLines = pr ? pr.mains.filter(m => m.player === pid).length + pr.ladders.filter(m => m.player === pid).length + pr.yes.filter(m => m.player === pid).length : 0;
+  const sum = row ? [['pts', 'pts'], ['reb', 'reb'], ['ast', 'ast']].map(([k, u]) => `<b>${ppNumTxt(ppMean(row, k))}</b> ${u}`).join(' &nbsp;·&nbsp; ') : `<span class="pp-q">No projection${nLines ? '' : `: ${esc(ppWhyNone(g, out))}`}</span>`;
+  const mins = row && Number.isFinite(row[3]) ? row[3].toFixed(0) : null, backup = !!x.backup && !!ppGame(g.id);
+  const posLine = [who.pos, mins != null && `${mins} min`, backup && 'backup'].filter(Boolean).join(' · ');
+  const sumSr = row ? `projected ${mins != null ? `${mins} minutes, ` : ''}${['pts', 'reb', 'ast'].map(k => `${ppNumTxt(ppMean(row, k))} ${{ pts: 'points', reb: 'rebounds', ast: 'assists' }[k]}`).join(', ')}` : 'no projection';
+  const hasStats = ppRecent(pid).length > 0;
+  /* in the game's top five Mismatches (app/parts/gamewin.html's own list, the window's) graded Solid or more, as the NFL's
+     old game page tagged (its live one, since 4 November 2026, tags at its file's measured size): its tag beside his name, titled with his row there ("Big mismatch: ..."), and said in the row's name */
+  const mm = typeof window.gwMismatch === 'function' ? window.gwMismatch(g.id, pid) : null;
+  const mmTag = mm ? `<span class="pp-mmtag" data-pp-mm="${mm.n}" data-pp-mmgrade="${esc(mm.grade)}" title="${esc(mm.title)}">Mismatch</span>` : '';
+  /* Show stats is named by its own words (Show stats or Hide stats, then whose), which say its state: no aria-pressed
+     beside them; it names the table it controls only while the table is drawn */
+  const stWord = st ? 'Hide stats' : 'Show stats';
+  const stBtn = hasStats ? `<button type="button" class="pp-stbtn${st ? ' on' : ''}" data-pp-stats="${esc(pid)}" data-pp-key="stats-${esc(pid)}"${st ? ` aria-controls="ppSt-${esc(pid)}"` : ''} aria-label="${esc(`${stWord}: ${who.name}'s games this past week`)}"><span>${stWord}</span></button>` : '';
+  const whoHtml = `<span class="who"><span aria-hidden="true">${badge}<span class="nm">${esc(who.name)}</span>${mmTag}${posLine ? `<span class="pos">${esc(posLine)}</span>` : ''}${inj}</span>${stBtn}</span>`;
+  const bench = !row && !nLines;
+  let h = `<div class="pp-pwrap" data-pp-name="${esc(String(who.name).toLowerCase())}">`;
+  if (bench) h += `<div class="pp-plr bench" data-pp-player="${esc(pid)}" data-pp-bench>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow"></span><span class="sr">${esc(who.name)}${posLine ? ', ' + esc(posLine) : ''}: no projection and no DraftKings line</span></div>`;
+  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}"${open ? ` aria-controls="ppPb-${esc(pid)}"` : ''} aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${backup ? ', backup' : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}${mm ? `, ${mm.grade} mismatch, #${mm.n} in this game` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
+  if (st && hasStats) h += ppStats(x);
+  if (open && !bench) h += ppBody(g, x, pr);
+  return h + '</div>';
+}
+/* the teams in turn, away then home, the NFL's: its header, who the report rules out, then a row a player by projected
+   minutes. Shown: every player the props model projects and every one DraftKings lines; with Include backups, the rest
+   of the club's expected rotation (the board model's lineup) and its rated players, each in his place with nothing to
+   bet. A player DraftKings lines whom the hub places on neither club comes last, under his own heading */
+function ppTeams(g) {
+  const pg = ppGame(g.id), pr = ppPr(g.id), seen = new Map(), outs = new Set(ppSides(g).flatMap(s => (s.out || []).map(o => o.id)));
+  const lineupMin = new Map(ppSides(g).flatMap(s => (s.lineup || []).map(p => [p.id, p.min])));
+  const add = (pid, extra) => { if (!seen.has(pid)) seen.set(pid, { pid, who: ppWho(g, pid), ...extra }); };
+  if (pg) for (const pid of Object.keys(pg.players)) add(pid);
+  if (pr) for (const y of pr.mains.concat(pr.ladders, pr.yes)) add(y.player);
+  if (PPV.backups) {
+    for (const s of ppSides(g)) for (const p of s.lineup || []) if (!outs.has(p.id)) add(p.id, { backup: true });
+    for (const p of S.players || []) if ((p.team === g.away || p.team === g.home) && !outs.has(p.id)) add(p.id, { backup: true });
+  }
+  const minOf = x => x.who.row ? x.who.row[3] : lineupMin.has(x.pid) ? lineupMin.get(x.pid) : -1;
+  const lines = x => pr ? pr.mains.filter(m => m.player === x.pid).length : 0;
+  const rated = new Map((S.players || []).map(p => [p.id, p.rating])), rating = x => Number.isFinite(rated.get(x.pid)) ? rated.get(x.pid) : -Infinity;
+  const all = [...seen.values()].sort((a, b) => minOf(b) - minOf(a) || lines(b) - lines(a) || rating(b) - rating(a) || (a.who.name < b.who.name ? -1 : a.who.name > b.who.name ? 1 : 0));
   let h = '';
-  if (started(g)) h = `<div class="note"><b>This game has tipped off.</b> Its props are off the board here.</div>`;
+  for (const team of [g.away, g.home]) {
+    const list = all.filter(x => x.who.team === team), side = ppSides(g).find(s => s.team === team);
+    const notShown = ((side && side.out) || []).filter(o => !seen.has(o.id));
+    h += `<section class="pp-team" data-pp-team="${esc(team)}"><h3 class="pp-teamhdr">${pill(team)} ${esc(TEAMS[team] ? TEAMS[team][1] : team)} <span class="pp-pill">playing ${esc(team === g.away ? g.home : g.away)}</span></h3>`;
+    if (notShown.length) h += `<p class="pp-outs" data-pp-outs>Not projected, on the injury report: ${notShown.map(o => `<b>${esc(o.name)}</b> (${esc(o.status || 'Out')})`).join(', ')}.</p>`;
+    h += list.length ? list.map(x => ppRow1(g, x, pr)).join('') : `<p class="pp-empty">No player to show: none projected and none with a DraftKings line.</p>`;
+    h += '</section>';
+  }
+  const other = all.filter(x => x.who.team !== g.away && x.who.team !== g.home);
+  if (other.length) h += `<section class="pp-team" data-pp-team="other"><h3 class="pp-teamhdr">Other DraftKings lines <span class="pp-pill">placed on neither club</span></h3>${other.map(x => ppRow1(g, x, pr)).join('')}</section>`;
+  return h;
+}
+/* the Find a player box, the NFL's: rows whose name holds what is typed, a club's heading only while it has one; a
+   search no row matches says so, in a line of its own that stays on the page (#ppNoMatch, a status, so it is heard) */
+function ppSearchApply() {
+  const body = $('#ppBody'); if (!body) return;
+  const q = PPV.q.trim().toLowerCase();
+  let any = 0;
+  body.querySelectorAll('.pp-team').forEach(sec => {
+    let shown = 0;
+    sec.querySelectorAll('.pp-pwrap').forEach(w => { const hide = !!q && !w.dataset.ppName.includes(q); w.hidden = hide; if (!hide) shown++; });
+    sec.hidden = !!q && !shown; any += shown;
+    sec.querySelectorAll('.pp-outs,.pp-empty').forEach(p => { p.hidden = !!q; });
+  });
+  const nm = $('#ppNoMatch'), say = q && !any && body.querySelector('.pp-team') ? `No player in this game matches "${PPV.q.trim()}".` : '';
+  if (nm && nm.textContent !== say) nm.textContent = say;
+}
+/* where the focus was before a redraw, so it can be put back after: its own key, then (where that control is gone, a
+   rung that left with Milestones off, a box whose line a press moved) the first box of the same stat block, the
+   player's row, the nearest control that is still drawn, and last the sheet itself, never a control scrolled off the
+   screen without bringing it back into view */
+function ppFocusPlan(sc, act) {
+  if (!act || act === sc || !sc.contains(act)) return null;
+  const key = act.getAttribute('data-pp-key'), body = $('#ppBody');
+  if (!body.contains(act)) return { el: act };                // the bar, the search, Refresh odds: drawn once, they stay
+  const near = [], cell = act.closest('.pp-stat'), pb = act.closest('[data-pp-body]'), wrap = act.closest('.pp-pwrap');
+  if (cell) { const sel = pb ? `[data-pp-body="${CSS.escape(pb.dataset.ppBody)}"] [data-pp-stat="${CSS.escape(cell.dataset.ppStat || '')}"]`
+      : cell.dataset.ppSide ? `[data-pp-gbets] [data-pp-side="${CSS.escape(cell.dataset.ppSide)}"]` : cell.hasAttribute('data-pp-total') ? '[data-pp-gbets] [data-pp-total]' : null;
+    if (sel) near.push(sel + ' [data-pp-key]'); }
+  if (pb) near.push(`[data-pp-open="${CSS.escape(pb.dataset.ppBody)}"]`);
+  else if (wrap) { const r = wrap.querySelector('[data-pp-open]'); if (r) near.push(`[data-pp-open="${CSS.escape(r.dataset.ppOpen)}"]`); }
+  /* the controls around it, nearest first */
+  const all = [...body.querySelectorAll('[data-pp-key]')], i = all.indexOf(act);
+  for (let k = 1; i >= 0 && k <= 8; k++) for (const j of [i + k, i - k]) if (all[j]) near.push(`[data-pp-key="${CSS.escape(all[j].getAttribute('data-pp-key'))}"]`);
+  return { key, near };
+}
+function ppFocusBack(sc, plan) {
+  if (!plan) return;
+  const ok = el => el && !el.disabled && !el.closest('[hidden]') && !(el.tagName !== 'SUMMARY' && el.closest('details:not([open])'));
+  if (plan.el) { if (!ok(plan.el)) $('#ppClose').focus({ preventScroll: true }); return; }   // hidden with its game's tip: the bar's Close, at the top
+  let el = plan.key ? sc.querySelector(`[data-pp-key="${CSS.escape(plan.key)}"]`) : null, moved = false;
+  if (!ok(el)) { el = null; moved = true; for (const q of plan.near) { const c = $('#ppBody').querySelector(q); if (ok(c)) { el = c; break; } } }
+  if (!el) el = sc;
+  el.focus({ preventScroll: true });
+  /* a stand-in the focus moved to is brought into view where it is off the screen */
+  if (moved && el !== sc && typeof el.scrollIntoView === 'function') { const r = el.getBoundingClientRect(), v = sc.getBoundingClientRect(); if (r.bottom > v.bottom || r.top < v.top) el.scrollIntoView({ block: 'nearest' }); }
+}
+function propsDraw(anchor) {
+  if (!ppOpen) return;
+  const sc = $('#ppSheet'), body = $('#ppBody');
+  const y = sc.scrollTop, plan = ppFocusPlan(sc, document.activeElement);
+  const trialOpen = !!body.querySelector('details[data-pp-trial][open]');
+  const pin = anchor && body.querySelector(`[data-pp-player="${CSS.escape(anchor)}"]`), pinTop = pin ? pin.getBoundingClientRect().top : null;
+  const g = S.slate.find(x => x.id === ppOpen), live = !!g && !started(g);
+  PP_OFFER = [];
+  $('#ppTitle').textContent = g ? `Player props: ${g.away} at ${g.home}` : 'Player props';
+  $('#ppBackups').checked = PPV.backups; $('#ppRungs').checked = PPV.rungs;
+  $('#ppSwitches').hidden = !live;
+  /* the search and Refresh odds with its status are the sheet's own, drawn once and changed in place, so a redraw never
+     takes the focus or the caret from them and the status line is a live region that stays (its changes are heard) */
+  $('#ppFixed').hidden = !live;
+  if (live) {
+    const find = $('#ppFind'); if (find.value !== PPV.q) find.value = PPV.q;
+    const rf = $('#ppRefresh'); if (oddsBusy) { rf.setAttribute('aria-busy', 'true'); rf.setAttribute('aria-disabled', 'true'); } else { rf.removeAttribute('aria-busy'); rf.removeAttribute('aria-disabled'); }
+    const st = $('#ppOddsSt'), rs = ppReadSaid(g); if (st.textContent !== rs.t) st.textContent = rs.t; if (rs.title) st.title = rs.title; else st.removeAttribute('title');
+  }
+  let h = '';
+  if (!g) h = '<p class="pp-q">This game is no longer on the board.</p>';
+  else if (!live) h = `<div class="note"><b>This game has tipped off.</b> Its props are off the board here.</div>`;
   else {
-    const e = PP_LIVE[g.id], busy = oddsBusy, n = ppCount(e);
-    const again = `<div style="margin-top:10px"><button type="button" class="btn${e ? '' : ' hot'} pp-btn" data-pp-refresh data-pp-key="refresh"${busy ? ' aria-disabled="true"' : ''}>Refresh odds</button></div>`;
-    if (busy) h += `<div class="note"><b>Reading DraftKings' lines and player props from ESPN…</b></div>`;
-    else if (!e) h += `<div class="note"><b>Press Refresh odds for DraftKings' props.</b> They are read from ESPN when you press it, for this visit only. Until then, the props model's projections for the players expected to play.${again}</div>`;
-    else if (n) h += `<div class="note"><b>DraftKings' props from ESPN, read ${oddsClock(e.at)}:</b> ${e.mains.length} main line${e.mains.length === 1 ? '' : 's'}${e.ladders.length ? `, ${e.ladders.length} milestone price${e.ladders.length === 1 ? '' : 's'}` : ''}${e.yes.length ? `, ${e.yes.length} double- and triple-double price${e.yes.length === 1 ? '' : 's'}` : ''}. For this visit only: a reload shows the published page again.${again}</div>`;
-    else if (e.status === 'failed') h += `<div class="note"><b>DraftKings' player props could not be read at ${oddsClock(e.at)}.</b> Below, the props model's projections.${again}</div>`;
-    else h += `<div class="note"><b>DraftKings has posted no player props for this game yet</b> (read ${oddsClock(e.at)}). They go up one to six days before tip-off. Below, the props model's projections.${again}</div>`;
-    h += ppTrial();
-    h += `<div class="pp-ctl"><div class="seg" role="group" aria-label="Team">${[['all', 'Both'], ['away', g.away], ['home', g.home]].map(([k, l]) => `<button type="button" class="${ppTeam === k ? 'on' : ''}" data-pp-team="${k}" data-pp-key="team-${k}" aria-pressed="${ppTeam === k}">${l}</button>`).join('')}</div></div>`;
-    const want = t => ppTeam === 'all' || t === (ppTeam === 'away' ? g.away : g.home);
-    h += ppGameLines(g);
-    if (n) {                                                 // a second press's read keeps the lines in view until it lands
-      const ids = [...new Set(e.mains.concat(e.ladders, e.yes).map(m => m.player))];
-      const order = t => t === g.away ? 0 : t === g.home ? 1 : 2;
-      const list = ids.map(pid => ({ pid, who: ppWho(g, pid), mains: e.mains.filter(m => m.player === pid).length })).filter(x => want(x.who.team))
-        .sort((a, b) => order(a.who.team) - order(b.who.team) || (b.who.row ? b.who.row[3] : -1) - (a.who.row ? a.who.row[3] : -1) || b.mains - a.mains || (a.who.name < b.who.name ? -1 : 1));
-      h += list.length ? list.map(x => ppPlayerHtml(g, x.pid, e)).join('') : `<p class="muted">No DraftKings line on ${esc(ppTeam === 'away' ? g.away : g.home)} players.</p>`;
-      if (ppGame(g.id)) {
-        const lined = new Set(ids), rest = Object.entries(ppGame(g.id).players).filter(([pid, r]) => !lined.has(pid) && want(r[1])).length;
-        if (rest) h += `<details class="pp-more" data-pp-more><summary>The model's projections for ${rest} player${rest === 1 ? '' : 's'} with no DraftKings line</summary>${ppProjTable(g, pid => !lined.has(pid))}</details>`;
-      }
-    } else h += `<h3 style="font-family:var(--display);font-size:14px;margin:4px 0 8px">The model's projections</h3>${ppProjTable(g)}`;
+    h += ppHead(g) + ppWinBtns(g) + ppTrial() + ppBets(g);
+    if (!ppGame(g.id)) h += `<p class="pp-q pp-nogame" data-pp-nogame>${esc(ppNoGame(g))}</p>`;
+    if (M.slip.legs.some(l => l.id === g.id && l.kind === 'prop' && l.mk === 'mile') && !PPV.rungs) h += `<p class="pp-q pp-lnote">A milestone leg in your parlay is shown under its player even with Milestones off, so nothing counts out of sight.</p>`;
+    h += ppTeams(g);
   }
   body.innerHTML = h;
-  body.querySelectorAll('details').forEach(d => { const p = d.closest('[data-pp-player]'); if (open.has(p ? 'l' + p.dataset.ppPlayer : d.hasAttribute('data-pp-trial') ? 'trial' : 'more')) d.open = true; });
-  body.querySelectorAll('[data-pp-team]').forEach(b => b.onclick = () => { ppTeam = b.dataset.ppTeam; propsDraw(); });
-  body.querySelectorAll('[data-pp-refresh]').forEach(b => b.onclick = () => refreshOdds());
-  body.querySelectorAll('[data-sg-add]').forEach(b => b.onclick = () => ppToggle(+b.dataset.sgAdd));
+  if (trialOpen) { const d = body.querySelector('details[data-pp-trial]'); if (d) d.open = true; }
+  body.querySelectorAll('[data-sg-add]').forEach(b => b.onchange = () => ppToggle(+b.dataset.sgAdd));
+  body.querySelectorAll('[data-pp-open]').forEach(b => b.onclick = () => { const id = b.dataset.ppOpen; PPV.row = PPV.row === id ? null : id; propsDraw(id); });
+  body.querySelectorAll('[data-pp-stats]').forEach(b => b.onclick = () => { const id = b.dataset.ppStats; if (PPV.stats.has(id)) PPV.stats.delete(id); else PPV.stats.add(id); propsDraw(id); });
+  body.querySelectorAll('[data-gp-pop]').forEach(b => b.onclick = () => { if (typeof window.gameWindow === 'function') window.gameWindow(b.dataset.gpPop, b.dataset.gpGame, b); });
+  body.querySelectorAll('.pp-mmtag').forEach(t => t.onclick = () => { const r = t.closest('.pp-plr'), o = r && r.querySelector('[data-pp-open]'); if (o) o.click(); });
+  if (live) ppSearchApply(); else $('#ppNoMatch').textContent = '';
   ppSlipSync();
   sc.scrollTop = y;
-  if (key) { const el = body.querySelector(`[data-pp-key="${key}"]`); (el || $('#ppClose')).focus(); }
+  if (pinTop != null) { const nb = body.querySelector(`[data-pp-player="${CSS.escape(anchor)}"]`); if (nb) sc.scrollTop += nb.getBoundingClientRect().top - pinTop; }
+  ppFocusBack(sc, plan);
+  /* a game's window open over the view follows the redraw: bound to its button as drawn now, or closed where the view
+     no longer draws one (its game has tipped off) */
+  if (typeof window.gameWindowSync === 'function') window.gameWindowSync();
 }
 function propsOpen(gid, from) {
   if (!S || !S.slate.some(x => x.id === gid)) return;
-  ppOpen = gid; ppTeam = 'all'; ppFrom = from || null;
+  if (PPV.gid !== gid) Object.assign(PPV, { gid, q: '', row: null, stats: new Set() });
+  ppOpen = gid; ppFrom = from || null;
   const back = $('#ppBack'); $('#ppBody').innerHTML = ''; back.hidden = false; document.body.classList.add('pp-lock');
   propsDraw(); $('#ppSheet').scrollTop = 0; $('#ppClose').focus();
+  /* DraftKings' published lines (lines.json), read once a load, as the Parlay Builder reads them: drawn when they
+     answer (ppLinesIn, which the read calls) */
+  if (typeof pbLinesLoad === 'function' && !LINES && !LINES_ERR) pbLinesLoad();
 }
 function propsClose() {
   if (!ppOpen) return;
@@ -3289,20 +3755,40 @@ function propsClose() {
   const to = ppFrom && document.contains(ppFrom) ? ppFrom : document.querySelector(`main [data-props="${gid}"]`);
   ppFrom = null; if (to) to.focus();
 }
-/* a game's button, on its card and its plan row; it counts the main lines a press read */
+/* a game's button, on its card and its plan row; it counts the main lines its view shows: DraftKings' as the Parlay
+   Builder has them (pbPr: the job's published read, lines.json, or a newer press), so the count is the view's */
+function propsCount(g) {
+  const e = ppPr(g.id), n = e ? e.mains.length : 0, c = e ? e.mains.length + e.ladders.length + e.yes.length : 0;
+  return { n, c, label: `Player props${n ? ` · ${n} line${n === 1 ? '' : 's'}` : c ? ` · ${c} price${c === 1 ? '' : 's'}` : ''}` };
+}
 function propsBtn(g, mini) {
-  const e = PP_LIVE[g.id], n = e && e.status === 'ok' ? e.mains.length : 0, c = ppCount(e);
-  const label = `Player props${n ? ` · ${n} line${n === 1 ? '' : 's'}` : c ? ` · ${c} price${c === 1 ? '' : 's'}` : ''}`;
+  const { c, label } = propsCount(g);
   return mini ? `<button type="button" class="pp-mini" data-props="${g.id}" aria-haspopup="dialog">${label}</button>`
     : `<button type="button" class="btn ghost pp-btn${c ? ' has' : ''}" data-props="${g.id}" aria-haspopup="dialog">${label}</button>`;
 }
+/* lines.json has answered (pbLinesLoad calls it): every game button on the page counts what it now has, in place, and
+   an open view is drawn on it */
+window.ppLinesIn = function () {
+  if (!S || !S.slate) return;
+  document.querySelectorAll('main [data-props]').forEach(b => { const g = S.slate.find(x => x.id === b.dataset.props); if (!g) return;
+    const { c, label } = propsCount(g); if (b.textContent !== label) b.textContent = label; if (b.classList.contains('pp-btn')) b.classList.toggle('has', !!c); });
+  if (ppOpen) propsDraw();
+};
 document.addEventListener('click', e => { const b = e.target.closest && e.target.closest('[data-props]'); if (b) propsOpen(b.dataset.props, b); });
 $('#ppClose').addEventListener('click', propsClose);
-$('#ppBack').addEventListener('click', e => { if (e.target === e.currentTarget) propsClose(); });
+$('#ppRefresh').addEventListener('click', () => refreshOdds());
+$('#ppFind').addEventListener('input', e => { PPV.q = e.target.value; ppSearchApply(); });
+$('#ppBackups').addEventListener('change', e => { PPV.backups = e.target.checked; propsDraw(); });
+$('#ppRungs').addEventListener('change', e => { PPV.rungs = e.target.checked; propsDraw(); });
+/* a click outside closes the view only where the press began outside too: a selection dragged from the sheet onto the
+   backdrop is no click outside (a click with no press before it still closes it) */
+let PP_DOWN = null;
+$('#ppBack').addEventListener('pointerdown', e => { PP_DOWN = e.target; });
+$('#ppBack').addEventListener('click', e => { const from = PP_DOWN; PP_DOWN = null; if (e.target === e.currentTarget && (!from || from === e.currentTarget)) propsClose(); });
 $('#ppBack').addEventListener('keydown', e => {
   if (e.key === 'Escape') { e.preventDefault(); propsClose(); return; }
   if (e.key !== 'Tab') return;
-  const sheet = $('#ppSheet'), f = [...sheet.querySelectorAll('button, summary, a[href]')].filter(el => !el.disabled && !el.closest('[hidden]') && !(el.tagName !== 'SUMMARY' && el.closest('details:not([open])')));
+  const sheet = $('#ppSheet'), f = [...sheet.querySelectorAll('button, summary, a[href], input')].filter(el => !el.disabled && !el.closest('[hidden]') && !(el.tagName !== 'SUMMARY' && el.closest('details:not([open])')));
   if (!f.length) return;
   const first = f[0], last = f[f.length - 1], at = document.activeElement;
   if (!sheet.contains(at) || at === sheet) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
@@ -3312,9 +3798,9 @@ $('#ppBack').addEventListener('keydown', e => {
 window.NBA_PROPS = { PROP_URL, PROP_MAIN, PROP_MILE, PROP_YES, PROP_STATS, propAmerican, propImplied, propAthlete, propLine, propTypeId, propPrice, propItems, propParse, propFairOver, propFairRung, propRead, nbVar, nbPmf, nbSf, pOver, live: () => PP_LIVE };
 
 /* ---------- Your parlay: player props and same-game legs (README "Same-game parlays") ----------
-   The visitor's own parlay, built from a game's Player props after a Refresh odds press: each DraftKings price in the
-   sheet (a player's main line Over or Under, a milestone k+, a double- or triple-double, the game's moneyline, spread
-   and total) puts that leg here at the price as read, dated by the read, and so does each line's Add on the Parlay
+   The visitor's own parlay, built from a game's Player props: each line's box in the view (a player's main line Over or
+   Under, a milestone k+, a double- or triple-double, the game's moneyline, spread and total) puts that leg here at
+   DraftKings' price as read, dated by the read (the job's published one or a press's), and so does each line's Add on the Parlay
    Builder's Top 50 lines (app/parts/parlay.html), which draws these legs as the NFL hub's builder.
    - The rule. Legs of different games join as before. In one game: one side bet (the moneyline or the spread, on one
      team), the total once, and player legs, one a player a stat (a milestone is its stat's leg). One player's two legs
@@ -3679,36 +4165,23 @@ function propGrade(l) {
   if (l.mk === 'mile') return { r: v >= l.k ? 'won' : 'lost', v };
   return { r: v >= (l.stat === 'td' ? 3 : 2) ? 'won' : 'lost', v };
 }
-/* the sheet's foot: your parlay in a line, and what the last tap did */
+/* the sheet's foot: your parlay in a line, and what the last tick did */
 function ppSlipSync() {
   const bar = $('#ppSlipBar'); if (!bar) return;
   const legs = M.slip.legs, here = legs.filter(l => l.id === ppOpen).length;
-  if (!legs.length) $('#ppSlipSum').innerHTML = 'Your parlay is empty: tap a DraftKings price to add it.';
+  if (!legs.length) $('#ppSlipSum').innerHTML = 'Your parlay is empty: tick a line to add it.';
   else { const P = slipDec(legs); $('#ppSlipSum').innerHTML = `Your parlay: <b>${legs.length} leg${legs.length === 1 ? '' : 's'}</b>${here && here !== legs.length ? ` (${here} in this game)` : ''}, <b>${fmtAm(decToAm(P.dec))}${P.sg ? ' est.' : ''}</b>`; }
   bar.hidden = !legs.length && !$('#ppSlipSt').textContent && !PP_OFFER.length;
+  const sc = $('#ppSheet'), hb = bar.hidden ? 0 : bar.offsetHeight;
+  if (sc) sc.style.scrollPaddingBottom = hb ? `${hb + 16}px` : '';
 }
-/* one price in the sheet: the control that puts that leg in your parlay (or takes it out) */
-function ppAdd(l, inner, cls = '') {
-  const i = PP_OFFER.push(l) - 1, on = M.slip.legs.some(x => slipKey(x) === slipKey(l));
-  return `<button type="button" class="pp-add${cls}${on ? ' in' : ''}" data-sg-add="${i}" data-pp-key="sg-${esc(slipKey(l))}" aria-pressed="${on}" title="${on ? 'In your parlay: tap to take it out' : 'Add to your parlay'}" aria-label="${esc(`${on ? 'In your parlay, tap to take out' : 'Add to your parlay'}: ${slipWho(l)}, ${slipWhat(l)} at ${fmtAm(l.odds)}`)}">${inner}</button>`;
-}
+/* a line's box in the view (ppLegRow): puts that leg in your parlay, or takes it out, by slipToggle's rules, and says so */
 function ppToggle(i) {
   const l = PP_OFFER[i]; if (!l) return;
   const r = slipToggle(l);
   $('#ppSlipSt').textContent = r.why ? `Not added: ${r.why}` : r.removed ? `Taken out: ${slipWho(l)}, ${slipWhat(l)}.` : `Added: ${slipWho(l)}, ${slipWhat(l)} at ${fmtAm(l.odds)}.`;
   propsDraw();
   if (tabNow() === 'parlay') render.parlay();
-}
-/* the game's own lines in the sheet, after a press: the moneyline, the spread and the total, each side a control */
-function ppGameLines(g) {
-  const x = SG_LINES[g.id]; if (!x) return '';
-  const b = { id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip, at: x.at };
-  const rows = [];
-  if (x.ml) rows.push(['Moneyline', ['away', 'home'].map(s => ppAdd({ ...b, kind: 'ml', side: g[s], line: null, odds: x.ml[s].odds, other: x.ml[s === 'home' ? 'away' : 'home'].odds, dk: x.ml[s].id || null }, `${g[s]} ${fmtAm(x.ml[s].odds)}`))]);
-  if (x.spread) rows.push(['Spread', ['away', 'home'].map(s => ppAdd({ ...b, kind: 'spread', side: g[s], line: x.spread[s].line, odds: x.spread[s].odds, other: x.spread[s === 'home' ? 'away' : 'home'].odds, dk: x.spread[s].id || null }, `${g[s]} ${fmtSp(x.spread[s].line)} ${fmtAm(x.spread[s].odds)}`))]);
-  if (x.total) rows.push([`Total ${x.total.line}`, ['over', 'under'].map(s => ppAdd({ ...b, kind: 'total', side: s, line: x.total.line, odds: x.total[s].odds, other: x.total[s === 'over' ? 'under' : 'over'].odds, dk: x.total[s].id || null }, `${s === 'over' ? 'Over' : 'Under'} ${fmtAm(x.total[s].odds)}`))]);
-  if (!rows.length) return '';
-  return `<div class="pp-pl pp-gl" data-pp-gl><div class="pp-pl-h"><b>Game lines</b><span class="muted">DraftKings, read ${oddsClock(x.at)}</span></div>${rows.map(([t, bs]) => `<div class="pp-glr"><span class="st">${t}</span>${bs.join('')}</div>`).join('')}</div>`;
 }
 $('#ppSlipGo').addEventListener('click', () => { propsClose(); show('parlay'); const t = $('#pbTitle'); if (t) { t.scrollIntoView?.({ behavior: 'smooth', block: 'start' }); t.focus({ preventScroll: true }); } });
 
@@ -3830,6 +4303,13 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
 .pb-tc .pb-trial{margin:2px 0 0;display:inline-block}
 small.faroff{display:block;font-size:11px;font-weight:600;margin-top:2px;white-space:normal;color:var(--gold)}
 .legfair{display:block;font-size:11px;font-weight:500;color:var(--ink-2);white-space:nowrap;margin-top:2px}
+/* a player's leg once the props model has failed its trial: DraftKings' fair chance leads (est. beside it where it is
+   one), the props model's own small and muted under it, for reference (the Player props view's row, its .mdl) */
+.pb-mdl{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:normal;margin-top:2px;cursor:help}
+.pb-mdl [data-pb-mv]{white-space:nowrap} .pb-mdl .pb-trial{margin-left:2px}
+.pb-fest{font-style:normal;font-size:10px;font-weight:500;color:var(--pb-q);margin-left:3px}
+/* "fair", the builder's own word for DraftKings' figure (a team row's "fair 40%"), before a player's lead figure on a FAIL */
+.pb-fairlbl{font-size:11px;font-weight:600;color:var(--ink-2)}
 .dkslip{display:block;font-size:11px;font-weight:500;color:var(--ink-2);white-space:normal;margin-top:2px}
 .pb-read{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:nowrap}
 .espn-ctl{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:0 0 12px}
@@ -3956,6 +4436,8 @@ function pbLinesLoad() {
     if (j && typeof j === 'object' && j.v === 1 && j.games && typeof j.games === 'object' && !Array.isArray(j.games)) LINES = j; else LINES_ERR = true;
     PB_TOP_CACHE.clear(); PB_CACHE.clear();
     if (tabNow() === 'parlay') pbKeep(() => render.parlay()); else if (tabNow() === 'suggest' && render.suggest) render.suggest(); else pbOddsSync();
+    /* the board's Player props buttons count these lines, and an open Player props view stands on them */
+    if (typeof window.ppLinesIn === 'function') window.ppLinesIn();
   })());
 }
 /* tools/lines_feed.js linesGl, line for line: a lines.json entry -> the shape oddsGameLines gives (what the page keeps
@@ -4381,7 +4863,19 @@ function pbTrialTitle() {
   if (!pbPropsOn()) { const w = pbPropsOffWhy(); return `${w[0].toUpperCase() + w.slice(1)}${lg.decision.early ? ', the owner’s call: it was not shown to beat DraftKings’ closing lines' : ' against DraftKings’ closing lines'}, so this chance is the model’s, for reference only, and no list or set takes it`; }
   return `The props model is on trial: its shadow ledger has ${n.toLocaleString('en-US')} of the ${N.toLocaleString('en-US')} graded lines its bar against DraftKings' closing lines is judged on, and it has not been shown to beat DraftKings, so this chance is the model's on trial`;
 }
-const pbTrialMark = l => l && l.kind === 'prop' ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>` : '';
+/* once it has failed (pbPropsOn false), a player's leg in the builder wears "failed trial" where it wore "on trial", titled
+   as the Player props view's FAIL mark: its chance there is DraftKings' fair chance, the props model's for reference */
+function pbFailLegTitle() {
+  const w = pbPropsOffWhy(), dec = S.props && S.props.ledger && S.props.ledger.decision;
+  return `${w[0].toUpperCase()}${w.slice(1)}${dec && dec.early ? ', the owner’s call' : ''}: it was not shown to beat DraftKings’ closing lines, so this leg’s chance is DraftKings’ fair chance, and the props model’s own, beside it, is for reference only`;
+}
+const PB_FAILED = 'failed trial';
+/* what the builder's summary and the parlay card say of the model's chance once a player leg in it is the failed props
+   model's (a parlay of team legs alone keeps the board model's chance as it was), counted: "its player leg" for one,
+   "its player legs" for more (the review of 6 November 2026: a parlay of one player leg said "legs") */
+const pbFailedSay = n => `its player leg${n === 1 ? '' : 's'} the props model’s, which failed its trial`;
+const pbTrialMark = l => !(l && l.kind === 'prop') ? '' : pbPropsOn() ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>`
+  : `<i class="pb-trial" data-pb-failed title="${esc(pbFailLegTitle())}">${PB_FAILED}</i>`;
 /* a leg on the builder: the same line exactly */
 const pbOn = l => M.slip.legs.some(x => slipKey(x) === (l.sk || slipKey(l)));
 const pbInBuilder = legs => M.slip.legs.length === legs.length && legs.every(pbOn);
@@ -4647,6 +5141,21 @@ function pbInj(l) {
   if (why) return `<span class="pb-inj" data-pb-held title="On today's injury report: ${esc(why)} of the Top 50 lines and every suggested parlay">${esc(String((Array.isArray(rp) && rp[1]) || 'listed').toUpperCase())}</span>`;
   return ppRow(l.id, l.pid) ? '' : `<span class="pb-inj" title="The props model does not project him for this game: on no list it reads, or under ${S.props ? S.props.minShown : 8} minutes">NOT PROJECTED</span>`;
 }
+/* a leg's Chance cell: the model's chance, its band and DraftKings' fair chance under it. Once the props model has failed
+   its trial, a player's leg is drawn as its row in the Player props view drew it (ppLegRow's FAIL row): DraftKings'
+   fair chance leads, labelled "fair" as a team row's is (and, to a screen reader, "DraftKings' fair chance", as the view
+   says it), at the view's percentage, with est. where it is one and the band worked on it (ppConf, on the percentage
+   shown); under it the props model's chance small and muted, with the "failed trial" mark beside the figure it is about
+   ("props model 50% FAILED TRIAL"); where DraftKings gives no fair chance, "no DraftKings chance" and the model's muted.
+   A team leg is as it was */
+function pbChanceCell(l, f, c, lbl) {
+  if (l.kind === 'prop' && !pbPropsOn()) {
+    const fp = f && f.p != null && Number.isFinite(f.p) ? f.p : null, [fc, fl] = fp != null ? ppConf(fp) : ['', ''];
+    return (fp != null ? `<span class="pb-fairlbl" aria-hidden="true">fair</span> <span class="sr">DraftKings' fair chance${f.est ? ', est.' : ''}: </span><span data-pb-fp="${fp}" title="${esc(ppFairTitle(l, f))}">${ppPct(fp)}</span>${f.est ? '<em class="pb-fest" aria-hidden="true">est.</em>' : ''} <span class="pb-conf ${fc}">${fl.toUpperCase()}</span>` : '<span class="pb-q" data-pb-nodk>no DraftKings chance</span>')
+      + (l.p != null ? ` <small class="pb-mdl" data-pb-p="${l.p}" title="${esc(pbTrialTitle())}"><span data-pb-mv>props model ${ppPct(l.p)}</span> ${pbTrialMark(l)}</small>` : ' ' + pbTrialMark(l));
+  }
+  return `${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}`;
+}
 /* the builder's numbers: its legs in its own order, the model's chance and DraftKings' fair chance that all land, the
    price (DraftKings' prices multiplied, a game's legs priced together by the same-game rule, or a parlay price typed in)
    and what the Bet amount returns. The parlay card (app/parts/card.html) reads the same, so its price is the builder's */
@@ -4680,16 +5189,23 @@ function renderParlay(o) {
     return;
   }
   const { n, pr, fair, P, stake, override, useDec, payout, profit, sg, trial } = q, slips = dkSlipRows(legs);
-  const fairAm = pr.corr != null && pr.corr > 0 && pr.corr < 1 ? fmtAm(probToAm(pr.corr)) : '–';
+  /* a player leg in it once the props model has failed its trial: the model's chance is said to be its, never on trial,
+     and nothing leads with it (the fair price and the confidence are DraftKings' fair chance's, or not drawn) */
+  const failed = trial && !pbPropsOn(), tw = trial ? (failed ? ', ' + pbFailedSay(legs.filter(l => l.kind === 'prop').length) : ', on trial') : '', hasFair = !!(fair && fair.p != null);
+  const fairAm = failed ? (hasFair && fair.p > 0 && fair.p < 1 ? fmtAm(probToAm(fair.p)) : '–') : pr.corr != null && pr.corr > 0 && pr.corr < 1 ? fmtAm(probToAm(pr.corr)) : '–';
   let html = `<div class="pb-card pb-builder"><h2 id="pbTitle" tabindex="-1" style="display:flex;align-items:center;gap:10px">${n}-leg parlay <span class="pb-pill">building</span></h2>${espnCtl('builder')}
     <p class="pb-lead">Every leg has to land. The chance below is worked out with the legs' real relationship to each other, not by multiplying them together.</p>
     <table class="pb-btbl"><thead><tr><th>Player</th><th>The bet</th><th class="num">Projected</th><th class="num">Chance</th><th class="num">Price</th><th><span class="sr">Remove</span></th></tr></thead><tbody>`;
   legs.forEach((l, i) => {
-    const f = legFair(l), far = f && l.p != null && l.p - f.p >= PB_FAR - 1e-9, [c, lbl] = l.p != null ? pbBandOf(l.p) : ['', ''];
+    /* far off the market: never on a player's leg once the props model has failed its trial (its chance there is
+       DraftKings' own fair chance, which cannot be far off itself, and the failed model's figure is drawn only muted,
+       for reference, in its Chance cell; the review of 6 November 2026: the gold flag put "model 100%" ahead of
+       DraftKings' 84%) */
+    const f = legFair(l), far = !(l.kind === 'prop' && !pbPropsOn()) && f && l.p != null && l.p - f.p >= PB_FAR - 1e-9, [c, lbl] = l.p != null ? pbBandOf(l.p) : ['', ''];
     html += `<tr class="legrow" data-pb-row="${esc(l.sk)}"><td class="plr">${glanceName(l, { ml: l.odds, src: 'real' })}${pbInj(l)}<small>${esc(l.pos)} · ${esc(l.team)} v ${esc(l.opp)} · ${esc(pbDayText(l.date))}</small></td>
       <td class="bet"><b>${esc(l.label)}</b>${far ? `<small class="faroff" data-far>${farText(l.p, f)}</small>` : ''}${dkSlipLine(slips && slips[i], i)}</td>
       <td class="num" data-h="Projected">${pbNum(l.mu)}</td>
-      <td class="num" data-h="Chance">${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}</td>
+      <td class="num" data-h="Chance">${pbChanceCell(l, f, c, lbl)}</td>
       <td class="num pb-px" data-h="Price">${fmtAm(l.odds)} <small title="DraftKings' price, read ${esc(oddsClock(l.at))}">real · read ${esc(oddsClock(l.at))}</small></td>
       <td class="rm"><button type="button" class="btn ghost" data-drop="${esc(l.sk)}" aria-label="Remove ${esc(l.name)}, ${esc(l.label)}, from the builder">Remove</button></td></tr>`;
   });
@@ -4704,16 +5220,20 @@ function renderParlay(o) {
       <span class="pb-hint">${sg ? 'Blank prices the legs that share a game together, the way a book does.' : 'Blank multiplies DraftKings’ leg prices.'}</span>
     </div>
     <div class="pb-bigp">
-      ${fair && fair.p != null ? `<div class="pb-box hero"><b data-fair="${fair.p}">${(fair.p * 100).toFixed(1)}%</b><span>fair chance all ${n} land${fair.est ? ', est.' : ''}</span>${pr.corr != null ? `<small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${trial ? ', on trial' : ''}</small>` : '<small>no model chance: a player in it is not projected</small>'}</div>`
-        : pr.corr != null ? `<div class="pb-box hero"><b data-model="${pr.corr}">${(pr.corr * 100).toFixed(1)}%</b><span>model's chance all ${n} land${trial ? ', on trial' : ''}</span><small>no fair chance: a leg has one price only</small></div>`
+      ${hasFair ? `<div class="pb-box hero"><b data-fair="${fair.p}">${(fair.p * 100).toFixed(1)}%</b><span>fair chance all ${n} land${fair.est ? ', est.' : ''}</span>${pr.corr != null ? `<small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${tw}</small>` : '<small>no model chance: a player in it is not projected</small>'}</div>`
+        : pr.corr != null && failed ? `<div class="pb-box hero"><b>–</b><span>no DraftKings fair chance: a leg has one price only</span><small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${tw}</small></div>`
+        : pr.corr != null ? `<div class="pb-box hero"><b data-model="${pr.corr}">${(pr.corr * 100).toFixed(1)}%</b><span>model's chance all ${n} land${tw}</span><small>no fair chance: a leg has one price only</small></div>`
         : `<div class="pb-box hero"><b>–</b><span>no chance to show</span><small>a leg has neither a fair chance nor a model chance</small></div>`}
-      <div class="pb-box"><b>${fairAm}</b><span>fair price for the model's chance</span></div>
+      <div class="pb-box" data-pb-fairam><b>${fairAm}</b><span>${failed ? 'fair price for DraftKings’ fair chance' : 'fair price for the model\'s chance'}</span></div>
       <div class="pb-box"><b class="payout" data-payout="${payout}">${pbMoney(payout)}</b><span>returned if it lands, ${pbMoney(profit)} profit${override ? ', at your price' : sg ? ', est.' : ''}</span></div>
-      ${(() => { const on = fair && fair.p != null, cp = on ? fair.p : pr.corr; if (cp == null) return '';
-        const [c, l] = pbBandOf(cp); return `<div class="pb-box tier ${c}" data-conf="${cp}"><b>${l}</b><span>confidence all ${n} land, on the ${on ? 'fair' : 'model’s'} chance</span></div>`; })()}
+      ${(() => { const on = hasFair, cp = on ? fair.p : failed ? null : pr.corr; if (cp == null) return '';
+        /* after the FAIL the fair chance is banded on the view's scale (ppConf: High from 70, Med from 45), the one each
+           player row above it uses, so a one-leg parlay's box says the band its row does (the review of 6 November 2026:
+           a 70% leg read HIGH in its row and MED here); on the trial and for team legs alone, the builder's own */
+        const [c, l] = on && failed ? (b => [b[0], b[1].toUpperCase()])(ppConf(cp)) : pbBandOf(cp); return `<div class="pb-box tier ${c}" data-conf="${cp}"><b>${l}</b><span>confidence all ${n} land, on the ${on ? 'fair' : 'model’s'} chance</span></div>`; })()}
     </div>
     <p class="pb-fair-note">${fair && fair.p != null ? `The fair chance is DraftKings’: its prices with the margin taken out (a main line’s whole margin on the Over, as measured on DraftKings’ archived lines)${fair.est ? ', est. where a leg is priced on one side only or the legs share a game' : ''}, the legs moving together as the model’s do.`
-      : `The fair chance needs both of DraftKings’ prices on every leg; ${fair && fair.miss === 1 ? 'one leg has' : (fair ? fair.miss : 0) + ' legs have'} one only, so this is the model’s chance alone.`}</p>
+      : `The fair chance needs both of DraftKings’ prices on every leg; ${fair && fair.miss === 1 ? 'one leg has' : (fair ? fair.miss : 0) + ' legs have'} one only, ${failed ? 'so there is none to show. The model’s chance under it is for reference only.' : 'so this is the model’s chance alone.'}`}</p>
     ${sg && override == null ? `<p class="pb-fair-note" data-sl-why>Legs here share a game, so they are priced together rather than multiplied: multiplying them would say <b>${pbMoney(stake * P.prod)}</b>, which is what a book pays only when the legs are in different games. ${SG_WHY}, with the NFL hub’s same-game hold (${S.corr && S.corr.hold}), untested on the NBA; type your book’s own parlay price above to override it.</p>` : ''}
     <div class="pb-acts"><button type="button" class="btn hot" id="pFinish" title="Opens this parlay as a card to place at DraftKings or share. Nothing is saved: not here, not in X’s parlays.">Finish parlay</button><button type="button" class="btn ghost" id="pClear">Clear ALL</button></div></div></div>`;
   if (pr.pairs.length) {
@@ -4743,7 +5263,7 @@ render.parlay = function () {
   renderParlay();
 };
 /* what Suggested Parlays, the checks and the next pieces stand on */
-Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
+Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, pbChanceCell, pbFailedSay, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
   PB_TIERS, PB_KINDS, PB_MIXES, PB_TOP_N, PB_SEARCH, getPbTiers, getPbTop, pbTopBuild, pbTierCard, pbValMark, pbIsValue, pbTrialMark, pbOrder, pbOrd, parlayProb, parlayDec, parlayFair, legFair, legFarOff, legModel,
   pbView, pbSlipOf, pbLegAddBtn, pbPut, pbStale, pbWatchTick, stakeRead, pbStake, renderParlay, renderPb, pbLinesLoad, linesGl, pbGl, pbPr, pbCarries, pbQuote, dkSlipRows, dkSlipLine, glanceName,
   toggleLeg: l => slipToggle(pbSlipOf(l)), pbLines: () => LINES });
@@ -5439,6 +5959,398 @@ Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spS
   }
   render.pickem = function () { draw(); if (!PK) load().then(() => { if (tabNow() === 'pickem') draw(); }); };
   window.NBA_PICKEM = { data: () => PK, vegas, tallies: () => PK && tallies(), load };   // what the smoke test reads
+})();
+</script>
+
+<!-- A game's three windows (README "The game's three windows"): the NFL hub's Matchup, Mismatches and Team Stats (its
+     props/build/part3.js gameWinBtns, which open one card of its Game snapshot in a small window, nflbets/build/
+     snapshot.html gameWindow) on this hub's numbers, set in by build.js at its part:gamewin marker: its styles, every class
+     prefixed gw-, its window, and its script in a closure. The Player props view draws the three buttons under the game's
+     head card (ppWinBtns in app/nba_hub.html) only where this part is on the page (window.gameWindow). It fetches nothing
+     and keeps nothing: every number is read from state.json as the page has it (the slate's board model, the Teams tab's
+     columns, the props model's projections and opponent table, the job's team stats). -->
+<style>
+/* ---------- a game's three windows (app/parts/gamewin.html) ----------
+   The NFL's window (its #gsModal.gs-one: 720px at most, a bar with the matchup and the window's name over one card) on
+   this page's tokens. Small text that must hold 4.5:1 is --ink-2 or --pb-q, never --muted: the NFL's quiet --muted text
+   (its theme's #B3B9CB) is --pb-q here. Its panel is the NFL's, panel-2 to panel under a bar of bg-2, with 39px from the
+   card's foot to the panel's (the NFL's card margin 14, panel padding 24 and border). It sits over the Player props view
+   (.pp-back, z-index 20) and scrolls inside when taller than the screen; at 760px and under, the NFL's phone window */
+.gw-back{position:fixed;inset:0;z-index:30;background:rgba(14,17,27,.6);display:flex;justify-content:center;align-items:flex-start;padding:28px 16px}
+.gw-sheet{position:relative;width:100%;max-width:720px;max-height:calc(100vh - 56px);max-height:calc(100dvh - 56px);overflow-y:auto;overscroll-behavior:contain;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line-2);border-radius:var(--r);box-shadow:0 30px 80px -30px rgba(0,0,0,.8);outline:none;color-scheme:dark}
+.gw-top{position:sticky;top:0;z-index:2;display:flex;align-items:center;gap:12px;min-height:64px;box-sizing:border-box;padding:8px 12px 8px 20px;background:var(--bg-2);border-bottom:1px solid var(--line);border-radius:var(--r) var(--r) 0 0}
+.gw-h{flex:1 1 auto;min-width:0;margin:0;display:flex;flex-direction:column;gap:4px;line-height:1.15}
+.gw-tm{display:flex;align-items:center;gap:8px;font-family:var(--display);font-size:15px;font-weight:600;color:var(--pb-q)}
+.gw-tm .pill{font-size:12px;padding:3px 7px}
+.gw-tsub{font-family:var(--body);font-size:13px;font-weight:600;color:var(--ink-2)}
+.gw-close{flex:none;min-height:44px;padding:10px 16px;font-size:14px;border-radius:12px}
+.gw-body{padding:16px 20px 38px}
+.gw-card{position:relative;overflow:hidden;background:linear-gradient(180deg,var(--panel-2),var(--panel));border:1px solid var(--line);border-radius:18px;padding:18px 20px 20px}
+.gw-card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--hot),transparent);pointer-events:none}
+.gw-msg{margin:0;font-size:15px;color:var(--ink-2);line-height:1.55}
+.gw-note{margin:14px 0 0;font-size:13px;color:var(--pb-q);line-height:1.6}
+.gw-sheet .pill{color:color-mix(in srgb,var(--tc,#888) 40%,#fff)}
+.gw-sheet button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.gw-sheet .gw-better b,.gw-sheet b.gw-better{color:var(--lime)}
+/* Team Stats: the NFL's rows, each club's number at its side with its league rank under it, the bar split between them in
+   the clubs' colours; the better side's number in lime on a lime tint */
+.gw-tsum{margin:0 0 12px;font-size:15px;color:var(--ink-2)} .gw-tsum b{font-family:var(--display);color:var(--ink)}
+.gw-nw{white-space:nowrap}
+.gw-teams{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:4px 0 10px}
+.gw-thn{display:inline-flex;align-items:center;gap:8px;font-family:var(--display);font-size:15px;font-weight:600;color:var(--ink);min-width:0}
+.gw-sbar{display:grid;grid-template-columns:76px minmax(0,1fr) 76px;gap:12px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line)}
+.gw-sbar:last-child{border-bottom:0}
+.gw-sva{justify-self:start;text-align:left} .gw-svh{justify-self:end;text-align:right}
+.gw-v{display:inline-flex;flex-direction:column;align-items:inherit;gap:1px;padding:3px 7px;border-radius:8px}
+.gw-sva .gw-v{align-items:flex-start} .gw-svh .gw-v{align-items:flex-end}
+.gw-v.gw-better{background:var(--lime-soft)}
+.gw-v b{font-family:var(--display);font-size:15px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums;white-space:nowrap}
+.gw-v small{font-size:11px;font-weight:600;color:var(--ink-2);font-variant-numeric:tabular-nums}
+/* on the lime tint the quiet ink falls to 4.4:1: the rank there is in the full ink */
+.gw-v.gw-better small{color:var(--ink)}
+.gw-smid{min-width:0;text-align:center}
+.gw-slb{display:block;margin:0 0 6px;font-size:13px;font-weight:600;color:var(--ink-2);line-height:1.3}
+.gw-slb small{margin-left:2px;font-size:11px;font-weight:600;color:var(--ink-2)}
+.gw-strack{display:flex;gap:8px}
+.gw-shalf{display:flex;flex:1 1 0;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
+.gw-shl{justify-content:flex-end}
+.gw-shalf i{display:block;height:100%;border-radius:4px;background:var(--gw-tc,var(--ink-2))}
+/* Matchup: the NFL's Offense vs defense, a possession over the other, its two boxes either side of "vs", the higher
+   rating's tinted; then pace */
+.gw-units{display:grid;grid-template-columns:minmax(0,1fr);gap:26px}
+.gw-uhd{margin:0 0 12px;text-align:center;font-family:var(--display);font-size:18px;font-weight:600;color:var(--ink);line-height:1.25}
+.gw-duel{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:12px;align-items:stretch}
+.gw-vsx{align-self:center;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--pb-q)}
+.gw-ubox{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;min-width:0;padding:14px 12px;border:1px solid var(--line);border-radius:14px;background:var(--panel);text-align:center;cursor:help}
+.gw-ubox.gw-better{background:var(--lime-soft);border-color:transparent}
+.gw-lab{display:block;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.gw-uval{font-family:var(--display);font-size:24px;font-weight:700;color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
+.gw-ubox.gw-better .gw-uval{color:var(--lime)}
+.gw-ubox.gw-better .gw-lab,.gw-ubox.gw-better .gw-urk{color:var(--ink)}
+.gw-urk{font-size:12.5px;font-weight:600;color:var(--ink-2);line-height:1.35}
+.gw-pace{margin-top:26px;padding-top:20px;border-top:1px solid var(--line)}
+.gw-pace .gw-uhd small{display:block;margin-top:4px;font-family:var(--body);font-size:12.5px;font-weight:600;color:var(--ink-2)}
+.gw-pboxes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gw-pbox{display:flex;flex-direction:column;align-items:center;gap:4px;min-width:0;padding:12px 8px;border:1px solid var(--line);border-radius:14px;background:var(--panel);text-align:center;cursor:help}
+.gw-pbox b{font-family:var(--display);font-size:20px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
+.gw-pbox small{font-size:12px;font-weight:600;color:var(--ink-2);line-height:1.3}
+.gw-pbox.gw-pgame{border-style:dashed}
+/* Mismatches: the NFL's list, a row a player: his place, who he is, the defence he faces (with the figure its grade is
+   worked on) and his projection, and at the right the lift in standard deviations, labelled a lift, with the grade and
+   the tag (white on #2563EB to #1E4FA8, 5.2:1 and up) */
+.gw-mmnote{margin:0 0 12px;font-size:13px;color:var(--ink-2);line-height:1.5}
+ul.gw-mm{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+ul.gw-mm li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;margin:0;border:1px solid var(--line);border-radius:14px;padding:12px 14px;line-height:1.4}
+.gw-mmn{display:inline-flex;align-items:center;justify-content:center;min-width:40px;height:28px;padding:0 6px;border-radius:999px;background:var(--panel-2);border:1px solid var(--line-2);font-family:var(--display);font-weight:700;font-size:13px;color:var(--ink)}
+.gw-mmwho{display:block;font-weight:600;font-size:15px;color:var(--ink)}
+.gw-mmwho .tierbadge{width:16px;height:18px;vertical-align:-3px;margin-right:4px}
+.gw-mmwho small{color:var(--pb-q);font-weight:600;font-size:13px}
+.gw-mmvs{display:inline-flex;align-items:center;gap:6px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+.gw-mmvs .pill{font-size:11px;padding:2px 6px}
+.gw-mmsub{display:block;font-size:13px;color:var(--ink-2);margin-top:4px;line-height:1.5}
+.gw-mmsub b{color:var(--ink);font-weight:700}
+.gw-mmsc{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:72px}
+.gw-mmsc b{font-family:var(--display);font-size:18px;line-height:1;color:var(--ink);white-space:nowrap}
+.gw-mmsc b small{font-family:var(--body);font-size:12px;font-weight:700;color:var(--ink-2)}
+.gw-mmtag{display:inline-block;padding:2px 8px;border-radius:999px;background:linear-gradient(135deg,#2563EB,#1E4FA8);color:#fff;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;line-height:1.3;white-space:nowrap}
+/* a mismatch's grade, on the NFL's old Mismatches' steps and drawn as its old row drew it (its snapshot.html .gs-meter
+   and .gs-mmsc small, its theme's pe-g colours; its live rows, since 4 November 2026, have no grade words): the word in
+   its grade's colour (Huge the hub's lime, Big #7BD88F, Solid #F2B84B, Slight the quiet ink), after the four-step meter */
+.gw-mmg{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;cursor:help}
+.gw-g4{color:var(--lime)} .gw-g3{color:#7BD88F} .gw-g2{color:#F2B84B} .gw-g1{color:var(--pb-q)}
+.gw-meter{display:inline-flex;align-items:flex-end;gap:2px;height:14px;vertical-align:-2px;flex:none}
+.gw-meter i{display:block;width:4px;border-radius:1px;background:var(--line-2)}
+.gw-meter i:nth-child(1){height:5px} .gw-meter i:nth-child(2){height:8px} .gw-meter i:nth-child(3){height:11px} .gw-meter i:nth-child(4){height:14px}
+.gw-meter.gw-l1 i:nth-child(-n+1),.gw-meter.gw-l2 i:nth-child(-n+2),.gw-meter.gw-l3 i:nth-child(-n+3),.gw-meter.gw-l4 i:nth-child(-n+4){background:currentColor}
+.gw-mmnone{margin:-4px 0 12px;font-size:13px;color:var(--ink-2);line-height:1.5}
+/* the NFL's phone window, at its 760px: 10px of the page around it, a 58px bar, the card 12px in and 14px inside, the
+   Team Stats names dropped, a mismatch's rank on its own row and the two clubs on their own line 6px under his name */
+@media(max-width:760px){
+  .gw-back{padding:10px}
+  .gw-sheet{max-height:calc(100vh - 20px);max-height:calc(100dvh - 20px)}
+  .gw-top{min-height:58px;padding:0 12px}
+  .gw-body{padding:12px 12px 38px}
+  .gw-card{padding:14px 14px 16px}
+  .gw-sbar{grid-template-columns:62px minmax(0,1fr) 62px;gap:8px}
+  .gw-teams .gw-tnm{display:none}
+  .gw-v{padding:3px 5px} .gw-v b{font-size:14px}
+  .gw-duel{gap:8px} .gw-ubox{padding:12px 8px} .gw-uval{font-size:20px}
+  .gw-uhd{font-size:15px}
+  .gw-pboxes{gap:6px} .gw-pbox{padding:10px 4px} .gw-pbox b{font-size:17px}
+  ul.gw-mm li{grid-template-columns:minmax(0,1fr) auto;gap:8px 12px;padding:11px 12px}
+  ul.gw-mm li .gw-mmn{grid-column:1/-1;justify-self:start;height:24px}
+  .gw-mmvs{display:flex;margin:6px 0 0} }
+@media(max-width:340px){ .gw-sbar{grid-template-columns:56px minmax(0,1fr) 56px;gap:6px} .gw-v b{font-size:13px} .gw-slb small{display:block;margin:2px 0 0} }
+</style>
+<div class="gw-back" id="gwBack" hidden><div class="gw-sheet" id="gwSheet" role="dialog" aria-modal="true" aria-labelledby="gwSub gwTm" tabindex="-1"><div class="gw-top"><h2 class="gw-h" id="gwTitle"><span class="gw-tm" id="gwTm"></span><span class="gw-tsub" id="gwSub"></span></h2><button type="button" class="btn gw-close" id="gwClose">Close</button></div><div class="gw-body" id="gwBody"></div></div></div>
+<script>
+(function () {
+'use strict';
+/* the three windows, by the key the view's buttons carry (data-gp-pop), the NFL's own keys */
+const KINDS = { units: 'Matchup', mism: 'Mismatches', stats: 'Team Stats' };
+const St = () => (typeof S === 'object' && S) ? S : null;
+const H = v => esc(v);
+const nick = t => (typeof TEAMS === 'object' && TEAMS[t]) ? TEAMS[t][1] : t;
+const tcol = t => (typeof TEAMS === 'object' && TEAMS[t]) ? TEAMS[t][2] : '#888';
+const ord = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)] || 'th');
+/* a rating in points with its sign, rounded as the Teams tab rounds it (toFixed: -45.5 is -46), a true minus */
+const sg0 = v => { const s = Math.abs(v).toFixed(0); return (s === '0' ? '' : v > 0 ? '+' : '−') + s; };
+const gameOf = gid => { const s = St(); return s && Array.isArray(s.slate) ? s.slate.find(g => g.id === gid) || null : null; };
+let KIND = null, GID = null, FROM = null;
+
+/* ---- the Teams tab's own ranking of a column: its rows high to low (its table's sort, the file's order on a tie) ---- */
+function tabRank(key, t) {
+  const s = St(); if (!s || !s.teams || !s.teams[t] || !Number.isFinite(s.teams[t][key])) return null;
+  const rows = Object.entries(s.teams).filter(([, v]) => Number.isFinite(v[key])), sorted = [...rows].sort((a, b) => a[1][key] === b[1][key] ? 0 : a[1][key] < b[1][key] ? 1 : -1);
+  return { v: s.teams[t][key], rank: sorted.findIndex(([x]) => x === t) + 1, n: sorted.length };
+}
+
+/* the two paces, each labelled on the window as what it is (the review of 5 November 2026: MIA's 104.1 on Matchup and its
+   105.3 on Team Stats read side by side as a contradiction, each said only in a tooltip). Matchup's is the Teams tab's
+   running pace, the board model's own; Team Stats' is this season's possessions per 48 so far, estimated from the box
+   scores (publish.js THE TEAM STATS) */
+const PACE_UNITS = 'The Teams tab’s pace, the board model’s: possessions per 48';
+const PACE_STATS = 'possessions per 48 this season, est. from the box scores';
+/* ---- Matchup: each side with the ball, the offence's rating against the other club's defence (the board model's, for the
+   lineups it expects in this game: the slate's model sides), ranked on the Teams tab's columns; then pace ---- */
+function unitsBody(g) {
+  const m = g.model, side = s => m && m[s] && Number.isFinite(m[s].offence) && Number.isFinite(m[s].defence) ? m[s] : null;
+  const A = side('away'), Hm = side('home');
+  if (!A || !Hm) return '<p class="gw-msg" data-gw-why>The board model has no ratings for this game\'s lineups yet.</p>';
+  const box = (t, what, v, better) => {
+    const key = what === 'off' ? 'offence' : 'defence', word = what === 'off' ? 'offence' : 'defence', Col = what === 'off' ? 'Offence' : 'Defence', r = tabRank(key, t);
+    const differs = r && sg0(r.v) !== sg0(v);
+    const title = `${t}'s ${word} for the lineup the board model expects in this game, in rating points (each player's, for a player on the floor all game, weighted by his share of the minutes): ${v > 0 ? '+' : ''}${v.toFixed(1)}.`
+      + (r ? ` Its rank is the Teams tab's ${Col} column (today's lineup, ${r.v > 0 ? '+' : ''}${r.v.toFixed(1)}): ${ord(r.rank)} of ${r.n}.` : '')
+      + ' Of this possession\'s offence and defence, the higher rating is tinted.';
+    return `<div class="gw-ubox${better ? ' gw-better' : ''}" data-gw-unit="${what}:${H(t)}" title="${H(title)}"><span class="gw-lab">${H(t)} ${word}</span><span class="gw-uval" data-gw-uval>${sg0(v)}</span>${better ? '<span class="sr"> (the higher)</span>' : ''}`
+      + (r ? `<span class="gw-urk" data-gw-urk>Teams tab ${differs ? `<span data-gw-tab>${sg0(r.v)}</span>, ` : ''}${ord(r.rank)} of ${r.n}</span>` : '<span class="gw-urk">not on the Teams tab</span>') + '</div>';
+  };
+  const poss = (o, O, d, D) => { const b = O.offence === D.defence ? null : O.offence > D.defence ? 'off' : 'def';
+    return `<div class="gw-unit" data-gw-poss="${H(o)}-${H(d)}"><h3 class="gw-uhd">${H(nick(o))} Possession</h3><div class="gw-duel">${box(o, 'off', O.offence, b === 'off')}<span class="gw-vsx" aria-hidden="true">vs</span>${box(d, 'def', D.defence, b === 'def')}</div></div>`; };
+  const pbox = t => { const r = tabRank('pace', t);
+    return `<div class="gw-pbox" data-gw-pace="${H(t)}" title="${H(`${t}'s pace on the Teams tab: its running possessions per 48 minutes, ${r ? ord(r.rank) + ' fastest of ' + r.n : 'not listed'}.`)}"><span class="gw-lab">${H(t)}</span><b>${r ? r.v.toFixed(1) : '–'}</b><small>${r ? `${ord(r.rank)} fastest of ${r.n}` : 'not on the Teams tab'}</small></div>`; };
+  const gp = Number.isFinite(m.pace) ? m.pace : null;
+  const game = `<div class="gw-pbox gw-pgame" data-gw-pace="game" title="The board model's expected pace for this game, possessions per 48 minutes, from the two clubs' paces."><span class="gw-lab">This game</span><b>${gp !== null ? gp.toFixed(1) : '–'}</b><small>expected</small></div>`;
+  return `<div class="gw-units">${poss(g.away, A, g.home, Hm)}${poss(g.home, Hm, g.away, A)}</div>
+    <div class="gw-pace"><h3 class="gw-uhd">Pace<small data-gw-pacelab>${PACE_UNITS}</small></h3><div class="gw-pboxes">${pbox(g.away)}${game}${pbox(g.home)}</div></div>`;
+}
+
+/* ---- Team Stats: the job's team stats (state.json's teamStats, publish.js THE TEAM STATS) side by side on the NFL's
+   bars, each value with its league rank, the better side marked ---- */
+/* [key, label, note, 1 more is better | -1 fewer is better | 0 neither, signed, a percentage] */
+const POSS = 'Possessions are estimated from the box score: field-goal attempts less offensive rebounds plus turnovers plus 0.44 of free-throw attempts, each side\'s averaged with its opponent\'s in each game.';
+const ROWS = [
+  ['pd', 'Point differential', 'per game', 1, true, false], ['ppg', 'Points', 'per game', 1, false, false], ['pa', 'Points allowed', 'per game', -1, false, false],
+  ['ortg', 'Offensive rating', 'points per 100 possessions', 1, false, false], ['drtg', 'Defensive rating', 'allowed per 100 possessions', -1, false, false],
+  ['pace', 'Pace', PACE_STATS, 0, false, false], ['fg', 'Field goal %', '', 1, false, true], ['tp', 'Three-point %', '', 1, false, true],
+  ['tpm', 'Threes made', 'per game', 1, false, false], ['reb', 'Rebounds', 'per game', 1, false, false], ['ast', 'Assists', 'per game', 1, false, false],
+  ['tov', 'Turnovers', 'per game, fewer is better', -1, false, false], ['stl', 'Steals', 'per game', 1, false, false], ['blk', 'Blocks', 'per game', 1, false, false]];
+/* the bar's split, the NFL's statSplit: fewer-is-better by the inverse of each number, else both shifted up by the lower
+   of the two (and 0) so a negative still splits; nothing where either is missing or both are 0. Tenths of a percent */
+function split(x, y, lo) {
+  if (x == null || y == null || (x === 0 && y === 0)) return [0, 0];
+  let pa;
+  if (lo) { const ix = 1 / Math.max(x, .01), iy = 1 / Math.max(y, .01); pa = ix / (ix + iy) * 100; }
+  else { const mn = Math.min(x, y, 0), sx = x - mn, sy = y - mn; pa = (sx + sy) === 0 ? 50 : sx / (sx + sy) * 100; }
+  pa = Math.round(pa * 10) / 10; return [pa, Math.round((100 - pa) * 10) / 10];
+}
+function statsBody(g) {
+  const s = St(), T = s && s.teamStats, a = g.away, h = g.home;
+  if (!T || typeof T !== 'object' || !T.clubs || typeof T.clubs !== 'object') return '<p class="gw-msg" data-gw-why>The team stats are not published yet: the job writes them on its next run.</p>';
+  const season = +String(g.id).slice(0, 4);
+  if (+T.season !== season) return `<p class="gw-msg" data-gw-why>The team stats are the ${H(seasonName(T.season))} season's; this game is in the ${H(seasonName(season))} season.</p>`;
+  const SA = T.clubs[a] || null, SH = T.clubs[h] || null;
+  const missing = [[a, SA], [h, SH]].filter(([, x]) => !x).map(([t]) => t);
+  if (missing.length === 2) return '<p class="gw-msg" data-gw-why>Neither club has a game counted yet this season.</p>';
+  const cell = (x, k) => x && Array.isArray(x[k]) && Number.isFinite(x[k][0]) ? { v: x[k][0], rank: x[k][1] } : null;
+  const fmt = (v, sign, pc) => v == null ? '–' : (v < 0 ? '−' + Math.abs(v).toFixed(1) : (sign && v > 0 ? '+' : '') + v.toFixed(1)) + (pc ? '%' : '');
+  let na = 0, nh = 0;
+  const rows = ROWS.map(([k, lab, note, dir, sign, pc]) => {
+    const ca = cell(SA, k), ch = cell(SH, k), x = ca ? ca.v : null, y = ch ? ch.v : null, [pa, ph] = split(x, y, dir < 0);
+    const ba = !!dir && x != null && y != null && x !== y && (dir < 0 ? x < y : x > y), bh = !!dir && x != null && y != null && x !== y && !ba;
+    if (ba) na++; if (bh) nh++;
+    /* the club, the rank in words and the better side are said to a screen reader (the clubs' header is hidden from it,
+       and the mark is a colour): "MIA: −4.9, 21st in the league, the better" */
+    const v = (t, c, b) => `<span class="gw-v${b ? ' gw-better' : ''}" data-gw-sval="${H(t)}"><span class="sr" data-gw-ssr>${H(t)}: </span><b>${fmt(c ? c.v : null, sign, pc)}</b>`
+      + `${c ? `<small data-gw-srk aria-hidden="true">#${c.rank}</small><span class="sr" data-gw-ssr>, ${ord(c.rank)} in the league</span>` : ''}${b ? '<span class="sr" data-gw-ssr>, the better</span>' : ''}</span>`;
+    const tip = k === 'ortg' || k === 'drtg' || k === 'pace' ? ` title="${H(POSS)}"` : '';
+    return `<div class="gw-sbar" data-gw-srow="${k}"><span class="gw-sva">${v(a, ca, ba)}</span>
+      <div class="gw-smid"><span class="gw-slb"${tip}>${lab}${note ? ` <small>${note}</small>` : ''}</span><span class="gw-strack" aria-hidden="true"><span class="gw-shalf gw-shl"><i style="width:${pa}%;--gw-tc:${tcol(a)}"></i></span><span class="gw-shalf gw-shr"><i style="width:${ph}%;--gw-tc:${tcol(h)}"></i></span></span></div>
+      <span class="gw-svh">${v(h, ch, bh)}</span></div>`; }).join('');
+  const g1 = n => `${n} game${n === 1 ? '' : 's'}`;
+  const counts = [[a, SA], [h, SH]].map(([t, x]) => `${t} ${g1(x ? x.g : 0)}`).join(', ');
+  return `<p class="gw-tsum" data-gw-tsum><span class="gw-nw">${H(a)} better on <b data-gw-sb="${H(a)}">${na}</b></span>, <span class="gw-nw">${H(h)} on <b data-gw-sb="${H(h)}">${nh}</b></span></p>
+    <div class="gw-teams" aria-hidden="true"><span class="gw-thn">${pill(a)}<span class="gw-tnm">${H(nick(a))}</span></span><span class="gw-thn"><span class="gw-tnm">${H(nick(h))}</span>${pill(h)}</span></div>
+    <div class="gw-sbars">${rows}</div>
+    ${missing.length ? `<p class="gw-note" data-gw-none>No game counted yet this season: ${H(missing[0])}.</p>` : ''}
+    <p class="gw-note" data-gw-basis title="${H(`Regular-season finals as the standings count them, the NBA Cup's group and knockout games among them; never the NBA Cup final, a play-in, preseason or playoff game. Each rank is in the league, 1 the best (pace: 1 the fastest). ${POSS}`)}">${H(seasonName(T.season))} season${T.through ? ' through ' + H(dayNum(T.through)) : ''}: ${H(counts)}.</p>`;
+}
+
+/* ---- Mismatches: the props model's opponent term. A player's projected stat is multiplied by the opponent's
+   multiplier on it (props.js means: ratio^opp[k], published by club in the game's props as [ratio, mult, rank, z],
+   oppCols), so his projection without the matchup is mean / mult and the matchup's lift mean - mean / mult. The game's
+   players shown at 20 minutes or more (his row's minutes, as the view prints them: 19.8 is "20 min" and counts), not
+   out, each at his best stat among points, rebounds, assists and threes by that lift in standard deviations of the stat
+   at his mean (sqrt(nbVar(mean, var[k])), the props model's spread), positive lifts only. Each is graded on the NFL
+   hub's old Mismatches' steps (its mmGrade, which since 4 November 2026 grades only a matchups file from before its
+   mismatch score: its live rows draw the size in points and one Mismatch tag, no grade words): on z, how far the defence
+   he faces is from the 30 clubs' mean on that stat in standard deviations across the 30 (publish.js THE MISMATCH GRADES),
+   rounded to a tenth, Slight under 1, Solid from 1, Big from 2, Huge from 3, the row showing that figure beside the
+   grade's words; listed by the grade, then the lift in SD, the top five; tagged MISMATCH Solid and up, as the NFL's old
+   game page tagged. The "allows 12% more" figure is against the league's rate (a ratio of 1), which the 30 clubs' mean
+   sits a little above, so each is named for what it is measured from. A state published before the grades lists the
+   five by the lift alone, none graded or tagged ---- */
+const MM_STATS = ['pts', 'reb', 'ast', 'tpm'], MM_MIN = 20, MM_TOP = 5;
+const MM_DEF = { pts: 'scoring defence', reb: 'rebounding defence', ast: 'assist defence', tpm: 'three-point defence' };
+const MM_NOUN = { pts: 'points', reb: 'rebounds', ast: 'assists', tpm: 'threes' };
+const MM_UNIT = { pts: 'pts', reb: 'reb', ast: 'ast', tpm: 'threes' };
+const mmNote = () => (typeof ppFail === 'function' && ppFail())
+  ? 'From the props model\'s opponent adjustment; the model lost to DraftKings in its trial, so read these as context, not picks.'
+  : 'From the props model\'s opponent adjustment; the model is on trial against DraftKings, so read these as context, not picks.';
+/* a small positive figure at the fewest decimals, from `min` to 3, that do not round it to nothing: a lift of 0.017 is
+   "+0.02", never "+0.0"; null where even 3 decimals would ("under 0.001") */
+/* the grade of a mismatch on the NFL's old steps (its tab_elo.html and snapshot.html mmGrade, kept there between its
+   OLD-MISMATCHES marks for a file from before its score: rounded to a tenth, then its four steps), with its colour class
+   and its step on the meter */
+const mmGrade = z => { const x = Math.round(z * 10) / 10; return x >= 3 ? ['Huge', 'gw-g4', 4] : x >= 2 ? ['Big', 'gw-g3', 3] : x >= 1 ? ['Solid', 'gw-g2', 2] : ['Slight', 'gw-g1', 1]; };
+const mmMeter = (lv, cls) => `<span class="gw-meter gw-l${lv} ${cls}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>`;
+const MM_STEPS = 'Slight under 1, Solid from 1, Big from 2, Huge from 3';
+const MM_NONE = 'No player in this game faces a defence a standard deviation or more weaker than the 30 clubs\' mean on his stat.';
+const MM_UNGRADED = 'The mismatch grades are not published yet: the job adds them on its next run.';
+const fine = (x, min) => { for (let d = min; d <= 3; d++) { const s = x.toFixed(d); if (+s !== 0) return s; } return null; };
+const liftTxt = l => { const s = fine(l, 1); return s ? '+' + s : 'under 0.001'; };
+const zTxt = z => { const s = fine(z, 2); return s ? '+' + s : '<0.001'; };
+const pctMore = (r, noun) => { const p = (r - 1) * 100, q = Math.abs(p);
+  return q < 0.05 ? `about as many ${noun} a minute as the league's rate` : `${q >= 0.5 ? Math.round(q) : q.toFixed(1)}% ${p > 0 ? 'more' : 'fewer'} ${noun} a minute than the league's rate`; };
+/* the figure a grade is worked on, z rounded to a tenth as mmGrade rounds it (0.95 is "1.0" and Solid, never "0.9"), in
+   words: "2.2 SD weaker than the 30 clubs' mean" on the row, "standard deviations" in the title */
+const zRound = z => Math.round(z * 10) / 10;
+const zWords = (z, long) => { const x = zRound(z); return x === 0 ? 'at the 30 clubs\' mean' : `${Math.abs(x).toFixed(1)} ${long ? 'standard deviations' : 'SD'} ${x > 0 ? 'weaker' : 'stronger'} than the 30 clubs' mean`; };
+let MM_MEMO = { of: null, gid: null, val: null };
+function mmList(g) {
+  const s = St(), P = s && s.props;
+  if (MM_MEMO.of === P && MM_MEMO.gid === g.id && MM_MEMO.at === s.slate) return MM_MEMO.val;
+  const val = mmWork(g, P);
+  MM_MEMO = { of: P, gid: g.id, at: s.slate, val };
+  return val;
+}
+function mmWork(g, P) {
+  if (!P) return { why: 'No projections are published.' };
+  const pg = typeof ppGame === 'function' ? ppGame(g.id) : null;
+  if (!pg) return { why: typeof ppNoGame === 'function' ? ppNoGame(g) : 'No projection for this game.' };
+  const O = pg.opp, V = P.dist && P.dist.var, cols = Array.isArray(P.oppCols) ? P.oppCols : ['ratio', 'mult', 'rank'], ci = c => cols.indexOf(c);
+  if (!O || !O[g.away] || !O[g.home]) return { why: 'The props model\'s opponent adjustment is not published for this game yet: the job adds it on its next run.' };
+  if (!V) return { why: 'The props model\'s spreads are not published.' };
+  /* graded where the job has given both clubs' defences their z on every stat the list reads (oppCols naming it) */
+  const zi = ci('z'), graded = zi >= 0 && [g.away, g.home].every(t => MM_STATS.every(k => Array.isArray(O[t][k]) && Number.isFinite(O[t][k][zi])));
+  const out = [];
+  for (const [pid, row] of Object.entries(pg.players || {})) {
+    const team = row[1], min = row[3]; if (!(Number.isFinite(min) && +min.toFixed(0) >= MM_MIN) || (team !== g.away && team !== g.home) || ppOut(g, pid)) continue;
+    const opp = team === g.away ? g.home : g.away, D = O[opp];
+    let best = null;
+    for (const k of MM_STATS) {
+      const mu = ppAt(row, k), e = D && D[k]; if (!Array.isArray(e) || !V[k] || !Number.isFinite(mu) || !(mu > 0)) continue;
+      const ratio = e[ci('ratio')], mult = e[ci('mult')], rank = e[ci('rank')]; if (!(mult > 0) || !Number.isFinite(ratio)) continue;
+      const lift = mu - mu / mult; if (!(lift > 0)) continue;
+      const sd = Math.sqrt(nbVar(mu, V[k])), z = lift / sd, dz = graded ? e[zi] : null;
+      if (!best || z > best.z || (z === best.z && lift > best.lift)) best = { k, mu, ratio, mult, rank, lift, sd, z, dz };
+    }
+    if (best) out.push({ pid, name: row[0], pos: row[2], team, opp, home: team === g.home, ...best });
+  }
+  for (const v of out) if (graded) { [v.grade, v.gc, v.lv] = mmGrade(v.dz); v.tagged = v.lv >= 2; } else { v.grade = null; v.lv = 0; v.tagged = false; }
+  out.sort((x, y) => y.lv - x.lv || y.z - x.z || y.lift - x.lift || (x.pid < y.pid ? -1 : x.pid > y.pid ? 1 : 0));
+  const list = out.slice(0, MM_TOP), note = mmNote();
+  list.forEach((v, i) => { v.n = i + 1;
+    v.vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`;
+    /* where it is graded, the figure the grade is worked on, beside the defence it is of (the review of 6 November 2026:
+       the only SD figure on a phone was the lift, +0.16 under Big, which those steps call Slight) */
+    v.zs = graded ? zWords(v.dz) : null;
+    v.vsz = v.zs ? `${v.vs}, ${v.zs}` : v.vs;
+    v.proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
+    v.sz = zTxt(v.z); v.lt = liftTxt(v.lift);
+    v.sub = `${v.vsz} (allows ${pctMore(v.ratio, MM_NOUN[v.k])}). ${v.proj} projected (${v.lt} from the matchup).`;
+    v.say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${v.sub}`;
+    const lift = `${v.sz} SD lift: what the matchup adds to his projection, over the spread of his ${MM_NOUN[v.k]} at his projection (${v.sd.toFixed(1)}).`;
+    if (graded) {
+      v.gsay = `${v.grade}: ${v.opp}'s ${MM_DEF[v.k]} is ${zWords(v.dz, true)} on ${MM_NOUN[v.k]}, across its 30 clubs; the grade is on that figure (${MM_STEPS}).`;
+      v.title = `${v.grade} mismatch: #${v.n} in this game. ${v.say} ${v.gsay} ${lift} Listed by the grade, then that lift. ${note}`; }
+    else v.title = `Mismatch #${v.n} in this game: ${v.say} ${lift} Listed by that lift; the grades are not published yet. ${note}`; });
+  return { list, note, graded };
+}
+function mismBody(g) {
+  const R = mmList(g);
+  if (!R.list) return `<p class="gw-msg" data-gw-why>${H(R.why)}</p>`;
+  const note = `<p class="gw-mmnote" data-gw-mmnote>${H(R.note)}</p>`
+    + (!R.graded ? `<p class="gw-mmnone" data-gw-nograde>${H(MM_UNGRADED)}</p>` : R.list.length && !R.list.some(v => v.tagged) ? `<p class="gw-mmnone" data-gw-mmnone>${H(MM_NONE)}</p>` : '');
+  if (!R.list.length) return note + `<p class="gw-msg" data-gw-why>No player projected ${MM_MIN} minutes or more gets a lift from this matchup on points, rebounds, assists or threes.</p>`;
+  /* each player's season shield before his name, as the NFL's row and the view's own rows wear it (the Players tab's
+     ranking, ppRankOf); none for a player it does not rank. Read as drawn, never kept with the list */
+  const shield = pid => { const rk = typeof ppRankOf === 'function' ? ppRankOf(pid) : null; return rk ? tierBadge(rk.rating) : ''; };
+  return note + `<ul class="gw-mm">${R.list.map(v => `<li data-gw-mm="${H(v.pid)}" title="${H(v.title)}"><span class="gw-mmn" title="Mismatch rank in this game">#${v.n}</span>
+      <div><span class="gw-mmwho">${shield(v.pid)}${H(v.name)} <small>${H(v.pos)}</small><span class="gw-mmvs">${pill(v.team)}<small>${v.home ? 'vs' : 'at'}</small>${pill(v.opp)}</span></span>
+      <span class="gw-mmsub" data-gw-mmsub>${H(v.vsz)} (allows ${H(pctMore(v.ratio, MM_NOUN[v.k]))}). <b>${H(v.proj)}</b> projected (${H(v.lt)} from the matchup).</span></div>
+      <div class="gw-mmsc"><b data-gw-z>${v.sz} <small>SD lift</small></b>${v.grade ? `<small class="gw-mmg ${v.gc}" data-gw-grade="${v.grade}">${mmMeter(v.lv, v.gc)}${v.grade}</small>` : ''}${v.tagged ? '<span class="gw-mmtag">Mismatch</span>' : ''}</div></li>`).join('')}</ul>`;
+}
+
+/* ---- the window ---- */
+function draw() {
+  const g = gameOf(GID); if (!g) return;
+  document.getElementById('gwTm').innerHTML = `${pill(g.away)}<span>${g.neutral ? 'vs' : 'at'}</span>${pill(g.home)}`;
+  document.getElementById('gwSub').textContent = `${KINDS[KIND]} · ${dayName(g.date)}, ${dayNum(g.date)}`;
+  let body;
+  try { body = KIND === 'units' ? unitsBody(g) : KIND === 'mism' ? mismBody(g) : statsBody(g); }
+  catch (e) { body = `<p class="gw-msg" data-gw-why>This part could not be drawn: ${H(e && e.message || e)}.</p>`; }
+  document.getElementById('gwBody').innerHTML = `<section class="gw-card" data-gw-only="${KIND}">${body}</section>`;
+}
+function open(kind, gid, from) {
+  if (!KINDS[kind] || !gameOf(gid)) return false;
+  KIND = kind; GID = gid; FROM = from || null;
+  draw();
+  const back = document.getElementById('gwBack'); back.hidden = false; document.getElementById('gwSheet').scrollTop = 0;
+  document.getElementById('gwClose').focus();
+  return true;
+}
+/* closed by Close, Escape or a click outside: the focus goes back to the button that opened it, or, where the view has
+   drawn it again since, to the same button as drawn now, else to the view's Close */
+function close() {
+  if (!KIND) return;
+  const kind = KIND, gid = GID; KIND = null; GID = null;
+  document.getElementById('gwBack').hidden = true; document.getElementById('gwBody').innerHTML = '';
+  const live = el => el && document.contains(el) && !el.closest('[hidden]');
+  let to = live(FROM) ? FROM : document.querySelector(`#ppBody [data-gp-pop="${kind}"][data-gp-game="${CSS.escape(gid)}"]`);
+  FROM = null;
+  if (!live(to)) to = document.getElementById('ppClose');
+  if (live(to)) to.focus();
+}
+document.getElementById('gwClose').addEventListener('click', close);
+/* a click outside closes it only where the press began outside too: a selection dragged from the window out onto the
+   backdrop ends in a click on the backdrop, and is no click outside (a click with no press before it, a script's,
+   still closes it) */
+let DOWN = null;
+document.getElementById('gwBack').addEventListener('pointerdown', e => { DOWN = e.target; });
+document.getElementById('gwBack').addEventListener('click', e => { const from = DOWN; DOWN = null; if (e.target === e.currentTarget && (!from || from === e.currentTarget)) close(); });
+document.getElementById('gwBack').addEventListener('keydown', e => {
+  if (e.key === 'Escape') { e.preventDefault(); e.stopPropagation(); close(); return; }
+  if (e.key !== 'Tab') return;
+  const sheet = document.getElementById('gwSheet'), f = [...sheet.querySelectorAll('button, a[href], input, select, summary, [tabindex="0"]')].filter(el => !el.disabled && !el.closest('[hidden]'));
+  if (!f.length) { e.preventDefault(); sheet.focus(); return; }
+  const first = f[0], last = f[f.length - 1], at = document.activeElement;
+  if (!sheet.contains(at) || at === sheet) { e.preventDefault(); (e.shiftKey ? last : first).focus(); }
+  else if (e.shiftKey && at === first) { e.preventDefault(); last.focus(); }
+  else if (!e.shiftKey && at === last) { e.preventDefault(); first.focus(); }
+});
+window.gameWindow = (kind, gid, from) => open(kind, gid, from);
+/* the view has drawn itself again (propsDraw): the window binds to its button as drawn now, or closes where the view no
+   longer draws one (the game has tipped off, or the view has closed) */
+window.gameWindowSync = () => {
+  if (!KIND) return;
+  const b = typeof ppOpen !== 'undefined' && ppOpen === GID ? document.querySelector(`#ppBody [data-gp-pop="${KIND}"][data-gp-game="${CSS.escape(GID)}"]`) : null;
+  if (b) FROM = b; else { FROM = null; close(); }
+};
+/* the view's MISMATCH tag: this player's row in the game's top five where it is graded Solid or more (the NFL's old game
+   page tagged Solid and up), or null */
+window.gwMismatch = (gid, pid) => { const g = gameOf(gid); if (!g) return null; const R = mmList(g); return R.list ? R.list.find(v => v.pid === String(pid) && v.tagged) || null : null; };
 })();
 </script>
 

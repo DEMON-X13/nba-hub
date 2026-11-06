@@ -70,6 +70,13 @@
 .pb-tc .pb-trial{margin:2px 0 0;display:inline-block}
 small.faroff{display:block;font-size:11px;font-weight:600;margin-top:2px;white-space:normal;color:var(--gold)}
 .legfair{display:block;font-size:11px;font-weight:500;color:var(--ink-2);white-space:nowrap;margin-top:2px}
+/* a player's leg once the props model has failed its trial: DraftKings' fair chance leads (est. beside it where it is
+   one), the props model's own small and muted under it, for reference (the Player props view's row, its .mdl) */
+.pb-mdl{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:normal;margin-top:2px;cursor:help}
+.pb-mdl [data-pb-mv]{white-space:nowrap} .pb-mdl .pb-trial{margin-left:2px}
+.pb-fest{font-style:normal;font-size:10px;font-weight:500;color:var(--pb-q);margin-left:3px}
+/* "fair", the builder's own word for DraftKings' figure (a team row's "fair 40%"), before a player's lead figure on a FAIL */
+.pb-fairlbl{font-size:11px;font-weight:600;color:var(--ink-2)}
 .dkslip{display:block;font-size:11px;font-weight:500;color:var(--ink-2);white-space:normal;margin-top:2px}
 .pb-read{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:nowrap}
 .espn-ctl{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:0 0 12px}
@@ -196,6 +203,8 @@ function pbLinesLoad() {
     if (j && typeof j === 'object' && j.v === 1 && j.games && typeof j.games === 'object' && !Array.isArray(j.games)) LINES = j; else LINES_ERR = true;
     PB_TOP_CACHE.clear(); PB_CACHE.clear();
     if (tabNow() === 'parlay') pbKeep(() => render.parlay()); else if (tabNow() === 'suggest' && render.suggest) render.suggest(); else pbOddsSync();
+    /* the board's Player props buttons count these lines, and an open Player props view stands on them */
+    if (typeof window.ppLinesIn === 'function') window.ppLinesIn();
   })());
 }
 /* tools/lines_feed.js linesGl, line for line: a lines.json entry -> the shape oddsGameLines gives (what the page keeps
@@ -621,7 +630,19 @@ function pbTrialTitle() {
   if (!pbPropsOn()) { const w = pbPropsOffWhy(); return `${w[0].toUpperCase() + w.slice(1)}${lg.decision.early ? ', the owner’s call: it was not shown to beat DraftKings’ closing lines' : ' against DraftKings’ closing lines'}, so this chance is the model’s, for reference only, and no list or set takes it`; }
   return `The props model is on trial: its shadow ledger has ${n.toLocaleString('en-US')} of the ${N.toLocaleString('en-US')} graded lines its bar against DraftKings' closing lines is judged on, and it has not been shown to beat DraftKings, so this chance is the model's on trial`;
 }
-const pbTrialMark = l => l && l.kind === 'prop' ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>` : '';
+/* once it has failed (pbPropsOn false), a player's leg in the builder wears "failed trial" where it wore "on trial", titled
+   as the Player props view's FAIL mark: its chance there is DraftKings' fair chance, the props model's for reference */
+function pbFailLegTitle() {
+  const w = pbPropsOffWhy(), dec = S.props && S.props.ledger && S.props.ledger.decision;
+  return `${w[0].toUpperCase()}${w.slice(1)}${dec && dec.early ? ', the owner’s call' : ''}: it was not shown to beat DraftKings’ closing lines, so this leg’s chance is DraftKings’ fair chance, and the props model’s own, beside it, is for reference only`;
+}
+const PB_FAILED = 'failed trial';
+/* what the builder's summary and the parlay card say of the model's chance once a player leg in it is the failed props
+   model's (a parlay of team legs alone keeps the board model's chance as it was), counted: "its player leg" for one,
+   "its player legs" for more (the review of 6 November 2026: a parlay of one player leg said "legs") */
+const pbFailedSay = n => `its player leg${n === 1 ? '' : 's'} the props model’s, which failed its trial`;
+const pbTrialMark = l => !(l && l.kind === 'prop') ? '' : pbPropsOn() ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>`
+  : `<i class="pb-trial" data-pb-failed title="${esc(pbFailLegTitle())}">${PB_FAILED}</i>`;
 /* a leg on the builder: the same line exactly */
 const pbOn = l => M.slip.legs.some(x => slipKey(x) === (l.sk || slipKey(l)));
 const pbInBuilder = legs => M.slip.legs.length === legs.length && legs.every(pbOn);
@@ -887,6 +908,21 @@ function pbInj(l) {
   if (why) return `<span class="pb-inj" data-pb-held title="On today's injury report: ${esc(why)} of the Top 50 lines and every suggested parlay">${esc(String((Array.isArray(rp) && rp[1]) || 'listed').toUpperCase())}</span>`;
   return ppRow(l.id, l.pid) ? '' : `<span class="pb-inj" title="The props model does not project him for this game: on no list it reads, or under ${S.props ? S.props.minShown : 8} minutes">NOT PROJECTED</span>`;
 }
+/* a leg's Chance cell: the model's chance, its band and DraftKings' fair chance under it. Once the props model has failed
+   its trial, a player's leg is drawn as its row in the Player props view drew it (ppLegRow's FAIL row): DraftKings'
+   fair chance leads, labelled "fair" as a team row's is (and, to a screen reader, "DraftKings' fair chance", as the view
+   says it), at the view's percentage, with est. where it is one and the band worked on it (ppConf, on the percentage
+   shown); under it the props model's chance small and muted, with the "failed trial" mark beside the figure it is about
+   ("props model 50% FAILED TRIAL"); where DraftKings gives no fair chance, "no DraftKings chance" and the model's muted.
+   A team leg is as it was */
+function pbChanceCell(l, f, c, lbl) {
+  if (l.kind === 'prop' && !pbPropsOn()) {
+    const fp = f && f.p != null && Number.isFinite(f.p) ? f.p : null, [fc, fl] = fp != null ? ppConf(fp) : ['', ''];
+    return (fp != null ? `<span class="pb-fairlbl" aria-hidden="true">fair</span> <span class="sr">DraftKings' fair chance${f.est ? ', est.' : ''}: </span><span data-pb-fp="${fp}" title="${esc(ppFairTitle(l, f))}">${ppPct(fp)}</span>${f.est ? '<em class="pb-fest" aria-hidden="true">est.</em>' : ''} <span class="pb-conf ${fc}">${fl.toUpperCase()}</span>` : '<span class="pb-q" data-pb-nodk>no DraftKings chance</span>')
+      + (l.p != null ? ` <small class="pb-mdl" data-pb-p="${l.p}" title="${esc(pbTrialTitle())}"><span data-pb-mv>props model ${ppPct(l.p)}</span> ${pbTrialMark(l)}</small>` : ' ' + pbTrialMark(l));
+  }
+  return `${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}`;
+}
 /* the builder's numbers: its legs in its own order, the model's chance and DraftKings' fair chance that all land, the
    price (DraftKings' prices multiplied, a game's legs priced together by the same-game rule, or a parlay price typed in)
    and what the Bet amount returns. The parlay card (app/parts/card.html) reads the same, so its price is the builder's */
@@ -920,16 +956,23 @@ function renderParlay(o) {
     return;
   }
   const { n, pr, fair, P, stake, override, useDec, payout, profit, sg, trial } = q, slips = dkSlipRows(legs);
-  const fairAm = pr.corr != null && pr.corr > 0 && pr.corr < 1 ? fmtAm(probToAm(pr.corr)) : '–';
+  /* a player leg in it once the props model has failed its trial: the model's chance is said to be its, never on trial,
+     and nothing leads with it (the fair price and the confidence are DraftKings' fair chance's, or not drawn) */
+  const failed = trial && !pbPropsOn(), tw = trial ? (failed ? ', ' + pbFailedSay(legs.filter(l => l.kind === 'prop').length) : ', on trial') : '', hasFair = !!(fair && fair.p != null);
+  const fairAm = failed ? (hasFair && fair.p > 0 && fair.p < 1 ? fmtAm(probToAm(fair.p)) : '–') : pr.corr != null && pr.corr > 0 && pr.corr < 1 ? fmtAm(probToAm(pr.corr)) : '–';
   let html = `<div class="pb-card pb-builder"><h2 id="pbTitle" tabindex="-1" style="display:flex;align-items:center;gap:10px">${n}-leg parlay <span class="pb-pill">building</span></h2>${espnCtl('builder')}
     <p class="pb-lead">Every leg has to land. The chance below is worked out with the legs' real relationship to each other, not by multiplying them together.</p>
     <table class="pb-btbl"><thead><tr><th>Player</th><th>The bet</th><th class="num">Projected</th><th class="num">Chance</th><th class="num">Price</th><th><span class="sr">Remove</span></th></tr></thead><tbody>`;
   legs.forEach((l, i) => {
-    const f = legFair(l), far = f && l.p != null && l.p - f.p >= PB_FAR - 1e-9, [c, lbl] = l.p != null ? pbBandOf(l.p) : ['', ''];
+    /* far off the market: never on a player's leg once the props model has failed its trial (its chance there is
+       DraftKings' own fair chance, which cannot be far off itself, and the failed model's figure is drawn only muted,
+       for reference, in its Chance cell; the review of 6 November 2026: the gold flag put "model 100%" ahead of
+       DraftKings' 84%) */
+    const f = legFair(l), far = !(l.kind === 'prop' && !pbPropsOn()) && f && l.p != null && l.p - f.p >= PB_FAR - 1e-9, [c, lbl] = l.p != null ? pbBandOf(l.p) : ['', ''];
     html += `<tr class="legrow" data-pb-row="${esc(l.sk)}"><td class="plr">${glanceName(l, { ml: l.odds, src: 'real' })}${pbInj(l)}<small>${esc(l.pos)} · ${esc(l.team)} v ${esc(l.opp)} · ${esc(pbDayText(l.date))}</small></td>
       <td class="bet"><b>${esc(l.label)}</b>${far ? `<small class="faroff" data-far>${farText(l.p, f)}</small>` : ''}${dkSlipLine(slips && slips[i], i)}</td>
       <td class="num" data-h="Projected">${pbNum(l.mu)}</td>
-      <td class="num" data-h="Chance">${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}</td>
+      <td class="num" data-h="Chance">${pbChanceCell(l, f, c, lbl)}</td>
       <td class="num pb-px" data-h="Price">${fmtAm(l.odds)} <small title="DraftKings' price, read ${esc(oddsClock(l.at))}">real · read ${esc(oddsClock(l.at))}</small></td>
       <td class="rm"><button type="button" class="btn ghost" data-drop="${esc(l.sk)}" aria-label="Remove ${esc(l.name)}, ${esc(l.label)}, from the builder">Remove</button></td></tr>`;
   });
@@ -944,16 +987,20 @@ function renderParlay(o) {
       <span class="pb-hint">${sg ? 'Blank prices the legs that share a game together, the way a book does.' : 'Blank multiplies DraftKings’ leg prices.'}</span>
     </div>
     <div class="pb-bigp">
-      ${fair && fair.p != null ? `<div class="pb-box hero"><b data-fair="${fair.p}">${(fair.p * 100).toFixed(1)}%</b><span>fair chance all ${n} land${fair.est ? ', est.' : ''}</span>${pr.corr != null ? `<small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${trial ? ', on trial' : ''}</small>` : '<small>no model chance: a player in it is not projected</small>'}</div>`
-        : pr.corr != null ? `<div class="pb-box hero"><b data-model="${pr.corr}">${(pr.corr * 100).toFixed(1)}%</b><span>model's chance all ${n} land${trial ? ', on trial' : ''}</span><small>no fair chance: a leg has one price only</small></div>`
+      ${hasFair ? `<div class="pb-box hero"><b data-fair="${fair.p}">${(fair.p * 100).toFixed(1)}%</b><span>fair chance all ${n} land${fair.est ? ', est.' : ''}</span>${pr.corr != null ? `<small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${tw}</small>` : '<small>no model chance: a player in it is not projected</small>'}</div>`
+        : pr.corr != null && failed ? `<div class="pb-box hero"><b>–</b><span>no DraftKings fair chance: a leg has one price only</span><small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${tw}</small></div>`
+        : pr.corr != null ? `<div class="pb-box hero"><b data-model="${pr.corr}">${(pr.corr * 100).toFixed(1)}%</b><span>model's chance all ${n} land${tw}</span><small>no fair chance: a leg has one price only</small></div>`
         : `<div class="pb-box hero"><b>–</b><span>no chance to show</span><small>a leg has neither a fair chance nor a model chance</small></div>`}
-      <div class="pb-box"><b>${fairAm}</b><span>fair price for the model's chance</span></div>
+      <div class="pb-box" data-pb-fairam><b>${fairAm}</b><span>${failed ? 'fair price for DraftKings’ fair chance' : 'fair price for the model\'s chance'}</span></div>
       <div class="pb-box"><b class="payout" data-payout="${payout}">${pbMoney(payout)}</b><span>returned if it lands, ${pbMoney(profit)} profit${override ? ', at your price' : sg ? ', est.' : ''}</span></div>
-      ${(() => { const on = fair && fair.p != null, cp = on ? fair.p : pr.corr; if (cp == null) return '';
-        const [c, l] = pbBandOf(cp); return `<div class="pb-box tier ${c}" data-conf="${cp}"><b>${l}</b><span>confidence all ${n} land, on the ${on ? 'fair' : 'model’s'} chance</span></div>`; })()}
+      ${(() => { const on = hasFair, cp = on ? fair.p : failed ? null : pr.corr; if (cp == null) return '';
+        /* after the FAIL the fair chance is banded on the view's scale (ppConf: High from 70, Med from 45), the one each
+           player row above it uses, so a one-leg parlay's box says the band its row does (the review of 6 November 2026:
+           a 70% leg read HIGH in its row and MED here); on the trial and for team legs alone, the builder's own */
+        const [c, l] = on && failed ? (b => [b[0], b[1].toUpperCase()])(ppConf(cp)) : pbBandOf(cp); return `<div class="pb-box tier ${c}" data-conf="${cp}"><b>${l}</b><span>confidence all ${n} land, on the ${on ? 'fair' : 'model’s'} chance</span></div>`; })()}
     </div>
     <p class="pb-fair-note">${fair && fair.p != null ? `The fair chance is DraftKings’: its prices with the margin taken out (a main line’s whole margin on the Over, as measured on DraftKings’ archived lines)${fair.est ? ', est. where a leg is priced on one side only or the legs share a game' : ''}, the legs moving together as the model’s do.`
-      : `The fair chance needs both of DraftKings’ prices on every leg; ${fair && fair.miss === 1 ? 'one leg has' : (fair ? fair.miss : 0) + ' legs have'} one only, so this is the model’s chance alone.`}</p>
+      : `The fair chance needs both of DraftKings’ prices on every leg; ${fair && fair.miss === 1 ? 'one leg has' : (fair ? fair.miss : 0) + ' legs have'} one only, ${failed ? 'so there is none to show. The model’s chance under it is for reference only.' : 'so this is the model’s chance alone.'}`}</p>
     ${sg && override == null ? `<p class="pb-fair-note" data-sl-why>Legs here share a game, so they are priced together rather than multiplied: multiplying them would say <b>${pbMoney(stake * P.prod)}</b>, which is what a book pays only when the legs are in different games. ${SG_WHY}, with the NFL hub’s same-game hold (${S.corr && S.corr.hold}), untested on the NBA; type your book’s own parlay price above to override it.</p>` : ''}
     <div class="pb-acts"><button type="button" class="btn hot" id="pFinish" title="Opens this parlay as a card to place at DraftKings or share. Nothing is saved: not here, not in X’s parlays.">Finish parlay</button><button type="button" class="btn ghost" id="pClear">Clear ALL</button></div></div></div>`;
   if (pr.pairs.length) {
@@ -983,7 +1030,7 @@ render.parlay = function () {
   renderParlay();
 };
 /* what Suggested Parlays, the checks and the next pieces stand on */
-Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
+Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, pbChanceCell, pbFailedSay, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
   PB_TIERS, PB_KINDS, PB_MIXES, PB_TOP_N, PB_SEARCH, getPbTiers, getPbTop, pbTopBuild, pbTierCard, pbValMark, pbIsValue, pbTrialMark, pbOrder, pbOrd, parlayProb, parlayDec, parlayFair, legFair, legFarOff, legModel,
   pbView, pbSlipOf, pbLegAddBtn, pbPut, pbStale, pbWatchTick, stakeRead, pbStake, renderParlay, renderPb, pbLinesLoad, linesGl, pbGl, pbPr, pbCarries, pbQuote, dkSlipRows, dkSlipLine, glanceName,
   toggleLeg: l => slipToggle(pbSlipOf(l)), pbLines: () => LINES });

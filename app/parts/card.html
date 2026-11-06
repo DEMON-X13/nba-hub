@@ -194,9 +194,9 @@ window.PARLAY_CARD = (function () {
     const am = typeof decToAm === 'function' && dec > 1 ? decToAm(dec) : null;
     return { source, kicker, title: n + '-leg parlay', dateText: dates(legs), price: ml(am), dec: isFinite(dec) ? dec.toFixed(2) : '–', implied: dec > 1 ? pct(1 / dec) : '–', priceNote,
       legs: legs.map(x => x.card), stake: stake > 0 ? stake : 0, payout: stake > 0 ? stake * dec : 0, profit: stake > 0 ? stake * dec - stake : 0,
-      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial,
+      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial, failed: !!trial && typeof pbPropsOn === 'function' && !pbPropsOn(),
       fair: fair && fair.p != null && isFinite(fair.p) ? pct(fair.p) : null, fairEst: !!(fair && fair.p != null && fair.est), sg: !!sg,
-      oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'),
+      oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'), props: legs.filter(l => l.kind === 'prop').length,
       made: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), site: SITE,
       file: 'parlay-' + (first ? first + '-' : '') + n + (n === 1 ? 'leg' : 'legs') + '.png', dk: dkPlan(legs) };
   }
@@ -236,13 +236,17 @@ window.PARLAY_CARD = (function () {
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
      then the model's (on trial with a player leg in it) and the price's; with no fair chance, the model's and the
-     price's, then why there is none. Each line is a list of [text, bold] pieces, so the window, the image and the share
-     text say the same */
+     price's, then why there is none. Once the props model has failed its trial, a parlay with a player leg says its
+     player legs are the failed model's, never on trial, and with no fair chance says why first, the model's after it.
+     Each line is a list of [text, bold] pieces, so the window, the image and the share text say the same */
   function chanceLines(m) {
-    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial ? ' (on trial)' : '';
-    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]];
+    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && !m.failed ? ' (on trial)' : '';
+    /* the failed model's words, counted as the builder counts them (pbFailedSay: "its player leg" for one) */
+    const k = m.props != null ? m.props : 2, say = typeof pbFailedSay === 'function' ? pbFailedSay(k) : `its player leg${k === 1 ? '' : 's'} the props model’s, which failed its trial`;
+    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + say]] : [];
     if (m.fair) return [[['Fair chance ' + all], [m.fair, 1], ...(m.fairEst ? [[' (est.)']] : [])],
-      [...(m.chance ? [[by + ' says '], [m.chance, 1]] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
+      [...(m.chance ? [[by + ' says '], [m.chance, 1], ...fx] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
+    if (m.failed && m.chance) return [[['No fair chance: a leg has only one of DraftKings’ two prices']], [['model says '], [m.chance, 1], ...fx, ...price]];
     return [[...(m.chance ? [['Model’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
       [['No fair chance: a leg has only one of DraftKings’ two prices']]];
   }
@@ -369,7 +373,31 @@ window.PARLAY_CARD = (function () {
     while (t.length > 1 && x.measureText(t + '…').width > max) t = t.slice(0, -1); return t + '…'; }
   function text(x, t, a, b, font, color, align, max) { x.font = font; x.fillStyle = color; x.textAlign = align || 'left'; x.textBaseline = 'alphabetic';
     const s = max ? fit(x, t, max) : String(t); x.fillText(s, a, b); return x.measureText(s).width; }
-  const LEG_H = 74, HEAD_H = 134, TILE_H = 58, TILE_GAP = 8, CHANCE_H = 58;
+  const LEG_H = 74, HEAD_H = 134, TILE_H = 58, TILE_GAP = 8, CHANCE_H = 58, CHANCE_ROW = 18;
+  /* the chance lines laid out by measure, at the card's 13px, to the text's right edge R: each line's pieces split at
+     its spaces, a row broken before a word that would run past R (a word alone wider than the row is kept whole), runs of
+     one weight drawn together. Rows of {t, b, x}, every run ending at or before R (the review of 6 November 2026: on a
+     FAIL, "model says 17.6%, its player legs the props model's, which failed its trial · the price says 20.0%" ran 110px
+     past the card's edge, the price's chance cut off in the image) */
+  const CHANCE_FONT = b => (b ? '700 ' : '500 ') + '13px ' + FB;
+  function chanceRows(x, m, L, R) {
+    const rows = [], w = (t, b) => { x.font = CHANCE_FONT(b); return x.measureText(t).width; };
+    for (const ln of chanceLines(m)) {
+      let row = [], cx = L, gap = '';
+      const put = (t, b) => { const last = row[row.length - 1];
+        if (last && last.b === b) { const e = last.x + w(last.t + t, b); if (e > R) return false; last.t += t; cx = e; return true; }
+        const e = cx + w(t, b); if (e > R) return false; row.push({ t, b, x: cx }); cx = e; return true; };
+      for (const [t, b] of ln) for (const tok of String(t).split(/(\s+)/)) {
+        if (!tok) continue;
+        if (/^\s+$/.test(tok)) { gap += tok; continue; }
+        if (!put(gap + tok, !!b)) { if (row.length) { rows.push(row); row = []; cx = L; } row.push({ t: tok, b: !!b, x: L }); cx = L + w(tok, !!b); }
+        gap = '';
+      }
+      if (row.length) rows.push(row);
+    }
+    return rows;
+  }
+  const chanceH = n => CHANCE_H + CHANCE_ROW * Math.max(0, n - 2);
   /* what it pays: Stake, Pays and Profit, every figure whole. Three across, the figures step down from 19px to 14px
      until each fits its tile; if one still does not, the tiles take two rows (Stake and Pays, then Profit the card's
      width), then one to a row; only past anything a real stake makes does the font go under 14px. Never an ellipsis
@@ -386,15 +414,15 @@ window.PARLAY_CARD = (function () {
     return { rows, px: Math.min(14, Math.floor(19 * (rows[0][0].tw - 20) / w * 10) / 10) };
   }
   const tilesH = t => t ? 4 + t.rows.length * TILE_H + (t.rows.length - 1) * TILE_GAP + 12 : 0;
-  function size(m, t) { return HEAD_H + 10 + m.legs.length * LEG_H + tilesH(t) + CHANCE_H + 52; }
+  function size(m, t, rows) { return HEAD_H + 10 + m.legs.length * LEG_H + tilesH(t) + chanceH(rows) + 52; }
   async function draw(m, scale) {
     scale = scale || 2;
     await fonts();
     const c = document.createElement('canvas');
     const x = c.getContext && c.getContext('2d'); if (!x) return null;
-    /* the tiles are laid out first, by measure, since their rows set the card's height; sizing the canvas then resets
-       the context, so the scale comes after */
-    const CW = W - 2 * MG, L = MG + P, R = MG + CW - P, t = tiles(x, m, L, R), CH = size(m, t), H = CH + 2 * MG;
+    /* the tiles and the chance lines are laid out first, by measure, since their rows set the card's height; sizing the
+       canvas then resets the context, so the scale comes after */
+    const CW = W - 2 * MG, L = MG + P, R = MG + CW - P, t = tiles(x, m, L, R), cr = chanceRows(x, m, L, R), CH = size(m, t, cr.length), H = CH + 2 * MG;
     c.width = Math.round(W * scale); c.height = Math.round(H * scale);
     x.scale(scale, scale);
     x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
@@ -448,9 +476,8 @@ window.PARLAY_CARD = (function () {
       y += tilesH(t);
     }
     /* the chance: DraftKings' fair chance first, then the model's and the price's */
-    chanceLines(m).forEach((ln, i) => { let cx = L; const yy = y + 24 + i * 18;
-      for (const [t1, b] of ln) cx += text(x, t1, cx, yy, (b ? '700 ' : '500 ') + '13px ' + FB, b ? C.ink : C.ink2); });
-    y += CHANCE_H;
+    cr.forEach((row, i) => { const yy = y + 24 + i * CHANCE_ROW; for (const r of row) text(x, r.t, r.x, yy, CHANCE_FONT(r.b), r.b ? C.ink : C.ink2); });
+    y += chanceH(cr.length);
     /* the site's mark */
     x.fillStyle = C.line; x.fillRect(MG, y, CW, 1);
     text(x, 'Made ' + m.made, R, y + 31, '500 12px ' + FB, C.muted, 'right');

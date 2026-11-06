@@ -9,7 +9,7 @@
     "status": "Out",
     "detail": "Knee Inflammation",
     "date": "2026-11-05",
-    "returns": "2026-11-08"
+    "returns": "2026-11-07"
    },
    {
     "id": "4873201",
@@ -461,12 +461,12 @@
   ],
   "LAL": [
    {
-    "id": "5060631",
-    "name": "Adou Thiero",
+    "id": "4278580",
+    "name": "Sandro Mamukelashvili",
     "pos": "F",
-    "status": "Out",
-    "detail": "Knee Inflammation",
-    "date": "2026-11-05",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-06",
     "returns": "2026-11-06"
    }
   ],
@@ -497,7 +497,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle",
-    "date": "2026-11-05",
+    "date": "2026-11-06",
     "returns": "2026-11-08"
    }
   ],
@@ -538,7 +538,7 @@
     "status": "Out",
     "detail": "Knee Bruise",
     "date": "2026-11-05",
-    "returns": "2026-11-08"
+    "returns": "2026-11-09"
    },
    {
     "id": "4397688",
@@ -753,15 +753,6 @@
   ],
   "SAC": [
    {
-    "id": "4279318",
-    "name": "Daeqwon Plowden",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
-   },
-   {
     "id": "4898371",
     "name": "Maxime Raynaud",
     "pos": "C",
@@ -810,6 +801,15 @@
    }
   ],
   "TOR": [
+   {
+    "id": "4433134",
+    "name": "Scottie Barnes",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin Soreness",
+    "date": "2026-11-06",
+    "returns": "2026-11-06"
+   },
    {
     "id": "6450",
     "name": "Kawhi Leonard",

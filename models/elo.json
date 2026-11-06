@@ -1465,8 +1465,8 @@
    "spread": 5.5
   },
   "2027_20261108_NOP_LAC": {
-   "pHome": 0.5009,
-   "spread": 0
+   "pHome": 0.4968,
+   "spread": 0.1
   },
   "2027_20261108_PHI_CHI": {
    "pHome": 0.2417,
@@ -2196,5 +2196,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-06T00:19Z"
+ "generated": "2026-11-06T04:07Z"
 }

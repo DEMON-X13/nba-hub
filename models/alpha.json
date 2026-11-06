@@ -1382,20 +1382,20 @@
    "spread": -0.2
   },
   "2027_20261106_BOS_CHA": {
-   "pHome": 0.3353,
-   "spread": 5.2
+   "pHome": 0.2958,
+   "spread": 6.6
   },
   "2027_20261106_MIN_NOP": {
    "pHome": 0.431,
    "spread": 2.1
   },
   "2027_20261106_OKC_MEM": {
-   "pHome": 0.5993,
-   "spread": -3.1
+   "pHome": 0.6607,
+   "spread": -5.1
   },
   "2027_20261106_PHI_CLE": {
-   "pHome": 0.462,
-   "spread": 1.2
+   "pHome": 0.4453,
+   "spread": 1.7
   },
   "2027_20261106_POR_LAL": {
    "pHome": 0.5905,
@@ -2193,5 +2193,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-05T20:39Z"
+ "generated": "2026-11-06T00:18Z"
 }

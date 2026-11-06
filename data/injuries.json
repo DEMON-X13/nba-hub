@@ -59,15 +59,6 @@
   ],
   "BOS": [
    {
-    "id": "4066354",
-    "name": "Payton Pritchard",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Eye Abrasion",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
-   },
-   {
     "id": "4433188",
     "name": "Devin Carter",
     "pos": "G",
@@ -495,10 +486,10 @@
     "id": "4697268",
     "name": "Kam Jones",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
     "date": "2026-11-06",
-    "returns": "2026-11-08"
+    "returns": "2026-11-06"
    }
   ],
   "MIN": [
@@ -532,6 +523,15 @@
   ],
   "NOP": [
    {
+    "id": "4397688",
+    "name": "Trey Murphy III",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-06",
+    "returns": "2026-11-06"
+   },
+   {
     "id": "5061589",
     "name": "Yves Missi",
     "pos": "C",
@@ -539,15 +539,6 @@
     "detail": "Knee Bruise",
     "date": "2026-11-05",
     "returns": "2026-11-09"
-   },
-   {
-    "id": "4397688",
-    "name": "Trey Murphy III",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
    }
   ],
   "NYK": [
@@ -811,6 +802,15 @@
     "returns": "2026-11-06"
    },
    {
+    "id": "2993874",
+    "name": "Kyle Anderson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-06",
+    "returns": "2026-11-06"
+   },
+   {
     "id": "6450",
     "name": "Kawhi Leonard",
     "pos": "F",
@@ -855,7 +855,7 @@
     "status": "Out",
     "detail": "Knee Bruise",
     "date": "2026-10-24",
-    "returns": "2026-11-08"
+    "returns": "2026-11-06"
    }
   ],
   "WAS": [

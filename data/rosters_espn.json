@@ -191,7 +191,7 @@
     "name": "Payton Pritchard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397424",
@@ -3337,7 +3337,7 @@
     "name": "Kyle Anderson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433134",

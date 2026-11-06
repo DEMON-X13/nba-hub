@@ -4154,7 +4154,6 @@ date,team,player_id,name,status
 2026-11-06,ATL,4701230,Jalen Johnson,Day-To-Day
 2026-11-06,ATL,4712863,Mouhamed Gueye,Out
 2026-11-06,ATL,5105571,Henri Veesaar,Out
-2026-11-06,BOS,4066354,Payton Pritchard,Day-To-Day
 2026-11-06,BOS,4433188,Devin Carter,Out
 2026-11-06,BKN,4712896,Noah Clowney,Day-To-Day
 2026-11-06,BKN,4432194,Day'Ron Sharpe,Day-To-Day
@@ -4199,12 +4198,12 @@ date,team,player_id,name,status
 2026-11-06,LAL,4278580,Sandro Mamukelashvili,Day-To-Day
 2026-11-06,MEM,4432810,Isaiah Stewart,Out
 2026-11-06,MEM,4431785,Scotty Pippen Jr.,Out
-2026-11-06,MIL,4697268,Kam Jones,Out
+2026-11-06,MIL,4697268,Kam Jones,Day-To-Day
 2026-11-06,MIN,4432847,Terrence Shannon Jr.,Day-To-Day
 2026-11-06,MIN,4594268,Anthony Edwards,Out
 2026-11-06,MIN,3934673,Donte DiVincenzo,Out
-2026-11-06,NOP,5061589,Yves Missi,Out
 2026-11-06,NOP,4397688,Trey Murphy III,Day-To-Day
+2026-11-06,NOP,5061589,Yves Missi,Out
 2026-11-06,NYK,3062679,Josh Hart,Day-To-Day
 2026-11-06,OKC,4432823,Jaylin Williams,Out
 2026-11-06,OKC,5159925,Nikola Topic,Out
@@ -4232,6 +4231,7 @@ date,team,player_id,name,status
 2026-11-06,SAS,6440,Tobias Harris,Out
 2026-11-06,SAS,5101845,Jayden Quaintance,Out
 2026-11-06,TOR,4433134,Scottie Barnes,Day-To-Day
+2026-11-06,TOR,2993874,Kyle Anderson,Day-To-Day
 2026-11-06,TOR,6450,Kawhi Leonard,Out
 2026-11-06,TOR,4432586,Nate Bittle,Out
 2026-11-06,UTA,3102530,Jusuf Nurkic,Out

@@ -1833,7 +1833,7 @@ function ppRow1(g, x, pr) {
   const sumSr = row ? `projected ${mins != null ? `${mins} minutes, ` : ''}${['pts', 'reb', 'ast'].map(k => `${ppNumTxt(ppMean(row, k))} ${{ pts: 'points', reb: 'rebounds', ast: 'assists' }[k]}`).join(', ')}` : 'no projection';
   const hasStats = ppRecent(pid).length > 0;
   /* in the game's top five Mismatches (app/parts/gamewin.html's own list, the window's) graded Solid or more, as the NFL's
-     game page tags: its tag beside his name, titled with his row there ("Big mismatch: ..."), and said in the row's name */
+     old game page tagged (its live one, since 4 November 2026, tags at its file's measured size): its tag beside his name, titled with his row there ("Big mismatch: ..."), and said in the row's name */
   const mm = typeof window.gwMismatch === 'function' ? window.gwMismatch(g.id, pid) : null;
   const mmTag = mm ? `<span class="pp-mmtag" data-pp-mm="${mm.n}" data-pp-mmgrade="${esc(mm.grade)}" title="${esc(mm.title)}">Mismatch</span>` : '';
   /* Show stats is named by its own words (Show stats or Hide stats, then whose), which say its state: no aria-pressed

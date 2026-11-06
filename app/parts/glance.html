@@ -34,7 +34,7 @@
 .glance-sh{display:inline-flex;vertical-align:-4px;margin-right:4px}
 .glance-sh .tierbadge{width:16px;height:18px}
 .glance-tm{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.02em;color:var(--ink)}
-.glance-trial{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 5px;border:1px solid #FFA2B8;border-radius:999px;color:#FFA2B8;white-space:nowrap;margin-left:5px;vertical-align:1px}
+.glance-trial{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 5px;border:1px solid #FFA2B8;border-radius:999px;color:#FFA2B8;white-space:nowrap;margin-left:2px;vertical-align:1px}
 .glance-pop table.glance-t,.glance-pop table.glance-vs{width:100%;border-collapse:collapse;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible;margin:0 0 8px;font-size:12.5px}
 .glance-pop .glance-t th,.glance-pop .glance-t td,.glance-pop .glance-vs th,.glance-pop .glance-vs td{padding:4px 6px;background:none;border:0;border-top:1px solid var(--line);text-align:left;vertical-align:middle;font-size:12.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);white-space:normal}
 .glance-pop .glance-t thead th,.glance-pop .glance-vs thead th,.glance-pop .glance-vs thead td{border-top:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
@@ -105,6 +105,10 @@
 const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ordinal = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)] || 'th');
 const pc0 = p => (p * 100).toFixed(0) + '%';
+/* a chance as the Player props view prints it (ppPct: whole, "<1%" and ">99%" at the ends): a player's leg after the FAIL,
+   whose builder row prints it so too, and the projected double- and triple-double, so the bubble never says "props
+   model 100%" beside their ">99%" (the review of 6 November 2026); elsewhere the builder's own (pc0, its pbPct) */
+const pcL = p => typeof ppPct === 'function' ? ppPct(p) : pc0(p);
 const N = (key, v) => `<b data-glance-n="${H(key)}">${H(v)}</b>`;
 const St = () => (typeof S === 'object' && S) ? S : null;
 /* a club by its code, in the bubble's ink (a club's own colour on the panel falls under 4.5:1 for several clubs) */
@@ -182,10 +186,10 @@ function legHtml(K) {
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
   /* Model: the player model's chance, the one the builder prices the leg on; once the props model has failed its trial,
      a player's leg leads with DraftKings' fair chance, the props model's after it, muted and marked failed */
-  const pm = l.p, failed = l.kind === 'prop' && propsFailed();
-  const model = `<div><dt>Model</dt><dd${failed ? ' class="glance-q"' : ''}>${pm != null && isFinite(pm) ? (failed ? 'props model ' : '') + N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark('chance') : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`;
+  const pm = l.p, failed = l.kind === 'prop' && propsFailed(), pf = failed ? pcL : pc0;
+  const model = `<div><dt>Model</dt><dd${failed ? ' class="glance-q"' : ''}>${pm != null && isFinite(pm) ? (failed ? 'props model ' : '') + N('model', pf(pm)) + (l.kind === 'prop' ? ' ' + trialMark('chance') : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`;
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
-  const fairRow = `<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`;
+  const fairRow = `<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pf(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`;
   if (failed) out.push(fairRow, model); else out.push(model, fairRow);
   return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;
 }
@@ -236,9 +240,9 @@ function playerHtml() {
     const st = L && L.kind === 'prop' && L.stat ? L.stat : null, ks = STATS.map(x => x[0]);
     const want = st && !ks.includes(st) ? [...STATS, [st, (typeof PP_NAMES === 'object' && PP_NAMES[st]) || st]] : STATS;
     const val = k => { if (k === 'min') return isFinite(row[3]) ? (+row[3]).toFixed(0) : '–';
-      if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pc0(v) : '–'; }
+      if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pcL(v) : '–'; }
       const v = typeof ppMean === 'function' ? ppMean(row, k) : null; return v == null || !isFinite(v) ? '–' : (+v).toFixed(1); };
-    table = `<table class="glance-t" aria-label="${propsFailed() ? 'The props model’s projection for him in this game, for reference: the model failed its trial' : 'The props model\'s projection for him in this game, on trial'}"><thead><tr><th scope="col">Projected${trialMark('proj')}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
+    table = `<table class="glance-t" aria-label="${propsFailed() ? 'The props model’s projection for him in this game, for reference: the model failed its trial' : 'The props model\'s projection for him in this game, on trial'}"><thead><tr><th scope="col">Projected ${trialMark('proj')}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
       `<tr data-glance-stat="${H(k)}"${st === k ? ' class="glance-on"' : ''}><th scope="row">${H(lab)}</th><td class="glance-n" data-glance-n="proj:${H(k)}">${H(val(k))}</td></tr>`).join('')}</tbody></table>`;
   } else table = `<p class="glance-q glance-none" data-glance-n="noproj">No projection: ${out ? 'he is on the injury report' : gameProj ? 'the props model does not project him for this game' : 'the props model has no projections for this game yet'}.</p>`;
   return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${tonightBtn(gid)}` };

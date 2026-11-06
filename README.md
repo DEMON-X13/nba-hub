@@ -1058,8 +1058,10 @@ November 2026, so the sets take none." (the bar's own FAIL, never reached now, w
 bar"), and those words are what the suggestions record keeps for a level it locks empty. The Parlay Builder's lead no
 longer calls the model on trial, and a player's leg a visitor adds by hand from the Player props view is drawn in the
 builder as its row in the view is, at DraftKings' fair chance, marked "failed trial", the model's chance small and muted
-for reference only, which no list or set takes (README "Parlay Builder", "After the FAIL", 6 November 2026). The Player props view's own on-trial summary, its first
-paragraph and its header's "Model on trial" tag are unchanged: they change with that view's rewrite. Run end to end on a scratch copy of 5 November's data at 18:05 UTC
+for reference only, which no list or set takes (README "Parlay Builder", "After the FAIL", 6 November 2026). The Player
+props view says it too: on a FAIL its header's tag reads "Props model: failed trial" and its folded note's summary "The
+props model failed its trial against DraftKings: the chances here are DraftKings' own, its projections for reference",
+every player line drawn at DraftKings' fair chance (README "Player props", "What a FAIL changes"). Run end to end on a scratch copy of 5 November's data at 18:05 UTC
 (`NBA_DATA_DIR`, `NBA_PROPS_LEDGER`, `NBA_PROPS_LINES`, `NBA_PROPS_OUT` and `NBA_NOW`, the real files untouched), the run
 wrote that decision on 12,298 lines and 121 games, dropped the 33 open calls, and the check passed; a run at 17:59 UTC
 on another copy changed nothing. On the built page the Top 50 went from 50 lines, 49 of them a player's, to 6 game lines
@@ -1108,11 +1110,11 @@ props: {
   build, asOf, fitSeasons: "2023-2026", horizonGameDays: 5, minShown: 8,
   stats: [pts, reb, ast, tpm, stl, blk, pra, pr, pa, ar, sb], combos: { pra: [pts, reb, ast], pr: [...], pa, ar, sb },
   layout: [name, team, pos, min, pts, reb, ast, tpm, stl, blk, dd, td],
-  oppCols: [ratio, mult, rank],                   // each club's defence in a game's opp (README "The game's three windows")
+  oppCols: [ratio, mult, rank, z],                // each club's defence in a game's opp: z where props.json carries oppLeague; [ratio, mult, rank] on one written before it (README "The game's three windows")
   dist: { kind: "negative binomial", var: { pts: [A, B], ... every stat and combo }, rule },
   fair: { main, mainWhy, rung: { form, a: { pts: 0.061, ... }, measured }, yes: { form, a: { dd: 0.068, td: 0.068 }, measured, playoffs }, estimated },
   games: { <game_id>: { tip, away, home, players: { <ESPN athlete id>: [ ...layout ] },       // the slate's games not yet started
-    opp: { <club>: { pts: [ratio, mult, rank], reb, ast, tpm, stl, blk } } } },          // each club's defence, the Mismatches'
+    opp: { <club>: { pts: [ratio, mult, rank, z], reb, ast, tpm, stl, blk } } } },       // each club's defence, the Mismatches'
   ledger: { registered, bar: { lines, passIf, otherwise, before },
     decision: { verdict, decidedAt, lines, games, scores, flat, early: { at, by, why } } | null,   // early only on the early stop's FAIL
     summary: { standing, gradedGames, lines, voids, scores, flat, toCome } },
@@ -1653,26 +1655,42 @@ lists (the minutes as his row in the view prints them, whole: 19.8 is "20 min" a
 until the review of 5 November 2026 the bar read the published 19.8 as under 20 while his row said 20), each at his stat among points, rebounds, assists and threes with the largest lift in standard deviations of the stat
 at his mean (the props model's own spread, the square root of `nbVar(mean, var[k])`), positive lifts only.
 
-**Graded as the NFL's** (6 November 2026). The NFL hub grades each mismatch on four steps, in standard deviations, the
-figure rounded to a tenth (its `tab_elo.html` and `snapshot.html` `mmGrade`): Slight under 1, Solid from 1, Big from 2,
-Huge from 3, and its game page tags Solid and up. Here the grade is how far the defence a player faces is from the league's
-on his stat: z = (the club's published opponent ratio on that stat, the "allows 12% more" figure, - the mean of all 30
+**Graded on the NFL's old steps** (6 November 2026). The NFL hub's Mismatches graded each mismatch on four steps, in
+standard deviations, the figure rounded to a tenth (its `tab_elo.html` and `snapshot.html` `mmGrade`): Slight under 1,
+Solid from 1, Big from 2, Huge from 3, its game page tagging Solid and up. Its live Mismatches no longer do: since 4
+November 2026 they draw the size in points ("+7 pts") and one Mismatch tag at its matchups file's measured tag, with no
+grade words, and `mmGrade` and the Solid-and-up tag run only between its OLD-MISMATCHES marks, for a matchups file from
+before that score. The grades here follow those old steps on this hub's numbers (the review of 6 November 2026 found the
+NFL's live page had dropped them two days before this change; whether this hub keeps the four words or moves to the
+NFL's one tag is the owner's call). Here the grade is how far the defence a player faces is from the 30 clubs' mean on
+his stat: z = (the club's published opponent ratio on that stat, the "allows 12% more" figure, - the mean of all 30
 clubs' ratios on it) / their standard deviation, population, over the 30. The job works it (`publish.js` THE MISMATCH
 GRADES, `oppLeagueZ`) from every club's ratio, never the two in a game alone: `props.js` writes the league's table into
 `props.json` (`oppLeague`: for each season of the games to come, every club's ratio on each base stat, `oppTable`'s own
 figures, so each game's two clubs carry exactly the league's number; 2.6 KB), and `publish.js` puts each club's z beside
 its ratio, multiplier and rank, rounded to two places, `oppCols` naming it (`[ratio, mult, rank, z]`); none for a club, or
 on a stat, where the season's table lacks a club of the 30 or the 30 are level. The window grades each player at his best
-stat by the lift in SD as before, on the z of the defence on that stat, with the NFL's rounding and steps, lists them by
-the grade first (Huge, Big, Solid, Slight), then the lift in SD, then the lift and the player's id, the top five; so a
-game's Solid-or-better mismatches are always among its five. Each row draws its grade as the NFL's row does, the
+stat by the lift in SD as before, on the z of the defence on that stat, with the NFL's old rounding and steps, lists them
+by the grade first (Huge, Big, Solid, Slight), then the lift in SD, then the lift and the player's id, the top five; so a
+game's Solid-or-better mismatches are always among its five. Each row draws its grade as the NFL's old row did, the
 four-step meter lit to its step and the word, both in the grade's colour (the NFL's dark theme's: Huge the hub's lime, Big
-#7BD88F, Solid #F2B84B, Slight the quiet ink), after the "+0.16 SD" lift on the right, and the MISMATCH chip under them
-only on Solid and up. Its title says what each is: "Big mismatch: #1 in this game. … Big: MIA's three-point defence is
-2.19 standard deviations weaker than the league's average on threes, across its 30 clubs (Slight under 1, Solid from 1,
-Big from 2, Huge from 3). +0.16 SD: what the matchup adds to his projection, over the spread of his threes at his
-projection (2.5). Listed by the grade, then that lift." Under the window's note, where no row is Solid or more: "No player
-in this game faces a defence a standard deviation or more weaker than the league's on his stat." On a state published
+#7BD88F, Solid #F2B84B, Slight the quiet ink), after the lift on the right, "+0.16 SD lift" (a screen reader hears "SD
+lift" too), and the MISMATCH chip under them only on Solid and up. The figure the grade is worked on is on the row
+itself, beside the defence it is of, rounded to a tenth as the grade rounds it (0.95 is "1.0" and Solid): "vs MIA
+three-point defence #30, 2.2 SD weaker than the 30 clubs' mean (allows 12% more threes a minute than the league's rate)",
+"at the 30 clubs' mean" where it rounds to 0. Until the review of 6 November 2026 it was in the title alone, which a phone
+never shows, and the one SD figure a phone showed was the lift, "+0.16 SD" under Big, which those steps call Slight
+(MIA at SAC drew "+0.07 SD Big" over "+0.16 SD Solid"). The two figures on the row are measured from two places, each
+named: the "allows" ratio from the league's rate (a ratio of 1, where the lift is 0), z from the mean of the 30 clubs'
+ratios, which sits a little above 1 (points 1.0062, rebounds 1.0050, assists 1.0102, threes 1.0070 on 6 November). Until
+that review both said "average", and a club between the two read as a contradiction: SAS's rebounding defence (ratio
+1.0047) "allows 0.5% more rebounds a minute than average" on its row and "0.01 standard deviations stronger than the
+league's average" in its title, 7 of that day's 165 rows. Its title says what each is: "Big mismatch: #1 in this game. …
+Big: MIA's three-point defence is 2.2 standard deviations weaker than the 30 clubs' mean on threes, across its 30 clubs;
+the grade is on that figure (Slight under 1, Solid from 1, Big from 2, Huge from 3). +0.16 SD lift: what the matchup adds
+to his projection, over the spread of his threes at his projection (2.5). Listed by the grade, then that lift." Under the
+window's note, where no row is Solid or more: "No player in this game faces a defence a standard deviation or more weaker
+than the 30 clubs' mean on his stat." On a state published
 before the grades (`oppCols` without z, or a club with none): the five by the lift as before, no grade, no tag, and "The
 mismatch grades are not published yet: the job adds them on its next run." Until this change any positive lift was listed
 and tagged: ORL at PHX listed five Magic players at +0.03 to +0.05 SD against a scoring defence ranked 20th ("allows 2%
@@ -1684,8 +1702,9 @@ ORL at PHX's five are Slight against PHX's scoring defence at z 0.38, untagged, 
 87 are tagged (18 Big, 69 Solid) and 78 are Slight, none Huge, and 44 are under 0.05 SD.
 
 Each row the NFL's: his season shield where the Players tab ranks him (none
-where it does not), "#1 Stephen Curry G GSW vs MIA · vs MIA three-point defence
-#30 (allows 12% more threes a minute than average). 4.8 threes projected (+0.4 from the matchup).", at its right "+0.16 SD",
+where it does not), "#1 Stephen Curry G GSW vs MIA · vs MIA three-point defence #30, 2.2 SD weaker than the 30 clubs'
+mean (allows 12% more threes a minute than the league's rate). 4.8 threes projected (+0.4 from the matchup).", at its
+right "+0.16 SD lift",
 its grade and, Solid and up, the MISMATCH tag, its title the grade, the row's sentence, what each figure is and the note. A lift is printed to one decimal
 and the spread to two, more where that would round a figure to nothing: a lift of 0.017 is "+0.02", of 0.003 "+0.003",
 under 0.0005 "under 0.001" (SAS at POR on 7 November reads "+0.04" and "+0.02" where it read "+0.0"; on 5 November 21 of
@@ -1696,7 +1715,7 @@ before a decision: "the model is on trial against DraftKings"). Nothing in the w
 value or model says. On the player rows of the view, each of the five graded Solid or more wears the NFL's MISMATCH tag
 beside his name, the same title ("Big mismatch: …", its grade in `data-pp-mmgrade`), and his row's name says it (", Big
 mismatch, #1 in this game"); a row graded Slight wears none. MIA at GSW on 5 November 2026, before the grades, all five
-Warriors against the Heat's defence: Stephen Curry threes (MIA 30th, 12% more a minute than average, 4.8 projected, +0.4,
+Warriors against the Heat's defence: Stephen Curry threes (MIA 30th, 12% more a minute than the league's rate, 4.8 projected, +0.4,
 +0.16 SD), Draymond Green assists (29th, 7% more, 6.2, +0.4, +0.14), Brandin Podziemski assists (4.5, +0.3, +0.12),
 Yaxel Lendeborg threes (2.6, +0.2, +0.12) and Georges Niang threes (2.1, +0.2, +0.10).
 
@@ -1751,7 +1770,13 @@ multipliers, z and means, and every published z from the published ratios of all
 `props.json`'s league table on the same build; on a state from before the grades, the job's `oppLeagueZ` on today's replay
 against this file's own z for every club and stat); never by calling the page's functions; each mismatch's shield from the published players (none where they do
 not rank him), no figure that rounds to nothing, and what a screen reader hears of each Team Stats value (its club, its
-rank in words, the better side) and of the higher Matchup box. The window's look, rule by rule as the page's CSSOM has it
+rank in words, the better side), of each Team Stats label (a word apart from its note: "Points allowed per game") and of
+the higher Matchup box. Since the review of 6 November 2026 each graded row's z is read off the row itself and held to the
+published z rounded to a tenth, the grade drawn the one the steps give that figure; the lift reads "SD lift"; no row or
+title says "average"; and on the real state an opponent table published with no grades fails (props.js writing `opp`
+without `oppLeague`, which would have every window say the grades are not published yet, on every run), where it had
+passed as a state from before the grades: a state with no `opp` at all is the one from before them, and goes to the
+replay. The window's look, rule by rule as the page's CSSOM has it
 (jsdom lays nothing out), against the NFL's values: its panel and the 39px under the card, its quiet text, a mismatch
 row (unfilled, 600, 4px, the shield 16 by 18), the phone window at 760px (no rule of it at another width) and its
 geometry, and the view's position line kept whole on a phone. The grade's colours and meter, rule by rule (Huge `var(--lime)`, Big #7BD88F, Solid
@@ -1828,6 +1853,15 @@ the job's in `tools/publish.js` or `tools/props.js`, put back after):
 | the league table's new season not halved | `test_gamewin.js`: `oppLeague` each season as `oppTable` gives it |
 | Matchup's pace label back to "possessions per 48 minutes" | gw: Matchup states … the pace (made-up, level and real) |
 | Team Stats' pace label only in a tooltip ("possessions per 48") | gw: Team Stats states every value … (made-up and real) |
+| the review of 6 November 2026 (the page in a copy through `NBA_HTML`): the row's "allows" against "average" | gw: the five's rows (and no "average" on a row or its title), made-up and real |
+| the title's z against "the league's average", two places | gw: the five's titles, and no "average" |
+| no z on the row | gw: the row shows the z its grade is worked on |
+| the lift unlabelled ("+0.16 SD") | gw: the lift reads "SD lift" |
+| z shown by `toFixed(1)`, not the grade's rounding (1.95 read "1.9" beside Big) | gw: CHI at TOR's grades: the row's z against its grade, and its tags' titles |
+| Team Stats' label and its note with no space between ("Points allowedper game") | gw: Team Stats … every label heard a word apart from its note (made-up and real) |
+| `props.js` writing `opp` without `oppLeague` (the job's two steps run locally on a copy) | gw: the published state has the opponent table but no grades (it passed before, as "from before the grades") |
+| README's shape of `state.json` without z | `test_gamewin.js` part 5: README's shape names the columns `propsState` writes |
+| README's heading and sentence put back to the NFL hub grading now; `gamewin.html`'s comment put back to its old present tense | `test_gamewin.js` part 6: README and the code call the four steps the NFL's old Mismatches' |
 
 In Chromium on 6 November 2026, on a copy of the site whose `state.json` the job's two steps wrote locally (`props.js`
 offline and `publish.js`: z for all 30 clubs, 396 figures across the 33 games, none missing), the page's clock held at
@@ -1838,6 +1872,15 @@ fastest, and Team Stats' "possessions per 48 this season, est. from the box scor
 wrapping inside its card at 360. At 360, 390, 914 and 1280, on both games with each window open and the view under it: no
 text under 4.5:1 (the lowest 4.87, unchanged; the grade words in their colours all above it), nothing wider than the
 screen, the window or its cards, and every control 44px.
+
+After the review's fixes of 6 November 2026, on the same local run and clock: MIA at GSW's five read "vs MIA three-point
+defence #30, 2.2 SD weaker than the 30 clubs' mean (allows 12% more threes a minute than the league's rate)", "+0.16 SD
+lift" and Big at the right; SAS at POR's five (7 November) "vs SAS rebounding defence #16, at the 30 clubs' mean (allows
+0.5% more rebounds a minute than the league's rate)", Slight, their titles "at the 30 clubs' mean on rebounds" where they
+had said "0.01 standard deviations stronger than the league's average"; Team Stats' labels heard "Points allowed per
+game", "Pace possessions per 48 this season, est. from the box scores". At 360, 390, 914 and 1280, MIA at GSW, ORL at PHX
+and SAS at POR with Mismatches and Team Stats open: no text under 4.5:1 (the lowest 4.87), nothing wider than the screen,
+every control 44px; at 360 the longer row wraps inside its card.
 
 ## Same-game parlays
 
@@ -2397,21 +2440,37 @@ trial". Stephen Curry's Threes Over 4.5, ticked in MIA at GSW's view at DraftKin
 in the builder as "50% ON TRIAL" over "fair 40%". On a FAIL (`pbPropsOn` false), with nothing changed before one or on a
 PASS:
 - **A player's leg** (`pbChanceCell`): its Chance cell is his row in the view's, DraftKings' fair chance first at the
-  view's percentage (`ppPct`), est. where it is one, and the view's band worked on it (`ppConf`, High, Med or Low), then
-  **failed trial** where "on trial" stood, titled "The props model's trial was stopped early as a FAIL on 5 November 2026,
-  the owner's call: it was not shown to beat DraftKings' closing lines, so this leg's chance is DraftKings' fair chance,
-  and the props model's own, beside it, is for reference only" (`pbFailLegTitle`), and the props model's chance small and
-  muted under it, "props model 50%", titled as the view's muted chance (`pbTrialTitle`); where DraftKings gives no fair
-  chance, "no DraftKings chance" and the model's muted. No "fair N%" line under it: the fair chance is the lead.
-- **The summary**, wherever the parlay holds a player leg: "model says 17.6%, its player legs the props model's, which
-  failed its trial" (`PB_FAILED_SAY`) under the fair chance; with no fair chance, "–" and "no DraftKings fair chance: a leg
-  has one price only", the model's line under it; the fair price box is DraftKings' fair chance's ("fair price for
-  DraftKings' fair chance"), and the confidence box is drawn on the fair chance alone, never on the failed model's.
-- **The parlay card** says the same ("model says 17.6%, its player legs the props model's, which failed its trial · the
-  price says 20.0%"), its window, image and Share text alike; with no fair chance it says why first.
-- **The matchup bubble** on a player's leg gives Price, Fair, then Model, muted whole ("props model 50%", its figure in
-  the quiet ink too), and marks the projections and the model's chance "failed trial", each titled that it is for
-  reference only.
+  view's percentage (`ppPct`, so ">99%" and "<1%" at the ends), labelled "fair" as a team row's fair chance is and heard
+  as "DraftKings' fair chance" (est. where it is one), and the view's band worked on it (`ppConf`, High, Med or Low); under
+  it the props model's chance small and muted, "props model 50%", titled as the view's muted chance (`pbTrialTitle`), with
+  **failed trial** beside that figure, titled "The props model's trial was stopped early as a FAIL on 5 November 2026, the
+  owner's call: it was not shown to beat DraftKings' closing lines, so this leg's chance is DraftKings' fair chance, and
+  the props model's own, beside it, is for reference only" (`pbFailLegTitle`). A screen reader hears "DraftKings' fair
+  chance: 40% LOW props model 50% failed trial". Where DraftKings gives no fair chance, "no DraftKings chance" and the
+  model's muted with its mark. No "fair N%" line under it: the fair chance is the lead. Until the review of 6 November
+  2026 the lead figure had no label but a title (which a phone never shows), and the mark sat right after it, where "on
+  trial" had labelled the model's chance, so DraftKings' 40% read as the failed model's.
+- **No far-off flag**: a player's leg wears no "far off the market" (`farText`) once the model has failed. Its chance is
+  DraftKings' own, which cannot be far off itself, and the rule no longer chooses any list; until that review the gold
+  flag led with the failed model's figure ("model 100% · DraftKings 84% est.: far off the market" on Giannis
+  Antetokounmpo's 2+ rebounds, rounded where the same row said ">99%"), on 109 of that day's 1,813 player legs. A team leg,
+  and every leg on the trial, keep it.
+- **The summary**, wherever the parlay holds a player leg: "model says 17.6%, its player leg the props model's, which
+  failed its trial" (`pbFailedSay`, "its player legs" for two or more) under the fair chance; with no fair chance, "–" and
+  "no DraftKings fair chance: a leg has one price only", the model's line under it, and the note "The fair chance needs
+  both of DraftKings' prices on every leg; one leg has one only, so there is none to show. The model's chance under it is
+  for reference only." (on the trial and for team legs alone, "... so this is the model's chance alone."); the fair price
+  box is DraftKings' fair chance's ("fair price for DraftKings' fair chance"), and the confidence box is drawn on the fair
+  chance alone, never on the failed model's, on the view's scale (`ppConf`: HIGH from 70, MED from 45, else LOW), the one
+  every player row above it uses, so a one-leg parlay's box and row say one band (a leg at 70% fair read "HIGH" in its row
+  and "MED" in the box until that review).
+- **The parlay card** says the same ("model says 17.6%, its player leg the props model's, which failed its trial · the
+  price says 20.0%"), its window, image and Share text alike; with no fair chance it says why first. The image lays each
+  chance line out by measure (README "The parlay card").
+- **The matchup bubble** on a player's leg gives Price, Fair, then Model, muted whole ("props model 50% failed trial", its
+  figure in the quiet ink too), each figure printed as the view and the builder print it (`ppPct`: ">99%" and "<1%" at
+  the ends, never "100%" or "0%"), and marks the projections and the model's chance "failed trial", a word apart from what
+  it marks ("Projected failed trial", never "Projectedfailed trial"), each titled that it is for reference only.
 - **Unchanged**: a team leg (the board model's chance, its band, "fair N%"), the board model's chance for a parlay of team
   legs alone, every price and payout, the same-game sums and what the builder adds. Suggested Parlays, the Top 50, Tonight,
   the Record and X Parlays show no props model chance on a FAIL (the sets and the list take no player line), so nothing
@@ -2420,13 +2479,23 @@ PASS:
 `tools/smoke.js` section 8 holds it: on the trial (no decision) and on three FAILs (the early stop, the bar's own and the
 real ledger's) on its own game, a player's main line, his milestone (est.) and the home side to win are ticked by the
 view's own boxes and read back in the builder: each player row's fair chance, percentage, est. and band the view's row's
-for that leg and its own reading (`tools/props_feed.js`'s fair-chance rules), the mark and its title, the muted model's
-chance and title (`tools/props.js`'s distribution); the team row the trial's to the character; the summary's fair chance,
-model chance, payout and confidence the trial's and its words the FAIL's; the card's lines the trial's with the FAIL's
-words; the bubble's order and marks; and no "on trial" in any text, title or name anywhere on the page. On the real state
-and the job's `lines.json`, the first game to come with a player's main line priced both ways and its moneylines (Georges
-Niang's points Over 7.5 and GSW to win, on 6 November) is held the same way on its real numbers. On the trial the same
-legs draw exactly as before, which section 9 also holds on a trial ledger whatever the published one says.
+for that leg and its own reading (`tools/props_feed.js`'s fair-chance rules), its "fair" label, what a screen reader hears
+of it word for word, the mark on the muted line and its title, the muted model's chance and title (`tools/props.js`'s
+distribution); no player row with a far-off flag or a model figure outside the muted line; the team row the trial's to
+the character; the summary's fair chance, model chance and payout the trial's, its confidence the view's band on the fair
+chance and its words the FAIL's, counted; the card's lines the trial's with the FAIL's words; the bubble's order, marks,
+figures and header; and no "on trial" in any text, title or name anywhere on the page. Its own game also carries planted
+lines (`EDGE8`) for the edges, held on the bar's FAIL and the real ledger's: Cade Cunningham's 3+ points at -50000 and
+Det Center's 15+ assists at +50000, both figures ">99%" and "<1%" in the view, the builder and the bubble; Bos Guard's 1+
+rebounds at +100 (the model 95%, DraftKings' fair 43%) with no far-off flag, which the trial's builder still flags; and
+Det Wing's points Over 9.5 at -300 / +257 alone, 72% fair, "HIGH" in its row and in its confidence box (the builder's own
+scale would say MED), its words "its player leg". On the early stop's FAIL, whose points milestones have no margin, a
+parlay of Jayson Tatum's 15+ points and the home side: the cell "no DraftKings chance props model 78% failed trial", the
+summary "–" with no fair price and no confidence box, the note that there is none to show, and the card why first. On the
+real state and the job's `lines.json`, the first game to come with a player's main line priced both ways and its
+moneylines (Georges Niang's points Over 7.5 and GSW to win, on 6 November: the model 64% against DraftKings' 48%, which
+wore the gold flag until that review) is held the same way on its real numbers. On the trial the same legs draw exactly
+as before, which section 9 also holds on a trial ledger whatever the published one says.
 
 In Chromium on 6 November 2026, on a copy of the site whose `state.json` the local publish wrote (the page's clock held
 at 00:30 UTC, before MIA at GSW and ORL at PHX tipped), with Stephen Curry's Threes Over 4.5 (40% Low in the view, at
@@ -2434,6 +2503,18 @@ DraftKings' fair chance) and the Heat to win ticked in the view: the builder dre
 50%" and "14.5% fair chance all 2 land, est., model says 17.6%, its player legs the props model's, which failed its
 trial", the fair price +592; at 360, 390, 914 and 1280 no text under 4.5:1 on the tab (the lowest 5.51), nothing wider
 than the screen and every control 44px; Curry's bubble at 390 and 1280 the same (the lowest 5.05, the "failed trial" mark).
+
+After the review's fixes of 6 November 2026, in Chromium on a copy whose `state.json` the job's two steps wrote locally
+(`props.js` offline and `publish.js`, z for all 30 clubs), the clock at 00:30 UTC, with Georges Niang's points Over 7.5,
+Giannis Antetokounmpo's 2+ rebounds, the Heat to win and Stephen Curry's threes Over 4.5 ticked in MIA at GSW's view: the
+builder drew "fair 48% MED" over "props model 64% FAILED TRIAL", "fair 84% est. HIGH" over "props model >99% FAILED TRIAL"
+and "fair 40% LOW" over "props model 50% FAILED TRIAL", no far-off flag on any (Niang's and Giannis's wore the gold one
+before), each cell heard as "DraftKings' fair chance: 48% MED props model 64% failed trial"; the summary "5.2% fair chance
+all 4 land, est.", "model says 10.1%, its player legs the props model's, which failed its trial", LOW on the fair chance;
+Giannis's bubble "Fair 84% est." and "Model props model >99% failed trial", its header heard "Projected failed trial"; the
+card's image 1080 by 1356, its model line on two rows inside the card. At 360, 390, 914 and 1280 no text under 4.5:1 in
+the builder (the lowest 5.13), the bubbles (5.05) or the card's window (its price, large, 4.33 as before), nothing wider
+than the screen, and every control 44px tall (the Heat's name in its row, an inline name, 30px wide as before).
 
 Breaks planted one at a time in a copy of the built page (`NBA_HTML=<copy> SMOKE_ONLY=8`), each failing the check named:
 
@@ -2449,6 +2530,19 @@ Breaks planted one at a time in a copy of the built page (`NBA_HTML=<copy> SMOKE
 | the bubble's projection marked "on trial" on a FAIL | §8: the player's matchup bubble… its marks "failed trial" |
 | the FAIL's rows drawn on the trial too | §8: on trial, the builder draws a player's legs as before… |
 | the band on the unrounded chance (0.4488 "45%" Low) | §8: the band is worked on the chance as printed; every row against its band (the view's rows on each FAIL and the real state) |
+| the review of 6 November 2026: the far-off flag back on a player's leg after the FAIL | §8: a leg the props model rates 95% against DraftKings' fair 43% wears no "far off the market" flag (the bar's FAIL and the real ledger's) |
+| the far-off flag drawn on no leg at all, the trial's too | §8: on the trial a leg the model rates far above DraftKings' fair chance still wears its flag |
+| the confidence box on the builder's own scale after the FAIL | §8: the summary's … its confidence the view's band on the fair chance (each FAIL); a parlay of one leg at 72% bands it once |
+| the bubble's figures by `toFixed(0)` ("100%", "0%") | §8: the matchup bubble prints them as the view and the builder do |
+| the cell's fair chance by `pbPct`; its muted model figure by `pbPct` | §8: at the clamps the builder prints each figure as the view does (each, alone) |
+| the cell with no "DraftKings' fair chance" for a screen reader; with no visible "fair" | §8: the lead figure is labelled "fair" and heard as DraftKings' fair chance (each FAIL) |
+| "failed trial" back after the band, off the model's line | §8: the same, and the no-fair leg's cell |
+| the no-fair note's "so this is the model's chance alone" after the FAIL | §8: its summary leads with no chance … and says there is none to show |
+| "its player legs" whatever the count | §8: with one player leg the summary and the card say "its player leg"; the no-fair parlay's; the real state's; and the card's section 10 |
+| the card's image drawing each chance line on one row | the card's section 10: the image keeps every chance piece inside the card |
+| "Projected" and the model's figure run into "failed trial" in the bubble | §8: the player's matchup bubble … each a word apart from what it marks |
+| the no-fair cell leading with the model's chance in full ink; the no-fair summary leading with the model's chance; the no-fair card leading with it, never saying why | §8: a player's leg with no DraftKings fair chance reads …; its summary leads with no chance …; the card says why there is no fair chance first (one each) |
+| README's sentence that the view's "Model on trial" tag is unchanged | `test_props.js` part 7: README's shadow ledger says the view's FAIL tag and summary |
 
 ### Where the NBA differs, and why
 
@@ -2578,8 +2672,13 @@ card reads, so the two cannot drift. Finishing saves nothing anywhere.
 **Download image** draws the same card on a canvas at twice its size, in the card's own colours written out (so the image
 never depends on the page), and saves it as `parlay-2026-10-26-4legs.png` (the first leg's day; `1leg` for one). The
 money tiles step their type down from 19px to 14px to stay three across, then take a second row, then one a row; a dollar
-figure is never cut. Where the browser can share a file (a phone), **Share or save to Photos** shows and leads: the share
-sheet with the image, which is how it reaches Photos.
+figure is never cut. The chance lines are laid out by measure at the card's 13px: each line's words fill a row to the
+text's right edge (498 on the 540 canvas), the next word starting a row 18px down, and the card grows 18px for each row
+past two, so no line runs past the card. After the props model's FAIL the model's line is long ("model says 17.6%, its
+player leg the props model's, which failed its trial · the price says 20.0%", 566px at 13px Manrope against 456px of
+room), and until the review of 6 November 2026 it was drawn on one row past the card's edge, the price's chance cut off
+at the canvas's; the window always wrapped it. Where the browser can share a file (a phone), **Share or save to Photos**
+shows and leads: the share sheet with the image, which is how it reaches Photos.
 
 **Open in DraftKings** is a link to DraftKings' betslip, `https://sportsbook.draftkings.com/?outcomes=<id>+<id>`, each id
 encoded (a `#` written `%23`), in a new tab, the legs in the card's order. Only game lines carry an id on ESPN's feed:
@@ -2639,14 +2738,20 @@ for word with no url field and every fallback, the image through a recorder canv
 down at $412,500, the tiles a second row at $41,250,000), the Tab order, Escape, the backdrop, Close, Start over, fourteen
 DraftKings cases one at a time, a press newer and older than `lines.json`, no leg on the slip (the game's page, the NBA
 page), a typed book price, a one-sided leg with no fair chance, a level's Finish through `PARLAY_CARD.from` and through `window.spTier` with none registered (and an `elo|<level>` Finish opening nothing though a page defines `window.eloPicks`, the card's chance lines with no Elo wording left), the share
-sheet for the image, every control 44px, and nothing written or fetched by any of it. The model's chance is marked on
+sheet for the image, every control 44px, and nothing written or fetched by any of it; after the FAIL (section 10), the
+image's chance lines on a parlay of one player leg, one with a moneyline, two player legs and one with no fair chance,
+every 13px piece starting at or after the text's left edge and ending at or before its right edge on the recorder's own
+measure, the rows joined the window's lines word for word, the card 18px taller a row past two, the words counted ("its
+player leg", "its player legs"). The model's chance is marked on
 trial wherever a player leg is in the parlay and nowhere else, its price called what it is, and the fair chance's est.
 given its own reason: two team legs of two games at the builder's price (a book price, "model says", no small print), a
 milestone beside a team leg of another game (est. for the one-sided reason, never the same-game one, and on trial), a
 level of a moneyline and a player leg (est., the same-game price, on trial) and a level of two team legs (neither). Start
 over after an Add the builder refused clears what was said of it at its row and in the builder, as Clear ALL does.
 Section 9 and the Parlay Builder's section hold the card on their own parlays too. Seventeen breaks planted in a copy of
-the built page each turn it red.
+the built page each turn it red, and since the review of 6 November 2026 two more: the image's chance lines drawn on one
+row each as before (section 10: past the card's edge on each of its four FAIL parlays) and "its player legs" whatever the
+count (section 10, on the three parlays of one player leg).
 
 In Chromium at 1280 and 390 wide, on the published `state.json` and that afternoon's `lines.json`, with four legs in the
 builder: every control in the window 44px or more (7), no sideways scroll, every text at 4.5:1 or better on what is under it

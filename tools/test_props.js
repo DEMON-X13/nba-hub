@@ -30,6 +30,7 @@
  *    one clock, and a tip-off between two clocks judged on it; with no earlier ledger, the stop read off the ledger's run
  *    time and a decision of an earlier run passing; the stop ending this trial alone (a new trial's ledger calling on
  *    through it, an early decision planted on it refused) and never on no line
+ * 7. the README's shadow ledger beside the view: the FAIL's tag and summary as app/nba_hub.html writes them
  */
 'use strict';
 const fs = require('fs'), path = require('path'), os = require('os');
@@ -735,6 +736,16 @@ function sfOwn(k, mu, v) {
     if (keep[1] === undefined) delete process.env.NBA_PROPS_LINES; else process.env.NBA_PROPS_LINES = keep[1];
     fs.rmSync(dir, { recursive: true, force: true });
   }
+
+  /* 7. the README's account of the shadow ledger says what the Player props view draws on a FAIL: its header's tag and its
+     folded note's summary as app/nba_hub.html writes them, never that its "Model on trial" tag is unchanged (the review
+     of 6 November 2026: the sentence from before the view's rewrite outlived it) */
+  console.log('7. the README beside the view');
+  { const RM = fs.readFileSync(path.resolve(__dirname, '..', 'README.md'), 'utf8'), HUB = fs.readFileSync(path.resolve(__dirname, '..', 'app', 'nba_hub.html'), 'utf8');
+    const sec = (RM.split('### The shadow ledger')[1] || '').split('\n### ')[0].replace(/\s+/g, ' ');
+    const tag = (/const PP_FAIL_TAG = '([^']+)'/.exec(HUB) || [])[1], sum = (/data-pp-fail><summary data-pp-key="trial">([^<]+)<\/summary>/.exec(HUB) || [])[1];
+    check(tag && sum && sec.includes(`"${tag}"`) && sec.includes(`"${sum}"`) && !/"Model on trial" tag are unchanged/.test(sec),
+      `README's shadow ledger says the view's FAIL tag ("${tag}") and summary ("${(sum || '').slice(0, 50)}…") as the page writes them, and no longer that its "Model on trial" tag is unchanged`); }
 
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log(fails ? `${fails} failed` : 'all good');

@@ -60,6 +60,9 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   /* Team Stats' rows: key, label, 1 more is better, -1 fewer, 0 neither, signed, a percentage */
   const TS = [['pd', 'Point differential', 1, true], ['ppg', 'Points', 1], ['pa', 'Points allowed', -1], ['ortg', 'Offensive rating', 1], ['drtg', 'Defensive rating', -1], ['pace', 'Pace', 0],
     ['fg', 'Field goal %', 1, false, true], ['tp', 'Three-point %', 1, false, true], ['tpm', 'Threes made', 1], ['reb', 'Rebounds', 1], ['ast', 'Assists', 1], ['tov', 'Turnovers', -1], ['stl', 'Steals', 1], ['blk', 'Blocks', 1]];
+  /* each row's note under its label, this file's own copy */
+  const NOTE_OWN = { pd: 'per game', ppg: 'per game', pa: 'per game', ortg: 'points per 100 possessions', drtg: 'allowed per 100 possessions', pace: PACE_STATS_OWN, fg: '', tp: '',
+    tpm: 'per game', reb: 'per game', ast: 'per game', tov: 'per game, fewer is better', stl: 'per game', blk: 'per game' };
   const fmtOwn = (v, sign, pc) => v === null ? '–' : (v < 0 ? '−' + Math.abs(v).toFixed(1) : (sign && v > 0 ? '+' : '') + v.toFixed(1)) + (pc ? '%' : '');
   /* the team stats from the files, this file's own reading of publish.js THE TEAM STATS' rules */
   function teamStatsOwn(season) {
@@ -112,11 +115,18 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   /* the shield a player wears: the tier of his overall Elo where the published players rank him, none otherwise */
   const TIER_AT = [['HOF', 1750], ['Elite', 1700], ['Master', 1650], ['Diamond', 1600], ['Platinum', 1550], ['Gold', 1500], ['Silver', 1450], ['Bronze', 1400], ['Iron', 1350], ['Wood', -Infinity]];
   const shieldOwn = (st, pid) => { const p = (st.players || []).find(x => String(x.id) === String(pid)); return p && p.ranked && Number.isFinite(p.rating) ? TIER_AT.find(t => p.rating >= t[1])[0] : null; };
-  const moreOwn = (ratio, noun) => { const p = 100 * (ratio - 1), a = Math.abs(p); return a < 0.05 ? `about as many ${noun} a minute as average` : `${a >= 0.5 ? Math.round(a) : a.toFixed(1)}% ${p > 0 ? 'more' : 'fewer'} ${noun} a minute than average`; };
-  /* the NFL hub's grade, this file's own reading of its four steps on z rounded to a tenth (Slight under 1, Solid from 1,
-     Big from 2, Huge from 3): [the word, its step 1 to 4] */
+  /* "allows 12% more": against the league's rate (a ratio of 1), named so, never "average" (the review of 6 November
+     2026: the 30 clubs' mean, which z is measured from, sits a little above 1, and a club between the two read "more
+     than average" on its row and "stronger than the league's average" in its title) */
+  const moreOwn = (ratio, noun) => { const p = 100 * (ratio - 1), a = Math.abs(p); return a < 0.05 ? `about as many ${noun} a minute as the league's rate` : `${a >= 0.5 ? Math.round(a) : a.toFixed(1)}% ${p > 0 ? 'more' : 'fewer'} ${noun} a minute than the league's rate`; };
+  /* the figure a grade is worked on, this file's own: z rounded to a tenth as the grade rounds it, in words, from the 30
+     clubs' mean ("2.2 SD weaker than the 30 clubs' mean"; "standard deviations" in the title) */
+  const zWordsOwn = (z, long) => { const t = Math.round(z * 10); return t === 0 ? "at the 30 clubs' mean" : `${(Math.abs(t) / 10).toFixed(1)} ${long ? 'standard deviations' : 'SD'} ${t > 0 ? 'weaker' : 'stronger'} than the 30 clubs' mean`; };
+  /* the NFL hub's old Mismatches' grade (its mmGrade, kept for a matchups file from before its score: its live rows have no
+     grade words since 4 November 2026), this file's own reading of its four steps on z rounded to a tenth (Slight under 1,
+     Solid from 1, Big from 2, Huge from 3): [the word, its step 1 to 4] */
   const gradeOwn = z => { const t = Math.round(z * 10); return t >= 30 ? ['Huge', 4] : t >= 20 ? ['Big', 3] : t >= 10 ? ['Solid', 2] : ['Slight', 1]; };
-  const MM_NONE = 'No player in this game faces a defence a standard deviation or more weaker than the league\'s on his stat.';
+  const MM_NONE = 'No player in this game faces a defence a standard deviation or more weaker than the 30 clubs\' mean on his stat.';
   const MM_UNGRADED = 'The mismatch grades are not published yet: the job adds them on its next run.';
   /* the game's mismatches with their grades: graded where the state carries z (oppCols) for both clubs on every stat the
      list reads; each row graded on the z of the defence on his best stat by the lift, the list by the grade, then the
@@ -139,11 +149,12 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     for (const v of rows) { const [gw, lv] = graded ? gradeOwn(v.dz) : [null, 0]; v.grade = gw; v.lv = lv; v.tagged = lv >= 2; }
     rows.sort((a, b) => b.lv - a.lv || b.z - a.z || b.lift - a.lift || (a.pid < b.pid ? -1 : 1));
     const out = rows.slice(0, top).map((v, i) => { const n = i + 1, sz = zOwn(v.z), vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`, proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
-      const sub = `${vs} (allows ${moreOwn(v.ratio, MM_NOUN[v.k])}). ${proj} projected (${liftOwn(v.lift)} from the matchup).`;
+      /* graded: the figure the grade is worked on, beside the defence it is of, on the row a phone shows */
+      const sub = `${vs}${graded ? ', ' + zWordsOwn(v.dz) : ''} (allows ${moreOwn(v.ratio, MM_NOUN[v.k])}). ${proj} projected (${liftOwn(v.lift)} from the matchup).`;
       const say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${sub}`;
-      const lift = `${sz} SD: what the matchup adds to his projection, over the spread of his ${MM_NOUN[v.k]} at his projection (${v.sd.toFixed(1)}).`;
-      const how = !graded ? '' : v.dz === 0 ? 'at the league\'s average' : `${Math.abs(v.dz).toFixed(2)} standard deviations ${v.dz > 0 ? 'weaker' : 'stronger'} than the league's average`;
-      const title = graded ? `${v.grade} mismatch: #${n} in this game. ${say} ${v.grade}: ${v.opp}'s ${MM_DEF[v.k]} is ${how} on ${MM_NOUN[v.k]}, across its 30 clubs (Slight under 1, Solid from 1, Big from 2, Huge from 3). ${lift} Listed by the grade, then that lift. ${note}`
+      const lift = `${sz} SD lift: what the matchup adds to his projection, over the spread of his ${MM_NOUN[v.k]} at his projection (${v.sd.toFixed(1)}).`;
+      const how = graded ? zWordsOwn(v.dz, true) : '';
+      const title = graded ? `${v.grade} mismatch: #${n} in this game. ${say} ${v.grade}: ${v.opp}'s ${MM_DEF[v.k]} is ${how} on ${MM_NOUN[v.k]}, across its 30 clubs; the grade is on that figure (Slight under 1, Solid from 1, Big from 2, Huge from 3). ${lift} Listed by the grade, then that lift. ${note}`
         : `Mismatch #${n} in this game: ${say} ${lift} Listed by that lift; the grades are not published yet. ${note}`;
       return { ...v, n, sz, sub, shield: shieldOwn(st, v.pid), title, note }; });
     out.graded = graded; out.note = note;
@@ -206,7 +217,11 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     }
     /* pace labelled on the window as this season's box-score estimate, never only in a tooltip */
     const pl = body.querySelector('[data-gw-srow="pace"] .gw-slb');
-    if (!pl || txt(pl) !== `Pace${PACE_STATS_OWN}` || txt(pl.querySelector('small')) !== PACE_STATS_OWN) bad.push(`pace's label "${txt(pl)}" where "Pace" over "${PACE_STATS_OWN}"`);
+    if (!pl || txt(pl) !== `Pace ${PACE_STATS_OWN}` || txt(pl.querySelector('small')) !== PACE_STATS_OWN) bad.push(`pace's label "${txt(pl)}" where "Pace" then "${PACE_STATS_OWN}"`);
+    /* every row's label and its note heard as words apart (a screen reader reads the text, not the margin between: the
+       review of 6 November 2026 heard "Points allowedper game"), the note in its own small */
+    for (const [k, lab] of TS) { const el = body.querySelector(`[data-gw-srow="${k}"] .gw-slb`), want = NOTE_OWN[k] ? `${lab} ${NOTE_OWN[k]}` : lab;
+      if (!el || el.textContent !== want || txt(el.querySelector('small')) !== NOTE_OWN[k]) bad.push(`${k}: the label is heard as "${el && el.textContent}" where "${want}"`); }
     const sum = `${a} better on ${na}, ${h} on ${nh}`;
     if (txt(body.querySelector('[data-gw-tsum]')) !== sum) bad.push(`summary "${txt(body.querySelector('[data-gw-tsum]'))}" where "${sum}"`);
     const foot = `${seasonNm(T.season)} season${T.through ? ' through ' + dayNo(T.through) : ''}: ${a} ${A.g} game${A.g === 1 ? '' : 's'}, ${h} ${Hm.g} game${Hm.g === 1 ? '' : 's'}.`;
@@ -268,10 +283,17 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
         bad.push(`#${v.n} ${v.name}: shield ${sh.length ? sh[0].getAttribute('class') : 'none'} where ${v.shield ? v.shield + ', before his name' : 'none (not ranked)'}`);
       /* no figure the row states rounds to nothing: no "+0.0 from the matchup", no "+0.00 SD" */
       const subT = txt(li.querySelector('[data-gw-mmsub]')), zT = txt(li.querySelector('[data-gw-z]'));
-      if (/\(\+0\.0+ from the matchup\)/.test(subT) || /^[+−]0\.0+SD$/.test(zT)) bad.push(`#${v.n}: a figure that rounds to nothing ("${subT}", "${zT}")`);
+      if (/\(\+0\.0+ from the matchup\)/.test(subT) || /^[+−]0\.0+ SD/.test(zT)) bad.push(`#${v.n}: a figure that rounds to nothing ("${subT}", "${zT}")`);
       if (txt(li.querySelector('[data-gw-mmsub]')) !== v.sub) bad.push(`#${v.n}: "${txt(li.querySelector('[data-gw-mmsub]'))}" where "${v.sub}"`);
-      if (txt(li.querySelector('[data-gw-z]')) !== `${v.sz}SD`) bad.push(`#${v.n}: "${txt(li.querySelector('[data-gw-z]'))}" where "${v.sz}SD"`);
-      /* its grade as the NFL's row draws it: the four-step meter, lit to its step, and the word, both in its grade's
+      /* the lift, labelled a lift (what a screen reader hears too), so it is never read as the grade's input */
+      if (txt(li.querySelector('[data-gw-z]')) !== `${v.sz} SD lift`) bad.push(`#${v.n}: "${txt(li.querySelector('[data-gw-z]'))}" where "${v.sz} SD lift"`);
+      /* the figure the grade is worked on, read off the row a phone shows: the defence's z rounded to a tenth, and the
+         grade the steps give that figure is the one drawn; none on a state from before the grades */
+      { const m = /#\d+, (?:(\d+\.\d) SD (weaker|stronger) than|at) the 30 clubs' mean \(/.exec(subT), shown = !m ? null : m[1] ? (m[2] === 'weaker' ? 1 : -1) * +m[1] : 0;
+        if (v.grade ? !(m && shown === Math.round(v.dz * 10) / 10 && gradeOwn(shown)[0] === v.grade) : m) bad.push(`#${v.n} ${v.name}: the row shows ${m ? `z ${shown}` : 'no z'} where ${v.grade ? `${Math.round(v.dz * 10) / 10}, graded ${v.grade}` : 'none (no grades)'} ("${subT}")`); }
+      /* two averages never under one word: the ratio's "allows" is against the league's rate, z against the 30 clubs' mean */
+      if (/\baverage\b/.test(subT + ' ' + li.title)) bad.push(`#${v.n}: "average" on the row or its title, which names no average ("${(subT + ' ' + li.title).slice(0, 200)}")`);
+      /* its grade as the NFL's old row drew it: the four-step meter, lit to its step, and the word, both in its grade's
          colour (gw-g1 to gw-g4), after the SD figure; none on a state from before the grades */
       const gr = li.querySelectorAll('[data-gw-grade]'), mt = gr[0] && gr[0].querySelector('.gw-meter');
       if (v.grade ? !(gr.length === 1 && gr[0].dataset.gwGrade === v.grade && txt(gr[0]) === v.grade && gr[0].classList.contains(`gw-g${v.lv}`) && mt && mt.classList.contains(`gw-l${v.lv}`) && mt.classList.contains(`gw-g${v.lv}`)
@@ -323,7 +345,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
       ['(max-width:760px)', 'ul.gw-mm li .gw-mmn', 'grid-column', '1/-1'], ['(max-width:760px)', 'ul.gw-mm li .gw-mmn', 'min-width', ''], ['(max-width:760px)', 'ul.gw-mm li', 'gap', '8px 12px'], ['(max-width:760px)', '.gw-mmvs', 'display', 'flex'], ['(max-width:760px)', '.gw-mmvs', 'margin', '6px 0 0'], ['(max-width:760px)', '.gw-mmvs', 'margin-left', '']],
     "on a phone the NFL's geometry: 10px of page around the window, its bar 58px and 12px in, the body 12px in, the card 14px in": [['(max-width:760px)', '.gw-back', 'padding', '10px'], ['(max-width:760px)', '.gw-top', 'min-height', '58px'], ['(max-width:760px)', '.gw-top', 'padding', '0 12px'], ['(max-width:760px)', '.gw-body', 'padding', '12px 12px 38px'], ['(max-width:760px)', '.gw-card', 'padding', '14px 14px 16px']],
     "on a phone a player's position line moves down whole beside a MISMATCH tag, never split (the NFL's .plrbtn .who span)": [['(max-width:760px)', '.pp-plr .who .pos', 'display', 'inline-block']],
-    "a mismatch's grade is the NFL's: its word at 13px and 700 in its grade's colour (Huge the lime, Big #7BD88F, Solid #F2B84B, Slight the quiet ink, its theme's pe-g colours), after its four-step meter (bars 4px wide and 2px apart, 5 to 14px tall, unlit in --line-2, lit in the grade's colour)":
+    "a mismatch's grade is drawn as the NFL's old row drew it: its word at 13px and 700 in its grade's colour (Huge the lime, Big #7BD88F, Solid #F2B84B, Slight the quiet ink, its theme's pe-g colours), after its four-step meter (bars 4px wide and 2px apart, 5 to 14px tall, unlit in --line-2, lit in the grade's colour)":
       [['', '.gw-g4', 'color', 'var(--lime)'], ['', '.gw-g3', 'color', GREEN3], ['', '.gw-g2', 'color', GOLD2], ['', '.gw-g1', 'color', 'var(--pb-q)'], ['', '.gw-mmg', 'font-size', '13px'], ['', '.gw-mmg', 'font-weight', '700'],
         ['', '.gw-meter', 'gap', '2px'], ['', '.gw-meter i', 'width', '4px'], ['', '.gw-meter i', 'background', 'var(--line-2)'], ['', '.gw-meter i:nth-child(1)', 'height', '5px'], ['', '.gw-meter i:nth-child(4)', 'height', '14px'],
         ['', '.gw-meter.gw-l3 i:nth-child(-n+3)', 'background', LIT]] };
@@ -361,7 +383,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
      0.0004 (each at the decimals that show it, the last "under 0.001"); one NYK guard at 19.5 minutes (his row "20 min":
      counted) and one at 19.4 ("19 min": left out) whose lift would put him second */
   const G5 = game('NYK', 'PHI', { pace: 99, away: side('NYK', 2, 1), home: side('PHI', -1, 0) });
-  /* CHI at TOR: the grades, each boundary on the NFL's rounding. TOR's defence (CHI's players) z 0.94 on points (Slight),
+  /* CHI at TOR: the grades, each boundary on the NFL's old rounding. TOR's defence (CHI's players) z 0.94 on points (Slight),
      0.95 on rebounds (Solid), 1.95 on assists (Big), 2.95 on threes (Huge); CHI's (TOR's players) 0.62 on points
      (Slight), 1.31 on rebounds (Solid) and below average on the rest */
   const G6 = game('CHI', 'TOR', { pace: 100, away: side('CHI', 1, 1), home: side('TOR', 0, 2) });
@@ -562,7 +584,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     bad5 = holdTags(d, own5, 'NYK at PHI tags');
     check(!bad5.length && own5.every(v => v.grade === 'Slight') && !d.querySelector('#ppBody .pp-mmtag'), `gw: NYK at PHI's five, all graded Slight (PHI's rebounding defence at z 0.94 among them), wear no MISMATCH tag and their rows are not named mismatches${bad5.length ? ': ' + bad5.slice(0, 4).join('; ') : ''}`);
     w.propsClose(); await sleep(10);
-    /* CHI at TOR: each grade's boundary on the NFL's rounding (0.94 Slight, 0.95 Solid, 1.95 Big, 2.95 Huge), the list by
+    /* CHI at TOR: each grade's boundary on the NFL's old rounding (0.94 Slight, 0.95 Solid, 1.95 Big, 2.95 Huge), the list by
        the grade first (the largest lift of all, Chi Scorer's, listed last as Slight, untagged; Tor Glass's small lift
        against a defence 1.31 from average listed before him, tagged), and the sixth, a Slight with a smaller lift, cut */
     const own6 = mmOwn(st, G6), all6 = mmOwn(st, G6, 99);
@@ -574,7 +596,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     await press(w, 'mism');
     let bad6 = holdMism(d, own6, 'CHI at TOR');
     const z6 = [...body().querySelectorAll('ul.gw-mm > li')].map(li => `${txt(li.querySelector('[data-gw-grade]'))}:${li.querySelectorAll('.gw-mmtag').length}`).join(' ');
-    check(!bad6.length && z6 === 'Huge:1 Big:1 Solid:1 Solid:1 Slight:0', `gw: Mismatches grades each row on the NFL's steps and rounding (z 2.95 Huge, 1.95 Big, 0.95 and 1.31 Solid, 0.94 Slight), lists them by the grade first, and puts the MISMATCH chip on Solid and up alone (${z6})${bad6.length ? ': ' + bad6.slice(0, 6).join('; ') : ''}`);
+    check(!bad6.length && z6 === 'Huge:1 Big:1 Solid:1 Solid:1 Slight:0', `gw: Mismatches grades each row on the NFL's old steps and rounding (z 2.95 Huge, 1.95 Big, 0.95 and 1.31 Solid, 0.94 Slight), lists them by the grade first, and puts the MISMATCH chip on Solid and up alone (${z6})${bad6.length ? ': ' + bad6.slice(0, 6).join('; ') : ''}`);
     check(!body().querySelector('[data-gw-mmnone], [data-gw-nograde]'), 'gw: with a mismatch among them, no line says there is none');
     d.getElementById('gwClose').click();
     bad6 = holdTags(d, own6, 'CHI at TOR tags');
@@ -677,7 +699,11 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
         }
         check(!bad.length && seen.length && !seen.some(x => /no league table/.test(x)), `gw: every published z is this file's own from the league's ratios (${seen.join('; ')})${bad.length ? ': ' + bad.slice(0, 4).join('; ') : ''}`);
         zHeld = 'published'; }
-      else check(true, 'gw: the published state is from before the grades: the made-up states above hold a state without z');
+      /* the opponent table published with no grades cannot be a state from before them: props.js writes the table (opp)
+         and the league's (oppLeague, which publish.js works z from) in one change, and main's job never wrote opp; so it
+         is the job dropping oppLeague, and every Mismatches window would say the grades are not published yet, on every
+         run, the job green (the review of 6 November 2026). A state with no opp at all goes to the replay above */
+      else check(false, `gw: the published state has the opponent table on ${Object.values(RP.games).filter(x => x.opp).length} games but no grades (oppCols ${JSON.stringify(RP.oppCols)}): props.js wrote opp without oppLeague, so every Mismatches window would say the grades are not published yet`);
       const own = mmOwn(st, g);
       const { w, d, errors } = load(st);
       await sleep(400);

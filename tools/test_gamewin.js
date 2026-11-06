@@ -19,7 +19,10 @@
  * 5. the Mismatches' grades: props.js oppLeague (every club's ratio on each base stat, for each season of the games to
  *    come, oppTable's to the digit) and publish.js's z on it, (ratio - the 30 clubs' mean) / their standard deviation
  *    over the 30, rounded to two places, on a made-up league worked by hand (the mean and the spread too); none for a
- *    club or season the table lacks, nor on a stat whose 30 ratios are level.
+ *    club or season the table lacks, nor on a stat whose 30 ratios are level; and README's shape of state.json naming
+ *    the columns propsState writes, both forms.
+ * 6. README and the code calling the four steps the NFL's old Mismatches', which its live page dropped on 4 November
+ *    2026, never its live page's.
  */
 'use strict';
 const fs = require('fs');
@@ -240,6 +243,25 @@ part('5. the Mismatches\' grades (props.js oppLeague, publish.js oppLeagueZ and 
     'none on a stat whose 30 ratios are level, nor for a game of a season the table lacks');
   const ps0 = PUB.propsState(slate, nowIso, mk(null));
   ok(eq(ps0.oppCols, ['ratio', 'mult', 'rank']) && eq(ps0.games[g1].opp.BOS.pts, [1.1, 1, 1]), 'a props.json written before the league\'s table carries no z, and oppCols does not name it');
+  /* the README's shape of state.json names the columns propsState writes, both forms (the review of 6 November 2026: it
+     still showed [ratio, mult, rank] alone after the grades came in) */
+  const RM = fs.readFileSync(path.join(__dirname, '..', 'README.md'), 'utf8'), shape = (RM.split('### What `state.json` carries for the page')[1] || '').split('```')[1] || '';
+  const colsLn = shape.split('\n').find(l => /^\s*oppCols:/.test(l)) || '', oppLn = shape.split('\n').find(l => /^\s*opp: \{ <club>:/.test(l)) || '';
+  ok(colsLn.trim().startsWith(`oppCols: [${ps.oppCols.join(', ')}],`) && colsLn.includes(`[${ps0.oppCols.join(', ')}] on one written before it`) && oppLn.includes(`pts: [${ps.oppCols.join(', ')}]`),
+    `README's shape of state.json names the columns propsState writes: "${colsLn.trim().slice(0, 60)}…", the three of a props.json from before oppLeague, and each club's "${(/pts: \[[^\]]*\]/.exec(oppLn) || [''])[0]}"`);
+});
+
+part('6. what the README and the code say of the NFL\'s grades', () => {
+  /* the four steps are the NFL hub's old Mismatches' (its mmGrade, kept between its OLD-MISMATCHES marks for a matchups
+     file from before its score); its live Mismatches have drawn the size in points and one Mismatch tag, no grade words,
+     since 4 November 2026. Nothing here may say its live page grades or tags Solid and up (the review of 6 November 2026) */
+  const RM = fs.readFileSync(path.join(__dirname, '..', 'README.md'), 'utf8'), win = (RM.split('## The game\'s three windows')[1] || '').split('\n## ')[0];
+  const STALE = [/The NFL hub grades each mismatch/, /its game page tags Solid and up/, /\*\*Graded as the NFL's\*\*/, /draws its grade as the NFL's row does/, /as the NFL hub grades a mismatch/, /as the NFL's game page tags\b/, /\(the NFL's game page\s+tags Solid and up\)/, /the NFL's grade of a mismatch/, /the NFL hub's grade read on/];
+  const files = { README: win, 'app/parts/gamewin.html': fs.readFileSync(path.join(__dirname, '..', 'app', 'parts', 'gamewin.html'), 'utf8'), 'app/nba_hub.html': fs.readFileSync(path.join(__dirname, '..', 'app', 'nba_hub.html'), 'utf8'), 'tools/publish.js': fs.readFileSync(path.join(__dirname, 'publish.js'), 'utf8') };
+  /* read with their line breaks and comment margins as single spaces, so a phrase a comment breaks over two lines is found */
+  const hits = Object.entries(files).flatMap(([f, t]) => { const u = t.replace(/\s+/g, ' '); return STALE.filter(re => re.test(u)).map(re => `${f}: ${re}`); });
+  ok(!hits.length && /\*\*Graded on the NFL's old steps\*\*/.test(win) && /its live Mismatches no longer do: since 4\s+November 2026 they draw the size in points/i.test(win) && /owner's call/.test(win),
+    `README and the code call the four steps the NFL's old Mismatches', say its live page dropped them on 4 November 2026 and leave keeping them to the owner${hits.length ? ': ' + hits.join('; ') : ''}`);
 });
 
 fs.rmSync(TMP, { recursive: true, force: true });

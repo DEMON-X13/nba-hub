@@ -323,7 +323,8 @@ function decisionState(d) {
   return out;
 }
 /* THE MISMATCH GRADES (README "The game's three windows"): how far a club's defence on a stat is from the league's, in
-   standard deviations across the league's 30 clubs, the NFL hub's grade read on this hub's numbers: z = (ratio - the
+   standard deviations across the league's 30 clubs, graded on the NFL hub's old Mismatches' steps (its mmGrade, which its
+   live Mismatches dropped on 4 November 2026) read on this hub's numbers: z = (ratio - the
    mean of the 30 clubs' ratios on that stat) / their standard deviation (population: over the 30), each ratio the
    published one (props.js oppTable: what the club's opponents made of the stat per minute over the league's, shrunk
    toward 1, to four decimals), all 30 from props.json's oppLeague for the game's season, never the two clubs of a game

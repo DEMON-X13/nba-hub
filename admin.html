@@ -1336,7 +1336,7 @@ window.PARLAY_CARD = (function () {
       legs: legs.map(x => x.card), stake: stake > 0 ? stake : 0, payout: stake > 0 ? stake * dec : 0, profit: stake > 0 ? stake * dec - stake : 0,
       chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial, failed: !!trial && typeof pbPropsOn === 'function' && !pbPropsOn(),
       fair: fair && fair.p != null && isFinite(fair.p) ? pct(fair.p) : null, fairEst: !!(fair && fair.p != null && fair.est), sg: !!sg,
-      oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'),
+      oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'), props: legs.filter(l => l.kind === 'prop').length,
       made: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), site: SITE,
       file: 'parlay-' + (first ? first + '-' : '') + n + (n === 1 ? 'leg' : 'legs') + '.png', dk: dkPlan(legs) };
   }
@@ -1381,7 +1381,9 @@ window.PARLAY_CARD = (function () {
      Each line is a list of [text, bold] pieces, so the window, the image and the share text say the same */
   function chanceLines(m) {
     const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && !m.failed ? ' (on trial)' : '';
-    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + (typeof PB_FAILED_SAY === 'string' ? PB_FAILED_SAY : 'its player legs the props model’s, which failed its trial')]] : [];
+    /* the failed model's words, counted as the builder counts them (pbFailedSay: "its player leg" for one) */
+    const k = m.props != null ? m.props : 2, say = typeof pbFailedSay === 'function' ? pbFailedSay(k) : `its player leg${k === 1 ? '' : 's'} the props model’s, which failed its trial`;
+    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + say]] : [];
     if (m.fair) return [[['Fair chance ' + all], [m.fair, 1], ...(m.fairEst ? [[' (est.)']] : [])],
       [...(m.chance ? [[by + ' says '], [m.chance, 1], ...fx] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
     if (m.failed && m.chance) return [[['No fair chance: a leg has only one of DraftKings’ two prices']], [['model says '], [m.chance, 1], ...fx, ...price]];
@@ -1511,7 +1513,31 @@ window.PARLAY_CARD = (function () {
     while (t.length > 1 && x.measureText(t + '…').width > max) t = t.slice(0, -1); return t + '…'; }
   function text(x, t, a, b, font, color, align, max) { x.font = font; x.fillStyle = color; x.textAlign = align || 'left'; x.textBaseline = 'alphabetic';
     const s = max ? fit(x, t, max) : String(t); x.fillText(s, a, b); return x.measureText(s).width; }
-  const LEG_H = 74, HEAD_H = 134, TILE_H = 58, TILE_GAP = 8, CHANCE_H = 58;
+  const LEG_H = 74, HEAD_H = 134, TILE_H = 58, TILE_GAP = 8, CHANCE_H = 58, CHANCE_ROW = 18;
+  /* the chance lines laid out by measure, at the card's 13px, to the text's right edge R: each line's pieces split at
+     its spaces, a row broken before a word that would run past R (a word alone wider than the row is kept whole), runs of
+     one weight drawn together. Rows of {t, b, x}, every run ending at or before R (the review of 6 November 2026: on a
+     FAIL, "model says 17.6%, its player legs the props model's, which failed its trial · the price says 20.0%" ran 110px
+     past the card's edge, the price's chance cut off in the image) */
+  const CHANCE_FONT = b => (b ? '700 ' : '500 ') + '13px ' + FB;
+  function chanceRows(x, m, L, R) {
+    const rows = [], w = (t, b) => { x.font = CHANCE_FONT(b); return x.measureText(t).width; };
+    for (const ln of chanceLines(m)) {
+      let row = [], cx = L, gap = '';
+      const put = (t, b) => { const last = row[row.length - 1];
+        if (last && last.b === b) { const e = last.x + w(last.t + t, b); if (e > R) return false; last.t += t; cx = e; return true; }
+        const e = cx + w(t, b); if (e > R) return false; row.push({ t, b, x: cx }); cx = e; return true; };
+      for (const [t, b] of ln) for (const tok of String(t).split(/(\s+)/)) {
+        if (!tok) continue;
+        if (/^\s+$/.test(tok)) { gap += tok; continue; }
+        if (!put(gap + tok, !!b)) { if (row.length) { rows.push(row); row = []; cx = L; } row.push({ t: tok, b: !!b, x: L }); cx = L + w(tok, !!b); }
+        gap = '';
+      }
+      if (row.length) rows.push(row);
+    }
+    return rows;
+  }
+  const chanceH = n => CHANCE_H + CHANCE_ROW * Math.max(0, n - 2);
   /* what it pays: Stake, Pays and Profit, every figure whole. Three across, the figures step down from 19px to 14px
      until each fits its tile; if one still does not, the tiles take two rows (Stake and Pays, then Profit the card's
      width), then one to a row; only past anything a real stake makes does the font go under 14px. Never an ellipsis
@@ -1528,15 +1554,15 @@ window.PARLAY_CARD = (function () {
     return { rows, px: Math.min(14, Math.floor(19 * (rows[0][0].tw - 20) / w * 10) / 10) };
   }
   const tilesH = t => t ? 4 + t.rows.length * TILE_H + (t.rows.length - 1) * TILE_GAP + 12 : 0;
-  function size(m, t) { return HEAD_H + 10 + m.legs.length * LEG_H + tilesH(t) + CHANCE_H + 52; }
+  function size(m, t, rows) { return HEAD_H + 10 + m.legs.length * LEG_H + tilesH(t) + chanceH(rows) + 52; }
   async function draw(m, scale) {
     scale = scale || 2;
     await fonts();
     const c = document.createElement('canvas');
     const x = c.getContext && c.getContext('2d'); if (!x) return null;
-    /* the tiles are laid out first, by measure, since their rows set the card's height; sizing the canvas then resets
-       the context, so the scale comes after */
-    const CW = W - 2 * MG, L = MG + P, R = MG + CW - P, t = tiles(x, m, L, R), CH = size(m, t), H = CH + 2 * MG;
+    /* the tiles and the chance lines are laid out first, by measure, since their rows set the card's height; sizing the
+       canvas then resets the context, so the scale comes after */
+    const CW = W - 2 * MG, L = MG + P, R = MG + CW - P, t = tiles(x, m, L, R), cr = chanceRows(x, m, L, R), CH = size(m, t, cr.length), H = CH + 2 * MG;
     c.width = Math.round(W * scale); c.height = Math.round(H * scale);
     x.scale(scale, scale);
     x.fillStyle = C.bg; x.fillRect(0, 0, W, H);
@@ -1590,9 +1616,8 @@ window.PARLAY_CARD = (function () {
       y += tilesH(t);
     }
     /* the chance: DraftKings' fair chance first, then the model's and the price's */
-    chanceLines(m).forEach((ln, i) => { let cx = L; const yy = y + 24 + i * 18;
-      for (const [t1, b] of ln) cx += text(x, t1, cx, yy, (b ? '700 ' : '500 ') + '13px ' + FB, b ? C.ink : C.ink2); });
-    y += CHANCE_H;
+    cr.forEach((row, i) => { const yy = y + 24 + i * CHANCE_ROW; for (const r of row) text(x, r.t, r.x, yy, CHANCE_FONT(r.b), r.b ? C.ink : C.ink2); });
+    y += chanceH(cr.length);
     /* the site's mark */
     x.fillStyle = C.line; x.fillRect(MG, y, CW, 1);
     text(x, 'Made ' + m.made, R, y + 31, '500 12px ' + FB, C.muted, 'right');
@@ -1771,7 +1796,7 @@ window.pcClose = () => window.PARLAY_CARD.close();
 .glance-sh{display:inline-flex;vertical-align:-4px;margin-right:4px}
 .glance-sh .tierbadge{width:16px;height:18px}
 .glance-tm{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.02em;color:var(--ink)}
-.glance-trial{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 5px;border:1px solid #FFA2B8;border-radius:999px;color:#FFA2B8;white-space:nowrap;margin-left:5px;vertical-align:1px}
+.glance-trial{font-style:normal;font-size:10px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;padding:0 5px;border:1px solid #FFA2B8;border-radius:999px;color:#FFA2B8;white-space:nowrap;margin-left:2px;vertical-align:1px}
 .glance-pop table.glance-t,.glance-pop table.glance-vs{width:100%;border-collapse:collapse;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible;margin:0 0 8px;font-size:12.5px}
 .glance-pop .glance-t th,.glance-pop .glance-t td,.glance-pop .glance-vs th,.glance-pop .glance-vs td{padding:4px 6px;background:none;border:0;border-top:1px solid var(--line);text-align:left;vertical-align:middle;font-size:12.5px;font-weight:500;letter-spacing:0;text-transform:none;color:var(--ink);white-space:normal}
 .glance-pop .glance-t thead th,.glance-pop .glance-vs thead th,.glance-pop .glance-vs thead td{border-top:0;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
@@ -1842,6 +1867,10 @@ window.pcClose = () => window.PARLAY_CARD.close();
 const H = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
 const ordinal = n => n + (['th', 'st', 'nd', 'rd'][(n % 100 > 10 && n % 100 < 14) ? 0 : (n % 10 < 4 ? n % 10 : 0)] || 'th');
 const pc0 = p => (p * 100).toFixed(0) + '%';
+/* a chance as the Player props view prints it (ppPct: whole, "<1%" and ">99%" at the ends): a player's leg after the FAIL,
+   whose builder row prints it so too, and the projected double- and triple-double, so the bubble never says "props
+   model 100%" beside their ">99%" (the review of 6 November 2026); elsewhere the builder's own (pc0, its pbPct) */
+const pcL = p => typeof ppPct === 'function' ? ppPct(p) : pc0(p);
 const N = (key, v) => `<b data-glance-n="${H(key)}">${H(v)}</b>`;
 const St = () => (typeof S === 'object' && S) ? S : null;
 /* a club by its code, in the bubble's ink (a club's own colour on the panel falls under 4.5:1 for several clubs) */
@@ -1919,10 +1948,10 @@ function legHtml(K) {
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
   /* Model: the player model's chance, the one the builder prices the leg on; once the props model has failed its trial,
      a player's leg leads with DraftKings' fair chance, the props model's after it, muted and marked failed */
-  const pm = l.p, failed = l.kind === 'prop' && propsFailed();
-  const model = `<div><dt>Model</dt><dd${failed ? ' class="glance-q"' : ''}>${pm != null && isFinite(pm) ? (failed ? 'props model ' : '') + N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark('chance') : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`;
+  const pm = l.p, failed = l.kind === 'prop' && propsFailed(), pf = failed ? pcL : pc0;
+  const model = `<div><dt>Model</dt><dd${failed ? ' class="glance-q"' : ''}>${pm != null && isFinite(pm) ? (failed ? 'props model ' : '') + N('model', pf(pm)) + (l.kind === 'prop' ? ' ' + trialMark('chance') : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`;
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
-  const fairRow = `<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`;
+  const fairRow = `<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pf(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`;
   if (failed) out.push(fairRow, model); else out.push(model, fairRow);
   return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;
 }
@@ -1973,9 +2002,9 @@ function playerHtml() {
     const st = L && L.kind === 'prop' && L.stat ? L.stat : null, ks = STATS.map(x => x[0]);
     const want = st && !ks.includes(st) ? [...STATS, [st, (typeof PP_NAMES === 'object' && PP_NAMES[st]) || st]] : STATS;
     const val = k => { if (k === 'min') return isFinite(row[3]) ? (+row[3]).toFixed(0) : '–';
-      if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pc0(v) : '–'; }
+      if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pcL(v) : '–'; }
       const v = typeof ppMean === 'function' ? ppMean(row, k) : null; return v == null || !isFinite(v) ? '–' : (+v).toFixed(1); };
-    table = `<table class="glance-t" aria-label="${propsFailed() ? 'The props model’s projection for him in this game, for reference: the model failed its trial' : 'The props model\'s projection for him in this game, on trial'}"><thead><tr><th scope="col">Projected${trialMark('proj')}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
+    table = `<table class="glance-t" aria-label="${propsFailed() ? 'The props model’s projection for him in this game, for reference: the model failed its trial' : 'The props model\'s projection for him in this game, on trial'}"><thead><tr><th scope="col">Projected ${trialMark('proj')}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
       `<tr data-glance-stat="${H(k)}"${st === k ? ' class="glance-on"' : ''}><th scope="row">${H(lab)}</th><td class="glance-n" data-glance-n="proj:${H(k)}">${H(val(k))}</td></tr>`).join('')}</tbody></table>`;
   } else table = `<p class="glance-q glance-none" data-glance-n="noproj">No projection: ${out ? 'he is on the injury report' : gameProj ? 'the props model does not project him for this game' : 'the props model has no projections for this game yet'}.</p>`;
   return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${tonightBtn(gid)}` };
@@ -3575,7 +3604,7 @@ function ppRow1(g, x, pr) {
   const sumSr = row ? `projected ${mins != null ? `${mins} minutes, ` : ''}${['pts', 'reb', 'ast'].map(k => `${ppNumTxt(ppMean(row, k))} ${{ pts: 'points', reb: 'rebounds', ast: 'assists' }[k]}`).join(', ')}` : 'no projection';
   const hasStats = ppRecent(pid).length > 0;
   /* in the game's top five Mismatches (app/parts/gamewin.html's own list, the window's) graded Solid or more, as the NFL's
-     game page tags: its tag beside his name, titled with his row there ("Big mismatch: ..."), and said in the row's name */
+     old game page tagged (its live one, since 4 November 2026, tags at its file's measured size): its tag beside his name, titled with his row there ("Big mismatch: ..."), and said in the row's name */
   const mm = typeof window.gwMismatch === 'function' ? window.gwMismatch(g.id, pid) : null;
   const mmTag = mm ? `<span class="pp-mmtag" data-pp-mm="${mm.n}" data-pp-mmgrade="${esc(mm.grade)}" title="${esc(mm.title)}">Mismatch</span>` : '';
   /* Show stats is named by its own words (Show stats or Hide stats, then whose), which say its state: no aria-pressed
@@ -4277,8 +4306,11 @@ small.faroff{display:block;font-size:11px;font-weight:600;margin-top:2px;white-s
 .legfair{display:block;font-size:11px;font-weight:500;color:var(--ink-2);white-space:nowrap;margin-top:2px}
 /* a player's leg once the props model has failed its trial: DraftKings' fair chance leads (est. beside it where it is
    one), the props model's own small and muted under it, for reference (the Player props view's row, its .mdl) */
-.pb-mdl{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:nowrap;margin-top:2px;cursor:help}
+.pb-mdl{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:normal;margin-top:2px;cursor:help}
+.pb-mdl [data-pb-mv]{white-space:nowrap} .pb-mdl .pb-trial{margin-left:2px}
 .pb-fest{font-style:normal;font-size:10px;font-weight:500;color:var(--pb-q);margin-left:3px}
+/* "fair", the builder's own word for DraftKings' figure (a team row's "fair 40%"), before a player's lead figure on a FAIL */
+.pb-fairlbl{font-size:11px;font-weight:600;color:var(--ink-2)}
 .dkslip{display:block;font-size:11px;font-weight:500;color:var(--ink-2);white-space:normal;margin-top:2px}
 .pb-read{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:nowrap}
 .espn-ctl{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:0 0 12px}
@@ -4840,8 +4872,9 @@ function pbFailLegTitle() {
 }
 const PB_FAILED = 'failed trial';
 /* what the builder's summary and the parlay card say of the model's chance once a player leg in it is the failed props
-   model's (a parlay of team legs alone keeps the board model's chance as it was) */
-const PB_FAILED_SAY = 'its player legs the props model’s, which failed its trial';
+   model's (a parlay of team legs alone keeps the board model's chance as it was), counted: "its player leg" for one,
+   "its player legs" for more (the review of 6 November 2026: a parlay of one player leg said "legs") */
+const pbFailedSay = n => `its player leg${n === 1 ? '' : 's'} the props model’s, which failed its trial`;
 const pbTrialMark = l => !(l && l.kind === 'prop') ? '' : pbPropsOn() ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>`
   : `<i class="pb-trial" data-pb-failed title="${esc(pbFailLegTitle())}">${PB_FAILED}</i>`;
 /* a leg on the builder: the same line exactly */
@@ -5111,14 +5144,16 @@ function pbInj(l) {
 }
 /* a leg's Chance cell: the model's chance, its band and DraftKings' fair chance under it. Once the props model has failed
    its trial, a player's leg is drawn as its row in the Player props view drew it (ppLegRow's FAIL row): DraftKings'
-   fair chance leads, at the view's percentage, with est. where it is one and the band worked on it (ppConf, on the
-   percentage shown), then the "failed trial" mark, and the props model's chance small and muted under it ("props model
-   50%"); where DraftKings gives no fair chance, "no DraftKings chance" and the model's muted. A team leg is as it was */
+   fair chance leads, labelled "fair" as a team row's is (and, to a screen reader, "DraftKings' fair chance", as the view
+   says it), at the view's percentage, with est. where it is one and the band worked on it (ppConf, on the percentage
+   shown); under it the props model's chance small and muted, with the "failed trial" mark beside the figure it is about
+   ("props model 50% FAILED TRIAL"); where DraftKings gives no fair chance, "no DraftKings chance" and the model's muted.
+   A team leg is as it was */
 function pbChanceCell(l, f, c, lbl) {
   if (l.kind === 'prop' && !pbPropsOn()) {
     const fp = f && f.p != null && Number.isFinite(f.p) ? f.p : null, [fc, fl] = fp != null ? ppConf(fp) : ['', ''];
-    return (fp != null ? `<span data-pb-fp="${fp}" title="${esc(ppFairTitle(l, f))}">${ppPct(fp)}</span>${f.est ? '<em class="pb-fest">est.</em>' : ''}<span class="pb-conf ${fc}">${fl.toUpperCase()}</span>` : '<span class="pb-q" data-pb-nodk>no DraftKings chance</span>')
-      + pbTrialMark(l) + (l.p != null ? `<small class="pb-mdl" data-pb-p="${l.p}" title="${esc(pbTrialTitle())}">props model ${ppPct(l.p)}</small>` : '');
+    return (fp != null ? `<span class="pb-fairlbl" aria-hidden="true">fair</span> <span class="sr">DraftKings' fair chance${f.est ? ', est.' : ''}: </span><span data-pb-fp="${fp}" title="${esc(ppFairTitle(l, f))}">${ppPct(fp)}</span>${f.est ? '<em class="pb-fest" aria-hidden="true">est.</em>' : ''} <span class="pb-conf ${fc}">${fl.toUpperCase()}</span>` : '<span class="pb-q" data-pb-nodk>no DraftKings chance</span>')
+      + (l.p != null ? ` <small class="pb-mdl" data-pb-p="${l.p}" title="${esc(pbTrialTitle())}"><span data-pb-mv>props model ${ppPct(l.p)}</span> ${pbTrialMark(l)}</small>` : ' ' + pbTrialMark(l));
   }
   return `${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}`;
 }
@@ -5157,13 +5192,17 @@ function renderParlay(o) {
   const { n, pr, fair, P, stake, override, useDec, payout, profit, sg, trial } = q, slips = dkSlipRows(legs);
   /* a player leg in it once the props model has failed its trial: the model's chance is said to be its, never on trial,
      and nothing leads with it (the fair price and the confidence are DraftKings' fair chance's, or not drawn) */
-  const failed = trial && !pbPropsOn(), tw = trial ? (failed ? ', ' + PB_FAILED_SAY : ', on trial') : '', hasFair = !!(fair && fair.p != null);
+  const failed = trial && !pbPropsOn(), tw = trial ? (failed ? ', ' + pbFailedSay(legs.filter(l => l.kind === 'prop').length) : ', on trial') : '', hasFair = !!(fair && fair.p != null);
   const fairAm = failed ? (hasFair && fair.p > 0 && fair.p < 1 ? fmtAm(probToAm(fair.p)) : '–') : pr.corr != null && pr.corr > 0 && pr.corr < 1 ? fmtAm(probToAm(pr.corr)) : '–';
   let html = `<div class="pb-card pb-builder"><h2 id="pbTitle" tabindex="-1" style="display:flex;align-items:center;gap:10px">${n}-leg parlay <span class="pb-pill">building</span></h2>${espnCtl('builder')}
     <p class="pb-lead">Every leg has to land. The chance below is worked out with the legs' real relationship to each other, not by multiplying them together.</p>
     <table class="pb-btbl"><thead><tr><th>Player</th><th>The bet</th><th class="num">Projected</th><th class="num">Chance</th><th class="num">Price</th><th><span class="sr">Remove</span></th></tr></thead><tbody>`;
   legs.forEach((l, i) => {
-    const f = legFair(l), far = f && l.p != null && l.p - f.p >= PB_FAR - 1e-9, [c, lbl] = l.p != null ? pbBandOf(l.p) : ['', ''];
+    /* far off the market: never on a player's leg once the props model has failed its trial (its chance there is
+       DraftKings' own fair chance, which cannot be far off itself, and the failed model's figure is drawn only muted,
+       for reference, in its Chance cell; the review of 6 November 2026: the gold flag put "model 100%" ahead of
+       DraftKings' 84%) */
+    const f = legFair(l), far = !(l.kind === 'prop' && !pbPropsOn()) && f && l.p != null && l.p - f.p >= PB_FAR - 1e-9, [c, lbl] = l.p != null ? pbBandOf(l.p) : ['', ''];
     html += `<tr class="legrow" data-pb-row="${esc(l.sk)}"><td class="plr">${glanceName(l, { ml: l.odds, src: 'real' })}${pbInj(l)}<small>${esc(l.pos)} · ${esc(l.team)} v ${esc(l.opp)} · ${esc(pbDayText(l.date))}</small></td>
       <td class="bet"><b>${esc(l.label)}</b>${far ? `<small class="faroff" data-far>${farText(l.p, f)}</small>` : ''}${dkSlipLine(slips && slips[i], i)}</td>
       <td class="num" data-h="Projected">${pbNum(l.mu)}</td>
@@ -5189,10 +5228,13 @@ function renderParlay(o) {
       <div class="pb-box" data-pb-fairam><b>${fairAm}</b><span>${failed ? 'fair price for DraftKings’ fair chance' : 'fair price for the model\'s chance'}</span></div>
       <div class="pb-box"><b class="payout" data-payout="${payout}">${pbMoney(payout)}</b><span>returned if it lands, ${pbMoney(profit)} profit${override ? ', at your price' : sg ? ', est.' : ''}</span></div>
       ${(() => { const on = hasFair, cp = on ? fair.p : failed ? null : pr.corr; if (cp == null) return '';
-        const [c, l] = pbBandOf(cp); return `<div class="pb-box tier ${c}" data-conf="${cp}"><b>${l}</b><span>confidence all ${n} land, on the ${on ? 'fair' : 'model’s'} chance</span></div>`; })()}
+        /* after the FAIL the fair chance is banded on the view's scale (ppConf: High from 70, Med from 45), the one each
+           player row above it uses, so a one-leg parlay's box says the band its row does (the review of 6 November 2026:
+           a 70% leg read HIGH in its row and MED here); on the trial and for team legs alone, the builder's own */
+        const [c, l] = on && failed ? (b => [b[0], b[1].toUpperCase()])(ppConf(cp)) : pbBandOf(cp); return `<div class="pb-box tier ${c}" data-conf="${cp}"><b>${l}</b><span>confidence all ${n} land, on the ${on ? 'fair' : 'model’s'} chance</span></div>`; })()}
     </div>
     <p class="pb-fair-note">${fair && fair.p != null ? `The fair chance is DraftKings’: its prices with the margin taken out (a main line’s whole margin on the Over, as measured on DraftKings’ archived lines)${fair.est ? ', est. where a leg is priced on one side only or the legs share a game' : ''}, the legs moving together as the model’s do.`
-      : `The fair chance needs both of DraftKings’ prices on every leg; ${fair && fair.miss === 1 ? 'one leg has' : (fair ? fair.miss : 0) + ' legs have'} one only, so this is the model’s chance alone.`}</p>
+      : `The fair chance needs both of DraftKings’ prices on every leg; ${fair && fair.miss === 1 ? 'one leg has' : (fair ? fair.miss : 0) + ' legs have'} one only, ${failed ? 'so there is none to show. The model’s chance under it is for reference only.' : 'so this is the model’s chance alone.'}`}</p>
     ${sg && override == null ? `<p class="pb-fair-note" data-sl-why>Legs here share a game, so they are priced together rather than multiplied: multiplying them would say <b>${pbMoney(stake * P.prod)}</b>, which is what a book pays only when the legs are in different games. ${SG_WHY}, with the NFL hub’s same-game hold (${S.corr && S.corr.hold}), untested on the NBA; type your book’s own parlay price above to override it.</p>` : ''}
     <div class="pb-acts"><button type="button" class="btn hot" id="pFinish" title="Opens this parlay as a card to place at DraftKings or share. Nothing is saved: not here, not in X’s parlays.">Finish parlay</button><button type="button" class="btn ghost" id="pClear">Clear ALL</button></div></div></div>`;
   if (pr.pairs.length) {
@@ -5222,7 +5264,7 @@ render.parlay = function () {
   renderParlay();
 };
 /* what Suggested Parlays, the checks and the next pieces stand on */
-Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, pbChanceCell, PB_FAILED_SAY, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
+Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, pbChanceCell, pbFailedSay, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
   PB_TIERS, PB_KINDS, PB_MIXES, PB_TOP_N, PB_SEARCH, getPbTiers, getPbTop, pbTopBuild, pbTierCard, pbValMark, pbIsValue, pbTrialMark, pbOrder, pbOrd, parlayProb, parlayDec, parlayFair, legFair, legFarOff, legModel,
   pbView, pbSlipOf, pbLegAddBtn, pbPut, pbStale, pbWatchTick, stakeRead, pbStake, renderParlay, renderPb, pbLinesLoad, linesGl, pbGl, pbPr, pbCarries, pbQuote, dkSlipRows, dkSlipLine, glanceName,
   toggleLeg: l => slipToggle(pbSlipOf(l)), pbLines: () => LINES });
@@ -5969,7 +6011,7 @@ Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spS
 .gw-v.gw-better small{color:var(--ink)}
 .gw-smid{min-width:0;text-align:center}
 .gw-slb{display:block;margin:0 0 6px;font-size:13px;font-weight:600;color:var(--ink-2);line-height:1.3}
-.gw-slb small{margin-left:6px;font-size:11px;font-weight:600;color:var(--ink-2)}
+.gw-slb small{margin-left:2px;font-size:11px;font-weight:600;color:var(--ink-2)}
 .gw-strack{display:flex;gap:8px}
 .gw-shalf{display:flex;flex:1 1 0;height:8px;border-radius:4px;background:var(--line);overflow:hidden}
 .gw-shl{justify-content:flex-end}
@@ -5994,8 +6036,9 @@ Object.assign(window, { spFeatured, spNets, spGames, spTakes, spNight, spOn, spS
 .gw-pbox b{font-family:var(--display);font-size:20px;font-weight:700;color:var(--ink);font-variant-numeric:tabular-nums}
 .gw-pbox small{font-size:12px;font-weight:600;color:var(--ink-2);line-height:1.3}
 .gw-pbox.gw-pgame{border-style:dashed}
-/* Mismatches: the NFL's list, a row a player: his place, who he is, the defence he faces and his projection, and at the
-   right the lift in standard deviations with the tag (white on #2563EB to #1E4FA8, 5.2:1 and up) */
+/* Mismatches: the NFL's list, a row a player: his place, who he is, the defence he faces (with the figure its grade is
+   worked on) and his projection, and at the right the lift in standard deviations, labelled a lift, with the grade and
+   the tag (white on #2563EB to #1E4FA8, 5.2:1 and up) */
 .gw-mmnote{margin:0 0 12px;font-size:13px;color:var(--ink-2);line-height:1.5}
 ul.gw-mm{list-style:none;margin:0;padding:0;display:grid;gap:10px}
 ul.gw-mm li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;align-items:center;margin:0;border:1px solid var(--line);border-radius:14px;padding:12px 14px;line-height:1.4}
@@ -6009,9 +6052,10 @@ ul.gw-mm li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;
 .gw-mmsub b{color:var(--ink);font-weight:700}
 .gw-mmsc{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:72px}
 .gw-mmsc b{font-family:var(--display);font-size:18px;line-height:1;color:var(--ink);white-space:nowrap}
-.gw-mmsc b small{font-family:var(--body);font-size:12px;font-weight:700;color:var(--ink-2);margin-left:3px}
+.gw-mmsc b small{font-family:var(--body);font-size:12px;font-weight:700;color:var(--ink-2)}
 .gw-mmtag{display:inline-block;padding:2px 8px;border-radius:999px;background:linear-gradient(135deg,#2563EB,#1E4FA8);color:#fff;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;line-height:1.3;white-space:nowrap}
-/* a mismatch's grade, the NFL's (its snapshot.html .gs-meter and .gs-mmsc small, its theme's pe-g colours): the word in
+/* a mismatch's grade, on the NFL's old Mismatches' steps and drawn as its old row drew it (its snapshot.html .gs-meter
+   and .gs-mmsc small, its theme's pe-g colours; its live rows, since 4 November 2026, have no grade words): the word in
    its grade's colour (Huge the hub's lime, Big #7BD88F, Solid #F2B84B, Slight the quiet ink), after the four-step meter */
 .gw-mmg{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;cursor:help}
 .gw-g4{color:var(--lime)} .gw-g3{color:#7BD88F} .gw-g2{color:#F2B84B} .gw-g1{color:var(--pb-q)}
@@ -6133,7 +6177,7 @@ function statsBody(g) {
       + `${c ? `<small data-gw-srk aria-hidden="true">#${c.rank}</small><span class="sr" data-gw-ssr>, ${ord(c.rank)} in the league</span>` : ''}${b ? '<span class="sr" data-gw-ssr>, the better</span>' : ''}</span>`;
     const tip = k === 'ortg' || k === 'drtg' || k === 'pace' ? ` title="${H(POSS)}"` : '';
     return `<div class="gw-sbar" data-gw-srow="${k}"><span class="gw-sva">${v(a, ca, ba)}</span>
-      <div class="gw-smid"><span class="gw-slb"${tip}>${lab}${note ? `<small>${note}</small>` : ''}</span><span class="gw-strack" aria-hidden="true"><span class="gw-shalf gw-shl"><i style="width:${pa}%;--gw-tc:${tcol(a)}"></i></span><span class="gw-shalf gw-shr"><i style="width:${ph}%;--gw-tc:${tcol(h)}"></i></span></span></div>
+      <div class="gw-smid"><span class="gw-slb"${tip}>${lab}${note ? ` <small>${note}</small>` : ''}</span><span class="gw-strack" aria-hidden="true"><span class="gw-shalf gw-shl"><i style="width:${pa}%;--gw-tc:${tcol(a)}"></i></span><span class="gw-shalf gw-shr"><i style="width:${ph}%;--gw-tc:${tcol(h)}"></i></span></span></div>
       <span class="gw-svh">${v(h, ch, bh)}</span></div>`; }).join('');
   const g1 = n => `${n} game${n === 1 ? '' : 's'}`;
   const counts = [[a, SA], [h, SH]].map(([t, x]) => `${t} ${g1(x ? x.g : 0)}`).join(', ');
@@ -6149,12 +6193,15 @@ function statsBody(g) {
    oppCols), so his projection without the matchup is mean / mult and the matchup's lift mean - mean / mult. The game's
    players shown at 20 minutes or more (his row's minutes, as the view prints them: 19.8 is "20 min" and counts), not
    out, each at his best stat among points, rebounds, assists and threes by that lift in standard deviations of the stat
-   at his mean (sqrt(nbVar(mean, var[k])), the props model's spread), positive lifts only. Each is graded as the NFL
-   hub grades a mismatch (its mmGrade): on z, how far the defence he faces is from the league's average on that stat in
-   standard deviations across the 30 clubs (publish.js THE MISMATCH GRADES), rounded to a tenth, Slight under 1, Solid
-   from 1, Big from 2, Huge from 3; listed by the grade, then the lift in SD, the top five; tagged MISMATCH Solid and up,
-   as the NFL's game page tags. A state published before the grades lists the five by the lift alone, none graded or
-   tagged ---- */
+   at his mean (sqrt(nbVar(mean, var[k])), the props model's spread), positive lifts only. Each is graded on the NFL
+   hub's old Mismatches' steps (its mmGrade, which since 4 November 2026 grades only a matchups file from before its
+   mismatch score: its live rows draw the size in points and one Mismatch tag, no grade words): on z, how far the defence
+   he faces is from the 30 clubs' mean on that stat in standard deviations across the 30 (publish.js THE MISMATCH GRADES),
+   rounded to a tenth, Slight under 1, Solid from 1, Big from 2, Huge from 3, the row showing that figure beside the
+   grade's words; listed by the grade, then the lift in SD, the top five; tagged MISMATCH Solid and up, as the NFL's old
+   game page tagged. The "allows 12% more" figure is against the league's rate (a ratio of 1), which the 30 clubs' mean
+   sits a little above, so each is named for what it is measured from. A state published before the grades lists the
+   five by the lift alone, none graded or tagged ---- */
 const MM_STATS = ['pts', 'reb', 'ast', 'tpm'], MM_MIN = 20, MM_TOP = 5;
 const MM_DEF = { pts: 'scoring defence', reb: 'rebounding defence', ast: 'assist defence', tpm: 'three-point defence' };
 const MM_NOUN = { pts: 'points', reb: 'rebounds', ast: 'assists', tpm: 'threes' };
@@ -6164,18 +6211,23 @@ const mmNote = () => (typeof ppFail === 'function' && ppFail())
   : 'From the props model\'s opponent adjustment; the model is on trial against DraftKings, so read these as context, not picks.';
 /* a small positive figure at the fewest decimals, from `min` to 3, that do not round it to nothing: a lift of 0.017 is
    "+0.02", never "+0.0"; null where even 3 decimals would ("under 0.001") */
-/* the NFL's grade of a mismatch (its tab_elo.html and snapshot.html mmGrade: rounded to a tenth, then its four steps),
-   with its colour class and its step on the meter */
+/* the grade of a mismatch on the NFL's old steps (its tab_elo.html and snapshot.html mmGrade, kept there between its
+   OLD-MISMATCHES marks for a file from before its score: rounded to a tenth, then its four steps), with its colour class
+   and its step on the meter */
 const mmGrade = z => { const x = Math.round(z * 10) / 10; return x >= 3 ? ['Huge', 'gw-g4', 4] : x >= 2 ? ['Big', 'gw-g3', 3] : x >= 1 ? ['Solid', 'gw-g2', 2] : ['Slight', 'gw-g1', 1]; };
 const mmMeter = (lv, cls) => `<span class="gw-meter gw-l${lv} ${cls}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>`;
 const MM_STEPS = 'Slight under 1, Solid from 1, Big from 2, Huge from 3';
-const MM_NONE = 'No player in this game faces a defence a standard deviation or more weaker than the league\'s on his stat.';
+const MM_NONE = 'No player in this game faces a defence a standard deviation or more weaker than the 30 clubs\' mean on his stat.';
 const MM_UNGRADED = 'The mismatch grades are not published yet: the job adds them on its next run.';
 const fine = (x, min) => { for (let d = min; d <= 3; d++) { const s = x.toFixed(d); if (+s !== 0) return s; } return null; };
 const liftTxt = l => { const s = fine(l, 1); return s ? '+' + s : 'under 0.001'; };
 const zTxt = z => { const s = fine(z, 2); return s ? '+' + s : '<0.001'; };
 const pctMore = (r, noun) => { const p = (r - 1) * 100, q = Math.abs(p);
-  return q < 0.05 ? `about as many ${noun} a minute as average` : `${q >= 0.5 ? Math.round(q) : q.toFixed(1)}% ${p > 0 ? 'more' : 'fewer'} ${noun} a minute than average`; };
+  return q < 0.05 ? `about as many ${noun} a minute as the league's rate` : `${q >= 0.5 ? Math.round(q) : q.toFixed(1)}% ${p > 0 ? 'more' : 'fewer'} ${noun} a minute than the league's rate`; };
+/* the figure a grade is worked on, z rounded to a tenth as mmGrade rounds it (0.95 is "1.0" and Solid, never "0.9"), in
+   words: "2.2 SD weaker than the 30 clubs' mean" on the row, "standard deviations" in the title */
+const zRound = z => Math.round(z * 10) / 10;
+const zWords = (z, long) => { const x = zRound(z); return x === 0 ? 'at the 30 clubs\' mean' : `${Math.abs(x).toFixed(1)} ${long ? 'standard deviations' : 'SD'} ${x > 0 ? 'weaker' : 'stronger'} than the 30 clubs' mean`; };
 let MM_MEMO = { of: null, gid: null, val: null };
 function mmList(g) {
   const s = St(), P = s && s.props;
@@ -6212,12 +6264,17 @@ function mmWork(g, P) {
   const list = out.slice(0, MM_TOP), note = mmNote();
   list.forEach((v, i) => { v.n = i + 1;
     v.vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`;
+    /* where it is graded, the figure the grade is worked on, beside the defence it is of (the review of 6 November 2026:
+       the only SD figure on a phone was the lift, +0.16 under Big, which those steps call Slight) */
+    v.zs = graded ? zWords(v.dz) : null;
+    v.vsz = v.zs ? `${v.vs}, ${v.zs}` : v.vs;
     v.proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
     v.sz = zTxt(v.z); v.lt = liftTxt(v.lift);
-    v.say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${v.vs} (allows ${pctMore(v.ratio, MM_NOUN[v.k])}). ${v.proj} projected (${v.lt} from the matchup).`;
-    const lift = `${v.sz} SD: what the matchup adds to his projection, over the spread of his ${MM_NOUN[v.k]} at his projection (${v.sd.toFixed(1)}).`;
-    if (graded) { const a = Math.abs(v.dz).toFixed(2);
-      v.gsay = `${v.grade}: ${v.opp}'s ${MM_DEF[v.k]} is ${v.dz === 0 ? 'at the league\'s average' : `${a} standard deviations ${v.dz > 0 ? 'weaker' : 'stronger'} than the league's average`} on ${MM_NOUN[v.k]}, across its 30 clubs (${MM_STEPS}).`;
+    v.sub = `${v.vsz} (allows ${pctMore(v.ratio, MM_NOUN[v.k])}). ${v.proj} projected (${v.lt} from the matchup).`;
+    v.say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${v.sub}`;
+    const lift = `${v.sz} SD lift: what the matchup adds to his projection, over the spread of his ${MM_NOUN[v.k]} at his projection (${v.sd.toFixed(1)}).`;
+    if (graded) {
+      v.gsay = `${v.grade}: ${v.opp}'s ${MM_DEF[v.k]} is ${zWords(v.dz, true)} on ${MM_NOUN[v.k]}, across its 30 clubs; the grade is on that figure (${MM_STEPS}).`;
       v.title = `${v.grade} mismatch: #${v.n} in this game. ${v.say} ${v.gsay} ${lift} Listed by the grade, then that lift. ${note}`; }
     else v.title = `Mismatch #${v.n} in this game: ${v.say} ${lift} Listed by that lift; the grades are not published yet. ${note}`; });
   return { list, note, graded };
@@ -6233,8 +6290,8 @@ function mismBody(g) {
   const shield = pid => { const rk = typeof ppRankOf === 'function' ? ppRankOf(pid) : null; return rk ? tierBadge(rk.rating) : ''; };
   return note + `<ul class="gw-mm">${R.list.map(v => `<li data-gw-mm="${H(v.pid)}" title="${H(v.title)}"><span class="gw-mmn" title="Mismatch rank in this game">#${v.n}</span>
       <div><span class="gw-mmwho">${shield(v.pid)}${H(v.name)} <small>${H(v.pos)}</small><span class="gw-mmvs">${pill(v.team)}<small>${v.home ? 'vs' : 'at'}</small>${pill(v.opp)}</span></span>
-      <span class="gw-mmsub" data-gw-mmsub>${H(v.vs)} (allows ${H(pctMore(v.ratio, MM_NOUN[v.k]))}). <b>${H(v.proj)}</b> projected (${H(v.lt)} from the matchup).</span></div>
-      <div class="gw-mmsc"><b data-gw-z>${v.sz}<small>SD</small></b>${v.grade ? `<small class="gw-mmg ${v.gc}" data-gw-grade="${v.grade}">${mmMeter(v.lv, v.gc)}${v.grade}</small>` : ''}${v.tagged ? '<span class="gw-mmtag">Mismatch</span>' : ''}</div></li>`).join('')}</ul>`;
+      <span class="gw-mmsub" data-gw-mmsub>${H(v.vsz)} (allows ${H(pctMore(v.ratio, MM_NOUN[v.k]))}). <b>${H(v.proj)}</b> projected (${H(v.lt)} from the matchup).</span></div>
+      <div class="gw-mmsc"><b data-gw-z>${v.sz} <small>SD lift</small></b>${v.grade ? `<small class="gw-mmg ${v.gc}" data-gw-grade="${v.grade}">${mmMeter(v.lv, v.gc)}${v.grade}</small>` : ''}${v.tagged ? '<span class="gw-mmtag">Mismatch</span>' : ''}</div></li>`).join('')}</ul>`;
 }
 
 /* ---- the window ---- */
@@ -6292,8 +6349,8 @@ window.gameWindowSync = () => {
   const b = typeof ppOpen !== 'undefined' && ppOpen === GID ? document.querySelector(`#ppBody [data-gp-pop="${KIND}"][data-gp-game="${CSS.escape(GID)}"]`) : null;
   if (b) FROM = b; else { FROM = null; close(); }
 };
-/* the view's MISMATCH tag: this player's row in the game's top five where it is graded Solid or more (the NFL's game page
-   tags Solid and up), or null */
+/* the view's MISMATCH tag: this player's row in the game's top five where it is graded Solid or more (the NFL's old game
+   page tagged Solid and up), or null */
 window.gwMismatch = (gid, pid) => { const g = gameOf(gid); if (!g) return null; const R = mmList(g); return R.list ? R.list.find(v => v.pid === String(pid) && v.tagged) || null : null; };
 })();
 </script>

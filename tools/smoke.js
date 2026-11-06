@@ -1032,7 +1032,14 @@ async function playerProps() {
      PASS, an early FAIL with one stat's milestone margin taken away, a full-bar FAIL) and the real ledger's own, each
      number worked out on its own from tools/props_feed.js's fair-chance rule and tools/props.js's distribution, on the
      job's published lines (lines.json) for this file's own game, so it holds at any hour and in the off-season */
-  { const T0 = new Date(Date.now() - 2 * 3600e3).toISOString(), PA = PF.propParse(p1Items), rowsP = props8.games[p1.id].players;
+  /* the builder's edges, planted on p1's own players beside the recorded answer (README "Parlay Builder", "After the
+     FAIL"): Cade Cunningham's 3+ points at -50000 (the props model's chance and, with the points milestones' margin,
+     DraftKings' fair chance both over 99.5%: ">99%"; with that margin taken away, no fair chance at all), Det Center's 15+
+     assists at +50000 (both under 0.5%: "<1%"), Bos Guard's 1+ rebounds at +100 (the model about 95%, DraftKings' fair
+     chance about 43%: far off the market) and Det Wing's points Over 9.5 at -300 / +257 (DraftKings' fair chance 72%: High
+     on the view's scale, MED on the builder's own) */
+  const EDGE8 = [ppItem(218, '4432166', 3, '-50000'), ppItem(219, '3004', 15, '+50000'), ppItem(220, '3001', 1, '+100'), ppItem(1, '3005', 9.5, '-300'), ppItem(1, '3005', 9.5, '+257')];
+  { const T0 = new Date(Date.now() - 2 * 3600e3).toISOString(), PA = PF.propParse(p1Items.concat(EDGE8)), rowsP = props8.games[p1.id].players;
     const pubF = { v: 1, at: T0, games: { [p1.id]: { at: T0, espn: '401909088', ml: { home: -150, away: 130 }, spread: { line: -3.5, home: -108, away: -112 }, total: { line: 219.5, over: -110, under: -110 },
       props: { at: T0, mains: PA.mains, ladders: PA.ladders, yes: PA.yes } } } };
     JSONS = [[/lines\.json/, pubF]];
@@ -1160,33 +1167,53 @@ async function playerProps() {
       return { pct: [...pc.childNodes].filter(x => x.nodeType === 3).map(x => x.textContent).join('').trim(), conf: cf ? cf.className.replace('pp-conf ', '') : null, est: !!pc.querySelector('em') }; };
     const bandOwn = p => { const r = Math.round(p * 100) / 100; return r >= 0.75 ? ['high', 'HIGH'] : r >= 0.60 ? ['med', 'MED'] : r >= 0.55 ? ['low', 'LOW'] : ['coin', 'UNDER 55%']; };
     const amOwn = p => { const a = p >= 0.5 ? -Math.round(100 * p / (1 - p)) : Math.round(100 * (1 - p) / p); return (a > 0 ? '+' : '') + a; };
-    const FAILED_SAY = 'its player legs the props model’s, which failed its trial';
+    /* the failed model's words, counted: "its player leg" for one, "its player legs" for more */
+    const FAILED_SAY = n => `its player leg${n === 1 ? '' : 's'} the props model’s, which failed its trial`;
+    /* what a screen reader hears of an element: its text less what it hides, the spaces collapsed */
+    const heardOf = el => { if (!el) return ''; const c = el.cloneNode(true); c.querySelectorAll('[aria-hidden="true"]').forEach(x => x.remove()); return c.textContent.replace(/\s+/g, ' ').trim(); };
+    /* the view's band, this file's own (ppConf: High from 70, Med from 45, on the whole percentage) */
+    const confWord = p => ({ high: 'High', med: 'Med', low: 'Low' })[confOwn(p)];
     const failLegTitleOwn = dec => `${cap(offOwn(dec))}${dec.early ? ', the owner’s call' : ''}: it was not shown to beat DraftKings’ closing lines, so this leg’s chance is DraftKings’ fair chance, and the props model’s own, beside it, is for reference only`;
     /* every word a reader or a screen reader meets anywhere on the page: its text (no script or style), every title, name */
     const pageWords = () => { const b = d.body.cloneNode(true); b.querySelectorAll('script, style, template').forEach(x => x.remove());
       return [b.textContent].concat([...d.querySelectorAll('[title],[aria-label]')].map(el => `${el.getAttribute('title') || ''} ${el.getAttribute('aria-label') || ''}`)).join(' \n '); };
     /* the builder as drawn, read: each row's Chance cell and its whole row, the summary's boxes, the card's chance lines
        and the player leg's matchup bubble */
-    const builderRead = async (pkey = tatKey) => {
+    const builderRead = async (pkey = tatKey, more = []) => {
       w.eval('propsClose()'); d.querySelector('#nav button[data-tab=parlay]').click(); await sleep(60);
       const bd = d.getElementById('pbBuild'), rows = {};
       for (const tr of bd.querySelectorAll('tr.legrow')) { const c = tr.querySelector('td[data-h="Chance"]'), mk = c.querySelector('.pb-trial'), md = c.querySelector('.pb-mdl'), fp = c.querySelector('[data-pb-fp]'), cf = c.querySelector('.pb-conf'), pp = c.querySelectorAll('[data-pb-p]');
+        /* the row's words outside the muted model line: none may name the model's chance there (a far-off flag, a bare figure) */
+        const out = tr.cloneNode(true); out.querySelectorAll('.pb-mdl').forEach(x => x.remove()); const far = tr.querySelector('[data-far], .faroff');
         rows[tr.dataset.pbRow] = { html: tr.outerHTML, fp: fp ? +fp.dataset.pbFp : null, fpct: fp ? fp.textContent : null, est: !!c.querySelector('.pb-fest'), conf: cf ? [cf.className.replace('pb-conf ', ''), cf.textContent] : null,
-          mark: mk ? [mk.textContent, mk.title] : null, mdl: md ? [md.textContent, +md.dataset.pbP, md.title] : null, nP: pp.length, p: pp[0] ? +pp[0].dataset.pbP : null, pct: pp[0] && !md ? pp[0].textContent : null,
-          legfair: (c.querySelector('.legfair') || {}).textContent || null, nodk: !!c.querySelector('[data-pb-nodk]') }; }
+          mark: mk ? [mk.textContent, mk.title] : null, markIn: !!(mk && md && md.contains(mk)), mdl: md ? [(md.querySelector('[data-pb-mv]') || md).textContent, +md.dataset.pbP, md.title] : null, nP: pp.length, p: pp[0] ? +pp[0].dataset.pbP : null, pct: pp[0] && !md ? pp[0].textContent : null,
+          legfair: (c.querySelector('.legfair') || {}).textContent || null, nodk: !!c.querySelector('[data-pb-nodk]'), fairLbl: (c.querySelector('.pb-fairlbl') || {}).textContent || null, heard: heardOf(c),
+          far: far ? far.textContent : null, bare: /\bmodel (\d+|<1|>99)%/.test(out.textContent) }; }
       const hero = bd.querySelector('.pb-box.hero'), fa = bd.querySelector('[data-pb-fairam]'), tierB = bd.querySelector('.pb-box.tier'), hm = hero && hero.querySelector('[data-model]');
       const sum = { fair: hero && hero.querySelector('[data-fair]') ? +hero.querySelector('[data-fair]').dataset.fair : null, heroTxt: hero ? hero.textContent.replace(/\s+/g, ' ').trim() : '', model: hm ? +hm.dataset.model : null, modelTxt: hm ? hm.textContent : '',
-        fairAm: fa ? [fa.querySelector('b').textContent, fa.querySelector('span').textContent] : null, tier: tierB ? tierB.textContent.replace(/\s+/g, ' ').trim() : null, pay: +bd.querySelector('[data-payout]').dataset.payout };
+        fairAm: fa ? [fa.querySelector('b').textContent, fa.querySelector('span').textContent] : null, tier: tierB ? tierB.textContent.replace(/\s+/g, ' ').trim() : null, pay: +bd.querySelector('[data-payout]').dataset.payout,
+        note: (bd.querySelector('.pb-fair-note') || {}).textContent || null };
       d.getElementById('pFinish').click(); await sleep(20);
       const card = [...d.querySelectorAll('#pcView .pc-chance > div')].map(x => x.textContent.replace(/\s+/g, ' ').trim());
       d.getElementById('pcBack').dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20);
-      const nm = bd.querySelector(`tr.legrow[data-pb-row="${CSS_ESC(pkey)}"] button.glance-name`); let bub = null;
-      if (nm) { nm.click(); await sleep(30); const B = d.getElementById('glanceBox');
-        bub = B && !B.hidden ? { dts: [...B.querySelectorAll('.glance-nums dt')].map(x => x.textContent), model: (B.querySelector('.glance-nums [data-glance-n="model"]') || {}).textContent, modelDd: (B.querySelector('.glance-nums [data-glance-n="model"]') || { parentNode: { textContent: '' } }).parentNode.textContent,
+      /* the matchup bubble of each leg asked for, opened from its builder row */
+      const bubs = {};
+      for (const k of [pkey, ...more]) { const nm = bd.querySelector(`tr.legrow[data-pb-row="${CSS_ESC(k)}"] button.glance-name`); if (!nm) { bubs[k] = null; continue; }
+        nm.click(); await sleep(30); const B = d.getElementById('glanceBox'), mEl = B && B.querySelector('.glance-nums [data-glance-n="model"]'), th = B && B.querySelector('table.glance-t thead th');
+        bubs[k] = B && !B.hidden ? { dts: [...B.querySelectorAll('.glance-nums dt')].map(x => x.textContent), model: (mEl || {}).textContent, modelDd: mEl ? mEl.parentNode.textContent : '',
+          fair: (B.querySelector('.glance-nums [data-glance-n="fair"]') || {}).textContent, projTh: th ? th.textContent : null,
           quiet: !!B.querySelector('.glance-nums dd.glance-q [data-glance-n="model"]'), marks: [...B.querySelectorAll('.glance-trial')].map(x => [x.textContent, x.title]), tableName: (B.querySelector('table.glance-t') || { getAttribute: () => '' }).getAttribute('aria-label') } : null;
         B.dispatchEvent(new w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(20); }
-      return { rows, sum, card, bub, words: pageWords() };
+      return { rows, sum, card, bub: bubs[pkey], bubs, words: pageWords() };
     };
+    /* the builder emptied (as Clear ALL does) and p1's view opened again, its milestones shown, for a parlay of other legs */
+    const builderAfresh = async () => { w.eval('M.slip.legs = []; M.bookPrice = null; saveMine(); renderParlay()');
+      w.eval(`propsOpen(${JSON.stringify(p1.id)})`); await sleep(20); const sw = d.getElementById('ppRungs'); if (sw && !sw.checked) { sw.click(); await sleep(20); } };
+    const EK = { hi: [p1.id, 'prop', '4432166', 'pts', 'mile', 3, 'yes'].join('|'), lo: [p1.id, 'prop', '3004', 'ast', 'mile', 15, 'yes'].join('|'), far: [p1.id, 'prop', '3001', 'reb', 'mile', 1, 'yes'].join('|'),
+      band: [p1.id, 'prop', '3005', 'pts', 'main', 9.5, 'over'].join('|') };
+    const edgeP = { hi: () => PJ.nbSf(3, muOf(rowsP['4432166'], 'pts'), PJ.nbVar(muOf(rowsP['4432166'], 'pts'), props8.dist.var.pts)), lo: () => PJ.nbSf(15, muOf(rowsP['3004'], 'ast'), PJ.nbVar(muOf(rowsP['3004'], 'ast'), props8.dist.var.ast)),
+      far: () => PJ.nbSf(1, muOf(rowsP['3001'], 'reb'), PJ.nbVar(muOf(rowsP['3001'], 'reb'), props8.dist.var.reb)), band: () => PJ.pOver(9.5, muOf(rowsP['3005'], 'pts'), PJ.nbVar(muOf(rowsP['3005'], 'pts'), props8.dist.var.pts)) };
+    const edgeF = { hi: () => PF.propFairRung(-50000, props8.fair.rung.a.pts), lo: () => PF.propFairRung(50000, props8.fair.rung.a.ast), far: () => PF.propFairRung(100, props8.fair.rung.a.reb), band: () => PF.propFairOver(-300, 257) };
 
     /* the builder on a FAIL, against the trial's (BT, read on the same legs above) and the view's rows as ticked */
     let BT = null;
@@ -1198,17 +1225,80 @@ async function playerProps() {
         && x.mark && x.mark[0] === 'failed trial' && x.mark[1] === failLegTitleOwn(dec) && x.mdl && x.mdl[0] === `props model ${ppPct(p)}` && x.mdl[1] === p && x.mdl[2] === mdlTitleOwn(dec) && x.nP === 1 && !x.legfair && !x.nodk;
       check(failRow(r, vT, pO, fo, false) && failRow(q, vR, pR, fR, true),
         `${name}: in the builder a player's leg leads with DraftKings' fair chance and its band, as his row in the view showed them (${r && r.fpct} ${r && r.conf && r.conf[1]}; the rung ${q && q.fpct} est. ${q && q.conf && q.conf[1]}), "failed trial" titled with why, and the props model's own small and muted ("${r && r.mdl && r.mdl[0]}")`);
+      /* whose figure the lead is, seen and heard (the review of 6 November 2026: nothing on a phone or to a screen reader
+         said the 40% was DraftKings', and "failed trial" sat right after it): labelled "fair" as a team row's fair chance
+         is, said "DraftKings' fair chance" to a screen reader as the view says it, and the mark on the model's line, after
+         the figure it is about */
+      const failWords = (x, p, f, est) => x && x.fairLbl === 'fair' && x.markIn && x.heard === `DraftKings' fair chance${est ? ', est.' : ''}: ${ppPct(f)} ${confOwn(f).toUpperCase()} props model ${ppPct(p)} failed trial`;
+      check(failWords(r, pO, fo, false) && failWords(q, pR, fR, true),
+        `${name}: the lead figure is labelled "fair" and heard as DraftKings' fair chance, the "failed trial" mark on the muted model line after its figure ("${r && r.heard}" / "${q && q.heard}")`);
+      /* no far-off-the-market flag on a player's leg after the FAIL, and no figure of the model's outside its muted line:
+         its chance is DraftKings' own, which cannot be far off itself */
+      const farBad = Object.entries(B.rows).filter(([k, x]) => /\|prop\|/.test(k) && (x.far || x.bare)).map(([k, x]) => `${k}: ${x.far || 'a bare model figure'}`);
+      check(!farBad.length, `${name}: no player row in the builder wears "far off the market" or names the model's chance outside its muted line${farBad.length ? ': ' + farBad.join('; ') : ''}`);
       check(BT && tm && BT.rows[homeKey(p1)] && tm.html === BT.rows[homeKey(p1)].html, `${name}: the team leg's row is the trial's to the character`);
       const s0 = BT.sum, s1 = B.sum;
-      check(s1.fair === s0.fair && s1.model === s0.model && s1.pay === s0.pay && s1.tier === s0.tier && s1.modelTxt === `model says ${(s1.model * 100).toFixed(1)}%, ${FAILED_SAY}` && s1.fairAm && s1.fairAm[0] === amOwn(s1.fair) && s1.fairAm[1] === 'fair price for DraftKings’ fair chance',
-        `${name}: the summary's fair chance, model chance, payout and confidence are the trial's, its model line saying the player legs are the failed props model's ("${s1.modelTxt}"), and the fair price DraftKings' fair chance's (${s1.fairAm && s1.fairAm[0]})`);
-      check(B.card[0] === BT.card[0] && B.card[1] === BT.card[1].replace('model (on trial) says', 'model says').replace(' · the price says', `, ${FAILED_SAY} · the price says`),
+      /* the confidence box on the fair chance after the FAIL: the view's band (ppConf), the one each player row uses */
+      const tierWant = s1.fair == null ? null : `${confOwn(s1.fair).toUpperCase()}confidence all 3 land, on the fair chance`;
+      check(s1.fair === s0.fair && s1.model === s0.model && s1.pay === s0.pay && s1.tier === tierWant && s1.modelTxt === `model says ${(s1.model * 100).toFixed(1)}%, ${FAILED_SAY(2)}` && s1.fairAm && s1.fairAm[0] === amOwn(s1.fair) && s1.fairAm[1] === 'fair price for DraftKings’ fair chance',
+        `${name}: the summary's fair chance, model chance and payout are the trial's, its confidence the view's band on the fair chance ("${s1.tier}"), its model line saying the player legs are the failed props model's ("${s1.modelTxt}"), and the fair price DraftKings' fair chance's (${s1.fairAm && s1.fairAm[0]})`);
+      check(B.card[0] === BT.card[0] && B.card[1] === BT.card[1].replace('model (on trial) says', 'model says').replace(' · the price says', `, ${FAILED_SAY(2)} · the price says`),
         `${name}: the card's chance lines are the trial's, the model's line saying the same ("${B.card[1]}")`);
-      check(B.bub && B.bub.dts.join() === 'Price,Fair,Model' && B.bub.quiet && /^props model \d+%failed trial$/.test(B.bub.modelDd) && B.bub.marks.length === 2 && B.bub.marks.every(m => m[0] === 'failed trial' && /not shown to beat DraftKings’ closing lines, so its (chance is|projections are) for reference only$/.test(m[1])) && /failed its trial/.test(B.bub.tableName),
-        `${name}: the player's matchup bubble leads with DraftKings' fair chance, the props model's after it muted ("${B.bub && B.bub.modelDd}"), its marks "failed trial" (${B.bub && B.bub.dts.join(', ')})`);
+      check(B.bub && B.bub.dts.join() === 'Price,Fair,Model' && B.bub.quiet && B.bub.modelDd === `props model ${ppPct(pO)} failed trial` && B.bub.fair === ppPct(fo) && B.bub.projTh === 'Projected failed trial' && B.bub.marks.length === 2 && B.bub.marks.every(m => m[0] === 'failed trial' && /not shown to beat DraftKings’ closing lines, so its (chance is|projections are) for reference only$/.test(m[1])) && /failed its trial/.test(B.bub.tableName),
+        `${name}: the player's matchup bubble leads with DraftKings' fair chance (${B.bub && B.bub.fair}), the props model's after it muted at the view's figure ("${B.bub && B.bub.modelDd}"), its marks "failed trial", each a word apart from what it marks ("${B.bub && B.bub.projTh}")`);
       const ot = B.words.search(/on trial/i);
       check(ot < 0, `${name}: no text, title or name anywhere on the page says "on trial"${ot >= 0 ? ` ("${B.words.slice(Math.max(0, ot - 100), ot + 30)}")` : ''}`);
       return B;
+    };
+    /* the builder's edges on a FAIL whose points milestones have their margin (the planted EDGE8): a leg at each clamp, its
+       fair chance and the model's both ">99%" or both "<1%" in the builder row and its bubble, as the view's row prints
+       them; a leg the model rates far above DraftKings' fair chance wearing no far-off flag; and a parlay of one leg whose
+       fair chance is 72%, its row and its confidence box on one band (High), its words counted ("its player leg") */
+    const holdEdges = async (name, dec) => {
+      await builderAfresh(); const vw = {};
+      for (const [k, pid] of [['hi', '4432166'], ['lo', '3004'], ['far', '3001']]) { openRow(pid); await sleep(5); vw[k] = viewSays(EK[k]); await tick(EK[k]); }
+      const B = await builderRead(EK.hi, [EK.lo]);
+      const bad = [];
+      for (const k of ['hi', 'lo', 'far']) { const x = B.rows[EK[k]], p = edgeP[k](), f = edgeF[k](), v = vw[k];
+        if (!x) { bad.push(`${k}: no row`); continue; }
+        if (!(x.fp === f && x.fpct === ppPct(f) && v && x.fpct === v.pct && x.est && x.conf && x.conf[0] === confOwn(f) && x.mdl && x.mdl[0] === `props model ${ppPct(p)}` && x.mdl[1] === p && x.markIn && x.fairLbl === 'fair'))
+          bad.push(`${k}: ${x.fpct} ${x.conf && x.conf[1]} "${x.mdl && x.mdl[0]}" where ${ppPct(f)} and "props model ${ppPct(p)}"`); }
+      const hx = B.rows[EK.hi], lx = B.rows[EK.lo];
+      check(!bad.length && edgeP.hi() > 0.995 && edgeF.hi() > 0.995 && edgeP.lo() < 0.005 && edgeF.lo() < 0.005 && hx && hx.fpct === '>99%' && hx.mdl[0] === 'props model >99%' && lx && lx.fpct === '<1%' && lx.mdl[0] === 'props model <1%',
+        `${name}: at the clamps the builder prints each figure as the view does, DraftKings' fair chance and the props model's: ${hx && hx.fpct} and "${hx && hx.mdl && hx.mdl[0]}", ${lx && lx.fpct} and "${lx && lx.mdl && lx.mdl[0]}"${bad.length ? ': ' + bad.join('; ') : ''}`);
+      const bh = B.bubs[EK.hi], bl = B.bubs[EK.lo];
+      check(bh && bh.dts.join() === 'Price,Fair,Model' && bh.fair === '>99% est.' && bh.modelDd === 'props model >99% failed trial' && bl && bl.fair === '<1% est.' && bl.modelDd === 'props model <1% failed trial',
+        `${name}: the matchup bubble prints them as the view and the builder do ("${bh && bh.fair}", "${bh && bh.modelDd}"; "${bl && bl.fair}", "${bl && bl.modelDd}"), never "100%" or "0%"`);
+      const fx = B.rows[EK.far];
+      check(fx && edgeP.far() - edgeF.far() >= 0.15 && !fx.far && !fx.bare,
+        `${name}: a leg the props model rates ${Math.round(edgeP.far() * 100)}% against DraftKings' fair ${Math.round(edgeF.far() * 100)}% wears no "far off the market" flag in the builder, and names the model nowhere but its muted line${fx && fx.far ? ` ("${fx.far}")` : ''}`);
+      /* one leg, fair 72%: High on the view's scale, MED on the builder's own */
+      await builderAfresh(); openRow('3005'); await sleep(5); const vb = viewSays(EK.band); await tick(EK.band);
+      const B1 = await builderRead(EK.band), x1 = B1.rows[EK.band], f1 = edgeF.band(), p1m = edgeP.band();
+      check(x1 && vb && x1.fpct === '72%' && x1.fpct === vb.pct && x1.conf && x1.conf[1] === 'HIGH' && vb.conf === 'high' && B1.sum.fair === f1 && B1.sum.tier === 'HIGHconfidence all 1 land, on the fair chance' && bandOwn(f1)[1] === 'MED',
+        `${name}: a parlay of one leg at DraftKings' fair chance 72% bands it once: its row "${x1 && x1.fpct} ${x1 && x1.conf && x1.conf[1]}", its confidence box "${B1.sum.tier}" (the builder's own scale would say ${bandOwn(f1)[1]})`);
+      check(B1.sum.modelTxt === `model says ${(p1m * 100).toFixed(1)}%, ${FAILED_SAY(1)}` && B1.card[1] === `model says ${(p1m * 100).toFixed(1)}%, ${FAILED_SAY(1)} · the price says ${(100 / (1 + 100 / 300)).toFixed(1)}%`,
+        `${name}: with one player leg the summary and the card say "its player leg", not "legs" ("${B1.sum.modelTxt}" / "${B1.card[1]}")`);
+      return B;
+    };
+    /* a FAIL parlay with a player leg DraftKings gives no fair chance (a milestone on a stat whose margin is taken away)
+       and a team leg: the leg's cell "no DraftKings chance", the model's muted with its mark; the summary "–", no fair
+       chance and why, the model's line under it, no fair price and no confidence box, the note that there is none to
+       show; the card the same, why first */
+    const holdNoFair = async (name, dec, stat) => {
+      const ml = PA.ladders.find(l => l.player === '4065648' && l.stat === stat), mk = [p1.id, 'prop', '4065648', stat, 'mile', ml.k, 'yes'].join('|'), rM = rowsP['4065648'];
+      const pM = PJ.nbSf(ml.k, muOf(rM, stat), PJ.nbVar(muOf(rM, stat), props8.dist.var[stat]));
+      await builderAfresh(); openRow('4065648'); await sleep(5); await tick(mk); await tick(homeKey(p1));
+      const B = await builderRead(mk), x = B.rows[mk], m = B.sum.model;
+      check(x && x.nodk && x.fp === null && x.mark && x.mark[0] === 'failed trial' && x.mark[1] === failLegTitleOwn(dec) && x.markIn && x.mdl && x.mdl[0] === `props model ${ppPct(pM)}` && x.mdl[1] === pM && x.mdl[2] === mdlTitleOwn(dec) && x.nP === 1 && !x.legfair && !x.bare
+        && x.heard === `no DraftKings chance props model ${ppPct(pM)} failed trial`,
+        `${name}: a player's leg with no DraftKings fair chance reads "${x && x.heard}" in the builder: no figure leads, the props model's muted with its mark`);
+      check(B.sum.fair === null && Number.isFinite(m) && m > 0 && m < 1 && B.sum.heroTxt === `–no DraftKings fair chance: a leg has one price onlymodel says ${(m * 100).toFixed(1)}%, ${FAILED_SAY(1)}`
+        && B.sum.modelTxt === `model says ${(m * 100).toFixed(1)}%, ${FAILED_SAY(1)}` && B.sum.fairAm && B.sum.fairAm[0] === '–' && B.sum.fairAm[1] === 'fair price for DraftKings’ fair chance' && B.sum.tier === null
+        && B.sum.note === 'The fair chance needs both of DraftKings’ prices on every leg; one leg has one only, so there is none to show. The model’s chance under it is for reference only.',
+        `${name}: its summary leads with no chance ("${B.sum.heroTxt}"), no fair price and no confidence box, and says there is none to show ("${B.sum.note}")`);
+      check(B.card.length === 2 && B.card[0] === 'No fair chance: a leg has only one of DraftKings’ two prices' && new RegExp(`^model says ${(m * 100).toFixed(1).replace('.', '\\.')}%, ${FAILED_SAY(1)} · the price says [\\d.]+%$`).test(B.card[1]),
+        `${name}: the card says why there is no fair chance first, the model's after it ("${B.card.join(' / ')}")`);
     };
     /* no decision: the trial's view, drawn by the same code (pbPropsOn true) */
     st = stOf(null); await openAll();
@@ -1236,6 +1326,12 @@ async function playerProps() {
         `and its summary as before: "${BT.sum.modelTxt}", the fair price for the model's chance (${BT.sum.fairAm && BT.sum.fairAm[0]}), the confidence on the fair chance`);
       check(BT.card.length === 2 && /^model \(on trial\) says [\d.]+% · the price says [\d.]+%$/.test(BT.card[1]) && BT.bub && BT.bub.dts.join() === 'Price,Model,Fair' && BT.bub.marks.length === 2 && BT.bub.marks.every(m => m[0] === 'on trial') && !BT.bub.quiet,
         `its card says the model's chance on trial ("${BT.card[1]}"), and the player's bubble gives Price, Model and Fair, the model marked on trial (${BT.bub && BT.bub.dts.join(', ')})`); }
+    /* on the trial the far-off flag is as it was: a leg the model rates 15 points or more above DraftKings' fair chance
+       wears it in the builder, the model's figure first, as before the FAIL */
+    { await builderAfresh(); openRow('3001'); await sleep(5); await tick(EK.far);
+      const B = await builderRead(EK.far), x = B.rows[EK.far], p = edgeP.far(), f = edgeF.far();
+      check(x && x.far === `model ${Math.round(p * 100)}% · DraftKings ${Math.round(f * 100)}% est.: far off the market`,
+        `on the trial a leg the model rates far above DraftKings' fair chance still wears its flag in the builder ("${x && x.far}")`); }
     check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
     /* a PASS moves nothing by itself: still the trial's view */
     st = stOf({ verdict: 'PASS', decidedAt: '2026-11-25T12:00Z', lines: 30000 }); await openAll();
@@ -1252,20 +1348,20 @@ async function playerProps() {
       check(a.leg === tickTrial.leg && a.slip === tickTrial.slip && a.said === tickTrial.said && a.on && tickTrial.on && b.leg === tickTrialR.leg && b.slip === tickTrialR.slip && b.said === tickTrialR.said && b.on === tickTrialR.on,
         `ticking a FAIL row's box puts in your parlay exactly the leg the trial's view put in, at DraftKings' price and the read's time, and says so the same ("${a.said}" / "${b.said}")`); }
     { openRow('4065648'); await sleep(5); const vT = viewSays(tatKey), vR = viewSays(rungKey);
-      await tick(homeKey(p1)); await holdBuilderFail('an early FAIL', decE, vT, vR); }
+      await tick(homeKey(p1)); await holdBuilderFail('an early FAIL', decE, vT, vR); await holdNoFair('an early FAIL', decE, 'pts'); }
     /* a full-bar FAIL (no early stop): the bar's own words */
     const decB = { verdict: 'FAIL', decidedAt: '2026-11-25T12:00Z', lines: 30000 };
     const smB = { lines: 30000, gradedGames: 260, scores: { lines: 30000, model: { logloss: 0.69, brier: 0.249 }, market: { logloss: 0.68, brier: 0.244 } } };
     st = stOf(decB, smB); await openAll();
     await holdFail('a full-bar FAIL', decB, { ...props8.ledger.summary, ...smB });
     { openRow('4065648'); await sleep(5); const vT = viewSays(tatKey), vR = viewSays(rungKey);
-      await tick(tatKey); await tick(rungKey); await tick(homeKey(p1)); await holdBuilderFail('a full-bar FAIL', decB, vT, vR); }
+      await tick(tatKey); await tick(rungKey); await tick(homeKey(p1)); await holdBuilderFail('a full-bar FAIL', decB, vT, vR); await holdEdges('a full-bar FAIL', decB); }
     /* the real ledger, its own decision and numbers, on this file's game */
     const RL = RP.ledger || LEDGER0;
     st = { ...st8, props: { ...props8, ledger: RL } }; await openAll();
     if (RL.decision && RL.decision.verdict === 'FAIL') { await holdFail('the real ledger', RL.decision, RL.summary);
       openRow('4065648'); await sleep(5); const vT = viewSays(tatKey), vR = viewSays(rungKey);
-      await tick(tatKey); await tick(rungKey); await tick(homeKey(p1)); await holdBuilderFail('the real ledger', RL.decision, vT, vR); }
+      await tick(tatKey); await tick(rungKey); await tick(homeKey(p1)); await holdBuilderFail('the real ledger', RL.decision, vT, vR); await holdEdges('the real ledger', RL.decision); }
     else check(w.eval('pbPropsOn()') === true && body().querySelector('.pp-trialtag') && !body().querySelector('[data-pp-fail]'), "the real ledger has no FAIL: the trial's view");
     /* the real state and the job's real lines.json: with the real ledger's FAIL (the early stop of 5 November 2026) every
        game the props model projects that is still to come opens on the FAIL's view, and every player line DraftKings has
@@ -1321,10 +1417,12 @@ async function playerProps() {
         await tick(key); await tick(mk);
         const B = await builderRead(key), x = B.rows[key], t = B.rows[mk];
         check(x && v && x.fp === fo && x.fpct === ppPct(fo) && x.fpct === v.pct && x.conf && x.conf[0] === confOwn(fo) && x.conf[0] === v.conf && x.mark && x.mark[0] === 'failed trial' && x.mark[1] === failLegTitleOwn(RD)
-          && x.mdl && x.mdl[0] === `props model ${ppPct(pO)}` && x.mdl[1] === pO && !x.legfair && t && !t.mark && !t.mdl && t.nP === 1,
-          `on the real state, ${r[0]}'s ${m.stat} Over ${m.line} in the builder: DraftKings' fair chance ${x && x.fpct} ${x && x.conf && x.conf[1]}, as his row in the view showed it, "failed trial", "${x && x.mdl && x.mdl[0]}" muted; the ${gB.home} to win as before`);
-        check(B.sum.modelTxt === `model says ${(B.sum.model * 100).toFixed(1)}%, ${FAILED_SAY}` && B.sum.fairAm && B.sum.fairAm[1] === 'fair price for DraftKings’ fair chance' && B.sum.fairAm[0] === amOwn(B.sum.fair)
-          && new RegExp(`^model says [\\d.]+%, ${FAILED_SAY} · the price says [\\d.]+%$`).test(B.card[1]) && B.bub && B.bub.dts.join() === 'Price,Fair,Model' && B.words.search(/on trial/i) < 0,
+          && x.mdl && x.mdl[0] === `props model ${ppPct(pO)}` && x.mdl[1] === pO && !x.legfair && t && !t.mark && !t.mdl && t.nP === 1
+          && x.fairLbl === 'fair' && x.markIn && x.heard === `DraftKings' fair chance: ${ppPct(fo)} ${confOwn(fo).toUpperCase()} props model ${ppPct(pO)} failed trial` && !x.far && !x.bare,
+          `on the real state, ${r[0]}'s ${m.stat} Over ${m.line} in the builder: DraftKings' fair chance ${x && x.fpct} ${x && x.conf && x.conf[1]}, as his row in the view showed it, labelled and heard as DraftKings' ("${x && x.heard}"), "${x && x.mdl && x.mdl[0]}" muted with its mark, no far-off flag (the model ${Math.round(pO * 100)}% against ${Math.round(fo * 100)}%); the ${gB.home} to win as before`);
+        check(B.sum.modelTxt === `model says ${(B.sum.model * 100).toFixed(1)}%, ${FAILED_SAY(1)}` && B.sum.fairAm && B.sum.fairAm[1] === 'fair price for DraftKings’ fair chance' && B.sum.fairAm[0] === amOwn(B.sum.fair)
+          && B.sum.tier === `${confOwn(B.sum.fair).toUpperCase()}confidence all 2 land, on the fair chance`
+          && new RegExp(`^model says [\\d.]+%, ${FAILED_SAY(1)} · the price says [\\d.]+%$`).test(B.card[1]) && B.bub && B.bub.dts.join() === 'Price,Fair,Model' && B.bub.modelDd === `props model ${ppPct(pO)} failed trial` && B.bub.fair === ppPct(fo) && B.words.search(/on trial/i) < 0,
           `and its summary, card and bubble the FAIL's ("${B.sum.modelTxt}" / "${B.card[1]}"), no "on trial" anywhere on the page${B.words.search(/on trial/i) >= 0 ? ` ("${B.words.slice(Math.max(0, B.words.search(/on trial/i) - 100), B.words.search(/on trial/i) + 30)}")` : ''}`);
       }
       check(errors.length === 0, 'the real state: nothing thrown' + (errors.length ? ': ' + errors.join(' | ') : '')); }

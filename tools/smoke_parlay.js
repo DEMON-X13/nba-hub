@@ -316,11 +316,14 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     const leadF = txt(pf.d.querySelector('#pbPanel .pb-lead')), footF = txt(pf.d.querySelector('#pbPanel .pb-foot'));
     check(leadF && !/on trial/.test(leadF) && /lines at most\. Add any of them to the builder below\.$/.test(leadF) && footF && !/on trial/.test(footF) && footF.includes('a total’s is the book’s own; it takes no player’s line: the props model’s trial was stopped early as a FAIL on 5 November 2026. The Value picks come first'),
       `the lead and the foot no longer call the model on trial, the foot saying why it takes no player's line ("${leadF.slice(-60)}" / "${footF.slice(footF.indexOf('a total’s'), footF.indexOf('a total’s') + 130)}")`);
-    /* a player's leg the reader adds by hand still shows the model's chance, marked: its title says the trial stopped and
-       that no list or set takes it; the bar's own FAIL (no early) is said as that, in the notes and the title alike */
+    /* a player's leg the reader adds by hand still shows the model's chance, muted, titled that the trial stopped and that
+       no list or set takes it; its mark reads "failed trial", titled that its chance there is DraftKings' fair chance
+       (section 8 holds the builder's rows); the bar's own FAIL (no early) is said as that, in the notes and the title alike */
     const T_EARLY = 'The props model’s trial was stopped early as a FAIL on 5 November 2026, the owner’s call: it was not shown to beat DraftKings’ closing lines, so this chance is the model’s, for reference only, and no list or set takes it';
+    const M_EARLY = 'The props model’s trial was stopped early as a FAIL on 5 November 2026, the owner’s call: it was not shown to beat DraftKings’ closing lines, so this leg’s chance is DraftKings’ fair chance, and the props model’s own, beside it, is for reference only';
     const markF = pf.d.createElement('div'); markF.innerHTML = pf.w.pbTrialMark({ kind: 'prop' });
-    check(pf.w.pbTrialTitle() === T_EARLY && markF.querySelector('.pb-trial') && markF.querySelector('.pb-trial').title === T_EARLY, `a player leg's mark is titled with the stop ("${pf.w.pbTrialTitle().slice(0, 100)}")`);
+    check(pf.w.pbTrialTitle() === T_EARLY && markF.querySelector('.pb-trial') && markF.querySelector('.pb-trial').textContent === 'failed trial' && markF.querySelector('.pb-trial').title === M_EARLY,
+      `a player leg's mark reads "failed trial", titled with the stop, and the muted chance's title says it is the model's for reference ("${pf.w.pbTrialTitle().slice(0, 100)}")`);
     const [noPlBar, titleBar] = JSON.parse(pf.w.eval('(() => { const d = S.props.ledger.decision, e = d.early; delete d.early; try { return JSON.stringify([pbNoPl([]), pbTrialTitle()]); } finally { d.early = e; } })()'));
     check(noPlBar === 'no player lines: the props model failed its shadow ledger’s bar, so the list takes none.' && titleBar === 'The props model failed its shadow ledger’s bar against DraftKings’ closing lines, so this chance is the model’s, for reference only, and no list or set takes it',
       `the bar's own FAIL is said as a failed bar ("${noPlBar}" / "${titleBar.slice(0, 80)}")`);

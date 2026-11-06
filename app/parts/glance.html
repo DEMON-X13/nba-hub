@@ -168,16 +168,23 @@ function anchor() {
 }
 
 /* ---- the leg it was opened from ---- */
-const trialMark = () => '<i class="glance-trial" title="The props model is on trial: not yet shown to beat DraftKings">on trial</i>';
+/* the props model's mark: on trial, or, once it has failed (pbPropsOn false), "failed trial", titled with why its
+   numbers are for reference only */
+const propsFailed = () => typeof pbPropsOn === 'function' && !pbPropsOn();
+const trialMark = what => propsFailed()
+  ? `<i class="glance-trial" data-glance-failed title="${H(`${typeof pbPropsOffWhy === 'function' ? pbPropsOffWhy().replace(/^./, c => c.toUpperCase()) : 'The props model failed its trial'}: it was not shown to beat DraftKings’ closing lines, so its ${what === 'proj' ? 'projections are' : 'chance is'} for reference only`)}">failed trial</i>`
+  : '<i class="glance-trial" title="The props model is on trial: not yet shown to beat DraftKings">on trial</i>';
 function legHtml(K) {
   if (!K || !K.leg) return '';
   const l = K.leg, out = [];
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
-  /* Model: the player model's chance, the one the builder prices the leg on */
-  const pm = l.p;
-  out.push(`<div><dt>Model</dt><dd>${pm != null && isFinite(pm) ? N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark() : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`);
+  /* Model: the player model's chance, the one the builder prices the leg on; once the props model has failed its trial,
+     a player's leg leads with DraftKings' fair chance, the props model's after it, muted and marked failed */
+  const pm = l.p, failed = l.kind === 'prop' && propsFailed();
+  const model = `<div><dt>Model</dt><dd${failed ? ' class="glance-q"' : ''}>${pm != null && isFinite(pm) ? (failed ? 'props model ' : '') + N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark('chance') : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`;
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
-  out.push(`<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`);
+  const fairRow = `<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`;
+  if (failed) out.push(fairRow, model); else out.push(model, fairRow);
   return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;
 }
 function tonightBtn(gid) {
@@ -229,7 +236,7 @@ function playerHtml() {
     const val = k => { if (k === 'min') return isFinite(row[3]) ? (+row[3]).toFixed(0) : '–';
       if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pc0(v) : '–'; }
       const v = typeof ppMean === 'function' ? ppMean(row, k) : null; return v == null || !isFinite(v) ? '–' : (+v).toFixed(1); };
-    table = `<table class="glance-t" aria-label="The props model's projection for him in this game, on trial"><thead><tr><th scope="col">Projected${trialMark()}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
+    table = `<table class="glance-t" aria-label="${propsFailed() ? 'The props model’s projection for him in this game, for reference: the model failed its trial' : 'The props model\'s projection for him in this game, on trial'}"><thead><tr><th scope="col">Projected${trialMark('proj')}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
       `<tr data-glance-stat="${H(k)}"${st === k ? ' class="glance-on"' : ''}><th scope="row">${H(lab)}</th><td class="glance-n" data-glance-n="proj:${H(k)}">${H(val(k))}</td></tr>`).join('')}</tbody></table>`;
   } else table = `<p class="glance-q glance-none" data-glance-n="noproj">No projection: ${out ? 'he is on the injury report' : gameProj ? 'the props model does not project him for this game' : 'the props model has no projections for this game yet'}.</p>`;
   return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${tonightBtn(gid)}` };

@@ -1334,7 +1334,7 @@ window.PARLAY_CARD = (function () {
     const am = typeof decToAm === 'function' && dec > 1 ? decToAm(dec) : null;
     return { source, kicker, title: n + '-leg parlay', dateText: dates(legs), price: ml(am), dec: isFinite(dec) ? dec.toFixed(2) : '–', implied: dec > 1 ? pct(1 / dec) : '–', priceNote,
       legs: legs.map(x => x.card), stake: stake > 0 ? stake : 0, payout: stake > 0 ? stake * dec : 0, profit: stake > 0 ? stake * dec - stake : 0,
-      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial,
+      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial, failed: !!trial && typeof pbPropsOn === 'function' && !pbPropsOn(),
       fair: fair && fair.p != null && isFinite(fair.p) ? pct(fair.p) : null, fairEst: !!(fair && fair.p != null && fair.est), sg: !!sg,
       oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'),
       made: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), site: SITE,
@@ -1376,13 +1376,15 @@ window.PARLAY_CARD = (function () {
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
      then the model's (on trial with a player leg in it) and the price's; with no fair chance, the model's and the
-     price's, then why there is none. Each line is a list of [text, bold] pieces, so the window, the image and the share
-     text say the same */
+     price's, then why there is none. Once the props model has failed its trial, a parlay with a player leg says its
+     player legs are the failed model's, never on trial, and with no fair chance says why first, the model's after it.
+     Each line is a list of [text, bold] pieces, so the window, the image and the share text say the same */
   function chanceLines(m) {
-    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial ? ' (on trial)' : '';
-    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]];
+    const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && !m.failed ? ' (on trial)' : '';
+    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + (typeof PB_FAILED_SAY === 'string' ? PB_FAILED_SAY : 'its player legs the props model’s, which failed its trial')]] : [];
     if (m.fair) return [[['Fair chance ' + all], [m.fair, 1], ...(m.fairEst ? [[' (est.)']] : [])],
-      [...(m.chance ? [[by + ' says '], [m.chance, 1]] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
+      [...(m.chance ? [[by + ' says '], [m.chance, 1], ...fx] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
+    if (m.failed && m.chance) return [[['No fair chance: a leg has only one of DraftKings’ two prices']], [['model says '], [m.chance, 1], ...fx, ...price]];
     return [[...(m.chance ? [['Model’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
       [['No fair chance: a leg has only one of DraftKings’ two prices']]];
   }
@@ -1903,16 +1905,23 @@ function anchor() {
 }
 
 /* ---- the leg it was opened from ---- */
-const trialMark = () => '<i class="glance-trial" title="The props model is on trial: not yet shown to beat DraftKings">on trial</i>';
+/* the props model's mark: on trial, or, once it has failed (pbPropsOn false), "failed trial", titled with why its
+   numbers are for reference only */
+const propsFailed = () => typeof pbPropsOn === 'function' && !pbPropsOn();
+const trialMark = what => propsFailed()
+  ? `<i class="glance-trial" data-glance-failed title="${H(`${typeof pbPropsOffWhy === 'function' ? pbPropsOffWhy().replace(/^./, c => c.toUpperCase()) : 'The props model failed its trial'}: it was not shown to beat DraftKings’ closing lines, so its ${what === 'proj' ? 'projections are' : 'chance is'} for reference only`)}">failed trial</i>`
+  : '<i class="glance-trial" title="The props model is on trial: not yet shown to beat DraftKings">on trial</i>';
 function legHtml(K) {
   if (!K || !K.leg) return '';
   const l = K.leg, out = [];
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
-  /* Model: the player model's chance, the one the builder prices the leg on */
-  const pm = l.p;
-  out.push(`<div><dt>Model</dt><dd>${pm != null && isFinite(pm) ? N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark() : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`);
+  /* Model: the player model's chance, the one the builder prices the leg on; once the props model has failed its trial,
+     a player's leg leads with DraftKings' fair chance, the props model's after it, muted and marked failed */
+  const pm = l.p, failed = l.kind === 'prop' && propsFailed();
+  const model = `<div><dt>Model</dt><dd${failed ? ' class="glance-q"' : ''}>${pm != null && isFinite(pm) ? (failed ? 'props model ' : '') + N('model', pc0(pm)) + (l.kind === 'prop' ? trialMark('chance') : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`;
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
-  out.push(`<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`);
+  const fairRow = `<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pc0(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`;
+  if (failed) out.push(fairRow, model); else out.push(model, fairRow);
   return `<div class="glance-leg" data-glance-legbox><p class="glance-lt"><span class="glance-k">This leg</span> ${N('label', l.label || '')}</p><dl class="glance-nums">${out.join('')}</dl></div>`;
 }
 function tonightBtn(gid) {
@@ -1964,7 +1973,7 @@ function playerHtml() {
     const val = k => { if (k === 'min') return isFinite(row[3]) ? (+row[3]).toFixed(0) : '–';
       if (k === 'dd' || k === 'td') { const v = typeof ppAt === 'function' ? ppAt(row, k) : null; return isFinite(v) ? pc0(v) : '–'; }
       const v = typeof ppMean === 'function' ? ppMean(row, k) : null; return v == null || !isFinite(v) ? '–' : (+v).toFixed(1); };
-    table = `<table class="glance-t" aria-label="The props model's projection for him in this game, on trial"><thead><tr><th scope="col">Projected${trialMark()}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
+    table = `<table class="glance-t" aria-label="${propsFailed() ? 'The props model’s projection for him in this game, for reference: the model failed its trial' : 'The props model\'s projection for him in this game, on trial'}"><thead><tr><th scope="col">Projected${trialMark('proj')}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
       `<tr data-glance-stat="${H(k)}"${st === k ? ' class="glance-on"' : ''}><th scope="row">${H(lab)}</th><td class="glance-n" data-glance-n="proj:${H(k)}">${H(val(k))}</td></tr>`).join('')}</tbody></table>`;
   } else table = `<p class="glance-q glance-none" data-glance-n="noproj">No projection: ${out ? 'he is on the injury report' : gameProj ? 'the props model does not project him for this game' : 'the props model has no projections for this game yet'}.</p>`;
   return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${tonightBtn(gid)}` };
@@ -4262,6 +4271,10 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
 .pb-tc .pb-trial{margin:2px 0 0;display:inline-block}
 small.faroff{display:block;font-size:11px;font-weight:600;margin-top:2px;white-space:normal;color:var(--gold)}
 .legfair{display:block;font-size:11px;font-weight:500;color:var(--ink-2);white-space:nowrap;margin-top:2px}
+/* a player's leg once the props model has failed its trial: DraftKings' fair chance leads (est. beside it where it is
+   one), the props model's own small and muted under it, for reference (the Player props view's row, its .mdl) */
+.pb-mdl{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:nowrap;margin-top:2px;cursor:help}
+.pb-fest{font-style:normal;font-size:10px;font-weight:500;color:var(--pb-q);margin-left:3px}
 .dkslip{display:block;font-size:11px;font-weight:500;color:var(--ink-2);white-space:normal;margin-top:2px}
 .pb-read{display:block;font-size:11px;font-weight:500;color:var(--pb-q);white-space:nowrap}
 .espn-ctl{display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:0 0 12px}
@@ -4815,7 +4828,18 @@ function pbTrialTitle() {
   if (!pbPropsOn()) { const w = pbPropsOffWhy(); return `${w[0].toUpperCase() + w.slice(1)}${lg.decision.early ? ', the owner’s call: it was not shown to beat DraftKings’ closing lines' : ' against DraftKings’ closing lines'}, so this chance is the model’s, for reference only, and no list or set takes it`; }
   return `The props model is on trial: its shadow ledger has ${n.toLocaleString('en-US')} of the ${N.toLocaleString('en-US')} graded lines its bar against DraftKings' closing lines is judged on, and it has not been shown to beat DraftKings, so this chance is the model's on trial`;
 }
-const pbTrialMark = l => l && l.kind === 'prop' ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>` : '';
+/* once it has failed (pbPropsOn false), a player's leg in the builder wears "failed trial" where it wore "on trial", titled
+   as the Player props view's FAIL mark: its chance there is DraftKings' fair chance, the props model's for reference */
+function pbFailLegTitle() {
+  const w = pbPropsOffWhy(), dec = S.props && S.props.ledger && S.props.ledger.decision;
+  return `${w[0].toUpperCase()}${w.slice(1)}${dec && dec.early ? ', the owner’s call' : ''}: it was not shown to beat DraftKings’ closing lines, so this leg’s chance is DraftKings’ fair chance, and the props model’s own, beside it, is for reference only`;
+}
+const PB_FAILED = 'failed trial';
+/* what the builder's summary and the parlay card say of the model's chance once a player leg in it is the failed props
+   model's (a parlay of team legs alone keeps the board model's chance as it was) */
+const PB_FAILED_SAY = 'its player legs the props model’s, which failed its trial';
+const pbTrialMark = l => !(l && l.kind === 'prop') ? '' : pbPropsOn() ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>`
+  : `<i class="pb-trial" data-pb-failed title="${esc(pbFailLegTitle())}">${PB_FAILED}</i>`;
 /* a leg on the builder: the same line exactly */
 const pbOn = l => M.slip.legs.some(x => slipKey(x) === (l.sk || slipKey(l)));
 const pbInBuilder = legs => M.slip.legs.length === legs.length && legs.every(pbOn);
@@ -5081,6 +5105,19 @@ function pbInj(l) {
   if (why) return `<span class="pb-inj" data-pb-held title="On today's injury report: ${esc(why)} of the Top 50 lines and every suggested parlay">${esc(String((Array.isArray(rp) && rp[1]) || 'listed').toUpperCase())}</span>`;
   return ppRow(l.id, l.pid) ? '' : `<span class="pb-inj" title="The props model does not project him for this game: on no list it reads, or under ${S.props ? S.props.minShown : 8} minutes">NOT PROJECTED</span>`;
 }
+/* a leg's Chance cell: the model's chance, its band and DraftKings' fair chance under it. Once the props model has failed
+   its trial, a player's leg is drawn as its row in the Player props view drew it (ppLegRow's FAIL row): DraftKings'
+   fair chance leads, at the view's percentage, with est. where it is one and the band worked on it (ppConf, on the
+   percentage shown), then the "failed trial" mark, and the props model's chance small and muted under it ("props model
+   50%"); where DraftKings gives no fair chance, "no DraftKings chance" and the model's muted. A team leg is as it was */
+function pbChanceCell(l, f, c, lbl) {
+  if (l.kind === 'prop' && !pbPropsOn()) {
+    const fp = f && f.p != null && Number.isFinite(f.p) ? f.p : null, [fc, fl] = fp != null ? ppConf(fp) : ['', ''];
+    return (fp != null ? `<span data-pb-fp="${fp}" title="${esc(ppFairTitle(l, f))}">${ppPct(fp)}</span>${f.est ? '<em class="pb-fest">est.</em>' : ''}<span class="pb-conf ${fc}">${fl.toUpperCase()}</span>` : '<span class="pb-q" data-pb-nodk>no DraftKings chance</span>')
+      + pbTrialMark(l) + (l.p != null ? `<small class="pb-mdl" data-pb-p="${l.p}" title="${esc(pbTrialTitle())}">props model ${ppPct(l.p)}</small>` : '');
+  }
+  return `${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}`;
+}
 /* the builder's numbers: its legs in its own order, the model's chance and DraftKings' fair chance that all land, the
    price (DraftKings' prices multiplied, a game's legs priced together by the same-game rule, or a parlay price typed in)
    and what the Bet amount returns. The parlay card (app/parts/card.html) reads the same, so its price is the builder's */
@@ -5114,7 +5151,10 @@ function renderParlay(o) {
     return;
   }
   const { n, pr, fair, P, stake, override, useDec, payout, profit, sg, trial } = q, slips = dkSlipRows(legs);
-  const fairAm = pr.corr != null && pr.corr > 0 && pr.corr < 1 ? fmtAm(probToAm(pr.corr)) : '–';
+  /* a player leg in it once the props model has failed its trial: the model's chance is said to be its, never on trial,
+     and nothing leads with it (the fair price and the confidence are DraftKings' fair chance's, or not drawn) */
+  const failed = trial && !pbPropsOn(), tw = trial ? (failed ? ', ' + PB_FAILED_SAY : ', on trial') : '', hasFair = !!(fair && fair.p != null);
+  const fairAm = failed ? (hasFair && fair.p > 0 && fair.p < 1 ? fmtAm(probToAm(fair.p)) : '–') : pr.corr != null && pr.corr > 0 && pr.corr < 1 ? fmtAm(probToAm(pr.corr)) : '–';
   let html = `<div class="pb-card pb-builder"><h2 id="pbTitle" tabindex="-1" style="display:flex;align-items:center;gap:10px">${n}-leg parlay <span class="pb-pill">building</span></h2>${espnCtl('builder')}
     <p class="pb-lead">Every leg has to land. The chance below is worked out with the legs' real relationship to each other, not by multiplying them together.</p>
     <table class="pb-btbl"><thead><tr><th>Player</th><th>The bet</th><th class="num">Projected</th><th class="num">Chance</th><th class="num">Price</th><th><span class="sr">Remove</span></th></tr></thead><tbody>`;
@@ -5123,7 +5163,7 @@ function renderParlay(o) {
     html += `<tr class="legrow" data-pb-row="${esc(l.sk)}"><td class="plr">${glanceName(l, { ml: l.odds, src: 'real' })}${pbInj(l)}<small>${esc(l.pos)} · ${esc(l.team)} v ${esc(l.opp)} · ${esc(pbDayText(l.date))}</small></td>
       <td class="bet"><b>${esc(l.label)}</b>${far ? `<small class="faroff" data-far>${farText(l.p, f)}</small>` : ''}${dkSlipLine(slips && slips[i], i)}</td>
       <td class="num" data-h="Projected">${pbNum(l.mu)}</td>
-      <td class="num" data-h="Chance">${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}</td>
+      <td class="num" data-h="Chance">${pbChanceCell(l, f, c, lbl)}</td>
       <td class="num pb-px" data-h="Price">${fmtAm(l.odds)} <small title="DraftKings' price, read ${esc(oddsClock(l.at))}">real · read ${esc(oddsClock(l.at))}</small></td>
       <td class="rm"><button type="button" class="btn ghost" data-drop="${esc(l.sk)}" aria-label="Remove ${esc(l.name)}, ${esc(l.label)}, from the builder">Remove</button></td></tr>`;
   });
@@ -5138,12 +5178,13 @@ function renderParlay(o) {
       <span class="pb-hint">${sg ? 'Blank prices the legs that share a game together, the way a book does.' : 'Blank multiplies DraftKings’ leg prices.'}</span>
     </div>
     <div class="pb-bigp">
-      ${fair && fair.p != null ? `<div class="pb-box hero"><b data-fair="${fair.p}">${(fair.p * 100).toFixed(1)}%</b><span>fair chance all ${n} land${fair.est ? ', est.' : ''}</span>${pr.corr != null ? `<small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${trial ? ', on trial' : ''}</small>` : '<small>no model chance: a player in it is not projected</small>'}</div>`
-        : pr.corr != null ? `<div class="pb-box hero"><b data-model="${pr.corr}">${(pr.corr * 100).toFixed(1)}%</b><span>model's chance all ${n} land${trial ? ', on trial' : ''}</span><small>no fair chance: a leg has one price only</small></div>`
+      ${hasFair ? `<div class="pb-box hero"><b data-fair="${fair.p}">${(fair.p * 100).toFixed(1)}%</b><span>fair chance all ${n} land${fair.est ? ', est.' : ''}</span>${pr.corr != null ? `<small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${tw}</small>` : '<small>no model chance: a player in it is not projected</small>'}</div>`
+        : pr.corr != null && failed ? `<div class="pb-box hero"><b>–</b><span>no DraftKings fair chance: a leg has one price only</span><small data-model="${pr.corr}">model says ${(pr.corr * 100).toFixed(1)}%${tw}</small></div>`
+        : pr.corr != null ? `<div class="pb-box hero"><b data-model="${pr.corr}">${(pr.corr * 100).toFixed(1)}%</b><span>model's chance all ${n} land${tw}</span><small>no fair chance: a leg has one price only</small></div>`
         : `<div class="pb-box hero"><b>–</b><span>no chance to show</span><small>a leg has neither a fair chance nor a model chance</small></div>`}
-      <div class="pb-box"><b>${fairAm}</b><span>fair price for the model's chance</span></div>
+      <div class="pb-box" data-pb-fairam><b>${fairAm}</b><span>${failed ? 'fair price for DraftKings’ fair chance' : 'fair price for the model\'s chance'}</span></div>
       <div class="pb-box"><b class="payout" data-payout="${payout}">${pbMoney(payout)}</b><span>returned if it lands, ${pbMoney(profit)} profit${override ? ', at your price' : sg ? ', est.' : ''}</span></div>
-      ${(() => { const on = fair && fair.p != null, cp = on ? fair.p : pr.corr; if (cp == null) return '';
+      ${(() => { const on = hasFair, cp = on ? fair.p : failed ? null : pr.corr; if (cp == null) return '';
         const [c, l] = pbBandOf(cp); return `<div class="pb-box tier ${c}" data-conf="${cp}"><b>${l}</b><span>confidence all ${n} land, on the ${on ? 'fair' : 'model’s'} chance</span></div>`; })()}
     </div>
     <p class="pb-fair-note">${fair && fair.p != null ? `The fair chance is DraftKings’: its prices with the margin taken out (a main line’s whole margin on the Over, as measured on DraftKings’ archived lines)${fair.est ? ', est. where a leg is priced on one side only or the legs share a game' : ''}, the legs moving together as the model’s do.`
@@ -5177,7 +5218,7 @@ render.parlay = function () {
   renderParlay();
 };
 /* what Suggested Parlays, the checks and the next pieces stand on */
-Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
+Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, pbChanceCell, PB_FAILED_SAY, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
   PB_TIERS, PB_KINDS, PB_MIXES, PB_TOP_N, PB_SEARCH, getPbTiers, getPbTop, pbTopBuild, pbTierCard, pbValMark, pbIsValue, pbTrialMark, pbOrder, pbOrd, parlayProb, parlayDec, parlayFair, legFair, legFarOff, legModel,
   pbView, pbSlipOf, pbLegAddBtn, pbPut, pbStale, pbWatchTick, stakeRead, pbStake, renderParlay, renderPb, pbLinesLoad, linesGl, pbGl, pbPr, pbCarries, pbQuote, dkSlipRows, dkSlipLine, glanceName,
   toggleLeg: l => slipToggle(pbSlipOf(l)), pbLines: () => LINES });

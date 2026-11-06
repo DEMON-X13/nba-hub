@@ -3,13 +3,31 @@
  "teams": {
   "ATL": [
    {
+    "id": "4585618",
+    "name": "Keshon Gilbert",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee Inflammation",
+    "date": "2026-11-05",
+    "returns": "2026-11-08"
+   },
+   {
+    "id": "4873201",
+    "name": "Asa Newell",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Toe",
+    "date": "2026-11-05",
+    "returns": "2026-11-07"
+   },
+   {
     "id": "3146557",
     "name": "Jock Landale",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hip",
     "date": "2026-11-05",
-    "returns": "2026-11-06"
+    "returns": "2026-11-07"
    },
    {
     "id": "4701230",
@@ -17,15 +35,6 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
-   },
-   {
-    "id": "4873201",
-    "name": "Asa Newell",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Toe",
     "date": "2026-11-05",
     "returns": "2026-11-06"
    },
@@ -108,13 +117,31 @@
   ],
   "CHA": [
    {
+    "id": "3032979",
+    "name": "Dennis Schroder",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Thigh",
+    "date": "2026-11-05",
+    "returns": "2026-11-06"
+   },
+   {
+    "id": "4433249",
+    "name": "Moussa Diabate",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Quadriceps",
+    "date": "2026-11-05",
+    "returns": "2026-11-06"
+   },
+   {
     "id": "5061575",
     "name": "Kon Knueppel",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Leg Soreness",
+    "status": "Out",
+    "detail": "Hamstring Strain",
     "date": "2026-11-05",
-    "returns": "2026-11-06"
+    "returns": "2026-11-09"
    },
    {
     "id": "4066218",
@@ -157,6 +184,24 @@
   ],
   "CLE": [
    {
+    "id": "5023693",
+    "name": "Tyrese Proctor",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-05",
+    "returns": "2026-11-06"
+   },
+   {
+    "id": "4683747",
+    "name": "Jaylon Tyson",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-05",
+    "returns": "2026-11-07"
+   },
+   {
     "id": "4576087",
     "name": "Peyton Watson",
     "pos": "G",
@@ -173,35 +218,17 @@
     "detail": "Knee",
     "date": "2026-11-05",
     "returns": "2026-11-06"
-   },
-   {
-    "id": "5023693",
-    "name": "Tyrese Proctor",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
-   },
-   {
-    "id": "4683747",
-    "name": "Jaylon Tyson",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
    }
   ],
   "DAL": [
    {
-    "id": "4432582",
-    "name": "Max Christie",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hip Not Specified",
+    "id": "5279129",
+    "name": "Sergio de Larrea",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Strain",
     "date": "2026-11-05",
-    "returns": "2026-11-06"
+    "returns": "2026-11-12"
    },
    {
     "id": "4593125",
@@ -209,7 +236,16 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Surgery",
-    "date": "2026-11-04",
+    "date": "2026-11-05",
+    "returns": "2026-11-06"
+   },
+   {
+    "id": "4432582",
+    "name": "Max Christie",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip Not Specified",
+    "date": "2026-11-05",
     "returns": "2026-11-06"
    },
    {
@@ -229,15 +265,6 @@
     "detail": "Foot Surgery",
     "date": "2026-11-01",
     "returns": "2026-11-12"
-   },
-   {
-    "id": "5279129",
-    "name": "Sergio de Larrea",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Strain",
-    "date": "2026-10-30",
-    "returns": "2026-11-06"
    }
   ],
   "DEN": [
@@ -448,10 +475,10 @@
     "id": "4432810",
     "name": "Isaiah Stewart",
     "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee",
+    "status": "Out",
+    "detail": "Knee Bruise",
     "date": "2026-11-05",
-    "returns": "2026-11-06"
+    "returns": "2026-11-09"
    },
    {
     "id": "4431785",
@@ -459,8 +486,8 @@
     "pos": "G",
     "status": "Out",
     "detail": "Back Soreness",
-    "date": "2026-11-03",
-    "returns": "2026-11-06"
+    "date": "2026-11-05",
+    "returns": "2026-11-09"
    }
   ],
   "MIL": [
@@ -468,10 +495,10 @@
     "id": "4697268",
     "name": "Kam Jones",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle",
     "date": "2026-11-05",
-    "returns": "2026-11-06"
+    "returns": "2026-11-08"
    }
   ],
   "MIN": [
@@ -539,10 +566,10 @@
     "id": "4432823",
     "name": "Jaylin Williams",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Back Spasms",
     "date": "2026-11-05",
-    "returns": "2026-11-06"
+    "returns": "2026-11-07"
    },
    {
     "id": "5159925",
@@ -643,7 +670,7 @@
     "name": "Adem Bona",
     "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Head",
+    "detail": "Back Sprain",
     "date": "2026-11-05",
     "returns": "2026-11-06"
    },
@@ -828,10 +855,19 @@
     "status": "Out",
     "detail": "Knee Bruise",
     "date": "2026-10-24",
-    "returns": "2026-11-06"
+    "returns": "2026-11-08"
    }
   ],
   "WAS": [
+   {
+    "id": "6583",
+    "name": "Anthony Davis",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-05",
+    "returns": "2026-11-06"
+   },
    {
     "id": "4432187",
     "name": "Reece Beekman",

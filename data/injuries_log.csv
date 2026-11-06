@@ -4054,9 +4054,10 @@ date,team,player_id,name,status
 2026-11-04,WAS,4997537,Tristan Vukcevic,Out
 2026-11-04,WAS,4432907,Justin Champagnie,Out
 2026-11-04,WAS,4606840,Jamir Watkins,Out
-2026-11-05,ATL,3146557,Jock Landale,Day-To-Day
+2026-11-05,ATL,4585618,Keshon Gilbert,Out
+2026-11-05,ATL,4873201,Asa Newell,Out
+2026-11-05,ATL,3146557,Jock Landale,Out
 2026-11-05,ATL,4701230,Jalen Johnson,Day-To-Day
-2026-11-05,ATL,4873201,Asa Newell,Day-To-Day
 2026-11-05,ATL,4712863,Mouhamed Gueye,Out
 2026-11-05,ATL,5105571,Henri Veesaar,Out
 2026-11-05,BOS,4066354,Payton Pritchard,Day-To-Day
@@ -4065,20 +4066,22 @@ date,team,player_id,name,status
 2026-11-05,BKN,4432194,Day'Ron Sharpe,Day-To-Day
 2026-11-05,BKN,5175643,Egor Demin,Out
 2026-11-05,BKN,5105626,Tyler Bilodeau,Out
-2026-11-05,CHA,5061575,Kon Knueppel,Day-To-Day
+2026-11-05,CHA,3032979,Dennis Schroder,Day-To-Day
+2026-11-05,CHA,4433249,Moussa Diabate,Day-To-Day
+2026-11-05,CHA,5061575,Kon Knueppel,Out
 2026-11-05,CHA,4066218,Grant Williams,Out
 2026-11-05,CHI,4278067,Nic Claxton,Out
 2026-11-05,CHI,4066650,Zach Collins,Day-To-Day
 2026-11-05,CHI,4397189,Jalen Smith,Day-To-Day
-2026-11-05,CLE,4576087,Peyton Watson,Day-To-Day
-2026-11-05,CLE,4066328,Jarrett Allen,Day-To-Day
 2026-11-05,CLE,5023693,Tyrese Proctor,Day-To-Day
 2026-11-05,CLE,4683747,Jaylon Tyson,Out
-2026-11-05,DAL,4432582,Max Christie,Day-To-Day
+2026-11-05,CLE,4576087,Peyton Watson,Day-To-Day
+2026-11-05,CLE,4066328,Jarrett Allen,Day-To-Day
+2026-11-05,DAL,5279129,Sergio de Larrea,Out
 2026-11-05,DAL,4593125,Santi Aldama,Out
+2026-11-05,DAL,4432582,Max Christie,Day-To-Day
 2026-11-05,DAL,5148538,Tarik Biberovic,Out
 2026-11-05,DAL,4683688,Dereck Lively II,Out
-2026-11-05,DAL,5279129,Sergio de Larrea,Out
 2026-11-05,DEN,3978,DeMar DeRozan,Day-To-Day
 2026-11-05,DEN,4592427,Spencer Jones,Out
 2026-11-05,DEN,4432181,Julian Strawther,Out
@@ -4100,16 +4103,16 @@ date,team,player_id,name,status
 2026-11-05,LAC,6580,Bradley Beal,Out
 2026-11-05,LAC,4396818,Jordan Miller,Out
 2026-11-05,LAL,5060631,Adou Thiero,Out
-2026-11-05,MEM,4432810,Isaiah Stewart,Day-To-Day
+2026-11-05,MEM,4432810,Isaiah Stewart,Out
 2026-11-05,MEM,4431785,Scotty Pippen Jr.,Out
-2026-11-05,MIL,4697268,Kam Jones,Day-To-Day
+2026-11-05,MIL,4697268,Kam Jones,Out
 2026-11-05,MIN,4432847,Terrence Shannon Jr.,Day-To-Day
 2026-11-05,MIN,4594268,Anthony Edwards,Out
 2026-11-05,MIN,3934673,Donte DiVincenzo,Out
 2026-11-05,NOP,5061589,Yves Missi,Out
 2026-11-05,NOP,4397688,Trey Murphy III,Day-To-Day
 2026-11-05,NYK,3062679,Josh Hart,Day-To-Day
-2026-11-05,OKC,4432823,Jaylin Williams,Day-To-Day
+2026-11-05,OKC,4432823,Jaylin Williams,Out
 2026-11-05,OKC,5159925,Nikola Topic,Out
 2026-11-05,OKC,5061603,Thomas Sorber,Out
 2026-11-05,OKC,4683692,Cason Wallace,Out
@@ -4140,6 +4143,7 @@ date,team,player_id,name,status
 2026-11-05,UTA,3102530,Jusuf Nurkic,Out
 2026-11-05,UTA,4277961,Jaren Jackson Jr.,Out
 2026-11-05,UTA,4433268,Trey Alexander,Out
+2026-11-05,WAS,6583,Anthony Davis,Day-To-Day
 2026-11-05,WAS,4432187,Reece Beekman,Out
 2026-11-05,WAS,4997537,Tristan Vukcevic,Out
 2026-11-05,WAS,4432907,Justin Champagnie,Out

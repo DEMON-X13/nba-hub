@@ -56,7 +56,7 @@
     "name": "Keshon Gilbert",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4712863",
@@ -405,7 +405,7 @@
     "name": "Moussa Diabate",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4701225",
@@ -475,7 +475,7 @@
     "name": "Dennis Schroder",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5281370",
@@ -3628,7 +3628,7 @@
     "name": "Anthony Davis",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5142718",

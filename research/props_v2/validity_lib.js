@@ -16,8 +16,13 @@
  *   prev          whether he played his side's previous game of the season (false: he missed it; null: the side's first)
  * The fold's constants are research/props.json's for S (the 2026 fold for the archive; the 2024 fold, fitted on 2023,
  * for 2023-24).
+ *
+ * readFetched(file) reads a fetched file once: its bytes, their text and their SHA-256. validity.js records the hashes of
+ * the csv and the reads it checked; test2024.js scores only the bytes those hashes name, read the same way.
  */
 'use strict';
+const fs = require('fs');
+const crypto = require('crypto');
 const PR = require('../../tools/props.js');
 const F = require('../../tools/props_feed.js');
 const SL = require('./cand_select_lib.js');
@@ -32,6 +37,7 @@ const TH = {
   v3Slack: { pts: 0.025, reb: 0.015, ast: 0.02, tpm: 0.015, stl: 0.015, blk: 0.015 },
 };
 const ll = (p, o) => o ? -Math.log(SL.clip(p)) : -Math.log(1 - SL.clip(p));
+const readFetched = file => { const buf = fs.readFileSync(file); return { buf, text: buf.toString('utf8'), sha256: crypto.createHash('sha256').update(buf).digest('hex') }; };
 const sfAt = (line, mu, ab) => PR.nbSf(Math.floor(line) + 1, mu, PR.nbVar(mu, ab));
 
 /* game|player -> did he play his side's previous game of the season (null on the side's first game) */
@@ -79,4 +85,4 @@ function gradeLines(D, research, S, rec) {
   return { L, voids, noProjection, pushes, games, P, NV };
 }
 
-module.exports = { BASE, TH, ll, sfAt, previousPlayed, gradeLines };
+module.exports = { BASE, TH, ll, sfAt, previousPlayed, gradeLines, readFetched };

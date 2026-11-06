@@ -1,0 +1,654 @@
+{
+ "what": "research/props_v2/test2024_test.js: test2024.js on made-up lines in a temporary folder (no real line read)",
+ "checks": [
+  {
+   "name": "the reader reads the fetch's columns",
+   "ok": true
+  },
+  {
+   "name": "a price missing, OFF or under 100 reads as none",
+   "ok": true
+  },
+  {
+   "name": "another header throws",
+   "ok": true
+  },
+  {
+   "name": "a row of the wrong shape throws",
+   "ok": true
+  },
+  {
+   "name": "two rows for one game, player and stat throw",
+   "ok": true
+  },
+  {
+   "name": "the window's first and last days kept, on the six base stats with both prices",
+   "ok": true
+  },
+  {
+   "name": "23 October, 15 April and the play-in left out",
+   "ok": true
+  },
+  {
+   "name": "a preseason game (one dated inside the window too) and a playoff game left out",
+   "ok": true
+  },
+  {
+   "name": "a game off the schedule left out",
+   "ok": true
+  },
+  {
+   "name": "turnovers and a combo left out",
+   "ok": true
+  },
+  {
+   "name": "a row missing a price, either or both, left out",
+   "ok": true
+  },
+  {
+   "name": "the window is the bar's",
+   "ok": true
+  },
+  {
+   "name": "a player who did not play, and one the box does not list, are void",
+   "ok": true
+  },
+  {
+   "name": "a debut with no game on record has no call",
+   "ok": true
+  },
+  {
+   "name": "a line equal to the stat is a push, left out",
+   "ok": true
+  },
+  {
+   "name": "every other line graded, by both models alike",
+   "ok": true
+  },
+  {
+   "name": "each graded line knows its row (V1 reads its stamp)",
+   "ok": true
+  },
+  {
+   "name": "the two models differ on the lines (A is not tools/props.js)",
+   "ok": true
+  },
+  {
+   "name": "tools/props.js's chance is its own project()'s on research/props.json's 2024 fold",
+   "ok": true
+  },
+  {
+   "name": "DraftKings' fair chance is the whole margin on the Over",
+   "ok": true
+  },
+  {
+   "name": "a 2023-24 row changed (its points, or one steal in a raw box score) fails the walk-forward",
+   "ok": true
+  },
+  {
+   "name": "all three hold: PASS",
+   "ok": true
+  },
+  {
+   "name": "a log-loss interval touching zero is not wholly below it",
+   "ok": true
+  },
+  {
+   "name": "a Brier interval touching zero is not wholly below it",
+   "ok": true
+  },
+  {
+   "name": "units of exactly zero are not up",
+   "ok": true
+  },
+  {
+   "name": "an interval missing or the wrong way round is not below zero",
+   "ok": true
+  },
+  {
+   "name": "both intervals below and units down: FAIL on test 3 alone",
+   "ok": true
+  },
+  {
+   "name": "the bar's figures before rounding: bootCI's bounds unrounded, the units summed",
+   "ok": true
+  },
+  {
+   "name": "a bound of -0.0000004 rounds to -0: the bar reads it as touching zero, the unrounded reading beside it as below",
+   "ok": true
+  },
+  {
+   "name": "V1 shown only at 95% or more stamped before the start, counted in whole lines",
+   "ok": true
+  },
+  {
+   "name": "V1 counted in whole lines: 80,746 of 85,000 (94.995%) is not 95%, though validity.js reads its share as 0.95",
+   "ok": true
+  },
+  {
+   "name": "V1 counts a line stamped before its event's start, as validity.js does",
+   "ok": true
+  },
+  {
+   "name": "the coverage counts every read and the games with no ESPN id",
+   "ok": true
+  },
+  {
+   "name": "a game of the window never read refuses",
+   "ok": true
+  },
+  {
+   "name": "a failed read refuses, as a game never read does: provider 40 has not answered it",
+   "ok": true
+  },
+  {
+   "name": "a failed read on the owner's list passes, counted",
+   "ok": true
+  },
+  {
+   "name": "a read of no known status refuses",
+   "ok": true
+  },
+  {
+   "name": "a game read with lines and no row refuses",
+   "ok": true
+  },
+  {
+   "name": "a game whose rows are not its read's count refuses",
+   "ok": true
+  },
+  {
+   "name": "a complete coverage passes",
+   "ok": true
+  },
+  {
+   "name": "the owner's list: a list of games with who decided it, or refused; none where there is no file",
+   "ok": true
+  },
+  {
+   "name": "lines other than the validity check's refuse",
+   "ok": true
+  },
+  {
+   "name": "the settings go together and never at the real cache or into results/",
+   "ok": true
+  },
+  {
+   "name": "a link to results/ or into the study folder is refused as the path is",
+   "ok": true
+  },
+  {
+   "name": "a fixture's file that is a link out of its folder is refused",
+   "ok": true
+  },
+  {
+   "name": "a file the scorer stands on must be committed",
+   "ok": true
+  },
+  {
+   "name": "FROZEN holds every module the scorer loads and every data file it reads",
+   "ok": true
+  },
+  {
+   "name": "the frozen list carries the scorer and what it reproduces",
+   "ok": true
+  },
+  {
+   "name": "no validity file: refused",
+   "ok": true
+  },
+  {
+   "name": "a VOID check (V0 did not hold) is read as VOID, not refused",
+   "ok": true
+  },
+  {
+   "name": "a VOID check (V2 did not hold) is read as VOID, not refused",
+   "ok": true
+  },
+  {
+   "name": "a VOID check (V3 did not hold) is read as VOID, not refused",
+   "ok": true
+  },
+  {
+   "name": "a check whose verdict is not what its checks say: refused",
+   "ok": true
+  },
+  {
+   "name": "a check on other thresholds: refused",
+   "ok": true
+  },
+  {
+   "name": "a check with no SHA-256 of what it read: refused",
+   "ok": true
+  },
+  {
+   "name": "lines that are not the validity check's bytes refuse (same count, prices swapped)",
+   "ok": true
+  },
+  {
+   "name": "a result already written: refused (decided once)",
+   "ok": true
+  },
+  {
+   "name": "a result that is not whole refuses as cut off, not as decided ({} and truncated)",
+   "ok": true
+  },
+  {
+   "name": "a truncated result, or a link at its path, is not decided but refused to be looked at",
+   "ok": true
+  },
+  {
+   "name": "a part left by a run cut off while writing: refused",
+   "ok": true
+  },
+  {
+   "name": "a write that fails leaves no result and no part",
+   "ok": true
+  },
+  {
+   "name": "the result is kept whole, and no part is left",
+   "ok": true
+  },
+  {
+   "name": "of two keeps only the first is kept",
+   "ok": true
+  },
+  {
+   "name": "a part already there refuses a keep, and is left as it was",
+   "ok": true
+  },
+  {
+   "name": "TEST2024_CACHE without TEST2024_OUT: refused",
+   "ok": true
+  },
+  {
+   "name": "TEST2024_OUT into results/: refused",
+   "ok": true
+  },
+  {
+   "name": "no refused run wrote a result",
+   "ok": true
+  },
+  {
+   "name": "the run ends and writes its result",
+   "ok": true
+  },
+  {
+   "name": "its reproduction passed in the same run",
+   "ok": true
+  },
+  {
+   "name": "the counts: graded, void, no call, pushes, and what was left out",
+   "ok": true
+  },
+  {
+   "name": "the coverage of the window, the two failed reads on the owner's list",
+   "ok": true
+  },
+  {
+   "name": "\"pre-game inferred, not shown\" in the result and its log",
+   "ok": true
+  },
+  {
+   "name": "V1 counted on the graded lines, reported",
+   "ok": true
+  },
+  {
+   "name": "the verdict is its own figures' by the bar",
+   "ok": true
+  },
+  {
+   "name": "reported beside it: tools/props.js, A less tools/props.js, the stats, sureness, units by side, the blend's share by stat and the figures before rounding",
+   "ok": true
+  },
+  {
+   "name": "every run of the validity check reported, deciding nothing: an earlier VOID on other bytes, and this one",
+   "ok": true
+  },
+  {
+   "name": "the hashes: the bytes scored, the validity check, and every file FROZEN holds",
+   "ok": true
+  },
+  {
+   "name": "the result is aggregates only: no player id, no per-line row",
+   "ok": true
+  },
+  {
+   "name": "it names no file of the real cache and is marked a fixture",
+   "ok": true
+  },
+  {
+   "name": "a second run on the same lines: refused (decided once)",
+   "ok": true
+  },
+  {
+   "name": "a VOID check is recorded as the outcome: VOID, the check's figures, and no score",
+   "ok": true
+  },
+  {
+   "name": "after a VOID, a second run (the validity check run again until it holds) is refused: decided once",
+   "ok": true
+  }
+ ],
+ "seconds": 103,
+ "plants": [
+  {
+   "planted": "--check: the Brier difference resampled on another seed",
+   "mustFail": "/does not score as results\\/cand_fix_score\\.json says: candidateMinusBaseline/",
+   "failed": "Error: the archive does not score as results/cand_fix_score.json says: candidateMinusBaseline",
+   "caught": true
+  },
+  {
+   "planted": "--check: both sides' units summed wrong",
+   "mustFail": "/does not score as results\\/cand_fix_score\\.json says: units/",
+   "failed": "Error: the archive does not score as results/cand_fix_score.json says: units",
+   "caught": true
+  },
+  {
+   "planted": "--check: a void graded as a no call",
+   "mustFail": "/is not cand_fix_lib\\.js archiveLines/",
+   "failed": "Error: the test's grading is not cand_fix_lib.js archiveLines' on the archive",
+   "caught": true
+  },
+  {
+   "planted": "--check: DraftKings' margin split between the two sides",
+   "mustFail": "/is not cand_fix_lib\\.js archiveLines/",
+   "failed": "Error: the test's grading is not cand_fix_lib.js archiveLines' on the archive",
+   "caught": true
+  },
+  {
+   "planted": "--check: A refitted without the rule's grids",
+   "mustFail": "/does not refit/",
+   "failed": "Error: A's 2024 fold does not refit to results/cand_fix_score.json's",
+   "caught": true
+  },
+  {
+   "planted": "--check: B's yardstick on 1,999 resamples",
+   "mustFail": "/B's yardstick does not give/",
+   "failed": "Error: B's yardstick does not give results/cand_blend.json's on the archive",
+   "caught": true
+  },
+  {
+   "planted": "--check: the 2023-24 walk-forward on tools/props.js's 2025 fold",
+   "mustFail": "/2023-24 walk-forward does not give/",
+   "failed": "Error: the 2023-24 walk-forward does not give results/cand_fix_score.json's walkForward[\"2024\"]: the 2023-24 rows are not the ones published",
+   "caught": true
+  },
+  {
+   "planted": "--check: brief() copied wrong",
+   "mustFail": "/brief is not cand_fix\\.js's/",
+   "failed": "Error: brief is not cand_fix.js's to the character",
+   "caught": true
+  },
+  {
+   "planted": "--check: FROZEN without tools/lib.js",
+   "mustFail": "/FROZEN leaves out what the run stands on: tools\\/lib\\.js/",
+   "failed": "Error: FROZEN leaves out what the run stands on: tools/lib.js",
+   "caught": true
+  },
+  {
+   "planted": "--check: the unrounded units summed on one side",
+   "mustFail": "/figures before rounding do not round/",
+   "failed": "Error: the bar's figures before rounding do not round to the ones it reads",
+   "caught": true
+  },
+  {
+   "planted": "--check: V1's bar at 94%",
+   "mustFail": "/V1's bar is not validity_lib\\.js's/",
+   "failed": "Error: V1's bar is not validity_lib.js's",
+   "caught": true
+  },
+  {
+   "planted": "the window ends a day late",
+   "mustFail": "the window's first and last days kept, on the six base stats with both prices",
+   "failed": "the window's first and last days kept, on the six base stats with both prices",
+   "caught": true
+  },
+  {
+   "planted": "the window starts a day late",
+   "mustFail": "the window's first and last days kept, on the six base stats with both prices",
+   "failed": "the window's first and last days kept, on the six base stats with both prices",
+   "caught": true
+  },
+  {
+   "planted": "no regular-season filter",
+   "mustFail": "the window's first and last days kept, on the six base stats with both prices",
+   "failed": "the window's first and last days kept, on the six base stats with both prices",
+   "caught": true
+  },
+  {
+   "planted": "every stat kept",
+   "mustFail": "the window's first and last days kept, on the six base stats with both prices",
+   "failed": "the window's first and last days kept, on the six base stats with both prices",
+   "caught": true
+  },
+  {
+   "planted": "a row kept with one price",
+   "mustFail": "the window's first and last days kept, on the six base stats with both prices",
+   "failed": "the window's first and last days kept, on the six base stats with both prices",
+   "caught": true
+  },
+  {
+   "planted": "a duplicate row read",
+   "mustFail": "two rows for one game, player and stat throw",
+   "failed": "two rows for one game, player and stat throw",
+   "caught": true
+  },
+  {
+   "planted": "a void counted as no call",
+   "mustFail": "a player who did not play, and one the box does not list, are void",
+   "failed": "a player who did not play, and one the box does not list, are void",
+   "caught": true
+  },
+  {
+   "planted": "pushes kept",
+   "mustFail": "a line equal to the stat is a push, left out",
+   "failed": "a line equal to the stat is a push, left out",
+   "caught": true
+  },
+  {
+   "planted": "the graded lines' rows not kept in step",
+   "mustFail": "each graded line knows its row (V1 reads its stamp)",
+   "failed": "each graded line knows its row (V1 reads its stamp)",
+   "caught": true
+  },
+  {
+   "planted": "the 2023-24 walk-forward not held (the old behaviour)",
+   "mustFail": "a 2023-24 row changed (its points, or one steal in a raw box score) fails the walk-forward",
+   "failed": "a 2023-24 row changed (its points, or one steal in a raw box score) fails the walk-forward",
+   "caught": true
+  },
+  {
+   "planted": "an interval touching zero read as below it",
+   "mustFail": "a log-loss interval touching zero is not wholly below it",
+   "failed": "a log-loss interval touching zero is not wholly below it",
+   "caught": true
+  },
+  {
+   "planted": "units of zero read as up",
+   "mustFail": "units of exactly zero are not up",
+   "failed": "units of exactly zero are not up",
+   "caught": true
+  },
+  {
+   "planted": "the figures before rounding rounded",
+   "mustFail": "the bar's figures before rounding: bootCI's bounds unrounded, the units summed",
+   "failed": "the bar's figures before rounding: bootCI's bounds unrounded, the units summed",
+   "caught": true
+  },
+  {
+   "planted": "V1 always shown",
+   "mustFail": "V1 shown only at 95% or more stamped before the start, counted in whole lines",
+   "failed": "V1 shown only at 95% or more stamped before the start, counted in whole lines",
+   "caught": true
+  },
+  {
+   "planted": "V1 read on validity.js's four-place share (the old behaviour)",
+   "mustFail": "V1 counted in whole lines: 80,746 of 85,000 (94.995%) is not 95%, though validity.js reads its share as 0.95",
+   "failed": "V1 counted in whole lines: 80,746 of 85,000 (94.995%) is not 95%, though validity.js reads its share as 0.95",
+   "caught": true
+  },
+  {
+   "planted": "a game never read let through",
+   "mustFail": "a game of the window never read refuses",
+   "failed": "a game of the window never read refuses",
+   "caught": true
+  },
+  {
+   "planted": "a failed read let through (the old behaviour)",
+   "mustFail": "a failed read refuses, as a game never read does: provider 40 has not answered it",
+   "failed": "a failed read refuses, as a game never read does: provider 40 has not answered it",
+   "caught": true
+  },
+  {
+   "planted": "the owner's list not read",
+   "mustFail": "a failed read on the owner's list passes, counted",
+   "failed": "a failed read on the owner's list passes, counted",
+   "caught": true
+  },
+  {
+   "planted": "a read of no known status let through",
+   "mustFail": "a read of no known status refuses",
+   "failed": "a read of no known status refuses",
+   "caught": true
+  },
+  {
+   "planted": "rows other than the read's count let through",
+   "mustFail": "a game whose rows are not its read's count refuses",
+   "failed": "a game whose rows are not its read's count refuses",
+   "caught": true
+  },
+  {
+   "planted": "the validity check's count not held",
+   "mustFail": "lines other than the validity check's refuse",
+   "failed": "lines other than the validity check's refuse",
+   "caught": true
+  },
+  {
+   "planted": "the settings allowed apart",
+   "mustFail": "the settings go together and never at the real cache or into results/",
+   "failed": "the settings go together and never at the real cache or into results/",
+   "caught": true
+  },
+  {
+   "planted": "a fixture allowed into results/",
+   "mustFail": "the settings go together and never at the real cache or into results/",
+   "failed": "the settings go together and never at the real cache or into results/",
+   "caught": true
+  },
+  {
+   "planted": "links not followed (the old behaviour)",
+   "mustFail": "a link to results/ or into the study folder is refused as the path is",
+   "failed": "a link to results/ or into the study folder is refused as the path is",
+   "caught": true
+  },
+  {
+   "planted": "a fixture's file linked out of its folder let through",
+   "mustFail": "a fixture's file that is a link out of its folder is refused",
+   "failed": "a fixture's file that is a link out of its folder is refused",
+   "caught": true
+  },
+  {
+   "planted": "FROZEN without tools/lib.js and cand_select_lib.js (the old list)",
+   "mustFail": "FROZEN holds every module the scorer loads and every data file it reads",
+   "failed": "FROZEN holds every module the scorer loads and every data file it reads",
+   "caught": true
+  },
+  {
+   "planted": "FROZEN without the data (the old list)",
+   "mustFail": "FROZEN holds every module the scorer loads and every data file it reads",
+   "failed": "FROZEN holds every module the scorer loads and every data file it reads",
+   "caught": true
+  },
+  {
+   "planted": "no refusal without a validity file",
+   "mustFail": "no validity file: refused",
+   "failed": "no validity file: refused",
+   "caught": true
+  },
+  {
+   "planted": "a VOID check read as holding",
+   "mustFail": "a VOID check (V0 did not hold) is read as VOID, not refused",
+   "failed": "a VOID check (V0 did not hold) is read as VOID, not refused",
+   "caught": true
+  },
+  {
+   "planted": "a VOID check refused, writing nothing (the old behaviour)",
+   "mustFail": "a VOID check (V0 did not hold) is read as VOID, not refused",
+   "failed": "a VOID check (V0 did not hold) is read as VOID, not refused",
+   "caught": true
+  },
+  {
+   "planted": "a verdict not held to its checks",
+   "mustFail": "a check whose verdict is not what its checks say: refused",
+   "failed": "a check whose verdict is not what its checks say: refused",
+   "caught": true
+  },
+  {
+   "planted": "other thresholds let through",
+   "mustFail": "a check on other thresholds: refused",
+   "failed": "a check on other thresholds: refused",
+   "caught": true
+  },
+  {
+   "planted": "a check with no SHA-256 let through",
+   "mustFail": "a check with no SHA-256 of what it read: refused",
+   "failed": "a check with no SHA-256 of what it read: refused",
+   "caught": true
+  },
+  {
+   "planted": "the lines not held to the bytes the validity check read (the old behaviour)",
+   "mustFail": "lines that are not the validity check's bytes refuse (same count, prices swapped)",
+   "failed": "lines that are not the validity check's bytes refuse (same count, prices swapped)",
+   "caught": true
+  },
+  {
+   "planted": "a second run let through",
+   "mustFail": "a result already written: refused (decided once)",
+   "failed": "a result already written: refused (decided once)",
+   "caught": true
+  },
+  {
+   "planted": "a result that is not whole read as decided (the old behaviour)",
+   "mustFail": "a result that is not whole refuses as cut off, not as decided ({} and truncated)",
+   "failed": "a result that is not whole refuses as cut off, not as decided ({} and truncated)",
+   "caught": true
+  },
+  {
+   "planted": "a part left by a cut-off run let through",
+   "mustFail": "a part left by a run cut off while writing: refused",
+   "failed": "a part left by a run cut off while writing: refused",
+   "caught": true
+  },
+  {
+   "planted": "the result written straight onto its path (the old behaviour)",
+   "mustFail": "a write that fails leaves no result and no part",
+   "failed": "a write that fails leaves no result and no part",
+   "caught": true
+  },
+  {
+   "planted": "a second keep written over the first",
+   "mustFail": "of two keeps only the first is kept",
+   "failed": "of two keeps only the first is kept",
+   "caught": true
+  },
+  {
+   "planted": "a per-line row written into the result",
+   "mustFail": "the result is aggregates only: no player id, no per-line row",
+   "failed": "the result is aggregates only: no player id, no per-line row",
+   "caught": true
+  },
+  {
+   "planted": "the phrase left out of the verdict",
+   "mustFail": "\"pre-game inferred, not shown\" in the result and its log",
+   "failed": "\"pre-game inferred, not shown\" in the result and its log",
+   "caught": true
+  },
+  {
+   "planted": "a VOID scored as if it held",
+   "mustFail": "a VOID check is recorded as the outcome: VOID, the check's figures, and no score",
+   "failed": "a VOID check is recorded as the outcome: VOID, the check's figures, and no score",
+   "caught": true
+  }
+ ]
+}

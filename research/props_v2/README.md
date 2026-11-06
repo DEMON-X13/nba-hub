@@ -508,6 +508,136 @@ Plainly: I'd put the chance that this path ends with A passing a live trial at a
 still worth running. It answers the question with regular-season evidence at a scale the playoffs cannot give, and costs
 no live trial. Its season is not blind, so it answers less firmly than a live trial would.
 
+## The 2023-24 test: the scorer
+
+`test2024.js` scores the test of step 2 above. It was written, reviewed and committed before it was ever run on the
+2023-24 lines, and it applies the bar as written there and nothing more: A exactly as frozen at 18:41 UTC with its 2024
+fold's constants (fitted on 2023), and `tools/props.js` with its own 2024 fold, on the very same lines. Its result will be
+added under this section, once, as the run writes it.
+
+It does not rebuild A or the grading. It reads the fetch's csv with a reader of its own and grades the lines by
+`cand_fix_lib.js` `archiveLines`'s rule, with the lines passed in where that function reads the archive. It scores them
+with copies of `cand_fix.js`'s and `cand_blend.js`'s functions, which its check holds to their source to the character.
+Requiring `cand_fix.js` would have run its own modes, and none of the three files was changed.
+
+The lines it keeps are every row on a game of `data/games.csv` of type REG dated 24 October 2023 to 14 April 2024, on the
+six base stats, with both prices. The play-in, from 16 April, falls outside the dates, and games.csv lists the in-season
+tournament's final as REG, so it is kept, as `validity.js` keeps it. The fetch writes one row a game, player and stat, so
+two such rows mean a broken cache, and the reader stops. A player who did not play is void. One who played with no game
+on record has no call; he is counted and left out, as on the archive. A push is left out.
+
+Each test of the bar is read on its figure as the study reports it. The intervals are `tools/props.js` `bootCI`'s, which
+is exactly the bar's method (10,000 resamples of games, seed 0), to six decimals; the units are to the cent, both sides
+added. An interval that touches zero is not wholly below it, and units of exactly zero are not up. So a bound between
+−0.0000005 and 0 rounds to −0 and reads as touching zero. The bar does not say how to read a figure at a hair's width,
+so nothing was added to it: the three figures before their rounding, and what the tests would read on them, are reported
+beside the result and decide nothing.
+
+V1 is counted twice. `validity.js` reports the share of graded lines stamped before the start to four places, which reads
+80,746 of 85,000 (94.995%) as 0.95. The scorer counts the same lines in whole lines on its own graded lines (the ones the
+validity check graded, by count), and the lines are shown pre-game only where 100 × those stamped before the start is at
+least 95 × the lines graded, and where `validity.js` says shown too. Otherwise every report of the result says
+"pre-game inferred, not shown".
+
+**`--check`** reads no 2023-24 line and prints no 2023-24 score. It runs in about 45 seconds and writes
+`results/test2024_check.json`.
+- It runs the scorer's own reader, grading and scoring on the 2026 archive, with the 2026 fold. The archive is written
+  out in the fetch's columns to a temporary file and read back. Every number of `results/cand_fix_score.json`'s archive
+  block must come back to the digit: 11,395 lines on 83 games, 302 void; A 0.6913 against DraftKings 0.6788 (+0.0125
+  [+0.0065, +0.0189]); `tools/props.js` 0.6934 (+0.0147 [+0.0083, +0.0214]); A less `tools/props.js` −0.0021 [−0.0037,
+  −0.0005]; both models' Brier, flat bets and units with their intervals.
+- It fits A's 2024 fold again on 2023 and requires `results/cand_fix_score.json`'s exactly.
+- It holds the 2023-24 rows themselves: both models' walk-forward on the 27,872 rows of 2023-24 (`cand_fix.js`'s
+  `brief()`, copied and held to its text) must be `results/cand_fix_score.json`'s `walkForward["2024"]` to the digit. The
+  archive and A's refit stand on other seasons, so without this a change to a 2023-24 box score could go unseen: one steal
+  added to Bojan Bogdanovic's game at Chicago on 5 April 2024 (he has no later season) fails it.
+- It requires B's yardstick to give `cand_blend.js`'s on the archive (pooled 0.091 [−0.066, +0.253], and each stat's).
+- It requires the archive's six base stats to grade as `validity.js` graded them: 6,418 lines on 83 games.
+- It requires `FROZEN` (below) to hold every module of the repository the scorer has loaded, those `validity.js`
+  requires, and every data file the run reads; and the bar's figures before their rounding, on the archive, to round to
+  the ones the bar reads.
+
+**`--score`** is the test, run once, in about two and a half minutes. It refuses, writing nothing, in any of these cases:
+- `results/test2024.json` holds a whole result (a verdict of PASS, FAIL or VOID): the test is decided once. Anything
+  else there (not JSON, no verdict, a link), or a `results/test2024.json.part` left by a run cut off while writing,
+  refuses with its own words, to be looked at by hand;
+- the scorer or a file it stands on is not committed, or differs from the last commit (`FROZEN` in the script: the
+  code, `tools/lib.js` and `cand_select_lib.js` among it; the results it reproduces; and the data:
+  `data/games.csv`, `data/props_2026.csv`, and the box scores and team boxes of 2022 to 2026, every season `cut2026.js`
+  opens; and `test2024_accept.json` where it exists, below);
+- `cache/validity_2024.json` is missing, is not the check of `props40_2024.csv` on the registered thresholds, has a
+  verdict other than its V0, V2 and V3 say, or carries no SHA-256 of the files it read.
+
+Then it runs the check above, and only then reads the lines, each file once. It refuses again if the csv or the reads are
+not the bytes the validity check read (their SHA-256 differ from the ones it recorded), if a game of the window with an
+ESPN id was never read or its read failed, if a read has no known status, if a game's rows are not its read's count, or if
+its graded lines are not the validity check's (the same count on the same number of games).
+
+A refusal decides nothing: once its cause is put right, the run can be made. A VOID is not a refusal:
+- If `cache/validity_2024.json` says V0, V2 or V3 did not hold, and the lines are complete and the very bytes it read,
+  the run writes `results/test2024.json` with the verdict VOID and the check's figures. It scores nothing, and every later
+  run refuses: a VOID is decided once, as a PASS or a FAIL is.
+- The check that counts is the one on the complete fetch. `validity.js` keeps a line for every run on fetched lines in
+  `cache/validity_2024_runs.jsonl`, and the result reports each run and whether it read the same bytes, deciding nothing.
+  The log is in the gitignored cache, so it shows what this folder ran, not that nothing else ran. So the validity check
+  is run once, on the complete fetch, and the scorer straight after it.
+
+A failed read is not an answer. `fetch_dk40.js` records a 404, the feed's "No propBets found", as none; a timeout, any
+other error status, or a body that is not a propBets page is failed, and a later run over the window asks that game
+again. A failed game has the standing of a game never read, so it refuses alike. A game that fails on every try is the
+owner's call: he lists it in `research/props_v2/test2024_accept.json` (`{ "games": [...], "decided": "who and when" }`),
+committed with the scorer. A listed game is left out as unanswered, and the result names it. The scorer never makes that
+call itself.
+
+The lines scored are the lines checked. `validity.js` now reads each file once and records the SHA-256 of the bytes it
+read (`files` in `validity_2024.json`). The scorer reads each file once, hashes those bytes and parses them, and refuses
+unless the hashes are the validity check's, so a file rewritten in between, even at the same count, is caught. It no
+longer compares the files' times. That change to `validity.js` moves no check or threshold: run on the archive, it writes
+`results/validity_ref.json` as before, but for its stamp.
+
+The result is written into `results/test2024.json.part` (opened only if no such file exists), synced, and then linked to
+`results/test2024.json`, which fails if that path exists, and the part is removed. A write that fails leaves nothing
+behind, a run killed while writing leaves only the part, and of two runs at once only the first is kept. The verdict is
+printed only after it is kept.
+
+It writes `results/test2024.json`, aggregates only, never a line, a price, a player id or a row of the cache:
+- the verdict, with each test's figure (or VOID, with the validity check's figures and no score);
+- beside it, deciding nothing: `tools/props.js`'s own score, A less `tools/props.js`, each stat, how sure each model is,
+  the units by side, the share of A's disagreement a blend keeps, by stat, and the bar's figures before their rounding;
+- the validity check's figures, V1 as counted here, every run in the validity check's log, and "pre-game inferred, not
+  shown" in the verdict wherever V1 did not show the lines pre-game;
+- the fetch's coverage of the window, and the owner's list where there is one;
+- the SHA-256 of the scorer, of the cache's files as read, of every file `FROZEN` holds and of `data/games.csv`'s rows of
+  seasons up to 2026 (the job rewrites the rest), and the commit it ran on.
+
+`test2024_test.js` holds it on made-up lines in a temporary folder, 82 checks in about two minutes. `TEST2024_CACHE` and
+`TEST2024_OUT` point the scorer there; the real run sets neither. Both must lie outside `research/props_v2/`, compared
+with links followed, so no link reaches the cache or `results/`, and a fixture's own files may not be links out of its
+folder. A plain copy of the cache passes any such test: the door is for the test, and the real run is held by git and by
+`results/test2024.json`. The test covers the reader, the window and its two ends, the regular season, the base stats, a
+row missing a price, a duplicate row, a void, a debut, a push, the 2023-24 rows against the published walk-forward (a
+row's points moved, and one steal planted in a raw box score), the verdict on planted figures and the figures before
+their rounding, V1 in whole lines, the coverage (a failed read, a read of no known status, the owner's list), the fixture
+door, `FROZEN`, the validity check (VOID read as VOID, a verdict that is not its checks', no SHA-256, a rewrite at the
+same count), the result decided once and written once (a write that fails, two runs, a part left behind), and two runs end
+to end, one where the bar applies and one VOID. With `--plants` it then breaks each rule of the scorer in a copy, the old
+behaviour put back for each review finding among them, and the check that holds that rule fails: 42 breaks, and 11 of the
+reproduction's own, which `--check` catches (about forty minutes; `--only <text>` runs the breaks whose name holds it).
+
+**The review (6 November 2026).** The scorer was reviewed before it was run. Eleven findings were confirmed, some by more
+than one reviewer, eight distinct. Each is fixed with a check that fails on the old behaviour:
+- A VOID check was a refusal that decided nothing, so the check could be run again until it held. It is now the outcome,
+  written once.
+- A failed read went through while a game never read refused. It now refuses alike, unless the owner lists the game.
+- V1 was read off `validity.js`'s four-place share. It is now counted in whole lines; the bounds and units are reported
+  before their rounding.
+- `FROZEN` left out `tools/lib.js`, `cand_select_lib.js` and the data. It now holds them, the check holds it against what
+  is loaded and read, and the result hashes every one.
+- No 2023-24 row was held to anything published. The 2023-24 walk-forward now is.
+- The fixture door compared path strings, so a link got through. It now follows links.
+- A run cut off while writing left a file that read as decided. The result is now written to a part file and linked.
+- The bytes scored were not tied to the bytes checked. They are now, by SHA-256.
+
 ## Re-running
 
 From the repository's root (the scripts need no package from `tools/node_modules`):
@@ -524,6 +654,8 @@ From the repository's root (the scripts need no package from `tools/node_modules
 | `node research/props_v2/fetch_dk40_test.js` | the fetch recipe on a local fake of the feed (no network) | a few seconds |
 | `node research/props_v2/validity.js` | the validity check's references on the archive (`--lines ... --season 2024` runs the check on fetched lines) | about a minute |
 | `node research/props_v2/validity_calib.js` | how its thresholds were set: the noise, the regime, the planted in-game prices; exits 1 unless `validity_lib.js` carries them | about 2 minutes |
+| `node research/props_v2/test2024.js --check` / `--score` | the 2023-24 test's scorer: its reproduction (no 2023-24 line read), then the test, once | about 45 s / 2.5 minutes |
+| `node research/props_v2/test2024_test.js` (`--plants`) | the scorer on made-up lines; with `--plants`, every planted break as well | about two minutes (forty minutes) |
 
 `espn_probe.sh`, `espn_shape.js`, `espn_coverage.js` and `espn_validate40.js` query ESPN's feed. `fetch_dk40.js` is the
 recipe for provider 40. Its present version has never been run on the real feed; its first version's `--dry`, which still
@@ -564,6 +696,7 @@ candidate script was run, and no candidate's number moved.
 | `data.md`, `data_describe.js`, `espn_*.{sh,js}`, `fetch_dk40.js`, `fetch_dk40_test.js`, `results/data_describe.json`, `results/espn_*`, `results/fetch_dk40_test.json` | the data there is, and the recipe and its test |
 | `validity.js`, `validity_lib.js`, `results/validity_ref.json` | the validity check the 2023-24 test must pass before its bar, its thresholds, and its references on the archive |
 | `validity_calib.js`, `results/validity_calib.json`, `results/validity_calib.md` | how the thresholds were set, and what the check can and cannot see |
+| `test2024.js`, `test2024_test.js`, `results/test2024_check.json`, `results/test2024_test.json`, `results/test2024.json` | the 2023-24 test's scorer, its test on made-up lines, its reproduction, and (written once, by the run) its result; `test2024_accept.json`, the owner's list of games that never answer, only if he writes one |
 | `cut2026.js`, `cut2026_check.js`, `results/cut2026_check.json` | the loader every candidate script uses (seasons up to 2026 only), and its check |
 | `cand_fix.md`, `cand_fix.js`, `cand_fix_lib.js`, `results/cand_fix_*` | candidate A |
 | `cand_blend.md`, `cand_blend.js`, `results/cand_blend*` | candidate B |

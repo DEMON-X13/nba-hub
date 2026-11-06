@@ -1,0 +1,368 @@
+{
+ "generated": "2026-11-06T18:37Z",
+ "what": "research/props_v2/test2024.js --check: the scorer's own path on the 2026 archive, A's 2024 fold refitted and B's yardstick, against the published results; no 2023-24 line is read",
+ "copies": {
+  "cand_fix.js": [
+   "sureness",
+   "betUnits",
+   "unitsByGame",
+   "bootSum",
+   "brief",
+   "r4",
+   "r5"
+  ],
+  "cand_blend.js": [
+   "fitShare"
+  ],
+  "same": true,
+  "columns": "game_id,player_id,stat,line,over,under,last_updated",
+  "v1Pct": 95
+ },
+ "frozen": {
+  "files": 31,
+  "coversEverythingLoaded": true
+ },
+ "fold2024": {
+  "fitOn": "2023-2023",
+  "refitSame": true,
+  "baselineIsResearchJson": true,
+  "rule": [
+   "sq",
+   "cal",
+   "open",
+   "ret",
+   "nt",
+   "debut",
+   "kappa",
+   "dE",
+   "shrink",
+   "phase",
+   "vm"
+  ],
+  "frozen": "2026-11-05T18:41Z"
+ },
+ "walkForward2024": {
+  "rows": 27872,
+  "baseline": 2.148,
+  "candidate": 2.1347,
+  "sameAsCandFixScore": true
+ },
+ "archive": {
+  "lines": 11395,
+  "games": 83,
+  "voids": 302,
+  "noCall": 0,
+  "pushes": 0,
+  "toolsProps": {
+   "logloss": {
+    "model": 0.6934,
+    "market": 0.6788,
+    "marketMultiplicative": 0.6807,
+    "diff": 0.0147,
+    "diffCi90": [
+     0.008254,
+     0.021361
+    ]
+   },
+   "brier": {
+    "model": 0.2495,
+    "market": 0.243,
+    "diff": 0.0064,
+    "diffCi90": [
+     0.003596,
+     0.009387
+    ]
+   },
+   "flat3": {
+    "over": {
+     "bets": 967,
+     "won": 442,
+     "units": -106.44,
+     "roi": -0.1101
+    },
+    "under": {
+     "bets": 4271,
+     "won": 2357,
+     "units": 135.28,
+     "roi": 0.0317
+    }
+   }
+  },
+  "candidate": {
+   "logloss": {
+    "model": 0.6913,
+    "market": 0.6788,
+    "marketMultiplicative": 0.6807,
+    "diff": 0.0125,
+    "diffCi90": [
+     0.006512,
+     0.018881
+    ]
+   },
+   "brier": {
+    "model": 0.2486,
+    "market": 0.243,
+    "diff": 0.0056,
+    "diffCi90": [
+     0.002861,
+     0.008407
+    ]
+   },
+   "flat3": {
+    "over": {
+     "bets": 1201,
+     "won": 556,
+     "units": -120.29,
+     "roi": -0.1002
+    },
+    "under": {
+     "bets": 3579,
+     "won": 2001,
+     "units": 158.99,
+     "roi": 0.0444
+    }
+   }
+  },
+  "candidateMinusBaseline": {
+   "logloss": -0.0021,
+   "ci90": [
+    -0.00373,
+    -0.000521
+   ],
+   "brier": -0.0009,
+   "brierCi90": [
+    -0.001588,
+    -0.000157
+   ]
+  },
+  "units": {
+   "edge": 0.03,
+   "resamples": 10000,
+   "seed": 0,
+   "games": 83,
+   "over": {
+    "baseline": {
+     "bets": 967,
+     "units": -106.44,
+     "ci90": [
+      -181.45,
+      -31.97
+     ]
+    },
+    "candidate": {
+     "bets": 1201,
+     "units": -120.29,
+     "ci90": [
+      -198.73,
+      -42.03
+     ]
+    },
+    "candidateMinusBaseline": {
+     "units": -13.85,
+     "ci90": [
+      -65.5,
+      37.38
+     ]
+    }
+   },
+   "under": {
+    "baseline": {
+     "bets": 4271,
+     "units": 135.28,
+     "ci90": [
+      -47,
+      315.56
+     ]
+    },
+    "candidate": {
+     "bets": 3579,
+     "units": 158.99,
+     "ci90": [
+      -14.47,
+      332.94
+     ]
+    },
+    "candidateMinusBaseline": {
+     "units": 23.71,
+     "ci90": [
+      -30.85,
+      75.96
+     ]
+    }
+   },
+   "bothSides": {
+    "baseline": {
+     "units": 28.84,
+     "ci90": [
+      -166.48,
+      224.85
+     ]
+    },
+    "candidate": {
+     "units": 38.7,
+     "ci90": [
+      -149.76,
+      230.41
+     ]
+    }
+   }
+  },
+  "sameAsCandFixScore": true
+ },
+ "barOnArchive": {
+  "note": "the bar's rule read on the archive's published figures, to show it reads them; the archive is not the test",
+  "tests": {
+   "logloss": false,
+   "brier": false,
+   "units": true
+  },
+  "verdict": "FAIL",
+  "figures": {
+   "logloss": {
+    "diff": 0.0125,
+    "ci90": [
+     0.006512,
+     0.018881
+    ]
+   },
+   "brier": {
+    "diff": 0.0056,
+    "ci90": [
+     0.002861,
+     0.008407
+    ]
+   },
+   "units": 38.7,
+   "over": {
+    "bets": 1201,
+    "units": -120.29,
+    "ci90": [
+     -198.73,
+     -42.03
+    ]
+   },
+   "under": {
+    "bets": 3579,
+    "units": 158.99,
+    "ci90": [
+     -14.47,
+     332.94
+    ]
+   }
+  }
+ },
+ "unroundedOnArchive": {
+  "roundsToBar": true,
+  "figures": {
+   "logloss": {
+    "ci90": [
+     0.0065116194856352375,
+     0.018880943028453823
+    ]
+   },
+   "brier": {
+    "ci90": [
+     0.0028606134814388993,
+     0.008406639591484607
+    ]
+   },
+   "units": 38.70420484773737
+  }
+ },
+ "blend": {
+  "pooled": {
+   "w": 0.091,
+   "ci90": [
+    -0.0664,
+    0.2525
+   ]
+  },
+  "byStat": {
+   "pts": {
+    "w": -0.0976,
+    "ci90": [
+     -0.2965,
+     0.1112
+    ]
+   },
+   "reb": {
+    "w": 0.2719,
+    "ci90": [
+     0.0265,
+     0.523
+    ]
+   },
+   "ast": {
+    "w": 0.2317,
+    "ci90": [
+     -0.0298,
+     0.5212
+    ]
+   },
+   "tpm": {
+    "w": 0.1002,
+    "ci90": [
+     -0.2726,
+     0.4896
+    ]
+   },
+   "stl": {
+    "w": 0.5923,
+    "ci90": [
+     0.1011,
+     1.121
+    ]
+   },
+   "blk": {
+    "w": 0.5365,
+    "ci90": [
+     0.0769,
+     1.0096
+    ]
+   },
+   "pra": {
+    "w": -0.0051,
+    "ci90": [
+     -0.2234,
+     0.2326
+    ]
+   },
+   "pr": {
+    "w": 0.0012,
+    "ci90": [
+     -0.2092,
+     0.2256
+    ]
+   },
+   "pa": {
+    "w": -0.0199,
+    "ci90": [
+     -0.2647,
+     0.2254
+    ]
+   },
+   "ar": {
+    "w": 0.1794,
+    "ci90": [
+     -0.0615,
+     0.4377
+    ]
+   },
+   "sb": {
+    "w": 0.4192,
+    "ci90": [
+     -0.2228,
+     1.024
+    ]
+   }
+  },
+  "sameAsCandBlend": true
+ },
+ "validityCount": {
+  "graded": 6418,
+  "games": 83,
+  "same": true
+ },
+ "passed": true,
+ "seconds": 44
+}

@@ -7,7 +7,11 @@
  *       results/validity_ref.json, which holds the thresholds and the archive's figures they are read against
  *   node research/props_v2/validity.js --lines research/props_v2/cache/props40_2024.csv --season 2024 [--to 2024-04-14]
  *       the check on the fetched lines (fetch_dk40.js's cache: its csv and props40_reads.json beside it), the regular
- *       season to --to: writes research/props_v2/cache/validity_2024.json (gitignored) and prints the verdict
+ *       season to --to: writes research/props_v2/cache/validity_2024.json (gitignored) and prints the verdict. Each file
+ *       is read once, and the SHA-256 of the bytes read goes into the verdict's file (`files`), so test2024.js scores
+ *       only the very bytes this check read; every such run is also added, one line, to validity_2024_runs.jsonl beside
+ *       it (when, the hashes, the counts and the verdict), which test2024.js reports beside its result. Neither moves a
+ *       check or a threshold, and the archive's references are written as before.
  *
  * What it reads: DraftKings' prices, the feed's stamps and the box scores, and three things tools/props.js's walk-forward
  * makes from the box scores before tip, with the fold's constants (the 2026 fold for the archive; the 2024 fold, fitted
@@ -67,14 +71,16 @@ const research = JSON.parse(fs.readFileSync(path.join(SL.ROOT, 'research', 'prop
 const gameOf = new Map(D.games.map(g => [g.game_id, g]));
 
 /* the lines: the archive, or the fetched csv (the record's columns, then last_updated) cut to the season's regular season */
-let rec, startOf = null;
+let rec, startOf = null, fetched = null;
 if (!LINES) rec = REC.readRecord(2026);
 else {
-  const t = fs.readFileSync(LINES, 'utf8').trim().split('\n'), head = t.shift();
+  const csvF = V.readFetched(LINES), readsF = V.readFetched(path.join(path.dirname(LINES), 'props40_reads.json'));
+  fetched = { csv: csvF.sha256, reads: readsF.sha256 };
+  const t = csvF.text.trim().split('\n'), head = t.shift();
   if (head !== 'game_id,player_id,stat,line,over,under,last_updated') throw new Error(`${LINES}: not fetch_dk40.js's columns`);
   rec = t.map(l => { const v = l.split(','); return { game_id: v[0], player_id: v[1], stat: v[2], line: +v[3], over: +v[4], under: +v[5], lu: v[6] }; })
     .filter(l => { const g = gameOf.get(l.game_id); return g && g.season === S && g.type === 'REG' && (!TO || g.date <= TO); });
-  const reads = JSON.parse(fs.readFileSync(path.join(path.dirname(LINES), 'props40_reads.json'), 'utf8'));
+  const reads = JSON.parse(readsF.text);
   startOf = new Map(Object.entries(reads).map(([k, v]) => [k, v.start || null]));
 }
 const G = V.gradeLines(D, research, S, rec), L = G.L;
@@ -126,7 +132,9 @@ if (!LINES) {
   out.v3.against = Object.fromEntries(BASE.map(k => [k, { figure: out.v3[k] && out.v3[k].figure, archive: ref.v3[k].figure, limit: r4(ref.v3[k].figure + TH.v3Slack[k]) }]));
   out.v3.holds = BASE.every(k => out.v3[k] && out.v3[k].figure <= ref.v3[k].figure + TH.v3Slack[k]);
   out.verdict = out.v0.holds && out.v2.holds && out.v3.holds ? `the bar applies (pre-game ${out.v1.preGame})` : 'VOID: the lines settle nothing';
+  out.files = fetched;
   fs.writeFileSync(path.join(path.dirname(LINES), `validity_${S}.json`), JSON.stringify(out, null, 1) + '\n');
+  fs.appendFileSync(path.join(path.dirname(LINES), `validity_${S}_runs.jsonl`), JSON.stringify({ generated: out.generated, files: out.files, graded: out.graded, games: out.games, verdict: out.verdict }) + '\n');
   log(`verdict: ${out.verdict}`);
 }
 console.log(JSON.stringify({ v0: out.v0, v1: out.v1, v2: out.v2, v3: out.v3 }, null, 1));

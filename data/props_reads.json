@@ -210,5 +210,7 @@
  "2027_20261104_PHI_DET": {"at":"2026-11-05T04:24Z","status":"ok","lines":102,"tries":1},
  "2027_20261104_POR_PHX": {"at":"2026-11-05T15:30Z","status":"ok","lines":101,"tries":1},
  "2027_20261104_TOR_DEN": {"at":"2026-11-05T15:30Z","status":"ok","lines":91,"tries":1},
- "2027_20261104_UTA_NOP": {"at":"2026-11-05T04:24Z","status":"ok","lines":90,"tries":1}
+ "2027_20261104_UTA_NOP": {"at":"2026-11-05T04:24Z","status":"ok","lines":90,"tries":1},
+ "2027_20261105_MIA_GSW": {"at":"2026-11-06T15:06Z","status":"ok","lines":104,"tries":1},
+ "2027_20261105_ORL_PHX": {"at":"2026-11-06T15:06Z","status":"ok","lines":114,"tries":1}
 }

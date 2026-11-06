@@ -3,17 +3,20 @@
 Research only, 5 November 2026. Nothing here goes on the page, into the job or into `tools/props.js`; every file is in
 `research/props_v2/`.
 
-**The short answer.** Three candidates were built and each was scored once against DraftKings' closing lines. None
-beats DraftKings:
+**The short answer.** Three candidates were built and each was scored once against DraftKings' closing lines of the
+2026 play-in and playoffs. None beats DraftKings:
 - **A** fixes the model's own parts. Its log score beats `tools/props.js`'s on every box-score fold (its playoff mean
-  absolute error is a little worse), but it still trails DraftKings, closing only about a seventh of the current model's
-  gap.
+  absolute error is a little worse), but it still trails DraftKings on those lines, closing only about a seventh of the
+  current model's gap there.
 - **B** blends toward DraftKings. Fitted honestly, it becomes DraftKings' own chance and has almost nothing to bet.
 - **C** picks the lines to trust. Its rules pick lines where DraftKings wins by more.
 
-No candidate is worth a new shadow trial now. One cheap test on data that already exists could answer the question
-before anyone waits on a live trial, though less firmly than a blind test (its season is not blind); it is the owner's
-call, below.
+No candidate is worth a new shadow trial. The one cheap test that could have changed that was run on 6 November 2026:
+A against DraftKings' 2023-24 regular-season lines, 89,032 lines on 1,116 games. **It failed.** A trails DraftKings by
++0.0097 [+0.0084, +0.0110] on log loss and +0.0041 [+0.0036, +0.0047] on Brier, and on that season it is level with
+`tools/props.js`. Pre-game is inferred, not shown: the feed cannot show the prices were posted before tip-off. Checks on
+the prices found no sign they were set during games, but they could miss a small share, which could only have flattered
+DraftKings ("The 2023-24 test: the result", below). So no new trial, and props stay off the picks.
 
 ## The question
 
@@ -370,8 +373,10 @@ Why:
    - Its mean absolute error is better on the three regular-season folds and a little worse in the playoffs (2.535 to
      2.547).
 
-2. **Score A once on regular-season lines that already exist.** ESPN's free feed still serves DraftKings' 2023-24 main
-   lines (provider 40, about 85,000 gradable lines on the six base stats), and no model has been scored on them.
+2. **Score A once on regular-season lines that already exist.** (Done on 6 November 2026: FAIL, pre-game inferred, not
+   shown; see "The 2023-24 test: the result". This step is kept as it was written before the run.)
+   ESPN's free feed still serves DraftKings' 2023-24 main lines (provider 40, about 85,000 gradable lines on the six base
+   stats), and no model has been scored on them.
    - This would answer in about a day, with regular-season evidence, what a live trial would take months to say. It
      would also give `tools/props.js` its first regular-season market test.
    - **It is not a blind test.** The lines' prices are unseen by any model, but the season's outcomes are not:
@@ -512,8 +517,8 @@ no live trial. Its season is not blind, so it answers less firmly than a live tr
 
 `test2024.js` scores the test of step 2 above. It was written, reviewed and committed before it was ever run on the
 2023-24 lines, and it applies the bar as written there and nothing more: A exactly as frozen at 18:41 UTC with its 2024
-fold's constants (fitted on 2023), and `tools/props.js` with its own 2024 fold, on the very same lines. Its result will be
-added under this section, once, as the run writes it.
+fold's constants (fitted on 2023), and `tools/props.js` with its own 2024 fold, on the very same lines. The run wrote
+its result to `results/test2024.json`; the next section reports it.
 
 It does not rebuild A or the grading. It reads the fetch's csv with a reader of its own and grades the lines by
 `cand_fix_lib.js` `archiveLines`'s rule, with the lines passed in where that function reads the archive. It scores them
@@ -637,6 +642,85 @@ than one reviewer, eight distinct. Each is fixed with a check that fails on the 
 - The fixture door compared path strings, so a link got through. It now follows links.
 - A run cut off while writing left a file that read as decided. The result is now written to a part file and linked.
 - The bytes scored were not tied to the bytes checked. They are now, by SHA-256.
+
+## The 2023-24 test: the result
+
+**FAIL (pre-game inferred, not shown).** `test2024.js --score` ran once, finishing on 6 November 2026 at 18:41 UTC (A
+was frozen at 18:41 UTC the day before; the two times match by chance), on the scorer as committed in `2d5793f`. The run
+wrote its record to `results/test2024.json`, totals only; this section reports it. A trails DraftKings on both scores,
+by as much as `tools/props.js` does. By the plan above: no new shadow trial, and props stay off the picks.
+
+**The lines.** The window holds 1,231 games: the regular season and the in-season tournament's final, which games.csv
+lists as REG. 1,226 have an ESPN id. The feed had provider 40's lines for 1,116 of them. For the other 110 it answered
+"No propBets found", on the first fetch and again on a second: 21-22 November, 12-23 January, 22 February and seven single
+dates. On the six base stats that is 92,295 lines, of which 3,224 are void (the player did not play), 39 have no call (no
+earlier game) and none push, so **89,032 lines on 1,116 games are graded**.
+
+**The validity check** (`validity.js --lines`, run once, on the very bytes scored):
+- V0 holds: the first item is the Over. On every stat, reading it so scores the lower log loss (points 0.6920 against
+  0.6972 swapped, blocks 0.6121 against 0.9281).
+- V1, reported only: every line's stamp falls after the start, at a median of 3.2 hours after it. (The 5.4 hours in the
+  data section above was each sampled game's latest stamp, a different measure.) So the feed cannot show when a price was
+  posted: pre-game is inferred, not shown.
+- V2 holds: 414 lines on 77 early exits, DraftKings' fair Over on them +0.0016 against the rest, where the floor is
+  −0.05. A price read after a player had left early would sit well below the rest.
+- V3 holds on every stat. DraftKings' edge over the naive guess, less the yardstick, against its limit: points 0.0209
+  (0.0533), rebounds 0.0128 (0.0268), assists 0.0169 (0.0262), threes 0.0056 (0.0224), steals 0.0033 (0.0140), blocks
+  0.0024 (0.0139). Each is under the limit set before the fetch.
+
+V2 and V3 rule out gross contamination, such as a tenth of the games read at half time. As the plan says, they cannot
+rule out a small share of prices read early in their games.
+
+**The bar** (all three must hold):
+
+| Test | A | DraftKings | 90% interval | Holds |
+|---|---|---|---|---|
+| 1. Log loss | 0.6769 | 0.6672 | A less DraftKings +0.0097 [+0.0084, +0.0110] | no |
+| 2. Brier | 0.2417 | 0.2375 | A less DraftKings +0.0041 [+0.0036, +0.0047] | no |
+| 3. Flat bets at a 3-point edge, both sides | +226.79 units (Overs 6,359 bets, −139.06; Unders 33,387 bets, +365.85) | – | A's units, not a difference: [−125.78, +576.55] | yes |
+
+Both score intervals lie wholly above zero, so A is worse than DraftKings' fair chance, not merely level with it. The
+units are up, but as the plan says, test 3 cannot carry the bar on its own, and their interval takes in zero. The figures
+before their rounding give the same three answers.
+
+By side, A's Overs lost −139.06 [−297.50, +18.69] and its Unders won +365.85 [+51.23, +677.86], which is clear of zero.
+`tools/props.js`'s Unders did the same (+350.3 [+55.66, +638.64]). That is one side picked after the fact, on a season
+that is not blind, where the trial's Unders made +3.7 on 3,231 bets. It is no evidence to bet them, and the bar reads the
+sides together.
+
+**Beside it, deciding nothing:**
+- `tools/props.js` on the same lines: log loss +0.0098 [+0.0084, +0.0112] behind DraftKings, Brier +0.0040.
+- A less `tools/props.js` on these lines: log loss −0.0001 [−0.0006, +0.0004], Brier +0.0001. They are level, and the
+  interval rules out a gain as large as the archive's (0.0021 over all eleven stats, about 0.0022 on its six base
+  stats). A is still ahead on this season's box scores, by −0.0133 [−0.0187, −0.0089] in the 2024 fold's walk-forward. So
+  A's fixes reach the box scores but not DraftKings' lines, as the archive warned.
+- By stat, A's log loss against DraftKings': points 0.7126 against 0.6920, rebounds 0.6981 against 0.6849, assists
+  0.7061 against 0.6869, threes 0.6767 against 0.6714, steals 0.6703 against 0.6675, blocks 0.6138 against 0.6121.
+  DraftKings is ahead on all six, by most on points and assists.
+- Flat bets for `tools/props.js`: Overs 8,429 bets, −281.2; Unders 28,423, +350.3; both +69.1 [−271.85, +413.35].
+- B's yardstick (the share of A's disagreement that a blend toward DraftKings keeps, fitted on these lines). Pooled it is
+  0.176 [0.139, 0.212]. By stat: points 0.017, rebounds 0.153, assists 0.117, threes 0.252, steals 0.350, blocks 0.405;
+  every interval but points' is clear of zero. So on these lines, in sample, a little of A's view improves on
+  DraftKings' own chance, least on points and most on steals and blocks. On the archive it was measured for
+  `tools/props.js`, not A, over all eleven stats: pooled 0.091 [−0.066, +0.253]. On its six base stats it showed the same
+  pattern: points −0.10, rebounds 0.27, assists 0.23, threes 0.10, steals 0.59, blocks 0.54. The share is fitted on the
+  lines it is read on, for a model this season's outcomes helped shape. It says where A adds something on these lines, not
+  that a blend would beat DraftKings on new games, and a blend this close to DraftKings barely bets. A third try that
+  wanted a blend would have to measure it first on the 2022-23 lines, which the plan keeps as a third try's development
+  set.
+
+**What this settles.** The answer to the owner's question is the plan's answer on FAIL: a second model built from box
+scores does not beat DraftKings, in the regular season either.
+- Here A is about 0.010 behind on log loss. On the archive's same six stats it was about 0.008 behind (0.0125 over all
+  eleven), so it is a little further behind in the regular season, not closer.
+- `tools/props.js` is as far behind on these lines (0.0098). The trial's 0.0184 was on other lines, about 40% of them
+  combos, so it does not compare.
+
+The FAIL holds only as far as the lines are pre-game. Prices read early in their games, which the check cannot rule out
+in small amounts, could only make DraftKings look better than it was. They are the one way this FAIL could overstate
+DraftKings' lead. Two things in the test favoured A instead: this season's outcomes helped shape it, and its side is the
+box score's list of who dressed. It failed anyway. As the plan says, this changes how firmly the answer reads, not what
+is done: no new shadow trial is started, and `tools/props.js` and the page are unchanged.
 
 ## Re-running
 

@@ -796,7 +796,7 @@
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4873153",
@@ -2304,7 +2304,7 @@
     "name": "Trey Murphy III",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3907497",
@@ -3421,14 +3421,14 @@
     "name": "Jakob Poeltl",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395724",
     "name": "Immanuel Quickley",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432241",

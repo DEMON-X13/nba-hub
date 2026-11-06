@@ -696,7 +696,7 @@
     "name": "Tyrese Proctor",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5041951",
@@ -733,7 +733,7 @@
     "name": "Santi Aldama",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5148538",
@@ -747,7 +747,7 @@
     "name": "Max Christie",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4701208",
@@ -796,7 +796,7 @@
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4873153",
@@ -1138,7 +1138,7 @@
     "name": "Draymond Green",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3213",
@@ -1194,7 +1194,7 @@
     "name": "Gary Payton II",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4709138",

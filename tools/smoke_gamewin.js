@@ -111,25 +111,41 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   const TIER_AT = [['HOF', 1750], ['Elite', 1700], ['Master', 1650], ['Diamond', 1600], ['Platinum', 1550], ['Gold', 1500], ['Silver', 1450], ['Bronze', 1400], ['Iron', 1350], ['Wood', -Infinity]];
   const shieldOwn = (st, pid) => { const p = (st.players || []).find(x => String(x.id) === String(pid)); return p && p.ranked && Number.isFinite(p.rating) ? TIER_AT.find(t => p.rating >= t[1])[0] : null; };
   const moreOwn = (ratio, noun) => { const p = 100 * (ratio - 1), a = Math.abs(p); return a < 0.05 ? `about as many ${noun} a minute as average` : `${a >= 0.5 ? Math.round(a) : a.toFixed(1)}% ${p > 0 ? 'more' : 'fewer'} ${noun} a minute than average`; };
+  /* the NFL hub's grade, this file's own reading of its four steps on z rounded to a tenth (Slight under 1, Solid from 1,
+     Big from 2, Huge from 3): [the word, its step 1 to 4] */
+  const gradeOwn = z => { const t = Math.round(z * 10); return t >= 30 ? ['Huge', 4] : t >= 20 ? ['Big', 3] : t >= 10 ? ['Solid', 2] : ['Slight', 1]; };
+  const MM_NONE = 'No player in this game faces a defence a standard deviation or more weaker than the league\'s on his stat.';
+  const MM_UNGRADED = 'The mismatch grades are not published yet: the job adds them on its next run.';
+  /* the game's mismatches with their grades: graded where the state carries z (oppCols) for both clubs on every stat the
+     list reads; each row graded on the z of the defence on his best stat by the lift, the list by the grade, then the
+     lift, the top five; tagged Solid and up */
   function mmOwn(st, g, top = 5) {
-    const P = st.props, pg = P.games[g.id], cols = P.oppCols, at = k => P.layout.indexOf(k), V = P.dist.var;
+    const P = st.props, pg = P.games[g.id], cols = P.oppCols, at = k => P.layout.indexOf(k), V = P.dist.var, zc = cols.indexOf('z');
     const outs = new Set([g.model.away, g.model.home].flatMap(s => (s.out || []).map(o => o.id)));
     const fail = !!(P.ledger && P.ledger.decision && P.ledger.decision.verdict === 'FAIL'), note = fail ? NOTE_FAIL : NOTE_TRIAL;
+    const graded = zc >= 0 && [g.away, g.home].every(t => ['pts', 'reb', 'ast', 'tpm'].every(k => pg.opp[t][k] && Number.isFinite(pg.opp[t][k][zc])));
     const rows = [];
     for (const pid of Object.keys(pg.players)) { const r = pg.players[pid], team = r[1];
       if (!(r[3] >= 19.5) || outs.has(pid) || (team !== g.away && team !== g.home)) continue;
       const opp = team === g.home ? g.away : g.home, tab = pg.opp[opp];
       const cand = ['pts', 'reb', 'ast', 'tpm'].map(k => { const e = tab[k], mu = r[at(k)], mult = e[cols.indexOf('mult')], lift = mu - mu / mult, sd = Math.sqrt(V[k][0] * Math.pow(Math.max(mu, 1e-9), V[k][1]));
-        return { k, mu, lift, sd, z: lift / sd, ratio: e[cols.indexOf('ratio')], rank: e[cols.indexOf('rank')] }; }).filter(c => c.mu > 0 && c.lift > 0);
+        return { k, mu, lift, sd, z: lift / sd, ratio: e[cols.indexOf('ratio')], rank: e[cols.indexOf('rank')], dz: graded ? e[zc] : null }; }).filter(c => c.mu > 0 && c.lift > 0);
       if (!cand.length) continue;
       cand.sort((a, b) => b.z - a.z || b.lift - a.lift);
       rows.push({ pid, name: r[0], pos: r[2], team, opp, home: team === g.home, ...cand[0] });
     }
-    rows.sort((a, b) => b.z - a.z || b.lift - a.lift || (a.pid < b.pid ? -1 : 1));
-    return rows.slice(0, top).map((v, i) => { const n = i + 1, sz = zOwn(v.z), vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`, proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
+    for (const v of rows) { const [gw, lv] = graded ? gradeOwn(v.dz) : [null, 0]; v.grade = gw; v.lv = lv; v.tagged = lv >= 2; }
+    rows.sort((a, b) => b.lv - a.lv || b.z - a.z || b.lift - a.lift || (a.pid < b.pid ? -1 : 1));
+    const out = rows.slice(0, top).map((v, i) => { const n = i + 1, sz = zOwn(v.z), vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`, proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
       const sub = `${vs} (allows ${moreOwn(v.ratio, MM_NOUN[v.k])}). ${proj} projected (${liftOwn(v.lift)} from the matchup).`;
       const say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${sub}`;
-      return { ...v, n, sz, sub, shield: shieldOwn(st, v.pid), title: `Mismatch #${n} in this game: ${say} Ranked by that lift over the spread of his ${MM_NOUN[v.k]} at his projection, ${sz} of a standard deviation (${v.sd.toFixed(1)}). ${note}`, note }; });
+      const lift = `${sz} SD: what the matchup adds to his projection, over the spread of his ${MM_NOUN[v.k]} at his projection (${v.sd.toFixed(1)}).`;
+      const how = !graded ? '' : v.dz === 0 ? 'at the league\'s average' : `${Math.abs(v.dz).toFixed(2)} standard deviations ${v.dz > 0 ? 'weaker' : 'stronger'} than the league's average`;
+      const title = graded ? `${v.grade} mismatch: #${n} in this game. ${say} ${v.grade}: ${v.opp}'s ${MM_DEF[v.k]} is ${how} on ${MM_NOUN[v.k]}, across its 30 clubs (Slight under 1, Solid from 1, Big from 2, Huge from 3). ${lift} Listed by the grade, then that lift. ${note}`
+        : `Mismatch #${n} in this game: ${say} ${lift} Listed by that lift; the grades are not published yet. ${note}`;
+      return { ...v, n, sz, sub, shield: shieldOwn(st, v.pid), title, note }; });
+    out.graded = graded; out.note = note;
+    return out;
   }
 
   /* ---------- the harness ---------- */
@@ -223,7 +239,13 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   }
   function holdMism(d, own, tag) {
     const bad = [], body = d.getElementById('gwBody'), lis = [...body.querySelectorAll('ul.gw-mm > li')];
-    if (txt(body.querySelector('[data-gw-mmnote]')) !== own[0].note) bad.push(`note "${txt(body.querySelector('[data-gw-mmnote]'))}" where "${own[0].note}"`);
+    if (txt(body.querySelector('[data-gw-mmnote]')) !== own.note) bad.push(`note "${txt(body.querySelector('[data-gw-mmnote]'))}" where "${own.note}"`);
+    /* under the note: that the grades are not published yet (a state from before them), else, where no row is graded
+       Solid or more, that no player faces such a defence; nothing where one does */
+    const none = body.querySelector('[data-gw-mmnone]'), nog = body.querySelector('[data-gw-nograde]'), wantNone = own.graded && own.length && !own.some(v => v.tagged);
+    if (!own.graded ? !(nog && txt(nog) === MM_UNGRADED && !none) : nog) bad.push(`the grades-not-published line: "${txt(nog)}" where ${own.graded ? 'none' : `"${MM_UNGRADED}"`}`);
+    if (wantNone ? !(none && txt(none) === MM_NONE) : none) bad.push(`the no-mismatch line: "${txt(none)}" where ${wantNone ? `"${MM_NONE}"` : 'none'}`);
+    if ((none || nog) && (none || nog).previousElementSibling !== body.querySelector('[data-gw-mmnote]')) bad.push('the grades\' line is not right under the note');
     if (lis.length !== own.length) bad.push(`${lis.length} rows where ${own.length}`);
     own.forEach((v, i) => { const li = lis[i]; if (!li) return;
       if (li.dataset.gwMm !== v.pid) bad.push(`#${v.n}: ${li.dataset.gwMm} where ${v.pid} (${v.name})`);
@@ -241,22 +263,30 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
       if (/\(\+0\.0+ from the matchup\)/.test(subT) || /^[+−]0\.0+SD$/.test(zT)) bad.push(`#${v.n}: a figure that rounds to nothing ("${subT}", "${zT}")`);
       if (txt(li.querySelector('[data-gw-mmsub]')) !== v.sub) bad.push(`#${v.n}: "${txt(li.querySelector('[data-gw-mmsub]'))}" where "${v.sub}"`);
       if (txt(li.querySelector('[data-gw-z]')) !== `${v.sz}SD`) bad.push(`#${v.n}: "${txt(li.querySelector('[data-gw-z]'))}" where "${v.sz}SD"`);
-      if (txt(li.querySelector('.gw-mmtag')) !== 'Mismatch') bad.push(`#${v.n}: no Mismatch tag`);
+      /* its grade as the NFL's row draws it: the four-step meter, lit to its step, and the word, both in its grade's
+         colour (gw-g1 to gw-g4), after the SD figure; none on a state from before the grades */
+      const gr = li.querySelectorAll('[data-gw-grade]'), mt = gr[0] && gr[0].querySelector('.gw-meter');
+      if (v.grade ? !(gr.length === 1 && gr[0].dataset.gwGrade === v.grade && txt(gr[0]) === v.grade && gr[0].classList.contains(`gw-g${v.lv}`) && mt && mt.classList.contains(`gw-l${v.lv}`) && mt.classList.contains(`gw-g${v.lv}`)
+        && mt.getAttribute('aria-hidden') === 'true' && mt.querySelectorAll('i').length === 4 && li.querySelector('[data-gw-z]').nextElementSibling === gr[0]) : gr.length)
+        bad.push(`#${v.n} ${v.name}: grade ${gr.length ? `"${txt(gr[0])}" ${gr[0].className} ${mt ? mt.className : 'no meter'}` : 'none'} where ${v.grade ? `${v.grade} (gw-g${v.lv}, its meter at ${v.lv})` : 'none'}`);
+      /* the MISMATCH chip on a row graded Solid or more, and on no other */
+      const chips = li.querySelectorAll('.gw-mmtag');
+      if (v.tagged ? !(chips.length === 1 && txt(chips[0]) === 'Mismatch') : chips.length) bad.push(`#${v.n} ${v.name}: ${chips.length} Mismatch chips where ${v.tagged ? 1 : 0} (${v.grade || 'no grade'})`);
       if (li.title !== v.title) bad.push(`#${v.n}: title "${li.title}" where "${v.title}"`); });
     return bad.map(s => `${tag}: ${s}`);
   }
   /* the MISMATCH tags on the view's player rows: exactly the game's top five, each titled with its row and numbered, and
      said in the row's name */
   function holdTags(d, own, tag) {
-    const bad = [], want = new Map(own.map(v => [v.pid, v]));
+    const bad = [], want = new Map(own.filter(v => v.tagged).map(v => [v.pid, v]));
     for (const plr of d.querySelectorAll('#ppBody .pp-plr[data-pp-player]')) {
       const pid = plr.dataset.ppPlayer, tg = plr.querySelectorAll('.pp-mmtag'), v = want.get(pid), btn = plr.querySelector('[data-pp-open]');
-      if (!v) { if (tg.length) bad.push(`${pid}: a tag, not in the top five`); if (btn && /mismatch/i.test(btn.getAttribute('aria-label'))) bad.push(`${pid}: named a mismatch`); continue; }
+      if (!v) { if (tg.length) bad.push(`${pid}: a tag, not a row of the five graded Solid or more`); if (btn && /mismatch/i.test(btn.getAttribute('aria-label'))) bad.push(`${pid}: named a mismatch`); continue; }
       want.delete(pid);
       if (tg.length !== 1) { bad.push(`${v.name}: ${tg.length} tags`); continue; }
       if (tg[0].title !== v.title) bad.push(`${v.name}: tag titled "${tg[0].title}" where "${v.title}"`);
-      if (tg[0].dataset.ppMm !== String(v.n) || txt(tg[0]) !== 'Mismatch') bad.push(`${v.name}: tag ${tg[0].dataset.ppMm} "${txt(tg[0])}"`);
-      if (!btn || !btn.getAttribute('aria-label').includes(`, mismatch #${v.n} in this game`)) bad.push(`${v.name}: the row's name does not say mismatch #${v.n}`);
+      if (tg[0].dataset.ppMm !== String(v.n) || txt(tg[0]) !== 'Mismatch' || tg[0].dataset.ppMmgrade !== v.grade || !tg[0].title.startsWith(`${v.grade} mismatch: `)) bad.push(`${v.name}: tag ${tg[0].dataset.ppMm} ${tg[0].dataset.ppMmgrade} "${txt(tg[0])}"`);
+      if (!btn || !btn.getAttribute('aria-label').includes(`, ${v.grade} mismatch, #${v.n} in this game`)) bad.push(`${v.name}: the row's name does not say ${v.grade} mismatch, #${v.n}`);
       const nm = plr.querySelector('.who .nm'); if (!nm || nm.nextElementSibling !== tg[0]) bad.push(`${v.name}: the tag is not beside his name`);
     }
     for (const v of want.values()) bad.push(`${v.name}: no row`);
@@ -274,6 +304,8 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     else if (r.selectorText) for (const sel of r.selectorText.split(',')) out.push({ media, sel: sel.trim().replace(/\s+/g, ' '), style: r.style }); } };
     for (const sh of d.styleSheets) walk(sh.cssRules, ''); return out; };
   const declOf = (R, media, sel, prop) => R.filter(r => r.media === media && r.sel === sel).map(r => r.style.getPropertyValue(prop)).filter(Boolean).pop() || '';
+  /* the NFL's grade colours on its dark theme (theme.css .pe-g3, .pe-g2), and a lit bar in the grade's own colour */
+  const GREEN3 = '#7BD88F', GOLD2 = '#F2B84B', LIT = 'currentColor';
   const LOOK = {
     "the window's panel is the NFL's, panel-2 to panel under its bg-2 bar, with 39px under the card": [['', '.gw-sheet', 'background', 'linear-gradient(180deg,var(--panel-2),var(--panel))'], ['', '.gw-top', 'background', 'var(--bg-2)'], ['', '.gw-body', 'padding', '16px 20px 38px'], ['', '.gw-card', 'margin', ''], ['', '.gw-card', 'margin-bottom', '']],
     "its quiet text is the NFL's muted (--pb-q, #B3B9CB): the matchup line, the \"vs\" between the boxes, the foot, the position and the \"vs\" of a mismatch row at 13px": [['', '.gw-tm', 'color', 'var(--pb-q)'], ['', '.gw-vsx', 'color', 'var(--pb-q)'], ['', '.gw-note', 'color', 'var(--pb-q)'], ['', '.gw-mmwho small', 'color', 'var(--pb-q)'], ['', '.gw-mmwho small', 'font-size', '13px'], ['', '.gw-mmvs small', 'font-size', ''], ['', '.gw-mmvs small', 'color', '']],
@@ -282,7 +314,11 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     "at 760px and under, the NFL's phone window: Team Stats' names dropped, the boxes 12px by 8px, a mismatch's rank on a row of its own (40px wide) and its clubs on a line of their own 6px under his name, 8px by 12px apart": [['(max-width:760px)', '.gw-teams .gw-tnm', 'display', 'none'], ['(max-width:760px)', '.gw-ubox', 'padding', '12px 8px'],
       ['(max-width:760px)', 'ul.gw-mm li .gw-mmn', 'grid-column', '1/-1'], ['(max-width:760px)', 'ul.gw-mm li .gw-mmn', 'min-width', ''], ['(max-width:760px)', 'ul.gw-mm li', 'gap', '8px 12px'], ['(max-width:760px)', '.gw-mmvs', 'display', 'flex'], ['(max-width:760px)', '.gw-mmvs', 'margin', '6px 0 0'], ['(max-width:760px)', '.gw-mmvs', 'margin-left', '']],
     "on a phone the NFL's geometry: 10px of page around the window, its bar 58px and 12px in, the body 12px in, the card 14px in": [['(max-width:760px)', '.gw-back', 'padding', '10px'], ['(max-width:760px)', '.gw-top', 'min-height', '58px'], ['(max-width:760px)', '.gw-top', 'padding', '0 12px'], ['(max-width:760px)', '.gw-body', 'padding', '12px 12px 38px'], ['(max-width:760px)', '.gw-card', 'padding', '14px 14px 16px']],
-    "on a phone a player's position line moves down whole beside a MISMATCH tag, never split (the NFL's .plrbtn .who span)": [['(max-width:760px)', '.pp-plr .who .pos', 'display', 'inline-block']] };
+    "on a phone a player's position line moves down whole beside a MISMATCH tag, never split (the NFL's .plrbtn .who span)": [['(max-width:760px)', '.pp-plr .who .pos', 'display', 'inline-block']],
+    "a mismatch's grade is the NFL's: its word at 13px and 700 in its grade's colour (Huge the lime, Big #7BD88F, Solid #F2B84B, Slight the quiet ink, its theme's pe-g colours), after its four-step meter (bars 4px wide and 2px apart, 5 to 14px tall, unlit in --line-2, lit in the grade's colour)":
+      [['', '.gw-g4', 'color', 'var(--lime)'], ['', '.gw-g3', 'color', GREEN3], ['', '.gw-g2', 'color', GOLD2], ['', '.gw-g1', 'color', 'var(--pb-q)'], ['', '.gw-mmg', 'font-size', '13px'], ['', '.gw-mmg', 'font-weight', '700'],
+        ['', '.gw-meter', 'gap', '2px'], ['', '.gw-meter i', 'width', '4px'], ['', '.gw-meter i', 'background', 'var(--line-2)'], ['', '.gw-meter i:nth-child(1)', 'height', '5px'], ['', '.gw-meter i:nth-child(4)', 'height', '14px'],
+        ['', '.gw-meter.gw-l3 i:nth-child(-n+3)', 'background', LIT]] };
   function holdLook(d) {
     const R = rulesOf(d), out = {};
     for (const [what, rows] of Object.entries(LOOK)) out[what] = rows.map(([m, sel, prop, want]) => { const got = declOf(R, m, sel, prop); return got === want ? null : `${m || 'all widths'} ${sel} ${prop}: "${got}" where "${want || 'none'}"`; }).filter(Boolean);
@@ -317,6 +353,10 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
      0.0004 (each at the decimals that show it, the last "under 0.001"); one NYK guard at 19.5 minutes (his row "20 min":
      counted) and one at 19.4 ("19 min": left out) whose lift would put him second */
   const G5 = game('NYK', 'PHI', { pace: 99, away: side('NYK', 2, 1), home: side('PHI', -1, 0) });
+  /* CHI at TOR: the grades, each boundary on the NFL's rounding. TOR's defence (CHI's players) z 0.94 on points (Slight),
+     0.95 on rebounds (Solid), 1.95 on assists (Big), 2.95 on threes (Huge); CHI's (TOR's players) 0.62 on points
+     (Slight), 1.31 on rebounds (Solid) and below average on the rest */
+  const G6 = game('CHI', 'TOR', { pace: 100, away: side('CHI', 1, 1), home: side('TOR', 0, 2) });
   const LAY = ['name', 'team', 'pos', 'min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'dd', 'td'];
   const VAR = { pts: [7.6017, 0.7213], reb: [1.6148, 0.9528], ast: [1.3344, 0.9826], tpm: [1.2473, 0.9867], stl: [1.1, 0.97], blk: [1.13, 1.01], pra: [10.65, 0.65], pr: [8.8, 0.7], pa: [8.7, 0.67], ar: [2.41, 0.83], sb: [1.19, 0.85] };
   const row = (name, team, pos, min, pts, reb, ast, tpm) => [name, team, pos, min, pts, reb, ast, tpm, 1, 0.5, 0.1, 0.01];
@@ -331,11 +371,28 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     '9300009': row('Det Big', 'DET', 'C', 31, 14.1, 11.9, 2.8, 0.1), '9300010': row('Det Wing', 'DET', 'F', 27, 11.6, 4.8, 1.9, 2.4),
     '9300012': row('Det Shooter', 'DET', 'G', 22, 10.2, 0, 1.5, 2.2) };
   /* [ratio, mult, rank]: DET's defence (BOS's players) leaks points and threes; BOS's (DET's players) rebounds only */
-  const tab = (pts, reb, ast, tpm) => Object.fromEntries([['pts', pts], ['reb', reb], ['ast', ast], ['tpm', tpm], ['stl', [1, 1, 15]], ['blk', [1, 1, 15]]]);
-  const OPP = { DET: tab([1.0612, 1.0612, 27], [1.0187, 1.014, 21], [0.9721, 0.9721, 6], [1.1048, 1.0777, 30]), BOS: tab([0.9531, 0.9531, 2], [1.0702, 1.0522, 28], [0.9902, 0.9902, 11], [0.998, 0.9985, 14]) };
+  /* [ratio, mult, rank, z]: z each defence's grade, set here (the job's z is held to the league's ratios below, on the
+     real state): on DET's defence points 1.40 and threes 1.05 (Solid), on BOS's rebounds 1.00 (Solid), so the five are
+     Solid, the set and order the lift alone gave */
+  const tab = (pts, reb, ast, tpm) => Object.fromEntries([['pts', pts], ['reb', reb], ['ast', ast], ['tpm', tpm], ['stl', [1, 1, 15, 0]], ['blk', [1, 1, 15, 0]]]);
+  const OPP = { DET: tab([1.0612, 1.0612, 27, 1.4], [1.0187, 1.014, 21, 0.2], [0.9721, 0.9721, 6, -0.9], [1.1048, 1.0777, 30, 1.05]), BOS: tab([0.9531, 0.9531, 2, -1.6], [1.0702, 1.0522, 28, 1], [0.9902, 0.9902, 11, -0.3], [0.998, 0.9985, 14, 0.1]) };
   const PLAYERS5 = { '9300021': row('Nyk Big', 'NYK', 'C', 30, 12, 11, 2, 0.3), '9300022': row('Nyk Bar', 'NYK', 'G', 19.5, 9, 2, 3, 3.0), '9300023': row('Nyk Under', 'NYK', 'G', 19.4, 9, 2, 3, 4.0),
     '9300024': row('Phi Tiny', 'PHI', 'F', 28, 8, 3, 1, 0.5), '9300025': row('Phi Tinier', 'PHI', 'C', 21, 1.5, 6, 1, 0.1), '9300026': row('Phi Least', 'PHI', 'G', 20, 0.2, 1, 2, 0.1) };
-  const OPP5 = { PHI: tab([0.97, 0.97, 3], [1.0042, 1.0522, 25], [0.99, 0.99, 8], [1.06, 1.045, 27]), NYK: tab([1.002, 1.002, 18], [0.99, 0.99, 11], [0.98, 0.98, 4], [0.995, 0.995, 10]) };
+  /* NYK at PHI's defences all under a standard deviation from the league's (PHI's rebounds 0.94, its threes 0.60): no
+     row is a mismatch, and the window says so */
+  const OPP5 = { PHI: tab([0.97, 0.97, 3, -1.2], [1.0042, 1.0522, 25, 0.94], [0.99, 0.99, 8, -0.5], [1.06, 1.045, 27, 0.6]), NYK: tab([1.002, 1.002, 18, 0.3], [0.99, 0.99, 11, -0.4], [0.98, 0.98, 4, -0.8], [0.995, 0.995, 10, 0.05]) };
+  /* CHI at TOR, worked by hand (mean, lift = mean - mean / mult, spread = sqrt(A x mean^B), lift / spread):
+       Chi Gunner threes 6: 6 - 6/1.0447 = 0.257 over 2.70, 0.0950 ("+0.09"), against TOR's threes z 2.95: Huge
+       Chi Passer assists 10: 10 - 10/1.06 = 0.566 over 3.58, 0.158, z 1.95: Big
+       Chi Board rebounds 14: 14 - 14/1.0447 = 0.599 over 4.46, 0.134, z 0.95: Solid
+       Tor Glass rebounds 12: 12 - 12/1.0037 = 0.044 over 4.15, 0.0107 ("+0.01"), against CHI's rebounds z 1.31: Solid (a small lift)
+       Chi Scorer points 28: 28 - 28/1.10 = 2.545 over 9.17, 0.278, the largest lift, z 0.94: Slight, untagged
+       Tor Wing points 8: 8 - 8/1.01 = 0.079 over 5.84, 0.0136, z 0.62: Slight, sixth, cut
+     each of the four CHI players at his own best stat (his others under it: Chi Gunner's assists 0.070, Chi Passer's
+     rebounds 0.060), listed by the grade, then the lift */
+  const PLAYERS6 = { '9300031': row('Chi Gunner', 'CHI', 'G', 32, 2, 2.5, 2, 6), '9300032': row('Chi Passer', 'CHI', 'G', 31, 2, 3, 10, 0.6), '9300033': row('Chi Board', 'CHI', 'C', 28, 2, 14, 1.2, 0.1),
+    '9300034': row('Chi Scorer', 'CHI', 'F', 34, 28, 4, 2.5, 1.2), '9300035': row('Tor Glass', 'TOR', 'C', 26, 1, 12, 0.5, 0), '9300036': row('Tor Wing', 'TOR', 'F', 24, 8, 3, 1.5, 0.8) };
+  const OPP6 = { TOR: tab([1.1, 1.1, 30, 0.94], [1.06, 1.0447, 27, 0.95], [1.06, 1.06, 28, 1.95], [1.06, 1.0447, 29, 2.95]), CHI: tab([1.01, 1.01, 17, 0.62], [1.005, 1.0037, 16, 1.31], [0.98, 0.98, 4, -1.4], [0.98, 0.985, 5, -1.2]) };
   /* the published players with some of the made-up ones rated: Bos Star a Master and Det Big a Silver, Nyk Big a Platinum,
      Bos Guard rated but not ranked; the rest not on the ladder */
   const rated = (id, name, team, rating, ranked = true) => ({ id, name, pos: 'G', team, o: 0, d: 0, min: 30, games: 100, prior: 'raptor', rating, ranked, d7: 0 });
@@ -343,9 +400,9 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   const LEDGER_FAIL = { registered: '2026-10-15T11:35Z', bar: { lines: 30000 }, decision: { verdict: 'FAIL', decidedAt: '2026-11-05T19:16Z', lines: 12298, games: 121, scores: { logloss_diff: 0.018, brier_diff: 0.008 }, flat: { all: { bets: 900, units: -223 } }, early: { at: '2026-11-05T19:16Z', by: 'the owner', why: 'test' } },
     summary: { standing: '', gradedGames: 121, lines: 12298, voids: 0, scores: null, flat: null, toCome: 0 } };
   const props = (decision = true) => ({ onTrial: true, build: 'test', asOf: D1, fitSeasons: '2023-2026', horizonGameDays: 5, minShown: 8, stats: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'],
-    combos: { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] }, layout: LAY, oppCols: ['ratio', 'mult', 'rank'], dist: { kind: 'negative binomial', var: VAR }, fair: require('./props').FAIR,
+    combos: { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] }, layout: LAY, oppCols: ['ratio', 'mult', 'rank', 'z'], dist: { kind: 'negative binomial', var: VAR }, fair: require('./props').FAIR,
     ledger: decision ? clone(LEDGER_FAIL) : { ...clone(LEDGER_FAIL), decision: null }, research: null,
-    games: { [G.id]: { tip: G.tip, away: 'BOS', home: 'DET', players: clone(PLAYERS), opp: clone(OPP) }, [G5.id]: { tip: G5.tip, away: 'NYK', home: 'PHI', players: clone(PLAYERS5), opp: clone(OPP5) }, [G2.id]: { tip: G2.tip, away: 'LAL', home: 'GSW', players: { '9300011': row('Lal Guard', 'LAL', 'G', 34, 22, 4, 6, 2.5) } } } });
+    games: { [G.id]: { tip: G.tip, away: 'BOS', home: 'DET', players: clone(PLAYERS), opp: clone(OPP) }, [G5.id]: { tip: G5.tip, away: 'NYK', home: 'PHI', players: clone(PLAYERS5), opp: clone(OPP5) }, [G6.id]: { tip: G6.tip, away: 'CHI', home: 'TOR', players: clone(PLAYERS6), opp: clone(OPP6) }, [G2.id]: { tip: G2.tip, away: 'LAL', home: 'GSW', players: { '9300011': row('Lal Guard', 'LAL', 'G', 34, 22, 4, 6, 2.5) } } } });
   /* the job's team stats: BOS and DET with level values (no mark), every kind of row; LAL alone of its game */
   const tsRow = vals => Object.fromEntries(TS.map(([k], i) => [k, vals[i]]));
   const TSTATS = { v: 1, season: SEASON, through: addDay(D1, -2), games: 120, clubs: {
@@ -357,7 +414,7 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   const TEAMS0 = clone(REAL.teams), first = Object.keys(TEAMS0).find(t => !['BOS', 'DET', 'LAL', 'GSW', 'MIA', 'ORL'].includes(t));
   Object.assign(TEAMS0.BOS, { offence: TEAMS0[first].offence, defence: 4.2, pace: 99.9 }); Object.assign(TEAMS0.DET, { offence: 5.2, defence: 8.1, pace: 103.2 });
   Object.assign(TEAMS0.LAL, { offence: -45.5, defence: -1, pace: 97.4 }); Object.assign(TEAMS0.GSW, { offence: 3.4, defence: 2.6, pace: 101.1 });
-  const ST = (o = {}) => ({ ...clone(REAL), today: etDate(now), generated: new Date(now - 3 * H).toISOString().slice(0, 16) + 'Z', injuriesAsOf: etDate(now), slate: [G, G2, G3, G4, G5].map(clone), props: props(true), teamStats: clone(TSTATS), teams: clone(TEAMS0), players: [...clone(REAL.players || []), ...clone(PLAYERS_RATED)], ...o });
+  const ST = (o = {}) => ({ ...clone(REAL), today: etDate(now), generated: new Date(now - 3 * H).toISOString().slice(0, 16) + 'Z', injuriesAsOf: etDate(now), slate: [G, G2, G3, G4, G5, G6].map(clone), props: props(true), teamStats: clone(TSTATS), teams: clone(TEAMS0), players: [...clone(REAL.players || []), ...clone(PLAYERS_RATED)], ...o });
 
   {
     const st = ST(), own = mmOwn(st, G);
@@ -495,7 +552,26 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     check(!bad5.length && li5.includes('9300022') && !li5.includes('9300023'), `gw: Mismatches counts the guard whose row shows 20 minutes (19.5) and leaves out the one whose row shows 19 (19.4), lists each small lift and spread at the decimals that show it ("+0.02", "+0.003", "under 0.001"), never "+0.0", and the 0.4% a shade over average${bad5.length ? ': ' + bad5.slice(0, 6).join('; ') : ''}`);
     d.getElementById('gwClose').click();
     bad5 = holdTags(d, own5, 'NYK at PHI tags');
-    check(!bad5.length, `gw: NYK at PHI's five wear MISMATCH, titled with the same figures${bad5.length ? ': ' + bad5.slice(0, 4).join('; ') : ''}`);
+    check(!bad5.length && own5.every(v => v.grade === 'Slight') && !d.querySelector('#ppBody .pp-mmtag'), `gw: NYK at PHI's five, all graded Slight (PHI's rebounding defence at z 0.94 among them), wear no MISMATCH tag and their rows are not named mismatches${bad5.length ? ': ' + bad5.slice(0, 4).join('; ') : ''}`);
+    w.propsClose(); await sleep(10);
+    /* CHI at TOR: each grade's boundary on the NFL's rounding (0.94 Slight, 0.95 Solid, 1.95 Big, 2.95 Huge), the list by
+       the grade first (the largest lift of all, Chi Scorer's, listed last as Slight, untagged; Tor Glass's small lift
+       against a defence 1.31 from average listed before him, tagged), and the sixth, a Slight with a smaller lift, cut */
+    const own6 = mmOwn(st, G6), all6 = mmOwn(st, G6, 99);
+    const hand6 = 'Chi Gunner tpm Huge +0.09|Chi Passer ast Big +0.16|Chi Board reb Solid +0.13|Tor Glass reb Solid +0.01|Chi Scorer pts Slight +0.28';
+    const got6 = own6.map(v => `${v.name} ${v.k} ${v.grade} ${v.sz}`).join('|');
+    check(got6 === hand6 && all6.length === 6 && all6[5].name === 'Tor Wing' && all6[5].grade === 'Slight' && own6.map(v => v.tagged).join() === 'true,true,true,true,false' && own6.graded,
+      `gw: this file's reading of CHI at TOR is the grades worked by hand, by the grade first and then the lift (${got6}; sixth ${all6[5] && all6[5].name})`);
+    check(await openView(w, G6), 'gw: CHI at TOR\'s view opens');
+    await press(w, 'mism');
+    let bad6 = holdMism(d, own6, 'CHI at TOR');
+    const z6 = [...body().querySelectorAll('ul.gw-mm > li')].map(li => `${txt(li.querySelector('[data-gw-grade]'))}:${li.querySelectorAll('.gw-mmtag').length}`).join(' ');
+    check(!bad6.length && z6 === 'Huge:1 Big:1 Solid:1 Solid:1 Slight:0', `gw: Mismatches grades each row on the NFL's steps and rounding (z 2.95 Huge, 1.95 Big, 0.95 and 1.31 Solid, 0.94 Slight), lists them by the grade first, and puts the MISMATCH chip on Solid and up alone (${z6})${bad6.length ? ': ' + bad6.slice(0, 6).join('; ') : ''}`);
+    check(!body().querySelector('[data-gw-mmnone], [data-gw-nograde]'), 'gw: with a mismatch among them, no line says there is none');
+    d.getElementById('gwClose').click();
+    bad6 = holdTags(d, own6, 'CHI at TOR tags');
+    const tg6 = [...d.querySelectorAll('#ppBody .pp-mmtag')].map(t => t.dataset.ppMmgrade).join();
+    check(!bad6.length && tg6 === 'Huge,Big,Solid,Solid', `gw: on the view's rows, MISMATCH beside the four graded Solid and up, each titled with its grade ("Huge mismatch: ..."), and none beside Chi Scorer, whose lift is the largest (${tg6})${bad6.length ? ': ' + bad6.slice(0, 4).join('; ') : ''}`);
     check(errors.length === 0, 'gw: no script errors: ' + errors.join(' | '));
   }
   /* before the job's next run: no teamStats, no oppCols or opp, and the model on trial (its note says so) */
@@ -519,8 +595,22 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
     check(await openView(L2.w, G), 'gw: the view opens with the model on trial');
     await press(L2.w, 'mism');
     const bad = holdMism(L2.d, own2, 'on trial');
-    check(!bad.length && own2[0].note === NOTE_TRIAL, `gw: on trial, the same five and the trial's note${bad.length ? ': ' + bad.slice(0, 4).join('; ') : ''}`);
+    check(!bad.length && own2.note === NOTE_TRIAL, `gw: on trial, the same five and the trial's note${bad.length ? ': ' + bad.slice(0, 4).join('; ') : ''}`);
     check(L2.errors.length === 0, 'gw: no script errors: ' + L2.errors.join(' | '));
+    /* a state published before the grades (oppCols without z): the five listed by the lift as before, no grade, no tag,
+       and the window says the grades come with the job's next run; the same where one club's defence has no z */
+    for (const [what, mk] of [['before the grades', x => { x.props.oppCols = ['ratio', 'mult', 'rank']; for (const g of Object.values(x.props.games)) for (const t of Object.keys(g.opp || {})) for (const k of Object.keys(g.opp[t])) g.opp[t][k] = g.opp[t][k].slice(0, 3); }],
+      ['a club with no z', x => { x.props.games[G6.id].opp.TOR.ast[3] = null; }]]) {
+      const st4 = ST(); mk(st4);
+      const own4 = mmOwn(st4, G6), L4 = load(st4); await sleep(350);
+      check(await openView(L4.w, G6), `gw: CHI at TOR's view opens on a state ${what}`);
+      await press(L4.w, 'mism');
+      const bad4 = holdMism(L4.d, own4, what);
+      check(!own4.graded && own4.map(v => v.name).join() === 'Chi Scorer,Chi Passer,Chi Board,Chi Gunner,Tor Wing' && !bad4.length && txt(L4.d.querySelector('[data-gw-nograde]')) === MM_UNGRADED && !L4.d.querySelector('#gwBody [data-gw-grade], #gwBody .gw-mmtag'),
+        `gw: on a state ${what}, the five by the lift alone (${own4.map(v => v.name).join(', ')}), none graded or tagged, and "${MM_UNGRADED}"${bad4.length ? ': ' + bad4.slice(0, 4).join('; ') : ''}`);
+      L4.d.getElementById('gwClose').click();
+      check(!L4.d.querySelector('#ppBody .pp-mmtag') && !holdTags(L4.d, own4, what).length && L4.errors.length === 0, `gw: and no row of the view wears a tag${L4.errors.length ? ': ' + L4.errors.join(' | ') : ''}`);
+    }
     /* another season's stats */
     const st3 = ST({ teamStats: { ...clone(TSTATS), season: SEASON - 1 } }), L3 = load(st3); await sleep(350);
     await openView(L3.w, G); await press(L3.w, 'stats');
@@ -544,9 +634,42 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
       check(JSON.stringify(st.teamStats) === JSON.stringify(ownTS), `gw: the ${pubTS ? 'published' : 'job\'s'} team stats are this file's own reading of the team boxes, scores and box minutes (${Object.keys(ownTS.clubs).length} clubs, ${ownTS.games} finals through ${ownTS.through})`);
       /* the opponent table as published, else as props.js's oppTable gives it on a replay of today's boxes */
       const pubOpp = !!(RP.games[id].opp && RP.oppCols);
+      /* each club's z on each stat, this file's own reading: (its ratio - the 30 clubs' mean) / their spread over the 30,
+         rounded to two places, from a table of every club's ratios ({club: {stat: ratio}}) */
+      const zLeagueOwn = R30 => { const out = {}, cl = Object.keys(R30);
+        for (const k of PJ.STATS) { const xs = cl.map(t => R30[t][k]); if (cl.length !== 30 || !xs.every(Number.isFinite)) continue;
+          const m = xs.reduce((a, x) => a + x, 0) / 30, sd = Math.sqrt(xs.reduce((a, x) => a + (x - m) ** 2, 0) / 30);
+          out[k] = sd > 0 ? Object.fromEntries(cl.map((t, i) => [t, Math.round((xs[i] - m) / sd * 100) / 100])) : null; }
+        return out; };
+      let zHeld = null;
       if (!pubOpp) { const R = PJ.replay(PJ.loadGames(), PJ.loadBoxes(), PJ.loadTeamBoxes(), {}), P = JSON.parse(fs.readFileSync(path.join(ROOT, 'props.json'), 'utf8')).params, season = +id.slice(0, 4);
         const D = PJ.oppTable(t => { const a = R.allowed[t]; if (!a || a.season === season) return a; return { m: a.m * 0.5, y: Object.fromEntries(PJ.STATS.map(k => [k, a.y[k] * 0.5])) }; }, R.lgAll, P.opp);
-        st.props.oppCols = ['ratio', 'mult', 'rank']; st.props.games[id].opp = Object.fromEntries([g.away, g.home].map(t => [t, Object.fromEntries(PJ.STATS.map(k => [k, [D[t][k].ratio, D[t][k].mult, D[t][k].rank]]))])); }
+        /* the grades as publish.js gives them on the league's 30 ratios (oppLeagueZ), held to this file's own z below */
+        const lg = Object.fromEntries(Object.keys(D).map(t => [t, Object.fromEntries(PJ.STATS.map(k => [k, D[t][k].ratio]))])), LZ = PUB.oppLeagueZ(lg), own30 = zLeagueOwn(lg);
+        const zj = (t, k) => LZ && LZ[k] ? Math.round((D[t][k].ratio - LZ[k].mean) / LZ[k].sd * 100) / 100 : null;
+        st.props.oppCols = ['ratio', 'mult', 'rank', 'z']; st.props.games[id].opp = Object.fromEntries([g.away, g.home].map(t => [t, Object.fromEntries(PJ.STATS.map(k => [k, [D[t][k].ratio, D[t][k].mult, D[t][k].rank, zj(t, k)]]))]));
+        const badZ = Object.keys(D).flatMap(t => PJ.STATS.filter(k => (own30[k] ? own30[k][t] : null) !== zj(t, k)).map(k => `${t} ${k} ${zj(t, k)} where ${own30[k] && own30[k][t]}`));
+        check(Object.keys(D).length === 30 && !badZ.length, `gw: the job's z (publish.js oppLeagueZ) on today's replay of every club's defence is this file's own, every club and stat (MIA threes ${own30.tpm && own30.tpm.MIA})${badZ.length ? ': ' + badZ.slice(0, 4).join('; ') : ''}`);
+        zHeld = 'replay'; }
+      else if (RP.oppCols.includes('z')) {
+        /* the published z, recomputed here from the published ratios of every club the state carries, by season (all 30
+           where the slate's games take in every club), and from props.json's oppLeague where it is the same build */
+        const zc = RP.oppCols.indexOf('z'), rc = RP.oppCols.indexOf('ratio'), bySeason = {};
+        for (const [gid, pg] of Object.entries(RP.games)) for (const [t, d] of Object.entries(pg.opp || {})) { const sx = gid.slice(0, 4); (bySeason[sx] = bySeason[sx] || {})[t] = Object.fromEntries(PJ.STATS.filter(k => d[k]).map(k => [k, d[k][rc]])); }
+        const PJF = JSON.parse(fs.readFileSync(path.join(ROOT, 'props.json'), 'utf8')), sameBuild = PJF.generated === RP.build && PJF.oppLeague;
+        const bad = [], seen = [];
+        for (const [sx, R30] of Object.entries(bySeason)) {
+          const fromFile = sameBuild && PJF.oppLeague[sx];
+          if (fromFile) for (const t of Object.keys(R30)) for (const k of Object.keys(R30[t])) if (fromFile[t][k] !== R30[t][k]) bad.push(`${sx} ${t} ${k}: ratio ${R30[t][k]} where props.json's league table has ${fromFile[t][k]}`);
+          const own30 = Object.keys(R30).length === 30 ? zLeagueOwn(R30) : fromFile ? zLeagueOwn(fromFile) : null;
+          if (!own30) { seen.push(`${sx}: ${Object.keys(R30).length} clubs, no league table to hold z to`); continue; }
+          seen.push(`${sx}: ${Object.keys(R30).length === 30 ? 'the 30 clubs the state carries' : "props.json's league table"}`);
+          for (const [gid, pg] of Object.entries(RP.games)) if (gid.slice(0, 4) === sx) for (const [t, dd] of Object.entries(pg.opp || {})) for (const k of Object.keys(dd)) {
+            const want = own30[k] ? own30[k][t] : null; if (dd[k][zc] !== want) bad.push(`${gid} ${t} ${k}: z ${dd[k][zc]} where ${want}`); }
+        }
+        check(!bad.length && seen.length && !seen.some(x => /no league table/.test(x)), `gw: every published z is this file's own from the league's ratios (${seen.join('; ')})${bad.length ? ': ' + bad.slice(0, 4).join('; ') : ''}`);
+        zHeld = 'published'; }
+      else check(true, 'gw: the published state is from before the grades: the made-up states above hold a state without z');
       const own = mmOwn(st, g);
       const { w, d, errors } = load(st);
       await sleep(400);

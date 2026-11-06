@@ -245,6 +245,19 @@ function oppTable(allowedOf, lg, exps, teams = L.TEAMS) {
   return out;
 }
 
+/* what a club allowed as a game of `season` reads it (liveProjections): its record as kept where it is of that season,
+   else (a new season's first games) at half */
+const oppAllowedIn = (R, season) => t => { const a = R.allowed[t]; if (!a || a.season === season) return a; return { m: a.m * 0.5, y: Object.fromEntries(STATS.map(k => [k, a.y[k] * 0.5])) }; };
+/* the league's defences, for the Mismatches' grades (README "The game's three windows"): for each season of the games
+   to come, every club's opponent ratio on each base stat as oppTable gives it (the ratio each game's opp carries for its
+   two clubs), so publish.js can set a club's defence against all 30 clubs', never only the two in a game */
+function oppLeague(R, P, seasons, teams = L.TEAMS) {
+  const out = {};
+  for (const s of [...new Set(seasons.map(Number))].sort((a, b) => a - b)) { const D = oppTable(oppAllowedIn(R, s), R.lgAll, P.opp, teams);
+    out[String(s)] = Object.fromEntries(teams.map(t => [t, Object.fromEntries(STATS.map(k => [k, D[t][k].ratio]))])); }
+  return out;
+}
+
 /* ---------- distributions (no dependencies: the page carries nbSf and nbVar line for line) ---------- */
 /* the variance of a stat with mean mu: A x mu^B, the constants fitted per stat (var in props.json) */
 const nbVar = (mu, ab) => ab[0] * Math.pow(Math.max(mu, 1e-9), ab[1]);
@@ -689,7 +702,7 @@ function liveProjections(R, P, games, now = new Date(), dir = DATA, horizon = HO
     const post = g.type === 'POST';
     const paceOfTeam = t => R.seasonOfTeam[t] === g.season ? R.pace[t] : R.lgPace + EARLY_PACE;
     const expPace = (paceOfTeam(g.home) + paceOfTeam(g.away)) / 2;
-    const oppAllowed = t => { const a = R.allowed[t]; if (!a || a.season === g.season) return a; return { m: a.m * 0.5, y: Object.fromEntries(STATS.map(k => [k, a.y[k] * 0.5])) }; };
+    const oppAllowed = oppAllowedIn(R, g.season);
     const sides = {}, scale = {}, D = oppTable(oppAllowed, R.lgAll, P.opp);
     for (const [t, opp] of [[g.home, g.away], [g.away, g.home]]) {
       const av = avail(g, t, R.players);
@@ -747,6 +760,8 @@ async function main() {
   /* 2. the games to come */
   const now = process.env.NBA_NOW ? new Date(process.env.NBA_NOW) : new Date();
   const upcoming = liveProjections(R, P, games, now);
+  const ofGame = new Map(games.map(g => [g.game_id, g.season]));
+  const league = oppLeague(R, P, Object.keys(upcoming).map(id => ofGame.get(id)).filter(Number.isFinite));
   /* 3. the shadow ledger: freeze what has started, grade what is final, call what is to come */
   /* the projections the page shows are the ledger's calls: when the ledger fails, props.json is left as it was (and the
      job puts every props file back), so the page never publishes projections the ledger did not take */
@@ -755,7 +770,7 @@ async function main() {
   const rs = fs.existsSync(RESEARCH) ? JSON.parse(fs.readFileSync(RESEARCH, 'utf8')) : null;
   const out = { name: 'NBA props model', onTrial: true, params: P, fitSeasons, asOf: R.lastFinal,
     distribution: 'negative binomial, variance A x mean^B (params.var); P(over a line) = P(stat >= floor(line) + 1); double- and triple-double by a one-factor Gaussian copula (params.rho)',
-    fair: FAIR, research: rs ? summarizeResearch(rs) : null, upcoming };
+    fair: FAIR, research: rs ? summarizeResearch(rs) : null, upcoming, oppLeague: league };
   const same = prev && JSON.stringify({ ...prev, generated: undefined }) === JSON.stringify({ ...out, generated: undefined });
   out.generated = same ? prev.generated : now.toISOString().slice(0, 16) + 'Z';
   const body = JSON.stringify(out) + '\n';
@@ -780,6 +795,6 @@ function summarizeResearch(rs) {
     stats: Object.fromEntries(Object.entries(f.stats).map(([k, v]) => [k, { mae: v.mae, naiveMae: v.naiveMae, bias: v.bias, logScore: v.logScore, naiveLogScore: v.naiveLogScore }])),
     market: f.market ? { lines: f.market.all.lines, games: f.market.all.games, logloss: f.market.all.logloss, brier: f.market.all.brier, flat: f.market.all.flat } : null })) };
 }
-module.exports = { fairMethods, HORIZON, LIVE_SIDE, ROT, sideS, publishedMeans, availability, liveProjections, research, marketTest, marketScores, flatBets, gradeLine, bootCI, rng, oppFactor, oppTable, OPP_H, OPP_SHRINK, FAIR, rollSeason, STATS, COMBOS, ALL, H_SET, GRID, MIN_SHOWN, posOf, loadBoxes, loadTeamBoxes, gamePace, loadGames, replay, features, nbVar, nbPmf, nbSf, pOver, nbLogPmf, lgamma, normCdf, normInv, doublesProb, baseMin, sideScale, finalMin, means, backtestMinutes, sidesOf, fit, fitVar, score, fitNaiveVar, project, yOf, doubles, FIRST, DATA, OUT, RESEARCH };
+module.exports = { fairMethods, HORIZON, LIVE_SIDE, ROT, sideS, publishedMeans, availability, liveProjections, research, marketTest, marketScores, flatBets, gradeLine, bootCI, rng, oppFactor, oppTable, oppAllowedIn, oppLeague, OPP_H, OPP_SHRINK, FAIR, rollSeason, STATS, COMBOS, ALL, H_SET, GRID, MIN_SHOWN, posOf, loadBoxes, loadTeamBoxes, gamePace, loadGames, replay, features, nbVar, nbPmf, nbSf, pOver, nbLogPmf, lgamma, normCdf, normInv, doublesProb, baseMin, sideScale, finalMin, means, backtestMinutes, sidesOf, fit, fitVar, score, fitNaiveVar, project, yOf, doubles, FIRST, DATA, OUT, RESEARCH };
 
 if (require.main === module) main().catch(e => { console.error(e.stack || e.message || e); process.exit(1); });

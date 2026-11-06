@@ -3561,10 +3561,10 @@ function ppRow1(g, x, pr) {
   const posLine = [who.pos, mins != null && `${mins} min`, backup && 'backup'].filter(Boolean).join(' · ');
   const sumSr = row ? `projected ${mins != null ? `${mins} minutes, ` : ''}${['pts', 'reb', 'ast'].map(k => `${ppNumTxt(ppMean(row, k))} ${{ pts: 'points', reb: 'rebounds', ast: 'assists' }[k]}`).join(', ')}` : 'no projection';
   const hasStats = ppRecent(pid).length > 0;
-  /* in the game's top five Mismatches (app/parts/gamewin.html's own list, the window's): the NFL's tag beside his name,
-     titled with his row there, and said in the row's name */
+  /* in the game's top five Mismatches (app/parts/gamewin.html's own list, the window's) graded Solid or more, as the NFL's
+     game page tags: its tag beside his name, titled with his row there ("Big mismatch: ..."), and said in the row's name */
   const mm = typeof window.gwMismatch === 'function' ? window.gwMismatch(g.id, pid) : null;
-  const mmTag = mm ? `<span class="pp-mmtag" data-pp-mm="${mm.n}" title="${esc(mm.title)}">Mismatch</span>` : '';
+  const mmTag = mm ? `<span class="pp-mmtag" data-pp-mm="${mm.n}" data-pp-mmgrade="${esc(mm.grade)}" title="${esc(mm.title)}">Mismatch</span>` : '';
   /* Show stats is named by its own words (Show stats or Hide stats, then whose), which say its state: no aria-pressed
      beside them; it names the table it controls only while the table is drawn */
   const stWord = st ? 'Hide stats' : 'Show stats';
@@ -3573,7 +3573,7 @@ function ppRow1(g, x, pr) {
   const bench = !row && !nLines;
   let h = `<div class="pp-pwrap" data-pp-name="${esc(String(who.name).toLowerCase())}">`;
   if (bench) h += `<div class="pp-plr bench" data-pp-player="${esc(pid)}" data-pp-bench>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow"></span><span class="sr">${esc(who.name)}${posLine ? ', ' + esc(posLine) : ''}: no projection and no DraftKings line</span></div>`;
-  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}"${open ? ` aria-controls="ppPb-${esc(pid)}"` : ''} aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${backup ? ', backup' : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}${mm ? `, mismatch #${mm.n} in this game` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
+  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}"${open ? ` aria-controls="ppPb-${esc(pid)}"` : ''} aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${backup ? ', backup' : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}${mm ? `, ${mm.grade} mismatch, #${mm.n} in this game` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
   if (st && hasStats) h += ppStats(x);
   if (open && !bench) h += ppBody(g, x, pr);
   return h + '</div>';
@@ -5966,6 +5966,15 @@ ul.gw-mm li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:14px;
 .gw-mmsc b{font-family:var(--display);font-size:18px;line-height:1;color:var(--ink);white-space:nowrap}
 .gw-mmsc b small{font-family:var(--body);font-size:12px;font-weight:700;color:var(--ink-2);margin-left:3px}
 .gw-mmtag{display:inline-block;padding:2px 8px;border-radius:999px;background:linear-gradient(135deg,#2563EB,#1E4FA8);color:#fff;font-size:11px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;line-height:1.3;white-space:nowrap}
+/* a mismatch's grade, the NFL's (its snapshot.html .gs-meter and .gs-mmsc small, its theme's pe-g colours): the word in
+   its grade's colour (Huge the hub's lime, Big #7BD88F, Solid #F2B84B, Slight the quiet ink), after the four-step meter */
+.gw-mmg{display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:700;line-height:1.2;white-space:nowrap;cursor:help}
+.gw-g4{color:var(--lime)} .gw-g3{color:#7BD88F} .gw-g2{color:#F2B84B} .gw-g1{color:var(--pb-q)}
+.gw-meter{display:inline-flex;align-items:flex-end;gap:2px;height:14px;vertical-align:-2px;flex:none}
+.gw-meter i{display:block;width:4px;border-radius:1px;background:var(--line-2)}
+.gw-meter i:nth-child(1){height:5px} .gw-meter i:nth-child(2){height:8px} .gw-meter i:nth-child(3){height:11px} .gw-meter i:nth-child(4){height:14px}
+.gw-meter.gw-l1 i:nth-child(-n+1),.gw-meter.gw-l2 i:nth-child(-n+2),.gw-meter.gw-l3 i:nth-child(-n+3),.gw-meter.gw-l4 i:nth-child(-n+4){background:currentColor}
+.gw-mmnone{margin:-4px 0 12px;font-size:13px;color:var(--ink-2);line-height:1.5}
 /* the NFL's phone window, at its 760px: 10px of the page around it, a 58px bar, the card 12px in and 14px inside, the
    Team Stats names dropped, a mismatch's rank on its own row and the two clubs on their own line 6px under his name */
 @media(max-width:760px){
@@ -6085,12 +6094,16 @@ function statsBody(g) {
 }
 
 /* ---- Mismatches: the props model's opponent term. A player's projected stat is multiplied by the opponent's
-   multiplier on it (props.js means: ratio^opp[k], published by club in the game's props as [ratio, mult, rank],
+   multiplier on it (props.js means: ratio^opp[k], published by club in the game's props as [ratio, mult, rank, z],
    oppCols), so his projection without the matchup is mean / mult and the matchup's lift mean - mean / mult. The game's
    players shown at 20 minutes or more (his row's minutes, as the view prints them: 19.8 is "20 min" and counts), not
-   out, are ranked by that lift in standard deviations of the stat at his mean (sqrt(nbVar(mean, var[k])), the props
-   model's spread) over points, rebounds, assists and threes, each player at his best stat, positive lifts only, the top
-   five ---- */
+   out, each at his best stat among points, rebounds, assists and threes by that lift in standard deviations of the stat
+   at his mean (sqrt(nbVar(mean, var[k])), the props model's spread), positive lifts only. Each is graded as the NFL
+   hub grades a mismatch (its mmGrade): on z, how far the defence he faces is from the league's average on that stat in
+   standard deviations across the 30 clubs (publish.js THE MISMATCH GRADES), rounded to a tenth, Slight under 1, Solid
+   from 1, Big from 2, Huge from 3; listed by the grade, then the lift in SD, the top five; tagged MISMATCH Solid and up,
+   as the NFL's game page tags. A state published before the grades lists the five by the lift alone, none graded or
+   tagged ---- */
 const MM_STATS = ['pts', 'reb', 'ast', 'tpm'], MM_MIN = 20, MM_TOP = 5;
 const MM_DEF = { pts: 'scoring defence', reb: 'rebounding defence', ast: 'assist defence', tpm: 'three-point defence' };
 const MM_NOUN = { pts: 'points', reb: 'rebounds', ast: 'assists', tpm: 'threes' };
@@ -6100,6 +6113,13 @@ const mmNote = () => (typeof ppFail === 'function' && ppFail())
   : 'From the props model\'s opponent adjustment; the model is on trial against DraftKings, so read these as context, not picks.';
 /* a small positive figure at the fewest decimals, from `min` to 3, that do not round it to nothing: a lift of 0.017 is
    "+0.02", never "+0.0"; null where even 3 decimals would ("under 0.001") */
+/* the NFL's grade of a mismatch (its tab_elo.html and snapshot.html mmGrade: rounded to a tenth, then its four steps),
+   with its colour class and its step on the meter */
+const mmGrade = z => { const x = Math.round(z * 10) / 10; return x >= 3 ? ['Huge', 'gw-g4', 4] : x >= 2 ? ['Big', 'gw-g3', 3] : x >= 1 ? ['Solid', 'gw-g2', 2] : ['Slight', 'gw-g1', 1]; };
+const mmMeter = (lv, cls) => `<span class="gw-meter gw-l${lv} ${cls}" aria-hidden="true"><i></i><i></i><i></i><i></i></span>`;
+const MM_STEPS = 'Slight under 1, Solid from 1, Big from 2, Huge from 3';
+const MM_NONE = 'No player in this game faces a defence a standard deviation or more weaker than the league\'s on his stat.';
+const MM_UNGRADED = 'The mismatch grades are not published yet: the job adds them on its next run.';
 const fine = (x, min) => { for (let d = min; d <= 3; d++) { const s = x.toFixed(d); if (+s !== 0) return s; } return null; };
 const liftTxt = l => { const s = fine(l, 1); return s ? '+' + s : 'under 0.001'; };
 const zTxt = z => { const s = fine(z, 2); return s ? '+' + s : '<0.001'; };
@@ -6120,6 +6140,8 @@ function mmWork(g, P) {
   const O = pg.opp, V = P.dist && P.dist.var, cols = Array.isArray(P.oppCols) ? P.oppCols : ['ratio', 'mult', 'rank'], ci = c => cols.indexOf(c);
   if (!O || !O[g.away] || !O[g.home]) return { why: 'The props model\'s opponent adjustment is not published for this game yet: the job adds it on its next run.' };
   if (!V) return { why: 'The props model\'s spreads are not published.' };
+  /* graded where the job has given both clubs' defences their z on every stat the list reads (oppCols naming it) */
+  const zi = ci('z'), graded = zi >= 0 && [g.away, g.home].every(t => MM_STATS.every(k => Array.isArray(O[t][k]) && Number.isFinite(O[t][k][zi])));
   const out = [];
   for (const [pid, row] of Object.entries(pg.players || {})) {
     const team = row[1], min = row[3]; if (!(Number.isFinite(min) && +min.toFixed(0) >= MM_MIN) || (team !== g.away && team !== g.home) || ppOut(g, pid)) continue;
@@ -6129,25 +6151,31 @@ function mmWork(g, P) {
       const mu = ppAt(row, k), e = D && D[k]; if (!Array.isArray(e) || !V[k] || !Number.isFinite(mu) || !(mu > 0)) continue;
       const ratio = e[ci('ratio')], mult = e[ci('mult')], rank = e[ci('rank')]; if (!(mult > 0) || !Number.isFinite(ratio)) continue;
       const lift = mu - mu / mult; if (!(lift > 0)) continue;
-      const sd = Math.sqrt(nbVar(mu, V[k])), z = lift / sd;
-      if (!best || z > best.z || (z === best.z && lift > best.lift)) best = { k, mu, ratio, mult, rank, lift, sd, z };
+      const sd = Math.sqrt(nbVar(mu, V[k])), z = lift / sd, dz = graded ? e[zi] : null;
+      if (!best || z > best.z || (z === best.z && lift > best.lift)) best = { k, mu, ratio, mult, rank, lift, sd, z, dz };
     }
     if (best) out.push({ pid, name: row[0], pos: row[2], team, opp, home: team === g.home, ...best });
   }
-  out.sort((x, y) => y.z - x.z || y.lift - x.lift || (x.pid < y.pid ? -1 : x.pid > y.pid ? 1 : 0));
+  for (const v of out) if (graded) { [v.grade, v.gc, v.lv] = mmGrade(v.dz); v.tagged = v.lv >= 2; } else { v.grade = null; v.lv = 0; v.tagged = false; }
+  out.sort((x, y) => y.lv - x.lv || y.z - x.z || y.lift - x.lift || (x.pid < y.pid ? -1 : x.pid > y.pid ? 1 : 0));
   const list = out.slice(0, MM_TOP), note = mmNote();
   list.forEach((v, i) => { v.n = i + 1;
     v.vs = `vs ${v.opp} ${MM_DEF[v.k]} #${v.rank}`;
     v.proj = `${v.mu.toFixed(1)} ${MM_UNIT[v.k]}`;
     v.sz = zTxt(v.z); v.lt = liftTxt(v.lift);
     v.say = `${v.name} ${v.pos} ${v.team} ${v.home ? 'vs' : 'at'} ${v.opp} · ${v.vs} (allows ${pctMore(v.ratio, MM_NOUN[v.k])}). ${v.proj} projected (${v.lt} from the matchup).`;
-    v.title = `Mismatch #${v.n} in this game: ${v.say} Ranked by that lift over the spread of his ${MM_NOUN[v.k]} at his projection, ${v.sz} of a standard deviation (${v.sd.toFixed(1)}). ${note}`; });
-  return { list, note };
+    const lift = `${v.sz} SD: what the matchup adds to his projection, over the spread of his ${MM_NOUN[v.k]} at his projection (${v.sd.toFixed(1)}).`;
+    if (graded) { const a = Math.abs(v.dz).toFixed(2);
+      v.gsay = `${v.grade}: ${v.opp}'s ${MM_DEF[v.k]} is ${v.dz === 0 ? 'at the league\'s average' : `${a} standard deviations ${v.dz > 0 ? 'weaker' : 'stronger'} than the league's average`} on ${MM_NOUN[v.k]}, across its 30 clubs (${MM_STEPS}).`;
+      v.title = `${v.grade} mismatch: #${v.n} in this game. ${v.say} ${v.gsay} ${lift} Listed by the grade, then that lift. ${note}`; }
+    else v.title = `Mismatch #${v.n} in this game: ${v.say} ${lift} Listed by that lift; the grades are not published yet. ${note}`; });
+  return { list, note, graded };
 }
 function mismBody(g) {
   const R = mmList(g);
   if (!R.list) return `<p class="gw-msg" data-gw-why>${H(R.why)}</p>`;
-  const note = `<p class="gw-mmnote" data-gw-mmnote>${H(R.note)}</p>`;
+  const note = `<p class="gw-mmnote" data-gw-mmnote>${H(R.note)}</p>`
+    + (!R.graded ? `<p class="gw-mmnone" data-gw-nograde>${H(MM_UNGRADED)}</p>` : R.list.length && !R.list.some(v => v.tagged) ? `<p class="gw-mmnone" data-gw-mmnone>${H(MM_NONE)}</p>` : '');
   if (!R.list.length) return note + `<p class="gw-msg" data-gw-why>No player projected ${MM_MIN} minutes or more gets a lift from this matchup on points, rebounds, assists or threes.</p>`;
   /* each player's season shield before his name, as the NFL's row and the view's own rows wear it (the Players tab's
      ranking, ppRankOf); none for a player it does not rank. Read as drawn, never kept with the list */
@@ -6155,7 +6183,7 @@ function mismBody(g) {
   return note + `<ul class="gw-mm">${R.list.map(v => `<li data-gw-mm="${H(v.pid)}" title="${H(v.title)}"><span class="gw-mmn" title="Mismatch rank in this game">#${v.n}</span>
       <div><span class="gw-mmwho">${shield(v.pid)}${H(v.name)} <small>${H(v.pos)}</small><span class="gw-mmvs">${pill(v.team)}<small>${v.home ? 'vs' : 'at'}</small>${pill(v.opp)}</span></span>
       <span class="gw-mmsub" data-gw-mmsub>${H(v.vs)} (allows ${H(pctMore(v.ratio, MM_NOUN[v.k]))}). <b>${H(v.proj)}</b> projected (${H(v.lt)} from the matchup).</span></div>
-      <div class="gw-mmsc"><b data-gw-z>${v.sz}<small>SD</small></b><span class="gw-mmtag">Mismatch</span></div></li>`).join('')}</ul>`;
+      <div class="gw-mmsc"><b data-gw-z>${v.sz}<small>SD</small></b>${v.grade ? `<small class="gw-mmg ${v.gc}" data-gw-grade="${v.grade}">${mmMeter(v.lv, v.gc)}${v.grade}</small>` : ''}${v.tagged ? '<span class="gw-mmtag">Mismatch</span>' : ''}</div></li>`).join('')}</ul>`;
 }
 
 /* ---- the window ---- */
@@ -6213,8 +6241,9 @@ window.gameWindowSync = () => {
   const b = typeof ppOpen !== 'undefined' && ppOpen === GID ? document.querySelector(`#ppBody [data-gp-pop="${KIND}"][data-gp-game="${CSS.escape(GID)}"]`) : null;
   if (b) FROM = b; else { FROM = null; close(); }
 };
-/* the view's MISMATCH tag: this player's row in the game's top five, or null */
-window.gwMismatch = (gid, pid) => { const g = gameOf(gid); if (!g) return null; const R = mmList(g); return R.list ? R.list.find(v => v.pid === String(pid)) || null : null; };
+/* the view's MISMATCH tag: this player's row in the game's top five where it is graded Solid or more (the NFL's game page
+   tags Solid and up), or null */
+window.gwMismatch = (gid, pid) => { const g = gameOf(gid); if (!g) return null; const R = mmList(g); return R.list ? R.list.find(v => v.pid === String(pid) && v.tagged) || null : null; };
 })();
 </script>
 

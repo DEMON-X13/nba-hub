@@ -322,20 +322,42 @@ function decisionState(d) {
   if (d.early) out.early = { at: d.early.at, by: d.early.by, why: d.early.why };
   return out;
 }
+/* THE MISMATCH GRADES (README "The game's three windows"): how far a club's defence on a stat is from the league's, in
+   standard deviations across the league's 30 clubs, the NFL hub's grade read on this hub's numbers: z = (ratio - the
+   mean of the 30 clubs' ratios on that stat) / their standard deviation (population: over the 30), each ratio the
+   published one (props.js oppTable: what the club's opponents made of the stat per minute over the league's, shrunk
+   toward 1, to four decimals), all 30 from props.json's oppLeague for the game's season, never the two clubs of a game
+   alone. Rounded to two places. None for any club where the season's table lacks a club of the 30, a stat or a spread */
+function oppLeagueZ(table, teams = L.TEAMS) {
+  if (!table || typeof table !== 'object' || !teams.every(t => table[t] && typeof table[t] === 'object')) return null;
+  const out = {};
+  for (const k of PROPS_BASE) {
+    const xs = teams.map(t => table[t][k]); if (!xs.every(Number.isFinite)) continue;
+    const n = xs.length, mean = xs.reduce((a, x) => a + x, 0) / n, sd = Math.sqrt(xs.reduce((a, x) => a + (x - mean) * (x - mean), 0) / n);
+    if (sd > 0) out[k] = { mean, sd };
+  }
+  return out;
+}
+const zOf = (ratio, m) => m && Number.isFinite(ratio) ? Math.round((ratio - m.mean) / m.sd * 100) / 100 : null;
 function propsState(slate, nowIso, given = null) {
   const f = path.join(L.ROOT, 'props.json');
   if (!given && !fs.existsSync(f)) return null;
   const pj = given || JSON.parse(fs.readFileSync(f, 'utf8'));          // given: a props.json's content, for a test
   const open = new Set(slate.filter(g => g.status === 'scheduled' && !(g.tip && g.tip <= nowIso)).map(g => g.id));
   const games = {};
+  /* the league's mean and spread of each stat's ratios, by season, where props.json carries the league's table */
+  const LZ = pj.oppLeague && typeof pj.oppLeague === 'object' ? Object.fromEntries(Object.entries(pj.oppLeague).map(([s, t]) => [s, oppLeagueZ(t)])) : null;
   for (const [gid, g] of Object.entries(pj.upcoming || {})) {
     if (!open.has(gid)) continue;
     const players = {};
     for (const [team, list] of Object.entries(g.players)) for (const p of list) players[p.id] = [p.name, team, p.pos, p.min, ...PROPS_BASE.map(k => p.mu[k]), p.dd, p.td];
     games[gid] = { tip: g.tip, away: g.away, home: g.home, players };
     /* each club's defence as the projections take it (props.js oppTable), for the Mismatches window: by club, the club
-       defending, each base stat [ratio, multiplier, rank] (oppCols); none on a props.json written before it */
-    if (g.opp && typeof g.opp === 'object') games[gid].opp = Object.fromEntries(Object.entries(g.opp).map(([t, d]) => [t, Object.fromEntries(PROPS_BASE.filter(k => d && d[k]).map(k => [k, [d[k].ratio, d[k].mult, d[k].rank]]))]));
+       defending, each base stat [ratio, multiplier, rank] (oppCols), and its grade's z where props.json carries the
+       league's table (null for a club or stat it has none for); none on a props.json written before it */
+    const lz = LZ ? LZ[String(gid).slice(0, 4)] || null : null;
+    if (g.opp && typeof g.opp === 'object') games[gid].opp = Object.fromEntries(Object.entries(g.opp).map(([t, d]) => [t, Object.fromEntries(PROPS_BASE.filter(k => d && d[k]).map(k => [k, LZ
+      ? [d[k].ratio, d[k].mult, d[k].rank, lz && L.TEAMS.includes(t) ? zOf(d[k].ratio, lz[k]) : null] : [d[k].ratio, d[k].mult, d[k].rank]]))]));
   }
   const lf = path.join(DATA, 'props_shadow.json');
   const lg = fs.existsSync(lf) ? JSON.parse(fs.readFileSync(lf, 'utf8')) : null;
@@ -346,7 +368,7 @@ function propsState(slate, nowIso, given = null) {
   /* on trial until a change of its own says otherwise: a PASS makes the model a candidate, it never moves the page by itself */
   return { onTrial: true, build: pj.generated, asOf: pj.asOf, fitSeasons: pj.fitSeasons,
     stats: ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'pra', 'pr', 'pa', 'ar', 'sb'], combos: { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] },
-    layout: ['name', 'team', 'pos', 'min'].concat(PROPS_BASE, ['dd', 'td']), oppCols: ['ratio', 'mult', 'rank'], horizonGameDays: 5, minShown: 8,
+    layout: ['name', 'team', 'pos', 'min'].concat(PROPS_BASE, ['dd', 'td']), oppCols: LZ ? ['ratio', 'mult', 'rank', 'z'] : ['ratio', 'mult', 'rank'], horizonGameDays: 5, minShown: 8,
     dist: { kind: 'negative binomial', var: pj.params.var, rule: pj.distribution },
     fair: pj.fair, games, ledger, research };
 }
@@ -461,5 +483,5 @@ function teamStatsState(games, season, dir = DATA) {
   }
   return { v: 1, season, through, games: n, clubs };
 }
-module.exports = { decisionState, propsState, boxesState, corrState, pickemState, offFinals, reportState, teamStatsState, TS_STATS, PK_MODELS };
+module.exports = { decisionState, oppLeagueZ, propsState, boxesState, corrState, pickemState, offFinals, reportState, teamStatsState, TS_STATS, PK_MODELS };
 if (require.main === module) main();

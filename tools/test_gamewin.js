@@ -16,6 +16,10 @@
  *    the projections used: a player's mean with the matchup is his mean without it times the opponent's multiplier.
  * 4. publish.js propsState carries opp to the page compactly ([ratio, mult, rank], oppCols), and nothing on a props.json
  *    written before it.
+ * 5. the Mismatches' grades: props.js oppLeague (every club's ratio on each base stat, for each season of the games to
+ *    come, oppTable's to the digit) and publish.js's z on it, (ratio - the 30 clubs' mean) / their standard deviation
+ *    over the 30, rounded to two places, on a made-up league worked by hand (the mean and the spread too); none for a
+ *    club or season the table lacks, nor on a stat whose 30 ratios are level.
  */
 'use strict';
 const fs = require('fs');
@@ -175,6 +179,15 @@ part('3. the projections\' own multiplier (props.js liveProjections)', () => {
       for (const p of L1.players[t]) { const b = bare[g.game_id].players[t].find(x => x.id === p.id);
         for (const k of PJ.STATS) { const d = Math.abs(p.mu[k] - b.mu[k] * L1.opp[opp][k].mult); worst = Math.max(worst, d); n++; } } }
     ok(n > 40 && worst <= 0.012, `${g.game_id}: each of ${n} projected stats is his mean without the matchup times the opponent's multiplier (largest gap ${worst.toFixed(4)}, rounding)`); }
+  /* the league's table the grades stand on (props.js oppLeague): for each season of the games to come, every one of the
+     league's 30 clubs' ratio on each base stat, oppTable's to the digit (a new season's halved, as above), so the two
+     clubs of each game carry exactly the league's own figure */
+  { const LG = PJ.oppLeague(R, P, [g2.season, g1.season, g1.season]);
+    const want = s => { const D = PJ.oppTable(allowedFor({ season: s }), R.lgAll, P.opp); return Object.fromEntries(Object.keys(D).map(t => [t, Object.fromEntries(PJ.STATS.map(k => [k, D[t][k].ratio]))])); };
+    ok(eq(Object.keys(LG), [String(S), String(S + 1)]) && eq(LG[String(S)], want(S)) && eq(LG[String(S + 1)], want(S + 1)) && Object.keys(LG[String(S)]).length === 30,
+      `oppLeague: each season once, every one of the 30 clubs' ratio on each base stat as oppTable gives it for that season (a new season's halved)`);
+    ok([g1, g2].every(g => [g.away, g.home].every(t => PJ.STATS.every(k => live[g.game_id].opp[t][k].ratio === LG[String(g.season)][t][k]))),
+      'each game\'s two clubs carry the league table\'s own ratio, so a grade set against all 30 reads the same figure the game shows'); }
   const halved = PJ.oppTable(allowedFor(g2), R.lgAll, P.opp), kept = PJ.oppTable(t => R.allowed[t], R.lgAll, P.opp);
   ok(clubs.some(t => kept[t].pts.ratio !== halved[t].pts.ratio) && eq(live[g2.game_id].opp.LAL, halved.LAL), 'a new season\'s game takes what each club allowed at half, as its projections do');
   /* the clubs the replay never saw sit at 1, so BOS, whose opponents scored the most, is the league's 30th on points */
@@ -195,6 +208,38 @@ part('4. what state.json carries (publish.js propsState)', () => {
   ok(eq(ps.oppCols, ['ratio', 'mult', 'rank']) && eq(pg.opp.BOS.reb, [1.01, 1.005, 2]) && eq(pg.opp.NYK.blk, [0.98, 0.99, 30]) && eq(Object.keys(pg.opp.BOS), PJ.STATS),
     'each club\'s defence on each base stat as [ratio, multiplier, rank], oppCols naming them');
   ok(!('opp' in PUB.propsState(slate, nowIso, mk(false)).games[gid]), 'a props.json written before the table carries none: the page says it is not published yet');
+});
+
+part('5. the Mismatches\' grades (props.js oppLeague, publish.js oppLeagueZ and propsState)', () => {
+  const T = require('./lib').TEAMS, S = 2031, n = T.length;
+  /* a made-up league of the 30, each stat worked by hand:
+       pts: 28 clubs at 1.0000, BOS 1.1000, NYK 0.9000: the mean 1, the variance (0.01 + 0.01) / 30 = 0.000667, the
+            spread 0.025820; BOS (1.1 - 1) / 0.025820 = 3.873, +3.87; NYK -3.87; the rest 0
+       reb: the first 15 clubs (ATL to MEM) at 1.02, the other 15 at 0.98: the mean 1, the spread 0.02; +1 and -1
+       ast: the first 10 (ATL to GSW) at 1.06, the next 10 (HOU to NYK) at 1.00, the last 10 (OKC to WAS) at 0.94: the mean 1, the variance 2 x 10 x 0.0036 / 30 =
+            0.0024, the spread 0.048990; (0.06 / 0.048990) = 1.2247, +1.22 and -1.22, the middle ten 0
+       tpm: PHX alone at 1.3000, the rest 1.0000: the mean 1.01, the variance (0.29^2 + 29 x 0.01^2) / 30 = 0.087 / 30 =
+            0.0029, the spread 0.053852; PHX 0.29 / 0.053852 = 5.385, +5.39; the rest -0.01 / 0.053852 = -0.186, -0.19
+       stl, blk: all 30 at 1: no spread, so no grade */
+  const tab = Object.fromEntries(T.map((t, i) => [t, { pts: t === 'BOS' ? 1.1 : t === 'NYK' ? 0.9 : 1, reb: i < 15 ? 1.02 : 0.98, ast: i < 10 ? 1.06 : i < 20 ? 1 : 0.94, tpm: t === 'PHX' ? 1.3 : 1, stl: 1, blk: 1 }]));
+  const Z = PUB.oppLeagueZ(tab), near = (a, b, e = 5e-7) => Math.abs(a - b) < e;
+  ok(n === 30 && near(Z.pts.mean, 1) && near(Z.pts.sd, 0.0258199) && near(Z.reb.sd, 0.02) && near(Z.ast.sd, 0.0489898) && near(Z.tpm.mean, 1.01) && near(Z.tpm.sd, 0.0538516) && !Z.stl && !Z.blk,
+    `the league's mean and spread by hand: points 1 and 0.025820, rebounds 1 and 0.02, assists 1 and 0.048990, threes 1.01 and 0.053852, none for steals or blocks (level) (${['pts', 'reb', 'ast', 'tpm'].map(k => `${k} ${Z[k].mean.toFixed(4)}/${Z[k].sd.toFixed(6)}`).join(', ')})`);
+  ok(PUB.oppLeagueZ({ ...tab, BOS: undefined }) === null && PUB.oppLeagueZ(Object.fromEntries(T.slice(0, 29).map(t => [t, tab[t]]))) === null, 'a table that lacks a club of the 30 gives no grades at all');
+  /* propsState: a game of the made-up season (BOS at PHX) and one of a season the table lacks (NYK at MIA) */
+  const tip = new Date(Date.now() + 864e5).toISOString().slice(0, 16) + 'Z', g1 = `${S}_20301021_BOS_PHX`, g2 = `${S + 1}_20311021_NYK_MIA`;
+  const opp = ts => Object.fromEntries(ts.map(t => [t, Object.fromEntries(PJ.STATS.map(k => [k, { ratio: tab[t][k], mult: 1, rank: 1 }]))]));
+  const mk = league => ({ generated: 'x', asOf: '2030-10-20', fitSeasons: '2023-2026', params: { var: {} }, distribution: 'nb', fair: {}, research: null,
+    upcoming: { [g1]: { tip, away: 'BOS', home: 'PHX', players: { BOS: [], PHX: [] }, opp: opp(['BOS', 'PHX']) }, [g2]: { tip, away: 'NYK', home: 'MIA', players: { NYK: [], MIA: [] }, opp: opp(['NYK', 'MIA']) } },
+    ...(league ? { oppLeague: league } : {}) });
+  const slate = [g1, g2].map(id => ({ id, status: 'scheduled', tip })), nowIso = new Date().toISOString().slice(0, 16) + 'Z';
+  const ps = PUB.propsState(slate, nowIso, mk({ [String(S)]: tab })), A = ps.games[g1].opp, zi = ps.oppCols.indexOf('z');
+  ok(eq(ps.oppCols, ['ratio', 'mult', 'rank', 'z']) && A.BOS.pts[zi] === 3.87 && A.PHX.pts[zi] === 0 && A.BOS.reb[zi] === 1 && A.PHX.reb[zi] === -1 && A.BOS.ast[zi] === 1.22 && A.PHX.ast[zi] === -1.22 && A.PHX.tpm[zi] === 5.39 && A.BOS.tpm[zi] === -0.19,
+    `each club's z on each stat, as worked by hand: BOS points +3.87, rebounds +1, assists +1.22, threes -0.19; PHX points 0, rebounds -1, assists -1.22, threes +5.39 (${['pts', 'reb', 'ast', 'tpm'].map(k => `${k} ${A.BOS[k][zi]}/${A.PHX[k][zi]}`).join(', ')})`);
+  ok(A.BOS.stl[zi] === null && A.PHX.blk[zi] === null && eq(ps.games[g2].opp.NYK.pts, [0.9, 1, 1, null]) && ps.games[g2].opp.MIA.tpm[zi] === null,
+    'none on a stat whose 30 ratios are level, nor for a game of a season the table lacks');
+  const ps0 = PUB.propsState(slate, nowIso, mk(null));
+  ok(eq(ps0.oppCols, ['ratio', 'mult', 'rank']) && eq(ps0.games[g1].opp.BOS.pts, [1.1, 1, 1]), 'a props.json written before the league\'s table carries no z, and oppCols does not name it');
 });
 
 fs.rmSync(TMP, { recursive: true, force: true });

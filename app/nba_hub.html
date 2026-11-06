@@ -1830,10 +1830,10 @@ function ppRow1(g, x, pr) {
   const posLine = [who.pos, mins != null && `${mins} min`, backup && 'backup'].filter(Boolean).join(' · ');
   const sumSr = row ? `projected ${mins != null ? `${mins} minutes, ` : ''}${['pts', 'reb', 'ast'].map(k => `${ppNumTxt(ppMean(row, k))} ${{ pts: 'points', reb: 'rebounds', ast: 'assists' }[k]}`).join(', ')}` : 'no projection';
   const hasStats = ppRecent(pid).length > 0;
-  /* in the game's top five Mismatches (app/parts/gamewin.html's own list, the window's): the NFL's tag beside his name,
-     titled with his row there, and said in the row's name */
+  /* in the game's top five Mismatches (app/parts/gamewin.html's own list, the window's) graded Solid or more, as the NFL's
+     game page tags: its tag beside his name, titled with his row there ("Big mismatch: ..."), and said in the row's name */
   const mm = typeof window.gwMismatch === 'function' ? window.gwMismatch(g.id, pid) : null;
-  const mmTag = mm ? `<span class="pp-mmtag" data-pp-mm="${mm.n}" title="${esc(mm.title)}">Mismatch</span>` : '';
+  const mmTag = mm ? `<span class="pp-mmtag" data-pp-mm="${mm.n}" data-pp-mmgrade="${esc(mm.grade)}" title="${esc(mm.title)}">Mismatch</span>` : '';
   /* Show stats is named by its own words (Show stats or Hide stats, then whose), which say its state: no aria-pressed
      beside them; it names the table it controls only while the table is drawn */
   const stWord = st ? 'Hide stats' : 'Show stats';
@@ -1842,7 +1842,7 @@ function ppRow1(g, x, pr) {
   const bench = !row && !nLines;
   let h = `<div class="pp-pwrap" data-pp-name="${esc(String(who.name).toLowerCase())}">`;
   if (bench) h += `<div class="pp-plr bench" data-pp-player="${esc(pid)}" data-pp-bench>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow"></span><span class="sr">${esc(who.name)}${posLine ? ', ' + esc(posLine) : ''}: no projection and no DraftKings line</span></div>`;
-  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}"${open ? ` aria-controls="ppPb-${esc(pid)}"` : ''} aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${backup ? ', backup' : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}${mm ? `, mismatch #${mm.n} in this game` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
+  else h += `<div class="pp-plr${open ? ' open' : ''}" data-pp-player="${esc(pid)}"><button type="button" class="pp-plrbtn" data-pp-open="${esc(pid)}" data-pp-key="open-${esc(pid)}" aria-expanded="${open}"${open ? ` aria-controls="ppPb-${esc(pid)}"` : ''} aria-label="${esc(`${who.name}${who.pos ? ', ' + who.pos : ''}${backup ? ', backup' : ''}${out ? ', ' + out : ''}${rk ? `, #${rk.rank} by overall Elo` : ''}${mm ? `, ${mm.grade} mismatch, #${mm.n} in this game` : ''}: ${sumSr}`)}"></button>${whoHtml}<span class="sum" aria-hidden="true">${sum}</span><span class="arrow" aria-hidden="true">${open ? '⌃' : '⌄'}</span></div>`;
   if (st && hasStats) h += ppStats(x);
   if (open && !bench) h += ppBody(g, x, pr);
   return h + '</div>';

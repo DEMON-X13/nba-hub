@@ -48,6 +48,8 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
   const tabOwn = (teams, key, t) => { if (!teams[t] || !Number.isFinite(teams[t][key])) return null;
     const s = Object.entries(teams).map(([c, v], i) => ({ c, v: v[key], i })).filter(x => Number.isFinite(x.v)).sort((a, b) => b.v - a.v || a.i - b.i);
     return { v: teams[t][key], rank: s.findIndex(x => x.c === t) + 1, n: s.length }; };
+  /* the two paces' labels: Matchup's the Teams tab's (the board model's), Team Stats' this season's box-score estimate */
+  const PACE_UNITS_OWN = 'The Teams tab’s pace, the board model’s: possessions per 48', PACE_STATS_OWN = 'possessions per 48 this season, est. from the box scores';
   /* the NFL's bar split, this file's copy */
   const splitOwn = (x, y, lo) => {
     if (x === null || y === null || (x === 0 && y === 0)) return [0, 0];
@@ -202,6 +204,9 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
       const [pa, ph] = splitOwn(x, y, dir < 0), bars = [...row.querySelectorAll('.gw-shalf i')].map(i => i.style.width);
       if (bars.join() !== `${pa}%,${ph}%`) bad.push(`${k}: bars ${bars.join()} where ${pa}%,${ph}%`);
     }
+    /* pace labelled on the window as this season's box-score estimate, never only in a tooltip */
+    const pl = body.querySelector('[data-gw-srow="pace"] .gw-slb');
+    if (!pl || txt(pl) !== `Pace${PACE_STATS_OWN}` || txt(pl.querySelector('small')) !== PACE_STATS_OWN) bad.push(`pace's label "${txt(pl)}" where "Pace" over "${PACE_STATS_OWN}"`);
     const sum = `${a} better on ${na}, ${h} on ${nh}`;
     if (txt(body.querySelector('[data-gw-tsum]')) !== sum) bad.push(`summary "${txt(body.querySelector('[data-gw-tsum]'))}" where "${sum}"`);
     const foot = `${seasonNm(T.season)} season${T.through ? ' through ' + dayNo(T.through) : ''}: ${a} ${A.g} game${A.g === 1 ? '' : 's'}, ${h} ${Hm.g} game${Hm.g === 1 ? '' : 's'}.`;
@@ -235,6 +240,9 @@ module.exports = async function gameWindows({ check, pageFile, ROOT }) {
       if (parts(b) !== want) bad.push(`pace ${t}: "${parts(b)}" where "${want}"`); }
     const gp = body.querySelector('[data-gw-pace="game"]'), wg = `This game | ${Number.isFinite(m.pace) ? m.pace.toFixed(1) : '–'} | expected`;
     if (parts(gp) !== wg) bad.push(`the game's pace "${parts(gp)}" where "${wg}"`);
+    /* labelled on the window as what it is, so it is never read against Team Stats' pace as the same figure */
+    const pl = body.querySelectorAll('[data-gw-pacelab]');
+    if (pl.length !== 1 || txt(pl[0]) !== PACE_UNITS_OWN || !pl[0].closest('.gw-pace > h3.gw-uhd')) bad.push(`the pace's label "${pl.length ? txt(pl[0]) : 'none'}" where "${PACE_UNITS_OWN}" under its heading`);
     return bad.map(s => `${tag}: ${s}`);
   }
   function holdMism(d, own, tag) {

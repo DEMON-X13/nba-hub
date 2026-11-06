@@ -139,6 +139,12 @@ function tabRank(key, t) {
   return { v: s.teams[t][key], rank: sorted.findIndex(([x]) => x === t) + 1, n: sorted.length };
 }
 
+/* the two paces, each labelled on the window as what it is (the review of 5 November 2026: MIA's 104.1 on Matchup and its
+   105.3 on Team Stats read side by side as a contradiction, each said only in a tooltip). Matchup's is the Teams tab's
+   running pace, the board model's own; Team Stats' is this season's possessions per 48 so far, estimated from the box
+   scores (publish.js THE TEAM STATS) */
+const PACE_UNITS = 'The Teams tab’s pace, the board model’s: possessions per 48';
+const PACE_STATS = 'possessions per 48 this season, est. from the box scores';
 /* ---- Matchup: each side with the ball, the offence's rating against the other club's defence (the board model's, for the
    lineups it expects in this game: the slate's model sides), ranked on the Teams tab's columns; then pace ---- */
 function unitsBody(g) {
@@ -161,7 +167,7 @@ function unitsBody(g) {
   const gp = Number.isFinite(m.pace) ? m.pace : null;
   const game = `<div class="gw-pbox gw-pgame" data-gw-pace="game" title="The board model's expected pace for this game, possessions per 48 minutes, from the two clubs' paces."><span class="gw-lab">This game</span><b>${gp !== null ? gp.toFixed(1) : '–'}</b><small>expected</small></div>`;
   return `<div class="gw-units">${poss(g.away, A, g.home, Hm)}${poss(g.home, Hm, g.away, A)}</div>
-    <div class="gw-pace"><h3 class="gw-uhd">Pace<small>possessions per 48 minutes</small></h3><div class="gw-pboxes">${pbox(g.away)}${game}${pbox(g.home)}</div></div>`;
+    <div class="gw-pace"><h3 class="gw-uhd">Pace<small data-gw-pacelab>${PACE_UNITS}</small></h3><div class="gw-pboxes">${pbox(g.away)}${game}${pbox(g.home)}</div></div>`;
 }
 
 /* ---- Team Stats: the job's team stats (state.json's teamStats, publish.js THE TEAM STATS) side by side on the NFL's
@@ -171,7 +177,7 @@ const POSS = 'Possessions are estimated from the box score: field-goal attempts 
 const ROWS = [
   ['pd', 'Point differential', 'per game', 1, true, false], ['ppg', 'Points', 'per game', 1, false, false], ['pa', 'Points allowed', 'per game', -1, false, false],
   ['ortg', 'Offensive rating', 'points per 100 possessions', 1, false, false], ['drtg', 'Defensive rating', 'allowed per 100 possessions', -1, false, false],
-  ['pace', 'Pace', 'possessions per 48', 0, false, false], ['fg', 'Field goal %', '', 1, false, true], ['tp', 'Three-point %', '', 1, false, true],
+  ['pace', 'Pace', PACE_STATS, 0, false, false], ['fg', 'Field goal %', '', 1, false, true], ['tp', 'Three-point %', '', 1, false, true],
   ['tpm', 'Threes made', 'per game', 1, false, false], ['reb', 'Rebounds', 'per game', 1, false, false], ['ast', 'Assists', 'per game', 1, false, false],
   ['tov', 'Turnovers', 'per game, fewer is better', -1, false, false], ['stl', 'Steals', 'per game', 1, false, false], ['blk', 'Blocks', 'per game', 1, false, false]];
 /* the bar's split, the NFL's statSplit: fewer-is-better by the inverse of each number, else both shifted up by the lower

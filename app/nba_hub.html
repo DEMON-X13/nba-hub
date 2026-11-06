@@ -1630,8 +1630,10 @@ function ppTrial() {
 /* ---- the view's pieces, the NFL hub's game page on this hub's numbers ---- */
 /* the stat blocks a player's page draws, in the sheet's order (README "Player props") */
 const PP_ORDER = ['pts', 'reb', 'ast', 'tpm', 'pra', 'pr', 'pa', 'ar', 'stl', 'blk', 'sb'];
-/* the NFL hub's confTier (props/build/part2.js there): High from 70%, Med from 45%, else Low */
-const ppConf = p => p >= 0.70 ? ['high', 'High'] : p >= 0.45 ? ['med', 'Med'] : ['low', 'Low'];
+/* the NFL hub's confTier (props/build/part2.js there): High from 70%, Med from 45%, else Low, worked on the chance as it
+   is shown, the whole percent beside it (ppPct), so a chance printed 45% is Med however it rounds there (0.4488 was
+   Low beside "45%"): 70% and up High, 45% to 69% Med */
+const ppConf = p => { const r = Math.round(p * 100); return r >= 70 ? ['high', 'High'] : r >= 45 ? ['med', 'Med'] : ['low', 'Low']; };
 /* a time in US Eastern with its weekday: "Thu 4:32 PM ET" */
 const ppEt = iso => { const t = Date.parse(iso); return Number.isFinite(t) ? new Date(t).toLocaleString('en-US', { weekday: 'short', hour: 'numeric', minute: '2-digit', timeZone: 'America/New_York' }) + ' ET' : ''; };
 /* "Giannis Antetokounmpo" -> "G. Antetokounmpo", as the NFL's head card shortens a name */

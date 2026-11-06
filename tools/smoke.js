@@ -479,8 +479,9 @@ async function playerProps() {
   const L8 = props8.layout, at8 = (r, k) => r[L8.indexOf(k)];
   const muOf = (r, k) => k in props8.combos ? Math.round(props8.combos[k].reduce((t, s) => t + at8(r, s), 0) * 100) / 100 : at8(r, k);   // a combo: its parts' sum, to two decimals, as the ledger's call holds it
   const num1 = v => Number.isFinite(v) ? v.toFixed(1) : '–';
-  /* this file's own copies of the view's rules (README "Player props"): the NFL hub's confTier, the stat blocks' order */
-  const confOwn = p => p >= 0.70 ? 'high' : p >= 0.45 ? 'med' : 'low';
+  /* this file's own copies of the view's rules (README "Player props"): the NFL hub's confTier on the whole percent the
+     row prints (a chance printed 45% is Med, 44% Low, 70% High, 69% Med), the stat blocks' order */
+  const confOwn = p => { const r = Math.round(p * 100); return r >= 70 ? 'high' : r >= 45 ? 'med' : 'low'; };
   const ORDER_OWN = ['pts', 'reb', 'ast', 'tpm', 'pra', 'pr', 'pa', 'ar', 'stl', 'blk', 'sb'];
   const NAMES_OWN = { pts: 'Points', reb: 'Rebounds', ast: 'Assists', tpm: 'Threes', stl: 'Steals', blk: 'Blocks', pra: 'Pts + reb + ast', pr: 'Pts + reb', pa: 'Pts + ast', ar: 'Ast + reb', sb: 'Stl + blk', dd: 'Double-double', td: 'Triple-double' };
   const openRow = pid => { const b = body().querySelector(`[data-pp-open="${pid}"]`); if (b && b.getAttribute('aria-expanded') !== 'true') b.click(); return b; };
@@ -511,6 +512,13 @@ async function playerProps() {
   const sh = d.getElementById('ppSheet'), css8 = [...d.querySelectorAll('style')].map(x => x.textContent).join('\n');
   check(!sheet().hidden && sh.getAttribute('role') === 'dialog' && sh.getAttribute('aria-modal') === 'true' && sh.getAttribute('aria-labelledby') === 'ppTitle' && d.getElementById('ppTitle').textContent === 'Player props: BOS at DET',
     `a tap opens a dialog over the page (role dialog, aria-modal, titled "${d.getElementById('ppTitle').textContent}")`);
+  /* the band on the chance as shown (the review of 5 November 2026: 0.4488 printed "45%" and banded Low, so a milestone
+     sat "45% est. LOW" under its main line's "45% MED" at the same price): the page's own ppConf beside its ppPct, at
+     each boundary and either side of it */
+  { const B = JSON.parse(w.eval('JSON.stringify([0.4488, 0.4451, 0.445, 0.4449, 0.44, 0.6951, 0.695, 0.6949, 0.69, 0.70, 0.004, 0.996].map(p => [p, ppPct(p), ppConf(p)[0], ppConf(p)[1]]))'));
+    const want = { '45%': 'med', '44%': 'low', '70%': 'high', '69%': 'med', '<1%': 'low', '>99%': 'high' };
+    check(B.every(([p, t, c, l]) => want[t] === c && confOwn(p) === c && l === c[0].toUpperCase() + c.slice(1)) && B.map(x => x[1]).join() === '45%,45%,45%,44%,44%,70%,70%,69%,69%,70%,<1%,>99%',
+      `the band is worked on the chance as printed: ${B.map(([p, t, c]) => `${p} "${t}" ${c}`).join(', ')}`); }
   check(/#ppSheet\{max-width:1100px;/.test(css8), "it is the NFL hub's game window, 1100px wide at most (its .modal-panel), the whole screen on a phone");
   const close = d.getElementById('ppClose');
   check(d.activeElement === close && close.textContent.trim() === '✕ Close' && w.getComputedStyle(close).minHeight === '44px' && /Close/.test(close.getAttribute('aria-label')) && close.closest('.pp-bar') && close.closest('.pp-bar').firstElementChild === close,
@@ -1496,7 +1504,7 @@ async function builder() {
     `Game bets, the NFL's card: each team to win and to cover, then the total, at the press's prices, each heading's book line, and whose lines they are (${glTxt.join(' / ')})`);
   /* the Game bets card's chances: the Parlay Builder's (legModel, legFair), worked out here on their own: a moneyline the
      player model's win chance, a spread Phi((m + h) / sigma), a total the market's own, the band the NFL's */
-  { const SIGg = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'sigma.json'), 'utf8')).sigma, SGg = require('./sigma'), m = q1.model, confOwn = p => p >= 0.70 ? 'high' : p >= 0.45 ? 'med' : 'low';
+  { const SIGg = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'sigma.json'), 'utf8')).sigma, SGg = require('./sigma'), m = q1.model, confOwn = p => { const r = Math.round(p * 100); return r >= 70 ? 'high' : r >= 45 ? 'med' : 'low'; };
     const want = [['BOS', 1 - m.pHome, -105, -115], ['BOS', SGg.Phi((m.spread + 1.5) / SIGg), -112, -108], ['DET', m.pHome, -115, -105], ['DET', SGg.Phi((-m.spread - 1.5) / SIGg), -108, -112], [null, imp(-115) / (imp(-115) + imp(-105)), -115, -105], [null, imp(-105) / (imp(-105) + imp(-115)), -105, -115]];
     const rows = [...body().querySelectorAll('[data-pp-gbets] tr[data-pp-leg]')], bad = rows.filter((tr, i) => { const [, p, o, x] = want[i], pc = tr.querySelector('.pct');
       return Math.abs(+pc.dataset.ppP - p) > 1e-12 || pc.textContent !== ppPct(p) || !tr.querySelector(`.pp-conf.${confOwn(p)}`) || (tr.querySelector('.fair') || {}).textContent !== `book ${ppPct(imp(o) / (imp(o) + imp(x)))}` || tr.querySelector('.pp-fill').style.width !== Math.max(2, p * 100).toFixed(0) + '%'; });

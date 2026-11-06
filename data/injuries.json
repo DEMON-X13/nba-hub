@@ -70,15 +70,6 @@
   ],
   "BKN": [
    {
-    "id": "4712896",
-    "name": "Noah Clowney",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-11-05",
-    "returns": "2026-11-07"
-   },
-   {
     "id": "4432194",
     "name": "Day'Ron Sharpe",
     "pos": "C",
@@ -359,10 +350,10 @@
     "id": "3102529",
     "name": "Clint Capela",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-05",
-    "returns": "2026-11-07"
+    "date": "2026-11-06",
+    "returns": "2026-11-09"
    },
    {
     "id": "2991235",
@@ -423,20 +414,20 @@
   ],
   "LAC": [
    {
-    "id": "5108024",
-    "name": "Yanic Konan Niederhauser",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Foot Surgery",
-    "date": "2026-11-02",
-    "returns": "2026-11-08"
-   },
-   {
     "id": "3913176",
     "name": "Brandon Ingram",
     "pos": "F",
     "status": "Out",
     "detail": "Achilles Surgery",
+    "date": "2026-11-06",
+    "returns": "2026-11-08"
+   },
+   {
+    "id": "5108024",
+    "name": "Yanic Konan Niederhauser",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot Surgery",
     "date": "2026-11-02",
     "returns": "2026-11-08"
    },
@@ -457,17 +448,6 @@
     "detail": "Shoulder Surgery",
     "date": "2026-08-26",
     "returns": "2027-03-02"
-   }
-  ],
-  "LAL": [
-   {
-    "id": "4278580",
-    "name": "Sandro Mamukelashvili",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-06",
-    "returns": "2026-11-06"
    }
   ],
   "MEM": [
@@ -743,6 +723,15 @@
    }
   ],
   "SAC": [
+   {
+    "id": "4065732",
+    "name": "De'Andre Hunter",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-06",
+    "returns": "2026-11-06"
+   },
    {
     "id": "4898371",
     "name": "Maxime Raynaud",

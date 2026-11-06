@@ -263,7 +263,7 @@
     "name": "Noah Clowney",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5175643",
@@ -1678,7 +1678,7 @@
     "name": "Sandro Mamukelashvili",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4702972",
@@ -3130,7 +3130,7 @@
     "name": "De'Andre Hunter",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4917149",

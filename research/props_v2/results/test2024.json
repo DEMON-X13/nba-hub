@@ -1,0 +1,821 @@
+{
+ "generated": "2026-11-06T18:41Z",
+ "what": "research/props_v2/test2024.js --score: candidate A (frozen 2026-11-05T18:41Z, its 2024 fold fitted on 2023) against DraftKings' provider-40 main lines of the 2023-24 regular season, by the bar the README wrote before the lines were fetched; decided once",
+ "verdict": "FAIL (pre-game inferred, not shown)",
+ "preGame": "inferred, not shown",
+ "bar": {
+  "tests": {
+   "logloss": false,
+   "brier": false,
+   "units": true
+  },
+  "figures": {
+   "logloss": {
+    "diff": 0.0097,
+    "ci90": [
+     0.008411,
+     0.010969
+    ]
+   },
+   "brier": {
+    "diff": 0.0041,
+    "ci90": [
+     0.003567,
+     0.004668
+    ]
+   },
+   "units": 226.79,
+   "over": {
+    "bets": 6359,
+    "units": -139.06,
+    "ci90": [
+     -297.5,
+     18.69
+    ]
+   },
+   "under": {
+    "bets": 33387,
+    "units": 365.85,
+    "ci90": [
+     51.23,
+     677.86
+    ]
+   }
+  },
+  "rule": "PASS only if (1) log loss, A less DraftKings' fair chance, has its 90% interval (10,000 resamples of games, seed 0) wholly below zero, (2) Brier the same, (3) flat one-unit bets at a 3-point edge over the price's implied chance, both sides together, are up"
+ },
+ "beside": {
+  "note": "reported beside the bar, deciding nothing",
+  "toolsProps": {
+   "lines": 89032,
+   "games": 1116,
+   "overRate": 0.4532,
+   "modelSaid": 0.4362,
+   "marketSaid": 0.4389,
+   "logloss": {
+    "model": 0.677,
+    "market": 0.6672,
+    "marketMultiplicative": 0.6674,
+    "diff": 0.0098,
+    "diffCi90": [
+     0.00843,
+     0.011164
+    ]
+   },
+   "brier": {
+    "model": 0.2416,
+    "market": 0.2375,
+    "diff": 0.004,
+    "diffCi90": [
+     0.003466,
+     0.004602
+    ]
+   },
+   "guess": {
+    "lineMae": 1.87,
+    "modelMae": 1.87,
+    "modelMinusLine": 0.08
+   },
+   "flat": {
+    "edge3": {
+     "over": {
+      "bets": 8429,
+      "won": 4021,
+      "units": -281.2,
+      "roi": -0.0334
+     },
+     "under": {
+      "bets": 28423,
+      "won": 15605,
+      "units": 350.3,
+      "roi": 0.0123
+     }
+    },
+    "edge5": {
+     "over": {
+      "bets": 5211,
+      "won": 2529,
+      "units": -100.33,
+      "roi": -0.0193
+     },
+     "under": {
+      "bets": 20496,
+      "won": 11216,
+      "units": 353.73,
+      "roi": 0.0173
+     }
+    },
+    "edge8": {
+     "over": {
+      "bets": 2549,
+      "won": 1237,
+      "units": -51.92,
+      "roi": -0.0204
+     },
+     "under": {
+      "bets": 12321,
+      "won": 6720,
+      "units": 285.56,
+      "roi": 0.0232
+     }
+    }
+   },
+   "sureness": {
+    "modelFrom50": 0.1097,
+    "marketFrom50": 0.0891,
+    "far10": {
+     "share": 0.1767,
+     "deficitShare": 0.8966,
+     "perLine": 0.0497
+    },
+    "near5": {
+     "share": 0.5363,
+     "perLine": 0.0004
+    }
+   }
+  },
+  "candidate": {
+   "lines": 89032,
+   "games": 1116,
+   "overRate": 0.4532,
+   "modelSaid": 0.4258,
+   "marketSaid": 0.4389,
+   "logloss": {
+    "model": 0.6769,
+    "market": 0.6672,
+    "marketMultiplicative": 0.6674,
+    "diff": 0.0097,
+    "diffCi90": [
+     0.008411,
+     0.010969
+    ]
+   },
+   "brier": {
+    "model": 0.2417,
+    "market": 0.2375,
+    "diff": 0.0041,
+    "diffCi90": [
+     0.003567,
+     0.004668
+    ]
+   },
+   "guess": {
+    "lineMae": 1.87,
+    "modelMae": 1.86,
+    "modelMinusLine": 0.01
+   },
+   "flat": {
+    "edge3": {
+     "over": {
+      "bets": 6359,
+      "won": 3063,
+      "units": -139.06,
+      "roi": -0.0219
+     },
+     "under": {
+      "bets": 33387,
+      "won": 18352,
+      "units": 365.85,
+      "roi": 0.011
+     }
+    },
+    "edge5": {
+     "over": {
+      "bets": 3925,
+      "won": 1874,
+      "units": -127.72,
+      "roi": -0.0325
+     },
+     "under": {
+      "bets": 24550,
+      "won": 13395,
+      "units": 296.89,
+      "roi": 0.0121
+     }
+    },
+    "edge8": {
+     "over": {
+      "bets": 1866,
+      "won": 916,
+      "units": -17.22,
+      "roi": -0.0092
+     },
+     "under": {
+      "bets": 14795,
+      "won": 8054,
+      "units": 301.1,
+      "roi": 0.0204
+     }
+    }
+   },
+   "sureness": {
+    "modelFrom50": 0.1129,
+    "marketFrom50": 0.0891,
+    "far10": {
+     "share": 0.1755,
+     "deficitShare": 0.8034,
+     "perLine": 0.0443
+    },
+    "near5": {
+     "share": 0.5378,
+     "perLine": 0.0005
+    }
+   }
+  },
+  "candidateMinusBaseline": {
+   "logloss": -0.0001,
+   "ci90": [
+    -0.000589,
+    0.000364
+   ],
+   "brier": 0.0001,
+   "brierCi90": [
+    -0.000126,
+    0.000276
+   ]
+  },
+  "byStat": {
+   "pts": {
+    "lines": 14956,
+    "overRate": 0.4838,
+    "said": {
+     "baseline": 0.4541,
+     "candidate": 0.445,
+     "market": 0.4668
+    },
+    "logloss": {
+     "baseline": 0.7141,
+     "candidate": 0.7126,
+     "market": 0.692
+    }
+   },
+   "reb": {
+    "lines": 15917,
+    "overRate": 0.4689,
+    "said": {
+     "baseline": 0.4586,
+     "candidate": 0.4431,
+     "market": 0.4636
+    },
+    "logloss": {
+     "baseline": 0.6983,
+     "candidate": 0.6981,
+     "market": 0.6849
+    }
+   },
+   "ast": {
+    "lines": 9703,
+    "overRate": 0.4826,
+    "said": {
+     "baseline": 0.4592,
+     "candidate": 0.4539,
+     "market": 0.458
+    },
+    "logloss": {
+     "baseline": 0.7057,
+     "candidate": 0.7061,
+     "market": 0.6869
+    }
+   },
+   "tpm": {
+    "lines": 15118,
+    "overRate": 0.4739,
+    "said": {
+     "baseline": 0.4554,
+     "candidate": 0.4495,
+     "market": 0.4566
+    },
+    "logloss": {
+     "baseline": 0.6766,
+     "candidate": 0.6767,
+     "market": 0.6714
+    }
+   },
+   "stl": {
+    "lines": 16750,
+    "overRate": 0.4758,
+    "said": {
+     "baseline": 0.4631,
+     "candidate": 0.45,
+     "market": 0.471
+    },
+    "logloss": {
+     "baseline": 0.6701,
+     "candidate": 0.6703,
+     "market": 0.6675
+    }
+   },
+   "blk": {
+    "lines": 16588,
+    "overRate": 0.3519,
+    "said": {
+     "baseline": 0.3405,
+     "candidate": 0.3296,
+     "market": 0.3304
+    },
+    "logloss": {
+     "baseline": 0.6135,
+     "candidate": 0.6138,
+     "market": 0.6121
+    }
+   }
+  },
+  "units": {
+   "edge": 0.03,
+   "resamples": 10000,
+   "seed": 0,
+   "games": 1116,
+   "over": {
+    "baseline": {
+     "bets": 8429,
+     "units": -281.2,
+     "ci90": [
+      -461.59,
+      -105.56
+     ]
+    },
+    "candidate": {
+     "bets": 6359,
+     "units": -139.06,
+     "ci90": [
+      -297.5,
+      18.69
+     ]
+    },
+    "candidateMinusBaseline": {
+     "units": 142.14,
+     "ci90": [
+      23.77,
+      258.88
+     ]
+    }
+   },
+   "under": {
+    "baseline": {
+     "bets": 28423,
+     "units": 350.3,
+     "ci90": [
+      55.66,
+      638.64
+     ]
+    },
+    "candidate": {
+     "bets": 33387,
+     "units": 365.85,
+     "ci90": [
+      51.23,
+      677.86
+     ]
+    },
+    "candidateMinusBaseline": {
+     "units": 15.55,
+     "ci90": [
+      -133.69,
+      161.55
+     ]
+    }
+   },
+   "bothSides": {
+    "baseline": {
+     "units": 69.1,
+     "ci90": [
+      -271.85,
+      413.35
+     ]
+    },
+    "candidate": {
+     "units": 226.79,
+     "ci90": [
+      -125.78,
+      576.55
+     ]
+    }
+   }
+  },
+  "blendShare": {
+   "what": "the share w* of A's disagreement a blend keeps, logit p = logit q + w (logit A - logit q), by maximum likelihood, with a 90% interval refitted on 2,000 resamples of games (seed 0): cand_blend.js's yardstick",
+   "pooled": {
+    "w": 0.1758,
+    "ci90": [
+     0.1391,
+     0.2123
+    ]
+   },
+   "byStat": {
+    "pts": {
+     "w": 0.017,
+     "ci90": [
+      -0.0448,
+      0.0777
+     ]
+    },
+    "reb": {
+     "w": 0.1533,
+     "ci90": [
+      0.0891,
+      0.2178
+     ]
+    },
+    "ast": {
+     "w": 0.117,
+     "ci90": [
+      0.0458,
+      0.1884
+     ]
+    },
+    "tpm": {
+     "w": 0.2519,
+     "ci90": [
+      0.1569,
+      0.3426
+     ]
+    },
+    "stl": {
+     "w": 0.3504,
+     "ci90": [
+      0.2642,
+      0.4406
+     ]
+    },
+    "blk": {
+     "w": 0.4053,
+     "ci90": [
+      0.3023,
+      0.5068
+     ]
+    }
+   }
+  },
+  "unrounded": {
+   "what": "the bar's three figures before their rounding (bootCI's bounds to six places, the units to the cent), and the tests read on them: deciding nothing",
+   "figures": {
+    "logloss": {
+     "ci90": [
+      0.008411440617322484,
+      0.010969183851424159
+     ]
+    },
+    "brier": {
+     "ci90": [
+      0.0035669265383271053,
+      0.004668036734689497
+     ]
+    },
+    "units": 226.78500865191384
+   },
+   "tests": {
+    "logloss": false,
+    "brier": false,
+    "units": true
+   },
+   "sameTestsAsBar": true
+  }
+ },
+ "validity": {
+  "generated": "2026-11-06T18:38Z",
+  "verdict": "the bar applies (pre-game not shown by the feed: inferred from V2 and V3)",
+  "graded": 89032,
+  "games": 1116,
+  "v0": {
+   "pts": {
+    "n": 14956,
+    "firstIsOver": 0.692,
+    "firstIsUnder": 0.6972
+   },
+   "reb": {
+    "n": 15917,
+    "firstIsOver": 0.6849,
+    "firstIsUnder": 0.7086
+   },
+   "ast": {
+    "n": 9703,
+    "firstIsOver": 0.6869,
+    "firstIsUnder": 0.7149
+   },
+   "tpm": {
+    "n": 15118,
+    "firstIsOver": 0.6714,
+    "firstIsUnder": 0.7527
+   },
+   "stl": {
+    "n": 16750,
+    "firstIsOver": 0.6675,
+    "firstIsUnder": 0.7632
+   },
+   "blk": {
+    "n": 16588,
+    "firstIsOver": 0.6121,
+    "firstIsUnder": 0.9281
+   },
+   "holds": true
+  },
+  "v1": {
+   "dated": 89032,
+   "undated": 0,
+   "shareBeforeStart": 0,
+   "hoursAfterStartMedian": 3.2333,
+   "preGame": "not shown by the feed: inferred from V2 and V3"
+  },
+  "v2": {
+   "byStat": {
+    "pts": {
+     "exitLines": 73,
+     "rest": 10429,
+     "fairOverExits": 0.466,
+     "fairOverRest": 0.468,
+     "diff": -0.0019,
+     "overHitExits": 0,
+     "overHitRest": 0.4822
+    },
+    "reb": {
+     "exitLines": 74,
+     "rest": 10473,
+     "fairOverExits": 0.4667,
+     "fairOverRest": 0.4656,
+     "diff": 0.001,
+     "overHitExits": 0,
+     "overHitRest": 0.4769
+    },
+    "ast": {
+     "exitLines": 45,
+     "rest": 7438,
+     "fairOverExits": 0.4441,
+     "fairOverRest": 0.4611,
+     "diff": -0.017,
+     "overHitExits": 0.0444,
+     "overHitRest": 0.4918
+    },
+    "tpm": {
+     "exitLines": 71,
+     "rest": 9758,
+     "fairOverExits": 0.4691,
+     "fairOverRest": 0.4598,
+     "diff": 0.0093,
+     "overHitExits": 0.0423,
+     "overHitRest": 0.4752
+    },
+    "stl": {
+     "exitLines": 76,
+     "rest": 10574,
+     "fairOverExits": 0.5055,
+     "fairOverRest": 0.4908,
+     "diff": 0.0146,
+     "overHitExits": 0.2237,
+     "overHitRest": 0.4936
+    },
+    "blk": {
+     "exitLines": 75,
+     "rest": 10555,
+     "fairOverExits": 0.347,
+     "fairOverRest": 0.3506,
+     "diff": -0.0036,
+     "overHitExits": 0.12,
+     "overHitRest": 0.3726
+    }
+   },
+   "exitLines": 414,
+   "exits": 77,
+   "leftOut": 4364,
+   "diff": 0.0016,
+   "holds": true
+  },
+  "v3": {
+   "pts": {
+    "n": 14955,
+    "draftKings": 0.692,
+    "naive": 0.7464,
+    "gain": 0.0544,
+    "yardstick": 0.0335,
+    "figure": 0.0209,
+    "figureCi90": [
+     0.017144,
+     0.02467
+    ]
+   },
+   "reb": {
+    "n": 15916,
+    "draftKings": 0.6849,
+    "naive": 0.7255,
+    "gain": 0.0406,
+    "yardstick": 0.0278,
+    "figure": 0.0128,
+    "figureCi90": [
+     0.009435,
+     0.016263
+    ]
+   },
+   "ast": {
+    "n": 9703,
+    "draftKings": 0.6869,
+    "naive": 0.7396,
+    "gain": 0.0527,
+    "yardstick": 0.0358,
+    "figure": 0.0169,
+    "figureCi90": [
+     0.012055,
+     0.021822
+    ]
+   },
+   "tpm": {
+    "n": 15117,
+    "draftKings": 0.6713,
+    "naive": 0.7114,
+    "gain": 0.04,
+    "yardstick": 0.0345,
+    "figure": 0.0056,
+    "figureCi90": [
+     0.002739,
+     0.008495
+    ]
+   },
+   "stl": {
+    "n": 16749,
+    "draftKings": 0.6675,
+    "naive": 0.7215,
+    "gain": 0.0541,
+    "yardstick": 0.0508,
+    "figure": 0.0033,
+    "figureCi90": [
+     0.001031,
+     0.005485
+    ]
+   },
+   "blk": {
+    "n": 16587,
+    "draftKings": 0.6121,
+    "naive": 0.6561,
+    "gain": 0.044,
+    "yardstick": 0.0416,
+    "figure": 0.0024,
+    "figureCi90": [
+     0.000086,
+     0.004859
+    ]
+   },
+   "against": {
+    "pts": {
+     "figure": 0.0209,
+     "archive": 0.0283,
+     "limit": 0.0533
+    },
+    "reb": {
+     "figure": 0.0128,
+     "archive": 0.0118,
+     "limit": 0.0268
+    },
+    "ast": {
+     "figure": 0.0169,
+     "archive": 0.0062,
+     "limit": 0.0262
+    },
+    "tpm": {
+     "figure": 0.0056,
+     "archive": 0.0074,
+     "limit": 0.0224
+    },
+    "stl": {
+     "figure": 0.0033,
+     "archive": -0.001,
+     "limit": 0.014
+    },
+    "blk": {
+     "figure": 0.0024,
+     "archive": -0.0011,
+     "limit": 0.0139
+    }
+   },
+   "holds": true
+  },
+  "v1Counted": {
+   "graded": 89032,
+   "dated": 89032,
+   "before": 0,
+   "shown": false,
+   "rule": "shown only where 100 x before >= 95 x graded, in whole lines, and where the validity check says shown"
+  },
+  "sameLines": true
+ },
+ "validityRuns": {
+  "note": "every run of validity.js on fetched lines, as its log keeps them (cache/validity_2024_runs.jsonl, gitignored); reported, deciding nothing",
+  "log": true,
+  "n": 1,
+  "runs": [
+   {
+    "generated": "2026-11-06T18:38Z",
+    "verdict": "the bar applies (pre-game not shown by the feed: inferred from V2 and V3)",
+    "graded": 89032,
+    "games": 1116,
+    "sameBytes": true
+   }
+  ],
+  "voidOnOtherBytes": 0
+ },
+ "lines": {
+  "graded": 89032,
+  "games": 1116,
+  "voids": 3224,
+  "noCall": 39,
+  "pushes": 0,
+  "rows": 92295,
+  "selected": 92295,
+  "dropped": {
+   "notOnSchedule": 0,
+   "notRegularSeason": 0,
+   "outsideWindow": 0,
+   "notBaseStat": 0,
+   "noPrice": 0
+  }
+ },
+ "coverage": {
+  "windowGames": 1231,
+  "noEspnId": 5,
+  "withEspnId": 1226,
+  "read": {
+   "ok": 1116,
+   "okWithNoLine": 0,
+   "none": 110,
+   "failed": 0,
+   "other": 0
+  },
+  "notRead": [],
+  "failed": [],
+  "other": [],
+  "gamesWithLines": 1116,
+  "okButNoRow": 0,
+  "rowsNotTheRead": 0,
+  "rowsOutsideWindow": 0,
+  "ownersList": null
+ },
+ "check": {
+  "passed": true,
+  "archiveSame": true,
+  "fold2024Same": true,
+  "walkForward2024Same": true,
+  "blendSame": true,
+  "copiesSame": true,
+  "validityCountSame": true,
+  "frozenCovered": true
+ },
+ "files": {
+  "commit": "2d5793fc39bd8f86a0e197358ab2c56e976a2a35",
+  "scorer": "44262aff008ea5ee9056b31ecc7eaf9eedbee54e93038c78d12b7c95ec40e8d5",
+  "csv": "9ff28cff993bc32aa50967c795764e0259f0404cc89b23c44fb4be0c84c4a0e5",
+  "reads": "b66de4b782a0ce8504f9793f51f75af8534a43ac5e62f560febe696329004850",
+  "validity": "464cabd35167d44e235b725271c49705b8d361a07fb5c910f0bdf9a8a41deaf0",
+  "ownersList": null,
+  "frozen": {
+   "research/props_v2/test2024.js": "44262aff008ea5ee9056b31ecc7eaf9eedbee54e93038c78d12b7c95ec40e8d5",
+   "research/props_v2/cand_fix_lib.js": "6199ebdc41209f45b8168f07224ae630f443663a50b69f446e2f50a8c5d2b32d",
+   "research/props_v2/cand_fix.js": "e58dad8c1a4e0c47e9de4109868541ee4f51f45854192b16305d0398680d3350",
+   "research/props_v2/cand_blend.js": "e782834a3322dae5bdf81b25bec00ee1a461a4d2a6c8e71ca6b4e5db302695fc",
+   "research/props_v2/cut2026.js": "e1b1d42afdd0e4efa3c39b6dbcba1c5734ccea1ed1cecb6586a8e5a002ebe848",
+   "research/props_v2/validity.js": "7995206d9143b797bb3e6b959465a5ae27e24ba43b50f26b79d7268ce33ae359",
+   "research/props_v2/validity_lib.js": "f4ac005194d0358d7928b272e9be5f07f50b8f9005fad7fea2c4ac2f6ec04bd5",
+   "research/props_v2/fetch_dk40.js": "2f04ef3e268c543dd621c31d3a72bfd986c4af145f80734dbe7949134cdba471",
+   "research/props_v2/cand_select_lib.js": "982d5ae7617eddc13ee0f9bc7731bb57aa4914705a297bf99bc6385e5367e24f",
+   "tools/lib.js": "192aceb42f8f7286b385ed700cb1d167beafb7c6681c43c8f05cca8148001900",
+   "research/props_v2/results/cand_fix_rule.json": "fbe6711e49286496116041da192b8fd07d9ba7f1267581a991a8cf11b960e033",
+   "research/props_v2/results/cand_fix_score.json": "6d3a6e557ed83f116234c485f26b10b356c74b538fcb81468e9f27d60955c6a3",
+   "research/props_v2/results/fold_params.json": "44b38f555494d47468594c33daafee5c6e7bd2668330f8a23a0f1dd997253fa3",
+   "research/props_v2/results/cand_blend.json": "28fcba7472c9d5ff83e709e99325843dda3ddac9391b7afea8b547d20c1c0d43",
+   "research/props_v2/results/validity_ref.json": "31ffc5ea59e167489120692c12813a28988f9914bd9e7354d4ad1f5c07724ea6",
+   "research/props.json": "eba3626208864ec9ebecf4208b1449dae7fa8168613f5edd39968fd9ab5c31e8",
+   "tools/props.js": "c18897fbba31559a3b602a9d6178c71c9330aebd8fad08eb2dcc4b1e1f230a61",
+   "tools/props_feed.js": "da1bf4e70f439016511407441917424303712cf8d5a1eea69730c177c5dda816",
+   "tools/props_record.js": "76dfaf201ac366f1eebcc31ceced272ec543b87601e3a03577745910ba8cb7ca",
+   "data/games.csv": "674c4ef524ea5e3be5ad36a35b1eca82786760be99cfa50e3ce1daf3c7c8394e",
+   "data/props_2026.csv": "9c5879ec25b0abb9541b0bbb6d41578868cc9b081e81a6180f5a0a756ea5006d",
+   "data/box_2022.csv": "67fe1e6c346ca7c9f397d562d5a86c5453fb47d2952c6c21508b5b14e7022d63",
+   "data/teambox_2022.jsonl": "99cf7526aa11b1d492063b8f5804cdd9302f7f19d9d99dd49d2535c3f6c5af0c",
+   "data/box_2023.csv": "ef25e30a5770abd0677bfbf9c2728226c577a64384fe0688328dcd4a4ee93b15",
+   "data/teambox_2023.jsonl": "090688cf3616b5c613bccd896cdb8a14e5d5552acdc8c4b2fd58be68f7cd54a9",
+   "data/box_2024.csv": "6d1ac2cad9301cf8126c681485b45294794fde2cc36cb59a5fad98d0c59d3d75",
+   "data/teambox_2024.jsonl": "576a264fd736f5bc65a83a3c2f92c1cd495e4d7dbef56a4bbf62653c9103551e",
+   "data/box_2025.csv": "b2a2167f479d62379880a726beced9a01f04da33c075e48c8b469bedefe021eb",
+   "data/teambox_2025.jsonl": "c93deb3221b83c5073bd5eaaa333e6ffe95fca713ae2622f81e35403abbe4e3f",
+   "data/box_2026.csv": "85f345aea583ddde9e957814b9ec01a97ef021a9f3cc69bf3fbfcb58640c299d",
+   "data/teambox_2026.jsonl": "defedc79faad2711da19289da9568359967d47fb0cd50e9e82c706a85f3f1242"
+  },
+  "gamesTo2026": "ebe0005e0b70b198cdce66381e172c21d3e04dfac5f192ffd923c8b69558e67f"
+ },
+ "fold": {
+  "candidate": {
+   "fitOn": "2023-2023",
+   "rule": [
+    "sq",
+    "cal",
+    "open",
+    "ret",
+    "nt",
+    "debut",
+    "kappa",
+    "dE",
+    "shrink",
+    "phase",
+    "vm"
+   ]
+  },
+  "toolsProps": "results/fold_params.json 2024 (research/props.json's), with none of A's changes"
+ },
+ "seconds": 161
+}

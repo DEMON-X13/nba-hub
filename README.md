@@ -1688,7 +1688,7 @@ that review both said "average", and a club between the two read as a contradict
 league's average" in its title, 7 of that day's 165 rows. Its title says what each is: "Big mismatch: #1 in this game. …
 Big: MIA's three-point defence is 2.2 standard deviations weaker than the 30 clubs' mean on threes, across its 30 clubs;
 the grade is on that figure (Slight under 1, Solid from 1, Big from 2, Huge from 3). +0.16 SD lift: what the matchup adds
-to his projection, over the spread of his threes at his projection (2.5). Listed by the grade, then that lift." Under the
+to his projection, over the spread of his threes at his projection (2.4 on 6 November). Listed by the grade, then that lift." Under the
 window's note, where no row is Solid or more: "No player in this game faces a defence a standard deviation or more weaker
 than the 30 clubs' mean on his stat." On a state published
 before the grades (`oppCols` without z, or a club with none): the five by the lift as before, no grade, no tag, and "The

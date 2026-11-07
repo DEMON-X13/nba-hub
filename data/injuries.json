@@ -6,28 +6,19 @@
     "id": "4585618",
     "name": "Keshon Gilbert",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee Inflammation",
     "date": "2026-11-07",
-    "returns": "2026-11-07"
+    "returns": "2026-11-09"
    },
    {
     "id": "4873201",
     "name": "Asa Newell",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Toe",
     "date": "2026-11-07",
-    "returns": "2026-11-07"
-   },
-   {
-    "id": "4701230",
-    "name": "Jalen Johnson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle",
-    "date": "2026-11-06",
-    "returns": "2026-11-07"
+    "returns": "2026-11-09"
    },
    {
     "id": "3146557",
@@ -35,7 +26,16 @@
     "pos": "C",
     "status": "Out",
     "detail": "Hip",
-    "date": "2026-11-05",
+    "date": "2026-11-07",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "4701230",
+    "name": "Jalen Johnson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-07",
     "returns": "2026-11-07"
    },
    {
@@ -63,9 +63,9 @@
     "name": "Devin Carter",
     "pos": "G",
     "status": "Out",
-    "detail": "Illness",
+    "detail": "Carter (illness) practiced with the G League's Maine Celtics on Wednesday.",
     "date": "2026-11-04",
-    "returns": "2026-11-06"
+    "returns": ""
    }
   ],
   "BKN": [
@@ -95,15 +95,6 @@
     "detail": "Leg Bruise",
     "date": "2026-10-29",
     "returns": "2026-11-11"
-   },
-   {
-    "id": "5105626",
-    "name": "Tyler Bilodeau",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Shoulder Sprain",
-    "date": "2026-10-25",
-    "returns": "2026-11-07"
    }
   ],
   "CHA": [
@@ -184,31 +175,31 @@
   ],
   "CLE": [
    {
-    "id": "4066757",
-    "name": "Sam Merrill",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Elbow",
-    "date": "2026-11-07",
-    "returns": "2026-11-07"
-   },
-   {
-    "id": "4066328",
-    "name": "Jarrett Allen",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-11-07",
-    "returns": "2026-11-07"
-   },
-   {
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-05",
-    "returns": "2026-11-07"
+    "date": "2026-11-07",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "4066757",
+    "name": "Sam Merrill",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Elbow",
+    "date": "2026-11-07",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "4066328",
+    "name": "Jarrett Allen",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee",
+    "date": "2026-11-07",
+    "returns": "2026-11-09"
    }
   ],
   "DAL": [
@@ -442,6 +433,15 @@
    }
   ],
   "MEM": [
+   {
+    "id": "5105462",
+    "name": "Richie Saunders",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-11-07",
+    "returns": "2026-12-01"
+   },
    {
     "id": "4432810",
     "name": "Isaiah Stewart",

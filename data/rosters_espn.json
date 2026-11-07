@@ -135,7 +135,7 @@
     "name": "Devin Carter",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3195",
@@ -249,7 +249,7 @@
     "name": "Tyler Bilodeau",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5101761",
@@ -1835,6 +1835,13 @@
     "pos": "F",
     "status": "active",
     "injured": false
+   },
+   {
+    "id": "5105462",
+    "name": "Richie Saunders",
+    "pos": "G",
+    "status": "active",
+    "injured": true
    },
    {
     "id": "4781746",

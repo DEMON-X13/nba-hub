@@ -50,8 +50,8 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `app/parts/glance.html` | The matchup bubble (README "The matchup bubble"): the NFL hub's bubble on every leg's name, with the NBA's numbers, set in at its `<!--part:glance-->` marker |
 | `app/parts/gamewin.html` | A game's three windows (README "The game's three windows"): Matchup, Mismatches and Team Stats, the NFL game page's three buttons under the head card of the Player props view, each a small window over it, set in at its `<!--part:gamewin-->` marker |
 | `tools/test_gamewin.js` | The job's numbers behind those windows on made-up data, each worked by hand: the team stats from a made-up season's team boxes, each club's defence and its multiplier (`oppTable`), the projections' own multiplier, and what `state.json` carries |
-| `app/parts/suggested.html` | The Suggested Parlays tab (README "Suggested Parlays"): each game on national TV's three parlays (Safe, Medium, Aggressive), one night at a time, locked 2 hours before tip-off, and the record's pills, on the Parlay Builder's engine, set in at its `<!--part:suggested-->` marker |
-| `tools/suggest_ledger.js`, `tools/suggest_check.js`, `data/suggest_ledger.json` | The suggestions record (README "Suggested Parlays"): each featured game's set as the job last published it before its lock, taken from the built page in jsdom, graded after the game by the page's own settlement, one entry a line; and its guard, which holds it to the last commit |
+| `app/parts/suggested.html` | The Suggested Parlays tab (README "Suggested Parlays"): one set a night across every game of the night, Safe the likeliest pair, Medium the likeliest paying $4 or more on $1 and Aggressive $8 or more, on the night's team legs, locked 2 hours before the first tip-off, and the record's pills, on the Parlay Builder's legs and sums, set in at its `<!--part:suggested-->` marker |
+| `tools/suggest_ledger.js`, `tools/suggest_check.js`, `data/suggest_ledger.json` | The suggestions record (README "Suggested Parlays"): each night's set as the job last published it before its lock (the per-game sets before 7 November 2026 kept as they were), taken from the built page in jsdom, graded as its games finish by the page's own settlement, one entry a line; and its guard, which works each level out again on the set's own pool and holds the file to the last commit |
 | `tools/test_suggest_ledger.js` | The record on made-up days: taken (three levels), rewritten, locked, a ruled-out level replaced, graded against settlements worked out from raw scores and box lines, a set from before kept with its Extreme, and the guard on hand-made ledgers; it runs first in the record's step |
 | `tools/sigma.js`, `research/sigma.json` | The spread of the real margin about the player model's own number, which the Parlay Builder prices a cover from (14.5 points, the 2026 walk-forward fold), the total's about the model's total (`sigmaTotal`, 19.1 points), which the Record tab's totals picks stand on, what the Value rule's team picks were worth on each fold and what the Record tab's rule would have been (`record`); run by hand |
 | `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, the confidence pill on each card and the key over them (section conf), the Record tab on a made-up season (section record), Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays"), the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder"), the parlay card (`tools/smoke_card.js`, `SMOKE_ONLY=card`, README "The parlay card") the matchup bubble (`tools/smoke_glance.js`, `SMOKE_ONLY=glance`, README "The matchup bubble"), Suggested Parlays (`tools/smoke_suggested.js`, `SMOKE_ONLY=sp`, README "Suggested Parlays") and a game's three windows (`tools/smoke_gamewin.js`, `SMOKE_ONLY=gw`, README "The game's three windows") |
@@ -2461,7 +2461,8 @@ legs that move together. Both Refresh odds there and in the controls keep the fo
 return that lands 25%, 12% and 5% by the model, else the likeliest of that size), `pbTierCard` (with `o.quiet`) and a
 level's **Add to builder**, and `parlayProb`, `parlayDec`, `parlayFair`, `legFair`, `legFarOff`, `pbOrder`, `pbIsValue`,
 `pbValMark`, `toggleLeg` on `window`. Nothing on this tab draws a level; Suggested Parlays draws three of them (Safe, Medium
-and Aggressive, not Extreme), one set a featured game (README "Suggested Parlays"), the one change it made here a level
+and Aggressive, not Extreme) one set a featured game until 7 November 2026, and since draws its own night levels on these
+legs and sums with its own exact search (README "Suggested Parlays"); the one change it made here a level
 card's chance reading "model (on trial) 38%" where a leg is a player's (it read "model says 38%, on trial"), and
 lines.json's one read shared with it as one promise. `pbTierCard`'s options for the Elo picks' cards (whose chance it said,
 a rule of their own, a leg's chance of their own) went with them on 5 November 2026: every card it draws states the model's.
@@ -2758,7 +2759,7 @@ this browser, as Clear ALL does, and puts the focus on the tab's first control.
 
 **A suggested level's Finish.** A tab that draws a level's card with `pbTierCard` draws its Finish as
 `data-pc-finish="<prefix>|<id>"`, and one listener in the card opens it; the tab registers what its levels are with
-`PARLAY_CARD.from(prefix, id => ({ legs, kicker, chance }))` (Suggested Parlays' `sp|<game id>:<level>`; the Parlay
+`PARLAY_CARD.from(prefix, id => ({ legs, kicker, chance }))` (Suggested Parlays' `sp|<night id>:<level>`; the Parlay
 Builder's own all-games levels are `pb|<level>`). Until the tab registers its own, the card reads Suggested Parlays' levels
 by the NFL hub's name, `window.spTier(id)`, the level as the tab shows it, live or locked. The NFL hub's other, the Elo
 picks' `elo|<level>` through `window.eloPicks()`, is not here: the NBA hub took its Elo picks off on 5 November 2026
@@ -2888,116 +2889,145 @@ every name in the builder and the Top 50 44px tall (54), every text 5.0:1 or bet
 ## Suggested Parlays
 
 The NFL hub's Suggested Parlays tab (`#suggest`), carried to the NBA on 25 October 2026 (the build plan's "Suggested
-Parlays"; the NFL hub's README, "Bets and Stats: the loop", and its `props/build/part3.js` at app v114 are the source): each
-game on national TV gets its own three parlays, Safe, Medium and Aggressive, set out one night at a time, locked 2 hours
-before tip-off, and kept and graded by the job as a record. Until 5 November 2026 a set had a fourth level, Extreme, and the
-ELO Model's picks stood under the sets; the owner took both off that day ("What went", below). It is
-`app/parts/suggested.html`, set in at its
-`<!--part:suggested-->` marker after the Parlay Builder's, on the Parlay Builder's engine, cards and builder (README
-"Parlay Builder"); the tab sits after Tonight. Its address is `#suggest` (a tab's address is its button's `data-tab`, read
-on load and on a hash change, and written as a tab is shown, with no history entry).
+Parlays"; the NFL hub's README, "Bets and Stats: the loop", and its `props/build/part3.js` at app v114 are the source),
+reshaped on 7 November 2026: **one set a night**, across every game of the night, its three levels Safe, Medium and
+Aggressive each the parlay of the night's team legs the model rates likeliest to land at the price its level asks, set
+out from 6:00 AM Eastern, locked 2 hours before the night's first tip-off, and kept and graded by the job as a record.
+Until that day each game on national TV had a set of its own ("Before 7 November", below). It is
+`app/parts/suggested.html`, set in at its `<!--part:suggested-->` marker after the Parlay Builder's, on the Parlay
+Builder's legs, sums, cards and builder (README "Parlay Builder"); the tab sits after Tonight. Its address is `#suggest`
+(a tab's address is its button's `data-tab`, read on load and on a hash change, and written as a tab is shown, with no
+history entry).
+
+### Why one set a night (the owner's call of 7 November 2026)
+
+He asked why Medium and Aggressive were empty. Since the props model's trial was stopped as a FAIL on 5 November 2026
+(README "Player props") a set took team legs only, and each set was one featured game's legs; a parlay takes one side
+(the moneyline or the spread) and one total a game, so a game gives 2 legs at most, and Medium (3 legs) and Aggressive (4)
+could never fill; Safe went empty too where only one of a game's team legs cleared the Value bar (the night's two sets on 7
+November: Nuggets at Pacers, Safe alone; Knicks at Cavaliers, nothing). Asked how to fill them, he answered: "I want there
+to always be suggested [parlays]. i want the med [parlay] to be at least $4 outcome from 1$ and aggressive to be $8 or
+more. I want the best possible model confidence to match what level bet." So a set now spans the night's games, its
+levels are set by what they pay rather than by a chance floor, and each is the likeliest parlay that pays it.
 
 ### On the page
 
-Top to bottom: the heading and the night's date; the record's pills; Refresh odds and its status line; the night's sets,
-or the wait line, or why there are none. Nothing else: as on the NFL hub since its app v113 (the owner's
-call of 17 October 2026, "get rid of all the long paragraph description stuff"), no lead paragraph, no foot, no sentence
-under the record, the cards drawn quiet (no line saying why a leg is not a Value pick or why a total is there), each lock
-line one short line.
+Top to bottom: the heading and the night's date; the record's pills; Refresh odds and its status line; the night's set,
+or the wait line, or why there is none. Nothing else: as on the NFL hub since its app v113 (the owner's call of 17 October
+2026, "get rid of all the long paragraph description stuff"), no lead paragraph, no foot, no sentence under the record,
+the cards drawn quiet, each lock line one short line.
 
-**Which games.** A featured game is a game on national TV: one the slate lists on any network ESPN's scoreboard names in
-the national market (`tv`, README "The national networks"), NBA TV among them, never a preseason game. Play-in and playoff
-games are on national TV and so featured, and every featured game of a night gets its own set, with no cap.
-`FEATURED_TV.except` (empty) names any network that should not count, so dropping one is one line (and its copy in
-`tools/suggest_check.js`): a set on it still to lock is dropped by the next run, and the sets on it already locked or
-graded stand on the rule they were taken under, so the record's guard never refuses them for it.
+**The night** is the first Eastern date with a game still to tip, never preseason: every game of that date but preseason
+ones, national TV or local alike (`spNight`, `spNightOf`), id `<season>_<YYYYMMDD>_NIGHT`. Its set goes up at 6:00 AM
+Eastern that morning; before it one line stands in its place, "Next up: Saturday’s 7 games. The set goes up Sat 6:00 AM
+ET." (`data-sp-wait` the instant, `data-sp-next` the games), worked out through the time zone database (`spEtAt`), so the
+Sundays the clocks turn open at 6:00 AM New York time either way. Once the night's last game has tipped the next date is
+the night, and its wait line stands until its morning. The set is headed "Saturday’s games", its count in a pill and its
+first tip-off in Eastern time.
 
-**One night at a time** (the NFL owner's call of 17 October 2026, "just show the next night game"): the tab sets out the
-featured games of the first Eastern date with one still to tip, all of them, from 6:00 AM Eastern on the morning after the
-latest featured date before it on the slate (played or not: the slate keeps yesterday), or at once with none before it.
-With national games most nights, each night's sets go up at 6:00 AM that morning; between the night's last tip-off and
-6:00 AM one line stands in their place, "Next up: Wednesday on ESPN, Nuggets at Suns. Its set goes up Wed 6:00 AM ET, the
-morning after Tuesday's featured games." (`data-sp-wait` the instant, `data-sp-next` the games; "Their sets go up" for two
-or more; a night whose games are on different networks names each game's). The instant is worked out through the time
-zone database (`spEtAt`), so the Sundays the clocks turn open at 6:00 AM New York time either way. Each set is headed by its
-clubs, its networks in a pill and its tip-off in Eastern time.
+**The pool** (`spPool`): every team leg of the night's games still to tip with DraftKings' price, the moneyline and spread
+of each side and the total's over and under, priced exactly as the Parlay Builder takes them (`lines.json` through
+`pbGl`, or a Refresh odds press's newer read; `pbPriced`, `pbTotals`), at the builder's own chance (`legModel`: a
+moneyline's and a spread's the model's, a total's DraftKings' own fair chance, as the NBA builder takes it), held to the
+builder's band (45% to 97% by that chance, `PB_PMIN`, `PB_PMAX`), its far-off guard (none 15 points or more over
+DraftKings' fair chance, `legFarOff`) and its betslip id rule (a game line with no id where its game's lines carry ids).
+No value bar: a leg need not beat its price (the owner wants the levels filled). The band is kept as the builder has it:
+on 7 November 2026's seven games it left 30 legs of 42 (the 12 out were 7 underdogs' moneylines and 5 favourites'
+spreads the model rated under 45%; none was over 97%, the likeliest leg in the pool the Thunder's moneyline at 81.6%), and
+all three levels built. A leg 3 points over its price still wears the
+Parlay Builder's Value mark, a total never. No player leg: the props model's FAIL stands. The far-off guard is kept on
+purpose: the levels are chosen on the model's chance, so without it they would gather exactly the legs where the model
+is furthest from DraftKings (an underdog the model rates 48% where DraftKings' fair chance is 30%).
 
-**A set** is three of the Parlay Builder's levels, Safe, Medium and Aggressive (`SP_TIERS`: `PB_TIERS` less Extreme), on
-that one game's legs and every bet type, whatever the Parlay Builder's boxes say (`SP_ALL`, so the page and the record
-agree): Safe the likeliest pair; Medium and Aggressive the 3- and 4-leg parlay with the best expected return that lands 25%
-and 12% of the time by the model's chance, else the likeliest of that size, said so on its card; Value picks first, the fewest thin-edge legs to fill, the game's
-total only where the legs with an edge cannot make the size. It is searched at the NFL hub's widths for one game
-(`SP_SEARCH`: each list to 60 legs, a beam of 200 by return and by chance and 400 for the likeliest, the best 4 and 10
-worked by the builder's own sums). On 25 October 2026's real data a set with props took 7 to 9 seconds to build in jsdom
-and about 1.1 seconds in Chromium (Raptors at Timberwolves, a pool of 100 legs; Pistons at 76ers, 57), most of it the
-builder's same-game sums, which a redraw on the same data takes from their cache (`SG_CACHE`) in a fifth of that or less
-(0.2 seconds in Chromium); the tab builds a set only for a game it sets out, while it is on the screen. Every leg is a line
-the Parlay Builder's Top 50 would take (DraftKings' real price, the model's chance from 45% to 97% and at or above the
-price's implied chance, a Value pick 3 points above it, none 15 points or more over DraftKings' fair chance, a game line
-only with its betslip id where its game's lines carry ids), and besides:
-- a player's chance is the props model's, which is on trial (README "Player props"; since the early stop of 5 November
-  2026 a FAIL, so a set takes no player leg and says so on a level it leaves empty): every player leg wears the Parlay
-  Builder's on-trial mark, with its title, and a card holding one gives the model's chance as "model (on trial) 38%";
-- one leg a player, one side bet (the moneyline or the spread) and one total a game, no line twice (the NFL's rule,
-  stricter than the builder's one leg a player a stat), and each level is held to the builder's own same-game refusals
-  (`slipWhy`), so a level is always a parlay the builder takes;
-- no player the injury report lists at all (`spOutWhy`, the Parlay Builder's own `pbHeldWhy`, so the Top 50 lines hold out
-  the same players): one on the game's out lists (the hub's availability rule) is ruled out, anyone else today's report
-  lists is held out ("listed day-to-day (ankle), so held out"), a probable player playing, as the NFL's sets take no
-  questionable player. `state.json`'s `report` carries the statuses (`publish.js`);
-- the prices are the Parlay Builder's (`lines.json`, or a Refresh odds press's newer read), and a press re-picks a set until
-  its lock and never after.
-An empty level says why in one line ("Only 2 legs in this game, and no player prices yet: ...", any read time in Eastern).
-From the lock to tip-off a level the set locked empty says why as of the take, "Empty when the set locked: Only 2 legs in
-this game, and no player prices yet: DraftKings had posted no player props for it as of Tue 9:00 AM ET." (`spWhyAtLock`),
-without "and no read since has found any" or the advice that the job or Refresh odds reads the current ones: a run after
-the lock does read the game's props, and a press never moves a locked set. The record keeps its words as taken; a level
-built again since the lock says its own.
+**The levels** (`SP_LEVELS`: `[id, label, the fewest legs, the most, the least decimal price]`), each chosen on the
+model's chance that every leg lands, by the builder's own sums (`parlayProb`, the same-game copula; `parlayDec`, the
+price, a game's two legs priced together at the same-game hold):
+- **Safe**: the likeliest 2-leg parlay ("likeliest pair");
+- **Medium**: the likeliest parlay of 2 to 5 legs whose decimal price is 4.00 or more, $1 paying $4 or more, +300 or
+  longer ("likeliest paying $4+");
+- **Aggressive**: the likeliest of 2 to 5 legs at 8.00 or more, +700 or longer ("likeliest paying $8+").
+One side (the moneyline or the spread) and one total a game, as the builder takes them (`pbFits`, `slipWhy`); ties go to
+the higher price, then the fewer legs, then the legs' ids (`spBetter`). The search is exact (`spSearch`): a parlay's
+chance and price are the products of its games' own (`parlayProb` and `slipDec` work game by game), so each game's options
+are worked once by the builder's sums (a side, a total, or its side and total together: `spOpts`), and the search walks the
+games, each one's options likeliest first, dropping a branch once its chance is under the best found (each leg can only
+lower it: a joint chance is never above a leg's own) or its price, at the dearest leg left for every leg it may still
+take, cannot reach the level's floor. A night of 15 games (about 80 legs) builds in about 15 ms in jsdom; the chosen
+parlays are then worked again by `pbExact` on the legs in the builder's order, the numbers the card states. A level that
+cannot be built says why in one line: "No parlay of the night’s legs pays $8 or more on $1: one game makes 2 legs at
+most." (a one-game night makes $4 only where the model rates an underdog of about +130 or longer at 45% or more, its
+moneyline with the total, and never $8: the band and the far-off guard let in no underdog much longer than +220, which
+with the total pays under $6), "Only 1 leg tonight: ...", "No legs yet:
+DraftKings had posted no game lines for the night’s games as of Sat 11:12 PM ET.".
 
-Each level is a card (`pbTierCard`, quiet), three across a set on a wide screen and one a row at 1100px and under (where
-the Parlay Builder's cards go two across; three broke a long name mid-word at 901px):
-DraftKings' fair chance first and the model's beside it, the price and what the
-Bet amount pays (redrawn in place as the amount is typed), its legs, each with its own **Add** (the leg as the card drew it:
-a locked set's at its locked line and price; Added while it is in, a second press taking it out, the focus kept), **Add to
-builder** (exactly its legs, in the builder's order, so the builder pays what the card said) and **Finish** (the parlay card
-on its legs at the Bet amount: through `PARLAY_CARD.from('sp|')` where the parlay card part is on the page, else the page's
-own card, headed "Suggested parlay" with the level named under it, stating the level's own chance as its card does, the
-model's ("the hub's model, on trial" with a player leg), and "Back to Suggested Parlays"; the builder is left as it is). Closing the card puts the focus back on that Finish, or, where the tab
-was redrawn while the card was open (a tip-off, a lock, a read answering), on the same Finish as drawn now, else on the
-tab's own button. A one-game card with no leg carrying a betslip id (every player leg) opens the game's page on
-DraftKings from the lines feed's event id (or a press's), as the NFL card does. An Add, a refusal and Add to builder are said on the
+Each level is a card (`pbTierCard`, quiet), three across on a wide screen and one a row at 1100px and under: its legs in a
+pill and its rule in words; DraftKings' fair chance first and the model's beside it; the price and what the Bet amount
+pays (redrawn in place as the amount is typed); its legs, each saying its game ("To win · WAS at OKC"; a total is named by
+its game), each with its own **Add** (the leg as the card drew it, a locked set's at its locked line and price; Added while
+it is in, a second press taking it out, the focus kept); **Add to builder** (exactly its legs, in the builder's order, so
+the builder pays what the card said) and **Finish** (the parlay card on its legs at the Bet amount, `sp|<night id>:<level>`,
+headed "Medium parlay · Sat Nov 7", stating the level's own chance). An Add, a refusal and Add to builder are said on the
 tab's own status line.
 
-**The lock.** A set is live until 2 hours before its tip-off (`spLockAt`): "Locks Tue 5:30 PM ET, 2 hours before
-tip-off." From then to tip-off the tab shows the record's set, the job's last before the lock, the same for every visitor
-and the one the record grades: "Locked since Tue 5:30 PM ET." Where the record has none (no run landed before the lock, or
-the file did not load), the page builds the set once on the lines at hand and keeps it in this browser under
-`nba_sp_lock_v1` (`{v, season, games: {<game id>: {tip, own, at, tiers, rep}}}`, outside `M` and never sent anywhere, a game
-pruned once it tips, leaves the slate or moves): "Locked since Tue 5:30 PM ET. This browser's own set: the site's was not
-published in time, so the record does not grade it." It is the one thing the page keeps of its own making beside the
-visitor's own choices, and the record's set takes its place as soon as a load reads one. A locked game waits for the
-record's read ("Loading the site's set...") and for DraftKings' lines ("Loading DraftKings' lines...") before building its
-own, and a set built with no published lines at all is shown and never kept, so a reload tries again. A locked level
-holding a player the report has listed since is built again, that level alone, and says so in one line: "Updated in this
-browser: Ace Guard listed out (knee), so held out (Tue 6:00 PM ET); this level was built again.", or the record's own
-"Updated: ..." where the job made the replacement, which then wins. The record is read again when a set reaches its lock
-whichever tab is on the screen, once Suggested Parlays has been opened in that page load, since the job may have taken the
-set after the page loaded. A record entry or a browser's own lock from before 5 November 2026 holds Extreme too: the tab
-reads its three levels and leaves Extreme (and any replacement of it the browser kept) out, never throwing.
+**The lock.** The set is live until 2 hours before the night's first tip-off (`spLockAt`): "Locks Sat 3:00 PM ET, 2 hours
+before the first tip-off." From then the tab shows the record's set, the job's last before the lock, the same for every
+visitor and the one the record grades: "Locked since Sat 3:00 PM ET." Where the record has none (no run landed before the
+lock, or the file did not load), the page builds the set once on the lines at hand and keeps it in this browser under
+`nba_sp_lock_v1` (`{v: 2, season, nights: {<night id>: {tip, own, at, tiers}}}`, outside `M` and never sent anywhere,
+pruned once the night's last game tips or the night leaves the slate): "Locked since Sat 3:00 PM ET. This browser’s own
+set: the site’s was not published in time, so the record does not grade it." A value of the
+per-game rule (`v: 1`, games keyed by game id) or of another season is taken out on its first read. A locked night waits
+for the record's read ("Loading the site’s set…") and for DraftKings' lines ("Loading DraftKings’ lines…") before building
+its own, and a set built with no published lines at all, or before DraftKings had posted any line of the night, is shown
+and never kept, so a reload (or the lines, once posted) builds it again. **A set of no lines is no set**: the job takes
+no set of a night DraftKings has posted no line for (the lines feed's second date, read a day ahead, mostly), and the page
+reads a record's entry whose pool holds no leg and none left out by a rule (`spNoLines`, one an older job took) as none,
+building its own from the lock on the lines it has. Until 7 November 2026's review the job took such a night's three
+empty levels a day ahead, and where no run that read the posted lines landed before the lock, that entry was the night's
+record and every visitor saw three empty levels all night, dated the day before. **A night once locked stays locked**
+(`spLockOf`): once a set of it has locked, in the record or in this browser, the night stays locked though ESPN moves its
+first tip-off later (the job takes no new set of it on later lines, and the page never sets it out live again); one
+whose first tip-off moved earlier past its lock is locked from then, its set as the last run took it. From the first
+tip-off the set is **under way**: the locked set as it locked, "Locked since Sat 3:00 PM ET. Under way since Sat 5:00 PM
+ET.", each level keeping its Add, Add to builder and Finish (and each leg its Add) while every one of its games is still
+to tip (`spOpen`; `spTier` finds only such a level), and losing them once one tips (the half-minute look draws the tab
+again at each tip-off). Until that review no level could be added from the first tip-off, though on a night of seven
+games six were still to come. With no locked set, none is built of the games left: "... The site’s set was not published
+in time." and no card. A set holds team legs alone, which no injury report moves, so nothing builds a level again after
+the lock. A level the set locked empty says so as of the take ("Empty when the
+set locked: ..."). The record is read again when the night reaches its lock whichever tab is on the screen, once Suggested
+Parlays has been opened in that page load.
 
-**The record's pills**: a pill a level, Safe, Medium and Aggressive, its won-lost and units on $1 from the record's grades
-(each season's game and level once, from the last key that holds it), each titled with the wins expected by DraftKings'
-fair chance and by the model's and with its pushes; Pending (the three levels' alone); "No featured set graded yet" until
-one is. The entries from before keep their Extreme legs and grades; the pills leave them out, and the file's summary keeps
-Extreme's record under its own key (below).
+**The record's pills**: a pill a level, Safe, Medium and Aggressive, its won-lost and units on $1 from the night map's
+grades alone (each season's night and level once, from the last key that holds it), starting fresh on 7 November 2026;
+each titled with the wins expected by DraftKings' fair chance and by the model's, its pushes, and the per-game rule's
+record before it ("Safe: 0 graded, 0 won; before 7 Nov, one game’s legs: 5–9, −7.48 units"); Pending (the night's
+levels still to settle).
 
-**What went (the owner's calls of 5 November 2026).** "Remove the Elo picks section", and "get rid of the extreme section
-as well", after going through the evidence:
+The tab is drawn only while it is on the screen: a hidden tab builds nothing and keeps nothing. Nothing is read before it
+first opens; then the record and lines.json, once each a page load, no-store (lines.json's read is the Parlay Builder's,
+one promise for the two tabs), and the record again, no-store, when the night reaches its lock. The half-minute look redraws
+the tab where what it shows is stale: the 6:00 AM turn, the lock, each tip-off of the night (`spState`).
+
+### Before 7 November: one set a featured game
+
+From 25 October to 7 November 2026 each game on national TV (a featured game: one the slate lists on any network ESPN's
+scoreboard names in the national market, NBA TV among them, never preseason; `FEATURED_TV`, whose copy
+`tools/suggest_check.js` keeps for the entries taken then) had a set of its own, set out one night at a time from 6:00 AM
+Eastern the morning after the featured date before it and locked 2 hours before its own tip-off: the Parlay Builder's levels
+on that one game's legs and every bet type, Safe the likeliest pair, Medium and Aggressive the 3- and 4-leg parlays with
+the best expected return that land 25% and 12% by the model's chance (else the likeliest of that size), Value picks first,
+thin-edge legs to fill and the total last (`SP_SEARCH`, the NFL's widths), a player's chance the props model's on trial,
+no player the injury report listed, and a locked level holding a player listed since built again, that level alone. Its
+record went 5–9 at Safe (−7.48 units), 4–10 at Medium (+7.91) and 1–13 at Aggressive (−1.17) over fourteen graded sets,
+and stays in the record's `featured` map as it was taken and graded (the pills' titles carry it).
+
+**What went on 5 November 2026** (the owner's calls, "Remove the Elo picks section", and "get rid of the extreme section as
+well"):
 - **The Elo picks**, the ELO Model's moneylines and spreads where its own chance beat DraftKings' price, four levels on that
-  chance under the sets (the NFL hub stands its Elo picks on a player's Elo matchup; the NBA has no player Elo fitted to
-  props, so its were the ELO Model's team legs, README "The ELO Model"). On the walk-forward folds, each called by the
-  model fitted on the seasons before it, against the consensus closing line (`research/elo.json`'s `pick`, README "Pricing
-  the Elo picks"), such picks lost against the market:
+  chance under the sets. On the walk-forward folds, each called by the model fitted on the seasons before it, against the
+  consensus closing line (`research/elo.json`'s `pick`, README "Pricing the Elo picks"), such picks lost against the
+  market:
 
   | Fold | Moneylines 3 points over the price | said | won | units on $1 | Spreads 3 points over -110 | won |
   |---|---|---|---|---|---|---|
@@ -3005,40 +3035,27 @@ as well", after going through the evidence:
   | 2025 | 393 | 61.3% | 50.6% | +7.0 | 753 | 52.2% |
   | 2026 | 376 | 59.6% | 45.7% | -17.9 | 784 | 49.4% |
 
-  Priced honestly, by the blend toward the market the research chose on 2024 and 2025 (`params.pick`, both weights 0), an
-  Elo pick was the market's own chance and never above its price, so the section stood on the model's own chance, labelled
-  and guarded; its legs were the team legs the sets and the Top 50 lines already offer, and on most days it held few or none.
-  Gone with it: the section (`#pbElo`, `epCands`, `EP_TIERS`, `epTier`, `eloPicksHtml`, `ELO_PICK_BLEND` and their cache and
-  wiring), its Add, Add to builder and Finish, the parlay card's `elo|<level>` resolver and its Elo chance ("Elo says"), the
-  matchup bubble's ELO Model line on an Elo pick's leg, and `state.json`'s `eloPicks` (`publish.js`'s `eloPickState`), which
-  no page read but the section. The ELO Model itself stays: its calls on the Pick'em Record and in the bubble's model
-  list, and `params.pick` and its study as research.
-- **Extreme**, each set's 5-leg level, the best expected return that lands 5% of the time by the model's chance: 0-12 on the
-  record when it went (Safe 5-7, Medium 4-8, Aggressive 1-11 over the same twelve graded sets). A set is Safe, Medium and
-  Aggressive since (`SP_TIERS`), on the tab, in the lock, in this browser's own lock, in a rebuilt level and in the pills,
-  and the record takes three levels for every set from then on (below). The Parlay Builder's engine keeps its four levels
-  (`PB_TIERS`, `getPbTiers`, drawn nowhere): only Suggested Parlays stopped drawing and recording Extreme.
-
-The tab is drawn only while it is on the screen: a hidden tab builds nothing and keeps nothing. Nothing is read before it
-first opens; then the record and lines.json, once each a page load, no-store (lines.json's read is the Parlay Builder's,
-one promise for the two tabs), and the record again, no-store, whenever a set reaches its lock, whichever tab is showing. The half-minute look redraws it where what it shows is stale: a game that
-tips, a set that locks, the 6:00 AM turn.
+  Gone with it: the section, its Add, Add to builder and Finish, the parlay card's `elo|<level>` resolver and its Elo
+  chance, the matchup bubble's ELO Model line on an Elo pick's leg, and `state.json`'s `eloPicks`. The ELO Model itself
+  stays (README "The ELO Model").
+- **Extreme**, each set's 5-leg level: 0-12 on the record when it went. The entries taken before (`THREE_FROM` in
+  `tools/suggest_check.js`) keep it, and the summary keeps its record under its own key (below).
 
 ### Where the NBA differs, and why
 
 | The NFL hub | Here | Why |
 |---|---|---|
-| Prime time: a Thursday, Sunday or Monday kickoff at 7:00 pm Eastern or later | A game on national TV (the slate's `tv`), never preseason | The NBA has national games most nights at every hour, so a clock says nothing; the networks are the league's own featured games |
-| One night a week's prime-time games, "week 6" in the head | The first Eastern date with a featured game to come, its date in the head; sets up at 6:00 AM the morning after the featured date before it | The NBA has no weeks; nearly every night is a featured night |
-| A night's pill: "Monday night" | The game's networks: "Peacock · NBC" | |
-| Lock 2 hours before kickoff | 2 hours before tip-off | |
-| Four levels a set, Safe to Extreme | Three, Safe, Medium and Aggressive (`SP_TIERS`) | The owner's call of 5 November 2026: Extreme went 0-12 ("What went") |
-| Questionable, Doubtful, Out, inactive and held-out players kept out | The game's out lists and every other listing on today's report, Day-To-Day included | ESPN's NBA feed has no Questionable or Doubtful: every status between playing and out is Day-To-Day |
-| The model's chance on player legs, market + form agreeing for a Value pick | The props model's, on trial and marked so on every player leg; the 3-point edge alone | The owner's call of 25 October 2026; the NBA has no market + form |
-| Every suggested leg needs DraftKings' id | Game legs only, where the game's lines carry ids | ESPN's feed carries no id for a player's line (the Parlay Builder's rule) |
-| The record's `prime` map, `prime_summary`, `entries` (a retired panel) | `featured` and `featured_summary` alone | No NBA panel came before it |
-| Graded by `settleLeg`, a player with no stat line by snap counts | Graded by the page's own `NBA_GRADE.legResult`: a player with no box line did not play, void | NBA box scores list every player who played |
-| Elo picks: player props on the Elo matchup | None since 5 November 2026 (the ELO Model's moneylines and spreads on its own chance until then) | No player Elo is fitted to NBA props, and the ELO Model's team picks lost against the market ("What went") |
+| Prime time: a Thursday, Sunday or Monday kickoff at 7:00 pm Eastern or later, a set a game, and the Sunday slot's games together | Every game of the night together, never preseason, one set (until 7 November 2026: a set a game on national TV) | The NBA has games most nights at every hour; the owner's call of 7 November 2026: one game's team legs make 2 legs at most |
+| Safe the likeliest pair; Medium to Extreme the best expected return over 25%, 12% and 5% (since its app v138, the least costly at DraftKings' fair chance) | Safe the likeliest pair; Medium and Aggressive the likeliest paying $4 and $8 or more on $1 | The owner's call of 7 November 2026: "the best possible model confidence to match what level bet" |
+| Value picks first, thin legs to fill | No value bar: every team leg in the builder's band, the far-off guard kept | So the levels always fill; the guard keeps the model's widest misses out |
+| One night a week's prime-time games, "week 6" in the head | The first Eastern date with a game to come, its date in the head, up from 6:00 AM that morning | The NBA has no weeks |
+| Lock 2 hours before kickoff | 2 hours before the night's first tip-off | |
+| Three levels shown (Extreme hidden since its app v132) | Three, Safe, Medium and Aggressive | Extreme went 0-12 here (5 November 2026) |
+| The model's chance on player legs | No player legs | The props model's trial was stopped as a FAIL on 5 November 2026 |
+| Every suggested leg needs DraftKings' id | Game legs need theirs where the game's lines carry ids | The Parlay Builder's rule |
+| The record's `prime` and `slot` maps | `night`, and `featured` from before | |
+| Graded by `settleLeg` | By the page's own `NBA_GRADE.legResult` | |
+| Elo picks | None since 5 November 2026 | No player Elo is fitted to NBA props, and the ELO Model's team picks lost against the market |
 | The record written by the props job after its audit, never turning it red | Its own step after the tests, which marks that step alone and puts the file back on a failure | The NBA job's pattern (the props ledger's check) |
 
 ### The record (`tools/suggest_ledger.js`, `tools/suggest_check.js`, `data/suggest_ledger.json`)
@@ -3046,169 +3063,136 @@ tips, a set that locks, the 6:00 AM turn.
 The NFL hub's `props/build/suggest_ledger.js` on this page. `node tools/suggest_ledger.js` boots the built `index.html`
 in jsdom on the `state.json` just published and the `lines.json` just read, the window's clock held at the run's time so a
 boot of seconds never crosses a lock, every file it asks for served from the checkout but the record itself, which answers
-404 so every set is built from the data. It takes every featured game's set on the lines feed's two dates by the page's own
-`spTakes`, `spSet` and `spTierOut`, whether the tab shows it yet or not (a featured game further out has no line read yet,
-and would be three empty levels, so it is taken once its date is one of the two). It refuses a page whose sets have other
-levels than the three (its `SP_TIERS`) or another lock, no lines.json, or one that threw.
+404 so every set is built from the data. It takes the night set of each date on the lines feed's two dates by the page's
+own `spTakes` and `spEntry`, whether the tab shows it yet or not (so the next night's set is taken the night before, since
+the job's runs land hours late), and refuses a page whose levels are not the three (`NIGHT_LEVELS`, its own copy) or that
+locks at another time, no lines.json, or one that threw.
 
 `data/suggest_ledger.json`, one entry a line so a run's diff is the entries it took or graded:
 
 ```
-{ how, since, updated,
-  featured_summary: { tiers: { safe: { label, graded, won, lost, push, exp_fair, fair_n, exp_model, units }, ... },
-                      pending, games, entries, graded_entries, updates },
-  featured: { "<season>|<date>|<tip>|<game id>": {
-      season, date, gid, away, home, type, tip, lock, tv, generated, pool: { pref, thin, mkt, far, held },
-      tiers: [ { id, label, n, floor, legs: [ <the builder's own leg> + name, label, p, fair, fair_est, thin, market ],
-                 p, fair, fair_est, dec, likeliest, thin, mkt[, updated] } | { id, label, n, floor, why } ] x3
-             (x4, Extreme last, on a set the page that drew four took: THE CUTOVER below),
-      taken_at[, grade: { <level>: { result, legs: [win|loss|push|void|null ...], payout } }][, updates: [...]] } } }
+{ how, since, updated, featured_summary, night_summary,
+  featured: { "<season>|<date>|<tip>|<game id>": <a per-game set, before 7 November 2026> },
+  night: { "<season>|<date>|<first tip>|<season>_<YYYYMMDD>_NIGHT": {
+      season, date, nid, games: [ { gid, away, home, tip, type } ], tip, last, lock, generated,
+      pool: { legs: [ [ <leg key>, <DraftKings' price>, <the model's chance, kept whole> ] ],
+              pairs: [ [ <leg>, <leg>, <their joint chance>, <their price> ] ], band, far, noId },
+      tiers: [ { id, label, min, max, price, legs: [ <the builder's own leg> + name, label, p, fair, fair_est, thin, market ],
+                 p, fair, fair_est, dec } | { id, label, min, max, price, why } ] x3,
+      taken_at[, grade: { <level>: { result, legs: [win|loss|push|void|null ...], payout } }] } } }
 ```
 
-The rules, the NFL's: while a set's lock is to come a run rewrites its entry whenever the set has changed (lines read, a
-player listed), keeping it otherwise; from the first run at or after the lock it stands as the last run before the lock
-left it. An entry not yet locked whose game is no longer a featured game to come (off national TV, a tip-off moved,
-postponed) is dropped; a tip-off moved makes a new key. Between the lock and tip-off, a level holding a player the page's
-own rule now keeps out (`spOutWhy`) is built again by the page's `spRebuild`, that level alone, marked `updated` {pid,
-name, reason, at} and recorded in `updates`. From tip-off each level of this season's entries is graded by the page's own
-settlement (`NBA_GRADE.legResult`, the one X Parlays grades by: a game's legs on its final score, a push on the line; a
-player's on his box line, read from the state's week of box lines or `data/box_<season>.csv`, a push on a whole line, void
-with no line): a leg lost loses the parlay; a push or void drops out as a book drops it, the rest paid at the builder's own
-price on the legs left (`parlayDec`, a same-game remainder priced together); every leg a push or void is a push, the stake
-back; pending while a game or its box is out. A grade once complete is never undone by a state that can no longer settle
-it, and another season's entries keep theirs. The summary counts each season's game and level once, from the last key,
-as the pills do; it keeps Extreme's record under its own key (`featured_summary.tiers.xtrm`, 0-12 when it went), from the
-sets that hold it (taken by the page that drew four: before the change, or by a run of it that landed after), which are
-graded on their four levels as before, so the file as it stood that day passes
-the guard unchanged, and its `pending` counts their Extreme levels still to settle beside the rest (the pills count the
-three).
+The pool is kept so the guard can work each level out again on its own, its chances and prices whole, as the search
+ranked them (until 7 November 2026's review they were rounded to 6 places, so two parlays the page told apart by less
+than that read as level to the guard, which then ranked them by the tie's rules and refused a correct set). While a
+night's lock is to come a run rewrites its entry whenever the set has changed (lines read), keeping it otherwise; from the
+first run at or after the lock it stands as the last run before the lock left it, and nothing changes but its grade. No
+set is taken of a night DraftKings has posted no line for ("no set of <night>: DraftKings has posted no line for its games
+yet"), and one an earlier run took stays as it was. A night once locked stays locked: an entry whose own lock has passed
+holds its night though ESPN moves the first tip-off later ("<night> (locked at ...) held: its first tip-off moved after
+the lock, and no new set is taken"), and one whose night has locked at a first tip-off moved earlier is kept as it was.
+An entry not yet locked whose night is still to lock at another first tip-off (moved before the lock) is dropped, and the
+night taken again at its new one. From the first tip-off each level is graded by the page's
+own settlement (`NBA_GRADE.legResult`, the one X Parlays grades by), leg by leg as its games finish: a leg lost loses the
+parlay at once, as a book settles it, though another leg's game is still to play; a push or void drops out as a book drops
+it, the rest paid at the builder's own price on the legs left (`parlayDec`); every leg a push or void is a push, the stake
+back; otherwise pending while a game is out. A grade once complete is never undone by a state that can no longer settle it,
+and another season's entries keep theirs. `night_summary` counts each season's night and level once, from the last key,
+as the pills do.
 
-**The cutover** (`THREE_FROM` in `tools/suggest_check.js`, 2026-11-05T03:00:00Z, just before the commit that took Extreme
-off): every set in the ledger then was taken before it (the last at 00:29 that morning), by the page that drew four levels;
-every run of the new page takes three, after it. A set holds the four (Extreme fifth, 5 legs) only where it was taken before `THREE_FROM`, or where the file it is held to
-(the run's start, or the last commit's) already holds it with the four and the same time taken: a run of the old page that
-lands after `THREE_FROM`, before the change reaches `main`, is then never refused for its sets (no old set refused), while a
-set new or taken again since that file must be the three (no new set carries Extreme). With no file to hold it to
-(`--no-prev`), `THREE_FROM` alone, so a ledger holding a set a late run of the old page took fails `--no-prev`; the job
-never runs that (its check holds the file to the last commit's), and the test holds the real ledger to itself, as the job
-does, never to no file, so a late run of the old page can never turn the record's step red before the script takes its
-sets still to lock again as three (G2 plants one). A replacement (`updates`) must name a level its set holds, so Extreme
-only on a set of four. Every other rule is as it was. Run on a scratch copy of that morning's real ledger
-(02:42 UTC), the new page rewrote the one set still to lock (Heat at Warriors, 5 November, taken on 3 November with four
-empty levels) as three, left the other fourteen, their four levels and grades, as they were, and the guard passed it and the
-ledger as it stood.
+The `featured` map, the per-game sets of the rule before, stays as it was taken and graded: the job takes no set there any
+more, a set still to lock when the change ran is dropped (no longer offered, as the job always dropped such a set), and the
+rest stand, graded as before (a set taken before 5 November 2026 with Extreme, `THREE_FROM`, the cutover, its rules in
+`tools/suggest_check.js`), `featured_summary` keeping their record and Extreme's under its own key. Run on a scratch copy
+of 7 November 2026's committed files at 18:53 UTC, the new page and job dropped the three per-game sets still to lock that
+day (Nuggets at Pacers, Knicks at Cavaliers, Lakers at Pistons), kept the other seventeen as they were, took Saturday's
+night set (7 games, 30 legs in its pool), took none of Sunday's ("no set of 2027_20261108_NIGHT: DraftKings has posted no
+line for its games yet"), and the guard passed it held to the committed file.
 
 `tools/suggest_check.js` is the guard, its rules worked out on its own from the file, the clock and the last commit's
-file: each entry keyed on its own season, date, tip-off and game; its game id its season's, date's and clubs'; its date
-its tip-off's Eastern date (Intl); featured by its own stored networks and type (today's `FEATURED_TV` for a set still to
-lock; one past its lock needs only a network and no preseason, the rule it was taken under); locking exactly 2 hours before tip-off;
-taken before the lock; the three levels of their sizes (the four, Extreme last, only as the cutover allows), every leg its own game's, one leg a player, one side bet and one
-total; a replacement made between its lock and tip-off, and a level's mark the last recorded for it, no longer holding the
-player; no grade before tip-off, and every grade following its legs (a loss pays 0, a push 1, a win over 1 and exactly its
-price when every leg won); against the previous file, no locked set gone or changed in anything but its grade and the
-replacements, which only grow, are this run's and replace a player the locked level held; no other entry new or changed
-but by this run before its lock; another season's grade never redone; the summary the entries'. The script runs it
-against the file it started from and, where that differs, the last commit's, and refuses to write (exit 1, the file put
-back, the last commit's where the file on disk had itself moved a locked entry); the job then runs it again from the
-command line against the last commit.
+file. A night entry: keyed on its own season, date, first tip-off and night id; its night id its season's and date's; each
+game's id of its season, date and clubs, never preseason, tipping on the night's Eastern date (Intl); its tip-off its
+games' first and its last their last; locking exactly 2 hours before the first; taken before the lock; its levels the
+three in order with their labels, ranges and floors; each level's legs games of the night, team legs alone, no leg twice,
+one side and one total a game, a count within its range, each in the entry's pool at its own price and chance, its chance
+and price its legs' as the pool has them (a game's two legs at the pool's joint figures), its price at its floor or over;
+and, by its own enumeration of every parlay the pool makes (`nightBest`: each game nothing or one of its options,
+multiplied across games), no parlay the rule ranks above it (likelier, or level within `NIGHT_TIE`, the page's own
+tolerance, and dearer, fewer or first by ids) and no level empty where a parlay meets its rule; no pool of no leg and
+none left out (a set taken before DraftKings had posted a line of the night); no second set of a night taken at or after
+another set of it locked; no grade before the first
+tip-off, every grade following its legs (a loss pays 0 though a leg is still out; a push 1; a win over 1 and exactly its
+price when every leg won); against the previous file, the night map there wherever that file has one (a ledger that
+drops it and its summary passes no night rule by having none), no locked night gone or changed in anything but its grade, no other
+entry new or changed but by this run before its lock, another season's grade never redone; the summary the entries'. The
+per-game entries are held to their own rules as before. The script runs it against the file it started from and, where
+that differs, the last commit's, and refuses to write (exit 1, the file put back, the last commit's where the file on disk
+had itself moved a locked entry); the job then runs it again from the command line against the last commit.
 
 In the job, after the tests (it needs their `npm ci` for jsdom): `node tools/test_suggest_ledger.js`, then one clock read
 (`now=$(date -u +%Y-%m-%dT%H:%M:%SZ)`) handed to both `SUGGEST_NOW=$now node tools/suggest_ledger.js` and `SUGGEST_NOW=$now
-node tools/suggest_check.js`, so the check reads which sets are locked at the instant the script rewrote or froze them (on
-the wall clock a few seconds later, a set rewritten just before its lock would read as a locked set moved, and the step
-would throw that run's takes and grades away); a failure marks that step alone, puts the file back as committed, and turns
-the run red at the end; the record never holds back state.json or the data, and is committed with the data from `main`
-alone (a run on any other ref writes and checks it, and the commit step puts it back as committed: README "Runs").
-Timing: GitHub starts this repo's runs 3 to 9 hours late, so the locked set is the last run's before the lock, possibly
-hours before it. The two slots added for it, 16:17 and 19:17 UTC, land from about 3:17pm to 9:17pm EDT and 6:17pm to
-12:17am EDT, nearer the 5:30pm to 8pm locks of the evening games; a weekend afternoon tip-off locks before most runs land,
-and a game no run reached before its lock has no entry (each visitor's page then shows its own set, said so). A run takes 7 to
-9 seconds of jsdom a priced game (25 October 2026's two sets with props, about 16 seconds in all).
+node tools/suggest_check.js`, so the check reads which sets are locked at the instant the script rewrote or froze them; a
+failure marks that step alone, puts the file back as committed, and turns the run red at the end; the record never holds
+back state.json or the data, and is committed with the data from `main` alone (README "Runs"). Timing: GitHub starts this
+repo's runs 3 to 9 hours late, so the locked set is the last run's before the lock, possibly hours before it, or the night
+before (the job takes the next night's set too); a night no run reached before its lock has no entry (each visitor's page
+then shows its own set, said so).
 
 ### The checks
 
-`node tools/test_suggest_ledger.js` (about 50 seconds, "N checks passed") runs the script itself on made-up November days
-of its own (a state, lines.json and box file in a scratch folder, the clock set), never the real ledger: A the morning of a
-night, a set for every featured game of the two dates and none for a game on local TV, a preseason game on national TV or a
-featured game on the third date, each keyed, locked, its networks kept and every leg its own; B the first game's props gone
-(rewritten), a game moved off national TV (dropped), one moved onto it before its lock (taken), the same run again (nothing
-written), a second before the lock with the props back (rewritten); C after the lock with the prices moved (the set to the
-byte), a game moved onto national TV after its lock (none); R a player of a locked level listed (that level alone rebuilt,
-marked and recorded), again (nothing), after tip-off (only the grade); D the night played out beside planted entries,
-every grade worked out from the raw scores and box lines (a moneyline, a whole-line total and spread pushing, a player's
-line from the state's box lines and from the season's box file, a player with no line void, the one leg left paid its own
-price, two paid at the same-game price `tools/corr.js` gives, every leg a push or void a push, a box not read pending, a
-grade kept that the state can no longer settle, last season's never redone, a game's level under two tip-offs counted once,
-a set taken before the cutover kept with its four levels byte for byte, its Extreme in the summary under its own key), the
-summary worked out, the next day's set (every set three levels); E no featured game to come; F the guard (a locked set
-edited on disk refused and
-the last commit's put back, an unlocked set an earlier run rewrote and a locked level an earlier run replaced not refused, no
-state refused, the command line, `check()` failing every rule on hand-made ledgers, a network dropped from `FEATURED_TV`
-since sets on it locked failing only the set on it still to lock, the cutover (a set taken since `THREE_FROM` holding
-Extreme refused, new, rewritten or taken again; one taken before it, or held so at the same time taken by the file it is
-held to, passing; one a minute before it passing and one at it failing; a replacement naming Extreme on a set of three
-refused), a page whose sets draw Extreme again refused with
-the file untouched, and the job's step reading one clock after the test for
-both the script and its check, a set rewritten a second before its lock passing its check on that clock and failing on one
-read five seconds later); G the real ledger, copied, on the real state and lines at the real clock, held at one instant for
-the script and the check (the made-up off-slate games never settled by a real game under their ids): the ledger as it
-stands passing the guard held to itself (as the job holds it to the last commit's), every set taken since the cutover the
-three levels but a locked one the file already held with four at the same time taken, every locked one from before the
-levels it had; G2 the same on the made-up nights, of a ledger as a run of the old page landing after the cutover would
-leave it (two sets with four levels): before the first lock both taken again as three, after it that one standing with its
-four and the other taken again as three, nothing refused. Four breaks planted in copies each turn it red: a locked set rewritten, a void graded
-a loss, the guard letting a locked set change, the report not read.
+`node tools/test_suggest_ledger.js` (about 10 seconds, "N checks passed") runs the script itself on made-up November days
+of its own (a state, lines.json and box file in a scratch folder, the clock set), never the real ledger, and works every
+night, pool, level and settlement out on its own (the pool from its own reading of the made-up model and lines; each
+level by its own brute-force enumeration of every parlay the pool makes, at chances and prices it works out itself with
+`tools/corr.js`'s copula and the same-game hold; never the page's search): M the migration (a ledger of per-game sets
+alone, one still to lock: that one dropped, the rest kept but for their grades, the night map added, the guard passing it
+held to the file it started from; the per-game settlement rules on planted entries, a moneyline, a whole-line push, a
+player with no box line void, the same-game price on two legs left, a box not read pending, a grade kept, last season's
+never redone, Extreme's record); A the morning of D1 (a night set for D1 and D2 and none for D3, keyed, every game of its
+date but a preseason one, its pool the test's own with no player leg though the props model prices two, the same-game
+copula met, each level the test's own enumeration's); B prices moved (rewritten; the other night unchanged; the same again
+nothing written; a second before the lock rewritten); C after the lock (the set to the byte, a game moved after the lock
+changing nothing; after the first tip-off every level pending); D the night played with one game still out (each level
+graded as worked out here, lost at once where a leg lost; the one-game night's Safe its side and total and its Medium and
+Aggressive empty, word for word), the last game final (every level settled), the summary; E no game to come; F the guard
+(a locked night edited on disk refused and the last commit's put back, one still to lock rewritten not refused, no state
+refused, a page whose levels are not the three refused, the command line, the job's one clock; `check()` on hand-made
+ledgers failing every night rule and the per-game rules); T a night of exact ties (four games alike, three pricing the
+likeliest leg at -105 and one at -115: Safe and Medium the dearer, then the first by ids; Aggressive the four); G the real
+ledger, copied, on the real state and lines at the real clock: nothing refused, every locked set as it was.
 
 `SMOKE_ONLY=sp node tools/smoke.js` (`tools/smoke_suggested.js`), blocking, boots the built page on a made-up November of
 its own, the page's clock moved to each moment a case needs, so it holds at any hour, the off-season included, and works
-every rule out on its own copies: nothing read before the tab opens, then the record and lines.json once each, no-store, and
-nothing else; the tab after Tonight at `#suggest`; the night set out (nightOwn, through Intl, America/New_York), the wait
-line's instant, games and words, the 6:00 AM turn redrawn by the half-minute look, the two Sundays the clocks turn, no
-featured game, no game at all and a preseason game on national TV; each set three level cards, Safe, Medium and Aggressive,
-and no Extreme anywhere on the tab (no card, Add, Finish or word of it, `spTier` finding none); each level's chance, price
-and fair chance the builder's own sums, every leg's rules, the Day-To-Day player in none, Safe the likeliest of every pair of the game's Value picks; the
-on-trial mark on every player leg and nowhere else and the Value mark likewise, "model (on trial)", the payouts on the Bet
-amount and following it, the cards quiet, the lock line word for word, every control 44px, an empty level's reason, and
-from the lock a level the record took empty saying why as of the take, word for word, in each wording the reasons take,
-the record's words untouched; Add, Added and a second press, Add to builder and the builder paying the level's price, Finish and its card (headed Suggested
-parlay, the level's own chance as its card states it, "Back to Suggested Parlays"), the focus on closing it (back on the
-Finish, on the same Finish as drawn again after a redraw while it was open, on the tab's button with none drawn), a one-game
-card of player legs opening the game's page from lines.json's event id; no Elo picks and nothing of them left (no section,
-Add to builder, Finish or words of one, none of their code on the page, no `elo|<level>` resolver or Elo chance wording on
-the parlay card, `publish.js` writing no `eloPicks`, a state.json from before that still carries one drawing the same sets
-and nothing of it) and the builder's own Finish parlay the builder's card, the model's chance with Start over; this
-browser's own set at the lock, its line and its key (its three levels), nothing else stored, a locked game waiting for slow
-lines and an own set never kept without them, a reload with the prices moved showing the same set, a browser's own
-four-level lock from before read as its three levels (Extreme and a kept replacement of it left out, nothing thrown), a
-locked leg's Add at its locked price, a press re-picking a live set and not a locked one, a ruled-out level built again
-alone and said, the record's set taking the browser's place (after waiting
-for its read; an entry from before, holding Extreme, shown as its three levels) and its own replacement said, a game
-leaving the tab and the key at tip-off; the pills from a made-up record (its entries holding Extreme, graded and pending),
-the real one and an empty one, every number and title its own, Safe, Medium and Aggressive alone, an entry's Extreme left
-out of them and of Pending, a junk record drawing nothing; and the real files, on what the day offers. Breaks planted in copies of the built page each turn it red: the sets up at 7:00 AM, a 3-hour lock, the
-browser lock not kept, the pills counting every key, the on-trial mark dropped (from before 5 November 2026); and Extreme
-back on the tab, the pills counting it, the record's entry or this browser's lock read on four levels, and an Elo picks
-section back on the tab (5 November 2026). Two more planted in `tools/suggest_check.js` turn `test_suggest_ledger.js`
-red: the guard letting a set taken since the cutover hold Extreme, and the summary dropping Extreme's key. The bubble's
-and the card's own Elo pieces, put back, turn their smokes red.
+every rule out on its own: nothing read before the tab opens, then the record and lines.json once each, no-store, and
+nothing else; the tab after Tonight at `#suggest`; the night set out (`nightOwn`, through Intl, America/New_York), its
+games every game of the date but preseason, its head; the wait line's instant, games and words, the 6:00 AM turn redrawn
+by the half-minute look, the two Sundays the clocks turn, no game to come and a preseason game alone; the pool (its own
+reading); each level against its own enumeration of every parlay the pool makes, each one's chance and price the builder's
+own `parlayProb` and `parlayDec` on its legs (10,634 parlays on its made-up night; 113,537 on 7 November's real one); the
+floors, one side and one total a game, the fair chance; each card's rule in words, its legs' games, the payouts on the Bet
+amount and following it, the Value mark, no on-trial mark, the cards quiet, the lock line word for word, every control
+44px; the same set after the props model's FAIL; a one-game night's empty levels word for word; ties on the page's own
+search; a night of 15 games built in under 2 seconds and held to the guard's enumeration; Add, Added and a second press,
+Add to builder and the builder paying the level's price, Finish and its card, the focus on closing it; this browser's own
+set at the lock, its line and its key (`v: 2`, a per-game value taken out), nothing else stored, lines.json not there
+(never kept), a reload with the prices moved showing the same set, a locked leg's Add at its locked price, the record's
+set taking its place after waiting for its read, a level the record took empty, under way (no Add, Add to builder or
+Finish; with no set, none built), the night leaving the tab and the key at its last tip-off; the pills from a made-up
+record, the real one and one with no night map, every number and title its own, the per-game record in each title, a junk
+record drawing nothing; and the real files, on what the day offers (the real night's live levels against its own
+enumeration where it is live).
 
-In Chromium at 1280 and 390 wide, on a scratch copy of 25 October 2026's real data pulled from ESPN that afternoon (the
-slate with its national networks: Raptors at Timberwolves on NBA TV that night, Mavericks at Heat on NBA TV and Warriors at
-Nuggets on NBCSN the next, lines.json read at 21:17 UTC), at three moments (live at 20:30 UTC, this browser's own locked set
-at the real clock, after the 21:00 lock, the wait line at 23:30): no sideways scroll, every control 44px or taller (45 on the tab with its set and the Elo
-picks), every one of about 280 texts at 5.5:1 or better on what is under it, and no script error. The job's run on the same
-data at 21:17 UTC took Monday's two featured sets (four empty levels each: DraftKings had posted neither their game lines nor
-their props) and no set for that night's game, whose lock had passed at 21:00 with no earlier run; held at 20:45 it took that
-game's set too (52 Value picks and 53 thin-edge lines in its pool, 40 left out far off the market: Safe a pair of milestones
-at -514, 84% by the model on trial and 70% by DraftKings' fair chance).
+Breaks planted in scratch copies (`NBA_HTML` for the smoke; a copy of the tree for the test) each turn them red: the
+floors loosened (a level at 85% of its price floor taken: the job refuses the ledger, the guard saying the level pays under
+its floor), the likeliest rule turned (the dearer parlay first: the guard and the test's enumeration find likelier ones),
+one side and one total a game broken (a game's moneyline and spread paired: the guard refuses the pool and the level), the
+page's lock moved to 3 hours (the job refuses the page), and the guard's own lock rule switched off (the test's locked
+night edited on disk passes, and the guard's hand-made locked-night cases pass). Counts are in the commit that made the
+change.
 
-Again on 5 November 2026, with Extreme and the Elo picks gone, on that morning's published files (served from the checkout,
-the browser's clock set): Mavericks at Spurs live at 00:20 UTC (its set built from `lines.json`), the same game locked at
-00:40 (the record's set, an entry taken at 00:29 with four levels, drawn as its three) and the wait line at the real clock
-(Heat at Warriors, up Thu 6:00 AM ET); at 1280, 1101, 1100, 914, 901, 900 and 390: three cards a set, three across above
-1100px and one a row at and under it, no Extreme and no Elo picks anywhere on the tab, three pills (Pending 3, the three
-levels of the night's other game still to settle), no sideways scroll, every control 44px or taller, every one of about 120
-texts at 5.5:1 or better, and no script error.
+In Chromium at 1280 and 390 wide on 7 November 2026's committed files at the real clock (Saturday's 7 games, live): one
+set, three cards three across at 1280 and one a row at 390, no sideways scroll, every control 44px or taller, and no script
+error.
 
 ## X Parlays
 
@@ -3400,8 +3384,8 @@ succeeded, and state.json and the pages only when publishing and the tests (`too
 `tools/test_fetch_box.js`, `tools/test_props.js`, `tools/test_corr.js`, `tools/test_lines.js`, `tools/test_calls.js`,
 `tools/test_gamewin.js`, then the page's smoke test on the new state)
 pass; the run is red when any step failed. After the tests, the suggestions record (`tools/test_suggest_ledger.js`, then
-`tools/suggest_ledger.js`, then `tools/suggest_check.js`, README "Suggested Parlays") takes, locks and grades each featured
-game's set into `data/suggest_ledger.json`, committed with the data; a failure marks that step alone and puts the file back
+`tools/suggest_ledger.js`, then `tools/suggest_check.js`, README "Suggested Parlays") takes, locks and grades each
+night's set into `data/suggest_ledger.json`, committed with the data; a failure marks that step alone and puts the file back
 as committed. The page says when the injury report is older than the file it came in. On
 demand the job takes a date range and a refit switch. A push that changes the tools or the app runs it once (on a
 `claude/` branch too, committing there and in its own queue, all but the two frozen ledgers, `data/calls.json` and
@@ -3533,17 +3517,17 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   parlay (a card to download, place at DraftKings or share, README "The parlay card") and Clear ALL. Every name on a leg
   opens its matchup bubble (README "The matchup bubble").
 
-- **Suggested Parlays** (`#suggest`, after Tonight): each game on national TV's own three parlays, Safe, Medium and
-  Aggressive, from that game's legs, set out one night at a time from 6:00 AM Eastern, live until 2 hours before tip-off
-  and then the record's locked set (or this browser's own, said so), with the record's pills and Refresh odds; every
-  player leg the props model's, on trial (README "Suggested Parlays"), and none since its trial was stopped early as a
-  FAIL (5 November 2026).
+- **Suggested Parlays** (`#suggest`, after Tonight): one set a night across every game of the night (since 7 November
+  2026; until then a set a game on national TV), Safe the likeliest pair, Medium the likeliest paying $4 or more on $1
+  and Aggressive $8 or more, on the night's team legs, set out from 6:00 AM Eastern, live until 2 hours before the first
+  tip-off and then the record's locked set (or this browser's own, said so), with the record's pills and Refresh odds
+  (README "Suggested Parlays").
 - **X Parlays**: the parlays X placed at the book, the same on every device and read only, each followed live through
   its games; read from `liveparlays/parlays.json` and ESPN when the tab is first opened in a visit and on Refresh now,
   never on load before that or on a timer (README "X Parlays").
 
 Nothing a visitor does reaches the published files, and the one thing the page keeps of its own making is a locked
-Suggested Parlays set it built where the record had none (`nba_sp_lock_v1`, to tip-off, outside `M` and never sent
+Suggested Parlays set it built where the record had none (`nba_sp_lock_v1`, to the night's last tip-off, outside `M` and never sent
 anywhere), which the record's set replaces as soon as a load reads one. The job runs `publish.js`, `build.js` and the
 smoke test after the models, and commits `state.json`, `pickem.json`, `history.json` and both pages (`index.html`,
 `admin.html`) when publishing and the tests pass. Whenever the pull succeeded it also commits the data folder

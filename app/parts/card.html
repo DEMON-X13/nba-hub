@@ -91,7 +91,7 @@
    window.PARLAY_CARD: the window over the page, its card (the window's and the image's, drawn from one model), Open in
    DraftKings, Share link, Download image and Start over. It reads the page's globals (S, M, the Parlay Builder's pricing
    and lines) only when it is used, so it may sit anywhere in the page. A tab that draws a suggested level's Finish
-   (data-pc-finish="<prefix>|<id>": Suggested Parlays' "sp|<game id>:<level>") registers a resolver for its prefix,
+   (data-pc-finish="<prefix>|<id>": Suggested Parlays' "sp|<night id>:<level>") registers a resolver for its prefix,
    PARLAY_CARD.from(prefix, id => ({ legs, kicker, chance })), and one listener here opens the card for whichever is
    pressed; the card prices the legs by the builder's own sums */
 window.PARLAY_CARD = (function () {
@@ -228,7 +228,7 @@ window.PARLAY_CARD = (function () {
   /* the Parlay Builder's own four levels over the games ticked (getPbTiers), which a level's card drawn with no prefix
      of its own finishes (pbTierCard's default "pb|<level>") */
   from('pb', id => { const t = typeof getPbTiers === 'function' ? getPbTiers().tiers.find(x => x.id === id && x.legs) : null; return t ? { legs: t.legs, kicker: t.label + ' parlay' } : null; });
-  /* and, until the tab registers its own, the NFL hub's name for Suggested Parlays' levels: window.spTier ("<game
+  /* and, until the tab registers its own, the NFL hub's name for Suggested Parlays' levels: window.spTier ("<night
      id>:<level>", the level as the tab shows it, live or locked). The NFL hub's other, the Elo picks' "elo|<level>", is
      not here: the NBA hub took its Elo picks off on 5 November 2026 */
   from('sp', id => { const t = typeof window.spTier === 'function' ? window.spTier(id) : null;
@@ -579,7 +579,7 @@ window.PARLAY_CARD = (function () {
   }
   /* the builder's Finish parlay (app/parts/parlay.html draws it and calls this) */
   function openBuilder(from) { const m = fromBuilder(); if (m) open(m, from); return !!m; }
-  /* a suggested level's Finish ("sp|<game id>:<level>"): one listener opens the card for whichever is pressed; a page
+  /* a suggested level's Finish ("sp|<night id>:<level>"): one listener opens the card for whichever is pressed; a page
      drawn before a game tipped off is redrawn rather than opening a parlay nobody saw */
   function finishFrom(btn) {
     if (typeof window.pbStale === 'function' && window.pbStale()) { if (typeof window.renderParlay === 'function') window.renderParlay(); return false; }

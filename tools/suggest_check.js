@@ -1,6 +1,33 @@
 /* The suggestions record's guard (README "Suggested Parlays"): data/suggest_ledger.json held to its rules, worked out
  * here on their own from the file, the clock and the last commit's file, never from the page.
  *
+ * Two maps. `night` is the record since the owner's call of 7 November 2026: one set a night across every game of the
+ * night, its three levels each the likeliest parlay the night's team legs make by its own rule (NIGHT_LEVELS below:
+ * Safe 2 legs, Medium 2 to 5 paying $4 or more on $1, Aggressive 2 to 5 paying $8 or more), and it fails when:
+ *   - an entry lacks its night, games, tip-off, lock, levels, pool or time taken; is not keyed season|date|first
+ *     tip|<season>_<date>_NIGHT on its own fields; a game of it is preseason, of another season, date or clubs than its
+ *     id, or tips off on another Eastern date (Intl) than the night's; its tip-off is not its games' first, or its last
+ *     not their last; its lock is not exactly 2 hours before its first tip-off; it was taken at or after its lock;
+ *   - its levels are not the three in order with their sizes and floors; a level holds a leg of no game of the night, a
+ *     player's leg, a leg twice, two side bets or two totals of one game, a count of legs outside its range, a leg not
+ *     in the entry's pool at its own price and chance, a price under its floor, or a chance or price that is not its
+ *     legs' as the pool has them; or, worked out here on the pool by its own enumeration of every parlay the level's
+ *     rule takes (one side and one total a game, the pool's chance and price of each leg and of each game's two legs
+ *     together, multiplied across games, the pool kept whole), a parlay the rule ranks above it (likelier, then dearer,
+ *     then fewer legs, then the legs' ids; two within NIGHT_TIE, the page's own tolerance, are level), or a level empty
+ *     where a parlay meets its rule; its pool holds no leg and none left out by a rule (taken before DraftKings had
+ *     posted any line of the night: the job takes no such set);
+ *   - a grade is on it before its first tip-off, or does not follow its legs (as below);
+ *   - a second set of one night is taken at or after another set of it locked (a night once locked stays locked, though
+ *     ESPN moves its first tip-off later);
+ *   - against the file the run started from (or the last commit's): an entry whose lock had passed is gone or changed in
+ *     anything but its grade (a night set is never built again after its lock: it holds team legs alone, which no
+ *     report moves); the night map itself gone where that file has one; with the run's time known, a new or changed
+ *     entry that is not that run's before its lock; another season's entry graded anew; and night_summary not following
+ *     from the entries.
+ * `featured` is the per-game record before it, its rules as they were (the job takes no new set there since, and drops
+ * one still to lock), held as below.
+ *
  *   node tools/suggest_check.js [--prev FILE | --no-prev] [--now ISO]
  *
  * The job runs it right after tools/suggest_ledger.js, which runs the same check() before it writes, on the script's own
@@ -20,8 +47,9 @@
  *   - a replacement (updates) names no level the set holds (Extreme on a set of three among them), no player or no time,
  *     or was made outside its lock to tip-off or after the clock; a level's mark (updated) is not the last replacement
  *     recorded for it, or the level still holds the player;
- *   - a grade is on an entry before its tip-off, or does not follow its legs (a leg lost loses and pays 0; every leg a push
- *     or void is a push and pays 1; otherwise won, paying over 1, and exactly its price when every leg won);
+ *   - a grade is on an entry before its tip-off, or does not follow its legs (a leg lost loses and pays 0, though another
+ *     leg is still out; otherwise any leg out is pending; every leg a push or void is a push and pays 1; otherwise won,
+ *     paying over 1, and exactly its price when every leg won);
  *   - against the file the run started from (or, by the command line, the last commit's): an entry whose lock had passed
  *     is gone or changed in anything but its grade and its replaced levels; its record of replacements rewritten; its
  *     levels changed; a level changed with no replacement recorded, or replaced for a player it did not hold; a
@@ -56,6 +84,15 @@ const THREE_FROM = '2026-11-05T03:00:00Z';
 const LOCK_MS = 2 * 3600e3;
 /* this file's own copy of the page's featured rule: a game on any national network ESPN lists, less those named here */
 const FEATURED_TV = { except: [] };
+/* THE NIGHT (the owner's call of 7 November 2026): this file's own copy of the page's SP_LEVELS, [id, label, the fewest
+   legs, the most, the least decimal price]; the job refuses a page whose levels are not these */
+const NIGHT_LEVELS = [['safe', 'Safe', 2, 2, 0], ['med', 'Medium', 2, 5, 4], ['aggr', 'Aggressive', 2, 5, 8]];
+const NIGHT_IDS = NIGHT_LEVELS.map(l => l[0]), TEAM_KINDS = ['ml', 'spread', 'total'];
+/* the pool keeps chances and prices whole, as the page's search ranked them (a level keeps its chance to 4 places and
+   its price to 3, which the guard never ranks on): two parlays within NIGHT_TIE, the page's own SP_TIE, are level, and
+   the tie goes by the rule's own order, as the page's spBetter takes it. A product worked in another order differs in
+   its last bits, far inside it */
+const NIGHT_TIE = 1e-12;
 const isMap = v => !!v && typeof v === 'object' && !Array.isArray(v);
 const canon = v => JSON.stringify(v, (k, x) => isMap(x) ? Object.keys(x).sort().reduce((o, y) => (o[y] = x[y], o), {}) : x);
 const callOf = e => { const { grade, ...c } = e || {}; return c; };
@@ -66,8 +103,29 @@ const NYD = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York', yea
 /* the Eastern date of an instant, through the time zone database */
 const etDateOf = ms => NYD.format(new Date(ms));
 const keyOf = e => `${e.season}|${e.date}|${e.tip}|${e.gid}`;
+const nightKeyOf = e => `${e.season}|${e.date}|${e.tip}|${e.nid}`;
+const nightIdOf = (season, date) => `${season}_${String(date).replace(/-/g, '')}_NIGHT`;
+/* a night entry taken before DraftKings had posted any line of the night: its pool holds no leg and none left out by a
+   rule. The job takes none such (the page builds its own set from the lock instead), and the guard refuses one */
+const nightNoLines = e => !!e && isMap(e.pool) && Array.isArray(e.pool.legs) && !e.pool.legs.length && !e.pool.band && !e.pool.far && !e.pool.noId;
+/* the entry that holds a night once locked: one of its season and night whose own lock (2 hours before the first tip-off
+   it was taken at) has passed by now, whatever the night's first tip-off is since. A night once locked stays locked: the
+   job takes no new set of it, and the guard refuses one taken after such an entry's lock */
+function nightHeld(M, season, nid, now) {
+  for (const k of Object.keys(M || {}).sort()) { const e = M[k]; if (isMap(e) && +e.season === +season && e.nid === nid && lockOf(e) <= now) return e; }
+  return null;
+}
 const featuredOf = e => !!e && e.type !== 'PRE' && Array.isArray(e.tv) && e.tv.some(n => typeof n === 'string' && n && !FEATURED_TV.except.includes(n));
-const HOW = 'The suggestions record, written by tools/suggest_ledger.js in the job and held by tools/suggest_check.js. featured: each '
+const HOW = 'The suggestions record, written by tools/suggest_ledger.js in the job and held by tools/suggest_check.js. night (since 7 '
+  + 'November 2026, the owner\'s call): each night\'s one set on the Suggested Parlays tab, across every game of the night (the first '
+  + 'Eastern date with a game to tip, never preseason), its team legs alone (moneyline, spread, total, at DraftKings\' prices in '
+  + 'lines.json and the builder\'s chance, 45% to 97%, none far off DraftKings, no value bar), one side and one total a game: Safe the '
+  + 'likeliest 2-leg parlay, Medium the likeliest of 2 to 5 legs paying $4 or more on $1, Aggressive the likeliest of 2 to 5 paying $8 '
+  + 'or more, by the builder\'s own sums; keyed season|date|first tip|<season>_<date>_NIGHT, its pool kept beside it (each leg\'s key, '
+  + 'price and chance, each game\'s two legs\' joint chance and price) so the check works every level out again, rewritten while '
+  + 'the night\'s lock (2 hours before its first tip-off) is to come and locked from it (held so though its first tip-off moves later; '
+  + 'no set is taken of a night DraftKings has posted no line for), graded leg by leg as its games finish. '
+  + 'night_summary: per level, as below, from the night map alone. featured (until 7 November 2026): each '
   + 'game on national TV\'s three parlays on the Suggested Parlays tab (Safe, Medium, Aggressive, 2 to 4 legs from that game alone, '
   + 'every bet type; a player\'s chance is the props model\'s, on trial; a set taken by the page that drew four, before ' + THREE_FROM
   + ' or by a run of it that landed after, holds a fourth, Extreme, 5 legs, kept and graded as it was), taken from the published '
@@ -106,12 +164,32 @@ function summarize(F) {
   const games = new Set(Object.values(F || {}).map(e => e.season + '|' + e.gid)).size;
   return { tiers: out, pending, games, entries: Object.keys(F || {}).length, graded_entries: graded, updates };
 }
-/* the file's own style: one entry a line (and the summary on one), so a run's diff is the entries it took or graded */
+/* the night map's summary, as the tab's pills count it: each season's night and level once, from the last key that
+   holds it (a first tip-off moved makes a new key), its levels still to settle in pending */
+function summarizeNight(N) {
+  const out = Object.fromEntries(NIGHT_LEVELS.map(([id, label]) => [id, { label, graded: 0, won: 0, lost: 0, push: 0, exp_fair: 0, fair_n: 0, exp_model: 0, units: 0 }]));
+  const last = new Map(); let graded = 0, pending = 0;
+  for (const key of Object.keys(N || {}).sort()) {
+    const e = N[key]; if (!e.grade) continue; graded++;
+    for (const t of e.tiers || []) { const g = e.grade[t && t.id]; if (!g || !out[t.id] || !Array.isArray(t.legs)) continue; last.set([e.season, e.nid, t.id].join('|'), { t, g }); }
+  }
+  for (const { t, g } of last.values()) {
+    const s = out[t.id];
+    if (g.result === 'pending') { pending++; continue; }
+    if (g.result === 'push') { s.push++; continue; }
+    s.graded++; if (g.result === 'won') s.won++; else s.lost++;
+    s.exp_model += t.p; if (t.fair != null) { s.exp_fair += t.fair; s.fair_n++; }
+    s.units += g.payout - 1;
+  }
+  for (const id of NIGHT_IDS) { const s = out[id]; s.exp_fair = r4(s.exp_fair); s.exp_model = r4(s.exp_model); s.units = r3(s.units); }
+  const nights = new Set(Object.values(N || {}).map(e => e.season + '|' + e.nid)).size;
+  return { tiers: out, pending, nights, entries: Object.keys(N || {}).length, graded_entries: graded };
+}
+/* the file's own style: one entry a line (and each summary on one), so a run's diff is the entries it took or graded */
 function dumps(L) {
-  const head = ['how', 'since', 'updated', 'featured_summary'].filter(k => k in L).map(k => ` ${JSON.stringify(k)}: ${JSON.stringify(L[k])}`);
-  const F = L.featured || {}, keys = Object.keys(F);
-  const body = keys.length ? '{\n' + keys.map(k => `  ${JSON.stringify(k)}: ${JSON.stringify(F[k])}`).join(',\n') + '\n }' : '{}';
-  return '{\n' + [...head, ` "featured": ${body}`].join(',\n') + '\n}';
+  const head = ['how', 'since', 'updated', 'featured_summary', 'night_summary'].filter(k => k in L).map(k => ` ${JSON.stringify(k)}: ${JSON.stringify(L[k])}`);
+  const map = M => { const keys = Object.keys(M || {}); return keys.length ? '{\n' + keys.map(k => `  ${JSON.stringify(k)}: ${JSON.stringify(M[k])}`).join(',\n') + '\n }' : '{}'; };
+  return '{\n' + [...head, ` "featured": ${map(L.featured)}`, ...('night' in L ? [` "night": ${map(L.night)}`] : [])].join(',\n') + '\n}';
 }
 
 /* ---- the guard: every failure as a sentence ---- */
@@ -122,7 +200,7 @@ function gradeBad(key, e) {
     if (!tier || !tier.legs) { bad.push(`${key} ${id}: a grade for a level with no parlay`); continue; }
     const s = (g && g.legs) || [];
     const ok = s.length === tier.legs.length && s.every(x => x == null || ['win', 'loss', 'push', 'void'].includes(x));
-    const want = !ok ? null : s.some(x => x == null) ? 'pending' : s.includes('loss') ? 'lost' : s.every(x => x !== 'win') ? 'push' : 'won';
+    const want = !ok ? null : s.includes('loss') ? 'lost' : s.some(x => x == null) ? 'pending' : s.every(x => x !== 'win') ? 'push' : 'won';
     if (!ok || !g || g.result !== want) { bad.push(`${key} ${id}: graded ${g && g.result} on legs ${JSON.stringify(s)}`); continue; }
     if (want === 'lost' && g.payout !== 0) bad.push(`${key} ${id}: a loss paying ${g.payout}`);
     if (want === 'push' && g.payout !== 1) bad.push(`${key} ${id}: a push paying ${g.payout}`);
@@ -190,6 +268,125 @@ function entryBad(key, e, now, pe) {
   bad.push(...gradeBad(key, e));
   return bad;
 }
+/* ---- THE NIGHT: an entry on its own, and its levels worked out again on its pool ---- */
+const legKey = l => [l.id, l.kind, l.side, l.line == null ? '' : l.line].join('|');
+const decOf = a => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
+/* the pool as kept: its legs, game by game, each game's options (a leg alone, or its side and total together, at the
+   pool's own joint chance and price), or null where it is not the pool's shape */
+function nightPool(e) {
+  const P = e && e.pool; if (!isMap(P) || !Array.isArray(P.legs) || !Array.isArray(P.pairs)) return null;
+  const legs = [];
+  for (const x of P.legs) {
+    if (!Array.isArray(x) || x.length !== 3 || typeof x[0] !== 'string' || !isFinite(x[1]) || x[1] === 0 || !(x[2] > 0 && x[2] < 1)) return null;
+    const [gid, kind, side, line] = x[0].split('|');
+    if (!TEAM_KINDS.includes(kind)) return null;
+    legs.push({ sk: x[0], gid, kind, side, line, odds: x[1], p: x[2], d: decOf(x[1]) });
+  }
+  if (new Set(legs.map(l => l.sk)).size !== legs.length) return null;
+  const games = new Map();
+  for (const l of legs) { if (!games.has(l.gid)) games.set(l.gid, []); games.get(l.gid).push({ legs: [l], p: l.p, d: l.d }); }
+  for (const x of P.pairs) {
+    if (!Array.isArray(x) || x.length !== 4) return null;
+    const a = legs[x[0]], b = legs[x[1]];
+    if (!a || !b || a.gid !== b.gid || (a.kind === 'total') === (b.kind === 'total') || !(x[2] > 0 && x[2] <= Math.min(a.p, b.p) + 1e-6) || !(x[3] > 1 && x[3] <= a.d * b.d + 1e-6)) return null;
+    games.get(a.gid).push({ legs: [a, b], p: x[2], d: x[3] });
+  }
+  return { legs, games: [...games.values()] };
+}
+/* every parlay of the pool the level's rule takes, the best by the rule: likelier, then dearer, then fewer legs, then the
+   legs' ids; each game gives nothing or one of its options. Walked game by game, a branch let go once its chance is
+   under the best's (a parlay's chance is the product of its games' own, each at most 1) */
+/* c ranks above b by a level's rule: likelier, then dearer, then fewer legs, then the legs' ids */
+const nightBetter = (c, b) => !b || c.p > b.p + NIGHT_TIE || (Math.abs(c.p - b.p) <= NIGHT_TIE && (c.d > b.d + NIGHT_TIE || (Math.abs(c.d - b.d) <= NIGHT_TIE && (c.n < b.n || (c.n === b.n && c.ids < b.ids)))));
+function nightBest(pool, [, , lo, hi, F]) {
+  let best = null; const chosen = [], better = nightBetter;
+  (function walk(i, p, d, n) {
+    if (best && p < best.p - NIGHT_TIE) return;
+    if (n >= lo && d >= F - 1e-9) { const ids = chosen.flatMap(o => o.legs.map(l => l.sk)).sort().join(','), c = { p, d, n, ids };
+      if (better(c, best)) best = c; }
+    if (i === pool.games.length || n === hi) return;
+    walk(i + 1, p, d, n);
+    for (const o of pool.games[i]) if (n + o.legs.length <= hi) { chosen.push(o); walk(i + 1, p * o.p, d * o.d, n + o.legs.length); chosen.pop(); }
+  })(0, 1, 1, 0);
+  return best;
+}
+function nightEntryBad(key, e, now) {
+  const bad = [], t = s => Date.parse(s);
+  if (!isMap(e) || !e.nid || !e.tip || !e.last || !e.lock || !e.taken_at || !e.date || !Array.isArray(e.games) || !e.games.length || !Array.isArray(e.tiers) || !isMap(e.pool)) return [`${key}: no night, games, tip-off, lock, date, levels, pool or time taken`];
+  if (key !== nightKeyOf(e)) bad.push(`${key}: not keyed on its own season, date, first tip-off and night (${nightKeyOf(e)})`);
+  if (e.nid !== nightIdOf(e.season, e.date)) bad.push(`${key}: its night id ${e.nid} is not of its season and date`);
+  const ids = new Set();
+  for (const g of e.games) {
+    const [gs, gd, ga, gh] = String(g && g.gid).split('_');
+    if (!isMap(g) || +gs !== +e.season || gd !== String(e.date).replace(/-/g, '') || ga !== g.away || gh !== g.home) { bad.push(`${key}: a game ${g && g.gid} not of its season, date and clubs`); continue; }
+    if (g.type === 'PRE') bad.push(`${key}: ${g.gid} is a preseason game`);
+    if (!isFinite(t(g.tip)) || etDateOf(t(g.tip)) !== e.date) bad.push(`${key}: ${g.gid} tips off ${g.tip}, not on ${e.date} in New York`);
+    ids.add(g.gid);
+  }
+  const tips = e.games.map(g => t(g && g.tip)).filter(isFinite);
+  if (tips.length && (t(e.tip) !== Math.min(...tips) || !e.games.some(g => g.tip === e.tip))) bad.push(`${key}: its tip-off ${e.tip} is not its games' first`);
+  if (tips.length && (t(e.last) !== Math.max(...tips) || !e.games.some(g => g.tip === e.last))) bad.push(`${key}: its last tip-off ${e.last} is not its games' last`);
+  if (!isFinite(t(e.tip))) bad.push(`${key}: its tip-off ${e.tip} is not a time`);
+  else {
+    if (etDateOf(t(e.tip)) !== e.date) bad.push(`${key}: tips off ${e.tip}, which is ${etDateOf(t(e.tip))} in New York, not ${e.date}`);
+    if (e.lock !== minIso(t(e.tip) - LOCK_MS)) bad.push(`${key}: locks at ${e.lock}, not 2 hours before its first tip-off`);
+    if (!(t(e.taken_at) < t(e.tip) - LOCK_MS)) bad.push(`${key}: taken at ${e.taken_at}, at or after its lock`);
+  }
+  if (e.tiers.map(x => x && x.id).join() !== NIGHT_IDS.join()) bad.push(`${key}: its levels are not the three (Safe, Medium, Aggressive)`);
+  const pool = nightPool(e);
+  if (!pool) bad.push(`${key}: its pool is not a pool of team legs, with each game's side and total together`);
+  else if (pool.legs.some(l => !ids.has(l.gid))) bad.push(`${key}: its pool holds a leg of no game of the night`);
+  else if (nightNoLines(e)) bad.push(`${key}: taken with no DraftKings line posted for any game of the night (no set is taken until one is)`);
+  e.tiers.forEach((x, i) => {
+    const lv = NIGHT_LEVELS[i]; if (!isMap(x) || !lv || x.id !== lv[0]) return;
+    const [id, label, lo, hi, F] = lv;
+    if (x.label !== label || x.min !== lo || x.max !== hi || x.price !== F) bad.push(`${key} ${id}: not the level's own label, range and floor (${label}, ${lo} to ${hi} legs, ${F || 'no floor'})`);
+    if (!Array.isArray(x.legs)) {
+      if (typeof x.why !== 'string' || !x.why) bad.push(`${key} ${id}: neither legs nor why`);
+      else if (pool) { const b = nightBest(pool, lv); if (b) bad.push(`${key} ${id}: empty, and the pool makes a parlay its rule takes (${b.ids}, ${(b.p * 100).toFixed(2)}%, ${b.d.toFixed(3)})`); }
+      return;
+    }
+    const L = x.legs;
+    if (L.length < lo || L.length > hi) bad.push(`${key} ${id}: ${L.length} legs, outside its ${lo} to ${hi}`);
+    if (L.some(l => !isMap(l) || !ids.has(l.id))) { bad.push(`${key} ${id}: a leg on no game of the night`); return; }
+    if (L.some(l => !TEAM_KINDS.includes(l.kind))) { bad.push(`${key} ${id}: a player's leg (the night set takes team legs alone)`); return; }
+    const ks = L.map(legKey);
+    if (new Set(ks).size < ks.length) bad.push(`${key} ${id}: a leg twice`);
+    const per = new Map(); for (const l of L) { const g = per.get(l.id) || { side: 0, total: 0 }; g[l.kind === 'total' ? 'total' : 'side']++; per.set(l.id, g); }
+    if ([...per.values()].some(g => g.side > 1 || g.total > 1)) bad.push(`${key} ${id}: two side bets or two totals of one game`);
+    if (!(x.dec >= F - 1e-9)) bad.push(`${key} ${id}: pays ${x.dec} on $1, under its floor ${F}`);
+    if (!pool) return;
+    /* the level's own chance and price as the pool has them: each game's legs alone or together */
+    const byG = new Map(); for (const l of L) { if (!byG.has(l.id)) byG.set(l.id, []); byG.get(l.id).push(legKey(l)); }
+    let pc = 1, dc = 1, inPool = true;
+    for (const [gid, sk] of byG) {
+      const opt = (pool.games.find(gg => gg[0].legs[0].gid === gid) || []).find(o => o.legs.length === sk.length && o.legs.every(l => sk.includes(l.sk)));
+      if (!opt) { inPool = false; break; }
+      pc *= opt.p; dc *= opt.d;
+    }
+    const at = new Map(pool.legs.map(l => [l.sk, l]));
+    if (!inPool || L.some(l => { const q = at.get(legKey(l)); return !q || q.odds !== l.odds || Math.abs(q.p - l.p) > 5e-5; })) { bad.push(`${key} ${id}: a leg, or a game's two legs, not in its pool at its own price and chance`); return; }
+    if (Math.abs(pc - x.p) > 1e-4 || Math.abs(dc - x.dec) > 1e-3) bad.push(`${key} ${id}: its chance ${x.p} and price ${x.dec} are not its legs' as its pool has them (${pc.toFixed(5)}, ${dc.toFixed(4)})`);
+    if (!(dc >= F - 1e-6)) bad.push(`${key} ${id}: its legs pay ${dc.toFixed(4)} on $1 by its pool, under its floor ${F}`);
+    const b = nightBest(pool, lv), mine = ks.slice().sort().join(',');
+    if (b && b.ids !== mine && nightBetter(b, { p: pc, d: dc, n: L.length, ids: mine }))
+      bad.push(`${key} ${id}: not the likeliest its rule takes: ${b.ids} (${(b.p * 100).toFixed(3)}%, ${b.d.toFixed(3)}) over its ${mine} (${(pc * 100).toFixed(3)}%, ${dc.toFixed(3)})`);
+  });
+  if (e.grade && !(t(e.tip) <= now)) bad.push(`${key}: graded before its first tip-off`);
+  bad.push(...gradeBad(key, e));
+  return bad;
+}
+/* the night entries prev had locked (their lock passed by now) that L has lost or changed in anything but a grade */
+function nightMoved(L, prev, now) {
+  const bad = [], N = (L && L.night) || {};
+  for (const [key, pe] of Object.entries((prev && prev.night) || {})) {
+    if (!isMap(pe) || !(lockOf(pe) <= now)) continue;
+    const e = N[key], at = minIso(lockOf(pe));
+    if (!e) { bad.push(`${key}: a night set locked at ${at} is gone`); continue; }
+    if (canon(callOf(e)) !== canon(callOf(pe))) bad.push(`${key}: a night set locked at ${at}, and changed (${diffKeys(callOf(e), callOf(pe)).join(', ')})`);
+  }
+  return bad;
+}
 const diffKeys = (a, b) => [...new Set([...Object.keys(a || {}), ...Object.keys(b || {})])].filter(k => canon((a || {})[k]) !== canon((b || {})[k]));
 const lockOf = e => Date.parse(e && e.tip) - LOCK_MS;
 /* the entries prev had locked (their lock passed by now) that L has lost or changed beyond a grade and the levels a
@@ -238,6 +435,31 @@ function check(L, prev, now, runAt, season) {
     }
   }
   if (canon(L.featured_summary) !== canon(summarize(F))) bad.push('the summary does not follow from the entries');
+  /* the night map: absent only from a file written before 7 November 2026, so required wherever the file it is held to
+     has one (a ledger that drops it, and its summary, must never pass every night rule by having none) */
+  const prevNight = !!(prev && isMap(prev.night));
+  if ('night' in L || 'night_summary' in L || prevNight) {
+    const N = isMap(L.night) ? L.night : null;
+    if (!N) return [...bad, !('night' in L) ? 'the ledger\'s night map is gone, where the file it is held to has one' : 'the ledger\'s night map is not a map'];
+    for (const [key, e] of Object.entries(N)) bad.push(...nightEntryBad(key, e, now));
+    /* a night once locked stays locked: no second set of a night taken at or after another set of it locked (a first
+       tip-off ESPN moved later after the lock makes a new key, which the job never takes) */
+    const byNight = new Map();
+    for (const [key, e] of Object.entries(N)) if (isMap(e) && e.nid) { const k = `${e.season}|${e.nid}`; if (!byNight.has(k)) byNight.set(k, []); byNight.get(k).push([key, e]); }
+    for (const list of byNight.values()) for (const [ka, a] of list) for (const [kb, b] of list)
+      if (ka !== kb && isFinite(lockOf(a)) && Date.parse(b.taken_at) >= lockOf(a)) bad.push(`${kb}: a second set of ${b.nid}, taken at ${b.taken_at}, at or after its night locked at ${minIso(lockOf(a))} (${ka})`);
+    const PN = prev && isMap(prev.night) ? prev.night : null;
+    if (prev) {
+      bad.push(...nightMoved(L, prev, now));
+      for (const [key, e] of Object.entries(N)) {
+        const pe = PN ? PN[key] : null;
+        if (pe && lockOf(pe) <= now) { if (season != null && +e.season !== +season && canon(e.grade) !== canon(pe.grade)) bad.push(`${key}: a night of the ${e.season} season graded anew in ${season}`); continue; }
+        if (pe && canon(callOf(e)) === canon(callOf(pe))) continue;
+        if (runAt != null && (e.taken_at !== runAt || !(now < lockOf(e)))) bad.push(`${key}: new or changed, and not taken by this run before its lock`);
+      }
+    }
+    if (canon(L.night_summary) !== canon(summarizeNight(N))) bad.push('the night summary does not follow from the night entries');
+  }
   return bad;
 }
 
@@ -258,9 +480,10 @@ function main() {
   try { season = JSON.parse(fs.readFileSync(process.env.SUGGEST_STATE || path.join(ROOT, 'state.json'), 'utf8')).season; } catch (e) { season = null; }
   const bad = check(L, prev, now, null, season);
   if (bad.length) { for (const b of bad.slice(0, 60)) console.log('FAIL ' + b); console.log(`suggest check: ${bad.length} failure${bad.length === 1 ? '' : 's'}`); return 1; }
-  const s = L.featured_summary || summarize(L.featured);
-  console.log(`suggest check: 0 failures (${s.entries} set${s.entries === 1 ? '' : 's'}, ${s.graded_entries} graded, ${s.updates} replacement${s.updates === 1 ? '' : 's'}${prev ? ', every locked set as the last commit had it' : ', no last commit to hold it to'})`);
+  const s = L.featured_summary || summarize(L.featured), q = L.night_summary || summarizeNight(L.night || {});
+  console.log(`suggest check: 0 failures (${q.entries} night set${q.entries === 1 ? '' : 's'}, ${q.graded_entries} graded; ${s.entries} featured set${s.entries === 1 ? '' : 's'} from before, ${s.graded_entries} graded, ${s.updates} replacement${s.updates === 1 ? '' : 's'}${prev ? '; every locked set as the last commit had it' : '; no last commit to hold it to'})`);
   return 0;
 }
-module.exports = { check, entryBad, lockedMoved, gradeBad, summarize, dumps, canon, callOf, keyOf, featuredOf, etDateOf, minIso, TIERS, OLD_TIERS, THREE_FROM, LABELS, LEGS, LOCK_MS, FEATURED_TV, HOW, LEDGER_REL };
+module.exports = { check, entryBad, lockedMoved, gradeBad, summarize, summarizeNight, dumps, canon, callOf, keyOf, nightKeyOf, nightIdOf, nightEntryBad, nightMoved, nightPool, nightBest, nightBetter, nightNoLines, nightHeld, featuredOf, etDateOf, minIso,
+  TIERS, OLD_TIERS, THREE_FROM, LABELS, LEGS, LOCK_MS, FEATURED_TV, NIGHT_LEVELS, NIGHT_IDS, NIGHT_TIE, HOW, LEDGER_REL };
 if (require.main === module) process.exit(main());

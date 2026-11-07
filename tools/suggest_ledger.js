@@ -1,38 +1,44 @@
-/* The suggestions record: what Suggested Parlays said of each game on national TV before it locked, frozen there, and
- * what happened to it (README "Suggested Parlays"). The NFL hub's props/build/suggest_ledger.js, on this hub's page.
+/* The suggestions record: what Suggested Parlays said of each night before it locked, frozen there, and what happened
+ * to it (README "Suggested Parlays"). The NFL hub's props/build/suggest_ledger.js, on this hub's page.
  *
  *   now=$(date -u +%Y-%m-%dT%H:%M:%SZ) && SUGGEST_NOW=$now node tools/suggest_ledger.js && SUGGEST_NOW=$now node tools/suggest_check.js
  *                                                                     (the job, after the tests: one clock for the two)
  *
- * featured: each featured game's own three levels on the Suggested Parlays tab, Safe, Medium and Aggressive, 2 to 4 legs
- * from that game alone: a game on any national network ESPN's scoreboard lists (the slate's tv), never a preseason game,
- * on the lines feed's two dates (the dates the job reads DraftKings' lines for: a game further out has no line yet, and
- * would be three empty levels). Until the owner took it off on 5 November 2026 a set held a fourth, Extreme (5 legs): the
- * sets taken before (tools/suggest_check.js THREE_FROM) keep it, its legs and grades, graded as before, and the summary
- * keeps its record under its own key. Taken from the published page itself: index.html booted in jsdom on the
- * state.json just published and lines.json just read, the window's clock held at the run's time, read by the page's own
- * spTakes, spSet and spTierOut, so the record holds exactly the sets the tab shows (every featured game's, from its first
- * run, though the tab sets out one night at a time). Keyed season|date|tip|game id. A set LOCKS 2 hours before its
+ * night (since the owner's call of 7 November 2026): each night's one set, across every game of the night (an Eastern
+ * date's games but preseason), its three levels Safe (the likeliest 2-leg parlay), Medium (the likeliest of 2 to 5 legs
+ * paying $4 or more on $1) and Aggressive (the likeliest of 2 to 5 paying $8 or more), on the night's team legs at
+ * DraftKings' prices, by the builder's own sums, on the lines feed's two dates (the dates the job reads DraftKings' lines
+ * for, so a night's set is taken the night before too: the job's runs land hours late). Taken from the published page
+ * itself: index.html booted in jsdom on the state.json just published and lines.json just read, the window's clock held
+ * at the run's time, read by the page's own spTakes and spEntry, so the record holds exactly the set the tab shows.
+ * Keyed season|date|first tip|<season>_<date>_NIGHT, its pool beside it (each leg's key, price and chance, each game's
+ * side and total together), so the guard works each level out again. A set LOCKS 2 hours before the night's first
  * tip-off (the page's spLockAt): while the lock is to come a run rewrites the entry whenever the set has changed (lines
- * read, a player listed); from the first run at or after the lock it stands as the last run before the lock left it.
- * GitHub starts this repo's runs 3 to 9 hours late, so that is the last publish before the lock, whenever it was; a game
- * no run reached before its lock has no entry (the page then builds its own set once, says it is not the site's, and
- * keeps it in the visitor's browser), and an entry not yet locked whose game is no longer a featured game to come (off
- * national TV, a tip-off moved, postponed) is dropped. One change is allowed after the lock, on any run before tip-off
- * (the NFL owner's call, "Replace that level only"): a level holding a player the page's own rule now keeps out of every
- * set (spOutWhy: the game's out lists, or any listing on today's injury report) is built again from the data at hand by
- * the page's spRebuild, that level alone, and carries `updated` {pid, name, reason, at}, the same written into the entry's
- * `updates` beside the level's id. From tip-off nothing changes but the grade.
+ * read), keeping it otherwise; from the first run at or after the lock it stands as the last run before the lock left
+ * it, and nothing changes but its grade (it holds team legs alone, which no report moves). GitHub starts this repo's
+ * runs 3 to 9 hours late, so that is the last publish before the lock, whenever it was; a night no run reached before
+ * its lock has no entry (the page then builds its own set once, says it is not the site's, and keeps it in the visitor's
+ * browser), and an entry not yet locked whose night is no longer to come as it was (its first tip-off moved before the
+ * lock) is dropped. A night once locked stays locked: an entry whose own lock has passed holds its night though ESPN
+ * moves the first tip-off later (no new set is taken on later lines), and one whose night has locked at a first tip-off
+ * moved earlier stays as it was. No set is taken of a night DraftKings has posted no line for (the lines feed's second
+ * date, read a day ahead, mostly): one an earlier run took stays, and with none the page builds its own from the lock.
  *
- * Grading. From tip-off, each level of this season's entries is graded by the page's own settlement (NBA_GRADE.legResult,
- * the one X Parlays grades by: a game's legs on its final score, a push on the line; a player's on his box line, read
- * from state.json's week of box scores or data/box_<season>.csv, a push on a whole line, void when he has no line, as a
- * book voids a player who did not play): a leg lost loses the parlay; a push or a void drops out as a book drops it, the
- * rest paid at the builder's own price on the legs left (parlayDec: the whole price when none dropped, a same-game
- * remainder priced together); every leg a push or void is a push, the stake back; pending while a game or its box is
- * out. A grade once complete is never undone by a state that can no longer settle it, and another season's entries keep
- * the grades they have. featured_summary per level, each season's game and level once, from the last key that holds it,
- * as the tab's record pills count it (the pills draw the three).
+ * featured (until 7 November 2026): each game on national TV's own three levels, taken by the rule before. No set is
+ * taken there any more; one still to lock is dropped, as the job drops a set no longer offered, and the rest stand as
+ * they were taken (sets taken before 5 November 2026 with Extreme, a fourth level), graded as before, the summary
+ * keeping their record.
+ *
+ * Grading. From its first tip-off, each level of this season's entries is graded by the page's own settlement
+ * (NBA_GRADE.legResult, the one X Parlays grades by: a game's legs on its final score, a push on the line; a player's on
+ * his box line, read from state.json's week of box scores or data/box_<season>.csv, a push on a whole line, void when he
+ * has no line, as a book voids a player who did not play): a leg lost loses the parlay; a push or a void drops out as a
+ * book drops it, the rest paid at the builder's own price on the legs left (parlayDec: the whole price when none dropped,
+ * a same-game remainder priced together); every leg a push or void is a push, the stake back; pending while a game or its
+ * box is out, unless a leg has already lost (a night's legs finish game by game: a book settles the parlay lost at once). A grade once complete is never undone by a state that can no longer settle it, and another season's entries
+ * keep the grades they have. night_summary and featured_summary per level, each season's night (or game) and level once,
+ * from the last key that holds it, as the tab's record pills count them (the pills draw the night's, each titled with the
+ * featured record).
  *
  * The guard (tools/suggest_check.js check, on its own rules): the new ledger against the file the run started from, then,
  * where that differs from it, against the last commit's (git show HEAD); a ledger that fails is not written, the file is
@@ -57,7 +63,7 @@ const SROOT = process.env.SUGGEST_ROOT ? path.resolve(process.env.SUGGEST_ROOT) 
 const LEDGER = process.env.SUGGEST_LEDGER || path.join(ROOT, SC.LEDGER_REL);
 const PAGE_URL = 'https://demon-x13.github.io/nba-hub/';
 const SINCE = '2026-10-25';
-const { TIERS, LABELS, LOCK_MS, canon, callOf } = SC;
+const { NIGHT_LEVELS, NIGHT_IDS, LOCK_MS, canon, callOf } = SC;
 const isMap = v => !!v && typeof v === 'object' && !Array.isArray(v);
 const r3 = v => v == null || !isFinite(v) ? null : Math.round(v * 1e3) / 1e3;
 const iso = ms => new Date(ms).toISOString().replace(/\.\d{3}Z$/, 'Z');
@@ -114,53 +120,43 @@ async function ready(w, errs, state) {
   const why = [];
   if (!w.eval("typeof S !== 'undefined' && !!S && !!S.slate")) return ['the page did not load state.json'];
   if (w.eval('S.generated') !== state.generated) why.push('the page did not load this checkout\'s state.json');
-  const missing = ['spTakes', 'spSet', 'spTierOut', 'spLockAt', 'spOutWhy', 'spRebuild', 'pbLinesLoad', 'parlayDec', 'pbSlipOf'].filter(f => w.eval(`typeof ${f}`) !== 'function');
-  if (missing.length) return [...why, 'the page has no Suggested Parlays sets to take (no ' + missing.join(', ') + ')'];
+  const missing = ['spTakes', 'spEntry', 'spLockAt', 'pbLinesLoad', 'parlayDec', 'pbSlipOf'].filter(f => w.eval(`typeof ${f}`) !== 'function');
+  if (missing.length) return [...why, 'the page has no Suggested Parlays nights to take (no ' + missing.join(', ') + ')'];
   if (!w.NBA_GRADE || typeof w.NBA_GRADE.legResult !== 'function') why.push('the page has no settlement to grade by (NBA_GRADE)');
-  if (w.eval("typeof SP_TIERS !== 'undefined' ? SP_TIERS : []").map(t => t[0] + ':' + t[1] + ':' + t[2]).join() !== TIERS.map(id => `${id}:${LABELS[id]}:${SC.LEGS[id]}`).join()) why.push("the page's levels are not the three this record keeps");
-  if (w.eval('SP_LOCK_MS') !== LOCK_MS) why.push('the page locks a set at another time than 2 hours before tip-off');
+  if (JSON.stringify(w.eval("typeof SP_LEVELS !== 'undefined' ? SP_LEVELS : []")) !== JSON.stringify(NIGHT_LEVELS)) why.push("the page's levels are not the three this record keeps (Safe a pair, Medium 2 to 5 legs paying $4+, Aggressive 2 to 5 paying $8+)");
+  if (w.eval('SP_LOCK_MS') !== LOCK_MS) why.push('the page locks a set at another time than 2 hours before its first tip-off');
   try { await w.eval('pbLinesLoad()'); } catch (e) { why.push('lines.json threw: ' + e.message); }
   if (!w.eval('LINES')) why.push('lines.json did not load, so the page would build every set with no DraftKings line');
   if (errs.length) why.push('the page threw: ' + errs.slice(0, 3).join('; '));
   return why;
 }
 
-/* ---- the featured sets the tab shows now, each game whose lock is still to come ---- */
-function takeFeatured(w, now) {
-  const games = w.eval('spTakes()'), lockAt = w.eval('spLockAt'), set = w.eval('spSet'), out = w.eval('spTierOut'), S = w.eval('S'), takes = [];
-  let locked = 0;
-  for (const g of games) {
-    const tip = Date.parse(g.tip), lock = lockAt(g);
-    if (!(tip > now)) throw new Error(`${g.id}, a game still to come, tips off at or before the clock`);
-    if (lock !== tip - LOCK_MS) throw new Error(`the page locks ${g.id} at another time than 2 hours before its tip-off`);
-    /* from the lock its entry stands as the last run before it left it, or there is none */
-    if (!(now < lock)) { locked++; continue; }
-    const s = set(g.id); if (!s) throw new Error(`the page has no set for ${g.id}`);
-    const entry = { season: S.season, date: g.date, gid: g.id, away: g.away, home: g.home, type: g.type, tip: g.tip, lock: SC.minIso(lock), tv: [...g.tv], generated: S.generated,
-      pool: { pref: s.pref, thin: s.thin, mkt: s.mkt, far: s.far, held: s.held }, tiers: s.tiers.map(t => JSON.parse(JSON.stringify(out(t)))) };
-    takes.push({ key: SC.keyOf(entry), entry });
+/* ---- the night sets the tab shows, each night of the lines feed's dates whose lock is still to come ----
+   have: the night map as the run found it. keep: the nights whose entries the drop below must leave as they are (one
+   locked, or held, or with no line posted this run) */
+function takeNights(w, now, have) {
+  const nights = w.eval('spTakes()'), lockAt = w.eval('spLockAt'), entry = w.eval('spEntry'), season = w.eval('S.season'), takes = [], keep = new Set();
+  let locked = 0; const held = [], empty = [];
+  for (const N of nights) {
+    const tip = Date.parse(N.tip), lock = lockAt(N);
+    if (lock !== tip - LOCK_MS) throw new Error(`the page locks ${N.id} at another time than 2 hours before its first tip-off`);
+    /* from the lock its entry stands as the last run before it left it, or there is none (an entry kept at a first
+       tip-off ESPN has moved earlier since, its own lock still to come, is the night's, and stays) */
+    if (!(now < lock)) { locked++; keep.add(N.id); continue; }
+    /* a night once locked stays locked: an entry of it whose own lock has passed, at a first tip-off ESPN has moved later
+       since, is the night's set, and no new one is taken on later lines (SC.nightHeld) */
+    const was = SC.nightHeld(have, season, N.id, now);
+    if (was) { held.push(`${N.id} (locked at ${SC.minIso(Date.parse(was.tip) - LOCK_MS)})`); keep.add(N.id); continue; }
+    if (!(tip > now)) throw new Error(`${N.id}, a night still to lock, tips off at or before the clock`);
+    const e = entry(N.id); if (!e) throw new Error(`the page has no set for ${N.id}`);
+    const x = JSON.parse(JSON.stringify(e));
+    if (x.tiers.map(t => t.id).join() !== NIGHT_IDS.join()) throw new Error(`the page's set for ${N.id} is not its three levels`);
+    /* no line posted yet for any game of the night (the lines feed's second date, a day ahead): no set is taken, and one
+       an earlier run took stays as it was; until a run reads the lines the page builds its own from the lock */
+    if (SC.nightNoLines(x)) { empty.push(N.id); keep.add(N.id); continue; }
+    takes.push({ key: SC.nightKeyOf(x), entry: x });
   }
-  return { games: games.length, locked, takes };
-}
-
-/* ---- a locked set, from its lock to tip-off: a level holding a player since listed built again, that level alone ---- */
-function replaceRuledOut(w, F, now, runAt, said) {
-  const S = w.eval('S'), why = w.eval('spOutWhy'), rebuild = w.eval('spRebuild'), out = w.eval('spTierOut');
-  for (const [key, e] of Object.entries(F)) {
-    const tip = Date.parse(e.tip);
-    if (!(tip - LOCK_MS <= now && now < tip) || +e.season !== +S.season || !Array.isArray(e.tiers)) continue;
-    /* the game as the slate has it now: one moved since the lock is another key's, and left alone */
-    const g = S.slate.find(x => x.id === e.gid); if (!g || g.tip !== e.tip || g.status !== 'scheduled') continue;
-    e.tiers.forEach((t, i) => {
-      if (!t || !Array.isArray(t.legs)) return;
-      const l = t.legs.find(x => x.kind === 'prop' && why(x.pid, e.gid)); if (!l) return;
-      const nt = rebuild(e.gid, t.id); if (!nt) return;
-      const upd = { pid: l.pid, name: l.name, reason: why(l.pid, e.gid), at: runAt };
-      e.tiers[i] = { ...JSON.parse(JSON.stringify(out(nt))), updated: upd };
-      e.updates = [...(Array.isArray(e.updates) ? e.updates : []), { tier: t.id, ...upd }];
-      said.push(`replaced ${key} ${t.id}: ${l.name} ${upd.reason}`);
-    });
-  }
+  return { nights: nights.length, locked, held, empty, takes, keep };
 }
 
 /* ---- a level's grade, by the page's own settlement ---- */
@@ -168,8 +164,10 @@ const RES = { won: 'win', lost: 'loss', push: 'push', void: 'void' };
 function gradeTier(w, t) {
   const result = w.NBA_GRADE.legResult, parlayDec = w.eval('parlayDec');
   const legs = t.legs.map(l => RES[result(JSON.parse(JSON.stringify(l)))] || null);
-  if (legs.some(x => x == null)) return { result: 'pending', legs };
+  /* a leg lost loses the parlay at once, as a book settles it, though another leg's game is still to finish (a night's
+     legs finish game by game) */
   if (legs.includes('loss')) return { result: 'lost', legs, payout: 0 };
+  if (legs.some(x => x == null)) return { result: 'pending', legs };
   const left = t.legs.filter((l, i) => legs[i] === 'win');
   if (!left.length) return { result: 'push', legs, payout: 1 };
   const payout = left.length === t.legs.length ? t.dec : r3(parlayDec(left.map(l => ({ leg: JSON.parse(JSON.stringify(l)), ml: l.odds }))));
@@ -184,6 +182,7 @@ async function boxesFor(w, F, now, season) {
   for (const s of need) await w.eval('boxCsvRead')(s);
 }
 function gradeAll(w, F, now, season) {
+  /* F: either map, the featured sets graded from their tip-off and the night's from its first */
   for (const e of Object.values(F)) {
     if (!(Date.parse(e.tip) <= now) || +e.season !== +season) continue;
     const g = {};
@@ -210,28 +209,35 @@ async function main() {
 
   const base = start || { how: SC.HOW, since: SINCE, updated: null, featured_summary: null, featured: {} };
   const next = JSON.parse(JSON.stringify(base));
-  next.how = SC.HOW; next.since = base.since || SINCE; next.featured = isMap(next.featured) ? next.featured : {};
-  const F = next.featured, said = [];
-  /* the featured sets: each game's rewritten while its lock is to come, when the set has changed */
-  const take = takeFeatured(w, now), keys = new Set(take.takes.map(x => x.key));
+  next.how = SC.HOW; next.since = base.since || SINCE; next.featured = isMap(next.featured) ? next.featured : {}; next.night = isMap(next.night) ? next.night : {};
+  const F = next.featured, N = next.night, said = [];
+  /* the per-game sets of the rule before 7 November 2026: none is taken any more, so one still to lock is no longer
+     offered and is dropped, as the job always dropped such a set */
   for (const [key, e] of Object.entries(F))
-    if (now < Date.parse(e.tip) - LOCK_MS && !keys.has(key)) { delete F[key]; said.push(`dropped ${key}, no longer a featured game to come`); }
+    if (now < Date.parse(e.tip) - LOCK_MS) { delete F[key]; said.push(`dropped ${key}, a per-game set no longer offered`); }
+  /* the night sets: each night's rewritten while its lock is to come, when the set has changed */
+  const take = takeNights(w, now, N), keys = new Set(take.takes.map(x => x.key));
+  for (const [key, e] of Object.entries(N))
+    if (now < Date.parse(e.tip) - LOCK_MS && !keys.has(key) && !take.keep.has(e.nid)) { delete N[key]; said.push(`dropped ${key}, no longer a night to come as it was`); }
   for (const { key, entry } of take.takes) {
-    const old = F[key], { generated, ...fresh } = entry;
+    const old = N[key], { generated, ...fresh } = entry;
     const same = old && (() => { const { taken_at, generated: g0, ...o } = callOf(old); return canon(o) === canon(fresh); })();
-    if (!same) { F[key] = { ...entry, taken_at: runAt }; said.push(`${old ? 'rewrote' : 'took'} ${key}`); }
+    if (!same) { N[key] = { ...entry, taken_at: runAt }; said.push(`${old ? 'rewrote' : 'took'} ${key}`); }
     else said.push(`${key} unchanged`);
   }
-  if (!take.games) said.push('no featured game on the lines feed\'s dates');
-  else if (take.locked) said.push(`${take.locked} featured set${take.locked === 1 ? '' : 's'} locked`);
-  replaceRuledOut(w, F, now, runAt, said);
-  await boxesFor(w, F, now, season);
-  gradeAll(w, F, now, season);
+  if (!take.nights) said.push('no night on the lines feed\'s dates');
+  else if (take.locked) said.push(`${take.locked} night set${take.locked === 1 ? '' : 's'} locked`);
+  for (const h of take.held) said.push(`${h} held: its first tip-off moved after the lock, and no new set is taken`);
+  for (const id of take.empty) said.push(`no set of ${id}: DraftKings has posted no line for its games yet`);
+  await boxesFor(w, F, now, season); await boxesFor(w, N, now, season);
+  gradeAll(w, F, now, season); gradeAll(w, N, now, season);
   next.featured = Object.fromEntries(Object.keys(F).sort().map(k => [k, F[k]]));
   next.featured_summary = SC.summarize(next.featured);
+  next.night = Object.fromEntries(Object.keys(N).sort().map(k => [k, N[k]]));
+  next.night_summary = SC.summarizeNight(next.night);
 
   const bad = SC.check(next, start, now, runAt, season);
-  const moved = (L, prev) => SC.lockedMoved(L, prev, now, null);
+  const moved = (L, prev) => [...SC.lockedMoved(L, prev, now, null), ...SC.nightMoved(L, prev, now)];
   if (head && headText !== startText) bad.push(...moved(next, head).map(b => 'against the last commit: ' + b));
   if (bad.length) {
     for (const b of bad) console.log('FAIL ' + b);
@@ -241,17 +247,17 @@ async function main() {
     console.log(`suggest ledger: refused, ${bad.length} failure${bad.length === 1 ? '' : 's'}; the ${startBad ? "last commit's" : 'last good'} ledger stays`);
     return 1;
   }
-  const q = next.featured_summary, rec = TIERS.map(id => `${id} ${q.tiers[id].won}/${q.tiers[id].graded}`).join(', ');
-  const tail = `${q.entries} set${q.entries === 1 ? '' : 's'}, ${q.pending} level${q.pending === 1 ? '' : 's'} pending, won/graded ${rec}`;
+  const q = next.night_summary, rec = NIGHT_IDS.map(id => `${id} ${q.tiers[id].won}/${q.tiers[id].graded}`).join(', '), f = next.featured_summary;
+  const tail = `${q.entries} night set${q.entries === 1 ? '' : 's'}, ${q.pending} level${q.pending === 1 ? '' : 's'} pending, won/graded ${rec}; ${f.entries} featured set${f.entries === 1 ? '' : 's'} from before, ${f.pending} pending`;
   if (start && canon({ ...next, updated: null }) === canon({ ...start, updated: null })) { console.log(`suggest ledger: unchanged (${said.join('; ')}); ${tail}`); return 0; }
   next.updated = runAt;
-  const out = { how: next.how, since: next.since, updated: next.updated, featured_summary: next.featured_summary, featured: next.featured };
+  const out = { how: next.how, since: next.since, updated: next.updated, featured_summary: next.featured_summary, night_summary: next.night_summary, featured: next.featured, night: next.night };
   fs.mkdirSync(path.dirname(LEDGER), { recursive: true });
   fs.writeFileSync(LEDGER, SC.dumps(out) + '\n');
   console.log(`suggest ledger: written (${said.join('; ')}); ${tail}`);
   return 0;
 }
-module.exports = { gradeTier, takeFeatured, SINCE };
+module.exports = { gradeTier, takeNights, SINCE };
 if (require.main === module) {
   main().then(code => process.exit(code), e => { console.log('suggest ledger: refused: ' + (e && e.message || e)); process.exit(1); });
 }

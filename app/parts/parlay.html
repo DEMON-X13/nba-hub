@@ -477,7 +477,8 @@ function pbCap(list, cap) {
 }
 function pbPool(games, u, opt) { const r = pbLegs(games, u), cap = pbOpt(opt).cap; return { ...r, pref: pbCap(r.pref, cap), thin: pbCap(r.thin, cap), mkt: pbCap(r.mkt, cap) }; }
 
-/* ---------- the levels: Safe, Medium, Aggressive, Extreme (Suggested Parlays draws the first three, one set a game) ----------
+/* ---------- the levels: Safe, Medium, Aggressive, Extreme (drawn nowhere since 7 November 2026: Suggested Parlays builds its
+   own night levels on these legs and sums, README "Suggested Parlays") ----------
    The NFL hub's engine as it is: Safe the likeliest pair; Medium, Aggressive and Extreme the 3-, 4- and 5-leg parlay with
    the best expected return that lands 25%, 12% and 5% of the time by the model's chance, else the likeliest of that size;
    Value picks first, the fewest thin legs to fill, the totals only where the legs with an edge cannot make the size. One
@@ -689,17 +690,21 @@ function glanceName(l, shown) {
 window.glanceLeg = sig => GLANCE_LEGS.get(String(sig)) || null;
 /* one level's card, or why it has none (Suggested Parlays draws its levels with it): o.what the game, for the buttons'
    names; o.legAdd false: no Add on each leg; o.quiet: no line saying why a leg is not a Value pick or why a total is
-   there; o.mktWhy why a total is there; o.add the Add to builder's own attribute; o.kind and o.fid what its Finish names */
+   there; o.mktWhy why a total is there; o.add the Add to builder's own attribute; o.kind and o.fid what its Finish names;
+   o.withGame: each team leg says its game ("To win · WAS at OKC"); o.acts false: no Add to builder or Finish (a set under
+   way); t.rule, where a level carries one, its rule in words in place of pbRuleOf's */
 function pbTierCard(t, o) {
   o = o || {}; const card = !!window.PARLAY_CARD, chance = t.corr, legAdd = o.legAdd !== false;
-  if (t.why) return `<div class="pb-tier ${t.id} none"><div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.n} legs</span></div><p class="pb-why">${esc(t.why)}</p></div>`;
+  /* a level of a fixed size says it; Suggested Parlays' night levels carry their range (min, max) and their rule in words */
+  const size = t.n != null ? t.n : t.min === t.max ? t.min : `${t.min}–${t.max}`;
+  if (t.why) return `<div class="pb-tier ${t.id} none"><div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${size} legs</span></div><p class="pb-why">${esc(t.why)}</p></div>`;
   const nm = o.what ? ` the ${esc(t.label)} parlay for ${esc(o.what)}` : '', inB = pbInBuilder(t.legs), trial = t.legs.some(l => l.kind === 'prop'), sg = new Set(t.legs.map(l => l.gid)).size < t.legs.length;
   return `<div class="pb-tier ${t.id}" data-pb-tier="${t.id}">
-    <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : ''}</div>
+    <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${t.rule ? `<span class="pb-rule">${esc(t.rule)}</span>` : t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : ''}</div>
     <div class="pb-nums">${pbChanceHtml(t.fair, chance, { ...o, trial })}<div><b>${fmtAm(decToAm(t.dec))}</b><span>price${sg ? ', est.' : ''}</span></div><div class="pb-pay" data-pb-pay="${t.dec}">${pbPayHtml(t.dec)}</div></div>
-    <ul class="pb-legs">${t.legs.map(l => { const ff = legFarOff(l); return `<li><span class="nm">${glanceName(l)}<small>${esc(l.label)}${pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em>${pbPct(l.p)}${pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
+    <ul class="pb-legs">${t.legs.map(l => { const ff = legFarOff(l); return `<li><span class="nm">${glanceName(l)}<small>${esc(l.label)}${o.withGame && l.kind !== 'total' ? ` · ${esc(l.away)} at ${esc(l.home)}` : ''}${pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em>${pbPct(l.p)}${pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
     ${t.thin && !o.quiet ? `<p class="pb-thin">${pbThinLine(t.legs)}</p>` : ''}${t.mkt && !o.quiet ? `<p class="pb-thin">${pbMktLine(t.legs, o.mktWhy)}</p>` : ''}
-    <div class="pb-acts"><button type="button" class="btn ${card ? 'ghost' : 'hot'}" ${o.add || `data-pb-add="${t.id}"`}${nm ? ` aria-label="${inB ? 'In the builder:' : 'Add'}${nm}${inB ? '' : ' to the builder'}"` : ''}>${inB ? 'In the builder' : 'Add to builder'}</button>${card ? `<button type="button" class="btn hot" data-pc-finish="${o.kind || 'pb'}|${o.fid || t.id}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button>` : ''}</div></div>`;
+    ${o.acts === false ? '' : `<div class="pb-acts"><button type="button" class="btn ${card ? 'ghost' : 'hot'}" ${o.add || `data-pb-add="${t.id}"`}${nm ? ` aria-label="${inB ? 'In the builder:' : 'Add'}${nm}${inB ? '' : ' to the builder'}"` : ''}>${inB ? 'In the builder' : 'Add to builder'}</button>${card ? `<button type="button" class="btn hot" data-pc-finish="${o.kind || 'pb'}|${o.fid || t.id}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button>` : ''}</div>`}</div>`;
 }
 /* exactly these legs into the builder, in its own order, so it prices them as the level did */
 function pbPut(legs, what) {

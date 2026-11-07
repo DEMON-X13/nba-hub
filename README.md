@@ -54,7 +54,7 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/suggest_ledger.js`, `tools/suggest_check.js`, `data/suggest_ledger.json` | The suggestions record (README "Suggested Parlays"): each featured game's set as the job last published it before its lock, taken from the built page in jsdom, graded after the game by the page's own settlement, one entry a line; and its guard, which holds it to the last commit |
 | `tools/test_suggest_ledger.js` | The record on made-up days: taken (three levels), rewritten, locked, a ruled-out level replaced, graded against settlements worked out from raw scores and box lines, a set from before kept with its Extreme, and the guard on hand-made ledgers; it runs first in the record's step |
 | `tools/sigma.js`, `research/sigma.json` | The spread of the real margin about the player model's own number, which the Parlay Builder prices a cover from (14.5 points, the 2026 walk-forward fold), the total's about the model's total (`sigmaTotal`, 19.1 points), which the Record tab's totals picks stand on, what the Value rule's team picks were worth on each fold and what the Record tab's rule would have been (`record`); run by hand |
-| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays"), the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder"), the parlay card (`tools/smoke_card.js`, `SMOKE_ONLY=card`, README "The parlay card") the matchup bubble (`tools/smoke_glance.js`, `SMOKE_ONLY=glance`, README "The matchup bubble"), Suggested Parlays (`tools/smoke_suggested.js`, `SMOKE_ONLY=sp`, README "Suggested Parlays") and a game's three windows (`tools/smoke_gamewin.js`, `SMOKE_ONLY=gw`, README "The game's three windows") |
+| `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, the confidence pill on each card and the key over them (section conf), the Record tab on a made-up season (section record), Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays"), the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder"), the parlay card (`tools/smoke_card.js`, `SMOKE_ONLY=card`, README "The parlay card") the matchup bubble (`tools/smoke_glance.js`, `SMOKE_ONLY=glance`, README "The matchup bubble"), Suggested Parlays (`tools/smoke_suggested.js`, `SMOKE_ONLY=sp`, README "Suggested Parlays") and a game's three windows (`tools/smoke_gamewin.js`, `SMOKE_ONLY=gw`, README "The game's three windows") |
 | `liveparlays/parlays.json` | X's placed parlays, kept by hand from the slips the owner sends (README "X Parlays"); the page reads it when its X Parlays tab opens, and the job's `tools/autoclear.js` marks a finished one cleared two Eastern days after its last game |
 | `app/parts/xparlays.html` | The X Parlays tab: its markup, its styles (all under `#lpCard`) and its script in a closure of its own, set into the page by `build.js` at its `<!--part:xparlays-->` marker |
 | `tools/autoclear.js`, `tools/test_autoclear.js` | X's finished parlays clear themselves (README "X Parlays"); the test runs first in the job's step |
@@ -2402,6 +2402,42 @@ fair chance (est. where it is), what $1 wins and what $1 is expected to make, an
 were left out far off the market and for want of a betslip id, and that the totals come last; an empty list says why (no
 box or game ticked, no player prices read yet, none the props model prices, or nothing qualifying).
 
+**No DraftKings line yet** (the owner's question of 7 November 2026: "why is there no available parlay legs being
+recommended for tomorrows games? i think something must have broke"). Nothing was broken: on the Friday evening DraftKings
+had posted game lines on ESPN for none of Saturday's 7 games (DEN at IND's came at about 01:40 UTC), the list takes only
+bets with DraftKings' real price, and its empty line said "No line on your picks qualifies yet, and no player lines: …",
+as if lines were there and failed. Now, wherever a team bet type is ticked and some ticked games have no DraftKings game
+line (`pbHasGl`: no moneyline, spread or total from the job's `lines.json` or a press), the empty line says so first
+(`pbTopWhy`, `pbNoGlSay`), in two groups. A game a read covered and found none is "No DraftKings lines yet for your 7
+games (as of Fri 6:45 PM)." ("6 of your 7 games" where some have lines), the time `pbGlAsOf`'s: `lines.json`'s own `at`
+where the file holds the game with its game lines read (its entry's own `at` set), or a Refresh odds press that read the
+game (`ODDS_SEEN`, memory only), the later, and for the group the oldest of the games' own, in the visitor's own time. It
+is said "as of", never "last read": the file's `at` is when the run that last changed it read (`tools/lines.js` writes
+nothing when a run finds nothing new, and keeps a half's last good read when its read fails), so it dates what the
+published file held, not each game's read. A game no read has covered (no entry in `lines.json`, an entry holding its props
+alone, or `lines.json` not loading) is never said to have none, since the page cannot know: "DraftKings’ lines for your
+7 games have not been read yet.", or "did not load." where `lines.json` did not load (the note over the list says the
+same). Then "The job reads them through the day; Refresh odds reads them now." ("Refresh odds reads them now." alone where
+`lines.json` did not load), then "No line on the other game qualifies yet." where some have lines (a spread or a total
+alone counts). Until the review of 7 November 2026 a game no read covered was counted with those found to have none, so
+with `lines.json` not loading the line said "No DraftKings lines yet for your 9 games" under the note saying the lines did
+not load, and the time was given as "last read". Where player bet types are
+ticked the player-lines reason follows as a sentence of its own ("No player lines: the props model’s trial was stopped
+early as a FAIL on 5 November 2026, so the list takes none."); with player types alone, that reason alone; with lines on
+every ticked game and nothing qualifying, "No line on your picks qualifies yet: tick more games or bet types." as
+before. Where the list is not empty and some ticked games still have no line, the same sentence is a note over it.
+`pbWhy`, the all-games levels' empty line, is drawn nowhere and was left as it was; Suggested Parlays already said this
+case per game (`spWhy`: "no DraftKings line has been read for it yet"). `tools/smoke_parlay.js` section 9b holds it word for
+word on its own reading of the lines (`hasGlOwn`, `asOfOwn`, `noGlOwn`, never the page's), on made-up games at any hour: no
+line on any game, lines on some, a spread alone and a total alone (lines, none qualifying), lines on all and none
+qualifying, each with player types and alone; no entry, entries holding their props alone, and `lines.json` as junk and
+as a 404 (the note and the empty line agreeing); a mix of all three groups, as the empty line and as the note over a list;
+and Refresh odds presses that find nothing, one failing a date (the sentence as of the older time) and one after
+`lines.json` did not load. Breaks planted in a copy of the built page, each turning it red: every game with no line
+counted as read (the review's case, 12 failures), "did not load" said "not read yet" (6), an entry holding its props
+alone taken for a read (1), "last read" for "as of" (14), the group dated by its newest read (1) and a game counted as
+having lines only with a moneyline (1).
+
 **A line qualifies** with DraftKings' real price, the model's chance from 45% to 97% and at or above the chance that price
 implies (the book's margin left in): 3 points above it or more is a **Value pick**, less a thin-edge line. Left out and
 counted: a line the model rates 15 points or more above DraftKings' fair chance (`legFarOff`, the NFL's `FAR_OFF`), and a
@@ -2625,13 +2661,19 @@ cases, the Bet amount typed, left empty, set by a chip and by the builder's box,
 and from the old stake; Finish parlay on the builder's legs, order and price; a game tipping while the page is open; Clear
 ALL; a press taking DraftKings' newer price and storing nothing, and a reload; the cut on sixty made-up games (forty Value
 picks, twenty thin, the first 50 of their order under "Top 50 lines", the other lines ranked from 41); a `lines.json` that
-does not load; a slate with no game to build from; and the real `state.json` and `lines.json`, the list this file's own
-line for line wherever no game tips within two minutes. Sections 7, 8 and 9 follow the tab: a press's prices in the Top
+does not load; a slate with no game to build from; an empty list's words, each worked out on this file's own reading of
+the lines (`noGlOwn`), word for word: no DraftKings line on any of three ticked games (with when `lines.json` read them;
+none at all where the file holds none of them), with player bet types ticked and alone, lines on one and on two of the
+three with none qualifying, a qualifying one listed with the sentence as a note, lines on all three with none qualifying,
+and a press that finds no line dating the sentence by the press; and the real `state.json` and `lines.json`, the list
+this file's own line for line wherever no game tips within two minutes. Sections 7, 8 and 9 follow the tab: a press's prices in the Top
 50 and the builder's leg repriced, the props a press reads reaching the list marked on trial, the builder held to section
 9's own same-game sums. Eight breaks planted in a copy of the built page (`NBA_HTML=<copy> SMOKE_ONLY=pb`) each turn it
 red: the list cut at 40, the each-bet-once rule dropped, a 2-point Value edge, the on-trial mark on team legs, the far-off
 guard dropped, the old sigma of 12.5, a $0 Bet amount taken, and the totals ranked with the thin-edge lines (which passed
-until the one-sided total went in).
+until the one-sided total went in). For the empty list (7 November 2026), five more: the old wording put back (10
+failures), "of your N games" counting one game too many (4), every ticked game counted as having no line (6), the note
+over a list that is not empty dropped (1), and a press not dating what it read (1).
 
 In Chromium at 1280 and 390 wide on the published `state.json` and that afternoon's `lines.json` (16 games, 726 lines
 qualifying for the 50), with three legs in the builder and the games list open: no sideways scroll, every control 44px or
@@ -3387,7 +3429,7 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
 `index.html`, its own look: graphite blue with an orange accent, bold display type, faint court lines, team-coloured badges; one card per game. Tabs:
 
 - **Tonight**: a day strip from yesterday to ten days out. Each card has the two teams (the model's pick
-  lit), the model's win chance and a probability bar, the spread and total, the market
+  lit), the model's win chance with its **confidence** under it (below) and a probability bar, the spread and total, the market
   line with a chip saying how far the model's spread is from it, who is out on each side and what
   it costs in points, a lineups drawer with projected minutes and each player's contribution and the
   coach (the two sides side by side on a wide card, one above the other on a narrow one, so nothing is cut
@@ -3397,6 +3439,32 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   "Player props"; the model on trial). Finals
   show the score and whether the model hit. Before the schedule appears the tab counts down to
   opening night over the preseason board.
+- **Confidence** (the owner's question of 7 November 2026: "is there a way to show me what confidence level each game is?
+  I assume its 78% is the confidence level but i dont know if its low med or high"): the page has one scale, the
+  confidence band the Parlay Builder already drew on a leg and the Pick'em Record bands Vegas by (`band`, the NFL hub's
+  game confidence): **High** 75%+, **Med** 60-74%, **Low** 55-59%, **50/50** under 55%, on the chance rounded to a whole
+  percent, as `fmtPct` shows it, so the band and the percentage beside it can never disagree (74.5% shows 75% and is
+  High; 74.49% shows 74% and is Med; a home chance of 0.455 shows the away side's 54% and is 50/50). Each card with a
+  number wears its band as a pill under the percentage and the pick (`confPill`: High lime, Med orange, Low ice, 50/50
+  neutral, as the builder's bands are), worked on exactly the chance the card shows, titled and read aloud as
+  "Confidence: High, the model gives its pick 75%+. Its High picks this season: 24-4." Over the cards, wherever the day
+  shown has a card with a number, one key line (`confKey`): "Confidence · W-L this season" and the four bands, each its
+  range and this season's record of the model's picks in it, straight up, from state.json's `record` (each graded game
+  on the number published before tip-off, a tie left out; a band with no graded game shows no record). On 7 November
+  2026: High 24-4, Med 34-19, Low 9-12, 50/50 10-11. It wraps on a phone; the Record tab's By confidence table is on the
+  same bands, in the same words. The smoke's section `conf` (`SMOKE_ONLY=conf`) holds it on its own copy of the scale
+  (`CONF_OWN`, never the page's `band`): every card's pill against the percentage the card shows (its band, word, title,
+  spoken text and place under the pick), on twenty made-up chances at the scale's edges, home and away, and every day of
+  the real state's strip; the key's words and records worked out from the record, on a made-up record in every band (its
+  edges and a tie among them), one with a band of ties only and one empty, before anything is graded and on a day with no
+  number (no key); the pill's colours on the stylesheet's own rule text, since jsdom resolves no `var()` (each band's
+  colour this file's and its rule the builder's `.pb-conf` twin's, colour and border, and no other rule colouring a pill,
+  50/50 among them); and section `record` the By confidence rows and their pills on a made-up season with a game at each
+  edge, and `window.NBA_RECORD` (the tab's scale and tally) against the same copy: its bands' names and ranges, each
+  chance's band, the edges among them, and each band's record. Breaks planted in a copy of the built page (`NBA_HTML`), each turning it red: the pill on the unrounded chance (7
+  failures: the edges and four real days), the key counting a tie as a loss (4) and on the unrounded chance (the real
+  record's games at 74.95% and 54.99% moving bands, High 24-3 and Med 34-20, 26 failures), the old 70/60/50 table (4),
+  Med's and Low's colours swapped (1), 50/50 given a colour (1), and `NBA_RECORD.band` on the home chance alone (2).
 - **Refresh odds**, over Tonight (the Parlay Builder has its own in its controls and its builder, Suggested Parlays at its head): the job's lines are as old as its last run, so a
   press reads DraftKings' current lines from ESPN's public scoreboard in the browser (one request a day with a
   game still to come; ESPN answers any page), taken exactly as `fetch.js` takes them (the page carries a copy of
@@ -3449,7 +3517,9 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   a side (the table keeps no price of theirs), a spread's chance Phi((m + h) / 14.5) for the home side at its line h, m
   the model's expected home margin, a total's Phi((t - line) / 19.1) for the over, t the model's total, both sigmas the
   model's own miss on the last finished season (`tools/sigma.js`); a push graded as one. Confidence is the model's
-  straight-up chance, banded 70+, 60-70 and 50-60 as the NHL hub bands it; the playoffs are a month of their own. How it
+  straight-up chance on the page's one scale (High 75%+, Med 60-74%, Low 55-59%, 50/50 under 55%, each row led by the
+  card's pill, which sits over its range on a phone so every column fits); until 7 November 2026 this table banded it
+  70+, 60-70 and 50-60 as the NHL hub does, a second scale beside the cards'. The playoffs are a month of their own. How it
   was fitted gives the fit and the holdout as `research.json` publishes them, lineups known. The same rule on the
   walk-forward folds (`research/sigma.json`'s `record`) lost money on spreads and totals in each of 2023-24 to 2025-26
   and on moneylines in two of the three, so a tile in green is a run, not an edge. The earlier rules' backtest table,

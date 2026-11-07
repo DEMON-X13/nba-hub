@@ -54,7 +54,8 @@ const ROOT = path.resolve(__dirname, '..');
 const sleep = ms => new Promise(r => setTimeout(r, ms));
 let fails = 0; const check = (c, m) => { if (!c) { fails++; console.log('  FAIL', m); } else console.log('  ok  ', m); };
 /* NBA_HTML tries another page in place of index.html (a deliberately broken copy, to show a check fails on it);
-   SMOKE_ONLY=base,7,8,9,10,12,lines,xparlays,pb,card,glance,sp,gw runs those sections alone (base is 0 to 6; xparlays is X
+   SMOKE_ONLY=base,7,8,9,10,12,lines,conf,record,xparlays,pb,card,glance,sp,gw runs those sections alone (base is 0 to 6; conf the
+   confidence pill on Tonight's cards and the key over them; record the Record tab on a made-up season; xparlays is X
    Parlays, tools/smoke_xparlays.js; pb the Parlay Builder, tools/smoke_parlay.js; card the parlay card,
    tools/smoke_card.js; glance the matchup bubble, tools/smoke_glance.js; sp Suggested Parlays, tools/smoke_suggested.js) */
 const pageFile = page => page === 'index.html' && process.env.NBA_HTML ? path.resolve(process.env.NBA_HTML) : path.join(ROOT, page);
@@ -2401,6 +2402,106 @@ async function linesFeed() {
   check(['', 'NBC', 'NBA TV', 'Peacock|NBC', 'ESPN|ABC|ESPN2'].every(v => tvSeen.has(v)), `and the cases meet every kind of listing: ${[...tvSeen].slice(0, 12).map(v => JSON.stringify(v)).join(', ')}`);
   check(errors.length === 0, 'no script errors: ' + errors.join(' | '));
 }
+/* ---------- conf. the confidence on Tonight's cards (README "The site") ----------
+   The page's one confidence scale, this file's own copy of it, never the page's band(): High from 75%, Med from 60%, Low
+   from 55%, else 50/50, on a chance rounded to a whole percent (the percentage a card shows). A card's pill is held to the
+   percentage the card shows, read off the card; the key over the cards to the state's record, worked out here (each graded
+   game's number published before tip-off, on its pick's chance, a tie left out); the Record tab's By confidence rows
+   (recordChecks below) to the same bands */
+const CONF_OWN = [['high', 'High', '75%+', 75], ['med', 'Med', '60-74%', 60], ['low', 'Low', '55-59%', 55], ['coin', '50/50', 'under 55%', -Infinity]];
+const confOwnOf = pct => CONF_OWN.find(b => pct >= b[3]);
+const confPctOwn = c => Math.floor(c * 100 + 0.5);                 // a chance as a whole percent, half up
+function confRecOwn(R) {
+  const t = Object.fromEntries(CONF_OWN.map(b => [b[0], [0, 0]]));
+  for (const g of R || []) { if (g.su !== true && g.su !== false) continue; t[confOwnOf(confPctOwn(Math.max(g.pHome, 1 - g.pHome)))[0]][g.su ? 0 : 1]++; }
+  return t;
+}
+const confWlOwn = x => x[0] + x[1] ? `${x[0]}-${x[1]}` : '';
+const confSayOwn = (b, rec) => `Confidence: ${b[1]}, the model gives its pick ${b[2]}.${confWlOwn(rec[b[0]]) ? ` Its ${b[1]} picks this season: ${confWlOwn(rec[b[0]])}.` : ''}`;
+const sq = t => String(t || '').replace(/\s+/g, ' ').trim();
+/* every card of the day shown: a pill under the percentage exactly where the card has a number, its band the shown
+   percentage's by this file's rule, its word, title and accessible text; then the key over the cards */
+function confHold(w, st, what) {
+  const d = w.document, rec = confRecOwn(st.record), on = d.querySelector('#days .day.on'), day = on && on.dataset.d;
+  const cards = [...d.querySelectorAll('#slate .card')], bad = [], seen = {};
+  let n = 0;
+  for (const el of cards) {
+    const g = st.slate.find(x => x.id === el.dataset.id), vs = el.querySelector('.vs'), pill = vs && vs.querySelector('.conf');
+    if (!g) { bad.push(`${el.dataset.id}: no game`); continue; }
+    if (!g.model) { if (pill || !/no number/.test(vs.textContent)) bad.push(`${g.id}: a pill with no number`); continue; }
+    n++;
+    const shown = vs.querySelector('b') && vs.querySelector('b').textContent, m = /^(\d+)%$/.exec(shown || '');
+    const own = confPctOwn(Math.max(g.model.pHome, 1 - g.model.pHome));
+    if (!m || +m[1] !== own) { bad.push(`${g.id}: shows ${shown}, its chance is ${own}%`); continue; }
+    const b = confOwnOf(+m[1]), say = confSayOwn(b, rec), word = pill && pill.querySelector('[aria-hidden="true"]'), sr = pill && pill.querySelector('.sr');
+    seen[b[0]] = (seen[b[0]] || 0) + 1;
+    if (!pill || pill.className !== 'conf ' + b[0] || pill.dataset.conf !== b[0] || !word || word.textContent !== b[1] || pill.title !== say || !sr || sr.textContent !== say || vs.lastElementChild !== pill
+      || w.getComputedStyle(pill).textTransform !== 'uppercase')
+      bad.push(`${g.id} at ${shown}: want ${b[1]} ("${say}"), got ${pill ? `${pill.className} "${word && word.textContent}" "${pill.title}"` : 'no pill'}`);
+  }
+  check(!bad.length && n === st.slate.filter(g => g.date === day && g.model).length, `${what}: every card with a number (${n}) wears its confidence pill under its percentage, the band that percentage falls in by this file's own rule (${CONF_OWN.map(b => `${b[1]} ${seen[b[0]] || 0}`).join(', ')}), titled and read aloud with its range and this season's record${bad.length ? ': ' + bad.slice(0, 3).join(' | ') : ''}`);
+  const key = d.querySelector('#slate [data-confkey]'), any = CONF_OWN.some(b => confWlOwn(rec[b[0]]));
+  if (!n) return check(!key, `${what}: no card with a number, so no confidence key`);
+  const want = `Confidence${any ? ' · W-L this season' : ''} ` + CONF_OWN.map(b => `${b[1]} ${b[2]}${confWlOwn(rec[b[0]]) ? ' ' + confWlOwn(rec[b[0]]) : ''}`).join(' ');
+  const items = key ? [...key.querySelectorAll('[data-ck]')].map(i => [i.dataset.ck, i.querySelector('.conf') && i.querySelector('.conf').className, sq(i.textContent), i.title]) : [];
+  const wantItems = CONF_OWN.map(b => [b[0], 'conf ' + b[0], sq(`${b[1]} ${b[2]} ${confWlOwn(rec[b[0]])}`), confSayOwn(b, rec)]);
+  check(key && sq(key.textContent) === want && JSON.stringify(items) === JSON.stringify(wantItems) && key.nextElementSibling && key.nextElementSibling.classList.contains('grid') && d.querySelectorAll('#slate [data-confkey]').length === 1,
+    `${what}: one key line over the cards, the four bands with their ranges and this season's record in each from the state's record, worked out here: "${key ? sq(key.textContent) : 'none'}"${key && sq(key.textContent) !== want ? ` (want "${want}")` : ''}`);
+}
+/* the pill's colours, as the Parlay Builder's .pb-conf bands are coloured (High lime, Med hot, Low ice, 50/50 neutral):
+   held on the stylesheet's own rule text, since jsdom resolves no var(): each band's rule this file's colour and the
+   builder's twin rule's colour and border, the bare .conf the builder's neutral, and no other rule on a .conf (50/50
+   among them) giving it a colour, a border or a background */
+const CONF_INK_OWN = { '': 'var(--ink-2)', high: 'var(--lime)', med: 'var(--hot-2)', low: 'var(--ice)' };
+function confCssHold(w, what) {
+  const rules = [], walk = rs => { for (const r of rs) { if (r.cssRules && !r.selectorText) walk(r.cssRules); else if (r.selectorText) rules.push(r); } };
+  for (const sh of w.document.styleSheets) walk(sh.cssRules);
+  const decl = sel => { const r = rules.filter(x => x.selectorText.split(',').map(t => t.trim()).includes(sel));
+    return r.length ? ['color', 'background', 'border', 'border-color'].map(k => r.map(x => x.style.getPropertyValue(k)).filter(Boolean).pop() || '') : null; };
+  const bad = [];
+  for (const [k, ink] of Object.entries(CONF_INK_OWN)) {
+    const a = decl('.conf' + (k ? '.' + k : '')), b = decl('.pb-conf' + (k ? '.' + k : ''));
+    if (!a || !b || a[0] !== ink || b[0] !== ink || JSON.stringify(a) !== JSON.stringify(b)) bad.push(`.conf${k ? '.' + k : ''} ${JSON.stringify(a)} against .pb-conf${k ? '.' + k : ''} ${JSON.stringify(b)}, want ${ink}`);
+  }
+  const mine = new Set(Object.keys(CONF_INK_OWN).map(k => '.conf' + (k ? '.' + k : '')));
+  for (const r of rules) for (const sel of r.selectorText.split(',').map(t => t.trim())) {
+    if (mine.has(sel) || !/\.conf(?![\w-])/.test(sel.split(/[\s>+~]+/).pop())) continue;
+    const set = ['color', 'background', 'background-color', 'border', 'border-color'].filter(k => r.style.getPropertyValue(k));
+    if (set.length) bad.push(`${sel} sets ${set.join(', ')}`);
+  }
+  check(!bad.length, `${what}: the pill is coloured as the builder's bands (High ${CONF_INK_OWN.high}, Med ${CONF_INK_OWN.med}, Low ${CONF_INK_OWN.low}, 50/50 the neutral ${CONF_INK_OWN['']}), each rule's colour and border the .pb-conf twin's, no other rule colouring a pill${bad.length ? ': ' + bad.slice(0, 3).join(' | ') : ''}`);
+}
+async function confChecks() {
+  console.log('conf. the confidence on Tonight\'s cards');
+  /* the scale's edges, home and away: each a chance whose rounding a pill on the unrounded number would read the other
+     way (74.5% shows 75%, 74.49% 74%, 1 - 0.455 is 54.49999...%), and one game with no number */
+  const P = [0.745, 0.7449, 0.7499, 0.75, 0.595, 0.5949, 0.5999, 0.6, 0.545, 0.5449, 0.5499, 0.55, 0.5, 0.255, 0.405, 0.455, 0.4501, 0.2505, 0.2551, 0.91];
+  const edge = P.map((p, i) => ({ ...fake('cf' + String(i).padStart(2, '0'), state.today, false), model: { ...fake('x', state.today, false).model, pHome: p } }));
+  edge.push({ ...fake('cfnone', state.today, false), model: null });
+  /* a made-up record: every band, its edges, a tie left out; a game of the last band but a tie only */
+  const R = (pHome, su) => ({ id: 'r' + pHome + su, date: '2026-10-25', type: 'REG', pHome, su });
+  const rec1 = [R(0.7495, true), R(0.2505, false), R(0.745, true), R(0.8, null), R(0.7449, true), R(0.595, false), R(0.4, true), R(0.5949, true), R(0.545, true), R(0.43, false), R(0.455, false), R(0.5449, true), R(0.5, true)];
+  const want1 = confRecOwn(rec1);
+  check(JSON.stringify(want1) === '{"high":[2,1],"med":[2,1],"low":[2,1],"coin":[2,1]}', `the made-up record, by this file's rule: ${JSON.stringify(want1)} (74.95% High, 74.49% Med, 40% by the away side Med, 59.49% Low, 1 - 0.455 50/50, the tie left out)`);
+  const variants = [['the scale\'s edges, a made-up record in every band', { ...state, slate: edge, record: rec1 }],
+    ['the same with a band of ties only and an empty one (no record shown for them)', { ...state, slate: edge, record: [R(0.8, true), R(0.62, false), R(0.56, null)] }],
+    ['the same before any game is graded (no record at all)', { ...state, slate: edge, record: [] }],
+    ['a day of games with no number', { ...state, slate: edge.map(g => ({ ...g, model: null })), record: rec1 }]];
+  for (const [what, st] of variants) {
+    const r = load('index.html', st); await sleep(250);
+    confHold(r.w, st, what);
+    if (st.record === rec1 && st.slate === edge) confCssHold(r.w, what);
+    check(r.errors.length === 0, 'no script errors: ' + r.errors.join(' | '));
+  }
+  /* the real state, every day of its strip */
+  const real = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'));
+  const r = load('index.html', real); await sleep(300);
+  const days = [...r.w.document.querySelectorAll('#days .day')].map(b => b.dataset.d);
+  for (const dd of days) { const b = r.w.document.querySelector(`#days .day[data-d="${dd}"]`); b.click(); await sleep(15); confHold(r.w, real, `the real state, ${dd}`); }
+  if (!days.length) check(!r.w.document.querySelector('[data-confkey]'), 'the real state has no game on the board, and no key');
+  check(r.errors.length === 0, 'no script errors: ' + r.errors.join(' | '));
+}
+
 /* ---------- the Record tab, laid out as the NHL hub's (README "The site") ----------
    Worked out here on its own from the state's record: each game's picks from the numbers published before tip-off and
    the lines (this file's own normal cdf, a Taylor series of erf, not the page's or publish.js's; the rule's edge, -110 on
@@ -2418,7 +2519,7 @@ function recOwnPicks(g, U) {
 }
 function recOwnTally(R) {
   const f = () => ({ su: [0, 0], ml: [0, 0, 0], sp: [0, 0, 0], ou: [0, 0, 0] }), all = f(), months = {}, bands = {};
-  const bandOf = p => { const c = Math.max(p, 1 - p); return c >= 0.7 ? '70+' : c >= 0.6 ? '60-70' : '50-60'; };
+  const bandOf = p => confOwnOf(confPctOwn(Math.max(p, 1 - p)))[0];
   for (const g of R) { const add = t => { if (g.su === true) t.su[0]++; if (g.su === false) t.su[1]++; for (const k of ['ml', 'sp', 'ou']) { const x = g.pk && g.pk[k]; if (x) t[k][x.res === 'win' ? 0 : x.res === 'loss' ? 1 : 2]++; } };
     add(all); add(months[g.type === 'POST' ? 'playoffs' : g.date.slice(0, 7)] = months[g.type === 'POST' ? 'playoffs' : g.date.slice(0, 7)] || f()); add(bands[bandOf(g.pHome)] = bands[bandOf(g.pHome)] || f()); }
   return { all, months, bands };
@@ -2443,9 +2544,18 @@ async function recordChecks(d, st, what) {
     const mName = m => m === 'playoffs' ? 'Playoffs' : new Date(m + '-15T12:00:00Z').toLocaleDateString('en-US', { month: 'long', year: 'numeric', timeZone: 'UTC' });
     const cells = t => [recWl(t.su), recRate(t.su), U ? recWl(t.ml) : '—', U ? recWl(t.sp) : '—', U ? recWl(t.ou) : '—'];
     const mw = Object.keys(T.months).sort((a, b) => (a === 'playoffs') - (b === 'playoffs') || (a < b ? -1 : 1)).map(m => [mName(m)].concat(cells(T.months[m])));
-    const bw = ['70+', '60-70', '50-60'].filter(b => T.bands[b]).map(b => [b + '%'].concat(cells(T.bands[b])));
+    const bw = CONF_OWN.filter(b => T.bands[b[0]]).map(b => [`${b[1]} ${b[2]}`].concat(cells(T.bands[b[0]])));
     check(JSON.stringify(rowsOf('recMonth')) === JSON.stringify(mw), `${what}: By month, a row a month in order, the playoffs last: ${JSON.stringify(rowsOf('recMonth')).slice(0, 160)}`);
-    check(JSON.stringify(rowsOf('recBand')) === JSON.stringify(bw), `${what}: By confidence, 70+, 60-70 and 50-60 on the model's straight-up chance: ${JSON.stringify(rowsOf('recBand')).slice(0, 160)}`);
+    check(JSON.stringify(rowsOf('recBand')) === JSON.stringify(bw), `${what}: By confidence, on the page's one scale (High 75%+, Med 60-74%, Low 55-59%, 50/50 under 55%, this file's own copy) on the model's straight-up chance rounded to a whole percent: ${JSON.stringify(rowsOf('recBand')).slice(0, 160)}`);
+    const pills = [...tab.querySelectorAll('#recBand tbody tr')].map(tr => { const c = tr.querySelector('td:first-child .conf'); return c ? [c.className, c.textContent] : null; });
+    check(JSON.stringify(pills) === JSON.stringify(CONF_OWN.filter(b => T.bands[b[0]]).map(b => ['conf ' + b[0], b[1]])), `${what}: each band's row leads with its pill, coloured as the cards' (${pills.map(x => x && x.join(' ')).join(', ')})`);
+    /* window.NBA_RECORD, the Record tab's scale as the page exports it: its four bands' names and ranges this file's own,
+       each game's band and each band's straight-up record the same as worked out here */
+    const NR = d.defaultView.NBA_RECORD, nb = NR && typeof NR.bands === 'function' ? NR.bands() : null, nt = NR && typeof NR.tally === 'function' ? NR.tally(R) : null;
+    const pOwn = [...R.map(g => g.pHome), 0.745, 0.7449, 0.255, 0.595, 0.5949, 0.405, 0.545, 0.455, 0.5];
+    check(JSON.stringify(nb) === JSON.stringify(CONF_OWN.map(b => [b[0], b[1], b[2]])) && pOwn.every(p => NR.band(p) === confOwnOf(confPctOwn(Math.max(p, 1 - p)))[0])
+      && nt && JSON.stringify(Object.keys(nt.bands).sort()) === JSON.stringify(Object.keys(T.bands).sort()) && Object.keys(T.bands).every(k => nt.bands[k].su.w === T.bands[k].su[0] && nt.bands[k].su.l === T.bands[k].su[1]),
+      `${what}: window.NBA_RECORD gives this file's bands (${nb ? nb.map(b => b.slice(1).join(' ')).join(', ') : 'none'}), each chance's band, the edges among them, and each band's straight-up record`);
     const th = n => [...tab.querySelectorAll('#recMonth thead th, #recBand thead th')].map(t => t.querySelector(n) ? t.querySelector(n).textContent : t.textContent).join('|');
     check(th('.t-wide') === 'When|SU|Rate|ML|Spread|Totals|Model chance|SU|Rate|ML|Spread|Totals' && th('.t-narrow') === 'When|SU|Rate|ML|ATS|O/U|Chance|SU|Rate|ML|ATS|O/U',
       `${what}: both tables headed When (Model chance), SU, Rate, ML, Spread, Totals, written short on a phone (Chance, ATS, O/U)`);
@@ -2469,8 +2579,15 @@ async function recordMadeUp(real) {
     G('2027_20261102_DEN_PHX', '2026-11-02', 'REG', 120, 112, 0.55, -1, 236, 2.5, 228.5, [-130, 110]),      // DEN by 8
     G('2027_20261104_CHI_MIL', '2026-11-04', 'REG', 98, 120, 0.66, -5, 240, -7.5, 218, [230, -280]),        // MIL by 22, the model's over landing on the number
     G('2027_20270420_OKC_DAL', '2027-04-20', 'POST', 108, 104, 0.52, -0.5, 211, 1.5, 219.5, [-125, 105]),   // OKC by 4, a playoff game
+    /* the scale's edges, on the chance rounded to a whole percent: 74.95% shows 75% and is High; 54.49999...% (1 - 0.455)
+       shows 54% and is 50/50; 74.49% shows 74% and is Med */
+    G('2027_20261025_SAC_POR', '2026-10-25', 'REG', 101, 99, 0.2505, 7, 230, 5.5, 231, [-240, 200]),     // SAC by 2: High
+    G('2027_20261030_ATL_BKN', '2026-10-30', 'REG', 110, 108, 0.455, 1, 226, 1.5, 224, [-115, -105]),   // ATL by 2: 50/50
+    G('2027_20261106_PHI_CHA', '2026-11-06', 'REG', 104, 112, 0.7449, -6, 221, -4.5, 225, [190, -230]),  // CHA by 8: Med
   ];
   const st = { ...JSON.parse(JSON.stringify(real)), record, recordRule: U };
+  check(CONF_OWN.every(b => recOwnTally(record).bands[b[0]]) && recOwnTally(record).bands.high.su[0] === 1 && JSON.stringify(recOwnTally(record).bands.coin.su) === '[1,1]',
+    'the made-up season has a game in every band of the scale, its edges among them (74.95% High, 54.5% 50/50 by the away side)');
   check(record.every(g => g.pk) && Object.values(record).some(g => g.pk.sp && g.pk.sp.res === 'push') && record.some(g => g.pk.ml) && record.some(g => g.pk.ou) && record.some(g => g.pk.ou && g.pk.ou.res === 'push'),
     'the made-up season has moneyline, spread and total picks, a spread pushed and a total on the number');
   let { w, errors } = load('index.html', st); await sleep(300);
@@ -2724,6 +2841,8 @@ async function recordMadeUp(real) {
   await guard('10', ratingHistory);
   await guard('12', pickemRecord);
   await guard('lines', linesFeed);
+  /* the confidence pill on Tonight's cards and the key over them (README "The site"), on made-up edges and the real state */
+  await guard('conf', confChecks);
   /* the Record tab, the NHL hub's layout, on a made-up season at any hour */
   await guard('record', async () => { console.log('record. the Record tab, laid out as the NHL hub\'s'); await recordMadeUp(JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'))); });
   /* X Parlays (README "X Parlays"): its own file, tools/smoke_xparlays.js, on this harness's checks */

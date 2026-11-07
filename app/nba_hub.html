@@ -92,6 +92,18 @@ h2 small{font-family:var(--body);font-weight:500;color:var(--muted);font-size:13
 .team .sc.lose{color:var(--muted)}
 .vs{font-family:var(--display);font-size:11px;color:var(--muted);text-align:center;line-height:1.3}
 .vs b{display:block;font-size:22px;color:var(--ink);font-weight:900}
+/* the model's confidence on a game (confPill, CONF below): one scale, coloured as the Parlay Builder's .pb-conf bands */
+.conf{display:inline-block;font-family:var(--body);font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;line-height:1.35;padding:2px 8px;border-radius:999px;background:var(--bg-2);border:1px solid var(--line-2);color:var(--ink-2);white-space:nowrap}
+.conf.high{color:var(--lime);border-color:rgba(205,255,79,.5)} .conf.med{color:var(--hot-2);border-color:rgba(255,140,74,.5)} .conf.low{color:var(--ice);border-color:rgba(95,212,255,.5)}
+.vs .conf{display:block;width:max-content;margin:6px auto 0}
+.confkey{display:flex;flex-wrap:wrap;align-items:center;gap:6px 14px;margin:0 0 14px;font-size:12.5px;color:var(--ink-2)}
+.confkey .ck-h{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-2)}
+.confkey .ck-h span{text-transform:none;letter-spacing:0;font-weight:600}
+.confkey .ck-i{display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.confkey .ck-i b{color:var(--ink);font-weight:800;font-variant-numeric:tabular-nums}
+#recBand td:first-child .conf{margin-right:6px;vertical-align:1px}
+#recBand .rb-r{white-space:nowrap}
+@media(max-width:520px){#recBand td:first-child{white-space:normal}#recBand td:first-child .conf{display:block;width:max-content;margin:0 0 3px}}   /* on a phone the pill sits over its range, so every column fits */
 .prob{margin:14px 0 8px;height:10px;border-radius:999px;background:var(--panel-3);overflow:hidden;display:flex}
 .prob i{display:block;height:100%;background:var(--ac,#888);transition:width .5s var(--ease)}
 .prob i.h{margin-left:auto;background:var(--hc,#888)}
@@ -615,14 +627,17 @@ render.slate = function () {
   const opening = S.opening ? `Opening night is ${dayName(S.opening)} ${dayNum(S.opening)}${S.opening > TODAY ? `, ${Math.round((Date.parse(S.opening) - Date.parse(TODAY)) / 86400000)} days away` : ''}.` : '';
   /* the injury report the numbers use, when the job's own read failed: older than the file it was published in (a
      file from last night, before the morning's run, is not a failure) */
+  const rec = confRecord(S.record);                         // this season's record in each confidence band, for the key and the pills
   const injOld = S.injuriesAsOf && S.today && (S.injuriesAsOf < S.today || S.injuriesAsOf < addDays(TODAY, -1)) && games.some(g => !started(g));
   $('#slate').innerHTML = (injOld ? `<div class="note"><b>Injury report as of ${dayName(S.injuriesAsOf)} ${dayNum(S.injuriesAsOf)}.</b> The latest could not be read, so the lineups below may still count a player who has since been ruled out.</div>` : '')
     + (pre ? `<div class="note"><b>Preseason.</b> Rotations are experimental and starters often sit, so these numbers assume each team's regular rotation. They are shown for fun and never graded, and the ratings don't learn from them. ${opening}</div>` : '')
-    + `<div class="grid">${games.map(card).join('')}</div>`;
+    + (games.some(g => g.model) ? confKey(rec) : '')
+    + `<div class="grid">${games.map(g => card(g, rec)).join('')}</div>`;
   $('#slate').querySelectorAll('[data-act]').forEach(el => el.onclick = act);
 };
-function card(g) {
+function card(g, rec) {
   const m = g.model, pick = pickOf(g), win = winner(g), fin = g.status === 'final';
+  const c = m ? Math.max(m.pHome, 1 - m.pHome) : null;       // the chance the card shows, and the one its confidence pill is worked on
   const A = TEAMS[g.away] || [g.away, g.away, '#888'], H = TEAMS[g.home] || [g.home, g.home, '#888'];
   const tags = [];
   if (fin) tags.push(`<span class="tag">Final</span>`); else if (g.status === 'live') tags.push(`<span class="tag hot">Live</span>`); else if (started(g)) tags.push(`<span class="tag hot">Tipped off</span>`);
@@ -651,7 +666,7 @@ function card(g) {
     <div class="top"><span><b>${tipTime(g.tip) || dayNum(g.date)}</b>${g.tip ? ` · ${dayNum(g.date)}` : ''}</span><span class="tags">${tags.join('')}</span></div>
     <div class="teams">
       <div class="team away" style="--tc:${A[2]}"><span class="badge${pick === g.away ? ' pick' : ''}" title="${A[1]}${pick === g.away ? ': the model\'s pick' : ''}">${g.away}</span><span class="nm">${A[1]}</span>${fin ? `<span class="sc${win === g.home ? ' lose' : ''}">${g.awayScore}</span>` : ''}</div>
-      <div class="vs">${m ? `<b>${fmtPct(Math.max(m.pHome, 1 - m.pHome))}</b>${pick}` : 'no number'}</div>
+      <div class="vs">${m ? `<b>${fmtPct(c)}</b>${pick}${confPill(c, rec)}` : 'no number'}</div>
       <div class="team home" style="--tc:${H[2]}"><span class="badge${pick === g.home ? ' pick' : ''}" title="${H[1]}${pick === g.home ? ': the model\'s pick' : ''}">${g.home}</span><span class="nm">${H[1]}</span>${fin ? `<span class="sc${win === g.away ? ' lose' : ''}">${g.homeScore}</span>` : ''}</div>
     </div>
     ${m ? `<div class="prob" style="--ac:${A[2]};--hc:${H[2]}"><i style="width:${(1 - m.pHome) * 100}%"></i><i class="h" style="width:${m.pHome * 100}%"></i></div>
@@ -942,8 +957,10 @@ const signedU = u => `${u >= 0 ? '+' : '−'}${Math.abs(u).toFixed(1)}u`;
    fitted. The earlier suggestion rules' backtest (tools/backtest.js, research/backtest.json) and the props model's
    shadow ledger (its numbers are in each game's props sheet) are no longer drawn here. */
 const recFresh = () => ({ su: { w: 0, l: 0 }, ml: { w: 0, l: 0, p: 0 }, sp: { w: 0, l: 0, p: 0 }, ou: { w: 0, l: 0, p: 0 } });
-/* the model's confidence on its straight-up call, as the NHL hub bands it */
-const recBand = p => { const c = Math.max(p, 1 - p); return c >= 0.7 ? '70+' : c >= 0.6 ? '60-70' : '50-60'; };
+/* the model's confidence on its straight-up call, on the page's one scale (confOf, CONF below: High 75%+, Med 60-74%, Low
+   55-59%, 50/50 under 55%, the confidence pill on Tonight's cards); until 7 November 2026 this table banded it 70+,
+   60-70 and 50-60 as the NHL hub does, a second scale beside the card's */
+const recBand = p => confOf(p);
 function recTally(R) {
   const all = recFresh(), byMonth = {}, bands = {};
   for (const g of R) {
@@ -974,11 +991,11 @@ render.record = function () {
     <div class="strip" id="recordTotals">${stat('Straight up', `${T.all.su.w}-${T.all.su.l}`)}${stat('SU rate', rate(T.all.su))}${picks('ml', 'Moneyline picks')}${picks('sp', 'Spread picks')}${picks('ou', 'Totals picks')}</div>
     ${R.length ? `<div class="two">
       <div><h2>By month</h2><div class="wrap"><table class="tbl rec-tbl" id="recMonth">${head('When')}<tbody>${months.map(m => `<tr><td>${m === 'playoffs' ? 'Playoffs' : `<span class="t-wide">${mName(m, true)}</span><span class="t-narrow">${mName(m, false)}</span>`}</td>${cells(T.byMonth[m])}</tr>`).join('')}</tbody></table></div></div>
-      <div><h2>By confidence</h2><div class="wrap"><table class="tbl rec-tbl" id="recBand">${head(hw('Model chance', 'Chance'))}<tbody>${['70+', '60-70', '50-60'].filter(b => T.bands[b]).map(b => `<tr><td>${b}%</td>${cells(T.bands[b])}</tr>`).join('')}</tbody></table></div></div>
+      <div><h2>By confidence</h2><div class="wrap"><table class="tbl rec-tbl" id="recBand">${head(hw('Model chance', 'Chance'))}<tbody>${CONF_ORDER.filter(b => T.bands[b]).map(b => `<tr data-conf="${b}"><td><span class="conf ${b}">${CONF[b][0]}</span> <span class="rb-r">${CONF[b][1]}</span></td>${cells(T.bands[b])}</tr>`).join('')}</tbody></table></div></div>
     </div>` : `<div class="empty"><b>Nothing graded yet</b>The record starts on opening night. Every morning the job publishes a number on each game; once the game is final it is graded here against that number, never against a replay.</div>`}
     ${fitNote ? `<h2 style="margin-top:28px">How it was fitted</h2><p class="muted rec-note" id="fitNote">${esc(fitNote)}</p>` : ''}`;
 };
-window.NBA_RECORD = { tally: recTally, band: recBand };   // what the smoke test reads
+window.NBA_RECORD = { tally: recTally, band: recBand, bands: () => CONF_ORDER.map(k => [k, ...CONF[k]]) };   // the tab's scale and tally, which tools/smoke.js's Record checks hold to their own copy
 /* ---------- the Parlay Builder's pieces kept here ----------
    The Parlay Builder is app/parts/parlay.html (README "Parlay Builder"), the NFL hub's tab on the NBA's lines. Until 25
    October 2026 this tab was a day's plan (a confidence band, straight bets or a parlay of the model's picks, Lock in),
@@ -989,6 +1006,35 @@ window.NBA_RECORD = { tally: recTally, band: recBand };   // what the smoke test
    (a leg's or a parlay's chance, HIGH from 75%, MED from 60%, LOW from 55%), the price helpers, and a parlay's
    settlement as a book settles it, which X Parlays and the suggestions record grade by. */
 const band = c => { const r = Math.round(c * 100) / 100; return r >= 0.75 ? ['high', 'HIGH'] : r >= 0.60 ? ['med', 'MED'] : r >= 0.55 ? ['low', 'LOW'] : ['coin', '50/50']; };
+/* the same band as a game's confidence, the page's one scale (the owner's question of 7 November 2026: "I assume its 78%
+   is the confidence level but i dont know if its low med or high"): each band's name and range, worded the same on the
+   pill under a card's chance (confPill), the key over Tonight's cards (confKey) and the Record tab's By confidence table.
+   band() rounds the chance to a whole percent as fmtPct does (both Math.round(c * 100)), so a pill and the percentage
+   beside it never disagree: 74.5% shows 75% and is High, 74.49% shows 74% and is Med */
+const CONF = { high: ['High', '75%+'], med: ['Med', '60-74%'], low: ['Low', '55-59%'], coin: ['50/50', 'under 55%'] };
+const CONF_ORDER = ['high', 'med', 'low', 'coin'];
+const confOf = pHome => band(Math.max(pHome, 1 - pHome))[0];   // a game's band, on its pick's chance
+/* this season's record of the model's published picks in each band, straight up, a tie left out (S.record: every graded
+   game with the number published before tip-off) */
+function confRecord(R) {
+  const t = {}; for (const k of CONF_ORDER) t[k] = [0, 0];
+  for (const g of R || []) { if (g.su !== true && g.su !== false) continue; t[confOf(g.pHome)][g.su ? 0 : 1]++; }
+  return t;
+}
+const confWl = x => x && x[0] + x[1] ? `${x[0]}-${x[1]}` : '';   // a band with no graded game has no record
+const confSay = (k, rec) => { const [name, range] = CONF[k], wl = confWl(rec && rec[k]);
+  return `Confidence: ${name}, the model gives its pick ${range}.${wl ? ` Its ${name} picks this season: ${wl}.` : ''}`; };
+/* the pill under a card's percentage, on the very chance it shows; read aloud as its title says */
+function confPill(c, rec) {
+  const k = band(c)[0], say = confSay(k, rec);
+  return `<span class="conf ${k}" data-conf="${k}" title="${say}"><span aria-hidden="true">${CONF[k][0]}</span><span class="sr">${say}</span></span>`;
+}
+/* the key over Tonight's cards: the four bands, each its range and this season's record (none where nothing is graded) */
+function confKey(rec) {
+  const any = CONF_ORDER.some(k => confWl(rec[k]));
+  return `<p class="confkey" data-confkey><span class="ck-h">Confidence${any ? ' <span>· W-L this season</span>' : ''}</span> ${CONF_ORDER.map(k => { const wl = confWl(rec[k]);
+    return `<span class="ck-i" data-ck="${k}" title="${confSay(k, rec)}"><span class="conf ${k}">${CONF[k][0]}</span> <span class="ck-r">${CONF[k][1]}</span>${wl ? ` <b>${wl}</b>` : ''}</span>`; }).join(' ')}</p>`;
+}
 const decToAm = d => d >= 2 ? Math.round((d - 1) * 100) : Math.round(-100 / (d - 1));
 const money = v => '$' + (Math.round(v * 100) / 100).toFixed(2);
 function dayTitle(d) { return d === TODAY ? 'Tonight' : d === addDays(TODAY, 1) ? 'Tomorrow' : `${dayName(d)} ${dayNum(d)}`; }
@@ -1218,6 +1264,9 @@ function oddsSaid(at, games, n, left, none) {
     + (kept.length ? ` ${oddsAnd(parts)}: ${oddsWhatStands(kept.map(x => x.g), false)}.` : '');
 }
 let oddsBusy = false, oddsDone = null;
+/* game id -> when a press last read that game's lines on ESPN's scoreboard (found or none), so the Parlay Builder can say
+   when a game with no DraftKings line was last read (pbNoGlSay); memory only */
+const ODDS_SEEN = {};
 function oddsIdle() { return `Lines as published ${new Date(S.generated).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}. Refresh odds reads DraftKings' current lines from ESPN, for this visit only.`; }
 /* the bar is on the board, while a game is still to come; the Parlay Builder carries the same button in its controls
    and in its builder, as the NFL hub's does (app/parts/parlay.html), so the bar is not shown over it */
@@ -1250,6 +1299,7 @@ async function refreshOdds() {
     const r = rows && rows.find(x => x.game_id === g.id);
     if (!r) return leave(g, 'failed');
     if (r.status !== 'scheduled' || (r.tip && Date.parse(r.tip) <= readAt.getTime())) return leave(g, 'tipped');
+    ODDS_SEEN[g.id] = at;                                     // read: its lines, or none posted yet
     if (ODDS_MARKET.every(k => !r[k])) return leave(g, 'noLine');
     const last = Date.parse(g.oddsAt || S.generated);
     if (Number.isFinite(last) && last >= readAt.getTime()) return leave(g, 'older');   // the published read is the newer

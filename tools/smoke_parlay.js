@@ -512,6 +512,140 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     check(q.errors.length === 0 && q2.errors.length === 0, 'no script errors: ' + q.errors.concat(q2.errors).join(' | '));
   }
 
+  /* ---------- 9b. why the list is empty: no DraftKings line yet, on some games or all, or none qualifying ----------
+     The owner's question of 7 November 2026 ("why is there no available parlay legs being recommended for tomorrows
+     games? i think something must have broke"): on Friday evening Saturday's seven games had no DraftKings line read yet,
+     and the list said "No line on your picks qualifies yet", as if lines were there and failed. Each case here is made
+     up (lines.json's entries with no game line, as the job writes a game DraftKings has not priced; lines no team leg
+     takes), worked out on this file's own reading of the lines and its own words, never the page's pbTopWhy; then a press
+     that reads the games and finds no line dates the sentence by the press */
+  {
+    const NOGL = g => ({ at: RD, espn: g.espn, ml: null, spread: null, total: null, ids: null, props: null });
+    /* lines no team leg takes on these games' numbers: each favourite under the chance its price implies, each other side
+       under 45% (the cases bite below, on this file's own rule) */
+    const COLD = { [A1.id]: { ml: { home: -400, away: 300 }, spread: { line: -3.5, home: -400, away: 300 } },
+      [A2.id]: { ml: { home: 100, away: -400 }, spread: { line: -3.5, home: 300, away: -400 } },
+      [A3.id]: { ml: { home: -400, away: 300 }, spread: { line: -3.5, home: -400, away: 300 } } };
+    const cold = g => ({ at: RD, espn: g.espn, ...COLD[g.id], total: null, ids: null, props: null });
+    const Lof = (games, at = RD) => ({ v: 1, at, games: Object.fromEntries(games.filter(Boolean).map(x => [x[0], x[1]])) });
+    const IDS3 = [A1.id, A2.id, A3.id];
+    const whenOwn = iso => new Date(iso).toLocaleString(undefined, { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+    /* this file's own reading: a game has DraftKings' game lines where its entry was read with a moneyline, spread or
+       total, or a press found them. One with none was covered by a read where lines.json holds it with its game lines read
+       (the entry's own at set: then "as of" the file's own at) or a press read it (its time), the later; the games all had
+       none as of the oldest of those. A game no read covered (L null: lines.json did not load; no entry; its props alone)
+       is not one DraftKings has none for: its lines "have not been read yet", or "did not load" */
+    const hasGlOwn = (L, id, press) => !!((press && press[id] && press[id].lines) || (L && L.games[id] && L.games[id].at && (L.games[id].ml || L.games[id].spread || L.games[id].total)));
+    const asOfOwn = (L, id, press) => { const t = [L && L.games[id] && L.games[id].at ? L.at : null, press && press[id] ? press[id].at : null].filter(Boolean).map(Date.parse); return t.length ? Math.max(...t) : null; };
+    function noGlOwn(L, ids, press) {
+      const miss = ids.filter(id => !hasGlOwn(L, id, press));
+      if (!miss.length) return '';
+      const of = n => n === ids.length ? (n === 1 ? 'your game' : `your ${n} games`) : `${n} of your ${ids.length} games`;
+      const read = miss.filter(id => asOfOwn(L, id, press) != null), unread = miss.filter(id => asOfOwn(L, id, press) == null), out = [];
+      if (read.length) out.push(`No DraftKings lines yet for ${of(read.length)} (as of ${whenOwn(Math.min(...read.map(id => asOfOwn(L, id, press))))}).`);
+      if (unread.length) out.push(`DraftKings’ lines for ${of(unread.length)} ${L ? 'have not been read yet' : 'did not load'}.`);
+      out.push(L ? 'The job reads them through the day; Refresh odds reads them now.' : 'Refresh odds reads them now.');
+      return out.join(' ');
+    }
+    const TEAMS_OWN = { k: { ml: true, ats: true, total: true, over: false, under: false }, off: [] };
+    const NOPL_OWN = 'No player prices yet: none have been read for these games; the job reads DraftKings\' player props through the day, and Refresh odds reads them now.';
+    const mineK = k => ({ picks: {}, build: [], slip: { legs: [], stake: 20 }, pb: { k, off: [] } });
+    const why = q => txt(q.d.querySelector('#pbPanel .pb-top-none'));
+    const notesOf = q => [...q.d.querySelectorAll('#pbPanel .pb-note')].map(txt);
+    /* L: the lines.json the page is served (an object, or 'junk' / 404 for a file that does not load) */
+    const caseOf = async (L, k, wantWhy, what, wantRows = 0) => {
+      const q = load(ST(), { lines: L, tab: 'parlay', mine: mineK(k) }); await sleep(300);
+      const n = q.d.querySelectorAll('#pbPanel li.pb-trow').length, w = why(q);
+      check(n === wantRows && w === wantWhy && !q.errors.length, `${what}: "${w}"${n !== wantRows ? ` (${n} rows)` : ''}${q.errors.length ? ': ' + q.errors.join(' | ') : ''}`);
+      return q;
+    };
+    /* the cases bite: on this file's own rule, the cold lines leave nothing on the team boxes, and a game with no entry
+       has no line */
+    const ownRows = L => pbTopOwn(candidatesOwn(ST(), L), TEAMS_OWN).rows.length;
+    const Lall = Lof(IDS3.map(id => [id, NOGL(SLATE.find(g => g.id === id))]));
+    const Lsome = Lof([[A1.id, cold(A1)], [A2.id, NOGL(A2)], [A3.id, NOGL(A3)]]), Lsome2 = Lof([[A1.id, cold(A1)], [A2.id, cold(A2)], [A3.id, NOGL(A3)]]);
+    const Lcold = Lof(IDS3.map(id => [id, cold(SLATE.find(g => g.id === id))])), Lhot = Lof([[A1.id, LINES.games[A1.id]], [A2.id, NOGL(A2)], [A3.id, NOGL(A3)]]);
+    /* a game whose entry holds its props alone (its game lines never read: at null), as tools/lines.js writes one; one with
+       a spread alone, one with a total alone (at prices no leg takes: the total's two sides 98% and 2% with the margin out) */
+    const PROPS_ONLY = g => ({ at: null, espn: g.espn, ml: null, spread: null, total: null, ids: null, props: { at: RD, mains: [], ladders: [], yes: [] } });
+    const SPREAD_ONLY = g => ({ at: RD, espn: g.espn, ml: null, spread: COLD[g.id].spread, total: null, ids: null, props: null });
+    const TOTAL_ONLY = g => ({ at: RD, espn: g.espn, ml: null, spread: null, total: { line: 228.5, over: -10000, under: 5000 }, ids: null, props: null });
+    const Lprops = Lof(IDS3.map(id => [id, PROPS_ONLY(SLATE.find(g => g.id === id))])), Lmix = Lof([[A1.id, cold(A1)], [A2.id, NOGL(A2)]]);
+    const Lhalf = Lof([[A1.id, SPREAD_ONLY(A1)], [A2.id, TOTAL_ONLY(A2)], [A3.id, NOGL(A3)]]);
+    check(!ownRows(Lall) && !ownRows(Lsome) && !ownRows(Lsome2) && !ownRows(Lcold) && ownRows(Lhot) > 0 && IDS3.every(id => hasGlOwn(Lcold, id) && !hasGlOwn(Lall, id)),
+      'the cases bite: on this file\'s own rule no team leg qualifies on the cold lines, the qualifying one does, and an entry with no game line is none');
+    check(!ownRows(Lhalf) && !ownRows(Lmix) && !ownRows(Lprops) && hasGlOwn(Lhalf, A1.id) && hasGlOwn(Lhalf, A2.id) && !hasGlOwn(Lhalf, A3.id) && !Lhalf.games[A1.id].ml && !Lhalf.games[A2.id].ml && IDS3.every(id => asOfOwn(Lprops, id) == null && asOfOwn(Lall, id) != null) && asOfOwn(null, A1.id) == null,
+      'and the new ones: a spread alone and a total alone are lines (no moneyline in either), none of them qualifying; an entry with its props alone, or a file that did not load, is no read of the game lines');
+    /* 1. no line on any ticked game */
+    const w1 = noGlOwn(Lall, IDS3);
+    check(w1 === `No DraftKings lines yet for your 3 games (as of ${whenOwn(RD)}). The job reads them through the day; Refresh odds reads them now.`, `this file's own words for three games with none: "${w1}"`);
+    let q = await caseOf(Lall, TEAMS_OWN.k, w1, 'no DraftKings line on any of the 3 ticked games, team bet types: the list says so plainly, as of lines.json\'s own time, never that a line failed to qualify');
+    check(!/qualif/.test(why(q)) && !notesOf(q).some(t => /No DraftKings lines yet/.test(t)) && !/last read/.test(why(q)), 'and nothing on the tab says a line failed to qualify, nor says it twice in the notes, nor dates it "last read"');
+    await caseOf(Lall, TICKS_ALL.k, `${w1} ${NOPL_OWN}`, 'the same with player bet types ticked: then, a sentence of its own, why there are no player lines');
+    await caseOf(Lall, { ml: false, ats: false, total: false, over: true, under: true }, NOPL_OWN, 'player bet types alone: the player-lines reason alone, no game-line sentence');
+    /* 1b. games no read has covered: no entry, an entry with its props alone, lines.json that did not load (junk, a 404):
+       never "No DraftKings lines yet", which the page cannot know */
+    const NEVER = 'DraftKings’ lines for your 3 games have not been read yet. The job reads them through the day; Refresh odds reads them now.';
+    const ERR = 'DraftKings’ lines for your 3 games did not load. Refresh odds reads them now.';
+    check(noGlOwn(Lof([]), IDS3) === NEVER && noGlOwn(Lprops, IDS3) === NEVER && noGlOwn(null, IDS3) === ERR, `this file's own words for games no read covered: "${noGlOwn(Lof([]), IDS3)}", and with lines.json not loading "${noGlOwn(null, IDS3)}"`);
+    q = await caseOf(Lof([]), TEAMS_OWN.k, NEVER, 'no game in lines.json at all (never read): not read yet, never that DraftKings has none');
+    await caseOf(Lprops, TEAMS_OWN.k, NEVER, 'every game in lines.json with its props alone (its game lines never read, at null): not read yet, and no time');
+    for (const [L, nm] of [['junk', 'not JSON'], [404, 'a 404']]) {
+      q = await caseOf(L, TEAMS_OWN.k, ERR, `lines.json that does not load (${nm}): the lines did not load, never that DraftKings has none`);
+      check(notesOf(q).some(t => /^DraftKings’ published lines did not load/.test(t)) && !/No DraftKings lines yet/.test(why(q)) && !notesOf(q).some(t => /No DraftKings lines yet/.test(t)),
+        `and the note over it says the same (${nm}): the two lines on the tab agree`);
+      await caseOf(L, TICKS_ALL.k, `${ERR} ${NOPL_OWN}`, `the same (${nm}) with player bet types ticked: the player-lines reason after`);
+    }
+    /* 2. lines on some of the ticked games, none of them qualifying; then one that does, which the list shows with a note */
+    const w2 = noGlOwn(Lsome, IDS3), w2b = noGlOwn(Lsome2, IDS3);
+    check(/^No DraftKings lines yet for 2 of your 3 games \(as of / .test(w2) && /^No DraftKings lines yet for 1 of your 3 games /.test(w2b), `this file's own counts: "${w2.slice(0, 50)}…", "${w2b.slice(0, 50)}…"`);
+    await caseOf(Lsome, TEAMS_OWN.k, `${w2} No line on the other game qualifies yet.`, 'lines on 1 of the 3 games, none qualifying: how many have none, as of when, then that the other game\'s lines do not qualify');
+    await caseOf(Lsome2, TEAMS_OWN.k, `${w2b} No line on the other 2 games qualifies yet.`, 'lines on 2 of the 3, none qualifying');
+    await caseOf(Lsome, TICKS_ALL.k, `${w2} No line on the other game qualifies yet. ${NOPL_OWN}`, 'and with player bet types ticked, the player-lines reason after');
+    const wh = noGlOwn(Lhalf, IDS3);
+    check(wh === `No DraftKings lines yet for 1 of your 3 games (as of ${whenOwn(RD)}). The job reads them through the day; Refresh odds reads them now.`, `this file's own words with a spread alone on one game and a total alone on another: "${wh}"`);
+    await caseOf(Lhalf, TEAMS_OWN.k, `${wh} No line on the other 2 games qualifies yet.`, 'a spread alone, a total alone and a game with none: the first two are lines (none qualifying), the third has none');
+    const wm = noGlOwn(Lmix, IDS3);
+    check(wm === `No DraftKings lines yet for 1 of your 3 games (as of ${whenOwn(RD)}). DraftKings’ lines for 1 of your 3 games have not been read yet. The job reads them through the day; Refresh odds reads them now.`, `this file's own words with lines on one game, none on one and one never read: "${wm}"`);
+    await caseOf(Lmix, TEAMS_OWN.k, `${wm} No line on the other game qualifies yet.`, 'lines on 1 of the 3 (none qualifying), none on 1, 1 never read: each said apart');
+    q = await caseOf(Lhot, TEAMS_OWN.k, '', 'lines on 1 of the 3 games that qualify: the list has them, and no empty line', ownRows(Lhot));
+    check(notesOf(q).filter(t => t === w2).length === 1, `and a note says, word for word, which games have no line yet ("${notesOf(q).find(t => /DraftKings lines yet/.test(t)) || 'none'}")`);
+    const Lhot2 = Lof([[A1.id, LINES.games[A1.id]], [A2.id, NOGL(A2)]]), wn = noGlOwn(Lhot2, IDS3);
+    q = await caseOf(Lhot2, TEAMS_OWN.k, '', 'lines on 1 that qualify, none on 1, 1 never read: the list has them', ownRows(Lhot2));
+    check(notesOf(q).filter(t => t === wn).length === 1 && /have not been read yet/.test(wn), `and its note says each apart, word for word ("${notesOf(q).find(t => /DraftKings/.test(t) && /yet/.test(t)) || 'none'}")`);
+    /* 3. lines on every ticked game, none qualifying: the "none qualifies" line, and no game-line sentence */
+    await caseOf(Lcold, TEAMS_OWN.k, 'No line on your picks qualifies yet: tick more games or bet types.', 'lines on all 3, none qualifying, team bet types: none qualifies, tick more');
+    q = await caseOf(Lcold, TICKS_ALL.k, `No line on your picks qualifies yet. ${NOPL_OWN}`, 'and with player bet types ticked: none qualifies, then the player-lines reason');
+    check(!notesOf(q).some(t => /No DraftKings lines yet|have not been read yet/.test(t)), 'no note says a game has no line when every one has');
+    /* 4. a press that reads the three games and finds no line posted dates the sentence by the press; one whose read of a
+       date fails leaves that date's games as of the file's time, and the sentence as of the older; one after lines.json
+       failed to load turns "did not load" into none, as of the press */
+    {
+      const ESPN_CODE = { GSW: 'GS', NOP: 'NO', NYK: 'NY', SAS: 'SA', UTA: 'UTAH', WAS: 'WSH' };
+      const ev = g => ({ id: g.espn, date: g.tip, season: { year: SEASON, type: 2 }, competitions: [{ neutralSite: false, status: { type: { name: 'STATUS_SCHEDULED', completed: false } }, odds: [],
+        competitors: [{ homeAway: 'home', team: { abbreviation: ESPN_CODE[g.home] || g.home }, score: '0' }, { homeAway: 'away', team: { abbreviation: ESPN_CODE[g.away] || g.away }, score: '0' }] }] });
+      const sb = { [ymd(A1.date)]: { events: [ev(A1), ev(A2)] }, [ymd(A3.date)]: { events: [ev(A3)] } };
+      const espnOf = down => async url => { const m = /dates=(\d{8})/.exec(url); if (/propBets/.test(url)) return { ok: false, status: 404, json: async () => ({ error: { code: 404 } }) };
+        if (m && down && m[1] === down) return { ok: false, status: 503, json: async () => ({}) };
+        return { ok: true, status: 200, json: async () => clone(sb[m && m[1]] || { events: [] }) }; };
+      const press = async qp => { const t0 = Date.now(); qp.d.querySelector('#pbPanel [data-espn-refresh="pb"]').click(); await sleep(30);
+        for (let i = 0; i < 400 && qp.d.getElementById('oddsBar').classList.contains('busy'); i++) await sleep(25);
+        await sleep(60); const t1 = Date.now(), mins = []; for (let t = Math.floor(t0 / 60e3) * 60e3; t <= t1; t += 60e3) mins.push(new Date(t).toISOString()); return mins; };
+      const LoldAt = at(now - 30 * H), Lold = { ...Lall, at: LoldAt };
+      let qp = load(ST(), { lines: Lold, espn: espnOf(null), tab: 'parlay', mine: mineK(TEAMS_OWN.k) }); await sleep(300);
+      check(why(qp) === noGlOwn(Lold, IDS3) && why(qp).includes(`(as of ${whenOwn(LoldAt)})`), `before the press the sentence gives lines.json's own time, a day old ("${why(qp).slice(0, 80)}")`);
+      let mins = await press(qp), wants = mins.map(m => noGlOwn(Lold, IDS3, Object.fromEntries(IDS3.map(id => [id, { at: m, lines: false }]))));
+      check(wants.includes(why(qp)) && !qp.errors.length, `after a press that finds no line, the sentence is dated by the press ("${why(qp)}")${qp.errors.length ? ': ' + qp.errors.join(' | ') : ''}`);
+      qp = load(ST(), { lines: Lold, espn: espnOf(ymd(A3.date)), tab: 'parlay', mine: mineK(TEAMS_OWN.k) }); await sleep(300);
+      mins = await press(qp); wants = mins.map(m => noGlOwn(Lold, IDS3, { [A1.id]: { at: m, lines: false }, [A2.id]: { at: m, lines: false } }));
+      check(wants.includes(why(qp)) && why(qp).includes(`(as of ${whenOwn(LoldAt)})`) && !qp.errors.length, `a press that reads one date and fails the other: the sentence is as of the older of the games' own times, lines.json's, never the press's ("${why(qp)}")`);
+      qp = load(ST(), { lines: 'junk', espn: espnOf(null), tab: 'parlay', mine: mineK(TEAMS_OWN.k) }); await sleep(300);
+      check(why(qp) === ERR, `with lines.json not loading, before a press: "${why(qp)}"`);
+      mins = await press(qp); wants = mins.map(m => noGlOwn(null, IDS3, Object.fromEntries(IDS3.map(id => [id, { at: m, lines: false }]))));
+      check(wants.includes(why(qp)) && /^No DraftKings lines yet for your 3 games \(as of [^)]+\)\. Refresh odds reads them now\.$/.test(why(qp)) && !qp.errors.length, `and after a press that reads them all and finds no line: none, as of the press ("${why(qp)}")`);
+    }
+  }
+
   /* ---------- 10. the 50-line cut, on sixty made-up games ---------- */
   {
     const TM = ['ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'];
@@ -537,7 +671,9 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   /* ---------- 11. lines.json that does not load, and the off-season ---------- */
   {
     const q = load(ST(), { lines: 'junk', tab: 'parlay' }); await sleep(300);
-    check(/The published lines did not load/.test(txt(q.d.getElementById('espnSt-pb'))) && /did not load/.test(txt(q.d.querySelector('#pbPanel .pb-note'))) && !q.d.querySelectorAll('#pbPanel li.pb-trow').length && q.errors.length === 0, 'a lines.json that does not load lists nothing, says so, and throws nothing');
+    const none = txt(q.d.querySelector('#pbPanel .pb-top-none'));
+    check(/The published lines did not load/.test(txt(q.d.getElementById('espnSt-pb'))) && /did not load/.test(txt(q.d.querySelector('#pbPanel .pb-note'))) && !q.d.querySelectorAll('#pbPanel li.pb-trow').length && q.errors.length === 0
+      && none.startsWith('DraftKings’ lines for your 3 games did not load. Refresh odds reads them now.') && !/No DraftKings lines yet|qualif/.test(none), `a lines.json that does not load lists nothing, says so in the status line, the note and the empty line alike ("${none.slice(0, 90)}"), and throws nothing`);
     const q2 = load(ST({ slate: [A4, A6].map(clone) }), { lines: LINES, tab: 'parlay' }); await sleep(300);
     check(/No game is left to build a parlay from/.test(txt(q2.d.getElementById('pbPanel'))) && !q2.d.getElementById('pbStake') && q2.errors.length === 0, 'with no game to come but a preseason one, the tab says there is nothing to build from, with no controls');
   }

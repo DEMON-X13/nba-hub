@@ -726,6 +726,7 @@ function pbTopBuild() {
   const r = pbLegs(games, u);
   out.pref = r.pref.length; out.thin = r.thin.length; out.mkt = r.mkt.length; out.far = r.far; out.noId = r.noId; out.held = r.held;
   out.noPlayerPrices = !!(u.k.over || u.k.under) && !r.plGames; out.plWhy = out.noPlayerPrices ? pbNoPl(games) : '';
+  out.noGl = games.filter(g => !pbHasGl(g.id)).map(g => g.id);   // ticked games with no DraftKings game line (read and none, or not read)
   const rank = list => list.map(l => { const dec = amToDec(l.price); return dec > 1 ? { ...l, dec, win: dec - 1, ev: l.p * dec - 1, fc: legFair(l) } : null; })
     .filter(Boolean).sort((a, b) => (b.ev - a.ev) || pbOrd(a, b));
   const rungOf = l => l.kind === 'prop' && l.mk === 'mile', mainOver = new Set([...r.pref, ...r.thin]
@@ -742,12 +743,48 @@ function getPbTop() {
   if (!r) { r = { sig, ...pbTopBuild() }; PB_TOP_CACHE.set(sig, r); if (PB_TOP_CACHE.size > 24) PB_TOP_CACHE.delete(PB_TOP_CACHE.keys().next().value); }
   return r;
 }
+/* a game has DraftKings' game lines once a read (the job's or a press's) found any of its moneyline, spread or total */
+const pbHasGl = gid => { const gl = pbGl(gid); return !!(gl && (gl.ml || gl.spread || gl.total)); };
+/* as of when a read covered a game's game lines and found none: lines.json as published (its own `at`, the time the
+   status line gives it) where the file holds the game with its game lines read (the entry's own `at` set), or a Refresh
+   odds press that read the game, the later; null where no read has covered them (lines.json did not load, holds no entry
+   for the game, or holds its props alone). The file's `at` is when the run that last changed it read, not each game's
+   read (tools/lines.js), so it is said "as of", what the published file supports, never "last read" */
+function pbGlAsOf(id) {
+  const x = LINES && LINES.games ? LINES.games[id] : null;
+  const t = [x && x.at ? LINES.at || x.at : null, ODDS_SEEN[id] || null].filter(Boolean);
+  return t.length ? t.sort((a, b) => pbT(a) - pbT(b)).pop() : null;
+}
+/* as of when every one of these games had none: the oldest of their own latest reads */
+function pbGlSeen(ids) {
+  const t = ids.map(pbGlAsOf);
+  return t.length && t.every(Boolean) ? t.sort((a, b) => pbT(a) - pbT(b))[0] : null;
+}
+/* the ticked games with no DraftKings game line, said plainly (until 7 November 2026 an empty list said "No line on your
+   picks qualifies yet", as if lines were there and failed, on a Friday evening when DraftKings had posted none for
+   Saturday's games), in two groups: those a read covered and found none ("No DraftKings lines yet for 6 of your 7 games
+   (as of Fri 5:39 PM).") and those no read has covered, which the page cannot say DraftKings has none for ("DraftKings’
+   lines for your 7 games have not been read yet.", or "did not load." where lines.json did not load); then what reads
+   them. Split here, on the reads as they stand, since a press that finds no line moves no cache key */
+function pbNoGlSay(r) {
+  const of = n => n === r.ticked ? (n === 1 ? 'your game' : `your ${n} games`) : `${n} of your ${r.ticked} games`;
+  const read = r.noGl.filter(id => pbGlAsOf(id)), unread = r.noGl.filter(id => !pbGlAsOf(id)), out = [];
+  if (read.length) out.push(`No DraftKings lines yet for ${of(read.length)} (as of ${pbWhen(pbGlSeen(read))}).`);
+  if (unread.length) out.push(`DraftKings’ lines for ${of(unread.length)} ${LINES_ERR ? 'did not load' : 'have not been read yet'}.`);
+  out.push(LINES_ERR ? 'Refresh odds reads them now.' : 'The job reads them through the day; Refresh odds reads them now.');
+  return out.join(' ');
+}
 function pbTopWhy(r, u) {
   if (!r.kinds) return 'No bet types ticked: tick at least one above.';
   if (!r.ticked) return 'No games ticked: tick at least one above.';
   if (r.loading) return 'Loading DraftKings’ lines…';
-  if ((u.k.over || u.k.under) && r.noPlayerPrices) { const np = r.plWhy;
-    return (u.k.ml || u.k.ats || u.k.total) ? `No line on your picks qualifies yet, and ${np}` : np[0].toUpperCase() + np.slice(1); }
+  const teams = !!(u.k.ml || u.k.ats || u.k.total), players = !!(u.k.over || u.k.under) && r.noPlayerPrices;
+  const cap = t => t[0].toUpperCase() + t.slice(1), np = players ? ' ' + cap(r.plWhy) : '';
+  if (teams && r.noGl && r.noGl.length) {
+    const rest = r.ticked - r.noGl.length;
+    return pbNoGlSay(r) + (rest ? ` No line on the other ${rest === 1 ? 'game' : rest + ' games'} qualifies yet.` : '') + np;
+  }
+  if (players) return teams ? `No line on your picks qualifies yet.${np}` : cap(r.plWhy);
   return `No line on your picks qualifies yet${r.noId ? ' that DraftKings’ betslip can take' : ''}: tick more games or bet types.`;
 }
 function pbTopRow(l, i) {
@@ -787,6 +824,7 @@ function pbPanel() {
       return `<label class="pb-g${on ? ' on' : ''}"><input type="checkbox" data-pb-game="${g.id}" ${on ? 'checked' : ''} aria-label="${esc(g.away)} at ${esc(g.home)}, ${esc(t || pbDayText(d))}"><span><b>${esc(g.away)} @ ${esc(g.home)}</b><small>${t ? esc(t) : esc(dayName(d))}</small></span></label>`; }).join('')}</div></div>`; }).join('');
   const notes = [];
   if (LINES_ERR && !Object.keys(SG_LINES).length && !Object.keys(PP_LIVE).length) notes.push('DraftKings’ published lines did not load: the list has what Refresh odds reads, once it is pressed.');
+  if (r.rows.length && (u.k.ml || u.k.ats || u.k.total) && r.noGl && r.noGl.length) notes.push(esc(pbNoGlSay(r)));
   if (u.k.total) notes.push(`Game totals are never Value picks: each is priced at the book’s own chance, so the totals come last among the other lines, and on a long list the ${PB_TOP_N} lines can end before them.`);
   if (r.noPlayerPrices && r.rows.length) notes.push(`The list has no player lines: ${r.plWhy.replace(/^no player (prices yet|lines the props model prices|lines): /, '')}`);
   if (r.far) notes.push(`${r.far} line${r.far === 1 ? ' is' : 's are'} left out: the model rates ${r.far === 1 ? 'it' : 'each'} ${Math.round(PB_FAR * 100)} points or more above DraftKings’ fair chance (its prices with the margin taken out), a gap too wide to list. ${r.far === 1 ? 'It is' : 'They are'} still in ${r.far === 1 ? 'its' : 'their'} game’s Player props after a Refresh odds press, to add yourself.`);

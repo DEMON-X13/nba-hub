@@ -99,6 +99,15 @@
   ],
   "CHA": [
    {
+    "id": "4433287",
+    "name": "Brandon Miller",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin Soreness",
+    "date": "2026-11-07",
+    "returns": "2026-11-09"
+   },
+   {
     "id": "3032979",
     "name": "Dennis Schroder",
     "pos": "G",
@@ -166,6 +175,24 @@
   ],
   "CLE": [
    {
+    "id": "4066757",
+    "name": "Sam Merrill",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Elbow",
+    "date": "2026-11-07",
+    "returns": "2026-11-07"
+   },
+   {
+    "id": "4066328",
+    "name": "Jarrett Allen",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee",
+    "date": "2026-11-06",
+    "returns": "2026-11-07"
+   },
+   {
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
@@ -173,24 +200,6 @@
     "detail": "Ankle Sprain",
     "date": "2026-11-05",
     "returns": "2026-11-07"
-   },
-   {
-    "id": "4576087",
-    "name": "Peyton Watson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Soreness",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
-   },
-   {
-    "id": "4066328",
-    "name": "Jarrett Allen",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-11-05",
-    "returns": "2026-11-06"
    }
   ],
   "DAL": [
@@ -231,15 +240,6 @@
     "detail": "Back Spasms",
     "date": "2026-11-06",
     "returns": "2026-11-07"
-   },
-   {
-    "id": "4592427",
-    "name": "Spencer Jones",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Hamstring Not Specified",
-    "date": "2026-11-03",
-    "returns": "2026-11-11"
    },
    {
     "id": "4432181",
@@ -465,6 +465,15 @@
   ],
   "MIN": [
    {
+    "id": "5279133",
+    "name": "Joan Beringer",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Fracture",
+    "date": "2026-11-07",
+    "returns": "2026-11-08"
+   },
+   {
     "id": "4432847",
     "name": "Terrence Shannon Jr.",
     "pos": "G",
@@ -648,21 +657,21 @@
   ],
   "PHX": [
    {
-    "id": "4278402",
-    "name": "Jordan Goodwin",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf Not Specified",
-    "date": "2026-11-06",
-    "returns": "2026-11-07"
-   },
-   {
     "id": "5105977",
     "name": "Rasheer Fleming",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-06",
+    "date": "2026-11-07",
+    "returns": "2026-11-07"
+   },
+   {
+    "id": "4278402",
+    "name": "Jordan Goodwin",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Calf Not Specified",
+    "date": "2026-11-07",
     "returns": "2026-11-07"
    },
    {
@@ -709,10 +718,10 @@
     "id": "4065732",
     "name": "De'Andre Hunter",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Illness",
-    "date": "2026-11-06",
-    "returns": "2026-11-06"
+    "date": "2026-11-07",
+    "returns": "2026-11-08"
    },
    {
     "id": "4898371",
@@ -764,40 +773,22 @@
   ],
   "TOR": [
    {
-    "id": "3134908",
-    "name": "Jakob Poeltl",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Shoulder",
+    "id": "4433134",
+    "name": "Scottie Barnes",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Groin Soreness",
     "date": "2026-11-06",
-    "returns": "2026-11-06"
+    "returns": "2026-11-09"
    },
    {
     "id": "4395724",
     "name": "Immanuel Quickley",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hamstring",
     "date": "2026-11-06",
-    "returns": "2026-11-06"
-   },
-   {
-    "id": "4433134",
-    "name": "Scottie Barnes",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin Soreness",
-    "date": "2026-11-06",
-    "returns": "2026-11-06"
-   },
-   {
-    "id": "2993874",
-    "name": "Kyle Anderson",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-06",
-    "returns": "2026-11-06"
+    "returns": "2026-11-09"
    },
    {
     "id": "6450",

@@ -447,7 +447,7 @@
     "name": "Brandon Miller",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2583632",
@@ -661,7 +661,7 @@
     "name": "Sam Merrill",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3908809",
@@ -724,7 +724,7 @@
     "name": "Peyton Watson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "DAL": [
@@ -931,7 +931,7 @@
     "name": "Spencer Jones",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3135046",
@@ -2127,7 +2127,7 @@
     "name": "Joan Beringer",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432247",
@@ -3337,7 +3337,7 @@
     "name": "Kyle Anderson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433134",
@@ -3421,7 +3421,7 @@
     "name": "Jakob Poeltl",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4395724",

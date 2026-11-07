@@ -108,6 +108,15 @@
   ],
   "CHA": [
    {
+    "id": "4433249",
+    "name": "Moussa Diabate",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Quadriceps",
+    "date": "2026-11-07",
+    "returns": "2026-11-09"
+   },
+   {
     "id": "4433287",
     "name": "Brandon Miller",
     "pos": "F",
@@ -122,15 +131,6 @@
     "pos": "G",
     "status": "Out",
     "detail": "Thigh",
-    "date": "2026-11-06",
-    "returns": "2026-11-09"
-   },
-   {
-    "id": "4433249",
-    "name": "Moussa Diabate",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Quadriceps",
     "date": "2026-11-06",
     "returns": "2026-11-09"
    },
@@ -631,9 +631,9 @@
     "id": "5105637",
     "name": "Adem Bona",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Sprain",
-    "date": "2026-11-06",
+    "date": "2026-11-07",
     "returns": "2026-11-08"
    },
    {
@@ -776,18 +776,18 @@
     "id": "4433134",
     "name": "Scottie Barnes",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Groin Soreness",
-    "date": "2026-11-06",
+    "date": "2026-11-07",
     "returns": "2026-11-09"
    },
    {
     "id": "4395724",
     "name": "Immanuel Quickley",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-11-06",
+    "date": "2026-11-07",
     "returns": "2026-11-09"
    },
    {

@@ -3,30 +3,30 @@
  "teams": {
   "ATL": [
    {
-    "id": "4701230",
-    "name": "Jalen Johnson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle",
-    "date": "2026-11-06",
-    "returns": "2026-11-07"
-   },
-   {
     "id": "4585618",
     "name": "Keshon Gilbert",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Inflammation",
-    "date": "2026-11-05",
+    "date": "2026-11-07",
     "returns": "2026-11-07"
    },
    {
     "id": "4873201",
     "name": "Asa Newell",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Toe",
-    "date": "2026-11-05",
+    "date": "2026-11-07",
+    "returns": "2026-11-07"
+   },
+   {
+    "id": "4701230",
+    "name": "Jalen Johnson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-06",
     "returns": "2026-11-07"
    },
    {
@@ -70,6 +70,15 @@
   ],
   "BKN": [
    {
+    "id": "4712896",
+    "name": "Noah Clowney",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-07",
+    "returns": "2026-11-07"
+   },
+   {
     "id": "4432194",
     "name": "Day'Ron Sharpe",
     "pos": "C",
@@ -94,7 +103,7 @@
     "status": "Out",
     "detail": "Shoulder Sprain",
     "date": "2026-10-25",
-    "returns": "2026-11-06"
+    "returns": "2026-11-07"
    }
   ],
   "CHA": [
@@ -178,7 +187,7 @@
     "id": "4066757",
     "name": "Sam Merrill",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Elbow",
     "date": "2026-11-07",
     "returns": "2026-11-07"
@@ -187,9 +196,9 @@
     "id": "4066328",
     "name": "Jarrett Allen",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-11-06",
+    "date": "2026-11-07",
     "returns": "2026-11-07"
    },
    {
@@ -468,7 +477,7 @@
     "id": "5279133",
     "name": "Joan Beringer",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Fracture",
     "date": "2026-11-07",
     "returns": "2026-11-08"
@@ -528,19 +537,10 @@
     "id": "4432823",
     "name": "Jaylin Williams",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Spasms",
-    "date": "2026-11-05",
+    "date": "2026-11-07",
     "returns": "2026-11-07"
-   },
-   {
-    "id": "5159925",
-    "name": "Nikola Topic",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Back",
-    "date": "2026-11-03",
-    "returns": "2026-11-13"
    },
    {
     "id": "5061603",
@@ -718,7 +718,7 @@
     "id": "4065732",
     "name": "De'Andre Hunter",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
     "date": "2026-11-07",
     "returns": "2026-11-08"
@@ -843,9 +843,9 @@
     "id": "6583",
     "name": "Anthony Davis",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-06",
+    "date": "2026-11-07",
     "returns": "2026-11-07"
    },
    {

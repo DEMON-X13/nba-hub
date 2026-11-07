@@ -263,7 +263,7 @@
     "name": "Noah Clowney",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5175643",
@@ -2574,7 +2574,7 @@
     "name": "Nikola Topic",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683692",

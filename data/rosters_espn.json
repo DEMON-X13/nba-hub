@@ -2048,7 +2048,7 @@
     "name": "Kam Jones",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3134907",
@@ -2625,7 +2625,7 @@
     "name": "Desmond Bane",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4348700",
@@ -3465,7 +3465,7 @@
     "name": "Trey Alexander",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4873138",

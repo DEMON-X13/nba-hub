@@ -4246,7 +4246,6 @@ date,team,player_id,name,status
 2026-11-07,ATL,4701230,Jalen Johnson,Out
 2026-11-07,ATL,4712863,Mouhamed Gueye,Out
 2026-11-07,ATL,5105571,Henri Veesaar,Out
-2026-11-07,BOS,4433188,Devin Carter,Out
 2026-11-07,BKN,4712896,Noah Clowney,Day-To-Day
 2026-11-07,BKN,4432194,Day'Ron Sharpe,Day-To-Day
 2026-11-07,BKN,5175643,Egor Demin,Out
@@ -4288,18 +4287,18 @@ date,team,player_id,name,status
 2026-11-07,MEM,5105462,Richie Saunders,Out
 2026-11-07,MEM,4432810,Isaiah Stewart,Out
 2026-11-07,MEM,4431785,Scotty Pippen Jr.,Out
-2026-11-07,MIL,4697268,Kam Jones,Day-To-Day
 2026-11-07,MIN,5279133,Joan Beringer,Day-To-Day
 2026-11-07,MIN,4432847,Terrence Shannon Jr.,Out
 2026-11-07,MIN,4594268,Anthony Edwards,Out
 2026-11-07,MIN,3934673,Donte DiVincenzo,Out
 2026-11-07,NOP,5061589,Yves Missi,Out
 2026-11-07,NYK,3062679,Josh Hart,Out
-2026-11-07,OKC,4432823,Jaylin Williams,Day-To-Day
+2026-11-07,OKC,4432823,Jaylin Williams,Out
 2026-11-07,OKC,5061603,Thomas Sorber,Out
 2026-11-07,OKC,4683692,Cason Wallace,Out
 2026-11-07,OKC,4433255,Chet Holmgren,Out
 2026-11-07,OKC,4593803,Jalen Williams,Out
+2026-11-07,ORL,4066320,Desmond Bane,Out
 2026-11-07,ORL,4065654,Jonathan Isaac,Out
 2026-11-07,ORL,4432165,Jalen Suggs,Out
 2026-11-07,ORL,4432573,Paolo Banchero,Out
@@ -4326,7 +4325,6 @@ date,team,player_id,name,status
 2026-11-07,TOR,4432586,Nate Bittle,Out
 2026-11-07,UTA,3102530,Jusuf Nurkic,Out
 2026-11-07,UTA,4277961,Jaren Jackson Jr.,Out
-2026-11-07,UTA,4433268,Trey Alexander,Out
 2026-11-07,WAS,6583,Anthony Davis,Day-To-Day
 2026-11-07,WAS,4432187,Reece Beekman,Out
 2026-11-07,WAS,4997537,Tristan Vukcevic,Out

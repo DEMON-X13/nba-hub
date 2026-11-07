@@ -70,7 +70,7 @@
     "name": "Jalen Johnson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4280151",
@@ -505,7 +505,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4711294",
@@ -882,7 +882,7 @@
     "name": "DeMar DeRozan",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4065813",
@@ -1010,7 +1010,7 @@
     "name": "Elijah Harkless",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683771",
@@ -1045,7 +1045,7 @@
     "name": "Isaac Jones",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4700852",
@@ -1387,7 +1387,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2580365",
@@ -1415,7 +1415,7 @@
     "name": "Kelly Oubre Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433076",
@@ -1615,7 +1615,7 @@
     "name": "Luka Doncic",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397014",
@@ -3086,7 +3086,7 @@
     "name": "Robert Williams III",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4706557",

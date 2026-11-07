@@ -1377,8 +1377,8 @@
  },
  "upcoming": {
   "2027_20261107_BKN_ATL": {
-   "pHome": 0.6193,
-   "spread": -3.8
+   "pHome": 0.6587,
+   "spread": -5.1
   },
   "2027_20261107_DEN_IND": {
    "pHome": 0.2272,
@@ -1397,8 +1397,8 @@
    "spread": -5.3
   },
   "2027_20261107_SAS_POR": {
-   "pHome": 0.3443,
-   "spread": 5
+   "pHome": 0.326,
+   "spread": 5.6
   },
   "2027_20261107_WAS_OKC": {
    "pHome": 0.7437,
@@ -2152,5 +2152,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-07T20:17Z"
+ "generated": "2026-11-07T22:47Z"
 }

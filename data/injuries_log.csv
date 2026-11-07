@@ -4243,7 +4243,6 @@ date,team,player_id,name,status
 2026-11-07,ATL,4585618,Keshon Gilbert,Out
 2026-11-07,ATL,4873201,Asa Newell,Out
 2026-11-07,ATL,3146557,Jock Landale,Out
-2026-11-07,ATL,4701230,Jalen Johnson,Out
 2026-11-07,ATL,4712863,Mouhamed Gueye,Out
 2026-11-07,ATL,5105571,Henri Veesaar,Out
 2026-11-07,BKN,4712896,Noah Clowney,Day-To-Day
@@ -4254,18 +4253,20 @@ date,team,player_id,name,status
 2026-11-07,CHA,3032979,Dennis Schroder,Out
 2026-11-07,CHA,5061575,Kon Knueppel,Out
 2026-11-07,CHA,4066218,Grant Williams,Out
-2026-11-07,CHI,4066650,Zach Collins,Day-To-Day
-2026-11-07,CHI,4278067,Nic Claxton,Out
+2026-11-07,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-11-07,CHI,4397189,Jalen Smith,Day-To-Day
+2026-11-07,CHI,4278067,Nic Claxton,Out
+2026-11-07,CHI,4066650,Zach Collins,Out
 2026-11-07,CLE,4683747,Jaylon Tyson,Out
 2026-11-07,CLE,4066757,Sam Merrill,Out
 2026-11-07,CLE,4066328,Jarrett Allen,Out
 2026-11-07,DAL,5279129,Sergio de Larrea,Out
 2026-11-07,DAL,5148538,Tarik Biberovic,Out
 2026-11-07,DAL,4683688,Dereck Lively II,Out
-2026-11-07,DEN,3978,DeMar DeRozan,Day-To-Day
 2026-11-07,DEN,4432181,Julian Strawther,Out
 2026-11-07,DET,4395702,Isaiah Joe,Out
+2026-11-07,DET,5107818,Isaac Jones,Day-To-Day
+2026-11-07,DET,4397449,Elijah Harkless,Day-To-Day
 2026-11-07,DET,4433621,Jalen Duren,Out
 2026-11-07,GSW,6589,Draymond Green,Day-To-Day
 2026-11-07,GSW,3134903,Gary Payton II,Day-To-Day
@@ -4275,15 +4276,14 @@ date,team,player_id,name,status
 2026-11-07,GSW,6430,Jimmy Butler III,Out
 2026-11-07,HOU,3102529,Clint Capela,Out
 2026-11-07,HOU,2991235,Steven Adams,Out
-2026-11-07,IND,2530530,T.J. McConnell,Out
-2026-11-07,IND,3133603,Kelly Oubre Jr.,Day-To-Day
+2026-11-07,IND,4396993,Tyrese Haliburton,Out
 2026-11-07,IND,5157066,Johnny Furphy,Out
 2026-11-07,IND,4433076,Ben Sheppard,Out
-2026-11-07,IND,4396993,Tyrese Haliburton,Out
 2026-11-07,LAC,3913176,Brandon Ingram,Out
 2026-11-07,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-11-07,LAC,6580,Bradley Beal,Out
 2026-11-07,LAC,4396818,Jordan Miller,Out
+2026-11-07,LAL,3945274,Luka Doncic,Day-To-Day
 2026-11-07,MEM,5105462,Richie Saunders,Out
 2026-11-07,MEM,4432810,Isaiah Stewart,Out
 2026-11-07,MEM,4431785,Scotty Pippen Jr.,Out
@@ -4310,6 +4310,7 @@ date,team,player_id,name,status
 2026-11-07,PHX,5105977,Rasheer Fleming,Day-To-Day
 2026-11-07,PHX,4278402,Jordan Goodwin,Day-To-Day
 2026-11-07,PHX,4701232,Mark Williams,Out
+2026-11-07,POR,4066211,Robert Williams III,Out
 2026-11-07,POR,4578893,Vit Krejci,Out
 2026-11-07,POR,4279888,Ja Morant,Out
 2026-11-07,POR,4914336,Shaedon Sharpe,Out

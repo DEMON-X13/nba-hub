@@ -30,15 +30,6 @@
     "returns": "2026-11-09"
    },
    {
-    "id": "4701230",
-    "name": "Jalen Johnson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle",
-    "date": "2026-11-07",
-    "returns": "2026-11-07"
-   },
-   {
     "id": "4712863",
     "name": "Mouhamed Gueye",
     "pos": "F",
@@ -135,12 +126,21 @@
   ],
   "CHI": [
    {
-    "id": "4066650",
-    "name": "Zach Collins",
+    "id": "5105555",
+    "name": "Tobe Awaka",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-06",
+    "detail": "Knee Sprain",
+    "date": "2026-11-07",
+    "returns": "2026-11-08"
+   },
+   {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Finger Sprain",
+    "date": "2026-11-07",
     "returns": "2026-11-08"
    },
    {
@@ -149,17 +149,17 @@
     "pos": "C",
     "status": "Out",
     "detail": "Hamstring Strain",
-    "date": "2026-11-06",
+    "date": "2026-11-07",
     "returns": "2026-11-08"
    },
    {
-    "id": "4397189",
-    "name": "Jalen Smith",
+    "id": "4066650",
+    "name": "Zach Collins",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hand",
-    "date": "2026-11-05",
-    "returns": "2026-11-08"
+    "status": "Out",
+    "detail": "Illness",
+    "date": "2026-11-07",
+    "returns": "2026-11-11"
    }
   ],
   "CLE": [
@@ -222,15 +222,6 @@
   ],
   "DEN": [
    {
-    "id": "3978",
-    "name": "DeMar DeRozan",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Spasms",
-    "date": "2026-11-06",
-    "returns": "2026-11-07"
-   },
-   {
     "id": "4432181",
     "name": "Julian Strawther",
     "pos": "G",
@@ -247,7 +238,25 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip Bruise",
-    "date": "2026-11-03",
+    "date": "2026-11-07",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "5107818",
+    "name": "Isaac Jones",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-11-07",
+    "returns": "2026-11-08"
+   },
+   {
+    "id": "4397449",
+    "name": "Elijah Harkless",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Not Injury Related",
+    "date": "2026-11-07",
     "returns": "2026-11-08"
    },
    {
@@ -338,22 +347,13 @@
   ],
   "IND": [
    {
-    "id": "2530530",
-    "name": "T.J. McConnell",
+    "id": "4396993",
+    "name": "Tyrese Haliburton",
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring Strain",
-    "date": "2026-11-06",
-    "returns": "2026-11-07"
-   },
-   {
-    "id": "3133603",
-    "name": "Kelly Oubre Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf Bruise",
-    "date": "2026-11-06",
-    "returns": "2026-11-07"
+    "date": "2026-11-07",
+    "returns": "2026-11-13"
    },
    {
     "id": "5157066",
@@ -372,15 +372,6 @@
     "detail": "Knee",
     "date": "2026-10-28",
     "returns": "2027-01-02"
-   },
-   {
-    "id": "4396993",
-    "name": "Tyrese Haliburton",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-10-28",
-    "returns": "2026-11-13"
    }
   ],
   "LAC": [
@@ -419,6 +410,17 @@
     "detail": "Shoulder Surgery",
     "date": "2026-08-26",
     "returns": "2027-03-02"
+   }
+  ],
+  "LAL": [
+   {
+    "id": "3945274",
+    "name": "Luka Doncic",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-07",
+    "returns": "2026-11-08"
    }
   ],
   "MEM": [
@@ -672,6 +674,15 @@
    }
   ],
   "POR": [
+   {
+    "id": "4066211",
+    "name": "Robert Williams III",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-11-07",
+    "returns": "2026-11-10"
+   },
    {
     "id": "4578893",
     "name": "Vit Krejci",

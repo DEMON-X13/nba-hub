@@ -1,5 +1,5 @@
 {
- "date": "2026-11-07",
+ "date": "2026-11-08",
  "teams": {
   "ATL": [
    {
@@ -50,13 +50,13 @@
   ],
   "BKN": [
    {
-    "id": "4432194",
-    "name": "Day'Ron Sharpe",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-11-05",
-    "returns": "2026-11-04"
+    "id": "5101761",
+    "name": "Mikel Brown Jr.",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-11-08",
+    "returns": "2026-11-11"
    },
    {
     "id": "5175643",
@@ -364,7 +364,7 @@
     "status": "Out",
     "detail": "Foot Surgery",
     "date": "2026-11-02",
-    "returns": "2026-11-08"
+    "returns": "2026-11-10"
    },
    {
     "id": "6580",
@@ -792,6 +792,15 @@
    }
   ],
   "WAS": [
+   {
+    "id": "4278129",
+    "name": "Deandre Ayton",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Leg",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
    {
     "id": "6583",
     "name": "Anthony Davis",

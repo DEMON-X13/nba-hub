@@ -707,13 +707,13 @@ window.glanceLeg = sig => GLANCE_LEGS.get(String(sig)) || null;
 function pbTierCard(t, o) {
   o = o || {}; const card = !!window.PARLAY_CARD, chance = t.corr, legAdd = o.legAdd !== false;
   /* a level of a fixed size says it; Suggested Parlays' night levels carry their range (min, max) and their rule in words */
-  const size = t.n != null ? t.n : t.min === t.max ? t.min : `${t.min}–${t.max}`;
+  const size = t.n != null ? t.n : t.max == null ? `${t.min}+` : t.min === t.max ? t.min : `${t.min}–${t.max}`;
   if (t.why) return `<div class="pb-tier ${t.id} none"><div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${size} legs</span></div><p class="pb-why">${esc(t.why)}</p></div>`;
   const nm = o.what ? ` the ${esc(t.label)} parlay for ${esc(o.what)}` : '', inB = pbInBuilder(t.legs), trial = t.legs.some(l => l.kind === 'prop'), sg = new Set(t.legs.map(l => l.gid)).size < t.legs.length;
   /* o.night: Suggested Parlays' night levels, whose player legs are at DraftKings' fair chance (pbChanceHtml's mix) */
   if (o.night) { const np = t.legs.filter(l => l.kind === 'prop').length; o = { ...o, mix: np === t.legs.length ? 'player' : np ? 'mixed' : null }; }
   return `<div class="pb-tier ${t.id}" data-pb-tier="${t.id}">
-    <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${t.rule ? `<span class="pb-rule">${esc(t.rule)}</span>` : t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : ''}</div>
+    <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${t.rule ? `<span class="pb-rule"${t.ruleTitle ? ` title="${esc(t.ruleTitle)}"` : ''}>${esc(t.rule)}</span>` : t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : ''}</div>
     <div class="pb-nums">${pbChanceHtml(t.fair, chance, { ...o, trial: trial && !o.night })}<div><b>${fmtAm(decToAm(t.dec))}</b><span>price${sg ? ', est.' : ''}</span></div><div class="pb-pay" data-pb-pay="${t.dec}">${pbPayHtml(t.dec)}</div></div>
     <ul class="pb-legs">${t.legs.map(l => { const pl = o.mix && l.kind === 'prop', ff = pl ? null : legFarOff(l);
       /* a night level's player leg: its line, his name and game, its price and DraftKings' fair chance, no Value mark and

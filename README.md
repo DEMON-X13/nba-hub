@@ -50,9 +50,10 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `app/parts/glance.html` | The matchup bubble (README "The matchup bubble"): the NFL hub's bubble on every leg's name, with the NBA's numbers, set in at its `<!--part:glance-->` marker |
 | `app/parts/gamewin.html` | A game's three windows (README "The game's three windows"): Matchup, Mismatches and Team Stats, the NFL game page's three buttons under the head card of the Player props view, each a small window over it, set in at its `<!--part:gamewin-->` marker |
 | `tools/test_gamewin.js` | The job's numbers behind those windows on made-up data, each worked by hand: the team stats from a made-up season's team boxes, each club's defence and its multiplier (`oppTable`), the projections' own multiplier, and what `state.json` carries |
-| `app/parts/suggested.html` | The Suggested Parlays tab (README "Suggested Parlays"): one set a night across every game of the night, Safe the likeliest pair, Medium the likeliest paying $4 or more on $1 and Aggressive $8 or more, on the night's team legs and (from the first set the page with player legs takes after 7 November 2026) DraftKings' main lines on its players at DraftKings' own fair chance, locked 2 hours before the first tip-off, and the record's pills, on the Parlay Builder's legs and sums, set in at its `<!--part:suggested-->` marker |
+| `app/parts/suggested.html` | The Suggested Parlays tab (README "Suggested Parlays"): one set a night across every game of the night, Safe the likeliest paying $2 or more on $1, Medium $4, Aggressive $8, no leg limit (since 8 November 2026; until then Safe the likeliest pair and Medium and Aggressive 5 legs at most), on the night's team legs and (from the first set the page with player legs takes after 7 November 2026) DraftKings' main lines on its players at DraftKings' own fair chance, locked 2 hours before the first tip-off, and the record's pills, on the Parlay Builder's legs and sums, set in at its `<!--part:suggested-->` marker |
 | `tools/suggest_ledger.js`, `tools/suggest_check.js`, `data/suggest_ledger.json` | The suggestions record (README "Suggested Parlays"): each night's set as the job last published it before its lock (the per-game sets before 7 November 2026 kept as they were), taken from the built page in jsdom, graded as its games finish by the page's own settlement, one entry a line; and its guard, which works each level out again on the set's own pool and holds the file to the last commit |
 | `tools/test_suggest_ledger.js` | The record on made-up days: taken (three levels), rewritten, locked, a ruled-out level replaced, graded against settlements worked out from raw scores and box lines, a set from before kept with its Extreme, and the guard on hand-made ledgers; it runs first in the record's step |
+| `tools/test_suggest_speed.js` | The time Suggested Parlays' exact search takes with no leg limit: the built page in jsdom on the pools of `tools/fixtures/sp_nights.json` (7 November 2026's night, each of its games alone, two and three of them, and the review's heavy-favourite nights), each level stopped at its limit and held to the exact search's answer; run in the job's record step and, for the heavy-favourite nights, by the smoke (README "Its time") |
 | `tools/sigma.js`, `research/sigma.json` | The spread of the real margin about the player model's own number, which the Parlay Builder prices a cover from (14.5 points, the 2026 walk-forward fold), the total's about the model's total (`sigmaTotal`, 19.1 points), which the Record tab's totals picks stand on, what the Value rule's team picks were worth on each fold and what the Record tab's rule would have been (`record`); run by hand |
 | `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, the confidence pill on each card and the key over them (section conf), the Record tab on a made-up season (section record), Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays"), the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder"), the parlay card (`tools/smoke_card.js`, `SMOKE_ONLY=card`, README "The parlay card") the matchup bubble (`tools/smoke_glance.js`, `SMOKE_ONLY=glance`, README "The matchup bubble"), Suggested Parlays (`tools/smoke_suggested.js`, `SMOKE_ONLY=sp`, README "Suggested Parlays") and a game's three windows (`tools/smoke_gamewin.js`, `SMOKE_ONLY=gw`, README "The game's three windows") |
 | `liveparlays/parlays.json` | X's placed parlays, kept by hand from the slips the owner sends (README "X Parlays"); the page reads it when its X Parlays tab opens, and the job's `tools/autoclear.js` marks a finished one cleared two Eastern days after its last game |
@@ -64,7 +65,7 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `tools/test_corr.js` | The bivariate normal, the fit, the lookup's sign rules, and the committed table held to its rules |
 | `tools/test_props.js` | The props parse, record, model, ledger and bar on stubbed answers and a scratch folder |
 | `tools/test_lines.js` | The lines feed on the recorded answers and made-up ones, through a stubbed reader and a scratch file: the parse, the drops, the last good read, the quiet run, the committed lines.json held to its shape, and the job's lines step (its test run there, lines.json put back when it fails) |
-| `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s; two more recorded on 2026-10-25 (that Sunday's seven games with DraftKings' lines and their local and national listings, and Tuesday 27 October's, Peacock and NBC beside a home market's network), on which `test_fetch.js`, `test_lines.js` and the smoke hold the national networks and the lines feed; and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to; and that morning's rosters and injury report as the props model reads them (`props_live_20261015.json`), on which `test_props.js` holds the live minutes to the backtest's |
+| `tools/fixtures/` | ESPN answers recorded on 2026-10-15: scoreboards (finals, preseason lines, opening night's lines), which the smoke holds the page's reading of to `fetch.js`'s; two more recorded on 2026-10-25 (that Sunday's seven games with DraftKings' lines and their local and national listings, and Tuesday 27 October's, Peacock and NBC beside a home market's network), on which `test_fetch.js`, `test_lines.js` and the smoke hold the national networks and the lines feed; and one game's DraftKings props (opening night, Celtics at Pistons), which `test_props.js` and the smoke hold the parse to; and that morning's rosters and injury report as the props model reads them (`props_live_20261015.json`), on which `test_props.js` holds the live minutes to the backtest's; `sp_nights.json`, the night pools `tools/test_suggest_speed.js` times the search on, written once from the page by hand |
 
 No dependencies for the job's tools: Node 22 and its built-in fetch. The smoke test needs jsdom (`npm ci` in `tools/`).
 
@@ -761,7 +762,10 @@ rules alone. In the job a failure puts `data/calls.json` back as committed and t
 on a branch writes and checks the ledger but never commits it: the commit step puts `data/calls.json` and
 `data/suggest_ledger.json` back as committed (removed where new) on any ref but `main`, so only the job on main writes
 them, and no call counts as published before the site showed it (`tools/test_calls.js` runs the step on a branch and on
-main).
+main). On `main` too the step puts `data/suggest_ledger.json` back as committed whenever the suggestions record's step
+did not succeed (failed, stopped at its 12-minute limit, or skipped), since a step stopped by its time limit never reaches
+its own put-back (the review of 8 November 2026; the Tests step has a limit of its own, 20 minutes); the test runs it on
+main with that step failed, cancelled and skipped.
 
 ### The record (`tools/publish.js`, `pickem.json`, `app/parts/pickem.html`)
 
@@ -2893,7 +2897,8 @@ every name in the builder and the Top 50 44px tall (54), every text 5.0:1 or bet
 The NFL hub's Suggested Parlays tab (`#suggest`), carried to the NBA on 25 October 2026 (the build plan's "Suggested
 Parlays"; the NFL hub's README, "Bets and Stats: the loop", and its `props/build/part3.js` at app v114 are the source),
 reshaped on 7 November 2026: **one set a night**, across every game of the night, its three levels Safe, Medium and
-Aggressive each the parlay of the night's legs likeliest to land at the price its level asks (a team leg at the model's
+Aggressive each the parlay of the night's legs likeliest to land at the price its level asks (since 8 November 2026 with
+no leg limit, Safe $2 on $1, Medium $4, Aggressive $8: "No leg limit", below; a team leg at the model's
 chance; from the first set the page with them takes after 7 November 2026 DraftKings' main lines on players join them, each at DraftKings' own fair
 chance: "Player legs, at DraftKings' odds", below), set out from 6:00 AM Eastern, locked 2 hours before the night's
 first tip-off, and kept and graded by the job as a record. Until that day each game on national TV had a set of its own
@@ -2991,40 +2996,130 @@ shown as it locked and closed to the builder, no Add, Add to builder or Finish (
 under it: "Ace Guard listed day-to-day (ankle), so held out: this level is closed." A set of team legs alone (7 November
 2026's) is never built again.
 
-**The search, and why it is exact.** With about a thousand player legs a night (922 on 7 November) the parlays are far
-too many to list, so the levels are found by a branch and bound (`spWalk`, under "THE SEARCH" in
-`app/parts/suggested.html`) that never cuts a parlay the rule could rank first. What it stands on, each a property of the
-gaussian copula the builder's sums work out (I a leg's chance its price implies, `e = p x price` its efficiency):
-1. A game's legs' chance only falls as legs join, and a parlay's is the product of its games' own.
-2. A leg whose chance is at most its implied chance (every player leg at DraftKings' fair chance, every total, any side
-   the model rates under its price; with every line priced with no margin left out of the pool, every leg but a side) is
-   "fair": a game's fair legs together have a chance at most their implied joint
-   chance J, so, priced at most at the hold over J, they return at most the hold (0.896) on $1. A leg over its price is an
-   "edge" leg, and a parlay takes at most one a game (one side).
+**The search, and why it is exact.** With about a thousand player legs a night (932 in the band on 8 November) and,
+since 8 November 2026, no leg limit (below), the parlays are far too many to list, so the levels are found by a branch
+and bound (`spSearch`, `spWalk` and `spGroups`, under "THE SEARCH" in `app/parts/suggested.html`, whose comment is the
+proof) that cuts only what it proves cannot rank first.
+
+*The invariant.* Every bound on two or more legs of a game stands on the gaussian copula at the same-game table's own
+correlations, which is what the builder works out wherever it does not shrink a group's matrix (`sgJoint` shrinks it
+toward 0 only where its Cholesky factor fails). A game's legs stand on its variables (a player's stat, the home side's
+win and its cover, the over), each leg its variable or its negative, so every group a parlay may hold is positive
+definite wherever the variables' matrix is: the page factors it for each game at load (`spPosDef`; `tools/corr.js`
+repairs the published table so, for 13 players a side, and every game of 7 November has least eigenvalue 0.37 or more).
+A game where it fails is held to bounds true of the shrunk matrix too: two legs by `joint2` at max(rho, 0), no exact
+integral. Until the review of 8 November 2026 the proof said its bounds held "whatever the correlation" and of the
+shrunk matrix, which the pair cut did not: on a planted table that is not positive definite three legs of a game
+landed 28.7% together where two of them land 26.7% at the table's -0.6, and the page missed that level.
+
+*What the walk stands on* (I a leg's implied chance, e = p x price what it returns on $1, HOLD 0.896):
+1. A parlay's chance never rises as a leg joins it, and its price never falls; so a parlay that meets its floor is
+   ranked and nothing is grown past it: every parlay holding it is less likely and pays the floor too.
+2. A game's "fair" legs (chance at most the implied one: every player leg at DraftKings' fair chance, every total, any
+   side the model rates under its price) land together no oftener than their implied joint chance J and are priced at
+   most HOLD / J, so they return at most HOLD on $1 at any size; a fair leg alone returns at most $1.
 3. A parlay paying F or more on $1 has chance at most what it returns over F.
-4. For a game's edge leg a with fair legs B, the return is at most the hold plus (e_a - 1) times a bound on P(B | a)
-   from Slepian's inequality (the equicorrelated case at the largest correlation, a one-dimensional integral), with a
-   Gershgorin check that the bound applies (else no bound is taken); three legs of a game are bounded by Plackett's
-   bound first and then by the copula itself (`spTri`: Gauss-Legendre over the first leg's chance, the other two given
-   it by the bivariate; within 2.6e-5 of a finer integral, relative, on 2,000 random triples), four or more by their
-   three-leg subsets.
-The walk takes the games in the order of the most their options can return, edge games first; a parlay of at most 5
-legs holds at most one game of three legs or more, so it walks the games of one or two legs each with a bound over the
-games left (`spDP`), and each game's groups of three legs or more once (`spBig`) with the rest of the night beside it;
-and it drops a branch once its chance, or its return
-over the floor times the most the games left can add, falls under the best found (to 1e-12, with the GHK sums' own
-noise allowed for, 1e-3, wherever a bound stands on them). Two of a game's fair legs are walked by chance and let go once
-the next leg's own chance cannot reach the best, a pair's chance being at most its lower leg's: until the review of 7
-November 2026 that test multiplied the two chances, which is no bound for two legs that move together (a side and a
-player of its game, a player and the total), and on made-up prices it left out a 61.18% pair, the Thunder to win at
--500 with Trae Young's Under 18.5 points at -300, for a 60.80% pair of two moneylines (and 4 of 360 levels on random
-legal prices); the night's own levels did not move. Every candidate is then worked by the builder's own
-`parlayProb` and `parlayDec`, the numbers the card states. Checked against brute force on six reduced pools (three games,
-three player legs each: the same parlay at every level), against the guard's own enumeration of the pool the record keeps
-(below), and against the smoke's and the test's own enumerations (each its own copula). Timing in jsdom: on 7 November
-2026's committed files at 18:00 UTC (922 player legs, 30 team legs) a set builds in about 0.35 s (the record's entry,
-its pool gathered, another 0.25 to 0.3 s); on the smoke's made-up night of 15 games with 1,200 player lines (622 in the
-band) in about 1.6 s.
+4. An edge leg (a side over its price, one a game) with fair legs returns at most HOLD + (e - 1) x L, L by Slepian's
+   inequality from the equicorrelated copula at the largest correlation they can have (48 Gauss-Legendre nodes).
+5. By Slepian's inequality again a group lands no oftener than a one-factor copula of its legs' largest correlations,
+   and a group grown by k legs no oftener than that with the game's k likeliest beside it, which falls to 0 as k grows:
+   that ends the walk with no leg limit, never a count of legs.
+6. The rest of the night: a branch of chance c and return u reaches at most the largest over the later games used with
+   an edge leg of min(c x their chances, u x their returns / F), read off a Pareto frontier built from the last game
+   back (256 points, neighbours merged upward, which only raises it).
+7. In the walk's last game, a group grown from T that pays the floor has J at most HOLD x D / F and lands no oftener
+   than min(J(T), HOLD x D / F) plus the edge leg's band at T.
+8. Two player legs of one club, stat and side have the same correlation with every other player's leg, so the less
+   likely of the two (by at least 0.2%) is let go wherever the other's group already paid the floor.
+9. In the last game, where every fair leg has a correlation of 0 or more with the edge leg a, P(a + B) <= e_a x J.
+
+The walk leaves a branch once its bound is under the best found less the tie (1e-12). A group of three to five legs is
+worked first by the copula's own integral (`spOrth`, Gauss-Legendre on fixed pieces, within 5e-5 of the integral at 64
+nodes a piece on 630 random groups of 7 November's legs), and only one that integral leaves in reach is worked by the
+builder's GHK sum; every bound that stands on an integral or a sum is taken 0.1% wider before it cuts. Every parlay it
+reaches is worked by the builder's own `parlayProb` and `parlayDec`, the numbers the card states. It starts from a
+parlay to beat, the best of its seeds: the team legs' own best, the night's likeliest legs taken until the floor is met,
+and the walk itself with at most two and then three legs of a game (each a parlay the rule takes, ranked with the rest),
+so its cuts bite from the first branch. Until the review a one- or two-game night had no such seed (neither the team
+legs nor one leg a game reached the floor), and the walk started with nothing to beat.
+
+**What the old walk's cuts stood on, and why they went** (the review of 8 November 2026's change, each cut of the 2-to-5
+walk read again with no leg limit): its split of every parlay into "at most one game's group of three legs or more, the
+rest one or two legs a game" held only while a parlay had 5 legs at most, so the walk takes a group of any size at every
+game; its bound on what later games return was a table by the legs left (`spDP`), which with no most is the product over
+every later game, so it is the frontier (6); its bound on a group growing by k legs more grew without end as k did and
+was taken only up to the cap, so the growth is held by (5); its three-leg quick check and its 0.1% allowance stand at any
+size. The first walk with no leg limit ranked a parlay that met the floor and walked on past it; (1) proves nothing past
+it can rank first, so the walk now stops there.
+
+**Its time.** `tools/test_suggest_speed.js` holds it (in the job's record step, beside the record's own test), on the
+pools of `tools/fixtures/sp_nights.json` as the page built them, each level stopped at a limit several times what it
+takes and held to the exact search's answer:
+
+| Night (jsdom) | Safe | Medium | Aggressive |
+|---|---|---|---|
+| 7 November, 7 games, 971 legs | 0.14 s | 0.12 s | 0.15 s |
+| Each of its games alone (112 to 166 legs) | 0.03 to 0.08 s | 0.06 to 1.0 s | 2.5 s (DEN at IND, ORL at GSW), 4.7 s (SAS at POR), 7.8 s (HOU at PHX) |
+| DEN at IND with WAS at OKC (246 legs) | 0.03 s | 0.09 s | 2.9 s |
+| Those two with ORL at GSW (375 legs) | 0.04 s | 0.07 s | 0.13 s |
+| 8 games at -900 (the review's) | 0.01 s | 0.08 s | 2.7 s |
+| 8 games at -400, 32 player lines a game | 0.03 s | 0.25 s | 1.4 s |
+| 7 November's player lines, every home side -600 to -1000 | 0.12 s | 0.12 s | 0.6 s |
+| Three of its games at -400, -350 and -300 | 0.07 s | 0.12 s | 1.9 s |
+
+The page as the review found it took over 8 s on every one of those games' Medium and over 30 s on their Aggressive, and
+over 12 s on every heavy-favourite night's Aggressive (30 of the test's 80 checks failed on it). Not held, and said: three
+of 7 November's games alone as an Aggressive night are still slow, WAS at OKC about 19 s, NYK at CLE about 51 s and BKN
+at ATL about 2 minutes in jsdom (8.5 million group nodes). On those every leg is a player's line at DraftKings' fair
+chance, so by (2) every parlay returns under HOLD and thousands sit within a hair of the same chance at $8; the page
+before the change (5 legs at most) took over 100 s on each. A one-game night (the NBA Cup's knockout nights, most
+playoff nights) can so still freeze the tab for that long when it opens; the job's record step stops at 12 minutes, and
+its commit puts the ledger back whenever that step did not succeed.
+
+tools/smoke_suggested.js holds the page's search to its own enumeration of every parlay on its made-up nights and 36
+random ones, and the heavy-favourite nights above by the speed test; tools/test_suggest_ledger.js to its own copula and
+enumeration on its nights (a night whose Safe needs 6 legs and Medium 12, and one of heavy Unders whose Safe is 9 legs
+with a group of four and one of three); the record's guard to its own enumeration (below).
+
+### No leg limit (the owner's call of 8 November 2026)
+
+He wrote: "we can eliminate maximum legs for all the sections, it can be multiple legs as long as it meets the criteria
+of safe, med, aggressive and meets min payout requirements. so for example the safe section could sometimes have up to
+5-6 legs but it meets safe req and min payout req". Safe was the likeliest 2-leg parlay with no floor, so with no leg
+limit and no floor it would always be 2 legs (a leg never raises the chance); asked what Safe's floor should be, he chose
+"$2 on $1 (+100)". So each level is the likeliest parlay of the night's legs, of 2 legs or more and no most, whose price
+meets its floor: Safe $2 on $1 (a decimal price of 2.00, +100 or longer), Medium $4 (+300), Aggressive $8 (+700). Every
+other rule is as it was: the chance it is ranked on (team legs at the model's chance, player legs at DraftKings' fair
+chance, a game's legs joined by the builder's own sums), one side and one total a game, one leg a player, the pool and
+its band, injury and main-line rules, and ties to the higher price, then the fewer legs, then the legs' ids. A card says
+its rule as "likeliest paying $2+" ("$4+", "$8+"), its title "No leg limit: ..." and what more legs cost.
+
+**What more legs cost.** A level is the likeliest at its floor, so on a night of heavy favourites the model rates over
+their price it stacks them: on 8 November's lines Safe is the Mavericks to win at -324 with Walker Kessler's Under 1.5
+assists, 2 legs, but a night of heavy favourites makes a deep one (the record's test: fourteen moneylines at -900 and -700 make a Safe of 6 legs and a Medium of 12). Every team leg stands on the
+model's chance, which has run over-confident: on the per-game record the model's expected wins ran about twice DraftKings'
+fair chance's (Medium 3.9 against 2.0, Aggressive 2.0 against 0.7, over fourteen sets), and a parlay multiplies that
+over-confidence leg by leg. More legs on favourites make a level likelier by the model, not by the market. The owner was
+told so.
+
+**The record.** The sets taken from `NOCAP_FROM` (`tools/suggest_check.js`, 18:00 UTC on 8 November 2026) are held to
+the new rule; one taken before keeps the rule it was taken under (Safe the likeliest pair, Medium and Aggressive 2 to 5
+legs), its levels' heads (`min`, `max`, `price`: 2, 2, 0 and 2, 5, 4 and 2, 5, 8, where the new are 2, null, 2 and 2,
+null, 4 and 2, null, 8) saying which, and stays as it was: 7 November's set and every per-game set byte for byte. A set of
+the old heads taken from `NOCAP_FROM` is refused unless the file it is held to already holds it so, taken at the same
+time (a run of the old page that landed before the change reached `main`, as `PL_FROM` keeps a set of team legs alone). A
+night not yet locked is rewritten by the next run under the new rule, as a set is rewritten until its lock (8 November's,
+taken at 03:04 UTC on the old rule, is rewritten only where a run of the new page lands before its 18:30 UTC lock;
+else it locks as taken, on the old rule). A level of a set taken under the old rule that is built again after its lock,
+for a player the report lists, is built under that rule (`spLvOf` reads the level's head, the page's `SP_OLD_LEVELS`;
+the job hands `spRebuildOut` the head), so the set keeps one rule's heads; until the review of 8 November 2026 it was built
+under the new one, and a set of mixed heads was refused on every run to its first tip-off. The pool the record keeps is
+gathered by the same walk with no leg limit (every option of every parlay within 1% of a level's chance), so it holds
+every leg a level's winner can use, at any size: the walk's every cut is a proof that no parlay of the branch could reach
+that 1% ("The search, and why it is exact", above). The guard holds a set the run took to that kept pool as well as to
+its own reading of the run's files (since the review of 8 November 2026: until then only to its own reading at the take,
+so a kept pool that could not make its own level was written and then refused on every run from the lock), and its own
+reading builds groups of three legs or more of a game itself ("The guard's own groups", under the record).
 
 ### On the page
 
@@ -3056,13 +3151,17 @@ at DraftKings' own fair chance ("Player legs, at DraftKings' odds", above). The 
 purpose: the levels are chosen on the model's chance, so without it they would gather exactly the legs where the model
 is furthest from DraftKings (an underdog the model rates 48% where DraftKings' fair chance is 30%).
 
-**The levels** (`SP_LEVELS`: `[id, label, the fewest legs, the most, the least decimal price]`), each chosen on the
-model's chance that every leg lands, by the builder's own sums (`parlayProb`, the same-game copula; `parlayDec`, the
-price, a game's two legs priced together at the same-game hold):
-- **Safe**: the likeliest 2-leg parlay ("likeliest pair");
-- **Medium**: the likeliest parlay of 2 to 5 legs whose decimal price is 4.00 or more, $1 paying $4 or more, +300 or
-  longer ("likeliest paying $4+");
-- **Aggressive**: the likeliest of 2 to 5 legs at 8.00 or more, +700 or longer ("likeliest paying $8+").
+**The levels** (`SP_LEVELS`: `[id, label, the fewest legs, the most (null: no limit), the least decimal price]`), each
+chosen on the chance that every leg lands, by the builder's own sums (`parlayProb`, the same-game copula; `parlayDec`, the
+price, a game's legs priced together at the same-game hold), since 8 November 2026 with no leg limit ("No leg limit",
+above):
+- **Safe**: the likeliest parlay of 2 legs or more whose decimal price is 2.00 or more, $1 paying $2 or more, +100 or
+  longer ("likeliest paying $2+");
+- **Medium**: the likeliest of 2 legs or more at 4.00 or more, +300 or longer ("likeliest paying $4+");
+- **Aggressive**: the likeliest of 2 legs or more at 8.00 or more, +700 or longer ("likeliest paying $8+").
+Until then Safe was the likeliest 2-leg parlay ("likeliest pair") and Medium and Aggressive took 2 to 5 legs
+(`SP_OLD_LEVELS`: a set taken then is drawn with its own rule; an empty level's pill reads "2+ legs" where it read "2–5
+legs").
 One side (the moneyline or the spread) and one total a game, as the builder takes them (`pbFits`, `slipWhy`); ties go to
 the higher price, then the fewer legs, then the legs' ids (`spBetter`). The search is exact (`spSearch`): a parlay's
 chance and price are the products of its games' own (`parlayProb` and `slipDec` work game by game), so each game's options
@@ -3168,7 +3267,7 @@ well"):
 | The NFL hub | Here | Why |
 |---|---|---|
 | Prime time: a Thursday, Sunday or Monday kickoff at 7:00 pm Eastern or later, a set a game, and the Sunday slot's games together | Every game of the night together, never preseason, one set (until 7 November 2026: a set a game on national TV) | The NBA has games most nights at every hour; the owner's call of 7 November 2026: one game's team legs make 2 legs at most |
-| Safe the likeliest pair; Medium to Extreme the best expected return over 25%, 12% and 5% (since its app v138, the least costly at DraftKings' fair chance) | Safe the likeliest pair; Medium and Aggressive the likeliest paying $4 and $8 or more on $1 | The owner's call of 7 November 2026: "the best possible model confidence to match what level bet" |
+| Safe the likeliest pair; Medium to Extreme the best expected return over 25%, 12% and 5% (since its app v138, the least costly at DraftKings' fair chance) | The likeliest parlay of any size from 2 paying $2 (Safe), $4 (Medium) and $8 (Aggressive) or more on $1 (until 8 November 2026 Safe the likeliest pair and the others 2 to 5 legs) | The owner's calls of 7 November 2026, "the best possible model confidence to match what level bet", and of 8 November, "we can eliminate maximum legs for all the sections" |
 | Value picks first, thin legs to fill | No value bar: every team leg in the builder's band, the far-off guard kept | So the levels always fill; the guard keeps the model's widest misses out |
 | One night a week's prime-time games, "week 6" in the head | The first Eastern date with a game to come, its date in the head, up from 6:00 AM that morning | The NBA has no weeks |
 | Lock 2 hours before kickoff | 2 hours before the night's first tip-off | |
@@ -3241,7 +3340,11 @@ night set (7 games, 30 legs in its pool), took none of Sunday's ("no set of 2027
 line for its games yet"), and the guard passed it held to the committed file.
 
 `tools/suggest_check.js` is the guard, its rules worked out on its own from the file, the clock and the last commit's
-file. A night entry: keyed on its own season, date, first tip-off and night id; its night id its season's and date's; each
+file; since `NOCAP_FROM` (8 November 2026) a night entry's levels are the new rule's (2 legs or more, no most, $2, $4,
+$8) or, on a set taken before it or held so by the file it is held to, the old rule's (`NIGHT_LEVELS_OLD`), its heads
+saying which, and its own enumeration (`nightBest`) takes options of any size and leaves a branch by its own frontier of
+what the later games' options can land and return (the page's (6) on the pool's own figures). The rest of it, as before.
+A night entry: keyed on its own season, date, first tip-off and night id; its night id its season's and date's; each
 game's id of its season, date and clubs, never preseason, tipping on the night's Eastern date (Intl); its tip-off its
 games' first and its last their last; locking exactly 2 hours before the first; taken before the lock; its levels the
 three in order with their labels, ranges and floors; each level's legs games of the night, team legs alone on a set of
@@ -3275,7 +3378,55 @@ then shows its own set, said so).
 
 ### The checks
 
-`node tools/test_suggest_ledger.js` (about 10 seconds, "N checks passed") runs the script itself on made-up November days
+**No leg limit** (the owner's call of 8 November 2026). The record's test runs U, a night of fourteen heavy favourites
+(home moneylines at -900 and -700, the model's 92% and 90%, two with a total): the job's Safe takes 6 legs to pay $2
+(2.048) and its Medium 12 to pay $4 (4.076), each the likeliest of the test's own enumeration of every parlay with no leg
+limit, one side and one total a game at any depth, and a cap of 5 (with Safe a pair) taking other parlays on the same
+pool; a night of the floors' very edges (-500 with -150 pays exactly $2.00 and is Safe, -500 with -155, as likely,
+pays 1.974 and is not; +100 legs make exactly $4.00 and $8.00); P, two games of player legs, where Aggressive holds four
+legs of one game (its moneyline, a player over, another's under and the total) and the kept pool makes every level again
+by the guard's own enumeration; Q and X re-priced so a pair pays $2 (OKC -200 and ATL -170 a near tie apart by 6e-7; a
+fair same-game pair at -150 and -150 paying $2.36 at the hold); and the sets taken before `NOCAP_FROM` (the real record's
+7 and 8 November, of the old heads, passing the old rule's checks; the 8 November set re-dated after `NOCAP_FROM`
+refused, and kept where the file it is held to holds it so; its Medium of 6 legs refused, outside the old 2 to 5; and its
+levels under the new heads refused, Safe a pair paying under $2). The smoke's own enumeration (`ENUM_OWN`) takes every
+option of a game, of any size, worked once by the builder's own sums, and leaves a branch only where its chance is under
+the best (1), on its made-up night, its one-game night (Safe its side and total, now paying $2 or more; the empty levels'
+pill "2+ legs"), the fair-pair night (re-priced as X), a night of eight favourites at -900 whose Safe takes 7 legs (one
+leg a player at that depth, two Unders of one player beside them) and 36 random nights; its real-night check holds the live levels to
+the guard's own reading of the real files (`nightFull`, `nightBest`), where until then it enumerated every parlay of
+the real night by brute force, which on 8 November 2026, the first night DraftKings posted player lines for before the
+lock, ran the job's runner out of memory (14:32 UTC: "tests failure, suggestions record skipped"), so no run took
+Sunday's set on its player lines.
+
+The no-leg-limit rule's breaks, each planted in `app/parts/suggested.html` on a copy of the tree and the page built
+again, turn the record's test and the smoke (`SMOKE_ONLY=sp`) red: a leg cap of 5 put back in the walk, the levels still
+saying no limit (test 1 failure, U refused by the guard, which finds likelier parlays of 6 and 12 legs; smoke 1, 3 of the
+36 random nights differing); Safe ranked without its floor (test 4: U, P and the real files refused, "pays under its floor
+2"; smoke 7); a cut that assumes the cap, a game's group grown to 3 legs at most (test 3: P's Aggressive, four legs of one
+game, not the test's own enumeration's, and the test stopped; smoke 1, Aggressive on 8 of the 36 random nights differing); and the kept pool dropping every group
+of four legs or more (test 2: the job refuses P, "a leg, or a game's legs together, not in its pool"; smoke 0: no level on its nights holds a group of four legs, so the record's test is the check that bites).
+
+**The review of 8 November 2026.** The record's test runs W: W1, four games of heavy player Unders (-865 to -915) whose
+Safe is 9 legs, a group of four of one game and one of three among them, each level the test's own enumeration's of
+32,752 parlays, and the page with a leg limit of 5 put back (in the walk and the greedy start) refused by the guard's
+own groups ("empty, and the pool (this file's own reading of the run's files) makes a parlay its rule takes"), where
+ranking the kept pool alone it passed; W2, the page that keeps the record's pool without its single player legs refused
+at the take ("its pool as kept"), not first at the lock; W3, a set of the old heads holding a player (taken before
+`NOCAP_FROM`), listed Out after its lock, its levels built again under the old rule with their heads kept and the guard
+passing it; W4, a planted table that is not positive definite, where Medium is three Unders of one game with the other
+game's moneyline (28.7% for the three, where two of them land 26.7% at the table's own -0.6) and the guard passes the
+kept group of three. Test U holds the real record's old sets as the guard holds them (`oldOk(e, e)`), so a set of the old
+heads a run of the page before the change took after `NOCAP_FROM` never jams it. `node tools/test_suggest_speed.js`
+holds the search's time ("Its time", above), and the smoke runs it on the heavy-favourite nights. Each fix's break,
+planted on a copy of the tree, turns them red: the guard's own groups taken out (test 1, W1: the run with the leg limit
+put back written); the take's check of the kept pool taken out (test 1, W2: written); test U holding the old sets by
+`taken_at < NOCAP_FROM` again (test 1); `spLvOf` reading no head (test 1, W3: the levels built again under the new
+heads); no game counted as shrunk on the page (test 2, W4: the page misses the three, and the guard refuses it); the
+guard's cap at the table's own correlation (test 2, W4 refused); and the search as the review found it (the speed test
+30 of 80: every game alone's Medium over 8 s, Aggressive over 30 s, every heavy-favourite night's Aggressive over 12 s).
+
+`node tools/test_suggest_ledger.js` (about 40 seconds, "N checks passed") runs the script itself on made-up November days
 of its own (a state, lines.json and box file in a scratch folder, the clock set), never the real ledger, and works every
 night, pool, level and settlement out on its own (the pool from its own reading of the made-up model and lines; each
 level by its own brute-force enumeration of every parlay the pool makes, at chances and prices it works out itself with
@@ -3329,8 +3480,22 @@ price the lower of the two prices multiplied and the hold over their implied joi
 them, and ranks each level again over every leg alone, every such pair and the pool's groups of three legs or more of one
 game (each held under its own pairs' chances): `nightFull`. So each level is the best its rule takes over every parlay
 whose games each give one or two legs, worked out from the files alone, and a parlay holding three legs or more of one
-game is ranked over the groups the record keeps, which the page's walk gathers: that part still stands on the page's
-walk, and the smoke's and the test's own enumerations hold the walk to brute force. On 7 November 2026's 16:58 UTC files
+game is ranked over the groups the record keeps, which the page's walk gathers, and over groups of its own (next).
+
+**The guard's own groups** (the review of 8 November 2026). With no leg limit a level often stands on three legs or more
+of one game, and a page that missed a deep winner (a leg limit put back, a cut too keen) would keep none of its groups,
+so ranking the kept groups alone the guard passed the level it took, or a level left empty: with a limit of 5 put back,
+a night of heavy Unders whose Safe is 9 legs was left empty and the guard passed it. So `nightFull` builds groups of its
+own in every game whose table is positive definite (`gamePosDef`), on its own copula (`ownJoint`: three legs by
+Simpson's rule over the first leg's normal with `bvnUpper`, four or more by a GHK sum on its own 10,000 Halton points),
+priced as the builder prices a game's legs (`ownFig`): each game's chains (its legs that go together taken greedily, the
+likeliest first, and again the best return on $1 first, every prefix of three legs or more up to 12, a chain stopping
+once its chance is under the least level's or it pays $8), and each level's own groups of a game grown by one of the 12
+likeliest legs of that game that go with it (`ownGroups`). It is not every group, but it is what a deep winner is made of
+on the nights that hid one. Its figures are its own and not the builder's GHK sum, so each counts 0.5% less, its chance
+and its price (`OWN_TOL`): an own group outranks a level, or fills an empty one, only by more than the two sums can
+differ. A game whose table is not positive definite gets none (there the builder shrinks a group's matrix, which the
+guard does not copy) and its kept groups are capped by two of their legs at max(rho, 0), the page's own bound there. On 7 November 2026's 16:58 UTC files
 at 18:00 UTC it takes about 0.2 s (922 player legs, about 60,000 pairs); on the smoke's made-up 15-game night about
 0.15 s. A replacement after the lock is held to the state of the run that made it (each run commits, so what is new since
 the last commit is that run's): it names a player that state lists (`plListed`, the page's own rule), and the level built
@@ -3731,8 +3896,9 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   opens its matchup bubble (README "The matchup bubble").
 
 - **Suggested Parlays** (`#suggest`, after Tonight): one set a night across every game of the night (since 7 November
-  2026; until then a set a game on national TV), Safe the likeliest pair, Medium the likeliest paying $4 or more on $1
-  and Aggressive $8 or more, on the night's team legs, set out from 6:00 AM Eastern, live until 2 hours before the first
+  2026; until then a set a game on national TV), Safe the likeliest paying $2 or more on $1, Medium $4, Aggressive $8,
+  no leg limit (since 8 November 2026; until then Safe the likeliest pair and Medium and Aggressive 5 legs at most), on
+  the night's team legs, set out from 6:00 AM Eastern, live until 2 hours before the first
   tip-off and then the record's locked set (or this browser's own, said so), with the record's pills and Refresh odds
   (README "Suggested Parlays").
 - **X Parlays**: the parlays X placed at the book, the same on every device and read only, each followed live through

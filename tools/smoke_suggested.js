@@ -12,8 +12,9 @@
  * and under, at DraftKings' own fair chance (the whole margin on the Over), on a player the props model places on one of
  * the game's clubs and no report lists, each 45% to 97%), each level against this file's own enumeration of every parlay
  * the pool makes (one side, one total and one leg a player a game; each one's chance and price the builder's own
- * parlayProb and parlayDec on its legs, never the page's search) by its rule (Safe the likeliest pair; Medium the likeliest
- * of 2 to 5 legs paying $4 or more on $1; Aggressive $8; ties to the dearer, then the fewer legs, then the ids), a player
+ * parlayProb and parlayDec on its legs, never the page's search) by its rule (since 8 November 2026 no leg limit: Safe the
+ * likeliest of 2 legs or more paying $2 or more on $1; Medium $4; Aggressive $8; ties to the dearer, then the fewer legs,
+ * then the ids), a player
  * the report lists left out and the levels the enumeration's without him, a one-game night's empty levels word for word,
  * a fair same-game pair that moves together beating the pairs across games and 36 random nights of made-up legs, each
  * level against this file's own enumeration (bruteOwn), a line priced with no margin left out of the pool and counted,
@@ -64,8 +65,10 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const wdLong = d => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { weekday: 'long', timeZone: 'UTC' });
   const waitOwn = (st, now) => { const N = nightOwn(st, now); if (!N || N.up) return null; const n = N.games.length;
     return { at: new Date(N.open).toISOString().slice(0, 19) + 'Z', next: N.games.map(g => g.id).join(' '), text: `Next up: ${wdLong(N.date)}’s ${n} game${n === 1 ? '' : 's'}. The set goes up ${etWd(N.open)}.` }; };
-  const LV = [['safe', 'Safe', 2, 2, 0], ['med', 'Medium', 2, 5, 4], ['aggr', 'Aggressive', 2, 5, 8]], LVID = LV.map(l => l[0]);
-  const RULE = { safe: 'likeliest pair', med: 'likeliest paying $4+', aggr: 'likeliest paying $8+' };
+  /* the levels since the owner's call of 8 November 2026: no leg limit, Safe $2 on $1 (until then Safe was the likeliest
+     pair and Medium and Aggressive took 2 to 5 legs) */
+  const LV = [['safe', 'Safe', 2, null, 2], ['med', 'Medium', 2, null, 4], ['aggr', 'Aggressive', 2, null, 8]], LVID = LV.map(l => l[0]);
+  const RULE = { safe: 'likeliest paying $2+', med: 'likeliest paying $4+', aggr: 'likeliest paying $8+' };
   const NICK = { BOS: 'Celtics', NYK: 'Knicks', LAL: 'Lakers', GSW: 'Warriors', MIA: 'Heat', ORL: 'Magic', DEN: 'Nuggets', PHX: 'Suns', CHI: 'Bulls', DET: 'Pistons', MIL: 'Bucks', TOR: 'Raptors', CLE: 'Cavaliers', ATL: 'Hawks', CHA: 'Hornets' };
 
   /* ---------- the made-up November ---------- */
@@ -238,27 +241,33 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   check(JSON.stringify(pagePool.map(l => l.sk)) === JSON.stringify(own1.map(l => l.sk)) && pagePool.every((l, i) => l.odds === own1[i].odds && Math.abs(l.p - own1[i].p) < (l.kind === 'prop' ? 1e-12 : 1e-6)) && plOwn1.length >= 2,
     `the pool is this file's own: every team leg of the night at DraftKings' price and the builder's chance, none far off, and every player main line at DraftKings' own fair chance, each 45% to 97% (${pagePool.length} legs, ${plOwn1.length} of them player legs: ${plOwn1.map(l => l.sk.split('|').slice(2).join(' ')).join('; ')})`);
   /* every parlay the pool makes (a game: nothing, or any of its legs together with one side, one total and one leg a
-     player at most; 5 legs at most), each one's chance and price by the builder's own parlayProb and parlayDec on its
-     legs, the best of each level by its rule */
-  const enumOwn = (q, nid) => JSON.parse(q.w.eval(`(() => {
-    const pool = spPool(spById(${JSON.stringify(nid)})).legs, by = new Map(); for (const l of pool) { if (!by.has(l.gid)) by.set(l.gid, []); by.get(l.gid).push(l); }
+     player at most; no leg limit since 8 November 2026), each game's options' chances and prices by the builder's own
+     parlayProb and parlayDec on their legs (a parlay's are their products across games, as the builder's own sums are),
+     the best of each level by its rule; the walk leaves a branch only where its chance is under the best a level has
+     (a parlay's chance never rises as a leg joins it), so every parlay that could rank first is ranked */
+  const ENUM_OWN = `(legs, LV) => {
+    const by = new Map(); for (const l of legs) { if (!by.has(l.gid)) by.set(l.gid, []); by.get(l.gid).push(l); }
     const grpOf = l => l.kind === 'ml' || l.kind === 'spread' ? 'side' : l.kind === 'total' ? 'total' : 'p' + l.pid;
     const G = [...by.values()].map(L => { const groups = new Map(); for (const l of L) { const k = grpOf(l); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(l); }
-      let o = [[]]; for (const ls of groups.values()) o = o.flatMap(c => [c, ...(c.length < 5 ? ls.map(l => [...c, l]) : [])]); return o.filter(c => c.length); });
-    const LV = ${JSON.stringify(LV)}, best = {}, pick = []; let count = 0;
+      let o = [[]]; for (const ls of groups.values()) o = o.flatMap(c => [c, ...ls.map(l => [...c, l])]);
+      return o.filter(c => c.length).map(c => { const L2 = pbOrder(c); return { c, p: parlayProb(L2).corr, d: parlayDec(L2.map(l => ({ leg: l, ml: l.price }))) }; }).sort((a, b) => b.p - a.p); });
+    const best = {}, pick = []; let count = 0, low = -Infinity;
     const better = (c, b) => !b || c.p > b.p + 1e-12 || (Math.abs(c.p - b.p) <= 1e-12 && (c.d > b.d + 1e-12 || (Math.abs(c.d - b.d) <= 1e-12 && (c.n < b.n || (c.n === b.n && c.ids < b.ids)))));
-    (function go(i, nL) {
-      if (i === G.length) { if (nL < 2) return; count++; const legs = pbOrder(pick.flat()), pr = parlayProb(legs).corr, d = parlayDec(legs.map(l => ({ leg: l, ml: l.price }))), ids = legs.map(l => l.sk).sort().join(',');
-        for (const [id, , lo, hi, F] of LV) if (nL >= lo && nL <= hi && d >= F - 1e-9) { const c = { p: pr, d, n: nL, ids }; if (better(c, best[id])) best[id] = c; } return; }
-      go(i + 1, nL);
-      for (const o of G[i]) if (nL + o.length <= 5) { pick.push(o); go(i + 1, nL + o.length); pick.pop(); }
-    })(0, 0);
-    return JSON.stringify({ best, count });
-  })()`));
+    (function go(i, pp, dd, nL) {
+      if (pp < low) return;
+      if (nL >= 2) { count++; let ids = null, moved = false;
+        for (const [id, , lo, hi, F] of LV) { const b = best[id];
+          if (nL >= lo && (hi == null || nL <= hi) && dd >= F - 1e-9 && (!b || pp >= b.p - 1e-12)) { ids = ids || pick.flatMap(o => o.c.map(l => l.sk)).sort().join(','); const c = { p: pp, d: dd, n: nL, ids }; if (better(c, b)) { best[id] = c; moved = true; } } }
+        if (moved) low = Math.min(...LV.map(([id]) => best[id] ? best[id].p - 1e-12 : -Infinity)); }
+      for (let j = i; j < G.length; j++) for (const o of G[j]) { if (pp * o.p < low) break; pick.push(o); go(j + 1, pp * o.p, dd * o.d, nL + o.c.length); pick.pop(); }
+    })(0, 1, 1, 0);
+    return { best, count };
+  }`;
+  const enumOwn = (q, nid) => JSON.parse(q.w.eval(`(() => { const pool = spPool(spById(${JSON.stringify(nid)})).legs; return JSON.stringify((${ENUM_OWN})(pool, ${JSON.stringify(LV)})); })()`));
   { const E = enumOwn(p, N1id);
     check(LVID.every((id, i) => { const t = tiers1[i], b = E.best[id]; return t && b && t.legs.map(l => l.sk).sort().join(',') === b.ids && Math.abs(t.corr - b.p) < 1e-12 && Math.abs(t.dec - b.d) < 1e-12; }),
       `each level is the best of this file's own enumeration of all ${E.count} parlays by its rule, its chance and price the builder's sums (${LVID.map((id, i) => `${id} ${tiers1[i] ? (tiers1[i].corr * 100).toFixed(2) + '% at ' + tiers1[i].dec.toFixed(2) : '-'}`).join(', ')})`); }
-  check(tiers1[0].legs.length === 2 && tiers1[1].dec >= 4 && tiers1[2].dec >= 8 && tiers1.every(t => t.legs.length >= 2 && t.legs.length <= 5), "Safe is a pair, Medium pays $4 or more on $1 and Aggressive $8 or more, each 2 to 5 legs");
+  check(tiers1[0].dec >= 2 && tiers1[1].dec >= 4 && tiers1[2].dec >= 8 && tiers1.every(t => t.legs.length >= 2 && t.min === 2 && t.max === null), "Safe pays $2 or more on $1, Medium $4 or more and Aggressive $8 or more, each 2 legs or more with no leg limit");
   check(tiers1.every(t => { const by = {}; for (const l of t.legs) { const k = l.gid + (l.kind === 'total' ? 't' : l.kind === 'prop' ? 'p' + l.pid : 's'); by[k] = (by[k] || 0) + 1; } return Object.values(by).every(v => v === 1) && t.legs.every(l => N1.games.some(g => g.id === l.gid)); }), 'every level: one side, one total and one leg a player a game at most, every leg a game of the night');
   { const sums = tiers1.map(t => JSON.parse(p.w.eval(`(() => { const L = spTier(${JSON.stringify(N1id + ':' + t.id)}).legs; const f = parlayFair(L); return JSON.stringify({ f: f.p }); })()`)));
     check(tiers1.every((t, i) => Math.abs(t.fair.p - sums[i].f) < 1e-12), "each level's fair chance is the builder's own parlayFair on its legs"); }
@@ -323,7 +332,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     const q = load(stO, { lines: linesOf([gF]), record: null, tab: 'suggest' }); await settle(q); await openTab(q);
     const nid = `${SEASON}_${ymd(D3)}_NIGHT`, s = q.w.spTier(`${nid}:safe`), whys = [...q.d.querySelectorAll(`#spSets [data-sp-game="${nid}"] .pb-why`)].map(txt);
     check(s && s.legs.length === 2 && s.legs.some(l => l.kind === 'total') && JSON.stringify(whys) === JSON.stringify(['No parlay of the night’s legs pays $4 or more on $1: one game makes 2 legs at most.', 'No parlay of the night’s legs pays $8 or more on $1: one game makes 2 legs at most.'])
-      && [...q.d.querySelectorAll(`#spSets [data-sp-game="${nid}"] .pb-tier.none .pb-pill`)].every(x => txt(x) === '2–5 legs'),
+      && [...q.d.querySelectorAll(`#spSets [data-sp-game="${nid}"] .pb-tier.none .pb-pill`)].every(x => txt(x) === '2+ legs'),
       `a one-game night: Safe its side and total, Medium and Aggressive empty saying why word for word ("${whys[1]}")`);
     const E = enumOwn(q, nid);
     check(!E.best.med && !E.best.aggr && E.best.safe && E.best.safe.ids === s.legs.map(l => l.sk).sort().join(','), "and this file's own enumeration agrees"); }
@@ -331,8 +340,8 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
      level on their chance, and of two level on both the first by the legs' ids */
   { const amOf = d => d >= 2 ? 100 * (d - 1) : -100 / (d - 1), o = (gid, pp, d) => ({ sk: gid + '|a', gid, id: gid, kind: 'ml', side: 'a', p: pp, price: amOf(d) });
     const X = () => p.w.spPrep({ legs: [o('g1', 0.6, 1.8), o('g2', 0.6, 1.9), o('g3', 0.6, 1.9), o('g4', 0.5, 2.0)] });
-    const safe = p.w.spSearch(X(), ['safe', 'Safe', 2, 2, 0]), med = p.w.spSearch(X(), ['med', 'Medium', 2, 5, 4]);
-    check(safe && safe.ids === 'g2|a,g3|a', `the likeliest pair, of three level on their chance, is the dearer, then the first by ids (${safe && safe.ids})`);
+    const safe = p.w.spSearch(X(), LV[0]), med = p.w.spSearch(X(), LV[1]);
+    check(safe && safe.ids === 'g2|a,g3|a', `the likeliest pair paying $2, of three level on their chance, is the dearer, then the first by ids (${safe && safe.ids})`);
     check(med && med.ids === 'g1|a,g2|a,g3|a' && Math.abs(med.d - 1.8 * 1.9 * 1.9) < 1e-9, `Medium: no pair pays $4, so the likeliest triple (${med && med.ids}, ${med && med.d.toFixed(3)})`); }
   /* the page's search against this file's own enumeration of every parlay made-up legs make (each game's options, its
      legs alone or together with one side, one total and one leg a player, by the builder's own parlayProb and parlayDec;
@@ -342,34 +351,32 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const legOf = (gid, o) => { const [, , a, h] = gid.split('_'), l = { id: gid, gid, away: a, home: h, date: D1, tip: T(D2, '00:30'), at: READ, line: null, ...o, mk: o.kind === 'prop' ? 'main' : undefined };
     if (l.mk === undefined) delete l.mk; l.price = l.odds; l.sk = skOf(l); if (l.kind === 'prop') { l.name = 'Player ' + l.pid; l.label = `${l.side === 'under' ? 'Under' : 'Over'} ${l.line} ${l.stat}`; } return l; };
   const bruteOwn = (q, legs) => JSON.parse(q.w.eval(`(() => {
-    const legs = ${JSON.stringify(legs)}, by = new Map(); for (const l of legs) { if (!by.has(l.gid)) by.set(l.gid, []); by.get(l.gid).push(l); }
-    const grp = l => l.kind === 'ml' || l.kind === 'spread' ? 'side' : l.kind === 'total' ? 'total' : 'p' + l.pid;
-    const G = [...by.values()].map(L => { const groups = new Map(); for (const l of L) { const k = grp(l); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(l); }
-      let o = [[]]; for (const ls of groups.values()) o = o.flatMap(c => [c, ...(c.length < 5 ? ls.map(l => [...c, l]) : [])]);
-      return o.filter(c => c.length).map(c => ({ c, p: parlayProb(c).corr, d: parlayDec(c.map(l => ({ leg: l, ml: l.price }))) })); });
-    const LV = ${JSON.stringify(LV)}, best = {}, pick = [];
-    const better = (c, b) => !b || c.p > b.p + 1e-12 || (Math.abs(c.p - b.p) <= 1e-12 && (c.d > b.d + 1e-12 || (Math.abs(c.d - b.d) <= 1e-12 && (c.n < b.n || (c.n === b.n && c.ids < b.ids)))));
-    (function go(i, pp, dd, nL) {
-      if (i === G.length) { if (nL < 2) return; const ids = pick.flatMap(o => o.c.map(l => l.sk)).sort().join(',');
-        for (const [id, , lo, hi, F] of LV) if (nL >= lo && nL <= hi && dd >= F - 1e-9) { const c = { p: pp, d: dd, n: nL, ids }; if (better(c, best[id])) best[id] = c; } return; }
-      go(i + 1, pp, dd, nL);
-      for (const o of G[i]) if (nL + o.c.length <= 5) { pick.push(o); go(i + 1, pp * o.p, dd * o.d, nL + o.c.length); pick.pop(); }
-    })(0, 1, 1, 0);
+    const legs = ${JSON.stringify(legs)}, LV = ${JSON.stringify(LV)}, { best } = (${ENUM_OWN})(legs, LV);
     const X = spPrep({ legs }), Xt = spPrep({ legs: legs.filter(l => l.kind !== 'prop') }), page = {};
-    for (const lv of LV) { const r = spSearch(X, lv, Xt.games.length ? spSearch(Xt, lv) : null); page[lv[0]] = r ? { p: r.p, d: r.d, ids: r.ids } : null; }
+    for (const lv of LV) { const r = spSearch(X, lv, Xt.games.length ? spSearch(Xt, lv) : null); page[lv[0]] = r ? { p: r.p, d: r.d, ids: r.ids, n: r.n } : null; }
     return JSON.stringify({ best, page });
   })()`));
   const agree = R => LVID.every(id => { const b = R.best[id], g = R.page[id]; return (!b && !g) || (b && g && b.ids === g.ids && Math.abs(b.p - g.p) <= 1e-12 * Math.max(1, b.p)); });
-  /* a fair pair of one game that moves together beats every pair across games (the review of 7 November 2026): the
-     Thunder to win at -500 (the model's 80%) with a Wizard's Under 18.5 points at -300 (DraftKings' fair 75%, the
-     correlation the table's team|pts|win, +0.128), against the Hawks to win at -400 (76%) in another game: Safe is the
-     same-game pair, likelier than the two moneylines together, though its two chances multiplied are not */
+  /* a fair pair of one game that moves together beats every pair across games (the review of 7 November 2026; since the
+     $2 floor of 8 November 2026 at prices that pay it): the Thunder to win at -150 (the model's 58%, under its price)
+     with a Wizard's Under 18.5 points at -150 (DraftKings' fair 60%, the correlation the table's team|pts|win, +0.128),
+     paying $2.36 at the same-game hold, against the Hawks to win at -133 (60.5%) in another game: Safe is the same-game
+     pair, likelier than the Under with the Hawks (36.3%), though its two chances multiplied (34.8%) are not */
   { const gW = `${SEASON}_${ymd(D1)}_WAS_OKC`, gK = `${SEASON}_${ymd(D1)}_BKN_ATL`;
-    const L1 = [legOf(gW, { kind: 'ml', side: 'OKC', odds: -500, other: 400, p: 0.80 }), legOf(gW, { kind: 'prop', pid: '9610001', team: 'WAS', stat: 'pts', line: 18.5, side: 'under', odds: -300, other: 240, p: 0.75 }),
-      legOf(gK, { kind: 'ml', side: 'ATL', odds: -400, other: 320, p: 0.76 })];
+    const L1 = [legOf(gW, { kind: 'ml', side: 'OKC', odds: -150, other: 130, p: 0.58 }), legOf(gW, { kind: 'prop', pid: '9610001', team: 'WAS', stat: 'pts', line: 18.5, side: 'under', odds: -150, other: 125, p: 0.6 }),
+      legOf(gK, { kind: 'ml', side: 'ATL', odds: -133, other: 115, p: 0.605 })];
     const R = bruteOwn(p, L1), sf = R.best.safe;
-    check(agree(R) && sf && sf.ids === [L1[0].sk, L1[1].sk].sort().join(',') && sf.p > 0.8 * 0.76 && 0.8 * 0.75 < 0.8 * 0.76,
-      `a fair same-game pair that moves together (${sf ? (sf.p * 100).toFixed(2) : '-'}%) beats the two moneylines across games (${(0.8 * 76).toFixed(2)}%), though its chances multiplied (60.00%) do not: the page's Safe ${R.page.safe ? R.page.safe.ids : 'none'} (${R.page.safe ? (R.page.safe.p * 100).toFixed(2) : '-'}%), this file's ${sf ? sf.ids : 'none'}`); }
+    check(agree(R) && sf && sf.ids === [L1[0].sk, L1[1].sk].sort().join(',') && sf.p > 0.6 * 0.605 && sf.d >= 2 && 0.58 * 0.6 < 0.6 * 0.605,
+      `a fair same-game pair that moves together (${sf ? (sf.p * 100).toFixed(2) : '-'}%, paying ${sf ? sf.d.toFixed(3) : '-'}) beats the Under with the Hawks across games (${(0.6 * 60.5).toFixed(2)}%), though its chances multiplied (34.80%) do not: the page's Safe ${R.page.safe ? R.page.safe.ids : 'none'} (${R.page.safe ? (R.page.safe.p * 100).toFixed(2) : '-'}%), this file's ${sf ? sf.ids : 'none'}`); }
+  /* no leg limit (the owner's call of 8 November 2026): eight games of heavy favourites, each home side to win at -900 (the
+     model's 92%), and in the first game two Unders of one player at -900 (DraftKings' fair 90%): Safe needs seven legs to
+     pay $2 on $1, and takes one leg of that player at most, whatever the depth */
+  { const CL8 = [['ATL', 'BOS'], ['BKN', 'CHA'], ['CHI', 'CLE'], ['DAL', 'DEN'], ['DET', 'GSW'], ['HOU', 'IND'], ['LAC', 'LAL'], ['MEM', 'MIA']], L8 = [];
+    CL8.forEach(([a, h], i) => { const gid = `${SEASON}_${ymd(D1)}_${a}_${h}`; L8.push(legOf(gid, { kind: 'ml', side: h, odds: -900, other: 600, p: 0.92 }));
+      if (!i) for (const [st, ln] of [['pts', 30.5], ['reb', 12.5]]) L8.push(legOf(gid, { kind: 'prop', pid: '9620001', team: h, stat: st, line: ln, side: 'under', odds: -900, other: 600, p: imp(-900) })); });
+    const R = bruteOwn(p, L8), sf = R.best.safe, pg = R.page.safe, ids = sf ? sf.ids.split(',') : [];
+    check(agree(R) && sf && pg && pg.n >= 6 && sf.d >= 2 && ids.filter(k => k.includes('|prop|9620001|')).length <= 1,
+      `a night of heavy favourites: Safe takes ${pg ? pg.n : 0} legs to pay $2 (${sf ? sf.d.toFixed(3) : '-'}), one leg a player at that depth, this file's own enumeration's with no leg limit`); }
   /* and on random nights of made-up legs: each game a home moneyline and an away spread (one side a parlay), a total
      and three players' main lines, at prices of -670 to +130, each player leg and total at a chance no higher than its
      price implies (DraftKings' fair chance, the whole margin on the Over) and each side on either side of its price,
@@ -409,6 +416,13 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     check(ms < 15000 && okAll && !gb.length && nPl > 300 && e.pool.pl && e.pool.pl.lines === nLines - e.pool.pl.none - e.pool.pl.held - e.pool.pl.vig,
       `a night of 15 games with ${nLines} player lines (${nPl} of them in the band) builds its set in ${ms} ms in jsdom, each level the guard's own enumeration's on the pool the record keeps (${e.pool.legs.length} legs, ${bytes} bytes; ${e.tiers.map(t => t.legs ? t.legs.length + ' legs at ' + t.dec + (t.legs.some(l => l.kind === 'prop') ? ' with ' + t.legs.filter(l => l.kind === 'prop').length + ' player' : '') : 'empty').join(', ')}), and on the guard's own reading of the files in ${msG} ms${gb.length ? ': ' + gb.slice(0, 2).join(' | ') : ''}`);
     for (const g of big) delete ROWS[g.id]; }
+  /* the heavy-favourite nights the review of 8 November 2026 found slow with no leg limit (8 games at -900, and 7
+     November's player lines with every home side -600 to -1000 or three of its games at -400 to -300): each level
+     searched within its limit and the exact search's answer, by tools/test_suggest_speed.js on this page (which holds
+     those and 7 November's games alone and together in the record's step of the job) */
+  { const r = require('child_process').spawnSync(process.execPath, [path.join(__dirname, 'test_suggest_speed.js')], { encoding: 'utf8', env: { ...process.env, SPEED_PAGE: pageFile('index.html'), SPEED_ONLY: 'rootB,rootH,rootM' }, timeout: 180000 });
+    const out = ((r.stdout || '') + (r.stderr || '')).trim().split('\n');
+    check(r.status === 0, `the heavy-favourite nights are searched in time, every level the exact search's (${out.filter(l => /FAIL/.test(l)).slice(0, 2).join(' | ') || out.pop()})`); }
 
   /* ---------- 5. Add, Add to builder, Finish ---------- */
   /* the clock back on D1's morning; section 4 moved it, and the page's half-minute look may have drawn another night */
@@ -672,9 +686,17 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     const N = nightOwn(REAL, NOW), shown = sets(r), body = txt(r.d.getElementById('spPanel'));
     check(N && N.up ? JSON.stringify(shown) === JSON.stringify([N.id]) : !shown.length, `on the real state the tab sets out this file's own night (${N ? (N.up ? N.id : 'waiting for ' + N.id) : 'none'})`);
     check(!/\bNaN\b|\bundefined\b|\bnull\b/.test(body) && r.errors.length === 0, 'the real tab shows no NaN or undefined and throws nothing: ' + r.errors.join(' | '));
+    /* the real night's live levels against the record's guard's own reading of the real files (every player line read
+       again, every two legs of a game by its own copula, the kept groups of three legs or more), ranked by its own
+       enumeration with no leg limit: on a night of a thousand player legs every parlay is far too many to list here, which
+       a brute force over them tried until 8 November 2026 and ran the job's runner out of memory on the first night
+       DraftKings posted player lines for (14:20 UTC that day) */
     if (N && N.up && realLines && Date.now() < Date.parse(N.tip) - 2 * H) {
-      const E = enumOwn(r, N.id), T3 = LVID.map(id => r.w.spTier(`${N.id}:${id}`));
-      check(LVID.every((id, i) => (!T3[i] && !E.best[id]) || (T3[i] && E.best[id] && T3[i].legs.map(l => l.sk).sort().join(',') === E.best[id].ids)), `the real night's live levels are this file's own enumeration's (${E.count} parlays)`);
+      const T3 = LVID.map(id => r.w.spTier(`${N.id}:${id}`)), e = JSON.parse(r.w.eval(`JSON.stringify(spEntry(${JSON.stringify(N.id)}))`)), kept = SC.nightPool(e);
+      const F = kept ? SC.nightFull('real', e.pool, kept, REAL, realLines, e.games, NOW, null) : { bad: ['no pool'], pool: null }, t0 = Date.now();
+      const B = F.pool ? SC.NIGHT_LEVELS.map(lv => SC.nightBest(F.pool, lv)) : [];
+      check(!F.bad.length && F.pool && LVID.every((id, i) => (!T3[i] && !B[i]) || (T3[i] && B[i] && T3[i].legs.map(l => l.sk).sort().join(',') === B[i].ids)),
+        `the real night's live levels are the guard's own reading's, with no leg limit (${F.pool ? F.pool.legs.length : 0} legs read; ${LVID.map((id, i) => `${id} ${T3[i] ? T3[i].legs.length + ' legs at ' + T3[i].dec.toFixed(3) : '-'}`).join(', ')}; ${Date.now() - t0} ms)${F.bad.length ? ': ' + F.bad.slice(0, 2).join(' | ') : ''}`);
     }
     const lockLines = [...r.d.querySelectorAll('#spSets .sp-lock')];
     check(lockLines.every(x => /^(Locks \w{3} \d{1,2}:\d{2} [AP]M ET, 2 hours before the first tip-off\.|Locked since \w{3} \d{1,2}:\d{2} [AP]M ET\..*|Locked since \w{3} \d{1,2}:\d{2} [AP]M ET\. Under way since .*)$/.test(txt(x))), `each real set's lock line is one of the tab's (${lockLines.length})`); }

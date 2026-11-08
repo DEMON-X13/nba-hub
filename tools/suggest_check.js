@@ -2,8 +2,9 @@
  * here on their own from the file, the clock and the last commit's file, never from the page.
  *
  * Two maps. `night` is the record since the owner's call of 7 November 2026: one set a night across every game of the
- * night, its three levels each the likeliest parlay the night's legs make by its own rule (NIGHT_LEVELS below: Safe 2
- * legs, Medium 2 to 5 paying $4 or more on $1, Aggressive 2 to 5 paying $8 or more). Its legs were the team legs alone
+ * night, its three levels each the likeliest parlay the night's legs make by its own rule (NIGHT_LEVELS below, since
+ * NOCAP_FROM, 8 November 2026: Safe 2 legs or more paying $2 or more on $1, Medium $4, Aggressive $8, no leg limit;
+ * before it NIGHT_LEVELS_OLD: Safe 2 legs, Medium 2 to 5 paying $4 or more, Aggressive 2 to 5 paying $8). Its legs were the team legs alone
  * on 7 November 2026's set; every set taken from PL_FROM (the night after) also holds DraftKings' player main lines at
  * DraftKings' own fair chance (the owner's call of that day, "Add at DraftKings' odds"; its pool carries `pl`, its counts
  * of player lines, and its games' legs together as `pairs` and `sets`). It fails when:
@@ -84,6 +85,7 @@ const cp = require('child_process');
 /* the copula the builder's same-game sums stand on (its joint2, bvnUpper and rhoFor are the page's line for line): the
    guard's own figures for every two legs of one game (THE GUARD'S OWN READING, below) */
 const CJ = require('./corr');
+const { normCdf, normInv } = require('./props');
 const ROOT = path.resolve(__dirname, '..');
 const LEDGER_REL = 'data/suggest_ledger.json';
 /* the levels the record takes (the page's SP_TIERS: a page with others is refused by the job), and each one's legs.
@@ -105,8 +107,24 @@ const LOCK_MS = 2 * 3600e3;
 /* this file's own copy of the page's featured rule: a game on any national network ESPN lists, less those named here */
 const FEATURED_TV = { except: [] };
 /* THE NIGHT (the owner's call of 7 November 2026): this file's own copy of the page's SP_LEVELS, [id, label, the fewest
-   legs, the most, the least decimal price]; the job refuses a page whose levels are not these */
-const NIGHT_LEVELS = [['safe', 'Safe', 2, 2, 0], ['med', 'Medium', 2, 5, 4], ['aggr', 'Aggressive', 2, 5, 8]];
+   legs, the most (null: no limit), the least decimal price]; the job refuses a page whose levels are not these.
+   NO LEG LIMIT (the owner's call of 8 November 2026: "we can eliminate maximum legs for all the sections, it can be
+   multiple legs as long as it meets the criteria of safe, med, aggressive and meets min payout requirements", Safe's
+   floor $2 on $1, his choice): every set taken from NOCAP_FROM is held to NIGHT_LEVELS, each level the likeliest parlay
+   of 2 legs or more, no most, whose price meets its floor; a set taken before keeps the rule it was taken under,
+   NIGHT_LEVELS_OLD (Safe the likeliest pair with no floor, Medium and Aggressive 2 to 5 legs), its levels' heads saying
+   which (nightRule). NOCAP_FROM is 18:00 UTC on 8 November 2026, before the change could reach main: a set of the old
+   heads taken from it is refused, unless the file it is held to holds it as it is, taken at the same time (a run of the
+   old page that landed after NOCAP_FROM, before the change: as PL_FROM keeps a set of team legs alone), and a set of
+   the new heads is held to the new rule whenever it was taken */
+const NIGHT_LEVELS = [['safe', 'Safe', 2, null, 2], ['med', 'Medium', 2, null, 4], ['aggr', 'Aggressive', 2, null, 8]];
+const NIGHT_LEVELS_OLD = [['safe', 'Safe', 2, 2, 0], ['med', 'Medium', 2, 5, 4], ['aggr', 'Aggressive', 2, 5, 8]];
+const NOCAP_FROM = '2026-11-08T18:00:00Z';
+/* which rule a night entry's levels are of, by their heads: 'new', 'old', or null where they are neither */
+const headsOf = (e, LV) => Array.isArray(e && e.tiers) && e.tiers.length === LV.length && e.tiers.every((x, i) => isMap(x) && x.id === LV[i][0] && x.min === LV[i][2] && x.max === LV[i][3] && x.price === LV[i][4]);
+const nightRule = e => headsOf(e, NIGHT_LEVELS) ? 'new' : headsOf(e, NIGHT_LEVELS_OLD) ? 'old' : null;
+/* the old rule's heads allowed: taken before NOCAP_FROM, or held so, taken at the same time, by the file it is held to */
+const oldOk = (e, pe) => Date.parse(e.taken_at) < Date.parse(NOCAP_FROM) || (isMap(pe) && nightRule(pe) === 'old' && pe.taken_at === e.taken_at);
 const NIGHT_IDS = NIGHT_LEVELS.map(l => l[0]), TEAM_KINDS = ['ml', 'spread', 'total'];
 /* the pool keeps chances and prices whole, as the page's search ranked them (a level keeps its chance to 4 places and
    its price to 3, which the guard never ranks on): two parlays within NIGHT_TIE, the page's own SP_TIE, are level, and
@@ -141,9 +159,10 @@ const HOW = 'The suggestions record, written by tools/suggest_ledger.js in the j
   + 'Eastern date with a game to tip, never preseason), its team legs (moneyline, spread, total, at DraftKings\' prices in '
   + 'lines.json and the builder\'s chance, 45% to 97%, none far off DraftKings, no value bar) and, on every set the page with player legs takes from 23:00 UTC on 7 November 2026, '
   + 'DraftKings\' main lines on players (over and under, both prices, at DraftKings\' own fair chance, never the props model\'s, 45% to 97%, '
-  + 'none on a player the report lists or the props model does not place in the game), one side, one total and one leg a player a game: Safe the '
-  + 'likeliest 2-leg parlay, Medium the likeliest of 2 to 5 legs paying $4 or more on $1, Aggressive the likeliest of 2 to 5 paying $8 '
-  + 'or more, by the builder\'s own sums; keyed season|date|first tip|<season>_<date>_NIGHT, its pool kept beside it (every team leg\'s key, '
+  + 'none on a player the report lists or the props model does not place in the game), one side, one total and one leg a player a game: from '
+  + NOCAP_FROM + ' (the owner\'s call of 8 November 2026) each level the likeliest parlay of 2 legs or more, no leg limit, paying its floor on $1, '
+  + 'Safe $2, Medium $4, Aggressive $8; before it Safe the likeliest 2-leg parlay, Medium the likeliest of 2 to 5 legs paying $4 or more, '
+  + 'Aggressive the likeliest of 2 to 5 paying $8 or more; by the builder\'s own sums; keyed season|date|first tip|<season>_<date>_NIGHT, its pool kept beside it (every team leg\'s key, '
   + 'price and chance, each game\'s side and total together, and the player legs and games\' legs together that come within 1% of a level\'s '
   + 'chance: pl counts the player lines read, out of the band, held out and cut) so the check works every level out again, rewritten while '
   + 'the night\'s lock (2 hours before its first tip-off) is to come and locked from it (held so though its first tip-off moves later; '
@@ -369,34 +388,55 @@ function nightPool(e, P0) {
 /* c ranks above b by a level's rule: likelier, then dearer, then fewer legs, then the legs' ids */
 const nightBetter = (c, b) => !b || c.p > b.p + NIGHT_TIE || (Math.abs(c.p - b.p) <= NIGHT_TIE && (c.d > b.d + NIGHT_TIE || (Math.abs(c.d - b.d) <= NIGHT_TIE && (c.n < b.n || (c.n === b.n && c.ids < b.ids)))));
 /* every parlay of the pool the level's rule takes, the best by the rule (from inc, a parlay to beat, where one is given);
-   each game gives nothing or one of its options. Walked game by game, the games taken in the order of the most any of
-   their options returns on $1 (a side the model rates over its price first), each game's options by chance; a branch let
-   go once its chance is under the best's (a parlay's chance is the product of its games' own, each at most 1; and the
-   options after one too unlikely are less likely still), or, with a floor F, once what it returns on $1 times the most
-   the later games' options can on the legs left (B: each game once, worked from the last game back, at least 1, since a
-   game may give nothing) over F is: a parlay paying F has chance at most its return over F */
-function nightBest(pool, [, , lo, hi, F], inc) {
+   each game gives nothing or one of its options, of any size the level allows (no most since NOCAP_FROM). Walked game by
+   game, the games taken in the order of the most any of their options returns on $1 (a side the model rates over its
+   price first), each game's options by chance; a branch let go once its chance is under the best's (a parlay's chance is
+   the product of its games' own, each at most 1, and the options after one too unlikely are less likely still), or, with
+   a floor F, once no parlay of it can reach the best by this file's own reading of what is left (the frontier, below): a
+   later game's option returning at most 1 on $1 lands at most 1 and returns at most 1, so a parlay of the branch (chance
+   p, price d) that uses the later games' options K returning more than 1 and pays F lands at most min(p x prod P_K,
+   p x d x prod E_K / F) (its chance is its return over its price); the most of that over every such K is worked from
+   the Pareto frontier of (prod P_K, prod E_K) over the later games, built from the last game back, a point whose chance is
+   under the best's to begin with left out (a branch's chance is at most 1, and the best only rises), and kept to 256
+   points by putting neighbours together at their larger chance and larger return, which only raises it; read by halving,
+   the lesser of the two rising one way and falling the other */
+const NIGHT_FRONT = 256;
+function nightBest(pool, [, , lo, hi0, F], inc) {
+  const hi = hi0 == null ? Infinity : hi0;
   let best = inc || null; const chosen = [], better = nightBetter;
   const G = pool.games.map(os => os.filter(o => o.legs.length <= hi).sort((a, b) => b.p - a.p))
     .map(os => ({ os, top: os.reduce((t, o) => Math.max(t, o.p * o.d), 0), maxP: os.length ? os[0].p : 0 }))
     .sort((a, b) => (b.top - a.top) || (b.maxP - a.maxP)).map(g => g.os);
-  const m = G.length, B = Array.from({ length: m + 1 }, () => new Array(hi + 1).fill(1));
+  const m = G.length, FR = new Array(m + 1); FR[m] = [[1, 1]];
+  const thin = pts => {
+    pts.sort((a, b) => (b[0] - a[0]) || (b[1] - a[1]));
+    const out = []; let mb = -Infinity; for (const q of pts) if (q[1] > mb) { out.push(q); mb = q[1]; }
+    if (out.length <= NIGHT_FRONT) return out;
+    const k = Math.ceil(out.length / NIGHT_FRONT), z = [];
+    for (let i = 0; i < out.length; i += k) { const b = out.slice(i, i + k); z.push([b[0][0], b[b.length - 1][1]]); }
+    return z;
+  };
+  const th0 = best ? best.p - NIGHT_TIE : -Infinity, ok = q => q[1] > 1 && q[0] * (1 + 1e-12) >= th0;
   for (let j = m - 1; j >= 0; j--) {
-    const E = new Array(hi + 1).fill(0); for (const o of G[j]) E[o.legs.length] = Math.max(E[o.legs.length], o.p * o.d);
-    for (let k = 0; k <= hi; k++) { let v = B[j + 1][k]; for (let c = 1; c <= k; c++) if (E[c] > 0) v = Math.max(v, E[c] * B[j + 1][k - c]); B[j][k] = v; }
+    const pts = thin(G[j].map(o => [o.p * (1 + 1e-12), o.p * o.d * (1 + 1e-12)]).filter(ok)), all = [...FR[j + 1]];
+    for (const [A, B] of FR[j + 1]) for (const [a, b] of pts) { const q = [A * a, B * b]; if (ok(q)) all.push(q); }
+    FR[j] = thin(all);
   }
+  const reach = (j, p, u) => { const F2 = FR[j], f = i => Math.min(p * F2[i][0], u * F2[i][1]); let lo = 0, hi2 = F2.length - 1;
+    while (lo < hi2) { const mid = (lo + hi2) >> 1; if (p * F2[mid][0] > u * F2[mid][1]) lo = mid + 1; else hi2 = mid; }
+    return Math.max(f(lo), lo > 0 ? f(lo - 1) : 0) * (1 + 1e-12); };
   const cut = () => best ? best.p - NIGHT_TIE : -Infinity;
   (function walk(i, p, d, n) {
     if (p < cut()) return;
-    if (F && best && p * d * B[i][hi - n] / F < cut()) return;
     if (n >= lo && d >= F - 1e-9) { const ids = chosen.flatMap(o => o.legs.map(l => l.sk)).sort().join(','), c = { p, d, n, ids };
       if (better(c, best)) best = c; }
-    if (i === m || n === hi) return;
+    if (i === m || n >= hi) return;
+    if (F && best && reach(i, p, p * d / F) < cut()) return;
     walk(i + 1, p, d, n);
     for (const o of G[i]) {
       if (p * o.p < cut()) break;
       const n2 = n + o.legs.length; if (n2 > hi) continue;
-      if (F && best && p * d * o.p * o.d * B[i + 1][hi - n2] / F < cut()) continue;
+      if (F && best && reach(i + 1, p * o.p, p * d * o.p * o.d / F) < cut()) continue;
       chosen.push(o); walk(i + 1, p * o.p, d * o.d, n2); chosen.pop();
     }
   })(0, 1, 1, 0);
@@ -479,10 +519,105 @@ function pairOwn(corr, a, b) {
   const J = CJ.joint2(impOf(x.odds), impOf(y.odds), rho), mult = decOf(x.odds) * decOf(y.odds);
   return { p: CJ.joint2(x.p, y.p, rho), d: J > 0 && isFinite(J) ? Math.min(mult, corr.hold / J) : mult };
 }
+/* this file's own copy of the page's spPosDef: a game's legs stand on its variables (a player's stat, the home side's win
+   and its cover, the over), each leg its variable or its negative (an Under, the away side: rhoFor's signs), so every
+   group of them a parlay may hold is positive definite wherever the variables' matrix is (a Cholesky factor, the
+   builder's own threshold) */
+function gamePosDef(corr, L) {
+  const vars = new Map(), sgnOf = l => l.kind === 'prop' || l.kind === 'total' ? (l.s === 'under' ? -1 : 1) : (l.s === l.home ? 1 : -1);
+  for (const l of L) { const k = l.kind === 'prop' ? `p|${l.pid}|${l.stat}` : `t|${l.kind === 'spread' ? 'cover' : l.kind}`; if (!vars.has(k)) vars.set(k, { l, s: sgnOf(l) }); }
+  const V = [...vars.values()], n = V.length, A = V.map((a, i) => V.map((b, j) => i === j ? 1 : a.s * b.s * (CJ.rhoFor(corr.rho, clOf(a.l), clOf(b.l)) || 0)));
+  const C = A.map(() => new Array(n).fill(0));
+  for (let i = 0; i < n; i++) for (let j = 0; j <= i; j++) { let x = A[i][j]; for (let k = 0; k < j; k++) x -= C[i][k] * C[j][k];
+    if (i === j) { if (x <= 1e-9) return false; C[i][i] = Math.sqrt(x); } else C[i][j] = x / C[j][j]; }
+  return true;
+}
+/* THE GUARD'S OWN GROUPS (the review of 8 November 2026). With no leg limit a level often stands on three legs or more of
+   one game, and the page keeps such a group in the pool only where its own search met it: a page that missed a deep winner
+   (a leg limit put back, a cut too keen) would keep none, and the guard, ranking over the kept pool and its own pairs,
+   would pass the level it took, or a level left empty. So the guard builds groups of its own in every game whose table is
+   positive definite (gamePosDef: there the builder never shrinks a group's matrix), on its own copula of the table's
+   correlations (ownJoint: one leg's chance; two by joint2; three by Simpson's rule over the first leg's normal with the
+   other two by bvnUpper; four or more by the GHK sum on its own Halton points, OWN_SIMS of them), each priced as the
+   builder prices a game's legs (their prices multiplied, or the hold over their joint chance at the prices' implied
+   chances, the lower):
+   - each game's chains: its legs that may go together taken greedily, the likeliest first, and again the best return on
+     $1 first, every prefix of three legs or more up to OWN_MAX, a chain stopping once its chance is under the least of
+     the levels' or it pays the highest floor;
+   - each level's own groups of a game grown by one leg, each of the OWN_TOP likeliest of that game's legs that go with it.
+   It is not every group (no search here is exhaustive over a game's thousands), but it is the groups a deep winner is
+   made of on the nights that hid one (a leg limit put back left a night of heavy Unders empty, where Safe is 9 legs). Its
+   figures are this file's own and not the builder's GHK sum, so each counts for less by OWN_TOL, its chance and its price
+   both: an own group outranks a level, or fills an empty one, only by more than the two sums can differ */
+const OWN_TOL = 5e-3, OWN_MAX = 12, OWN_TOP = 12, OWN_SIMS = 10000;
+const OWN_PRIMES = [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83, 89, 97, 101, 103, 107, 109, 113];
+const OWN_HAL = [];
+const ownHal = i => OWN_HAL[i] || (OWN_HAL[i] = Float64Array.from({ length: OWN_SIMS }, (_, s) => { let f = 1, r = 0, k = s + 1; const b = OWN_PRIMES[i]; while (k > 0) { f /= b; r += f * (k % b); k = Math.floor(k / b); } return r; }));
+function ownChol(R) {
+  const n = R.length, C = R.map(() => new Array(n).fill(0));
+  for (let i = 0; i < n; i++) for (let j = 0; j <= i; j++) { let x = R[i][j]; for (let k = 0; k < j; k++) x -= C[i][k] * C[j][k];
+    if (i === j) { if (x <= 1e-9) return null; C[i][i] = Math.sqrt(x); } else C[i][j] = x / C[j][j]; }
+  return C;
+}
+const ownPhi = z => Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI);
+/* the chance all of a game's legs land, at chances ps, on correlations R (positive definite); null where it is not */
+function ownJoint(R, ps) {
+  const n = ps.length; if (n === 1) return ps[0];
+  if (ps.some(q => !(q > 0 && q < 1))) return null;
+  const t = ps.map(q => normInv(1 - q));
+  if (n === 2) return CJ.bvnUpper(t[0], t[1], R[0][1]);
+  const C = ownChol(R); if (!C) return null;
+  if (n === 3) {
+    const r1 = R[0][1], r2 = R[0][2], s1 = Math.sqrt(1 - r1 * r1), s2 = Math.sqrt(1 - r2 * r2), rc = (R[1][2] - r1 * r2) / (s1 * s2);
+    const a = t[0], b = Math.max(a, 0) + 9, N = 1000, h = (b - a) / N; let sum = 0;
+    for (let i = 0; i <= N; i++) { const z = a + i * h, w = i === 0 || i === N ? 1 : i % 2 ? 4 : 2; sum += w * ownPhi(z) * CJ.bvnUpper((t[1] - r1 * z) / s1, (t[2] - r2 * z) / s2, rc); }
+    return Math.min(1, Math.max(0, sum * h / 3));
+  }
+  if (n - 1 > OWN_PRIMES.length) return null;
+  const H = C.slice(0, n - 1).map((_, i) => ownHal(i)), y = new Array(n); let sum = 0;
+  for (let s = 0; s < OWN_SIMS; s++) {
+    let w = 1;
+    for (let i = 0; i < n; i++) {
+      let m = 0; for (let k = 0; k < i; k++) m += C[i][k] * y[k];
+      const lo = normCdf((t[i] - m) / C[i][i]), q = 1 - lo; w *= q; if (!(w > 0)) break;
+      if (i < n - 1) y[i] = normInv(Math.min(1 - 1e-15, lo + H[i][s] * q));
+    }
+    sum += w > 0 ? w : 0;
+  }
+  return sum / OWN_SIMS;
+}
+/* a game's legs together by this file's own copula: their chance, and their price as the builder prices them */
+function ownFig(corr, L) {
+  const T = [...L].sort((a, b) => a.sk < b.sk ? -1 : 1), R = T.map((a, i) => T.map((b, j) => i === j ? 1 : (CJ.rhoFor(corr.rho, clOf(a), clOf(b)) || 0)));
+  const p = ownJoint(R, T.map(l => l.p)), J = ownJoint(R, T.map(l => impOf(l.odds))), prod = T.reduce((x, l) => x * l.d, 1);
+  if (p == null || J == null) return null;
+  return { p, d: J > 0 ? Math.min(prod, corr.hold / J) : prod };
+}
+/* the game's own groups (above): options of three legs or more, at their own figures less OWN_TOL, none the pool keeps */
+function ownGroups(corr, L, seeds, pmin, Fmax, has) {
+  const out = [], seen = new Set(has), fitsAll = (T, x) => T.every(y => fitsTwo(y, x));
+  const add = T => { if (T.length < 3) return null; const k = T.map(l => l.sk).sort().join('~'); if (seen.has(k)) return null; seen.add(k);
+    const f = ownFig(corr, T); if (!f) return null;
+    const o = { legs: [...T].sort((a, b) => a.sk < b.sk ? -1 : 1), p: f.p / (1 + OWN_TOL), d: f.d / (1 + OWN_TOL), own: true }; out.push(o); return f; };
+  const byP = [...L].sort((a, b) => (b.p - a.p) || (a.sk < b.sk ? -1 : 1)), byE = [...L].sort((a, b) => (b.p * b.d - a.p * a.d) || (b.p - a.p) || (a.sk < b.sk ? -1 : 1));
+  for (const order of [byP, byE]) {
+    const T = [];
+    for (const x of order) {
+      if (T.length >= OWN_MAX) break;
+      if (!fitsAll(T, x)) continue;
+      T.push(x); if (T.length < 3) continue;
+      const f = add(T) || ownFig(corr, T); if (!f || f.p < pmin / (1 + OWN_TOL) || f.d >= Fmax * (1 + OWN_TOL)) break;
+    }
+  }
+  for (const G of seeds) if (G.length >= 2) {
+    for (const x of byP.filter(x => !G.some(y => y.sk === x.sk) && fitsAll(G, x)).slice(0, OWN_TOP)) add([...G, x]);
+  }
+  return out;
+}
 /* a pool (P as kept, kept: nightPool's reading of it) held to this file's own reading of the run's files, and the pool the
    levels are ranked on here: the kept team legs, every player leg read, every two legs of one game together by pairOwn,
    and the kept groups of three legs or more (each at most its own pairs' chance). tag names the pool in the words */
-function nightFull(key, P, kept, state, lines, games, at, tag) {
+function nightFull(key, P, kept, state, lines, games, at, tag, tiers) {
   const bad = [], own = plOwn(state, lines, games, at), c = isMap(P.pl) ? P.pl : {}, w = tag ? ` (${tag})` : '';
   const corr = state && state.corr && isMap(state.corr.rho) && state.corr.hold > 0 ? state.corr : null;
   if (!corr) return { bad: [`${key}${w}: the run's state.json has no same-game table, so the guard cannot work its pairs out`], pool: null };
@@ -505,11 +640,21 @@ function nightFull(key, P, kept, state, lines, games, at, tag) {
     const pair = new Map();
     for (let i = 0; i < L.length; i++) for (let k = i + 1; k < L.length; k++) { const a = L[i], b = L[k]; if (!fitsTwo(a, b)) continue;
       const f = pairOwn(corr, a, b); const o = { legs: a.sk < b.sk ? [a, b] : [b, a], p: f.p, d: f.d }; os.push(o); pair.set(o.legs.map(l => l.sk).join('~'), f.p); }
+    /* a group of three legs or more lands no oftener than two of its legs together, on the copula of the table's own
+       correlations wherever the game's matrix is positive definite (this file's own check, gamePosDef: then the builder
+       never shrinks a group's matrix); where it is not, the builder shrinks a group's correlations toward 0, so the cap
+       is two legs at max(rho, 0) (the review of 8 November 2026) */
+    const pd = gamePosDef(corr, L), capOf = (a, b) => pd ? (pair.has(a.sk + '~' + b.sk) ? pair.get(a.sk + '~' + b.sk) : pair.get(b.sk + '~' + a.sk)) : CJ.joint2(a.p, b.p, Math.max(0, CJ.rhoFor(corr.rho, clOf(a), clOf(b)) || 0));
     for (const o of (kept.games.find(g => g[0].legs[0].gid === gid) || [])) if (o.legs.length >= 3) {
-      const ks = o.legs.map(l => l.sk).sort(), cap = Math.min(...ks.flatMap((x, i) => ks.slice(i + 1).map(y => pair.has(x + '~' + y) ? pair.get(x + '~' + y) : Infinity)));
+      const ks = o.legs.map(l => l.sk).sort(), cap = Math.min(...o.legs.flatMap((a, i) => o.legs.slice(i + 1).map(b => { const v = capOf(a, b); return v == null ? Infinity : v; })));
       if (!(o.p <= cap + 1e-9)) bad.push(`${key}${w}: its pool keeps ${ks.join(' with ')} at ${o.p}, over the chance two of them land together by the builder's own sums (${cap})`);
       os.push(o);
     }
+    /* the guard's own groups of three legs or more (above), where the game's table is positive definite */
+    if (pd) { const has = os.filter(o => o.legs.length >= 3).map(o => o.legs.map(l => l.sk).sort().join('~')), bySk = new Map(L.map(l => [l.sk, l]));
+      const seeds = (Array.isArray(tiers) ? tiers : []).filter(t => isMap(t) && Array.isArray(t.legs)).map(t => t.legs.map(l => bySk.get(legKey(l))).filter(Boolean)).filter(T => T.length >= 2 && T.every(l => l.gid === gid));
+      const lvP = (Array.isArray(tiers) ? tiers : []).filter(t => isMap(t) && Array.isArray(t.legs) && t.p > 0), pmin = lvP.length === 3 ? Math.min(...lvP.map(t => +t.p)) : 0;
+      os.push(...ownGroups(corr, L, seeds, pmin, Math.max(...NIGHT_LEVELS.map(l => l[4])), has)); }
     games2.push(os);
   }
   return { bad, pool: { legs, games: games2, pl: true } };
@@ -517,14 +662,14 @@ function nightFull(key, P, kept, state, lines, games, at, tag) {
 /* one level against a pool (the entry's, or its own where it was built again): its legs, its figures and its rank */
 function nightLevelBad(key, x, lv, pool, ids, pl, tag) {
   const bad = [], [id, label, lo, hi, F] = lv, w = tag ? ` (${tag})` : '';
-  if (x.label !== label || x.min !== lo || x.max !== hi || x.price !== F) bad.push(`${key} ${id}: not the level's own label, range and floor (${label}, ${lo} to ${hi} legs, ${F || 'no floor'})`);
+  if (x.label !== label || x.min !== lo || x.max !== hi || x.price !== F) bad.push(`${key} ${id}: not the level's own label, range and floor (${label}, ${hi == null ? `${lo} legs or more` : `${lo} to ${hi} legs`}, ${F || 'no floor'})`);
   if (!Array.isArray(x.legs)) {
     if (typeof x.why !== 'string' || !x.why) bad.push(`${key} ${id}: neither legs nor why`);
     else if (pool) { const b = nightBest(pool, lv); if (b) bad.push(`${key} ${id}: empty, and the pool${w} makes a parlay its rule takes (${b.ids}, ${(b.p * 100).toFixed(2)}%, ${b.d.toFixed(3)})`); }
     return bad;
   }
   const L = x.legs;
-  if (L.length < lo || L.length > hi) bad.push(`${key} ${id}: ${L.length} legs, outside its ${lo} to ${hi}`);
+  if (L.length < lo || (hi != null && L.length > hi)) bad.push(`${key} ${id}: ${L.length} legs, outside its ${hi == null ? `${lo} or more` : `${lo} to ${hi}`}`);
   if (L.some(l => !isMap(l) || !ids.has(l.id))) { bad.push(`${key} ${id}: a leg on no game of the night`); return bad; }
   if (L.some(l => !TEAM_KINDS.includes(l.kind) && !(pl && l.kind === 'prop'))) { bad.push(`${key} ${id}: ${pl ? 'a leg that is neither a team leg nor a player\'s line' : 'a player\'s leg (the night set took team legs alone before the player-leg rule)'}`); return bad; }
   if (L.some(l => l.kind === 'prop' && (l.mk !== 'main' || !['over', 'under'].includes(l.side) || !PL_STATS.includes(l.stat) || !isFinite(l.odds) || !isFinite(l.other)))) { bad.push(`${key} ${id}: a player's leg that is not a main line, over or under, with both prices, on a stat the page offers`); return bad; }
@@ -579,6 +724,10 @@ function nightEntryBad(key, e, now, pe, state, lines) {
     if (!(t(e.taken_at) < t(e.tip) - LOCK_MS)) bad.push(`${key}: taken at ${e.taken_at}, at or after its lock`);
   }
   if (e.tiers.map(x => x && x.id).join() !== NIGHT_IDS.join()) bad.push(`${key}: its levels are not the three (Safe, Medium, Aggressive)`);
+  /* NO LEG LIMIT: the rule its levels' heads say, the old one only on a set taken before NOCAP_FROM or held so */
+  const rule = nightRule(e), LV = rule === 'old' ? NIGHT_LEVELS_OLD : NIGHT_LEVELS;
+  if (!rule) bad.push(`${key}: its levels' heads are neither the rule's (${NIGHT_LEVELS.map(l => `${l[1]} ${l[2]}+ legs paying $${l[4]}+`).join(', ')}) nor the one before ${NOCAP_FROM}'s`);
+  else if (rule === 'old' && !oldOk(e, pe)) bad.push(`${key}: taken at ${e.taken_at} with a leg limit (Safe a pair with no floor, Medium and Aggressive 5 legs at most), a rule the record has not taken since ${NOCAP_FROM}`);
   const pl = isMap(e.pool.pl);
   if (!pl && !plOk(e, pe)) bad.push(`${key}: taken at ${e.taken_at} with team legs alone, a rule the record has not taken since ${PL_FROM} (no player legs in its pool)`);
   if (pl) { const c = e.pool.pl; if (!['lines', 'band', 'held', 'none', 'vig', 'cut'].every(k => Number.isInteger(c[k]) && c[k] >= 0)) bad.push(`${key}: its player legs' counts are not counts`); }
@@ -596,10 +745,10 @@ function nightEntryBad(key, e, now, pe, state, lines) {
   let rank = pool;
   if (own) {
     if (e.generated !== state.generated) bad.push(`${key}: taken at ${e.taken_at} on a state.json of ${e.generated}, not the run's (${state.generated})`);
-    const F = nightFull(key, e.pool, pool, state, lines, e.games, t(e.taken_at), null); bad.push(...F.bad); if (F.pool) rank = F.pool;
+    const F = nightFull(key, e.pool, pool, state, lines, e.games, t(e.taken_at), null, e.tiers); bad.push(...F.bad); if (F.pool) rank = F.pool;
   }
   e.tiers.forEach((x, i) => {
-    const lv = NIGHT_LEVELS[i]; if (!isMap(x) || !lv || x.id !== lv[0]) return;
+    const lv = LV[i]; if (!isMap(x) || !lv || x.id !== lv[0]) return;
     /* a level built again after the lock for a player ruled out is held to its own pool, which holds him nowhere; one the
        run built (changed since the file it is held to, before the first tip-off) held to this file's own reading of the
        run's files as its pool was, at the time it was built */
@@ -617,6 +766,9 @@ function nightEntryBad(key, e, now, pe, state, lines) {
     }
     if (x.pool != null) bad.push(`${key} ${x.id}: a pool of its own, never built again`);
     bad.push(...nightLevelBad(key, x, lv, rank, ids, pl, own ? 'this file\'s own reading of the run\'s files' : null));
+    /* a set the run took is held to the pool it keeps too, as it will be on every run from its lock: a kept pool that
+       cannot make its own level is refused at the take, never first at the lock (the review of 8 November 2026) */
+    if (own && rank !== pool) bad.push(...nightLevelBad(key, x, lv, pool, ids, pl, 'its pool as kept'));
   });
   /* its record of replacements: each a level of the set, a player and a time between the lock and the first tip-off */
   const U = e.updates == null ? [] : e.updates;
@@ -781,7 +933,7 @@ function main() {
   console.log(`suggest check: 0 failures (${q.entries} night set${q.entries === 1 ? '' : 's'}, ${q.graded_entries} graded; ${s.entries} featured set${s.entries === 1 ? '' : 's'} from before, ${s.graded_entries} graded, ${s.updates} replacement${s.updates === 1 ? '' : 's'}${prev ? '; every locked set as the last commit had it' : '; no last commit to hold it to'})`);
   return 0;
 }
-module.exports = { check, entryBad, lockedMoved, gradeBad, summarize, summarizeNight, dumps, canon, callOf, keyOf, nightKeyOf, nightIdOf, nightEntryBad, nightLevelBad, nightMoved, nightPool, nightBest, nightBetter, nightNoLines, nightHeld, featuredOf, etDateOf, minIso, plFair, plHeld, plListed, plOwn, pairOwn, nightFull, legKey,
-  PL_FROM, PL_STATS, PL_BAND,
+module.exports = { check, entryBad, lockedMoved, gradeBad, summarize, summarizeNight, dumps, canon, callOf, keyOf, nightKeyOf, nightIdOf, nightEntryBad, nightLevelBad, nightMoved, nightPool, nightBest, nightBetter, nightNoLines, nightHeld, featuredOf, etDateOf, minIso, plFair, plHeld, plListed, plOwn, pairOwn, nightFull, gamePosDef, legKey,
+  PL_FROM, PL_STATS, PL_BAND, NOCAP_FROM, NIGHT_LEVELS_OLD, nightRule, oldOk,
   TIERS, OLD_TIERS, THREE_FROM, LABELS, LEGS, LOCK_MS, FEATURED_TV, NIGHT_LEVELS, NIGHT_IDS, NIGHT_TIE, HOW, LEDGER_REL };
 if (require.main === module) process.exit(main());

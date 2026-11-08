@@ -48,6 +48,17 @@
     "returns": "2027-07-01"
    }
   ],
+  "BOS": [
+   {
+    "id": "4351852",
+    "name": "Mitchell Robinson",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-08",
+    "returns": "2026-11-08"
+   }
+  ],
   "BKN": [
    {
     "id": "4702670",
@@ -129,37 +140,10 @@
     "id": "2595516",
     "name": "Norman Powell",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Shoulder Inflammation",
     "date": "2026-11-08",
-    "returns": "2026-11-08"
-   },
-   {
-    "id": "5105555",
-    "name": "Tobe Awaka",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Sprain",
-    "date": "2026-11-07",
-    "returns": "2026-11-08"
-   },
-   {
-    "id": "4397189",
-    "name": "Jalen Smith",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger Sprain",
-    "date": "2026-11-07",
-    "returns": "2026-11-08"
-   },
-   {
-    "id": "4278067",
-    "name": "Nic Claxton",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-07",
-    "returns": "2026-11-08"
+    "returns": "2026-11-11"
    },
    {
     "id": "4066650",
@@ -390,9 +374,9 @@
     "id": "3945274",
     "name": "Luka Doncic",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Back Soreness",
-    "date": "2026-11-07",
+    "date": "2026-11-08",
     "returns": "2026-11-09"
    }
   ],
@@ -423,6 +407,17 @@
     "detail": "Back Soreness",
     "date": "2026-11-05",
     "returns": "2026-11-09"
+   }
+  ],
+  "MIL": [
+   {
+    "id": "4277843",
+    "name": "Gary Trent Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-08",
+    "returns": "2026-11-08"
    }
   ],
   "MIN": [
@@ -571,15 +566,6 @@
    }
   ],
   "PHI": [
-   {
-    "id": "3059318",
-    "name": "Joel Embiid",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot Plantar Fasciitis",
-    "date": "2026-11-07",
-    "returns": "2026-11-08"
-   },
    {
     "id": "5105637",
     "name": "Adem Bona",

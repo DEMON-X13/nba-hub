@@ -4332,6 +4332,7 @@ date,team,player_id,name,status
 2026-11-08,ATL,3146557,Jock Landale,Out
 2026-11-08,ATL,4712863,Mouhamed Gueye,Out
 2026-11-08,ATL,5105571,Henri Veesaar,Out
+2026-11-08,BOS,4351852,Mitchell Robinson,Day-To-Day
 2026-11-08,BKN,4702670,Grant Nelson,Day-To-Day
 2026-11-08,BKN,5101761,Mikel Brown Jr.,Out
 2026-11-08,BKN,5175643,Egor Demin,Out
@@ -4340,10 +4341,7 @@ date,team,player_id,name,status
 2026-11-08,CHA,3032979,Dennis Schroder,Out
 2026-11-08,CHA,5061575,Kon Knueppel,Out
 2026-11-08,CHA,4066218,Grant Williams,Out
-2026-11-08,CHI,2595516,Norman Powell,Day-To-Day
-2026-11-08,CHI,5105555,Tobe Awaka,Day-To-Day
-2026-11-08,CHI,4397189,Jalen Smith,Day-To-Day
-2026-11-08,CHI,4278067,Nic Claxton,Out
+2026-11-08,CHI,2595516,Norman Powell,Out
 2026-11-08,CHI,4066650,Zach Collins,Out
 2026-11-08,CLE,4066757,Sam Merrill,Day-To-Day
 2026-11-08,CLE,4066328,Jarrett Allen,Day-To-Day
@@ -4367,10 +4365,11 @@ date,team,player_id,name,status
 2026-11-08,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-11-08,LAC,6580,Bradley Beal,Out
 2026-11-08,LAC,4396818,Jordan Miller,Out
-2026-11-08,LAL,3945274,Luka Doncic,Day-To-Day
+2026-11-08,LAL,3945274,Luka Doncic,Out
 2026-11-08,MEM,5105462,Richie Saunders,Out
 2026-11-08,MEM,4432810,Isaiah Stewart,Out
 2026-11-08,MEM,4431785,Scotty Pippen Jr.,Out
+2026-11-08,MIL,4277843,Gary Trent Jr.,Day-To-Day
 2026-11-08,MIN,4594268,Anthony Edwards,Out
 2026-11-08,MIN,3934673,Donte DiVincenzo,Out
 2026-11-08,NOP,5061589,Yves Missi,Out
@@ -4386,7 +4385,6 @@ date,team,player_id,name,status
 2026-11-08,ORL,4432573,Paolo Banchero,Out
 2026-11-08,ORL,5214637,Noah Penda,Out
 2026-11-08,ORL,5107251,Izaiyah Nelson,Out
-2026-11-08,PHI,3059318,Joel Embiid,Day-To-Day
 2026-11-08,PHI,5105637,Adem Bona,Out
 2026-11-08,PHI,4870562,Dominick Barlow,Out
 2026-11-08,PHI,4871141,Ariel Hukporti,Out

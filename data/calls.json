@@ -476,6 +476,8 @@
    "2027_20261108_NOP_LAC": {"pick":"NOP","pHome":0.4841,"at":"2026-11-08T02:54Z","src":"published"},
    "2027_20261108_PHI_CHI": {"pick":"PHI","pHome":0.276,"at":"2026-11-08T17:05Z","src":"published"},
    "2027_20261108_UTA_MIN": {"pick":"MIN","pHome":0.7728,"at":"2026-11-07T22:47Z","src":"published"},
+   "2027_20261109_DEN_HOU": {"pick":"HOU","pHome":0.6196,"at":"2026-11-08T20:32Z","src":"published"},
+   "2027_20261109_SAS_PHX": {"pick":"SAS","pHome":0.359,"at":"2026-11-08T20:32Z","src":"published"},
    "2027_20261113_GSW_SAS": {"pick":"SAS","pHome":0.7711,"at":"2026-11-05T04:23Z","src":"published"},
    "2027_20261113_NYK_IND": {"pick":"NYK","pHome":0.4648,"at":"2026-11-05T04:23Z","src":"published"},
    "2027_20261120_HOU_DEN": {"pick":"DEN","pHome":0.635,"at":"2026-11-05T15:30Z","src":"published"},

@@ -205,7 +205,7 @@
     "name": "Mitchell Robinson",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4593841",
@@ -505,7 +505,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4711294",
@@ -519,7 +519,7 @@
     "name": "Nic Claxton",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4066650",
@@ -596,7 +596,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4848625",
@@ -2111,7 +2111,7 @@
     "name": "Gary Trent Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133628",
@@ -2788,7 +2788,7 @@
     "name": "Joel Embiid",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3904625",

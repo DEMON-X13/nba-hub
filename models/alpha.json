@@ -1394,8 +1394,8 @@
    "spread": -4.1
   },
   "2027_20261108_PHI_CHI": {
-   "pHome": 0.2748,
-   "spread": 7.4
+   "pHome": 0.2301,
+   "spread": 9.2
   },
   "2027_20261108_UTA_MIN": {
    "pHome": 0.8089,
@@ -2121,5 +2121,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-08T18:21Z"
+ "generated": "2026-11-08T20:32Z"
 }

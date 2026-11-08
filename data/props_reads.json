@@ -221,5 +221,6 @@
  "2027_20261106_SAS_SAC": {"at":"2026-11-07T14:05Z","status":"ok","lines":101,"tries":1},
  "2027_20261106_TOR_MIL": {"at":"2026-11-07T14:05Z","status":"ok","lines":160,"tries":1},
  "2027_20261106_UTA_DAL": {"at":"2026-11-07T14:05Z","status":"ok","lines":96,"tries":1},
- "2027_20261106_WAS_ATL": {"at":"2026-11-07T03:12Z","status":"ok","lines":113,"tries":1}
+ "2027_20261106_WAS_ATL": {"at":"2026-11-07T03:12Z","status":"ok","lines":113,"tries":1},
+ "2027_20261107_DEN_IND": {"at":"2026-11-08T02:54Z","status":"ok","lines":86,"tries":1}
 }

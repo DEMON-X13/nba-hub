@@ -3,21 +3,21 @@
  "teams": {
   "ATL": [
    {
-    "id": "4585618",
-    "name": "Keshon Gilbert",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Knee Inflammation",
-    "date": "2026-11-07",
-    "returns": "2026-11-09"
-   },
-   {
     "id": "4873201",
     "name": "Asa Newell",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Toe",
-    "date": "2026-11-07",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "4585618",
+    "name": "Keshon Gilbert",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee Inflammation",
+    "date": "2026-11-08",
     "returns": "2026-11-09"
    },
    {
@@ -49,6 +49,15 @@
    }
   ],
   "BKN": [
+   {
+    "id": "4702670",
+    "name": "Grant Nelson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-08",
+    "returns": "2026-11-10"
+   },
    {
     "id": "5101761",
     "name": "Mikel Brown Jr.",
@@ -117,6 +126,15 @@
   ],
   "CHI": [
    {
+    "id": "2595516",
+    "name": "Norman Powell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Shoulder Inflammation",
+    "date": "2026-11-08",
+    "returns": "2026-11-08"
+   },
+   {
     "id": "5105555",
     "name": "Tobe Awaka",
     "pos": "F",
@@ -155,29 +173,29 @@
   ],
   "CLE": [
    {
-    "id": "4683747",
-    "name": "Jaylon Tyson",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-07",
-    "returns": "2026-11-09"
-   },
-   {
     "id": "4066757",
     "name": "Sam Merrill",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Elbow",
-    "date": "2026-11-07",
+    "date": "2026-11-08",
     "returns": "2026-11-09"
    },
    {
     "id": "4066328",
     "name": "Jarrett Allen",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "4683747",
+    "name": "Jaylon Tyson",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle Sprain",
     "date": "2026-11-07",
     "returns": "2026-11-09"
    }
@@ -224,39 +242,21 @@
   ],
   "DET": [
    {
+    "id": "4433621",
+    "name": "Jalen Duren",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-08",
+    "returns": "2026-11-24"
+   },
+   {
     "id": "4395702",
     "name": "Isaiah Joe",
     "pos": "G",
     "status": "Out",
     "detail": "Hip Bruise",
     "date": "2026-11-07",
-    "returns": "2026-11-09"
-   },
-   {
-    "id": "5107818",
-    "name": "Isaac Jones",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Not Injury Related",
-    "date": "2026-11-07",
-    "returns": "2026-11-08"
-   },
-   {
-    "id": "4397449",
-    "name": "Elijah Harkless",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Not Injury Related",
-    "date": "2026-11-07",
-    "returns": "2026-11-08"
-   },
-   {
-    "id": "4433621",
-    "name": "Jalen Duren",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-10-25",
     "returns": "2026-11-09"
    }
   ],
@@ -470,9 +470,9 @@
     "id": "3062679",
     "name": "Josh Hart",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-11-06",
+    "date": "2026-11-08",
     "returns": "2026-11-10"
    }
   ],
@@ -528,9 +528,9 @@
     "id": "4066320",
     "name": "Desmond Bane",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-07",
+    "date": "2026-11-08",
     "returns": "2026-11-10"
    },
    {
@@ -639,6 +639,15 @@
   ],
   "POR": [
    {
+    "id": "4066211",
+    "name": "Robert Williams III",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-11-08",
+    "returns": "2026-11-10"
+   },
+   {
     "id": "4279888",
     "name": "Ja Morant",
     "pos": "G",
@@ -646,15 +655,6 @@
     "detail": "Hamstring Not Specified",
     "date": "2026-11-08",
     "returns": "2026-12-01"
-   },
-   {
-    "id": "4066211",
-    "name": "Robert Williams III",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Rest",
-    "date": "2026-11-07",
-    "returns": "2026-11-10"
    },
    {
     "id": "4578893",
@@ -764,6 +764,15 @@
   ],
   "UTA": [
    {
+    "id": "4433627",
+    "name": "Keyonte George",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-08",
+    "returns": "2026-11-08"
+   },
+   {
     "id": "4066336",
     "name": "Lauri Markkanen",
     "pos": "F",
@@ -793,21 +802,21 @@
   ],
   "WAS": [
    {
-    "id": "4278129",
-    "name": "Deandre Ayton",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Leg",
+    "id": "6583",
+    "name": "Anthony Davis",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
     "date": "2026-11-08",
     "returns": "2026-11-09"
    },
    {
-    "id": "6583",
-    "name": "Anthony Davis",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-07",
+    "id": "4278129",
+    "name": "Deandre Ayton",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Leg",
+    "date": "2026-11-08",
     "returns": "2026-11-09"
    },
    {

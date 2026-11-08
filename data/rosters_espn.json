@@ -312,7 +312,7 @@
     "name": "Grant Nelson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278104",
@@ -582,7 +582,7 @@
     "name": "Norman Powell",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4898010",
@@ -1010,7 +1010,7 @@
     "name": "Elijah Harkless",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683771",
@@ -1045,7 +1045,7 @@
     "name": "Isaac Jones",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4700852",
@@ -3521,7 +3521,7 @@
     "name": "Keyonte George",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432811",

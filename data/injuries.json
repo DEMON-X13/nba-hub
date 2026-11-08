@@ -391,9 +391,9 @@
     "name": "Luka Doncic",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Back",
+    "detail": "Back Soreness",
     "date": "2026-11-07",
-    "returns": "2026-11-08"
+    "returns": "2026-11-09"
    }
   ],
   "MEM": [
@@ -426,15 +426,6 @@
    }
   ],
   "MIN": [
-   {
-    "id": "5279133",
-    "name": "Joan Beringer",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Fracture",
-    "date": "2026-11-07",
-    "returns": "2026-11-08"
-   },
    {
     "id": "4594268",
     "name": "Anthony Edwards",
@@ -726,21 +717,21 @@
   ],
   "TOR": [
    {
-    "id": "4433134",
-    "name": "Scottie Barnes",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin Soreness",
-    "date": "2026-11-07",
-    "returns": "2026-11-09"
-   },
-   {
     "id": "4395724",
     "name": "Immanuel Quickley",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-11-07",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "4433134",
+    "name": "Scottie Barnes",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin Soreness",
+    "date": "2026-11-08",
     "returns": "2026-11-09"
    },
    {

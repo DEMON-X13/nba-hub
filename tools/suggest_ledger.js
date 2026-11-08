@@ -7,7 +7,9 @@
  * night (since the owner's call of 7 November 2026): each night's one set, across every game of the night (an Eastern
  * date's games but preseason), its three levels Safe (the likeliest 2-leg parlay), Medium (the likeliest of 2 to 5 legs
  * paying $4 or more on $1) and Aggressive (the likeliest of 2 to 5 paying $8 or more), on the night's team legs at
- * DraftKings' prices, by the builder's own sums, on the lines feed's two dates (the dates the job reads DraftKings' lines
+ * DraftKings' prices and, on every set the page with them takes from 23:00 UTC on 7 November 2026, DraftKings' main lines on its players at DraftKings' own
+ * fair chance (the owner's call of that day, "Add at DraftKings' odds"), by the builder's own sums, on the lines feed's
+ * two dates (the dates the job reads DraftKings' lines
  * for, so a night's set is taken the night before too: the job's runs land hours late). Taken from the published page
  * itself: index.html booted in jsdom on the state.json just published and lines.json just read, the window's clock held
  * at the run's time, read by the page's own spTakes and spEntry, so the record holds exactly the set the tab shows.
@@ -15,7 +17,10 @@
  * side and total together), so the guard works each level out again. A set LOCKS 2 hours before the night's first
  * tip-off (the page's spLockAt): while the lock is to come a run rewrites the entry whenever the set has changed (lines
  * read), keeping it otherwise; from the first run at or after the lock it stands as the last run before the lock left
- * it, and nothing changes but its grade (it holds team legs alone, which no report moves). GitHub starts this repo's
+ * it, and nothing changes but its grade, and, before the first tip-off, a level holding a player the report has listed
+ * since: that level alone is built again from the lines at hand (the page's spRebuildOut), marked `updated` {pid, name,
+ * reason, at} with its own pool, and recorded in the entry's `updates` (replaceRuledOut; a set of team legs alone, which
+ * no report moves, never is). GitHub starts this repo's
  * runs 3 to 9 hours late, so that is the last publish before the lock, whenever it was; a night no run reached before
  * its lock has no entry (the page then builds its own set once, says it is not the site's, and keeps it in the visitor's
  * browser), and an entry not yet locked whose night is no longer to come as it was (its first tip-off moved before the
@@ -40,7 +45,9 @@
  * from the last key that holds it, as the tab's record pills count them (the pills draw the night's, each titled with the
  * featured record).
  *
- * The guard (tools/suggest_check.js check, on its own rules): the new ledger against the file the run started from, then,
+ * The guard (tools/suggest_check.js check, on its own rules, and for each set or level this run took on its own reading
+ * of the same state.json and lines.json: every player line, every two legs of a game by its own copula): the new ledger
+ * against the file the run started from, then,
  * where that differs from it, against the last commit's (git show HEAD); a ledger that fails is not written, the file is
  * put back as it was (the last commit's where the file on disk had itself moved a locked entry), and the run exits 1.
  * The job's step then puts the last commit's file back and turns that step red; the record never holds back state.json
@@ -120,7 +127,7 @@ async function ready(w, errs, state) {
   const why = [];
   if (!w.eval("typeof S !== 'undefined' && !!S && !!S.slate")) return ['the page did not load state.json'];
   if (w.eval('S.generated') !== state.generated) why.push('the page did not load this checkout\'s state.json');
-  const missing = ['spTakes', 'spEntry', 'spLockAt', 'pbLinesLoad', 'parlayDec', 'pbSlipOf'].filter(f => w.eval(`typeof ${f}`) !== 'function');
+  const missing = ['spTakes', 'spEntry', 'spLockAt', 'spOutWhy', 'spRebuildOut', 'pbLinesLoad', 'parlayDec', 'pbSlipOf'].filter(f => w.eval(`typeof ${f}`) !== 'function');
   if (missing.length) return [...why, 'the page has no Suggested Parlays nights to take (no ' + missing.join(', ') + ')'];
   if (!w.NBA_GRADE || typeof w.NBA_GRADE.legResult !== 'function') why.push('the page has no settlement to grade by (NBA_GRADE)');
   if (JSON.stringify(w.eval("typeof SP_LEVELS !== 'undefined' ? SP_LEVELS : []")) !== JSON.stringify(NIGHT_LEVELS)) why.push("the page's levels are not the three this record keeps (Safe a pair, Medium 2 to 5 legs paying $4+, Aggressive 2 to 5 paying $8+)");
@@ -157,6 +164,27 @@ function takeNights(w, now, have) {
     takes.push({ key: SC.nightKeyOf(x), entry: x });
   }
   return { nights: nights.length, locked, held, empty, takes, keep };
+}
+
+/* ---- a locked night, from its lock to its first tip-off: a level holding a player the report has listed since built
+   again from the lines at hand, that level alone (the page's spRebuildOut, its pool with it), recorded in updates ---- */
+function replaceRuledOut(w, Nm, now, runAt, said) {
+  const season = w.eval('S.season'), why = w.eval('spOutWhy'), rebuild = w.eval('spRebuildOut'), byId = w.eval('spById');
+  for (const [key, e] of Object.entries(Nm)) {
+    const tip = Date.parse(e.tip);
+    if (!(tip - LOCK_MS <= now && now < tip) || +e.season !== +season || !Array.isArray(e.tiers) || !e.pool || !e.pool.pl) continue;
+    /* the night as the slate has it now: one whose first tip-off moved since the lock is held as it was */
+    const N = byId(e.nid); if (!N || N.tip !== e.tip) continue;
+    e.tiers.forEach((t, i) => {
+      if (!t || !Array.isArray(t.legs)) return;
+      const l = t.legs.find(x => x.kind === 'prop' && why(x.pid, x.id)); if (!l) return;
+      const upd = { pid: String(l.pid), name: l.name, reason: why(l.pid, l.id), at: runAt };
+      const nt = rebuild(e.nid, t.id, upd); if (!nt) return;
+      e.tiers[i] = JSON.parse(JSON.stringify(nt));
+      e.updates = [...(Array.isArray(e.updates) ? e.updates : []), { tier: t.id, ...upd }];
+      said.push(`replaced ${key} ${t.id}: ${l.name} ${upd.reason}`);
+    });
+  }
 }
 
 /* ---- a level's grade, by the page's own settlement ---- */
@@ -229,6 +257,7 @@ async function main() {
   else if (take.locked) said.push(`${take.locked} night set${take.locked === 1 ? '' : 's'} locked`);
   for (const h of take.held) said.push(`${h} held: its first tip-off moved after the lock, and no new set is taken`);
   for (const id of take.empty) said.push(`no set of ${id}: DraftKings has posted no line for its games yet`);
+  replaceRuledOut(w, N, now, runAt, said);
   await boxesFor(w, F, now, season); await boxesFor(w, N, now, season);
   gradeAll(w, F, now, season); gradeAll(w, N, now, season);
   next.featured = Object.fromEntries(Object.keys(F).sort().map(k => [k, F[k]]));
@@ -236,8 +265,10 @@ async function main() {
   next.night = Object.fromEntries(Object.keys(N).sort().map(k => [k, N[k]]));
   next.night_summary = SC.summarizeNight(next.night);
 
-  const bad = SC.check(next, start, now, runAt, season);
-  const moved = (L, prev) => [...SC.lockedMoved(L, prev, now, null), ...SC.nightMoved(L, prev, now)];
+  /* the guard holds every set and level this run took to its own reading of the same state.json and lines.json */
+  const lines = parse(readText(path.join(SROOT, 'lines.json'))) || null;
+  const bad = SC.check(next, start, now, runAt, season, state, lines);
+  const moved = (L, prev) => [...SC.lockedMoved(L, prev, now, null), ...SC.nightMoved(L, prev, now, null)];
   if (head && headText !== startText) bad.push(...moved(next, head).map(b => 'against the last commit: ' + b));
   if (bad.length) {
     for (const b of bad) console.log('FAIL ' + b);
@@ -257,7 +288,7 @@ async function main() {
   console.log(`suggest ledger: written (${said.join('; ')}); ${tail}`);
   return 0;
 }
-module.exports = { gradeTier, takeNights, SINCE };
+module.exports = { gradeTier, takeNights, replaceRuledOut, SINCE };
 if (require.main === module) {
   main().then(code => process.exit(code), e => { console.log('suggest ledger: refused: ' + (e && e.message || e)); process.exit(1); });
 }

@@ -189,12 +189,12 @@ window.PARLAY_CARD = (function () {
   }
 
   /* the card: everything it shows, worked out once, drawn twice (the window, and the image) */
-  function card({ kicker, legs, dec, priceNote, chance, trial, fair, stake, source, sg }) {
+  function card({ kicker, legs, dec, priceNote, chance, trial, fair, stake, source, sg, by }) {
     const n = legs.length, first = legs.map(l => l.date).filter(Boolean).sort()[0] || '';
     const am = typeof decToAm === 'function' && dec > 1 ? decToAm(dec) : null;
     return { source, kicker, title: n + '-leg parlay', dateText: dates(legs), price: ml(am), dec: isFinite(dec) ? dec.toFixed(2) : '–', implied: dec > 1 ? pct(1 / dec) : '–', priceNote,
       legs: legs.map(x => x.card), stake: stake > 0 ? stake : 0, payout: stake > 0 ? stake * dec : 0, profit: stake > 0 ? stake * dec - stake : 0,
-      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial, failed: !!trial && typeof pbPropsOn === 'function' && !pbPropsOn(),
+      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial && !by, failed: !!trial && !by && typeof pbPropsOn === 'function' && !pbPropsOn(), by: by || null,
       fair: fair && fair.p != null && isFinite(fair.p) ? pct(fair.p) : null, fairEst: !!(fair && fair.p != null && fair.est), sg: !!sg,
       oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'), props: legs.filter(l => l.kind === 'prop').length,
       made: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), site: SITE,
@@ -222,8 +222,10 @@ window.PARLAY_CARD = (function () {
     for (const l of L) { if (l.price == null) l.price = l.odds; l.card = leg(l, l.price); }
     const dec = parlayDec(L.map(l => ({ leg: l, ml: l.price }))), sg = new Set(L.map(l => l.id)).size < L.length;
     const chance = t.chance !== undefined ? t.chance : parlayProb(L).corr;
+    /* t.by: whose chance the level states (Suggested Parlays' night levels: the model's on team legs, DraftKings' fair
+       chance on player legs; of player legs alone, the fair chance itself, so none beside it) */
     return card({ source: kind, kicker: String(t.kicker || 'Suggested parlay'), legs: L, dec, priceNote: sg ? 'estimated same-game price' : 'book price',
-      chance, trial: L.some(l => l.kind === 'prop'), fair: parlayFair(L), stake: typeof pbStake === 'function' ? pbStake() : 20, sg });
+      chance, trial: L.some(l => l.kind === 'prop'), fair: parlayFair(L), stake: typeof pbStake === 'function' ? pbStake() : 20, sg, by: typeof t.by === 'string' ? t.by : null });
   }
   /* the Parlay Builder's own four levels over the games ticked (getPbTiers), which a level's card drawn with no prefix
      of its own finishes (pbTierCard's default "pb|<level>") */
@@ -232,7 +234,7 @@ window.PARLAY_CARD = (function () {
      id>:<level>", the level as the tab shows it, live or locked). The NFL hub's other, the Elo picks' "elo|<level>", is
      not here: the NBA hub took its Elo picks off on 5 November 2026 */
   from('sp', id => { const t = typeof window.spTier === 'function' ? window.spTier(id) : null;
-    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}`, chance: t.corr } : null; });
+    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}`, chance: t.by === 'dk' ? null : t.corr, by: t.by || undefined } : null; });
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
      then the model's (on trial with a player leg in it) and the price's; with no fair chance, the model's and the
@@ -243,22 +245,28 @@ window.PARLAY_CARD = (function () {
     const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && !m.failed ? ' (on trial)' : '';
     /* the failed model's words, counted as the builder counts them (pbFailedSay: "its player leg" for one) */
     const k = m.props != null ? m.props : 2, say = typeof pbFailedSay === 'function' ? pbFailedSay(k) : `its player leg${k === 1 ? '' : 's'} the props model’s, which failed its trial`;
-    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + say]] : [];
+    const by = m.by && m.by !== 'dk' ? m.by : 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + say]] : [];
+    /* a Suggested Parlays night level mixing team and player legs states the chance it was ranked on, which is no one's
+       alone: never "model + DraftKings says", which read as DraftKings saying it under DraftKings' own fair chance (the
+       review of 7 November 2026) */
+    const mixed = m.by === 'model + DraftKings', says = mixed ? [['ranked at '], [m.chance, 1], [' (model on team legs, DraftKings on player legs)']] : [[by + ' says '], [m.chance, 1], ...fx];
     if (m.fair) return [[['Fair chance ' + all], [m.fair, 1], ...(m.fairEst ? [[' (est.)']] : [])],
-      [...(m.chance ? [[by + ' says '], [m.chance, 1], ...fx] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
+      [...(m.chance ? says : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
     if (m.failed && m.chance) return [[['No fair chance: a leg has only one of DraftKings’ two prices']], [['model says '], [m.chance, 1], ...fx, ...price]];
     return [[...(m.chance ? [['Model’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
       [['No fair chance: a leg has only one of DraftKings’ two prices']]];
   }
   const lineText = l => l.map(x => x[0]).join('');
-  /* the window's small print under the chances: why the fair chance is an estimate, the same-game price's, and a
-     parlay with no model chance */
+  /* the window's small print under the chances: why the fair chance is an estimate, the same-game price's, a parlay with
+     no model chance, and a night level's player legs (at DraftKings' fair chance: no model claim, and what they cost) */
+  const PL_COST = 'at it a player Under breaks even and an Over gives up about 12%';
   function smallPrint(m) {
     const out = [];
+    if (m.by === 'model + DraftKings') out.push(`Team legs at the model’s chance, player legs at DraftKings’ fair chance: no model claim on a player leg, and ${PL_COST}.`);
     if (m.fair && m.fairEst) out.push(m.oneSided ? 'Est.: a leg is priced on one side only (a milestone or a double- or triple-double), so its margin is taken out as measured on DraftKings’ archived milestones.'
       : 'Est.: legs share a game, so their fair chances are joined by how they move together, measured on the hub’s box scores.');
     if (m.sg) out.push((typeof SG_WHY === 'string' ? SG_WHY : 'DraftKings prices same-game parlays its own way: this is an estimate from the legs’ prices and how they move together') + '.');
-    if (!m.chance) out.push(typeof SL_NOMODEL === 'string' ? SL_NOMODEL : 'No model chance: the props model does not project a player in it.');
+    if (!m.chance) out.push(m.by === 'dk' ? `Every leg is a player’s, at DraftKings’ fair chance: no model claim on a player leg, and ${PL_COST}.` : typeof SL_NOMODEL === 'string' ? SL_NOMODEL : 'No model chance: the props model does not project a player in it.');
     return out;
   }
   /* ---- the window ---- */

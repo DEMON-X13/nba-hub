@@ -2,7 +2,8 @@
  * locked and graded on made-up days, the per-game sets of the rule before 7 November 2026 kept and graded, and the guard
  * that refuses a ledger whose locked entries moved or whose levels are not their rule's.
  *
- *   node tools/test_suggest_ledger.js      ends "N checks passed"; exit 1 otherwise (about a minute; needs jsdom)
+ *   node tools/test_suggest_ledger.js      ends "N checks passed"; exit 1 otherwise (about a minute; needs jsdom;
+ *                                          SL_VERBOSE=1 prints every check)
  *
  * Each run is the script itself, as the job runs it, on the built page (index.html) with a state.json, lines.json and box
  * file of this test's own in a scratch folder (SUGGEST_ROOT), the clock set (SUGGEST_NOW), never the real ledger (G alone
@@ -39,6 +40,23 @@
  *      per-game ledgers failing theirs.
  *   T  a night of exact ties (three games alike, a fourth priced lower on the same chance): each level the one the rule's
  *      tie-breaks give, the higher price then the legs' ids.
+ *   P  a night with player legs (the rule of every set the page with them takes from 23:00 UTC on 7 November 2026): DraftKings' main lines over and under at
+ *      DraftKings' own fair chance beside the team legs at the model's, one leg a player, a player the report lists left
+ *      out, a line priced on one side, a milestone and a Yes market taken nowhere; each level the likeliest of this file's
+ *      own enumeration (every game's legs together by its own copula: two legs exactly, three by its own integral, four or
+ *      more bounded by their three-leg subsets); the pool the record keeps compact and making every level again by the
+ *      guard's own enumeration; after the lock, a player listed: the level holding him alone built again, marked and
+ *      recorded, the rest to the byte, and nothing built again from the first tip-off; graded from the box lines, a player
+ *      with no line void and a whole line pushing, each dropping out, the rest paid by this file's own sums; and the guard
+ *      refusing a player's leg at the model's chance, two legs of one player, a milestone, a player listed before the
+ *      lock and a pool that cannot make its level. Since the review of 7 November 2026: the guard's own reading of the
+ *      run's state and lines.json passing the job's sets and failing a ledger whose winning player leg was cut from the
+ *      pool with its levels the runner-up the cut pool makes (which the kept pool alone passes); a line priced with no
+ *      margin in the pool refused; a replacement for a player the run's state does not list, and a level built again on a
+ *      pool holding a player the state lists, refused; a win with a leg dropped paying more than the legs left's prices
+ *      multiplied, or other than that where each game is left one leg, refused; and X, a night whose likeliest pair is a
+ *      fair same-game pair that moves together (the Thunder to win at -500 with a Wizard's Under at -300), taken through
+ *      the job, every level this file's own enumeration's.
  *   G  the real ledger, copied, on the real state and lines.json at the real clock: nothing refused, every locked set as
  *      it was.
  */
@@ -56,7 +74,7 @@ fs.mkdirSync(path.join(DIR, 'data'), { recursive: true });
 fs.copyFileSync(path.join(ROOT, 'index.html'), path.join(DIR, 'index.html'));
 
 let n = 0; const fails = [];
-const chk = (ok, msg) => { n++; if (!ok) fails.push(msg); };
+const chk = (ok, msg) => { n++; if (!ok) fails.push(msg); if (process.env.SL_VERBOSE) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${msg}`); };
 const clone = x => JSON.parse(JSON.stringify(x));
 const H = 3600e3, LOCK = 2 * H;
 const imp = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100), dec = a => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
@@ -639,6 +657,235 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
         `V: ${lvV.id} (${lvV.legs.length} legs over ${gamesV.length} games) graded on a push and a void as a book settles it, the ${left.length} leg${left.length === 1 ? '' : 's'} left paid ${gV && gV.payout} (this file's own ${r3(pay)}, where every leg won pays ${lvV.dec}) on ${JSON.stringify(res)}: ${rV.last}`);
       chk(rV.code === 0 && SC.check(readU(U), null, Date.parse(T(DV1, '12:00:00')), null, SEASON).length === 0, 'V: the graded ledger passes the guard');
     } else chk(false, `V: (no level over two games or more to plant a push and a void on: ${eV ? eV.tiers.map(t => t.legs ? t.legs.length : 0).join(',') : 'no entry'})`); }
+
+  console.log('P. a night with player legs');
+  { const U = uni('players'), DP = addDay(D0, 16), DP1 = addDay(DP, 1);
+    const p1 = mk(DP, 'ORL', 'MIA', T(DP1, '00:00'), [], { pHome: 0.62, spread: -4, total: 221 }), p2 = mk(DP, 'PHI', 'TOR', T(DP1, '00:30'), [], { pHome: 0.4, spread: 3, total: 226 });
+    const slP = [p1, p2], kP = nightKey(slP, DP), lockP = Date.parse(p1.tip) - LOCK;
+    /* the props model's rows, and DraftKings' main lines priced so the side each names is likely: Pa's points and his
+       rebounds (one leg a player), Pb's rebounds under, Pc's assists (Pc listed Questionable: held out), Pd's rebounds on a
+       whole line (a push to come) and his points priced on the Over alone, Pe's points (no box line to come: void); a
+       milestone and a Yes market beside them. Pa's two lines are the likeliest of the night, so a page that took two legs
+       of one player would pair them */
+    const rowsP = { [p1.id]: { 9500001: ['Pa Guard', 'ORL', 'G', 34, 25, 6, 5, 2, 1, 0.3, 0.1, 0.01], 9500002: ['Pb Wing', 'MIA', 'F', 30, 14, 8, 2, 1, 1, 0.5, 0.1, 0.01], 9500003: ['Pc Held', 'ORL', 'G', 31, 16, 4, 7, 2, 1, 0.2, 0.1, 0.01] },
+      [p2.id]: { 9500004: ['Pd Big', 'TOR', 'C', 32, 18, 11, 2, 0.5, 0.6, 1.5, 0.4, 0.01], 9500005: ['Pe Dnp', 'PHI', 'G', 28, 18, 4, 4, 2, 1, 0.3, 0.1, 0.01] } };
+    const mainsP = { [p1.id]: [['9500001', 'pts', 17.5, -1200, 700], ['9500001', 'reb', 3.5, -1000, 650], ['9500002', 'reb', 12.5, 250, -350], ['9500003', 'ast', 4.5, -600, 400]],
+      [p2.id]: [['9500004', 'reb', 8, -450, 310], ['9500004', 'pts', 12.5, -300, null], ['9500005', 'pts', 10.5, -700, 450]] };
+    const lineP = (g, at) => ({ ...lineOf(g, { at }), props: { at, mains: mainsP[g.id].map(([player, stat, line, over, under]) => ({ player, stat, line, over, under })),
+      ladders: [{ player: g.id === p1.id ? '9500001' : '9500005', stat: 'pts', k: 10, price: -2000 }], yes: [{ player: g.id === p1.id ? '9500002' : '9500004', market: 'dd', price: -900 }] } });
+    const LP = at => ({ v: 1, at, games: { [p1.id]: lineP(p1, at), [p2.id]: lineP(p2, at) } });
+    const QREP = { 9500003: ['Pc Held', 'Questionable', 'knee'] };
+    const stP = (o = {}, sl = slP) => { const st = stateOf(sl, { today: DP, generated: T(DP, '12:00'), report: QREP, ...o });
+      st.props.games = Object.fromEntries(slP.filter(g => g.status === 'scheduled').map(g => [g.id, { tip: g.tip, away: g.away, home: g.home, players: clone(rowsP[g.id]) }])); return st; };
+    /* this file's own pool: the team legs as above, and each main line over and under with both prices at DraftKings' own
+       fair chance (the Over 1 less the Under's implied chance, the Under that chance), 45% to 97%, on a player the props
+       model places on one of the game's clubs and the report does not list (a probable player plays) */
+    const heldP = (st, g, pid) => { if ([g.model.home, g.model.away].some(x => (x.out || []).some(y => String(y.id) === String(pid)))) return true;
+      const r = st.report.players[pid]; return Array.isArray(r) && !/^probable/i.test(String(r[1] || '').trim()); };
+    const poolP = (st, lines, now) => { const legs = poolOwn(slP.map(g => st.slate.find(x => x.id === g.id)), lines, now, DP);
+      for (const g of nightGames(st.slate, DP).filter(g => g.status === 'scheduled' && Date.parse(g.tip) > now)) {
+        const pr = lines.games[g.id] && lines.games[g.id].props, rows = st.props.games[g.id] && st.props.games[g.id].players; if (!pr || !rows) continue;
+        for (const m of pr.mains) { const row = rows[m.player];
+          if (!row || (row[1] !== g.away && row[1] !== g.home) || heldP(st, g, m.player) || !Number.isFinite(m.over) || !Number.isFinite(m.under)) continue;
+          const fo = 1 - imp(m.under);
+          for (const [sd, odds, other, pp] of [['over', m.over, m.under, fo], ['under', m.under, m.over, 1 - fo]]) if (pp >= 0.45 && pp < 0.97)
+            legs.push({ sk: [g.id, 'prop', m.player, m.stat, 'main', m.line, sd].join('|'), gid: g.id, kind: 'prop', pid: String(m.player), stat: m.stat, side: sd, line: m.line, odds, other, p: pp, d: dec(odds), home: g.home, team: row[1] }); } }
+      return legs.sort((a, b) => a.sk < b.sk ? -1 : 1); };
+    /* the copula of this file's own: two legs exactly (tools/corr.js joint2); three or more by conditioning on the first
+       leg's normal, its density times the rest's own orthant given it integrated by Gauss-Legendre (six panels of 20
+       points from its threshold to 9), the rest worked the same way down to two (tools/corr.js bvnUpper); never the
+       page's GHK sum. Three legs
+       also by Simpson's rule on the normal itself (4,000 steps), the two held to each other. A game's legs together pay
+       the lower of their prices multiplied and the hold over their implied joint chance */
+    const phi = z => Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI), ORTH = new Map();
+    const GLN = (() => { const n = 20, x = [], w = []; for (let i = 1; i <= n; i++) { let z = Math.cos(Math.PI * (i - 0.25) / (n + 0.5)), pp = 0;
+      for (let it = 0; it < 100; it++) { let p0 = 1, p1 = z; for (let k = 2; k <= n; k++) { const p2 = ((2 * k - 1) * z * p1 - (k - 1) * p0) / k; p0 = p1; p1 = p2; } pp = n * (z * p1 - p0) / (z * z - 1); const dz = p1 / pp; z -= dz; if (Math.abs(dz) < 1e-15) break; }
+      x.push(z); w.push(2 / ((1 - z * z) * pp * pp)); } return { x, w }; })();
+    const orthOwn = (t, R) => { const n = t.length; if (n === 1) return 1 - PJ.normCdf(t[0]); if (n === 2) return CJ.bvnUpper(t[0], t[1], R[0][1]);
+      const k = JSON.stringify([t, R]); if (ORTH.has(k)) return ORTH.get(k);
+      const s = R[0].slice(1).map(r => Math.sqrt(1 - r * r)), Rc = [...Array(n - 1)].map((_, i) => [...Array(n - 1)].map((__, j) => i === j ? 1 : (R[i + 1][j + 1] - R[0][i + 1] * R[0][j + 1]) / (s[i] * s[j])));
+      const lo = t[0], P6 = 6, wd = (9 - lo) / P6; let sum = 0;
+      for (let pn = 0; pn < P6; pn++) for (let q = 0; q < GLN.x.length; q++) { const z = lo + wd * (pn + (GLN.x[q] + 1) / 2);
+        sum += GLN.w[q] * wd / 2 * phi(z) * orthOwn(t.slice(1).map((ti, i) => (ti - R[0][i + 1] * z) / s[i]), Rc); }
+      const v = sum; ORTH.set(k, v); return v; };
+    const triSimpson = (ps, R) => { const t = ps.map(q => PJ.normInv(1 - q)), r12 = R[0][1], r13 = R[0][2], r23 = R[1][2], s2 = Math.sqrt(1 - r12 * r12), s3 = Math.sqrt(1 - r13 * r13), rc = (r23 - r12 * r13) / (s2 * s3);
+      const a = t[0], b = 9, N = 4000, h = (b - a) / N; let sum = 0;
+      for (let i = 0; i <= N; i++) { const z = a + i * h, w = i === 0 || i === N ? 1 : i % 2 ? 4 : 2; sum += w * phi(z) * CJ.bvnUpper((t[1] - r12 * z) / s2, (t[2] - r13 * z) / s3, rc); }
+      return sum * h / 3; };
+    const rhoM = L => L.map((a, i) => L.map((b, j) => i === j ? 1 : (CJ.rhoFor(CORR.rho, cl(a), cl(b)) || 0)));
+    const jointOwn = (ps, L) => { const R = rhoM(L); return ps.length === 1 ? ps[0] : ps.length === 2 ? CJ.joint2(ps[0], ps[1], R[0][1]) : orthOwn(ps.map(q => PJ.normInv(1 - q)), R); };
+    const figOwn = L => { if (L.length === 1) return { p: L[0].p, d: L[0].d }; const J = jointOwn(L.map(l => imp(l.odds)), L), prod = L.reduce((t, l) => t * l.d, 1); return { p: jointOwn(L.map(l => l.p), L), d: J > 0 ? Math.min(prod, HOLD / J) : prod }; };
+    const cls = l => l.kind === 'ml' || l.kind === 'spread' ? 'side' : l.kind === 'total' ? 'total' : 'p' + l.pid;
+    const optsP = legs => { const by = new Map(); for (const l of legs) { if (!by.has(l.gid)) by.set(l.gid, []); by.get(l.gid).push(l); }
+      return [...by.values()].map(L => { const groups = new Map(); for (const l of L) { const k = cls(l); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(l); }
+        let o = [[]]; for (const ls of groups.values()) o = o.flatMap(c => [c, ...(c.length < 5 ? ls.map(l => [...c, l]) : [])]);
+        return o.filter(c => c.length).map(c => ({ legs: c, ...figOwn(c) })); }); };
+    /* every parlay, by brute force, the best of each level by its rule */
+    const levelsP = G => { const best = {}, pick = []; let count = 0;
+      const better = (c, b) => !b || c.p > b.p + 1e-12 || (Math.abs(c.p - b.p) <= 1e-12 && (c.d > b.d + 1e-12 || (Math.abs(c.d - b.d) <= 1e-12 && (c.n < b.n || (c.n === b.n && c.ids < b.ids)))));
+      (function go(i, pp, dd, nL) {
+        if (i === G.length) { if (nL < 2) return; count++; const ids = pick.flatMap(o => o.legs.map(l => l.sk)).sort().join(',');
+          for (const [id, lo, hi, F] of LV) if (nL >= lo && nL <= hi && dd >= F - 1e-9) { const c = { p: pp, d: dd, n: nL, ids }; if (better(c, best[id])) best[id] = c; } return; }
+        go(i + 1, pp, dd, nL);
+        for (const o of G[i]) if (nL + o.legs.length <= 5) { pick.push(o); go(i + 1, pp * o.p, dd * o.d, nL + o.legs.length); pick.pop(); }
+      })(0, 1, 1, 0);
+      return { best, count }; };
+    const kOf = l => SC.legKey(l);
+    const matchP = (tag, e, st, lines, now, x0) => { const legs = poolP(st, lines, now), { best, count } = levelsP(optsP(legs)); let all = true;
+      for (const t of (x0 ? [x0] : e.tiers)) { const b = best[t.id];
+        if (!t.legs) { chk(!b, `${tag} ${t.id}: empty ("${t.why}"), and this file's own enumeration finds none (${b ? b.ids : ''})`); continue; }
+        const mine = t.legs.map(kOf).sort().join(','), ok = b && b.ids === mine && Math.abs(b.p - t.p) < 1e-4 && Math.abs(b.d - t.dec) < 1e-3; all = all && ok;
+        chk(ok, `${tag} ${t.id}: the likeliest its rule takes by this file's own enumeration of ${count} parlays (${b ? `${b.ids} ${(b.p * 100).toFixed(3)}% ${b.d.toFixed(3)}` : 'none'}; the entry ${mine} ${t.p} ${t.dec})`); }
+      return { legs, best, all }; };
+
+    /* P1: the morning of DP, Pc listed Questionable */
+    { const L3 = [{ gid: 'x', kind: 'prop', stat: 'pts', pid: '1', team: 'ORL', side: 'over', home: 'MIA' }, { gid: 'x', kind: 'prop', stat: 'reb', pid: '2', team: 'MIA', side: 'under', home: 'MIA' }, { gid: 'x', kind: 'total', side: 'over', home: 'MIA' }];
+      const R3 = rhoM(L3), ps = [0.77, 0.74, 0.52], a = orthOwn(ps.map(q => PJ.normInv(1 - q)), R3), b = triSimpson(ps, R3);
+      chk(Math.abs(a - b) < 1e-8 && R3[0][1] !== 0, `P: this file's own copula, its two readings of three legs one number (${a.toFixed(10)} and ${b.toFixed(10)}, rho ${R3[0][1]}, ${R3[0][2]}, ${R3[1][2]})`); }
+    const tP1 = T(DP, '15:00:00'), L1P = LP(T(DP, '14:30:00')), st1 = stP();
+    let rP = runU(U, st1, L1P, tP1);
+    const eP = rP.code === 0 ? (readU(U).night || {})[kP] : null;
+    chk(rP.code === 0 && eP && eP.pool.pl, `P: the night is taken on the player-leg rule (its pool's pl ${eP ? JSON.stringify(eP.pool.pl) : 'none'}): ${rP.last}`);
+    if (!eP) { chk(false, 'P: no entry to go on with'); }
+    else {
+      const own1 = poolP(st1, L1P, Date.parse(tP1)), plOwn = own1.filter(l => l.kind === 'prop');
+      const m1 = matchP('P1', eP, st1, L1P, Date.parse(tP1));
+      const lvls = eP.tiers.filter(t => t.legs), props = lvls.flatMap(t => t.legs.filter(l => l.kind === 'prop'));
+      chk(plOwn.length === 5 && plOwn.every(l => l.pid !== '9500003') && !plOwn.some(l => l.sk.includes('|pts|main|12.5|')), `P: this file's own pool holds five player legs, none of Pc (listed Questionable), none on the line priced on one side (${plOwn.map(l => l.sk.split('|').slice(2).join(' ')).join('; ')})`);
+      chk(props.length > 0 && lvls.some(t => t.legs.some(l => l.kind === 'prop') && t.legs.some(l => l.kind !== 'prop')), `P: the levels take player legs, a level mixing them with team legs (${lvls.map(t => `${t.id} ${t.legs.map(l => l.kind === 'prop' ? 'p' : 't').join('')}`).join(', ')})`);
+      chk(props.every(l => l.mk === 'main' && Number.isFinite(l.other) && l.pid !== '9500003' && Math.abs(l.p - (l.side === 'under' ? imp(l.odds) : 1 - imp(l.other))) < 6e-5 && l.fair === l.p && !l.fair_est) && lvls.every(t => { const ps = t.legs.filter(l => l.kind === 'prop').map(l => l.pid); return new Set(ps).size === ps.length; }),
+        "P: each player leg a main line with both prices at DraftKings' own fair chance (its chance and its fair chance one number), none of a listed player, one leg a player in every level");
+      chk(lvls.some(t => { const by = {}; for (const l of t.legs) by[l.id] = (by[l.id] || 0) + 1; return Object.values(by).some(v => v >= 2) && t.legs.some(l => l.kind === 'prop'); }), "P: a level holds a game's legs together, a player's among them, at the copula's joint chance");
+      /* the pool the record keeps: compact, and the guard's own enumeration on it gives every level again */
+      const kp = SC.nightPool(eP), plKept = eP.pool.legs.filter(x => x.length === 4).length, bytesP = JSON.stringify(eP).length;
+      chk(kp && SC.NIGHT_LEVELS.every((lv, i) => { const b = SC.nightBest(kp, lv), t = eP.tiers[i]; return t.legs ? b && b.ids === t.legs.map(kOf).sort().join(',') : !b; }) && plKept <= plOwn.length && eP.pool.pl.lines === 2 * 5 && eP.pool.pl.held === 2 && eP.pool.pl.cut === plOwn.length - plKept,
+        `P: the pool kept (${eP.pool.legs.length} legs, ${plKept} of them players', ${eP.pool.pairs.length} pairs, ${(eP.pool.sets || []).length} sets of three or more; ${bytesP} bytes the entry) makes every level again by the guard's own enumeration; its counts ${JSON.stringify(eP.pool.pl)}`);
+      chk(SC.check(readU(U), null, Date.parse(tP1), null, SEASON, st1).length === 0, 'P: the ledger passes the guard, the state beside it: ' + SC.check(readU(U), null, Date.parse(tP1), null, SEASON, st1).slice(0, 2).join(' | '));
+      /* the guard refuses each break, planted on the entry */
+      const failsP = (mut, re, what) => { const L1x = clone(readU(U)), e1 = L1x.night[kP]; mut(e1, L1x); L1x.night_summary = SC.summarizeNight(L1x.night);
+        const b = SC.check(L1x, null, Date.parse(tP1), null, SEASON, st1); chk(b.some(x => re.test(x)), `P: the guard fails ${what} (${b.slice(0, 2).join(' | ') || 'no failure'})`); };
+      const lvP = eP.tiers.find(t => t.legs && t.legs.some(l => l.kind === 'prop')), iP = eP.tiers.indexOf(lvP), lP = lvP.legs.findIndex(l => l.kind === 'prop');
+      failsP(e => { const l = e.tiers[iP].legs[lP], row = rowsP[l.id][l.pid]; e.tiers[iP].legs[lP] = { ...l, p: 0.9 }; const x = e.pool.legs.find(y => y[0] === kOf(l)); if (x) x[2] = 0.9; void row; },
+        /its pool is not a pool|not in its pool|not its legs'/, "a player's leg at a chance other than DraftKings' fair chance (the model's), in the level and its pool");
+      failsP(e => { const t = e.tiers[iP], l = t.legs[lP]; t.legs.push({ ...l, stat: l.stat === 'pts' ? 'reb' : 'pts', line: 3.5 }); }, /two legs of one player/, 'two legs of one player in a level');
+      failsP(e => { const t = e.tiers[iP], l = t.legs[lP]; t.legs[lP] = { ...l, mk: 'mile', k: 10, line: undefined, side: 'yes', other: null }; }, /not a main line/, 'a milestone (a ladder) in a level');
+      failsP(e => { const x = e.pool.legs.find(y => y.length === 4 && y[0].startsWith(p1.id + '|')); x[0] = x[0].replace(/\|prop\|\d+\|/, '|prop|9500003|'); }, /a player listed questionable/, 'a player listed Questionable in the pool before the lock');
+      failsP(e => { const need = lvP.legs.filter(l => l.kind === 'prop').map(kOf), ix = e.pool.legs.findIndex(y => y[0] === need[0]);
+        e.pool.legs.splice(ix, 1); e.pool.pairs = e.pool.pairs.filter(x => !x.slice(0, -2).includes(ix)).map(x => [...x.slice(0, -2).map(i => i > ix ? i - 1 : i), ...x.slice(-2)]);
+        e.pool.sets = (e.pool.sets || []).filter(x => !x.slice(0, -2).includes(ix)).map(x => [...x.slice(0, -2).map(i => i > ix ? i - 1 : i), ...x.slice(-2)]); }, /not in its pool/, 'a pool compacted past a leg its level needs');
+      /* THE GUARD'S OWN READING (the review of 7 November 2026): on the run's own state and lines.json the ledger passes,
+         its pool's counts and kept player legs this reading's; and a ledger whose winning player leg was cut from the pool
+         with each level holding it swapped for the runner-up the cut pool makes (the counts kept true: one more cut), which
+         the kept pool alone cannot tell, fails it */
+      chk(SC.check(readU(U), null, Date.parse(tP1), null, SEASON, st1, L1P).length === 0, "P: the ledger passes the guard's own reading of the run's state and lines.json: " + SC.check(readU(U), null, Date.parse(tP1), null, SEASON, st1, L1P).slice(0, 2).join(' | '));
+      { const L1x = clone(readU(U)), e1 = L1x.night[kP], k = kOf(lvP.legs[lP]), ix = e1.pool.legs.findIndex(y => y[0] === k);
+        e1.pool.legs.splice(ix, 1); const drop = xs => xs.filter(x => !x.slice(0, -2).includes(ix)).map(x => [...x.slice(0, -2).map(i => i > ix ? i - 1 : i), ...x.slice(-2)]);
+        e1.pool.pairs = drop(e1.pool.pairs); e1.pool.sets = drop(e1.pool.sets || []); e1.pool.pl.cut++;
+        const kp = SC.nightPool(e1), legOfKey = key => { const f = key.split('|'), x = e1.pool.legs.find(y => y[0] === key);
+          return f[1] === 'prop' ? { id: f[0], kind: 'prop', pid: f[2], stat: f[3], mk: 'main', line: +f[5], side: f[6], odds: x[1], other: x[3], p: x[2] } : { id: f[0], kind: f[1], side: f[2], line: f[3] === '' ? null : +f[3], odds: x[1], p: x[2] }; };
+        e1.tiers.forEach((t, i) => { if (!t.legs || !t.legs.some(l => kOf(l) === k)) return; const b = SC.nightBest(kp, SC.NIGHT_LEVELS[i]);
+          e1.tiers[i] = b ? { ...t, legs: b.ids.split(',').map(legOfKey), p: Math.round(b.p * 1e4) / 1e4, dec: r3(b.d) } : { id: t.id, label: t.label, min: t.min, max: t.max, price: t.price, why: 'none' }; });
+        L1x.night_summary = SC.summarizeNight(L1x.night);
+        const b0 = SC.check(L1x, null, Date.parse(tP1), null, SEASON, st1), b1 = SC.check(L1x, null, Date.parse(tP1), null, SEASON, st1, L1P);
+        chk(!b0.length && b1.some(x => /not the likeliest/.test(x)), `P: the winning player leg cut from the pool and its levels the runner-up: the kept pool alone passes (${b0.length} failures), the guard's own reading of the run's files fails it (${b1.slice(0, 1).join('') || 'no failure'})`); }
+      /* a player's main line priced with no margin (+105 both ways) in the pool: refused (the page leaves such a line out) */
+      failsP(e => { const pp = SC.plFair('over', 105, 105); e.pool.legs.push([`${p2.id}|prop|9500004|blk|main|0.5|over`, 105, pp, 105]); }, /its pool is not a pool/, 'a player\'s line priced with no margin in the pool');
+      const LP1 = clone(readU(U));
+
+      /* P2: after the lock, a player in a level (not Pe, whose box line is to be missing) listed Day-To-Day: the level
+         holding him alone built again on the lines at hand, this file's own enumeration without him; the others to the byte */
+      const victim = props.find(l => l.pid !== '9500005'), lineP0 = lineIn(fs.readFileSync(path.join(U, 'ledger.json'), 'utf8'), kP);
+      chk(!!victim, `P: a player to list after the lock (${victim ? victim.name : 'none but Pe'})`);
+      if (victim) {
+        const rep2 = { ...QREP, [victim.pid]: [victim.name, 'Day-To-Day', 'ankle'] }, st2 = stP({ report: rep2, generated: T(DP, '22:20') }), tP2 = T(DP, '22:30:00');
+        rP = runU(U, st2, L1P, tP2);
+        const e2 = rP.code === 0 ? readU(U).night[kP] : null, hit = eP.tiers.filter(t => t.legs && t.legs.some(l => String(l.pid) === victim.pid)).map(t => t.id);
+        const whyV = 'listed day-to-day (ankle), so held out';
+        chk(rP.code === 0 && e2 && hit.length > 0 && e2.tiers.every((t, i) => hit.includes(t.id) ? t.updated && t.updated.pid === victim.pid && t.updated.reason === whyV && t.updated.at === tP2 && t.pool && t.pool.pl && !(t.legs || []).some(l => String(l.pid) === victim.pid)
+            : JSON.stringify(t) === JSON.stringify(eP.tiers[i])) && Array.isArray(e2.updates) && e2.updates.length === hit.length && e2.updates.every(u => u.pid === victim.pid && hit.includes(u.tier) && u.at === tP2)
+          && JSON.stringify({ ...e2, tiers: null, updates: null, grade: null }) === JSON.stringify({ ...eP, tiers: null, updates: null, grade: null }),
+          `P2: ${victim.name} listed day-to-day after the lock: ${hit.join(', ')} built again without him, marked ${JSON.stringify(e2 && e2.tiers.find(t => t.updated) ? e2.tiers.find(t => t.updated).updated : null)}, recorded in its updates; every other level to the byte: ${rP.last}`);
+        if (e2) for (const id of hit) { const x = e2.tiers.find(t => t.id === id); matchP('P2', e2, st2, L1P, Date.parse(tP2), x); }
+        chk(SC.check(readU(U), null, Date.parse(tP2), null, SEASON, st2).length === 0 && /replaced/.test(rP.out), 'P2: the ledger with its replacement passes the guard: ' + SC.check(readU(U), null, Date.parse(tP2), null, SEASON, st2).slice(0, 2).join(' | '));
+        const lineP2 = lineIn(fs.readFileSync(path.join(U, 'ledger.json'), 'utf8'), kP);
+        rP = runU(U, stP({ report: rep2, generated: T(DP, '22:50') }), L1P, T(DP, '23:00:00'));
+        chk(rP.code === 0 && lineIn(fs.readFileSync(path.join(U, 'ledger.json'), 'utf8'), kP) === lineP2, `P2: a later run before the tip-off with him still listed builds nothing again: ${rP.last}`);
+        /* the guard fails a replacement the rule does not allow */
+        { const L1x = clone(readU(U)), e1 = L1x.night[kP], x = e1.tiers.find(t => t.updated); if (x) x.legs = clone(eP.tiers.find(t => t.id === x.id).legs); L1x.night_summary = SC.summarizeNight(L1x.night);
+          const b = SC.check(L1x, readU(U), Date.parse(T(DP, '23:00:00')), null, SEASON, st2); chk(b.some(y => /still holds him|not the likeliest|not in its pool/.test(y)), `P2: the guard fails a replaced level that still holds the player (${b.slice(0, 1).join('')})`); }
+        /* the replacement held to the state of the run that made it (the review of 7 November 2026): against the ledger
+           before it, on the run's own state and lines.json it passes, the level built again on this file's own reading;
+           on a state that does not list him, and on one listing a player its own pool holds, it fails */
+        { const L2 = readU(U), now2 = Date.parse(tP2);
+          const ok2 = SC.check(L2, LP1, now2, null, SEASON, st2, L1P);
+          chk(!ok2.length, "P2: the replacement passes the guard against the ledger before it, on the run's state and the guard's own reading of its lines.json: " + ok2.slice(0, 2).join(' | '));
+          const bU = SC.check(L2, LP1, now2, null, SEASON, stP({ report: QREP, generated: T(DP, '22:20') }));
+          chk(bU.some(y => /whom the run's state\.json does not list/.test(y)), `P2: the guard fails a replacement for a player the run's state does not list (${bU.slice(0, 1).join('') || 'no failure'})`);
+          const x2 = L2.night[kP].tiers.find(t => t.updated), o2 = x2 ? (SC.nightPool(L2.night[kP], x2.pool) || { legs: [] }).legs.find(l => l.pid && l.pid !== victim.pid) : null;
+          const bO = o2 ? SC.check(L2, LP1, now2, null, SEASON, stP({ report: { ...rep2, [o2.pid]: ['x', 'Out', 'knee'] }, generated: T(DP, '22:20') })) : [];
+          chk(!!o2 && bO.some(y => /built again on a pool holding .*, a player listed out/.test(y)), `P2: the guard fails a level built again on a pool holding a player the run's state lists (${o2 ? o2.sk : 'no other player in its pool'}: ${bO.slice(0, 1).join('') || 'no failure'})`); }
+        /* from the first tip-off nothing is built again, though another player of a level is listed then */
+        const other = e2 ? e2.tiers.flatMap(t => (t.legs || []).filter(l => l.kind === 'prop' && l.pid !== victim.pid))[0] : null;
+        const rep3 = other ? { ...rep2, [other.pid]: [other.name, 'Out', 'rest'] } : rep2;
+        rP = runU(U, stP({ report: rep3, generated: T(DP1, '00:05') }), L1P, T(DP1, '00:10:00'));
+        chk(rP.code === 0 && !!lineP2 && JSON.stringify(SC.callOf(readU(U).night[kP])) === JSON.stringify(SC.callOf(entryOfLine(lineP2, kP))), `P2: from the first tip-off nothing is built again${other ? ` (${other.name} listed out then)` : ''}: ${rP.last}`);
+        void lineP0;
+      }
+      /* P3: played. Box lines: every player leg wins but Pd's rebounds on a whole line (8: a push) and Pe, who has none
+         (void); each game's final making its team legs in the levels win. Graded as a book settles it */
+      const e3 = readU(U).night[kP], gameLegs = gid => e3.tiers.flatMap(t => (t.legs || []).filter(l => l.id === gid && l.kind !== 'prop'));
+      const settleT = (l, as, hs) => { if (l.kind === 'ml') return (l.side === l.home ? hs > as : as > hs) ? 'win' : 'loss'; if (l.kind === 'spread') { const m = (l.side === l.home ? hs - as : as - hs) + l.line; return m === 0 ? 'push' : m > 0 ? 'win' : 'loss'; } const t = as + hs; return t === l.line ? 'push' : (t > l.line) === (l.side === 'over') ? 'win' : 'loss'; };
+      const scoreP = g => { const L = gameLegs(g.id); for (let as = 90; as <= 135; as++) for (let hs = 90; hs <= 135; hs++) if (as !== hs && L.every(l => settleT(l, as, hs) === 'win')) return [as, hs]; return null; };
+      const sc1 = scoreP(p1), sc2 = scoreP(p2);
+      const BX = { [p1.id]: { 9500001: [25, 6, 5, 2, 1, 0], 9500002: [12, 5, 2, 1, 1, 0], 9500003: [14, 3, 8, 1, 0, 0] }, [p2.id]: { 9500004: [19, 8, 2, 0, 1, 2] } };
+      const played = slP.map(g => fin(g, ...(g.id === p1.id ? sc1 : sc2)));
+      rP = runU(U, stP({ today: DP1, generated: T(DP1, '11:00'), boxes: BX, report: {} }, played), L1P, T(DP1, '12:00:00'));
+      const e4 = rP.code === 0 ? readU(U).night[kP] : null;
+      /* this file's own settlement */
+      const boxV = (l, k) => { const b = BX[l.id] && BX[l.id][l.pid]; return b ? b[['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'].indexOf(k)] : null; };
+      const resOf = l => { if (l.kind !== 'prop') { const g = played.find(x => x.id === l.id); return settleT(l, g.awayScore, g.homeScore); } const v = boxV(l, l.stat); if (v == null) return 'void'; return v === l.line ? 'push' : (v > l.line) === (l.side === 'over') ? 'win' : 'loss'; };
+      const gradeOwn = t => { const res = t.legs.map(resOf); if (res.includes('loss')) return { result: 'lost', legs: res, payout: 0 };
+        const left = t.legs.filter((l, i) => res[i] === 'win'); if (!left.length) return { result: 'push', legs: res, payout: 1 };
+        if (left.length === t.legs.length) return { result: 'won', legs: res, payout: t.dec };
+        const by = new Map(); for (const l of left) { if (!by.has(l.id)) by.set(l.id, []); by.get(l.id).push({ ...l, gid: l.id, d: dec(l.odds), team: l.kind === 'prop' ? l.team : l.side }); }
+        let pay = 1; for (const L of by.values()) pay *= figOwn(L).d; return { result: 'won', legs: res, payout: r3(pay) }; };
+      const st4 = stP({ today: DP1, boxes: BX, report: {} }); void st4;
+      chk(sc1 && sc2 && e4 && e4.grade && e4.tiers.every(t => { if (!t.legs) return true; const g = e4.grade[t.id], o = gradeOwn(t); return g && g.result === o.result && JSON.stringify(g.legs) === JSON.stringify(o.legs) && Math.abs((g.payout || 0) - o.payout) < 0.0011; })
+        && e4.tiers.some(t => t.legs && e4.grade[t.id].legs.includes('void')),
+        `P3: played: every level graded from the box lines as a book settles it, Pe (no box line) void and Pd's whole line a push dropping out, the rest paid by this file's own sums (${e4 ? e4.tiers.map(t => t.legs ? `${t.id} ${e4.grade[t.id].result} ${JSON.stringify(e4.grade[t.id].legs)} ${e4.grade[t.id].payout}` : t.id + ' empty').join('; ') : 'no entry'}): ${rP.last}`);
+      chk(rP.code === 0 && SC.check(readU(U), null, Date.parse(T(DP1, '12:00:00')), null, SEASON).length === 0, 'P3: the graded ledger passes the guard');
+      /* a win with legs dropped pays the price of the legs left (the review of 7 November 2026: any payout over 1 passed):
+         at most their prices multiplied, exactly that where each game is left one leg */
+      { const gt = (legs, dd, res, payout) => SC.gradeBad('k', { tiers: [{ id: 'med', legs, dec: dd }], grade: { med: { result: 'won', legs: res, payout } } });
+        const Lg = [{ id: 'g1', odds: -110 }, { id: 'g2', odds: 150 }, { id: 'g3', odds: -200 }], left = r3(dec(150) * dec(-200)), whole = r3(dec(-110) * dec(150) * dec(-200));
+        const Ls = [{ id: 'g1', odds: -110 }, { id: 'g2', odds: 150 }, { id: 'g2', odds: -200 }];
+        const cases = [[Lg, ['void', 'win', 'win'], left, true, 'the legs left priced alone'], [Lg, ['void', 'win', 'win'], whole, false, 'its whole price'], [Lg, ['void', 'win', 'win'], 9.99, false, 'over the whole price'],
+          [Lg, ['push', 'win', 'win'], 1.0001, false, 'barely over 1'], [Ls, ['void', 'win', 'win'], r3(dec(150) * dec(-200)) - 0.4, true, "a game's two legs left at a same-game price under their product"],
+          [Ls, ['void', 'win', 'win'], 3.9, false, "a game's two legs left over their prices multiplied"]];
+        const out = cases.map(([L0, res, pay, good]) => (gt(L0, whole, res, pay).length === 0) === good);
+        chk(out.every(Boolean), `P3: a win with a leg dropped pays the legs left's price: ${cases.map((c, i) => `${c[4]} (${c[2]}) ${c[3] ? 'passes' : 'fails'}${out[i] ? '' : ' NOT AS IT SHOULD'}`).join('; ')}`); }
+
+      /* X: a fair pair of one game that moves together is the likeliest pair of the night (the review of 7 November 2026):
+         the Thunder to win at -500 (the model's 80%) with a Wizard's Under 18.5 points at -300 (DraftKings' fair 75%), and
+         the Hawks to win at -400 (76%) in the other game. The two moneylines multiply to 60.8%; the same-game pair, its
+         chances multiplied 60.0%, lands 61.2% together by the copula. The job's Safe is the pair, every level this file's
+         own enumeration's, and the guard's own reading passes it */
+      { const UX = uni('fairpair'), DX = addDay(D0, 20), DX1 = addDay(DX, 1);
+        const x1 = mk(DX, 'WAS', 'OKC', T(DX1, '00:00'), [], { pHome: 0.80, spread: -8, total: 228 }), x2 = mk(DX, 'BKN', 'ATL', T(DX1, '00:30'), [], { pHome: 0.76, spread: -6, total: 230 }), slX = [x1, x2];
+        const rowX = ['Xa Wiz', 'WAS', 'G', 32, 20, 4, 3, 2, 1, 0.3, 0.05, 0.01];
+        const LXat = T(DX, '14:00:00'), LX = { v: 1, at: LXat, games: { [x1.id]: { ...lineOf(x1, { at: LXat }), ml: { home: -500, away: 400 }, props: { at: LXat, mains: [{ player: '9700001', stat: 'pts', line: 18.5, over: 240, under: -300 }], ladders: [], yes: [] } },
+          [x2.id]: { ...lineOf(x2, { at: LXat }), ml: { home: -400, away: 320 }, props: null } } };
+        const stX = stateOf(slX, { today: DX, generated: T(DX, '12:00') }); stX.props.games = { [x1.id]: { tip: x1.tip, away: x1.away, home: x1.home, players: { 9700001: rowX } } };
+        const tX = T(DX, '15:00:00'), rX = runU(UX, stX, LX, tX), eX = rX.code === 0 ? (readU(UX).night || {})[nightKey(slX, DX)] : null;
+        const und = { sk: [x1.id, 'prop', '9700001', 'pts', 'main', 18.5, 'under'].join('|'), gid: x1.id, kind: 'prop', pid: '9700001', stat: 'pts', side: 'under', line: 18.5, odds: -300, other: 240, p: imp(-300), d: dec(-300), home: x1.home, team: 'WAS' };
+        const legsX = [...poolOwn(slX, LX, Date.parse(tX), DX), und].sort((a, b) => a.sk < b.sk ? -1 : 1), { best } = levelsP(optsP(legsX));
+        const okcMl = [x1.id, 'ml', 'OKC', ''].join('|'), sfX = eX && eX.tiers[0].legs ? eX.tiers[0].legs.map(kOf).sort().join(',') : null;
+        chk(!!eX && best.safe && best.safe.ids === [okcMl, und.sk].sort().join(',') && sfX === best.safe.ids && best.safe.p > 0.8 * 0.76,
+          `X: the job's Safe is the same-game pair (${sfX}, ${eX ? eX.tiers[0].p : '-'}), this file's own enumeration's (${best.safe ? (best.safe.p * 100).toFixed(3) : '-'}%, over the two moneylines' 60.800%): ${rX.last}`);
+        if (eX) for (const t of eX.tiers) { const b = best[t.id], mine = t.legs ? t.legs.map(kOf).sort().join(',') : null;
+          chk(t.legs ? b && b.ids === mine && Math.abs(b.p - t.p) < 1e-4 && Math.abs(b.d - t.dec) < 1e-3 : !b, `X ${t.id}: this file's own enumeration's (${b ? `${b.ids} ${(b.p * 100).toFixed(3)}% ${b.d.toFixed(3)}` : 'none'}; the entry ${mine || t.why})`); }
+        chk(!!eX && SC.check(readU(UX), null, Date.parse(tX), null, SEASON, stX, LX).length === 0, "X: the guard's own reading of the run's files passes it"); }
+    } }
 
   console.log('G. the real ledger, copied, on the real state');
   const realLedger = path.join(ROOT, SC.LEDGER_REL), realLines = path.join(ROOT, 'lines.json');

@@ -1340,12 +1340,12 @@ window.PARLAY_CARD = (function () {
   }
 
   /* the card: everything it shows, worked out once, drawn twice (the window, and the image) */
-  function card({ kicker, legs, dec, priceNote, chance, trial, fair, stake, source, sg }) {
+  function card({ kicker, legs, dec, priceNote, chance, trial, fair, stake, source, sg, by }) {
     const n = legs.length, first = legs.map(l => l.date).filter(Boolean).sort()[0] || '';
     const am = typeof decToAm === 'function' && dec > 1 ? decToAm(dec) : null;
     return { source, kicker, title: n + '-leg parlay', dateText: dates(legs), price: ml(am), dec: isFinite(dec) ? dec.toFixed(2) : '–', implied: dec > 1 ? pct(1 / dec) : '–', priceNote,
       legs: legs.map(x => x.card), stake: stake > 0 ? stake : 0, payout: stake > 0 ? stake * dec : 0, profit: stake > 0 ? stake * dec - stake : 0,
-      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial, failed: !!trial && typeof pbPropsOn === 'function' && !pbPropsOn(),
+      chance: chance != null && isFinite(chance) ? pct(chance) : null, trial: !!trial && !by, failed: !!trial && !by && typeof pbPropsOn === 'function' && !pbPropsOn(), by: by || null,
       fair: fair && fair.p != null && isFinite(fair.p) ? pct(fair.p) : null, fairEst: !!(fair && fair.p != null && fair.est), sg: !!sg,
       oneSided: legs.some(l => l.kind === 'prop' && l.mk !== 'main'), props: legs.filter(l => l.kind === 'prop').length,
       made: new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }), site: SITE,
@@ -1373,8 +1373,10 @@ window.PARLAY_CARD = (function () {
     for (const l of L) { if (l.price == null) l.price = l.odds; l.card = leg(l, l.price); }
     const dec = parlayDec(L.map(l => ({ leg: l, ml: l.price }))), sg = new Set(L.map(l => l.id)).size < L.length;
     const chance = t.chance !== undefined ? t.chance : parlayProb(L).corr;
+    /* t.by: whose chance the level states (Suggested Parlays' night levels: the model's on team legs, DraftKings' fair
+       chance on player legs; of player legs alone, the fair chance itself, so none beside it) */
     return card({ source: kind, kicker: String(t.kicker || 'Suggested parlay'), legs: L, dec, priceNote: sg ? 'estimated same-game price' : 'book price',
-      chance, trial: L.some(l => l.kind === 'prop'), fair: parlayFair(L), stake: typeof pbStake === 'function' ? pbStake() : 20, sg });
+      chance, trial: L.some(l => l.kind === 'prop'), fair: parlayFair(L), stake: typeof pbStake === 'function' ? pbStake() : 20, sg, by: typeof t.by === 'string' ? t.by : null });
   }
   /* the Parlay Builder's own four levels over the games ticked (getPbTiers), which a level's card drawn with no prefix
      of its own finishes (pbTierCard's default "pb|<level>") */
@@ -1383,7 +1385,7 @@ window.PARLAY_CARD = (function () {
      id>:<level>", the level as the tab shows it, live or locked). The NFL hub's other, the Elo picks' "elo|<level>", is
      not here: the NBA hub took its Elo picks off on 5 November 2026 */
   from('sp', id => { const t = typeof window.spTier === 'function' ? window.spTier(id) : null;
-    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}`, chance: t.corr } : null; });
+    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}`, chance: t.by === 'dk' ? null : t.corr, by: t.by || undefined } : null; });
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
      then the model's (on trial with a player leg in it) and the price's; with no fair chance, the model's and the
@@ -1394,22 +1396,28 @@ window.PARLAY_CARD = (function () {
     const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && !m.failed ? ' (on trial)' : '';
     /* the failed model's words, counted as the builder counts them (pbFailedSay: "its player leg" for one) */
     const k = m.props != null ? m.props : 2, say = typeof pbFailedSay === 'function' ? pbFailedSay(k) : `its player leg${k === 1 ? '' : 's'} the props model’s, which failed its trial`;
-    const by = 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + say]] : [];
+    const by = m.by && m.by !== 'dk' ? m.by : 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + say]] : [];
+    /* a Suggested Parlays night level mixing team and player legs states the chance it was ranked on, which is no one's
+       alone: never "model + DraftKings says", which read as DraftKings saying it under DraftKings' own fair chance (the
+       review of 7 November 2026) */
+    const mixed = m.by === 'model + DraftKings', says = mixed ? [['ranked at '], [m.chance, 1], [' (model on team legs, DraftKings on player legs)']] : [[by + ' says '], [m.chance, 1], ...fx];
     if (m.fair) return [[['Fair chance ' + all], [m.fair, 1], ...(m.fairEst ? [[' (est.)']] : [])],
-      [...(m.chance ? [[by + ' says '], [m.chance, 1], ...fx] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
+      [...(m.chance ? says : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])]];
     if (m.failed && m.chance) return [[['No fair chance: a leg has only one of DraftKings’ two prices']], [['model says '], [m.chance, 1], ...fx, ...price]];
     return [[...(m.chance ? [['Model’s chance ' + all], [m.chance, 1], ...(tr ? [[tr]] : [])] : []), ...(m.chance ? price : [['the price says '], [m.implied, 1]])],
       [['No fair chance: a leg has only one of DraftKings’ two prices']]];
   }
   const lineText = l => l.map(x => x[0]).join('');
-  /* the window's small print under the chances: why the fair chance is an estimate, the same-game price's, and a
-     parlay with no model chance */
+  /* the window's small print under the chances: why the fair chance is an estimate, the same-game price's, a parlay with
+     no model chance, and a night level's player legs (at DraftKings' fair chance: no model claim, and what they cost) */
+  const PL_COST = 'at it a player Under breaks even and an Over gives up about 12%';
   function smallPrint(m) {
     const out = [];
+    if (m.by === 'model + DraftKings') out.push(`Team legs at the model’s chance, player legs at DraftKings’ fair chance: no model claim on a player leg, and ${PL_COST}.`);
     if (m.fair && m.fairEst) out.push(m.oneSided ? 'Est.: a leg is priced on one side only (a milestone or a double- or triple-double), so its margin is taken out as measured on DraftKings’ archived milestones.'
       : 'Est.: legs share a game, so their fair chances are joined by how they move together, measured on the hub’s box scores.');
     if (m.sg) out.push((typeof SG_WHY === 'string' ? SG_WHY : 'DraftKings prices same-game parlays its own way: this is an estimate from the legs’ prices and how they move together') + '.');
-    if (!m.chance) out.push(typeof SL_NOMODEL === 'string' ? SL_NOMODEL : 'No model chance: the props model does not project a player in it.');
+    if (!m.chance) out.push(m.by === 'dk' ? `Every leg is a player’s, at DraftKings’ fair chance: no model claim on a player leg, and ${PL_COST}.` : typeof SL_NOMODEL === 'string' ? SL_NOMODEL : 'No model chance: the props model does not project a player in it.');
     return out;
   }
   /* ---- the window ---- */
@@ -4945,6 +4953,17 @@ function pbRuleOf(t) { const n = t.legs.length, pct = Math.round((t.floor || 0) 
    said "model (on trial) 38%" (Suggested Parlays, the owner's call of 25 October 2026) */
 function pbChanceHtml(F, chance, o) {
   const isTrial = !!(o && o.trial), trial = isTrial ? ' (on trial)' : '';
+  /* Suggested Parlays' night levels (o.mix): a player leg there is at DraftKings' fair chance, so the chance the levels
+     are ranked on is the model's on its team legs and DraftKings' on its player legs, said so; of player legs alone it
+     is the fair chance itself */
+  if (o && o.mix && F && F.p != null) {
+    /* what a player leg costs at that chance, by the page's rule (the whole margin on the Over): an Under breaks even,
+       an Over gives up about 12% (7 November 2026's lines: $0.86 to $0.91 back on $1, $0.88 on average) */
+    const cost = 'at that chance a player Under breaks even and an Over gives up about 12%, so the levels take Unders';
+    const all = o.mix === 'player', title = all ? `Every leg is a player’s, at DraftKings’ fair chance: the props model failed its trial, so no leg carries a model claim (${cost}), and the levels are ranked on this chance`
+      : `The chance the levels are ranked on: each team leg at the model’s chance, each player leg at DraftKings’ fair chance (the props model failed its trial, so a player leg carries no model claim: ${cost}), joined by the same-game copula`;
+    return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}" data-pb-mix="${o.mix}" title="${esc(title)}">${all ? 'every leg at DraftKings’ chance' : `model + DraftKings ${pbPct(chance)}`}</small></div>`;
+  }
   if (chance == null) return `<div class="pb-chance"><b${F && F.p != null ? ` data-pb-fair="${F.p}"` : ''}>${F && F.p != null ? pbPct(F.p) : '–'}</b><span>${F && F.p != null ? `fair chance${F.est ? ', est.' : ''}` : 'no chance'}</span><small class="pb-model">no model chance: a player in it is not projected</small></div>`;
   if (F && F.p != null) return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: a leg is priced on one side only, or the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}">${isTrial ? `model (on trial) ${pbPct(chance)}` : `model says ${pbPct(chance)}`}</small></div>`;
   return `<div class="pb-chance"><b data-pb-model="${chance}">${pbPct(chance)}</b><span>model’s chance${trial}</span><small class="pb-model">no fair chance: a leg has one price only</small></div>`;
@@ -4981,10 +5000,16 @@ function pbTierCard(t, o) {
   const size = t.n != null ? t.n : t.min === t.max ? t.min : `${t.min}–${t.max}`;
   if (t.why) return `<div class="pb-tier ${t.id} none"><div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${size} legs</span></div><p class="pb-why">${esc(t.why)}</p></div>`;
   const nm = o.what ? ` the ${esc(t.label)} parlay for ${esc(o.what)}` : '', inB = pbInBuilder(t.legs), trial = t.legs.some(l => l.kind === 'prop'), sg = new Set(t.legs.map(l => l.gid)).size < t.legs.length;
+  /* o.night: Suggested Parlays' night levels, whose player legs are at DraftKings' fair chance (pbChanceHtml's mix) */
+  if (o.night) { const np = t.legs.filter(l => l.kind === 'prop').length; o = { ...o, mix: np === t.legs.length ? 'player' : np ? 'mixed' : null }; }
   return `<div class="pb-tier ${t.id}" data-pb-tier="${t.id}">
     <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${t.rule ? `<span class="pb-rule">${esc(t.rule)}</span>` : t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : ''}</div>
-    <div class="pb-nums">${pbChanceHtml(t.fair, chance, { ...o, trial })}<div><b>${fmtAm(decToAm(t.dec))}</b><span>price${sg ? ', est.' : ''}</span></div><div class="pb-pay" data-pb-pay="${t.dec}">${pbPayHtml(t.dec)}</div></div>
-    <ul class="pb-legs">${t.legs.map(l => { const ff = legFarOff(l); return `<li><span class="nm">${glanceName(l)}<small>${esc(l.label)}${o.withGame && l.kind !== 'total' ? ` · ${esc(l.away)} at ${esc(l.home)}` : ''}${pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em>${pbPct(l.p)}${pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
+    <div class="pb-nums">${pbChanceHtml(t.fair, chance, { ...o, trial: trial && !o.night })}<div><b>${fmtAm(decToAm(t.dec))}</b><span>price${sg ? ', est.' : ''}</span></div><div class="pb-pay" data-pb-pay="${t.dec}">${pbPayHtml(t.dec)}</div></div>
+    <ul class="pb-legs">${t.legs.map(l => { const pl = o.mix && l.kind === 'prop', ff = pl ? null : legFarOff(l);
+      /* a night level's player leg: its line, his name and game, its price and DraftKings' fair chance, no Value mark and
+         no model figure; his matchup bubble is handed the props model's chance (pm), which it draws muted, as the
+         builder's */
+      return `<li><span class="nm">${glanceName(pl ? { ...l, p: l.pm != null ? l.pm : null } : l)}<small>${esc(l.label)}${o.withGame && l.kind !== 'total' ? ` · ${esc(l.away)} at ${esc(l.home)}` : ''}${pl ? '' : pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em${pl ? ' data-pb-plfair' : ''}>${pl ? 'fair ' + pbPct(l.p) : pbPct(l.p) + pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
     ${t.thin && !o.quiet ? `<p class="pb-thin">${pbThinLine(t.legs)}</p>` : ''}${t.mkt && !o.quiet ? `<p class="pb-thin">${pbMktLine(t.legs, o.mktWhy)}</p>` : ''}
     ${o.acts === false ? '' : `<div class="pb-acts"><button type="button" class="btn ${card ? 'ghost' : 'hot'}" ${o.add || `data-pb-add="${t.id}"`}${nm ? ` aria-label="${inB ? 'In the builder:' : 'Add'}${nm}${inB ? '' : ' to the builder'}"` : ''}>${inB ? 'In the builder' : 'Add to builder'}</button>${card ? `<button type="button" class="btn hot" data-pc-finish="${o.kind || 'pb'}|${o.fid || t.id}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button>` : ''}</div>`}</div>`;
 }
@@ -5400,21 +5425,33 @@ Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, 
      exactly as the Parlay Builder takes them (lines.json via pbGl, or a newer Refresh odds read), each at the builder's
      own chance (legModel: a moneyline's and a spread's the model's, a total's DraftKings' own fair chance), held to the
      builder's band (45% to 97%), its far-off guard (none 15 points or more over DraftKings' fair chance) and its betslip
-     id rule, with no value bar; no player legs (the FAIL stands);
-   - the levels, each chosen on the model's chance every leg lands by the builder's own sums (parlayProb with the
-     same-game copula, parlayDec the price, a game's two legs priced together): Safe the likeliest 2-leg parlay; Medium the
-     likeliest of 2 to 5 legs paying $4 or more on $1 (a decimal price of 4.00 or more); Aggressive the likeliest of 2 to 5
-     legs paying $8 or more; at most one side (the moneyline or the spread) and one total a game (pbFits); ties to the
-     higher price, then the fewer legs, then the legs' ids. The search is exact (spSearch): a parlay's chance and price are
-     the products of its games' own, so it walks the games, each one's options (a side, a total, or both, worked by the
-     builder's sums) likeliest first, and drops a branch once its chance is under the best found (each leg can only lower
-     it) or its price cannot reach the level's floor;
+     id rule, with no value bar; and since the owner's call of 7 November 2026 ("Add at DraftKings' odds") every player's
+     main line DraftKings has posted (lines.json's props.mains, or a newer Refresh odds read: pbPr), over and under with
+     both prices on file, on a stat the page offers, at DraftKings' own fair chance (legFair: the whole margin on the
+     Over), never the props model's (its FAIL stands: a player leg carries no model claim and no edge). By that rule an
+     Under's fair chance is its own price's implied chance, so it breaks even at it ($1 back on $1 on average), and an
+     Over carries the whole margin (about $0.88 back on $1 on the 7 November lines); the levels, the likeliest at their
+     price, so take short-priced Unders and almost never an Over. The card's chance line says so in its title. In the same
+     band, on a player the props model places on one of the game's clubs and whom the report does not list (spOutWhy, the
+     Parlay Builder's pbHeldWhy: Out, Doubtful, Questionable, Day-To-Day; a probable player plays); no milestone, Yes
+     market or line priced on one side, or with no margin;
+   - the levels, each chosen on the chance every leg lands by the builder's own sums (parlayProb with the same-game
+     copula at each leg's chance: a team leg's the model's, a player leg's DraftKings' fair chance; parlayDec the price, a
+     game's legs priced together): Safe the likeliest 2-leg parlay; Medium the likeliest of 2 to 5 legs paying $4 or more
+     on $1 (a decimal price of 4.00 or more); Aggressive the likeliest of 2 to 5 legs paying $8 or more; at most one side
+     (the moneyline or the spread), one total and one leg a player a game (spFits); ties to the higher price, then the
+     fewer legs, then the legs' ids. The search is exact with a thousand player legs a night (spWalk, under THE SEARCH:
+     a branch and bound on properties of the copula that never cuts a parlay the rule could rank first);
+   - after the lock and before the first tip-off, a level holding a player the report has listed since is built again
+     from the lines at hand, that level alone (spRebuild), said in one line under it: the record's replacement where the
+     job made one, else this page's own, kept beside the set (nba_sp_lock_v1's rep);
    - the record is the job's (tools/suggest_ledger.js, data/suggest_ledger.json, its `night` map), read no-store when the
      tab first opens and again at a lock; the job takes no set of a night DraftKings has posted no line for, and the page
      reads one such (spNoLines) as no set, building its own from the lock; the `featured` map, the per-game sets before 7
      November, stays as it was taken and graded, and the pills count the night map alone, each titled with the old
      rule's record.
-   Nothing is read before the tab opens; nothing is stored but nba_sp_lock_v1, a locked set the page built itself. */
+   Nothing is read before the tab opens; nothing is stored but nba_sp_lock_v1, a locked set the page built itself and
+   any level it built again after the lock. */
 const SP_LOCK_H = 2, SP_LOCK_MS = SP_LOCK_H * 3600e3, SP_OPEN_H = 6;
 /* the night's three levels: [id, label, the fewest legs, the most legs, the least decimal price] (tools/suggest_check.js
    keeps its own copy, and the job refuses a page whose levels are not these) */
@@ -5495,15 +5532,32 @@ function spRecState() { const N = spNight(); return N ? `${N.id}@${N.tip}:${spPh
    takes the Adds off the levels holding its legs, so the tab is drawn again) */
 function spState() { const N = spNight(); return N ? `${spRecState()}|${N.games.filter(spToTip).length}` : 'none'; }
 
-/* ---------- the pool: every team leg of the night's games still to tip ----------
-   pbPriced's moneylines and spreads and pbTotals' totals, at DraftKings' prices as the Parlay Builder takes them and at
-   the builder's own chance (legModel), each held to the builder's band, its far-off guard and its betslip id rule (a game
-   line with no id where its game's lines carry ids), and no value bar. A leg 3 points over its price is still marked
-   Value (thin false), a total never. No player leg: the props model's trial was stopped as a FAIL */
+/* ---------- the pool: every team leg and every player's main line of the night's games still to tip ----------
+   Team legs (pbPriced's moneylines and spreads, pbTotals' totals) at DraftKings' prices as the Parlay Builder takes them
+   and at the builder's own chance (legModel), each held to the builder's band, its far-off guard and its betslip id rule
+   (a game line with no id where its game's lines carry ids), and no value bar; a leg 3 points over its price is still
+   marked Value (thin false), a total never.
+   Player legs (the owner's call of 7 November 2026, asked "why is it not showing player parlays": "Add at DraftKings'
+   odds"): every player's main line DraftKings has posted for the night's games (lines.json's props.mains, or a newer
+   Refresh odds read, as the Parlay Builder reads them: pbPr), over and under, on a stat the page offers (PROP_STATS),
+   with both prices on file, on a player the props model projects in that game on one of its two clubs (pbWho) whom the
+   injury report does not list (spOutWhy: the game's out lists, or any listing on today's report, Day-To-Day among them, a
+   probable player playing), each at DraftKings' own fair chance as the page's rule gives it (legFair: a main line's whole
+   margin on the Over), never the props model's, held to the same band. No milestone, no Yes market (a double- or
+   triple-double), nothing priced on one side or estimated. A player leg carries no edge (the props model failed its
+   trial twice: README "Player props"), so it is never marked Value; its props model chance rides along (pm) for the
+   matchup bubble alone, which draws it muted, as the builder does.
+   A line DraftKings priced with no margin (its two implied chances summing under 1: none on the 25,819 archived main lines
+   or in lines.json, the least 1.005) is left out, a player's main line and a game's total alike, and counted (vig): there
+   the fair Over, or the total's fair chance, would read over its own price, and THE SEARCH below stands on no leg but a
+   side being so (the review of 7 November 2026) */
+function spOutWhy(pid, gid) { return pbHeldWhy(pid, gid); }
 function spPool(N) {
-  const games = N.games.filter(spToTip), legs = []; let band = 0, far = 0, noId = 0;
+  const games = N.games.filter(spToTip), legs = []; let band = 0, far = 0, noId = 0, vig = 0;
+  const pl = { lines: 0, band: 0, held: 0, none: 0, vig: 0 }, noVig = (a, b) => propImplied(a) + propImplied(b) < 1;
   const keep = (c, total) => {
     if (!Number.isFinite(c.price) || c.price === 0 || c.p == null || !Number.isFinite(c.p)) return;
+    if (total && Number.isFinite(c.other) && c.other && noVig(c.price, c.other)) { vig++; return; }
     if (!(c.p >= PB_PMIN && c.p < PB_PMAX)) { band++; return; }
     if (legFarOff(c)) { far++; return; }
     if (c.dkOn && !c.dk) { noId++; return; }
@@ -5511,24 +5565,26 @@ function spPool(N) {
   };
   for (const c of pbPriced(games)) if (c.kind === 'ml' || c.kind === 'spread') keep(c, false);
   for (const g of games) for (const c of pbTotals(g)) keep(c, true);
+  for (const g of games) {
+    const pr = pbPr(g.id); if (!pr || !Array.isArray(pr.mains)) continue;
+    const base = { id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip };
+    for (const m of pr.mains) {
+      if (!m || !PROP_STATS.includes(m.stat) || !Number.isFinite(m.line) || !Number.isFinite(m.over) || !Number.isFinite(m.under) || !m.over || !m.under) continue;
+      const w = pbWho(g, m.player);
+      if (!w) { pl.none += 2; continue; }
+      if (spOutWhy(m.player, g.id)) { pl.held += 2; continue; }
+      if (noVig(m.over, m.under)) { pl.vig += 2; continue; }
+      for (const side of ['over', 'under']) {
+        pl.lines++;
+        const v = pbView({ ...base, kind: 'prop', pid: m.player, name: w.name, team: w.team, at: pr.at, stat: m.stat, mk: 'main', line: m.line, side, odds: side === 'over' ? m.over : m.under, other: side === 'over' ? m.under : m.over });
+        const f = legFair(v); if (!f || f.est || !(f.p > 0 && f.p < 1)) { pl.band++; continue; }
+        if (!(f.p >= PB_PMIN && f.p < PB_PMAX)) { pl.band++; continue; }
+        legs.push({ ...v, pm: v.p, p: f.p, thin: true, pl: true });
+      }
+    }
+  }
   legs.sort(pbOrd);
-  return { games, legs, band, far, noId };
-}
-/* each game's options, likeliest first: a side, a total, or a side and the total together, each one's chance and price by
-   the builder's own sums on just those legs (a parlay's are the products of its games' own: parlayProb and slipDec work
-   game by game). Without the same-game table a game gives one leg, as the builder takes no second (slipWhy) */
-function spOpts(pool) {
-  const pairs = !!(S.corr && S.corr.rho && S.corr.hold), by = new Map();
-  for (const l of pool.legs) { if (!by.has(l.gid)) by.set(l.gid, { side: [], total: [] }); by.get(l.gid)[l.kind === 'total' ? 'total' : 'side'].push(l); }
-  return [...by.entries()].map(([gid, x]) => {
-    const opts = [...x.side, ...x.total].map(l => ({ legs: [l], p: l.p, d: amToDec(l.price) }));
-    if (pairs) for (const a of x.side) for (const b of x.total) {
-      if (slipWhy([pbSlipOf(a)], pbSlipOf(b))) continue;
-      const L = [a, b], p = parlayProb(L).corr, d = parlayDec(L.map(l => ({ leg: l, ml: l.price })));
-      if (p > 0 && d > 1) opts.push({ legs: L, p, d }); }
-    opts.sort((a, b) => (b.p - a.p) || (b.d - a.d) || (a.legs.length - b.legs.length) || (a.legs.map(l => l.sk).join() < b.legs.map(l => l.sk).join() ? -1 : 1));
-    return { gid, opts, top: Math.max(1, ...opts.filter(o => o.legs.length === 1).map(o => o.d)) };
-  });
+  return { games, legs, band, far, noId, vig, pl };
 }
 /* a is better than b by a level's rule: the likelier, then the higher price, then the fewer legs, then the legs' ids */
 function spBetter(a, b) {
@@ -5538,27 +5594,323 @@ function spBetter(a, b) {
   if (a.n !== b.n) return a.n < b.n;
   return a.ids < b.ids;
 }
-/* the level's parlay, exactly: every choice of games and of one option a game, of lo to hi legs, at the floor F or over,
-   walked game by game, a branch dropped once its chance is under the best found (each leg lowers it: a joint chance is
-   never above a leg's own) or its price, at the dearest leg left for every leg it may still take, cannot reach F */
-function spSearch(G, lv) {
-  const [, , lo, hi, F] = lv, n0 = G.length, suf = new Array(n0 + 1).fill(1);
-  for (let i = n0 - 1; i >= 0; i--) suf[i] = Math.max(suf[i + 1], G[i].top);
-  let best = null; const pick = [];
-  const visit = (i, p, d, n) => {
-    if (n >= lo && d >= F - SP_FLOOR_EPS && (!best || p >= best.p - SP_TIE)) {
-      const legs = pick.flatMap(o => o.legs), c = { p, d, n, ids: legs.map(l => l.sk).sort().join(','), legs };
-      if (spBetter(c, best)) best = c; }
-    if (n >= hi || (F && d * Math.pow(suf[i], hi - n) < F - SP_FLOOR_EPS)) return;
-    for (let j = i; j < n0; j++) for (const o of G[j].opts) {
-      const q = p * o.p; if (best && q < best.p - SP_TIE) break;
-      if (n + o.legs.length > hi) continue;
-      pick.push(o); visit(j + 1, q, d * o.d, n + o.legs.length); pick.pop();
+
+/* ---------- THE SEARCH: each level the exact best of every parlay the pool makes ----------
+   A parlay is a set of legs, one leg a player, one side (the moneyline or the spread) and one total a game; its chance
+   and its price are the products of its games' own (parlayProb and slipDec work game by game): a game's one leg at its
+   chance and price, its two or more together at the builder's own same-game sums (the gaussian copula at data/corr.json's
+   rho: two legs exactly, more by the GHK sum; the price min(the prices multiplied, HOLD over their implied joint chance)).
+   With 1,000 and more player legs a night the parlays are too many to enumerate, so the search is a branch and bound
+   that never cuts a parlay the rule could rank first. What it stands on, each a property of the gaussian copula the
+   builder's sums work out (P a game's legs' joint chance at their chances, J their joint chance at the chances their
+   prices imply, I = 1 / the decimal price, e = p x price, "efficiency"):
+   (1) a game's legs' chance falls as legs join: P(S) <= P(T) for T inside S (the event only shrinks); and it is the
+       product of its games' chances, each at most 1;
+   (2) P rises with each leg's own chance (the copula's thresholds fall), so a leg whose chance is at most the chance
+       its price implies (p <= I: every player leg at DraftKings' fair chance, whose Over carries the whole margin and
+       whose Under is its price's own chance; every total at its two prices' fair chance; any side the model rates under
+       its price; with spPool leaving out every line priced with no margin, every leg but a side) is a "fair" leg, and a game's legs that are all fair have P(S) <= J(S). Then, as the price of two or more
+       of a game's legs is at most HOLD / J(S), E(S) = P(S) x price(S) <= HOLD (0.896): a game's fair legs together never
+       return more than 0.896 on $1. A leg with p > I is an "edge" leg (a side the model rates over its price; at most one
+       a parlay a game, as it takes one side);
+   (3) a parlay paying F or more on $1 has chance p = E / price <= E / F, E the product of its games' efficiencies.
+   So the walk takes the games in the order of the most any of their options can return (edge games first), each
+   game's options (a leg, or two or more of its legs together) in a fixed order, and leaves a branch when its chance
+   bound, (1), or its return bound, (3) with the most each later game can still add (at most 1 a fair game), falls under
+   the best parlay found less the tie (SP_TIE): a parlay of the branch could never rank above it. An option's figures are
+   the builder's own; a group of three legs is first bounded by Plackett's (spTriUb) and then by the copula's own value
+   (spTri: one leg integrated by 48-point Gauss-Legendre over its chance, the other two given it by bvnUpper; within
+   2.6e-5 of the integral worked finer, relative, on 2,000 random triples), and worked by the builder's GHK sum only
+   where that bound reaches the best; four legs or more of one game are bounded by their three-leg groups' chances. The
+   GHK sum is within a few parts in 100,000 of the copula (README "Same-game parlays"), so a bound on a group of three
+   legs or more is taken SP_SLACK wider (0.1%) before it cuts. An edge leg a's group with fair legs B is bounded by (4):
+   E(S) <= HOLD + (e_a - 1) x L, L a bound on the lift of B's implied event given a over the band a's edge spans
+   (spLam): where the legs' correlations pass a Gershgorin check (each row's others summing under 1; else no bound,
+   Infinity), Slepian's inequality bounds that event, given a, by the equicorrelated copula at the largest of B's
+   correlations given a, each leg at its threshold given a at the band's end that favours it, a one-dimensional
+   integral (spEqInt, 48 nodes over the common factor), over B's implied chances; spLamExt bounds the same for every
+   group a may yet make with more of its game's fair legs. The derivation is in README "Suggested Parlays", "Player legs,
+   at DraftKings' odds". tools/smoke_suggested.js and tools/test_suggest_ledger.js hold every level to a full
+   enumeration of their own on fixtures, and tools/suggest_check.js to its own on the pool each entry keeps */
+const SP_SLACK = 1e-3;
+/* the record keeps, beside the night's team legs, every parlay the walk finds within 1% of a level's chance (spPoolOut):
+   the contenders its guard ranks the level against */
+const SP_NEAR = 0.99;
+/* Gauss-Legendre on [-1, 1], 48 nodes (spTri's one integral) */
+const SP_GL48 = (() => {
+  const n = 48, out = [];
+  for (let i = 1; i <= n; i++) {
+    let x = Math.cos(Math.PI * (i - 0.25) / (n + 0.5)), w = 0;
+    for (let it = 0; it < 100; it++) { let p0 = 1, p1 = x; for (let k = 2; k <= n; k++) { const p2 = ((2 * k - 1) * x * p1 - (k - 1) * p0) / k; p0 = p1; p1 = p2; }
+      const dp = n * (x * p1 - p0) / (x * x - 1), dx = p1 / dp; x -= dx; w = 2 / ((1 - x * x) * dp * dp); if (Math.abs(dx) < 1e-15) break; }
+    out.push([x, w]);
+  }
+  return out;
+})();
+/* the copula's exact chance three legs all land, at chances q1..q3 and correlations r12, r13, r23: the first leg's
+   variable integrated over where it lands (u = its own chance's scale, 48 Gauss-Legendre nodes), the other two given it
+   by bvnUpper; null where the correlations are not a valid copula */
+function spTri(q1, q2, q3, r12, r13, r23) {
+  const s2 = Math.sqrt(1 - r12 * r12), s3 = Math.sqrt(1 - r13 * r13);
+  if (!(s2 > 1e-6 && s3 > 1e-6)) return null;
+  const rc = (r23 - r12 * r13) / (s2 * s3); if (!(Math.abs(rc) < 1 - 1e-9) || !(q1 > 0 && q2 > 0 && q3 > 0)) return null;
+  const t2 = normInv(1 - q2), t3 = normInv(1 - q3), a = 1 - q1;
+  let s = 0;
+  for (const [x, w] of SP_GL48) { const u = a + q1 * (x + 1) / 2, z = normInv(Math.min(1 - 1e-15, u)); s += w * bvnUpper((t2 - r12 * z) / s2, (t3 - r13 * z) / s3, rc); }
+  return Math.max(0, Math.min(1, s * q1 / 2));
+}
+/* the night's pool made ready for the walk: each leg with its decimal price d, implied chance I, efficiency e, its
+   thresholds, whether it is an edge leg; each game's legs (edge legs first, then by chance) and singles (by chance);
+   each game's most an option of it can return (Ehat), the order the walk takes the games in */
+function spPrep(pool) {
+  const ok2 = !!(S.corr && S.corr.rho && S.corr.hold), hold = ok2 ? S.corr.hold : 1, by = new Map();
+  for (const l of pool.legs) {
+    const d = amToDec(l.price); if (!(d > 1) || !(l.p > 0 && l.p < 1)) continue;
+    const x = { l, sk: l.sk, gid: l.gid, side: l.kind === 'ml' || l.kind === 'spread', tot: l.kind === 'total', pid: l.kind === 'prop' ? String(l.pid) : null, p: l.p, d, I: 1 / d };
+    x.e = x.p * d; x.edge = x.e > 1 + 1e-12; x.t = normInv(1 - x.p); x.tI = normInv(1 - x.I);
+    if (!by.has(l.gid)) by.set(l.gid, []); by.get(l.gid).push(x);
+  }
+  const X = { ok2, hold, games: [], memo: new Map(), rho: new Map(), tri: new Map(), pair: new Map(), ghk: 0 };
+  const R = ok2 ? S.corr.rho : {}, cls = re => Object.keys(R).filter(k => re.test(k)).reduce((m, k) => Math.max(m, Math.abs(+R[k] || 0)), 0);
+  /* the largest correlation a fair leg may have with another fair leg of its game given an edge side (mate, opp, and a
+     player with the total), and an edge side with a fair leg: for spLamExt's bound on groups not yet built */
+  X.rB = cls(/^(mate|opp)\||^team\|[^|]+\|over$/); X.rA = cls(/^team\|[^|]+\|(win|cover)$|^game\|(cover\|over|over\|win)$/);
+  for (const [gid, xs] of by) {
+    xs.sort((a, b) => (b.edge - a.edge) || (b.p - a.p) || (a.sk < b.sk ? -1 : 1));
+    xs.forEach((x, i) => { x.i = i; });
+    const sing = [...xs].sort((a, b) => (b.p - a.p) || (a.sk < b.sk ? -1 : 1));
+    X.games.push({ gid, xs, sing, edges: xs.filter(x => x.edge), nEdge: xs.filter(x => x.edge).length, maxP: sing.length ? sing[0].p : 0 });
+  }
+  for (const g of X.games) g.Ehat = spEhat(X, g);
+  X.games.sort((a, b) => (b.Ehat - a.Ehat) || (b.maxP - a.maxP) || (a.gid < b.gid ? -1 : 1));
+  return X;
+}
+const spRho = (X, a, b) => { const k = a.sk < b.sk ? a.sk + '~' + b.sk : b.sk + '~' + a.sk; let r = X.rho.get(k); if (r == null) { r = pbRho(a.l, b.l); X.rho.set(k, r); } return r; };
+/* two of a game's legs can go together: never one leg twice, one leg a player, one side and one total */
+const spFits = (T, x) => !T.some(y => y.sk === x.sk || (x.pid && y.pid === x.pid) || (x.side && y.side) || (x.tot && y.tot));
+/* an option's figures by the builder's own sums: a leg's own, or a game's legs together (parlayProb, parlayDec) */
+function spFig(X, T) {
+  if (T.length === 1) return { p: T[0].p, d: T[0].d };
+  const key = T.map(x => x.sk).sort().join('~'); let f = X.memo.get(key); if (f) return f;
+  const L = T.map(x => x.l), p = parlayProb(L).corr, d = parlayDec(L.map(l => ({ leg: l, ml: l.price })));
+  if (T.length > 2) X.ghk++;
+  f = { p, d }; X.memo.set(key, f); return f;
+}
+/* two of a game's legs' figures by the copula itself (joint2 at their chances; the price the lower of the prices
+   multiplied and HOLD over their implied joint chance): what the builder's sums give, but for the last bits, which the
+   walk uses only to test a pair before working it by spFig */
+function spPair(X, x, y) {
+  const key = x.sk < y.sk ? x.sk + '~' + y.sk : y.sk + '~' + x.sk; let f = X.pair.get(key); if (f) return f;
+  const r = spRho(X, x, y), J = joint2(x.I, y.I, r);
+  f = { p: joint2(x.p, y.p, r), d: J > 0 ? Math.min(x.d * y.d, X.hold / J) : x.d * y.d }; X.pair.set(key, f); return f;
+}
+/* the copula's exact chance and implied joint chance of three of a game's legs (spTri), cached */
+function spTriOf(X, T) {
+  const key = T.map(x => x.sk).sort().join('~'); let v = X.tri.get(key); if (v !== undefined) return v;
+  const [a, b, c] = T, r12 = spRho(X, a, b), r13 = spRho(X, a, c), r23 = spRho(X, b, c);
+  const P = spTri(a.p, b.p, c.p, r12, r13, r23), J = spTri(a.I, b.I, c.I, r12, r13, r23);
+  v = P == null || J == null ? null : { P, D: J > 0 ? Math.min(a.d * b.d * c.d, X.hold / J) : a.d * b.d * c.d };
+  X.tri.set(key, v); return v;
+}
+/* (4): the conditional lift L of fair legs B's implied event given the edge leg a in its band: each b's threshold given
+   a's variable z, (s_b - rho_ab z) / sigma_b, at the band's end that favours it (the event only grows as a threshold
+   falls); their correlations given a, rho'_bc = (rho_bc - rho_ab rho_ac) / (sigma_b sigma_c), each at most rho'max (and
+   0 where all are under it), so by Slepian's inequality the joint chance is at most the equicorrelated copula's at
+   rho'max, a one-dimensional integral (w the common factor) of the product of the legs' chances given it; over their
+   implied chances. Infinity where the group's correlations are not diagonally dominant (Gershgorin: each row's sum of
+   correlations under 1, so the matrices compared are valid copulas): no bound, the group is worked out */
+const SP_EQ = SP_GL48.map(([x, w]) => [8 * x, 8 * w * Math.exp(-32 * x * x) / Math.sqrt(2 * Math.PI)]);
+function spEqInt(xs, rho, extra) {
+  /* the equicorrelated copula's chance at thresholds xs, each factor over its own divisor; extra(w) multiplies in a bound
+     for legs not yet known */
+  const sr = Math.sqrt(rho), cr = Math.sqrt(1 - rho); let s = 0;
+  SP_EQ.forEach(([w, wt], i) => { let f = wt; for (const [x, I] of xs) f *= (1 - normCdf((x - sr * w) / cr)) / I; if (extra) f *= extra(i, w); s += f; });
+  return s;
+}
+const spXmin = (X, a, b) => { const r = spRho(X, a, b), sg = Math.sqrt(1 - r * r); return Math.min((b.tI - r * a.t) / sg, (b.tI - r * a.tI) / sg); };
+function spCondR(X, a, b, c) { const ra = spRho(X, a, b), rc = spRho(X, a, c); return (spRho(X, b, c) - ra * rc) / Math.sqrt((1 - ra * ra) * (1 - rc * rc)); }
+function spDiag(X, T) { for (const x of T) { let r = 0; for (const y of T) if (y !== x) r += Math.abs(spRho(X, x, y)); if (!(r < 1)) return false; } return true; }
+function spLam(X, a, B) {
+  if (!spDiag(X, [a, ...B])) return Infinity;
+  let rho = 0; for (let i = 0; i < B.length; i++) for (let j = i + 1; j < B.length; j++) rho = Math.max(rho, spCondR(X, a, B[i], B[j]));
+  return spEqInt(B.map(b => [spXmin(X, a, b), b.I]), Math.min(rho, 0.95));
+}
+/* the same over every group the edge leg a may yet make with k more fair legs of its game beside B: rho'max the game's
+   largest for any two of its fair legs (by the table's classes: X.rB, mate, opp and a player with the total; X.rA, the
+   edge side with a fair leg), and each new leg's factor at each w at most the largest any fair leg of the game has there
+   (G); Infinity where four of the game's largest correlations sum to 1 or more (no group of five is sure to be dominant) */
+function spLamExt(X, g, a, B, k) {
+  if (!k) return spLam(X, a, B);
+  if (4 * Math.max(X.rA, X.rB) >= 1) return Infinity;
+  const rho = Math.min(0.95, Math.max(0, (X.rB + X.rA * X.rA) / (1 - X.rA * X.rA))), sr = Math.sqrt(rho), cr = Math.sqrt(1 - rho);
+  if (!a.G || a.G.rho !== rho) { const cand = g.xs.filter(b => !b.edge && spFits([a], b)).map(b => [spXmin(X, a, b), b.I]);
+    a.G = { rho, v: SP_EQ.map(([w]) => cand.reduce((m, [x, I]) => Math.max(m, (1 - normCdf((x - sr * w) / cr)) / I), 0)) }; }
+  return spEqInt(B.map(b => [spXmin(X, a, b), b.I]), rho, i => Math.pow(a.G.v[i], k));
+}
+/* what an option of a game can return on $1, for the walk's bound: w1 its best single leg; w2 its best two legs together
+   (two fair legs at most HOLD, by (2); a pair with its edge leg its own exact figure). A game with two edge legs that could
+   go together (never with the night's real legs: a side is its one edge leg) bounds nothing */
+function spEhat(X, g) {
+  g.w1 = g.sing.reduce((m, x) => Math.max(m, x.e), 0); g.w2 = 0;
+  if (!X.ok2 || g.xs.length < 2) return g.w1;
+  if (g.xs.some((x, i) => g.xs.some((y, k) => k > i && spFits([x], y)))) g.w2 = X.hold;
+  for (const a of g.edges) {
+    if (g.edges.some(b => b !== a && spFits([a], b))) { g.w2 = Infinity; break; }
+    for (const b of g.xs) if (!b.edge && spFits([a], b)) { const f = spFig(X, [a, b]); g.w2 = Math.max(g.w2, f.p * f.d); }
+  }
+  return Math.max(g.w1, g.w2);
+}
+/* the most the games G[j..] can still return on k legs, options of one or two legs a game: B[j][k], worked from the last
+   game back (B >= 1: a game may give nothing) */
+function spDP(G, cap) {
+  const m = G.length, B = Array.from({ length: m + 1 }, () => new Array(cap + 1).fill(1));
+  for (let j = m - 1; j >= 0; j--) for (let k = 0; k <= cap; k++) {
+    let v = B[j + 1][k];
+    if (k >= 1) v = Math.max(v, G[j].w1 * B[j + 1][k - 1]);
+    if (k >= 2 && G[j].w2 > 0) v = Math.max(v, G[j].w2 * B[j + 1][k - 2]);
+    B[j][k] = v;
+  }
+  return B;
+}
+/* Plackett's bound on a game's legs' joint chance (the copula's path from independence: each pair's rise at most rho /
+   (2 pi sqrt(1 - rho^2))), a cheap first test before spTri */
+function spTriUb(X, T) {
+  let u = T.reduce((t, x) => t * x.p, 1);
+  for (let i = 0; i < T.length; i++) for (let k = i + 1; k < T.length; k++) { const r = spRho(X, T[i], T[k]); if (r > 0) u += r / (2 * Math.PI * Math.sqrt(1 - Math.min(0.999999, r * r))); }
+  return u;
+}
+/* the walk, for one level ([id, label, lo, hi, F]): the best parlay by the rule (spBetter), from the incumbent inc where
+   given. A parlay of at most 5 legs holds at most one option of three legs or more (two would be six), so the walk is in
+   two parts: (A) every parlay whose options are one or two legs a game, the games in their order, the bound the DP's; (B)
+   for each game and each of its options of three legs or more the bound cannot cut (spBig), the best parlay of it and
+   (A)'s options on the other games. With o.keep (a Set) the walk only gathers, against the level's chance held fixed, the
+   options of every parlay within SP_NEAR of it (the pool the record keeps: tools/suggest_check.js works each level out
+   again on it) */
+function spWalk(X, lv, o) {
+  o = o || {};
+  const [, , lo, hi, F] = lv, keep = o.keep || null;
+  let best = o.inc || null;
+  /* gathering: every parlay within SP_NEAR of the level's chance, against that chance held fixed */
+  const fixed = keep && best ? best.p * SP_NEAR - SP_TIE : null;
+  const thr = () => fixed != null ? fixed : best ? best.p - SP_TIE : -Infinity;
+  const consider = (picks, P, D, n) => {
+    if (keep) { if (P >= fixed) for (const q of picks) keep.add(q); return; }
+    const legs = picks.flatMap(q => q.T), c = { p: P, d: D, n, ids: legs.map(x => x.sk).sort().join(','), legs: legs.map(x => x.l) };
+    if (spBetter(c, best)) best = c;
+  };
+  const walk = (G, B, j0, P, D, n, picks) => {
+    const m = G.length;
+    if (!G.maxPfrom) { G.maxPfrom = new Array(m + 1).fill(0); for (let i = m - 1; i >= 0; i--) G.maxPfrom[i] = Math.max(G.maxPfrom[i + 1], G[i].maxP); }
+    if (n >= lo && D >= F - SP_FLOOR_EPS) { consider(picks, P, D, n); return; }
+    if (n >= hi) return;
+    /* a branch's bound: its chance, times the likeliest later leg while it still needs one, and with a floor what it
+       returns with the most the later games may add (3) */
+    const ok = (P2, E2, n2, j, D2) => P2 * (n2 < lo || (F && D2 < F - SP_FLOOR_EPS) ? G.maxPfrom[j + 1] : 1) >= thr() && (!F || E2 * B[j + 1][hi - n2] / F >= thr());
+    const go = (q, j) => { picks.push(q); walk(G, B, j + 1, P * q.p, D * q.d, n + q.T.length, picks); picks.pop(); };
+    for (let j = j0; j < m; j++) {
+      const g = G[j]; if (P * g.maxP < thr()) continue;
+      for (const x of g.sing) {
+        const P2 = P * x.p; if (P2 * (n + 1 < lo ? G.maxPfrom[j + 1] : 1) < thr()) break;
+        if (ok(P2, P2 * D * x.d, n + 1, j, D * x.d)) go({ T: [x], p: x.p, d: x.d }, j);
+      }
+      /* its options of two legs: an edge leg with each fair leg it fits; then two fair legs, which return at most HOLD */
+      if (!X.ok2 || hi - n < 2 || g.w2 <= 0 || !ok(P * g.maxP, P * D * g.w2, n + 2, j, Infinity)) continue;
+      /* each pair first by its own copula figures (spPair), then by the builder's (spFig) where those reach the bound */
+      const pair = (x, y) => { const e = spPair(X, x, y); if (!ok(P * e.p * (1 + 1e-9), P * D * e.p * e.d * (1 + 1e-9), n + 2, j, D * e.d * (1 + 1e-9))) return;
+        const f = spFig(X, [x, y]); if (ok(P * f.p, P * D * f.p * f.d, n + 2, j, D * f.d)) go({ T: [x, y], p: f.p, d: f.d }, j); };
+      for (const a of g.edges) for (const b of g.xs) if (b !== a && spFits([a], b)) pair(a, b);
+      if (!ok(P * g.maxP, P * D * X.hold, n + 2, j, Infinity)) continue;
+      const fair = g.sing.filter(x => !x.edge);
+      /* the fair pairs, by chance: a pair's chance is at most its lower leg's, so once the leg after x cannot reach the
+         bound no pair from x on can, and the walk stops; never the two chances multiplied, since two legs that move
+         together (a side and a player of its game, a player and the total) land together more often than that (the
+         review of 7 November 2026: a 61.18% pair, the Thunder to win at -500 with Trae Young's Under 18.5 points at -300,
+         was left out for a 60.80% pair across two games) */
+      for (let i = 0; i < fair.length; i++) {
+        if (P * (i + 1 < fair.length ? fair[i + 1].p : 0) < thr()) break;
+        const x = fair[i];
+        for (let k = i + 1; k < fair.length; k++) {
+          const y = fair[k]; if (P * y.p < thr()) break;   /* the pair's chance is at most its lower leg's */
+          if (spFits([x], y)) pair(x, y);
+        }
+      }
     }
   };
-  visit(0, 1, 1, 0);
+  const GA = X.games, BA = spDP(GA, hi);
+  walk(GA, BA, 0, 1, 1, 0, []);
+  if (X.ok2 && hi >= 3) for (const g of X.games) {
+    if (g.xs.length < 3) continue;
+    const G2 = X.games.filter(x => x !== g), B2 = spDP(G2, hi);
+    const pOther = G2.reduce((mx, x) => Math.max(mx, x.maxP), 0);
+    /* the bound on a parlay holding the group: its chance (times the likeliest leg of another game where its price is
+       under the floor, so the parlay needs one more), and what it returns with the most the other games may add (3) */
+    const can = (pub, eub, s, dub) => pub * (F && !(dub >= F - SP_FLOOR_EPS) ? pOther : 1) >= thr() && (!F || eub * B2[0][hi - s] / F >= thr());
+    spBig(X, g, hi, can, (T, f) => {
+      if (!can(f.p, f.p * f.d, T.length, f.d)) return;
+      walk(G2, B2, 0, f.p, f.d, T.length, [{ T, p: f.p, d: f.d }]);
+    });
+  }
   return best;
 }
+/* a game's options of three legs or more the bound cannot cut: each set of its legs in its fixed order (edge legs first,
+   then by chance) that can go together, at most cap legs; its chance bounded by its pairs' (1), by Plackett's then the
+   exact copula for three (spTriUb, spTriOf), by its three-leg groups' for more; its return by (2) without an edge leg,
+   for three legs the exact copula's, else (4) for every group it may still grow to; can(pub, eub, size): the walk's
+   bound; each one it passes handed to emit with the builder's own figures */
+function spBig(X, g, cap, can, emit) {
+  const xs = g.xs, hold = X.hold, sl = 1 + SP_SLACK;
+  /* two fair legs and more return at most HOLD (2): where that cannot reach the bound, only groups with the edge leg */
+  const fairOn = can(1, hold * sl, 3, Infinity);
+  /* the groups T grows to, each size on its own: its chance at most T's, its return (2) or (4) at that size, with the
+     other games' most for the legs it leaves */
+  const growOk = (T, pub, a) => { const B = a ? T.filter(y => y !== a) : null;
+    for (let s = T.length + 1; s <= cap; s++) if (can(pub * sl, (a ? hold + (a.e - 1) * spLamExt(X, g, a, B, s - T.length) : hold) * sl, s, Infinity)) return true;
+    return false; };
+  const grow = (T, k0, pub, a) => {
+    const s = T.length;
+    for (let k = k0; k < xs.length; k++) {
+      const x = xs[k];
+      if (!s && !x.edge && !fairOn) break;
+      if (!spFits(T, x) || (a && x.edge)) continue;
+      const T2 = [...T, x], s2 = s + 1, a2 = a || (x.edge ? x : null);
+      /* the cheapest chance bound first, the group's legs' own (1): later fair legs have lower chances, so where it fails
+         they fail too */
+      let p2 = Math.min(pub, x.p);
+      if (!can(p2 * sl, Infinity, Math.max(3, s2), Infinity)) { if (x.edge) continue; break; }
+      if (s2 === 1) { grow(T2, k + 1, p2, a2); continue; }
+      if (s2 === 2) { p2 = Math.min(p2, spPair(X, T[0], x).p); if (growOk(T2, p2, a2)) grow(T2, k + 1, p2, a2); continue; }
+      const mult = T2.reduce((t, y) => t * y.d, 1);
+      if (s2 === 3) {
+        /* Plackett's bound on the three, then their pairs', then (2) or (4), then the copula's exact figures, each costlier */
+        const ub = spTriUb(X, T2), emitC = can(ub * sl, Infinity, 3, mult), growC = s2 < cap && can(ub * sl, Infinity, 4, Infinity);
+        if (!emitC && !growC) continue;
+        for (const y of T) p2 = Math.min(p2, spPair(X, y, x).p);
+        p2 = Math.min(p2, ub);
+        if (emitC && can(p2 * sl, Infinity, 3, mult)) {
+          const eUb = a2 ? hold + (a2.e - 1) * spLam(X, a2, T2.filter(y => y !== a2)) : hold;
+          if (can(p2 * sl, eUb * sl, 3, mult)) {
+            const t = spTriOf(X, T2);
+            if (t) { p2 = Math.min(p2, t.P); if (can(p2 * sl, Math.min(eUb, t.P * t.D) * sl, 3, t.D * sl)) emit(T2, spFig(X, T2)); }
+            else emit(T2, spFig(X, T2));
+          }
+        }
+        if (growC && growOk(T2, p2, a2)) grow(T2, k + 1, p2, a2);
+        continue;
+      }
+      /* four legs or more: Plackett's bound on them all, their pairs' and their three-leg groups' exact chances, (2) or (4) */
+      p2 = Math.min(p2, spTriUb(X, T2));
+      for (const y of T) p2 = Math.min(p2, spPair(X, y, x).p);
+      if (!can(p2 * sl, Infinity, s2, Infinity)) continue;
+      for (let i = 0; i < T.length; i++) for (let j2 = i + 1; j2 < T.length; j2++) { const t = spTriOf(X, [T[i], T[j2], x]); if (t) p2 = Math.min(p2, t.P); }
+      const eT = a2 ? hold + (a2.e - 1) * spLam(X, a2, T2.filter(y => y !== a2)) : hold;
+      if (can(p2 * sl, eT * sl, s2, mult)) emit(T2, spFig(X, T2));
+      if (growOk(T2, p2, a2)) grow(T2, k + 1, p2, a2);
+    }
+  };
+  grow([], 0, 1, null);
+}
+/* the level's parlay: the walk, from an incumbent where one is given (the team legs' own best, a quick first parlay) */
+function spSearch(X, lv, inc) { return spWalk(X, lv, { inc: inc || null }); }
 /* a level's head, its parlay or why it has none */
 const spHead = ([id, label, lo, hi, F]) => ({ id, label, min: lo, max: hi, price: F, rule: SP_RULE[id] });
 function spWhy([, , lo, , F], pool, N) {
@@ -5567,86 +5919,122 @@ function spWhy([, , lo, , F], pool, N) {
     /* when the lines feed (or a press) last read the night's games, posted or not */
     const at = N.games.flatMap(g => [LINES && LINES.games && LINES.games[g.id] ? LINES.games[g.id].at : null, SG_LINES[g.id] ? SG_LINES[g.id].at : null]).filter(x => Number.isFinite(Date.parse(x))).sort().pop();
     if (!N.games.some(g => pbHasGl(g.id))) return at ? `No legs yet: DraftKings had posted no game lines for the night’s games as of ${spEt(Date.parse(at), true)}.` : 'No legs yet: no DraftKings line has been read for the night’s games.';
-    return 'No leg of the night is in the builder’s range: 45% to 97% by the model, and not far off DraftKings.';
+    return 'No leg of the night is in the builder’s range: 45% to 97%, and not far off DraftKings.';
   }
-  const by = new Map(); for (const l of pool.legs) by.set(l.gid + (l.kind === 'total' ? '|t' : '|s'), 1);
+  const by = new Map(); for (const l of pool.legs) by.set(l.kind === 'prop' ? 'p' + l.pid : l.gid + (l.kind === 'total' ? '|t' : '|s'), 1);
   const m = by.size;
-  if (m < lo) return `Only ${m} leg${m === 1 ? '' : 's'} tonight: a parlay takes one side and one total a game.`;
-  if (F) return `No parlay of the night’s legs pays $${F} or more on $1${pool.games.length === 1 ? ': one game makes 2 legs at most' : ''}.`;
+  if (m < lo) return `Only ${m} leg${m === 1 ? '' : 's'} tonight: a parlay takes one leg a player, and one side and one total a game.`;
+  if (F) return `No parlay of the night’s legs pays $${F} or more on $1${pool.games.length === 1 && !pool.legs.some(l => l.kind === 'prop') ? ': one game makes 2 legs at most' : ''}.`;
   return 'No parlay of the night’s legs that the builder takes.';
 }
-/* a level's legs one by one as the builder takes them (slipWhy, the NBA's same-game refusals): pbFits's rules are those
-   refusals on team legs, so this never refuses; it is the guarantee that a level is a parlay the builder takes */
+/* a level's legs one by one as the builder takes them (slipWhy, the NBA's same-game refusals): one leg a player, one
+   side and one total a game are those refusals on these legs, so this never refuses; it is the guarantee that a level
+   is a parlay the builder takes */
 function spSlipOk(legs) { const have = []; for (const l of legs) { const s = pbSlipOf(l); if (slipWhy(have, s)) return false; have.push(s); } return true; }
 const SP_NO_TABLE = 'The same-game table is not in the published file, so a game’s two legs cannot be priced together.';
-function spLevel(G, pool, lv, N) {
-  const head = spHead(lv), r = spSearch(G, lv);
+function spLevel(X, pool, lv, N, inc) {
+  const head = spHead(lv), r = spSearch(X, lv, inc);
   if (!r) return { ...head, why: spWhy(lv, pool, N) + (!(S.corr && S.corr.rho && S.corr.hold) && pool.legs.length ? ' ' + SP_NO_TABLE : '') };
   const x = pbExact(r.legs);
   if (!spSlipOk(x.legs)) return { ...head, why: 'No parlay of the night’s legs that the builder’s same-game rules take.' };
-  return { ...head, ...x, fair: parlayFair(x.legs) };
+  return { ...head, ...x, fair: parlayFair(x.legs), found: r };
 }
+/* the night's set: each level from the team legs' own best first (a pool of team legs alone, searched the same way), so
+   the walk over every leg starts with a parlay to beat; then the pool the record keeps */
 function spBuild(N) {
-  const pool = spPool(N), G = spOpts(pool);
-  return { id: N.id, tiers: SP_LEVELS.map(lv => spLevel(G, pool, lv, N)), pool, G };
+  const pool = spPool(N), X = spPrep(pool), Xt = spPrep({ legs: pool.legs.filter(l => l.kind !== 'prop') });
+  const tiers = SP_LEVELS.map(lv => spLevel(X, pool, lv, N, Xt.games.length ? spSearch(Xt, lv) : null));
+  return { id: N.id, tiers, pool, X };
 }
 /* a night's live set, the same for the same data (the search and the sums are deterministic), from the cache while
-   nothing it stands on has moved: its first tip-off, which of its games are still to tip and pbDataSig (the publish,
-   lines.json, a press's reads) */
-const spSig = N => [N.id, N.tip, N.games.filter(spToTip).map(g => g.id).join('+'), pbDataSig()].join('|');
+   nothing it stands on has moved: its first tip-off, which of its games are still to tip, today's report (who is held
+   out) and pbDataSig (the publish, lines.json, a press's reads) */
+const spSig = N => [N.id, N.tip, N.games.filter(spToTip).map(g => g.id).join('+'), S.generated || '', pbDataSig()].join('|');
 function spSet(id) {
   const N = spById(id); if (!N) return null;
   const sig = spSig(N); let r = SP_CACHE.get(sig);
   if (!r) { r = { sig, ...spBuild(N) }; SP_CACHE.set(sig, r); if (SP_CACHE.size > 12) SP_CACHE.delete(SP_CACHE.keys().next().value); }
   return r;
 }
+/* one level of a night built again now, from the lines at hand (a locked level holding a player ruled out since): the
+   night's games still to tip, every rule as at the lock, the player held out by the report as it stands */
+function spRebuild(id, lid) {
+  const N = spById(id), lv = SP_LEVELS.find(s => s[0] === lid); if (!N || !lv) return null;
+  const pool = spPool(N), X = spPrep(pool), Xt = spPrep({ legs: pool.legs.filter(l => l.kind !== 'prop') });
+  const t = spLevel(X, pool, lv, N, Xt.games.length ? spSearch(Xt, lv) : null);
+  return { tier: t, pool, X };
+}
 
 /* ---------- a level as the record and this browser keep it, and back ----------
    A leg kept is the builder's own leg (pbSlipOf: the game, its clubs, date and tip, the kind, the side, the line,
-   DraftKings' price and the other side's, the read's time, its betslip id), its name and words, the model's chance (4
-   places), DraftKings' fair chance and whether it is estimated, and its marks (thin, market). A level is {id, label,
-   min, max, price, legs, p, fair, fair_est, dec} or {id, label, min, max, price, why} */
+   DraftKings' price and the other side's, the read's time, a game line's betslip id; a player's id, name, club, stat and
+   main line), its name and words, its chance as the set ranked it (4 places: a team leg the model's, a player leg
+   DraftKings' fair chance), DraftKings' fair chance and whether it is estimated, and its marks (thin, market). A level is
+   {id, label, min, max, price, legs, p, fair, fair_est, dec} or {id, label, min, max, price, why}; one built again after
+   the lock carries `updated` {pid, name, reason, at} and the pool it was built on */
 function spLegOut(l) { const f = legFair(l);
   return { ...pbSlipOf(l), name: String(l.name || ''), label: String(l.label || ''), p: spR(l.p, 1e4), fair: f ? spR(f.p, 1e4) : null, fair_est: !!(f && f.est), thin: !!l.thin, market: !!l.market }; }
 function spTierOut(t) {
   const head = { id: t.id, label: t.label, min: t.min, max: t.max, price: t.price };
-  if (!t || !t.legs) return { ...head, why: t.why };
-  return { ...head, legs: t.legs.map(spLegOut), p: spR(t.corr, 1e4), fair: t.fair && t.fair.p != null ? spR(t.fair.p, 1e4) : null, fair_est: !!(t.fair && t.fair.est), dec: spR(t.dec, 1e3) };
+  if (!t || !t.legs) return { ...head, why: t.why, ...(t.updated ? { updated: t.updated } : {}) };
+  return { ...head, legs: t.legs.map(spLegOut), p: spR(t.corr, 1e4), fair: t.fair && t.fair.p != null ? spR(t.fair.p, 1e4) : null, fair_est: !!(t.fair && t.fair.est), dec: spR(t.dec, 1e3), ...(t.updated ? { updated: t.updated } : {}) };
 }
 /* the pool as the record keeps it, for its guard (tools/suggest_check.js) to work every level out again on its own:
-   each leg [its key, DraftKings' price, the model's chance], and each game's side and total together [the two legs'
-   places, their joint chance and their price], with the counts the rules left out. Chances and prices are kept whole,
-   as the search ranked them (a number written to JSON reads back as itself): rounded, two parlays the search told apart
-   by less than the rounding would read as level to the guard, which would then rank them by the tie's rules */
+   every team leg [its key, DraftKings' price, the model's chance] and each game's side and total together [the two legs'
+   places, their joint chance, their price], as the record kept them before; then the player legs and the options of two
+   legs or more with one that a parlay as good as a level could take, gathered by the walk run again against each level
+   with its best held fixed (spWalk's keep: every branch a parlay ranking with the level could be on), each player leg
+   [its key, its price, DraftKings' fair chance, the other side's price] and each option [its legs' places..., their
+   joint chance, their price] (pairs of two, sets of three or more); and the counts the rules left out (the player legs'
+   in pl, cut the player legs in the band a parlay as good as a level could not take, which the record does not keep).
+   Chances and prices are kept whole, as the search ranked them (rounded, two parlays the search told apart by less than
+   the rounding would read as level to the guard) */
 function spPoolOut(s) {
-  const legs = s.pool.legs, ix = new Map(legs.map((l, i) => [l.sk, i])), pairs = [];
-  for (const g of s.G) for (const o of g.opts) if (o.legs.length === 2) { const [a, b] = [ix.get(o.legs[0].sk), ix.get(o.legs[1].sk)].sort((x, y) => x - y); pairs.push([a, b, o.p, o.d]); }
-  pairs.sort((x, y) => x[0] - y[0] || x[1] - y[1]);
-  return { legs: legs.map(l => [l.sk, l.price, l.p]), pairs, band: s.pool.band, far: s.pool.far, noId: s.pool.noId };
+  const team = s.pool.legs.filter(l => l.kind !== 'prop'), X = s.X, keep = new Set();
+  for (const t of s.tiers) if (t.found) spWalk(X, SP_LEVELS.find(v => v[0] === t.id), { inc: t.found, keep });
+  const opts = [...keep].filter(q => q.T.length > 1 || q.T[0].pid);
+  const plSk = new Set(opts.flatMap(q => q.T.filter(x => x.pid).map(x => x.sk)));
+  const pls = s.pool.legs.filter(l => l.kind === 'prop' && plSk.has(l.sk));
+  const legs = [...team, ...pls], ix = new Map(legs.map((l, i) => [l.sk, i])), pairs = new Map(), sets = new Map();
+  const add = (T, f) => { const I = T.map(x => ix.get(x.sk)).sort((a, b) => a - b), k = I.join(',');
+    if (T.length === 2) pairs.set(k, [I[0], I[1], f.p, f.d]); else sets.set(k, [...I, f.p, f.d]); };
+  if (X.ok2) for (const g of X.games) for (const a of g.xs) if (a.side) for (const b of g.xs) if (b.tot) add([a, b], spFig(X, [a, b]));
+  for (const q of opts) if (q.T.length > 1) add(q.T, { p: q.p, d: q.d });
+  const order = (a, b) => { for (let i = 0; i < Math.min(a.length, b.length) - 2; i++) if (a[i] !== b[i]) return a[i] - b[i]; return a.length - b.length; };
+  const plIn = s.pool.legs.filter(l => l.kind === 'prop').length;
+  return { legs: legs.map(l => l.kind === 'prop' ? [l.sk, l.price, l.p, l.other] : [l.sk, l.price, l.p]), pairs: [...pairs.values()].sort(order), sets: [...sets.values()].sort(order),
+    band: s.pool.band, far: s.pool.far, noId: s.pool.noId, vig: s.pool.vig || 0, pl: { ...s.pool.pl, cut: plIn - pls.length } };
 }
 /* a pool (live, or as the record keeps it) of a night DraftKings had posted no game line for: no leg, and none left out
    by a rule. A set taken then is no set: the job takes none, and the page builds its own from the lock */
-const spNoLines = P => !!P && Array.isArray(P.legs) && !P.legs.length && !P.band && !P.far && !P.noId;
+const spNoLines = P => !!P && Array.isArray(P.legs) && !P.legs.length && !P.band && !P.far && !P.noId && !P.vig;
 /* a night's set as the record takes it (tools/suggest_ledger.js adds the time taken) */
 function spEntry(id) {
   const N = spById(id), s = N && spSet(id); if (!s) return null;
   return { season: S.season, date: N.date, nid: N.id, games: N.games.map(g => ({ gid: g.id, away: g.away, home: g.home, tip: g.tip, type: g.type })), tip: N.tip, last: N.last,
     lock: spMin(spLockAt(N)), generated: S.generated, pool: spPoolOut(s), tiers: s.tiers.map(t => JSON.parse(JSON.stringify(spTierOut(t)))) };
 }
-/* a kept leg back as a drawn one (pbView), at its kept chance and price; null where it is not a team leg of one of the
-   night's games the builder would take */
+/* a level built again, as the record keeps it: the level, its mark, and the pool it was built on */
+function spRebuildOut(id, lid, upd) {
+  const r = spRebuild(id, lid); if (!r) return null;
+  const s = { pool: r.pool, X: r.X, tiers: [r.tier] }, t = JSON.parse(JSON.stringify(spTierOut({ ...r.tier, updated: upd })));
+  return { ...t, pool: spPoolOut(s) };
+}
+/* a kept leg back as a drawn one (pbView), at its kept chance and price; null where it is not a leg of one of the
+   night's games the builder would take (a player's leg: his main line, over or under) */
 function spLegIn(l, N) {
-  if (!spIsMap(l) || !N.games.some(g => g.id === l.id) || !['ml', 'spread', 'total'].includes(l.kind)) return null;
+  if (!spIsMap(l) || !N.games.some(g => g.id === l.id) || !['ml', 'spread', 'total', 'prop'].includes(l.kind)) return null;
+  if (l.kind === 'prop' && (l.mk !== 'main' || !['over', 'under'].includes(l.side))) return null;
   const g = N.games.find(x => x.id === l.id), p = +l.p; if (!(p > 0 && p < 1)) return null;
   const s = pbSlipOf({ ...l, away: g.away, home: g.home, date: g.date, tip: g.tip });
   if (normSlip({ legs: [s] }).legs.length !== 1) return null;
-  const v = pbView(s); v.p = p; v.thin = !!l.thin; if (l.market) v.market = true; else delete v.market;
+  const v = pbView(s); if (v.kind === 'prop') { v.pm = v.p; v.pl = true; } v.p = p; v.thin = !!l.thin; if (l.market) v.market = true; else delete v.market;
   return v;
 }
 function spTierIn(t, N) {
   const lv = t && SP_LEVELS.find(s => s[0] === t.id); if (!lv) return null;
-  const head = spHead(lv);
-  if (!Array.isArray(t.legs)) return { ...head, why: typeof t.why === 'string' && t.why ? t.why : 'No parlay this night.' };
+  const head = spHead(lv), U = spIsMap(t.updated) ? { updated: { pid: String(t.updated.pid || ''), name: String(t.updated.name || ''), reason: String(t.updated.reason || ''), at: String(t.updated.at || ''), ...(t.updated.by === 'page' ? { by: 'page' } : {}) } } : {};
+  if (!Array.isArray(t.legs)) return { ...head, why: typeof t.why === 'string' && t.why ? t.why : 'No parlay this night.', ...U };
   const legs = t.legs.map(l => spLegIn(l, N)); if (legs.length < lv[2] || legs.length > lv[3] || legs.some(l => !l)) return null;
   if (!(+t.dec > 1) || !(+t.p > 0 && +t.p <= 1)) return null;
   /* the chance and the price worked out again on the legs as kept, by the builder's own sums (parlayProb at the kept
@@ -5656,7 +6044,7 @@ function spTierIn(t, N) {
   const sum = was || (() => { const pr = parlayProb(L); return { corr: pr.corr, indep: pr.indep, dec: parlayDec(L.map(l => ({ leg: l, ml: l.price }))) }; })();
   if (!was) { SP_IN.set(ck, sum); if (SP_IN.size > 64) SP_IN.delete(SP_IN.keys().next().value); }
   return { ...head, legs: L, corr: sum.corr, indep: sum.indep, dec: sum.dec, fair: t.fair != null && isFinite(+t.fair) ? { p: +t.fair, est: !!t.fair_est } : null,
-    thin: L.filter(l => l.thin).length, mkt: L.filter(l => l.market).length };
+    thin: L.filter(l => l.thin).length, mkt: L.filter(l => l.market).length, ...U };
 }
 
 /* ---------- the record (data/suggest_ledger.json, tools/suggest_ledger.js) ----------
@@ -5695,7 +6083,8 @@ function spLedgerOf(N) {
 }
 /* a map's record a level: each season's game (or night) and level once, from the last entry that holds it (a tip-off
    ESPN moved makes a new key), from the entries' own grades: won or lost (a push, every leg a push or a void, is counted
-   apart), the wins expected by DraftKings' fair chance and by the model's (the chances the set showed), units on $1 */
+   apart), the wins expected by DraftKings' fair chance and by the level's own chance (the one the set showed and was
+   ranked on: the model's on a team leg, DraftKings' fair chance on a player leg), units on $1 */
 function spRecSum(L, map) {
   const out = SP_LEVELS.map(([id, label]) => ({ id, label, graded: 0, won: 0, lost: 0, push: 0, fair: 0, fairN: 0, model: 0, units: 0 }));
   let pending = 0, sets = 0; const E = L && spIsMap(L[map]) ? L[map] : {}, last = new Map();
@@ -5712,14 +6101,16 @@ function spRecSum(L, map) {
   return { tiers: out, pending, sets };
 }
 /* the record's line at the top of the tab: a pill a level, the night rule's alone (won-lost, units on $1), each titled
-   with the wins expected, its pushes and the per-game rule's record before it; then what is pending; no record, nothing */
+   with the wins expected (by DraftKings' fair chance, and by the set's own chance: the model's on team legs, DraftKings'
+   on player legs, never called the model's, since a night level's player legs carry no model claim), its pushes and the
+   per-game rule's record before it; then what is pending; no record, nothing */
 const spUnits = v => (v > 0.0005 ? '+' : v < -0.0005 ? '−' : '') + Math.abs(v).toFixed(2);
 function spRecHtml() {
   if (!SP_REC) return '<div id="spRec" class="sp-rec" hidden></div>';
   const R = spRecSum(SP_REC, 'night'), O = spRecSum(SP_REC, 'featured'), f1 = v => v.toFixed(1);
   const pills = R.tiers.map((s, i) => { const o = O.tiers[i];
     const old = `before ${SP_NIGHT_FROM}, one game’s legs: ${o.won}–${o.lost}${o.graded || o.push ? `, ${spUnits(o.units)} units` : ''}`;
-    const title = `${s.label}: ${s.graded} graded, ${s.won} won${s.graded ? `; wins expected ${s.fairN ? f1(s.fair) + ' by DraftKings’ fair chance' + (s.fairN < s.graded ? ' (on the ' + s.fairN + ' with one)' : '') + ', ' : ''}${f1(s.model)} by the model` : ''}${s.push ? `; ${s.push} push${s.push === 1 ? '' : 'es'}, the stake back` : ''}; ${old}`;
+    const title = `${s.label}: ${s.graded} graded, ${s.won} won${s.graded ? `; wins expected ${s.fairN ? f1(s.fair) + ' by DraftKings’ fair chance' + (s.fairN < s.graded ? ' (on the ' + s.fairN + ' with one)' : '') + ', ' : ''}${f1(s.model)} by the set’s own chance (the model’s on team legs, DraftKings’ on player legs)` : ''}${s.push ? `; ${s.push} push${s.push === 1 ? '' : 'es'}, the stake back` : ''}; ${old}`;
     return `<span class="rec" data-sp-rec="${s.id}" title="${esc(title)}">${esc(s.label)} <b>${s.won}–${s.lost}</b>${s.graded || s.push ? ' ' + spUnits(s.units) + ' units' : ''}</span>`; }).join('');
   return `<div id="spRec" class="sp-rec"><div class="bar">${pills}${R.pending ? `<span class="rec" data-sp-rec="pending">Pending <b>${R.pending}</b></span>` : ''}</div></div>`;
 }
@@ -5760,7 +6151,7 @@ function spShown(N) {
   const K = spKeep(), k = K[N.id] || null;
   const e = spLedgerOf(N); let tiers = null, own = false, atLock = false;
   if (e) { const T = SP_LEVELS.map(([id]) => spTierIn(e.tiers.find(t => t && t.id === id), N));
-    if (T.every(Boolean)) { tiers = T; atLock = true; if (k) { delete K[N.id]; spKeepSave(); } } }
+    if (T.every(Boolean)) { tiers = T; atLock = true; if (k && k.own) { delete K[N.id]; spKeepSave(); } } }
   if (!tiers && k && k.own && Array.isArray(k.tiers)) { const T = SP_LEVELS.map(([id]) => spTierIn(k.tiers.find(t => t && t.id === id), N));
     if (T.every(Boolean)) { tiers = T; own = true; atLock = true; } }
   if (!tiers && under) return { phase: 'late', lock, tip, tiers: null };
@@ -5772,15 +6163,44 @@ function spShown(N) {
     tiers = SP_LEVELS.map(([id], i) => spTierIn(out.find(t => t.id === id), N) || s.tiers[i]);
     if (LINES && !spNoLines(s.pool)) { K[N.id] = { tip: N.tip, own: true, at: spIso(now), tiers: out }; spKeepSave(); atLock = true; }
     own = true; }
-  /* a level empty at the lock says so, its reason as of the take */
-  if (atLock) tiers = tiers.map(t => t && t.why && !t.legs ? { ...t, why: spWhyAtLock(t.why) } : t);
+  /* from the lock, a level holding a player the report has listed since (spOutWhy): before the first tip-off it is
+     built again from the lines at hand, that level alone (spRebuild), and only from DraftKings' lines as published
+     (lines.json loaded: never from none, where lines.json did not load), and only where that makes a parlay: the
+     record's own replacement where the job has made one for him (the level's updated), else this page's, kept in this
+     browser beside the set (rep) for a level holding him until the record's names the same player (the record's set
+     taking the page's own place drops the page's whole keep, its replacements with it). From the first tip-off nothing
+     is built again, and a replacement this page made before it still stands (the review of 7 November 2026: under way,
+     the level as it locked came back, the listed player in it, and with its Adds while its games were to tip). A kept
+     replacement with no legs is no replacement: it is dropped and never applied. A level that still holds a listed
+     player (no lines to build it from, or none would make a parlay without him) is drawn as it locked, closed to the
+     builder (spOpen), saying why in one line (spHeldHtml) */
+  {
+    let k2 = K[N.id] || null, dirty = false; const rep = k2 && spIsMap(k2.rep) ? k2.rep : {};
+    tiers = tiers.map(t => {
+      if (!t) return t;
+      let cur = t, upd = null; const r = rep[t.id];
+      if (r && spIsMap(r.tier)) { const T = Array.isArray(r.tier.legs) && r.tier.legs.length ? spTierIn(r.tier, N) : null, holds = Array.isArray(t.legs) && t.legs.some(l => l.kind === 'prop' && String(l.pid) === String(r.pid));
+        if (T && T.legs && holds && !(t.updated && t.updated.pid === r.pid)) { cur = T; upd = { pid: String(r.pid), name: String(r.name || ''), reason: String(r.reason || ''), at: String(r.at || ''), by: 'page' }; }
+        else { delete rep[t.id]; dirty = true; } }
+      const out = !under && LINES && cur.legs && cur.legs.find(l => l.kind === 'prop' && spOutWhy(l.pid, l.id || l.gid));
+      if (out) { const why = spOutWhy(out.pid, out.id || out.gid), nt = spRebuild(N.id, t.id), at2 = spIso(now);
+        if (nt && nt.tier && Array.isArray(nt.tier.legs) && nt.tier.legs.length) { const T = spTierOut(nt.tier); rep[t.id] = { pid: String(out.pid), name: String(out.name || ''), reason: why, at: at2, tier: T }; dirty = true;
+          cur = spTierIn(T, N) || nt.tier; upd = { pid: String(out.pid), name: String(out.name || ''), reason: why, at: at2, by: 'page' }; } }
+      return upd ? { ...cur, updated: upd } : cur;
+    });
+    if (dirty) { if (!k2) { k2 = { tip: N.tip, rep: {} }; K[N.id] = k2; } k2.rep = rep; spKeepSave(); }
+  }
+  /* a level empty at the lock says so, its reason as of the take (one built again since says it was) */
+  if (atLock) tiers = tiers.map(t => t && t.why && !t.legs && !t.updated ? { ...t, why: spWhyAtLock(t.why) } : t);
   return { phase: under ? 'under' : 'locked', lock, tip, tiers, own, ledger: !!e };
 }
-/* a level a reader may still put in the builder: every leg's game still to tip. Under way, the levels holding a game that
-   has tipped are drawn with no Add, Add to builder or Finish, and the rest keep theirs */
-function spOpen(t) {
-  return !!t && Array.isArray(t.legs) && t.legs.length > 0 && t.legs.every(l => { const g = S.slate.find(x => x.id === (l.gid || l.id)); return !!g && spToTip(g); });
-}
+/* a level a reader may still put in the builder: every leg's game still to tip, and no leg on a player the report lists
+   now (spHeldOf). Under way, the levels holding a game that has tipped are drawn with no Add, Add to builder or Finish,
+   and the rest keep theirs */
+const spGamesOpen = t => !!t && Array.isArray(t.legs) && t.legs.length > 0 && t.legs.every(l => { const g = S.slate.find(x => x.id === (l.gid || l.id)); return !!g && spToTip(g); });
+function spOpen(t) { return spGamesOpen(t) && !spHeldOf(t); }
+/* a level's leg on a player the report lists now (a locked level not built again without him): the level is closed */
+function spHeldOf(t) { return t && Array.isArray(t.legs) ? t.legs.find(l => l.kind === 'prop' && spOutWhy(l.pid, l.gid || l.id)) || null : null; }
 /* a level by the id its Finish names (night id:level), as the tab shows it; only the night the tab sets out, live,
    locked or under way, and only while every game of the level is still to tip (spOpen) */
 function spTier(fid) {
@@ -5788,8 +6208,16 @@ function spTier(fid) {
   const N = spOn(); if (!N || N.id !== s.slice(0, i)) return null;
   const v = spShown(N); if (v.phase !== 'live' && v.phase !== 'locked' && v.phase !== 'under') return null;
   const t = v.tiers && v.tiers.find(x => x && x.id === s.slice(i + 1));
-  return t && t.legs && spOpen(t) ? { ...t, game: pbDayText(N.date) } : null;
+  return t && t.legs && spOpen(t) ? { ...t, game: pbDayText(N.date), by: spBy(t) } : null;
 }
+/* whose chance a level states: the model's on its team legs, DraftKings' fair chance on its player legs ('model +
+   DraftKings'); of player legs alone, the fair chance itself ('dk'); of team legs alone, the model's (none) */
+function spBy(t) { const n = t.legs.filter(l => l.kind === 'prop').length; return !n ? undefined : n === t.legs.length ? 'dk' : 'model + DraftKings'; }
+/* a level built again for a player ruled out after the lock says so in one line, under its legs */
+function spUpdLine(u) { return `Updated${u.by === 'page' ? ' in this browser' : ''}: ${u.name} ${u.reason || 'ruled out'} (${spEt(Date.parse(u.at), true)}); this level was built again.`; }
+const spUpdHtml = (t, html) => !t || !t.updated ? html : html.replace(/(<div class="pb-acts">|<\/div>\s*$)/, m => `<p class="pb-thin sp-upd" data-sp-upd="${esc(t.updated.pid)}">${esc(spUpdLine(t.updated))}</p>${m}`);
+/* a level that still holds a player the report lists now, closed, says so in one line under its legs */
+const spHeldHtml = (t, html) => { const l = spGamesOpen(t) && spHeldOf(t); return !l ? html : html.replace(/(<div class="pb-acts">|<\/div>\s*$)/, m => `<p class="pb-thin sp-held" data-sp-held="${esc(String(l.pid))}">${esc(`${l.name} ${spOutWhy(l.pid, l.gid || l.id)}: this level is closed.`)}</p>${m}`); };
 
 /* ---------- the tab's drawing ---------- */
 /* a level's card, the Parlay Builder's (pbTierCard), each leg with its game. With the parlay card on the page
@@ -5821,7 +6249,7 @@ function spNightHtml(N) {
     : `<p class="sp-lock" data-sp-phase="locked">${mark} since ${lockT}.</p>`;
   /* each level keeps its Add, Add to builder and Finish while every one of its games is still to tip */
   const cards = v.tiers ? `<div class="pb-tiers">${v.tiers.map(t => { const acts = spOpen(t);
-    return spCard(t, { kind: 'sp', fid: `${N.id}:${t.id}`, add: `data-sp-add="${N.id}:${t.id}"`, what, quiet: true, withGame: true, acts, legAdd: acts }); }).join('')}</div>` : '';
+    return spHeldHtml(t, spUpdHtml(t, spCard(t, { kind: 'sp', fid: `${N.id}:${t.id}`, add: `data-sp-add="${N.id}:${t.id}"`, what, quiet: true, withGame: true, acts, legAdd: acts, night: true }))); }).join('')}</div>` : '';
   return box(line + cards);
 }
 function spHeadHtml() {
@@ -5891,7 +6319,7 @@ function spFinish(b) {
   if (spStale()) { spKeepPlace(renderSp); return; }
   const [kind, id] = String(b.dataset.pcFinish).split('|'), t = kind === 'sp' ? spTier(id) : null; if (!t) return;
   const kicker = `${t.label} parlay · ${t.game}`;
-  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null, { chance: t.corr, by: "the hub's model", back: 'Back to Suggested Parlays' });
+  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null, { chance: t.by === 'dk' ? null : t.corr, by: t.by || "the hub's model", back: 'Back to Suggested Parlays' });
   $('#pcTitle').textContent = 'Suggested parlay'; $('#pcSub').textContent = `${kicker} · ${PC.sub}`; $('#pcBody').innerHTML = PC.html;
   $('#pcShare').onclick = pcShare; $('#pcDone').onclick = () => pcClose();
   $('#pcBack').hidden = false; document.body.classList.add('pp-lock'); $('#pcSheet').scrollTop = 0; $('#pcClose').focus();
@@ -5913,7 +6341,7 @@ function spWire(el) {
    legs by the builder's own sums */
 function spCardHook() {
   const C = window.PARLAY_CARD; if (!C || typeof C.from !== 'function' || spCardHook.on === C) return;
-  const ok = C.from('sp', id => { const t = spTier(id); return t ? { legs: t.legs, kicker: `${t.label} parlay · ${t.game}`, chance: t.corr } : null; });
+  const ok = C.from('sp', id => { const t = spTier(id); return t ? { legs: t.legs, kicker: `${t.label} parlay · ${t.game}`, chance: t.by === 'dk' ? null : t.corr, by: t.by } : null; });
   if (ok) spCardHook.on = C;
 }
 /* the half-minute look, once the tab has been opened: the record read again where the night has reached its lock since
@@ -5935,8 +6363,8 @@ render.suggest = function () {
   spKeepPlace(renderSp);
 };
 /* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
-Object.assign(window, { spNight, spNightOf, spById, spOn, spTakes, spPhase, spState, spRecState, spLockAt, spLockOf, spNoLines, spOpen, spRecMine, spEtAt, spPool, spOpts, spSearch, spBetter, spBuild, spSet, spEntry, spPoolOut,
-  spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier, spLedgerOf, spRecSum, spRecLoad, spWhyAtLock, renderSp, spWatchTick, SP_LEVELS, SP_RULE, SP_LOCK_MS, SP_KEEP_KEY, SP_KEEP_V });
+Object.assign(window, { spNight, spNightOf, spById, spOn, spTakes, spPhase, spState, spRecState, spLockAt, spLockOf, spNoLines, spOpen, spRecMine, spEtAt, spPool, spPrep, spWalk, spSearch, spBetter, spBuild, spSet, spEntry, spPoolOut, spTri, spFig, spOutWhy, spRebuild, spRebuildOut,
+  spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier, spBy, spUpdLine, spLedgerOf, spRecSum, spRecLoad, spWhyAtLock, renderSp, spWatchTick, SP_LEVELS, SP_RULE, SP_LOCK_MS, SP_KEEP_KEY, SP_KEEP_V });
 </script>
 
 <style>

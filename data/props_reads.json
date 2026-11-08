@@ -228,5 +228,6 @@
  "2027_20261107_NYK_CLE": {"at":"2026-11-08T14:20Z","status":"ok","lines":127,"tries":1},
  "2027_20261107_ORL_GSW": {"at":"2026-11-08T14:20Z","status":"ok","lines":92,"tries":1},
  "2027_20261107_SAS_POR": {"at":"2026-11-08T14:20Z","status":"ok","lines":113,"tries":1},
- "2027_20261107_WAS_OKC": {"at":"2026-11-08T14:20Z","status":"ok","lines":108,"tries":1}
+ "2027_20261107_WAS_OKC": {"at":"2026-11-08T14:20Z","status":"ok","lines":108,"tries":1},
+ "2027_20261108_PHI_CHI": {"at":"2026-11-08T22:55Z","status":"ok","lines":111,"tries":1}
 }

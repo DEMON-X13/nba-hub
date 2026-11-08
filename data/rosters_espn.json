@@ -868,7 +868,7 @@
     "name": "Christian Braun",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4698719",
@@ -882,7 +882,7 @@
     "name": "DeMar DeRozan",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4065813",
@@ -896,7 +896,7 @@
     "name": "Aaron Gordon",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433607",
@@ -917,14 +917,14 @@
     "name": "Cameron Johnson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3112335",
     "name": "Nikola Jokic",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4592427",
@@ -945,7 +945,7 @@
     "name": "Jamal Murray",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433629",
@@ -2507,6 +2507,13 @@
     "injured": false
    },
    {
+    "id": "4702384",
+    "name": "Nique Clifford",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "5105800",
     "name": "Josh Dix",
     "pos": "G",
@@ -3133,13 +3140,6 @@
     "injured": false
    },
    {
-    "id": "4702384",
-    "name": "Nique Clifford",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "4065732",
     "name": "De'Andre Hunter",
     "pos": "F",
@@ -3179,7 +3179,7 @@
     "name": "Keegan Murray",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4709131",
@@ -3207,7 +3207,7 @@
     "name": "Domantas Sabonis",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5106058",
@@ -3600,7 +3600,7 @@
     "name": "Deandre Ayton",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432187",

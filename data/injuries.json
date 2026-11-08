@@ -6,19 +6,19 @@
     "id": "4873201",
     "name": "Asa Newell",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Toe",
     "date": "2026-11-08",
-    "returns": "2026-11-09"
+    "returns": "2026-11-13"
    },
    {
     "id": "4585618",
     "name": "Keshon Gilbert",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee Inflammation",
     "date": "2026-11-08",
-    "returns": "2026-11-09"
+    "returns": "2026-11-13"
    },
    {
     "id": "3146557",
@@ -26,7 +26,7 @@
     "pos": "C",
     "status": "Out",
     "detail": "Hip",
-    "date": "2026-11-07",
+    "date": "2026-11-08",
     "returns": "2026-11-09"
    },
    {
@@ -90,21 +90,30 @@
   ],
   "CHA": [
    {
+    "id": "4066218",
+    "name": "Grant Williams",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Hamstring",
+    "date": "2026-11-08",
+    "returns": "2026-11-12"
+   },
+   {
+    "id": "5061575",
+    "name": "Kon Knueppel",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-08",
+    "returns": "2026-12-12"
+   },
+   {
     "id": "4433249",
     "name": "Moussa Diabate",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Quadriceps",
-    "date": "2026-11-07",
-    "returns": "2026-11-09"
-   },
-   {
-    "id": "4433287",
-    "name": "Brandon Miller",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin Soreness",
-    "date": "2026-11-07",
+    "date": "2026-11-08",
     "returns": "2026-11-09"
    },
    {
@@ -113,26 +122,17 @@
     "pos": "G",
     "status": "Out",
     "detail": "Thigh",
-    "date": "2026-11-06",
-    "returns": "2026-11-09"
+    "date": "2026-11-08",
+    "returns": "2026-11-23"
    },
    {
-    "id": "5061575",
-    "name": "Kon Knueppel",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-05",
-    "returns": "2026-11-09"
-   },
-   {
-    "id": "4066218",
-    "name": "Grant Williams",
+    "id": "4433287",
+    "name": "Brandon Miller",
     "pos": "F",
     "status": "Out",
-    "detail": "Hamstring",
-    "date": "2026-11-04",
-    "returns": "2026-11-09"
+    "detail": "Groin Soreness",
+    "date": "2026-11-08",
+    "returns": "2026-11-12"
    }
   ],
   "CHI": [
@@ -157,15 +157,6 @@
   ],
   "CLE": [
    {
-    "id": "4066757",
-    "name": "Sam Merrill",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Elbow",
-    "date": "2026-11-08",
-    "returns": "2026-11-09"
-   },
-   {
     "id": "4066328",
     "name": "Jarrett Allen",
     "pos": "C",
@@ -180,8 +171,17 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-07",
-    "returns": "2026-11-09"
+    "date": "2026-11-08",
+    "returns": "2026-11-11"
+   },
+   {
+    "id": "4066757",
+    "name": "Sam Merrill",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Elbow",
+    "date": "2026-11-08",
+    "returns": "2026-11-11"
    }
   ],
   "DAL": [
@@ -214,6 +214,42 @@
    }
   ],
   "DEN": [
+   {
+    "id": "3936299",
+    "name": "Jamal Murray",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg Bruise",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "4431767",
+    "name": "Christian Braun",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Calf Bruise",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "3064290",
+    "name": "Aaron Gordon",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Lower Body",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "3112335",
+    "name": "Nikola Jokic",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Elbow Sprain",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
    {
     "id": "4432181",
     "name": "Julian Strawther",
@@ -654,15 +690,6 @@
   ],
   "SAC": [
    {
-    "id": "4594327",
-    "name": "Keegan Murray",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle",
-    "date": "2026-11-08",
-    "returns": "2026-11-08"
-   },
-   {
     "id": "4898371",
     "name": "Maxime Raynaud",
     "pos": "C",
@@ -703,6 +730,15 @@
   ],
   "TOR": [
    {
+    "id": "4432586",
+    "name": "Nate Bittle",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot Fracture",
+    "date": "2026-11-08",
+    "returns": "2026-11-15"
+   },
+   {
     "id": "4395724",
     "name": "Immanuel Quickley",
     "pos": "G",
@@ -728,15 +764,6 @@
     "detail": "Knee Inflammation",
     "date": "2026-11-04",
     "returns": "2026-11-23"
-   },
-   {
-    "id": "4432586",
-    "name": "Nate Bittle",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Foot Fracture",
-    "date": "2026-11-02",
-    "returns": "2026-11-09"
    }
   ],
   "UTA": [
@@ -779,20 +806,20 @@
   ],
   "WAS": [
    {
+    "id": "4997537",
+    "name": "Tristan Vukcevic",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Hip Pinched Nerve",
+    "date": "2026-11-08",
+    "returns": "2026-11-16"
+   },
+   {
     "id": "6583",
     "name": "Anthony Davis",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-08",
-    "returns": "2026-11-09"
-   },
-   {
-    "id": "4278129",
-    "name": "Deandre Ayton",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Leg",
     "date": "2026-11-08",
     "returns": "2026-11-09"
    },
@@ -804,15 +831,6 @@
     "detail": "Shoulder",
     "date": "2026-11-02",
     "returns": "2026-12-03"
-   },
-   {
-    "id": "4997537",
-    "name": "Tristan Vukcevic",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Hip Pinched Nerve",
-    "date": "2026-11-01",
-    "returns": "2026-11-09"
    },
    {
     "id": "4432907",

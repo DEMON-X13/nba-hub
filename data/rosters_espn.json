@@ -1394,7 +1394,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2580365",
@@ -3521,7 +3521,7 @@
     "name": "Keyonte George",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432811",
@@ -3556,7 +3556,7 @@
     "name": "Lauri Markkanen",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133602",

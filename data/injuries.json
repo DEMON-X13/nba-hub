@@ -121,9 +121,9 @@
     "name": "Dennis Schroder",
     "pos": "G",
     "status": "Out",
-    "detail": "Thigh",
+    "detail": "Hamstring Strain",
     "date": "2026-11-08",
-    "returns": "2026-11-23"
+    "returns": "2026-11-25"
    },
    {
     "id": "4433287",
@@ -157,6 +157,15 @@
   ],
   "CLE": [
    {
+    "id": "4066757",
+    "name": "Sam Merrill",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Elbow",
+    "date": "2026-11-08",
+    "returns": "2026-11-11"
+   },
+   {
     "id": "4066328",
     "name": "Jarrett Allen",
     "pos": "C",
@@ -171,15 +180,6 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-08",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "4066757",
-    "name": "Sam Merrill",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Elbow",
     "date": "2026-11-08",
     "returns": "2026-11-11"
    }
@@ -215,11 +215,20 @@
   ],
   "DEN": [
    {
-    "id": "3936299",
-    "name": "Jamal Murray",
+    "id": "3138196",
+    "name": "Cameron Johnson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Lower Body",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "3978",
+    "name": "DeMar DeRozan",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Lower Leg Bruise",
+    "detail": "Back Spasms",
     "date": "2026-11-08",
     "returns": "2026-11-09"
    },
@@ -229,6 +238,15 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Calf Bruise",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "3936299",
+    "name": "Jamal Murray",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg Bruise",
     "date": "2026-11-08",
     "returns": "2026-11-09"
    },
@@ -316,8 +334,8 @@
     "pos": "C",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-06",
-    "returns": "2026-11-09"
+    "date": "2026-11-08",
+    "returns": "2026-11-11"
    },
    {
     "id": "2991235",
@@ -326,10 +344,19 @@
     "status": "Out",
     "detail": "Calf Strain",
     "date": "2026-11-05",
-    "returns": "2026-11-09"
+    "returns": "2026-11-11"
    }
   ],
   "IND": [
+   {
+    "id": "2530530",
+    "name": "T.J. McConnell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-08",
+    "returns": "2026-11-09"
+   },
    {
     "id": "4396993",
     "name": "Tyrese Haliburton",
@@ -418,13 +445,13 @@
   ],
   "MEM": [
    {
-    "id": "5105462",
-    "name": "Richie Saunders",
+    "id": "4431785",
+    "name": "Scotty Pippen Jr.",
     "pos": "G",
     "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-11-07",
-    "returns": "2026-12-01"
+    "detail": "Back Soreness",
+    "date": "2026-11-08",
+    "returns": "2026-11-11"
    },
    {
     "id": "4432810",
@@ -432,17 +459,17 @@
     "pos": "C",
     "status": "Out",
     "detail": "Knee Bruise",
-    "date": "2026-11-05",
+    "date": "2026-11-08",
     "returns": "2026-11-09"
    },
    {
-    "id": "4431785",
-    "name": "Scotty Pippen Jr.",
+    "id": "5105462",
+    "name": "Richie Saunders",
     "pos": "G",
     "status": "Out",
-    "detail": "Back Soreness",
-    "date": "2026-11-05",
-    "returns": "2026-11-09"
+    "detail": "Knee Surgery",
+    "date": "2026-11-07",
+    "returns": "2026-12-01"
    }
   ],
   "MIL": [
@@ -690,6 +717,15 @@
   ],
   "SAC": [
    {
+    "id": "3155942",
+    "name": "Domantas Sabonis",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Soreness",
+    "date": "2026-11-08",
+    "returns": "2026-11-08"
+   },
+   {
     "id": "4898371",
     "name": "Maxime Raynaud",
     "pos": "C",
@@ -767,24 +803,6 @@
    }
   ],
   "UTA": [
-   {
-    "id": "4433627",
-    "name": "Keyonte George",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-08",
-    "returns": "2026-11-08"
-   },
-   {
-    "id": "4066336",
-    "name": "Lauri Markkanen",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist Sprain",
-    "date": "2026-11-07",
-    "returns": "2026-11-08"
-   },
    {
     "id": "3102530",
     "name": "Jusuf Nurkic",

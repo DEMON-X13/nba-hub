@@ -4343,14 +4343,16 @@ date,team,player_id,name,status
 2026-11-08,CHA,4433287,Brandon Miller,Out
 2026-11-08,CHI,2595516,Norman Powell,Out
 2026-11-08,CHI,4066650,Zach Collins,Out
+2026-11-08,CLE,4066757,Sam Merrill,Out
 2026-11-08,CLE,4066328,Jarrett Allen,Day-To-Day
 2026-11-08,CLE,4683747,Jaylon Tyson,Out
-2026-11-08,CLE,4066757,Sam Merrill,Day-To-Day
 2026-11-08,DAL,5279129,Sergio de Larrea,Out
 2026-11-08,DAL,5148538,Tarik Biberovic,Out
 2026-11-08,DAL,4683688,Dereck Lively II,Out
-2026-11-08,DEN,3936299,Jamal Murray,Day-To-Day
+2026-11-08,DEN,3138196,Cameron Johnson,Day-To-Day
+2026-11-08,DEN,3978,DeMar DeRozan,Day-To-Day
 2026-11-08,DEN,4431767,Christian Braun,Day-To-Day
+2026-11-08,DEN,3936299,Jamal Murray,Day-To-Day
 2026-11-08,DEN,3064290,Aaron Gordon,Day-To-Day
 2026-11-08,DEN,3112335,Nikola Jokic,Day-To-Day
 2026-11-08,DEN,4432181,Julian Strawther,Out
@@ -4361,6 +4363,7 @@ date,team,player_id,name,status
 2026-11-08,GSW,6430,Jimmy Butler III,Out
 2026-11-08,HOU,3102529,Clint Capela,Out
 2026-11-08,HOU,2991235,Steven Adams,Out
+2026-11-08,IND,2530530,T.J. McConnell,Day-To-Day
 2026-11-08,IND,4396993,Tyrese Haliburton,Out
 2026-11-08,IND,5157066,Johnny Furphy,Out
 2026-11-08,IND,4433076,Ben Sheppard,Out
@@ -4370,9 +4373,9 @@ date,team,player_id,name,status
 2026-11-08,LAC,6580,Bradley Beal,Out
 2026-11-08,LAC,4396818,Jordan Miller,Out
 2026-11-08,LAL,3945274,Luka Doncic,Out
-2026-11-08,MEM,5105462,Richie Saunders,Out
-2026-11-08,MEM,4432810,Isaiah Stewart,Out
 2026-11-08,MEM,4431785,Scotty Pippen Jr.,Out
+2026-11-08,MEM,4432810,Isaiah Stewart,Out
+2026-11-08,MEM,5105462,Richie Saunders,Out
 2026-11-08,MIL,4277843,Gary Trent Jr.,Day-To-Day
 2026-11-08,MIN,4594268,Anthony Edwards,Out
 2026-11-08,MIN,3934673,Donte DiVincenzo,Out
@@ -4398,6 +4401,7 @@ date,team,player_id,name,status
 2026-11-08,POR,4279888,Ja Morant,Out
 2026-11-08,POR,4578893,Vit Krejci,Out
 2026-11-08,POR,4914336,Shaedon Sharpe,Out
+2026-11-08,SAC,3155942,Domantas Sabonis,Day-To-Day
 2026-11-08,SAC,4898371,Maxime Raynaud,Out
 2026-11-08,SAC,3907387,Ben Simmons,Out
 2026-11-08,SAS,6440,Tobias Harris,Out
@@ -4406,8 +4410,6 @@ date,team,player_id,name,status
 2026-11-08,TOR,4395724,Immanuel Quickley,Day-To-Day
 2026-11-08,TOR,4433134,Scottie Barnes,Day-To-Day
 2026-11-08,TOR,6450,Kawhi Leonard,Out
-2026-11-08,UTA,4433627,Keyonte George,Day-To-Day
-2026-11-08,UTA,4066336,Lauri Markkanen,Day-To-Day
 2026-11-08,UTA,3102530,Jusuf Nurkic,Out
 2026-11-08,UTA,4277961,Jaren Jackson Jr.,Out
 2026-11-08,WAS,4997537,Tristan Vukcevic,Out

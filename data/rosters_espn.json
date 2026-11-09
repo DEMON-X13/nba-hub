@@ -803,7 +803,7 @@
     "name": "Morez Johnson Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5106040",
@@ -1194,7 +1194,7 @@
     "name": "Gary Payton II",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4709138",
@@ -1622,7 +1622,7 @@
     "name": "Luka Doncic",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397014",
@@ -1706,7 +1706,7 @@
     "name": "Austin Reaves",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4277811",
@@ -2318,7 +2318,7 @@
     "name": "Trey Murphy III",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3907497",
@@ -2360,7 +2360,7 @@
     "name": "Trendon Watford",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395628",
@@ -3421,7 +3421,7 @@
     "name": "Collin Murray-Boyles",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3134908",
@@ -3621,7 +3621,7 @@
     "name": "Bilal Coulibaly",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6583",

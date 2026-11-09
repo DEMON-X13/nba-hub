@@ -79,6 +79,15 @@
   ],
   "CHA": [
    {
+    "id": "4433249",
+    "name": "Moussa Diabate",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Quadriceps",
+    "date": "2026-11-09",
+    "returns": "2026-11-09"
+   },
+   {
     "id": "4066218",
     "name": "Grant Williams",
     "pos": "F",
@@ -95,15 +104,6 @@
     "detail": "Hamstring Strain",
     "date": "2026-11-08",
     "returns": "2026-12-12"
-   },
-   {
-    "id": "4433249",
-    "name": "Moussa Diabate",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Quadriceps",
-    "date": "2026-11-08",
-    "returns": "2026-11-09"
    },
    {
     "id": "3032979",
@@ -175,6 +175,15 @@
   ],
   "DAL": [
    {
+    "id": "4873153",
+    "name": "Morez Johnson Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Leg",
+    "date": "2026-11-09",
+    "returns": "2026-11-09"
+   },
+   {
     "id": "5279129",
     "name": "Sergio de Larrea",
     "pos": "F",
@@ -208,17 +217,8 @@
     "name": "Cameron Johnson",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Lower Body",
-    "date": "2026-11-08",
-    "returns": "2026-11-09"
-   },
-   {
-    "id": "3978",
-    "name": "DeMar DeRozan",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Spasms",
-    "date": "2026-11-08",
+    "detail": "Ankle",
+    "date": "2026-11-09",
     "returns": "2026-11-09"
    },
    {
@@ -227,16 +227,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Calf Bruise",
-    "date": "2026-11-08",
-    "returns": "2026-11-09"
-   },
-   {
-    "id": "3936299",
-    "name": "Jamal Murray",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Lower Leg Bruise",
-    "date": "2026-11-08",
+    "date": "2026-11-09",
     "returns": "2026-11-09"
    },
    {
@@ -245,7 +236,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Lower Body",
-    "date": "2026-11-08",
+    "date": "2026-11-09",
     "returns": "2026-11-09"
    },
    {
@@ -254,7 +245,25 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Elbow Sprain",
-    "date": "2026-11-08",
+    "date": "2026-11-09",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "3978",
+    "name": "DeMar DeRozan",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back Spasms",
+    "date": "2026-11-09",
+    "returns": "2026-11-09"
+   },
+   {
+    "id": "3936299",
+    "name": "Jamal Murray",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg Bruise",
+    "date": "2026-11-09",
     "returns": "2026-11-09"
    },
    {
@@ -269,6 +278,15 @@
   ],
   "DET": [
    {
+    "id": "4395702",
+    "name": "Isaiah Joe",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hip Bruise",
+    "date": "2026-11-09",
+    "returns": "2026-11-17"
+   },
+   {
     "id": "4433621",
     "name": "Jalen Duren",
     "pos": "C",
@@ -276,18 +294,18 @@
     "detail": "Hamstring Strain",
     "date": "2026-11-08",
     "returns": "2026-11-24"
-   },
-   {
-    "id": "4395702",
-    "name": "Isaiah Joe",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hip Bruise",
-    "date": "2026-11-07",
-    "returns": "2026-11-09"
    }
   ],
   "GSW": [
+   {
+    "id": "3134903",
+    "name": "Gary Payton II",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-09",
+    "returns": "2026-11-09"
+   },
    {
     "id": "4897262",
     "name": "Will Richard",
@@ -450,20 +468,20 @@
   ],
   "LAL": [
    {
-    "id": "3945274",
-    "name": "Luka Doncic",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
-    "date": "2026-11-09",
-    "returns": "2026-11-09"
-   },
-   {
     "id": "4397014",
     "name": "Quentin Grimes",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Finger",
+    "date": "2026-11-09",
+    "returns": "2026-11-11"
+   },
+   {
+    "id": "4066457",
+    "name": "Austin Reaves",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Illness",
     "date": "2026-11-09",
     "returns": "2026-11-09"
    }
@@ -529,6 +547,24 @@
    }
   ],
   "NOP": [
+   {
+    "id": "4431675",
+    "name": "Trendon Watford",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-09",
+    "returns": "2026-11-11"
+   },
+   {
+    "id": "4397688",
+    "name": "Trey Murphy III",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Tendinitis",
+    "date": "2026-11-09",
+    "returns": "2026-11-11"
+   },
    {
     "id": "5061589",
     "name": "Yves Missi",
@@ -771,6 +807,15 @@
   ],
   "SAS": [
    {
+    "id": "4395630",
+    "name": "Devin Vassell",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Groin",
+    "date": "2026-11-09",
+    "returns": "2026-11-11"
+   },
+   {
     "id": "6440",
     "name": "Tobias Harris",
     "pos": "F",
@@ -778,15 +823,6 @@
     "detail": "Calf Strain",
     "date": "2026-11-09",
     "returns": "2026-11-11"
-   },
-   {
-    "id": "4395630",
-    "name": "Devin Vassell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Groin",
-    "date": "2026-11-09",
-    "returns": "2026-11-09"
    },
    {
     "id": "5101845",
@@ -799,6 +835,15 @@
    }
   ],
   "TOR": [
+   {
+    "id": "5093267",
+    "name": "Collin Murray-Boyles",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-09",
+    "returns": "2026-11-09"
+   },
    {
     "id": "4432586",
     "name": "Nate Bittle",
@@ -875,6 +920,15 @@
    }
   ],
   "WAS": [
+   {
+    "id": "5104155",
+    "name": "Bilal Coulibaly",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hand",
+    "date": "2026-11-09",
+    "returns": "2026-11-09"
+   },
    {
     "id": "4997537",
     "name": "Tristan Vukcevic",

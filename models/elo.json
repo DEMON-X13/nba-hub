@@ -1389,20 +1389,20 @@
    "spread": -3.6
   },
   "2027_20261109_LAL_ATL": {
-   "pHome": 0.5241,
-   "spread": -0.7
+   "pHome": 0.5321,
+   "spread": -1
   },
   "2027_20261109_MEM_TOR": {
    "pHome": 0.6437,
    "spread": -4.6
   },
   "2027_20261109_NOP_GSW": {
-   "pHome": 0.6985,
-   "spread": -6.5
+   "pHome": 0.7159,
+   "spread": -7.1
   },
   "2027_20261109_SAS_PHX": {
-   "pHome": 0.2098,
-   "spread": 10.3
+   "pHome": 0.2341,
+   "spread": 9.2
   },
   "2027_20261109_WAS_DET": {
    "pHome": 0.6946,
@@ -2096,5 +2096,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-09T17:34Z"
+ "generated": "2026-11-09T21:28Z"
 }

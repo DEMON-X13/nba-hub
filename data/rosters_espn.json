@@ -84,7 +84,7 @@
     "name": "Jock Landale",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2490149",
@@ -2034,7 +2034,7 @@
     "name": "Tyler Herro",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5214640",
@@ -2367,7 +2367,7 @@
     "name": "Zion Williamson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "NYK": [

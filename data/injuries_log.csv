@@ -4419,13 +4419,12 @@ date,team,player_id,name,status
 2026-11-08,WAS,4606840,Jamir Watkins,Out
 2026-11-09,ATL,4873201,Asa Newell,Out
 2026-11-09,ATL,4585618,Keshon Gilbert,Out
-2026-11-09,ATL,3146557,Jock Landale,Out
 2026-11-09,ATL,4712863,Mouhamed Gueye,Out
 2026-11-09,ATL,5105571,Henri Veesaar,Out
 2026-11-09,BKN,5101761,Mikel Brown Jr.,Day-To-Day
 2026-11-09,BKN,4702670,Grant Nelson,Day-To-Day
 2026-11-09,BKN,5175643,Egor Demin,Out
-2026-11-09,CHA,4433249,Moussa Diabate,Day-To-Day
+2026-11-09,CHA,4433249,Moussa Diabate,Out
 2026-11-09,CHA,4066218,Grant Williams,Out
 2026-11-09,CHA,5061575,Kon Knueppel,Out
 2026-11-09,CHA,3032979,Dennis Schroder,Out
@@ -4466,14 +4465,16 @@ date,team,player_id,name,status
 2026-11-09,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-11-09,LAC,6580,Bradley Beal,Out
 2026-11-09,LAC,4396818,Jordan Miller,Out
+2026-11-09,LAL,4066457,Austin Reaves,Out
 2026-11-09,LAL,4397014,Quentin Grimes,Out
-2026-11-09,LAL,4066457,Austin Reaves,Day-To-Day
 2026-11-09,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-09,MEM,4432810,Isaiah Stewart,Out
 2026-11-09,MEM,5105462,Richie Saunders,Out
+2026-11-09,MIL,4395725,Tyler Herro,Day-To-Day
 2026-11-09,MIL,4277843,Gary Trent Jr.,Day-To-Day
 2026-11-09,MIN,4594268,Anthony Edwards,Out
 2026-11-09,MIN,3934673,Donte DiVincenzo,Out
+2026-11-09,NOP,4395628,Zion Williamson,Out
 2026-11-09,NOP,4431675,Trendon Watford,Out
 2026-11-09,NOP,4397688,Trey Murphy III,Out
 2026-11-09,NOP,5061589,Yves Missi,Out
@@ -4489,7 +4490,7 @@ date,team,player_id,name,status
 2026-11-09,ORL,4432573,Paolo Banchero,Out
 2026-11-09,ORL,5214637,Noah Penda,Out
 2026-11-09,ORL,5107251,Izaiyah Nelson,Out
-2026-11-09,PHI,5105637,Adem Bona,Day-To-Day
+2026-11-09,PHI,5105637,Adem Bona,Out
 2026-11-09,PHI,4870562,Dominick Barlow,Out
 2026-11-09,PHI,4871141,Ariel Hukporti,Out
 2026-11-09,PHX,4278402,Jordan Goodwin,Out
@@ -4504,10 +4505,10 @@ date,team,player_id,name,status
 2026-11-09,SAS,4395630,Devin Vassell,Out
 2026-11-09,SAS,6440,Tobias Harris,Out
 2026-11-09,SAS,5101845,Jayden Quaintance,Out
+2026-11-09,TOR,4433134,Scottie Barnes,Out
 2026-11-09,TOR,5093267,Collin Murray-Boyles,Day-To-Day
 2026-11-09,TOR,4432586,Nate Bittle,Out
 2026-11-09,TOR,4395724,Immanuel Quickley,Day-To-Day
-2026-11-09,TOR,4433134,Scottie Barnes,Day-To-Day
 2026-11-09,TOR,6450,Kawhi Leonard,Out
 2026-11-09,UTA,4066336,Lauri Markkanen,Day-To-Day
 2026-11-09,UTA,4433627,Keyonte George,Day-To-Day

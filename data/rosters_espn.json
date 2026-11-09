@@ -1,5 +1,5 @@
 {
- "date": "2026-11-08",
+ "date": "2026-11-09",
  "teams": {
   "ATL": [
    {
@@ -205,7 +205,7 @@
     "name": "Mitchell Robinson",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4593841",
@@ -1215,14 +1215,14 @@
     "name": "Will Richard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4997536",
     "name": "Gui Santos",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397040",
@@ -1343,7 +1343,7 @@
     "name": "Oscar Tshiebwe",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2991230",
@@ -1629,7 +1629,7 @@
     "name": "Quentin Grimes",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4868423",
@@ -2584,13 +2584,6 @@
     "injured": false
    },
    {
-    "id": "4433159",
-    "name": "Dalen Terry",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "5159925",
     "name": "Nikola Topic",
     "pos": "G",
@@ -3335,7 +3328,7 @@
     "name": "Devin Vassell",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5104157",
@@ -3521,7 +3514,7 @@
     "name": "Keyonte George",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432811",
@@ -3556,7 +3549,7 @@
     "name": "Lauri Markkanen",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133602",
@@ -3724,35 +3717,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-11-08",
-  "BOS": "2026-11-08",
-  "BKN": "2026-11-08",
-  "CHA": "2026-11-08",
-  "CHI": "2026-11-08",
-  "CLE": "2026-11-08",
-  "DAL": "2026-11-08",
-  "DEN": "2026-11-08",
-  "DET": "2026-11-08",
-  "GSW": "2026-11-08",
-  "HOU": "2026-11-08",
-  "IND": "2026-11-08",
-  "LAC": "2026-11-08",
-  "LAL": "2026-11-08",
-  "MEM": "2026-11-08",
-  "MIA": "2026-11-08",
-  "MIL": "2026-11-08",
-  "MIN": "2026-11-08",
-  "NOP": "2026-11-08",
-  "NYK": "2026-11-08",
-  "OKC": "2026-11-08",
-  "ORL": "2026-11-08",
-  "PHI": "2026-11-08",
-  "PHX": "2026-11-08",
-  "POR": "2026-11-08",
-  "SAC": "2026-11-08",
-  "SAS": "2026-11-08",
-  "TOR": "2026-11-08",
-  "UTA": "2026-11-08",
-  "WAS": "2026-11-08"
+  "ATL": "2026-11-09",
+  "BOS": "2026-11-09",
+  "BKN": "2026-11-09",
+  "CHA": "2026-11-09",
+  "CHI": "2026-11-09",
+  "CLE": "2026-11-09",
+  "DAL": "2026-11-09",
+  "DEN": "2026-11-09",
+  "DET": "2026-11-09",
+  "GSW": "2026-11-09",
+  "HOU": "2026-11-09",
+  "IND": "2026-11-09",
+  "LAC": "2026-11-09",
+  "LAL": "2026-11-09",
+  "MEM": "2026-11-09",
+  "MIA": "2026-11-09",
+  "MIL": "2026-11-09",
+  "MIN": "2026-11-09",
+  "NOP": "2026-11-09",
+  "NYK": "2026-11-09",
+  "OKC": "2026-11-09",
+  "ORL": "2026-11-09",
+  "PHI": "2026-11-09",
+  "PHX": "2026-11-09",
+  "POR": "2026-11-09",
+  "SAC": "2026-11-09",
+  "SAS": "2026-11-09",
+  "TOR": "2026-11-09",
+  "UTA": "2026-11-09",
+  "WAS": "2026-11-09"
  }
 }

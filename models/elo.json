@@ -1385,8 +1385,8 @@
    "spread": -0.6
   },
   "2027_20261110_MIA_UTA": {
-   "pHome": 0.3779,
-   "spread": 3.9
+   "pHome": 0.3425,
+   "spread": 5
   },
   "2027_20261110_MIL_NYK": {
    "pHome": 0.8715,
@@ -2064,5 +2064,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-10T15:37Z"
+ "generated": "2026-11-10T18:42Z"
 }

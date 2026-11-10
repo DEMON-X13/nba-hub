@@ -2125,7 +2125,7 @@
     "name": "Kel'el Ware",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "MIN": [
@@ -2681,7 +2681,7 @@
     "name": "Tristan da Silva",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4065654",

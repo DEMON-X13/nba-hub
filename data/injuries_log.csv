@@ -4437,18 +4437,11 @@ date,team,player_id,name,status
 2026-11-09,DAL,5279129,Sergio de Larrea,Out
 2026-11-09,DAL,5148538,Tarik Biberovic,Out
 2026-11-09,DAL,4683688,Dereck Lively II,Out
-2026-11-09,DEN,3138196,Cameron Johnson,Day-To-Day
-2026-11-09,DEN,4431767,Christian Braun,Day-To-Day
-2026-11-09,DEN,3064290,Aaron Gordon,Day-To-Day
-2026-11-09,DEN,3112335,Nikola Jokic,Day-To-Day
-2026-11-09,DEN,3978,DeMar DeRozan,Day-To-Day
-2026-11-09,DEN,3936299,Jamal Murray,Day-To-Day
 2026-11-09,DEN,4432181,Julian Strawther,Out
 2026-11-09,DET,4395702,Isaiah Joe,Out
 2026-11-09,DET,4433621,Jalen Duren,Out
-2026-11-09,GSW,3134903,Gary Payton II,Day-To-Day
+2026-11-09,GSW,3134903,Gary Payton II,Out
 2026-11-09,GSW,4897262,Will Richard,Out
-2026-11-09,GSW,4997536,Gui Santos,Day-To-Day
 2026-11-09,GSW,3102531,Kristaps Porzingis,Out
 2026-11-09,GSW,4432171,Moses Moody,Out
 2026-11-09,GSW,6430,Jimmy Butler III,Out
@@ -4458,13 +4451,14 @@ date,team,player_id,name,status
 2026-11-09,IND,4396993,Tyrese Haliburton,Out
 2026-11-09,IND,5157066,Johnny Furphy,Out
 2026-11-09,IND,4433076,Ben Sheppard,Out
+2026-11-09,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-11-09,LAC,3913176,Brandon Ingram,Out
 2026-11-09,LAC,4845363,Cam Christie,Day-To-Day
-2026-11-09,LAC,5108024,Yanic Konan Niederhauser,Out
 2026-11-09,LAC,6580,Bradley Beal,Out
 2026-11-09,LAC,4396818,Jordan Miller,Out
 2026-11-09,LAL,4066457,Austin Reaves,Out
 2026-11-09,LAL,4397014,Quentin Grimes,Out
+2026-11-09,MEM,4593016,Quinten Post,Day-To-Day
 2026-11-09,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-09,MEM,4432810,Isaiah Stewart,Out
 2026-11-09,MEM,5105462,Richie Saunders,Out
@@ -4493,12 +4487,12 @@ date,team,player_id,name,status
 2026-11-09,PHI,4871141,Ariel Hukporti,Out
 2026-11-09,PHX,4278402,Jordan Goodwin,Out
 2026-11-09,PHX,4701232,Mark Williams,Out
-2026-11-09,POR,4066211,Robert Williams III,Day-To-Day
 2026-11-09,POR,4279888,Ja Morant,Out
 2026-11-09,POR,4578893,Vit Krejci,Out
 2026-11-09,POR,4914336,Shaedon Sharpe,Out
-2026-11-09,SAC,3155942,Domantas Sabonis,Day-To-Day
 2026-11-09,SAC,4898371,Maxime Raynaud,Out
+2026-11-09,SAC,4594327,Keegan Murray,Day-To-Day
+2026-11-09,SAC,3155942,Domantas Sabonis,Day-To-Day
 2026-11-09,SAC,3907387,Ben Simmons,Out
 2026-11-09,SAS,4395630,Devin Vassell,Out
 2026-11-09,SAS,6440,Tobias Harris,Out

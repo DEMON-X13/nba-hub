@@ -8,7 +8,9 @@
  * date's games but preseason), its three levels Safe, Medium and Aggressive, each the likeliest parlay of 2 legs or more,
  * no leg limit, paying $2, $4 and $8 or more on $1 (the owner's call of 8 November 2026; the sets taken before
  * suggest_check.js's NOCAP_FROM keep the rule they were taken under: Safe the likeliest 2-leg parlay, Medium and
- * Aggressive the likeliest of 2 to 5 legs paying $4 and $8), on the night's team legs at
+ * Aggressive the likeliest of 2 to 5 legs paying $4 and $8), and since the owner's call of 10 November 2026 (its
+ * PLAYER_FROM) each holding at least one player leg wherever the night's legs make such a parlay, else the likeliest
+ * without one, saying why (a set taken before keeps its rule), on the night's team legs at
  * DraftKings' prices and, on every set the page with them takes from 23:00 UTC on 7 November 2026, DraftKings' main lines on its players at DraftKings' own
  * fair chance (the owner's call of that day, "Add at DraftKings' odds"), by the builder's own sums, on the lines feed's
  * two dates (the dates the job reads DraftKings' lines
@@ -132,7 +134,7 @@ async function ready(w, errs, state) {
   const missing = ['spTakes', 'spEntry', 'spLockAt', 'spOutWhy', 'spRebuildOut', 'pbLinesLoad', 'parlayDec', 'pbSlipOf'].filter(f => w.eval(`typeof ${f}`) !== 'function');
   if (missing.length) return [...why, 'the page has no Suggested Parlays nights to take (no ' + missing.join(', ') + ')'];
   if (!w.NBA_GRADE || typeof w.NBA_GRADE.legResult !== 'function') why.push('the page has no settlement to grade by (NBA_GRADE)');
-  if (JSON.stringify(w.eval("typeof SP_LEVELS !== 'undefined' ? SP_LEVELS : []")) !== JSON.stringify(NIGHT_LEVELS)) why.push("the page's levels are not the three this record keeps (Safe, Medium and Aggressive, 2 legs or more with no leg limit, paying $2+, $4+ and $8+)");
+  if (JSON.stringify(w.eval("typeof SP_LEVELS !== 'undefined' ? SP_LEVELS : []")) !== JSON.stringify(NIGHT_LEVELS)) why.push("the page's levels are not the three this record keeps (Safe, Medium and Aggressive, 2 legs or more with no leg limit, paying $2+, $4+ and $8+, each with a player leg wherever the night's legs make one)");
   if (w.eval('SP_LOCK_MS') !== LOCK_MS) why.push('the page locks a set at another time than 2 hours before its first tip-off');
   try { await w.eval('pbLinesLoad()'); } catch (e) { why.push('lines.json threw: ' + e.message); }
   if (!w.eval('LINES')) why.push('lines.json did not load, so the page would build every set with no DraftKings line');
@@ -181,8 +183,9 @@ function replaceRuledOut(w, Nm, now, runAt, said) {
       if (!t || !Array.isArray(t.legs)) return;
       const l = t.legs.find(x => x.kind === 'prop' && why(x.pid, x.id)); if (!l) return;
       const upd = { pid: String(l.pid), name: l.name, reason: why(l.pid, l.id), at: runAt };
-      /* under the rule its set was taken under (its head: a set taken before NOCAP_FROM keeps its leg limit) */
-      const nt = rebuild(e.nid, t.id, upd, { max: t.max, price: t.price }); if (!nt) return;
+      /* under the rule its set was taken under (its head: a set taken before NOCAP_FROM keeps its leg limit, one taken
+         before PLAYER_FROM asks no player leg of a level, and one taken since carries need: 'player') */
+      const nt = rebuild(e.nid, t.id, upd, { max: t.max, price: t.price, need: t.need }); if (!nt) return;
       e.tiers[i] = JSON.parse(JSON.stringify(nt));
       e.updates = [...(Array.isArray(e.updates) ? e.updates : []), { tier: t.id, ...upd }];
       said.push(`replaced ${key} ${t.id}: ${l.name} ${upd.reason}`);

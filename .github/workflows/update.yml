@@ -214,7 +214,7 @@ jobs:
       # night; until 7 November 2026 a set a game on national TV, kept as it was), taken from the page just built on the
       # state just published and lines.json, rewritten until 2 hours before the night's first tip-off and locked from then,
       # graded as its games finish, in data/suggest_ledger.json; its tests run first (the record's, then the search's time on
-      # 7 November's games alone and together and on heavy-favourite nights), and its check works each level out
+      # 7 November's games alone and together, 10 November's night and heavy-favourite nights), and its check works each level out
       # again on the set's own pool and holds the file to the last commit (no locked set moved). The script and its check are handed the run's one clock (SUGGEST_NOW, read
       # after the test): the check reads which sets are locked at the instant the script rewrote or froze them, so a lock
       # that passes in the seconds the script runs is judged as the script judged it, never as a locked set moved. It boots

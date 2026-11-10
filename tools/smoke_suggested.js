@@ -67,8 +67,21 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     return { at: new Date(N.open).toISOString().slice(0, 19) + 'Z', next: N.games.map(g => g.id).join(' '), text: `Next up: ${wdLong(N.date)}’s ${n} game${n === 1 ? '' : 's'}. The set goes up ${etWd(N.open)}.` }; };
   /* the levels since the owner's call of 8 November 2026: no leg limit, Safe $2 on $1 (until then Safe was the likeliest
      pair and Medium and Aggressive took 2 to 5 legs) */
-  const LV = [['safe', 'Safe', 2, null, 2], ['med', 'Medium', 2, null, 4], ['aggr', 'Aggressive', 2, null, 8]], LVID = LV.map(l => l[0]);
+  const LV = [['safe', 'Safe', 2, null, 2, 'player'], ['med', 'Medium', 2, null, 4, 'player'], ['aggr', 'Aggressive', 2, null, 8, 'player']], LVID = LV.map(l => l[0]);
   const RULE = { safe: 'likeliest paying $2+', med: 'likeliest paying $4+', aggr: 'likeliest paying $8+' };
+  /* the rule with a player (the owner's call of 10 November 2026): a level holding a player leg says so, one that holds
+     none (the night's legs make no parlay holding one that meets it) says why: no player line read for the night's games
+     still to tip, else none that fits; this file's own words and its own reading of which */
+  const NOPL_OWN = { lines: 'no player lines yet', fit: 'no player leg fits' };
+  const ruleOwn = (t, nopl) => t.legs && t.legs.some(l => l.kind === 'prop') ? `${RULE[t.id]} with a player` : t.legs ? `${RULE[t.id]} · ${NOPL_OWN[nopl]}` : `${RULE[t.id]} with a player`;
+  /* the rule's title on a level's card (the only place the page states the rule whole), this file's own words: the rule
+     with a player (need) and the rule before (no leg limit, no player asked), each on the level's floor F; a level of the
+     rule before 8 November 2026 (a leg limit) has none */
+  const LEAN_OWN = 'More legs on favourites stack the model’s overconfidence on team legs: on the record its expected wins ran about twice DraftKings’.';
+  const titleOwn = (F, need, capped) => capped ? '' : need
+    ? `No leg limit: the likeliest parlay of the night’s legs (team legs at the model’s chance, player legs at DraftKings’ fair chance) that pays $${F} or more on $1 and holds at least one player leg, wherever the night’s legs make one; where they make none, the likeliest without one. ${LEAN_OWN}`
+    : `No leg limit: the likeliest parlay of the night’s legs that pays $${F} or more on $1. ${LEAN_OWN}`;
+  const noplOwn = (lines, gids) => gids.some(id => { const pr = lines && lines.games && lines.games[id] && lines.games[id].props; return !!pr && Array.isArray(pr.mains) && pr.mains.some(m => m && Number.isFinite(m.line) && Number.isFinite(m.over) && Number.isFinite(m.under) && m.over && m.under); }) ? 'fit' : 'lines';
   const NICK = { BOS: 'Celtics', NYK: 'Knicks', LAL: 'Lakers', GSW: 'Warriors', MIA: 'Heat', ORL: 'Magic', DEN: 'Nuggets', PHX: 'Suns', CHI: 'Bulls', DET: 'Pistons', MIL: 'Bucks', TOR: 'Raptors', CLE: 'Cavaliers', ATL: 'Hawks', CHA: 'Hornets' };
 
   /* ---------- the made-up November ---------- */
@@ -245,29 +258,38 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
      parlayProb and parlayDec on their legs (a parlay's are their products across games, as the builder's own sums are),
      the best of each level by its rule; the walk leaves a branch only where its chance is under the best a level has
      (a parlay's chance never rises as a leg joins it), so every parlay that could rank first is ranked */
-  const ENUM_OWN = `(legs, LV) => {
+  const ENUM_OWN = `(legs, LV, nopl) => {
     const by = new Map(); for (const l of legs) { if (!by.has(l.gid)) by.set(l.gid, []); by.get(l.gid).push(l); }
     const grpOf = l => l.kind === 'ml' || l.kind === 'spread' ? 'side' : l.kind === 'total' ? 'total' : 'p' + l.pid;
     const G = [...by.values()].map(L => { const groups = new Map(); for (const l of L) { const k = grpOf(l); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(l); }
       let o = [[]]; for (const ls of groups.values()) o = o.flatMap(c => [c, ...ls.map(l => [...c, l])]);
       return o.filter(c => c.length).map(c => { const L2 = pbOrder(c); return { c, p: parlayProb(L2).corr, d: parlayDec(L2.map(l => ({ leg: l, ml: l.price }))) }; }).sort((a, b) => b.p - a.p); });
-    const best = {}, pick = []; let count = 0, low = -Infinity;
+    /* the best of each level by the rule before (raw) and among the parlays holding a player leg (pl): a level is pl's
+       where there is one, else raw's, saying why (nopl) on the rule with a player; a branch is left only where its chance
+       is under every level's best it could still change (pl's on a night with a player leg, else raw's) */
+    const raw = {}, pl = {}, pick = [], anyPl = legs.some(l => l.kind === 'prop'); let count = 0, low = -Infinity;
     const better = (c, b) => !b || c.p > b.p + 1e-12 || (Math.abs(c.p - b.p) <= 1e-12 && (c.d > b.d + 1e-12 || (Math.abs(c.d - b.d) <= 1e-12 && (c.n < b.n || (c.n === b.n && c.ids < b.ids)))));
-    (function go(i, pp, dd, nL) {
+    (function go(i, pp, dd, nL, hp) {
       if (pp < low) return;
       if (nL >= 2) { count++; let ids = null, moved = false;
-        for (const [id, , lo, hi, F] of LV) { const b = best[id];
-          if (nL >= lo && (hi == null || nL <= hi) && dd >= F - 1e-9 && (!b || pp >= b.p - 1e-12)) { ids = ids || pick.flatMap(o => o.c.map(l => l.sk)).sort().join(','); const c = { p: pp, d: dd, n: nL, ids }; if (better(c, b)) { best[id] = c; moved = true; } } }
-        if (moved) low = Math.min(...LV.map(([id]) => best[id] ? best[id].p - 1e-12 : -Infinity)); }
-      for (let j = i; j < G.length; j++) for (const o of G[j]) { if (pp * o.p < low) break; pick.push(o); go(j + 1, pp * o.p, dd * o.d, nL + o.c.length); pick.pop(); }
-    })(0, 1, 1, 0);
-    return { best, count };
+        for (const [id, , lo, hi, F] of LV) for (const [M, ok] of [[raw, true], [pl, hp]]) { const b = M[id];
+          if (ok && nL >= lo && (hi == null || nL <= hi) && dd >= F - 1e-9 && (!b || pp >= b.p - 1e-12)) { ids = ids || pick.flatMap(o => o.c.map(l => l.sk)).sort().join(','); const c = { p: pp, d: dd, n: nL, ids, hp }; if (better(c, b)) { M[id] = c; moved = true; } } }
+        if (moved) low = Math.min(...LV.map(([id]) => { const b = anyPl && LV.find(l => l[0] === id)[5] ? pl[id] : raw[id]; return b ? b.p - 1e-12 : -Infinity; })); }
+      for (let j = i; j < G.length; j++) for (const o of G[j]) { if (pp * o.p < low) break; pick.push(o); go(j + 1, pp * o.p, dd * o.d, nL + o.c.length, hp || o.c.some(l => l.kind === 'prop')); pick.pop(); }
+    })(0, 1, 1, 0, false);
+    const best = {}; for (const [id, , , , , need] of LV) { if (need && pl[id]) best[id] = { ...pl[id], nopl: null }; else if (raw[id]) best[id] = { ...raw[id], nopl: need ? (nopl || 'fit') : null }; }
+    return { best, raw, pl, count };
   }`;
-  const enumOwn = (q, nid) => JSON.parse(q.w.eval(`(() => { const pool = spPool(spById(${JSON.stringify(nid)})).legs; return JSON.stringify((${ENUM_OWN})(pool, ${JSON.stringify(LV)})); })()`));
+  const enumOwn = (q, nid, nopl) => JSON.parse(q.w.eval(`(() => { const pool = spPool(spById(${JSON.stringify(nid)})).legs; return JSON.stringify((${ENUM_OWN})(pool, ${JSON.stringify(LV)}, ${JSON.stringify(nopl || 'fit')})); })()`));
   { const E = enumOwn(p, N1id);
     check(LVID.every((id, i) => { const t = tiers1[i], b = E.best[id]; return t && b && t.legs.map(l => l.sk).sort().join(',') === b.ids && Math.abs(t.corr - b.p) < 1e-12 && Math.abs(t.dec - b.d) < 1e-12; }),
       `each level is the best of this file's own enumeration of all ${E.count} parlays by its rule, its chance and price the builder's sums (${LVID.map((id, i) => `${id} ${tiers1[i] ? (tiers1[i].corr * 100).toFixed(2) + '% at ' + tiers1[i].dec.toFixed(2) : '-'}`).join(', ')})`); }
-  check(tiers1[0].dec >= 2 && tiers1[1].dec >= 4 && tiers1[2].dec >= 8 && tiers1.every(t => t.legs.length >= 2 && t.min === 2 && t.max === null), "Safe pays $2 or more on $1, Medium $4 or more and Aggressive $8 or more, each 2 legs or more with no leg limit");
+  check(tiers1[0].dec >= 2 && tiers1[1].dec >= 4 && tiers1[2].dec >= 8 && tiers1.every(t => t.legs.length >= 2 && t.min === 2 && t.max === null && t.need === 'player'), "Safe pays $2 or more on $1, Medium $4 or more and Aggressive $8 or more, each 2 legs or more with no leg limit, on the rule with a player");
+  /* the rule with a player moved this night: by this file's own enumeration the rule before takes team legs alone on a
+     level, and every level holds a player leg */
+  { const E = enumOwn(p, N1id), moved = LVID.filter(id => E.raw[id] && !E.raw[id].hp);
+    check(moved.length > 0 && tiers1.every(t => t.legs.some(l => l.kind === 'prop')) && moved.every(id => E.pl[id] && E.pl[id].p < E.raw[id].p),
+      `every level holds a player leg, where the rule before takes team legs alone (${moved.map(id => `${id}: ${(E.raw[id].p * 100).toFixed(2)}% team legs alone, ${(E.pl[id].p * 100).toFixed(2)}% with a player`).join('; ') || 'no level moved'})`); }
   check(tiers1.every(t => { const by = {}; for (const l of t.legs) { const k = l.gid + (l.kind === 'total' ? 't' : l.kind === 'prop' ? 'p' + l.pid : 's'); by[k] = (by[k] || 0) + 1; } return Object.values(by).every(v => v === 1) && t.legs.every(l => N1.games.some(g => g.id === l.gid)); }), 'every level: one side, one total and one leg a player a game at most, every leg a game of the night');
   { const sums = tiers1.map(t => JSON.parse(p.w.eval(`(() => { const L = spTier(${JSON.stringify(N1id + ':' + t.id)}).legs; const f = parlayFair(L); return JSON.stringify({ f: f.p }); })()`)));
     check(tiers1.every((t, i) => Math.abs(t.fair.p - sums[i].f) < 1e-12), "each level's fair chance is the builder's own parlayFair on its legs"); }
@@ -276,9 +298,24 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
      legs "model + DraftKings N%", titled with what it is made of; of player legs alone "every leg at DraftKings' chance" */
   const mixOwn = t => { const np = t.legs.filter(l => l.kind === 'prop').length; return np === t.legs.length ? 'player' : np ? 'mixed' : null; };
   const chanceOwn = t => { const m = mixOwn(t), pc = (t.corr * 100).toFixed(0) + '%'; return m === 'player' ? 'every leg at DraftKings’ chance' : m ? `model + DraftKings ${pc}` : `model says ${pc}`; };
-  check(tiers1.every(t => { const c = card(t.id), mo = c.querySelector('.pb-model'), m = mixOwn(t); return txt(c.querySelector('.pb-rule')) === RULE[t.id] && txt(c.querySelector('.pb-pill')) === `${t.legs.length} legs` && txt(mo) === chanceOwn(t) && txt(c.querySelector('[data-pb-fair]')) === (t.fair.p * 100).toFixed(0) + '%'
+  check(tiers1.every(t => { const c = card(t.id), mo = c.querySelector('.pb-model'), m = mixOwn(t); return txt(c.querySelector('.pb-rule')) === ruleOwn(t, noplOwn(LINES1, N1.games.map(g => g.id))) && txt(c.querySelector('.pb-pill')) === `${t.legs.length} legs` && txt(mo) === chanceOwn(t) && txt(c.querySelector('[data-pb-fair]')) === (t.fair.p * 100).toFixed(0) + '%'
       && (m ? mo.dataset.pbMix === m && /DraftKings’ fair chance/.test(mo.title) && /no model claim|carries no model claim/.test(mo.title) && /a player Under breaks even and an Over gives up about 12%/.test(mo.title) : !mo.dataset.pbMix); }),
     `each card says its rule (${LVID.map(id => `"${txt(card(id).querySelector('.pb-rule'))}"`).join(', ')}), its legs, the fair chance and the chance it is ranked on, said for what it is (${LVID.map(id => `"${txt(card(id).querySelector('.pb-model'))}"`).join(', ')})`);
+  /* the rule's title, word for word: the only place the page states the rule whole (the review of 10 November 2026) */
+  check(tiers1.every(t => { const r = card(t.id).querySelector('.pb-rule'); return r && r.title === titleOwn(t.price, 'player'); }),
+    `each card's rule is titled with the rule with a player whole, word for word ("${(card('safe').querySelector('.pb-rule') || {}).title || ''}")`);
+  /* a level as the record keeps it, drawn back with its own rule's words: a set of the rule before 10 November 2026 (no
+     need in its head) says no player word; one of the rule with a player holding one says so; one holding none says why
+     as kept (its nopl), and "no player leg fits" where it keeps none */
+  { const W = JSON.parse(p.w.eval(`(() => { const N = spById(${JSON.stringify(N1id)}), t = ['aggr', 'med', 'safe'].map(id => spTier(${JSON.stringify(N1id)} + ':' + id)).find(x => x && x.legs.filter(l => l.kind !== 'prop').length >= 2) || spTier(${JSON.stringify(N1id + ':med')}), o = spTierOut(t), team = o.legs.filter(l => l.kind !== 'prop'), F = o.price;
+      const nc = { ...o }; delete nc.need; const tm = { ...o, legs: team, nopl: 'lines' }, tf = { ...o, legs: team }; delete tf.nopl;
+      const r = x => { const y = spTierIn(x, N); return y ? y.rule : null; }, rt = x => { const y = spTierIn(x, N); return y ? y.ruleTitle : null; };
+      return JSON.stringify({ nc: r(nc), pl: r(o), tm: team.length >= 2 ? r(tm) : 'skip', tf: team.length >= 2 ? r(tf) : 'skip', n: team.length, F,
+        tt: { nc: rt(nc), pl: rt(o), tm: team.length >= 2 ? rt(tm) : 'skip', tf: team.length >= 2 ? rt(tf) : 'skip' } }); })()`));
+    check(W.n >= 2 && W.nc === `likeliest paying $${W.F}+` && W.pl === `likeliest paying $${W.F}+ with a player` && W.tm === `likeliest paying $${W.F}+ · no player lines yet` && W.tf === `likeliest paying $${W.F}+ · no player leg fits`,
+      `a kept level drawn back in its own rule's words (the rule before: "${W.nc}"; with a player: "${W.pl}"; holding none: "${W.tm}", "${W.tf}")`);
+    check(W.tt.nc === titleOwn(W.F, null) && ['pl', 'tm', 'tf'].every(k => W.tt[k] === titleOwn(W.F, 'player')),
+      `and titled with its own rule whole, word for word (the rule before: "${W.tt.nc}"; with a player, holding one or none: "${W.tt.pl}")`); }
   check(tiers1.every(t => { const c = card(t.id), pay = c.querySelector('[data-pb-pay]'); return Math.abs(+pay.dataset.pbPay - t.dec) < 1e-12 && txt(pay.querySelector('b')) === '$' + (20 * t.dec).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }), 'each card pays the Bet amount times its price');
   { const lis = tiers1.flatMap(t => [...card(t.id).querySelectorAll('.pb-legs li')].map((li, i) => [li, t.legs[i]]));
     check(lis.every(([li, l]) => { const sm = txt(li.querySelector('small')).replace(/\s*Value$/, ''); return l.kind === 'total' ? sm === l.label && txt(li.querySelector('.glance-name, .nm')).startsWith(`${NICK[l.away]} at ${NICK[l.home]}`) : sm === `${l.label} · ${l.away} at ${l.home}`; }),
@@ -315,6 +352,18 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
       check(JSON.stringify(pp) === JSON.stringify(ownQ) && pp.some(k => k.split('|')[2] === pid0) === !out && (!out || TQ.every(t => !t || !t.legs.some(l => String(l.pid) === pid0)))
         && LVID.every((id, i) => TQ[i] && E.best[id] && TQ[i].legs.map(l => l.sk).sort().join(',') === E.best[id].ids),
         `${nm} listed ${status}: ${out ? 'left out of the pool and every level' : 'he plays, his legs in the pool'}, the levels this file's own enumeration's (${TQ.map(t => t ? t.legs.length + ' legs' : '-').join(', ')})`); } }
+  /* DraftKings' player lines posted and every player on them listed Out (the review of 10 November 2026: no live card
+     had said "no player leg fits"): each level the likeliest without one, drawn live, saying so word for word by this
+     file's own reading of why, titled with the rule whole, the levels this file's own enumeration's */
+  { const outs = [...new Set(Object.values(LINES1.games).flatMap(g => g.props && Array.isArray(g.props.mains) ? g.props.mains.map(m => String(m.player)) : []))];
+    const nmOf = pid => { for (const g of Object.values(ROWS)) if (g[pid]) return g[pid][0]; return 'Player ' + pid; };
+    const stO = stateOf(SLATE, { report: Object.fromEntries(outs.map(pid => [pid, [nmOf(pid), 'Out', 'ankle']])) }), q = load(stO, { lines: LINES1, record: null, tab: 'suggest' }); await settle(q); await openTab(q);
+    const why = noplOwn(LINES1, N1.games.map(g => g.id)), E = enumOwn(q, N1id, why), TO = LVID.map(id => q.w.spTier(`${N1id}:${id}`));
+    const cardO = id => q.d.querySelector(`#spSets [data-sp-game="${N1id}"] [data-pb-tier="${id}"] .pb-rule`);
+    check(outs.length >= 2 && why === 'fit' && poolOwn(stO, LINES1, NOW, N1).every(l => l.kind !== 'prop')
+      && LVID.every((id, i) => { const t = TO[i], r = cardO(id); return t && t.legs.length >= 2 && !t.legs.some(l => l.kind === 'prop') && t.nopl === 'fit' && E.best[id] && E.best[id].nopl === 'fit' && t.legs.map(l => l.sk).sort().join(',') === E.best[id].ids
+        && r && txt(r) === ruleOwn(t, why) && txt(r) === `${RULE[id]} · no player leg fits` && r.title === titleOwn(t.price, 'player'); }) && !q.errors.length,
+      `player lines posted and every player on them (${outs.length}) listed Out: each level the likeliest without one, drawn live saying so (${LVID.map(id => `"${txt(cardO(id))}"`).join(', ')}), this file's own enumeration's`); }
   /* a line priced with no margin (the review of 7 November 2026: its two implied chances under 1, so its fair Over, and
      a total's fair chance, would read over its own price, an edge leg the search's proof is not built for): Cy Big's
      assists at +105 both ways and LAL at GSW's total at +105 both ways, each left out of the pool and counted (two legs
@@ -334,8 +383,11 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     check(s && s.legs.length === 2 && s.legs.some(l => l.kind === 'total') && JSON.stringify(whys) === JSON.stringify(['No parlay of the night’s legs pays $4 or more on $1: one game makes 2 legs at most.', 'No parlay of the night’s legs pays $8 or more on $1: one game makes 2 legs at most.'])
       && [...q.d.querySelectorAll(`#spSets [data-sp-game="${nid}"] .pb-tier.none .pb-pill`)].every(x => txt(x) === '2+ legs'),
       `a one-game night: Safe its side and total, Medium and Aggressive empty saying why word for word ("${whys[1]}")`);
-    const E = enumOwn(q, nid);
-    check(!E.best.med && !E.best.aggr && E.best.safe && E.best.safe.ids === s.legs.map(l => l.sk).sort().join(','), "and this file's own enumeration agrees"); }
+    const E = enumOwn(q, nid, 'lines'), rw = txt(q.d.querySelector(`#spSets [data-sp-game="${nid}"] [data-pb-tier="safe"] .pb-rule`));
+    check(!E.best.med && !E.best.aggr && E.best.safe && E.best.safe.ids === s.legs.map(l => l.sk).sort().join(','), "and this file's own enumeration agrees");
+    check(rw === ruleOwn(s, noplOwn(linesOf([gF]), [gF.id])) && rw === 'likeliest paying $2+ · no player lines yet', `with no player line posted, Safe is the likeliest without one and says why in its words ("${rw}")`);
+    const rt = (q.d.querySelector(`#spSets [data-sp-game="${nid}"] [data-pb-tier="safe"] .pb-rule`) || {}).title;
+    check(rt === titleOwn(2, 'player'), `and is titled with the rule with a player whole, its fallback said ("${rt}")`); }
   /* ties, on the page's search itself (spSearch on spPrep) over legs made up here, one a game: the dearer of two parlays
      level on their chance, and of two level on both the first by the legs' ids */
   { const amOf = d => d >= 2 ? 100 * (d - 1) : -100 / (d - 1), o = (gid, pp, d) => ({ sk: gid + '|a', gid, id: gid, kind: 'ml', side: 'a', p: pp, price: amOf(d) });
@@ -353,7 +405,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const bruteOwn = (q, legs) => JSON.parse(q.w.eval(`(() => {
     const legs = ${JSON.stringify(legs)}, LV = ${JSON.stringify(LV)}, { best } = (${ENUM_OWN})(legs, LV);
     const X = spPrep({ legs }), Xt = spPrep({ legs: legs.filter(l => l.kind !== 'prop') }), page = {};
-    for (const lv of LV) { const r = spSearch(X, lv, Xt.games.length ? spSearch(Xt, lv) : null); page[lv[0]] = r ? { p: r.p, d: r.d, ids: r.ids, n: r.n } : null; }
+    for (const lv of LV) { const r = spRule(X, lv, Xt.games.length ? spSearch(Xt, lv) : null, { pl: { lines: legs.filter(l => l.kind === 'prop').length, held: 0, none: 0, vig: 0 } }).r; page[lv[0]] = r ? { p: r.p, d: r.d, ids: r.ids, n: r.n } : null; }
     return JSON.stringify({ best, page });
   })()`));
   const agree = R => LVID.every(id => { const b = R.best[id], g = R.page[id]; return (!b && !g) || (b && g && b.ids === g.ids && Math.abs(b.p - g.p) <= 1e-12 * Math.max(1, b.p)); });
@@ -405,7 +457,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     const nLines = Object.values(L.games).reduce((t, x) => t + 2 * x.props.mains.length, 0);
     const t0 = Date.now(); q.w.eval(`spSet(${JSON.stringify(N1id)})`); const ms = Date.now() - t0;
     const e = JSON.parse(q.w.eval(`JSON.stringify(spEntry(${JSON.stringify(N1id)}))`)), pool = SC.nightPool(e);
-    const okAll = !!pool && e.tiers.every((t, i) => { const b = SC.nightBest(pool, SC.NIGHT_LEVELS[i]); return t.legs && b && b.ids === t.legs.map(SC.legKey).sort().join(','); });
+    const okAll = !!pool && e.tiers.every((t, i) => { const b = SC.nightBest(pool, SC.NIGHT_LEVELS[i], null, !!t.legs && t.legs.some(l => l.kind === 'prop')); return t.legs && t.legs.some(l => l.kind === 'prop') && b && b.ids === t.legs.map(SC.legKey).sort().join(','); });
     const nPl = poolOwn(stB, L, NOW, nightOwn(stB, NOW)).filter(l => l.kind === 'prop').length, bytes = JSON.stringify(e.pool).length;
     /* the guard's own reading of the same state and lines.json (every player line again by its own rules, every two legs
        of a game by its own copula, each level ranked over them): the set as the record would take it passes, and how
@@ -694,9 +746,9 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     if (N && N.up && realLines && Date.now() < Date.parse(N.tip) - 2 * H) {
       const T3 = LVID.map(id => r.w.spTier(`${N.id}:${id}`)), e = JSON.parse(r.w.eval(`JSON.stringify(spEntry(${JSON.stringify(N.id)}))`)), kept = SC.nightPool(e);
       const F = kept ? SC.nightFull('real', e.pool, kept, REAL, realLines, e.games, NOW, null) : { bad: ['no pool'], pool: null }, t0 = Date.now();
-      const B = F.pool ? SC.NIGHT_LEVELS.map(lv => SC.nightBest(F.pool, lv)) : [];
+      const B = F.pool ? SC.NIGHT_LEVELS.map(lv => SC.nightBest(F.pool, lv, null, true) || SC.nightBest(F.pool, lv)) : [];
       check(!F.bad.length && F.pool && LVID.every((id, i) => (!T3[i] && !B[i]) || (T3[i] && B[i] && T3[i].legs.map(l => l.sk).sort().join(',') === B[i].ids)),
-        `the real night's live levels are the guard's own reading's, with no leg limit (${F.pool ? F.pool.legs.length : 0} legs read; ${LVID.map((id, i) => `${id} ${T3[i] ? T3[i].legs.length + ' legs at ' + T3[i].dec.toFixed(3) : '-'}`).join(', ')}; ${Date.now() - t0} ms)${F.bad.length ? ': ' + F.bad.slice(0, 2).join(' | ') : ''}`);
+        `the real night's live levels are the guard's own reading's, with no leg limit and with a player wherever the night's legs make one (${F.pool ? F.pool.legs.length : 0} legs read; ${LVID.map((id, i) => `${id} ${T3[i] ? T3[i].legs.length + ' legs at ' + T3[i].dec.toFixed(3) : '-'}`).join(', ')}; ${Date.now() - t0} ms)${F.bad.length ? ': ' + F.bad.slice(0, 2).join(' | ') : ''}`);
     }
     const lockLines = [...r.d.querySelectorAll('#spSets .sp-lock')];
     check(lockLines.every(x => /^(Locks \w{3} \d{1,2}:\d{2} [AP]M ET, 2 hours before the first tip-off\.|Locked since \w{3} \d{1,2}:\d{2} [AP]M ET\..*|Locked since \w{3} \d{1,2}:\d{2} [AP]M ET\. Under way since .*)$/.test(txt(x))), `each real set's lock line is one of the tab's (${lockLines.length})`); }

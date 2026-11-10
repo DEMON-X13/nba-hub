@@ -3062,8 +3062,9 @@ reshaped on 7 November 2026: **one set a night**, across every game of the night
 Aggressive each the parlay of the night's legs likeliest to land at the price its level asks (since 8 November 2026 with
 no leg limit, Safe $2 on $1, Medium $4, Aggressive $8: "No leg limit", below; a team leg at the model's
 chance; from the first set the page with them takes after 7 November 2026 DraftKings' main lines on players join them, each at DraftKings' own fair
-chance: "Player legs, at DraftKings' odds", below), set out from 6:00 AM Eastern, locked 2 hours before the night's
-first tip-off, and kept and graded by the job as a record. Until that day each game on national TV had a set of its own
+chance: "Player legs, at DraftKings' odds", below; since 10 November 2026 each level holds at least one player leg wherever
+the night's legs make such a parlay, else it is the likeliest without one and says why: "At least one player leg", below),
+set out from 6:00 AM Eastern, locked 2 hours before the night's first tip-off, and kept and graded by the job as a record. Until that day each game on national TV had a set of its own
 ("Before 7 November", below). It is `app/parts/suggested.html`, set in at its `<!--part:suggested-->` marker after the
 Parlay Builder's, on the Parlay Builder's legs, sums, cards and builder (README "Parlay Builder"); the tab sits after
 Tonight. Its address is `#suggest` (a tab's address is its button's `data-tab`, read on load and on a hash change, and
@@ -3228,6 +3229,8 @@ takes and held to the exact search's answer:
 | 8 games at -400, 32 player lines a game | 0.03 s | 0.25 s | 1.4 s |
 | 7 November's player lines, every home side -600 to -1000 | 0.12 s | 0.12 s | 0.6 s |
 | Three of its games at -400, -350 and -300 | 0.07 s | 0.12 s | 1.9 s |
+| 10 November, 6 games, 775 legs (since the rule with a player) | 0.09 s | 0.11 s | 0.21 s |
+| 8 games at -900 whose only player legs are long shots (232 legs) | 0.02 s | 0.11 s | 0.45 s |
 
 The page as the review found it took over 8 s on every one of those games' Medium and over 30 s on their Aggressive, and
 over 12 s on every heavy-favourite night's Aggressive (30 of the test's 80 checks failed on it). Not held, and said: three
@@ -3283,6 +3286,103 @@ its own reading of the run's files (since the review of 8 November 2026: until t
 so a kept pool that could not make its own level was written and then refused on every run from the lock), and its own
 reading builds groups of three legs or more of a game itself ("The guard's own groups", under the record).
 
+### At least one player leg (the owner's call of 10 November 2026)
+
+He sent a screenshot of that night's Suggested Parlays, every level team legs alone, and asked "why is it still only
+showing team legs and not players", and of the Parlay Builder "I also dont see any player odds". The why: each level is the
+likeliest parlay paying its floor, and a team leg stands on the model's chance, which runs above DraftKings' (the Value
+tags), while a player leg stands on DraftKings' own fair chance, at which an Under breaks even and an Over gives up about
+12% ("Player legs, at DraftKings' odds", above). So at the same price a team leg always looks likelier, and that night the
+record's pool kept no player leg at all (its `pl`: 920 lines read, 172 out of the band, 60 held out, the 748 in the band all
+cut, none within 1% of a level). Offered "at least one player leg in every level" as the fix, his reply made plain he
+expects player legs on the tab. So:
+
+- each level (Safe, Medium, Aggressive) is the likeliest parlay of the night's pool, 2 legs or more and no most, paying at
+  least its floor ($2, $4, $8 on $1), **that holds at least one player leg** (a leg `spPool` marks `pl`), wherever the pool
+  makes such a parlay;
+- where it makes none (DraftKings has posted no player line for the night's games still to tip, or every player is held
+  out, out of the band, or none can make the level), the level is the likeliest such parlay without one, the rule before,
+  so **a level is never empty for want of a player**; it is empty only where no parlay at all meets its rule, as before;
+- the card's rule says which in a few words: "likeliest paying $2+ with a player", or "likeliest paying $2+ · no player
+  lines yet" (no player main line read for the night's games still to tip: the pool's `pl` counts none read, held, placed
+  on no club or priced with no margin) and "likeliest paying $2+ · no player leg fits" (lines read, and no parlay holding
+  one meets the level); its title says the rule whole;
+- everything else is as it was: the chances (the model's on team legs, DraftKings' fair chance on player legs), the floors,
+  the pool, one side and one total a game and one leg a player, the builder's own sums (`parlayProb`, `parlayDec`), the lock
+  2 hours before the night's first tip-off, and ties to the higher price, then the fewer legs, then the legs' ids.
+
+What it costs, said: the level is still the likeliest at its floor, now among the parlays holding a player, so where the
+best of all held none the level gives up some chance by the numbers it is ranked on. A player leg carries no model claim
+(DraftKings' own fair chance), so the level's chance is at least as honest as before, and the levels take short-priced
+Unders, which break even at that chance. On 10 November 2026's committed files at 17:00 UTC (6 games, 775 legs in the pool)
+Safe went from 52.07% (two team legs) to 49.92% with a player, Medium from 28.62% to 27.95% and Aggressive from 15.42% to
+14.87%; on 7 November's night only Safe moved (51.38% to 51.34%); on the speed test's night of eight -900 favourites whose
+only player legs are long shots (every player leg 45% to 53%), Safe falls from seven moneylines at 55.78% to one moneyline and an
+Under at 47.12%.
+
+**In the code** (`app/parts/suggested.html`): `SP_LEVELS` gains a sixth field, `'player'`, which a level's head carries as
+`need: 'player'`; the levels of 8 to 10 November are `SP_NOCAP_LEVELS` (no need), and `SP_OLD_LEVELS` before them. `spRule`
+is the rule's search: the best of every parlay (`spSearch`, as before); where it already holds a player leg it is the
+answer (the best of a wider field, and in this one) and nothing more is searched; where it holds none, `spSearchPl` (the
+walk with the rule's word, `spWalk`'s `o.pl`, seeded by `spAddPl`, the best of all with one player leg more, `spGreedyPl`,
+and the walk with at most two and three legs of a game) finds the best holding one; where there is none, the best of all,
+its why worked out by `spNoPlOf` and kept on the level as `nopl` (`lines` or `fit`). The proof is the search's own comment,
+(10), and below. A level built again after the lock for a player listed since is built under the rule its set was taken
+under (`spLvOf` reads the head: `need: 'player'` the rule with a player, a head without it the rule of 8 November, the old
+heads the old rule; the job hands `spRebuildOut` the head with its `need`), and the kept pool (`spPoolOut`) gathers, for a
+level holding a player, every option of every parlay holding one within 1% of the level's chance (`spWalk` with `pl` and
+`keep`), and for a level holding none every option of every parlay within 1%, as before (there is then no parlay holding a
+player to keep).
+
+**Why the search stays exact.** Every bound of the walk ((1) to (9), "The search, and why it is exact", above) bounds every
+parlay of a branch, so it bounds the parlays holding a player leg too and stands as it is. What the word changes is
+which parlays rank and where the walk stops: (a) a parlay is ranked only where it holds a player leg; (b) (1)'s stop: a
+branch that meets the floor with no player leg yet is not ranked, and any parlay of it that holds one holds the branch and
+some later player leg x, so it is no likelier than the branch with x alone, which pays the floor too (a leg only raises the
+price) and is a parlay the rule takes (x is the only leg of its player, and a player leg fits any game's side and total); so
+from there the walk tries each later game's player legs alone, likeliest first, and nothing else, and in a game's groups a
+group that pays the floor with no player leg grows only by one of that game's player legs (`onlyPl`) and is handed on to
+the walk for a later game's; (c) a branch with no player leg that needs one reaches at most its chance times the likeliest
+player leg of the games still to walk (`maxPLfrom`: a leg's own chance bounds every group that holds it, by (1)), and a
+group holding none, handed on, at most that from the next game on; (d) (8)'s let-go of a less likely leg of the same club,
+stat and side stands where that leg's group paid the floor holding a player leg, and both are player legs. The review of
+that day also found (9), the edge ratio, handed on as a bound to the groups a group grows to: it bounds a group that pays
+the floor and holds no leg of a correlation under 0 with its edge leg, so a grown group with such a leg (or a group that
+did not pay the floor) inherited a cut that was never proved; it now bounds the group itself alone (no case had met it: no
+answer of the speed test or the record's test moved when it went).
+
+**Its time** (`tools/test_suggest_speed.js`, each level as `spBuild` searches it, the rule's word where the best of all
+holds no player, in jsdom): 10 November's night (6 games, 775 legs) 0.09 s Safe, 0.11 s Medium, 0.21 s Aggressive; the
+night of eight -900 favourites whose only player legs are long shots (232 legs) 0.02 s, 0.11 s and 0.45 s; the levels the
+word moved (7 November's Safe, the two and three games' Safe, eight games at -900's Safe, 7 November's player lines at
+-600 to -1000's Safe) 0.03 to 0.17 s; every other level within the times above, the best of all already holding a player
+leg. Every answer the word moved was held, before it went into the test, to the record's guard's own reading of the same
+legs (every pair by its own copula, its own groups, its own enumeration with the word): the same parlay on all 21 levels of
+the seven nights, and on the six of the two new ones.
+
+**The record.** Every set taken from `PLAYER_FROM` (`tools/suggest_check.js`, 18:00 UTC on 10 November 2026, before the
+change could reach `main` and before that night's 22:30 UTC lock) is held to the rule with a player, its levels' heads
+carrying `need: 'player'`; a set taken before keeps the rule it was taken under (the heads without `need`, held by
+`NIGHT_LEVELS_NOCAP`, or the old heads), byte for byte, and every check it had; a set of the heads without `need` taken from
+`PLAYER_FROM` is refused unless the file it is held to already holds it so, taken at the same time (a run of the page
+before the change that landed after the cutoff: the `NOCAP_FROM` pattern, `nocapOk`). That night's set, taken at 15:42 UTC
+on the rule before and taken again so by the job's runs from 18:47 UTC (the page before the change, after the cutoff:
+each kept only as the file holds it), is rewritten by the first run of the new page before its lock, as a set is
+rewritten until its lock.
+The guard holds the new rule on its own: a level's head its rule's (`need` among it); a level holding a player leg ranked
+over every parlay holding one by its own enumeration with the rule's word (`nightBest`'s `needPl`: a parlay ranked only
+where one of its games' options holds a player leg, and a branch holding none let go once its chance times the likeliest
+such option of a later game is under the best's, and at once where no later game has such an option: the review of that
+day found the walk, with no best yet on a night with no player line, listing every parlay of the night, about 36 s a call
+on nine games and 4 to 8 minutes on ten, six calls a set, so the record's step would have overrun its cap on every run that took a big night before DraftKings
+posted its props, and the smoke's tests step too); a level holding none ranked over every parlay, standing only where its
+pool makes no parlay holding one that its rule takes ("holds no player leg, and the pool makes a parlay holding one that
+its rule takes"), and saying why, `nopl`, as the guard reads its pool's counts (`noPlOf`: `lines` where none was read,
+held, placed on no club or priced with no margin, else `fit`); a level holding one saying no why. On a set the run took,
+that is on the guard's own reading of the run's files (every player leg read again, every pair by its own copula, its own
+groups: a game's team legs are a side and a total at most, so every group of three legs or more it builds holds a player
+leg), and on the pool the set keeps.
+
 ### On the page
 
 Top to bottom: the heading and the night's date; the record's pills; Refresh odds and its status line; the night's set,
@@ -3323,7 +3423,11 @@ above):
 - **Aggressive**: the likeliest of 2 legs or more at 8.00 or more, +700 or longer ("likeliest paying $8+").
 Until then Safe was the likeliest 2-leg parlay ("likeliest pair") and Medium and Aggressive took 2 to 5 legs
 (`SP_OLD_LEVELS`: a set taken then is drawn with its own rule; an empty level's pill reads "2+ legs" where it read "2–5
-legs").
+legs"). Since 10 November 2026 each is the likeliest such parlay holding at least one player leg wherever the night's legs
+make one, its rule "likeliest paying $2+ with a player"; where they make none, the likeliest without one, "likeliest paying
+$2+ · no player lines yet" or "· no player leg fits" ("At least one player leg", above; `SP_LEVELS`' sixth field,
+`'player'`; a set taken from 8 November until then, `SP_NOCAP_LEVELS`, is drawn with its own words, "likeliest paying
+$2+").
 One side (the moneyline or the spread) and one total a game, as the builder takes them (`pbFits`, `slipWhy`); ties go to
 the higher price, then the fewer legs, then the legs' ids (`spBetter`). The search is exact (`spSearch`): a parlay's
 chance and price are the products of its games' own (`parlayProb` and `slipDec` work game by game), so each game's options
@@ -3429,7 +3533,7 @@ well"):
 | The NFL hub | Here | Why |
 |---|---|---|
 | Prime time: a Thursday, Sunday or Monday kickoff at 7:00 pm Eastern or later, a set a game, and the Sunday slot's games together | Every game of the night together, never preseason, one set (until 7 November 2026: a set a game on national TV) | The NBA has games most nights at every hour; the owner's call of 7 November 2026: one game's team legs make 2 legs at most |
-| Safe the likeliest pair; Medium to Extreme the best expected return over 25%, 12% and 5% (since its app v138, the least costly at DraftKings' fair chance) | The likeliest parlay of any size from 2 paying $2 (Safe), $4 (Medium) and $8 (Aggressive) or more on $1 (until 8 November 2026 Safe the likeliest pair and the others 2 to 5 legs) | The owner's calls of 7 November 2026, "the best possible model confidence to match what level bet", and of 8 November, "we can eliminate maximum legs for all the sections" |
+| Safe the likeliest pair; Medium to Extreme the best expected return over 25%, 12% and 5% (since its app v138, the least costly at DraftKings' fair chance) | The likeliest parlay of any size from 2 paying $2 (Safe), $4 (Medium) and $8 (Aggressive) or more on $1, holding a player leg wherever the night's legs make one (until 8 November 2026 Safe the likeliest pair and the others 2 to 5 legs; until 10 November no player leg asked) | The owner's calls of 7 November 2026, "the best possible model confidence to match what level bet", of 8 November, "we can eliminate maximum legs for all the sections", and of 10 November, "why is it still only showing team legs and not players" |
 | Value picks first, thin legs to fill | No value bar: every team leg in the builder's band, the far-off guard kept | So the levels always fill; the guard keeps the model's widest misses out |
 | One night a week's prime-time games, "week 6" in the head | The first Eastern date with a game to come, its date in the head, up from 6:00 AM that morning | The NBA has no weeks |
 | Lock 2 hours before kickoff | 2 hours before the night's first tip-off | |
@@ -3505,7 +3609,11 @@ line for its games yet"), and the guard passed it held to the committed file.
 file; since `NOCAP_FROM` (8 November 2026) a night entry's levels are the new rule's (2 legs or more, no most, $2, $4,
 $8) or, on a set taken before it or held so by the file it is held to, the old rule's (`NIGHT_LEVELS_OLD`), its heads
 saying which, and its own enumeration (`nightBest`) takes options of any size and leaves a branch by its own frontier of
-what the later games' options can land and return (the page's (6) on the pool's own figures). The rest of it, as before.
+what the later games' options can land and return (the page's (6) on the pool's own figures); since `PLAYER_FROM` (10
+November 2026) a night entry's levels are the rule with a player's (their heads carrying `need: 'player'`, each level
+holding a player leg wherever its pool makes a parlay holding one, else saying why, `nopl`), or, on a set taken before it
+or held so by the file it is held to, the rule it was taken under (`NIGHT_LEVELS_NOCAP`, `nocapOk`): "At least one player
+leg", above. The rest of it, as before.
 A night entry: keyed on its own season, date, first tip-off and night id; its night id its season's and date's; each
 game's id of its season, date and clubs, never preseason, tipping on the night's Eastern date (Intl); its tip-off its
 games' first and its last their last; locking exactly 2 hours before the first; taken before the lock; its levels the
@@ -3539,6 +3647,56 @@ before (the job takes the next night's set too); a night no run reached before i
 then shows its own set, said so).
 
 ### The checks
+
+**At least one player leg** (the owner's call of 10 November 2026). The record's test runs every night of its own on the
+rule: its own enumeration takes each night's player legs beside its team legs (its own reading of DraftKings' main lines,
+the props model's rows and the report) and ranks every level by the rule's word (`levelsP`: every parlay by brute force,
+the likeliest holding a player leg where any meets the level, else the likeliest of all and the why it works out itself,
+`noplOwn`), so A, B and D (D1's night holds two players' lines: every level holds a player, and on A the rule before would
+take team legs alone on a level) and T, N, Q and U (no player line: every level the likeliest of all, saying "lines") hold
+it, with P, X and W; and Y: Y1 three games whose rule before takes team legs alone on Safe, the levels each holding a player,
+the kept pool making every level again by the guard's own enumeration with the rule's word, and the guard refusing a level
+with its player leg taken off, a why on a level holding a player, and the same set under the heads of the rule before taken
+after `PLAYER_FROM`; Y1b a page with the word dropped (every level the best of all, saying "no player leg fits") refused at
+the take by the guard's own reading of the run's files; Y2 no player line posted ("lines") and Y2b lines posted with both
+players listed Out ("fit"), every level built, never empty for want of a player, and a why that is not its pool's refused;
+Y3 a one-game night, every level a group of its legs holding a player; Y4 the cutoff on the real record's sets of the rule
+before (held as the guard holds them; one taken after `PLAYER_FROM`, as the job's runs from 18:47 UTC on 10 November
+2026 took that night's, refused with no file to hold it to; one taken before it standing as it was taken with no file to
+hold it to, re-dated after `PLAYER_FROM` refused, and kept where the file it is held to holds it so); Y5 a level built
+again after the lock under each rule, the rule with a player's and the rule before's (heads without `need`, taken before
+`PLAYER_FROM`), each its own enumeration's under its rule and the guard passing; Y6 a night of ten games with DraftKings'
+game lines and no player line, as the read a day ahead has them: every level "lines", the job (its own check of the guard
+included) within 120 s and `suggest_check.js` within 60 s, and the guard's walk for a parlay holding a player finding none
+on the kept pool in milliseconds. The smoke's own enumeration (`ENUM_OWN`) carries the word (its levels the rule's, and
+the rule before's beside them), so every level it holds is the rule's: its made-up night (where the word moves Medium and
+Aggressive), the players listed and the lines with no margin, the one-game night with no player line (Safe "likeliest
+paying $2+ · no player lines yet", word for word), the fair-pair night, the eight favourites at -900, the 36 random nights
+(the page's levels by `spRule`, as `spBuild` takes them), the 15-game night and the real night (the guard's own reading
+with the word); the cards' rule words on its own reading (`ruleOwn`, `noplOwn`), and a kept level drawn back in its own
+rule's words ("likeliest paying $8+" for the rule before, "with a player", "· no player lines yet", "· no player leg
+fits"); since the review of 10 November 2026 each rule's title word for word (`titleOwn`: the only place the page states
+the rule whole, on the live cards, the kept levels of each rule and the one-game night's fallback), and a live night whose
+player lines are posted with every player on them listed Out, each card "· no player leg fits".
+`tools/test_suggest_speed.js` holds every level as `spBuild` searches it (`spRule`) to its answer and to holding a player
+leg, with 10 November's night and the long shots' night added.
+
+The rule's breaks, each planted on a copy of the tree (the page built again where it is the page's), each turn the checks
+red: the word dropped (`spRule` returning the best of all, still headed "with a player": the record's
+test 13 of 17, the job refused at its first run and the test stopped; the smoke 15; the speed test 18 of 137); the fallback
+dropped (a level left empty where no parlay holds a player: the test 13 of 17, the job refused, "empty, and the pool makes
+a parlay its rule takes", on a night with no player line; the smoke 2, one a throw; the speed test 0, every fixture night
+having player legs); the guard accepting a level of team legs alone where its pool makes one holding a player (its check
+taken out: the test 2 of 306, Y1's planted level and Y1b's page with the word dropped written; the smoke 0); the cutoff
+reversed (`nocapOk` taking the rule before from `PLAYER_FROM` and refusing it before: the test 3 of 306, Y1 and Y4 twice;
+the smoke 0); and a bound that prunes the winner with a player (a branch needing a player leg bounded by the later games'
+player legs alone, `maxPLfrom[j + 1]`: the test 13 of 17, the job refused by the guard's own reading at its first run; the
+smoke 8, 12 of the 36 random nights differing; the speed test 4 of 137, 7 November's Safe and 10 November's three levels).
+The review's, the same way: the guard's let-go where no later game has a player option taken out (the record's test 2 of
+308, Y6's job killed at its 120 s bound with no entry); the rule's title saying the opposite ("holds NO player leg": the
+smoke 4, every title it reads); the title's wording before the review ("at DraftKings’ fair chance" read as the level's
+chance: the smoke 4); and the why always "lines" (the smoke 1, the live night with every player Out; the record's test 1 of
+303, Y2b refused by the guard).
 
 **No leg limit** (the owner's call of 8 November 2026). The record's test runs U, a night of fourteen heavy favourites
 (home moneylines at -900 and -700, the model's 92% and 90%, two with a total): the job's Safe takes 6 legs to pay $2

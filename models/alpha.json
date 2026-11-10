@@ -1378,8 +1378,8 @@
    "spread": 0
   },
   "2027_20261110_LAC_PHX": {
-   "pHome": 0.4796,
-   "spread": 0.6
+   "pHome": 0.4863,
+   "spread": 0.4
   },
   "2027_20261110_MIA_UTA": {
    "pHome": 0.2989,
@@ -2061,5 +2061,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-10T18:41Z"
+ "generated": "2026-11-10T20:28Z"
 }

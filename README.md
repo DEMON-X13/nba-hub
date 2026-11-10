@@ -1052,16 +1052,19 @@ those). The rule:
 - Had the bar's 30,000 been in first, the bar's own decision would stand and the early stop would do nothing; once any
   decision is written it does nothing either.
 
-What follows on the page: the Parlay Builder's Top 50 lines and their Value picks take no player line (`pbPropsOn`,
-which reads any FAIL), and no list or set takes the model's chance on one; Suggested Parlays' night sets, from the night
-after 7 November 2026, take DraftKings' main lines on players at DraftKings' own fair chance, with no model claim (the
-owner's call of that day: README "Suggested Parlays", "Player legs, at DraftKings' odds"), and the Player props view
+What follows on the page: the Parlay Builder's Top 50 lines and their Value picks take no player line at the model's
+chance (`pbPropsOn`, which reads any FAIL), and no list or set takes the model's chance on one; Suggested Parlays' night
+sets, from the night after 7 November 2026, take DraftKings' main lines on players at DraftKings' own fair chance, with no
+model claim (the owner's call of that day: README "Suggested Parlays", "Player legs, at DraftKings' odds"), and so, from
+10 November 2026, does the Top 50 in a part of its own (README "Parlay Builder", "Player lines in the Top 50"); the
+Player props view
 says so from the decision's own numbers: "Stopped early on 5 November 2026, the owner's call, at 12,298 graded lines: behind DraftKings on both scores and its
 flat bets down 223 units. FAIL: its chances are no longer used in the Parlay Builder's Top 50 lines or Suggested
 Parlays, and its calls have stopped; the projections stay for reference." The Top 50's note and a set's empty level say
 why in the same terms (`pbPropsOffWhy`): "no player lines: the props model's trial was stopped early as a FAIL on 5
 November 2026, so the sets take none." (the bar's own FAIL, never reached now, would read "failed its shadow ledger's
-bar"), and those words are what the suggestions record keeps for a level it locks empty. The Parlay Builder's lead no
+bar"), and those words are what the suggestions record keeps for a level it locks empty (the Top 50's note no longer
+says it since 10 November 2026, when the list took DraftKings' player lines). The Parlay Builder's lead no
 longer calls the model on trial, and a player's leg a visitor adds by hand from the Player props view is drawn in the
 builder as its row in the view is, at DraftKings' fair chance, marked "failed trial", the model's chance small and muted
 for reference only, which no list or set takes (README "Parlay Builder", "After the FAIL", 6 November 2026). The Player
@@ -2399,7 +2402,9 @@ went").
 **The Top 50 lines** (`getPbTop`, `pbTopBuild`): every leg on the ticks that qualifies, in two parts, **Value picks**
 (each marked Value) then **Other lines** (the thin-edge legs, then the game totals), each part ranked by what $1 on it is
 expected to make at the model's chance (the chance times the decimal price, less the $1), best first, the totals set after
-every thin-edge line, 50 lines at most in all (`PB_TOP_N`). Each bet is listed once: a milestone k+ lands exactly when the
+every thin-edge line, 50 lines at most in all (`PB_TOP_N`); and since 10 November 2026, once the props model has failed,
+a third part after them, **Player lines**, DraftKings' main lines on players at DraftKings' own fair chance, a mix of
+stats, the room shared (each part 25 where it has that many: "After the FAIL", "Player lines in the Top 50", below). Each bet is listed once: a milestone k+ lands exactly when the
 player's main Over at k - 0.5 does (DraftKings' NBA rungs sit at the main line + 0.5), so where that main Over qualifies
 the rung is left out and its slot goes to the next line; a whole-number main line, an Under, a main Over that does not
 qualify and the same rung in another game never take a rung's place. Each row gives its rank, the player or team, the bet
@@ -2428,11 +2433,14 @@ same). Then "The job reads them through the day; Refresh odds reads them now." (
 alone counts). Until the review of 7 November 2026 a game no read covered was counted with those found to have none, so
 with `lines.json` not loading the line said "No DraftKings lines yet for your 9 games" under the note saying the lines did
 not load, and the time was given as "last read". Where player bet types are
-ticked the player-lines reason follows as a sentence of its own ("No player lines: the props model’s trial was stopped
-early as a FAIL on 5 November 2026, so the list takes none."); with player types alone, that reason alone; with lines on
-every ticked game and nothing qualifying, "No line on your picks qualifies yet: tick more games or bet types." as
-before. Where the list is not empty and some ticked games still have no line, the same sentence is a note over it.
-`pbWhy`, the all-games levels' empty line, is drawn nowhere and was left as it was; Suggested Parlays already said this
+ticked and DraftKings has posted no player main line on the ticked games, the player-lines reason follows as a sentence
+of its own ("No DraftKings player lines yet for your 3 games (as of Tue 11:37 AM)."; until 10 November 2026 "No player lines: the props
+model’s trial was stopped early as a FAIL on 5 November 2026, so the list takes none.": "Player lines in the Top 50",
+under "After the FAIL", below); with player types alone, that reason alone; with lines on every ticked game and nothing
+qualifying, "No line on your picks qualifies yet: tick more games or bet types." as before. Where the list is not empty and some ticked games still have no line, the same sentence is a note over it.
+`pbWhy`, the all-games levels' empty line, is drawn nowhere and was left as it was (but that on a FAIL, since the review
+of 10 November 2026, it says those levels' pool takes no player line, "No player lines: the props model’s trial was stopped
+early as a FAIL on 5 November 2026, so these levels take none.", never that DraftKings has posted none); Suggested Parlays already said this
 case per game (`spWhy`: "no DraftKings line has been read for it yet"). `tools/smoke_parlay.js` section 9b holds it word for
 word on its own reading of the lines (`hasGlOwn`, `asOfOwn`, `noGlOwn`, never the page's), on made-up games at any hour: no
 line on any game, lines on some, a spread alone and a total alone (lines, none qualifying), lines on all and none
@@ -2516,8 +2524,9 @@ PASS:
   it marks ("Projected failed trial", never "Projectedfailed trial"), each titled that it is for reference only.
 - **Unchanged**: a team leg (the board model's chance, its band, "fair N%"), the board model's chance for a parlay of team
   legs alone, every price and payout, the same-game sums and what the builder adds. Suggested Parlays, the Top 50, Tonight,
-  the Record and X Parlays show no props model chance on a FAIL (the sets and the list take no player line), so nothing
-  there moved.
+  the Record and X Parlays show no props model chance on a FAIL (until 10 November 2026 the list took no player line, and
+  the sets none until 7 November; since, each takes DraftKings' main lines on players at DraftKings' own fair chance, with
+  no model claim: "Player lines in the Top 50", below, and README "Suggested Parlays"), so nothing there moved.
 
 `tools/smoke.js` section 8 holds it: on the trial (no decision) and on three FAILs (the early stop, the bar's own and the
 real ledger's) on its own game, a player's main line, his milestone (est.) and the home side to win are ticked by the
@@ -2587,6 +2596,158 @@ Breaks planted one at a time in a copy of the built page (`NBA_HTML=<copy> SMOKE
 | the no-fair cell leading with the model's chance in full ink; the no-fair summary leading with the model's chance; the no-fair card leading with it, never saying why | §8: a player's leg with no DraftKings fair chance reads …; its summary leads with no chance …; the card says why there is no fair chance first (one each) |
 | README's sentence that the view's "Model on trial" tag is unchanged | `test_props.js` part 7: README's shadow ledger says the view's FAIL tag and summary |
 
+**Player lines in the Top 50** (the owner's ask of 10 November 2026, with a screenshot of Suggested Parlays: "why is it
+still only showing team legs and not players", then "when i go to the parlay builder I also dont see any player odds and
+there is only 13 lines when you can fit several others."). From the FAIL of 5 November the list took no player line
+(`pbPriced` prices a player's leg only while `pbPropsOn()`), so on a night of 13 qualifying game bets it was 13 lines.
+Suggested Parlays' night pool took players' lines back on 7 November, at DraftKings' odds (README "Suggested Parlays",
+"Player legs, at DraftKings' odds"); the Top 50 never did. Now, once the props model has failed (`pbPropsOn()` false; on
+the trial the list is as it was, the model's chance on every player leg), the list has a third part after the game bets,
+**Player lines**, at DraftKings' own fair chance and with no model claim. `pbPropsOn` stays off, and the failed model's
+chance is used for nothing but the muted figure the matchup bubble already draws.
+
+- **Which lines** (`pbPlayerLines`, in `app/parts/parlay.html`, the twin of `spPool`'s player half in
+  `app/parts/suggested.html`: the two change together): every player's **main line** DraftKings has posted for the
+  ticked games (`lines.json`'s `props.mains`, or a newer Refresh odds read: `pbPr`), on a stat the page offers
+  (`PROP_STATS`), with **both prices on file**; on a player the props model places in the game on one of its two clubs
+  (`pbWho`) whom neither the game's out lists nor today's report lists (`pbHeldWhy`, Day-To-Day among them, a probable
+  player playing; such a line is counted in the note on the report, as a game leg's was); never a line priced with no
+  margin (its two implied chances summing under 1; counted, `vig`); each side at DraftKings' fair chance by the page's
+  rule (`legFair`: the whole margin on the Over, so an Under's is its own implied chance and an Over's 1 less the
+  Under's), never est., from 45% to 97%; no milestone, no Yes market, nothing one-sided; then the reader's boxes
+  (`pbAllows`: the games, **Player overs**, **Player unders**).
+- **One side a line.** The builder holds one leg a player a stat (`slipWhy`: "One leg per player per stat"; the levels'
+  `pbKeyOf` and `pbFits` read a line's two sides as one key), so a line's Over and Under could never both go in, and
+  the list shows only the likelier of the sides its boxes leave in (`pbLikely`: DraftKings' fair chance, ties within 1e-9
+  to the lower key, which puts an Over before its Under when both are 50%, at a +100 Under). With Player overs unticked
+  a line's Under is listed where its Over was; with the whole margin on the Over, the Under is the likelier side unless
+  the Over is a clear favourite (tonight 389 of the 460 lines that qualify are Unders).
+- **The order** (`pbPlayerMix`): a mix of stats, each stat's likeliest first, the NFL hub's rule of its app v141 (its
+  CLAUDE.md, "The Top 50's player lines are a mix of bet types"): round 1 takes each stat's likeliest line, round 2
+  each stat's second, a stat run out skipped, each round likeliest first, the part that order cut where the room ends.
+- **The room** (`PB_TOP_N` 50, `PB_TOP_MIN` 25): with G game bets qualifying (their two parts and order as before: the
+  Value picks, then the other lines, the totals last) and P player lines, the list takes g = min(G, max(25, 50 - P)) game
+  bets and then min(P, 50 - g) player lines: each part 25 where it has that many, the one with more filling the rest. The
+  game bets come first, the player lines after, the ranks running on.
+- **Each row**: its rank, the player (his name the matchup bubble's button, `glanceName`, handed the props model's chance
+  as a night set's card hands it, which the bubble draws muted, "failed trial"), the bet and its game, DraftKings' price,
+  "fair" (DraftKings' fair chance, titled so, labelled as a game row's and a night card's are), what $1 wins and what $1
+  is expected to return at that chance (an Under +$0.00; an Over below it), and the Add. No Value mark, no model column,
+  no far-off flag. Its four cells sit on the game rows' five columns with the model's column left empty
+  (`.pb-tcs.pl>.pb-tc:nth-child(2)` starts at the third), so price, fair, wins and expected stand under the game rows'
+  own at every width (until the review of 10 November 2026 a grid of four put the price under the game rows' model).
+- **Add** puts the leg in the builder exactly as a night set's player leg goes in (`slipToggle(pbSlipOf(l))`, the leg a
+  game's Player props stores), so the builder draws it as every player leg after the FAIL ("After the FAIL", above:
+  DraftKings' fair chance first with its band, the props model's muted beside it, marked failed trial) and prices it by
+  the same sums (`parlayProb`, `parlayFair`, `slipDec`).
+- **The words**: the part's heading "Player lines" with its count, one line under it, "At DraftKings’ odds: no model
+  claim."; the lead adds "then the player lines at DraftKings’ odds, a mix of stats". The foot, on a FAIL (`pbFootFail`;
+  on the trial `pbFootTrial`, the foot as it was), says the game bets' rules and the Player lines' apart, shorter than
+  before: "Game bets: DraftKings’ price … and a model chance of 45% to 97%, at or above the price’s implied chance …
+  Player lines: DraftKings’ main lines priced both ways, at DraftKings’ fair chance (the whole margin on the Over), 45% to
+  97%, the likelier side the boxes leave, with no model claim (…)", then the order, the room and expected on $1 (until
+  the review of 10 November 2026 it said every line had a model chance at or above its price's implied chance and a
+  far-off rule, false of the Player lines). Where DraftKings has posted no player main line on the ticked games, a note
+  over the game bets (or the empty line) says so (`pbNoPl`), in the game lines' sentence's shape (`pbNoGlSay`): "No
+  DraftKings player lines yet for your 3 games (as of Tue 11:37 AM).", as of the oldest read that found none, "No
+  DraftKings player lines yet for 2 of your 3 games (…). DraftKings’ player lines for 1 of your 3 games have not been read
+  yet." where some were never read, "… for your game …" with one ticked, and "DraftKings’ player lines for your 3 games
+  have not been read yet." ("did not load." where `lines.json` did not load); with both player boxes off nothing is said
+  of player lines. Nothing on the tab says the list takes no player line.
+- **A Refresh odds press** reads DraftKings' player lines now (`PP_LIVE`); `pbPr` takes it over `lines.json`'s where it
+  is newer by its time (a 404, none posted, is a read with no line), and the list's cache key carries it (`pbDataSig`), so
+  the Player lines follow a press with no other read beside it.
+
+Tonight, on the published `state.json` and the job's `lines.json` of 15:37 UTC (16 games over two dates, DraftKings'
+player lines on tonight's 6): 16 game bets qualify and 460 player lines (30 more held out for the report, none with no
+margin), so the list is the 16 game bets (3 Value picks, 13 other lines) and then 34 player lines: Bobby Portis Under 1.5
+threes -233 (70% fair), Jalen Green Under 1.5 steals -223 (69%), Neemias Queta Under 1.5 blocks -215 (68%), Dillon
+Brooks Under 2.5 assists -194 (66%), Josh Green Under 2.5 rebounds -172 (63%), Jalen Green Under 7.5 assists + rebounds
+-150 (60%), Aday Mara Under 8.5 points -135 (57%), Klay Thompson Under 16.5 points + assists -129 (56%), Collin
+Gillespie Under 16.5 points + rebounds + assists -128 (56%) and Alex Caruso Under 9.5 points + rebounds -128 (56%) as
+round 1, then each stat's second. All 34 listed are Unders, each +$0.00 expected on $1 at DraftKings' fair chance;
+the 71 Overs that qualify, none of them listed, run from -$0.09 to -$0.12 (to -$0.13 with Player unders unticked, when
+304 Overs qualify). In Chromium at 390, 914 and 1280 wide on that copy, served locally, with a player line and a
+game total added by their Adds: no sideways scroll, every one of the tab's 144 controls 44px or taller, no page error, and
+each player row's price, fair, wins and expected cells ending where the game rows' own do (measured after the review of
+10 November 2026: at 1280 both at 803, 959, 1037 and 1139 px, the game rows' model at 881; at 914 at 153, 309, 387 and
+489; at 390 price and fair on the first line and wins and expected on the second, as a game row's).
+
+`tools/smoke_parlay.js` holds it, blocking, on its own reading (`plOwn`, `mixOwn`, `topOwn`, `plRead`, `plWant`, never the
+page's functions) and fixtures of its own at any hour: on a made-up early-stop FAIL, the list line for line (5 game bets,
+then 7 player lines worked by hand: each line's likelier side, Cy Center's rebounds Over at 54.5% where his Under is
+45.5%, two ties to the lower key, Ivy Doubt held for the report and counted in the note, Gus Out and an unplaced player
+never a line), each player row's price, fair, wins and expected on $1 (an Under +$0.00, an Over less), no mark or
+model figure, its cells on the game rows' five columns with the model's left empty (jsdom's cascade), the heading, its
+line, the list's start and name, the lead and the foot word for word (its own copy, `FOOT_OWN`), and nothing saying the
+list takes none; the page's own list (`getPbTop`) in the same order; the bubble on a player line (price, fair, the
+props model's muted, failed trial); Add (the builder's leg field for field, its row, a second leg of the game priced by
+this file's copula of DraftKings' fair chances and of the model's, and its same-game price; a second press taking it
+out); the boxes (Player overs off, an Under in an Over's place; Player unders off; a game unticked, its lines gone and the
+note counting the ticked games alone; Players only); a line at +105 both ways left out; the rule's other parts on lines of their own (a main on turnovers, a stat the
+page offers none for; one on a player the props block places on a third club; one with no Under price), none listed and
+each shown to be listed with its own rule off (`plOwn`'s `relax`); a Refresh odds press (ESPN's scoreboard refused, the
+props read answering one game with a line moved, one added and one gone, the others 404): the Player lines the press's,
+row for row, by this file's own reading of the newer read (`prOwn`, by its time); a read older than `lines.json`'s,
+planted, never taken; the same read made newer with no scoreboard read beside it, the list drawn again on it; a press
+finding none posted on every game, the game bets alone and the note dated by the press; Players only, the four levels
+the tab draws nowhere (`getPbTiers`) saying their pool takes no player line; no player lines (none posted on any game,
+two read and one never, all read, read at two times as of the older, none read, Players only, `lines.json` not loading,
+one game ticked never read and read with none, both player boxes off with nothing said), the list the game bets alone and
+the words word for word; the mix on a made-up game of nine lines on four
+stats, worked by hand and shown to differ from the plain order and from rounds left unsorted; the room on sixty made-up
+games (60 and 60 qualifying: 25 and 25; 60 and 10: 40 and 10; 10 and 60: 10 and 40; 60 and 0: 50 game bets); no Player
+lines part on the trial; and the real state and `lines.json`, line for line. Breaks planted one at a time in a copy of
+the built page (`NBA_HTML=<copy> SMOKE_ONLY=pb`), each turning it red (every count as of the review of 10 November 2026,
+whose findings added the last fourteen):
+
+| Planted | Checks failed |
+|---|---|
+| a player line at the props model's chance, not DraftKings' fair chance | 15 |
+| both sides of a line listed | 8 |
+| the less likely side of a line listed | 8 |
+| a player the report lists not held out | 11 |
+| a line priced with no margin kept | 1 |
+| the 45% to 97% band dropped | 1 |
+| Player overs and Player unders ignored | 2 |
+| the games' boxes ignored for the player lines (pbPlayerLines on every game) | 1 |
+| no mix: the plain order by chance | 6 |
+| each round left in the stats' own order | 11 |
+| ties to the higher key | 8 |
+| no 25 each: the game bets take the room | 2 |
+| the player lines before the game bets in the list (getPbTop) | 2 |
+| the Player lines part drawn before the game bets | 14 |
+| a Player lines part on the trial too | 3 (and the section then stops on a throw) |
+| expected on $1 at the props model's chance | 15 |
+| a model column in a player row | 17 |
+| a Value mark on a player line | 15 |
+| the bubble handed DraftKings' chance as the props model's | 1 |
+| "fair" labelled "model" | 14 |
+| Add putting the leg in with no other price | 3 (and the section then stops on a throw) |
+| the heading's count one off | 4 |
+| the player lines' ranks starting again at 1 | 13 |
+| the line under the heading changed | 1 |
+| the lead not naming the player lines | 1 |
+| the old "so the list takes none" words back | 10 |
+| the no-player-lines note dropped | 8 |
+| as of the newest read, not the oldest | 1 |
+| the report's note not counting player lines | 1 |
+| a read with no main line counted as posted | 7 |
+| review R1, F1: a press never read, the Player lines from `lines.json` alone | 3 |
+| review F1: a press read taken however old | 1 |
+| review R1: the press read dropped from the list's cache key (`pbDataSig`) | 3 |
+| review F2: a stat the page offers no line for kept | 1 |
+| review F2: a player of a third club kept (`pbWho` without its club test) | 1 |
+| review F2: a one-sided line taken at its one price (the both-price, est. and margin tests, each of which holds it out, relaxed for it) | 1 |
+| review R2: the four levels' reason back on what DraftKings posted, on a FAIL | 1 |
+| review R3, F3: the old foot back on a FAIL | 2 |
+| review F3: "the likelier side", not "the likelier side the boxes leave" | 1 |
+| review F4: the player rows labelled "DK fair" | 14 |
+| review F5: the player cells on a grid of four again | 1 |
+| review F6: one game said "your 1 games" | 2 |
+| review F6: the no-player-lines note with both player boxes off | 1 |
+| review F6: the old no-player-lines words ("of these 3 games …; the other game’s have not been read yet") | 9 |
+
 ### Where the NBA differs, and why
 
 | The NFL hub | Here | Why |
@@ -2595,7 +2756,7 @@ Breaks planted one at a time in a copy of the built page (`NBA_HTML=<copy> SMOKE
 | The payload's prices, a Refresh odds press over them | `lines.json`, read once a page load, no-store, the first time the tab opens (never on load or a timer), and a press's read, the newer of the two for each game's lines and its props; every price DraftKings' real one, nothing estimated | The NBA's prices come from the lines feed, which carries both prices on every line |
 | A moneyline's or a cover's chance from the NFL's game model | A moneyline's the player model's win chance (the number Tonight shows); a spread's Phi((m + h) / sigma), m the side's expected margin (minus the model's spread for the home side) and h its line, sigma 14.5 points | The NBA's game model gives a margin; sigma is measured, below. Until this change the page put no chance on a spread |
 | A total at the market's own chance | The same: its two prices with the margin out in proportion (50% where one is missing), never a Value pick, last | The NBA's total has never been tested against the market |
-| A player's chance from the props model, on a book price | The props model's (README "Player props"), which is **on trial**: marked so beside its chance on every Top 50 row, builder row and level card, the mark titled with the shadow ledger's count, and said once in the lead; never a player it does not project or today's report lists, Probable aside (the next row); none at all once its ledger fails its bar, or the trial is stopped early as a FAIL (5 November 2026, README "Player props"), which `tools/smoke.js`'s Parlay Builder and Suggested Parlays sections hold on a made-up early decision; and from then a leg added by hand drawn in the builder at DraftKings' fair chance, marked "failed trial", the model's muted ("After the FAIL", above) | The owner's call of 25 October 2026: props in the Top 50, Value picks allowed, every one marked |
+| A player's chance from the props model, on a book price | The props model's (README "Player props"), which is **on trial**: marked so beside its chance on every Top 50 row, builder row and level card, the mark titled with the shadow ledger's count, and said once in the lead; never a player it does not project or today's report lists, Probable aside (the next row); none at all once its ledger fails its bar, or the trial is stopped early as a FAIL (5 November 2026, README "Player props"), which `tools/smoke.js`'s Parlay Builder and Suggested Parlays sections hold on a made-up early decision; and from then a leg added by hand drawn in the builder at DraftKings' fair chance, marked "failed trial", the model's muted ("After the FAIL", above), and from 10 November 2026 DraftKings' main lines on players listed again in a part of their own, Player lines, at DraftKings' fair chance with no model claim ("Player lines in the Top 50", above) | The owner's call of 25 October 2026: props in the Top 50, Value picks allowed, every one marked |
 | A questionable, doubtful or out player never listed (`pricedLegs` skips `!suggestable`), a Q on a leg on him added by hand | The game's out lists and every other listing on today's report, Day-To-Day included, a probable player playing (`pbHeldWhy`, read by `pbWho`: the one rule the Top 50 lines, the all-games levels and Suggested Parlays' sets keep, as the NFL's `pricedLegs` is theirs), the lines left out counted in a note; a leg on him added by hand wears his status (DAY-TO-DAY) in the builder and in his bubble, titled with why | ESPN's NBA feed has no Questionable or Doubtful: every status between playing and out is Day-To-Day |
 | Value: the 3-point edge with market + form agreeing on a player's line | The 3-point edge alone, which the panel says | The NBA has no market + form (no player Elo is fitted to the props) |
 | DraftKings' fair chance by `legFair` | The NBA's `legFair`: a main line's whole margin on the Over (measured on DraftKings' archived lines), a milestone's and a Yes price's by the rung rule, est., a team line's two prices in proportion | The NBA's measured rule |
@@ -2680,7 +2841,8 @@ red: the list cut at 40, the each-bet-once rule dropped, a 2-point Value edge, t
 guard dropped, the old sigma of 12.5, a $0 Bet amount taken, and the totals ranked with the thin-edge lines (which passed
 until the one-sided total went in). For the empty list (7 November 2026), five more: the old wording put back (10
 failures), "of your N games" counting one game too many (4), every ticked game counted as having no line (6), the note
-over a list that is not empty dropped (1), and a press not dating what it read (1).
+over a list that is not empty dropped (1), and a press not dating what it read (1). Since 10 November 2026 it holds the
+Top 50's Player lines after the FAIL too, with breaks of their own ("After the FAIL", "Player lines in the Top 50").
 
 In Chromium at 1280 and 390 wide on the published `state.json` and that afternoon's `lines.json` (16 games, 726 lines
 qualifying for the 50), with three legs in the builder and the games list open: no sideways scroll, every control 44px or

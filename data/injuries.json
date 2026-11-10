@@ -229,19 +229,10 @@
     "id": "3134903",
     "name": "Gary Payton II",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee Inflammation",
     "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "4397040",
-    "name": "Brandon Williams",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Not Specified",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
+    "returns": "2026-11-13"
    },
    {
     "id": "4897262",
@@ -250,7 +241,16 @@
     "status": "Out",
     "detail": "Thumb",
     "date": "2026-11-10",
-    "returns": "2026-11-16"
+    "returns": "2026-11-11"
+   },
+   {
+    "id": "4397040",
+    "name": "Brandon Williams",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-11-10",
+    "returns": "2026-11-22"
    },
    {
     "id": "3102531",
@@ -281,15 +281,6 @@
    }
   ],
   "HOU": [
-   {
-    "id": "4432827",
-    "name": "Oscar Tshiebwe",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
    {
     "id": "3102529",
     "name": "Clint Capela",
@@ -529,7 +520,7 @@
     "name": "Josh Hart",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Ankle",
+    "detail": "Illness",
     "date": "2026-11-10",
     "returns": "2026-11-10"
    }
@@ -717,24 +708,6 @@
     "returns": "2026-11-15"
    },
    {
-    "id": "4594327",
-    "name": "Keegan Murray",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist Soreness",
-    "date": "2026-11-10",
-    "returns": "2026-11-10"
-   },
-   {
-    "id": "3155942",
-    "name": "Domantas Sabonis",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-11-10",
-    "returns": "2026-11-10"
-   },
-   {
     "id": "3907387",
     "name": "Ben Simmons",
     "pos": "G",
@@ -808,7 +781,7 @@
     "status": "Day-To-Day",
     "detail": "Groin Soreness",
     "date": "2026-11-10",
-    "returns": "2026-11-11"
+    "returns": "2026-11-12"
    },
    {
     "id": "4432586",

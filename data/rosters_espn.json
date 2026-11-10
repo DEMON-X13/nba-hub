@@ -1343,7 +1343,7 @@
     "name": "Oscar Tshiebwe",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2991230",
@@ -3172,7 +3172,7 @@
     "name": "Keegan Murray",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4709131",
@@ -3200,7 +3200,7 @@
     "name": "Domantas Sabonis",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5106058",

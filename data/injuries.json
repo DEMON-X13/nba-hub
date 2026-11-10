@@ -840,20 +840,20 @@
   ],
   "UTA": [
    {
+    "id": "4066336",
+    "name": "Lauri Markkanen",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Wrist Sprain",
+    "date": "2026-11-10",
+    "returns": "2026-11-11"
+   },
+   {
     "id": "4433627",
     "name": "Keyonte George",
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "4066336",
-    "name": "Lauri Markkanen",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist Sprain",
     "date": "2026-11-10",
     "returns": "2026-11-11"
    },

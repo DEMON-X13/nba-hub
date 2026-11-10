@@ -626,7 +626,7 @@
     "name": "Jarrett Allen",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3934723",
@@ -1394,7 +1394,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2580365",
@@ -1487,7 +1487,7 @@
     "name": "Cam Christie",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5106258",
@@ -1529,7 +1529,7 @@
     "name": "Isaiah Jackson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3936099",
@@ -1892,7 +1892,7 @@
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107157",
@@ -2632,7 +2632,7 @@
     "name": "Desmond Bane",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4348700",
@@ -3628,7 +3628,7 @@
     "name": "Anthony Davis",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5142718",

@@ -1,5 +1,5 @@
 {
- "date": "2026-11-10",
+ "date": "2026-11-11",
  "teams": {
   "ATL": [
    {
@@ -349,6 +349,15 @@
   ],
   "LAC": [
    {
+    "id": "4845363",
+    "name": "Cam Christie",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
+   },
+   {
     "id": "5108024",
     "name": "Yanic Konan Niederhauser",
     "pos": "C",
@@ -365,15 +374,6 @@
     "detail": "Achilles Surgery",
     "date": "2026-11-10",
     "returns": "2026-11-13"
-   },
-   {
-    "id": "4845363",
-    "name": "Cam Christie",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-11-09",
-    "returns": "2026-11-10"
    },
    {
     "id": "6580",
@@ -443,25 +443,14 @@
     "returns": "2026-12-01"
    }
   ],
-  "MIA": [
-   {
-    "id": "3032977",
-    "name": "Giannis Antetokounmpo",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist Sprain",
-    "date": "2026-11-09",
-    "returns": "2026-11-10"
-   }
-  ],
   "MIL": [
    {
     "id": "4395725",
     "name": "Tyler Herro",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Bruise",
-    "date": "2026-11-10",
+    "date": "2026-11-11",
     "returns": "2026-11-11"
    }
   ],
@@ -579,8 +568,8 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Calf Strain",
-    "date": "2026-11-10",
-    "returns": "2026-11-10"
+    "date": "2026-11-11",
+    "returns": "2026-11-11"
    },
    {
     "id": "4432165",
@@ -699,6 +688,15 @@
   ],
   "SAC": [
    {
+    "id": "4431679",
+    "name": "Precious Achiuwa",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg Bruise",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
+   },
+   {
     "id": "4898371",
     "name": "Maxime Raynaud",
     "pos": "C",
@@ -804,21 +802,21 @@
   ],
   "UTA": [
    {
-    "id": "4066336",
-    "name": "Lauri Markkanen",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Wrist Sprain",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
     "id": "4433627",
     "name": "Keyonte George",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-10",
+    "date": "2026-11-11",
+    "returns": "2026-11-11"
+   },
+   {
+    "id": "4066336",
+    "name": "Lauri Markkanen",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Wrist Sprain",
+    "date": "2026-11-11",
     "returns": "2026-11-11"
    },
    {

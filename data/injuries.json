@@ -39,7 +39,27 @@
     "returns": "2027-07-01"
    }
   ],
+  "BOS": [
+   {
+    "id": "4251",
+    "name": "Paul George",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Illness",
+    "date": "2026-11-11",
+    "returns": "2026-11-15"
+   }
+  ],
   "BKN": [
+   {
+    "id": "5101761",
+    "name": "Mikel Brown Jr.",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Illness Not Specified",
+    "date": "2026-11-11",
+    "returns": "2026-11-14"
+   },
    {
     "id": "5279130",
     "name": "Nolan Traore",
@@ -48,24 +68,6 @@
     "detail": "Calf Soreness",
     "date": "2026-11-10",
     "returns": "2026-11-11"
-   },
-   {
-    "id": "5175643",
-    "name": "Egor Demin",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Leg Bruise",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "4702670",
-    "name": "Grant Nelson",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-11-08",
-    "returns": "2026-11-10"
    }
   ],
   "CHA": [
@@ -116,6 +118,15 @@
    }
   ],
   "CHI": [
+   {
+    "id": "5095151",
+    "name": "Caleb Wilson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hip Soreness",
+    "date": "2026-11-11",
+    "returns": "2026-11-11"
+   },
    {
     "id": "2595516",
     "name": "Norman Powell",
@@ -215,6 +226,15 @@
   ],
   "DET": [
    {
+    "id": "5037878",
+    "name": "Ugonna Onyenso",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
+   },
+   {
     "id": "4395702",
     "name": "Isaiah Joe",
     "pos": "G",
@@ -235,6 +255,15 @@
   ],
   "GSW": [
    {
+    "id": "4897262",
+    "name": "Will Richard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Thumb",
+    "date": "2026-11-11",
+    "returns": "2026-11-11"
+   },
+   {
     "id": "3134903",
     "name": "Gary Payton II",
     "pos": "G",
@@ -242,15 +271,6 @@
     "detail": "Knee Inflammation",
     "date": "2026-11-10",
     "returns": "2026-11-13"
-   },
-   {
-    "id": "4897262",
-    "name": "Will Richard",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Thumb",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
    },
    {
     "id": "4397040",
@@ -476,12 +496,12 @@
   ],
   "NOP": [
    {
-    "id": "4431675",
-    "name": "Trendon Watford",
-    "pos": "F",
+    "id": "4683634",
+    "name": "Bennedict Mathurin",
+    "pos": "G",
     "status": "Out",
-    "detail": "Ankle",
-    "date": "2026-11-10",
+    "detail": "Thumb Sprain",
+    "date": "2026-11-11",
     "returns": "2026-11-13"
    },
    {
@@ -490,8 +510,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Knee Tendinitis",
-    "date": "2026-11-10",
+    "date": "2026-11-11",
     "returns": "2026-11-11"
+   },
+   {
+    "id": "4431675",
+    "name": "Trendon Watford",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-10",
+    "returns": "2026-11-13"
    },
    {
     "id": "5061589",
@@ -505,12 +534,21 @@
   ],
   "NYK": [
    {
+    "id": "3136195",
+    "name": "Karl-Anthony Towns",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Calf Soreness",
+    "date": "2026-11-11",
+    "returns": "2026-11-11"
+   },
+   {
     "id": "3062679",
     "name": "Josh Hart",
     "pos": "G",
     "status": "Out",
     "detail": "Illness",
-    "date": "2026-11-10",
+    "date": "2026-11-11",
     "returns": "2026-11-11"
    }
   ],
@@ -749,10 +787,10 @@
     "id": "4431684",
     "name": "Trayce Jackson-Davis",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Illness",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
+    "date": "2026-11-11",
+    "returns": "2026-11-12"
    },
    {
     "id": "5093267",
@@ -802,20 +840,20 @@
   ],
   "UTA": [
    {
+    "id": "4066336",
+    "name": "Lauri Markkanen",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Hand Fracture",
+    "date": "2026-11-11",
+    "returns": "2027-01-04"
+   },
+   {
     "id": "4433627",
     "name": "Keyonte George",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "4066336",
-    "name": "Lauri Markkanen",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist Sprain",
     "date": "2026-11-11",
     "returns": "2026-11-11"
    },

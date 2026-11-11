@@ -163,7 +163,7 @@
     "name": "Paul George",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5175647",
@@ -263,7 +263,7 @@
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4712896",
@@ -277,7 +277,7 @@
     "name": "Egor Demin",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4702177",
@@ -319,7 +319,7 @@
     "name": "Grant Nelson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278104",
@@ -624,7 +624,7 @@
     "name": "Caleb Wilson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "CLE": [
@@ -1066,7 +1066,7 @@
     "name": "Ugonna Onyenso",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2990962",
@@ -2276,7 +2276,7 @@
     "name": "Bennedict Mathurin",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4997538",
@@ -2467,7 +2467,7 @@
     "name": "Karl-Anthony Towns",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432808",

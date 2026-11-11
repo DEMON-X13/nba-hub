@@ -2111,7 +2111,7 @@
     "name": "Myles Turner",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5105623",
@@ -2639,7 +2639,7 @@
     "name": "Jamal Cain",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133635",

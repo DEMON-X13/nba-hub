@@ -1394,8 +1394,8 @@
    "spread": -4.2
   },
   "2027_20261111_LAL_MIL": {
-   "pHome": 0.147,
-   "spread": 13.4
+   "pHome": 0.1546,
+   "spread": 13
   },
   "2027_20261111_OKC_POR": {
    "pHome": 0.5693,
@@ -2037,5 +2037,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-11T18:43Z"
+ "generated": "2026-11-11T20:12Z"
 }

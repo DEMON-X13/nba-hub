@@ -4614,9 +4614,9 @@ date,team,player_id,name,status
 2026-11-11,CHA,4066218,Grant Williams,Out
 2026-11-11,CHA,5061575,Kon Knueppel,Out
 2026-11-11,CHA,3032979,Dennis Schroder,Out
+2026-11-11,CHI,5105555,Tobe Awaka,Out
 2026-11-11,CHI,5095151,Caleb Wilson,Day-To-Day
 2026-11-11,CHI,2595516,Norman Powell,Day-To-Day
-2026-11-11,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-11-11,CHI,4066650,Zach Collins,Day-To-Day
 2026-11-11,CLE,4066757,Sam Merrill,Out
 2026-11-11,CLE,4683747,Jaylon Tyson,Out
@@ -4645,12 +4645,13 @@ date,team,player_id,name,status
 2026-11-11,LAC,3913176,Brandon Ingram,Out
 2026-11-11,LAC,6580,Bradley Beal,Out
 2026-11-11,LAC,4396818,Jordan Miller,Out
-2026-11-11,LAL,4397014,Quentin Grimes,Day-To-Day
+2026-11-11,LAL,4397014,Quentin Grimes,Out
 2026-11-11,MEM,4432810,Isaiah Stewart,Day-To-Day
 2026-11-11,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-11,MEM,4593016,Quinten Post,Out
 2026-11-11,MEM,5105462,Richie Saunders,Out
 2026-11-11,MIL,4395725,Tyler Herro,Day-To-Day
+2026-11-11,MIL,3133628,Myles Turner,Out
 2026-11-11,MIN,4594268,Anthony Edwards,Out
 2026-11-11,MIN,3934673,Donte DiVincenzo,Out
 2026-11-11,NOP,4683634,Bennedict Mathurin,Out
@@ -4664,6 +4665,7 @@ date,team,player_id,name,status
 2026-11-11,OKC,4683692,Cason Wallace,Out
 2026-11-11,OKC,4433255,Chet Holmgren,Out
 2026-11-11,OKC,4593803,Jalen Williams,Out
+2026-11-11,ORL,4278572,Jamal Cain,Day-To-Day
 2026-11-11,ORL,4702382,Tristan da Silva,Day-To-Day
 2026-11-11,ORL,4432165,Jalen Suggs,Out
 2026-11-11,ORL,4065654,Jonathan Isaac,Out

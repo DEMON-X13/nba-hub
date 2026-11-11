@@ -119,6 +119,15 @@
   ],
   "CHI": [
    {
+    "id": "5105555",
+    "name": "Tobe Awaka",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
+   },
+   {
     "id": "5095151",
     "name": "Caleb Wilson",
     "pos": "F",
@@ -133,15 +142,6 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Shoulder Inflammation",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "5105555",
-    "name": "Tobe Awaka",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
     "date": "2026-11-10",
     "returns": "2026-11-11"
    },
@@ -419,10 +419,10 @@
     "id": "4397014",
     "name": "Quentin Grimes",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Finger",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
+    "date": "2026-11-11",
+    "returns": "2026-11-15"
    }
   ],
   "MEM": [
@@ -472,6 +472,15 @@
     "detail": "Knee Bruise",
     "date": "2026-11-11",
     "returns": "2026-11-11"
+   },
+   {
+    "id": "3133628",
+    "name": "Myles Turner",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
    }
   ],
   "MIN": [
@@ -601,6 +610,15 @@
   ],
   "ORL": [
    {
+    "id": "4278572",
+    "name": "Jamal Cain",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Shoulder Bruise",
+    "date": "2026-11-11",
+    "returns": "2026-11-11"
+   },
+   {
     "id": "4702382",
     "name": "Tristan da Silva",
     "pos": "F",
@@ -712,7 +730,7 @@
     "status": "Out",
     "detail": "Ankle",
     "date": "2026-11-05",
-    "returns": "2027-01-02"
+    "returns": "2027-01-12"
    },
    {
     "id": "4914336",

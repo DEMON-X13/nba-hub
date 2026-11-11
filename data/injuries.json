@@ -52,6 +52,15 @@
   ],
   "BKN": [
    {
+    "id": "5279130",
+    "name": "Nolan Traore",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Calf Soreness",
+    "date": "2026-11-11",
+    "returns": "2026-11-14"
+   },
+   {
     "id": "5101761",
     "name": "Mikel Brown Jr.",
     "pos": "G",
@@ -59,15 +68,6 @@
     "detail": "Illness Not Specified",
     "date": "2026-11-11",
     "returns": "2026-11-14"
-   },
-   {
-    "id": "5279130",
-    "name": "Nolan Traore",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf Soreness",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
    }
   ],
   "CHA": [
@@ -177,22 +177,13 @@
   ],
   "DAL": [
    {
-    "id": "4873153",
-    "name": "Morez Johnson Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Leg",
-    "date": "2026-11-10",
-    "returns": "2026-11-12"
-   },
-   {
-    "id": "5279129",
-    "name": "Sergio de Larrea",
-    "pos": "F",
+    "id": "4683688",
+    "name": "Dereck Lively II",
+    "pos": "C",
     "status": "Out",
-    "detail": "Knee Strain",
-    "date": "2026-11-05",
-    "returns": "2026-11-12"
+    "detail": "Foot Surgery",
+    "date": "2026-11-11",
+    "returns": "2026-11-18"
    },
    {
     "id": "5148538",
@@ -200,16 +191,25 @@
     "pos": "F",
     "status": "Out",
     "detail": "Heel Inflammation",
-    "date": "2026-11-01",
-    "returns": "2026-11-12"
+    "date": "2026-11-11",
+    "returns": "2026-11-18"
    },
    {
-    "id": "4683688",
-    "name": "Dereck Lively II",
-    "pos": "C",
+    "id": "5279129",
+    "name": "Sergio de Larrea",
+    "pos": "F",
     "status": "Out",
-    "detail": "Foot Surgery",
-    "date": "2026-11-01",
+    "detail": "Knee Strain",
+    "date": "2026-11-11",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "4873153",
+    "name": "Morez Johnson Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg Bruise",
+    "date": "2026-11-11",
     "returns": "2026-11-12"
    }
   ],
@@ -346,7 +346,7 @@
     "status": "Out",
     "detail": "Hamstring Strain",
     "date": "2026-11-07",
-    "returns": "2026-11-13"
+    "returns": "2026-11-22"
    },
    {
     "id": "5157066",
@@ -541,26 +541,6 @@
     "returns": "2026-11-16"
    }
   ],
-  "NYK": [
-   {
-    "id": "3136195",
-    "name": "Karl-Anthony Towns",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Calf Soreness",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "3062679",
-    "name": "Josh Hart",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Illness",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
-   }
-  ],
   "OKC": [
    {
     "id": "4432823",
@@ -568,8 +548,17 @@
     "pos": "F",
     "status": "Out",
     "detail": "Back Spasms",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
+    "date": "2026-11-11",
+    "returns": "2026-11-15"
+   },
+   {
+    "id": "4900671",
+    "name": "Ajay Mitchell",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
    },
    {
     "id": "5061603",
@@ -680,7 +669,25 @@
     "pos": "C",
     "status": "Out",
     "detail": "Back Sprain",
-    "date": "2026-11-09",
+    "date": "2026-11-11",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "3059318",
+    "name": "Joel Embiid",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-11-11",
+    "returns": "2026-11-12"
+   },
+   {
+    "id": "1966",
+    "name": "LeBron James",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-11",
     "returns": "2026-11-12"
    },
    {
@@ -715,13 +722,13 @@
   ],
   "POR": [
    {
-    "id": "4279888",
-    "name": "Ja Morant",
+    "id": "4706557",
+    "name": "Chris Youngblood",
     "pos": "G",
     "status": "Out",
-    "detail": "Hamstring Not Specified",
-    "date": "2026-11-08",
-    "returns": "2026-12-01"
+    "detail": "Foot Bruise",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
    },
    {
     "id": "4578893",
@@ -729,8 +736,17 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle",
-    "date": "2026-11-05",
+    "date": "2026-11-11",
     "returns": "2027-01-12"
+   },
+   {
+    "id": "4279888",
+    "name": "Ja Morant",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-11-08",
+    "returns": "2026-12-01"
    },
    {
     "id": "4914336",
@@ -802,6 +818,15 @@
   ],
   "TOR": [
    {
+    "id": "6450",
+    "name": "Kawhi Leonard",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Inflammation",
+    "date": "2026-11-11",
+    "returns": "2026-11-23"
+   },
+   {
     "id": "4431684",
     "name": "Trayce Jackson-Davis",
     "pos": "F",
@@ -811,24 +836,6 @@
     "returns": "2026-11-12"
    },
    {
-    "id": "5093267",
-    "name": "Collin Murray-Boyles",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "4395724",
-    "name": "Immanuel Quickley",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
     "id": "4433134",
     "name": "Scottie Barnes",
     "pos": "F",
@@ -836,15 +843,6 @@
     "detail": "Groin Soreness",
     "date": "2026-11-10",
     "returns": "2026-11-12"
-   },
-   {
-    "id": "6450",
-    "name": "Kawhi Leonard",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Inflammation",
-    "date": "2026-11-10",
-    "returns": "2026-11-23"
    },
    {
     "id": "4432586",
@@ -858,15 +856,6 @@
   ],
   "UTA": [
    {
-    "id": "4066336",
-    "name": "Lauri Markkanen",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Hand Fracture",
-    "date": "2026-11-11",
-    "returns": "2027-01-04"
-   },
-   {
     "id": "4433627",
     "name": "Keyonte George",
     "pos": "G",
@@ -874,6 +863,15 @@
     "detail": "Ankle Sprain",
     "date": "2026-11-11",
     "returns": "2026-11-11"
+   },
+   {
+    "id": "4066336",
+    "name": "Lauri Markkanen",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Hand Fracture",
+    "date": "2026-11-11",
+    "returns": "2027-01-04"
    },
    {
     "id": "3102530",

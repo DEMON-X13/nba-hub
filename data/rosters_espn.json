@@ -256,7 +256,7 @@
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4712896",
@@ -354,7 +354,7 @@
     "name": "Nolan Traore",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3150844",
@@ -505,7 +505,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4711294",
@@ -1048,13 +1048,6 @@
     "injured": false
    },
    {
-    "id": "4700852",
-    "name": "Chaz Lanier",
-    "pos": "G",
-    "status": "active",
-    "injured": false
-   },
-   {
     "id": "5258459",
     "name": "Ebuka Okorie",
     "pos": "G",
@@ -1394,7 +1387,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2580365",
@@ -1706,7 +1699,7 @@
     "name": "Austin Reaves",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4277811",
@@ -2125,7 +2118,7 @@
     "name": "Kel'el Ware",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "MIN": [
@@ -2170,13 +2163,6 @@
     "pos": "G",
     "status": "active",
     "injured": true
-   },
-   {
-    "id": "5061585",
-    "name": "Isaiah Evans",
-    "pos": "F",
-    "status": "active",
-    "injured": false
    },
    {
     "id": "3032976",
@@ -3393,7 +3379,7 @@
     "name": "Trayce Jackson-Davis",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6450",
@@ -3621,7 +3607,7 @@
     "name": "Bilal Coulibaly",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6583",

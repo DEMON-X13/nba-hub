@@ -41,12 +41,21 @@
   ],
   "BKN": [
    {
-    "id": "5101761",
-    "name": "Mikel Brown Jr.",
+    "id": "5279130",
+    "name": "Nolan Traore",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-11-09",
+    "detail": "Calf Soreness",
+    "date": "2026-11-10",
+    "returns": "2026-11-11"
+   },
+   {
+    "id": "5175643",
+    "name": "Egor Demin",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Leg Bruise",
+    "date": "2026-11-10",
     "returns": "2026-11-11"
    },
    {
@@ -57,15 +66,6 @@
     "detail": "Knee",
     "date": "2026-11-08",
     "returns": "2026-11-10"
-   },
-   {
-    "id": "5175643",
-    "name": "Egor Demin",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Leg Bruise",
-    "date": "2026-10-29",
-    "returns": "2026-11-11"
    }
   ],
   "CHA": [
@@ -122,7 +122,16 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Shoulder Inflammation",
-    "date": "2026-11-09",
+    "date": "2026-11-10",
+    "returns": "2026-11-11"
+   },
+   {
+    "id": "5105555",
+    "name": "Tobe Awaka",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-10",
     "returns": "2026-11-11"
    },
    {
@@ -131,7 +140,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-09",
+    "date": "2026-11-10",
     "returns": "2026-11-11"
    }
   ],
@@ -140,10 +149,10 @@
     "id": "4066757",
     "name": "Sam Merrill",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Elbow",
     "date": "2026-11-10",
-    "returns": "2026-11-11"
+    "returns": "2026-11-16"
    },
    {
     "id": "4683747",
@@ -151,7 +160,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-08",
+    "date": "2026-11-10",
     "returns": "2026-11-11"
    }
   ],
@@ -302,6 +311,15 @@
   ],
   "IND": [
    {
+    "id": "2530530",
+    "name": "T.J. McConnell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-11-10",
+    "returns": "2026-11-11"
+   },
+   {
     "id": "4396993",
     "name": "Tyrese Haliburton",
     "pos": "G",
@@ -378,15 +396,6 @@
   ],
   "LAL": [
    {
-    "id": "4066457",
-    "name": "Austin Reaves",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
     "id": "4397014",
     "name": "Quentin Grimes",
     "pos": "G",
@@ -407,22 +416,22 @@
     "returns": "2026-11-11"
    },
    {
-    "id": "4593016",
-    "name": "Quinten Post",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Head",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
     "id": "4431785",
     "name": "Scotty Pippen Jr.",
     "pos": "G",
     "status": "Out",
     "detail": "Back Soreness",
-    "date": "2026-11-08",
-    "returns": "2026-11-11"
+    "date": "2026-11-10",
+    "returns": "2026-11-21"
+   },
+   {
+    "id": "4593016",
+    "name": "Quinten Post",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Head",
+    "date": "2026-11-10",
+    "returns": "2026-11-13"
    },
    {
     "id": "5105462",
@@ -447,22 +456,13 @@
   ],
   "MIL": [
    {
-    "id": "5105623",
-    "name": "Kel'el Ware",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-10",
-    "returns": "2026-11-10"
-   },
-   {
     "id": "4395725",
     "name": "Tyler Herro",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Knee Bruise",
-    "date": "2026-11-09",
-    "returns": "2026-11-10"
+    "date": "2026-11-10",
+    "returns": "2026-11-11"
    }
   ],
   "MIN": [
@@ -519,10 +519,10 @@
     "id": "3062679",
     "name": "Josh Hart",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Illness",
     "date": "2026-11-10",
-    "returns": "2026-11-10"
+    "returns": "2026-11-11"
    }
   ],
   "OKC": [
@@ -733,8 +733,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Calf Strain",
-    "date": "2026-11-09",
-    "returns": "2026-11-11"
+    "date": "2026-11-10",
+    "returns": "2026-11-19"
    },
    {
     "id": "5101845",
@@ -748,20 +748,11 @@
   ],
   "TOR": [
    {
-    "id": "6450",
-    "name": "Kawhi Leonard",
+    "id": "4431684",
+    "name": "Trayce Jackson-Davis",
     "pos": "F",
-    "status": "Out",
-    "detail": "Knee Inflammation",
-    "date": "2026-11-10",
-    "returns": "2026-11-23"
-   },
-   {
-    "id": "4395724",
-    "name": "Immanuel Quickley",
-    "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Hamstring",
+    "detail": "Illness",
     "date": "2026-11-10",
     "returns": "2026-11-11"
    },
@@ -775,13 +766,31 @@
     "returns": "2026-11-11"
    },
    {
+    "id": "4395724",
+    "name": "Immanuel Quickley",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-11-10",
+    "returns": "2026-11-11"
+   },
+   {
     "id": "4433134",
     "name": "Scottie Barnes",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Groin Soreness",
     "date": "2026-11-10",
     "returns": "2026-11-12"
+   },
+   {
+    "id": "6450",
+    "name": "Kawhi Leonard",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Inflammation",
+    "date": "2026-11-10",
+    "returns": "2026-11-23"
    },
    {
     "id": "4432586",
@@ -832,15 +841,6 @@
    }
   ],
   "WAS": [
-   {
-    "id": "5104155",
-    "name": "Bilal Coulibaly",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hand",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
    {
     "id": "4997537",
     "name": "Tristan Vukcevic",

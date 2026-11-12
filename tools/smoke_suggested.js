@@ -973,10 +973,10 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
       q9.w.spRulerWorkSet(null); await pressReset(); await waitBuilt(q9, NF); }
     /* the soft build: a piece a task while the tab shows; a filter pressed and another tab opened in the same task builds
        nothing on the other tab, and the tab opened again carries on */
-    { const n0 = q9.w.spSoftCount(); qf('[data-sp-short="-500"]').click(); q9.d.querySelector('#nav button[data-tab=slate]').click(); await sleep(120);
+    { const n0 = q9.w.spSoftCount(), p0 = q9.w.spSoftPieces(); qf('[data-sp-short="-500"]').click(); q9.d.querySelector('#nav button[data-tab=slate]').click(); await sleep(120);
       const n1 = q9.w.spSoftCount(), done1 = builtOf(q9, NF);
-      await openTab(q9); await waitBuilt(q9, NF); const n2 = q9.w.spSoftCount();
-      check(n1 === n0 && !done1 && n2 === n0 + 4, `the soft build stops on another tab (no piece built there: ${n1 - n0}) and carries on when the tab opens again (${n2 - n1} pieces: the pool and three levels)`);
+      await openTab(q9); await waitBuilt(q9, NF); const n2 = q9.w.spSoftCount(), p2 = q9.w.spSoftPieces();
+      check(n1 === n0 && !done1 && p2 === p0 + 4 && n2 - n1 >= 4, `the soft build stops on another tab (no task run there: ${n1 - n0}) and carries on when the tab opens again (${p2 - p0} pieces: the pool and three levels, in ${n2 - n1} tasks, a level a slice of its search a task)`);
       await press('[data-sp-short="any"]'); await waitBuilt(q9, NF); }
 
     /* the folds: on a phone More filters starts shut, then stays as the reader leaves it, across a redraw and a reload; on a

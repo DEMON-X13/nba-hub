@@ -6879,8 +6879,9 @@ render.suggest = function () {
   spKeepPlace(renderSp);
 };
 /* ---------- THE RULER SEARCH: one ruler for every level, on the visitor's filters (sets taken from RULER_FROM) ----------
-   Not wired yet: spSet, the tab and the record still run THE SEARCH above, and every set taken before RULER_FROM keeps
-   it. research/sp_ruler/engine.md has the timings and the cases that do not settle.
+   From SP_RULER_FROM it builds every live set (spRB: the site's set at the default filters, and Your filters sets), the
+   record's take (spEntry) and a ruler level built again after the lock (spRebuild); every set taken before keeps THE
+   SEARCH above. research/sp_ruler/engine.md has the timings and the cases that do not settle.
 
    The rule. A parlay is two legs or more of the ruler pool (spRulerPool: every leg at DraftKings' fair chance, legFair,
    on the visitor's filters), one leg a player, one side (a moneyline or a spread) and one total a game. Its chance C and
@@ -6893,9 +6894,14 @@ render.suggest = function () {
      (3) no parlay with D >= F and fewer legs than L has C >= (1 - SPR_TAU + SPR_ETA) C*;
      (4) C(L) >= (1 - SPR_ETA) C*_k, k its legs.
    Nothing reads a clock or draws at random; a tie on the chance goes to the lower sorted slip keys. Besides the proof
-   the only stop is a count of the work done (SPR_COST, about microseconds in jsdom; SPR_WORK a level, about a second),
-   counted the same for a call whatever an earlier call left in the caches, so a level is the same on every machine: a
-   level that reaches it is the best parlay found, settled false, with gap = 1 - C(L) / U, U the bound proved.
+   the only stop is a count of the work done (SPR_COST, about microseconds in jsdom), counted the same for a call whatever
+   an earlier call left in the caches, so a level is the same on every machine: SPR_WORK_SITE (20 million units, about 7
+   s of jsdom) for the site's set, the default filters' (the record's, and the page's own copy of it, which must be the
+   same set), never reached on a real night measured (every game and every two games of 14 nights cut alone, 26 October to
+   12 November: the most 5.4 million, 9 November's NOP at GSW alone at $4, the review of 12 November); SPR_WORK (a million)
+   for any other filters'. A level that reaches it is the best parlay found, settled false, with gap = 1 - C(L) / U, U the
+   bound proved. The search is a generator (sprLevel) that pauses every SPR_SLICE units of that count, so the tab's soft
+   build runs a level a slice a task (spRBStep) and spRulerLevel runs it whole; a pause changes nothing it counts.
 
    What every cut stands on (each label is in the code). A leg's thresholds: t = Phi^-1(1 - p), tI = Phi^-1(1 - I).
    (R1) Units. Legs of different games are independent in the builder's sums, so a parlay is, game by game, nothing, one
@@ -7670,8 +7676,8 @@ function spRulerWhy(lv, pool, N, r) {
 }
 /* one level on a ruler pool, as the cards draw it: the search's parlay (its legs in the builder's order, its chance and
    price pbExact's: the builder's own sums), its fair chance the same chance (every leg at legFair), est. where legs share a
-   game; a level the work ran out on (a custom filter: never at the default filters on a real night, research/sp_ruler)
-   keeps the best found, settled false, its gap said in the rule's title */
+   game; a level the work ran out on (a custom filter's: at the default filters SPR_WORK_SITE has not been reached on a
+   real night, research/sp_ruler) keeps the best found, settled false, its gap said in the rule's title */
 function spRulerTier(pool, lv, N, o) { return spRulerTierOf(pool, lv, N, spRulerLevel(pool, lv[4], o)); }
 function spRulerTierOf(pool, lv, N, r) {
   const head = spHead(lv);
@@ -7735,9 +7741,11 @@ function spSoftTick() {
   const r = spRBStep(b, SPR_SLICE); spSoftN++;
   /* a slice of a level: no draw (nothing new to show), the next task carries it on */
   if (r === 'part') { spSoft(b); return; }
+  spSoftP++;
   spKeepPlace(renderSp);
 }
-let spSoftN = 0;
+/* the tasks the soft build ran and the pieces it finished (a check's counts) */
+let spSoftN = 0, spSoftP = 0;
 /* ---------- your filters: M.sp, this browser's alone, never sent anywhere, apart from the Parlay Builder's M.pb ----------
    spRulerClean's {k, off, st, short}, with fx (More filters open) and sx (Player stats open) as the reader left them (null:
    the page's own: More filters open on a wide screen, shut on a phone; the stats shut) */
@@ -7842,7 +7850,7 @@ function spFiltPress(t) {
   SP_SAID = ''; const s = $('#spSaid'); if (s) s.textContent = '';
 }
 /* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
-Object.assign(window, { SP_RULER_FROM, SP_RULER_LEVELS, spRulerOn, spRulerTier, spRulerWorkSet, spRulerWhy, spRB, spRBStep, spRBDone, spRBAll, spSetRuler, spPoolOutRuler, spUi, spUiSave, spEff, spMine, spMineSet, spFiltHtml, spFiltSet, spFiltKey, spSoft, spSoftTick, spRuleFair, spRuleFairTitle, spGapPct, spSoftCount: () => spSoftN,
+Object.assign(window, { SP_RULER_FROM, SP_RULER_LEVELS, spRulerOn, spRulerTier, spRulerWorkSet, spRulerWhy, spRB, spRBStep, spRBDone, spRBAll, spSetRuler, spPoolOutRuler, spUi, spUiSave, spEff, spMine, spMineSet, spFiltHtml, spFiltSet, spFiltKey, spSoft, spSoftTick, spRuleFair, spRuleFairTitle, spGapPct, spSoftCount: () => spSoftN, spSoftPieces: () => spSoftP,
   spRulerPool, spRulerLevel, sprLevel, spRulerTierOf, spRBWork, spRulerClean, spRulerAll, spRulerAllows, spRulerLeg, SPR_TAU, SPR_ETA, SPR_WORK, SPR_WORK_SITE, SPR_SLICE, spNight, spNightOf, spById, spOn, spTakes, spPhase, spState, spRecState, spLockAt, spLockOf, spNoLines, spOpen, spRecMine, spEtAt, spPool, spPrep, spWalk, spSearch, spBetter, spBuild, spSet, spEntry, spPoolOut, spOrth, spFig, spOutWhy, spRebuild, spRebuildOut,
   spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier, spBy, spUpdLine, spLedgerOf, spRecSum, spRecLoad, spWhyAtLock, renderSp, spWatchTick, SP_LEVELS, SP_RULE, SP_LOCK_MS, SP_KEEP_KEY, SP_KEEP_V });
 </script>

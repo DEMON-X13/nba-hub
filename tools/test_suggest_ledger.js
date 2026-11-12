@@ -1336,7 +1336,7 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
         leg at the model's chance, a level not settled, a team leg left out of the pool, the heads of another rule, a leg not
         in the pool, ties among Unders at even prices passing as any of the tied); R5 a level built again after the lock
         under each rule (one the search does not settle within its work left as locked); R6 the pool as kept, holding every level from the lock; R7 a night of one game; R8 a level not settled within the search's work, never taken; R9 the fewest legs, the pair
-        of Unders where three land likelier */
+        of Unders where three land likelier, and a page that takes the most legs refused by the guard */
   { const RCUT = T(D0, '12:00:00'), TAU = 0.005, ETA = 0.001, SCR = scAt(RCUT), slR = [gG, gC, gA, gB, gP, gE, gD, gF];
     const isMap = x => !!x && typeof x === 'object' && !Array.isArray(x);
     const uniR = (name, cut) => { const U = uni(name); fs.writeFileSync(path.join(U, 'index.html'), pageAt(cut || RCUT)); return U; };
@@ -1535,7 +1535,18 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
       chk(!!e9, `R9: the night of five Unders taken: ${r9b.last}`);
       if (e9) { const M = rulerMatch('R9', e9, st9, L9, Date.parse(tR)), s9 = e9.tiers[0];
         chk(!!s9.legs && s9.legs.length === 2 && s9.legs.every(l => l.kind === 'prop' && l.side === 'under' && l.odds === -241) && M.E.out[2].k[3] > M.E.out[2].k[2],
-          `R9: Safe is the two Unders at -241 (${s9.legs ? s9.legs.map(l => l.name).join(' + ') + ', ' + s9.p : s9.why}), the fewest legs, where the triple lands likelier (${(M.E.out[2].k[3] * 100).toFixed(3)}% against ${(M.E.out[2].k[2] * 100).toFixed(3)}%)`); } }
+          `R9: Safe is the two Unders at -241 (${s9.legs ? s9.legs.map(l => l.name).join(' + ') + ', ' + s9.p : s9.why}), the fewest legs, where the triple lands likelier (${(M.E.out[2].k[3] * 100).toFixed(3)}% against ${(M.E.out[2].k[2] * 100).toFixed(3)}%)`); }
+      /* the same night on a page whose search takes the most legs where it should take the fewest (planted on a copy):
+         the job's own guard refuses the set on its witnesses, rule (3) (the review of 12 November: the guard held the
+         fewest legs by nothing, so a level padded with short Unders, which return $1 too, passed it) */
+      const FEW = 'let ks = -1; for (let k = 2; k <= C.K; k++) if (hi[k] > 0 && (hi[k] > out || (hi[k] === out && !hs[k]))) { ks = k; break; }',
+        MOST = 'let ks = -1; for (let k = C.K; k >= 2; k--) if (hi[k] > 0 && (hi[k] > out || (hi[k] === out && !hs[k]))) { ks = k; break; }';
+      const U9p = uniR('ruler9p'), pg = fs.readFileSync(path.join(U9p, 'index.html'), 'utf8');
+      chk(pg.split(FEW).length === 2, 'R9: the page\'s search takes the fewest legs at one place (the plant below stands on it)');
+      fs.writeFileSync(path.join(U9p, 'index.html'), pg.replace(FEW, MOST));
+      const r9p = runR(U9p, st9, L9, tR);
+      chk(r9p.code === 1 && /\bsafe: \d+ legs, where a parlay of 2 \(.*the rule takes the fewest legs/.test(r9p.out),
+        `R9: a page that takes the most legs is refused by the job's own guard (${(r9p.out.split('\n').find(x => /fewest legs/.test(x)) || r9p.last || '').slice(0, 220)})`); }
   }
 
   console.log('G. the real ledger, copied, on the real state, at the real cutoff');

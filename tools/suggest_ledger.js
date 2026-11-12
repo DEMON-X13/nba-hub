@@ -179,8 +179,9 @@ function takeNights(w, now, have) {
     /* no line posted yet for any game of the night (the lines feed's second date, a day ahead): no set is taken, and one
        an earlier run took stays as it was; until a run reads the lines the page builds its own from the lock */
     if (SC.nightNoLines(x)) { empty.push(N.id); keep.add(N.id); continue; }
-    /* a ruler level the search did not settle (it never has at the default filters on a real night: research/sp_ruler):
-       no set is taken this run, and one an earlier run took stays as it was */
+    /* a ruler level the search did not settle within the site's work (SPR_WORK_SITE: not on any real night measured,
+       every game and every two games of 14 nights cut alone, research/sp_ruler): no set is taken this run, and one an
+       earlier run took stays as it was */
     const u = x.tiers.filter(t => t && t.gap != null).map(t => t.id);
     if (u.length) { unsettled.push(`${N.id} (${u.join(', ')})`); keep.add(N.id); continue; }
     takes.push({ key: SC.nightKeyOf(x), entry: x });

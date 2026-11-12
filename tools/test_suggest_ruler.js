@@ -5,7 +5,8 @@
  *                                        RULER_PAGE=<file> runs it on another built page, RULER_ONLY=enum, time, site,
  *                                        slice or bound (or several, comma-separated) some parts, RULER_OUT=<file> writes
  *                                        the timing table as JSON, SL_VERBOSE=1 prints every check)
- *   RULER_ONLY=enum,site,slice node tools/test_suggest_ruler.js   the job's run of it (the suggestions record's step)
+ *   RULER_ONLY=enum,site,slice,bound node tools/test_suggest_ruler.js   the job's run of it (the suggestions record's step,
+ *                                        about a minute and a half: every part but the other filters' timing)
  *
  * (i) The rule, exactly. On small pools every valid parlay is enumerated (one leg a player, one side and one total a game,
  * two legs or more), each game's legs priced together by the builder's own sums (sgJoint and joint2 on the legs in
@@ -34,7 +35,8 @@
  * paying a floor, on its own reading of the legs). On every pool of (i) it is at C* or more, C* worked out exactly; on
  * every real night's cut at the default filters (each night whole, each game and each two games) it is never under a
  * settled level's chance but for the two copulas' own noise (RB_SIG), and the level lands within TAU_G of it, so the
- * guard's property check never refuses the page's level on a real night; each bound within RULER_BOUND_MS. */
+ * guard's property check never refuses the page's level on a real night, nor do its witnesses (rules (3) and (4), the
+ * exact walk's likeliest parlay of each size up to the level's); each bound within RULER_BOUND_MS. */
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -310,14 +312,14 @@ function madeUp() {
     }
   }
   if (part('bound')) {
-    const t0 = Date.now(), corr = JSON.parse(w.eval('JSON.stringify(S.corr)')); let worst = 0, over = 0, slow = 0, nB = 0, at = null;
+    const t0 = Date.now(), corr = JSON.parse(w.eval('JSON.stringify(S.corr)')); let worst = 0, over = 0, slow = 0, nB = 0, at = null, nW = 0, wCap = 0;
     for (const [nm, N] of Object.entries(NIGHTS)) {
       const all = legsOf(N), gs = Object.keys(N.games).sort(), cuts = [['night', gs], ...gs.map(g => [g.slice(14), [g]])];
       for (let a = 0; a < gs.length; a++) for (let b = a + 1; b < gs.length; b++) cuts.push([gs[a].slice(14) + '+' + gs[b].slice(14), [gs[a], gs[b]]]);
       for (const [cn, keepG] of cuts) {
         w.__legs = all.filter(l => keepG.includes(l.gid));
         const R = JSON.parse(w.eval(`(() => { const pool = __rPool(__legs, {}); return JSON.stringify({ gl: pool.legs.map(l => ({ sk: l.sk, gid: l.gid, kind: l.kind, pid: l.pid || null, side: l.side, line: l.line, home: l.home, team: l.team, stat: l.stat || null, odds: l.price, other: l.other, p: l.p })),
-          L: [2, 4, 8].map(F => { const L = spRulerLevel(pool, F); return { F, p: L.p || null, settled: L.settled }; }) }); })()`));
+          L: [2, 4, 8].map(F => { const L = spRulerLevel(pool, F, { work: SPR_WORK_SITE }); return { F, p: L.p || null, n: L.n || 0, settled: L.settled }; }) }); })()`));
         const gl = guardLegs(R.gl);
         for (const x of R.L) {
           if (!x.p || !x.settled) continue;
@@ -326,10 +328,15 @@ function madeUp() {
           chk(x.p <= b * (1 + 2e-3), `${nm} ${cn}: $${x.F} the guard's bound ${b} is never under the level's chance ${x.p}, but for the copulas' noise`);
           chk(x.p >= (1 - SC.TAU_G) * b, `${nm} ${cn}: $${x.F} the level ${x.p} lands within TAU_G (${SC.TAU_G}) of the guard's bound ${b}, so its property check passes it`);
           chk(ms <= LIMIT.bound, `${nm} ${cn}: $${x.F} the guard's bound in ${ms} ms, within ${LIMIT.bound} ms`);
+          /* its witnesses (rules (3) and (4) on the exact walk's likeliest of each size) never refuse a settled level */
+          const Wt = SC.rulerWitness(gl, corr, x.F, x.n); let wbad = null; nW++;
+          if (Wt) { for (let j = 2; j < x.n; j++) if (Wt[j] && Wt[j].p >= (1 - SC.RULER_TAU + SC.RULER_ETA) * b * (1 + 1e-12)) wbad = `${j} legs at ${Wt[j].p}`;
+            if (Wt[x.n] && Wt[x.n].p * (1 - SC.RULER_ETA) > x.p * (1 + 1e-12)) wbad = `${x.n} legs at ${Wt[x.n].p}`; } else wCap++;
+          chk(!!Wt && !wbad, `${nm} ${cn}: $${x.F} the guard's witnesses (fewer legs, and its own ${x.n}) worked out and refusing nothing (${Wt ? wbad || 'none' : 'capped'})`);
         }
       }
     }
-    notes.push(`the guard's bound: ${nB} settled levels at the default filters in ${Math.round((Date.now() - t0) / 1000)} s; at most ${((worst - 1) * 100).toFixed(3)}% over the level (${at}), ${over} over 0.2%; slowest ${slow} ms`);
+    notes.push(`the guard's bound: ${nB} settled levels at the default filters in ${Math.round((Date.now() - t0) / 1000)} s; at most ${((worst - 1) * 100).toFixed(3)}% over the level (${at}), ${over} over 0.2%; slowest ${slow} ms; its witnesses on ${nW}, capped on ${wCap}`);
   }
   end();
 })();

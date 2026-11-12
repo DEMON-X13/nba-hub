@@ -53,6 +53,7 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `app/parts/suggested.html` | The Suggested Parlays tab (README "Suggested Parlays"): one set a night across every game of the night, Safe the likeliest paying $2 or more on $1, Medium $4, Aggressive $8, no leg limit (since 8 November 2026; until then Safe the likeliest pair and Medium and Aggressive 5 legs at most), on the night's team legs and (from the first set the page with player legs takes after 7 November 2026) DraftKings' main lines on its players at DraftKings' own fair chance, locked 2 hours before the first tip-off, and the record's pills, on the Parlay Builder's legs and sums, set in at its `<!--part:suggested-->` marker |
 | `tools/suggest_ledger.js`, `tools/suggest_check.js`, `data/suggest_ledger.json` | The suggestions record (README "Suggested Parlays"): each night's set as the job last published it before its lock (the per-game sets before 7 November 2026 kept as they were), taken from the built page in jsdom, graded as its games finish by the page's own settlement, one entry a line; and its guard, which works each level out again on the set's own pool and holds the file to the last commit |
 | `tools/test_suggest_ledger.js` | The record on made-up days: taken (three levels), rewritten, locked, a ruled-out level replaced, graded against settlements worked out from raw scores and box lines, a set from before kept with its Extreme, and the guard on hand-made ledgers; it runs first in the record's step |
+| `tools/test_suggest_ruler.js` | The ruler search (README "One ruler, and your own filters"): every level of small pools held to its rule by an enumeration of every parlay, every fixture night's default filters settled within half the site's work (`tools/fixtures/sp_ruler_nights.json` holds two nights of one game that need more than another filters' work), a level a slice a task, and the guard's bound and witnesses never refusing a real night's level; run in the job's record step (`RULER_ONLY=enum,site,slice,bound`, about a minute and a half), its other filters' timing by hand |
 | `tools/test_suggest_speed.js` | The time Suggested Parlays' exact search takes with no leg limit: the built page in jsdom on the pools of `tools/fixtures/sp_nights.json` (7 November 2026's night, each of its games alone, two and three of them, and the review's heavy-favourite nights), each level stopped at its limit and held to the exact search's answer; run in the job's record step and, for the heavy-favourite nights, by the smoke (README "Its time") |
 | `tools/sigma.js`, `research/sigma.json` | The spread of the real margin about the player model's own number, which the Parlay Builder prices a cover from (14.5 points, the 2026 walk-forward fold), the total's about the model's total (`sigmaTotal`, 19.1 points), which the Record tab's totals picks stand on, what the Value rule's team picks were worth on each fold and what the Record tab's rule would have been (`record`); run by hand |
 | `tools/smoke.js` | Loads the built viewer in jsdom with a fabricated game and checks the tabs, the tier shields and ladders, a bet graded as a book settles it, the confidence pill on each card and the key over them (section conf), the Record tab on a made-up season (section record), Refresh odds on a stubbed ESPN, the player props view on a press (section 8, README "Player props"), your parlay: player props and same-game legs (section 9, README "Same-game parlays"), the rating over time (section 10), the Pick'em Record (section 12, README "Pick'em Record"), the lines feed's readings held to the page's (section lines, README "The lines feed"), X Parlays (`tools/smoke_xparlays.js`, `SMOKE_ONLY=xparlays`, README "X Parlays"), the Parlay Builder (`tools/smoke_parlay.js`, `SMOKE_ONLY=pb`, README "Parlay Builder"), the parlay card (`tools/smoke_card.js`, `SMOKE_ONLY=card`, README "The parlay card") the matchup bubble (`tools/smoke_glance.js`, `SMOKE_ONLY=glance`, README "The matchup bubble"), Suggested Parlays (`tools/smoke_suggested.js`, `SMOKE_ONLY=sp`, README "Suggested Parlays") and a game's three windows (`tools/smoke_gamewin.js`, `SMOKE_ONLY=gw`, README "The game's three windows") |
@@ -3449,8 +3450,18 @@ likeliest legs (R11); a game whose table is not positive definite (the builder m
 Each size k is searched under a cut that only rises; its bound hi_k falls as it is searched. With Lo the best found,
 k* is the fewest legs whose bound reaches (1 - 0.005 + 0.001) Lo, and the level is settled when its best of k* legs, b,
 is within 0.1% of hi_k* and within half a percent of U, the most of every size's bound: then (1) to (4) hold of b by those
-bounds. Ties go to the lower slip keys (a tie pass within its own work). `tools/test_suggest_ruler.js` holds every
-level of 171 small pools to an enumeration of every parlay (2.58 million paying parlays) and its bound at C* or more.
+bounds. Ties go to the lower slip keys (a tie pass within its own work; a leg tied on the chance with a dearer one of its
+game stays in the search for it, which the review of 12 November found it dropping). `tools/test_suggest_ruler.js` holds
+every level of 172 small pools to an enumeration of every parlay (2.58 million paying parlays) and its bound at C* or
+more. The search's one stop besides its proof is its counted work (about microseconds of jsdom, the same on every
+machine): the site's set, the default filters', may use `SPR_WORK_SITE`, 20 million units, which the record and the
+page's own copy of it share; any other filters `SPR_WORK`, a million. A million left two real nights of one game
+unsettled at the default filters (the review of 12 November: 9 November's NOP at GSW alone at $4 needs 5.37 million,
+11 November's ORL at UTA alone at $8 1.78 million, a pair of short Unders half a hair short of the tolerance against
+many groups at the hold's envelope); every game and every two games of the 14 nights' last pre-lock files (26 October to
+12 November) cut alone settle within the site's work, and the record's test holds every fixture night's within half of
+it. The search is a generator (`sprLevel`) that pauses every `SPR_SLICE` units of that count (20,000, about 10 ms of
+jsdom); `spRulerLevel` runs it whole, the tab's soft build a slice a task, the same level either way.
 
 **On the page.** A ruler card states the fair chance ("49% fair chance", "every leg at DraftKings’ chance", titled with
 what it is), each leg's price and "fair 70%", a team leg's model chance in its own title alone ("The model’s chance: 62%
@@ -3480,8 +3491,11 @@ its storage (Teams only, nothing shorter than −200) and takes the set at the d
 which its guard holds on its own reading of the files.
 
 **The soft build.** A set the tab shows (the site's live set, this browser's own at the lock and yours) is built a piece a
-task: the pool, then each level (`spRB`, `spRBStep`, kept per page load on the night's data and the filters, the last 12),
-each task drawing what is built, a level still building drawn "Building…" (`data-sp-pending`). A task that finds another
+task: the pool, then each level a slice of its search a task (`spRB`, `spRBStep` with `SPR_SLICE`, kept per page load on
+the night's data and the filters, the last 12), each finished piece drawn, a level still building drawn "Building…"
+(`data-sp-pending`). Until the review of 12 November a level was one task, and a filter pressed on a real night held the
+page 0.5 to 1.1 s at a phone's speed (Chromium at four times slower, Player unders off or Overs only, a level running to
+its work); a call now counts at most a slice and one step of the search (a group's own sums), about 50,000 units. A task that finds another
 tab on the screen builds nothing and stops; the tab opened again carries on where it stopped (the review of the first
 build: one kept building on the Parlay Builder's tab). A filter pressed draws at once and builds nothing in the press.
 
@@ -3493,7 +3507,11 @@ the player legs the levels hold (`cut` the player legs in the band it does not k
 with the builder's own figures. A night with a level the search did not settle (marked `gap`, an empty one 1) gets no set
 that run, said ("no set of 2027_20261113_NIGHT this run: a level not settled within the search's work"), and a set an
 earlier run took stays as it was. A level built again after the lock for a player listed since is built under its own
-set's rule (a ruler level on a ruler pool of its own; a set taken under the rule with a player keeps that rule).
+set's rule (a ruler level on a ruler pool of its own, at the site's work; a set taken under the rule with a player keeps
+that rule); a ruler level built again that the search does not settle within its work is not written, the locked level
+standing that run, said ("kept ... as locked: built again for ..., it was not settled within the search's work"): until
+the review of 12 November it was written, and the job's own guard refused the whole ledger on every run to the first
+tip-off.
 
 **The guard** (`rulerEntryBad` in `tools/suggest_check.js`). A ruler set taken by the run (new or changed, its lock to
 come) is held to the guard's own reading of the run's files (`teamOwn` and `plOwn`: every team and player leg, its fair
@@ -3501,14 +3519,24 @@ chance its own reading of the two prices, every count of what the rules left out
 leg, every kept group worked again by its own copula; and every level by property: a valid parlay of the pool's legs at
 their kept figures, its chance and price its legs' (the pool's figures multiplied), paying its floor, settled, and landing
 at least (1 - `TAU_G`) of the guard's own upper bound on C* (`rulerBound`): `TAU_G` is 1%, the page's half a percent plus
-the bound's slack, which on every level of three real nights' cuts at the default filters (7 November, and 10 November at
-17:00 and at 21:57 UTC, each whole, each game and each two games: 219 levels) was at most 0.6% over the page's level (whole nights at most 0.06%; a night of one game at $4, where the bound's envelope stands
-over a game's many triples, up to 0.6%). The bound is a dynamic programme over the night's games on a grid of log prices
-(cells of 2e-4, each unit's log price rounded up, every cell from ln F on one): first each game's legs alone (exact), and,
-only where a group of two legs or more of one game could matter (the legs alone below the hold over F), its pairs
-exactly by the builder's own two-leg sums, every larger group by the hold's envelope capped by the one-factor copula at
-the game's largest correlation (Slepian's inequality), then its triples exactly where few enough; every term an upper
-bound, so the least of them is. An empty level is refused where the legs make a parlay paying its floor (`rulerPays`).
+the bound's slack, which on every level of the 14 real nights' last pre-lock files at the default filters (26 October to
+12 November, each whole, each game and each two games: 1,203 levels) was at most 0.68% over the page's level (none where
+the legs alone decide; a night of one game, where the bound's envelope stands over a game's many groups, up to 0.68%).
+The bound: first each game's legs alone, and, only where a group of two legs or more of one game could matter (the legs
+alone below the hold over F), the legs alone and its pairs (by the builder's own two-leg sums), walked EXACTLY
+(`rbExact`: a table on a grid of log prices, each unit's rounded up, cuts a walk over the games, with each branch's
+return, and every parlay the walk ends on is held to its own price, so one a hair short of the floor never counts: the
+review of 12 November found a $1.9996 pair of 30 October's IND at MIA and DEN at PHX, 1% likelier than any paying
+parlay, refusing the page's correct Safe and with it the record step); every larger group by a dynamic programme on that
+grid (its cells rounded up, which only raises the bound) under the hold's envelope capped by the one-factor copula at the
+game's largest correlation (Slepian's inequality), then its triples exactly where few enough; every term an upper bound.
+Rules (3) and (4) are held on the guard's own witnesses (`rulerWitness`): the exact walk's likeliest parlay of each size
+up to the level's (the legs alone, and on a night of three games or fewer their pairs too); a parlay of fewer legs
+landing (1 - 0.005 + 0.001) of the bound or more refuses the level ("the rule takes the fewest legs"), and so does one of
+the level's own size landing more than its chance over 0.999. Until the review of 12 November nothing held them: a Safe
+of three short Unders at $2.0002 and 49.996%, where two pay exactly $2 at 50%, passed. On the 1,203 real levels the
+bound and the witnesses refuse none, the bound in at most 0.65 s and the witnesses in 0.21 s. An empty level is refused
+where the legs make a parlay paying its floor (`rulerPays`).
 A level built again after the lock is held the same way on the guard's reading of the files at the time it was built, by
 the run that built it. A set the file it is held to holds as it is (every set on every later run) is held to its pool as
 kept (a valid parlay of its legs at their kept figures, paying its floor) and not worked again: its pool carries no
@@ -3521,7 +3549,8 @@ merge keeps what it took, as `PLAYER_FROM` and `NOCAP_FROM` did.
 
 **Its time.** The job's record step (the take and the guard) on 12 November's files at 19:38 UTC, the cutoff an hour
 before for the run, took 1.07 s and rewrote that night's set under the ruler (the guard's bound took at most 0.82 s a level
-on the real cuts, about 0.1 s on that night). On the page, measured in Chromium on 10 November's files at 21:55 UTC (6
+on the real cuts, about 0.1 s on that night). The hardest real level measured, 9 November's NOP at GSW alone at $4, takes
+5.37 million units, about 2 s of jsdom, in the job, and on the page a slice a task. On the page, measured in Chromium on 10 November's files at 21:55 UTC (6
 games, 922 legs, the page's cutoff moved before them), from the press to every level drawn: opening the tab 302 ms at
 390 wide and 328 ms at 1280, its longest task 70 to 74 ms; a filter pressed (Teams only, All, Player unders off, −300,
 Reset) drawn at once and built 34 to 132 ms after the press, no task over 50 ms; no sideways scroll at either width, no
@@ -3531,10 +3560,12 @@ about a second of jsdom: on the real nights' cuts of one and two games, Overs on
 its gap said; every level at the default filters settled.
 
 **What the owner was told.** The record's sets from the cutoff are the ruler's, and its pills count them beside every set
-before (a set of the rule before stands as taken and graded). A night with a level the search cannot settle in its work
-gets no set: never on the real nights measured at the default filters, but a made-up night of three games of short
-Unders at -241, -384 and -385 leaves its Aggressive unsettled (the smoke's DF: 9.72% found where 10.20% pays), so a real
-night like it would go unrecorded. The Parlay Builder's Top 50 still ranks its Value picks on the team model's chance,
+before (a set of the rule before stands as taken and graded). A night with a level the search cannot settle gets no set:
+never on the real nights measured at the default filters (every game and every two games of 14 nights cut alone, at the
+site's work), but a made-up night of three games of short Unders at -241, -384 and -385 leaves its Aggressive unsettled
+(the smoke's DF: 9.72% found where 10.20% pays). That is not its work (it stops at 77,572 units, the same at 100
+million): the search bounds every parlay longer than the most legs it searches (six on a night of three games) by its
+likeliest legs, and there that bound stands over the level. A real night like it would go unrecorded. The Parlay Builder's Top 50 still ranks its Value picks on the team model's chance,
 which the evidence above says loses to DraftKings' on every market: a follow-up, not this change.
 
 ### On the page

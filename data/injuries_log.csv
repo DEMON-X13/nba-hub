@@ -4702,10 +4702,10 @@ date,team,player_id,name,status
 2026-11-12,CHA,4433287,Brandon Miller,Out
 2026-11-12,CHA,5061575,Kon Knueppel,Out
 2026-11-12,CHA,3032979,Dennis Schroder,Out
+2026-11-12,CHI,5105555,Tobe Awaka,Out
 2026-11-12,CHI,4848625,Dailyn Swain,Day-To-Day
 2026-11-12,CHI,2595516,Norman Powell,Day-To-Day
-2026-11-12,CHI,5105555,Tobe Awaka,Day-To-Day
-2026-11-12,CHI,5095151,Caleb Wilson,Day-To-Day
+2026-11-12,CHI,5095151,Caleb Wilson,Out
 2026-11-12,CLE,4066757,Sam Merrill,Out
 2026-11-12,DAL,4683688,Dereck Lively II,Out
 2026-11-12,DAL,5148538,Tarik Biberovic,Out
@@ -4727,9 +4727,9 @@ date,team,player_id,name,status
 2026-11-12,IND,4396993,Tyrese Haliburton,Out
 2026-11-12,IND,5157066,Johnny Furphy,Out
 2026-11-12,IND,4433076,Ben Sheppard,Out
+2026-11-12,LAC,3913176,Brandon Ingram,Out
 2026-11-12,LAC,4845363,Cam Christie,Day-To-Day
 2026-11-12,LAC,5108024,Yanic Konan Niederhauser,Out
-2026-11-12,LAC,3913176,Brandon Ingram,Out
 2026-11-12,LAC,6580,Bradley Beal,Out
 2026-11-12,LAC,4396818,Jordan Miller,Out
 2026-11-12,LAL,4397014,Quentin Grimes,Day-To-Day
@@ -4739,16 +4739,18 @@ date,team,player_id,name,status
 2026-11-12,MEM,4593016,Quinten Post,Day-To-Day
 2026-11-12,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-12,MEM,5105462,Richie Saunders,Out
-2026-11-12,MIA,4601025,Pelle Larsson,Day-To-Day
 2026-11-12,MIA,6475,Klay Thompson,Day-To-Day
+2026-11-12,MIA,3032977,Giannis Antetokounmpo,Day-To-Day
+2026-11-12,MIA,4601025,Pelle Larsson,Day-To-Day
 2026-11-12,MIL,3133628,Myles Turner,Day-To-Day
 2026-11-12,MIL,4591725,Ryan Rollins,Day-To-Day
 2026-11-12,MIN,4594268,Anthony Edwards,Out
 2026-11-12,MIN,3934673,Donte DiVincenzo,Out
+2026-11-12,NOP,4576086,Bryce McGowens,Day-To-Day
+2026-11-12,NOP,4431675,Trendon Watford,Out
 2026-11-12,NOP,4683634,Bennedict Mathurin,Day-To-Day
-2026-11-12,NOP,4431675,Trendon Watford,Day-To-Day
-2026-11-12,NOP,4397688,Trey Murphy III,Day-To-Day
 2026-11-12,NOP,5061589,Yves Missi,Out
+2026-11-12,NOP,4397688,Trey Murphy III,Day-To-Day
 2026-11-12,OKC,4900671,Ajay Mitchell,Day-To-Day
 2026-11-12,OKC,4432823,Jaylin Williams,Out
 2026-11-12,OKC,5061603,Thomas Sorber,Out

@@ -682,7 +682,7 @@
     "name": "Evan Mobley",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4702134",
@@ -1885,7 +1885,7 @@
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107157",
@@ -2083,7 +2083,7 @@
     "name": "Ryan Rollins",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397114",
@@ -2111,7 +2111,7 @@
     "name": "Myles Turner",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5105623",
@@ -2290,7 +2290,7 @@
     "name": "Bryce McGowens",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5061589",

@@ -101,6 +101,15 @@
   ],
   "CHI": [
    {
+    "id": "5105555",
+    "name": "Tobe Awaka",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-11-12",
+    "returns": "2026-11-14"
+   },
+   {
     "id": "4848625",
     "name": "Dailyn Swain",
     "pos": "G",
@@ -119,22 +128,13 @@
     "returns": "2026-11-13"
    },
    {
-    "id": "5105555",
-    "name": "Tobe Awaka",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
     "id": "5095151",
     "name": "Caleb Wilson",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hand",
     "date": "2026-11-12",
-    "returns": "2026-11-13"
+    "returns": "2026-12-13"
    }
   ],
   "CLE": [
@@ -342,6 +342,15 @@
   ],
   "LAC": [
    {
+    "id": "3913176",
+    "name": "Brandon Ingram",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Achilles Surgery",
+    "date": "2026-11-12",
+    "returns": "2026-11-19"
+   },
+   {
     "id": "4845363",
     "name": "Cam Christie",
     "pos": "G",
@@ -358,15 +367,6 @@
     "detail": "Foot Surgery",
     "date": "2026-11-10",
     "returns": "2026-11-17"
-   },
-   {
-    "id": "3913176",
-    "name": "Brandon Ingram",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Achilles Surgery",
-    "date": "2026-11-10",
-    "returns": "2026-11-13"
    },
    {
     "id": "6580",
@@ -456,20 +456,29 @@
   ],
   "MIA": [
    {
+    "id": "6475",
+    "name": "Klay Thompson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Soreness",
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
+   },
+   {
+    "id": "3032977",
+    "name": "Giannis Antetokounmpo",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Wrist",
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
+   },
+   {
     "id": "4601025",
     "name": "Pelle Larsson",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "6475",
-    "name": "Klay Thompson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
     "date": "2026-11-12",
     "returns": "2026-11-13"
    }
@@ -489,9 +498,9 @@
     "name": "Ryan Rollins",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Head",
+    "detail": "Rollins (head) exited to the locker room in the fourth quarter of Wednesday's 123-112 loss to the Lakers and did not return  finishing with eight points (3-10 FG  2-6 3Pt)  seven rebounds  four assists and one steal across 24 minutes.",
     "date": "2026-11-12",
-    "returns": "2026-11-13"
+    "returns": ""
    }
   ],
   "MIN": [
@@ -516,6 +525,24 @@
   ],
   "NOP": [
    {
+    "id": "4576086",
+    "name": "Bryce McGowens",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Elbow Infection",
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
+   },
+   {
+    "id": "4431675",
+    "name": "Trendon Watford",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-12",
+    "returns": "2026-11-14"
+   },
+   {
     "id": "4683634",
     "name": "Bennedict Mathurin",
     "pos": "G",
@@ -525,11 +552,11 @@
     "returns": "2026-11-13"
    },
    {
-    "id": "4431675",
-    "name": "Trendon Watford",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
+    "id": "5061589",
+    "name": "Yves Missi",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee Bruise",
     "date": "2026-11-12",
     "returns": "2026-11-13"
    },
@@ -541,15 +568,6 @@
     "detail": "Knee Tendinitis",
     "date": "2026-11-12",
     "returns": "2026-11-13"
-   },
-   {
-    "id": "5061589",
-    "name": "Yves Missi",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Bruise",
-    "date": "2026-11-05",
-    "returns": "2026-11-16"
    }
   ],
   "OKC": [
@@ -634,7 +652,7 @@
     "status": "Out",
     "detail": "Knee",
     "date": "2026-11-09",
-    "returns": "2026-11-16"
+    "returns": "2026-11-13"
    },
    {
     "id": "4065654",

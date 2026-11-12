@@ -1,5 +1,5 @@
 {
- "date": "2026-11-11",
+ "date": "2026-11-12",
  "teams": {
   "ATL": [
    {
@@ -624,7 +624,7 @@
     "name": "Caleb Wilson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "CLE": [
@@ -1131,7 +1131,7 @@
     "name": "Stephen Curry",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6589",
@@ -1415,7 +1415,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133603",
@@ -1629,7 +1629,7 @@
     "name": "Luka Doncic",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397014",
@@ -1706,14 +1706,14 @@
     "name": "Austin Reaves",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4277811",
     "name": "Collin Sexton",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5060631",
@@ -2083,7 +2083,7 @@
     "name": "Ryan Rollins",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397114",
@@ -3175,6 +3175,13 @@
     "injured": false
    },
    {
+    "id": "2488653",
+    "name": "Mason Plumlee",
+    "pos": "C",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "4898371",
     "name": "Maxime Raynaud",
     "pos": "C",
@@ -3451,7 +3458,7 @@
     "name": "Trey Alexander",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4873138",
@@ -3703,35 +3710,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-11-11",
-  "BOS": "2026-11-11",
-  "BKN": "2026-11-11",
-  "CHA": "2026-11-11",
-  "CHI": "2026-11-11",
-  "CLE": "2026-11-11",
-  "DAL": "2026-11-11",
-  "DEN": "2026-11-11",
-  "DET": "2026-11-11",
-  "GSW": "2026-11-11",
-  "HOU": "2026-11-11",
-  "IND": "2026-11-11",
-  "LAC": "2026-11-11",
-  "LAL": "2026-11-11",
-  "MEM": "2026-11-11",
-  "MIA": "2026-11-11",
-  "MIL": "2026-11-11",
-  "MIN": "2026-11-11",
-  "NOP": "2026-11-11",
-  "NYK": "2026-11-11",
-  "OKC": "2026-11-11",
-  "ORL": "2026-11-11",
-  "PHI": "2026-11-11",
-  "PHX": "2026-11-11",
-  "POR": "2026-11-11",
-  "SAC": "2026-11-11",
-  "SAS": "2026-11-11",
-  "TOR": "2026-11-11",
-  "UTA": "2026-11-11",
-  "WAS": "2026-11-11"
+  "ATL": "2026-11-12",
+  "BOS": "2026-11-12",
+  "BKN": "2026-11-12",
+  "CHA": "2026-11-12",
+  "CHI": "2026-11-12",
+  "CLE": "2026-11-12",
+  "DAL": "2026-11-12",
+  "DEN": "2026-11-12",
+  "DET": "2026-11-12",
+  "GSW": "2026-11-12",
+  "HOU": "2026-11-12",
+  "IND": "2026-11-12",
+  "LAC": "2026-11-12",
+  "LAL": "2026-11-12",
+  "MEM": "2026-11-12",
+  "MIA": "2026-11-12",
+  "MIL": "2026-11-12",
+  "MIN": "2026-11-12",
+  "NOP": "2026-11-12",
+  "NYK": "2026-11-12",
+  "OKC": "2026-11-12",
+  "ORL": "2026-11-12",
+  "PHI": "2026-11-12",
+  "PHX": "2026-11-12",
+  "POR": "2026-11-12",
+  "SAC": "2026-11-12",
+  "SAS": "2026-11-12",
+  "TOR": "2026-11-12",
+  "UTA": "2026-11-12",
+  "WAS": "2026-11-12"
  }
 }

@@ -48,9 +48,9 @@ asks for the event (its scheduled start) and then each propBets page of provider
 | 2023-10-24 to 2024-04-30 | 00:07:06 to 00:18:27 | 2,536: 1,268 events, 1,268 propBets pages | every event 200; pages 1,141 HTTP 200, 126 HTTP 404 ("No propBets found"), 1 failed (curl exit 56, the connection dropped mid-answer: `2024_20231126_ATL_BOS`) |
 | 2023-11-26 (the failed game's date) | 00:18:50 to 00:18:53 | 16: 8 events, 8 pages | all 200; ATL at BOS answered with 76 lines; the day's other 7 games read again row for row as the first pass had them |
 
-So 2,552 requests in all, every game one page (limit 1000 is honoured), none refused by the server (a 404 is the feed's "No
-propBets found"), and in the end every game of
-the range read: **1,142 games with lines, 126 with none, none failed**. The cache holds **94,485 main lines**:
+So 2,552 requests in all, every game one page (limit 1000 is honoured), none refused by the server (a 404 is the feed's
+"No propBets found"), and in the end every game of the range read: **1,142 games with lines, 126 with none, none
+failed**. The cache holds **94,485 main lines**:
 
 | Kind of game | Games read | With lines | Lines |
 |---|---|---|---|
@@ -171,8 +171,8 @@ January 2023 that props_v2's coverage found answering on 5 November. curl wrote 
 status: **HTTP 200, still served**. No price, line, item count or outcome was read. The script refuses a second run.
 
 **What is known without reading them** (props_v2's committed results): its coverage asked one game in four on 5 November
-2026, and provider 40 answered for 303 of 309 sampled regular-season games and 20 of 21 sampled playoff games; its data.md scales
-that to about 1,210 regular-season games, which at 2023-24's rate (about 80 lines a game) is about 90,000 lines.
+2026, and provider 40 answered for 303 of 309 sampled regular-season games and 20 of 21 sampled playoff games; its data.md
+scales that to about 1,210 regular-season games, which at 2023-24's rate (about 80 lines a game) is about 90,000 lines.
 
 **What has been seen of 2022-23, for the preregistration's list.** Its prices have been seen nowhere in bulk, but:
 - props_v2 (5 November 2026): `espn_coverage` (status and item count, one game in four), `espn_validate40` (31 sampled
@@ -298,10 +298,10 @@ the day's scoreboard. A sample of four games a season shows what a season carrie
 | 2016-17 to 2021-22, and 2023-24 | yes | complete | flagged with reasons ("COACH'S DECISION", "REST", an injury such as "SORE LEFT KNEE") | real | yes |
 
 Also in the summaries: the officials (nearly every game from 1993-94), team statistics (22 or 23 a team, in every sampled
-game but 2 of 2014-15's four and 1 of 2015-16's), a pickcenter of game
-lines in every sampled game of 2012-13 to 2021-22 and none of 2023-24's (as `tools/fetch_odds_hist.js` notes, which took
-2023-24's lines from the core feed). And an injuries block that is **today's list**: in every sampled season its entries
-are dated July to November 2026, so it says nothing about who was out then.
+game but 2 of 2014-15's four and 1 of 2015-16's), a pickcenter of game lines in every sampled game of 2012-13 to 2021-22
+and none of 2023-24's (as `tools/fetch_odds_hist.js` notes, which took 2023-24's lines from the core feed). And an
+injuries block that is **today's list**: in every sampled season its entries are dated July to November 2026, so it says
+nothing about who was out then.
 
 How to fetch more: `tools/fetch_box.js`'s `parseSummary` reads a summary into the hub's columns, but its run is not for
 research: for a season with no ESPN ids it writes the ids it finds into `data/games.csv` itself (whatever

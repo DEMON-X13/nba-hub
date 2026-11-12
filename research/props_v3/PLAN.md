@@ -238,9 +238,9 @@ not a result). Forward-chained:
 ### 3.2 Why it is clean
 
 No model has been scored on these prices. Nobody has read them in bulk: what was seen is the short list in 3.3, every
-item a count, a status, a shape or DraftKings' own aggregate on 31 games, which are left out. Nothing MA stands on was fitted or
-chosen on 2022-23 (1.4). The season's box scores are not blind: earlier fits read them, and MA's replay walks them as
-history, as the rules allow. But no outcome of a 2022-23 line has entered anything MA carries.
+item a count, a status, a shape or DraftKings' own aggregate on 31 games, which are left out. Nothing MA stands on was
+fitted or chosen on 2022-23 (1.4). The season's box scores are not blind: earlier fits read them, and MA's replay walks
+them as history, as the rules allow. But no outcome of a 2022-23 line has entered anything MA carries.
 
 ### 3.3 Everything already seen of 2022-23, for the preregistration's list
 
@@ -287,8 +287,8 @@ is printed until all have.
   fitted on 2022-23. This is a change of the script's inputs, written and tested on 2023-24 (where it must give back
   `data.md`'s figures with the 2024 fold) before the preregistration.
 - **V4, the nudge knows no early exits.** On early exits (projected 24+ minutes by P23's own minutes rule, as V2
-  projects them; played his club's previous game; played under 12), MA's frozen nudge moves the chance by no more than 0.5 points more toward the Under than elsewhere, on 40
-  exits or more. On 2023-24: +0.06 against +0.02 points.
+  projects them; played his club's previous game; played under 12), MA's frozen nudge moves the chance by no more than
+  0.5 points more toward the Under than elsewhere, on 40 exits or more. On 2023-24: +0.06 against +0.02 points.
 - **V5, the level can be read.** At least 90% of graded lines are on player-games with two or more posted lines (2023-24:
   99.99%).
 

@@ -41,3 +41,11 @@ integrals a group). Non-PD games: pair bounds at max(rho,0)/min(rho,0); no one-f
 Default: every level of the night and every 1/2-game cut of 10 Nov settled (night 0.18 s for three levels; MIL_NYK alone
 0.36 s). Overs only and no unders: the night settles; 21 and 25 of the 1/2-game cut Aggressives stop at the budget
 (1e6 units, about 1 s) with a parlay and a proven gap (worst 12% and 33%).
+
+## 18:00 UTC: shipped in suggested.html (not wired), held and timed
+THE RULER SEARCH is in app/parts/suggested.html with its proof (R1-R11); the dev copies are gone from the branch.
+tools/test_suggest_ruler.js: (i) 171 levels held to the rule by full enumeration (made-up nights, a non-PD table, team
+legs of real 2- and 3-game cuts), the three planted errors each caught (113, 78 and 16 failures); (ii) 1,533 levels
+timed (7 Nov, 10 Nov 17:00, 10 Nov 21:57; whole, every game, every two games; seven filter cases): every default level
+settled, the nights' three levels 45-182 ms, the slowest level 652 ms; 150 levels on Overs-only and no-Unders cuts
+stop on the work with a proven gap (worst 39%). engine.md has the tables; timing.json the rows.

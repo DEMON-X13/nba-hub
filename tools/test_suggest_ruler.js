@@ -11,7 +11,7 @@
  * sgOrder; HOLD / J), and the level is held to (1) D >= F, (2) C >= (1 - SPR_TAU) C*, (3) no paying parlay with fewer
  * legs at (1 - SPR_TAU + SPR_ETA) C* or more, (4) C >= (1 - SPR_ETA) C*_k; where its tie pass ran, to the likeliest parlay
  * of its size, ties to the lower sorted slip keys; its bound at C* or more; the same answer and the same work a second
- * time. The pools: made-up nights of 6 to 30 legs over 1 to 4 games cut from 10 November's real legs (a game's groups of
+ * time. The pools: made-up nights of 6 to 24 legs over 1 to 4 games cut from 10 November's real legs (a game's groups of
  * three legs and more; even-return Unders tying; parlays paying their floor exactly; Unders off; Overs only; a table
  * that is not positive definite; a filter that leaves no leg), and real nights' team legs on every two-game cut and a
  * spread of three-game cuts (small enough to enumerate).
@@ -164,6 +164,11 @@ function madeUp() {
   P.push(['two games, Overs only', mix, { k: { ml: false, ats: false, total: false, under: false } }]);
   P.push(['two games, shortest -200', mix, { short: -200 }]);
   P.push(['a filter that leaves no leg', mix, { k: { ml: false, ats: false, total: false, over: false, under: false } }]);
+  /* thirty legs: three games of both sides at their moneylines and spreads, the total and three players' lines */
+  const one = (gid, st) => { const seen = new Set(), out = []; for (const l of pick(L, gid, x => x.kind === 'prop' && x.stat === st)) if (!seen.has(l.pid) && out.length < 3) { seen.add(l.pid); out.push(l); } return out; };
+  const big = [];
+  for (const [gid, st] of [['BOS_PHI', 'pts'], ['LAC_PHX', 'reb'], ['OKC_POR', 'ast']]) big.push(...team(gid, ['ml', 'spread', 'total']), ...one(gid, st));
+  P.push([`three games of ${big.length} legs (both sides at the moneyline and the spread, the total, three players a game)`, big, {}]);
   return P;
 }
 

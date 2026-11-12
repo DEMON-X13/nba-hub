@@ -250,11 +250,11 @@ rule's openers over-minuted in each of the last four seasons) or 2026-27's own; 
 
 The trial's early Over lean is real (the mean ran +0.56 over the stat; props_v2 traced about half of such leans to
 minutes and the rest to rates carried across the summer, debutants and the season-start pace) but worth about 2-3% of
-the gap: the first run's "about 2%" holds. It is not
-the cause. In 2023-24 the model leaned the other way at DraftKings' lines, toward the Under, all season. Taking the
-trial's lean out of the means instead (each stat's mean moved by its own average error) makes the log loss worse, 0.7044
-to 0.7057 (`lean.meanShift`): at a line near its mean the model's distribution already shades the Over (props_v2's
-"shape" finding), so the lean in the chance and the lean in the mean are not the same thing.
+the gap: the first run's "about 2%" holds. It is not the cause. In 2023-24 the model leaned the other way at
+DraftKings' lines, toward the Under, all season. Taking the trial's lean out of the means instead (each stat's mean
+moved by its own average error) makes the log loss worse, 0.7044 to 0.7057 (`lean.meanShift`): at a line near its mean
+the model's distribution already shades the Over (props_v2's "shape" finding), so the lean in the chance and the lean in
+the mean are not the same thing.
 
 ## 6. Stat by stat and month by month
 

@@ -5,3 +5,7 @@
   (DraftKings' level, the hub's mix) is the strong stand-in; the small information-free family lets month x stat,
   signed spread and the all-rivals rival meet T1 on the alternate-nights split, so the family must be the union of the
   rivals' features. Next: size.js on that family (sparse fits), the held-out rivals, then PLAN.md.
+- 12 Nov 2026 23:45 UTC: round 2 (size2.js) on the union family F (194 columns: every named rival's features, the
+  posting indicator and rest), the held-out rivals and the shuffles; boot_check.js; tables.js draws
+  results/plan_tables.md. No rival meets T1 (b above 0.25, 5% outside F) or T2 (below -0.0001 log loss, -0.00005
+  Brier); the stat-mix stand-in meets both on every split. Next: PLAN.md itself.

@@ -208,3 +208,158 @@ const powerT1 = (b, se, gEv, gTest, bar = 0) => normCdf((b - bar) / (se * Math.s
 const powerT2 = (d, se, gEv, gTest, m) => normCdf((-m - d) / (se * Math.sqrt(gEv / gTest)) - 1.645);
 
 module.exports = { ROOT, T, PM, STATS, load, graded, famCols, eCols, perStat, design, irls, robustSE, groupsOf, foldOf, fitNudge, fitE, crossFit, T1, T2, calibOf, shuffleWithin, powerT1, powerT2, ll, br, logit, sigm, mean };
+
+/* ---------- round 2: the union family, sparse ----------
+ * F, the information-free family PLAN.md's bar controls for: the union of every named rival's features, so that each
+ * named rival lies in its span. Per stat (each column zero off its stat): an intercept; logit q; logit of the Over's
+ * implied chance; logit of the multiplicative devig less logit q; the margin; the price band as six steps (q above
+ * 0.35, 0.40, 0.45, 0.50, 0.55, 0.60: the favourite side is the fourth); home; the season's month (November to April,
+ * October the base); the game total less the set's mean, and its square; the club's spread (minus when favoured) and its
+ * size; the generic position mix; guard and centre (forward the base); the line's size (log of line + 0.5); the player's
+ * posted lines, whether all six are posted, and the player-game's mean logit q; rest with no player in it, his club's
+ * and its opponent's second night of a back-to-back (a schedule effect is information-free: P1). Pooled: the price band's three hinges, a
+ * night's and a game's posted lines (their count, log) and mean logit q, and the line's logit q within its night,
+ * standardised */
+const seasonMonth = d => { const m = +d.slice(5, 7); return m >= 10 ? m - 10 : Math.min(m + 2, 6); };   // Oct 0 .. Apr 6 (later months 6)
+const STEPS = [0.35, 0.40, 0.45, 0.50, 0.55, 0.60];
+const zMultOf = x => logit(x.Io / (x.Io + x.Iu));
+/* each club's schedule (games.csv, the lines' own seasons alone), for the rest columns */
+function schedOf(L) {
+  const seasons = new Set(L.map(x => +x.game.slice(0, 4))), sched = new Map();
+  const t = fs.readFileSync(path.join(ROOT, 'data', 'games.csv'), 'utf8').split('\n').filter(Boolean), h = t.shift().split(','), ix = k => h.indexOf(k);
+  for (const l of t) { const v = l.split(','); if (!seasons.has(+v[ix('season')])) continue; for (const c of [v[ix('away')], v[ix('home')]]) { if (!sched.has(c)) sched.set(c, []); sched.get(c).push(v[ix('date')]); } }
+  for (const a of sched.values()) a.sort();
+  return sched;
+}
+const dayGap = (a, b) => (Date.parse(b) - Date.parse(a)) / 864e5;
+function prepBig(L) {
+  const sched = schedOf(L);
+  const restOf = (club, date) => { const a = sched.get(club) || [], i = a.indexOf(date); if (i < 0) return { b2b: 0, rest: 5, g3in4: 0 };
+    const gap = i > 0 ? dayGap(a[i - 1], date) : 9; return { b2b: gap === 1 ? 1 : 0, rest: Math.min(gap, 5), g3in4: i >= 2 && dayGap(a[i - 2], date) <= 3 ? 1 : 0 }; };
+  for (const x of L) { if (!x.team) { x.b2b = 0; x.oppB2b = 0; x.rest = 5; x.g3in4 = 0; continue; }
+    const [, , aw, hm] = x.game.split('_'), me = restOf(x.team, x.date), op = restOf(x.team === hm ? aw : hm, x.date);
+    x.b2b = me.b2b; x.oppB2b = op.b2b; x.rest = me.rest; x.g3in4 = me.g3in4; x.oppRest = op.rest; }
+  const pg = new Map(); for (const x of L) { const k = x.game + '|' + x.player; if (!pg.has(k)) pg.set(k, []); pg.get(k).push(x); }
+  for (const [, a] of pg) { const mz = mean(a.map(x => x.zq)); for (const x of a) x.pgZ = mz; }
+  for (const x of L) { x.sm = seasonMonth(x.date); x.zmq = zMultOf(x) - x.zq; x.lsz = Math.log(x.line + 0.5); }
+}
+const PER = 31, POOL = 8, NBIG = STATS.length * PER + POOL;
+function bigSparse(x) {
+  const s = STATS.indexOf(x.stat), b = s * PER, idx = [], val = [];
+  const put = (j, v) => { if (v !== 0 && Number.isFinite(v)) { idx.push(j); val.push(v); } };
+  put(b, 1); put(b + 1, x.zq); put(b + 2, x.zo); put(b + 3, x.zmq); put(b + 4, x.M * 10);
+  STEPS.forEach((t, k) => put(b + 5 + k, x.q > t ? 1 : 0));
+  put(b + 11, x.home || 0);
+  for (let m = 1; m <= 6; m++) put(b + 11 + m, x.sm === m ? 1 : 0);
+  put(b + 18, x.totC / 10); put(b + 19, (x.totC / 10) ** 2); put(b + 20, x.spr / 10); put(b + 21, Math.abs(x.spr) / 10);
+  put(b + 22, x.dPos || 0); put(b + 23, x.pos === 'G' ? 1 : 0); put(b + 24, x.pos === 'C' ? 1 : 0);
+  put(b + 25, x.lsz); put(b + 26, x.nPl); put(b + 27, x.pgZ); put(b + 28, x.nPl >= 6 ? 1 : 0); put(b + 29, x.b2b || 0); put(b + 30, x.oppB2b || 0);
+  const p = STATS.length * PER;
+  put(p, hinge(x.zq, K1)); put(p + 1, hinge(x.zq, K2)); put(p + 2, hinge(x.zq, K3));
+  put(p + 3, Math.log(x.nN)); put(p + 4, x.nZ); put(p + 5, Math.log(x.gN)); put(p + 6, x.gZ); put(p + 7, x.nZs);
+  return { idx, val };
+}
+/* the candidate's own information-free part, sparse: per stat an intercept, logit q, logit of the Over's implied chance */
+const NE = STATS.length * 3;
+function eSparse(x) { const s = STATS.indexOf(x.stat) * 3; return { idx: [s, s + 1, s + 2], val: [1, x.zq, x.zo] }; }
+/* rows: [{idx, val}] over k columns; extra dense columns appended (each an array over the rows) */
+function sparseRows(L, f, extra = []) {
+  return L.map((x, t) => { const r = f(x); const idx = r.idx.slice(), val = r.val.slice(); extra.forEach((e, j) => { const v = e[t]; if (v !== 0) { idx.push(-1 - j); val.push(v); } }); return { idx, val }; });
+}
+/* Newton on sparse rows: k base columns, then extra columns (index -1 - j maps to k + j). A ridge lam on every column
+   but each stat's intercept and the extra columns, and only where asked */
+function sirls(R, k, nExtra, y, off, lam = 0, iters = 60, beta0 = null, ridgeSkip = () => false) {
+  const K = k + nExtra, beta = beta0 ? Float64Array.from(beta0) : new Float64Array(K);
+  const col = j => (j < 0 ? k - 1 - j : j);
+  const seen = new Uint8Array(K); for (const r of R) for (const j of r.idx) seen[col(j)] = 1;
+  const live = []; for (let a = 0; a < K; a++) if (seen[a]) live.push(a);
+  const pos = new Int32Array(K).fill(-1); live.forEach((a, u) => { pos[a] = u; });
+  const RR = R.map(r => { const ii = new Int32Array(r.idx.length); r.idx.forEach((j, q) => { ii[q] = pos[col(j)]; }); return { ii, vv: Float64Array.from(r.val) }; });
+  const kk = live.length;
+  let fitted = null;
+  for (let it = 0; it < iters; it++) {
+    const H = new Float64Array(kk * kk), g = new Float64Array(kk);
+    for (let t = 0; t < RR.length; t++) {
+      const { ii, vv } = RR[t]; let z = off ? off[t] : 0;
+      for (let q = 0; q < ii.length; q++) z += beta[live[ii[q]]] * vv[q];
+      const p = 1 / (1 + Math.exp(-z)), w = Math.max(p * (1 - p), 1e-12), r = y[t] - p;
+      for (let q = 0; q < ii.length; q++) { const u = ii[q], xu = vv[q]; g[u] += xu * r; const wx = w * xu, base = u * kk; for (let q2 = 0; q2 < ii.length; q2++) H[base + ii[q2]] += wx * vv[q2]; }
+    }
+    if (lam) for (let u = 0; u < kk; u++) { const a = live[u]; if (a < k && !ridgeSkip(a)) { H[u * kk + u] += lam; g[u] -= lam * beta[a]; } }
+    const A = []; for (let u = 0; u < kk; u++) A.push(Array.from(H.subarray(u * kk, (u + 1) * kk)));
+    const step = T.solve(A, Array.from(g)); if (!step) return null;
+    let mx = 0; live.forEach((a, u) => { beta[a] += step[u]; mx = Math.max(mx, Math.abs(step[u])); });
+    fitted = { beta, live, H: A, RR, pos, kk };
+    if (mx < 1e-9) break;
+  }
+  return fitted;
+}
+const sLin = (fit, r, off) => { let z = off || 0; for (let q = 0; q < r.idx.length; q++) { const j = r.idx[q]; z += fit.beta[j < 0 ? fit.kBase - 1 - j : j] * r.val[q]; } return z; };
+/* cluster-robust standard error of the coefficient at column a (in the fit's own numbering) */
+function sRobustSE(fit, y, off, a, groups) {
+  const { beta, live, RR, pos, kk } = fit, n = RR.length, p = new Float64Array(n);
+  for (let t = 0; t < n; t++) { const { ii, vv } = RR[t]; let z = off ? off[t] : 0; for (let q = 0; q < ii.length; q++) z += beta[live[ii[q]]] * vv[q]; p[t] = 1 / (1 + Math.exp(-z)); }
+  /* the fit's own information matrix (its last Newton step's, the ridge in it) */
+  const e = new Array(kk).fill(0); e[pos[a]] = 1; const u = T.solve(fit.H.map(r => r.slice()), e); if (!u) return NaN;
+  let s = 0; for (const g of groups) { let d = 0; for (const t of g) { const { ii, vv } = RR[t]; let xu = 0; for (let q = 0; q < ii.length; q++) xu += u[ii[q]] * vv[q]; d += xu * (y[t] - p[t]); } s += d * d; }
+  const G = groups.length; return Math.sqrt(s * G / (G - 1));
+}
+/* the family cross-fitted on evaluation lines, 5 folds by game, ridge lam (the plan's: 5) */
+function crossFitBig(Lev, K = 5, lam = 5) {
+  const z = new Float64Array(Lev.length), R = Lev.map(bigSparse);
+  for (let k = 0; k < K; k++) {
+    const tr = [], te = []; Lev.forEach((x, i) => (foldOf(x.game, K) === k ? te : tr).push(i));
+    const f = sirls(tr.map(i => R[i]), NBIG, 0, Float64Array.from(tr, i => Lev[i].o), null, lam, 60, null, a => a % PER === 0 && a < STATS.length * PER);
+    for (const i of te) { let s = 0; const r = R[i]; for (let q = 0; q < r.idx.length; q++) s += f.beta[r.idx[q]] * r.val[q]; z[i] = s; }
+  }
+  return z;
+}
+/* T1 on the union family: logit P = F(x) + b n, unpenalised, cluster-robust; a nudge (nearly) inside the family's span
+   (its residual on the family under 1e-6 of its variance) has no b */
+/* the share of a nudge's variance its least-squares fit on the family leaves (a whisker of ridge for the family's exact
+   collinearities, such as a month dummy set that covers every evaluation line) */
+function sOrth(R, k, v) {
+  const seen = new Uint8Array(k); for (const r of R) for (const j of r.idx) seen[j] = 1;
+  const live = []; for (let a = 0; a < k; a++) if (seen[a]) live.push(a); const pos = new Int32Array(k).fill(-1); live.forEach((a, u) => { pos[a] = u; });
+  const kk = live.length, A = Array.from({ length: kk }, () => new Array(kk).fill(0)), r = new Array(kk).fill(0);
+  R.forEach((row, t) => { for (let q = 0; q < row.idx.length; q++) { const u = pos[row.idx[q]], xu = row.val[q]; r[u] += xu * v[t]; for (let q2 = 0; q2 < row.idx.length; q2++) A[u][pos[row.idx[q2]]] += xu * row.val[q2]; } });
+  for (let u = 0; u < kk; u++) A[u][u] += 1e-6 * (A[u][u] || 1);
+  const beta = T.solve(A, r); if (!beta) return null;
+  let ssr = 0, sst = 0; const mv = mean(Array.from(v));
+  R.forEach((row, t) => { let f = 0; for (let q = 0; q < row.idx.length; q++) f += beta[pos[row.idx[q]]] * row.val[q]; ssr += (v[t] - f) ** 2; sst += (v[t] - mv) ** 2; });
+  return sst > 0 ? ssr / sst : 0;
+}
+function T1big(Lev, nArr, Rfam) {
+  const R = Rfam || Lev.map(bigSparse), y = Float64Array.from(Lev, x => x.o), n = Lev.length;
+  const orth = sOrth(R, NBIG, nArr);
+  if (orth == null || orth < 1e-6) return { b: NaN, se: NaN, lo: NaN, hi: NaN, collinear: true, orth };
+  const rows = R.map((r, t) => ({ idx: nArr[t] !== 0 ? [...r.idx, -1] : r.idx, val: nArr[t] !== 0 ? [...r.val, nArr[t]] : r.val }));
+  /* a whisker of ridge (1e-3) on the family alone, never on b: it settles the family's exact collinearities */
+  const f = sirls(rows, NBIG, 1, y, null, 1e-3, 60);
+  if (!f) return { b: NaN, se: NaN, lo: NaN, hi: NaN, collinear: true };
+  f.kBase = NBIG; const a = NBIG; const b = f.beta[a];
+  if (f.pos[a] < 0) return { b: NaN, se: NaN, lo: NaN, hi: NaN, collinear: true };
+  const se = sRobustSE(f, y, null, a, T.groupBy(Lev, x => x.game));
+  const bad = !Number.isFinite(se);
+  return { b, se, lo: b - 1.645 * se, hi: b + 1.645 * se, collinear: bad, orth };
+}
+/* a nudge's weights, fitted jointly with the union family on training lines (the candidate's way: they carry only what
+   the family does not); then the candidate's own information-free part with the frozen nudge as an offset, its slopes
+   shrunk toward the identity (a ridge on logit q's coefficient less 1 and on the others) */
+function fitNudgeBig(Ltr, featf, lam = 5) {
+  const nf = featf(Ltr[0]).length, y = Float64Array.from(Ltr, x => x.o);
+  const R = Ltr.map(x => { const r = bigSparse(x), f = featf(x); const idx = r.idx.slice(), val = r.val.slice(); f.forEach((v, j) => { if (v !== 0) { idx.push(-1 - j); val.push(v); } }); return { idx, val }; });
+  const fit = sirls(R, NBIG, nf, y, null, lam, 60, null, a => a % PER === 0 && a < STATS.length * PER);
+  if (!fit) return null;
+  const w = Array.from(fit.beta.slice(NBIG, NBIG + nf));
+  const nud = x => { const f = featf(x); let s = 0; for (let a = 0; a < nf; a++) s += w[a] * f[a]; return s; };
+  /* E: logit q as an offset too, so the ridge shrinks toward the identity */
+  const off = Float64Array.from(Ltr, x => nud(x) + x.zq), RE = Ltr.map(eSparse), fe = sirls(RE, NE, 0, y, off, lam, 60, null, a => a % 3 === 0);
+  const eb = Array.from(fe.beta), eOf = x => { const r = eSparse(x); let s = x.zq; for (let q = 0; q < 3; q++) s += eb[r.idx[q]] * r.val[q]; return s; };
+  return { w, nud, eOf, eb };
+}
+function fitEBig(Ltr, lam = 5) {
+  const y = Float64Array.from(Ltr, x => x.o), off = Float64Array.from(Ltr, x => x.zq), fe = sirls(Ltr.map(eSparse), NE, 0, y, off, lam, 60, null, a => a % 3 === 0), eb = Array.from(fe.beta);
+  return x => { const r = eSparse(x); let s = x.zq; for (let q = 0; q < 3; q++) s += eb[r.idx[q]] * r.val[q]; return s; };
+}
+Object.assign(module.exports, { seasonMonth, prepBig, bigSparse, NBIG, PER, eSparse, sirls, sRobustSE, crossFitBig, T1big, fitNudgeBig, fitEBig, zMultOf });

@@ -3858,10 +3858,13 @@ exactly one in it), and the smoke loads the page so for every section but 8 and 
   guard's breaks (a Safe 30% under its bound, a team leg kept at the model's chance, a level not settled, a team leg left
   out of the pool, the heads of the rule with a player, a leg not in its pool), `TAU_G` itself (a level refused against a
   bound 1.06% over its chance and passed at 0.96%), and ties among two players' Unders at +100 (the guard passing either);
-  R5 a level built again after the lock under each rule; R6 the pool as kept from the lock; R7 a night of one game; R8 a
-  level not settled within the search's work (`SUGGEST_RULER_WORK`), the night given no set and an earlier set left as it
-  was; R9 the fewest legs, D1's night with five players' Unders: the pair at -241 (49.949% paying $2.0020) where the
-  triple at -385, -384 and -384 lands likelier (49.968%). G runs the real ledger at the real cutoff.
+  R5 a level built again after the lock under each rule, and one the search does not settle within its work
+  (`SUGGEST_RULER_WORK`, which reaches the page's rebuild) left as locked, said, the guard passing; R6 the pool as kept
+  from the lock; R7 a night of one game; R8 a level not settled within the search's work (`SUGGEST_RULER_WORK`), the
+  night given no set and an earlier set left as it was; R9 the fewest legs, D1's night with five players' Unders: the
+  pair at -241 (49.949% paying $2.0020) where the triple at -385, -384 and -384 lands likelier (49.968%), and the same
+  night on a page whose search takes the most legs refused by the job's own guard, on its witnesses. F holds that the
+  job's record step runs the ruler search's own test before the take. G runs the real ledger at the real cutoff.
 - `tools/smoke_suggested.js` section 9, on a night made for the filters (DF: three games, the pair of Unders at -241 and
   the likelier triple, legs at exactly -300 and -301) and on D1, D2 and D3: the pool and every level against this file's
   own pool and enumeration (the builder's own sums on each game's legs) at the default filters and on Teams only, Players
@@ -3876,11 +3879,16 @@ exactly one in it), and the smoke loads the page so for every section but 8 and 
   stopped on another tab and carried on (four pieces); at the lock this browser's own set, then the record's, and your
   filters' set live under the site's lock, on the games still to tip after the first tip-off. Section 8 holds the real
   night with the guard's own property check once the page's cutoff has passed.
-- `tools/test_suggest_ruler.js` (4,051 checks): (i) 171 levels on small pools enumerated whole (2.58 million paying
-  parlays) and the guard's bound at C* or more on the 163 with a parlay; (ii) every real night timed at seven filter cases;
-  (iii) the guard's bound on every settled level of the real nights' cuts at the default filters (219): never under the
-  level but for the copulas' noise, at most 0.596% over it (10 November at 21:57, ORL at SAC, $4), within `TAU_G`,
-  the slowest 0.82 s.
+- `tools/test_suggest_ruler.js`: (i) 172 levels on small pools enumerated whole (2.58 million paying parlays), a tie on
+  the chance between two legs of one game among them, and the guard's bound at C* or more on the 164 with a parlay; (ii)
+  every fixture night timed at seven filter cases, the default filters at the site's work, each level settled within half
+  of it (two nights of one game, 9 November's NOP at GSW and 11 November's ORL at UTA, held unsettled at another filters'
+  work and settled at the site's); (slice) a level a slice a task, each call within `SPR_SLICE` and one step of the
+  search, the same level as whole; (iii) the guard's bound and witnesses on every settled level of the fixture nights'
+  cuts at the default filters (231): the bound never under the level but for the copulas' noise, at most 0.68% over it
+  (11 November's ORL at UTA alone, $8), within `TAU_G`, the slowest 0.87 s, the witnesses refusing none; and a near miss
+  of two games (a $1.9996 pair 1% likelier than the likeliest paying parlay) never its bound. The job runs it with
+  `RULER_ONLY=enum,site,slice,bound` (about a minute and a half).
 - Planted, each in a scratch copy (the smoke's Suggested Parlays section with `NBA_HTML`, the record's test on a scratch
   copy of the page or the guard, the ruler test with `RULER_PAGE`), the failures each caused: a team leg ranked on the
   model's chance: smoke 32, record 5, ruler 148; the bet types ignored: smoke 9; the games ignored: 2; the stats ignored:
@@ -3888,7 +3896,12 @@ exactly one in it), and the smoke loads the page so for every section but 8 and 
   drawn as the site's (no Your filters line): 1; the site's set built on a visitor's filters: record 4; the tolerance ten
   times too loose: smoke 3, record 3, ruler 1; the fewest legs reversed (the most legs not ruled out): smoke 4, record 2,
   ruler 1; the page's cutoff reversed: smoke 25; the soft build carrying on with another tab on the screen: smoke 1; the
-  guard's `TAU_G` at 5%: record 2; the guard with no bound: record 2; the guard's cutoff reversed: record 13.
+  guard's `TAU_G` at 5%: record 2; the guard with no bound: record 2; the guard's cutoff reversed: record 13. The review of
+  12 November's fixes, each taken back out in a scratch copy (the record's test beside a copy with nothing planted, 394
+  checks passed): the frontier dropping a leg tied on the chance: ruler 1; the site's set on another filters' work:
+  ruler 8; a level whole a call (no slice): ruler 2; the guard's legs alone on the rounded cells (the near miss): ruler 1;
+  the guard with no witnesses: record 1; a rebuild not settled written: record 1; the record's test's work knob not
+  reaching the rebuild: record 1; the workflow without the ruler test: record 1.
 
 **At least one player leg** (the owner's call of 10 November 2026). The record's test runs every night of its own on the
 rule: its own enumeration takes each night's player legs beside its team legs (its own reading of DraftKings' main lines,

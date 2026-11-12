@@ -485,6 +485,19 @@ Shortest -200 (898 legs):
 - **The work budget at the default filters.** The whole nights use at most 104,724 units of the 1,000,000 (7 November's
   Aggressive); the heaviest cut, 7 November's DEN at IND alone at Aggressive, 722,532. The count is the same on every
   machine (the answer never depends on the clock); its wall time is about 0.5 to 0.8 microseconds a unit in jsdom here.
+  Since the review of 12 November the site's set (the default filters: the record's take, and the page's own copy of it)
+  has `SPR_WORK_SITE`, 20 million units; any other filters `SPR_WORK`, a million. A million left two real nights of one
+  game unsettled: of the 90 one-game cuts of the 14 nights' last pre-lock files (26 October to 12 November), 9 November's
+  NOP at GSW alone at $4 needs 5.37 million (a pair of short Unders, $4.0204 at 22.286%, a hair under half a percent of
+  the hold's envelope over $4, against size after size of groups at that envelope, each ruled out to a hundredth of a
+  percent by its integrals) and 11 November's ORL at UTA alone at $8 1.78 million; the next, 7 November's DEN at IND at
+  $8, 0.73 million. Every one settles within the site's work. The search is a generator since (`sprLevel`), paused every
+  `SPR_SLICE` units (20,000) so the tab's soft build runs a level a slice a task; whole or sliced the same level and
+  work, on 1,533 timed levels and 132 real cuts.
+- **The tail.** The smoke's made-up night DF (three games of short Unders at -241, -384 and -385) leaves its Aggressive
+  unsettled at 77,572 units whatever the work (9.72% found where 10.20% pays): R11 bounds every parlay longer than the
+  most legs searched (K, six on three games) by its likeliest legs and the hold, and there that bound stands over the
+  level. No real night measured meets it; a larger K for such nights is left.
 - **The tie pass** completes on every level of every whole night; on 72 of the 210 levels of the cuts at the
   default filters it stops at its 60,000 units, and those levels meet (1)-(4) with no proof that a parlay of the same chance and
   lower slip keys does not exist (an exact tie is all but impossible on real legs; the made-up tie case is held).
@@ -495,7 +508,9 @@ Shortest -200 (898 legs):
   the pool keeps none, its margin check), and a price of 2.9 or more (the pool's band, 45% to 97%, keeps every price under
   2.23). A game whose variables are not positive definite is searched on bounds that hold for the builder's shrunk matrix
   (the real tables are repaired by `tools/corr.js`, so this is the made-up case's path).
-- **Not wired**: `spSet`, the tab, the record, the filters' controls and `RULER_FROM` are the next step's.
+- **Wired** (the build step): the tab's sets (`spRB`), the record's take (`spEntry`) and a level built again after the
+  lock (`spRebuild`), from `RULER_FROM`. The tie order (a tie on the chance to the lower sorted slip keys) holds since the
+  review of 12 November: the frontier no longer drops a leg tied on the chance with a dearer one of a higher key.
 - **For the owner, a follow-up**: the Parlay Builder's Top 50 still ranks team legs as Value picks on the model's chance
   (`legModel`), not on DraftKings' fair chance, though the evidence (research/sp_ruler, the team model against DraftKings'
   no-vig) is that the model loses to it. The ruler pool does not read the model at all; the Top 50 is untouched here.

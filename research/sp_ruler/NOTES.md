@@ -126,3 +126,9 @@ Next: the guard (S-2 exact singles/pairs, S-4 witnesses), replaceRuledOut (S-3/F
 - test_suggest_ruler: nov9one/nov11one fixtures, the site's work at the default filters with half of it as headroom, a
   slice part, the tie case; RULER_ONLY takes a list (the job: enum,site,slice).
 Next: R9's guard plant (fewest legs reversed), F3 workflow, README, smoke, full suite, planted breaks, the final check.
+## 21:43 UTC: every finding fixed, each held and planted
+Plants (each fix taken back out in a scratch copy; the record's test 394 passed on a control copy): S-5 ruler 1, S-1
+ruler 8, F1 ruler 2, S-2 ruler 1 (near miss), S-4 record 1, S-3 gap record 1, the knob record 1, F3 record 1.
+Chromium (fix/lt.js, lt2.js on main's 20:55 files, the cutoff moved): 1x every press's longest task 52 ms (was 188),
+every one- and two-game cut at Overs only and Player unders off none over 50 ms (was up to 285); 4x at 390 wide the
+longest 155 ms (was 783 to 1063). Next: the final check (rebase on main, RULER_FROM, one commit).

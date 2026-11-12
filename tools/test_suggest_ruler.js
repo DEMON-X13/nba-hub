@@ -313,6 +313,18 @@ function madeUp() {
   }
   if (part('bound')) {
     const t0 = Date.now(), corr = JSON.parse(w.eval('JSON.stringify(S.corr)')); let worst = 0, over = 0, slow = 0, nB = 0, at = null, nW = 0, wCap = 0;
+    /* a near miss on two games (30 October's IND at MIA and DEN at PHX, the review of 12 November): MIA to win at -325 with a
+       DEN at PHX Under at -189 pays $1.99959, a cell's rounding short of $2, and lands 47.97%; with the other Under, at -178,
+       it pays $2.04235 at 46.97%, the likeliest paying parlay. The bound is that, never the near miss (a bound on the
+       rounded cells alone refused the page's correct Safe by 1%) */
+    { const imp = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100), A = '2027_20261030_IND_MIA', B = '2027_20261030_DEN_PHX';
+      const ml = { sk: A + '|ml|MIA|', gid: A, kind: 'ml', pid: null, s: 'MIA', line: null, home: 'MIA', team: 'MIA', stat: null, odds: -325, other: 260, side: true, tot: false };
+      ml.p = imp(-325) / (imp(-325) + imp(260)); ml.d = decOf(-325);
+      const un = (pid, stat, odds, other) => ({ sk: [B, 'prop', pid, stat, 'main', 1.5, 'under'].join('|'), gid: B, kind: 'prop', pid, s: 'under', line: 1.5, home: 'PHX', team: 'PHX', stat, odds, other, p: imp(odds), d: decOf(odds), side: false, tot: false });
+      const L = [ml, un('3112335', 'stl', -189, 145), un('4437244', 'tpm', -178, 134)], near = ml.p * L[1].p, best = ml.p * L[2].p;
+      chk(ml.d * L[1].d < 2 - 1e-6 && ml.d * L[2].d >= 2 && near > best * 1.01, `the near miss stands on what it is for: ${(near * 100).toFixed(3)}% paying ${(ml.d * L[1].d).toFixed(6)}, the likeliest paying ${(best * 100).toFixed(3)}% at ${(ml.d * L[2].d).toFixed(5)}`);
+      const info = {}, b = SC.rulerBound(L, corr, 2, info);
+      chk(Math.abs(b - best) <= best * 2e-9, `the guard's bound on the near miss is the likeliest paying parlay, ${best}, never the near miss's ${near} (${b}, stage ${info.stage})`); }
     for (const [nm, N] of Object.entries(NIGHTS)) {
       const all = legsOf(N), gs = Object.keys(N.games).sort(), cuts = [['night', gs], ...gs.map(g => [g.slice(14), [g]])];
       for (let a = 0; a < gs.length; a++) for (let b = a + 1; b < gs.length; b++) cuts.push([gs[a].slice(14) + '+' + gs[b].slice(14), [gs[a], gs[b]]]);

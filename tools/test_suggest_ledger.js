@@ -673,6 +673,9 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
      seconds later on the wall clock, would read as a locked night moved */
   { const wf = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'update.yml'), 'utf8').split('\n').find(l => /node tools\/suggest_ledger\.js/.test(l) && /node tools\/suggest_check\.js/.test(l)) || '';
     chk(/now=\$\(date -u \+[^)]*\) && SUGGEST_NOW=\$now node tools\/suggest_ledger\.js && SUGGEST_NOW=\$now node tools\/suggest_check\.js/.test(wf) && wf.indexOf('test_suggest_ledger.js') < wf.indexOf('now=$('), "F: the job's step reads one clock after the test and hands it to both the script and its check");
+    /* and runs the ruler search's own test before the take (the review of 12 November: nothing in the job ran it) */
+    const rt = wf.indexOf('RULER_ONLY=enum,site,slice,bound node tools/test_suggest_ruler.js');
+    chk(rt > 0 && rt < wf.indexOf('now=$(') && /test_suggest_ruler\.js >> \/tmp\/test_suggest_ledger\.log 2>&1 &&/.test(wf), "F: the job's step runs the ruler search's own test (its rule, the site's work on every fixture night, a level a slice a task, the guard's bound and witnesses) before the take, and stops on it");
     fs.writeFileSync(LEDGER, good);
     const lockD2 = Date.parse(gE.tip) - LOCK, tJ = isoS(lockD2 - 1000), tLate = isoS(lockD2 + 5000);
     r = run(stateOf(day2b, { today: D2, generated: T(D2, '20:00') }), linesOf([gD, gE, gF], { mlShift: { [gE.id]: 0.03 }, at: T(D2, '20:30:00') }), tJ);

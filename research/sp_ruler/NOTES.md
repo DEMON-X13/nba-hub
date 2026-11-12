@@ -132,3 +132,16 @@ ruler 8, F1 ruler 2, S-2 ruler 1 (near miss), S-4 record 1, S-3 gap record 1, th
 Chromium (fix/lt.js, lt2.js on main's 20:55 files, the cutoff moved): 1x every press's longest task 52 ms (was 188),
 every one- and two-game cut at Overs only and Player unders off none over 50 ms (was up to 285); 4x at 390 wide the
 longest 155 ms (was 783 to 1063). Next: the final check (rebase on main, RULER_FROM, one commit).
+
+## 22:14 UTC 12 Nov: the final check, squashed into ade9ee4 on wip/sp-one-ruler
+- On main 243d6af (the 20:55 UTC update): the change's 20 files (this file left out), the pages rebuilt, unchanged on
+  a second build. RULER_FROM 2026-11-13T04:00:00Z, for 13 November's night (9 games, first tip-off 00:00 UTC on the
+  14th, lock 22:00 UTC on the 13th); 12 November's night locked at 22:00 UTC, before the commit.
+- Words: no line of the change says an Under returns $1 or its dollar, or calls Unders even-return (README, engine.md,
+  the page's and the guard's comments, two test names); the pages rebuilt and every test run again on them: the ruler
+  test 4446, the record's 394, the speed test 137, the smoke all good, every other test all good.
+- Scratch job (fix/jobrun_at.sh, the cutoff at 21:00 UTC for the run): at 22:11 UTC the file byte for byte (12 Nov
+  locked, 13 Nov with no DraftKings line yet), the guard 0 failures; at 21:59 UTC only 12 Nov's entry rewritten under
+  the ruler, the guard 0 failures (Safe Wade u1.5 3PM -237 + Irving u1.5 stl -244, 49.88% at 2.005; Medium Martin u5.5
+  PR +100 + O'Neale u1.5 3PM +100, 25% at 4.00; Aggressive those two + Walter u5.5 AR +100, 12.5% at 8.00).
+- This branch (the milestones and these notes) is kept at wip/sp-one-ruler-dev; wip/sp-one-ruler is the one commit.

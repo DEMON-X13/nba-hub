@@ -1,0 +1,593 @@
+{
+ "generated": "2026-11-12T00:24Z",
+ "what": "research/props_v3/fetch_check.js: the 2023-24 provider-40 fetch logged and checked against props_v2's test and samples, and what in it is clean; aggregates only",
+ "window": {
+  "type": "REG",
+  "from": "2023-10-24",
+  "to": "2024-04-14"
+ },
+ "fetch": {
+  "runs": [
+   {
+    "log": "research/props_v3/cache/fetch_dk40_2023-10-24_2024-04-30.requests.tsv",
+    "from": "2023-10-24",
+    "to": "2024-04-30",
+    "started": "2026-11-12T00:07:06Z",
+    "finished": "2026-11-12T00:18:27Z",
+    "requests": 2536,
+    "byKind": {
+     "event": 1268,
+     "propBets page": 1268
+    },
+    "byStatus": {
+     "event: curl 0, HTTP 200": 1268,
+     "propBets page: curl 0, HTTP 200": 1141,
+     "propBets page: curl 0, HTTP 404": 126,
+     "propBets page: curl 56, HTTP 000": 1
+    },
+    "errors": [
+     {
+      "at": "2026-11-12T00:09:21Z",
+      "kind": "propBets page",
+      "espn": "401584874",
+      "rc": "56",
+      "http": "000"
+     }
+    ],
+    "pagesPerGame": {
+     "1": 1268
+    },
+    "gamesLogged": 1268,
+    "readsLogged": {
+     "ok": 1141,
+     "none": 126,
+     "failed": 1
+    }
+   },
+   {
+    "log": "research/props_v3/cache/fetch_dk40_2023-11-26_2023-11-26.requests.tsv",
+    "from": "2023-11-26",
+    "to": "2023-11-26",
+    "started": "2026-11-12T00:18:50Z",
+    "finished": "2026-11-12T00:18:53Z",
+    "requests": 16,
+    "byKind": {
+     "event": 8,
+     "propBets page": 8
+    },
+    "byStatus": {
+     "event: curl 0, HTTP 200": 8,
+     "propBets page: curl 0, HTTP 200": 8
+    },
+    "errors": [],
+    "pagesPerGame": {
+     "1": 8
+    },
+    "gamesLogged": 8,
+    "readsLogged": {
+     "ok": 8
+    }
+   }
+  ],
+  "stray": {
+   "what": "a guard test of fetch_dk40_logged.sh on a 2021-22 range that was meant to be refused only for 2022-23 ran the real fetch; stopped by hand after 373 games. 2021-22 is development data, so no rule was broken, but it was not asked for",
+   "requests": 746,
+   "byStatus": {
+    "event: curl 0, HTTP 200": 373,
+    "propBets page: curl 0, HTTP 404": 373
+   },
+   "gamesAsked": 373,
+   "dates": [
+    "2021-10-19",
+    "2021-12-08"
+   ],
+   "seasonsAsked": [
+    2022
+   ],
+   "readsFlushed": 350,
+   "readsByStatus": {
+    "none": 350
+   },
+   "csvRows": 0,
+   "kept": "moved out of research/props_v2/cache/ into research/props_v3/cache/stray_2021-22/ (gitignored) before the 2023-24 fetch, so that cache holds the 2023-24 fetch alone"
+  }
+ },
+ "cache": {
+  "header": "game_id,player_id,stat,line,over,under,last_updated",
+  "headerIsTheRecipes": true,
+  "rows": 94485,
+  "games": 1142,
+  "rowsByKind": {
+   "regular season (the window)": 92295,
+   "play-in": 511,
+   "playoffs": 1679
+  },
+  "gamesByKind": {
+   "regular season (the window)": 1116,
+   "play-in": 6,
+   "playoffs": 20
+  },
+  "byStat": {
+   "pts": 15857,
+   "reb": 16880,
+   "ast": 10345,
+   "tpm": 16025,
+   "stl": 17778,
+   "blk": 17600
+  },
+  "rowsPerGame": {
+   "min": 6,
+   "median": 83,
+   "max": 120
+  },
+  "duplicateGamePlayerStat": 0,
+  "missingPrice": 0,
+  "priceNotAmerican": 0,
+  "halfPointLines": 94485,
+  "notHalfPoint": 0,
+  "noStamp": 0,
+  "sha256": {
+   "csv": "98e6d677953941325297f48537db096a4694d8489c36801df3f104cfff7ecc4f",
+   "reads": "b1fddf05f1c5ff83e24f544ce30c16f0b352847e2f9fbd9c2d6977d5479929e9"
+  },
+  "playersDistinct": 445
+ },
+ "reads": {
+  "games": 1268,
+  "byKindStatus": {
+   "regular season (the window)": {
+    "ok": 1116,
+    "none": 110
+   },
+   "play-in": {
+    "ok": 6
+   },
+   "playoffs": {
+    "ok": 20,
+    "none": 16
+   }
+  },
+  "failed": [],
+  "noLineDates": {},
+  "range": {
+   "from": "2023-10-24",
+   "to": "2024-04-30",
+   "finals": 1273,
+   "withEspnId": 1268,
+   "read": 1268,
+   "noEspnId": [
+    "2024_20231109_ORL_ATL",
+    "2024_20231207_LAL_NOP",
+    "2024_20231207_MIL_IND",
+    "2024_20240111_CLE_BKN",
+    "2024_20240317_SAS_BKN"
+   ]
+  },
+  "windowNone": {
+   "games": 110,
+   "dates": 22,
+   "spans": [
+    {
+     "from": "2023-11-21",
+     "to": "2023-11-22",
+     "games": 19
+    },
+    {
+     "from": "2023-12-02",
+     "to": "2023-12-02",
+     "games": 1
+    },
+    {
+     "from": "2023-12-09",
+     "to": "2023-12-09",
+     "games": 1
+    },
+    {
+     "from": "2023-12-14",
+     "to": "2023-12-14",
+     "games": 1
+    },
+    {
+     "from": "2024-01-12",
+     "to": "2024-01-23",
+     "games": 78
+    },
+    {
+     "from": "2024-02-22",
+     "to": "2024-02-22",
+     "games": 6
+    },
+    {
+     "from": "2024-02-27",
+     "to": "2024-02-27",
+     "games": 1
+    },
+    {
+     "from": "2024-03-08",
+     "to": "2024-03-09",
+     "games": 2
+    },
+    {
+     "from": "2024-03-16",
+     "to": "2024-03-16",
+     "games": 1
+    }
+   ]
+  },
+  "windowDatesPartlyAnswered": [
+   {
+    "date": "2023-12-02",
+    "games": 12,
+    "none": 1
+   },
+   {
+    "date": "2023-12-14",
+    "games": 7,
+    "none": 1
+   },
+   {
+    "date": "2024-01-12",
+    "games": 10,
+    "none": 3
+   },
+   {
+    "date": "2024-02-22",
+    "games": 12,
+    "none": 6
+   },
+   {
+    "date": "2024-02-27",
+    "games": 11,
+    "none": 1
+   },
+   {
+    "date": "2024-03-08",
+    "games": 8,
+    "none": 1
+   },
+   {
+    "date": "2024-03-09",
+    "games": 7,
+    "none": 1
+   },
+   {
+    "date": "2024-03-16",
+    "games": 9,
+    "none": 1
+   }
+  ],
+  "startKnown": 1268
+ },
+ "againstTest2024": {
+  "now": {
+   "windowGames": 1231,
+   "noEspnId": 5,
+   "withEspnId": 1226,
+   "read": {
+    "ok": 1116,
+    "okNoLine": 0,
+    "none": 110,
+    "failed": 0,
+    "notRead": 0
+   },
+   "gamesWithLines": 1116,
+   "rows": 92295,
+   "rowsMatchReads": true,
+   "sha256": "9ff28cff993bc32aa50967c795764e0259f0404cc89b23c44fb4be0c84c4a0e5"
+  },
+  "test2024": {
+   "windowGames": 1231,
+   "noEspnId": 5,
+   "withEspnId": 1226,
+   "read": {
+    "ok": 1116,
+    "okWithNoLine": 0,
+    "none": 110,
+    "failed": 0,
+    "other": 0
+   },
+   "gamesWithLines": 1116,
+   "rows": 92295,
+   "sha256": "9ff28cff993bc32aa50967c795764e0259f0404cc89b23c44fb4be0c84c4a0e5",
+   "graded": 89032,
+   "voids": 3224,
+   "noCall": 39,
+   "generated": "2026-11-06T18:41Z"
+  },
+  "same": {
+   "sha256": true,
+   "rows": true,
+   "gamesWithLines": true,
+   "none": true,
+   "ok": true,
+   "failed": true
+  },
+  "note": "the window's rows, written as fetch_dk40.js writes its csv (its header, the rows of the window's games in game order, a closing newline), hashed: equal to test2024.json's files.csv means the very bytes props_v2's test scored (the whole file adds the play-in and playoff games of the range, so it hashes otherwise)"
+ },
+ "againstSamples": {
+  "coverage": {
+   "what": "research/props_v2/results/espn_coverage.tsv: one 2023-24 game in four asked of provider 40 on 5 November 2026 (HTTP status and item count)",
+   "games": 329,
+   "agree": {
+    "ok then, ok now": 286,
+    "none then, none now": 31,
+    "none then, not read now": 12
+   },
+   "disagree": [
+    {
+     "game": "2024_20240501_DAL_LAC",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240503_CLE_ORL",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240506_IND_NYK",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240508_IND_NYK",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240510_NYK_IND",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240512_NYK_IND",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240514_MIN_DEN",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240517_NYK_IND",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240521_IND_BOS",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240525_BOS_IND",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240530_DAL_MIN",
+     "then": "none",
+     "now": "not read"
+    },
+    {
+     "game": "2024_20240614_BOS_DAL",
+     "then": "none",
+     "now": "not read"
+    }
+   ]
+  },
+  "validate40": {
+   "what": "research/props_v2/results/espn_validate40.json: every tenth answering 2023-24 regular-season game and every answering 2024 playoff game, read whole on 5 November 2026",
+   "games": 34,
+   "mainsEqualRows": 34,
+   "startEqual": 34,
+   "differ": []
+  }
+ },
+ "validity": {
+  "test2024": {
+   "generated": "2026-11-06T18:38Z",
+   "verdict": "the bar applies (pre-game not shown by the feed: inferred from V2 and V3)",
+   "graded": 89032,
+   "games": 1116
+  },
+  "runs": {
+   "window": {
+    "file": "research/props_v3/cache/props40_2024_window/validity_2024.json",
+    "run": true,
+    "generated": "2026-11-12T00:22Z",
+    "files": {
+     "csv": "9ff28cff993bc32aa50967c795764e0259f0404cc89b23c44fb4be0c84c4a0e5",
+     "reads": "b1fddf05f1c5ff83e24f544ce30c16f0b352847e2f9fbd9c2d6977d5479929e9"
+    },
+    "verdict": "the bar applies (pre-game not shown by the feed: inferred from V2 and V3)",
+    "sameAsTest2024": true,
+    "diffs": []
+   },
+   "wholeFile": {
+    "file": "research/props_v2/cache/validity_2024.json",
+    "run": true,
+    "generated": "2026-11-12T00:22Z",
+    "files": {
+     "csv": "98e6d677953941325297f48537db096a4694d8489c36801df3f104cfff7ecc4f",
+     "reads": "b1fddf05f1c5ff83e24f544ce30c16f0b352847e2f9fbd9c2d6977d5479929e9"
+    },
+    "verdict": "the bar applies (pre-game not shown by the feed: inferred from V2 and V3)",
+    "sameAsTest2024": true,
+    "diffs": []
+   }
+  }
+ },
+ "clean": {
+  "lineStatus": {
+   "played (graded)": 89071,
+   "listed, did not play (void)": 1105,
+   "not on the box (void)": 2110,
+   "played under half a minute, box minutes 0 (void by the hub's rule)": 9
+  },
+  "graded": 89071,
+  "gradedGames": 1116,
+  "pushesLeftOut": 0,
+  "overRate": 0.4533,
+  "fairOver": 0.4389,
+  "margins": {
+   "pts": {
+    "lines": 14963,
+    "p10": 0.0587,
+    "median": 0.0678,
+    "p90": 0.0698
+   },
+   "reb": {
+    "lines": 15923,
+    "p10": 0.057,
+    "median": 0.0623,
+    "p90": 0.0693
+   },
+   "ast": {
+    "lines": 9710,
+    "p10": 0.0556,
+    "median": 0.0619,
+    "p90": 0.0693
+   },
+   "tpm": {
+    "lines": 15124,
+    "p10": 0.0573,
+    "median": 0.0613,
+    "p90": 0.068
+   },
+   "stl": {
+    "lines": 16756,
+    "p10": 0.0576,
+    "median": 0.0613,
+    "p90": 0.0678
+   },
+   "blk": {
+    "lines": 16595,
+    "p10": 0.0531,
+    "median": 0.0603,
+    "p90": 0.0652
+   }
+  },
+  "stamps": {
+   "what": "last_updated, the later of a main line's two items' lastUpdated as the feed gives it, against the event's scheduled start (props40_reads.json `start`)",
+   "linesBeforeStart": 0,
+   "linesDated": 89071,
+   "hoursAfterStart": {
+    "p01": 3.0833,
+    "p10": 3.1667,
+    "median": 3.2333,
+    "p90": 5,
+    "p99": 5.4333
+   },
+   "gameLatest": {
+    "regulation": {
+     "games": 1063,
+     "median": 5.3167,
+     "p10": 5.1167,
+     "p90": 5.5167
+    },
+    "pastRegulation": {
+     "games": 53,
+     "median": 5.7167,
+     "p10": 5.4833,
+     "p90": 5.9667,
+     "shareAboveRegulationMedian": 1
+    }
+   },
+   "voidLines": {
+    "lines": 3224,
+    "medianHours": 3.1667
+   },
+   "gradedLines": {
+    "lines": 89071,
+    "medianHours": 3.2333
+   },
+   "resultByStampQuartile": [
+    {
+     "lines": 2269,
+     "hoursFrom": 2.8833,
+     "overRate": 0.0198,
+     "fairOver": 0.4191,
+     "overLessFair": -0.3993
+    },
+    {
+     "lines": 42065,
+     "hoursFrom": 3.1667,
+     "overRate": 0.0223,
+     "fairOver": 0.421,
+     "overLessFair": -0.3987
+    },
+    {
+     "lines": 22440,
+     "hoursFrom": 3.2333,
+     "overRate": 0.8142,
+     "fairOver": 0.4582,
+     "overLessFair": 0.3561
+    },
+    {
+     "lines": 22297,
+     "hoursFrom": 4.4833,
+     "overRate": 0.9472,
+     "fairOver": 0.4554,
+     "overLessFair": 0.4918
+    }
+   ],
+   "resultByOvertime": [
+    {
+     "pastRegulation": false,
+     "games": 1063,
+     "lines": 84887,
+     "overRate": 0.4499,
+     "fairOver": 0.4389,
+     "overLessFair": 0.011
+    },
+    {
+     "pastRegulation": true,
+     "games": 53,
+     "lines": 4184,
+     "overRate": 0.5215,
+     "fairOver": 0.4403,
+     "overLessFair": 0.0812
+    }
+   ],
+   "tellsTheResult": {
+    "aucPooled": 0.9677,
+    "aucWithinGamesMedian": 0.9775,
+    "gamesWithAuc": 1115,
+    "ruleFiveMinutesAfterFirst": {
+     "lines": 89071,
+     "correct": 85032,
+     "accuracy": 0.9547
+    },
+    "draftKingsFairChanceAccuracy": 0.582
+   },
+   "oversByStamp": [
+    {
+     "lines": 8001,
+     "hoursFrom": 3,
+     "fairOver": 0.4726
+    },
+    {
+     "lines": 7987,
+     "hoursFrom": 3.7333,
+     "fairOver": 0.4649
+    },
+    {
+     "lines": 7979,
+     "hoursFrom": 4.3167,
+     "fairOver": 0.4652
+    },
+    {
+     "lines": 8128,
+     "hoursFrom": 4.6667,
+     "fairOver": 0.4552
+    },
+    {
+     "lines": 8278,
+     "hoursFrom": 5.0167,
+     "fairOver": 0.4563
+    }
+   ]
+  }
+ }
+}

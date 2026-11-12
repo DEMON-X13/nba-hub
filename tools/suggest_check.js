@@ -137,8 +137,9 @@ const PLAYER_FROM = '2026-11-10T18:00:00Z';
 const NOPL = ['lines', 'fit'];
 const noPlOf = c => !isMap(c) || !((+c.lines || 0) + (+c.held || 0) + (+c.none || 0) + (+c.vig || 0)) ? 'lines' : 'fit';
 /* which rule a night entry's levels are of, by their heads: 'player', 'nocap', 'old', or null where they are none */
-const headsOf = (e, LV) => Array.isArray(e && e.tiers) && e.tiers.length === LV.length && e.tiers.every((x, i) => isMap(x) && x.id === LV[i][0] && x.min === LV[i][2] && x.max === LV[i][3] && x.price === LV[i][4] && x.need === LV[i][5]);
-const nightRule = e => headsOf(e, NIGHT_LEVELS) ? 'player' : headsOf(e, NIGHT_LEVELS_NOCAP) ? 'nocap' : headsOf(e, NIGHT_LEVELS_OLD) ? 'old' : null;
+const headsOf = (e, LV) => Array.isArray(e && e.tiers) && e.tiers.length === LV.length && e.tiers.every((x, i) => isMap(x) && x.id === LV[i][0] && x.min === LV[i][2] && x.max === LV[i][3] && x.price === LV[i][4]
+  && (LV[i][5] === 'fair' ? x.need === undefined && x.chance === 'fair' : x.need === LV[i][5] && x.chance === undefined));
+const nightRule = e => headsOf(e, NIGHT_LEVELS_RULER) ? 'fair' : headsOf(e, NIGHT_LEVELS) ? 'player' : headsOf(e, NIGHT_LEVELS_NOCAP) ? 'nocap' : headsOf(e, NIGHT_LEVELS_OLD) ? 'old' : null;
 /* the old rule's heads allowed: taken before NOCAP_FROM, or held so, taken at the same time, by the file it is held to */
 const oldOk = (e, pe) => Date.parse(e.taken_at) < Date.parse(NOCAP_FROM) || (isMap(pe) && nightRule(pe) === 'old' && pe.taken_at === e.taken_at);
 /* the NOCAP rule's heads (no player leg asked of a level) allowed: taken before PLAYER_FROM, or held so, taken at the same
@@ -764,11 +765,16 @@ function nightEntryBad(key, e, now, pe, state, lines) {
   }
   if (e.tiers.map(x => x && x.id).join() !== NIGHT_IDS.join()) bad.push(`${key}: its levels are not the three (Safe, Medium, Aggressive)`);
   /* NO LEG LIMIT: the rule its levels' heads say, the old one only on a set taken before NOCAP_FROM or held so */
-  const rule = nightRule(e), LV = rule === 'old' ? NIGHT_LEVELS_OLD : rule === 'nocap' ? NIGHT_LEVELS_NOCAP : NIGHT_LEVELS;
-  if (!rule) bad.push(`${key}: its levels' heads are neither the rule's (${NIGHT_LEVELS.map(l => `${l[1]} ${l[2]}+ legs paying $${l[4]}+ with a player`).join(', ')}) nor the ones before ${PLAYER_FROM} and ${NOCAP_FROM}`);
+  const rule = nightRule(e), LV = rule === 'fair' ? NIGHT_LEVELS_RULER : rule === 'old' ? NIGHT_LEVELS_OLD : rule === 'nocap' ? NIGHT_LEVELS_NOCAP : NIGHT_LEVELS;
+  if (!rule) bad.push(`${key}: its levels' heads are neither the ruler's (${NIGHT_LEVELS_RULER.map(l => `${l[1]} ${l[2]}+ legs paying $${l[4]}+ at DraftKings' fair chance`).join(', ')}) nor the ones before ${RULER_FROM}, ${PLAYER_FROM} and ${NOCAP_FROM}`);
+  /* ONE RULER: a set of an older rule's heads taken from RULER_FROM, or one of the ruler's taken before it, only as the file
+     it is held to holds it, taken at the same time */
+  else if (rule !== 'fair' && !rulerOk(e, pe)) bad.push(`${key}: taken at ${e.taken_at} under a rule before the ruler (its heads the ${rule === 'player' ? 'rule with a player' : rule === 'nocap' ? 'rule of 8 November' : 'rule before 8 November'}), which the record has not taken since ${RULER_FROM}`);
+  else if (rule === 'fair' && !rulerLateOk(e, pe)) bad.push(`${key}: taken at ${e.taken_at} under the ruler, before its cutoff ${RULER_FROM}`);
   else if (rule === 'old' && !oldOk(e, pe)) bad.push(`${key}: taken at ${e.taken_at} with a leg limit (Safe a pair with no floor, Medium and Aggressive 5 legs at most), a rule the record has not taken since ${NOCAP_FROM}`);
   else if (rule === 'nocap' && !nocapOk(e, pe)) bad.push(`${key}: taken at ${e.taken_at} with no player leg asked of a level, a rule the record has not taken since ${PLAYER_FROM}`);
   const pl = isMap(e.pool.pl);
+  if (rule === 'fair') return [...bad, ...rulerEntryBad(key, e, now, pe, state, lines, LV, ids), ...nightUpdatesBad(key, e, now)];
   if (rule === 'player' && !pl) bad.push(`${key}: the rule with a player on a pool of team legs alone`);
   if (!pl && !plOk(e, pe)) bad.push(`${key}: taken at ${e.taken_at} with team legs alone, a rule the record has not taken since ${PL_FROM} (no player legs in its pool)`);
   if (pl) { const c = e.pool.pl; if (!['lines', 'band', 'held', 'none', 'vig', 'cut'].every(k => Number.isInteger(c[k]) && c[k] >= 0)) bad.push(`${key}: its player legs' counts are not counts`); }
@@ -811,6 +817,11 @@ function nightEntryBad(key, e, now, pe, state, lines) {
        cannot make its own level is refused at the take, never first at the lock (the review of 8 November 2026) */
     if (own && rank !== pool) bad.push(...nightLevelBad(key, x, lv, pool, ids, pl, 'its pool as kept', e.pool.pl));
   });
+  return [...bad, ...nightUpdatesBad(key, e, now)];
+}
+/* a night entry's record of replacements and its grades, whatever its rule */
+function nightUpdatesBad(key, e, now) {
+  const bad = [], t = s => Date.parse(s);
   /* its record of replacements: each a level of the set, a player and a time between the lock and the first tip-off */
   const U = e.updates == null ? [] : e.updates;
   if (!Array.isArray(U)) bad.push(`${key}: its replacements are not a list`);
@@ -831,6 +842,435 @@ function nightEntryBad(key, e, now, pe, state, lines) {
   }
   if (e.grade && !(t(e.tip) <= now)) bad.push(`${key}: graded before its first tip-off`);
   bad.push(...gradeBad(key, e));
+  return bad;
+}
+/* ---- ONE RULER (the owner's call of 11 November 2026) ----
+   Every set taken from RULER_FROM is the ruler's (its heads carry chance: 'fair', NIGHT_LEVELS_RULER): its legs, team
+   and player alike, at DraftKings' fair chance (a team line's two prices with the margin out in proportion, a player's
+   main line's whole margin on the Over), on the default filters (every bet type, every game, every stat, any price),
+   each level within half a percent of the likeliest parlay paying its floor, the fewest legs any such parlay has, the
+   likeliest of that many within 0.1% (the page's THE RULER SEARCH, whose comment is the proof). This file holds such a
+   level BY PROPERTY, on its own: a valid parlay (two legs or more, one leg a player, one side and one total a game, every
+   leg in the kept pool at its kept price and fair chance, each game's legs at the kept group's figures, held to this
+   file's own copula), paying its floor, and at a chance of (1 - TAU_G) times THIS FILE'S OWN UPPER BOUND on the likeliest
+   paying parlay or more (rulerBound, below: written apart from the page's search, it never finds a parlay). At the take
+   the bound is worked on this file's own reading of the run's files (every team leg and player main line of the night's
+   games still to tip, as the page's pool reads them); from the lock on the pool as kept (its levels' legs are all in it).
+   TAU_G is 1%: the page's TAU (0.5%, the rule's own tolerance), its ETA (0.1%, the search's precision), the bound's slack
+   (a same-game group of three legs or more stands on the HOLD envelope, its cells rounding its price up: on every level of
+   the 14 real nights' cuts at the default filters it sat within 0.68% of the level, none where the legs alone decide) and
+   the builder's GHK sum against this file's copula (0.05%), with room. The fewest legs (rule (3)) and the likeliest of a
+   size (rule (4)) are held on this file's own witnesses (rulerWitness: the exact walk's likeliest parlay of each size, the
+   legs alone, and their pairs on a night of three games or fewer), where it works the bound on its own reading. A set of
+   an older rule's heads taken from RULER_FROM is refused unless the file it is held to holds it
+   so, taken at the same time (a run of the page before the change, landing after RULER_FROM: the PLAYER_FROM pattern), and
+   a set of the ruler's heads taken before it the same (the page takes the ruler's sets from RULER_FROM alone).
+   RULER_FROM is the page's SP_RULER_FROM (the job refuses a page whose cutoff is another), 13 November 2026 at 04:00 UTC.
+   SUGGEST_RULER_FROM moves it for the test alone */
+const RULER_FROM_SET = '2026-11-13T04:00:00Z';
+const RULER_FROM = process.env.SUGGEST_RULER_FROM || RULER_FROM_SET;
+const NIGHT_LEVELS_RULER = [['safe', 'Safe', 2, null, 2, 'fair'], ['med', 'Medium', 2, null, 4, 'fair'], ['aggr', 'Aggressive', 2, null, 8, 'fair']];
+const TAU_G = 0.01;
+const rulerOk = (e, pe) => Date.parse(e.taken_at) < Date.parse(RULER_FROM) || (isMap(pe) && nightRule(pe) === nightRule(e) && pe.taken_at === e.taken_at);
+const rulerLateOk = (e, pe) => Date.parse(e.taken_at) >= Date.parse(RULER_FROM) || (isMap(pe) && nightRule(pe) === 'fair' && pe.taken_at === e.taken_at);
+/* this file's own reading of a team line's fair chance (the page's legFair: the two prices with the margin out in
+   proportion) */
+const teamFair = (price, other) => { const i = impOf(price), o = impOf(other); return i / (i + o); };
+/* tools/lines_feed.js linesGl, line for line (the page's own copy): a lines.json entry -> the game lines, or null */
+function glOwn(x) {
+  if (!isMap(x) || !(x.ml || x.spread || x.total)) return null;
+  const id = (k, s) => (x.ids && x.ids[k] && x.ids[k][s]) || null, out = { event: (x.ids && x.ids.event) || null };
+  if (x.ml) out.ml = { home: { odds: x.ml.home, id: id('ml', 'home') }, away: { odds: x.ml.away, id: id('ml', 'away') } };
+  if (x.spread) out.spread = { home: { line: x.spread.line, odds: x.spread.home, id: id('spread', 'home') }, away: { line: -x.spread.line, odds: x.spread.away, id: id('spread', 'away') } };
+  if (x.total) out.total = { line: x.total.line, over: { odds: x.total.over, id: id('total', 'over') }, under: { odds: x.total.under, id: id('total', 'under') } };
+  return out;
+}
+const glCarries = gl => !!gl && (!!gl.event || ['ml', 'spread'].some(k => gl[k] && (gl[k].home.id || gl[k].away.id)) || !!(gl.total && (gl.total.over.id || gl.total.under.id)));
+const TEAM_COUNT_WORDS = { band: 'out of the band', noId: 'with no DraftKings id', vig: 'priced with no margin' };
+/* the team legs of a night's games still to tip at an instant, read from lines.json by the page's rules (pbPriced and
+   pbTotals: a moneyline and a spread of a game the model rates, a total of any game), each at DraftKings' fair chance with
+   both prices on file and a margin (else vig), 45% to 97% (else band), a game line's betslip id where its game's lines carry
+   ids (else noId) */
+function teamOwn(state, lines, games, at) {
+  const out = { legs: [], band: 0, noId: 0, vig: 0 };
+  for (const eg of games || []) {
+    const g = (state.slate || []).find(x => x.id === (eg && eg.gid));
+    if (!g || g.type === 'PRE' || g.status !== 'scheduled' || !(Date.parse(g.tip) > at)) continue;
+    const gl = glOwn(lines && isMap(lines.games) ? lines.games[g.id] : null); if (!gl) continue;
+    const on = glCarries(gl), take = (kind, side, line, odds, other, id) => {
+      if (!isFinite(odds) || !odds) { out.band++; return; }
+      if (!isFinite(other) || !other || impOf(odds) + impOf(other) < 1) { out.vig++; return; }
+      const p = teamFair(odds, other); if (!(p >= PL_BAND[0] && p < PL_BAND[1])) { out.band++; return; }
+      if (on && !id) { out.noId++; return; }
+      out.legs.push({ sk: [g.id, kind, side, line == null ? '' : line].join('|'), gid: g.id, kind, side: kind !== 'total', tot: kind === 'total', pid: null, s: side, line, home: g.home, odds, other, p, d: decOf(odds) });
+    };
+    if (g.model) {
+      if (gl.ml) for (const s of ['away', 'home']) take('ml', g[s], null, gl.ml[s].odds, gl.ml[s === 'home' ? 'away' : 'home'].odds, gl.ml[s].id);
+      if (gl.spread) for (const s of ['away', 'home']) take('spread', g[s], gl.spread[s].line, gl.spread[s].odds, gl.spread[s === 'home' ? 'away' : 'home'].odds, gl.spread[s].id);
+    }
+    if (gl.total) for (const s of ['over', 'under']) take('total', s, gl.total.line, gl.total[s].odds, gl.total[s === 'over' ? 'under' : 'over'].odds, gl.total[s].id);
+  }
+  return out;
+}
+/* the ruler's pool as kept ({rule: 'fair', legs: [[key, price, fair, other]], sets: [[places..., chance, price]], band,
+   noId, vig, pl}): its legs, each game's kept groups, or null where it is not that shape. Every leg's fair chance is this
+   file's own reading of its two prices, each priced with a margin and in the band; each group two legs or more of one
+   game that go together, its chance at most its least likely leg's and its price at most its legs' prices multiplied */
+function nightPoolRuler(P) {
+  if (!isMap(P) || P.rule !== 'fair' || !Array.isArray(P.legs) || !Array.isArray(P.sets) || !isMap(P.pl)) return null;
+  const legs = [];
+  for (const x of P.legs) {
+    if (!Array.isArray(x) || x.length !== 4 || typeof x[0] !== 'string' || !isFinite(x[1]) || !x[1] || !isFinite(x[3]) || !x[3] || !(x[2] > 0 && x[2] < 1)) return null;
+    if (impOf(x[1]) + impOf(x[3]) < 1 || !(x[2] >= PL_BAND[0] && x[2] < PL_BAND[1])) return null;
+    const f = x[0].split('|'), [gid, kind] = f;
+    if (TEAM_KINDS.includes(kind)) {
+      if (f.length !== 4 || Math.abs(x[2] - teamFair(x[1], x[3])) > 1e-9) return null;
+      legs.push({ sk: x[0], gid, kind, side: kind !== 'total', tot: kind === 'total', pid: null, s: f[2], line: f[3] === '' ? null : +f[3], home: String(gid).split('_')[3], odds: x[1], other: x[3], p: x[2], d: decOf(x[1]) });
+    } else if (kind === 'prop') {
+      const [, , pid, stat, mk, line, sd] = f;
+      if (f.length !== 7 || !pid || !PL_STATS.includes(stat) || mk !== 'main' || !['over', 'under'].includes(sd) || !isFinite(+line) || line === '') return null;
+      if (Math.abs(x[2] - plFair(sd, x[1], x[3])) > 1e-9) return null;
+      legs.push({ sk: x[0], gid, kind, side: false, tot: false, pid, stat, s: sd, line: +line, home: String(gid).split('_')[3], odds: x[1], other: x[3], p: x[2], d: decOf(x[1]) });
+    } else return null;
+  }
+  if (new Set(legs.map(l => l.sk)).size !== legs.length) return null;
+  const groups = new Map();
+  for (const x of P.sets) {
+    if (!Array.isArray(x) || x.length < 4) return null;
+    const L = x.slice(0, -2).map(i => legs[i]), pj = x[x.length - 2], dj = x[x.length - 1];
+    if (L.some(l => !l) || new Set(L).size !== L.length || L.some(l => l.gid !== L[0].gid)) return null;
+    if (L.some((a, i) => L.some((b, k) => k > i && !fitsTwo(a, b)))) return null;
+    if (!(pj > 0 && pj <= Math.min(...L.map(l => l.p)) + 1e-6) || !(dj > 1 && dj <= L.reduce((t, l) => t * l.d, 1) + 1e-6)) return null;
+    groups.set(L.map(l => l.sk).sort().join('~'), { legs: L, p: pj, d: dj });
+  }
+  return { legs, groups, rule: 'fair' };
+}
+/* THIS FILE'S OWN UPPER BOUND on the likeliest parlay paying F of a set of legs (one leg a player, one side and one total a
+   game, two legs or more), never ranking one: a dynamic programme over the night's games on a grid of log prices (cells of
+   RB_W; every unit's log price rounded UP to its cell, every cell from ln F on one, so the programme admits every parlay
+   that pays F and some that fall short by under a cell a unit, which only raises the bound), keeping in each cell and count
+   of legs (none, one, two or more) the most chance any choice of the games so far lands at.
+   First the legs alone, EXACTLY (rbExact: a walk over the games, each giving nothing or one leg at its fair chance and
+   price, cut by the programme's cells and holding every parlay it ends on to its own price, so a parlay a cell short of
+   the floor never counts: the review of 12 November found a $1.9996 pair of two games' legs, 1% likelier than any paying
+   one, refusing the page's correct Safe). A parlay holding two legs or more of a game returns at most HOLD on $1 (RB_SIG
+   more, for the builder's GHK sum against the copula): such a group lands no oftener than its legs' implied joint chance J
+   (each leg's fair chance is at most its implied chance, so its event lies inside its event at the implied thresholds)
+   and is priced at most HOLD / J, and every other unit returns at most $1. So it lands at most HOLD / F, and where the
+   legs alone already reach that (every night of three games or more at the default filters: a short Under's fair chance
+   is the very chance its price implies) the
+   bound is theirs, and is the likeliest paying parlay itself. Otherwise a game also gives:
+   - two legs that go together, exactly, by this file's own two-leg sums (pairOwn: the builder's own, line for line), the
+     legs alone and these pairs walked exactly as above;
+   - three legs or more, by the HOLD envelope above, and at most the s likeliest legs of the game together in the one-factor
+     copula at the game's largest correlation (Slepian's inequality: those correlations are at least every pair's, and the
+     orthant rises in each chance), s = 3 for groups of three, 4 for more;
+   - where that envelope raises the bound by more than RB_TRY (a game or two, where a same-game group can be the answer),
+     the game's triples that could reach the bound without them, worked out exactly by this file's own copula (ownFig: its
+     chance and its price as the builder prices them, RB_SIG wider), each a unit of its own, the envelope then from four
+     legs; a triple left out is one whose one-factor bound is under that bound, so no parlay holding it can raise it (a
+     parlay's chance is at most each of its units'); a game whose table is not positive definite (the builder may shrink
+     its groups' correlations) or with more than RB_TRIPLES such triples keeps the envelope from three legs.
+   A parlay holding three legs or more of a game is bounded by the programme (its cells rounded up, so it admits every
+   such parlay that pays and some that fall short by under a cell a unit, which only raises the bound); the rest are worked
+   exactly. Every one of those is an upper bound, so the most of the exact best and the least of the groups' is. No
+   parlay's chance is ever over it. Its slack, against the page's levels on every real night's cut (research/sp_ruler):
+   none on a night the legs alone decide, and up to 0.6% on a night of one game at $4, where the envelope stands over a
+   game's many triples */
+const RB_W = 2e-4, RB_SIG = 1e-3, RB_TRIPLES = 3000, RB_TRY = 2e-3, RB_NODES = 2e6, RB_PAYS = 1e-9, RB_TIE = 1e-9, RB_WX = 1e-3;
+/* the one-factor copula's chance that legs at chances ps all land, every pair correlated m (0 <= m < 1): Simpson's rule
+   over the factor, 160 pieces on [-8, 8] */
+function oneFactor(ps, m) {
+  if (!(m > 0)) return ps.reduce((a, b) => a * b, 1);
+  const t = ps.map(q => normInv(1 - q)), sm = Math.sqrt(m), sr = Math.sqrt(1 - m), N = 160, a = -8, h = 16 / N; let s = 0;
+  for (let i = 0; i <= N; i++) { const z = a + i * h, w = i === 0 || i === N ? 1 : i % 2 ? 4 : 2; let f = Math.exp(-z * z / 2) / Math.sqrt(2 * Math.PI);
+    for (const ti of t) f *= 1 - normCdf((ti - sm * z) / sr); s += w * f; }
+  return Math.min(1, s * h / 3);
+}
+/* THE EXACT WALK: the likeliest parlay paying F of units whose figures are exact (a leg alone; two legs of one game by the
+   builder's two-leg sums), at most one unit a game, with exactly k legs (k a number) or two or more (k null). A table
+   T[j][r][c] of the most chance the games from j on can add with r legs still to come (k null: at least r, r at most 2)
+   and their units' log prices, each rounded UP to its cell of RB_WX, reaching c cells (so every paying parlay is admitted),
+   cuts a walk over the games, likeliest first, with each branch's return (a parlay paying F lands at most its return over
+   F, and each unit returns at most its own most: a leg alone at most $1, two legs HOLD; without it a branch of short
+   Unders, each at the very chance its price implies, stood a cell's rounding over the best and the walk met 331,103 of them on a night of
+   ten games), a branch within RB_TIE of the best found let go (the walk's best is then within RB_TIE of the true best,
+   and the bound carries RB_TIE over it); the parlay it ends on is held to its own price, the product of its units'
+   (D >= F - RB_PAYS, as the guard holds a level's floor). { p, units } of the best, null where none pays, { capped } where
+   the walk ran past RB_NODES */
+function rbExact(G, F, k, sizes) {
+  const NC = Math.ceil(Math.log(F) / RB_WX - 1e-9), R = k == null ? 2 : k, m = G.length, lnF = Math.log(F - RB_PAYS);
+  if (!(R >= 0)) return null;
+  const T = new Array(m + 1); T[m] = []; for (let r = 0; r <= R; r++) { const a = new Float64Array(NC + 1); if (r === 0) a[0] = 1; T[m].push(a); }
+  const next = (r, n) => k == null ? Math.max(0, r - n) : r - n;
+  for (let j = m - 1; j >= 0; j--) {
+    const U = G[j], row = [];
+    for (let r = 0; r <= R; r++) {
+      const a = Float64Array.from(T[j + 1][r]);
+      for (const u of U) { const r2 = next(r, u.n); if (r2 < 0) continue; const b = T[j + 1][r2];
+        for (let c = 0; c <= NC; c++) { const v = b[c > u.cell ? c - u.cell : 0] * u.p; if (v > a[c]) a[c] = v; } }
+      row.push(a);
+    }
+    T[j] = row;
+  }
+  /* E[j]: the most the games from j on can return on $1 (each a unit or none: at least 1) */
+  const E = new Float64Array(m + 1); E[m] = 1;
+  for (let j = m - 1; j >= 0; j--) { let e = 1; for (const u of G[j]) e = Math.max(e, u.p * u.d); E[j] = E[j + 1] * e; }
+  const Fp = F - RB_PAYS, CAP = {};
+  const walk = R0 => {
+    let best = 0, bestU = null, nodes = 0; const pick = [];
+    const go = (j, r, c, ld) => {
+      if (++nodes > RB_NODES) throw CAP;
+      if (j === m) { if (r === 0 && ld >= lnF && c > best) { best = c; bestU = pick.slice(); } return; }
+      const need = lnF - ld, cn = need <= 0 ? 0 : Math.min(NC, Math.ceil(need / RB_WX - 1e-9)), opts = [];
+      const dc = Math.exp(ld), v0 = T[j + 1][r][cn]; if (v0 > 0) opts.push([Math.min(c * v0, c * dc * E[j + 1] / Fp), null]);
+      for (const u of G[j]) { const r2 = next(r, u.n); if (r2 < 0) continue; const v = T[j + 1][r2][cn > u.cell ? cn - u.cell : 0]; if (v > 0) opts.push([Math.min(c * u.p * v, c * u.p * dc * u.d * E[j + 1] / Fp), u]); }
+      opts.sort((a, b) => b[0] - a[0]);
+      for (const [b, u] of opts) {
+        if (!(b > best * (1 + RB_TIE))) break;
+        if (!u) go(j + 1, r, c, ld);
+        else { pick.push(u); go(j + 1, next(r, u.n), c * u.p, ld + Math.log(u.d)); pick.pop(); }
+      }
+    };
+    try { go(0, R0, 1, 0); } catch (e) { if (e === CAP) return { capped: true, nodes }; throw e; }
+    return bestU ? { p: best, units: bestU, d: bestU.reduce((t, u) => t * u.d, 1), n: bestU.reduce((t, u) => t + u.n, 0), nodes } : null;
+  };
+  if (k == null) return walk(2);
+  /* each size asked (every one at most k), on the one table */
+  const out = {}; for (const t of sizes || [k]) { const r = walk(t); if (r && r.capped) return { capped: true }; out[t] = r; } return out;
+}
+/* each game's exact units for the walk: its legs alone and, with pairs, its two legs that go together (pairOwn), each
+   kept where no unit of as many legs of its game is as dear and as likely (the walk wants the most chance, never a tie) */
+const rbCell = d => Math.max(0, Math.ceil(Math.log(d) / RB_WX + 1e-9));
+const rbFront = us => { us.sort((a, b) => (b.d - a.d) || (b.p - a.p)); const out = []; let mx = -1; for (const u of us) if (u.p > mx) { out.push(u); mx = u.p; } return out; };
+/* a game's two legs that go together, each by the builder's two-leg sums (pairOwn) */
+function rbPairs(corr, L) {
+  const two = [];
+  for (let i = 0; i < L.length; i++) for (let k = i + 1; k < L.length; k++) { const a = L[i], b = L[k]; if (!fitsTwo(a, b)) continue;
+    const f = pairOwn(corr, a, b); if (f.p > 0 && f.d > 1) two.push({ n: 2, p: f.p, d: f.d, cell: rbCell(f.d), legs: [a, b] }); }
+  return two;
+}
+function rbUnits(legs, corr, F, pairs, worked) {
+  const byG = new Map(); for (const l of legs) { if (!byG.has(l.gid)) byG.set(l.gid, []); byG.get(l.gid).push(l); }
+  return [...byG.values()].map((L, i) => {
+    const one = rbFront(L.map(l => ({ n: 1, p: l.p, d: l.d, cell: rbCell(l.d), legs: [l] })));
+    if (!pairs) return one;
+    return [...one, ...rbFront([...(worked ? worked[i] : rbPairs(corr, L))])];
+  });
+}
+function rulerBound(legs, corr, F, info) {
+  if (!(F > 1)) return null;
+  const NC = Math.ceil(Math.log(F) / RB_W - 1e-9), H = corr.hold * (1 + RB_SIG), byG = new Map();
+  for (const l of legs) { if (!byG.has(l.gid)) byG.set(l.gid, []); byG.get(l.gid).push(l); }
+  const cellOf = d => Math.min(NC, Math.max(0, Math.ceil(Math.log(d) / RB_W + 1e-9)));
+  const frontier = pts => { const best = new Map(); for (const [j, c] of pts) if (!(best.get(j) >= c)) best.set(j, c);
+    const fr = []; let mx = -1; for (const j of [...best.keys()].sort((a, b) => b - a)) { const c = best.get(j); if (c > mx) { fr.push([j, c]); mx = c; } } return fr; };
+  const G = [...byG.values()].map(L => ({ L, one: frontier(L.map(l => [cellOf(l.d), l.p])), two: [], three: null, cap3: 0, cap4: 0 }));
+  /* the programme over the games, each game's units as they stand; g3: only the parlays holding a group of three legs or
+     more (an envelope's or a triple's: the state past A[2], the rest kept apart), the others being the exact walk's */
+  const run = g3 => {
+    let A = [new Float64Array(NC + 1), new Float64Array(NC + 1), new Float64Array(NC + 1), new Float64Array(NC + 1)]; A[0][0] = 1;
+    const merge = (B, src, fr, k, to3) => { for (let s = 0; s < 4; s++) { const a = src[s], to = B[s === 3 || to3 ? 3 : Math.min(2, s + k)];
+      for (let i = 0; i <= NC; i++) { const v = a[i]; if (!(v > 0)) continue; for (const [j, c] of fr) { const t = Math.min(NC, i + j), x = v * c; if (x > to[t]) to[t] = x; } } } };
+    for (const g of G) {
+      const B = A.map(a => Float64Array.from(a));
+      merge(B, A, g.one, 1, false); if (g.two.length) merge(B, A, g.two, 2, false); if (g.three) merge(B, A, g.three, 3, g3);
+      const cap = g.three ? g.cap4 : g.cap3;
+      if (cap > 0) {
+        /* a group of the envelope in cell j (its price over e^((j-1)w)) lands at most min(cap, H e^-((j-1)w)): up to jc the
+           cap binds, so jc alone matters there; past it H e^-((t-1)w) times the most of v_i e^(iw) over i <= t - jc - 1 */
+        const jc = Math.max(1, Math.min(NC, Math.floor(Math.log(H / cap) / RB_W) + 1));
+        for (let s = 0; s < 4; s++) { const a = A[s], to = B[g3 ? 3 : 2]; let run = 0;
+          for (let i = 0; i <= NC; i++) { const v = a[i]; if (!(v > 0)) continue; const t = Math.min(NC, i + jc), x = v * cap; if (x > to[t]) to[t] = x; }
+          for (let t = 0; t <= NC; t++) { const i = t - jc - 1; if (i >= 0 && a[i] > 0) run = Math.max(run, a[i] * Math.exp(i * RB_W));
+            if (run > 0) { const x = H * Math.exp(-(t - 1) * RB_W) * run; if (x > to[t]) to[t] = x; } } }
+      }
+      A = B;
+    }
+    return g3 ? A[3][NC] : Math.max(A[2][NC], A[3][NC]);
+  };
+  const roof = H / F;
+  /* the legs alone, exactly (a walk past its cap falls back on the programme, which only raises the bound) */
+  const ex1 = rbExact(rbUnits(legs, corr, F, false), F, null), g1 = ex1 && ex1.capped ? run(false) : ex1 ? ex1.p * (1 + RB_TIE) : 0;
+  if (info) Object.assign(info, { one: g1, roof, stage: 1, triples: 0, exact: !(ex1 && ex1.capped), best: ex1 && !ex1.capped ? ex1 : null });
+  if (g1 >= roof) return g1;
+  /* groups can matter: the pairs exactly (with the legs alone, walked), the envelope's caps */
+  const worked = [];
+  for (const g of G) {
+    const L = g.L; let m = 0;
+    for (let i = 0; i < L.length; i++) for (let k = i + 1; k < L.length; k++) { const a = L[i], b = L[k]; if (!fitsTwo(a, b)) continue;
+      const [x, y] = a.sk < b.sk ? [a, b] : [b, a]; m = Math.max(m, Math.abs(CJ.rhoFor(corr.rho, clOf(x), clOf(y)) || 0)); }
+    const two = rbPairs(corr, L); worked.push(two);
+    const ps = L.map(l => l.p).sort((a, b) => b - a); g.m = Math.min(0.999, m); g.two = frontier(two.map(u => [cellOf(u.d), u.p]));
+    g.cap3 = ps.length >= 3 ? Math.min(H, oneFactor(ps.slice(0, 3), g.m) * (1 + RB_SIG)) : 0;
+    g.cap4 = ps.length >= 4 ? Math.min(H, oneFactor(ps.slice(0, 4), g.m) * (1 + RB_SIG)) : 0;
+  }
+  const ex2 = rbExact(rbUnits(legs, corr, F, true, worked), F, null), g2 = ex2 && ex2.capped ? (() => { const keep = G.map(g => [g.cap3, g.cap4]); for (const g of G) { g.cap3 = 0; g.cap4 = 0; } const v = run(false); G.forEach((g, i) => { g.cap3 = keep[i][0]; g.cap4 = keep[i][1]; }); return v; })() : ex2 ? ex2.p * (1 + RB_TIE) : 0;
+  const e3 = Math.min(roof, run(true)), b0 = Math.max(g2, e3);
+  if (info) Object.assign(info, { stage: 2, env: e3, two: g2, best: ex2 && !ex2.capped ? ex2 : null });
+  if (!(e3 > g2 * (1 + RB_TRY))) return b0;
+  /* the triples that could raise it, counted on their one-factor bound first, then worked out exactly */
+  let any = false;
+  for (const g of G) {
+    if (g.cap3 <= g2 || !gamePosDef(corr, g.L)) continue;
+    const L = [...g.L].sort((a, b) => (b.p - a.p) || (a.sk < b.sk ? -1 : 1)), cand = []; let over = false;
+    const ub = (a, b, c) => oneFactor([a.p, b.p, c.p], g.m) * (1 + RB_SIG);
+    for (let i = 0; i + 2 < L.length && !over; i++) { if (ub(L[i], L[i + 1], L[i + 2]) <= g2) break;
+      for (let k = i + 1; k + 1 < L.length && !over; k++) { if (!fitsTwo(L[i], L[k])) continue; if (ub(L[i], L[k], L[k + 1]) <= g2) break;
+        for (let q = k + 1; q < L.length; q++) { const c = L[q]; if (ub(L[i], L[k], c) <= g2) break; if (!fitsTwo(L[i], c) || !fitsTwo(L[k], c)) continue;
+          if (cand.length >= RB_TRIPLES) { over = true; break; } cand.push([L[i], L[k], c]); } } }
+    if (over) continue;
+    const out = []; let bad = false;
+    for (const T of cand) { const f = ownFig(corr, T); if (!f) { bad = true; break; } out.push([cellOf(f.d * (1 + RB_SIG)), Math.min(1, f.p * (1 + RB_SIG))]); }
+    if (bad) continue;
+    g.three = frontier(out); any = true; if (info) info.triples += cand.length;
+  }
+  if (!any) return b0;
+  const b = Math.min(e3, run(true));
+  if (info) Object.assign(info, { stage: 3, three: b });
+  return Math.max(g2, b);
+}
+/* THE FEWEST LEGS AND THE SIZE, on this file's own witnesses (the review of 12 November: a level padded with a short Under,
+   at the very chance its price implies, landed within a hair of the best and passed the bound alone). For a level of k legs: the exact
+   walk's likeliest parlay of each size j < k (the legs alone, and on a night of three games or fewer their pairs too) and
+   of k; a parlay of fewer legs landing (1 - TAU + ETA) of the bound or more breaks rule (3) (the bound is at C* or more),
+   one of k legs landing more than the level over (1 - ETA) breaks rule (4). null where a walk ran past its cap (nothing is
+   held then); the page's TAU and ETA are this file's own copies (the record refuses a page whose levels or cutoff differ) */
+const RULER_TAU = 0.005, RULER_ETA = 0.001;
+function rulerWitness(legs, corr, F, k) {
+  const games = new Set(legs.map(l => l.gid)).size, G = rbUnits(legs, corr, F, games <= 3), sizes = [];
+  for (let j = 2; j <= k; j++) sizes.push(j);
+  const out = sizes.length ? rbExact(G, F, k, sizes) : {};
+  return out && out.capped ? null : out;
+}
+/* whether some parlay the rule takes pays F, by its legs alone and its pairs (a level empty where one does is refused):
+   each game's dearest leg, or its dearest pair by the builder's two-leg sums, multiplied across the games */
+function rulerPays(legs, corr, F) {
+  const byG = new Map(); for (const l of legs) { if (!byG.has(l.gid)) byG.set(l.gid, []); byG.get(l.gid).push(l); }
+  const opts = [];
+  for (const L of byG.values()) {
+    const one = Math.max(...L.map(l => l.d)), top = [...L].sort((a, b) => b.d - a.d).slice(0, 16); let two = 0;
+    if (corr) for (let i = 0; i < top.length; i++) for (let k = i + 1; k < top.length; k++) if (fitsTwo(top[i], top[k])) two = Math.max(two, pairOwn(corr, top[i], top[k]).d);
+    opts.push({ one, two });
+  }
+  /* singles across two games or more, or one game's pair with any singles of the rest */
+  const ones = opts.map(o => o.one).sort((a, b) => b - a), all = ones.reduce((t, d) => t * d, 1);
+  if (opts.length >= 2 && all >= F - 1e-9) return true;
+  return opts.some((o, i) => o.two > 0 && o.two * opts.reduce((t, q, k) => k === i ? t : t * q.one, 1) >= F - 1e-9);
+}
+/* one ruler level held by property: its head, its legs (a valid parlay of the pool's legs at their kept figures), its
+   chance and price (the pool's figures multiplied), its floor, and its chance against the bound (null: not held to one) */
+function rulerLevelBad(key, x, lv, pool, ids, bound, tag, F0, legsAll, corr) {
+  const bad = [], [id, label, lo, hi, F] = lv, w = tag ? ` (${tag})` : '';
+  if (x.label !== label || x.min !== lo || x.max !== hi || x.price !== F || x.chance !== 'fair' || x.need !== undefined) bad.push(`${key} ${id}: not the ruler's own label, range, floor and chance (${label}, ${lo} legs or more, $${F}, at DraftKings' fair chance)`);
+  if (x.nopl !== undefined) bad.push(`${key} ${id}: says why it holds no player leg (nopl ${x.nopl}), where the ruler asks none`);
+  if (x.gap !== undefined) bad.push(`${key} ${id}: a level the search did not settle (gap ${x.gap}): the record takes none`);
+  if (!Array.isArray(x.legs)) {
+    if (typeof x.why !== 'string' || !x.why) bad.push(`${key} ${id}: neither legs nor why`);
+    else if (legsAll && rulerPays(legsAll, corr, F)) bad.push(`${key} ${id}: empty, and the legs${w} make a parlay paying $${F} or more`);
+    return bad;
+  }
+  const L = x.legs;
+  if (L.length < lo) bad.push(`${key} ${id}: ${L.length} leg${L.length === 1 ? '' : 's'}, under its ${lo}`);
+  if (L.some(l => !isMap(l) || !ids.has(l.id))) { bad.push(`${key} ${id}: a leg on no game of the night`); return bad; }
+  if (L.some(l => !TEAM_KINDS.includes(l.kind) && l.kind !== 'prop')) { bad.push(`${key} ${id}: a leg that is neither a team leg nor a player's line`); return bad; }
+  if (L.some(l => l.kind === 'prop' && (l.mk !== 'main' || !['over', 'under'].includes(l.side) || !PL_STATS.includes(l.stat) || !isFinite(l.odds) || !isFinite(l.other)))) { bad.push(`${key} ${id}: a player's leg that is not a main line, over or under, with both prices, on a stat the page offers`); return bad; }
+  const ks = L.map(legKey);
+  if (new Set(ks).size < ks.length) bad.push(`${key} ${id}: a leg twice`);
+  const pids = L.filter(l => l.kind === 'prop').map(l => String(l.pid));
+  if (new Set(pids).size < pids.length) bad.push(`${key} ${id}: two legs of one player`);
+  const per = new Map(); for (const l of L) { if (l.kind === 'prop') continue; const g = per.get(l.id) || { side: 0, total: 0 }; g[l.kind === 'total' ? 'total' : 'side']++; per.set(l.id, g); }
+  if ([...per.values()].some(g => g.side > 1 || g.total > 1)) bad.push(`${key} ${id}: two side bets or two totals of one game`);
+  if (!(x.dec >= F - 1e-9)) bad.push(`${key} ${id}: pays ${x.dec} on $1, under its floor ${F}`);
+  if (!pool) return bad;
+  const at = new Map(pool.legs.map(l => [l.sk, l]));
+  if (L.some(l => { const q = at.get(legKey(l)); return !q || q.odds !== l.odds || q.other !== l.other || Math.abs(q.p - l.p) > 5e-5 || Math.abs(q.p - l.fair) > 5e-5; })) { bad.push(`${key} ${id}: a leg not in its pool${w} at its own prices and fair chance`); return bad; }
+  const byG = new Map(); for (const l of L) { if (!byG.has(l.id)) byG.set(l.id, []); byG.get(l.id).push(legKey(l)); }
+  let pc = 1, dc = 1;
+  for (const sk of byG.values()) {
+    if (sk.length === 1) { const q = at.get(sk[0]); pc *= q.p; dc *= q.d; continue; }
+    const g = pool.groups.get([...sk].sort().join('~'));
+    if (!g) { bad.push(`${key} ${id}: a game's legs together not kept in its pool${w} with their figures`); return bad; }
+    pc *= g.p; dc *= g.d;
+  }
+  if (Math.abs(pc - x.p) > 1e-4 || Math.abs(pc - (x.fair == null ? NaN : x.fair)) > 1e-4 || Math.abs(dc - x.dec) > 1e-3) bad.push(`${key} ${id}: its chance ${x.p}, fair chance ${x.fair} and price ${x.dec} are not its legs' as its pool${w} has them (${pc.toFixed(5)}, ${dc.toFixed(4)})`);
+  if (!(dc >= F - 1e-6)) bad.push(`${key} ${id}: its legs pay ${dc.toFixed(4)} on $1 by its pool${w}, under its floor ${F}`);
+  if (bound != null && !(pc >= (1 - TAU_G) * bound)) bad.push(`${key} ${id}: lands ${(pc * 100).toFixed(3)}%, under ${((1 - TAU_G) * 100).toFixed(0)}% of this file's own bound on the likeliest parlay paying $${F}${w} (${(bound * 100).toFixed(3)}%)`);
+  /* rules (3) and (4) on this file's own witnesses, where it worked the bound on its own reading */
+  if (bound != null && legsAll && corr) {
+    const Wt = rulerWitness(legsAll, corr, F, L.length), nm = r => r.units.flatMap(u => u.legs.map(l => l.sk)).join(' + ');
+    if (Wt) {
+      for (let j = 2; j < L.length; j++) { const r = Wt[j]; if (r && r.p >= (1 - RULER_TAU + RULER_ETA) * bound * (1 + 1e-12)) { bad.push(`${key} ${id}: ${L.length} legs, where a parlay of ${j} (${nm(r)}) lands ${(r.p * 100).toFixed(3)}% at ${r.d.toFixed(4)}, within half a percent of this file's own bound (${(bound * 100).toFixed(3)}%): the rule takes the fewest legs`); break; } }
+      const r = Wt[L.length]; if (r && r.p * (1 - RULER_ETA) > pc * (1 + 1e-12)) bad.push(`${key} ${id}: lands ${(pc * 100).toFixed(3)}%, where a parlay of its ${L.length} legs (${nm(r)}) lands ${(r.p * 100).toFixed(3)}% at ${r.d.toFixed(4)}: the rule takes the likeliest of its size, within 0.1%`);
+    }
+  }
+  return bad;
+}
+/* a ruler pool (P as kept, kept: its reading) held to this file's own reading of the run's files at an instant, and the legs
+   and figures the bound is worked on there; tag names the pool in the words */
+function rulerFull(key, P, kept, state, lines, games, at, tag) {
+  const bad = [], w = tag ? ` (${tag})` : '', pl = plOwn(state, lines, games, at), tm = teamOwn(state, lines, games, at), c = P.pl;
+  const corr = state && state.corr && isMap(state.corr.rho) && state.corr.hold > 0 ? state.corr : null;
+  if (!corr) return { bad: [`${key}${w}: the run's state.json has no same-game table, so the guard cannot work its bound out`], legs: null, corr: null };
+  for (const k of Object.keys(PL_COUNT_WORDS)) if (c[k] !== pl[k]) bad.push(`${key}${w}: its pool counts ${c[k]} player lines ${PL_COUNT_WORDS[k]}, where this file's own reading of the run's lines.json and state.json counts ${pl[k]}`);
+  for (const k of Object.keys(TEAM_COUNT_WORDS)) if ((P[k] || 0) !== tm[k]) bad.push(`${key}${w}: its pool counts ${P[k] || 0} team legs ${TEAM_COUNT_WORDS[k]}, where this file's own reading counts ${tm[k]}`);
+  const keptPl = kept.legs.filter(l => l.pid), keptTm = kept.legs.filter(l => !l.pid), plAt = new Map(pl.legs.map(l => [l.sk, l])), tmAt = new Map(tm.legs.map(l => [l.sk, l]));
+  if (c.cut !== pl.legs.length - keptPl.length) bad.push(`${key}${w}: its pool says ${c.cut} player legs in the band were left out, where this file's own reading has ${pl.legs.length} in the band and the pool keeps ${keptPl.length}`);
+  for (const l of keptPl) { const o = plAt.get(l.sk); if (!o || o.odds !== l.odds || o.other !== l.other || o.p !== l.p) bad.push(`${key}${w}: its pool keeps ${l.sk} at ${l.odds}, ${l.p}, which is no player leg of the run's lines.json by this file's own reading`); }
+  for (const l of keptTm) { const o = tmAt.get(l.sk); if (!o || o.odds !== l.odds || o.other !== l.other || o.p !== l.p) bad.push(`${key}${w}: its pool keeps ${l.sk} at ${l.odds}, ${l.p}, which is no team leg of the run's lines.json by this file's own reading`); }
+  for (const l of tm.legs) if (!kept.legs.some(k => k.sk === l.sk)) bad.push(`${key}${w}: its pool leaves out ${l.sk}, a team leg of the run's lines.json by this file's own reading`);
+  /* the kept groups held to this file's own copula: two legs exactly (the builder's two-leg sums), more within OWN_TOL */
+  for (const g of kept.groups.values()) {
+    const f = g.legs.length === 2 ? pairOwn(corr, g.legs[0], g.legs[1]) : ownFig(corr, g.legs);
+    if (!f) { bad.push(`${key}${w}: its pool keeps ${g.legs.map(l => l.sk).join(' with ')}, which this file's own copula cannot work out`); continue; }
+    const tol = g.legs.length === 2 ? [1e-12, 1e-9] : [OWN_TOL * f.p, OWN_TOL * f.d];
+    if (Math.abs(f.p - g.p) > tol[0] || Math.abs(f.d - g.d) > tol[1]) bad.push(`${key}${w}: its pool keeps ${g.legs.map(l => l.sk).join(' with ')} at ${g.p}, ${g.d}, where this file's own copula gives ${f.p}, ${f.d}`);
+  }
+  return { bad, legs: [...tm.legs, ...pl.legs], corr };
+}
+/* a ruler entry's pool and levels (its key, games, tip-offs and lock are held before, its replacements and grades after):
+   the pool as kept; while its lock is to come, no player the report lists; a set the run took (new or changed since the
+   file it is held to, its lock to come) held to this file's own reading of the run's files, each level by property against
+   the bound worked there; otherwise each level against the bound on its pool as kept (where the run's state has the
+   same-game table); a level built again after the lock against its own pool, and, built by this run, this file's own
+   reading at the time it was built */
+function rulerEntryBad(key, e, now, pe, state, lines, LV, ids) {
+  const bad = [], t = s => Date.parse(s), pool = nightPoolRuler(e.pool);
+  if (!pool) return [`${key}: its pool is not the ruler's (team legs and players' main lines, each [key, price, DraftKings' fair chance, the other side's price], priced with a margin and in the band, and each level's same-game groups)`];
+  if (pool.legs.some(l => !ids.has(l.gid))) return [`${key}: its pool holds a leg of no game of the night`];
+  if (nightNoLines(e)) bad.push(`${key}: taken with no DraftKings line posted for any game of the night (no set is taken until one is)`);
+  const toLock = isFinite(t(e.tip)) && now < t(e.tip) - LOCK_MS, same = !!state && +state.season === +e.season;
+  if (same && toLock) for (const l of pool.legs) if (l.pid) { const why = plHeld(state, l.gid, l.pid); if (why) { bad.push(`${key}: its pool holds ${l.sk}, a player ${why}`); break; } }
+  const corr = state && state.corr && isMap(state.corr.rho) && state.corr.hold > 0 ? state.corr : null;
+  const own = !!(same && lines && toLock && (!pe || canon(callOf(e)) !== canon(callOf(pe))));
+  let legsAll = null;
+  if (own) {
+    if (e.generated !== state.generated) bad.push(`${key}: taken at ${e.taken_at} on a state.json of ${e.generated}, not the run's (${state.generated})`);
+    const R = rulerFull(key, e.pool, pool, state, lines, e.games, t(e.taken_at), null); bad.push(...R.bad); legsAll = R.legs;
+  }
+  const B = new Map(), boundOf = (legs, F) => { if (!legs || !corr) return null; const k = F; if (!B.has(k)) B.set(k, rulerBound(legs, corr, F)); return B.get(k); };
+  e.tiers.forEach((x, i) => {
+    const lv = LV[i]; if (!isMap(x) || !lv || x.id !== lv[0]) return;
+    if (x.updated != null) {
+      const op = nightPoolRuler(x.pool);
+      if (!op) { bad.push(`${key} ${x.id}: built again with no ruler pool of its own`); return; }
+      if (op.legs.some(l => l.pid && String(l.pid) === String(x.updated.pid))) bad.push(`${key} ${x.id}: built again for ${x.updated.pid}, and its pool still holds him`);
+      if (op.legs.some(l => !ids.has(l.gid))) bad.push(`${key} ${x.id}: its own pool holds a leg of no game of the night`);
+      const pt = pe && Array.isArray(pe.tiers) ? pe.tiers[i] : null;
+      /* built by this run: held to the bound on this file's own reading of the run's files at the time it was built (its legs
+         carry each player's club, which the correlations a bound works on need: the pool as kept does not) */
+      let legs = null;
+      if (same && lines && isFinite(t(e.tip)) && now < t(e.tip) && isFinite(t(x.updated.at)) && (!pt || canon(pt) !== canon(x))) {
+        const R = rulerFull(`${key} ${x.id}`, x.pool, op, state, lines, e.games, t(x.updated.at), 'its own'); bad.push(...R.bad); if (R.legs) legs = R.legs; }
+      bad.push(...rulerLevelBad(key, x, lv, op, ids, corr && legs ? rulerBound(legs, corr, lv[4]) : null, 'its own', null, legs, corr));
+      return;
+    }
+    if (x.pool != null) bad.push(`${key} ${x.id}: a pool of its own, never built again`);
+    /* a set the run took is held to the bound on this file's own reading of the run's files; one the file it is held to
+       holds as it is was held so when it was taken, and its pool as kept carries no player's club, which the bound's
+       correlations need: it is held to its pool (a valid parlay of its legs at their kept figures, paying its floor) */
+    bad.push(...rulerLevelBad(key, x, lv, pool, ids, own ? boundOf(legsAll, lv[4]) : null, own ? 'this file\'s own reading of the run\'s files' : 'its pool as kept', null, own ? legsAll : null, corr));
+  });
   return bad;
 }
 /* the night entries prev had locked (their lock passed by now) that L has lost or changed beyond a grade and the levels
@@ -864,7 +1304,7 @@ function nightMoved(L, prev, now, runAt, state) {
       if (state && +state.season === +e.season) {
         for (const u of mine) { const l = PT[i].legs.find(y => y && y.kind === 'prop' && y.pid === u.pid);
           if (l && !plListed(state, l.id, u.pid)) bad.push(`${key} ${x.id}: replaced for ${u.pid} (${u.reason || 'no reason'}), whom the run's state.json does not list`); }
-        const op = nightPool(e, x.pool);
+        const op = isMap(x.pool) && x.pool.rule === 'fair' ? nightPoolRuler(x.pool) : nightPool(e, x.pool);
         if (op) for (const l of op.legs) if (l.pid) { const why = plHeld(state, l.gid, l.pid); if (why) { bad.push(`${key} ${x.id}: built again on a pool holding ${l.sk}, a player ${why}`); break; } }
       }
     });
@@ -976,5 +1416,6 @@ function main() {
 }
 module.exports = { ownGroups, ownFig, check, entryBad, lockedMoved, gradeBad, summarize, summarizeNight, dumps, canon, callOf, keyOf, nightKeyOf, nightIdOf, nightEntryBad, nightLevelBad, nightMoved, nightPool, nightBest, nightBetter, nightNoLines, nightHeld, featuredOf, etDateOf, minIso, plFair, plHeld, plListed, plOwn, pairOwn, nightFull, gamePosDef, legKey,
   PL_FROM, PL_STATS, PL_BAND, NOCAP_FROM, NIGHT_LEVELS_OLD, nightRule, oldOk, PLAYER_FROM, NIGHT_LEVELS_NOCAP, nocapOk, noPlOf, NOPL,
-  TIERS, OLD_TIERS, THREE_FROM, LABELS, LEGS, LOCK_MS, FEATURED_TV, NIGHT_LEVELS, NIGHT_IDS, NIGHT_TIE, HOW, LEDGER_REL };
+  TIERS, OLD_TIERS, THREE_FROM, LABELS, LEGS, LOCK_MS, FEATURED_TV, NIGHT_LEVELS, NIGHT_IDS, NIGHT_TIE, HOW, LEDGER_REL,
+  RULER_FROM, RULER_FROM_SET, NIGHT_LEVELS_RULER, TAU_G, RULER_TAU, RULER_ETA, RB_W, RB_SIG, RB_NODES, oneFactor, rulerOk, rulerLateOk, teamFair, teamOwn, glOwn, nightPoolRuler, rbExact, rbUnits, rulerBound, rulerWitness, rulerPays, rulerLevelBad, rulerFull, rulerEntryBad, nightUpdatesBad };
 if (require.main === module) process.exit(main());

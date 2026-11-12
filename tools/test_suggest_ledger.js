@@ -65,8 +65,15 @@
  *      Y3 a one-game night, each level a group of its legs holding a player; Y4 the cutoff (PLAYER_FROM) on the real
  *      record's sets of the rule before; Y5 a level built again after the lock under each rule; Y6 a night of ten games
  *      with game lines and no player line, every level "lines", the job and suggest_check.js each within a time bound.
- *   G  the real ledger, copied, on the real state and lines.json at the real clock: nothing refused, every locked set as
- *      it was.
+ *   R  one ruler (the owner's call of 11 November 2026): every set taken from the record's cutoff (suggest_check.js's
+ *      RULER_FROM) on one ruler, every leg at DraftKings' fair chance, at the default filters; each level held by this
+ *      file's own enumeration to the rule's four properties, the pool as kept, the cutoff both ways (and on the real
+ *      record), the guard's breaks, ties among Unders at +100, a level built again after the lock under each rule
+ *      and a night of one game. Every section before it holds the rules before the ruler, on made-up days after any
+ *      cutoff the finish step can set, so the test moves the cutoff far ahead for them (SUGGEST_RULER_FROM, which every
+ *      run spawned here inherits, and the page copied with its own SP_RULER_FROM moved the same).
+ *   G  the real ledger, copied, on the real state and lines.json at the real clock and the real cutoff: nothing refused,
+ *      every locked set as it was.
  */
 'use strict';
 const fs = require('fs');
@@ -75,11 +82,26 @@ const path = require('path');
 const cp = require('child_process');
 const ROOT = path.resolve(__dirname, '..');
 const SCRIPT = path.join(__dirname, 'suggest_ledger.js'), CHECK = path.join(__dirname, 'suggest_check.js');
+/* the record's cutoff for the ruler as the guard carries it (its RULER_FROM_SET), and far ahead for every section but R
+   and G (set before suggest_check.js is first read, and inherited by every run spawned here) */
+const REAL_CUT = (/const RULER_FROM_SET = '([^']+)'/.exec(fs.readFileSync(path.join(__dirname, 'suggest_check.js'), 'utf8')) || [])[1];
+const CUT_FAR = '2099-01-01T00:00:00Z';
+process.env.SUGGEST_RULER_FROM = CUT_FAR;
 const SC = require('./suggest_check'), PJ = require('./props'), CJ = require('./corr');
+/* the guard at another cutoff: suggest_check.js read again with SUGGEST_RULER_FROM set to it */
+const SC_AT = new Map();
+const scAt = cut => { if (SC_AT.has(cut)) return SC_AT.get(cut); const k = require.resolve('./suggest_check'), keep = require.cache[k];
+  delete require.cache[k]; process.env.SUGGEST_RULER_FROM = cut;
+  try { const m = require('./suggest_check'); SC_AT.set(cut, m); return m; } finally { process.env.SUGGEST_RULER_FROM = CUT_FAR; require.cache[k] = keep; } };
+/* the page with its cutoff for the ruler moved (exactly one SP_RULER_FROM in it) */
+const PAGE = fs.readFileSync(path.join(ROOT, 'index.html'), 'utf8');
+const pageAt = cut => { const re = /const SP_RULER_FROM = '[^']*'/g, m = PAGE.match(re);
+  if (!m || m.length !== 1) throw new Error(`the page carries ${m ? m.length : 0} cutoffs for the ruler (const SP_RULER_FROM), where the test moves exactly one`);
+  return PAGE.replace(re, `const SP_RULER_FROM = '${cut}'`); };
 const DIR = fs.mkdtempSync(path.join(os.tmpdir(), 'suggest_ledger_'));
 const LEDGER = path.join(DIR, 'ledger.json');
 fs.mkdirSync(path.join(DIR, 'data'), { recursive: true });
-fs.copyFileSync(path.join(ROOT, 'index.html'), path.join(DIR, 'index.html'));
+fs.writeFileSync(path.join(DIR, 'index.html'), pageAt(CUT_FAR));
 
 let n = 0; const fails = [];
 const chk = (ok, msg) => { n++; if (!ok) fails.push(msg); if (process.env.SL_VERBOSE) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${msg}`); };
@@ -651,6 +673,9 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
      seconds later on the wall clock, would read as a locked night moved */
   { const wf = fs.readFileSync(path.join(ROOT, '.github', 'workflows', 'update.yml'), 'utf8').split('\n').find(l => /node tools\/suggest_ledger\.js/.test(l) && /node tools\/suggest_check\.js/.test(l)) || '';
     chk(/now=\$\(date -u \+[^)]*\) && SUGGEST_NOW=\$now node tools\/suggest_ledger\.js && SUGGEST_NOW=\$now node tools\/suggest_check\.js/.test(wf) && wf.indexOf('test_suggest_ledger.js') < wf.indexOf('now=$('), "F: the job's step reads one clock after the test and hands it to both the script and its check");
+    /* and runs the ruler search's own test before the take (the review of 12 November: nothing in the job ran it) */
+    const rt = wf.indexOf('RULER_ONLY=enum,site,slice,bound node tools/test_suggest_ruler.js');
+    chk(rt > 0 && rt < wf.indexOf('now=$(') && /test_suggest_ruler\.js >> \/tmp\/test_suggest_ledger\.log 2>&1 &&/.test(wf), "F: the job's step runs the ruler search's own test (its rule, the site's work on every fixture night, a level a slice a task, the guard's bound and witnesses) before the take, and stops on it");
     fs.writeFileSync(LEDGER, good);
     const lockD2 = Date.parse(gE.tip) - LOCK, tJ = isoS(lockD2 - 1000), tLate = isoS(lockD2 + 5000);
     r = run(stateOf(day2b, { today: D2, generated: T(D2, '20:00') }), linesOf([gD, gE, gF], { mlShift: { [gE.id]: 0.03 }, at: T(D2, '20:30:00') }), tJ);
@@ -1299,7 +1324,235 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
     }
   }
 
-  console.log('G. the real ledger, copied, on the real state');
+  console.log('R. one ruler (the owner\'s call of 11 November 2026)');
+  /* R  the ruler (every set taken from suggest_check.js's RULER_FROM): the cutoff moved before the made-up days (RCUT, the
+        page copied with its own moved the same), the job takes each night's set at the default filters with every leg at
+        DraftKings' fair chance, and this file holds it on its own: its pool (every team leg at its two prices' fair chance,
+        in the band, priced with a margin; the player legs as P reads them), and every level by this file's own enumeration
+        of every parlay the night's legs make (each game's legs together by its own copula: optsP), against the rule's four
+        properties: (1) it pays its floor; (2) it lands within SPR_TAU (0.5%) of the likeliest parlay that does; (3) no
+        parlay of fewer legs paying the floor lands within SPR_TAU - SPR_ETA of that; (4) it lands within SPR_ETA (0.1%) of
+        the likeliest of its own size. R1 D1's night of four games and D2's of two; R2 prices moved and again unchanged; R3
+        the cutoff both ways (a run before it the rule with a player, after it the ruler; an older rule's set taken after it
+        and a ruler's taken before it each refused, unless the file it is held to holds it so; the real record's sets at a
+        cutoff after and before its last take); R4 the guard's breaks (a level under its bound by more than TAU_G, a team
+        leg at the model's chance, a level not settled, a team leg left out of the pool, the heads of another rule, a leg not
+        in the pool, ties among Unders at +100 passing as any of the tied); R5 a level built again after the lock
+        under each rule (one the search does not settle within its work left as locked); R6 the pool as kept, holding every level from the lock; R7 a night of one game; R8 a level not settled within the search's work, never taken; R9 the fewest legs, the pair
+        of Unders where three land likelier, and a page that takes the most legs refused by the guard */
+  { const RCUT = T(D0, '12:00:00'), TAU = 0.005, ETA = 0.001, SCR = scAt(RCUT), slR = [gG, gC, gA, gB, gP, gE, gD, gF];
+    const isMap = x => !!x && typeof x === 'object' && !Array.isArray(x);
+    const uniR = (name, cut) => { const U = uni(name); fs.writeFileSync(path.join(U, 'index.html'), pageAt(cut || RCUT)); return U; };
+    const runR = (U, st, lines, at, cut, o = {}) => runU(U, st, lines, at, { SUGGEST_RULER_FROM: cut || RCUT, ...o });
+    /* gA's players' lines: two short Unders beside P's lines, so the levels can take a player's Under (its chance on the ruler one over its price) */
+    const mainsR = [{ player: '9100001', stat: 'stl', line: 1.5, over: 170, under: -230 }, { player: '9100003', stat: 'blk', line: 1.5, over: 180, under: -240 },
+      mainOf(9100001, ROWS[gA.id][9100001], 'pts', 24.5, 'over'), mainOf(9100003, ROWS[gA.id][9100003], 'reb', 9.5, 'over')];
+    const linesR = (o = {}) => { const L = linesOf(slR.filter(g => g.type !== 'PRE'), o); L.games[gA.id].props = { at: o.at || READ, mains: clone(o.mains || mainsR), ladders: [], yes: [] }; return L; };
+    /* this file's own ruler pool: every team leg of the night's games still to tip at its two prices' fair chance (a side of
+       a game the model rates, a total of any), priced with a margin, 45% to 97%, with DraftKings' id (every made-up line
+       carries ids); the player legs as P reads them (plLegsOwn: the whole margin on the Over) */
+    const teamR = (st, lines, now, d) => { const out = [];
+      for (const g of toTip(st, d, now)) { const x = lines.games[g.id]; if (!x) continue;
+        const add = (kind, s, line, odds, other) => { if (!odds || !other || imp(odds) + imp(other) < 1) return; const p = imp(odds) / (imp(odds) + imp(other)); if (!(p >= 0.45 && p < 0.97)) return;
+          out.push({ sk: [g.id, kind, s, line == null ? '' : line].join('|'), gid: g.id, kind, side: s, line, odds, other, p, d: dec(odds), home: g.home, team: kind === 'total' ? '' : s }); };
+        if (g.model && x.ml) { add('ml', g.home, null, x.ml.home, x.ml.away); add('ml', g.away, null, x.ml.away, x.ml.home); }
+        if (g.model && x.spread) { add('spread', g.home, x.spread.line, x.spread.home, x.spread.away); add('spread', g.away, -x.spread.line, x.spread.away, x.spread.home); }
+        if (x.total) { add('total', 'over', x.total.line, x.total.over, x.total.under); add('total', 'under', x.total.line, x.total.under, x.total.over); } }
+      return out; };
+    const legsR = (st, lines, now, d) => [...teamR(st, lines, now, d), ...plLegsOwn(st, lines, now, d)].sort((a, b) => a.sk < b.sk ? -1 : 1);
+    /* every parlay of the night's options (each game nothing or one of its options), the likeliest paying each floor, of
+       all and of each size */
+    const enumR = G => { const out = { 2: { star: 0, k: {} }, 4: { star: 0, k: {} }, 8: { star: 0, k: {} } }; let count = 0;
+      (function go(i, c, d, n) { if (i === G.length) { if (n < 2) return; count++;
+          for (const F of [2, 4, 8]) if (d >= F - 1e-9) { const o = out[F]; if (c > o.star) o.star = c; if (!(o.k[n] >= c)) o.k[n] = c; } return; }
+        go(i + 1, c, d, n); for (const o of G[i]) go(i + 1, c * o.p, d * o.d, n + o.legs.length); })(0, 1, 1, 0);
+      return { out, count }; };
+    /* a level's own figures: each game's legs as one of its options */
+    const figR = (G, L) => { const by = new Map(); for (const l of L) { const k = legKey(l); const gid = k.split('|')[0]; if (!by.has(gid)) by.set(gid, []); by.get(gid).push(k); }
+      let c = 1, d = 1; for (const ks of by.values()) { const o = G.flat().find(x => x.legs.length === ks.length && x.legs.every(l => ks.includes(l.sk))); if (!o) return null; c *= o.p; d *= o.d; } return { c, d }; };
+    function rulerMatch(tag, e, st, lines, now) {
+      const legs = legsR(st, lines, now, e.date), G = optsP(legs), E = enumR(G), F0 = { safe: 2, med: 4, aggr: 8 };
+      chk(e.tiers.every(t => t.chance === 'fair' && t.need === undefined && t.nopl === undefined && t.gap === undefined) && SCR.nightRule(e) === 'fair',
+        `${tag}: the ruler's heads (chance fair, no player asked, no why, no gap): ${e.tiers.map(t => `${t.id} ${t.chance} ${t.need}`).join(', ')}`);
+      const P = SCR.nightPoolRuler(e.pool), tm = teamR(st, lines, now, e.date), kTm = P ? P.legs.filter(l => !l.pid) : [];
+      chk(!!P && kTm.length === tm.length && tm.every(l => kTm.some(k => k.sk === l.sk && k.odds === l.odds && k.other === l.other && Math.abs(k.p - l.p) < 1e-9)),
+        `${tag}: its pool keeps every team leg at its two prices' fair chance, this file's own (${kTm.length} kept, ${tm.length} own)`);
+      for (const t of e.tiers) { const F = F0[t.id], o = E.out[F];
+        if (!t.legs) { chk(!(o.star > 0), `${tag} ${t.id}: empty ("${t.why}"), and this file's own enumeration finds no parlay paying $${F} (${o.star})`); continue; }
+        const f = figR(G, t.legs), n = t.legs.length, kStar = o.k[n] || 0;
+        chk(!!f && t.legs.every(l => { const q = legs.find(x => x.sk === legKey(l)); return q && Math.abs(q.p - l.p) < 6e-5 && Math.abs(q.p - l.fair) < 6e-5; }),
+          `${tag} ${t.id}: every leg at DraftKings' fair chance, this file's own (${t.legs.map(l => `${l.name} ${l.p}`).join(', ')})`);
+        if (!f) continue;
+        const fewer = Object.keys(o.k).map(Number).filter(k => k < n && o.k[k] >= (1 - TAU + ETA) * o.star * (1 + 2e-4));
+        chk(f.d >= F - 1e-6 && f.c >= (1 - TAU) * o.star * (1 - 2e-4) && !fewer.length && f.c >= (1 - ETA) * kStar * (1 - 2e-4) && Math.abs(f.c - t.p) < 2e-4 && Math.abs(f.d - t.dec) < 2e-3,
+          `${tag} ${t.id}: by this file's own enumeration of ${E.count} parlays, (1) it pays $${F} (${f.d.toFixed(4)}), (2) within 0.5% of the likeliest (${(f.c * 100).toFixed(3)}% of ${(o.star * 100).toFixed(3)}%), (3) no fewer legs within 0.4% (${fewer.map(k => k + ' legs at ' + (o.k[k] * 100).toFixed(3) + '%').join(', ') || 'none'}), (4) within 0.1% of the likeliest of its ${n} legs (${(kStar * 100).toFixed(3)}%); the entry ${t.p} at ${t.dec}`);
+      }
+      return { legs, G, E };
+    };
+    const keyR = d => nightKey(slR, d), stR = (o = {}) => stateOf(slR, o);
+    const tR = T(D1, '15:00:00'), LR = linesR();
+
+    /* R1 */
+    const UR = uniR('ruler1'), r1 = runR(UR, stR(), LR, tR), L1 = r1.code === 0 ? readU(UR) : null, e1 = L1 && L1.night[keyR(D1)], e2 = L1 && L1.night[keyR(D2)];
+    chk(!!e1 && !!e2 && /took /.test(r1.out), `R1: the job takes D1's and D2's sets under the ruler, and the guard passes them: ${r1.last}`);
+    if (e1) { rulerMatch('R1 D1', e1, stR(), LR, Date.parse(tR));
+      chk(e1.tiers.some(t => t.legs && t.legs.some(l => l.kind === 'prop' && l.side === 'under')), `R1: a level takes a player's Under at its fair chance (${e1.tiers.map(t => t.id + ' ' + (t.legs || []).map(l => l.kind === 'prop' ? l.side : l.kind).join('+')).join(', ')})`);
+      const P = SCR.nightPoolRuler(e1.pool), inL = new Set(e1.tiers.flatMap(t => (t.legs || []).map(legKey)));
+      chk(!!P && P.legs.filter(l => l.pid).every(l => inL.has(l.sk)) && e1.tiers.every(t => !t.legs || t.legs.every(l => P.legs.some(q => q.sk === legKey(l)))) && e1.pool.pl.cut === plLegsOwn(stR(), LR, Date.parse(tR), D1).length - P.legs.filter(l => l.pid).length,
+        `R1: the pool keeps every leg its levels hold, its player legs those alone, the rest counted as cut (${P ? P.legs.length : 0} kept, cut ${e1.pool.pl.cut})`); }
+    if (e2) rulerMatch('R1 D2 (two games)', e2, stR(), LR, Date.parse(tR));
+
+    /* R2: prices moved before the lock: rewritten under the ruler; the same again: unchanged */
+    if (e1) { const t2 = T(D1, '16:00:00'), L2 = linesR({ mlShift: { [gC.id]: 0.04 } }), r2 = runR(UR, stR(), L2, t2), n2 = readU(UR).night[keyR(D1)];
+      chk(r2.code === 0 && n2.taken_at === t2 && SCR.nightRule(n2) === 'fair', `R2: prices moved, D1's set rewritten under the ruler: ${r2.last}`);
+      if (r2.code === 0) rulerMatch('R2', n2, stR(), L2, Date.parse(t2));
+      const before = fs.readFileSync(path.join(UR, 'ledger.json'), 'utf8'), r3 = runR(UR, stR(), L2, T(D1, '16:30:00'));
+      chk(r3.code === 0 && /unchanged/.test(r3.last) && fs.readFileSync(path.join(UR, 'ledger.json'), 'utf8') === before, `R2: the same lines again write nothing: ${r3.last}`); }
+
+    /* R3: the cutoff, both ways */
+    { const CL = T(D1, '18:00:00'), U3 = uniR('ruler3', CL), a = runR(U3, stR(), LR, tR, CL), eA = a.code === 0 ? readU(U3).night[keyR(D1)] : null;
+      chk(!!eA && SCR.nightRule(eA) === 'player', `R3: a run before the cutoff (${CL}) takes the rule with a player: ${eA ? SCR.nightRule(eA) : a.last}`);
+      const tB = T(D1, '19:00:00'), b = runR(U3, stR(), LR, tB, CL), eB = b.code === 0 ? readU(U3).night[keyR(D1)] : null;
+      chk(!!eB && SCR.nightRule(eB) === 'fair' && eB.taken_at === tB, `R3: a run after it rewrites the set still to lock under the ruler: ${eB ? SCR.nightRule(eB) + ' ' + eB.taken_at : b.last}`);
+      if (eA && eB) {
+        const SC1 = scAt(T(D1, '14:00:00')), k = keyR(D1), now = Date.parse(tR) + 60e3;
+        const late = SC1.nightEntryBad(k, eA, now, null, null, null), held = SC1.nightEntryBad(k, eA, now, clone(eA), null, null);
+        chk(late.some(x => /under a rule before the ruler/.test(x)) && !held.some(x => /under a rule before the ruler/.test(x)),
+          `R3: a set of the rule with a player taken after the cutoff is refused (${late.find(x => /ruler/.test(x)) || 'not refused'}), and kept where the file it is held to holds it so, taken at the same time`);
+        const SC2 = scAt(T(D1, '20:00:00')), early = SC2.nightEntryBad(k, eB, Date.parse(tB) + 60e3, null, null, null), held2 = SC2.nightEntryBad(k, eB, Date.parse(tB) + 60e3, clone(eB), null, null);
+        chk(early.some(x => /under the ruler, before its cutoff/.test(x)) && !held2.some(x => /before its cutoff/.test(x)), `R3: a ruler's set taken before the cutoff is refused (${early.find(x => /cutoff/.test(x)) || 'not refused'}), and kept where the file it is held to holds it so`);
+        const old = SCR.nightEntryBad(k, eA, now, null, null, null);
+        chk(SCR.nightRule(eA) === 'player' && old.some(x => /under a rule before the ruler/.test(x)), 'R3: under the ruler\'s own cutoff, before it, the same set taken after is refused');
+      }
+      /* the real record: every set as the file holds it at the real cutoff, and its latest set refused with no file to hold it
+         to at a cutoff a minute before it was taken (the job keeps retaking sets under the old page until this lands) */
+      const RL = fs.existsSync(path.join(ROOT, SC.LEDGER_REL)) ? JSON.parse(fs.readFileSync(path.join(ROOT, SC.LEDGER_REL), 'utf8')) : null;
+      if (RL && RL.night && Object.keys(RL.night).length) {
+        const SCreal = scAt(REAL_CUT), tNow = Date.now(), a1 = SCreal.check(RL, RL, tNow, null, REAL.season);
+        chk(!a1.length, `R3: the real record at the real cutoff (${REAL_CUT}), held to itself, passes (${a1.slice(0, 2).join(' | ') || 'no failure'})`);
+        const [kL, eL] = Object.entries(RL.night).sort((x, y) => Date.parse(x[1].taken_at) - Date.parse(y[1].taken_at)).pop(), cut = isoS(Date.parse(eL.taken_at) - 60e3), SCc = scAt(cut);
+        const nowL = Math.min(Date.parse(eL.taken_at) + 60e3, Date.parse(eL.tip) - LOCK - 1000);
+        const r1b = SCc.nightEntryBad(kL, eL, nowL, null, null, null), r2b = SCc.nightEntryBad(kL, eL, nowL, clone(eL), null, null);
+        const rule = SCc.nightRule(eL);
+        chk(rule === 'fair' ? r1b.every(x => !/before its cutoff/.test(x)) : r1b.some(x => /under a rule before the ruler/.test(x)) && !r2b.some(x => /under a rule before the ruler/.test(x)),
+          `R3: the real record's latest set (${kL.split('|')[1]}, ${rule}, taken ${eL.taken_at}) at a cutoff a minute before it: ${rule === 'fair' ? 'the ruler\'s, standing' : 'refused with no file to hold it to, kept as the file holds it'}`);
+      } else chk(true, 'R3: no night set in the real record (skipped)');
+    }
+
+    /* R4: the guard's breaks, on R1's set at its take (this file's reading of the run's files) */
+    if (e1) { const k = keyR(D1), now = Date.parse(e1.taken_at) + 60e3, st = stR(), base = SCR.nightEntryBad(k, e1, now, null, st, LR);
+      chk(!base.length, `R4: the set as taken passes (${base.slice(0, 2).join(' | ') || 'no failure'})`);
+      const bad = (what, f, re) => { const x = clone(e1); f(x); const b = SCR.nightEntryBad(k, x, now, null, st, LR); chk(b.some(y => re.test(y)), `R4: ${what} refused (${b.find(y => re.test(y)) || b[0] || 'not refused'})`); };
+      /* a worse valid parlay paying $2 of the kept team legs: two sides of two games, its chance well under the bound */
+      const P = SCR.nightPoolRuler(e1.pool), tl = P.legs.filter(l => !l.pid && l.kind === 'ml');
+      let worse = null; for (const a of tl) for (const b of tl) if (!worse && a.gid < b.gid && a.d * b.d >= 2 && a.p * b.p < 0.95 * e1.tiers[0].p) worse = [a, b];
+      if (worse) bad('a Safe under its bound by more than TAU_G (two moneylines at ' + (worse[0].p * worse[1].p * 100).toFixed(2) + '%)', x => { const t = x.tiers[0];
+        t.legs = worse.map(q => { const g = slR.find(y => y.id === q.gid); return { id: q.gid, away: g.away, home: g.home, date: g.date, tip: g.tip, at: READ, kind: 'ml', side: q.s, line: null, odds: q.odds, other: q.other, dk: 'x', name: q.s, label: 'To win', p: +q.p.toFixed(6), fair: +q.p.toFixed(6), fair_est: false, thin: true, market: false }; });
+        t.p = +(worse[0].p * worse[1].p).toFixed(4); t.fair = t.p; t.dec = +(worse[0].d * worse[1].d).toFixed(3); }, /under 99% of this file's own bound/);
+      else chk(false, 'R4: (no worse pair of moneylines to plant)');
+      /* TAU_G itself: the level held to a bound 1.06% over its chance is refused, and to one 0.96% over it passes (the guard
+         takes a level within 1% of its own bound) */
+      { const x = e1.tiers[0], ids = new Set(e1.games.map(g => g.gid)), lv = SCR.NIGHT_LEVELS_RULER[0], pool = SCR.nightPoolRuler(e1.pool);
+        const over = SCR.rulerLevelBad(k, x, lv, pool, ids, x.p * 1.0106, null, null, null, null), under = SCR.rulerLevelBad(k, x, lv, pool, ids, x.p * 1.0096, null, null, null, null);
+        chk(SCR.TAU_G === 0.01 && over.some(y => /under 99% of this file's own bound/.test(y)) && !under.length, `R4: the guard takes a level within 1% of its bound (TAU_G ${SCR.TAU_G}): refused at a bound 1.06% over its chance, passed at 0.96% (${over[0] || 'not refused'})`); }
+      bad('a team leg kept at the model\'s chance', x => { const i = x.pool.legs.findIndex(l => /\|ml\|/.test(l[0])); x.pool.legs[i][2] = +(x.pool.legs[i][2] + 0.03).toFixed(6); }, /its pool is not the ruler's/);
+      bad('a level the search did not settle (a gap)', x => { x.tiers[2].gap = 0.02; }, /did not settle/);
+      bad('a team leg left out of the pool', x => { const used = new Set(x.tiers.flatMap(t => (t.legs || []).map(legKey))); const i = x.pool.legs.findIndex(l => !/\|prop\|/.test(l[0]) && !used.has(l[0]));
+        x.pool.legs.splice(i, 1); x.pool.sets = x.pool.sets.map(s => s.map((v, j) => j < s.length - 2 && v > i ? v - 1 : v)); }, /leaves out/);
+      bad('the heads of the rule with a player', x => { x.tiers.forEach(t => { delete t.chance; t.need = 'player'; }); }, /under a rule before the ruler|not a pool of|neither/);
+      bad('a level\'s leg not in its pool', x => { const t = x.tiers.find(y => y.legs); t.legs[0] = { ...t.legs[0], odds: t.legs[0].odds - 7 }; }, /not in its pool/);
+      /* ties: two players' Unders at +100, each 50% at its fair chance (a pure leg, its fair chance its implied): Medium and Aggressive each
+         a tie between them (Medium one with a home moneyline at +104, 24.01% paying $4.08); the page takes either by its
+         slip keys, and the guard passes the level with the other in its place */
+      const mainsT = [{ player: '9100001', stat: 'reb', line: 3.5, over: -120, under: 100 }, { player: '9100003', stat: 'ast', line: 2.5, over: -120, under: 100 }];
+      const LT = linesR({ mains: mainsT }), tT = T(D1, '15:30:00'), UT = uniR('ruler4t'), rT = runR(UT, stR(), LT, tT), eT = rT.code === 0 ? readU(UT).night[keyR(D1)] : null;
+      if (eT) { rulerMatch('R4 ties', eT, stR(), LT, Date.parse(tT)); let tied = 0;
+        for (const i of [1, 2]) { const t = eT.tiers[i], u = t.legs && t.legs.find(l => l.kind === 'prop' && l.side === 'under' && l.odds === 100); if (!u) continue;
+          const m = mainsT.find(q => q.player !== String(u.pid)), row = ROWS[gA.id][m.player], x = clone(eT), tx = x.tiers[i], j = tx.legs.findIndex(l => l.kind === 'prop' && String(l.pid) === String(u.pid));
+          tx.legs[j] = { ...u, pid: m.player, name: row[0], team: row[1], stat: m.stat, line: m.line, other: m.over, label: `Under ${m.line}` };
+          const sk = legKey(tx.legs[j]); if (!x.pool.legs.some(l => l[0] === sk)) { x.pool.legs.push([sk, 100, 0.5, m.over]); x.pool.pl.cut -= 1; }
+          const b = SCR.nightEntryBad(keyR(D1), x, Date.parse(tT) + 60e3, null, stR(), LT); tied++;
+          chk(!b.length, `R4: ${t.id} holds ${u.name}'s Under at +100, tied with ${row[0]}'s: the guard passes the level with his in its place (${b.slice(0, 2).join(' | ') || 'no failure'})`); }
+        chk(tied === 2, `R4: Medium and Aggressive each hold an Under at +100 tied with the other player's (${eT.tiers.map(t => t.id + ' ' + (t.legs || []).map(l => l.kind === 'prop' ? l.side + ' ' + l.odds : l.kind).join('+')).join(', ')})`); }
+      else chk(false, 'R4: the ties night was not taken: ' + rT.last);
+    }
+
+    /* R5: a level built again after the lock, under each rule */
+    if (e1) { const eNow = readU(UR).night[keyR(D1)], holds = eNow.tiers.find(t => t.legs && t.legs.some(l => l.kind === 'prop')), pl = holds && holds.legs.find(l => l.kind === 'prop');
+      if (pl) { const rep = { [pl.pid]: [pl.name, 'Out', 'knee'] }, tL = isoS(Date.parse(gG.tip) - LOCK + 20 * 60e3), U5 = uniR('ruler5');
+        fs.writeFileSync(path.join(U5, 'ledger.json'), fs.readFileSync(path.join(UR, 'ledger.json'), 'utf8'));
+        const r5 = runR(U5, stR({ report: rep, generated: T(D1, '22:00') }), LR, tL), e5 = r5.code === 0 ? readU(U5).night[keyR(D1)] : null, hit = e5 ? e5.tiers.filter(t => t.updated) : [];
+        chk(!!e5 && hit.length >= 1 && hit.every(t => t.chance === 'fair' && t.need === undefined && isMap(t.pool) && t.pool.rule === 'fair' && !(t.legs || []).some(l => String(l.pid) === String(pl.pid))) && e5.updates.length === hit.length,
+          `R5: ${pl.name} listed after the lock: each level holding him built again under the ruler, on a ruler's pool of its own, recorded (${hit.map(t => t.id).join(', ')}): ${r5.last}`);
+        /* the same with the search's work cut to nothing (SUGGEST_RULER_WORK reaches the page's rebuild too): the level built
+           again is not settled, so the locked level stands, said, and the guard passes (the review of 12 November: the job
+           wrote it, and its own guard refused the whole ledger on every run to the first tip-off) */
+        const U5c = uniR('ruler5c'); fs.writeFileSync(path.join(U5c, 'ledger.json'), fs.readFileSync(path.join(UR, 'ledger.json'), 'utf8'));
+        const r5c = runR(U5c, stR({ report: rep, generated: T(D1, '22:00') }), LR, tL, null, { SUGGEST_RULER_WORK: '1' }), e5c = r5c.code === 0 ? readU(U5c).night[keyR(D1)] : null;
+        chk(r5c.code === 0 && /kept \S+ \w+ as locked: built again for /.test(r5c.out) && !!e5c && JSON.stringify(e5c.tiers) === JSON.stringify(eNow.tiers) && e5c.updates == null,
+          `R5: a level built again that the search does not settle within its work is not written: the locked level stands, said, the guard passing: ${r5c.code === 0 ? r5c.last : r5c.out.trim().split('\n').slice(-4).join(' | ')}`); }
+      else chk(false, 'R5: (no level of R1 holds a player)');
+      /* the rule with a player's set, taken before a cutoff that passes before its lock: built again under its own rule */
+      const CL = T(D1, '18:00:00'), U6 = uniR('ruler5b', CL), a = runR(U6, stR(), LR, tR, CL), eA = a.code === 0 ? readU(U6).night[keyR(D1)] : null;
+      const hp = eA && eA.tiers.find(t => t.legs && t.legs.some(l => l.kind === 'prop')), p2 = hp && hp.legs.find(l => l.kind === 'prop');
+      if (p2) { const tL = isoS(Date.parse(gG.tip) - LOCK + 20 * 60e3), r6 = runR(U6, stR({ report: { [p2.pid]: [p2.name, 'Out', 'knee'] }, generated: T(D1, '22:00') }), LR, tL, CL), e6 = r6.code === 0 ? readU(U6).night[keyR(D1)] : null, hit = e6 ? e6.tiers.filter(t => t.updated) : [];
+        chk(!!e6 && hit.length >= 1 && SCR.nightRule(e6) === 'player' && hit.every(t => t.need === 'player' && t.chance === undefined && !(t.legs || []).some(l => String(l.pid) === String(p2.pid))),
+          `R5: a set of the rule with a player locked after the cutoff passed: the level holding ${p2.name} built again under its own rule (${hit.map(t => t.id + ' ' + t.need).join(', ')}): ${r6.last}`); }
+      else chk(false, 'R5: (no level of the rule with a player holds a player: ' + a.last + ')');
+    }
+
+    /* R6: the pool as kept, from the lock: every level made again on it, and one whose leg left the pool refused */
+    if (e1) { const k = keyR(D1), now = Date.parse(gG.tip) - LOCK + 60e3, L = clone(L1), st = stR(), ok1 = SCR.nightEntryBad(k, L.night[k], now, clone(L.night[k]), st, LR);
+      chk(!ok1.length, `R6: after the lock, every level held to its pool as kept (${ok1.slice(0, 2).join(' | ') || 'no failure'})`);
+      const x = clone(L.night[k]), t = x.tiers.find(y => y.legs && y.legs.some(l => l.kind === 'prop'));
+      if (t) { const sk = legKey(t.legs.find(l => l.kind === 'prop')), i = x.pool.legs.findIndex(l => l[0] === sk); x.pool.legs.splice(i, 1);
+        x.pool.sets = x.pool.sets.filter(s => !s.slice(0, -2).includes(i)).map(s => s.map((v, j) => j < s.length - 2 && v > i ? v - 1 : v));
+        const b = SCR.nightEntryBad(k, x, now, null, st, LR); chk(b.some(y => /not in its pool/.test(y)), `R6: a level whose player leg left the pool as kept refused (${b.find(y => /pool/.test(y)) || 'not refused'})`); }
+    }
+
+    /* R7: a night of one game (D3, gF), under the ruler */
+    { const t7 = T(D3, '15:00:00'), st7 = stR({ today: D3, generated: T(D3, '13:00') }), L7 = linesR({ at: T(D3, '14:00:00') }), U7 = uniR('ruler7'), r7 = runR(U7, st7, L7, t7), e7 = r7.code === 0 ? readU(U7).night[keyR(D3)] : null;
+      chk(!!e7, `R7: a night of one game taken under the ruler: ${r7.last}`);
+      if (e7) rulerMatch('R7 (one game)', e7, st7, L7, Date.parse(t7)); }
+
+    /* R8: a level the search does not settle within its work (cut to nothing here: SUGGEST_RULER_WORK, read by the job for
+       this test alone) is never taken: the night gets no set this run, said, and a set an earlier run took stays as it was */
+    { const U8 = uniR('ruler8'), r8 = runR(U8, stR(), LR, tR, null, { SUGGEST_RULER_WORK: '1' }), L8 = readU(U8);
+      chk(r8.code === 0 && /no set of \S+_NIGHT \([^)]*\) this run: a level not settled within the search's work/.test(r8.out) && (!L8 || !L8.night || !L8.night[keyR(D1)]),
+        `R8: with the search's work cut to nothing, no set of the night is taken, said so: ${r8.code === 0 ? r8.last : r8.out.trim().split("\n").slice(-7).join(" | ")}`);
+      fs.writeFileSync(path.join(U8, 'ledger.json'), fs.readFileSync(path.join(UR, 'ledger.json'), 'utf8'));
+      const was = readU(U8).night[keyR(D2)], r9 = runR(U8, stR(), LR, T(D1, '17:00:00'), null, { SUGGEST_RULER_WORK: '1' }), now9 = readU(U8).night[keyR(D2)];
+      chk(r9.code === 0 && !!was && JSON.stringify(now9) === JSON.stringify(was), `R8: and a set an earlier run took stays as it was: ${r9.last}`); }
+
+    /* R9: the fewest legs. D1's night with five players' Unders in three of its games: two at -241 (ATL's and MIA's) land
+       49.948% together paying $2.0021, three at -385, -384 and -384 (CHA's, ORL's and LAL's) 49.968% paying $2.0013, so the
+       triple is the likeliest parlay paying $2 and the pair is within the rule's half a percent with fewer legs: Safe is
+       the pair, by this file's own enumeration (condition 3) */
+    { const rowR = (nm, tm) => [nm, tm, 'G', 32, 20, 6, 5, 2, 1, 0.5, 0.1, 0.01];
+      const R9 = { [gG.id]: { 9100011: rowR('Al Hawk', 'ATL'), 9100013: rowR('Bo Hornet', 'CHA') }, [gC.id]: { 9100012: rowR('Al Heat', 'MIA'), 9100014: rowR('Bo Magic', 'ORL') }, [gB.id]: { 9100015: rowR('Bo Laker', 'LAL') } };
+      const M9 = { [gG.id]: [{ player: '9100011', stat: 'pts', line: 20.5, over: 150, under: -241 }, { player: '9100013', stat: 'reb', line: 9.5, over: 200, under: -385 }],
+        [gC.id]: [{ player: '9100012', stat: 'pts', line: 22.5, over: 150, under: -241 }, { player: '9100014', stat: 'reb', line: 7.5, over: 200, under: -384 }], [gB.id]: [{ player: '9100015', stat: 'reb', line: 6.5, over: 200, under: -384 }] };
+      const st9 = stR(); st9.props.games = Object.fromEntries([gG, gC, gB].map(g => [g.id, { tip: g.tip, away: g.away, home: g.home, players: clone(R9[g.id]) }]));
+      const L9 = linesR(); for (const g of [gG, gC, gA, gB]) L9.games[g.id].props = M9[g.id] ? { at: READ, mains: clone(M9[g.id]), ladders: [], yes: [] } : null;
+      const U9 = uniR('ruler9'), r9b = runR(U9, st9, L9, tR), e9 = r9b.code === 0 ? readU(U9).night[keyR(D1)] : null;
+      chk(!!e9, `R9: the night of five Unders taken: ${r9b.last}`);
+      if (e9) { const M = rulerMatch('R9', e9, st9, L9, Date.parse(tR)), s9 = e9.tiers[0];
+        chk(!!s9.legs && s9.legs.length === 2 && s9.legs.every(l => l.kind === 'prop' && l.side === 'under' && l.odds === -241) && M.E.out[2].k[3] > M.E.out[2].k[2],
+          `R9: Safe is the two Unders at -241 (${s9.legs ? s9.legs.map(l => l.name).join(' + ') + ', ' + s9.p : s9.why}), the fewest legs, where the triple lands likelier (${(M.E.out[2].k[3] * 100).toFixed(3)}% against ${(M.E.out[2].k[2] * 100).toFixed(3)}%)`); }
+      /* the same night on a page whose search takes the most legs where it should take the fewest (planted on a copy):
+         the job's own guard refuses the set on its witnesses, rule (3) (the review of 12 November: the guard held the
+         fewest legs by nothing, so a level padded with short Unders, each at the very chance its price implies, passed it) */
+      const FEW = 'let ks = -1; for (let k = 2; k <= C.K; k++) if (hi[k] > 0 && (hi[k] > out || (hi[k] === out && !hs[k]))) { ks = k; break; }',
+        MOST = 'let ks = -1; for (let k = C.K; k >= 2; k--) if (hi[k] > 0 && (hi[k] > out || (hi[k] === out && !hs[k]))) { ks = k; break; }';
+      const U9p = uniR('ruler9p'), pg = fs.readFileSync(path.join(U9p, 'index.html'), 'utf8');
+      chk(pg.split(FEW).length === 2, 'R9: the page\'s search takes the fewest legs at one place (the plant below stands on it)');
+      fs.writeFileSync(path.join(U9p, 'index.html'), pg.replace(FEW, MOST));
+      const r9p = runR(U9p, st9, L9, tR);
+      chk(r9p.code === 1 && /\bsafe: \d+ legs, where a parlay of 2 \(.*the rule takes the fewest legs/.test(r9p.out),
+        `R9: a page that takes the most legs is refused by the job's own guard (${(r9p.out.split('\n').find(x => /fewest legs/.test(x)) || r9p.last || '').slice(0, 220)})`); }
+  }
+
+  console.log('G. the real ledger, copied, on the real state, at the real cutoff');
   const realLedger = path.join(ROOT, SC.LEDGER_REL), realLines = path.join(ROOT, 'lines.json');
   if (fs.existsSync(realLines)) {
     const G = path.join(DIR, 'real'); fs.mkdirSync(path.join(G, 'data'), { recursive: true });
@@ -1307,8 +1560,8 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
     for (const f of fs.readdirSync(path.join(ROOT, 'data')).filter(f => /^box_\d{4}\.csv$/.test(f))) fs.copyFileSync(path.join(ROOT, 'data', f), path.join(G, 'data', f));
     const gl = path.join(G, 'ledger.json'); if (fs.existsSync(realLedger)) fs.copyFileSync(realLedger, gl);
     const tG = Date.now(), before = fs.existsSync(gl) ? fs.readFileSync(gl, 'utf8') : null;
-    if (before) { const RL = JSON.parse(before), b2 = SC.check(RL, RL, tG, null, REAL.season); chk(!b2.length, `G: the ledger as it stands passes the guard (${b2.slice(0, 2).join(' | ') || 'no failure'})`); }
-    const rg = cp.spawnSync('node', [SCRIPT], { encoding: 'utf8', env: { ...process.env, SUGGEST_NOW: new Date(tG).toISOString(), SUGGEST_ROOT: G, SUGGEST_LEDGER: gl, SUGGEST_PREV: fs.existsSync(realLedger) ? realLedger : 'none' } });
+    if (before) { const RL = JSON.parse(before), b2 = scAt(REAL_CUT).check(RL, RL, tG, null, REAL.season); chk(!b2.length, `G: the ledger as it stands passes the guard at the real cutoff, ${REAL_CUT} (${b2.slice(0, 2).join(' | ') || 'no failure'})`); }
+    const rg = cp.spawnSync('node', [SCRIPT], { encoding: 'utf8', env: { ...process.env, SUGGEST_NOW: new Date(tG).toISOString(), SUGGEST_ROOT: G, SUGGEST_LEDGER: gl, SUGGEST_PREV: fs.existsSync(realLedger) ? realLedger : 'none', SUGGEST_RULER_FROM: REAL_CUT } });
     const last = ((rg.stdout || '') + (rg.stderr || '')).trim().split('\n').pop();
     chk(rg.status === 0 && /^suggest ledger: (written|unchanged)/.test(last), 'G: the state and lines at the real clock: nothing refused: ' + last);
     if (before && rg.status === 0) { const was = JSON.parse(before), now1 = JSON.parse(fs.readFileSync(gl, 'utf8')), lockedAt = e => Date.parse(e.tip) - LOCK <= tG;

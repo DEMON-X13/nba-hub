@@ -732,10 +732,15 @@ function pbChanceHtml(F, chance, o) {
   /* Suggested Parlays' night levels (o.mix): a player leg there is at DraftKings' fair chance, so the chance the levels
      are ranked on is the model's on its team legs and DraftKings' on its player legs, said so; of player legs alone it
      is the fair chance itself */
+  /* Suggested Parlays' ruler levels (o.fair, every set taken from SP_RULER_FROM): every leg at DraftKings' fair chance,
+     so the level's chance is the fair chance itself, said once, and no model figure (a team leg's sits in its own title) */
+  if (o && o.fair && F && F.p != null)
+    return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-ruler title="The chance the levels are ranked on: every leg at DraftKings’ fair chance, its two prices with the margin taken out (a player’s main line all on the Over), legs of one game joined by the same-game copula. No model claim.">every leg at DraftKings’ chance</small></div>`;
   if (o && o.mix && F && F.p != null) {
-    /* what a player leg costs at that chance, by the page's rule (the whole margin on the Over): an Under breaks even,
-       an Over gives up about 12% (7 November 2026's lines: $0.86 to $0.91 back on $1, $0.88 on average) */
-    const cost = 'at that chance a player Under breaks even and an Over gives up about 12%, so the levels take Unders';
+    /* what a player leg's chance is, by the page's rule: DraftKings' whole margin on the Over (never said as a return: on
+       this season's graded lines an Under lost about 1.65% a dollar at that chance and an Over about 11.3%,
+       research/sp_ruler) */
+    const cost = 'DraftKings’ fair chance puts a player line’s whole margin on the Over, so the levels take Unders';
     const all = o.mix === 'player', title = all ? `Every leg is a player’s, at DraftKings’ fair chance: the props model failed its trial, so no leg carries a model claim (${cost}), and the levels are ranked on this chance`
       : `The chance the levels are ranked on: each team leg at the model’s chance, each player leg at DraftKings’ fair chance (the props model failed its trial, so a player leg carries no model claim: ${cost}), joined by the same-game copula`;
     return `<div class="pb-chance"><b data-pb-fair="${F.p}">${pbPct(F.p)}</b><span${F.est ? ' title="Estimated: the legs share a game and are joined by the copula"' : ''}>fair chance${F.est ? ', est.' : ''}</span><small class="pb-model" data-pb-model="${chance}" data-pb-mix="${o.mix}" title="${esc(title)}">${all ? 'every leg at DraftKings’ chance' : `model + DraftKings ${pbPct(chance)}`}</small></div>`;
@@ -776,18 +781,28 @@ function pbTierCard(t, o) {
   const size = t.n != null ? t.n : t.max == null ? `${t.min}+` : t.min === t.max ? t.min : `${t.min}–${t.max}`;
   if (t.why) return `<div class="pb-tier ${t.id} none"><div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${size} legs</span></div><p class="pb-why">${esc(t.why)}</p></div>`;
   const nm = o.what ? ` the ${esc(t.label)} parlay for ${esc(o.what)}` : '', inB = pbInBuilder(t.legs), trial = t.legs.some(l => l.kind === 'prop'), sg = new Set(t.legs.map(l => l.gid)).size < t.legs.length;
-  /* o.night: Suggested Parlays' night levels, whose player legs are at DraftKings' fair chance (pbChanceHtml's mix) */
-  if (o.night) { const np = t.legs.filter(l => l.kind === 'prop').length; o = { ...o, mix: np === t.legs.length ? 'player' : np ? 'mixed' : null }; }
+  /* o.night: Suggested Parlays' night levels, whose player legs are at DraftKings' fair chance (pbChanceHtml's mix); a
+     ruler level's (t.chance 'fair') every leg at it, with no Value mark and no model figure but a team leg's title */
+  if (o.night && t.chance === 'fair') o = { ...o, fair: true, mix: null };
+  else if (o.night) { const np = t.legs.filter(l => l.kind === 'prop').length; o = { ...o, mix: np === t.legs.length ? 'player' : np ? 'mixed' : null }; }
   return `<div class="pb-tier ${t.id}" data-pb-tier="${t.id}">
     <div class="pb-th"><span class="pb-tn">${esc(t.label)}</span><span class="pb-pill">${t.legs.length} legs</span>${t.rule ? `<span class="pb-rule"${t.ruleTitle ? ` title="${esc(t.ruleTitle)}"` : ''}>${esc(t.rule)}</span>` : t.floor != null ? `<span class="pb-rule">${pbRuleOf(t)}</span>` : ''}</div>
     <div class="pb-nums">${pbChanceHtml(t.fair, chance, { ...o, trial: trial && !o.night })}<div><b>${fmtAm(decToAm(t.dec))}</b><span>price${sg ? ', est.' : ''}</span></div><div class="pb-pay" data-pb-pay="${t.dec}">${pbPayHtml(t.dec)}</div></div>
-    <ul class="pb-legs">${t.legs.map(l => { const pl = o.mix && l.kind === 'prop', ff = pl ? null : legFarOff(l);
+    <ul class="pb-legs">${t.legs.map(l => { if (o.fair) return pbFairLegHtml(l, o, legAdd); const pl = o.mix && l.kind === 'prop', ff = pl ? null : legFarOff(l);
       /* a night level's player leg: its line, his name and game, its price and DraftKings' fair chance, no Value mark and
          no model figure; his matchup bubble is handed the props model's chance (pm), which it draws muted, as the
          builder's */
       return `<li><span class="nm">${glanceName(pl ? { ...l, p: l.pm != null ? l.pm : null } : l)}<small>${esc(l.label)}${o.withGame && l.kind !== 'total' ? ` · ${esc(l.away)} at ${esc(l.home)}` : ''}${pl ? '' : pbValMark(l)}</small>${ff ? `<small class="faroff" data-pb-far>${farText(l.p, ff)}</small>` : ''}</span><span class="pr">${fmtAm(l.price)}<em${pl ? ' data-pb-plfair' : ''}>${pl ? 'fair ' + pbPct(l.p) : pbPct(l.p) + pbTrialMark(l)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`; }).join('')}</ul>
     ${t.thin && !o.quiet ? `<p class="pb-thin">${pbThinLine(t.legs)}</p>` : ''}${t.mkt && !o.quiet ? `<p class="pb-thin">${pbMktLine(t.legs, o.mktWhy)}</p>` : ''}
     ${o.acts === false ? '' : `<div class="pb-acts"><button type="button" class="btn ${card ? 'ghost' : 'hot'}" ${o.add || `data-pb-add="${t.id}"`}${nm ? ` aria-label="${inB ? 'In the builder:' : 'Add'}${nm}${inB ? '' : ' to the builder'}"` : ''}>${inB ? 'In the builder' : 'Add to builder'}</button>${card ? `<button type="button" class="btn hot" data-pc-finish="${o.kind || 'pb'}|${o.fid || t.id}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button>` : ''}</div>`}</div>`;
+}
+/* a ruler level's leg (Suggested Parlays, sets taken from SP_RULER_FROM): its name, line and game, DraftKings' price and
+   its fair chance, the chance it was ranked on; no Value mark, no far-off flag; a team leg's model chance in its fair
+   figure's title alone (information, never a ranking), and its matchup bubble handed the model's chance (pm) as the
+   builder's are */
+function pbFairLegHtml(l, o, legAdd) {
+  const pm = l.pm != null && isFinite(l.pm) ? l.pm : null, mt = pm != null && l.kind !== 'prop' ? ` title="The model’s chance: ${pbPct(pm)} (not what the level is ranked on)"` : '';
+  return `<li><span class="nm">${glanceName({ ...l, p: pm })}<small>${esc(l.label)}${o.withGame && l.kind !== 'total' ? ` · ${esc(l.away)} at ${esc(l.home)}` : ''}</small></span><span class="pr">${fmtAm(l.price)}<em data-pb-legfair="${l.p}"${mt}>fair ${pbPct(l.p)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`;
 }
 /* exactly these legs into the builder, in its own order, so it prices them as the level did */
 function pbPut(legs, what) {

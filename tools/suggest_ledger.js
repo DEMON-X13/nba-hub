@@ -10,7 +10,11 @@
  * suggest_check.js's NOCAP_FROM keep the rule they were taken under: Safe the likeliest 2-leg parlay, Medium and
  * Aggressive the likeliest of 2 to 5 legs paying $4 and $8), and since the owner's call of 10 November 2026 (its
  * PLAYER_FROM) each holding at least one player leg wherever the night's legs make such a parlay, else the likeliest
- * without one, saying why (a set taken before keeps its rule), on the night's team legs at
+ * without one, saying why (a set taken before keeps its rule), and since the owner's call of 11 November 2026 (its
+ * RULER_FROM) on one ruler, every leg at DraftKings' fair chance, at the default filters (the page's site set: every bet
+ * type, game and stat, any price; a visitor's own filters never reach the record), each level within half a percent of
+ * the likeliest parlay paying its floor, the fewest legs any such parlay has (THE RULER SEARCH; a set taken before keeps
+ * its rule), on the night's team legs at
  * DraftKings' prices and, on every set the page with them takes from 23:00 UTC on 7 November 2026, DraftKings' main lines on its players at DraftKings' own
  * fair chance (the owner's call of that day, "Add at DraftKings' odds"), by the builder's own sums, on the lines feed's
  * two dates (the dates the job reads DraftKings' lines
@@ -74,7 +78,11 @@ const SROOT = process.env.SUGGEST_ROOT ? path.resolve(process.env.SUGGEST_ROOT) 
 const LEDGER = process.env.SUGGEST_LEDGER || path.join(ROOT, SC.LEDGER_REL);
 const PAGE_URL = 'https://demon-x13.github.io/nba-hub/';
 const SINCE = '2026-10-25';
-const { NIGHT_LEVELS, NIGHT_IDS, LOCK_MS, canon, callOf } = SC;
+const { NIGHT_LEVELS, NIGHT_IDS, LOCK_MS, canon, callOf, NIGHT_LEVELS_RULER, RULER_FROM } = SC;
+/* a visitor's filters planted in the boot's storage (Teams only, a game left out, nothing shorter than -200): the record's
+   set is the site's, the default filters', whatever a visitor's are, so a page that read them into it would take another
+   set, which the guard's bound on the default filters refuses */
+const FILTERS_PLANTED = { k: { ml: true, ats: true, total: true, over: false, under: false }, off: [], st: ['pts'], short: -200 };
 const isMap = v => !!v && typeof v === 'object' && !Array.isArray(v);
 const r3 = v => v == null || !isFinite(v) ? null : Math.round(v * 1e3) / 1e3;
 const iso = ms => new Date(ms).toISOString().replace(/\.\d{3}Z$/, 'Z');
@@ -105,6 +113,10 @@ function boot(now) {
     beforeParse(w) {
       w.confirm = () => true; w.alert = () => {}; w.scrollTo = () => {};
       if (!w.CSS) w.CSS = { escape: v => String(v).replace(/[^\w-]/g, c => '\\' + c) };
+      { const k = /const KEY = '([^']+)'/.exec(html); if (k) try { w.localStorage.setItem(k[1], JSON.stringify({ sp: FILTERS_PLANTED })); } catch (e) {} }
+      /* the record's test alone: the work a ruler level may use, cut (SUGGEST_RULER_WORK), to hold that a night with a level
+         not settled is never taken */
+      if (process.env.SUGGEST_RULER_WORK) w.addEventListener('DOMContentLoaded', () => { try { w.spRulerWorkSet(+process.env.SUGGEST_RULER_WORK); } catch (e) {} });
       /* the window's clock is the run's, held still: a boot of a few seconds must not carry the page past a lock or a
          tip-off the script, on the same instant, still counts as to come */
       const D0 = w.Date;
@@ -131,11 +143,13 @@ async function ready(w, errs, state) {
   const why = [];
   if (!w.eval("typeof S !== 'undefined' && !!S && !!S.slate")) return ['the page did not load state.json'];
   if (w.eval('S.generated') !== state.generated) why.push('the page did not load this checkout\'s state.json');
-  const missing = ['spTakes', 'spEntry', 'spLockAt', 'spOutWhy', 'spRebuildOut', 'pbLinesLoad', 'parlayDec', 'pbSlipOf'].filter(f => w.eval(`typeof ${f}`) !== 'function');
+  const missing = ['spTakes', 'spEntry', 'spLockAt', 'spOutWhy', 'spRebuildOut', 'pbLinesLoad', 'parlayDec', 'pbSlipOf', 'spSetRuler', 'spRulerOn'].filter(f => w.eval(`typeof ${f}`) !== 'function');
   if (missing.length) return [...why, 'the page has no Suggested Parlays nights to take (no ' + missing.join(', ') + ')'];
   if (!w.NBA_GRADE || typeof w.NBA_GRADE.legResult !== 'function') why.push('the page has no settlement to grade by (NBA_GRADE)');
   if (JSON.stringify(w.eval("typeof SP_LEVELS !== 'undefined' ? SP_LEVELS : []")) !== JSON.stringify(NIGHT_LEVELS)) why.push("the page's levels are not the three this record keeps (Safe, Medium and Aggressive, 2 legs or more with no leg limit, paying $2+, $4+ and $8+, each with a player leg wherever the night's legs make one)");
   if (w.eval('SP_LOCK_MS') !== LOCK_MS) why.push('the page locks a set at another time than 2 hours before its first tip-off');
+  if (JSON.stringify(w.eval("typeof SP_RULER_LEVELS !== 'undefined' ? SP_RULER_LEVELS : []")) !== JSON.stringify(NIGHT_LEVELS_RULER)) why.push("the page's ruler levels are not the three this record keeps (Safe, Medium and Aggressive, 2 legs or more paying $2+, $4+ and $8+ at DraftKings' fair chance)");
+  if (w.eval("typeof SP_RULER_FROM !== 'undefined' ? SP_RULER_FROM : ''") !== RULER_FROM) why.push(`the page's cutoff for the ruler is not the record's (${RULER_FROM})`);
   try { await w.eval('pbLinesLoad()'); } catch (e) { why.push('lines.json threw: ' + e.message); }
   if (!w.eval('LINES')) why.push('lines.json did not load, so the page would build every set with no DraftKings line');
   if (errs.length) why.push('the page threw: ' + errs.slice(0, 3).join('; '));
@@ -147,7 +161,7 @@ async function ready(w, errs, state) {
    locked, or held, or with no line posted this run) */
 function takeNights(w, now, have) {
   const nights = w.eval('spTakes()'), lockAt = w.eval('spLockAt'), entry = w.eval('spEntry'), season = w.eval('S.season'), takes = [], keep = new Set();
-  let locked = 0; const held = [], empty = [];
+  let locked = 0; const held = [], empty = [], unsettled = [];
   for (const N of nights) {
     const tip = Date.parse(N.tip), lock = lockAt(N);
     if (lock !== tip - LOCK_MS) throw new Error(`the page locks ${N.id} at another time than 2 hours before its first tip-off`);
@@ -165,9 +179,14 @@ function takeNights(w, now, have) {
     /* no line posted yet for any game of the night (the lines feed's second date, a day ahead): no set is taken, and one
        an earlier run took stays as it was; until a run reads the lines the page builds its own from the lock */
     if (SC.nightNoLines(x)) { empty.push(N.id); keep.add(N.id); continue; }
+    /* a ruler level the search did not settle within the site's work (SPR_WORK_SITE: not on any real night measured,
+       every game and every two games of 14 nights cut alone, research/sp_ruler): no set is taken this run, and one an
+       earlier run took stays as it was */
+    const u = x.tiers.filter(t => t && t.gap != null).map(t => t.id);
+    if (u.length) { unsettled.push(`${N.id} (${u.join(', ')})`); keep.add(N.id); continue; }
     takes.push({ key: SC.nightKeyOf(x), entry: x });
   }
-  return { nights: nights.length, locked, held, empty, takes, keep };
+  return { nights: nights.length, locked, held, empty, unsettled, takes, keep };
 }
 
 /* ---- a locked night, from its lock to its first tip-off: a level holding a player the report has listed since built
@@ -185,7 +204,11 @@ function replaceRuledOut(w, Nm, now, runAt, said) {
       const upd = { pid: String(l.pid), name: l.name, reason: why(l.pid, l.id), at: runAt };
       /* under the rule its set was taken under (its head: a set taken before NOCAP_FROM keeps its leg limit, one taken
          before PLAYER_FROM asks no player leg of a level, and one taken since carries need: 'player') */
-      const nt = rebuild(e.nid, t.id, upd, { max: t.max, price: t.price, need: t.need }); if (!nt) return;
+      const nt = rebuild(e.nid, t.id, upd, { max: t.max, price: t.price, need: t.need, chance: t.chance }); if (!nt) return;
+      /* a ruler level the search did not settle within its work (gap): never the record's (the guard refuses it), so the
+         locked level stands this run, as takeNights keeps a set it could not settle (the review of 12 November: written,
+         it refused the whole ledger on every run to the first tip-off) */
+      if (nt.gap != null) { said.push(`kept ${key} ${t.id} as locked: built again for ${l.name} (${upd.reason}), it was not settled within the search's work`); return; }
       e.tiers[i] = JSON.parse(JSON.stringify(nt));
       e.updates = [...(Array.isArray(e.updates) ? e.updates : []), { tier: t.id, ...upd }];
       said.push(`replaced ${key} ${t.id}: ${l.name} ${upd.reason}`);
@@ -263,6 +286,7 @@ async function main() {
   else if (take.locked) said.push(`${take.locked} night set${take.locked === 1 ? '' : 's'} locked`);
   for (const h of take.held) said.push(`${h} held: its first tip-off moved after the lock, and no new set is taken`);
   for (const id of take.empty) said.push(`no set of ${id}: DraftKings has posted no line for its games yet`);
+  for (const id of take.unsettled) said.push(`no set of ${id} this run: a level not settled within the search's work`);
   replaceRuledOut(w, N, now, runAt, said);
   await boxesFor(w, F, now, season); await boxesFor(w, N, now, season);
   gradeAll(w, F, now, season); gradeAll(w, N, now, season);

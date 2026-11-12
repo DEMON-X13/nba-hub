@@ -9,3 +9,7 @@
   posting indicator and rest), the held-out rivals and the shuffles; boot_check.js; tables.js draws
   results/plan_tables.md. No rival meets T1 (b above 0.25, 5% outside F) or T2 (below -0.0001 log loss, -0.00005
   Brier); the stat-mix stand-in meets both on every split. Next: PLAN.md itself.
+- 13 Nov 2026 00:00 UTC: PLAN.md written (the candidate, its folds and guards, the development bar D1-D9, the one-shot
+  test on DraftKings' 2022-23 lines with its validity checks, the bar T1/T2 with every rival sized, the forward
+  shadow's pinned rules, every development choice, what stops early). Next step: build MA (the 2020-21 fetch, P23,
+  the screening) and run the development bar on its own projections.

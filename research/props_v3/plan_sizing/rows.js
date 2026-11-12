@@ -23,8 +23,9 @@
  * Inputs a candidate could have before tip-off are kept apart from outcomes: `o`, `y`, `minPlayed` and `status` are
  * outcomes (read by the scorer only); everything else is known before the game (the box scores of earlier games, the
  * schedule, the posted prices). The one exception, said: the stand-in's projection uses the game's own list of who
- * dressed for the side's minutes, which is hindsight; the sizing never reads the projection's minutes level (the stat
- * mix rescales it to DraftKings' level), and the plan's candidate does not use that list.
+ * dressed for the side's minutes, which is hindsight. The stat mix rescales the projection to DraftKings' level, so the
+ * sizing reads its minutes only through the level's weights, the raw disagreement (S_d), the level part (S_mixlvl) and
+ * the leak check's choice of early exits; the plan's candidate does not use that list.
  *
  * Nothing of 2022-23's DraftKings lines exists on disk or is read; the replay walks the 2021-22 and 2022-23 box scores
  * as history and collects rows only from 2023-24 on, as why_lines.js does.

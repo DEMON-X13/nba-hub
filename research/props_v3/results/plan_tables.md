@@ -87,7 +87,7 @@ By split (slope [90%], said less hit):
 
 ## E. The interval for T1: cluster-robust against the game-clustered bootstrap (`plan_bootcheck.json`)
 
-Chronological split, S_mix: robust b 1.34 [1.15, 1.52], standard error 0.112; bootstrap (400 resamples of games) [1.18, 1.55], standard deviation 0.114.
+Chronological split, S_mix: robust b 1.34 [1.16, 1.52], standard error 0.112; bootstrap (400 resamples of games) [1.18, 1.55], standard deviation 0.114.
 
 ## F. Round 1 (the small family), kept for the record
 

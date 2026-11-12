@@ -12,8 +12,8 @@ holds or does not it says so.
 - **It was far too sure of itself.** When it gave a bet a 70% chance or better, the bet won about half the time.
   DraftKings' chances were about the right size.
 - **Nearly all of the loss came from the bets where it disagreed most with DraftKings, and DraftKings was right on
-  those.** In the trial, the third of the bets where the two were 10 or more points apart carried nine-tenths of the
-  loss.
+  those.** In the trial, the third of the bets where their chances were 10 percentage points or more apart carried
+  nine-tenths of the loss.
 - **When they disagreed, the result landed at DraftKings' number, not the model's**: on average the whole way there in
   the trial, and about four-fifths of the way in the 2026 playoffs and the 2023-24 season.
 - **What DraftKings knew better was mostly playing time.** Six or seven parts in ten of it came through the minutes the
@@ -31,13 +31,14 @@ holds or does not it says so.
   toned down perfectly, it still trails, by a fifth of the gap in the trial and half of it in 2023-24, because
   DraftKings' price already holds nearly everything the model knows. The model adds a little on rebounds, assists,
   threes, steals and blocks (most on steals and blocks) and nothing on points. Candidate A fixed parts of the model and
-  predicted box scores better, but against DraftKings' lines it stayed as over-sure and as far behind.
+  predicted box scores better, but against DraftKings' lines it stayed about as over-sure, and in 2023-24 just as far
+  behind.
 
 ## What was read, and under which rules
 
 | Set | What it is | How it may be used here |
 |---|---|---|
-| The trial | 12,298 graded closing lines of 121 games, 20 October to 4 November 2026 (`data/props_shadow*`, `data/props_2027.csv`, `data/box_2027.csv`) | The season in play: **diagnosis only**. Read to say where the frozen model lost; every regression on it is a description fitted on those very lines, and nothing from it is a candidate, a constant or a choice |
+| The trial | 12,298 graded closing lines of 121 games, 20 October to 4 November 2026 (`data/props_shadow*`, `data/props_2027.csv`, `data/box_2027.csv`, `data/injuries_log.csv`) | The season in play: **diagnosis only**. Read to say where the frozen model lost; every regression on it is a description fitted on those very lines, and nothing from it is a candidate, a constant or a choice |
 | The archive | DraftKings' 11,395 graded closing lines of the 2026 play-in and playoffs (`data/props_2026.csv`), the 2026 fold's model | **Spent**: development only, never a test |
 | 2023-24 | DraftKings' provider-40 lines of the 2023-24 regular season, 89,032 graded on 1,116 games, fetched again on 12 November by the data step (`research/props_v2/cache/props40_2024.csv`, gitignored; byte for byte the window props_v2 scored, `data.md`) | **Development data**: it was scored once, against candidate A on 6 November 2026 (FAIL), so it is no test. Its `last_updated` column, which gives the result away (`data.md`), is never read |
 | 2022-23 | DraftKings' provider-40 lines: the one-shot test's | **Not touched**: not fetched, read or printed. The replay that builds the 2023-24 projections walks 2022-23's box scores as history, as `tools/props.js` and props_v2's test do (the 2024 fold was fitted on 2022-23); no 2022-23 row is collected, projected, graded, summed or printed (`why_lines.js`) |
@@ -274,9 +275,9 @@ The gap by stat (`byStat`; table I):
 | Stl+blk | +0.0274 [+0.0130, +0.0418] | +0.0010 [−0.0069, +0.0084] | – |
 
 The first run's lead mostly holds: points is the hardest single stat on the archive and on 2023-24, the points combos
-the hardest lines on the trial and the archive, and on the trial assists (+0.0223) ran behind points (+0.0175); steals
-and blocks are closest everywhere (the trial's blocks, 320 lines, are noisy). Candidate A's are within 0.002 of these on
-2023-24 (table I).
+are among the hardest lines on the trial and the archive, and on the trial assists (+0.0223) ran behind points
+(+0.0175); steals and blocks are closest everywhere (the trial's blocks, 320 lines, are noisy). Candidate A's are within
+0.002 of these on 2023-24 (table I).
 
 Month by month, 2023-24 (`byMonth`; table H):
 
@@ -323,13 +324,14 @@ every combo with points in it.
 
 ## 8. So, why it failed
 
-1. **Over-sureness** (the largest part: 76% of the trial's gap, 44-61% elsewhere). The model priced its own mean as if it
-   were known. Against DraftKings' line its mean's distance was mostly its own error, and on points and the combos
-   almost wholly.
-2. **What DraftKings knew and the model did not** (21-53% of the gap is left after any tempering): mostly minutes,
-   three-fifths to two-thirds, the rest the rate per minute. Not mainly late news: it holds where there was none and on
-   2023-24's perfect list of who dressed. It is how the minutes are shared among the players who play, worst for the
-   low-minute players, the heaviest-minute starters, new clubs and, in the trial, the first games of a season.
+1. **Over-sureness** (the largest part of the trial's gap, 76%, and of the archive's, 57%; 44% of 2023-24's). The model
+   priced its own mean as if it were known. Against DraftKings' line its mean's distance was mostly its own error, and
+   on points and the combos almost wholly.
+2. **What DraftKings knew and the model did not** (21-53% of the gap is left after any tempering, the largest part of
+   2023-24's): mostly minutes, three-fifths to two-thirds, the rest the rate per minute. Not mainly late news: it holds
+   where there was none and on 2023-24's perfect list of who dressed. It is how the minutes are shared among the
+   players who play, worst for the low-minute players, the heaviest-minute starters, new clubs and, in the trial, the
+   first games of a season.
 3. **The early Over lean**: 2-3% of the trial's gap, a season's quirk that changed sign in the playoffs and in 2023-24.
 
 What it means for a more reliable model (the second half of the owner's question, for the next step to take up): a

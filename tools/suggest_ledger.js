@@ -114,6 +114,9 @@ function boot(now) {
       w.confirm = () => true; w.alert = () => {}; w.scrollTo = () => {};
       if (!w.CSS) w.CSS = { escape: v => String(v).replace(/[^\w-]/g, c => '\\' + c) };
       { const k = /const KEY = '([^']+)'/.exec(html); if (k) try { w.localStorage.setItem(k[1], JSON.stringify({ sp: FILTERS_PLANTED })); } catch (e) {} }
+      /* the record's test alone: the work a ruler level may use, cut (SUGGEST_RULER_WORK), to hold that a night with a level
+         not settled is never taken */
+      if (process.env.SUGGEST_RULER_WORK) w.addEventListener('DOMContentLoaded', () => { try { w.spRulerWorkSet(+process.env.SUGGEST_RULER_WORK); } catch (e) {} });
       /* the window's clock is the run's, held still: a boot of a few seconds must not carry the page past a lock or a
          tip-off the script, on the same instant, still counts as to come */
       const D0 = w.Date;

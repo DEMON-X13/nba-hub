@@ -5561,9 +5561,10 @@ Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, 
      main line DraftKings has posted (lines.json's props.mains, or a newer Refresh odds read: pbPr), over and under with
      both prices on file, on a stat the page offers, at DraftKings' own fair chance (legFair: the whole margin on the
      Over), never the props model's (its FAIL stands: a player leg carries no model claim and no edge). By that rule an
-     Under's fair chance is its own price's implied chance, so it breaks even at it ($1 back on $1 on average), and an
-     Over carries the whole margin (about $0.88 back on $1 on the 7 November lines); the levels, the likeliest at their
-     price, so take short-priced Unders and almost never an Over. The card's chance line says so in its title. In the same
+     Under's fair chance is exactly one over its price, and an Over carries the whole margin (about $0.88 back on $1 at
+     that chance on the 7 November lines); the levels, the likeliest at their price, so take short-priced Unders and
+     almost never an Over. That is a rule, not a return: on this season's graded lines an Under lost about 1.65% a dollar
+     at that chance and an Over about 11.3% (research/sp_ruler). The card's chance line says so in its title. In the same
      band, on a player the props model places on one of the game's clubs and whom the report does not list (spOutWhy, the
      Parlay Builder's pbHeldWhy: Out, Doubtful, Questionable, Day-To-Day; a probable player plays); no milestone, Yes
      market or line priced on one side, or with no margin;
@@ -6459,7 +6460,8 @@ function spLegOut(l) { const f = legFair(l);
   return { ...pbSlipOf(l), name: String(l.name || ''), label: String(l.label || ''), p: spR(l.p, 1e4), fair: f ? spR(f.p, 1e4) : null, fair_est: !!(f && f.est), thin: !!l.thin, market: !!l.market }; }
 function spTierOut(t) {
   const head = { id: t.id, label: t.label, min: t.min, max: t.max, price: t.price, ...(t.need ? { need: t.need } : {}), ...(t.chance === 'fair' ? { chance: 'fair' } : {}), ...(t.nopl && t.legs ? { nopl: t.nopl } : {}) };
-  if (!t || !t.legs) return { ...head, why: t.why, ...(t.updated ? { updated: t.updated } : {}) };
+  /* an empty ruler level the search did not settle keeps its gap (1), so the job takes no set holding it */
+  if (!t || !t.legs) return { ...head, why: t.why, ...(t.gap != null ? { gap: spR(t.gap, 1e4) } : {}), ...(t.updated ? { updated: t.updated } : {}) };
   /* a ruler level the work ran out on keeps its gap (this browser's own lock may hold one; the record takes none) */
   return { ...head, legs: t.legs.map(spLegOut), p: spR(t.corr, 1e4), fair: t.fair && t.fair.p != null ? spR(t.fair.p, 1e4) : null, fair_est: !!(t.fair && t.fair.est), dec: spR(t.dec, 1e3), ...(t.gap != null ? { gap: spR(t.gap, 1e4) } : {}), ...(t.updated ? { updated: t.updated } : {}) };
 }
@@ -7632,8 +7634,8 @@ const spRulerOn = () => Date.now() >= Date.parse(SP_RULER_FROM);
 const spGapPct = g => (Math.ceil(Math.max(0, g) * 1000) / 10).toFixed(1) + '%';
 /* a ruler level's rule in words, and its title (the tolerance said there and in the README) */
 const spRuleFair = F => `likeliest paying $${F}+`;
-const spRuleFairTitle = (F, gap) => gap != null
-  ? `Not settled on your filters: within ${spGapPct(gap)} of the likeliest parlay paying $${F} or more on $1, every leg at DraftKings’ fair chance.`
+const spRuleFairTitle = (F, gap, mine) => gap != null
+  ? `Not settled ${mine ? 'on your filters' : 'in the search’s work'}: within ${spGapPct(gap)} of the likeliest parlay paying $${F} or more on $1, every leg at DraftKings’ fair chance.`
   : `Within half a percent of the likeliest parlay paying $${F} or more on $1, every leg at DraftKings’ fair chance; the fewest legs any such parlay has; the likeliest of that many legs, within 0.1%.`;
 /* why a ruler level has no parlay: the pool's own reasons, the filters' and the search's ('legs': no two legs go
    together; 'pays': none pays the floor), in a few words */
@@ -7651,18 +7653,21 @@ function spRulerWhy(lv, pool, N, r) {
   const by = new Map(); for (const l of pool.legs) by.set(l.kind === 'prop' ? 'p' + l.pid : l.gid + (l.kind === 'total' ? '|t' : '|s'), 1);
   if (r.why === 'legs' || by.size < 2) return `Only ${by.size} leg${by.size === 1 ? '' : 's'} ${mine ? 'on your filters' : 'tonight'}: a parlay takes one leg a player, and one side and one total a game.`;
   if (r.why === 'pays') return `No parlay of ${mine ? 'your filters’' : 'the night’s'} legs pays $${F} or more on $1.`;
+  if (r.why === 'work') return `Not settled within the search’s work on ${mine ? 'your filters' : 'tonight’s legs'}.`;
   return 'Not built: these lines are outside what the search covers.';
 }
 /* one level on a ruler pool, as the cards draw it: the search's parlay (its legs in the builder's order, its chance and
    price pbExact's: the builder's own sums), its fair chance the same chance (every leg at legFair), est. where legs share a
    game; a level the work ran out on (a custom filter: never at the default filters on a real night, research/sp_ruler)
    keeps the best found, settled false, its gap said in the rule's title */
-function spRulerTier(pool, lv, N) {
-  const head = spHead(lv), r = spRulerLevel(pool, lv[4]);
-  if (!r.legs || r.why === 'floor') return { ...head, why: spRulerWhy(lv, pool, N, r) };
+function spRulerTier(pool, lv, N, o) {
+  const head = spHead(lv), r = spRulerLevel(pool, lv[4], o);
+  /* nothing found, or nothing that pays: settled where the search proved there is none, else marked not settled (gap 1),
+     which the job never takes and the guard refuses */
+  if (!r.legs || r.why === 'floor') { const t = { ...head, why: spRulerWhy(lv, pool, N, r) }; if (!r.settled) t.gap = 1; return t; }
   const sg = new Set(r.legs.map(l => l.gid)).size < r.legs.length;
   const t = { ...head, legs: r.legs, corr: r.p, dec: r.d, fair: { p: r.p, est: sg }, thin: 0, mkt: 0, settled: !!r.settled, work: r.work ? r.work.used : null };
-  if (!r.settled) { t.gap = r.gap != null && isFinite(r.gap) ? r.gap : 1; t.rule = `likeliest found paying $${lv[4]}+`; t.ruleTitle = spRuleFairTitle(lv[4], t.gap); }
+  if (!r.settled) { t.gap = r.gap != null && isFinite(r.gap) ? r.gap : 1; t.rule = `likeliest found paying $${lv[4]}+`; t.ruleTitle = spRuleFairTitle(lv[4], t.gap, !!pool.u && !spRulerAll(pool.u)); }
   return t;
 }
 /* ---------- the ruler's builds: a night's set on filters, its pool and each level as built ----------
@@ -7679,8 +7684,13 @@ function spRB(N, u) {
 function spRBStep(b) {
   if (!b.pool) { b.pool = spRulerPool(b.N, b.u); return true; }
   const i = b.tiers.findIndex(t => !t); if (i < 0) return false;
-  b.tiers[i] = spRulerTier(b.pool, SP_RULER_LEVELS[i], b.N); return true;
+  b.tiers[i] = spRulerTier(b.pool, SP_RULER_LEVELS[i], b.N, SP_RB_WORK != null ? { work: SP_RB_WORK } : null); return true;
 }
+/* a check's knob, never the page's: the work a ruler level of this page's builds may use (null: SPR_WORK); every build
+   kept is dropped. tools/smoke_suggested.js holds a level not settled with it, and tools/suggest_ledger.js reads it from
+   SUGGEST_RULER_WORK for the record's test alone */
+let SP_RB_WORK = null;
+function spRulerWorkSet(v) { SP_RB_WORK = v == null ? null : +v; SP_RB.clear(); }
 const spRBDone = b => !!b && !!b.pool && b.tiers.every(Boolean);
 function spRBAll(b) { while (spRBStep(b)); return b; }
 /* the site's set, the default filters' (every box, game and stat, any price), whole: the job's take (spEntry), a level
@@ -7780,7 +7790,7 @@ function spPoolOutRuler(s) {
 function spMineHtml(N, u) {
   const now = Date.now(), m = spMineSet(N, u), lk = spLockOf(N, now), what = pbDayText(N.date);
   if (!m.done) spSoft(m.b);
-  const line = `<p class="sp-lock sp-mine" data-sp-phase="mine"><span class="sp-minemark">Your filters</span>not the site’s set · not graded <button type="button" class="btn ghost sp-reset" data-sp-reset>Reset</button></p>`
+  const line = `<p class="sp-lock sp-mine" data-sp-phase="mine"><span class="sp-minemark">Your filters</span> not the site’s set · not graded <button type="button" class="btn ghost sp-reset" data-sp-reset>Reset</button></p>`
     + (lk != null ? `<p class="sp-lock sp-site" data-sp-site>The site’s set ${now >= lk ? 'locked' : 'locks'} ${spEt(lk, true)}.</p>` : '');
   return line + `<div class="pb-tiers">${m.tiers.map((t, i) => { if (!t) return spPendHtml(SP_RULER_LEVELS[i]); const acts = spOpen(t);
     return spCard(t, { kind: 'sp', fid: `${N.id}:${t.id}`, add: `data-sp-add="${N.id}:${t.id}"`, what: what + ', your filters', quiet: true, withGame: true, acts, legAdd: acts, night: true }); }).join('')}</div>`;
@@ -7804,7 +7814,7 @@ function spFiltPress(t) {
   SP_SAID = ''; const s = $('#spSaid'); if (s) s.textContent = '';
 }
 /* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
-Object.assign(window, { SP_RULER_FROM, SP_RULER_LEVELS, spRulerOn, spRulerTier, spRulerWhy, spRB, spRBStep, spRBDone, spRBAll, spSetRuler, spPoolOutRuler, spUi, spUiSave, spEff, spMine, spMineSet, spFiltHtml, spFiltSet, spFiltKey, spSoft, spSoftTick, spRuleFair, spRuleFairTitle, spGapPct, spSoftCount: () => spSoftN,
+Object.assign(window, { SP_RULER_FROM, SP_RULER_LEVELS, spRulerOn, spRulerTier, spRulerWorkSet, spRulerWhy, spRB, spRBStep, spRBDone, spRBAll, spSetRuler, spPoolOutRuler, spUi, spUiSave, spEff, spMine, spMineSet, spFiltHtml, spFiltSet, spFiltKey, spSoft, spSoftTick, spRuleFair, spRuleFairTitle, spGapPct, spSoftCount: () => spSoftN,
   spRulerPool, spRulerLevel, spRulerClean, spRulerAll, spRulerAllows, spRulerLeg, SPR_TAU, SPR_ETA, SPR_WORK, spNight, spNightOf, spById, spOn, spTakes, spPhase, spState, spRecState, spLockAt, spLockOf, spNoLines, spOpen, spRecMine, spEtAt, spPool, spPrep, spWalk, spSearch, spBetter, spBuild, spSet, spEntry, spPoolOut, spOrth, spFig, spOutWhy, spRebuild, spRebuildOut,
   spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier, spBy, spUpdLine, spLedgerOf, spRecSum, spRecLoad, spWhyAtLock, renderSp, spWatchTick, SP_LEVELS, SP_RULE, SP_LOCK_MS, SP_KEEP_KEY, SP_KEEP_V });
 </script>

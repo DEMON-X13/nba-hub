@@ -27,6 +27,11 @@
  * way to the record's, the night under way, the record's pills (the night map's alone, each titled with the per-game
  * record before 7 November 2026), nothing stored but nba_sp_lock_v1 and nothing read but the record and lines.json, each
  * once and no-store; then the real files, on what the day offers. Every request is recorded.
+ *
+ * ONE RULER (the owner's call of 11 November 2026): the page runs the ruler from its SP_RULER_FROM, which the finish step
+ * sets to the hour the change lands, so every section but 8 and 9 loads the page with its cutoff moved far ahead (the rules
+ * before it, which sets taken before the cutoff keep); section 9 moves it before its days and holds the ruler and your
+ * filters; section 8 reads the real files at the page's own cutoff.
  */
 'use strict';
 const fs = require('fs');
@@ -38,7 +43,12 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const sleep = ms => new Promise(r => setTimeout(r, ms));
   const clone = x => JSON.parse(JSON.stringify(x));
   const txt = el => el ? el.textContent.replace(/\s+/g, ' ').trim() : '';
-  const PJ = require('./props'), SC = require('./suggest_check');
+  const PJ = require('./props'), SCR = require('./suggest_check');
+  /* the guard as the sections before 9 read it: suggest_check.js read again with its cutoff far ahead (those sections hold
+     the rules before the ruler); section 8 reads the real files with the guard as it stands (SCR) */
+  const SC = (() => { const k = require.resolve('./suggest_check'), keep = require.cache[k], was = process.env.SUGGEST_RULER_FROM; delete require.cache[k];
+    process.env.SUGGEST_RULER_FROM = '2099-01-01T00:00:00Z';
+    try { return require('./suggest_check'); } finally { if (was == null) delete process.env.SUGGEST_RULER_FROM; else process.env.SUGGEST_RULER_FROM = was; require.cache[k] = keep; } })();
   const REAL = JSON.parse(fs.readFileSync(path.join(ROOT, 'state.json'), 'utf8'));
   const SEASON = REAL.season, Y = SEASON - 1, H = 3600e3;
   const imp = a => a > 0 ? 100 / (a + 100) : -a / (-a + 100), decOf = a => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
@@ -160,8 +170,13 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
 
   /* ---------- the harness: the page on a clock of the case's own ---------- */
   let NOW = Date.parse(T(D1, '15:00:00'));
+  /* the page's cutoff for the ruler: far ahead (CUT_FAR) unless a case names its own (o.cut; 'real': as the page carries it) */
+  const CUT_FAR = '2099-01-01T00:00:00Z';
+  const cutAt = (html, cut) => { if (cut === 'real') return html; const re = /const SP_RULER_FROM = '[^']*'/g, m = html.match(re);
+    if (!m || m.length !== 1) throw new Error(`the page carries ${m ? m.length : 0} cutoffs for the ruler (const SP_RULER_FROM), where the smoke moves exactly one`);
+    return html.replace(re, `const SP_RULER_FROM = '${cut || CUT_FAR}'`); };
   function load(st, o = {}) {
-    const html = fs.readFileSync(pageFile('index.html'), 'utf8').replace(/<link[^>]*fonts[^>]*>/g, '');
+    const html = cutAt(fs.readFileSync(pageFile('index.html'), 'utf8').replace(/<link[^>]*fonts[^>]*>/g, ''), o.cut);
     const errors = [], requests = [];
     const dom = new JSDOM(html, { runScripts: 'dangerously', pretendToBeVisual: true, url: 'http://localhost/' + (o.hash || ''),
       beforeParse(w) {
@@ -176,6 +191,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
         if (!w.CSS) w.CSS = { escape: v => String(v).replace(/[^\w-]/g, c => '\\' + c) };
         if (o.storage) for (const [k, v] of Object.entries(o.storage)) w.localStorage.setItem(k, v);
         if (o.tab) w.localStorage.setItem('nba_hub_2027:tab', o.tab);
+        if (o.before) o.before(w);
         w.addEventListener('error', e => errors.push(e.message));
       } });
     const w = dom.window;
@@ -299,7 +315,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   const mixOwn = t => { const np = t.legs.filter(l => l.kind === 'prop').length; return np === t.legs.length ? 'player' : np ? 'mixed' : null; };
   const chanceOwn = t => { const m = mixOwn(t), pc = (t.corr * 100).toFixed(0) + '%'; return m === 'player' ? 'every leg at DraftKings’ chance' : m ? `model + DraftKings ${pc}` : `model says ${pc}`; };
   check(tiers1.every(t => { const c = card(t.id), mo = c.querySelector('.pb-model'), m = mixOwn(t); return txt(c.querySelector('.pb-rule')) === ruleOwn(t, noplOwn(LINES1, N1.games.map(g => g.id))) && txt(c.querySelector('.pb-pill')) === `${t.legs.length} legs` && txt(mo) === chanceOwn(t) && txt(c.querySelector('[data-pb-fair]')) === (t.fair.p * 100).toFixed(0) + '%'
-      && (m ? mo.dataset.pbMix === m && /DraftKings’ fair chance/.test(mo.title) && /no model claim|carries no model claim/.test(mo.title) && /a player Under breaks even and an Over gives up about 12%/.test(mo.title) : !mo.dataset.pbMix); }),
+      && (m ? mo.dataset.pbMix === m && /DraftKings’ fair chance/.test(mo.title) && /no model claim|carries no model claim/.test(mo.title) && /DraftKings’ fair chance puts a player line’s whole margin on the Over, so the levels take Unders/.test(mo.title) && !/break(s)? even/.test(mo.title) : !mo.dataset.pbMix); }),
     `each card says its rule (${LVID.map(id => `"${txt(card(id).querySelector('.pb-rule'))}"`).join(', ')}), its legs, the fair chance and the chance it is ranked on, said for what it is (${LVID.map(id => `"${txt(card(id).querySelector('.pb-model'))}"`).join(', ')})`);
   /* the rule's title, word for word: the only place the page states the rule whole (the review of 10 November 2026) */
   check(tiers1.every(t => { const r = card(t.id).querySelector('.pb-rule'); return r && r.title === titleOwn(t.price, 'player'); }),
@@ -505,7 +521,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
      November 2026: "model + DraftKings says 31.0%" under DraftKings' own fair chance read as DraftKings saying it): a
      level of team legs alone "model says", one mixing them with player legs "ranked at N% (model on team legs,
      DraftKings on player legs)" with one line of small print under it, never "DraftKings says" */
-  { const PL_SMALL = 'Team legs at the model’s chance, player legs at DraftKings’ fair chance: no model claim on a player leg, and at it a player Under breaks even and an Over gives up about 12%.';
+  { const PL_SMALL = 'Team legs at the model’s chance, player legs at DraftKings’ fair chance: no model claim on a player leg, and DraftKings’ fair chance puts a player line’s whole margin on the Over.';
     const said = [];
     for (const t of tiers1) {
       card(t.id).querySelector('[data-pc-finish]').click(); await sleep(30);
@@ -730,11 +746,285 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
   q = load(stateOf(SLATE), { lines: LINES1, record: 'junk', tab: 'suggest' }); await settle(q); await openTab(q);
   check(q.d.getElementById('spRec') && q.d.getElementById('spRec').hidden && q.errors.length === 0, 'a record that is not JSON draws nothing and throws nothing');
 
+  /* ---------- 9. one ruler and your filters (the owner's call of 11 November 2026) ----------
+     From the page's SP_RULER_FROM (moved here before the made-up days: CUT9) every set is the ruler's: every leg at
+     DraftKings' fair chance, on the visitor's filters (the site's set at the default ones), each level within half a
+     percent of the likeliest parlay paying its floor, the fewest legs any such parlay has, the likeliest of that many within
+     0.1%. This file's own pool (poolRulerOwn: every team leg and player main line at DraftKings' fair chance, in the band,
+     priced with a margin, on the filters) and its own enumeration of every parlay the pool makes (each game's legs by the
+     builder's own sums, never the page's search: ENUM_RULER) hold every level to those four properties: on D1's night, on
+     a night of three games made for the filters (DF: two Unders at -241 in two games land 49.948% paying $2.0021, three at
+     -385, -384 and -384 49.968% paying $2.0013, so Safe is the pair, the fewest legs, though the triple is likelier; legs at
+     exactly -300 and -301, so the shortest leg's edge is held both ways), on every filter, and on nights of two games and
+     one. Then the controls: the mix each box makes, games and stats All and None, the folds on a phone and a wide screen (a
+     matchMedia stub), the Your filters line whole, Reset; the site's set (live, this browser's own at the lock, the
+     record's) at the default filters and your live set beside the site's lock line, never on a game tipped; the filters in
+     this browser's own M.sp, apart from the Parlay Builder's, across a reload, and never in the record's set; a level the
+     search did not settle on your filters (the work cut by a check's own knob), its words; the soft build, a piece a task,
+     stopped on another tab and carried on when the tab opens again; and the card's words */
+  {
+    const CUT9 = T(D0, '12:00:00'), TAU = 0.005, ETA = 0.001;
+    const loadR = (st, o = {}) => load(st, { cut: CUT9, ...o });
+    const ENUM_RULER = `(legs, levels) => {
+      const by = new Map(); for (const l of legs) { const g = l.gid || l.id; if (!by.has(g)) by.set(g, []); by.get(g).push(l); }
+      const grpOf = l => l.kind === 'ml' || l.kind === 'spread' ? 'side' : l.kind === 'total' ? 'total' : 'p' + l.pid;
+      const keys = [...by.keys()], G = [...by.values()].map(L => { const groups = new Map(); for (const l of L) { const k = grpOf(l); if (!groups.has(k)) groups.set(k, []); groups.get(k).push(l); }
+        let o = [[]]; for (const ls of groups.values()) o = o.flatMap(c => [c, ...ls.map(l => [...c, l])]);
+        return o.filter(c => c.length).map(c => { const L2 = pbOrder(c); return { ks: c.map(l => l.sk).sort().join(','), n: c.length, p: parlayProb(L2).corr, d: parlayDec(L2.map(l => ({ leg: l, ml: l.price }))) }; }); });
+      const FS = [2, 4, 8], out = Object.fromEntries(FS.map(F => [F, { star: 0, k: {} }])); let count = 0;
+      (function go(i, pp, dd, nL) {
+        if (i === G.length) { if (nL < 2) return; count++; for (const F of FS) if (dd >= F - 1e-9) { const o = out[F]; if (pp > o.star) o.star = pp; if (!(o.k[nL] >= pp)) o.k[nL] = pp; } return; }
+        go(i + 1, pp, dd, nL); for (const o of G[i]) go(i + 1, pp * o.p, dd * o.d, nL + o.n); })(0, 1, 1, 0);
+      const fig = ids => { const byG = new Map(); for (const sk of ids) { const l = legs.find(x => x.sk === sk); if (!l) return null; const g = l.gid || l.id; if (!byG.has(g)) byG.set(g, []); byG.get(g).push(sk); }
+        let c = 1, d = 1; for (const [g, ks] of byG) { const o = G[keys.indexOf(g)].find(x => x.ks === [...ks].sort().join(',')); if (!o) return null; c *= o.p; d *= o.d; } return { c, d }; };
+      return { out, count, figs: levels.map(ids => ids ? fig(ids) : null) };
+    }`;
+    /* this file's own ruler pool: every team leg of the night's games still to tip (a moneyline and a spread of a game the
+       model rates, a total of any) and every player main line the old pool reads (a stat the page offers, a player the
+       props model places on one of the game's clubs and no list holds out), each at DraftKings' fair chance (a team line's
+       two prices with the margin out in proportion; a player line's whole margin on the Over), priced with a margin, 45%
+       to 97%, and on the filters: its bet type ticked, its game not left out, its stat not left out, no price shorter than
+       the shortest leg allowed */
+    const poolRulerOwn = (st, lines, now, N, u = {}) => {
+      const k = { ml: true, ats: true, total: true, over: true, under: true, ...(u.k || {}) }, off = u.off || [], sto = u.st || [], short = u.short == null ? null : u.short;
+      const fits = (kind, gid, stat, price) => !!k[kind] && !off.includes(gid) && !(stat && sto.includes(stat)) && !(short != null && !(price >= short));
+      const out = [];
+      for (const g of N.games.filter(g => toCome(g, now))) { const x = lines.games[g.id]; if (!x) continue;
+        const add = (kind, fk, s, line, odds, other) => { if (!odds || !other || imp(odds) + imp(other) < 1) return; const p = imp(odds) / (imp(odds) + imp(other));
+          if (p >= 0.45 && p < 0.97 && fits(fk, g.id, null, odds)) out.push({ sk: [g.id, kind, s, line == null ? '' : line].join('|'), p, odds, gid: g.id }); };
+        if (g.model && x.ml) { add('ml', 'ml', g.home, null, x.ml.home, x.ml.away); add('ml', 'ml', g.away, null, x.ml.away, x.ml.home); }
+        if (g.model && x.spread) { add('spread', 'ats', g.home, x.spread.line, x.spread.home, x.spread.away); add('spread', 'ats', g.away, -x.spread.line, x.spread.away, x.spread.home); }
+        if (x.total) { add('total', 'total', 'over', x.total.line, x.total.over, x.total.under); add('total', 'total', 'under', x.total.line, x.total.under, x.total.over); }
+        const pr = x.props, rows = st.props.games[g.id] && st.props.games[g.id].players;
+        if (pr && Array.isArray(pr.mains) && rows) for (const m of pr.mains) { const row = rows[m.player];
+          if (!PL_STATS_OWN.includes(m.stat) || !row || (row[1] !== g.away && row[1] !== g.home) || heldOwn(st, g, m.player) || !Number.isFinite(m.over) || !Number.isFinite(m.under) || !m.over || !m.under || imp(m.over) + imp(m.under) < 1) continue;
+          const fo = 1 - imp(m.under);
+          for (const [sd, odds, pp] of [['over', m.over, fo], ['under', m.under, 1 - fo]]) if (pp >= 0.45 && pp < 0.97 && fits(sd, g.id, m.stat, odds)) out.push({ sk: [g.id, 'prop', m.player, m.stat, 'main', m.line, sd].join('|'), p: pp, odds, gid: g.id }); } }
+      return out.sort((a, b) => a.sk < b.sk ? -1 : 1);
+    };
+    const builtOf = (q, nid) => q.w.eval(`(() => { const N = spById(${JSON.stringify(nid)}); if (!N) return true; const u = spUi(); return spRBDone(spMine(u, N) ? spMineSet(N, u).b : spRB(N, null)); })()`);
+    const waitBuilt = async (q, nid) => { for (let i = 0; i < 800; i++) { if (builtOf(q, nid) && !q.d.querySelector('#spSets [data-sp-pending]')) return true; await sleep(10); } return false; };
+    /* the tab's set on its filters (the visitor's, else the site's), held by this file's own pool and enumeration */
+    const rulerHold = (q, st, lines, nid, tag, uOwn) => {
+      const N = nightOwn(st, NOW), R = JSON.parse(q.w.eval(`(() => { const N = spById(${JSON.stringify(nid)}), u = spUi(), b = spMine(u, N) ? spMineSet(N, u).b : spRB(N, null); spRBAll(b);
+        const ids = b.tiers.map(t => t && t.legs ? t.legs.map(l => l.sk) : null);
+        return JSON.stringify({ pool: b.pool.legs.map(l => ({ sk: l.sk, p: l.p, odds: l.price, gid: l.gid || l.id })), E: (${ENUM_RULER})(b.pool.legs, ids),
+          lv: b.tiers.map(t => t.legs ? { id: t.id, F: t.price, n: t.legs.length, ids: t.legs.map(l => l.sk).sort(), corr: t.corr, dec: t.dec, gap: t.gap == null ? null : t.gap, legs: t.legs.map(l => ({ sk: l.sk, kind: l.kind, side: l.side, gid: l.gid || l.id, price: l.price, p: l.p, stat: l.stat || null })) } : { id: t.id, F: t.price, why: t.why }) }); })()`));
+      const own = poolRulerOwn(st, lines, NOW, N, uOwn), ps = R.pool.map(l => l.sk).sort(), os = own.map(l => l.sk);
+      const pOk = JSON.stringify(ps) === JSON.stringify(os) && R.pool.every(l => { const o = own.find(x => x.sk === l.sk); return o && o.odds === l.odds && Math.abs(o.p - l.p) < 1e-12; });
+      check(pOk, `${tag}: the pool is this file's own on the filters, every leg at DraftKings' fair chance (${R.pool.length} legs${pOk ? '' : `; the page's alone: ${ps.filter(x => !os.includes(x)).slice(0, 3).join(' ') || '-'}; this file's alone: ${os.filter(x => !ps.includes(x)).slice(0, 3).join(' ') || '-'}; or a chance or price apart`})`);
+      const res = R.lv.map((t, i) => { const o = R.E.out[t.F];
+        if (!t.ids) return { ok: !(o.star > 0), say: `${t.id} empty ("${t.why}")` };
+        const f = R.E.figs[i]; if (!f) return { ok: false, say: `${t.id}: its legs are no parlay of the pool` };
+        const fewer = Object.keys(o.k).map(Number).filter(k => k < t.n && o.k[k] >= (1 - TAU + ETA) * o.star);
+        const ok = Math.abs(f.c - t.corr) < 1e-9 && Math.abs(f.d - t.dec) < 1e-9 && f.d >= t.F - 1e-9 && (t.gap != null ? f.c >= (1 - t.gap) * o.star - 1e-12
+          : f.c >= (1 - TAU) * o.star - 1e-12 && !fewer.length && f.c >= (1 - ETA) * (o.k[t.n] || 0) - 1e-12);
+        return { ok, say: `${t.id} ${t.n} legs ${(f.c * 100).toFixed(3)}% at ${f.d.toFixed(4)} (the likeliest ${(o.star * 100).toFixed(3)}%${fewer.length ? `; fewer legs within 0.4%: ${fewer.join(', ')}` : ''}${t.gap != null ? `; not settled, said within ${(t.gap * 100).toFixed(2)}%` : ''})` }; });
+      check(res.every(x => x.ok), `${tag}: every level by this file's own enumeration of all ${R.E.count} parlays: it pays its floor, within 0.5% of the likeliest, the fewest legs any such parlay has, the likeliest of its size within 0.1% (a level not settled: within the gap it states), its chance and price the builder's sums (${res.map(x => x.say).join('; ')})`);
+      return R;
+    };
+
+    /* DF: three games made for the filters */
+    const DF = addDay(D0, 20), DF1 = addDay(DF, 1);
+    const f1 = mk(DF, 'BOS', 'NYK', T(DF1, '00:00'), [], { pHome: 0.62, spread: -4, total: 226 }), f2 = mk(DF, 'LAL', 'GSW', T(DF1, '00:30'), [], { pHome: 0.55, spread: -2, total: 230 }), f3 = mk(DF, 'MIA', 'ORL', T(DF1, '01:00'), [], { pHome: 0.6, spread: -3, total: 220 });
+    const rowF = (nm, tm) => [nm, tm, 'G', 32, 20, 6, 5, 2, 1, 0.5, 0.1, 0.01];
+    const ROWS_F = { [f1.id]: { 9400001: rowF('Ann One', 'BOS'), 9400002: rowF('Ben One', 'NYK'), 9400003: rowF('Pat Three', 'BOS') }, [f2.id]: { 9400004: rowF('Ann Two', 'LAL'), 9400005: rowF('Ben Two', 'GSW') }, [f3.id]: { 9400006: rowF('Ben Three', 'MIA'), 9400007: rowF('Pat Four', 'ORL') } };
+    const atF = T(DF, '14:00:00'), glF = (g, ml) => ({ at: atF, espn: g.espn, ml, spread: { line: -3.5, home: -110, away: -110 }, total: { line: Math.floor(g.model.total) + 0.5, over: -110, under: -110 }, ids: idsOf(g) });
+    const LF = { v: 1, at: atF, games: {
+      [f1.id]: { ...glF(f1, { home: -301, away: 250 }), props: { at: atF, mains: [{ player: '9400001', stat: 'pts', line: 20.5, over: 150, under: -241 }, { player: '9400002', stat: 'reb', line: 9.5, over: 200, under: -385 }, { player: '9400003', stat: 'ast', line: 5.5, over: -300, under: 200 }], ladders: [], yes: [] } },
+      [f2.id]: { ...glF(f2, { home: -110, away: -110 }), props: { at: atF, mains: [{ player: '9400004', stat: 'pts', line: 22.5, over: 150, under: -241 }, { player: '9400005', stat: 'reb', line: 7.5, over: 200, under: -384 }], ladders: [], yes: [] } },
+      [f3.id]: { ...glF(f3, { home: -300, away: 250 }), props: { at: atF, mains: [{ player: '9400006', stat: 'reb', line: 6.5, over: 200, under: -384 }, { player: '9400007', stat: 'ast', line: 4.5, over: -301, under: 180 }], ladders: [], yes: [] } } } };
+    const stF = (() => { const st = stateOf([f1, f2, f3], { today: DF, generated: T(DF, '13:00') }); st.props.games = Object.fromEntries([f1, f2, f3].map(g => [g.id, { tip: g.tip, away: g.away, home: g.home, players: clone(ROWS_F[g.id]) }])); return st; })();
+    const NF = `${SEASON}_${ymd(DF)}_NIGHT`, lockF = Date.parse(f1.tip) - 2 * H;
+    const narrow = w => { w.matchMedia = qy => ({ matches: false, media: qy, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} }); };
+    const wide = w => { w.matchMedia = qy => ({ matches: /min-width/.test(qy), media: qy, addEventListener() {}, removeEventListener() {}, addListener() {}, removeListener() {} }); };
+
+    NOW = Date.parse(T(DF, '15:00:00'));
+    let q9 = loadR(stF, { lines: LF, record: null, tab: 'suggest', before: wide }); await settle(q9); await openTab(q9);
+    check(await waitBuilt(q9, NF), 'DF: the site\'s set is built, a piece a task');
+    const fb = () => q9.d.getElementById('spFiltBox'), qf = sel => fb().querySelector(sel), qfa = sel => [...fb().querySelectorAll(sel)];
+    const kindsOn = () => qfa('[data-sp-kind]').filter(x => x.checked).map(x => x.dataset.spKind).join(), mixLit = () => qfa('[data-sp-mix]').filter(x => x.getAttribute('aria-pressed') === 'true').map(x => x.dataset.spMix).join();
+    const mineLine = () => q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-phase="mine"]`), siteLine = () => q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-site]`);
+    const PROPS9 = JSON.parse(q9.w.eval('JSON.stringify(PROP_STATS)'));
+    check(q9.w.spRulerOn() && !!q9.d.getElementById('spFilt') && !mineLine() && q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-phase="live"]`),
+      'from the cutoff the tab draws the filters over the set, and at the default filters the site\'s live set, with no Your filters line');
+    check(qfa('[data-sp-mix]').map(x => `${x.dataset.spMix}:${txt(x)}`).join() === 'all:All,teams:Teams only,players:Players only' && mixLit() === 'all' && kindsOn() === 'ml,ats,total,over,under'
+      && qfa('[data-sp-short]').map(x => `${x.dataset.spShort}:${txt(x)}:${x.getAttribute('aria-pressed')}`).join() === 'any:Any:true,-500:−500:false,-300:−300:false,-200:−200:false'
+      && qfa('[data-sp-g]').map(x => x.dataset.spG).join() === [f1, f2, f3].map(g => g.id).join() && qfa('[data-sp-g]').every(x => x.checked) && qfa('[data-sp-gs]').length === 2
+      && qfa('[data-sp-stat]').map(x => x.dataset.spStat).join() === PROPS9.join() && qfa('[data-sp-stat]').every(x => x.checked) && qfa('[data-sp-stats]').length === 2,
+      `the filters: All, Teams only and Players only (All lit), the five bet types, the shortest leg (Any), the night's ${qfa('[data-sp-g]').length} games and the ${PROPS9.length} stats, every one on`);
+    check(txt(qf('[data-sp-fsum]')) === 'All bet types · all 3 games · any price' && qfa('[data-sp-g]').map(x => x.getAttribute('aria-label')).join(' | ') === [f1, f2, f3].map(g => `${g.away} at ${g.home}, ${etWd(Date.parse(g.tip))}`).join(' | ')
+      && qfa('.pb-g small').map(txt).join() === [f1, f2, f3].map(g => etWd(Date.parse(g.tip))).join(),
+      `More filters says what is on ("${txt(qf('[data-sp-fsum]'))}"), each game named with its tip-off in Eastern time as the rest of the tab ("${txt(qfa('.pb-g')[0])}")`);
+    check(qf('details[data-sp-fx]').open && !qf('details[data-sp-sx]').open, 'on a wide screen More filters starts open, the player stats folded');
+
+    /* the site's set on DF, every leg at DraftKings' fair chance, and the fewest legs */
+    const R0 = rulerHold(q9, stF, LF, NF, 'DF at the default filters', {});
+    { const s0 = R0.lv[0];
+      check(s0.ids && s0.n === 2 && s0.legs.every(l => l.kind === 'prop' && l.side === 'under' && l.price === -241) && R0.E.out[2].star > s0.corr + 1e-6 && R0.E.out[2].k[3] === R0.E.out[2].star,
+        `Safe takes the two Unders at -241 (${(s0.corr * 100).toFixed(3)}% paying ${s0.dec.toFixed(4)}), the fewest legs, where three Unders land likelier (${(R0.E.out[2].star * 100).toFixed(3)}%) by this file's own enumeration`); }
+    /* the cards: the rule and its title, the chance line, each leg at its fair chance, no Value mark, no model figure but a
+       team leg's title, nothing saying an Under breaks even */
+    { const cards = LV.map(([id]) => q9.d.querySelector(`#spSets [data-sp-game="${NF}"] .pb-tier.${id}`)), F0 = { safe: 2, med: 4, aggr: 8 };
+      const titleF = F => `Within half a percent of the likeliest parlay paying $${F} or more on $1, every leg at DraftKings’ fair chance; the fewest legs any such parlay has; the likeliest of that many legs, within 0.1%.`;
+      const okCard = (c, i) => { const t = R0.lv[i]; if (!t.ids) return !!c && !!c.querySelector('.pb-why');
+        const r = c.querySelector('.pb-rule'), ch = c.querySelector('[data-pb-ruler]'), fair = c.querySelector('[data-pb-fair]');
+        const ems = [...c.querySelectorAll('.pb-legs em[data-pb-legfair]')], lis = [...c.querySelectorAll('.pb-legs li')];
+        const g = t.gap != null ? (Math.ceil(Math.max(0, t.gap) * 1000) / 10).toFixed(1) + '%' : null;
+        return r && txt(r) === (g ? `likeliest found paying $${F0[t.id]}+` : `likeliest paying $${F0[t.id]}+`) && r.title === (g ? `Not settled in the search’s work: within ${g} of the likeliest parlay paying $${F0[t.id]} or more on $1, every leg at DraftKings’ fair chance.` : titleF(F0[t.id])) && ch && txt(ch) === 'every leg at DraftKings’ chance' && /No model claim/.test(ch.title)
+          && fair && txt(fair) === (t.corr * 100).toFixed(0) + '%' && !c.querySelector('.pb-valmark, .pb-trial, [data-pb-model], [data-pb-mix]') && ems.length === lis.length
+          && ems.every((em, k) => { const l = t.legs.find(x => Math.abs(x.p - +em.dataset.pbLegfair) < 1e-12); return l && txt(em) === `fair ${(l.p * 100).toFixed(0)}%` && (l.kind === 'prop' ? !em.title : /^The model’s chance: \d+% \(not what the level is ranked on\)$/.test(em.title)); }); };
+      check(cards.every((c, i) => okCard(c, i)), `each ruler card: its rule ("${txt(cards[0].querySelector('.pb-rule'))}") titled with the rule whole, "every leg at DraftKings’ chance", the fair chance, each leg's "fair N%" (a team leg's model chance in its title alone), no Value mark or model figure`);
+      const words = [txt(q9.d.getElementById('spPanel')), ...[...q9.d.querySelectorAll('#spPanel [title]')].map(x => x.title)].join(' ');
+      check(!/break(s)? even|even return/i.test(words), 'nothing on the tab, nor in a title, says an Under breaks even'); }
+    /* Finish on a ruler level: the card's chance said as DraftKings' fair chance, no model figure */
+    { const c = q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-pb-tier="safe"] [data-pc-finish]`); c.click(); await sleep(30);
+      const m = q9.w.PARLAY_CARD.current(), small = [...q9.d.querySelectorAll('#pcView .pc-chance small')].map(txt);
+      check(m && m.chance == null && m.by === 'fair' && /^Safe parlay · /.test(m.kicker) && !/your filters/.test(m.kicker) && small.includes('Every leg at DraftKings’ fair chance, its two prices with the margin taken out: the chance the level was ranked on, no model claim.'),
+        `the site's Safe finished: "${m && m.kicker}", its chance said as DraftKings' fair chance (${small.join(' | ')})`);
+      q9.d.getElementById('pcClose').click(); await sleep(20); }
+    const entry0 = q9.w.eval(`JSON.stringify(spEntry(${JSON.stringify(NF)}))`);
+
+    /* the mix each box makes, and what the tab draws for your filters */
+    const pressReset = async () => { const el = mineLine() && mineLine().querySelector('button[data-sp-reset]'); if (!el) throw new Error('no Reset on the set'); el.focus(); el.click(); await sleep(15); return el; };
+    const press = async sel => { const el = qf(sel); if (!el) throw new Error(`no ${sel} among the filters: ${fb() ? fb().innerHTML.slice(0, 200) : 'no box'}`); el.focus(); el.click(); await sleep(15); return el; };
+    await press('[data-sp-mix="teams"]');
+    check(kindsOn() === 'ml,ats,total' && mixLit() === 'teams' && q9.d.activeElement && q9.d.activeElement.dataset.spMix === 'teams', `Teams only sets the three team boxes and lights itself, the focus kept on it (${kindsOn()})`);
+    check(mineLine() && txt(mineLine()) === 'Your filters not the site’s set · not graded Reset' && mineLine().querySelector('.sp-minemark') && mineLine().querySelector('button[data-sp-reset]')
+      && siteLine() && txt(siteLine()) === `The site’s set locks ${etWd(lockF)}.` && !q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-phase="live"]`),
+      `your filters' set: its line whole ("${mineLine() && txt(mineLine())}"), then the site's lock, said as the site's ("${siteLine() && txt(siteLine())}")`);
+    check(q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-pending]`) && txt(q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-pending] .pb-why`)) === 'Building…', 'a filter pressed draws at once, each level "Building…" until it is built');
+    await waitBuilt(q9, NF);
+    rulerHold(q9, stF, LF, NF, 'DF, Teams only', { k: { over: false, under: false } });
+    await press('[data-sp-kind="over"]');
+    check(kindsOn() === 'ml,ats,total,over' && mixLit() === '', `a box changed by hand lights the mix it makes, or none (${kindsOn()}: none)`);
+    await press('[data-sp-mix="all"]'); await waitBuilt(q9, NF);
+    check(kindsOn() === 'ml,ats,total,over,under' && mixLit() === 'all' && !mineLine(), 'All sets every box again, and the site\'s set is drawn, unmarked');
+    for (const k of ['ml', 'ats', 'total']) await press(`[data-sp-kind="${k}"]`);
+    check(kindsOn() === 'over,under' && mixLit() === 'players', `the team boxes unticked by hand make Players only, which lights (${kindsOn()})`);
+    await waitBuilt(q9, NF); rulerHold(q9, stF, LF, NF, 'DF, Players only', { k: { ml: false, ats: false, total: false } });
+    await press('[data-sp-kind="under"]'); await waitBuilt(q9, NF);
+    check(kindsOn() === 'over' && mixLit() === '', 'Player overs alone lights no mix');
+    rulerHold(q9, stF, LF, NF, 'DF, Player overs alone', { k: { ml: false, ats: false, total: false, under: false } });
+    await press('[data-sp-mix="all"]'); await press('[data-sp-kind="under"]'); await waitBuilt(q9, NF);
+    rulerHold(q9, stF, LF, NF, 'DF, Player unders off', { k: { under: false } });
+    await press('[data-sp-mix="all"]');
+    /* the shortest leg, each step, its edge both ways (a leg at -300 stays at -300; -301 goes) */
+    for (const v of [-300, -200, -500]) { await press(`[data-sp-short="${v}"]`); await waitBuilt(q9, NF);
+      check(qfa('[data-sp-short]').filter(x => x.getAttribute('aria-pressed') === 'true').map(x => x.dataset.spShort).join() === String(v) && txt(qf('[data-sp-fsum]')) === `All bet types · all 3 games · none shorter than −${-v}`,
+        `the shortest leg ${v} pressed, said in More filters ("${txt(qf('[data-sp-fsum]'))}")`);
+      const R = rulerHold(q9, stF, LF, NF, `DF, no leg shorter than ${v}`, { short: v });
+      if (v === -300) check(R.pool.some(l => l.odds === -300) && !R.pool.some(l => l.odds === -301), `at -300 the legs at exactly -300 stay and those at -301 go (${R.pool.filter(l => l.odds <= -300).map(l => l.odds).join(', ')})`); }
+    await press('[data-sp-short="any"]');
+    /* a game left out, and None and All */
+    { const el = qf(`[data-sp-g="${f2.id}"]`); el.click(); await sleep(15); await waitBuilt(q9, NF);
+      check(!qf(`[data-sp-g="${f2.id}"]`).checked && txt(qf('[data-sp-fsum]')) === 'All bet types · 2 of 3 games · any price', `a game left out ("${txt(qf('[data-sp-fsum]'))}")`);
+      rulerHold(q9, stF, LF, NF, 'DF, LAL at GSW left out', { off: [f2.id] }); }
+    await press('[data-sp-gs="none"]'); await waitBuilt(q9, NF);
+    check(qfa('[data-sp-g]').every(x => !x.checked) && LV.every(([id]) => txt(q9.d.querySelector(`#spSets [data-sp-game="${NF}"] .pb-tier.${id} .pb-why`)) === 'No leg of the night fits your filters.'),
+      'None leaves every game out, and each level says no leg fits your filters');
+    await press('[data-sp-gs="all"]');
+    check(qfa('[data-sp-g]').every(x => x.checked) && !mineLine(), 'All ticks every game again: the site\'s set');
+    /* the stats: one left out, None and All; and with every bet type off, never "no player lines" */
+    { const el = qf('[data-sp-stat="pts"]'); el.click(); await sleep(15); await waitBuilt(q9, NF);
+      rulerHold(q9, stF, LF, NF, 'DF, points left out', { st: ['pts'] }); }
+    await press('[data-sp-stats="none"]'); await waitBuilt(q9, NF);
+    check(qfa('[data-sp-stat]').every(x => !x.checked) && txt(qf('[data-sp-fsum]')) === `All bet types · all 3 games · 0 of ${PROPS9.length} stats · any price`, `the stats' None ("${txt(qf('[data-sp-fsum]'))}")`);
+    rulerHold(q9, stF, LF, NF, 'DF, every stat left out', { st: PROPS9 });
+    await press('[data-sp-stats="all"]');
+    for (const k of ['ml', 'ats', 'total', 'over', 'under']) await press(`[data-sp-kind="${k}"]`);
+    await waitBuilt(q9, NF);
+    check(LV.every(([id]) => txt(q9.d.querySelector(`#spSets [data-sp-game="${NF}"] .pb-tier.${id} .pb-why`)) === 'No leg of the night fits your filters.'), 'every bet type off: each level says no leg fits your filters (never that no player line is posted)');
+    /* your filters never reach the site's set; kept in M.sp alone, apart from the Parlay Builder's */
+    await press('[data-sp-mix="teams"]'); await press('[data-sp-short="-300"]'); await waitBuilt(q9, NF);
+    check(q9.w.eval(`JSON.stringify(spEntry(${JSON.stringify(NF)}))`) === entry0, 'the site\'s set (spEntry, what the job records) is the same whatever your filters');
+    const kept = JSON.parse(q9.w.localStorage.getItem('nba_hub_2027') || '{}');
+    check(kept.sp && JSON.stringify(kept.sp.k) === JSON.stringify({ ml: true, ats: true, total: true, over: false, under: false }) && kept.sp.short === -300 && JSON.stringify(kept.sp.off) === '[]' && JSON.stringify(kept.sp.st) === '[]'
+      && JSON.stringify(kept.pb || null) === JSON.stringify(JSON.parse(q9.w.eval('JSON.stringify(M.pb || null)'))) && (!kept.pb || !kept.pb.k || ['ml', 'ats', 'total', 'over', 'under'].every(k => kept.pb.k[k] !== false)),
+      `your filters are kept in this browser's own store, apart from the Parlay Builder's (${JSON.stringify(kept.sp)})`);
+    check(q9.requests.every(x => !/suggest_ledger|lines\.json/.test(x.url) || (x.opt && x.opt.cache === 'no-store')) && !q9.requests.some(x => x.opt && x.opt.method && x.opt.method !== 'GET'), 'nothing is sent anywhere');
+    { const tierIds = R => R.lv.map(t => t.ids ? t.ids.join(',') : '-').join(' | ');
+      const Rb = rulerHold(q9, stF, LF, NF, 'DF, Teams only at -300', { k: { over: false, under: false }, short: -300 });
+      const qR = loadR(stF, { lines: LF, record: null, tab: 'suggest', before: wide, storage: { nba_hub_2027: JSON.stringify(kept) } }); await settle(qR); await openTab(qR); await waitBuilt(qR, NF);
+      const kR = [...qR.d.querySelectorAll('#spFiltBox [data-sp-kind]')].filter(x => x.checked).map(x => x.dataset.spKind).join(), sR = [...qR.d.querySelectorAll('#spFiltBox [data-sp-short]')].filter(x => x.getAttribute('aria-pressed') === 'true').map(x => x.dataset.spShort).join();
+      const Rr = rulerHold(qR, stF, LF, NF, 'DF, the filters after a reload', { k: { over: false, under: false }, short: -300 });
+      check(kR === 'ml,ats,total' && sR === '-300' && qR.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-phase="mine"]`) && tierIds(Rr) === tierIds(Rb), `a reload keeps your filters and draws the same set (${kR}, ${sR})`); }
+    /* Reset: every filter back, the focus on All */
+    await pressReset(); await waitBuilt(q9, NF);
+    check(kindsOn() === 'ml,ats,total,over,under' && mixLit() === 'all' && !mineLine() && q9.d.activeElement && q9.d.activeElement.dataset.spMix === 'all' && q9.w.spUi().short == null,
+      'Reset puts every filter back, draws the site\'s set and hands the focus to All');
+    /* a level the search did not settle on your filters: the best it found, said so (the page's own work cut by a check's
+       knob, spRulerWorkSet, which only checks call) */
+    { await press('[data-sp-mix="teams"]'); const F0 = { safe: 2, med: 4, aggr: 8 };
+      const tiersNow = () => JSON.parse(q9.w.eval(`JSON.stringify(spMineSet(spById(${JSON.stringify(NF)}), spUi()).tiers.map(t => ({ id: t.id, legs: !!t.legs, gap: t.gap == null ? null : t.gap, why: t.why || null })))`));
+      /* no work at all: nothing found, each level saying so, marked not settled */
+      q9.w.spRulerWorkSet(1); q9.w.renderSp(); await waitBuilt(q9, NF);
+      const T1 = tiersNow(), w1 = LV.map(([id]) => txt(q9.d.querySelector(`#spSets [data-sp-game="${NF}"] .pb-tier.${id} .pb-why`)));
+      check(T1.every(t => !t.legs && t.gap === 1) && w1.every(x => x === 'Not settled within the search’s work on your filters.'), `with no work to spend, each level found nothing and says so, marked not settled ("${w1[0]}")`);
+      /* a level found and not settled: DF's Aggressive on no leg shorter than -500 runs out of the search's work as it stands
+         (its pure Unders at -241, -384 and -385 sit within a hair of each other); failing that, the least work cut short
+         that finds one */
+      q9.w.spRulerWorkSet(null); await press('[data-sp-mix="all"]'); await press('[data-sp-short="-500"]'); await waitBuilt(q9, NF);
+      let found = null; { const u = tiersNow().find(t => t.legs && t.gap != null); if (u) found = { wk: 'the page as it stands', t: u }; }
+      if (!found) for (const wk of [50, 100, 200, 400, 800, 1600, 3200, 6400, 12800, 25600, 51200]) { q9.w.spRulerWorkSet(wk); q9.w.renderSp(); await waitBuilt(q9, NF); const T2 = tiersNow(), u = T2.find(t => t.legs && t.gap != null); if (u) { found = { wk, t: u }; break; } }
+      const c = found ? q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-pb-tier="${found.t.id}"] .pb-rule`) : null, g = found ? (Math.ceil(Math.max(0, found.t.gap) * 1000) / 10).toFixed(1) + '%' : '';
+      check(!!found && c && txt(c) === `likeliest found paying $${F0[found.t.id]}+` && c.title === `Not settled on your filters: within ${g} of the likeliest parlay paying $${F0[found.t.id]} or more on $1, every leg at DraftKings’ fair chance.`,
+        `with the work cut short (${found ? found.wk : '-'}), a level not settled shows the best parlay found, said so in its rule and title ("${c && txt(c)}"; "${c && c.title}")`);
+      q9.w.spRulerWorkSet(null); await pressReset(); await waitBuilt(q9, NF); }
+    /* the soft build: a piece a task while the tab shows; a filter pressed and another tab opened in the same task builds
+       nothing on the other tab, and the tab opened again carries on */
+    { const n0 = q9.w.spSoftCount(); qf('[data-sp-short="-500"]').click(); q9.d.querySelector('#nav button[data-tab=slate]').click(); await sleep(120);
+      const n1 = q9.w.spSoftCount(), done1 = builtOf(q9, NF);
+      await openTab(q9); await waitBuilt(q9, NF); const n2 = q9.w.spSoftCount();
+      check(n1 === n0 && !done1 && n2 === n0 + 4, `the soft build stops on another tab (no piece built there: ${n1 - n0}) and carries on when the tab opens again (${n2 - n1} pieces: the pool and three levels)`);
+      await press('[data-sp-short="any"]'); await waitBuilt(q9, NF); }
+
+    /* the folds: on a phone More filters starts shut, then stays as the reader leaves it, across a redraw and a reload; on a
+       wide screen the reverse */
+    for (const [label, env, start] of [['a phone', narrow, false], ['a wide screen', wide, true]]) {
+      const qa = loadR(stF, { lines: LF, record: null, tab: 'suggest', before: env }); await settle(qa); await openTab(qa); await waitBuilt(qa, NF);
+      const fx = () => qa.d.querySelector('#spFiltBox details[data-sp-fx]'), s0 = fx().open;
+      fx().open = !start; fx().dispatchEvent(new qa.w.Event('toggle')); await sleep(10);
+      qa.d.querySelector('#spFiltBox [data-sp-mix="teams"]').click(); await sleep(15); const s1 = fx().open;
+      const qb = loadR(stF, { lines: LF, record: null, tab: 'suggest', before: env, storage: { nba_hub_2027: qa.w.localStorage.getItem('nba_hub_2027') } }); await settle(qb); await openTab(qb);
+      const s2 = qb.d.querySelector('#spFiltBox details[data-sp-fx]').open;
+      check(s0 === start && s1 === !start && s2 === !start && !qa.d.querySelector('#spFiltBox details[data-sp-sx]').open, `on ${label} More filters starts ${start ? 'open' : 'shut'}, and stays ${start ? 'shut' : 'open'} once the reader leaves it so, across a redraw and a reload; the stats folded`); }
+
+    /* after the lock: at the default filters this browser's own set (no record), then the record's; your filters a live set
+       on the games still to tip, the site's lock line said as the site's */
+    { NOW = lockF + 10 * 60e3;
+      const qo = loadR(stF, { lines: LF, record: null, tab: 'suggest' }); await settle(qo); await openTab(qo); await waitBuilt(qo, NF);
+      for (let i = 0; i < 200 && !(qo.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-phase="own"]`)); i++) await sleep(10);
+      const lo = qo.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-phase]`), To = LV.map(([id]) => qo.w.spTier(`${NF}:${id}`));
+      check(lo && lo.dataset.spPhase === 'own' && txt(lo) === `Locked since ${etWd(lockF)}. This browser’s own set: the site’s was not published in time, so the record does not grade it.`
+        && To.every((t, i) => (t ? t.legs.map(l => l.sk).sort().join(',') : '-') === (R0.lv[i].ids ? R0.lv[i].ids.join(',') : '-')),
+        `at the lock with no record: this browser's own set, the ruler's, its line word for word ("${lo && txt(lo)}")`);
+      const e0 = JSON.parse(entry0), rec = { night: { [`${SEASON}|${DF}|${f1.tip}|${NF}`]: { ...e0, taken_at: T(DF, '15:00:00') } } };
+      const qr = loadR(stF, { lines: LF, record: rec, tab: 'suggest' }); await settle(qr); await openTab(qr); await sleep(60);
+      const lr = qr.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-phase]`), Tr = LV.map(([id]) => qr.w.spTier(`${NF}:${id}`));
+      check(lr && lr.dataset.spPhase === 'locked' && txt(lr) === `Locked since ${etWd(lockF)}.` && Tr.every((t, i) => (t ? t.legs.map(l => l.sk).sort().join(',') : '-') === (e0.tiers[i].legs ? e0.tiers[i].legs.map(l => [l.id, l.kind === 'prop' ? 'prop' : l.kind, ...(l.kind === 'prop' ? [l.pid, l.stat, 'main', l.line, l.side] : [l.side, l.line == null ? '' : l.line])].join('|')).sort().join(',') : '-'))
+        && qr.d.querySelectorAll(`#spSets [data-sp-game="${NF}"] [data-pb-tier] [data-pb-ruler]`).length === e0.tiers.filter(t => t.legs).length,
+        `at the default filters the record's locked set, drawn with the ruler's words ("${lr && txt(lr)}")`);
+      qr.d.querySelector('#spFiltBox [data-sp-mix="teams"]').click(); await sleep(15); await waitBuilt(qr, NF);
+      const lm = qr.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-phase="mine"]`), ls = qr.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-site]`);
+      check(lm && ls && txt(ls) === `The site’s set locked ${etWd(lockF)}.` && !qr.d.querySelector(`#spSets [data-sp-game="${NF}"] .sp-lockmark`), `after the lock your filters' set is live, under the site's lock said as the site's ("${ls && txt(ls)}"), with no Locked mark`);
+      { const NOWwas = NOW; NOW = Date.parse(f1.tip) + 10 * 60e3; qr.w.renderSp(); await waitBuilt(qr, NF);
+        const R = rulerHold(qr, stF, LF, NF, 'DF, Teams only after the first tip-off', { k: { over: false, under: false } });
+        check(R.pool.length > 0 && R.pool.every(l => l.gid !== f1.id), `your filters' set is built on the games still to tip alone (${[...new Set(R.pool.map(l => l.gid.slice(-7)))].join(', ')})`); NOW = NOWwas; } }
+
+    /* D1's night (team legs and player lines), and nights of two games and one, at the default filters */
+    for (const [label, at, nid] of [["D1's night", T(D1, '15:00:00'), N1id], ["D2's night (two games)", T(D2, '15:00:00'), N2id], ["D3's night (one game)", T(D3, '15:00:00'), `${SEASON}_${ymd(D3)}_NIGHT`]]) {
+      NOW = Date.parse(at); const st = stateOf(SLATE, { today: at.slice(0, 10) });
+      const qn = loadR(st, { lines: LINES1, record: null, tab: 'suggest' }); await settle(qn); await openTab(qn); await waitBuilt(qn, nid);
+      rulerHold(qn, st, LINES1, nid, label, {}); }
+    NOW = Date.parse(T(D1, '15:00:00'));
+  }
+
   /* ---------- 8. the real files, on what the day offers ---------- */
   { NOW = Date.now();
     const realLines = fs.existsSync(path.join(ROOT, 'lines.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'lines.json'), 'utf8')) : null;
     const realRec = fs.existsSync(path.join(ROOT, 'data', 'suggest_ledger.json')) ? JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'suggest_ledger.json'), 'utf8')) : null;
-    const r = load(REAL, { lines: realLines, record: realRec, tab: 'suggest' }); await settle(r); await openTab(r); await sleep(200);
+    const r = load(REAL, { lines: realLines, record: realRec, tab: 'suggest', cut: 'real' }); await settle(r); await openTab(r); await sleep(200);
     const N = nightOwn(REAL, NOW), shown = sets(r), body = txt(r.d.getElementById('spPanel'));
     check(N && N.up ? JSON.stringify(shown) === JSON.stringify([N.id]) : !shown.length, `on the real state the tab sets out this file's own night (${N ? (N.up ? N.id : 'waiting for ' + N.id) : 'none'})`);
     check(!/\bNaN\b|\bundefined\b|\bnull\b/.test(body) && r.errors.length === 0, 'the real tab shows no NaN or undefined and throws nothing: ' + r.errors.join(' | '));
@@ -743,7 +1033,16 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
        enumeration with no leg limit: on a night of a thousand player legs every parlay is far too many to list here, which
        a brute force over them tried until 8 November 2026 and ran the job's runner out of memory on the first night
        DraftKings posted player lines for (14:20 UTC that day) */
-    if (N && N.up && realLines && Date.now() < Date.parse(N.tip) - 2 * H) {
+    if (N && N.up && realLines && Date.now() < Date.parse(N.tip) - 2 * H && r.w.spRulerOn()) {
+      /* from the cutoff the site's set is the ruler's: held by the guard's own property check on the real files (its own
+         reading of every line, its own bound on the likeliest parlay of each floor); a level the search did not settle in
+         its work (never seen at the default filters on a real night: research/sp_ruler) is one the job does not take, so
+         it is said and not held */
+      const t0 = Date.now(), e = JSON.parse(r.w.eval(`JSON.stringify(spEntry(${JSON.stringify(N.id)}))`)); e.taken_at = new Date(NOW).toISOString().replace(/\.\d{3}Z$/, 'Z');
+      const un = e.tiers.filter(t => t.gap != null).map(t => t.id), bad = un.length ? [] : SCR.nightEntryBad(SCR.nightKeyOf(e), e, NOW, null, REAL, realLines);
+      check(!bad.length, `the real night's live levels hold to the guard's own property check on its own reading of the real files (${LVID.map((id, i) => `${id} ${e.tiers[i].legs ? e.tiers[i].legs.length + ' legs at ' + e.tiers[i].dec : '-'}`).join(', ')}; ${Date.now() - t0} ms${un.length ? `; not settled in the search's work, so not held: ${un.join(', ')}` : ''})${bad.length ? ': ' + bad.slice(0, 2).join(' | ') : ''}`);
+    }
+    else if (N && N.up && realLines && Date.now() < Date.parse(N.tip) - 2 * H) {
       const T3 = LVID.map(id => r.w.spTier(`${N.id}:${id}`)), e = JSON.parse(r.w.eval(`JSON.stringify(spEntry(${JSON.stringify(N.id)}))`)), kept = SC.nightPool(e);
       const F = kept ? SC.nightFull('real', e.pool, kept, REAL, realLines, e.games, NOW, null) : { bad: ['no pool'], pool: null }, t0 = Date.now();
       const B = F.pool ? SC.NIGHT_LEVELS.map(lv => SC.nightBest(F.pool, lv, null, true) || SC.nightBest(F.pool, lv)) : [];

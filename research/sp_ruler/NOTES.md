@@ -76,3 +76,16 @@ levels and cutoff, plants made-up filters in the boot's storage, takes no unsett
 Scratch record run with the cutoff moved back: 12 Nov rewritten under the ruler, guard 0 failures.
 Next: tests (test_suggest_ledger: old sections run with the cutoff moved to the future via SUGGEST_RULER_FROM and the page
 copy; new section R), smoke_suggested (old sections the same; a ruler + filters section), speed, README.
+
+## 19:25 UTC: the tests
+
+- tools/test_suggest_ledger.js: every section before R runs with the cutoff far ahead (SUGGEST_RULER_FROM, the page copied
+  with its SP_RULER_FROM moved the same); R (R1-R8) holds the ruler's take by its own enumeration of every parlay, the
+  cutoff both ways and on the real record, the guard's breaks and TAU_G itself, ties among Unders at +100, a rebuild after
+  the lock under each rule, the kept pool, one game, and a night with a level not settled never taken; G at the real
+  cutoff. 380 checks passed.
+- tools/smoke_suggested.js: section 9 (one ruler and your filters) on a made-up night built for the filters (DF) and on
+  D1, D2 and D3; section 8 property-checks the real night with the guard once the page's cutoff has passed.
+- Found by section 9: on DF (three games, short Unders at -241/-384/-385) the default filters' Aggressive does not settle
+  within SPR_WORK; the job then takes no set for such a night. An empty level not settled now keeps gap 1 in the record
+  shape (spTierOut) so the job never takes it; its words "Not settled within the search's work on ...".

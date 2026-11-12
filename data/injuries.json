@@ -72,12 +72,12 @@
   ],
   "CHA": [
    {
-    "id": "4433287",
-    "name": "Brandon Miller",
+    "id": "4066218",
+    "name": "Grant Williams",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin Soreness",
-    "date": "2026-11-10",
+    "status": "Out",
+    "detail": "Hamstring",
+    "date": "2026-11-12",
     "returns": "2026-11-12"
    },
    {
@@ -86,17 +86,17 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Quadriceps",
-    "date": "2026-11-10",
+    "date": "2026-11-12",
     "returns": "2026-11-12"
    },
    {
-    "id": "4066218",
-    "name": "Grant Williams",
+    "id": "4433287",
+    "name": "Brandon Miller",
     "pos": "F",
     "status": "Out",
-    "detail": "Hamstring",
-    "date": "2026-11-08",
-    "returns": "2026-11-12"
+    "detail": "Groin Soreness",
+    "date": "2026-11-12",
+    "returns": "2026-11-15"
    },
    {
     "id": "5061575",
@@ -119,6 +119,24 @@
   ],
   "CHI": [
    {
+    "id": "4848625",
+    "name": "Dailyn Swain",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
+   },
+   {
+    "id": "2595516",
+    "name": "Norman Powell",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Shoulder Inflammation",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
+   },
+   {
     "id": "5105555",
     "name": "Tobe Awaka",
     "pos": "F",
@@ -126,33 +144,6 @@
     "detail": "Back",
     "date": "2026-11-11",
     "returns": "2026-11-13"
-   },
-   {
-    "id": "5095151",
-    "name": "Caleb Wilson",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hip Soreness",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "2595516",
-    "name": "Norman Powell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Shoulder Inflammation",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
-    "id": "4066650",
-    "name": "Zach Collins",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
    }
   ],
   "CLE": [
@@ -164,15 +155,6 @@
     "detail": "Elbow",
     "date": "2026-11-10",
     "returns": "2026-11-16"
-   },
-   {
-    "id": "4683747",
-    "name": "Jaylon Tyson",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
    }
   ],
   "DAL": [
@@ -255,15 +237,6 @@
   ],
   "GSW": [
    {
-    "id": "4897262",
-    "name": "Will Richard",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Thumb",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
-   },
-   {
     "id": "3134903",
     "name": "Gary Payton II",
     "pos": "G",
@@ -331,21 +304,12 @@
   ],
   "IND": [
    {
-    "id": "2530530",
-    "name": "T.J. McConnell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
     "id": "4396993",
     "name": "Tyrese Haliburton",
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring Strain",
-    "date": "2026-11-07",
+    "date": "2026-11-11",
     "returns": "2026-11-22"
    },
    {
@@ -427,15 +391,6 @@
   ],
   "MEM": [
    {
-    "id": "4432810",
-    "name": "Isaiah Stewart",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee Bruise",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
-   },
-   {
     "id": "4431785",
     "name": "Scotty Pippen Jr.",
     "pos": "G",
@@ -464,15 +419,6 @@
    }
   ],
   "MIL": [
-   {
-    "id": "4395725",
-    "name": "Tyler Herro",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Bruise",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
-   },
    {
     "id": "3133628",
     "name": "Myles Turner",
@@ -505,6 +451,15 @@
   ],
   "NOP": [
    {
+    "id": "4397688",
+    "name": "Trey Murphy III",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Tendinitis",
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
+   },
+   {
     "id": "4683634",
     "name": "Bennedict Mathurin",
     "pos": "G",
@@ -512,15 +467,6 @@
     "detail": "Thumb Sprain",
     "date": "2026-11-11",
     "returns": "2026-11-13"
-   },
-   {
-    "id": "4397688",
-    "name": "Trey Murphy III",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Tendinitis",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
    },
    {
     "id": "4431675",
@@ -602,19 +548,19 @@
     "id": "4278572",
     "name": "Jamal Cain",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Shoulder Bruise",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
    },
    {
     "id": "4702382",
     "name": "Tristan da Silva",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Calf Strain",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
    },
    {
     "id": "4432165",
@@ -792,10 +738,10 @@
     "id": "4395630",
     "name": "Devin Vassell",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Groin",
-    "date": "2026-11-10",
-    "returns": "2026-11-11"
+    "date": "2026-11-11",
+    "returns": "2026-11-13"
    },
    {
     "id": "6440",
@@ -855,15 +801,6 @@
    }
   ],
   "UTA": [
-   {
-    "id": "4433627",
-    "name": "Keyonte George",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-11",
-    "returns": "2026-11-11"
-   },
    {
     "id": "4066336",
     "name": "Lauri Markkanen",

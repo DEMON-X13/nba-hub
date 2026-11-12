@@ -1374,16 +1374,16 @@
  },
  "upcoming": {
   "2027_20261111_BKN_NOP": {
-   "pHome": 0.6038,
-   "spread": -3.2
+   "pHome": 0.578,
+   "spread": -2.4
   },
   "2027_20261111_BOS_TOR": {
    "pHome": 0.3747,
    "spread": 3.9
   },
   "2027_20261111_CLE_NYK": {
-   "pHome": 0.7333,
-   "spread": -7.7
+   "pHome": 0.7222,
+   "spread": -7.3
   },
   "2027_20261111_DEN_MEM": {
    "pHome": 0.5185,
@@ -1402,20 +1402,20 @@
    "spread": -5.4
   },
   "2027_20261111_ORL_UTA": {
-   "pHome": 0.3702,
-   "spread": 4.1
+   "pHome": 0.3819,
+   "spread": 3.7
   },
   "2027_20261111_SAS_CHI": {
-   "pHome": 0.1554,
-   "spread": 12.9
+   "pHome": 0.1541,
+   "spread": 13
   },
   "2027_20261111_WAS_IND": {
    "pHome": 0.6315,
    "spread": -4.1
   },
   "2027_20261112_CHA_PHX": {
-   "pHome": 0.6345,
-   "spread": -4.2
+   "pHome": 0.6755,
+   "spread": -5.6
   },
   "2027_20261112_DAL_MIN": {
    "pHome": 0.6889,
@@ -2037,5 +2037,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-11T22:45Z"
+ "generated": "2026-11-12T01:33Z"
 }

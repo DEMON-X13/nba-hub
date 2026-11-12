@@ -533,7 +533,7 @@
     "name": "Zach Collins",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5242496",
@@ -610,7 +610,7 @@
     "name": "Dailyn Swain",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4431687",
@@ -624,7 +624,7 @@
     "name": "Caleb Wilson",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "CLE": [
@@ -717,7 +717,7 @@
     "name": "Jaylon Tyson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5106261",
@@ -1215,7 +1215,7 @@
     "name": "Will Richard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4997536",
@@ -1394,7 +1394,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2580365",
@@ -1862,7 +1862,7 @@
     "name": "Isaiah Stewart",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5112087",
@@ -2027,7 +2027,7 @@
     "name": "Tyler Herro",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5214640",
@@ -3500,7 +3500,7 @@
     "name": "Keyonte George",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432811",

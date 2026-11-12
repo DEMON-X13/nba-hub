@@ -102,7 +102,8 @@ const STATS = PM.ALL;
 const by = k => lines.filter(x => x.stat === k);
 const calRow = sub => ({ lines: sub.length, modelFrom50: mean(sub.map(x => Math.abs(x.pModel - 0.5))), marketFrom50: mean(sub.map(x => Math.abs(x.pMarket - 0.5))),
   model: T.calib(sub, 'pModel', NB), market: T.calib(sub, 'pMarket', NB) });
-const sureness = { pooled: calRow(lines), byStat: {} };
+const BASE = new Set(PM.STATS), base = lines.filter(x => BASE.has(x.stat));   // the six base stats: what 2023-24's lines carry
+const sureness = { pooled: calRow(lines), baseStats: calRow(base), combos: calRow(lines.filter(x => !BASE.has(x.stat))), byStat: {} };
 for (const k of STATS) sureness.byStat[k] = calRow(by(k));
 /* the calibration table: the chance said in bands, against how often the Over went in */
 const bands = [[0, 0.3], [0.3, 0.4], [0.4, 0.45], [0.45, 0.5], [0.5, 0.55], [0.55, 0.6], [0.6, 0.7], [0.7, 1.01]];
@@ -137,12 +138,12 @@ function parts(sub) {
     informationPart: rm.both - rq.both, marketOwnRecal: rq.raw - rq.both,
     shares: { lean: lean / gap, overSure: sure / gap, information: (rm.both - rq.raw) / gap } };
 }
-const gapParts = { pooled: parts(lines), byStat: {} };
+const gapParts = { pooled: parts(lines), baseStats: parts(base), combos: parts(lines.filter(x => !BASE.has(x.stat))), byStat: {} };
 for (const k of STATS) gapParts.byStat[k] = parts(by(k));
 log(`gap ${gapParts.pooled.gap.toFixed(4)}: lean ${gapParts.pooled.leanPart.toFixed(4)}, over-sure ${gapParts.pooled.overSurePart.toFixed(4)}, recalibrated still behind ${(gapParts.pooled.model.both - gapParts.pooled.market.raw).toFixed(4)}`);
 
 /* ---------- does the model add anything beyond DraftKings' price ---------- */
-const beyond = { pooled: T.infoBeyond(lines, 'pModel', NB), byStat: {} };
+const beyond = { pooled: T.infoBeyond(lines, 'pModel', NB), baseStats: T.infoBeyond(base, 'pModel', NB), byStat: {} };
 for (const k of STATS) beyond.byStat[k] = T.infoBeyond(by(k), 'pModel', NB);
 log(`w (share of the model's disagreement worth keeping): ${beyond.pooled.w.toFixed(3)} ${beyond.pooled.wCi.map(v => v.toFixed(3))}`);
 
@@ -184,13 +185,13 @@ function split(ix, seed = 0) {
   const bt = T.olsSlope(ix, D, ET), bm = T.olsSlope(ix, D, EM), brr = T.olsSlope(ix, D, ER);
   const groups = T.groupBy(ix.map(i => lines[i]), x => x.game).map(g => g.map(j => ix[j]));
   const ci = T.clusterBoot(groups, iz => T.olsSlope(iz, D, EM) / T.olsSlope(iz, D, ET), NB, seed);
-  /* each line's contribution to the minutes covariance, for the split by late news */
-  return { lines: ix.length, slopeTotal: bt, slopeMinutes: bm, slopeRate: brr, minutesShare: bm / bt, minutesShareCi: ci,
+  const ciT = T.clusterBoot(groups, iz => T.olsSlope(iz, D, ET), NB, seed + 7);
+  return { lines: ix.length, slopeTotal: bt, slopeTotalCi: ciT, slopeMinutes: bm, slopeRate: brr, minutesShare: bm / bt, minutesShareCi: ci,
     sdDelta: Math.sqrt(mean(ix.map(i => D[i] * D[i])) - mean(ix.map(i => D[i])) ** 2) };
 }
 const all = lines.map((_, i) => i);
 const news = x => x.lateScratch || x.uncalled;
-const minutes = { pooled: split(all), byStat: {}, noLateNews: split(idxOf(x => !news(x) && !x.ownReport)), lateNews: split(idxOf(x => news(x))),
+const minutes = { pooled: split(all), baseStats: split(idxOf(x => BASE.has(x.stat))), byStat: {}, noLateNews: split(idxOf(x => !news(x) && !x.ownReport)), lateNews: split(idxOf(x => news(x))),
   ownReport: split(idxOf(x => x.ownReport)), starters: split(idxOf(x => x.starter)), bench: split(idxOf(x => !x.starter)) };
 for (const k of STATS) minutes.byStat[k] = split(idxOf(x => x.stat === k));
 /* how much of the minutes covariance, and of the whole, the lines with late news carry: contributions to the pooled,
@@ -241,14 +242,31 @@ const lean = {
 log(`lean: said ${(100 * lean.overSaid).toFixed(1)}% hit ${(100 * lean.overHit).toFixed(1)}%; removing it gains ${lean.shiftInLogit.gain.toFixed(5)} (${(100 * lean.shiftInLogit.shareOfGap).toFixed(1)}% of the gap), mean shift ${(100 * lean.meanShift.shareOfGap).toFixed(1)}%`);
 
 /* ---------- by week, and by stat on one table ---------- */
+const baseScore = T.scoreLines(base, 10000, 0);
 const byWeek = {
   first: T.scoreLines(lines.filter(x => x.date <= '2026-10-27'), 10000, 0),
   second: T.scoreLines(lines.filter(x => x.date > '2026-10-27'), 10000, 0),
 };
 const byStat = {};
 for (const k of STATS) { const s = T.scoreLines(by(k), 10000, 0); byStat[k] = s; }
+/* where minutes are least known: his appearances this season before the game (box_2027), a new club (his last
+   appearance of 2025-26 was for another), the box's starter flag, the call's own minutes */
+const seasonStart = '2026-10-01';
+for (const x of lines) {
+  const a = (appear[x.id] || []).filter(z => z.date < x.date);
+  x.nCur = a.filter(z => z.date >= seasonStart).length;
+  const prev = a.filter(z => z.date < seasonStart);
+  x.newClub = prev.length ? prev[prev.length - 1].team !== x.team : null;
+}
+const roleRow = (label, f) => { const s = lines.filter(f); if (s.length < 50) return { label, lines: s.length }; const S2 = T.scoreLines(s, 2000, 0);
+  return { label, lines: s.length, llDiff: S2.llDiff, llDiffCi: S2.llDiffCi, modelSaid: S2.modelSaid, overHit: S2.overRate, marketSaid: S2.marketSaid, minutesSaid: mean(s.map(x => x.m)), minutesPlayed: mean(s.map(x => x.a)) }; };
+const roles = [roleRow('his first game of the season', x => x.nCur === 0), roleRow('his 2nd to 6th game', x => x.nCur >= 1 && x.nCur <= 5),
+  roleRow('a new club (another club last season)', x => x.newClub === true), roleRow('no game last season', x => x.newClub === null),
+  roleRow('started', x => x.starter), roleRow('off the bench', x => !x.starter),
+  roleRow('projected under 20 minutes', x => x.m < 20), roleRow('projected 20 to 30', x => x.m >= 20 && x.m < 30), roleRow('projected 30 to 34', x => x.m >= 30 && x.m < 34), roleRow('projected 34+', x => x.m >= 34),
+  roleRow('a late scratch or an uncalled teammate on his side', x => x.lateScratch || x.uncalled), roleRow('neither', x => !x.lateScratch && !x.uncalled)];
 
 const out = { generated: new Date().toISOString().slice(0, 16) + 'Z', what: 'research/props_v3/why_trial.js: why the props trial lost to DraftKings, on its own graded lines (diagnosis only; nothing fitted here is a candidate or carried anywhere)',
-  boot: { gap: 10000, regressions: NB, seed: 0 }, reproduce, byStat, byWeek, sureness, where, gapParts, beyond, minutes, lean, seconds: Math.round((Date.now() - t0) / 1000) };
+  boot: { gap: 10000, regressions: NB, seed: 0 }, reproduce, baseStats: baseScore, byStat, byWeek, roles, sureness, where, gapParts, beyond, minutes, lean, seconds: Math.round((Date.now() - t0) / 1000) };
 fs.writeFileSync(OUT, JSON.stringify(out, (k, v) => (typeof v === 'number' ? +v.toPrecision(7) : v), 1) + '\n');
 log(`wrote ${path.relative(T.ROOT, OUT)}`);

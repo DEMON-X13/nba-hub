@@ -1,0 +1,23 @@
+{
+ "generated": "2026-11-12T00:15Z",
+ "what": "research/props_v3/why_rerun_v2.js: props_v2's diagnosis scripts run again, unchanged, against their committed results",
+ "head": "f7bcd71f5160ee76e26d61d05b17505c3c8ed564",
+ "runs": [
+  {
+   "script": "research/props_v2/diag_trial.js",
+   "ran": true,
+   "error": null,
+   "seconds": 6,
+   "sameAsCommittedButForTheStamp": true,
+   "filesPutBack": true
+  },
+  {
+   "script": "research/props_v2/diag_history.js",
+   "ran": true,
+   "error": null,
+   "seconds": 28,
+   "sameAsCommittedButForTheStamp": true,
+   "filesPutBack": true
+  }
+ ]
+}

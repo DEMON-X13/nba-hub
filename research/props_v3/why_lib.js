@@ -126,11 +126,12 @@ function olsSlope(idx, u, v) {
 }
 
 /* the mean a line's two prices imply, read on the model's own distribution: the mean mu at which tools/props.js's
-   negative binomial (variance A x mu^B, the fit's) gives the Over the chance q. pOver rises with mu, so bisection; a q
-   the distribution cannot reach is held at the end it reaches */
-function impliedMean(line, q, ab) {
+   negative binomial (variance A x mu^B, the fit's, times the row's own multiplier where a forecaster widens it, as
+   candidate A does for the bench) gives the Over the chance q. pOver rises with mu, so bisection; a q the distribution
+   cannot reach is held at the end it reaches */
+function impliedMean(line, q, ab, mult = 1) {
   let lo = 1e-4, hi = Math.max(4 * line + 20, 10);
-  const f = mu => PM.pOver(line, mu, PM.nbVar(mu, ab));
+  const f = mu => PM.pOver(line, mu, PM.nbVar(mu, ab) * mult);
   if (q <= f(lo)) return lo;
   while (f(hi) < q && hi < 1e4) hi *= 2;
   for (let it = 0; it < 60; it++) { const mid = (lo + hi) / 2; if (f(mid) < q) lo = mid; else hi = mid; }
@@ -159,12 +160,32 @@ function scoreLines(lines, nBoot = 10000, seed = 0) {
    is 1 for a forecaster whose departures from 50% are exactly right in size, under 1 for one too sure of itself. The
    interval resamples games */
 function calib(lines, key, nBoot = 1000, seed = 0) {
-  const idx = lines.map((_, i) => i);
-  const X = i => [1, logit(lines[i][key])], y = i => lines[i].o;
-  const beta = logreg(idx, X, y);
+  const n = lines.length, idx = lines.map((_, i) => i);
+  const one = new Float64Array(n).fill(1), z = Float64Array.from(lines, x => logit(x[key])), y = Float64Array.from(lines, x => x.o);
+  const beta = logregF(idx, [one, z], y, null);
   const groups = groupBy(lines, x => x.game);
-  const ci = clusterBoot(groups, ix => { const b = logreg(ix, X, y); return b ? b[1] : NaN; }, nBoot, seed);
-  return { intercept: beta[0], slope: beta[1], slopeCi: ci, n: lines.length };
+  const ci = clusterBoot(groups, ix => { const b = logregF(ix, [one, z], y, null, beta); return b ? b[1] : NaN; }, nBoot, seed);
+  return { intercept: beta[0], slope: beta[1], slopeCi: ci, n };
+}
+
+/* the same Newton's method on columns laid out once (Float64Arrays), for the bootstrap's many refits: P(y = 1) =
+   sigm(off + sum_a beta_a cols_a), warm-started at beta0 where given */
+function logregF(idx, cols, y, off, beta0 = null, iters = 50) {
+  const k = cols.length, beta = beta0 ? Float64Array.from(beta0) : new Float64Array(k);
+  for (let it = 0; it < iters; it++) {
+    const H = Array.from({ length: k }, () => new Array(k).fill(0)), g = new Array(k).fill(0);
+    for (let t = 0; t < idx.length; t++) {
+      const i = idx[t]; let zz = off ? off[i] : 0;
+      for (let a = 0; a < k; a++) zz += beta[a] * cols[a][i];
+      const p = 1 / (1 + Math.exp(-zz)), w = Math.max(p * (1 - p), 1e-12), r = y[i] - p;
+      for (let a = 0; a < k; a++) { const xa = cols[a][i]; g[a] += xa * r; for (let c = a; c < k; c++) H[a][c] += w * xa * cols[c][i]; }
+    }
+    for (let a = 0; a < k; a++) for (let c = 0; c < a; c++) H[a][c] = H[c][a];
+    const step = solve(H, g); if (!step) return null;
+    let mx = 0; for (let a = 0; a < k; a++) { beta[a] += step[a]; mx = Math.max(mx, Math.abs(step[a])); }
+    if (mx < 1e-10) break;
+  }
+  return Array.from(beta);
 }
 
 /* how much a forecaster adds beyond DraftKings' price: P(Over) = sigm(logit q + w (logit m - logit q)), w fitted on the
@@ -172,16 +193,14 @@ function calib(lines, key, nBoot = 1000, seed = 0) {
    resamples games. "wFree" adds a free intercept and a free weight on logit q, so that w is not forced to carry
    DraftKings' own miscalibration */
 function infoBeyond(lines, mKey = 'pModel', nBoot = 1000, seed = 0) {
-  const idx = lines.map((_, i) => i);
-  const y = i => lines[i].o, off = i => logit(lines[i].pMarket);
-  const d = i => logit(lines[i][mKey]) - logit(lines[i].pMarket);
-  const X1 = i => [d(i)];
-  const b1 = logreg(idx, X1, y, off);
+  const n = lines.length, idx = lines.map((_, i) => i);
+  const y = Float64Array.from(lines, x => x.o), off = Float64Array.from(lines, x => logit(x.pMarket));
+  const d = Float64Array.from(lines, x => logit(x[mKey]) - logit(x.pMarket)), one = new Float64Array(n).fill(1);
+  const b1 = logregF(idx, [d], y, off);
   const groups = groupBy(lines, x => x.game);
-  const ci1 = clusterBoot(groups, ix => { const b = logreg(ix, X1, y, off); return b ? b[0] : NaN; }, nBoot, seed);
-  const X3 = i => [1, logit(lines[i].pMarket), d(i)];
-  const b3 = logreg(idx, X3, y);
-  const ci3 = clusterBoot(groups, ix => { const b = logreg(ix, X3, y); return b ? b[2] : NaN; }, nBoot, seed + 1);
+  const ci1 = clusterBoot(groups, ix => { const b = logregF(ix, [d], y, off, b1); return b ? b[0] : NaN; }, nBoot, seed);
+  const b3 = logregF(idx, [one, off, d], y, null);
+  const ci3 = clusterBoot(groups, ix => { const b = logregF(ix, [one, off, d], y, null, b3); return b ? b[2] : NaN; }, nBoot, seed + 1);
   const llAt = w => mean(lines.map(x => ll(sigm(logit(x.pMarket) + w * (logit(x[mKey]) - logit(x.pMarket))), x.o)));
   return { w: b1[0], wCi: ci1, llGainInSample: llAt(0) - llAt(b1[0]), wFree: b3[2], wFreeCi: ci3, freeIntercept: b3[0], freeSlopeOnDK: b3[1] };
 }
@@ -202,4 +221,4 @@ function recal(lines, key) {
 }
 
 module.exports = { ROOT, PM, F, EPS, clip, ll, br, logit, sigm, sum, mean, implied, fairOver, csv, rng, groupBy, clusterBoot, clusterBootMean,
-  solve, logreg, logregLL, olsSlope, impliedMean, scoreLines, calib, infoBeyond, recal };
+  solve, logreg, logregF, logregLL, olsSlope, impliedMean, scoreLines, calib, infoBeyond, recal };

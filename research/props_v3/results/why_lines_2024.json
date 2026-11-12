@@ -1,0 +1,1563 @@
+{
+ "generated": "2026-11-12T00:32Z",
+ "set": "2024",
+ "what": "research/props_v3/why_lines.js 2024: where tools/props.js (and candidate A) lose to DraftKings on DraftKings' 2023-24 regular-season lines (development data: scored once against A on 6 November 2026); diagnosis only, nothing fitted here is a candidate",
+ "folds": "tools/props.js 2024 fold (fitted on 2022-23); A 2024 fold (fitted on 2023)",
+ "boot": {
+  "gap": 10000,
+  "regressions": 1000,
+  "seed": 0
+ },
+ "counts": {
+  "rows": 92295,
+  "graded": 89032,
+  "voids": 3224,
+  "noCall": 39,
+  "pushes": 0,
+  "gradedA": 89032
+ },
+ "toolsProps": {
+  "reproduce": {
+   "lines": 89032,
+   "games": 1116,
+   "overRate": 0.4532415,
+   "modelSaid": 0.436217,
+   "marketSaid": 0.4389234,
+   "llModel": 0.676968,
+   "llMarket": 0.6671714,
+   "llDiff": 0.009796606,
+   "llDiffCi": [
+    0.008450316,
+    0.01116179
+   ],
+   "brModel": 0.2415861,
+   "brMarket": 0.2375493,
+   "brDiff": 0.004036752,
+   "brDiffCi": [
+    0.003472474,
+    0.004606558
+   ],
+   "modelFrom50": 0.1096978,
+   "marketFrom50": 0.08910532,
+   "llDiffCi_toolsPropsBootCI": [
+    0.00843,
+    0.011164
+   ],
+   "brDiffCi_toolsPropsBootCI": [
+    0.003466,
+    0.004602
+   ]
+  },
+  "byStat": {
+   "pts": {
+    "lines": 14956,
+    "games": 1116,
+    "overRate": 0.4837523,
+    "modelSaid": 0.4541067,
+    "marketSaid": 0.4667788,
+    "llModel": 0.714097,
+    "llMarket": 0.6920344,
+    "llDiff": 0.02206261,
+    "llDiffCi": [
+     0.01877444,
+     0.02538259
+    ],
+    "brModel": 0.2589037,
+    "brMarket": 0.2494418,
+    "brDiff": 0.009461915,
+    "brDiffCi": [
+     0.008041784,
+     0.01088631
+    ],
+    "modelFrom50": 0.08431239,
+    "marketFrom50": 0.03635483
+   },
+   "reb": {
+    "lines": 15917,
+    "games": 1116,
+    "overRate": 0.4688698,
+    "modelSaid": 0.4585666,
+    "marketSaid": 0.4636429,
+    "llModel": 0.6983356,
+    "llMarket": 0.6848804,
+    "llDiff": 0.01345524,
+    "llDiffCi": [
+     0.01062384,
+     0.01622036
+    ],
+    "brModel": 0.2511787,
+    "brMarket": 0.2458904,
+    "brDiff": 0.005288281,
+    "brDiffCi": [
+     0.004084682,
+     0.006461715
+    ],
+    "modelFrom50": 0.08227221,
+    "marketFrom50": 0.05246947
+   },
+   "ast": {
+    "lines": 9703,
+    "games": 1116,
+    "overRate": 0.4826342,
+    "modelSaid": 0.4591853,
+    "marketSaid": 0.4579993,
+    "llModel": 0.7056906,
+    "llMarket": 0.6868919,
+    "llDiff": 0.01879874,
+    "llDiffCi": [
+     0.01464236,
+     0.02299356
+    ],
+    "brModel": 0.254507,
+    "brMarket": 0.2468885,
+    "brDiff": 0.007618513,
+    "brDiffCi": [
+     0.00587876,
+     0.009355124
+    ],
+    "modelFrom50": 0.09165916,
+    "marketFrom50": 0.06176367
+   },
+   "tpm": {
+    "lines": 15118,
+    "games": 1116,
+    "overRate": 0.4739384,
+    "modelSaid": 0.4554132,
+    "marketSaid": 0.4566206,
+    "llModel": 0.6766373,
+    "llMarket": 0.6713539,
+    "llDiff": 0.005283397,
+    "llDiffCi": [
+     0.003122208,
+     0.007420065
+    ],
+    "brModel": 0.2414842,
+    "brMarket": 0.2392971,
+    "brDiff": 0.002187057,
+    "brDiffCi": [
+     0.001200572,
+     0.003160614
+    ],
+    "modelFrom50": 0.1009208,
+    "marketFrom50": 0.08685138
+   },
+   "stl": {
+    "lines": 16750,
+    "games": 1116,
+    "overRate": 0.4758209,
+    "modelSaid": 0.4631315,
+    "marketSaid": 0.471028,
+    "llModel": 0.6700651,
+    "llMarket": 0.6674692,
+    "llDiff": 0.002595922,
+    "llDiffCi": [
+     0.000829879,
+     0.004377169
+    ],
+    "brModel": 0.2385294,
+    "brMarket": 0.2373969,
+    "brDiff": 0.001132426,
+    "brDiffCi": [
+     0.0003166658,
+     0.00195002
+    ],
+    "modelFrom50": 0.1032549,
+    "marketFrom50": 0.09100221
+   },
+   "blk": {
+    "lines": 16588,
+    "games": 1116,
+    "overRate": 0.3518809,
+    "modelSaid": 0.3405344,
+    "marketSaid": 0.3303838,
+    "llModel": 0.6134595,
+    "llMarket": 0.6121142,
+    "llDiff": 0.001345293,
+    "llDiffCi": [
+     -0.0005909214,
+     0.003262763
+    ],
+    "brModel": 0.212389,
+    "brMarket": 0.2119212,
+    "brDiff": 0.0004677842,
+    "brDiffCi": [
+     -0.0003270913,
+     0.001254639
+    ],
+    "modelFrom50": 0.1839587,
+    "marketFrom50": 0.1879519
+   }
+  },
+  "sureness": {
+   "pooled": {
+    "lines": 89032,
+    "modelFrom50": 0.1096978,
+    "marketFrom50": 0.08910532,
+    "model": {
+     "intercept": -0.01000317,
+     "slope": 0.6555756,
+     "slopeCi": [
+      0.6314533,
+      0.6823047
+     ],
+     "n": 89032
+    },
+    "market": {
+     "intercept": 0.04817869,
+     "slope": 0.9440689,
+     "slopeCi": [
+      0.9181678,
+      0.9715334
+     ],
+     "n": 89032
+    }
+   },
+   "byStat": {
+    "pts": {
+     "lines": 14956,
+     "modelFrom50": 0.08431239,
+     "marketFrom50": 0.03635483,
+     "model": {
+      "intercept": -0.04892606,
+      "slope": 0.08209796,
+      "slopeCi": [
+       0.02435874,
+       0.1461934
+      ],
+      "n": 14956
+     },
+     "market": {
+      "intercept": 0.05450382,
+      "slope": 0.8966338,
+      "slopeCi": [
+       0.6637622,
+       1.149272
+      ],
+      "n": 14956
+     }
+    },
+    "reb": {
+     "lines": 15917,
+     "modelFrom50": 0.08227221,
+     "marketFrom50": 0.05246947,
+     "model": {
+      "intercept": -0.06436834,
+      "slope": 0.3397829,
+      "slopeCi": [
+       0.2801359,
+       0.40376
+      ],
+      "n": 15917
+     },
+     "market": {
+      "intercept": 0.03420245,
+      "slope": 1.089736,
+      "slopeCi": [
+       0.9664869,
+       1.207926
+      ],
+      "n": 15917
+     }
+    },
+    "ast": {
+     "lines": 9703,
+     "modelFrom50": 0.09165916,
+     "marketFrom50": 0.06176367,
+     "model": {
+      "intercept": -0.01808413,
+      "slope": 0.2868287,
+      "slopeCi": [
+       0.2199841,
+       0.3513458
+      ],
+      "n": 9703
+     },
+     "market": {
+      "intercept": 0.09236551,
+      "slope": 0.9523215,
+      "slopeCi": [
+       0.8129708,
+       1.093814
+      ],
+      "n": 9703
+     }
+    },
+    "tpm": {
+     "lines": 15118,
+     "modelFrom50": 0.1009208,
+     "marketFrom50": 0.08685138,
+     "model": {
+      "intercept": 0.0392648,
+      "slope": 0.7778487,
+      "slopeCi": [
+       0.7184271,
+       0.8385708
+      ],
+      "n": 15118
+     },
+     "market": {
+      "intercept": 0.07972491,
+      "slope": 1.043526,
+      "slopeCi": [
+       0.9761415,
+       1.116181
+      ],
+      "n": 15118
+     }
+    },
+    "stl": {
+     "lines": 16750,
+     "modelFrom50": 0.1032549,
+     "marketFrom50": 0.09100221,
+     "model": {
+      "intercept": 0.03336733,
+      "slope": 0.8526897,
+      "slopeCi": [
+       0.7987117,
+       0.9073986
+      ],
+      "n": 16750
+     },
+     "market": {
+      "intercept": 0.02464764,
+      "slope": 1.041695,
+      "slopeCi": [
+       0.9769024,
+       1.100954
+      ],
+      "n": 16750
+     }
+    },
+    "blk": {
+     "lines": 16588,
+     "modelFrom50": 0.1839587,
+     "marketFrom50": 0.1879519,
+     "model": {
+      "intercept": -0.04644902,
+      "slope": 0.8322406,
+      "slopeCi": [
+       0.7878614,
+       0.8776089
+      ],
+      "n": 16588
+     },
+     "market": {
+      "intercept": 0.02176893,
+      "slope": 0.8721741,
+      "slopeCi": [
+       0.8280355,
+       0.914404
+      ],
+      "n": 16588
+     }
+    }
+   }
+  },
+  "where": [
+   {
+    "label": "DraftKings 10+ points above the model",
+    "lines": 8760,
+    "share": 0.09839159,
+    "gapShare": 0.7308305,
+    "llDiff": 0.07276698,
+    "overHit": 0.4591324,
+    "modelSaid": 0.3045992,
+    "marketSaid": 0.4699211
+   },
+   {
+    "label": "DraftKings 5 to 10 above",
+    "lines": 11736,
+    "share": 0.1318178,
+    "gapShare": 0.112449,
+    "llDiff": 0.008357133,
+    "overHit": 0.4480232,
+    "modelSaid": 0.385301,
+    "marketSaid": 0.4569095
+   },
+   {
+    "label": "within 5",
+    "lines": 47745,
+    "share": 0.5362679,
+    "gapShare": 0.02116522,
+    "llDiff": 0.0003866487,
+    "overHit": 0.4451775,
+    "modelSaid": 0.4336252,
+    "marketSaid": 0.4322548
+   },
+   {
+    "label": "model 5 to 10 above",
+    "lines": 13816,
+    "share": 0.1551802,
+    "gapShare": -0.03017347,
+    "llDiff": -0.001904867,
+    "overHit": 0.4690214,
+    "modelSaid": 0.5000227,
+    "marketSaid": 0.4285212
+   },
+   {
+    "label": "model 10+ above",
+    "lines": 6975,
+    "share": 0.07834262,
+    "gapShare": 0.1657287,
+    "llDiff": 0.02072408,
+    "overHit": 0.4785663,
+    "modelSaid": 0.5785437,
+    "marketSaid": 0.4359823
+   },
+   {
+    "label": "apart by 10 points or more, either way",
+    "lines": 15735,
+    "share": 0.1767342,
+    "gapShare": 0.8965592,
+    "llDiff": 0.04969744,
+    "overHit": 0.4677471,
+    "modelSaid": 0.4260332,
+    "marketSaid": 0.4548767
+   }
+  ],
+  "parts": {
+   "pooled": {
+    "lines": 89032,
+    "gap": 0.009796606,
+    "leanPart": 0.0003194242,
+    "overSurePart": 0.004288803,
+    "informationPart": 0.005188379,
+    "recalibratedSlope": 0.6555756,
+    "marketOwnRecal": 0.0005019544,
+    "shares": {
+     "lean": 0.0326056,
+     "overSure": 0.4377846,
+     "information": 0.5296099
+    }
+   },
+   "byStat": {
+    "pts": {
+     "lines": 14956,
+     "gap": 0.02206261,
+     "leanPart": 0.001047132,
+     "overSurePart": 0.020599,
+     "informationPart": 0.0004164751,
+     "recalibratedSlope": 0.08209796,
+     "marketOwnRecal": 0.0005953176,
+     "shares": {
+      "lean": 0.04746185,
+      "overSure": 0.9336612,
+      "information": 0.01887696
+     }
+    },
+    "reb": {
+     "lines": 15917,
+     "gap": 0.01345524,
+     "leanPart": 0.0003341946,
+     "overSurePart": 0.009736059,
+     "informationPart": 0.003384985,
+     "recalibratedSlope": 0.3397829,
+     "marketOwnRecal": 0.00009853999,
+     "shares": {
+      "lean": 0.02483751,
+      "overSure": 0.7235887,
+      "information": 0.2515737
+     }
+    },
+    "ast": {
+     "lines": 9703,
+     "gap": 0.01879874,
+     "leanPart": 0.000600513,
+     "overSurePart": 0.01530765,
+     "informationPart": 0.002890574,
+     "recalibratedSlope": 0.2868287,
+     "marketOwnRecal": 0.001255206,
+     "shares": {
+      "lean": 0.03194432,
+      "overSure": 0.8142914,
+      "information": 0.1537642
+     }
+    },
+    "tpm": {
+     "lines": 15118,
+     "gap": 0.005283397,
+     "leanPart": 0.0004460408,
+     "overSurePart": 0.001586226,
+     "informationPart": 0.003251131,
+     "recalibratedSlope": 0.7778487,
+     "marketOwnRecal": 0.0006615777,
+     "shares": {
+      "lean": 0.0844231,
+      "overSure": 0.3002284,
+      "information": 0.6153485
+     }
+    },
+    "stl": {
+     "lines": 16750,
+     "gap": 0.002595922,
+     "leanPart": 0.0002332711,
+     "overSurePart": 0.0007412576,
+     "informationPart": 0.001621393,
+     "recalibratedSlope": 0.8526897,
+     "marketOwnRecal": 0.00008559899,
+     "shares": {
+      "lean": 0.08986061,
+      "overSure": 0.285547,
+      "information": 0.6245924
+     }
+    },
+    "blk": {
+     "lines": 16588,
+     "gap": 0.001345293,
+     "leanPart": 0.0002195685,
+     "overSurePart": 0.001402172,
+     "informationPart": -0.0002764483,
+     "recalibratedSlope": 0.8322406,
+     "marketOwnRecal": 0.001859689,
+     "shares": {
+      "lean": 0.1632125,
+      "overSure": 1.042281,
+      "information": -0.2054931
+     }
+    }
+   }
+  },
+  "beyond": {
+   "pooled": {
+    "w": 0.1844752,
+    "wCi": [
+     0.1498796,
+     0.2237397
+    ],
+    "llGainInSample": 0.0005776166,
+    "wFree": 0.1886344,
+    "wFreeCi": [
+     0.1515353,
+     0.2260545
+    ],
+    "freeIntercept": 0.05569274,
+    "freeSlopeOnDK": 0.960235
+   },
+   "byStat": {
+    "pts": {
+     "w": 0.02201557,
+     "wCi": [
+      -0.03421807,
+      0.08456745
+     ],
+     "llGainInSample": 0.00001189757,
+     "wFree": 0.04317621,
+     "wFreeCi": [
+      -0.01297563,
+      0.1066977
+     ],
+     "freeIntercept": 0.05855828,
+     "freeSlopeOnDK": 0.9067436
+    },
+    "reb": {
+     "w": 0.1534594,
+     "wCi": [
+      0.09102926,
+      0.2191285
+     ],
+     "llGainInSample": 0.0005166014,
+     "wFree": 0.1615853,
+     "wFreeCi": [
+      0.1029007,
+      0.2263903
+     ],
+     "freeIntercept": 0.0423514,
+     "freeSlopeOnDK": 1.10906
+    },
+    "ast": {
+     "w": 0.1144933,
+     "wCi": [
+      0.04753381,
+      0.1856147
+     ],
+     "llGainInSample": 0.0003827087,
+     "wFree": 0.1175619,
+     "wFreeCi": [
+      0.04805275,
+      0.1835077
+     ],
+     "freeIntercept": 0.09629471,
+     "freeSlopeOnDK": 0.9676423
+    },
+    "tpm": {
+     "w": 0.2770525,
+     "wCi": [
+      0.1955488,
+      0.3698354
+     ],
+     "llGainInSample": 0.0009471853,
+     "wFree": 0.2925449,
+     "wFreeCi": [
+      0.2076461,
+      0.3739147
+     ],
+     "freeIntercept": 0.08684362,
+     "freeSlopeOnDK": 1.068375
+    },
+    "stl": {
+     "w": 0.3681789,
+     "wCi": [
+      0.2855575,
+      0.455004
+     ],
+     "llGainInSample": 0.001415069,
+     "wFree": 0.3862644,
+     "wFreeCi": [
+      0.295773,
+      0.4729938
+     ],
+     "freeIntercept": 0.04006503,
+     "freeSlopeOnDK": 1.053349
+    },
+    "blk": {
+     "w": 0.4287448,
+     "wCi": [
+      0.325142,
+      0.5282327
+     ],
+     "llGainInSample": 0.001789668,
+     "wFree": 0.3473047,
+     "wFreeCi": [
+      0.2476077,
+      0.4466767
+     ],
+     "freeIntercept": 0.02401963,
+     "freeSlopeOnDK": 0.8980511
+    }
+   }
+  },
+  "minutes": {
+   "pooled": {
+    "lines": 89032,
+    "slopeTotal": 0.773722,
+    "slopeTotalCi": [
+     0.7217817,
+     0.8208773
+    ],
+    "slopeMinutes": 0.517589,
+    "slopeRate": 0.2561329,
+    "minutesShare": 0.66896,
+    "minutesShareCi": [
+     0.6428682,
+     0.6971306
+    ]
+   },
+   "byStat": {
+    "pts": {
+     "lines": 14956,
+     "slopeTotal": 0.8940816,
+     "slopeTotalCi": [
+      0.8417312,
+      0.9440812
+     ],
+     "slopeMinutes": 0.5991544,
+     "slopeRate": 0.2949273,
+     "minutesShare": 0.6701338,
+     "minutesShareCi": [
+      0.6376154,
+      0.7084398
+     ]
+    },
+    "reb": {
+     "lines": 15917,
+     "slopeTotal": 0.8428553,
+     "slopeTotalCi": [
+      0.7899375,
+      0.8960681
+     ],
+     "slopeMinutes": 0.7057006,
+     "slopeRate": 0.1371547,
+     "minutesShare": 0.8372737,
+     "minutesShareCi": [
+      0.7907623,
+      0.8884224
+     ]
+    },
+    "ast": {
+     "lines": 9703,
+     "slopeTotal": 0.7327046,
+     "slopeTotalCi": [
+      0.5648304,
+      0.908311
+     ],
+     "slopeMinutes": 0.3842926,
+     "slopeRate": 0.3484119,
+     "minutesShare": 0.5244851,
+     "minutesShareCi": [
+      0.4811883,
+      0.5718576
+     ]
+    },
+    "tpm": {
+     "lines": 15118,
+     "slopeTotal": 0.7395408,
+     "slopeTotalCi": [
+      0.6624553,
+      0.8192296
+     ],
+     "slopeMinutes": 0.4638253,
+     "slopeRate": 0.2757156,
+     "minutesShare": 0.6271801,
+     "minutesShareCi": [
+      0.5670883,
+      0.6985421
+     ]
+    },
+    "stl": {
+     "lines": 16750,
+     "slopeTotal": 0.6343281,
+     "slopeTotalCi": [
+      0.5478257,
+      0.7182972
+     ],
+     "slopeMinutes": 0.4128787,
+     "slopeRate": 0.2214493,
+     "minutesShare": 0.6508915,
+     "minutesShareCi": [
+      0.5693215,
+      0.7494816
+     ]
+    },
+    "blk": {
+     "lines": 16588,
+     "slopeTotal": 0.6747928,
+     "slopeTotalCi": [
+      0.5653444,
+      0.7968889
+     ],
+     "slopeMinutes": 0.3344496,
+     "slopeRate": 0.3403432,
+     "minutesShare": 0.495633,
+     "minutesShareCi": [
+      0.4282742,
+      0.5868341
+     ]
+    }
+   },
+   "starters": {
+    "lines": 61198,
+    "slopeTotal": 0.7663775,
+    "slopeTotalCi": [
+     0.6969065,
+     0.8270203
+    ],
+    "slopeMinutes": 0.515578,
+    "slopeRate": 0.2507995,
+    "minutesShare": 0.6727468,
+    "minutesShareCi": [
+     0.6409161,
+     0.7056716
+    ]
+   },
+   "bench": {
+    "lines": 27834,
+    "slopeTotal": 0.764644,
+    "slopeTotalCi": [
+     0.6973622,
+     0.8329224
+    ],
+    "slopeMinutes": 0.4930336,
+    "slopeRate": 0.2716104,
+    "minutesShare": 0.6447884,
+    "minutesShareCi": [
+     0.5969692,
+     0.6965291
+    ]
+   },
+   "firstGameOfSeason": {
+    "lines": 1353,
+    "slopeTotal": 0.2874511,
+    "slopeTotalCi": [
+     0.1355862,
+     0.8193424
+    ],
+    "slopeMinutes": 0.2049523,
+    "slopeRate": 0.08249883,
+    "minutesShare": 0.7129987,
+    "minutesShareCi": [
+     0.5606343,
+     0.9412029
+    ]
+   },
+   "backFrom3PlusMissed": {
+    "lines": 1076,
+    "slopeTotal": 0.6885877,
+    "slopeTotalCi": [
+     0.5008415,
+     0.8874092
+    ],
+    "slopeMinutes": 0.7263799,
+    "slopeRate": -0.03779224,
+    "minutesShare": 1.054884,
+    "minutesShareCi": [
+     0.8392329,
+     1.430714
+    ]
+   },
+   "newClubFirst10": {
+    "lines": 4339,
+    "slopeTotal": 0.8451632,
+    "slopeTotalCi": [
+     0.7394689,
+     0.9527196
+    ],
+    "slopeMinutes": 0.6085256,
+    "slopeRate": 0.2366376,
+    "minutesShare": 0.7200096,
+    "minutesShareCi": [
+     0.6231817,
+     0.8179041
+    ]
+   },
+   "regular": {
+    "lines": 82553,
+    "slopeTotal": 0.7978732,
+    "slopeTotalCi": [
+     0.760253,
+     0.8354791
+    ],
+    "slopeMinutes": 0.5202209,
+    "slopeRate": 0.2776523,
+    "minutesShare": 0.6520095,
+    "minutesShareCi": [
+     0.6247863,
+     0.6799201
+    ]
+   },
+   "disagreementGroups": {
+    "modelHigher10": {
+     "lines": 6975,
+     "minutesSaid": 28.59189,
+     "minutesPlayed": 25.86523
+    },
+    "dkHigher10": {
+     "lines": 8760,
+     "minutesSaid": 24.09515,
+     "minutesPlayed": 28.27078
+    },
+    "within5": {
+     "lines": 47745,
+     "minutesSaid": 28.57196,
+     "minutesPlayed": 28.30847
+    }
+   },
+   "minutesSaidPlayed": {
+    "said": 28.06456,
+    "played": 28.04979,
+    "mae": 4.610757
+   },
+   "hindsightMinutes": {
+    "llDiff": -0.03964132
+   }
+  },
+  "byMonth": {
+   "2023-10": {
+    "lines": 4600,
+    "games": 54,
+    "overHit": 0.4686957,
+    "modelSaid": 0.4586623,
+    "marketSaid": 0.4356025,
+    "llDiff": 0.01060521,
+    "llDiffCi": [
+     0.004314117,
+     0.01705784
+    ],
+    "brDiff": 0.004597947,
+    "meanMinusStat": 0.1774043,
+    "leanGain": 0.0002193718,
+    "leanGainShareOfSeasonGap": 0.001156956,
+    "calibSlope": 0.5369725,
+    "byStat": {
+     "pts": {
+      "lines": 759,
+      "llDiff": 0.02746989
+     },
+     "reb": {
+      "lines": 802,
+      "llDiff": 0.01450737
+     },
+     "ast": {
+      "lines": 588,
+      "llDiff": 0.01668693
+     },
+     "tpm": {
+      "lines": 760,
+      "llDiff": 0.01603817
+     },
+     "stl": {
+      "lines": 847,
+      "llDiff": -0.006046829
+     },
+     "blk": {
+      "lines": 844,
+      "llDiff": -0.0006870462
+     }
+    }
+   },
+   "2023-11": {
+    "lines": 15506,
+    "games": 199,
+    "overHit": 0.4530504,
+    "modelSaid": 0.4455913,
+    "marketSaid": 0.4372367,
+    "llDiff": 0.005515972,
+    "llDiffCi": [
+     0.003017278,
+     0.008197141
+    ],
+    "brDiff": 0.00229251,
+    "meanMinusStat": 0.06871921,
+    "leanGain": 0.0001203847,
+    "leanGainShareOfSeasonGap": 0.002140176,
+    "calibSlope": 0.7315032,
+    "byStat": {
+     "pts": {
+      "lines": 2633,
+      "llDiff": 0.01442394
+     },
+     "reb": {
+      "lines": 2771,
+      "llDiff": 0.004291157
+     },
+     "ast": {
+      "lines": 1644,
+      "llDiff": 0.01213793
+     },
+     "tpm": {
+      "lines": 2621,
+      "llDiff": 0.002143167
+     },
+     "stl": {
+      "lines": 2925,
+      "llDiff": 0.002251199
+     },
+     "blk": {
+      "lines": 2912,
+      "llDiff": 0.001203594
+     }
+    }
+   },
+   "2023-12": {
+    "lines": 16257,
+    "games": 203,
+    "overHit": 0.4505136,
+    "modelSaid": 0.4319469,
+    "marketSaid": 0.4379991,
+    "llDiff": 0.009343687,
+    "llDiffCi": [
+     0.006562971,
+     0.01228203
+    ],
+    "brDiff": 0.003859079,
+    "meanMinusStat": -0.04994101,
+    "leanGain": 0.0007460489,
+    "leanGainShareOfSeasonGap": 0.01390548,
+    "calibSlope": 0.6117624,
+    "byStat": {
+     "pts": {
+      "lines": 2767,
+      "llDiff": 0.01826036
+     },
+     "reb": {
+      "lines": 2914,
+      "llDiff": 0.01843156
+     },
+     "ast": {
+      "lines": 1774,
+      "llDiff": 0.01792305
+     },
+     "tpm": {
+      "lines": 2728,
+      "llDiff": 0.003418638
+     },
+     "stl": {
+      "lines": 3047,
+      "llDiff": 0.003213087
+     },
+     "blk": {
+      "lines": 3027,
+      "llDiff": -0.001072831
+     }
+    }
+   },
+   "2024-01": {
+    "lines": 11908,
+    "games": 152,
+    "overHit": 0.4470944,
+    "modelSaid": 0.4342539,
+    "marketSaid": 0.4394089,
+    "llDiff": 0.009357497,
+    "llDiffCi": [
+     0.006198171,
+     0.01243285
+    ],
+    "brDiff": 0.003951324,
+    "meanMinusStat": 0.04749525,
+    "leanGain": 0.0003563449,
+    "leanGainShareOfSeasonGap": 0.004865054,
+    "calibSlope": 0.6552572,
+    "byStat": {
+     "pts": {
+      "lines": 1996,
+      "llDiff": 0.01845953
+     },
+     "reb": {
+      "lines": 2139,
+      "llDiff": 0.01703984
+     },
+     "ast": {
+      "lines": 1301,
+      "llDiff": 0.01583463
+     },
+     "tpm": {
+      "lines": 2012,
+      "llDiff": 0.002478218
+     },
+     "stl": {
+      "lines": 2237,
+      "llDiff": 0.0007096273
+     },
+     "blk": {
+      "lines": 2223,
+      "llDiff": 0.004930801
+     }
+    }
+   },
+   "2024-02": {
+    "lines": 13426,
+    "games": 167,
+    "overHit": 0.4593326,
+    "modelSaid": 0.4392218,
+    "marketSaid": 0.4400285,
+    "llDiff": 0.008770412,
+    "llDiffCi": [
+     0.005325747,
+     0.01197789
+    ],
+    "brDiff": 0.003579214,
+    "meanMinusStat": -0.0007009186,
+    "leanGain": 0.0008762746,
+    "leanGainShareOfSeasonGap": 0.01348855,
+    "calibSlope": 0.7310916,
+    "byStat": {
+     "pts": {
+      "lines": 2237,
+      "llDiff": 0.01819553
+     },
+     "reb": {
+      "lines": 2377,
+      "llDiff": 0.01208205
+     },
+     "ast": {
+      "lines": 1483,
+      "llDiff": 0.01154503
+     },
+     "tpm": {
+      "lines": 2284,
+      "llDiff": 0.006932273
+     },
+     "stl": {
+      "lines": 2534,
+      "llDiff": 0.004141022
+     },
+     "blk": {
+      "lines": 2511,
+      "llDiff": 0.001943916
+     }
+    }
+   },
+   "2024-03": {
+    "lines": 18241,
+    "games": 226,
+    "overHit": 0.4500302,
+    "modelSaid": 0.4307869,
+    "marketSaid": 0.4402597,
+    "llDiff": 0.01023398,
+    "llDiffCi": [
+     0.0074667,
+     0.01299316
+    ],
+    "brDiff": 0.004497339,
+    "meanMinusStat": -0.03497143,
+    "leanGain": 0.000804595,
+    "leanGainShareOfSeasonGap": 0.0168269,
+    "calibSlope": 0.6752217,
+    "byStat": {
+     "pts": {
+      "lines": 3021,
+      "llDiff": 0.02489804
+     },
+     "reb": {
+      "lines": 3292,
+      "llDiff": 0.01069534
+     },
+     "ast": {
+      "lines": 1931,
+      "llDiff": 0.02287733
+     },
+     "tpm": {
+      "lines": 3160,
+      "llDiff": 0.008133925
+     },
+     "stl": {
+      "lines": 3448,
+      "llDiff": 0.001022965
+     },
+     "blk": {
+      "lines": 3389,
+      "llDiff": 0.0008396082
+     }
+    }
+   },
+   "2024-04": {
+    "lines": 9094,
+    "games": 115,
+    "overHit": 0.4561249,
+    "modelSaid": 0.4255392,
+    "marketSaid": 0.4401841,
+    "llDiff": 0.0187088,
+    "llDiffCi": [
+     0.01162345,
+     0.02647824
+    ],
+    "brDiff": 0.006908065,
+    "meanMinusStat": -0.11286,
+    "leanGain": 0.002056341,
+    "leanGainShareOfSeasonGap": 0.02144018,
+    "calibSlope": 0.5550275,
+    "byStat": {
+     "pts": {
+      "lines": 1543,
+      "llDiff": 0.04397183
+     },
+     "reb": {
+      "lines": 1622,
+      "llDiff": 0.02253726
+     },
+     "ast": {
+      "lines": 982,
+      "llDiff": 0.03965756
+     },
+     "tpm": {
+      "lines": 1553,
+      "llDiff": 0.004004776
+     },
+     "stl": {
+      "lines": 1712,
+      "llDiff": 0.009708147
+     },
+     "blk": {
+      "lines": 1682,
+      "llDiff": 0.002348632
+     }
+    }
+   }
+  },
+  "lean": {
+   "overSaid": 0.436217,
+   "overHit": 0.4532415,
+   "overDK": 0.4389234,
+   "meanMinusStat": -0.0004309719,
+   "oneShift": {
+    "gain": 0.0006289943,
+    "shareOfGap": 0.06420533
+   },
+   "shiftEachMonth": {
+    "gain": 0.0007232177,
+    "shareOfGap": 0.07382329
+   },
+   "octNov": {
+    "lines": 20106,
+    "overSaid": 0.4485818,
+    "overHit": 0.4566299,
+    "gain": 0.0001403714,
+    "shareOfSeasonGap": 0.003235806
+   }
+  },
+  "roles": [
+   {
+    "label": "his first game of the season",
+    "lines": 1353,
+    "llDiff": -0.001691518,
+    "llDiffCi": [
+     -0.02058736,
+     0.01593361
+    ],
+    "modelSaid": 0.4706958,
+    "overHit": 0.4892831,
+    "marketSaid": 0.4379348,
+    "minutesSaid": 27.76535,
+    "minutesPlayed": 27.18699
+   },
+   {
+    "label": "back after missing 3+ of his club's games",
+    "lines": 1076,
+    "llDiff": 0.006032871,
+    "llDiffCi": [
+     -0.009052869,
+     0.0225886
+    ],
+    "modelSaid": 0.4604014,
+    "overHit": 0.4498141,
+    "marketSaid": 0.4374942,
+    "minutesSaid": 27.47227,
+    "minutesPlayed": 25.76115
+   },
+   {
+    "label": "his first 10 games for a new club",
+    "lines": 4339,
+    "llDiff": 0.02269655,
+    "llDiffCi": [
+     0.01562485,
+     0.03066828
+    ],
+    "modelSaid": 0.422574,
+    "overHit": 0.4378889,
+    "marketSaid": 0.4254907,
+    "minutesSaid": 24.63622,
+    "minutesPlayed": 25.17539
+   },
+   {
+    "label": "started",
+    "lines": 61198,
+    "llDiff": 0.01105196,
+    "llDiffCi": [
+     0.0094677,
+     0.01261699
+    ],
+    "modelSaid": 0.4378548,
+    "overHit": 0.4644106,
+    "marketSaid": 0.4499079,
+    "minutesSaid": 30.79405,
+    "minutesPlayed": 31.17059
+   },
+   {
+    "label": "off the bench",
+    "lines": 27834,
+    "llDiff": 0.007036492,
+    "llDiffCi": [
+     0.0049343,
+     0.009116693
+    ],
+    "modelSaid": 0.4326161,
+    "overHit": 0.4286843,
+    "marketSaid": 0.4147721,
+    "minutesSaid": 22.06328,
+    "minutesPlayed": 21.18815
+   },
+   {
+    "label": "projected under 20 minutes",
+    "lines": 12710,
+    "llDiff": 0.03075693,
+    "llDiffCi": [
+     0.02489363,
+     0.03656831
+    ],
+    "modelSaid": 0.3666581,
+    "overHit": 0.4284028,
+    "marketSaid": 0.406196,
+    "minutesSaid": 16.99679,
+    "minutesPlayed": 18.99701
+   },
+   {
+    "label": "projected 20 to 30",
+    "lines": 37086,
+    "llDiff": 0.00915997,
+    "llDiffCi": [
+     0.007402105,
+     0.01100006
+    ],
+    "modelSaid": 0.4364426,
+    "overHit": 0.453109,
+    "marketSaid": 0.4367412,
+    "minutesSaid": 25.52434,
+    "minutesPlayed": 25.71178
+   },
+   {
+    "label": "projected 30 to 34",
+    "lines": 20144,
+    "llDiff": 0.003217404,
+    "llDiffCi": [
+     0.001431654,
+     0.005157214
+    ],
+    "modelSaid": 0.4544067,
+    "overHit": 0.4641084,
+    "marketSaid": 0.4510552,
+    "minutesSaid": 32.01442,
+    "minutesPlayed": 31.59586
+   },
+   {
+    "label": "projected 34+",
+    "lines": 19092,
+    "llDiff": 0.004021201,
+    "llDiffCi": [
+     0.002165096,
+     0.005958275
+    ],
+    "modelSaid": 0.4628939,
+    "overHit": 0.458569,
+    "marketSaid": 0.4521496,
+    "minutesSaid": 36.19948,
+    "minutesPlayed": 34.87655
+   }
+  ]
+ },
+ "A": {
+  "reproduce": {
+   "lines": 89032,
+   "games": 1116,
+   "overRate": 0.4532415,
+   "modelSaid": 0.4258202,
+   "marketSaid": 0.4389234,
+   "llModel": 0.6768537,
+   "llMarket": 0.6671714,
+   "llDiff": 0.009682249,
+   "llDiffCi": [
+    0.008411034,
+    0.01094699
+   ],
+   "brModel": 0.2416631,
+   "brMarket": 0.2375493,
+   "brDiff": 0.0041138,
+   "brDiffCi": [
+    0.00356536,
+    0.004656578
+   ],
+   "modelFrom50": 0.1128966,
+   "marketFrom50": 0.08910532,
+   "llDiffCi_toolsPropsBootCI": [
+    0.008411,
+    0.010969
+   ],
+   "brDiffCi_toolsPropsBootCI": [
+    0.003567,
+    0.004668
+   ]
+  },
+  "byStat": {
+   "pts": {
+    "lines": 14956,
+    "llDiff": 0.02060905,
+    "llDiffCi": [
+     0.0175299,
+     0.02373852
+    ],
+    "brDiff": 0.009021037
+   },
+   "reb": {
+    "lines": 15917,
+    "llDiff": 0.01323755,
+    "llDiffCi": [
+     0.01048929,
+     0.01596715
+    ],
+    "brDiff": 0.005477178
+   },
+   "ast": {
+    "lines": 9703,
+    "llDiff": 0.01925501,
+    "llDiffCi": [
+     0.01522072,
+     0.02324739
+    ],
+    "brDiff": 0.00797718
+   },
+   "tpm": {
+    "lines": 15118,
+    "llDiff": 0.005384761,
+    "llDiffCi": [
+     0.003320546,
+     0.007463173
+    ],
+    "brDiff": 0.002320009
+   },
+   "stl": {
+    "lines": 16750,
+    "llDiff": 0.002820073,
+    "llDiffCi": [
+     0.00110631,
+     0.004545248
+    ],
+    "brDiff": 0.001286074
+   },
+   "blk": {
+    "lines": 16588,
+    "llDiff": 0.001665333,
+    "llDiffCi": [
+     -0.0001701941,
+     0.003518787
+    ],
+    "brDiff": 0.0006114499
+   }
+  },
+  "sureness": {
+   "pooled": {
+    "modelFrom50": 0.1128966,
+    "model": {
+     "intercept": 0.02574039,
+     "slope": 0.6770869,
+     "slopeCi": [
+      0.6540623,
+      0.7025807
+     ],
+     "n": 89032
+    }
+   }
+  },
+  "where": [
+   {
+    "label": "DraftKings 10+ points above the model",
+    "lines": 10349,
+    "share": 0.1162391,
+    "gapShare": 0.6901384,
+    "llDiff": 0.05748575,
+    "overHit": 0.4506716,
+    "modelSaid": 0.3093175,
+    "marketSaid": 0.4693335
+   },
+   {
+    "label": "DraftKings 5 to 10 above",
+    "lines": 14201,
+    "share": 0.1595044,
+    "gapShare": 0.197867,
+    "llDiff": 0.01201094,
+    "overHit": 0.4570805,
+    "modelSaid": 0.3840369,
+    "marketSaid": 0.4558173
+   },
+   {
+    "label": "within 5",
+    "lines": 47885,
+    "share": 0.5378403,
+    "gapShare": 0.02713072,
+    "llDiff": 0.0004884096,
+    "overHit": 0.4457346,
+    "modelSaid": 0.4295263,
+    "marketSaid": 0.4303896
+   },
+   {
+    "label": "model 5 to 10 above",
+    "lines": 11321,
+    "share": 0.1271565,
+    "gapShare": -0.02842106,
+    "llDiff": -0.002164103,
+    "overHit": 0.4683332,
+    "modelSaid": 0.4980132,
+    "marketSaid": 0.4270482
+   },
+   {
+    "label": "model 10+ above",
+    "lines": 5276,
+    "share": 0.05925959,
+    "gapShare": 0.113285,
+    "llDiff": 0.0185093,
+    "overHit": 0.4836998,
+    "modelSaid": 0.5782627,
+    "marketSaid": 0.4367363
+   },
+   {
+    "label": "apart by 10 points or more, either way",
+    "lines": 15625,
+    "share": 0.1754987,
+    "gapShare": 0.8034233,
+    "llDiff": 0.0443248,
+    "overHit": 0.461824,
+    "modelSaid": 0.4001306,
+    "marketSaid": 0.4583266
+   }
+  ],
+  "parts": {
+   "pooled": {
+    "lines": 89032,
+    "gap": 0.009682249,
+    "leanPart": 0.0008477501,
+    "overSurePart": 0.00420317,
+    "informationPart": 0.00463133,
+    "recalibratedSlope": 0.6770869,
+    "marketOwnRecal": 0.0005019544,
+    "shares": {
+     "lean": 0.08755715,
+     "overSure": 0.4341109,
+     "information": 0.478332
+    }
+   }
+  },
+  "beyond": {
+   "pooled": {
+    "w": 0.1757556,
+    "wCi": [
+     0.1407494,
+     0.2160142
+    ],
+    "llGainInSample": 0.0004949041,
+    "wFree": 0.2059112,
+    "wFreeCi": [
+     0.1699768,
+     0.2442869
+    ],
+    "freeIntercept": 0.06542919,
+    "freeSlopeOnDK": 0.9617384
+   }
+  },
+  "byMonth": {
+   "2023-10": {
+    "lines": 4600,
+    "llDiff": 0.01229221,
+    "llDiffCi": [
+     0.005564309,
+     0.01901533
+    ]
+   },
+   "2023-11": {
+    "lines": 15506,
+    "llDiff": 0.005679024,
+    "llDiffCi": [
+     0.003180717,
+     0.008300193
+    ]
+   },
+   "2023-12": {
+    "lines": 16257,
+    "llDiff": 0.009695016,
+    "llDiffCi": [
+     0.007040943,
+     0.01249973
+    ]
+   },
+   "2024-01": {
+    "lines": 11908,
+    "llDiff": 0.008499329,
+    "llDiffCi": [
+     0.005506312,
+     0.01142206
+    ]
+   },
+   "2024-02": {
+    "lines": 13426,
+    "llDiff": 0.00838084,
+    "llDiffCi": [
+     0.005098262,
+     0.0114639
+    ]
+   },
+   "2024-03": {
+    "lines": 18241,
+    "llDiff": 0.0100412,
+    "llDiffCi": [
+     0.007560506,
+     0.01256528
+    ]
+   },
+   "2024-04": {
+    "lines": 9094,
+    "llDiff": 0.01791537,
+    "llDiffCi": [
+     0.0117932,
+     0.02494018
+    ]
+   }
+  }
+ },
+ "seconds": 256
+}

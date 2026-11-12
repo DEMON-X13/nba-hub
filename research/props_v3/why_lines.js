@@ -7,7 +7,7 @@
  *     2024     DraftKings' provider-40 lines of the 2023-24 regular season (research/props_v2/cache/props40_2024.csv,
  *              the six base stats, fetched by research/props_v2/fetch_dk40.js into the gitignored cache): scored once
  *              against candidate A on 6 November 2026 (FAIL), and so DEVELOPMENT data for any new candidate
- *   writes research/props_v3/results/why_lines_<set>.json (about two minutes a set)
+ *   writes research/props_v3/results/why_lines_<set>.json (about 30 s for the archive, 4 minutes for 2023-24)
  *
  * The forecasters are the ones those lines were scored with, never refitted here: tools/props.js's walk-forward fold
  * (research/props_v2/results/fold_params.json: the 2024 fold fitted on 2022-23, the 2026 fold on 2023-2025; the same
@@ -41,9 +41,14 @@ const readJSON = f => JSON.parse(fs.readFileSync(f, 'utf8'));
 const want = process.argv.slice(2).filter(a => !a.startsWith('-'));
 const SETS = want.length ? want : ['archive', '2024'];
 
-/* ---------- the world: seasons up to 2026, the replay with props_v2's extras (who missed games, new clubs) ---------- */
+/* ---------- the world: seasons up to 2026, the replay with props_v2's extras (who missed games, new clubs) ----------
+   The replay walks every box score from 2021-22 on, as tools/props.js's own does: the 2023-24 projections stand on the
+   ratings 2022-23's games built (the 2024 fold was fitted on 2022-23, as props_v2's test scored it). 2022-23 is the
+   one-shot test's season, so its rows are not even collected (from 2024): nothing of 2022-23 is projected, graded,
+   summed or printed here */
 const Dd = C.loadData();
-const R = C.replayX(Dd.games, Dd.boxes, Dd.tbox, { collect: true, from: PM.FIRST + 1 });
+const R = C.replayX(Dd.games, Dd.boxes, Dd.tbox, { collect: true, from: 2024 });
+if (R.rows.some(r => r.season < 2024)) throw new Error('a row of a season before 2023-24 was collected');
 if (R.rows.some(r => r.season > C.LAST)) throw new Error('a row after 2026');
 const rows = R.rows, sides = C.sidesOf(rows);
 const gameOf = new Map(Dd.games.map(g => [g.game_id, g]));
@@ -129,6 +134,7 @@ function partsAll(L, stats) { const out = { pooled: parts(L), byStat: {} }; for 
 function beyond(L, stats) { const out = { pooled: T.infoBeyond(L, 'pModel', NB), byStat: {} }; for (const k of stats) { const s = L.filter(x => x.stat === k); if (s.length) out.byStat[k] = T.infoBeyond(s, 'pModel', NB); } return out; }
 /* minutes against production per minute, as why_trial.js: DraftKings' price read as a mean on the forecaster's own
    distribution, its disagreement with the forecaster's mean against what happened, split exactly into minutes and rate */
+const MIN = {};                                                   // the minutes block's arrays, for byMonth's split
 function minutes(L, stats) {
   for (const x of L) {
     x.muDK = T.impliedMean(x.line, x.pMarket, x.ab, x.mult);
@@ -136,6 +142,7 @@ function minutes(L, stats) {
     x.eMin = x.m > 0 ? x.mu * (x.a / x.m - 1) / x.sd : 0; x.eRate = x.eTot - x.eMin;
   }
   const D = L.map(x => x.delta), ET = L.map(x => x.eTot), EM = L.map(x => x.eMin), ER = L.map(x => x.eRate);
+  L.forEach((x, i) => { x.idx = i; }); MIN.D = D; MIN.ET = ET; MIN.EM = EM;
   const split = (f, seed = 0) => {
     const ix = L.map((x, i) => (f(x) ? i : -1)).filter(i => i >= 0); if (ix.length < 50) return null;
     const groups = T.groupBy(ix.map(i => L[i]), x => x.game).map(g => g.map(j => ix[j]));
@@ -158,13 +165,15 @@ function minutes(L, stats) {
 }
 /* the lean, month by month: what the forecaster said, what happened, DraftKings, the gap, and what a perfect in-sample
    removal of each month's own lean (a shift in logit) would gain */
-function byMonth(L, stats) {
+function byMonth(L, stats, withMinutes = true) {
   const months = [...new Set(L.map(x => x.month))].sort();
   const tot = T.sum(L.map(x => ll(x.pModel, x.o) - ll(x.pMarket, x.o)));
   const out = {};
   for (const mo of months) {
     const s = L.filter(x => x.month === mo), S = T.scoreLines(s, 2000, 0), rm = T.recal(s, 'pModel');
+    const ix = withMinutes ? s.map(x => x.idx) : null, slT = withMinutes ? T.olsSlope(ix, MIN.D, MIN.ET) : null, slM = withMinutes ? T.olsSlope(ix, MIN.D, MIN.EM) : null;
     out[mo] = { lines: s.length, games: S.games, overHit: S.overRate, modelSaid: S.modelSaid, marketSaid: S.marketSaid, llDiff: S.llDiff, llDiffCi: S.llDiffCi, brDiff: S.brDiff,
+      minutesSaid: mean(s.map(x => x.m)), minutesPlayed: mean(s.map(x => x.a)), minutesMae: mean(s.map(x => Math.abs(x.a - x.m))), slopeTotal: slT, minutesShare: withMinutes ? slM / slT : null,
       meanMinusStat: mean(s.map(x => x.mu - x.y)), leanGain: rm.raw - rm.shiftOnly, leanGainShareOfSeasonGap: (rm.raw - rm.shiftOnly) * s.length / tot,
       calibSlope: rm.bothCoef[1], byStat: Object.fromEntries(stats.map(k => { const z = s.filter(x => x.stat === k); return [k, z.length ? { lines: z.length, llDiff: mean(z.map(x => ll(x.pModel, x.o) - ll(x.pMarket, x.o))) } : null]; })) };
   }
@@ -216,7 +225,7 @@ for (const set of SETS) {
   out.toolsProps.minutes = minutes(L, stats);
   log(`  minutes share ${(100 * out.toolsProps.minutes.pooled.minutesShare).toFixed(1)}% ${out.toolsProps.minutes.pooled.minutesShareCi.map(v => (100 * v).toFixed(1))} (slope ${out.toolsProps.minutes.pooled.slopeTotal.toFixed(3)})`);
   out.toolsProps.byMonth = byMonth(L, stats); out.toolsProps.lean = lean(L); out.toolsProps.roles = roles(L);
-  out.A.byMonth = Object.fromEntries(Object.entries(byMonth(LA, stats)).map(([k, v]) => [k, { lines: v.lines, llDiff: v.llDiff, llDiffCi: v.llDiffCi }]));
+  out.A.byMonth = Object.fromEntries(Object.entries(byMonth(LA, stats, false)).map(([k, v]) => [k, { lines: v.lines, llDiff: v.llDiff, llDiffCi: v.llDiffCi }]));
   log(`  lean: one shift ${(100 * out.toolsProps.lean.oneShift.shareOfGap).toFixed(1)}% of the gap, each month ${(100 * out.toolsProps.lean.shiftEachMonth.shareOfGap).toFixed(1)}%`);
   out.seconds = Math.round((Date.now() - t0) / 1000);
   const file = path.join(__dirname, 'results', `why_lines_${set}.json`);

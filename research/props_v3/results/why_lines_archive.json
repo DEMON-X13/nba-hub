@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-12T00:32Z",
+ "generated": "2026-11-12T00:40Z",
  "set": "archive",
  "what": "research/props_v3/why_lines.js archive: where tools/props.js (and candidate A) lose to DraftKings on the 2026 play-in and playoff archive (spent: development only); diagnosis only, nothing fitted here is a candidate",
  "folds": "tools/props.js 2026 fold (fitted on 2023-2025); A 2026 fold",
@@ -1285,6 +1285,11 @@
      0.03410811
     ],
     "brDiff": 0.009843447,
+    "minutesSaid": 30.15874,
+    "minutesPlayed": 30.10812,
+    "minutesMae": 4.506056,
+    "slopeTotal": 0.9244024,
+    "minutesShare": 0.658732,
     "meanMinusStat": -0.05878346,
     "leanGain": 0.001152809,
     "leanGainShareOfSeasonGap": 0.03815471,
@@ -1348,6 +1353,11 @@
      0.01497201
     ],
     "brDiff": 0.003854415,
+    "minutesSaid": 30.46432,
+    "minutesPlayed": 29.02251,
+    "minutesMae": 5.082405,
+    "slopeTotal": 0.7335869,
+    "minutesShare": 0.7265244,
     "meanMinusStat": 0.188264,
     "leanGain": 0.00001354683,
     "leanGainShareOfSeasonGap": 0.0004069384,
@@ -1411,6 +1421,11 @@
      0.02391963
     ],
     "brDiff": -0.0004878691,
+    "minutesSaid": 29.03836,
+    "minutesPlayed": 28.23578,
+    "minutesMae": 3.984426,
+    "slopeTotal": 0.5234753,
+    "minutesShare": 0.734538,
     "meanMinusStat": 0.1493829,
     "leanGain": 0.0004641765,
     "leanGainShareOfSeasonGap": 0.002344297,

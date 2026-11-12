@@ -1,7 +1,7 @@
 {
- "generated": "2026-11-12T00:15Z",
- "what": "research/props_v3/why_rerun_v2.js: props_v2's diagnosis scripts run again, unchanged, against their committed results",
- "head": "f7bcd71f5160ee76e26d61d05b17505c3c8ed564",
+ "generated": "2026-11-12T00:48Z",
+ "what": "research/props_v3/why_rerun_v2.js: props_v2's diag_trial.js run again, unchanged, against its committed result",
+ "head": "946605cb2d7bd7f6599c3902dd1598ff3ebd5056",
  "runs": [
   {
    "script": "research/props_v2/diag_trial.js",
@@ -10,14 +10,17 @@
    "seconds": 6,
    "sameAsCommittedButForTheStamp": true,
    "filesPutBack": true
-  },
+  }
+ ],
+ "earlier": [
   {
+   "at": "2026-11-12T00:15Z",
    "script": "research/props_v2/diag_history.js",
    "ran": true,
-   "error": null,
    "seconds": 28,
    "sameAsCommittedButForTheStamp": true,
-   "filesPutBack": true
+   "filesPutBack": true,
+   "note": "run once by this script's first version; not run again, since its in-sample view pools 2022-23's box scores (the one-shot test season's outcomes) with later seasons. Nothing of it was printed or read"
   }
  ]
 }

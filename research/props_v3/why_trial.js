@@ -1,6 +1,6 @@
 /* Why the props trial lost to DraftKings, checked with this study's own code (research only: DIAGNOSIS).
  *
- *   node research/props_v3/why_trial.js      writes research/props_v3/results/why_trial.json (about a minute)
+ *   node research/props_v3/why_trial.js      writes research/props_v3/results/why_trial.json (about 30 s)
  *
  * What it reads: the trial's frozen calls and fit (data/props_shadow.json), its graded lines (data/props_shadow_lines.csv:
  * the model's chance, DraftKings' fair chance, the stat), DraftKings' closing lines and prices (data/props_2027.csv), the
@@ -33,7 +33,11 @@
  *               called teammate who did not play, a teammate who played 15+ minutes with no call, the player himself on
  *               the game day's injury report) and on those with none, and the call's age at tip-off
  *   lean        the early-season Over lean: its size, and how much of the gap a perfect removal of it would close
- *   byWeek      the gap in the trial's first and second week
+ *   byStat, baseStats, byWeek, roles
+ *               the gap by stat, on the six base stats alone (what 2023-24's lines carry; sureness, parts, beyond and
+ *               minutes carry the same cut, and the five combos), in the trial's first and second week, and by the
+ *               kinds of line where minutes are least known (his first games of the season, a new club, the bench, the
+ *               call's own minutes, a side with late news)
  */
 'use strict';
 const fs = require('fs');

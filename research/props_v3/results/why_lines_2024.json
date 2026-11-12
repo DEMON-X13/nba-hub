@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-12T00:32Z",
+ "generated": "2026-11-12T00:41Z",
  "set": "2024",
  "what": "research/props_v3/why_lines.js 2024: where tools/props.js (and candidate A) lose to DraftKings on DraftKings' 2023-24 regular-season lines (development data: scored once against A on 6 November 2026); diagnosis only, nothing fitted here is a candidate",
  "folds": "tools/props.js 2024 fold (fitted on 2022-23); A 2024 fold (fitted on 2023)",
@@ -863,6 +863,11 @@
      0.01705784
     ],
     "brDiff": 0.004597947,
+    "minutesSaid": 27.67937,
+    "minutesPlayed": 27.33652,
+    "minutesMae": 4.323582,
+    "slopeTotal": 0.5272776,
+    "minutesShare": 0.4746232,
     "meanMinusStat": 0.1774043,
     "leanGain": 0.0002193718,
     "leanGainShareOfSeasonGap": 0.001156956,
@@ -906,6 +911,11 @@
      0.008197141
     ],
     "brDiff": 0.00229251,
+    "minutesSaid": 28.15865,
+    "minutesPlayed": 27.99303,
+    "minutesMae": 4.411206,
+    "slopeTotal": 0.7400365,
+    "minutesShare": 0.6062716,
     "meanMinusStat": 0.06871921,
     "leanGain": 0.0001203847,
     "leanGainShareOfSeasonGap": 0.002140176,
@@ -949,6 +959,11 @@
      0.01228203
     ],
     "brDiff": 0.003859079,
+    "minutesSaid": 28.17767,
+    "minutesPlayed": 28.10162,
+    "minutesMae": 4.459182,
+    "slopeTotal": 0.7392814,
+    "minutesShare": 0.685893,
     "meanMinusStat": -0.04994101,
     "leanGain": 0.0007460489,
     "leanGainShareOfSeasonGap": 0.01390548,
@@ -992,6 +1007,11 @@
      0.01243285
     ],
     "brDiff": 0.003951324,
+    "minutesSaid": 28.18973,
+    "minutesPlayed": 27.91443,
+    "minutesMae": 4.754215,
+    "slopeTotal": 0.8483926,
+    "minutesShare": 0.6195542,
     "meanMinusStat": 0.04749525,
     "leanGain": 0.0003563449,
     "leanGainShareOfSeasonGap": 0.004865054,
@@ -1035,6 +1055,11 @@
      0.01197789
     ],
     "brDiff": 0.003579214,
+    "minutesSaid": 28.16041,
+    "minutesPlayed": 28.19224,
+    "minutesMae": 4.443506,
+    "slopeTotal": 0.7988569,
+    "minutesShare": 0.7181497,
     "meanMinusStat": -0.0007009186,
     "leanGain": 0.0008762746,
     "leanGainShareOfSeasonGap": 0.01348855,
@@ -1078,6 +1103,11 @@
      0.01299316
     ],
     "brDiff": 0.004497339,
+    "minutesSaid": 27.94095,
+    "minutesPlayed": 28.22099,
+    "minutesMae": 4.602855,
+    "slopeTotal": 0.8380919,
+    "minutesShare": 0.692638,
     "meanMinusStat": -0.03497143,
     "leanGain": 0.000804595,
     "leanGainShareOfSeasonGap": 0.0168269,
@@ -1121,6 +1151,11 @@
      0.02647824
     ],
     "brDiff": 0.006908065,
+    "minutesSaid": 27.83926,
+    "minutesPlayed": 28.03827,
+    "minutesMae": 5.442154,
+    "slopeTotal": 0.8211825,
+    "minutesShare": 0.7348669,
     "meanMinusStat": -0.11286,
     "leanGain": 0.002056341,
     "leanGainShareOfSeasonGap": 0.02144018,
@@ -1559,5 +1594,5 @@
    }
   }
  },
- "seconds": 256
+ "seconds": 252
 }

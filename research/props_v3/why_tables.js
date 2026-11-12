@@ -98,8 +98,9 @@ if (Y4.toolsProps.lean.octNov) { const o = Y4.toolsProps.lean.octNov; md.push(''
 md.push('', `Removing the trial's lean from the means instead (each stat's mean moved by its own average error, the spread unchanged) makes its log loss worse, ${f4(TR.lean.meanShift.llBefore)} to ${f4(TR.lean.meanShift.llAfter)}: the model's distribution already shaded the Over at a line near its mean.`);
 
 h('H. Month by month, DraftKings 2023-24 (tools/props.js; candidate A beside it)');
-row(['Month', 'Lines', 'Gap [90%]', 'A\'s gap', 'Model said / hit / DraftKings', 'Mean less stat', 'Calibration slope', 'Lean removed, at most']); row(['---', '---', '---', '---', '---', '---', '---', '---']);
-for (const [mo, v] of Object.entries(Y4.toolsProps.byMonth)) row([mo, v.lines, `${sg(v.llDiff)} ${ci(v.llDiffCi)}`, sg(Y4.A.byMonth[mo] && Y4.A.byMonth[mo].llDiff), `${pc(v.modelSaid)} / ${pc(v.overHit)} / ${pc(v.marketSaid)}`, sg(v.meanMinusStat, f2), f2(v.calibSlope), f4(v.leanGain)]);
+row(['Month', 'Lines', 'Gap [90%]', 'A\'s gap', 'Model said / hit / DraftKings', 'Calibration slope', 'Minutes said / played (miss)', 'Result toward DraftKings; minutes share', 'Lean removed, at most']); row(['---', '---', '---', '---', '---', '---', '---', '---', '---']);
+for (const [mo, v] of Object.entries(Y4.toolsProps.byMonth)) row([mo, v.lines, `${sg(v.llDiff)} ${ci(v.llDiffCi)}`, sg(Y4.A.byMonth[mo] && Y4.A.byMonth[mo].llDiff), `${pc(v.modelSaid)} / ${pc(v.overHit)} / ${pc(v.marketSaid)}`, f2(v.calibSlope),
+  `${f2(v.minutesSaid)} / ${f2(v.minutesPlayed)} (${f2(v.minutesMae)})`, `${f2(v.slopeTotal)}; ${pcS(v.minutesShare)}`, f4(v.leanGain)]);
 md.push('', 'The gap by stat and month (2023-24, tools/props.js):', '');
 const stats24 = ['pts', 'reb', 'ast', 'tpm', 'stl', 'blk'];
 row(['Month', ...stats24.map(k => NAME[k])]); row(['---', ...stats24.map(() => '---')]);

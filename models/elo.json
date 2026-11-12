@@ -1429,8 +1429,8 @@
    "spread": 4.3
   },
   "2027_20261113_CLE_MIA": {
-   "pHome": 0.4539,
-   "spread": 1.4
+   "pHome": 0.4965,
+   "spread": 0.1
   },
   "2027_20261113_GSW_SAS": {
    "pHome": 0.8793,
@@ -2064,5 +2064,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-12T22:17Z"
+ "generated": "2026-11-12T22:23Z"
 }

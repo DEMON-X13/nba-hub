@@ -1110,7 +1110,7 @@
     "name": "Charles Bassey",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "6430",
@@ -1194,7 +1194,7 @@
     "name": "Gary Payton II",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4709138",

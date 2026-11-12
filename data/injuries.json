@@ -139,6 +139,15 @@
   ],
   "CLE": [
    {
+    "id": "4432158",
+    "name": "Evan Mobley",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Toe",
+    "date": "2026-11-12",
+    "returns": "2026-11-14"
+   },
+   {
     "id": "4066757",
     "name": "Sam Merrill",
     "pos": "G",
@@ -241,9 +250,9 @@
     "name": "Gary Payton II",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Knee Inflammation",
+    "detail": "Payton (knee) is out for Wednesday's game against Houston.",
     "date": "2026-11-12",
-    "returns": "2026-11-13"
+    "returns": ""
    },
    {
     "id": "4397040",
@@ -483,26 +492,6 @@
     "returns": "2026-11-13"
    }
   ],
-  "MIL": [
-   {
-    "id": "3133628",
-    "name": "Myles Turner",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "4591725",
-    "name": "Ryan Rollins",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Rollins (head) exited to the locker room in the fourth quarter of Wednesday's 123-112 loss to the Lakers and did not return  finishing with eight points (3-10 FG  2-6 3Pt)  seven rebounds  four assists and one steal across 24 minutes.",
-    "date": "2026-11-12",
-    "returns": ""
-   }
-  ],
   "MIN": [
    {
     "id": "4594268",
@@ -651,7 +640,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Knee",
-    "date": "2026-11-09",
+    "date": "2026-11-12",
     "returns": "2026-11-13"
    },
    {

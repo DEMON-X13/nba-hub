@@ -64,3 +64,15 @@ Record: spEntry takes the ruler's set at the default filters from the cutoff, ke
 levels' player legs + the levels' same-game groups). Tests can move the cutoff by rewriting the page copy's constant
 (and the guard's by SUGGEST_RULER_FROM, still to write). Dev scratch: ../b2 (boot.js, t_tab.js, patch/).
 Next: the guard (RULER_FROM, own DP bound, property check), suggest_ledger.js take, then the tests.
+
+## 19:15 UTC (clock said 19:1x): the record and the guard
+suggest_check.js: RULER_FROM (placeholder 2026-11-13T15:00Z, SUGGEST_RULER_FROM moves it for tests), NIGHT_LEVELS_RULER
+(heads chance 'fair'), TAU_G 0.01, rulerOk/rulerLateOk (cutoff both ways, held as the file holds it), teamOwn/glOwn (own
+team reading), nightPoolRuler, rulerBound (staged DP: legs alone; if under HOLD/F then exact pairs, the HOLD envelope
+capped by one-factor Slepian bounds, exact triples where few), rulerPays, rulerLevelBad (property), rulerFull,
+rulerEntryBad, nightUpdatesBad (split out). Measured (b2/t_bound.js): bound/level <= 1.006 on all 219 real cuts (whole
+nights <= 0.06%; one-game $4 up to 0.6%, the roof HOLD/F), slowest 0.86 s. suggest_ledger.js: ready() checks the ruler
+levels and cutoff, plants made-up filters in the boot's storage, takes no unsettled set, rebuild passes chance.
+Scratch record run with the cutoff moved back: 12 Nov rewritten under the ruler, guard 0 failures.
+Next: tests (test_suggest_ledger: old sections run with the cutoff moved to the future via SUGGEST_RULER_FROM and the page
+copy; new section R), smoke_suggested (old sections the same; a ruler + filters section), speed, README.

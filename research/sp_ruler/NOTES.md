@@ -49,3 +49,9 @@ legs of real 2- and 3-game cuts), the three planted errors each caught (113, 78 
 timed (7 Nov, 10 Nov 17:00, 10 Nov 21:57; whole, every game, every two games; seven filter cases): every default level
 settled, the nights' three levels 45-182 ms, the slowest level 652 ms; 150 levels on Overs-only and no-Unders cuts
 stop on the work with a proven gap (worst 39%). engine.md has the tables; timing.json the rows.
+
+# wip/sp-one-ruler: the build step (wiring the ruler, the filters, the record) -- where this attempt is
+
+## 18:10 UTC 12 Nov: started
+Branch wip-sp = origin/main 0cc6014 + merge origin/wip/sp-engine (d2b36f8) + merge origin/wip/sp-evidence (c8d763c).
+Scratch: .../scratchpad/spfilter/repo (this clone). Next: read README "Suggested Parlays", suggested.html, the guard.

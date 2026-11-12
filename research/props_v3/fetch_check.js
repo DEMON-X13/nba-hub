@@ -145,6 +145,11 @@ function readsFacts() {
   for (const g of winGames) { const m = mixed[g.date] = mixed[g.date] || { games: 0, none: 0 }; m.games++; if (reads[g.id] && reads[g.id].status === 'none') m.none++; }
   out.windowDatesPartlyAnswered = Object.entries(mixed).filter(([, m]) => m.none > 0 && m.none < m.games).map(([d, m]) => ({ date: d, ...m }));
   out.startKnown = Object.values(reads).filter(r => r.start).length;
+  /* the dates each kind of game answered with lines, and the last date any did */
+  const okDates = {};
+  for (const g of range) { const r = reads[g.id]; if (!r || r.status !== 'ok' || !r.lines) continue; const k = kindOf(g); const d = okDates[k] = okDates[k] || { from: g.date, to: g.date, games: 0 }; d.games++; if (g.date < d.from) d.from = g.date; if (g.date > d.to) d.to = g.date; }
+  out.answeredDates = okDates;
+  out.playoffsAfterLastAnswer = range.filter(g => g.type === 'POST' && okDates.playoffs && g.date > okDates.playoffs.to).length;
   return out;
 }
 

@@ -1,5 +1,5 @@
 {
- "generated": "2026-11-12T00:13Z",
+ "generated": "2026-11-12T00:36Z",
  "what": "research/props_v3/data_inventory.js: every source on disk, its shape, its completeness and consistency, and what the rules allow it for; files only, no network",
  "rules": {
   "dev": "development: may be read to fit, tune and choose a candidate",
@@ -1771,7 +1771,7 @@
   "note": "Each team's roster as ESPN lists it on the day the job ran: no past season's roster is kept (who was on a team then is read from its box scores)."
  },
  "coaches": {
-  "use": "dev (2022-2026; 2027 forward)",
+  "use": "dev for 2021-22 and 2023-24 to 2025-26; testSeason for 2022-23; forward for 2026-27",
   "file": "data/coaches.csv",
   "bytes": 4619,
   "sha256": "f11e096211bba6e1c4e65ac4a477b213f7dc2c38c4bb4c51ce2a3661db463be2",
@@ -1926,7 +1926,7 @@
     "bytes": 11313,
     "sha256": "30b28188ca086fa1104c17675aca0ab5ea4960ae4e7f16cc993c29ce47b71065",
     "use": "none",
-    "what": "the same-game correlation table, measured on the finished seasons' box scores (tools/corr.js)"
+    "what": "the same-game correlation table, measured on the 2022-23 to 2025-26 box scores (tools/corr.js): it carries the test season's outcomes, so a candidate tested on 2022-23 may not stand on it as it stands"
    },
    {
     "file": "data/sample_summary.json",

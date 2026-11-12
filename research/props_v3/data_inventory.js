@@ -220,7 +220,7 @@ function rosters() {
     rosters: { use: 'forwardToday', ...fileInfo(f), date: j.date, asOf: j.asOf, teams: Object.keys(j.teams || {}).length, players: Object.values(j.teams || {}).reduce((n, a) => n + a.length, 0),
       fields: [...new Set(Object.values(j.teams || {}).flatMap(a => a.flatMap(x => Object.keys(x))))].sort(),
       note: 'Each team\'s roster as ESPN lists it on the day the job ran: no past season\'s roster is kept (who was on a team then is read from its box scores).' },
-    coaches: { use: 'dev (2022-2026; 2027 forward)', ...fileInfo(cf), columns: h, rows: C.rows.length, seasons, note: 'Head coach by team and season, hand-kept, a mid-season change dated in `from`.' },
+    coaches: { use: 'dev for 2021-22 and 2023-24 to 2025-26; testSeason for 2022-23; forward for 2026-27', ...fileInfo(cf), columns: h, rows: C.rows.length, seasons, note: 'Head coach by team and season, hand-kept, a mid-season change dated in `from`.' },
     coachesToday: { use: 'forwardToday', ...fileInfo(ef), date: e.date, teams: Object.keys(e.teams || {}).length },
   };
 }
@@ -242,7 +242,7 @@ function others() {
     ...BOX_SEASONS.flatMap(s => [`box_${s}.csv`, `teambox_${s}.jsonl`])]);
   const notes = {
     'calls.json': 'the calls ledger: each game model\'s call on 2026-27 games (Pick\'em Record); the season in play',
-    'corr.json': 'the same-game correlation table, measured on the finished seasons\' box scores (tools/corr.js)',
+    'corr.json': 'the same-game correlation table, measured on the 2022-23 to 2025-26 box scores (tools/corr.js): it carries the test season\'s outcomes, so a candidate tested on 2022-23 may not stand on it as it stands',
     'suggest_ledger.json': 'the Suggested Parlays record (2026-27); the season in play',
     'sample_summary.json': 'one ESPN game summary payload as tools/fetch_box.js first read it (a 2021-22 game): kept for its shape',
   };

@@ -412,7 +412,7 @@
     "name": "Moussa Diabate",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4701225",
@@ -1948,7 +1948,7 @@
     "name": "Pelle Larsson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278053",
@@ -1983,7 +1983,7 @@
     "name": "Klay Thompson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3059319",

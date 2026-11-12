@@ -15,3 +15,10 @@ Engine design:
   Plackett bounds on J and C for the last leg; return bound HOLD.
 - Certificate by size: hi[k] (proven upper bound on C*_k), lo[k] (found); rule out k when hi[k] < (1-TAU+ETA) Lo; settle
   k when lo[k] >= (1-ETA) hi[k] and lo[k] >= (1-TAU) max hi; a counted work budget, never a clock.
+
+## 17:20 UTC: dev engine in research/sp_ruler/dev/ (ruler_search.js, ruler_pool.js; h1.js runs 10 Nov's cuts)
+Default filters, 10 Nov 21:57 files: the night settles in ~140 ms (three levels); every one-game cut settles, 0.12-0.45 s
+for three levels (MIL_NYK the slowest, 442 ms). Fixed so far: side-side correlation excluded from the group bounds
+(one side a group), exact per-group G for impure legs (R10), cells tight, -Inf bounds pruned, a probe before the
+near-best search, groups worked lazily in the order of their pairwise estimate, last leg by a window on byP.
+Next: two-game cuts (F8 slow), filter cases, the best found kept when the work runs out, port into suggested.html.

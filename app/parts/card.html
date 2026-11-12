@@ -234,7 +234,7 @@ window.PARLAY_CARD = (function () {
      id>:<level>", the level as the tab shows it, live or locked). The NFL hub's other, the Elo picks' "elo|<level>", is
      not here: the NBA hub took its Elo picks off on 5 November 2026 */
   from('sp', id => { const t = typeof window.spTier === 'function' ? window.spTier(id) : null;
-    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}`, chance: t.by === 'dk' ? null : t.corr, by: t.by || undefined } : null; });
+    return t && Array.isArray(t.legs) ? { legs: t.legs, kicker: t.kicker || `${t.label} parlay${t.game ? ' · ' + t.game : ''}${t.mine ? ' · your filters' : ''}`, chance: t.by === 'dk' || t.by === 'fair' ? null : t.corr, by: t.by || undefined } : null; });
 
   /* the chance, in two lines: DraftKings' fair chance (est. where a leg is priced on one side only or legs share a game),
      then the model's (on trial with a player leg in it) and the price's; with no fair chance, the model's and the
@@ -259,14 +259,17 @@ window.PARLAY_CARD = (function () {
   const lineText = l => l.map(x => x[0]).join('');
   /* the window's small print under the chances: why the fair chance is an estimate, the same-game price's, a parlay with
      no model chance, and a night level's player legs (at DraftKings' fair chance: no model claim, and what they cost) */
-  const PL_COST = 'at it a player Under breaks even and an Over gives up about 12%';
+  /* never said as a return (the owner's standing rule: on this season's graded lines an Under lost about 1.65% a dollar
+     at DraftKings' fair chance and an Over about 11.3%, research/sp_ruler) */
+  const PL_COST = 'DraftKings’ fair chance puts a player line’s whole margin on the Over';
   function smallPrint(m) {
     const out = [];
     if (m.by === 'model + DraftKings') out.push(`Team legs at the model’s chance, player legs at DraftKings’ fair chance: no model claim on a player leg, and ${PL_COST}.`);
     if (m.fair && m.fairEst) out.push(m.oneSided ? 'Est.: a leg is priced on one side only (a milestone or a double- or triple-double), so its margin is taken out as measured on DraftKings’ archived milestones.'
       : 'Est.: legs share a game, so their fair chances are joined by how they move together, measured on the hub’s box scores.');
     if (m.sg) out.push((typeof SG_WHY === 'string' ? SG_WHY : 'DraftKings prices same-game parlays its own way: this is an estimate from the legs’ prices and how they move together') + '.');
-    if (!m.chance) out.push(m.by === 'dk' ? `Every leg is a player’s, at DraftKings’ fair chance: no model claim on a player leg, and ${PL_COST}.` : typeof SL_NOMODEL === 'string' ? SL_NOMODEL : 'No model chance: the props model does not project a player in it.');
+    if (!m.chance && m.by === 'fair') out.push('Every leg at DraftKings’ fair chance, its two prices with the margin taken out: the chance the level was ranked on, no model claim.');
+    else if (!m.chance) out.push(m.by === 'dk' ? `Every leg is a player’s, at DraftKings’ fair chance: no model claim on a player leg, and ${PL_COST}.` : typeof SL_NOMODEL === 'string' ? SL_NOMODEL : 'No model chance: the props model does not project a player in it.');
     return out;
   }
   /* ---- the window ---- */

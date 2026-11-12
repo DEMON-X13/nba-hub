@@ -55,3 +55,12 @@ stop on the work with a proven gap (worst 39%). engine.md has the tables; timing
 ## 18:10 UTC 12 Nov: started
 Branch wip-sp = origin/main 0cc6014 + merge origin/wip/sp-engine (d2b36f8) + merge origin/wip/sp-evidence (c8d763c).
 Scratch: .../scratchpad/spfilter/repo (this clone). Next: read README "Suggested Parlays", suggested.html, the guard.
+
+## 19:25 UTC: the page wired (not yet the record, the guard or the tests)
+Design: the page is clock-gated at SP_RULER_FROM (placeholder 2026-11-13T15:00Z): from it, live sets (the site's at the
+default filters, and "Your filters" sets) are the ruler's, built a piece a task (SP_RB cache, spSoft); before it main's
+search, byte for byte. Heads: chance 'fair' (SP_RULER_LEVELS) for the ruler's levels. Filters in M.sp (normMine keeps it).
+Record: spEntry takes the ruler's set at the default filters from the cutoff, kept pool spPoolOutRuler (team legs + the
+levels' player legs + the levels' same-game groups). Tests can move the cutoff by rewriting the page copy's constant
+(and the guard's by SUGGEST_RULER_FROM, still to write). Dev scratch: ../b2 (boot.js, t_tab.js, patch/).
+Next: the guard (RULER_FROM, own DP bound, property check), suggest_ledger.js take, then the tests.

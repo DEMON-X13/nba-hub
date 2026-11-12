@@ -522,7 +522,7 @@ let S = null;                                                        // publishe
    the old builder's stake, read once as the Bet amount where there is none yet) stays as it was saved, undrawn; picks an
    older page saved are kept for the backup. Tickets saved by an older builder were carried into the Bet Build once. */
 const BANK0 = () => ({ filter: 'all', mode: 'straight', amt: 20, suggStake: 10, suggMin: false, sort: 'tip', sortDir: 'asc', day: null, off: {}, fixed: {} });
-let M = { picks: {}, bank: BANK0(), build: [], slip: { legs: [], stake: 20 }, pb: null, stake: 20, bookPrice: null };
+let M = { picks: {}, bank: BANK0(), build: [], slip: { legs: [], stake: 20 }, pb: null, sp: null, stake: 20, bookPrice: null };
 /* your parlay's legs: a leg this page did not write (junk, or an older page's) is dropped, never priced */
 function normSlip(s) {
   s = s && typeof s === 'object' && !Array.isArray(s) ? s : {};
@@ -540,7 +540,10 @@ function normMine(v) {
      stake where it was an amount */
   const stake = 'stake' in v ? v.stake : v.slip && typeof v.slip.stake === 'number' && Number.isFinite(v.slip.stake) && v.slip.stake > 0 ? v.slip.stake : 20;
   return { picks: v.picks || {}, bank: Object.assign(BANK0(), v.bank || {}), build, slip: normSlip(v.slip),
-    pb: v.pb && typeof v.pb === 'object' && !Array.isArray(v.pb) ? v.pb : null, stake,
+    pb: v.pb && typeof v.pb === 'object' && !Array.isArray(v.pb) ? v.pb : null,
+    /* Suggested Parlays' filters (sp: the mix's boxes, the games and stats left out, the shortest leg, its folds), kept
+       apart from the Parlay Builder's */
+    sp: v.sp && typeof v.sp === 'object' && !Array.isArray(v.sp) ? v.sp : null, stake,
     bookPrice: typeof v.bookPrice === 'number' && Number.isFinite(v.bookPrice) && v.bookPrice !== 0 ? v.bookPrice : null };
 }
 function loadMine() { try { M = normMine(JSON.parse(localStorage.getItem(KEY) || '{}')); } catch (e) { M = normMine({}); } }

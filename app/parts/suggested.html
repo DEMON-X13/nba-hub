@@ -18,6 +18,19 @@
    two across (three would break a long name mid-word at 901px, and two would leave a card alone on a row) */
 #spPanel .pb-tiers{grid-template-columns:repeat(3,minmax(0,1fr))}
 @media(max-width:1100px){#spPanel .pb-tiers{grid-template-columns:minmax(0,1fr)}}
+/* your filters (the Parlay Builder's choices, mirrored): one row, then the More filters fold; every control 44px */
+.sp-filt{margin:10px 0 4px}
+.sp-filt .sp-more>summary b{white-space:normal;font-size:12.5px;font-weight:600;color:var(--ink-2);min-width:0}
+.sp-filt .sp-more[open]>summary{margin-bottom:10px}
+.sp-filt .sp-more .pb-row{margin:0 0 10px}
+.sp-filt .sp-stats{margin-top:10px}
+.sp-filt .sp-stats .pb-gbar{margin-top:0}
+.sp-grow .pb-gbar{margin:0}
+.sp-mine{display:flex;align-items:center;gap:6px 10px;flex-wrap:wrap}
+.sp-minemark{display:inline-block;padding:1px 8px;border:1px solid var(--hot);border-radius:999px;font-size:10.5px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--ink);vertical-align:1px}
+.sp-reset{min-height:44px;padding:8px 16px}
+.sp-pend .pb-why{color:var(--pb-q)}
+@media(max-width:760px){.sp-filt .pb-seg button{padding:8px 12px}}
 </style>
 <script>
 'use strict';
@@ -170,7 +183,7 @@ const spWeekday = d => new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', { 
 function spRecState() { const N = spNight(); return N ? `${N.id}@${N.tip}:${spPhase(N, Date.now())}` : 'none'; }
 /* what the tab stands on beyond the data: that, and how many of the night's games are still to tip (a tip-off under way
    takes the Adds off the levels holding its legs, so the tab is drawn again) */
-function spState() { const N = spNight(); return N ? `${spRecState()}|${N.games.filter(spToTip).length}` : 'none'; }
+function spState() { const N = spNight(); return N ? `${spRecState()}|${N.games.filter(spToTip).length}|${spRulerOn() ? 'r' + spFiltKey(spEff(spUi(), N)) : ''}` : 'none'; }
 
 /* ---------- the pool: every team leg and every player's main line of the night's games still to tip ----------
    Team legs (pbPriced's moneylines and spreads, pbTotals' totals) at DraftKings' prices as the Parlay Builder takes them
@@ -865,7 +878,8 @@ function spRule(X, lv, inc, pool) {
    none that makes the level (fit) */
 const spNoPlOf = pool => { const c = pool && pool.pl; return !c || !(c.lines + c.held + c.none + c.vig) ? 'lines' : 'fit'; };
 /* a level's head, its parlay or why it has none */
-const spHead = ([id, label, lo, hi, F, need]) => ({ id, label, min: lo, max: hi, price: F, ...(need ? { need } : {}), rule: spRuleOf(id, F, need), ruleTitle: spRuleTitle(F, hi, need) });
+const spHead = ([id, label, lo, hi, F, need]) => need === 'fair' ? { id, label, min: lo, max: hi, price: F, chance: 'fair', rule: spRuleFair(F), ruleTitle: spRuleFairTitle(F) }
+  : ({ id, label, min: lo, max: hi, price: F, ...(need ? { need } : {}), rule: spRuleOf(id, F, need), ruleTitle: spRuleTitle(F, hi, need) });
 function spWhy([, , lo, , F], pool, N) {
   if (!pool.games.length) return 'No game of the night is still to tip.';
   if (!pool.legs.length) {
@@ -912,12 +926,16 @@ function spSet(id) {
 /* a level's rule by its id and its head ({max, price}, as a level keeps it): the rule's own, or the one before 8 November
    2026 for a level taken under it (a set keeps the rule it was taken under, a level built again after the lock with it:
    the review of 8 November 2026); with no head, the rule's own */
-const spLvOf = (lid, head) => !head || head.need === 'player' ? SP_LEVELS.find(s => s[0] === lid) || null
+const spLvOf = (lid, head) => head && head.chance === 'fair' ? SP_RULER_LEVELS.find(s => s[0] === lid) || null
+  : !head || head.need === 'player' ? SP_LEVELS.find(s => s[0] === lid) || null
   : SP_OLD_LEVELS.find(s => s[0] === lid && s[3] === head.max && s[4] === head.price) || SP_NOCAP_LEVELS.find(s => s[0] === lid) || null;
 /* one level of a night built again now, from the lines at hand (a locked level holding a player ruled out since): the
    night's games still to tip, every rule as at the lock, the player held out by the report as it stands */
 function spRebuild(id, lid, head) {
   const N = spById(id), lv = spLvOf(lid, head); if (!N || !lv) return null;
+  /* a level of the ruler's set: the ruler's level on the default filters' pool as it stands (the player held out by the
+     report as every leg of the pool is) */
+  if (lv[5] === 'fair') { const pool = spRulerPool(N, null); return { tier: spRulerTier(pool, lv, N), pool, ruler: true }; }
   const pool = spPool(N), X = spPrep(pool), Xt = spPrep({ legs: pool.legs.filter(l => l.kind !== 'prop') });
   const t = spLevel(X, pool, lv, N, Xt.games.length ? spSearch(Xt, lv) : null);
   return { tier: t, pool, X };
@@ -933,9 +951,10 @@ function spRebuild(id, lid, head) {
 function spLegOut(l) { const f = legFair(l);
   return { ...pbSlipOf(l), name: String(l.name || ''), label: String(l.label || ''), p: spR(l.p, 1e4), fair: f ? spR(f.p, 1e4) : null, fair_est: !!(f && f.est), thin: !!l.thin, market: !!l.market }; }
 function spTierOut(t) {
-  const head = { id: t.id, label: t.label, min: t.min, max: t.max, price: t.price, ...(t.need ? { need: t.need } : {}), ...(t.nopl && t.legs ? { nopl: t.nopl } : {}) };
+  const head = { id: t.id, label: t.label, min: t.min, max: t.max, price: t.price, ...(t.need ? { need: t.need } : {}), ...(t.chance === 'fair' ? { chance: 'fair' } : {}), ...(t.nopl && t.legs ? { nopl: t.nopl } : {}) };
   if (!t || !t.legs) return { ...head, why: t.why, ...(t.updated ? { updated: t.updated } : {}) };
-  return { ...head, legs: t.legs.map(spLegOut), p: spR(t.corr, 1e4), fair: t.fair && t.fair.p != null ? spR(t.fair.p, 1e4) : null, fair_est: !!(t.fair && t.fair.est), dec: spR(t.dec, 1e3), ...(t.updated ? { updated: t.updated } : {}) };
+  /* a ruler level the work ran out on keeps its gap (this browser's own lock may hold one; the record takes none) */
+  return { ...head, legs: t.legs.map(spLegOut), p: spR(t.corr, 1e4), fair: t.fair && t.fair.p != null ? spR(t.fair.p, 1e4) : null, fair_est: !!(t.fair && t.fair.est), dec: spR(t.dec, 1e3), ...(t.gap != null ? { gap: spR(t.gap, 1e4) } : {}), ...(t.updated ? { updated: t.updated } : {}) };
 }
 /* the pool as the record keeps it, for its guard (tools/suggest_check.js) to work every level out again on its own:
    every team leg [its key, DraftKings' price, the model's chance] and each game's side and total together [the two legs'
@@ -969,37 +988,43 @@ function spPoolOut(s) {
 const spNoLines = P => !!P && Array.isArray(P.legs) && !P.legs.length && !P.band && !P.far && !P.noId && !P.vig;
 /* a night's set as the record takes it (tools/suggest_ledger.js adds the time taken) */
 function spEntry(id) {
-  const N = spById(id), s = N && spSet(id); if (!s) return null;
+  /* from SP_RULER_FROM the ruler's set at the default filters (the site's set), whole; before it main's */
+  const N = spById(id), ruler = spRulerOn(), s = N && (ruler ? spSetRuler(id) : spSet(id)); if (!s) return null;
   return { season: S.season, date: N.date, nid: N.id, games: N.games.map(g => ({ gid: g.id, away: g.away, home: g.home, tip: g.tip, type: g.type })), tip: N.tip, last: N.last,
-    lock: spMin(spLockAt(N)), generated: S.generated, pool: spPoolOut(s), tiers: s.tiers.map(t => JSON.parse(JSON.stringify(spTierOut(t)))) };
+    lock: spMin(spLockAt(N)), generated: S.generated, pool: ruler ? spPoolOutRuler(s) : spPoolOut(s), tiers: s.tiers.map(t => JSON.parse(JSON.stringify(spTierOut(t)))) };
 }
 /* a level built again, as the record keeps it: the level, its mark, and the pool it was built on */
 function spRebuildOut(id, lid, upd, head) {
   const r = spRebuild(id, lid, head); if (!r) return null;
   const s = { pool: r.pool, X: r.X, tiers: [r.tier] }, t = JSON.parse(JSON.stringify(spTierOut({ ...r.tier, updated: upd })));
-  return { ...t, pool: spPoolOut(s) };
+  return { ...t, pool: r.ruler ? spPoolOutRuler(s) : spPoolOut(s) };
 }
 /* a kept leg back as a drawn one (pbView), at its kept chance and price; null where it is not a leg of one of the
    night's games the builder would take (a player's leg: his main line, over or under) */
-function spLegIn(l, N) {
+function spLegIn(l, N, fair) {
   if (!spIsMap(l) || !N.games.some(g => g.id === l.id) || !['ml', 'spread', 'total', 'prop'].includes(l.kind)) return null;
   if (l.kind === 'prop' && (l.mk !== 'main' || !['over', 'under'].includes(l.side))) return null;
   const g = N.games.find(x => x.id === l.id), p = +l.p; if (!(p > 0 && p < 1)) return null;
   const s = pbSlipOf({ ...l, away: g.away, home: g.home, date: g.date, tip: g.tip });
   if (normSlip({ legs: [s] }).legs.length !== 1) return null;
-  const v = pbView(s); if (v.kind === 'prop') { v.pm = v.p; v.pl = true; } v.p = p; v.thin = !!l.thin; if (l.market) v.market = true; else delete v.market;
+  const v = pbView(s); if (v.kind === 'prop') { v.pm = v.p; v.pl = true; }
+  /* a ruler level's leg: its kept chance is DraftKings' fair chance; the model's rides along for a title alone */
+  if (fair) { v.pm = v.p; v.ruler = true; }
+  v.p = p; v.thin = !!l.thin; if (l.market) v.market = true; else delete v.market;
   return v;
 }
 function spTierIn(t, N) {
   /* a level kept under the rule before 8 November 2026 (Safe 2 legs with no floor, Medium and Aggressive 2 to 5) is
      drawn with its own head and rule words, not today's */
   const lvP = t && SP_LEVELS.find(s => s[0] === t.id), lvN = t && SP_NOCAP_LEVELS.find(s => s[0] === t.id), lvO = t && SP_OLD_LEVELS.find(s => s[0] === t.id);
-  const lv = t && t.need === 'player' ? lvP : lvO && t.max === lvO[3] && t.price === lvO[4] ? lvO : lvN; if (!lv) return null;
+  const lvF = t && t.chance === 'fair' ? SP_RULER_LEVELS.find(s => s[0] === t.id) : null;
+  const lv = lvF || (t && t.need === 'player' ? lvP : lvO && t.max === lvO[3] && t.price === lvO[4] ? lvO : lvN); if (!lv) return null;
   /* a level of the rule with a player that holds none says why in its words (its nopl, as kept) */
-  const nopl = lv[5] && Array.isArray(t.legs) && !t.legs.some(l => l && l.kind === 'prop') ? (SP_NOPL[t.nopl] ? t.nopl : 'fit') : null;
-  const head = { ...spHead(lv), ...(nopl ? { nopl, rule: spRuleOf(lv[0], lv[4], lv[5], nopl) } : {}) }, U = spIsMap(t.updated) ? { updated: { pid: String(t.updated.pid || ''), name: String(t.updated.name || ''), reason: String(t.updated.reason || ''), at: String(t.updated.at || ''), ...(t.updated.by === 'page' ? { by: 'page' } : {}) } } : {};
+  const nopl = lv[5] === 'player' && Array.isArray(t.legs) && !t.legs.some(l => l && l.kind === 'prop') ? (SP_NOPL[t.nopl] ? t.nopl : 'fit') : null;
+  const gap = lvF && t.gap != null && isFinite(+t.gap) ? +t.gap : null;
+  const head = { ...spHead(lv), ...(nopl ? { nopl, rule: spRuleOf(lv[0], lv[4], lv[5], nopl) } : {}), ...(gap != null ? { gap, rule: `likeliest found paying $${lv[4]}+`, ruleTitle: spRuleFairTitle(lv[4], gap) } : {}) }, U = spIsMap(t.updated) ? { updated: { pid: String(t.updated.pid || ''), name: String(t.updated.name || ''), reason: String(t.updated.reason || ''), at: String(t.updated.at || ''), ...(t.updated.by === 'page' ? { by: 'page' } : {}) } } : {};
   if (!Array.isArray(t.legs)) return { ...head, why: typeof t.why === 'string' && t.why ? t.why : 'No parlay this night.', ...U };
-  const legs = t.legs.map(l => spLegIn(l, N)); if (legs.length < lv[2] || (lv[3] != null && legs.length > lv[3]) || legs.some(l => !l)) return null;
+  const legs = t.legs.map(l => spLegIn(l, N, !!lvF)); if (legs.length < lv[2] || (lv[3] != null && legs.length > lv[3]) || legs.some(l => !l)) return null;
   if (!(+t.dec > 1) || !(+t.p > 0 && +t.p <= 1)) return null;
   /* the chance and the price worked out again on the legs as kept, by the builder's own sums (parlayProb at the kept
      chances, parlayDec at the kept prices), so a locked level states what Add to builder and Finish then pay (the kept
@@ -1008,7 +1033,7 @@ function spTierIn(t, N) {
   const sum = was || (() => { const pr = parlayProb(L); return { corr: pr.corr, indep: pr.indep, dec: parlayDec(L.map(l => ({ leg: l, ml: l.price }))) }; })();
   if (!was) { SP_IN.set(ck, sum); if (SP_IN.size > 64) SP_IN.delete(SP_IN.keys().next().value); }
   return { ...head, legs: L, corr: sum.corr, indep: sum.indep, dec: sum.dec, fair: t.fair != null && isFinite(+t.fair) ? { p: +t.fair, est: !!t.fair_est } : null,
-    thin: L.filter(l => l.thin).length, mkt: L.filter(l => l.market).length, ...U };
+    thin: lvF ? 0 : L.filter(l => l.thin).length, mkt: lvF ? 0 : L.filter(l => l.market).length, ...U };
 }
 
 /* ---------- the record (data/suggest_ledger.json, tools/suggest_ledger.js) ----------
@@ -1110,7 +1135,9 @@ const spWhyAtLock = w => 'Empty when the set locked: ' + String(w);
    set: one built then would be of the games left, never locked */
 function spShown(N) {
   const now = Date.now(), lock = spLockOf(N, now), tip = Date.parse(N.tip), under = now >= tip;
-  if (lock == null || now < lock) { const s = spSet(N.id); return { phase: 'live', lock, tip, tiers: s ? s.tiers : [] }; }
+  /* the ruler's live set is the soft build's (a level still building is null), never built in a draw */
+  if (lock == null || now < lock) { if (spRulerOn()) { const b = spRB(N, null); return { phase: 'live', lock, tip, tiers: b.tiers, build: b }; }
+    const s = spSet(N.id); return { phase: 'live', lock, tip, tiers: s ? s.tiers : [] }; }
   if (!SP_REC_DONE || (SP_REC_BUSY && !spLedgerOf(N))) return { phase: 'loading', lock, tip, tiers: null };
   const K = spKeep(), k = K[N.id] || null;
   const e = spLedgerOf(N); let tiers = null, own = false, atLock = false;
@@ -1123,7 +1150,10 @@ function spShown(N) {
      built with no published lines at all (lines.json did not load), or before DraftKings had posted any line of the
      night, is shown and not kept, so a reload (or the lines, once posted) builds it again */
   if (!tiers && !LINES && !LINES_ERR) return { phase: 'loading', lock, tip, tiers: null, lines: true };
-  if (!tiers) { const s = spSet(N.id), out = s.tiers.map(spTierOut);
+  if (!tiers) {
+    /* the ruler's own lock is built softly too, and kept once it is whole */
+    let s; if (spRulerOn()) { const b = spRB(N, null); if (!spRBDone(b)) return { phase: 'building', lock, tip, tiers: null, build: b }; s = { tiers: b.tiers, pool: b.pool }; } else s = spSet(N.id);
+    const out = s.tiers.map(spTierOut);
     tiers = SP_LEVELS.map(([id], i) => spTierIn(out.find(t => t.id === id), N) || s.tiers[i]);
     if (LINES && !spNoLines(s.pool)) { K[N.id] = { tip: N.tip, own: true, at: spIso(now), tiers: out }; spKeepSave(); atLock = true; }
     own = true; }
@@ -1147,7 +1177,7 @@ function spShown(N) {
         if (T && T.legs && holds && !(t.updated && t.updated.pid === r.pid)) { cur = T; upd = { pid: String(r.pid), name: String(r.name || ''), reason: String(r.reason || ''), at: String(r.at || ''), by: 'page' }; }
         else { delete rep[t.id]; dirty = true; } }
       const out = !under && LINES && cur.legs && cur.legs.find(l => l.kind === 'prop' && spOutWhy(l.pid, l.id || l.gid));
-      if (out) { const why = spOutWhy(out.pid, out.id || out.gid), nt = spRebuild(N.id, t.id, { max: t.max, price: t.price, need: t.need }), at2 = spIso(now);
+      if (out) { const why = spOutWhy(out.pid, out.id || out.gid), nt = spRebuild(N.id, t.id, { max: t.max, price: t.price, need: t.need, chance: t.chance }), at2 = spIso(now);
         if (nt && nt.tier && Array.isArray(nt.tier.legs) && nt.tier.legs.length) { const T = spTierOut(nt.tier); rep[t.id] = { pid: String(out.pid), name: String(out.name || ''), reason: why, at: at2, tier: T }; dirty = true;
           cur = spTierIn(T, N) || nt.tier; upd = { pid: String(out.pid), name: String(out.name || ''), reason: why, at: at2, by: 'page' }; } }
       return upd ? { ...cur, updated: upd } : cur;
@@ -1170,13 +1200,16 @@ function spHeldOf(t) { return t && Array.isArray(t.legs) ? t.legs.find(l => l.ki
 function spTier(fid) {
   const s = String(fid || '').replace(/^sp\|/, ''), i = s.lastIndexOf(':'); if (i < 0) return null;
   const N = spOn(); if (!N || N.id !== s.slice(0, i)) return null;
+  /* your filters' level, as the tab shows it */
+  if (spRulerOn() && spMine(spUi(), N)) { const t = spMineSet(N, spUi()).tiers.find(x => x && x.id === s.slice(i + 1));
+    return t && t.legs && spOpen(t) ? { ...t, game: pbDayText(N.date), by: spBy(t), mine: true } : null; }
   const v = spShown(N); if (v.phase !== 'live' && v.phase !== 'locked' && v.phase !== 'under') return null;
   const t = v.tiers && v.tiers.find(x => x && x.id === s.slice(i + 1));
   return t && t.legs && spOpen(t) ? { ...t, game: pbDayText(N.date), by: spBy(t) } : null;
 }
 /* whose chance a level states: the model's on its team legs, DraftKings' fair chance on its player legs ('model +
    DraftKings'); of player legs alone, the fair chance itself ('dk'); of team legs alone, the model's (none) */
-function spBy(t) { const n = t.legs.filter(l => l.kind === 'prop').length; return !n ? undefined : n === t.legs.length ? 'dk' : 'model + DraftKings'; }
+function spBy(t) { if (t.chance === 'fair') return 'fair'; const n = t.legs.filter(l => l.kind === 'prop').length; return !n ? undefined : n === t.legs.length ? 'dk' : 'model + DraftKings'; }
 /* a level built again for a player ruled out after the lock says so in one line, under its legs */
 function spUpdLine(u) { return `Updated${u.by === 'page' ? ' in this browser' : ''}: ${u.name} ${u.reason || 'ruled out'} (${spEt(Date.parse(u.at), true)}); this level was built again.`; }
 const spUpdHtml = (t, html) => !t || !t.updated ? html : html.replace(/(<div class="pb-acts">|<\/div>\s*$)/, m => `<p class="pb-thin sp-upd" data-sp-upd="${esc(t.updated.pid)}">${esc(spUpdLine(t.updated))}</p>${m}`);
@@ -1200,6 +1233,8 @@ function spNightHtml(N) {
   const firstT = (() => { try { return new Date(first).toLocaleTimeString('en-US', { timeZone: 'America/New_York', hour: 'numeric', minute: '2-digit' }) + ' ET'; } catch (e) { return spMin(first).slice(11, 16) + ' UTC'; } })();
   const hd = `<div class="sp-hd"><h3 id="spg-${esc(N.id)}">${esc(spWeekday(N.date))}’s games</h3><span class="pb-pill" data-sp-count="${n}">${n} game${n === 1 ? '' : 's'}</span><small>First tip-off ${esc(firstT)}</small></div>`;
   const box = inner => `<div class="sp-game" role="group" data-sp-game="${esc(N.id)}" aria-labelledby="spg-${esc(N.id)}">${hd}${inner}</div>`;
+  /* your filters: their set, never the site's (built once DraftKings' lines are read) */
+  if (spRulerOn() && spMine(spUi(), N)) return box(!LINES && !LINES_ERR ? '<p class="pb-none" data-sp-loading>Loading DraftKings’ lines…</p>' : spMineHtml(N, spUi()));
   /* a live set waits for DraftKings' lines (lines.json, read when the tab first opens) before it is built */
   if (lk != null && Date.now() < lk && !LINES && !LINES_ERR) return box(`<p class="sp-lock" data-sp-phase="live">Locks ${spEt(lk, true)}, 2 hours before the first tip-off.</p><p class="pb-none" data-sp-loading>Loading DraftKings’ lines…</p>`);
   const v = spShown(N), lockT = spEt(v.lock, true), tipT = spEt(v.tip, true);
@@ -1207,12 +1242,14 @@ function spNightHtml(N) {
   const mark = '<span class="sp-lockmark">Locked</span>', ownSay = ' This browser’s own set: the site’s was not published in time, so the record does not grade it.';
   const line = v.phase === 'live' ? `<p class="sp-lock" data-sp-phase="live">Locks ${lockT}, 2 hours before the first tip-off.</p>`
     : v.phase === 'loading' ? `<p class="sp-lock" data-sp-phase="loading">${mark} since ${lockT}. ${v.lines ? 'Loading DraftKings’ lines…' : 'Loading the site’s set…'}</p>`
+    : v.phase === 'building' ? `<p class="sp-lock" data-sp-phase="building">${mark} since ${lockT}. Building this browser’s own set…</p>`
     : v.phase === 'late' ? `<p class="sp-lock" data-sp-phase="late">${mark} since ${lockT}. Under way since ${tipT}. The site’s set was not published in time.</p>`
     : v.phase === 'under' ? `<p class="sp-lock" data-sp-phase="under">${mark} since ${lockT}. Under way since ${tipT}.${v.own ? ownSay : ''}</p>`
     : v.own ? `<p class="sp-lock" data-sp-phase="own">${mark} since ${lockT}.${ownSay}</p>`
     : `<p class="sp-lock" data-sp-phase="locked">${mark} since ${lockT}.</p>`;
   /* each level keeps its Add, Add to builder and Finish while every one of its games is still to tip */
-  const cards = v.tiers ? `<div class="pb-tiers">${v.tiers.map(t => { const acts = spOpen(t);
+  if (v.build && !spRBDone(v.build)) spSoft(v.build);
+  const cards = v.tiers ? `<div class="pb-tiers">${v.tiers.map((t, i) => { if (!t) return spPendHtml(SP_RULER_LEVELS[i]); const acts = spOpen(t);
     return spHeldHtml(t, spUpdHtml(t, spCard(t, { kind: 'sp', fid: `${N.id}:${t.id}`, add: `data-sp-add="${N.id}:${t.id}"`, what, quiet: true, withGame: true, acts, legAdd: acts, night: true }))); }).join('')}</div>` : '';
   return box(line + cards);
 }
@@ -1232,10 +1269,12 @@ function spSetsHtml() {
 /* the tab: drawn only while it is on the screen (a hidden tab builds nothing, reads nothing, keeps nothing) */
 function renderSp() {
   const el = $('#spPanel'), tab = $('#tab-suggest'); if (!el || !S || !S.slate || !tab || tab.hidden) return;
-  if (!$('#spSets')) { el.innerHTML = '<div class="pb-card sp" id="spCard"><div id="spHead"></div><p class="pb-said" id="spSaid" role="status" aria-live="polite"></p><div id="spSets"></div></div>'; spWire(el); }
+  if (!$('#spSets')) { el.innerHTML = '<div class="pb-card sp" id="spCard"><div id="spHead"></div><div id="spFiltBox"></div><p class="pb-said" id="spSaid" role="status" aria-live="polite"></p><div id="spSets"></div></div>'; spWire(el); }
   /* a night this browser kept a locked set of that is past, left the slate or moved leaves the key */
   { const K = spKeep(); if (Object.keys(K).some(id => { const N = spById(id); return !N || Date.now() >= Date.parse(N.last); })) spKeepSave(); }
   $('#spHead').innerHTML = spHeadHtml();
+  /* the filters, from SP_RULER_FROM and while the night is set out */
+  { const fb = $('#spFiltBox'), N = spOn(); if (fb) { fb.innerHTML = spRulerOn() && N ? spFiltHtml(N, spUi()) : ''; spFiltWire(fb); } }
   $('#spSaid').textContent = SP_SAID;
   $('#spSets').innerHTML = spSetsHtml();
   SP_SHOWN = spState();
@@ -1244,7 +1283,7 @@ function renderSp() {
 function spKeepPlace(draw) {
   const a = document.activeElement, y = window.scrollY || 0, inP = a && a.closest && a.closest('#spPanel');
   let sel = null;
-  if (inP && a.dataset) { const k = ['pbLeg', 'spAdd', 'pcFinish', 'espnRefresh'].find(x => a.dataset[x] != null);
+  if (inP && a.dataset) { const k = ['pbLeg', 'spAdd', 'pcFinish', 'espnRefresh', 'spMix', 'spKind', 'spShort', 'spG', 'spGs', 'spStat', 'spStats'].find(x => a.dataset[x] != null);
     if (k) { const box = a.closest('[data-sp-game]'), tier = a.closest('[data-pb-tier]');
       sel = `${box ? `[data-sp-game="${CSS.escape(box.dataset.spGame)}"] ` : ''}${tier ? `[data-pb-tier="${CSS.escape(tier.dataset.pbTier)}"] ` : ''}[data-${k.replace(/[A-Z]/g, c => '-' + c.toLowerCase())}="${CSS.escape(a.dataset[k])}"]`; } }
   draw();
@@ -1282,8 +1321,8 @@ function spAddClick(b, t, what) {
 function spFinish(b) {
   if (spStale()) { spKeepPlace(renderSp); return; }
   const [kind, id] = String(b.dataset.pcFinish).split('|'), t = kind === 'sp' ? spTier(id) : null; if (!t) return;
-  const kicker = `${t.label} parlay · ${t.game}`;
-  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null, { chance: t.by === 'dk' ? null : t.corr, by: t.by || "the hub's model", back: 'Back to Suggested Parlays' });
+  const kicker = `${t.label} parlay · ${t.game}${t.mine ? ' · your filters' : ''}`;
+  pcFrom = b; PC = pcBuild(pbOrder(t.legs).map(pbSlipOf), pbStake(), null, { chance: t.by === 'dk' || t.by === 'fair' ? null : t.corr, by: t.by || "the hub's model", back: 'Back to Suggested Parlays' });
   $('#pcTitle').textContent = 'Suggested parlay'; $('#pcSub').textContent = `${kicker} · ${PC.sub}`; $('#pcBody').innerHTML = PC.html;
   $('#pcShare').onclick = pcShare; $('#pcDone').onclick = () => pcClose();
   $('#pcBack').hidden = false; document.body.classList.add('pp-lock'); $('#pcSheet').scrollTop = 0; $('#pcClose').focus();
@@ -1297,15 +1336,19 @@ function spWire(el) {
     const add = t.closest('[data-sp-add]');
     if (add) { e.preventDefault(); const lv = spTier(add.dataset.spAdd); spAddClick(add, lv, lv ? `the ${lv.label} ${lv.legs.length}-leg parlay for ${lv.game}` : ''); return; }
     const fin = t.closest('[data-pc-finish]');
-    if (fin && !window.PARLAY_CARD) { e.preventDefault(); spFinish(fin); }
+    if (fin && !window.PARLAY_CARD) { e.preventDefault(); spFinish(fin); return; }
+    /* your filters' buttons (the boxes answer their change, below) */
+    const f = t.closest('[data-sp-mix],[data-sp-short],[data-sp-gs],[data-sp-stats],[data-sp-reset]');
+    if (f) { e.preventDefault(); spFiltPress(f); }
   });
+  el.addEventListener('change', e => { const t = e.target; if (t && t.matches && t.matches('[data-sp-kind],[data-sp-g],[data-sp-stat]')) spFiltPress(t); });
 }
 /* the parlay card's own Finish (app/parts/card.html, where it is on the page) asks the tab for a level by its prefix (a
    bare word: the card's data-pc-finish is "<prefix>|<id>"), the chance the level's own, the model's; the card prices the
    legs by the builder's own sums */
 function spCardHook() {
   const C = window.PARLAY_CARD; if (!C || typeof C.from !== 'function' || spCardHook.on === C) return;
-  const ok = C.from('sp', id => { const t = spTier(id); return t ? { legs: t.legs, kicker: `${t.label} parlay · ${t.game}`, chance: t.by === 'dk' ? null : t.corr, by: t.by } : null; });
+  const ok = C.from('sp', id => { const t = spTier(id); return t ? { legs: t.legs, kicker: `${t.label} parlay · ${t.game}${t.mine ? ' · your filters' : ''}`, chance: t.by === 'dk' || t.by === 'fair' ? null : t.corr, by: t.by } : null; });
   if (ok) spCardHook.on = C;
 }
 /* the half-minute look, once the tab has been opened: the record read again where the night has reached its lock since
@@ -1458,6 +1501,8 @@ function spRulerPool(N, v) {
       const w = pbWho(g, m.player);
       if (!w) { pl.none += 2; continue; }
       if (spOutWhy(m.player, g.id)) { pl.held += 2; continue; }
+      /* priced with no margin: both sides counted, before lines, as spPool and the guard's own reading count it */
+      if (propImplied(m.over) + propImplied(m.under) < 1) { pl.vig += 2; continue; }
       for (const side of ['over', 'under']) {
         pl.lines++;
         take(pbView({ ...base, kind: 'prop', pid: m.player, name: w.name, team: w.team, at: pr.at, stat: m.stat, mk: 'main', line: m.line, side, odds: side === 'over' ? m.over : m.under, other: side === 'over' ? m.under : m.over }), true);
@@ -2043,7 +2088,216 @@ function spRulerLevel(pool, F, o) {
   }
   return out;
 }
+/* ---------- ONE RULER, AND YOUR FILTERS (the owner's call of 11 November 2026) ----------
+   After a night of team filler (the Knicks at -1040 in a set) he wrote: "i dont want to never use team odds. i want it to
+   be like the nfl stuff where i can turn on and off filters to fit what I want. i just find it hard to believe that team
+   odds are always the best and always overtake player legs." So, for every set taken from SP_RULER_FROM:
+   - ONE RULER: every leg of a set is ranked, and its level's chance stated, at DraftKings' fair chance (legFair, as the
+     rest of the page uses it: a main line's whole margin on the Over, a team line's two prices with the margin out in
+     proportion), the ruler pool (spRulerPool), as the NFL hub did in its app v138. The team model's chance never ranks a
+     leg (research/sp_ruler: it loses to DraftKings' no-vig chance on log loss in every market and season tested); it sits
+     on a card only in a team leg's title, and a new-rule card draws no Value mark. A level is the ruler search's
+     (spRulerLevel, THE RULER SEARCH above): within half a percent of the likeliest parlay paying its floor ($2, $4, $8 on
+     $1), the fewest legs any such parlay has, the likeliest of that many legs within 0.1%. Under one ruler every leg returns
+     at most $1 on $1 at its fair chance, so any parlay paying F lands at most 1/F and a great many sit within a hair of the
+     best: the exact likeliest means nothing to a bettor, and the fewest legs keep free filler out (a heavy Under returns $1
+     too). No leg of a player is asked of a level any more (the rule of 10 November keeps it for the sets taken under it).
+   - YOUR FILTERS, the Parlay Builder's choices on this tab (mirrored, kept apart in M.sp, this browser only, never sent):
+     the mix (All, Teams only, Players only) setting the five boxes (Moneyline, Spread, Game total, Player overs, Player
+     unders; a box changed by hand lights the mix it makes, or none), the night's games (All, None), the player stats the
+     page offers (folded), and the shortest leg (Any, -500, -300, -200: no leg priced shorter). One row of chips and a More
+     filters fold, open on a wide screen and shut on a phone until the reader says otherwise.
+   - THE SITE'S SET is the set at the default filters (every box, every game, every stat, Any): the one the job records,
+     locks 2 hours before the night's first tip-off and grades. A visitor whose filters differ sees "Your filters" sets
+     instead, built live from the lines at hand on the games still to tip, said to be neither the site's set nor graded,
+     with one Reset; before and after the lock alike (the site's lock line names whose set locks).
+   - THE SOFT BUILD: a set the tab shows is built a piece a task (the pool, then each level) while the tab is on the
+     screen, each task drawing what is built; leaving the tab stops it (nothing is built while another tab shows), and it
+     carries on from where it stopped when the tab opens again. The job builds the site's set whole (spEntry).
+   A set taken before SP_RULER_FROM keeps main's pool and search (THE SEARCH above) and every rule it was taken under: the
+   heads say which (chance: 'fair' for the ruler's), and a level built again after the lock is built under its own set's. */
+/* the cutoff, the same instant as tools/suggest_check.js's RULER_FROM (the job refuses a page whose cutoff is another).
+   PLACEHOLDER: the build step left it at an hour still to come; the finish step sets it */
+const SP_RULER_FROM = '2026-11-13T15:00:00Z';
+/* the ruler's three levels: [id, label, the fewest legs, the most (null: no limit), the least decimal price, 'fair'] */
+const SP_RULER_LEVELS = [['safe', 'Safe', 2, null, 2, 'fair'], ['med', 'Medium', 2, null, 4, 'fair'], ['aggr', 'Aggressive', 2, null, 8, 'fair']];
+const spRulerOn = () => Date.now() >= Date.parse(SP_RULER_FROM);
+const spGapPct = g => (Math.ceil(Math.max(0, g) * 1000) / 10).toFixed(1) + '%';
+/* a ruler level's rule in words, and its title (the tolerance said there and in the README) */
+const spRuleFair = F => `likeliest paying $${F}+`;
+const spRuleFairTitle = (F, gap) => gap != null
+  ? `Not settled on your filters: within ${spGapPct(gap)} of the likeliest parlay paying $${F} or more on $1, every leg at DraftKings’ fair chance.`
+  : `Within half a percent of the likeliest parlay paying $${F} or more on $1, every leg at DraftKings’ fair chance; the fewest legs any such parlay has; the likeliest of that many legs, within 0.1%.`;
+/* why a ruler level has no parlay: the pool's own reasons, the filters' and the search's ('legs': no two legs go
+   together; 'pays': none pays the floor), in a few words */
+function spRulerWhy(lv, pool, N, r) {
+  const F = lv[4], u = pool.u || spRulerClean(null), mine = !spRulerAll(u);
+  if (!pool.games.length) return 'No game of the night is still to tip.';
+  if (!pool.legs.length) {
+    const pl = pool.pl || {}, plOnly = !u.k.ml && !u.k.ats && !u.k.total && (u.k.over || u.k.under) && PROP_STATS.some(s => !u.st.includes(s));
+    if (plOnly && !(pl.lines + pl.held + pl.none + pl.vig)) return 'No player lines yet for the night’s games.';
+    if ((pool.filt || 0) + (pl.filt || 0) > 0 || (mine && !PB_KINDS.some(([k]) => u.k[k]))) return 'No leg of the night fits your filters.';
+    const at = N.games.flatMap(g => [LINES && LINES.games && LINES.games[g.id] ? LINES.games[g.id].at : null, SG_LINES[g.id] ? SG_LINES[g.id].at : null]).filter(x => Number.isFinite(Date.parse(x))).sort().pop();
+    if (!N.games.some(g => pbHasGl(g.id))) return at ? `No legs yet: DraftKings had posted no game lines for the night’s games as of ${spEt(Date.parse(at), true)}.` : 'No legs yet: no DraftKings line has been read for the night’s games.';
+    return 'No leg of the night is in the builder’s range: 45% to 97% by DraftKings’ fair chance.';
+  }
+  const by = new Map(); for (const l of pool.legs) by.set(l.kind === 'prop' ? 'p' + l.pid : l.gid + (l.kind === 'total' ? '|t' : '|s'), 1);
+  if (r.why === 'legs' || by.size < 2) return `Only ${by.size} leg${by.size === 1 ? '' : 's'} ${mine ? 'on your filters' : 'tonight'}: a parlay takes one leg a player, and one side and one total a game.`;
+  if (r.why === 'pays') return `No parlay of ${mine ? 'your filters’' : 'the night’s'} legs pays $${F} or more on $1.`;
+  return 'Not built: these lines are outside what the search covers.';
+}
+/* one level on a ruler pool, as the cards draw it: the search's parlay (its legs in the builder's order, its chance and
+   price pbExact's: the builder's own sums), its fair chance the same chance (every leg at legFair), est. where legs share a
+   game; a level the work ran out on (a custom filter: never at the default filters on a real night, research/sp_ruler)
+   keeps the best found, settled false, its gap said in the rule's title */
+function spRulerTier(pool, lv, N) {
+  const head = spHead(lv), r = spRulerLevel(pool, lv[4]);
+  if (!r.legs || r.why === 'floor') return { ...head, why: spRulerWhy(lv, pool, N, r) };
+  const sg = new Set(r.legs.map(l => l.gid)).size < r.legs.length;
+  const t = { ...head, legs: r.legs, corr: r.p, dec: r.d, fair: { p: r.p, est: sg }, thin: 0, mkt: 0, settled: !!r.settled, work: r.work ? r.work.used : null };
+  if (!r.settled) { t.gap = r.gap != null && isFinite(r.gap) ? r.gap : 1; t.rule = `likeliest found paying $${lv[4]}+`; t.ruleTitle = spRuleFairTitle(lv[4], t.gap); }
+  return t;
+}
+/* ---------- the ruler's builds: a night's set on filters, its pool and each level as built ----------
+   Kept per page load (the last 12), never saved, keyed on what the set stands on (spSig: the night, its games still to
+   tip, the publish, lines.json, a press's reads) and the filters; the job's and a check's whole, the tab's a piece a task */
+const SP_RB = new Map();
+const spFiltKey = u => [PB_KINDS.map(([k]) => u.k[k] ? 1 : 0).join(''), [...u.off].sort().join('+'), [...u.st].sort().join('+'), u.short == null ? '' : u.short].join('/');
+function spRB(N, u) {
+  const v = spRulerClean(u), key = spSig(N) + '|' + spFiltKey(v); let b = SP_RB.get(key);
+  if (!b) { b = { key, N, u: v, pool: null, tiers: SP_RULER_LEVELS.map(() => null) }; SP_RB.set(key, b); if (SP_RB.size > 12) SP_RB.delete(SP_RB.keys().next().value); }
+  return b;
+}
+/* the next piece of a build (its pool, then each level in turn); false once there is none left */
+function spRBStep(b) {
+  if (!b.pool) { b.pool = spRulerPool(b.N, b.u); return true; }
+  const i = b.tiers.findIndex(t => !t); if (i < 0) return false;
+  b.tiers[i] = spRulerTier(b.pool, SP_RULER_LEVELS[i], b.N); return true;
+}
+const spRBDone = b => !!b && !!b.pool && b.tiers.every(Boolean);
+function spRBAll(b) { while (spRBStep(b)); return b; }
+/* the site's set, the default filters' (every box, game and stat, any price), whole: the job's take (spEntry), a level
+   built again after the lock and the checks */
+function spSetRuler(id) { const N = spById(id); return N ? spRBAll(spRB(N, null)) : null; }
+/* ---------- the soft build: what the tab waits on, a piece a task while the tab is on the screen ----------
+   Each task builds one piece and draws the tab again, which asks again for whatever is still to build; a task that finds
+   another tab on the screen builds nothing and stops (the review of the first build: one kept building on the Parlay
+   Builder's tab), and the tab opened again carries on from where it stopped (render.suggest draws it) */
+let SP_SOFT_T = null, SP_SOFT_B = null;
+function spSoft(b) { if (!b || spRBDone(b)) return; SP_SOFT_B = b; if (!SP_SOFT_T) SP_SOFT_T = setTimeout(spSoftTick, 0); }
+function spSoftTick() {
+  SP_SOFT_T = null; const b = SP_SOFT_B; SP_SOFT_B = null;
+  if (!b || spRBDone(b) || tabNow() !== 'suggest') return;
+  const tab = $('#tab-suggest'); if (!tab || tab.hidden) return;
+  spRBStep(b); spSoftN++;
+  spKeepPlace(renderSp);
+}
+let spSoftN = 0;
+/* ---------- your filters: M.sp, this browser's alone, never sent anywhere, apart from the Parlay Builder's M.pb ----------
+   spRulerClean's {k, off, st, short}, with fx (More filters open) and sx (Player stats open) as the reader left them (null:
+   the page's own: More filters open on a wide screen, shut on a phone; the stats shut) */
+function spUi() { const v = M.sp && typeof M.sp === 'object' && !Array.isArray(M.sp) ? M.sp : {}, u = spRulerClean(v);
+  u.fx = typeof v.fx === 'boolean' ? v.fx : null; u.sx = typeof v.sx === 'boolean' ? v.sx : null; return u; }
+function spUiSave(u) { M.sp = { k: { ...u.k }, off: [...u.off], st: [...u.st], short: u.short, ...(u.fx != null ? { fx: u.fx } : {}), ...(u.sx != null ? { sx: u.sx } : {}) }; saveMine(); }
+/* the filters as they bear on a night: a game unticked that is not one of its games still to tip counts for nothing */
+function spEff(u, N) { const ids = N ? N.games.filter(spToTip).map(g => g.id) : []; return spRulerClean({ k: u.k, off: u.off.filter(id => ids.includes(id)), st: u.st, short: u.short }); }
+const spMine = (u, N) => !spRulerAll(spEff(u, N));
+/* what the tab shows of the filters (every control 44px; no paragraph: the owner's standing rule): the mix's one row, then
+   a More filters fold with the bet types, the shortest leg, the night's games (tip-offs in Eastern time, as the rest of
+   the tab) and the player stats (folded) */
+function spFiltHtml(N, u) {
+  const eff = spEff(u, N), mix = pbMix(eff), G = N.games.filter(spToTip), nOn = G.filter(g => !eff.off.includes(g.id)).length, mine = !spRulerAll(eff);
+  const fx = u.fx != null ? u.fx : pbWide(), sx = u.sx === true, nK = PB_KINDS.filter(([k]) => eff.k[k]).length, nS = PROP_STATS.filter(s => !eff.st.includes(s)).length;
+  const seg = `<span class="pb-seg" role="group" aria-label="Build from">${PB_MIXES.map(([k, l]) => `<button type="button" class="${mix === k ? 'on' : ''}" data-sp-mix="${k}" aria-pressed="${mix === k}">${l}</button>`).join('')}</span>`;
+  const chip = (attr, on, l, s) => `<label class="pb-chip${on ? ' on' : ''}"><input type="checkbox" ${attr} ${on ? 'checked' : ''}><span>${l}${s ? ` <small>${s}</small>` : ''}</span></label>`;
+  const kinds = PB_KINDS.map(([k, l, s]) => chip(`data-sp-kind="${k}"`, eff.k[k], l, s)).join('');
+  const shortL = v => v == null ? 'Any' : '−' + (-v);
+  const short = `<span class="pb-seg" role="group" aria-label="Shortest leg">${SPR_SHORT.map(v => `<button type="button" class="${eff.short === v ? 'on' : ''}" data-sp-short="${v == null ? 'any' : v}" aria-pressed="${eff.short === v}"${v == null ? '' : ` aria-label="No leg shorter than ${shortL(v)}"`}>${shortL(v)}</button>`).join('')}</span>`;
+  const games = G.map(g => { const on = !eff.off.includes(g.id), t = spEt(Date.parse(g.tip), true);
+    return `<label class="pb-g${on ? ' on' : ''}"><input type="checkbox" data-sp-g="${esc(g.id)}" ${on ? 'checked' : ''} aria-label="${esc(g.away)} at ${esc(g.home)}, ${esc(t)}"><span><b>${esc(g.away)} @ ${esc(g.home)}</b><small>${esc(t)}</small></span></label>`; }).join('');
+  const stats = PROP_STATS.map(s => chip(`data-sp-stat="${s}"`, !eff.st.includes(s), esc(PP_NAMES[s] || s))).join('');
+  const say = [nK === PB_KINDS.length ? 'All bet types' : `${nK} of ${PB_KINDS.length} bet types`, nOn === G.length ? `all ${G.length} game${G.length === 1 ? '' : 's'}` : `${nOn} of ${G.length} games`,
+    ...(nS < PROP_STATS.length ? [`${nS} of ${PROP_STATS.length} stats`] : []), eff.short == null ? 'any price' : `none shorter than ${shortL(eff.short)}`].join(' · ');
+  return `<div class="pb-ctl sp-filt" id="spFilt">
+    <div class="pb-row"><span class="pb-lbl">Build from</span>${seg}</div>
+    <details class="pb-games sp-more" data-sp-fx${fx ? ' open' : ''}><summary><span class="pb-lbl">More filters</span><b data-sp-fsum>${esc(say)}</b></summary>
+      <div class="pb-row"><span class="pb-lbl">Bet types</span><div class="pb-chips">${kinds}</div></div>
+      <div class="pb-row"><span class="pb-lbl">Shortest leg</span>${short}</div>
+      <div class="pb-row sp-grow"><span class="pb-lbl">Games</span><div class="pb-gbar"><button type="button" class="btn ghost" data-sp-gs="all">All</button><button type="button" class="btn ghost" data-sp-gs="none">None</button></div></div>
+      ${G.length ? `<div class="pb-glist">${games}</div>` : ''}
+      <details class="pb-games sp-stats" data-sp-sx${sx ? ' open' : ''}><summary><span class="pb-lbl">Player stats</span><b>${nS === PROP_STATS.length ? 'All' : `${nS} of ${PROP_STATS.length}`}</b></summary>
+        <div class="pb-gbar"><button type="button" class="btn ghost" data-sp-stats="all">All</button><button type="button" class="btn ghost" data-sp-stats="none">None</button></div>
+        <div class="pb-chips">${stats}</div></details>
+    </details></div>`;
+}
+/* the filters changed by a control: the mix sets the five boxes; a box, a game or a stat flips; All and None; the shortest
+   leg; Reset (every filter back, the folds as the reader left them) */
+function spFiltSet(t) {
+  const N = spOn(), u = spUi(), ids = N ? N.games.filter(spToTip).map(g => g.id) : [], d = t.dataset;
+  if (d.spMix != null) { const m = PB_MIXES.find(x => x[0] === d.spMix); if (!m) return null; for (const [k] of PB_KINDS) u.k[k] = m[2].includes(k); }
+  else if (d.spKind != null) { if (!(d.spKind in u.k)) return null; u.k[d.spKind] = !!t.checked; }
+  else if (d.spG != null) { u.off = u.off.filter(x => x !== d.spG); if (!t.checked) u.off.push(d.spG); }
+  else if (d.spGs != null) u.off = d.spGs === 'none' ? [...new Set([...u.off, ...ids])] : u.off.filter(x => !ids.includes(x));
+  else if (d.spStat != null) { u.st = u.st.filter(x => x !== d.spStat); if (!t.checked) u.st.push(d.spStat); }
+  else if (d.spStats != null) u.st = d.spStats === 'none' ? [...PROP_STATS] : [];
+  else if (d.spShort != null) u.short = d.spShort === 'any' ? null : +d.spShort;
+  else if (d.spReset != null) { const k = {}; for (const [id] of PB_KINDS) k[id] = true; Object.assign(u, { k, off: [], st: [], short: null }); }
+  else return null;
+  spUiSave(u); return u;
+}
+/* your filters' set on a night: built live on the games still to tip, a piece a task (spSoft) */
+function spMineSet(N, u) { const b = spRB(N, spEff(u, N)); return { b, tiers: b.tiers, done: spRBDone(b) }; }
+/* the ruler's pool as the record keeps it, for its guard (tools/suggest_check.js) to hold each level by property: every
+   team leg and the player legs the levels hold, each [its key, DraftKings' price, its fair chance (legFair), the other
+   side's price], each level's same-game groups [their places..., their joint chance, their price] (the builder's own sums
+   on the group: pbExact, one game), the counts the rules left out (band, noId and vig of the team legs; the player
+   lines' in pl, cut the player legs in the band the record does not keep), rule 'fair'. The guard works its own bound on
+   the likeliest parlay from its own reading of the run's files at the take, and from this pool from the lock (the levels'
+   legs are all in it, so it can make each level again) */
+function spPoolOutRuler(s) {
+  const P = s.pool, inL = new Set(), groups = new Map();
+  for (const t of s.tiers) if (t && Array.isArray(t.legs)) {
+    for (const l of t.legs) inL.add(l.sk);
+    const byG = new Map(); for (const l of t.legs) { if (!byG.has(l.gid)) byG.set(l.gid, []); byG.get(l.gid).push(l); }
+    for (const L of byG.values()) if (L.length > 1) groups.set(L.map(l => l.sk).sort().join('~'), L);
+  }
+  const legs = P.legs.filter(l => l.kind !== 'prop' || inL.has(l.sk)), ix = new Map(legs.map((l, i) => [l.sk, i]));
+  const sets = [...groups.values()].map(L => { const x = pbExact(L); return [...L.map(l => ix.get(l.sk)).sort((a, b) => a - b), x.corr, x.dec]; })
+    .sort((a, b) => { for (let i = 0; i < Math.min(a.length, b.length) - 2; i++) if (a[i] !== b[i]) return a[i] - b[i]; return a.length - b.length; });
+  const plIn = P.legs.filter(l => l.kind === 'prop').length, plKept = legs.filter(l => l.kind === 'prop').length, c = P.pl || {};
+  return { rule: 'fair', legs: legs.map(l => [l.sk, l.price, l.p, l.other]), sets, band: P.band, noId: P.noId, vig: P.vig || 0,
+    pl: { lines: c.lines || 0, band: c.band || 0, held: c.held || 0, none: c.none || 0, vig: c.vig || 0, cut: plIn - plKept } };
+}
+/* your filters' set, drawn: the site's lock said as the site's (never as if your set locked: it is built live, on the games
+   still to tip), then its levels as they are built */
+function spMineHtml(N, u) {
+  const now = Date.now(), m = spMineSet(N, u), lk = spLockOf(N, now), what = pbDayText(N.date);
+  if (!m.done) spSoft(m.b);
+  const line = `<p class="sp-lock sp-mine" data-sp-phase="mine"><span class="sp-minemark">Your filters</span>not the site’s set · not graded <button type="button" class="btn ghost sp-reset" data-sp-reset>Reset</button></p>`
+    + (lk != null ? `<p class="sp-lock sp-site" data-sp-site>The site’s set ${now >= lk ? 'locked' : 'locks'} ${spEt(lk, true)}.</p>` : '');
+  return line + `<div class="pb-tiers">${m.tiers.map((t, i) => { if (!t) return spPendHtml(SP_RULER_LEVELS[i]); const acts = spOpen(t);
+    return spCard(t, { kind: 'sp', fid: `${N.id}:${t.id}`, add: `data-sp-add="${N.id}:${t.id}"`, what: what + ', your filters', quiet: true, withGame: true, acts, legAdd: acts, night: true }); }).join('')}</div>`;
+}
+/* a level still building: its name and one word */
+const spPendHtml = lv => `<div class="pb-tier ${lv[0]} none sp-pend" data-sp-pending="${lv[0]}"><div class="pb-th"><span class="pb-tn">${esc(lv[1])}</span></div><p class="pb-why">Building…</p></div>`;
+/* the folds' choices: kept where the reader leaves them (a toggle a browser sends for a fold drawn as the page would draw
+   it is no choice of the reader's) */
+function spFiltWire(el) {
+  const fx = el.querySelector('details[data-sp-fx]'), sx = el.querySelector('details[data-sp-sx]');
+  if (fx) fx.addEventListener('toggle', () => { const u = spUi(), was = u.fx != null ? u.fx : pbWide(); if (fx.open !== was) { u.fx = fx.open; spUiSave(u); } });
+  if (sx) sx.addEventListener('toggle', () => { const u = spUi(), was = u.sx === true; if (sx.open !== was) { u.sx = sx.open; spUiSave(u); } });
+}
+/* a filter pressed: the filters saved, the tab drawn again (nothing built in the press: the soft build takes over), the
+   focus kept on the control (Reset, which leaves, hands it to the mix's All) */
+function spFiltPress(t) {
+  const reset = t.dataset.spReset != null;
+  if (!spFiltSet(t)) return;
+  spKeepPlace(renderSp);
+  if (reset) { const f = document.querySelector('#spPanel [data-sp-mix="all"]'); try { if (f) f.focus({ preventScroll: true }); } catch (e) {} }
+  SP_SAID = ''; const s = $('#spSaid'); if (s) s.textContent = '';
+}
 /* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
-Object.assign(window, { spRulerPool, spRulerLevel, spRulerClean, spRulerAll, spRulerAllows, spRulerLeg, SPR_TAU, SPR_ETA, SPR_WORK, spNight, spNightOf, spById, spOn, spTakes, spPhase, spState, spRecState, spLockAt, spLockOf, spNoLines, spOpen, spRecMine, spEtAt, spPool, spPrep, spWalk, spSearch, spBetter, spBuild, spSet, spEntry, spPoolOut, spOrth, spFig, spOutWhy, spRebuild, spRebuildOut,
+Object.assign(window, { SP_RULER_FROM, SP_RULER_LEVELS, spRulerOn, spRulerTier, spRulerWhy, spRB, spRBStep, spRBDone, spRBAll, spSetRuler, spPoolOutRuler, spUi, spUiSave, spEff, spMine, spMineSet, spFiltHtml, spFiltSet, spFiltKey, spSoft, spSoftTick, spRuleFair, spRuleFairTitle, spGapPct, spSoftCount: () => spSoftN,
+  spRulerPool, spRulerLevel, spRulerClean, spRulerAll, spRulerAllows, spRulerLeg, SPR_TAU, SPR_ETA, SPR_WORK, spNight, spNightOf, spById, spOn, spTakes, spPhase, spState, spRecState, spLockAt, spLockOf, spNoLines, spOpen, spRecMine, spEtAt, spPool, spPrep, spWalk, spSearch, spBetter, spBuild, spSet, spEntry, spPoolOut, spOrth, spFig, spOutWhy, spRebuild, spRebuildOut,
   spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier, spBy, spUpdLine, spLedgerOf, spRecSum, spRecLoad, spWhyAtLock, renderSp, spWatchTick, SP_LEVELS, SP_RULE, SP_LOCK_MS, SP_KEEP_KEY, SP_KEEP_V });
 </script>

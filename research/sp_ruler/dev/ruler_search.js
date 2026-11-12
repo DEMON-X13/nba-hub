@@ -1,8 +1,10 @@
 /* ---------- THE RULER SEARCH (dev copy; the proof ships in app/parts/suggested.html) ---------- */
-const SPR_TAU = 0.005, SPR_ETA = 0.001, SPR_NEAR = 9e-4, SPR_SIG = 1e-3, SPR_REL = 1e-12, SPR_PURE = 1e-9, SPR_TH = 1e-3;
-const SPR_CELLS = 512, SPR_KCAP = 16, SPR_WORK = 4e6;
+const SPR_TAU = 0.005, SPR_ETA = 0.001, SPR_NEAR = 9e-4, SPR_SIG = 1e-3, SPR_REL = 1e-12, SPR_PURE = 1e-7, SPR_TH = 1 / 16;
+const SPR_CELLS = 512, SPR_KCAP = 16, SPR_WORK = 1e6, SPR_DMAX = 2.9, SPR_STEP = 0.01;
+const SPR_Z = [2, 2.5, 3, 3.5, 4, 5, 6];
 /* the work each step is counted at (about its microseconds in jsdom) */
-const SPR_COST = { prep: 2, cell: 0.004, node: 0.6, opt: 0.15, pair: 4, est3: 60, est4: 800, est5: 11000, ghk: 22000, cap: 15, cand: 1, gv: 5 };
+const SPR_COST = { prep: 2, cell: 0.004, node: 0.6, opt: 0.15, look: 0.5, pair: 4, est3: 60, est4: 790, est5: 11300, ghk3: 18000, ghk4: 22000, ghk5: 34000, ghk6: 50000, cap: 15, cand: 1, gv: 5 };
+const SPR_BATCH = 256;
 const SPR_PREP = new WeakMap();
 const sprCmp = (a, b) => a < b ? -1 : a > b ? 1 : 0;
 function sprWork(C, what, n) { const W = C.W; n = n || 1; W.used += SPR_COST[what] * n; W[what] = (W[what] || 0) + n; if (W.used > W.budget) throw W; }
@@ -11,18 +13,19 @@ function sprIdsLess(a, b) { for (let i = 0; i < Math.min(a.length, b.length); i+
 /* ---------- the pool made ready (no level in it: kept for the pool's legs) ---------- */
 function sprPrep(legs) {
   const ok2 = !!(S.corr && S.corr.rho && S.corr.hold), hold = ok2 ? +S.corr.hold : 0, by = new Map();
-  let edge = false, n = 0;
+  let edge = false, dear = false, n = 0;
   for (const l of legs || []) {
     const d = amToDec(l.price), I = propImplied(l.price), p = l.p;
     if (!(d > 1) || !(p > 0 && p < 1) || !(I > 0 && I < 1)) continue;
     const sk = slipKey(l), gid = l.gid || l.id;
     const x = { l, sk, gid, pid: l.kind === 'prop' ? String(l.pid) : null, side: l.kind === 'ml' || l.kind === 'spread', tot: l.kind === 'total', p, d, I, e: p * d };
-    x.lp = Math.log(p); x.ld = Math.log(d); x.t = normInv(1 - p); x.tI = normInv(1 - I); x.pure = p >= I * (1 - SPR_REL);
+    x.lp = Math.log(p); x.ld = Math.log(d); x.t = normInv(1 - p); x.tI = normInv(1 - I); x.pure = Math.abs(p / I - 1) <= SPR_REL;
     x.kind = x.pid ? 'p|' + l.stat : 't|' + SG_KIND[l.kind];
-    if (p > I * (1 + SPR_PURE)) edge = true;
+    if (p > I * (1 + SPR_REL)) edge = true;
+    if (!(d < SPR_DMAX)) dear = true;
     if (!by.has(gid)) by.set(gid, []); by.get(gid).push(x); n++;
   }
-  const X = { ok2, hold, edge, n, games: [], pair: new Map(), est: new Map(), ghk: new Map() };
+  const X = { ok2, hold, edge, dear, n, games: [], pair: new Map(), pairB: new Map(), est: new Map(), ghk: new Map() };
   for (const gid of [...by.keys()].sort(sprCmp)) {
     const xs = by.get(gid).sort((a, b) => sprCmp(a.sk, b.sk)), gn = xs.length;
     xs.forEach((x, i) => { x.i = i; });
@@ -34,7 +37,7 @@ function sprPrep(legs) {
     const pids = new Set(xs.filter(x => x.pid).map(x => x.pid)).size;
     const maxLegs = ok2 ? pids + (xs.some(x => x.side) ? 1 : 0) + (xs.some(x => x.tot) ? 1 : 0) : 1;
     const sm = Math.min(SPR_KCAP, maxLegs);
-    const g = { gid, xs, n: gn, fr, byP, pl, tl, maxLegs, sm, R: new Float64Array(gn * gn).fill(NaN), pd: null, cap: null, H: null };
+    const g = { gid, xs, n: gn, fr, byP, pl, tl, maxLegs, sm, R: new Float64Array(gn * gn).fill(NaN), pd: null, cap: null, H: [], Gm: [], nPure: xs.filter(x => x.pure).length };
     const ds = xs.map(x => x.d).sort((a, b) => b - a); g.topD = [1]; for (let s = 1; s <= sm; s++) g.topD.push(s <= ds.length ? g.topD[s - 1] * ds[s - 1] : 0);
     /* sufD[q][r]: the r dearest prices of byP from q on multiplied (0 where fewer are left) */
     g.sufD = new Array(gn + 1); let top = []; g.sufD[gn] = [1];
@@ -66,20 +69,38 @@ const sprFits = (T, x) => !T.some(y => y === x || (x.pid && y.pid === x.pid) || 
 function sprPair(C, g, a, b) {
   if (a.i > b.i) { const z = a; a = b; b = z; }
   const k = g.gid + ':' + a.i + ',' + b.i; let u = C.X.pair.get(k);
+  sprWork(C, 'look');
   if (!C.sp.has(k)) { C.sp.add(k); sprWork(C, 'pair'); }
   if (u) return u;
   const r = sprRho(g, a, b), c = joint2(a.p, b.p, r), J = joint2(a.I, b.I, r), mult = a.d * b.d;
   u = { T: [a, b], n: 2, c, J, mult, d: J > 0 && isFinite(J) ? Math.min(mult, C.X.hold / J) : mult, exact: true, pure: a.pure && b.pure };
   C.X.pair.set(k, u); return u;
 }
+/* two legs of a group of three or more, as bounds: exact where the game's variables are positive definite (spPosDef: the
+   builder then never shrinks a group's matrix), else the chance at max(rho, 0) and J at min(rho, 0), the shrunk
+   correlation lying between rho and 0 */
+function sprPairB(C, g, a, b) {
+  if (g.pd == null) g.pd = spPosDef(g.xs);
+  if (g.pd) return sprPair(C, g, a, b);
+  if (a.i > b.i) { const z = a; a = b; b = z; }
+  const k = g.gid + ':' + a.i + ',' + b.i; let u = C.X.pairB.get(k);
+  sprWork(C, 'look');
+  if (!C.sp.has('B' + k)) { C.sp.add('B' + k); sprWork(C, 'pair'); }
+  if (u) return u;
+  const r = sprRho(g, a, b);
+  u = { c: joint2(a.p, b.p, Math.max(r, 0)), J: joint2(a.I, b.I, Math.min(r, 0)) };
+  C.X.pairB.set(k, u); return u;
+}
 /* three to five legs by the page's own integral (spOrth, R7): { c, J }; null where the game's matrix is not positive
    definite (the builder shrinks it) or the integral fails */
-function sprEst(C, g, W) {
+function sprEst(C, g, W, why) {
   if (W.length < 3 || W.length > 5) return null;
+  if (C.dbg) C.dbg[why + W.length] = (C.dbg[why + W.length] || 0) + 1;
   if (g.pd == null) g.pd = spPosDef(g.xs);
   if (!g.pd) return null;
   const key = g.gid + ':' + W.map(x => x.i).join(',');
-  if (!C.se.has(key)) { C.se.add(key); sprWork(C, 'est' + W.length); }
+  sprWork(C, 'look');
+  if (!C.se.has(key)) { C.se.add(key); sprWork(C, 'est' + W.length, W.every(x => x.pure) ? 1 : 2); }
   let u = C.X.est.get(key); if (u !== undefined) return u;
   const R = W.map((a, i) => W.map((b, j) => i === j ? 1 : sprRho(g, a, b)));
   const pure = W.every(x => x.pure), c = spOrth(W.map(x => x.t), R), J = pure ? c : spOrth(W.map(x => x.tI), R);
@@ -89,7 +110,7 @@ function sprEst(C, g, W) {
 /* a group's own figures by the builder's own sums (parlayProb's and slipDec's sgJoint on the legs in sgOrder) */
 function sprGhk(C, g, W) {
   const key = g.gid + ':' + W.map(x => x.i).join(',');
-  if (!C.sg.has(key)) { C.sg.add(key); sprWork(C, 'ghk'); }
+  if (!C.sg.has(key)) { C.sg.add(key); sprWork(C, 'ghk' + Math.min(W.length, 6), 2); }
   let u = C.X.ghk.get(key); if (u) return u;
   const L = W.map(x => sgLeg(x.l)), c = sgJoint(W.map(x => x.p), L), J = sgJoint(W.map(x => x.I), L);
   let mult = 1; for (const x of W) mult *= x.d;
@@ -98,58 +119,78 @@ function sprGhk(C, g, W) {
 }
 /* (R9): phi_2(a, b; q) at most this for every |q| <= r */
 const sprPhi2 = (a, b, r) => Math.exp(-(a * a + b * b) / (2 * (1 + r))) / (TWOPI * Math.sqrt(1 - r * r));
-/* (R10): an impure leg x's factor on C / J in a group of s legs of its game that lands at least SPR_TH (see the proof) */
-function sprGv(g, x, s) {
+/* (R10): an impure leg x's factor on C / J in a group of s legs of its game that lands at least C.TH, s_v at its worst:
+   the largest sum of squared correlations x can have with s - 1 others (at most two team legs, one for a team leg) over
+   the least eigenvalue the others' matrix can have (Weyl, on its Frobenius norm). Kept for the call (C.gv) */
+function sprGv(C, g, x, s) {
   if (x.pure) return 1;
-  const ex = x.p / x.I; if (s < 2) return ex;
-  /* the largest sum of squared correlations x can have with s - 1 others: at most two team legs (one for a team leg) */
-  const o = s - 1, nt = Math.min(x.pid ? 2 : 1, o), r2 = x.pid ? nt * Math.max(x.Mt, x.Mp) ** 2 + (o - nt) * x.Mp * x.Mp : (o - nt) * x.Mp * x.Mp + nt * Math.max(x.Mp, x.Mt) ** 2;
-  let e2 = 0; for (let t2 = 0; t2 <= Math.min(2, o); t2++) { const np = o - t2; e2 = Math.max(e2, np * (np - 1) * g.Mpp * g.Mpp + 2 * np * t2 * g.Mpt * g.Mpt + t2 * (t2 - 1) * g.Mtt * g.Mtt); }
-  const lam = 1 - Math.sqrt(e2); if (!(lam > 0.05)) return 1;
-  return sprGFor(x, Math.sqrt(r2 / lam));
+  let m = C.gv.get(x); if (!m) { m = new Uint8Array(SPR_KCAP + 2); C.gv.set(x, m); }
+  if (!m[s]) { m[s] = 1; sprWork(C, 'gv'); }
+  const a = x.gv || (x.gv = []);
+  if (a[s] != null) return a[s];
+  let v;
+  if (s < 2) v = x.p / x.I;
+  else {
+    const o = s - 1, nt = Math.min(x.pid ? 2 : 1, o), r2 = (o - nt) * x.Mp * x.Mp + nt * Math.max(x.Mp, x.Mt) ** 2;
+    let e2 = 0; for (let t2 = 0; t2 <= Math.min(2, o); t2++) { const np = o - t2; e2 = Math.max(e2, np * (np - 1) * g.Mpp * g.Mpp + 2 * np * t2 * g.Mpt * g.Mpt + t2 * (t2 - 1) * g.Mtt * g.Mtt); }
+    const lam = 1 - Math.sqrt(e2);
+    v = lam > 0.05 ? sprGFor(x, Math.sqrt(r2 / lam), SPR_TH) : 1;
+  }
+  a[s] = v; return v;
 }
-/* (R10): the most a group of s legs of game g returns on $1 (a group landing at least SPR_TH) */
+/* (R10): the most a group of s legs of game g returns on $1 when it lands at least C.TH: HOLD, times the worst impure
+   leg's factor (a group's every impure leg brings its own factor under 1; one is the least the group can carry), a pure
+   group's HOLD with its rounding (1 + SPR_PURE). Kept for the call (C.hg) */
 function sprHg(C, g, s) {
-  if (!g.H) g.H = [];
+  let m = C.hg.get(g); if (!m) { m = new Uint8Array(SPR_KCAP + 2); C.hg.set(g, m); }
+  if (!m[s]) { m[s] = 1; for (const x of g.xs) if (!x.pure) { const k = C.gv.get(x) || new Uint8Array(SPR_KCAP + 2); C.gv.set(x, k); if (!k[s]) { k[s] = 1; sprWork(C, 'gv'); } } }
   if (g.H[s] == null) {
-    sprWork(C, 'gv', g.n);
-    let gm = 0, pure = false; for (const x of g.xs) if (!x.pure) gm = Math.max(gm, sprGv(g, x, s)); else pure = true;
-    g.H[s] = C.X.hold * Math.max(pure ? 1 + SPR_PURE : 0, (1 + SPR_SIG) * gm);
+    let gm = 0; for (const x of g.xs) if (!x.pure) gm = Math.max(gm, sprGv(C, g, x, s));
+    /* a group of s legs holds at least s - nPure impure legs, each with a factor of gm or under */
+    const mi = Math.max(0, s - g.nPure);
+    g.Gm[s] = gm;
+    g.H[s] = C.X.hold * (mi === 0 ? Math.max(1 + SPR_PURE, (1 + SPR_SIG) * gm) : (1 + SPR_SIG) * gm ** mi);
   }
   return g.H[s];
 }
+const sprGm = (C, g, s) => { sprHg(C, g, s); return g.Gm[s]; };
 /* the same for one group W, over HOLD: each impure leg's factor at its own s_v, its regression on the group's others
-   worked out (R10) */
-function sprHW(g, W) {
-  let f = 1, pure = true;
-  for (const x of W) if (!x.pure) { pure = false; f *= sprGvAt(g, W, x); }
-  return pure ? 1 + SPR_PURE : (1 + SPR_SIG) * f;
+   worked out (R10); 1 + SPR_SIG where the builder would shrink W's matrix (its Cholesky fails), C <= J standing alone */
+function sprHW(C, g, W) {
+  if (W.every(x => x.pure)) return 1 + SPR_PURE;
+  if (!sgCholesky(W.map((a, i) => W.map((b, j) => i === j ? 1 : sprRho(g, a, b))))) return 1 + SPR_SIG;
+  let f = 1; for (const x of W) if (!x.pure) f *= sprGvAt(C, g, W, x);
+  return (1 + SPR_SIG) * f;
 }
-function sprGvAt(g, W, x) {
+function sprGvAt(C, g, W, x) {
   const A = W.filter(y => y !== x), r = A.map(y => sprRho(g, x, y));
   const L = sgCholesky(A.map((a, i) => A.map((b, j) => i === j ? 1 : sprRho(g, a, b))));
   if (!L) return 1;
   const n = A.length, y = new Array(n);
   for (let i = 0; i < n; i++) { let v = r[i]; for (let k = 0; k < i; k++) v -= L[i][k] * y[k]; y[i] = v / L[i][i]; }
   const s2 = y.reduce((t, v) => t + v * v, 0);
-  return sprGFor(x, Math.sqrt(s2 * (1 + 1e-9) + 1e-18));
+  return sprGFor(x, Math.sqrt(s2 * (1 + 1e-9) + 1e-18), SPR_TH);
 }
-function sprGFor(x, sv) {
+/* (R10) for one leg at s_v at most sv: min over z of g + (1 - g) Phi(-z) / TH, mu = z sv, g the most
+   Phi(-(t - mu) / sigma) / Phi(-(tI - mu) / sigma) can be for sigma in [sqrt(1 - sv^2), 1] (decreasing in both of
+   h(a, b) = Phi(-(a + b)) / Phi(-a): a = (tI - mu) / sigma at its least, b = (t - tI) / sigma at its least, 1) */
+function sprGFor(x, sv, TH) {
   if (!(sv < 0.95)) return 1;
-  if (sv < 1e-9) return Math.min(1, x.p / x.I * (1 + SPR_PURE));
+  const sb = Math.sqrt(1 - sv * sv), dl = x.t - x.tI;
   let best = 1;
-  for (const z of [2, 2.5, 3, 3.5, 4, 4.5, 5, 5.5, 6, 7]) {
-    const k = x.t - z * sv, g1 = normCdf(-k) / normCdf(-(k - (x.t - x.tI)));
-    best = Math.min(best, g1 + (1 - g1) * normCdf(-z) / SPR_TH);
+  for (const z of SPR_Z) {
+    let a = x.tI - z * sv; if (a < 0) a /= sb;
+    const g1 = normCdf(-(a + dl)) / normCdf(-a);
+    best = Math.min(best, g1 + (1 - g1) * normCdf(-z) / TH);
   }
   return Math.min(1, best);
 }
 
 /* (R8): each game's caps: the most s legs of it together can land (one-factor copula, Slepian) */
 function sprCaps(C, g) {
+  if (!C.cc.has(g)) { C.cc.add(g); sprWork(C, 'cap', g.n); }
   if (g.cap) return g.cap;
-  sprWork(C, 'cap', g.n);
-  const cols = g.xs.map(x => { const m = Math.min(0.81, Math.max(x.Mp, x.Mt)), sr = Math.sqrt(m), cr = Math.sqrt(1 - m); return SP_EQ.map(([w]) => spUp(x.t, sr, cr, w)); });
+  const cols = g.xs.map(x => { const m = Math.max(x.Mp, x.Mt); if (!(m <= 0.81)) return SP_EQ.map(() => 1); const sr = Math.sqrt(m), cr = Math.sqrt(1 - m); return SP_EQ.map(([w]) => spUp(x.t, sr, cr, w)); });
   const tops = SP_EQ.map((_, i) => { const v = cols.map(c => c[i]).sort((a, b) => b - a), pp = [1]; for (const y of v) pp.push(pp[pp.length - 1] * y); return pp; });
   g.cap = [1];
   for (let s = 1; s <= g.sm + 1; s++) { let v = 0; for (let i = 0; i < SP_EQ.length; i++) v += SP_EQ[i][1] * tops[i][Math.min(s, tops[i].length - 1)]; g.cap.push(Math.min(1, v * (1 + SPR_SIG))); }
@@ -162,7 +203,7 @@ function sprTable(C, K) {
   const B = []; for (let j = 0; j <= m; j++) { const row = []; for (let t = 0; t <= K; t++) row.push(null); B.push(row); }
   const z = new Float64Array(NC + 1).fill(NEG); z[0] = 0; B[m][0] = z;
   for (let t = 1; t <= K; t++) B[m][t] = new Float64Array(NC + 1).fill(NEG);
-  const hTh = Math.log(SPR_TH);
+  const hTh = Math.log(C.TH);
   let reach = 0;
   for (let j = m - 1; j >= 0; j--) {
     const g = G[j], cc = g.fr.map(x => Math.ceil(x.ld / dl + 1e-9));
@@ -208,8 +249,8 @@ function sprRelaxed(out, src, L, h, dl, ccmax, NC) {
   }
 }
 /* R[j][t]: the most t legs of the games from j on can return on $1 */
-function sprRet(C, K) {
-  const { X } = C, G = X.games, m = G.length, R = [], Dm = [];
+function sprRet(C, K, low) {
+  const { X } = C, G = X.games, m = G.length, R = [], Dm = [], h0 = X.hold * (1 + SPR_SIG);
   for (let j = 0; j <= m; j++) { R.push(new Float64Array(K + 1)); Dm.push(new Float64Array(K + 1).fill(-Infinity)); }
   R[m][0] = 1; Dm[m][0] = 0;
   for (let j = m - 1; j >= 0; j--) {
@@ -217,18 +258,20 @@ function sprRet(C, K) {
     for (let t = 0; t <= K; t++) {
       let v = R[j + 1][t], w = Dm[j + 1][t];
       if (t >= 1) { v = Math.max(v, e1 * R[j + 1][t - 1]); w = Math.max(w, d1 + Dm[j + 1][t - 1]); }
-      if (C.gr) for (let s = 2; s <= Math.min(t, g.sm); s++) { v = Math.max(v, sprHg(C, g, s) * R[j + 1][t - s]); w = Math.max(w, Math.log(g.topD[s]) + Dm[j + 1][t - s]); }
+      if (C.gr) for (let s = 2; s <= Math.min(t, g.sm); s++) { v = Math.max(v, (low ? h0 : sprHg(C, g, s)) * R[j + 1][t - s]); w = Math.max(w, Math.log(g.topD[s]) + Dm[j + 1][t - s]); }
       R[j][t] = v; Dm[j][t] = w;
     }
   }
-  C.Dm = Dm;
+  if (!low) C.Dm = Dm;
   return R;
 }
 
 /* ---------- one size: every parlay of exactly k legs whose bound reaches the cut ---------- */
 function sprQ(C, k, thr, near, any, hiK) {
-  const { X, A, Fe, dl, NC, B, R } = C, G = X.games, m = G.length, NEG = -Infinity, STOP = {}, DONE = {};
+  const { X, A, Fe, dl, NC, B, R, R0 } = C, G = X.games, m = G.length, NEG = -Infinity, STOP = {}, DONE = {}, h0 = X.hold * (1 + SPR_SIG);
   let best = null;
+  /* a parlay reaching a cut of TH or more has every group landing TH or more: the R10 tables; under it, HOLD's */
+  const hiT = () => cutV() >= C.TH;
   const cutV = () => Math.max(thr, best ? best.c / (1 - near) : 0);
   /* nothing of k legs lands over hiK: a cut over it ends the search, all of it looked at */
   if (thr > hiK) return { best: null, done: true, hi: thr };
@@ -239,7 +282,7 @@ function sprQ(C, k, thr, near, any, hiK) {
     sprWork(C, 'cand');
     if (!(d >= Fe) || !(c >= thr)) return;
     const legs = units.flatMap(u => u.T), ids = legs.map(x => x.sk).sort(sprCmp);
-    if (!best || c > best.c * (1 + SPR_REL) || (c >= best.c * (1 - SPR_REL) && sprIdsLess(ids, best.ids))) best = { c, d, n: legs.length, legs, ids };
+    if (!best || c > best.c * (1 + SPR_REL) || (c >= best.c * (1 - SPR_REL) && sprIdsLess(ids, best.ids))) { best = { c, d, n: legs.length, legs, ids }; if (!C.qb || c > C.qb.c) C.qb = best; }
     if (any) throw STOP;
     if (cutV() > hiK) throw DONE;
   };
@@ -250,7 +293,7 @@ function sprQ(C, k, thr, near, any, hiK) {
     const lc = Math.log(c), need = A - Math.log(d);
     const bt = lc + B[j][t][cellOf(need)];
     if (!(bt > NEG) || bt < lnCut()) return;
-    if (c * d * R[j][t] < cutV() * Fe) return;
+    if (c * d * (hiT() ? R : R0)[j][t] < cutV() * Fe) return;
     const g = G[j], opts = [];
     if (B[j + 1][t][cellOf(need)] > NEG) opts.push({ b: lc + B[j + 1][t][cellOf(need)], x: null });
     const nx = B[j + 1][t - 1];
@@ -263,7 +306,7 @@ function sprQ(C, k, thr, near, any, hiK) {
       else { units.push({ T: [o.x], n: 1, c: o.x.p, d: o.x.d }); rec(j + 1, t - 1, c * o.x.p, d * o.x.d); units.pop(); }
     }
     if (C.gr) for (let s = 2; s <= Math.min(t, g.sm); s++) {
-      if (c * d * sprHg(C, g, s) * R[j + 1][t - s] < cutV() * Fe) continue;
+      if (c * d * (hiT() ? sprHg(C, g, s) * R[j + 1][t - s] : h0 * R0[j + 1][t - s]) < cutV() * Fe) continue;
       sprGroupsAt(C, j, s, t, c, d, cutV, u => { units.push(u); rec(j + 1, t - s, c * u.c, d * u.d); units.pop(); });
     }
   };
@@ -276,14 +319,19 @@ function sprQ(C, k, thr, near, any, hiK) {
    then each worked in the order of its pairwise estimate, held to the integral (R7) and worked by the builder's own sums
    where it may still reach the cut, and handed on. With no cut yet (a probe) they are worked a T at a time */
 function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
-  const { X, A, dl, NC, B, R, Fe } = C, g = X.games[j], rest = B[j + 1][t - s], NEG = -Infinity;
+  const { X, A, dl, NC, B, R, R0, Fe } = C, g = X.games[j], rest = B[j + 1][t - s], NEG = -Infinity, TH = C.TH, h0 = X.hold * (1 + SPR_SIG);
   if (rest[0] === NEG) return;
-  const lc = Math.log(c), need = A - Math.log(d), slk = s >= 3 ? 1 + SPR_SIG : 1 + SPR_PURE, Rr = R[j + 1][t - s];
+  const lc = Math.log(c), need = A - Math.log(d), slk = s >= 3 ? 1 + SPR_SIG : 1 + SPR_PURE;
+  /* the cut at TH or over: every group that may reach it lands TH or more (R10 holds, the rest's groups at R); under it,
+     a group landing under TH is also taken, at chance TH and HOLD (R2), the rest's at R0 */
+  const hiT = () => cutV() >= TH, Rr = () => hiT() ? R[j + 1][t - s] : R0[j + 1][t - s];
   const cellOf = v => { if (!(v > 0)) return 0; const q = Math.ceil(v / dl - 1e-9); return q < 0 ? 0 : q > NC ? NC : q; };
   const restAt = t === s ? dd => d * dd >= Fe * (1 - SPR_REL) ? 0 : NEG : dd => rest[cellOf(need - Math.log(dd))];
   const lnCut = () => { const v = cutV(); return v > 0 ? Math.log(v) : NEG; };
   const low = v => !(v > NEG) || v < lnCut();
-  const bound = (cu, dd, H) => Math.min(lc + Math.log(cu) + restAt(dd), Math.log(c * d * H * Rr / Fe));
+  const bnd = (cu, dd, H, Rx) => Math.min(lc + Math.log(cu) + restAt(dd), Math.log(c * d * H * Rx / Fe));
+  const bound = (cu, dd, H) => hiT() ? bnd(cu, dd, H, R[j + 1][t - s]) : Math.max(bnd(cu, dd, H, R0[j + 1][t - s]), bnd(Math.min(cu, TH), dd, h0, R0[j + 1][t - s]));
+  const retLow = H => low(Math.log(c * d * (hiT() ? H : Math.max(H, h0)) * Rr() / Fe));
   const byP = g.byP, T = [], Hs = sprHg(C, g, s);
   let cands = [], later = [];
   /* the gathered groups in the order of their estimate; a probe (no cut yet) leaves those its estimate says do not pay
@@ -296,18 +344,18 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
       if (!all && !(cutV() > 0) && !(k.sc > NEG)) { later.push(k); continue; }
       let u = k.u;
       if (!u) {
-        const e = sprEst(C, k.g, k.W);
+        const e = sprEst(C, k.g, k.W, 'work');
         if (e) { const dHi = Math.min(k.mult, X.hold / (e.J * (1 - SPR_SIG))); if (low(bound(Math.min(k.cu, e.c) * (1 + SPR_SIG), dHi, k.H))) continue; }
         u = sprGhk(C, g, k.W);
       }
-      if (!(u.c > 0) || low(lc + Math.log(u.c) + restAt(u.d))) continue;
+      if (!(u.c > 0) || low(lc + Math.log(u.c) + restAt(u.d)) || low(Math.log(c * d * u.c * u.d * Rr() / Fe))) continue;
       emit(u);
     }
   };
   /* (R9) T's own figures, for the last leg: its chance at most cT, its J at least JT */
   const own = () => { if (T.length === 1) return { cT: T[0].p, JT: T[0].I };
-    if (T.length === 2) { const u = sprPair(C, g, T[0], T[1]); return { cT: u.c, JT: u.J }; }
-    const e = sprEst(C, g, [...T].sort((a, b) => a.i - b.i)); return e ? { cT: e.c * (1 + SPR_SIG), JT: e.J * (1 - SPR_SIG) } : null; };
+    if (T.length === 2) { const u = sprPairB(C, g, T[0], T[1]); return { cT: u.c, JT: u.J }; }
+    const e = sprEst(C, g, [...T].sort((a, b) => a.i - b.i), 'own'); return e ? { cT: e.c * (1 + SPR_SIG), JT: e.J * (1 - SPR_SIG) } : null; };
   const lnDmR = C.Dm[j + 1][t - s];
   /* the last leg among the players: none more likely than Imax can pay (its J would be over HOLD over the least price
      the group must have), and the loop ends where none can land enough (R9, every |rho| at most M) */
@@ -319,11 +367,22 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
     return { start: lo, eP, cT: o.cT };
   };
   /* what a group holding T returns at most (R10): T's impure legs' worst factors at s legs, else the game's own */
-  const hT = () => { let f = 1, imp = false; for (const y of T) if (!y.pure) { imp = true; f *= sprGv(g, y, s); } return imp ? X.hold * (1 + SPR_SIG) * f : Hs; };
+  /* (R10) the most a group of s legs holding T and xs, rem legs still to choose, returns: each impure leg's factor at its
+     worst at s, the legs still to choose that must be impure (the game has only nPure pure legs) at the game's worst */
+  const hB = (xs, rem) => {
+    let f = 1, imp = false;
+    for (const y of T) if (!y.pure) { imp = true; f *= sprGv(C, g, y, s); }
+    for (const y of xs) if (!y.pure) { imp = true; f *= sprGv(C, g, y, s); }
+    const mi = Math.max(0, rem - g.nPure);
+    if (mi > 0) { imp = true; f *= sprGm(C, g, s) ** mi; }
+    else if (rem > 0 && !imp) return X.hold * Math.max(1 + SPR_PURE, (1 + SPR_SIG) * sprGm(C, g, s));
+    return imp ? X.hold * (1 + SPR_SIG) * f : X.hold * (1 + SPR_PURE);
+  };
+  const hT = () => hB([], s - T.length);
   const grow = (pos, cUb, mult) => {
     const HT = hT();
     if (s - T.length - 1 === 0 && T.length >= 1) {
-      if (low(Math.log(c * d * HT * Rr / Fe))) return;
+      if (retLow(HT)) return;
       const st = lastPl(pos, cUb, mult);
       if (st) {
         const L = g.pl, dMx = mult * (g.sufD[pos][1] || 0);
@@ -348,10 +407,10 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
       const dMax = mult * x.d * (left > 0 ? (g.sufD[q + 1][left] || 0) : 1);
       if (!(dMax > 0)) continue;
       if (left > 0) {
-        let cu = Math.min(cUb, x.p); for (const y of T) cu = Math.min(cu, sprPair(C, g, y, x).c);
-        if (low(bound(cu * slk, dMax, x.pure ? HT : Math.min(HT, X.hold * (1 + SPR_SIG) * sprGv(g, x, s) * (HT === Hs ? 1 : HT / (X.hold * (1 + SPR_SIG))))))) continue;
+        let cu = Math.min(cUb, x.p); for (const y of T) cu = Math.min(cu, sprPairB(C, g, y, x).c);
+        if (low(bound(cu * slk, dMax, hB([x], left)))) continue;
         T.push(x); grow(q + 1, cu, mult * x.d); T.pop();
-        if (left === 1 && cands.length && !(cutV() > 0)) work(false);
+        if (left === 1 && cands.length && (!(cutV() > 0) || cands.length >= SPR_BATCH)) work(false);
         continue;
       }
       leaf(x, mult, cUb);
@@ -364,13 +423,13 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
       const W = [...T, x].sort((a, b) => a.i - b.i), mx = mult * x.d;
       const pre = sprPre(C, g, T, x, mx);
       if (pre && low(bound(pre.cHi * slk, pre.dHi, Hs))) return;
-      let cu = Math.min(cUb, x.p); for (const y of T) cu = Math.min(cu, sprPair(C, g, y, x).c);
+      let cu = Math.min(cUb, x.p); for (const y of T) cu = Math.min(cu, sprPairB(C, g, y, x).c);
       if (pre) cu = Math.min(cu, pre.cHi);
       const dHi = pre ? pre.dHi : dMax;
       if (low(bound(cu * slk, dHi, Hs))) return;
-      const H = X.hold * sprHW(g, W), b = bound(cu * slk, dHi, H);
+      const H = X.hold * sprHW(C, g, W), b = bound(cu * slk, dHi, H);
       if (low(b)) return;
-      if (s === 2) { const u = sprPair(C, g, W[0], W[1]), b2 = bound(u.c, u.d, H); if (!low(b2)) cands.push({ W, b: b2, u, sc: lc + Math.log(u.c) + restAt(u.d), key: '' }); return; }
+      if (s === 2) { const u = sprPair(C, g, W[0], W[1]), b2 = Math.min(lc + Math.log(u.c) + restAt(u.d), Math.log(c * d * u.c * u.d * Rr() / Fe)); if (!low(b2)) cands.push({ W, b: b2, u, sc: lc + Math.log(u.c) + restAt(u.d), key: '' }); return; }
       /* the pairwise estimate, for the order alone: each pair's lift over its legs' own multiplied */
       let c2 = 1, J2 = 1; for (const y of W) { c2 *= y.p; J2 *= y.I; }
       for (let a = 0; a < W.length; a++) for (let b3 = a + 1; b3 < W.length; b3++) { const u = sprPair(C, g, W[a], W[b3]); c2 *= u.c / (W[a].p * W[b3].p); J2 *= u.J / (W[a].I * W[b3].I); }
@@ -385,8 +444,8 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
 function sprPre(C, g, T, x, mult) {
   let cT, JT;
   if (T.length === 1) { cT = T[0].p; JT = T[0].I; }
-  else if (T.length === 2) { const u = sprPair(C, g, T[0], T[1]); cT = u.c; JT = u.J; }
-  else { const e = sprEst(C, g, [...T].sort((a, b) => a.i - b.i)); if (!e) return null; cT = e.c * (1 + SPR_SIG); JT = e.J * (1 - SPR_SIG); }
+  else if (T.length === 2) { const u = sprPairB(C, g, T[0], T[1]); cT = u.c; JT = u.J; }
+  else { const e = sprEst(C, g, [...T].sort((a, b) => a.i - b.i), 'pre'); if (!e) return null; cT = e.c * (1 + SPR_SIG); JT = e.J * (1 - SPR_SIG); }
   let cHi = cT * x.p, JLo = JT * x.I;
   for (const y of T) {
     const r = sprRho(g, x, y);
@@ -401,47 +460,57 @@ function sprSolve(C) {
   const { X } = C, G = X.games, log = C.log;
   const maxN = G.reduce((t, g) => t + g.maxLegs, 0);
   if (maxN < 2) return { none: true, why: 'legs' };
-  const lo = []; let hi = [], hiS = [], tail = 0;
+  const lo = [], dsc = [], hs = [], pr = []; let hi = [], hiS = [], tail = 0;
   const setup = gr => {
     C.gr = gr && X.ok2;
     C.K = Math.max(2, Math.min(SPR_KCAP, C.gr ? maxN : G.length, C.gr ? Math.max(G.length + 2, 6) : SPR_KCAP));
-    C.B = sprTable(C, C.K); C.R = sprRet(C, C.K);
-    const cell0 = Math.max(0, Math.min(C.NC, Math.ceil(C.A / C.dl - 1e-9)));
-    let hG = 0; if (X.ok2 && !C.gr) for (const g of G) for (let s = 2; s <= g.sm; s++) hG = Math.max(hG, sprHg(C, g, s));
-    hG = hG * (1 + SPR_PURE) / C.Fe;
-    hi = []; hiS = [];
-    for (let k = 0; k <= C.K; k++) { const v = k >= 2 ? Math.min(Math.exp(C.B[0][k][cell0]), C.R[0][k] / C.Fe) : 0; hiS.push(v); hi.push(k >= 2 && k <= maxN ? Math.max(v, hG) : v); if (lo.length <= k) lo.push(null); }
+    C.B = sprTable(C, C.K); C.R = sprRet(C, C.K, false); C.R0 = sprRet(C, C.K, true);
+    const cell0 = Math.max(0, Math.min(C.NC, Math.ceil(C.A / C.dl - 1e-9))), h0 = X.hold * (1 + SPR_SIG) * (1 + SPR_PURE);
+    /* singles alone: a parlay holding a group returns at most the group's most (a group landing TH or more, R10), or lands
+       under TH and returns at most HOLD (R2) */
+    let hG = 0;
+    if (X.ok2 && !C.gr) { for (const g of G) if (g.sm >= 2) hG = Math.max(hG, sprHg(C, g, g.sm)); hG = Math.max(hG * (1 + SPR_PURE) / C.Fe, Math.min(C.TH, h0 / C.Fe)); }
+    hi = []; hiS = []; hs.length = 0;
+    for (let k = 0; k <= C.K; k++) { const v = k >= 2 ? Math.min(Math.exp(C.B[0][k][cell0]), Math.max(C.R[0][k], Math.min(C.TH * C.Fe, C.R0[0][k])) / C.Fe) : 0; hiS.push(v); hi.push(k >= 2 && k <= maxN ? Math.max(v, hG) : v); if (lo.length <= k) lo.push(null); }
     const top = C.gr ? maxN : G.length;
     tail = top > C.K ? Math.min(sprTail(C, C.K + 1), (X.ok2 ? X.hold * (1 + SPR_SIG) : 1) * (1 + SPR_PURE) / C.Fe) : 0;
     if (!C.gr && X.ok2 && maxN > C.K) tail = Math.max(tail, hG);
     log.push(`${C.gr ? 'G' : 'S'}K${C.K}`);
   };
-  setup(false);
   const bestAll = () => { let b = null; for (let k = 2; k < lo.length; k++) if (lo[k] && (!b || lo[k].c > b.c)) b = lo[k]; return b; };
+  C.best = bestAll;
+  setup(false);
   const toGroups = () => { if (C.gr || !X.ok2) return false; setup(true); for (let k = 2; k <= C.K; k++) if (lo[k]) hi[k] = Math.max(hi[k], lo[k].c); return true; };
   for (let it = 0; it < 600; it++) {
     const L0 = bestAll(), Lo = L0 ? L0.c : 0;
     let U = tail; for (let k = 2; k <= C.K; k++) U = Math.max(U, hi[k]);
     if (!(U > 0)) return { none: true, why: 'pays' };
+    C.Ul = U;
     const out = (1 - SPR_TAU + SPR_ETA) * Lo;
-    let ks = -1; for (let k = 2; k <= C.K; k++) if (hi[k] > 0 && hi[k] >= out) { ks = k; break; }
+    /* the fewest legs not ruled out: a size is out once its bound is under out (or at it, where a search proved every
+       parlay of it under its bound, hs) */
+    let ks = -1; for (let k = 2; k <= C.K; k++) if (hi[k] > 0 && (hi[k] > out || (hi[k] === out && !hs[k]))) { ks = k; break; }
     if (ks < 0) { if (toGroups()) continue; return { unsettled: 'tail', b: L0, U }; }
     const b = lo[ks];
     if (b && b.c >= (1 - SPR_ETA) * hi[ks] && b.c >= (1 - SPR_TAU) * U) return { b, k: ks, U, hiK: hi[ks], Lo, exact: b.c >= hi[ks] * (1 - 1e-9) };
     if (!(b && b.c >= (1 - SPR_ETA) * hi[ks])) {
       if (hi[ks] > hiS[ks] * (1 + SPR_REL) && toGroups()) continue;
-      /* a parlay of ks legs to start from: the first the search meets, best first (none: none pays) */
-      if (!b && !(out > 0)) {
-        const p = sprQ(C, ks, 0, 0, true, hi[ks]);
-        log.push(`p${ks}:${p.best ? p.best.c.toPrecision(6) : '-'}`);
-        if (p.best) lo[ks] = p.best; else if (p.done) hi[ks] = 0;
+      /* the cut: a step under the size's bound, the step doubled each time nothing reaches it, never under what the
+         level needs (out) or what is found (b); the search keeps every parlay over the cut within SPR_NEAR of its best */
+      if (!b && !pr[ks]) {
+        /* a parlay of ks legs to start from, and to show should the work run out: the first the search meets, best first */
+        pr[ks] = true;
+        const p = sprQ(C, ks, out, 0, true, hi[ks]);
+        log.push(`p${ks}:${p.best ? p.best.c.toPrecision(6) : '-'}:${Math.round(C.W.used / 1e3)}k`);
+        if (p.best) lo[ks] = p.best; else if (p.done && out <= hi[ks]) { hi[ks] = out; hs[ks] = true; }
         continue;
       }
-      const th = Math.max(out, b ? b.c : 0);
+      const st = dsc[ks] || 0, th = Math.max(out, b ? b.c : 0, hi[ks] * (1 - SPR_STEP * 2 ** st));
       const r = sprQ(C, ks, th, SPR_NEAR, false, hi[ks]);
-      log.push(`q${ks}@${th.toPrecision(5)}:${r.best ? r.best.c.toPrecision(6) : '-'}`);
+      log.push(`q${ks}@${th.toPrecision(5)}:${r.best ? r.best.c.toPrecision(6) : '-'}:${Math.round(C.W.used / 1e3)}k`);
       if (r.best && (!lo[ks] || r.best.c > lo[ks].c)) lo[ks] = r.best;
-      hi[ks] = Math.min(hi[ks], r.hi);
+      if (r.best) { if (r.hi < hi[ks]) { hi[ks] = r.hi; hs[ks] = false; } }
+      else { if (th <= hi[ks]) { hi[ks] = th; hs[ks] = true; } dsc[ks] = st + 1; }
       continue;
     }
     const need = b.c / (1 - SPR_TAU);
@@ -450,9 +519,9 @@ function sprSolve(C) {
     if (j < 0) return { unsettled: 'bound', b, k: ks, U };
     if (hi[j] > hiS[j] * (1 + SPR_REL) && toGroups()) continue;
     const r = sprQ(C, j, need, 0, true, hi[j]);
-    log.push(`a${j}@${need.toPrecision(5)}:${r.best ? r.best.c.toPrecision(6) : '-'}`);
+    log.push(`a${j}@${need.toPrecision(5)}:${r.best ? r.best.c.toPrecision(6) : '-'}:${Math.round(C.W.used / 1e3)}k`);
     if (r.best) { if (!lo[j] || r.best.c > lo[j].c) lo[j] = r.best; }
-    else hi[j] = Math.min(hi[j], need);
+    else if (need <= hi[j]) { hi[j] = need; hs[j] = true; }
   }
   return { unsettled: 'loop', b: bestAll() };
 }
@@ -475,14 +544,21 @@ function spRulerLevel(pool, F, o) {
   let X = SPR_PREP.get(pool.legs); if (!X) { X = sprPrep(pool.legs); SPR_PREP.set(pool.legs, X); }
   const Fe = F - SP_FLOOR_EPS, A = Math.log(Fe), NC = SPR_CELLS;
   const W = { used: 0, budget: o.work != null ? o.work : SPR_WORK };
-  const C = { X, F, Fe, A, NC, dl: A / NC, K: 0, gr: false, W, log: [], sp: new Set(), se: new Set(), sg: new Set() };
+  const C = { X, F, Fe, A, NC, dl: A / NC, K: 0, gr: false, W, log: [], TH: SPR_TH,
+    sp: new Set(), se: new Set(), sg: new Set(), cc: new Set(), dbg: o.dbg ? {} : null, gv: new Map(), hg: new Map(), qb: null, Ul: null, best: null };
   if (X.edge) return { legs: null, settled: false, why: 'edge', work: W };
+  if (X.dear) return { legs: null, settled: false, why: 'dear', work: W };
   let r;
   try { sprWork(C, 'prep', X.n); r = sprSolve(C); }
-  catch (e) { if (e === W) r = { unsettled: 'work', b: null }; else throw e; }
+  catch (e) {
+    if (e !== W) throw e;
+    /* the work ran out: the best parlay found, against the last bound proved (every bound only falls) */
+    const b0 = C.best ? C.best() : null, q = C.qb;
+    r = { unsettled: 'work', b: q && (!b0 || q.c > b0.c) ? q : b0, U: C.Ul };
+  }
   const work = { ...W };
   if (r.none) return { legs: null, settled: true, why: r.why, work, log: C.log };
-  const b = r.b, out = { legs: null, settled: !r.unsettled, why: r.unsettled || null, work, log: C.log, bound: r.U, boundK: r.hiK, k: r.k, exact: !!r.exact, groups: C.gr };
+  const b = r.b, out = { legs: null, settled: !r.unsettled, why: r.unsettled || null, work, log: C.log, dbg: C.dbg, bound: r.U, boundK: r.hiK, k: r.k, exact: !!r.exact, groups: C.gr };
   if (b) {
     const x = pbExact(b.legs.map(y => y.l));
     Object.assign(out, { legs: x.legs, p: x.corr, d: x.dec, n: x.legs.length, found: { c: b.c, d: b.d } });

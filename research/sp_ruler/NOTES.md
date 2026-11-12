@@ -29,3 +29,15 @@ factors; the one-factor composition undercounted when a leg's team link was belo
 two-game cuts settle, 65-210 ms for three levels; night filter cases settle (players, teams, no unders, -300, -200) but
 Overs only at Aggressive, which needs 26M work units (45 s): 4 legs 8.0749% @8.026. Next: keep the best found with its
 proven gap when the work runs out, count gv/cap per call, the conditional-sd step of R10, the fixture nights.
+
+## 21:00 UTC: R10 tightened; the work runs out on a best found
+A group must hold at least s - nPure impure legs, so its bound carries gm^(that many) (Overs-only or no-unders games: every
+leg impure): Overs-only Aggressive on the night settles in 0.37 s (was 45 s). R10's g now takes the conditional sd
+(a at its least over sigma in [sqrt(1 - s^2), 1]); TH 1/16 fixed (every cut a level meets is over it); the return tables
+come in two tiers (groups landing TH or more, at R10; any group at HOLD while the cut is under TH). The search descends
+from each size's bound (1%, 2%, 4%... under it), after a probe for a first parlay; the work runs out on the best found
+and the last bound proved. Work counted per call (deterministic whatever the caches hold), costs recalibrated (two
+integrals a group). Non-PD games: pair bounds at max(rho,0)/min(rho,0); no one-factor cap past 0.81.
+Default: every level of the night and every 1/2-game cut of 10 Nov settled (night 0.18 s for three levels; MIL_NYK alone
+0.36 s). Overs only and no unders: the night settles; 21 and 25 of the 1/2-game cut Aggressives stop at the budget
+(1e6 units, about 1 s) with a parlay and a proven gap (worst 12% and 33%).

@@ -102,7 +102,8 @@ const sprPhi2 = (a, b, r) => Math.exp(-(a * a + b * b) / (2 * (1 + r))) / (TWOPI
 function sprGv(g, x, s) {
   if (x.pure) return 1;
   const ex = x.p / x.I; if (s < 2) return ex;
-  const o = s - 1, nt = Math.min(x.pid ? 2 : 1, o), r2 = x.pid ? nt * x.Mt * x.Mt + (o - nt) * x.Mp * x.Mp : (o - nt) * x.Mp * x.Mp + nt * Math.max(x.Mp, x.Mt) * Math.max(x.Mp, x.Mt);
+  /* the largest sum of squared correlations x can have with s - 1 others: at most two team legs (one for a team leg) */
+  const o = s - 1, nt = Math.min(x.pid ? 2 : 1, o), r2 = x.pid ? nt * Math.max(x.Mt, x.Mp) ** 2 + (o - nt) * x.Mp * x.Mp : (o - nt) * x.Mp * x.Mp + nt * Math.max(x.Mp, x.Mt) ** 2;
   let e2 = 0; for (let t2 = 0; t2 <= Math.min(2, o); t2++) { const np = o - t2; e2 = Math.max(e2, np * (np - 1) * g.Mpp * g.Mpp + 2 * np * t2 * g.Mpt * g.Mpt + t2 * (t2 - 1) * g.Mtt * g.Mtt); }
   const lam = 1 - Math.sqrt(e2); if (!(lam > 0.05)) return 1;
   return sprGFor(x, Math.sqrt(r2 / lam));
@@ -112,8 +113,8 @@ function sprHg(C, g, s) {
   if (!g.H) g.H = [];
   if (g.H[s] == null) {
     sprWork(C, 'gv', g.n);
-    let gm = 0; for (const x of g.xs) if (!x.pure) gm = Math.max(gm, sprGv(g, x, s));
-    g.H[s] = C.X.hold * Math.max(1 + SPR_PURE, (1 + SPR_SIG) * gm);
+    let gm = 0, pure = false; for (const x of g.xs) if (!x.pure) gm = Math.max(gm, sprGv(g, x, s)); else pure = true;
+    g.H[s] = C.X.hold * Math.max(pure ? 1 + SPR_PURE : 0, (1 + SPR_SIG) * gm);
   }
   return g.H[s];
 }
@@ -317,8 +318,12 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
     let lo = 0, hi = L.length; while (lo < hi) { const mid = (lo + hi) >> 1; if (L[mid].q >= pos && L[mid].p <= Imax) hi = mid; else if (L[mid].q < pos) lo = mid + 1; else lo = mid + 1; }
     return { start: lo, eP, cT: o.cT };
   };
+  /* what a group holding T returns at most (R10): T's impure legs' worst factors at s legs, else the game's own */
+  const hT = () => { let f = 1, imp = false; for (const y of T) if (!y.pure) { imp = true; f *= sprGv(g, y, s); } return imp ? X.hold * (1 + SPR_SIG) * f : Hs; };
   const grow = (pos, cUb, mult) => {
+    const HT = hT();
     if (s - T.length - 1 === 0 && T.length >= 1) {
+      if (low(Math.log(c * d * HT * Rr / Fe))) return;
       const st = lastPl(pos, cUb, mult);
       if (st) {
         const L = g.pl, dMx = mult * (g.sufD[pos][1] || 0);
@@ -338,13 +343,13 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
       const x = byP[q], left = s - T.length - 1;
       sprWork(C, 'node');
       const dAll = mult * (g.sufD[q][left + 1] || 0);
-      if (!(dAll > 0) || low(bound(Math.min(cUb, x.p) * slk, Math.max(dAll, 1), Hs))) break;
+      if (!(dAll > 0) || low(bound(Math.min(cUb, x.p) * slk, Math.max(dAll, 1), HT))) break;
       if (!sprFits(T, x)) continue;
       const dMax = mult * x.d * (left > 0 ? (g.sufD[q + 1][left] || 0) : 1);
       if (!(dMax > 0)) continue;
       if (left > 0) {
         let cu = Math.min(cUb, x.p); for (const y of T) cu = Math.min(cu, sprPair(C, g, y, x).c);
-        if (low(bound(cu * slk, dMax, Hs))) continue;
+        if (low(bound(cu * slk, dMax, x.pure ? HT : Math.min(HT, X.hold * (1 + SPR_SIG) * sprGv(g, x, s) * (HT === Hs ? 1 : HT / (X.hold * (1 + SPR_SIG))))))) continue;
         T.push(x); grow(q + 1, cu, mult * x.d); T.pop();
         if (left === 1 && cands.length && !(cutV() > 0)) work(false);
         continue;

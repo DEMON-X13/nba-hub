@@ -22,3 +22,10 @@ for three levels (MIL_NYK the slowest, 442 ms). Fixed so far: side-side correlat
 (one side a group), exact per-group G for impure legs (R10), cells tight, -Inf bounds pruned, a probe before the
 near-best search, groups worked lazily in the order of their pairwise estimate, last leg by a window on byP.
 Next: two-game cuts (F8 slow), filter cases, the best found kept when the work runs out, port into suggested.html.
+
+## 19:40 UTC: bound fixes; two-game cuts settle
+Fixed: a game's group cap used the pure bound with no pure leg in it; a partial group did not carry its impure legs'
+factors; the one-factor composition undercounted when a leg's team link was below its mate link. Default filters: all 15
+two-game cuts settle, 65-210 ms for three levels; night filter cases settle (players, teams, no unders, -300, -200) but
+Overs only at Aggressive, which needs 26M work units (45 s): 4 legs 8.0749% @8.026. Next: keep the best found with its
+proven gap when the work runs out, count gv/cap per call, the conditional-sd step of R10, the fixture nights.

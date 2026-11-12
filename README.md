@@ -3063,7 +3063,9 @@ Aggressive each the parlay of the night's legs likeliest to land at the price it
 no leg limit, Safe $2 on $1, Medium $4, Aggressive $8: "No leg limit", below; a team leg at the model's
 chance; from the first set the page with them takes after 7 November 2026 DraftKings' main lines on players join them, each at DraftKings' own fair
 chance: "Player legs, at DraftKings' odds", below; since 10 November 2026 each level holds at least one player leg wherever
-the night's legs make such a parlay, else it is the likeliest without one and says why: "At least one player leg", below),
+the night's legs make such a parlay, else it is the likeliest without one and says why: "At least one player leg", below;
+and since 11 November 2026 every leg at DraftKings' fair chance, on the visitor's own filters, the site's set at the
+default ones: "One ruler, and your own filters", below),
 set out from 6:00 AM Eastern, locked 2 hours before the night's first tip-off, and kept and graded by the job as a record. Until that day each game on national TV had a set of its own
 ("Before 7 November", below). It is `app/parts/suggested.html`, set in at its `<!--part:suggested-->` marker after the
 Parlay Builder's, on the Parlay Builder's legs, sums, cards and builder (README "Parlay Builder"); the tab sits after
@@ -3090,9 +3092,11 @@ bets down 223 units), and the second props model's one test on DraftKings' 2023-
 Offered DraftKings' own chance instead, with its cost said as "about -5% expected per leg" (a player leg then has no
 edge), he chose "Add at DraftKings' odds". **That cost was said wrong, and is corrected here** (the review of 7 November
 2026): -5% is the average of the two sides, but the page's rule for a main line's fair chance (below) puts the whole
-margin on the Over, so at that chance **an Under breaks even** (its fair chance is its own price's implied chance: $1 back
-on $1 on average) and **an Over gives up about 12%** (the whole margin: $0.86 to $0.91 back on $1 on 7 November's lines,
-$0.88 on average). The levels are the likeliest parlays at their price, so they take short-priced Unders (steals, threes,
+margin on the Over, so at that chance **an Under's fair chance is its own price's implied chance** (one over its price;
+that is the rule's arithmetic, never a return: on this season's graded lines an Under lost about 1.65% a dollar at that
+chance and an Over about 11.3%, `research/sp_ruler`, and since 11 November 2026 nothing says an Under breaks even) and
+**an Over carries the whole margin** (about 12%: $0.86 to $0.91 back on $1 at that chance on 7 November's lines, $0.88 on
+average). The levels are the likeliest parlays at their price, so they take short-priced Unders (steals, threes,
 blocks and assists at -180 to -240) and almost never an Over: every player leg the job's runs took on 7 November's files
 was an Under. The owner was told so. So every night set the page with player legs takes from `PL_FROM`
 (`tools/suggest_check.js`, 23:00 UTC on 7 November 2026, after that night's set, taken at 19:12 UTC with team legs alone,
@@ -3133,13 +3137,15 @@ name's matchup bubble keeps the props model's projection for reference. The leve
 "model says 31%" on a level of team legs alone; "model + DraftKings 29%" on one that mixes them (`data-pb-mix="mixed"`,
 titled "The chance the levels are ranked on: each team leg at the model's chance, each player leg at DraftKings' fair
 chance (the props model failed its trial, so a player leg carries no model claim), joined by the same-game copula"); and
-"every leg at DraftKings’ chance" where every leg is a player's (`player`); both titles say what a player leg costs
-there ("at that chance a player Under breaks even and an Over gives up about 12%, so the levels take Unders"). The parlay
+"every leg at DraftKings’ chance" where every leg is a player's (`player`); both titles say what a player leg's chance is
+there ("DraftKings’ fair chance puts a player line’s whole margin on the Over, so the levels take Unders"; until 11 November
+2026 they said an Under broke even at it, which the owner's call of that day took off). The parlay
 card (its window, its image and Share link's text) says the mixed chance as "ranked at 31.0% (model on team legs,
 DraftKings on player legs)", never "model + DraftKings says", which under DraftKings' own fair chance read as DraftKings
 saying it (the review of 7 November 2026), with one line of small print under it: "Team legs at the model’s chance,
-player legs at DraftKings’ fair chance: no model claim on a player leg, and at it a player Under breaks even and an Over
-gives up about 12%." Player legs go on DraftKings by hand (ESPN's feed carries no DraftKings id for a player's line), as
+player legs at DraftKings’ fair chance: no model claim on a player leg, and DraftKings’ fair chance puts a player line’s
+whole margin on the Over." (until 11 November 2026 it ended "and at it a player Under breaks even and an Over gives up
+about 12%"). Player legs go on DraftKings by hand (ESPN's feed carries no DraftKings id for a player's line), as
 the parlay card says.
 
 **After the lock.** A player can be listed after the set locks, and a set holding him would then hold a leg DraftKings
@@ -3291,8 +3297,8 @@ reading builds groups of three legs or more of a game itself ("The guard's own g
 He sent a screenshot of that night's Suggested Parlays, every level team legs alone, and asked "why is it still only
 showing team legs and not players", and of the Parlay Builder "I also dont see any player odds". The why: each level is the
 likeliest parlay paying its floor, and a team leg stands on the model's chance, which runs above DraftKings' (the Value
-tags), while a player leg stands on DraftKings' own fair chance, at which an Under breaks even and an Over gives up about
-12% ("Player legs, at DraftKings' odds", above). So at the same price a team leg always looks likelier, and that night the
+tags), while a player leg stands on DraftKings' own fair chance, which puts a line's whole margin on its Over (an Under's
+chance one over its price, an Over's about 12% under it: "Player legs, at DraftKings' odds", above). So at the same price a team leg always looks likelier, and that night the
 record's pool kept no player leg at all (its `pl`: 920 lines read, 172 out of the band, 60 held out, the 748 in the band all
 cut, none within 1% of a level). Offered "at least one player leg in every level" as the fix, his reply made plain he
 expects player legs on the tab. So:
@@ -3314,7 +3320,7 @@ expects player legs on the tab. So:
 What it costs, said: the level is still the likeliest at its floor, now among the parlays holding a player, so where the
 best of all held none the level gives up some chance by the numbers it is ranked on. A player leg carries no model claim
 (DraftKings' own fair chance), so the level's chance is at least as honest as before, and the levels take short-priced
-Unders, which break even at that chance. On 10 November 2026's committed files at 17:00 UTC (6 games, 775 legs in the pool)
+Unders, whose chance there is one over their price. On 10 November 2026's committed files at 17:00 UTC (6 games, 775 legs in the pool)
 Safe went from 52.07% (two team legs) to 49.92% with a player, Medium from 28.62% to 27.95% and Aggressive from 15.42% to
 14.87%; on 7 November's night only Safe moved (51.38% to 51.34%); on the speed test's night of eight -900 favourites whose
 only player legs are long shots (every player leg 45% to 53%), Safe falls from seven moneylines at 55.78% to one moneyline and an
@@ -3383,7 +3389,160 @@ that is on the guard's own reading of the run's files (every player leg read aga
 groups: a game's team legs are a side and a total at most, so every group of three legs or more it builds holds a player
 leg), and on the pool the set keeps.
 
+### One ruler, and your own filters (12 November 2026, the owner's call of 11 November)
+
+After a night whose sets were team filler (the Knicks at -1040 in one of them) he wrote: "i dont want to never use team
+odds. i want it to be like the nfl stuff where i can turn on and off filters to fit what I want. i just find it hard to
+believe that team odds are always the best and always overtake player legs." Two changes answer it, both from the
+record's cutoff (`RULER_FROM` in `tools/suggest_check.js`, the page's `SP_RULER_FROM` in `app/parts/suggested.html`, the
+same instant: the job refuses a page whose cutoff is another), and every set taken before it keeps the rule it was taken
+under, byte for byte.
+
+**Why team legs always won** (`research/sp_ruler/README.md`, the evidence, run before a line of this was written). A
+set's team leg stood on the team model's chance (`legModel`: the player model's win chance, raw, and a spread's margin
+over 14.5 points), a player leg on DraftKings' own fair chance. On no market and no season does the model's chance beat
+DraftKings' (or the closing line's) no-vig chance on log loss out of sample: every difference is positive (the sides a set
+takes: moneyline +0.0132 [+0.0087, +0.0177] on 4,455 sides, spread +0.0096 [+0.0063, +0.0129] on 4,988). The model rates
+team legs above what the market and the results say, so at the same price a team leg always looked likelier and crowded
+the player legs out. On one ruler both stand on DraftKings' chance, and the evidence for the player side holds at it: on
+this season's graded DraftKings main lines an Under lost about 1.65% a dollar at that chance [-3.71%, +0.47%] and an Over
+about 11.3%, so no word on the page, in the record or here says an Under breaks even (it does not, by the results), and
+the levels take Unders because the rule puts a line's whole margin on its Over, not because they return a dollar.
+
+**The rule** (THE RULER SEARCH in `app/parts/suggested.html`, its proof in `research/sp_ruler/engine.md`). The ruler pool
+(`spRulerPool`) is every team leg (each side's moneyline and spread of a game the model rates, a total's over and under)
+and every player's main line (over and under) of the night's games still to tip, as `spPool` reads them, each at
+DraftKings' fair chance (`legFair`: a team line's two prices with the margin out in proportion, a player line's whole
+margin on its Over), priced with a margin, 45% to 97%, a game line with its betslip id where its game's lines carry ids,
+with no far-off guard and no value bar, on the filters. A parlay is two legs or more of it, one leg a player, one side and
+one total a game; its chance C and price D the builder's own sums (a leg's chance; a game's legs together by the
+same-game copula, priced at the lower of their prices multiplied and the hold over their implied joint chance). For a
+level of floor F ($2, $4 and $8 on $1, `SP_RULER_LEVELS`), C* is the most C of a parlay with D at least F and C*_k the
+most of k legs; the level L is a parlay with
+- (1) D(L) at least F;
+- (2) C(L) at least (1 - 0.005) C* (`SPR_TAU`, half a percent);
+- (3) no parlay paying F with fewer legs than L lands (1 - 0.005 + 0.001) C* or more (`SPR_ETA`, a tenth of a percent);
+- (4) C(L) at least (1 - 0.001) C*_k, k its legs.
+Under one ruler every leg returns at most $1 on $1 at its fair chance, so a parlay paying F lands at most 1/F and a great
+many sit within a hair of the best: the exact likeliest means nothing to a bettor, and the fewest legs keep free filler
+out (a heavy Under at -1000 returns its dollar too). A tie on the chance goes to the lower slip keys; nothing reads a
+clock or draws at random; the search's only stop besides its proof is a count of its work (`SPR_WORK`, about a second of
+jsdom a level, counted the same on every machine). A level whose work runs out keeps the best parlay found, settled
+false, its rule "likeliest found paying $8+" and its title "Not settled on your filters: within 13.3% of the likeliest
+parlay paying $8 or more on $1, ..." (the gap 1 - C / U, U the bound proved; "in the search's work" for the site's set),
+or, with nothing found, "Not settled within the search's work on your filters." A level of no parlay says why ("No parlay
+of your filters' legs pays $8 or more on $1.", "No leg of the night fits your filters.", "Only 1 leg on your filters: a
+parlay takes one leg a player, and one side and one total a game."). No player leg is asked of a level any more (the rule
+of 10 November keeps it for the sets taken under it).
+
+**The search, and why it settles what it says** (THE RULER SEARCH's comment holds every cut, (R1) to (R11);
+`research/sp_ruler/engine.md` the cases, the checks and the timings). A parlay is, game by game, nothing, one leg or a
+group of two legs or more of one game, so C and D are products over those units (R1). Every leg returns at most $1 at its
+fair chance (an Under exactly $1: "pure"), and a group returns at most the hold (its fair chance at most its chance at
+the implied prices, J, and it is priced at most HOLD / J): so a parlay paying F lands at most its return over F (R2, R3).
+A table over the games on a grid of log prices bounds the most chance any choice of the games still to come can add
+toward the floor (R4), the returns still to come bound it again (R5), two legs of a game are worked exactly (R6), three to
+five held to the page's own integral within `SPR_SIG` (R7), a game's likeliest legs capped by the one-factor copula at
+its largest correlation (Slepian's inequality, R8), a leg joined to a known group bounded by its correlations (R9), an
+impure leg's share of a group's return bounded (R10), and every parlay longer than the sizes searched bounded by its
+likeliest legs (R11); a game whose table is not positive definite (the builder may shrink it) is bounded at its worst.
+Each size k is searched under a cut that only rises; its bound hi_k falls as it is searched. With Lo the best found,
+k* is the fewest legs whose bound reaches (1 - 0.005 + 0.001) Lo, and the level is settled when its best of k* legs, b,
+is within 0.1% of hi_k* and within half a percent of U, the most of every size's bound: then (1) to (4) hold of b by those
+bounds. Ties go to the lower slip keys (a tie pass within its own work). `tools/test_suggest_ruler.js` holds every
+level of 171 small pools to an enumeration of every parlay (2.58 million paying parlays) and its bound at C* or more.
+
+**On the page.** A ruler card states the fair chance ("49% fair chance", "every leg at DraftKings’ chance", titled with
+what it is), each leg's price and "fair 70%", a team leg's model chance in its own title alone ("The model’s chance: 62%
+(not what the level is ranked on)"), no Value mark, its rule "likeliest paying $2+" titled with the rule whole ("Within
+half a percent of the likeliest parlay paying $2 or more on $1, every leg at DraftKings’ fair chance; the fewest legs any
+such parlay has; the likeliest of that many legs, within 0.1%."). The parlay card's chance line is DraftKings' fair chance
+and its small print says so ("Every leg at DraftKings’ fair chance, its two prices with the margin taken out: the chance
+the level was ranked on, no model claim."). The words of the rule with a player that said what a player leg costs now say
+"DraftKings’ fair chance puts a player line’s whole margin on the Over" (never that an Under breaks even).
+
+**Your filters** (the Parlay Builder's choices, mirrored on this tab and kept apart: `M.sp`, this browser only, never
+sent anywhere, never `M.pb`), between Refresh odds and the set, from the cutoff and while the night is set out: one row,
+"Build from" All, Teams only and Players only (`data-sp-mix`, `aria-pressed`), then a More filters fold
+(`details[data-sp-fx]`, its summary saying what is on, "All bet types · all 7 games · any price"): the five bet types
+(Moneyline, Spread, Game total, Player overs, Player unders, `data-sp-kind`), the shortest leg (Any, −500, −300, −200: no
+leg priced shorter, `data-sp-short`; a leg at exactly −300 stays at −300), the night's games still to tip with All and
+None (`data-sp-g`, each named with its tip-off in Eastern time as the rest of the tab) and the player stats the page
+offers with All and None, folded (`details[data-sp-sx]`). A mix sets the five boxes; a box changed by hand lights the mix
+it makes, or none. More filters starts open on a wide screen and shut on a phone (761px, `pbWide`), and stays where the
+reader leaves it (`fx`, as `sx` for the stats). Every control is 44px, and there is no paragraph. At the default filters
+(every box, game and stat, Any) the tab draws the site's set as before; at any other it draws "Your filters" sets: one line
+"Your filters not the site’s set · not graded" with one Reset (every filter back, the focus on All), then the site's lock
+said as the site's ("The site’s set locks Sat 5:00 PM ET.", "locked" after it, no Locked mark), then your set, built live
+from the lines at hand on the games still to tip, before the lock and after it alike, its Finish kicker ending "· your
+filters". The site's set never stands on a visitor's filters: the job boots the page with a visitor's filters planted in
+its storage (Teams only, nothing shorter than −200) and takes the set at the default filters (`spEntry` builds with none),
+which its guard holds on its own reading of the files.
+
+**The soft build.** A set the tab shows (the site's live set, this browser's own at the lock and yours) is built a piece a
+task: the pool, then each level (`spRB`, `spRBStep`, kept per page load on the night's data and the filters, the last 12),
+each task drawing what is built, a level still building drawn "Building…" (`data-sp-pending`). A task that finds another
+tab on the screen builds nothing and stops; the tab opened again carries on where it stopped (the review of the first
+build: one kept building on the Parlay Builder's tab). A filter pressed draws at once and builds nothing in the press.
+
+**The record.** From the cutoff the job takes each night's set by `spEntry`, the ruler's at the default filters, whole:
+heads `{id, label, min, max, price, chance: 'fair'}` with no `need` and no `nopl`, each leg's `p` and `fair` its fair
+chance, and the pool `{rule: 'fair', legs: [[key, DraftKings' price, its fair chance, the other side's price]], sets:
+[[places..., chance, price]], band, noId, vig, pl: {lines, band, held, none, vig, cut}}`: every team leg of the night and
+the player legs the levels hold (`cut` the player legs in the band it does not keep), and each level's same-game groups
+with the builder's own figures. A night with a level the search did not settle (marked `gap`, an empty one 1) gets no set
+that run, said ("no set of 2027_20261113_NIGHT this run: a level not settled within the search's work"), and a set an
+earlier run took stays as it was. A level built again after the lock for a player listed since is built under its own
+set's rule (a ruler level on a ruler pool of its own; a set taken under the rule with a player keeps that rule).
+
+**The guard** (`rulerEntryBad` in `tools/suggest_check.js`). A ruler set taken by the run (new or changed, its lock to
+come) is held to the guard's own reading of the run's files (`teamOwn` and `plOwn`: every team and player leg, its fair
+chance its own reading of the two prices, every count of what the rules left out), the pool it keeps leaving out no team
+leg, every kept group worked again by its own copula; and every level by property: a valid parlay of the pool's legs at
+their kept figures, its chance and price its legs' (the pool's figures multiplied), paying its floor, settled, and landing
+at least (1 - `TAU_G`) of the guard's own upper bound on C* (`rulerBound`): `TAU_G` is 1%, the page's half a percent plus
+the bound's slack, which on every level of three real nights' cuts at the default filters (7 November, and 10 November at
+17:00 and at 21:57 UTC, each whole, each game and each two games: 219 levels) was at most 0.6% over the page's level (whole nights at most 0.06%; a night of one game at $4, where the bound's envelope stands
+over a game's many triples, up to 0.6%). The bound is a dynamic programme over the night's games on a grid of log prices
+(cells of 2e-4, each unit's log price rounded up, every cell from ln F on one): first each game's legs alone (exact), and,
+only where a group of two legs or more of one game could matter (the legs alone below the hold over F), its pairs
+exactly by the builder's own two-leg sums, every larger group by the hold's envelope capped by the one-factor copula at
+the game's largest correlation (Slepian's inequality), then its triples exactly where few enough; every term an upper
+bound, so the least of them is. An empty level is refused where the legs make a parlay paying its floor (`rulerPays`).
+A level built again after the lock is held the same way on the guard's reading of the files at the time it was built, by
+the run that built it. A set the file it is held to holds as it is (every set on every later run) is held to its pool as
+kept (a valid parlay of its legs at their kept figures, paying its floor) and not worked again: its pool carries no
+player's club, which the bound's correlations need (a teammate's line and an opponent's correlate differently: worked
+with the clubs left out, the bound fell under the level on 6 one-game cuts of the real nights), and a season of nights
+worked again on every run would grow the record step by about 0.1 s a level. A set of an older
+rule's heads taken from `RULER_FROM`, or a ruler's taken before it, is refused unless the file it is held to (the last
+commit's) holds it so, taken at the same time: the job running the page before this change between the cutoff and the
+merge keeps what it took, as `PLAYER_FROM` and `NOCAP_FROM` did.
+
+**Its time.** The job's record step (the take and the guard) on 12 November's files at 19:38 UTC, the cutoff an hour
+before for the run, took 1.07 s and rewrote that night's set under the ruler (the guard's bound took at most 0.82 s a level
+on the real cuts, about 0.1 s on that night). On the page, measured in Chromium on 10 November's files at 21:55 UTC (6
+games, 922 legs, the page's cutoff moved before them), from the press to every level drawn: opening the tab 302 ms at
+390 wide and 328 ms at 1280, its longest task 70 to 74 ms; a filter pressed (Teams only, All, Player unders off, −300,
+Reset) drawn at once and built 34 to 132 ms after the press, no task over 50 ms; no sideways scroll at either width, no
+control under 44px, no page error. A level the search does not settle on a visitor's filters stops on its counted work,
+about a second of jsdom: on the real nights' cuts of one and two games, Overs only and Player unders off leave 150 of the
+1,533 levels `tools/test_suggest_ruler.js` times unsettled (the worst gap 39%), each drawn as the best parlay found with
+its gap said; every level at the default filters settled.
+
+**What the owner was told.** The record's sets from the cutoff are the ruler's, and its pills count them beside every set
+before (a set of the rule before stands as taken and graded). A night with a level the search cannot settle in its work
+gets no set: never on the real nights measured at the default filters, but a made-up night of three games of short
+Unders at -241, -384 and -385 leaves its Aggressive unsettled (the smoke's DF: 9.72% found where 10.20% pays), so a real
+night like it would go unrecorded. The Parlay Builder's Top 50 still ranks its Value picks on the team model's chance,
+which the evidence above says loses to DraftKings' on every market: a follow-up, not this change.
+
 ### On the page
+
+**Since the cutoff of 11 November 2026** ("One ruler, and your own filters", above) the filters sit between Refresh odds
+and the set, and the pool, the levels and the cards are the ruler's: what this section says of `spPool`, the model's
+chance, the far-off guard, the Value mark, the rule with a player and a card's model figure is the rule before, which the
+sets taken before the cutoff keep (and a level of one built again after its lock).
 
 Top to bottom: the heading and the night's date; the record's pills; Refresh odds and its status line; the night's set,
 or the wait line, or why there is none. Nothing else: as on the NFL hub since its app v113 (the owner's call of 17 October
@@ -3547,6 +3706,12 @@ well"):
 
 ### The record (`tools/suggest_ledger.js`, `tools/suggest_check.js`, `data/suggest_ledger.json`)
 
+Since 11 November 2026 (`RULER_FROM`) the sets the record takes are the ruler's: their heads, their pool's shape (`rule:
+'fair'`, every leg four fields with its fair chance and the other side's price), the job's refusal of a page whose cutoff
+or ruler levels are another, the night with a level not settled left untaken, and the guard's property check against its
+own bound are in "One ruler, and your own filters", above. What follows is the record as it stands for every set and the
+rules before.
+
 The NFL hub's `props/build/suggest_ledger.js` on this page. `node tools/suggest_ledger.js` boots the built `index.html`
 in jsdom on the `state.json` just published and the `lines.json` just read, the window's clock held at the run's time so a
 boot of seconds never crosses a lock, every file it asks for served from the checkout but the record itself, which answers
@@ -3647,6 +3812,52 @@ before (the job takes the next night's set too); a night no run reached before i
 then shows its own set, said so).
 
 ### The checks
+
+**One ruler, and your own filters** (the owner's call of 11 November 2026). Every check keeps its own copy of the rule
+and reads the page's cutoff from where it stands, moving it where a case needs: the record's test runs every section
+before R with the cutoff far ahead (`SUGGEST_RULER_FROM`, and the page copied with its `SP_RULER_FROM` moved the same,
+exactly one in it), and the smoke loads the page so for every section but 8 and 9.
+- `tools/test_suggest_ledger.js` R (390 checks in all): R1 D1's night of four games with player Unders and D2's of two,
+  taken under the ruler, every level held by this file's own enumeration of every parlay (each game's legs by its own
+  copula) to the rule's four properties, every leg at its fair chance, the pool keeping every team leg at its two prices'
+  fair chance and the player legs its levels hold; R2 prices moved and the set rewritten, the same lines writing nothing;
+  R3 the cutoff both ways (a run before it the rule with a player, after it the ruler; an older rule's set taken after it
+  and a ruler's before it refused, each kept where the file it is held to holds it so) and on the real record (held to
+  itself at the real cutoff, and its latest set refused at a cutoff a minute before it with no file to hold it to); R4 the
+  guard's breaks (a Safe 30% under its bound, a team leg kept at the model's chance, a level not settled, a team leg left
+  out of the pool, the heads of the rule with a player, a leg not in its pool), `TAU_G` itself (a level refused against a
+  bound 1.06% over its chance and passed at 0.96%), and ties among two players' Unders at +100 (the guard passing either);
+  R5 a level built again after the lock under each rule; R6 the pool as kept from the lock; R7 a night of one game; R8 a
+  level not settled within the search's work (`SUGGEST_RULER_WORK`), the night given no set and an earlier set left as it
+  was; R9 the fewest legs, D1's night with five players' Unders: the pair at -241 (49.949% paying $2.0020) where the
+  triple at -385, -384 and -384 lands likelier (49.968%). G runs the real ledger at the real cutoff.
+- `tools/smoke_suggested.js` section 9, on a night made for the filters (DF: three games, the pair of Unders at -241 and
+  the likelier triple, legs at exactly -300 and -301) and on D1, D2 and D3: the pool and every level against this file's
+  own pool and enumeration (the builder's own sums on each game's legs) at the default filters and on Teams only, Players
+  only, Player overs alone, Player unders off, −300 (the edge both ways), −200, −500, a game left out, a stat left out and
+  every stat left out, a level not settled held to the gap it states; the controls, the mix each box makes or none, games
+  and stats All and None, every bet type off ("No leg of the night fits your filters."), Players only with no player line
+  ("No player lines yet for the night’s games."); the folds on a phone and a wide screen (a matchMedia stub) across a
+  redraw and a reload; the Your filters line whole and the site's lock line, Reset and its focus; the site's set the same
+  (`spEntry`) whatever the filters; the filters in `M.sp` apart from `M.pb`, across a reload; the card's words, no Value
+  mark, no model figure but a team leg's title, nothing saying an Under breaks even, Finish's small print; with no work a
+  level saying it is not settled, and a level found and not settled said so in its rule and title; the soft build
+  stopped on another tab and carried on (four pieces); at the lock this browser's own set, then the record's, and your
+  filters' set live under the site's lock, on the games still to tip after the first tip-off. Section 8 holds the real
+  night with the guard's own property check once the page's cutoff has passed.
+- `tools/test_suggest_ruler.js` (4,051 checks): (i) 171 levels on small pools enumerated whole (2.58 million paying
+  parlays) and the guard's bound at C* or more on the 163 with a parlay; (ii) every real night timed at seven filter cases;
+  (iii) the guard's bound on every settled level of the real nights' cuts at the default filters (219): never under the
+  level but for the copulas' noise, at most 0.596% over it (10 November at 21:57, ORL at SAC, $4), within `TAU_G`,
+  the slowest 0.82 s.
+- Planted, each in a scratch copy (the smoke's Suggested Parlays section with `NBA_HTML`, the record's test on a scratch
+  copy of the page or the guard, the ruler test with `RULER_PAGE`), the failures each caused: a team leg ranked on the
+  model's chance: smoke 32, record 5, ruler 148; the bet types ignored: smoke 9; the games ignored: 2; the stats ignored:
+  2; the shortest leg ignored: 5; the shortest leg off by one (a leg at exactly the limit left out): 4; your filters' set
+  drawn as the site's (no Your filters line): 1; the site's set built on a visitor's filters: record 4; the tolerance ten
+  times too loose: smoke 3, record 3, ruler 1; the fewest legs reversed (the most legs not ruled out): smoke 4, record 2,
+  ruler 1; the page's cutoff reversed: smoke 25; the soft build carrying on with another tab on the screen: smoke 1; the
+  guard's `TAU_G` at 5%: record 2; the guard with no bound: record 2; the guard's cutoff reversed: record 13.
 
 **At least one player leg** (the owner's call of 10 November 2026). The record's test runs every night of its own on the
 rule: its own enumeration takes each night's player legs beside its team legs (its own reading of DraftKings' main lines,

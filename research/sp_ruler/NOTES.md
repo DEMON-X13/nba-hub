@@ -89,3 +89,17 @@ copy; new section R), smoke_suggested (old sections the same; a ruler + filters 
 - Found by section 9: on DF (three games, short Unders at -241/-384/-385) the default filters' Aggressive does not settle
   within SPR_WORK; the job then takes no set for such a night. An empty level not settled now keeps gap 1 in the record
   shape (spTierOut) so the job never takes it; its words "Not settled within the search's work on ...".
+
+## 20:05 UTC: the guard's bound, the breaks, the job run, the README
+
+- test_suggest_ruler.js part (iii) found the guard's bound under the page's level on 6 one-game cuts: the legs it was
+  handed carried no player's club, and the correlations (mate or opponent, a player's club against a team leg) read it.
+  With the clubs the bound holds on all 219 settled real levels (at most 0.596% over, within TAU_G, slowest 0.82 s) and is
+  at C* or more on the 163 enumerated pools. The record's kept pool carries no club, so the guard now works its bound only
+  on its own reading of the run's files (a set the run took, a level the run built again), and holds a set the file it is
+  held to holds as it is to its pool alone: that also keeps the record step from working every past set again each run.
+- Planted breaks: all caught (counts in README, The checks). The record's test missed the fewest legs reversed until R9
+  (the pair of Unders at -241 against the likelier triple) was added.
+- Scratch job run (jobrun, the cutoff 18:37 UTC for the run): the job rewrote 12 November's set under the ruler in 1.07 s
+  with its guard; the levels and four filter cases are in the report.
+- Screenshots: shots/sp_390_*.png and sp_1280_*.png (Chromium, 10 November's files at 21:55 UTC).

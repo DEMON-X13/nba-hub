@@ -1335,7 +1335,8 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
         cutoff after and before its last take); R4 the guard's breaks (a level under its bound by more than TAU_G, a team
         leg at the model's chance, a level not settled, a team leg left out of the pool, the heads of another rule, a leg not
         in the pool, ties among Unders at even prices passing as any of the tied); R5 a level built again after the lock
-        under each rule; R6 the pool as kept, holding every level from the lock; R7 a night of one game; R8 a level not settled within the search's work, never taken */
+        under each rule; R6 the pool as kept, holding every level from the lock; R7 a night of one game; R8 a level not settled within the search's work, never taken; R9 the fewest legs, the pair
+        of Unders where three land likelier */
   { const RCUT = T(D0, '12:00:00'), TAU = 0.005, ETA = 0.001, SCR = scAt(RCUT), slR = [gG, gC, gA, gB, gP, gE, gD, gF];
     const isMap = x => !!x && typeof x === 'object' && !Array.isArray(x);
     const uniR = (name, cut) => { const U = uni(name); fs.writeFileSync(path.join(U, 'index.html'), pageAt(cut || RCUT)); return U; };
@@ -1512,6 +1513,22 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
       fs.writeFileSync(path.join(U8, 'ledger.json'), fs.readFileSync(path.join(UR, 'ledger.json'), 'utf8'));
       const was = readU(U8).night[keyR(D2)], r9 = runR(U8, stR(), LR, T(D1, '17:00:00'), null, { SUGGEST_RULER_WORK: '1' }), now9 = readU(U8).night[keyR(D2)];
       chk(r9.code === 0 && !!was && JSON.stringify(now9) === JSON.stringify(was), `R8: and a set an earlier run took stays as it was: ${r9.last}`); }
+
+    /* R9: the fewest legs. D1's night with five players' Unders in three of its games: two at -241 (ATL's and MIA's) land
+       49.948% together paying $2.0021, three at -385, -384 and -384 (CHA's, ORL's and LAL's) 49.968% paying $2.0013, so the
+       triple is the likeliest parlay paying $2 and the pair is within the rule's half a percent with fewer legs: Safe is
+       the pair, by this file's own enumeration (condition 3) */
+    { const rowR = (nm, tm) => [nm, tm, 'G', 32, 20, 6, 5, 2, 1, 0.5, 0.1, 0.01];
+      const R9 = { [gG.id]: { 9100011: rowR('Al Hawk', 'ATL'), 9100013: rowR('Bo Hornet', 'CHA') }, [gC.id]: { 9100012: rowR('Al Heat', 'MIA'), 9100014: rowR('Bo Magic', 'ORL') }, [gB.id]: { 9100015: rowR('Bo Laker', 'LAL') } };
+      const M9 = { [gG.id]: [{ player: '9100011', stat: 'pts', line: 20.5, over: 150, under: -241 }, { player: '9100013', stat: 'reb', line: 9.5, over: 200, under: -385 }],
+        [gC.id]: [{ player: '9100012', stat: 'pts', line: 22.5, over: 150, under: -241 }, { player: '9100014', stat: 'reb', line: 7.5, over: 200, under: -384 }], [gB.id]: [{ player: '9100015', stat: 'reb', line: 6.5, over: 200, under: -384 }] };
+      const st9 = stR(); st9.props.games = Object.fromEntries([gG, gC, gB].map(g => [g.id, { tip: g.tip, away: g.away, home: g.home, players: clone(R9[g.id]) }]));
+      const L9 = linesR(); for (const g of [gG, gC, gA, gB]) L9.games[g.id].props = M9[g.id] ? { at: READ, mains: clone(M9[g.id]), ladders: [], yes: [] } : null;
+      const U9 = uniR('ruler9'), r9b = runR(U9, st9, L9, tR), e9 = r9b.code === 0 ? readU(U9).night[keyR(D1)] : null;
+      chk(!!e9, `R9: the night of five Unders taken: ${r9b.last}`);
+      if (e9) { const M = rulerMatch('R9', e9, st9, L9, Date.parse(tR)), s9 = e9.tiers[0];
+        chk(!!s9.legs && s9.legs.length === 2 && s9.legs.every(l => l.kind === 'prop' && l.side === 'under' && l.odds === -241) && M.E.out[2].k[3] > M.E.out[2].k[2],
+          `R9: Safe is the two Unders at -241 (${s9.legs ? s9.legs.map(l => l.name).join(' + ') + ', ' + s9.p : s9.why}), the fewest legs, where the triple lands likelier (${(M.E.out[2].k[3] * 100).toFixed(3)}% against ${(M.E.out[2].k[2] * 100).toFixed(3)}%)`); } }
   }
 
   console.log('G. the real ledger, copied, on the real state, at the real cutoff');

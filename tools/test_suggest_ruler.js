@@ -20,7 +20,12 @@
  * Players only, Teams only, Overs only, Player unders off, shortest -300 and shortest -200, every level: at the default
  * filters every level settled and a night's three levels within RULER_NIGHT_MS; any level within RULER_LEVEL_MS (both
  * runner-safe, several times the jsdom figures in research/sp_ruler/engine.md); a level that stops on its work shows a
- * parlay with its proven gap. */
+ * parlay with its proven gap.
+ * (iii) The guard's bound (tools/suggest_check.js rulerBound, the record's guard's own upper bound on the likeliest parlay
+ * paying a floor, on its own reading of the legs). On every pool of (i) it is at C* or more, C* worked out exactly; on
+ * every real night's cut at the default filters (each night whole, each game and each two games) it is never under a
+ * settled level's chance but for the two copulas' own noise (RB_SIG), and the level lands within TAU_G of it, so the
+ * guard's property check never refuses the page's level on a real night; each bound within RULER_BOUND_MS. */
 'use strict';
 const fs = require('fs');
 const path = require('path');
@@ -31,7 +36,12 @@ const FR = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'sp_ruler
 const NIGHTS = { nov7: FX.nights.nov7, nov10: FX.nights.nov10, nov10b: FR.nights.nov10b };
 const FILTERS = { default: {}, players: { k: { ml: false, ats: false, total: false } }, teams: { k: { over: false, under: false } },
   overs: { k: { ml: false, ats: false, total: false, under: false } }, nounders: { k: { under: false } }, s300: { short: -300 }, s200: { short: -200 } };
-const LIMIT = { level: +(process.env.RULER_LEVEL_MS || 4000), night: +(process.env.RULER_NIGHT_MS || 1500) };
+const LIMIT = { level: +(process.env.RULER_LEVEL_MS || 4000), night: +(process.env.RULER_NIGHT_MS || 1500), bound: +(process.env.RULER_BOUND_MS || 5000) };
+const SC = require('./suggest_check');
+const decOf = a => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
+/* a pool's legs as the guard reads them */
+const guardLegs = L => L.map(l => ({ sk: l.sk, gid: l.gid, kind: l.kind, pid: l.kind === 'prop' ? String(l.pid) : null, s: l.side, line: l.line, home: l.home, team: l.team, stat: l.stat || null, odds: l.odds, other: l.other, p: l.p,
+  side: l.kind === 'ml' || l.kind === 'spread', tot: l.kind === 'total', d: decOf(l.odds) }));
 const ONLY = process.env.RULER_ONLY || '';
 
 let n = 0; const fails = [], notes = [];
@@ -183,11 +193,14 @@ function madeUp() {
     w.__legs = legs;
     const r = JSON.parse(w.eval(`(() => { const pool = __rPool(__legs, ${JSON.stringify(filt)}); const E = __rEnum(pool.legs, ${F}, ${cap});
       if (E.tooBig) return JSON.stringify({ tooBig: E.tooBig, legs: pool.legs.length });
-      const c = __rCheck(pool, ${F}, E); return JSON.stringify({ legs: pool.legs.length, count: E.count, units: E.units, out: c.out, n: c.L.n, p: c.L.p, tie: c.L.tie, ties: c.L.n && E.best[c.L.n] ? E.best[c.L.n].ties : 0 }); })()`));
+      const c = __rCheck(pool, ${F}, E); return JSON.stringify({ legs: pool.legs.length, count: E.count, units: E.units, out: c.out, n: c.L.n, p: c.L.p, tie: c.L.tie, ties: c.L.n && E.best[c.L.n] ? E.best[c.L.n].ties : 0,
+        star: E.star, gl: pool.legs.map(l => ({ sk: l.sk, gid: l.gid, kind: l.kind, pid: l.pid || null, side: l.side, line: l.line, home: l.home, team: l.team, stat: l.stat || null, odds: l.price, other: l.other, p: l.p })) }); })()`));
+    /* (iii) on the same pool: the guard's bound at C* or more */
+    if (!r.tooBig && r.star > 0) { const corr = JSON.parse(w.eval('JSON.stringify(S.corr)')), b = SC.rulerBound(guardLegs(r.gl), corr, F); r.bound = b; r.boundOk = b >= r.star * (1 - 1e-9); }
     return r;
   };
   if (!ONLY || ONLY === 'enum') {
-    const t0 = Date.now(); let pools = 0, parlays = 0;
+    const t0 = Date.now(); let pools = 0, parlays = 0, boundsI = 0;
     const hold = (what, legs, filt, o) => {
       for (const F of [2, 4, 8]) {
         const r = run(legs, filt, F, 3e6);
@@ -195,6 +208,7 @@ function madeUp() {
         pools++; parlays += r.count;
         if (o && o.ties) chk(r.ties >= 2 && r.tie, `${what}, $${F}: the case stands on ties: ${r.ties} parlays of the level's ${r.n} legs tie at its chance, and its tie pass ran`);
         for (const [ok, m] of r.out) chk(ok, `${what}, $${F} (${r.legs} legs, ${r.count} paying parlays): ${m}`);
+        if (r.star > 0) { boundsI++; chk(r.boundOk, `${what}, $${F}: the guard's bound ${r.bound} is at C*, ${r.star}, or more`); }
       }
     };
     for (const [what, legs, filt, o] of madeUp()) hold(what, legs, filt, o);
@@ -217,7 +231,7 @@ function madeUp() {
       for (let a = 0; a < gs.length; a++) for (let b = a + 1; b < gs.length; b++) hold(`${nm}'s team legs, ${gs[a].slice(14)} and ${gs[b].slice(14)}`, L.filter(l => l.gid === gs[a] || l.gid === gs[b]), {});
       for (let a = 0; a < gs.length; a += 2) for (let b = a + 1; b < gs.length; b += 2) for (let c = b + 1; c < gs.length; c += 3) hold(`${nm}'s team legs, ${[gs[a], gs[b], gs[c]].map(x => x.slice(14)).join(', ')}`, L.filter(l => [gs[a], gs[b], gs[c]].includes(l.gid)), {});
     }
-    notes.push(`the rule: ${pools} levels enumerated (${parlays} paying parlays) in ${Math.round((Date.now() - t0) / 1000)} s`);
+    notes.push(`the rule: ${pools} levels enumerated (${parlays} paying parlays) in ${Math.round((Date.now() - t0) / 1000)} s; the guard's bound at C* or more on ${boundsI} of them`);
   }
   if (!ONLY || ONLY === 'time') {
     const t0 = Date.now(), rows = [];
@@ -247,6 +261,28 @@ function madeUp() {
     const unset = L.filter(x => !x.settled);
     notes.push(`the time: ${L.length} levels in ${Math.round((Date.now() - t0) / 1000)} s; slowest ${Math.max(...L.map(x => x.ms))} ms; ${unset.length} not settled (${[...new Set(unset.map(x => x.r.filter))].join(', ') || 'none'}), worst gap ${unset.length ? (Math.max(...unset.map(x => x.gap || 0)) * 100).toFixed(1) + '%' : '-'}`);
     for (const r of rows.filter(r => r.cut === 'night' && r.filter === 'default')) notes.push(`${r.night}'s night at the default filters: ${r.L.map(x => `$${x.F} ${x.n} legs ${(x.p * 100).toFixed(2)}% at ${x.d && x.d.toFixed(3)} in ${x.ms} ms`).join('; ')}`);
+  }
+  if (!ONLY || ONLY === 'bound') {
+    const t0 = Date.now(), corr = JSON.parse(w.eval('JSON.stringify(S.corr)')); let worst = 0, over = 0, slow = 0, nB = 0, at = null;
+    for (const [nm, N] of Object.entries(NIGHTS)) {
+      const all = legsOf(N), gs = Object.keys(N.games).sort(), cuts = [['night', gs], ...gs.map(g => [g.slice(14), [g]])];
+      for (let a = 0; a < gs.length; a++) for (let b = a + 1; b < gs.length; b++) cuts.push([gs[a].slice(14) + '+' + gs[b].slice(14), [gs[a], gs[b]]]);
+      for (const [cn, keepG] of cuts) {
+        w.__legs = all.filter(l => keepG.includes(l.gid));
+        const R = JSON.parse(w.eval(`(() => { const pool = __rPool(__legs, {}); return JSON.stringify({ gl: pool.legs.map(l => ({ sk: l.sk, gid: l.gid, kind: l.kind, pid: l.pid || null, side: l.side, line: l.line, home: l.home, team: l.team, stat: l.stat || null, odds: l.price, other: l.other, p: l.p })),
+          L: [2, 4, 8].map(F => { const L = spRulerLevel(pool, F); return { F, p: L.p || null, settled: L.settled }; }) }); })()`));
+        const gl = guardLegs(R.gl);
+        for (const x of R.L) {
+          if (!x.p || !x.settled) continue;
+          const t = Date.now(), b = SC.rulerBound(gl, corr, x.F), ms = Date.now() - t, ratio = b / x.p; nB++; slow = Math.max(slow, ms);
+          if (ratio > worst) { worst = ratio; at = `${nm} ${cn} $${x.F}`; } if (ratio > 1.002) over++;
+          chk(x.p <= b * (1 + 2e-3), `${nm} ${cn}: $${x.F} the guard's bound ${b} is never under the level's chance ${x.p}, but for the copulas' noise`);
+          chk(x.p >= (1 - SC.TAU_G) * b, `${nm} ${cn}: $${x.F} the level ${x.p} lands within TAU_G (${SC.TAU_G}) of the guard's bound ${b}, so its property check passes it`);
+          chk(ms <= LIMIT.bound, `${nm} ${cn}: $${x.F} the guard's bound in ${ms} ms, within ${LIMIT.bound} ms`);
+        }
+      }
+    }
+    notes.push(`the guard's bound: ${nB} settled levels at the default filters in ${Math.round((Date.now() - t0) / 1000)} s; at most ${((worst - 1) * 100).toFixed(3)}% over the level (${at}), ${over} over 0.2%; slowest ${slow} ms`);
   }
   end();
 })();

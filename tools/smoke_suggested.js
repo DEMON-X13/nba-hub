@@ -862,7 +862,7 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     const R0 = rulerHold(q9, stF, LF, NF, 'DF at the default filters', {});
     { const s0 = R0.lv[0];
       check(s0.ids && s0.n === 2 && s0.legs.every(l => l.kind === 'prop' && l.side === 'under' && l.price === -241) && R0.E.out[2].star > s0.corr + 1e-6 && R0.E.out[2].k[3] === R0.E.out[2].star,
-        `Safe takes the two Unders at -241 (${(s0.corr * 100).toFixed(3)}% paying ${s0.dec.toFixed(4)}), the fewest legs, where three Unders land likelier (${(R0.E.out[2].star * 100).toFixed(3)}%) by this file's own enumeration`); }
+        `Safe takes the two Unders at -241 (${s0.ids ? (s0.corr * 100).toFixed(3) + "% paying " + s0.dec.toFixed(4) : "empty: " + s0.why}), the fewest legs, where three Unders land likelier (${(R0.E.out[2].star * 100).toFixed(3)}%) by this file's own enumeration`); }
     /* the cards: the rule and its title, the chance line, each leg at its fair chance, no Value mark, no model figure but a
        team leg's title, nothing saying an Under breaks even */
     { const cards = LV.map(([id]) => q9.d.querySelector(`#spSets [data-sp-game="${NF}"] .pb-tier.${id}`)), F0 = { safe: 2, med: 4, aggr: 8 };
@@ -878,11 +878,11 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
       const words = [txt(q9.d.getElementById('spPanel')), ...[...q9.d.querySelectorAll('#spPanel [title]')].map(x => x.title)].join(' ');
       check(!/break(s)? even|even return/i.test(words), 'nothing on the tab, nor in a title, says an Under breaks even'); }
     /* Finish on a ruler level: the card's chance said as DraftKings' fair chance, no model figure */
-    { const c = q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-pb-tier="safe"] [data-pc-finish]`); c.click(); await sleep(30);
+    { const c = q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-pb-tier="safe"] [data-pc-finish]`); if (c) c.click(); await sleep(30);
       const m = q9.w.PARLAY_CARD.current(), small = [...q9.d.querySelectorAll('#pcView .pc-chance small')].map(txt);
       check(m && m.chance == null && m.by === 'fair' && /^Safe parlay · /.test(m.kicker) && !/your filters/.test(m.kicker) && small.includes('Every leg at DraftKings’ fair chance, its two prices with the margin taken out: the chance the level was ranked on, no model claim.'),
         `the site's Safe finished: "${m && m.kicker}", its chance said as DraftKings' fair chance (${small.join(' | ')})`);
-      q9.d.getElementById('pcClose').click(); await sleep(20); }
+      if (c) { q9.d.getElementById('pcClose').click(); await sleep(20); } }
     const entry0 = q9.w.eval(`JSON.stringify(spEntry(${JSON.stringify(NF)}))`);
 
     /* the mix each box makes, and what the tab draws for your filters */
@@ -1016,7 +1016,11 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     for (const [label, at, nid] of [["D1's night", T(D1, '15:00:00'), N1id], ["D2's night (two games)", T(D2, '15:00:00'), N2id], ["D3's night (one game)", T(D3, '15:00:00'), `${SEASON}_${ymd(D3)}_NIGHT`]]) {
       NOW = Date.parse(at); const st = stateOf(SLATE, { today: at.slice(0, 10) });
       const qn = loadR(st, { lines: LINES1, record: null, tab: 'suggest' }); await settle(qn); await openTab(qn); await waitBuilt(qn, nid);
-      rulerHold(qn, st, LINES1, nid, label, {}); }
+      rulerHold(qn, st, LINES1, nid, label, {});
+      /* a night with no player line posted: Players only says so, each level */
+      if (nid === N2id) { qn.d.querySelector('#spFiltBox [data-sp-mix="players"]').click(); await sleep(15); await waitBuilt(qn, nid);
+        const ws = LV.map(([id]) => txt(qn.d.querySelector(`#spSets [data-sp-game="${nid}"] .pb-tier.${id} .pb-why`)));
+        check(ws.every(x => x === 'No player lines yet for the night’s games.'), `${label} with no player line posted: Players only says so on each level ("${ws[0]}")`); } }
     NOW = Date.parse(T(D1, '15:00:00'));
   }
 

@@ -1153,15 +1153,19 @@ function rulerEntryBad(key, e, now, pe, state, lines, LV, ids) {
       if (op.legs.some(l => l.pid && String(l.pid) === String(x.updated.pid))) bad.push(`${key} ${x.id}: built again for ${x.updated.pid}, and its pool still holds him`);
       if (op.legs.some(l => !ids.has(l.gid))) bad.push(`${key} ${x.id}: its own pool holds a leg of no game of the night`);
       const pt = pe && Array.isArray(pe.tiers) ? pe.tiers[i] : null;
-      let legs = op.legs;
+      /* built by this run: held to the bound on this file's own reading of the run's files at the time it was built (its legs
+         carry each player's club, which the correlations a bound works on need: the pool as kept does not) */
+      let legs = null;
       if (same && lines && isFinite(t(e.tip)) && now < t(e.tip) && isFinite(t(x.updated.at)) && (!pt || canon(pt) !== canon(x))) {
         const R = rulerFull(`${key} ${x.id}`, x.pool, op, state, lines, e.games, t(x.updated.at), 'its own'); bad.push(...R.bad); if (R.legs) legs = R.legs; }
-      bad.push(...rulerLevelBad(key, x, lv, op, ids, corr ? rulerBound(legs, corr, lv[4]) : null, 'its own', null, legs, corr));
+      bad.push(...rulerLevelBad(key, x, lv, op, ids, corr && legs ? rulerBound(legs, corr, lv[4]) : null, 'its own', null, legs, corr));
       return;
     }
     if (x.pool != null) bad.push(`${key} ${x.id}: a pool of its own, never built again`);
-    const legs = legsAll || pool.legs;
-    bad.push(...rulerLevelBad(key, x, lv, pool, ids, boundOf(legs, lv[4]), own ? 'this file\'s own reading of the run\'s files' : 'its pool as kept', null, legs, corr));
+    /* a set the run took is held to the bound on this file's own reading of the run's files; one the file it is held to
+       holds as it is was held so when it was taken, and its pool as kept carries no player's club, which the bound's
+       correlations need: it is held to its pool (a valid parlay of its legs at their kept figures, paying its floor) */
+    bad.push(...rulerLevelBad(key, x, lv, pool, ids, own ? boundOf(legsAll, lv[4]) : null, own ? 'this file\'s own reading of the run\'s files' : 'its pool as kept', null, own ? legsAll : null, corr));
   });
   return bad;
 }

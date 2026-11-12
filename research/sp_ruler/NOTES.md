@@ -103,3 +103,14 @@ copy; new section R), smoke_suggested (old sections the same; a ruler + filters 
 - Scratch job run (jobrun, the cutoff 18:37 UTC for the run): the job rewrote 12 November's set under the ruler in 1.07 s
   with its guard; the levels and four filter cases are in the report.
 - Screenshots: shots/sp_390_*.png and sp_1280_*.png (Chromium, 10 November's files at 21:55 UTC).
+
+# The review's findings (S-1..S-5, F1..F3): where this attempt is (21:40 UTC 12 Nov)
+Scratch harness: ../fix (the reviewers' scripts pointed at this clone; sites/ = their 14 nights' pre-lock files).
+- S-5 (real, nit): the frontier kept a dearer leg tied on chance over a lower-keyed one; now a leg is dropped only for one
+  likelier, or as likely with a lower key. The reviewer's tie case and fuzz seeds 12, 13 pass.
+- S-1 (real): NOP at GSW alone (9 Nov) $4 needs 5.37M units, ORL at UTA (11 Nov) $8 1.78M; every one of the 90 real one-game
+  cuts settles under 2e7 (one_2e7.out). The site's set (default filters: the record's and the page's copy) now has
+  SPR_WORK_SITE 2e7, other filters SPR_WORK 1e6.
+- F1 (real): the search is a generator now (sprLevel; spRulerLevel drains it): the soft build runs SPR_SLICE (2e4) units a
+  task; identical levels and work on 1,533 timed levels and 132 real cuts, +1-5% time.
+Next: the guard (S-2 exact singles/pairs, S-4 witnesses), replaceRuledOut (S-3/F2), tests, F3, README, the final check.

@@ -936,7 +936,7 @@ function spRebuild(id, lid, head) {
   const N = spById(id), lv = spLvOf(lid, head); if (!N || !lv) return null;
   /* a level of the ruler's set: the ruler's level on the default filters' pool as it stands (the player held out by the
      report as every leg of the pool is) */
-  if (lv[5] === 'fair') { const pool = spRulerPool(N, null); return { tier: spRulerTier(pool, lv, N), pool, ruler: true }; }
+  if (lv[5] === 'fair') { const pool = spRulerPool(N, null); return { tier: spRulerTier(pool, lv, N, { work: SP_RB_WORK != null ? SP_RB_WORK : SPR_WORK_SITE }), pool, ruler: true }; }
   const pool = spPool(N), X = spPrep(pool), Xt = spPrep({ legs: pool.legs.filter(l => l.kind !== 'prop') });
   const t = spLevel(X, pool, lv, N, Xt.games.length ? spSearch(Xt, lv) : null);
   return { tier: t, pool, X };
@@ -1400,8 +1400,9 @@ render.suggest = function () {
         A parlay paying F returns C D >= C F, so C <= its return over F (R3).
    (R4) The table. B[j][t][cell] is the most sum of ln c of t legs of games j.. whose price, each unit's log price rounded
         up to a cell of ln(F) / SPR_CELLS, reaches the cell: singles from each game's frontier (a leg another leg of its
-        game beats on price and on chance never makes the best single: swapping it keeps the size and the price and raises
-        the chance), and every group of s legs relaxed to every (chance, price cell) with the chance at most the game's
+        game prices at least as dear and makes likelier, or as likely with a lower slip key, never makes the best single
+        nor wins a tie: swapping it keeps the size and the price and raises the chance, or keeps it and lowers the sorted
+        keys; a leg tied on the chance with a dearer one of a higher key stays, so the tie pass meets it), and every group of s legs relaxed to every (chance, price cell) with the chance at most the game's
         cap (R8) and at most the group's return bound over the cell's least price, the price at most the s dearest legs
         multiplied: at its R10 bound for a group landing SPR_TH or more, at HOLD (1 + SPR_SIG) and a chance under SPR_TH
         for any other. Every real unit lies under a relaxed one (a chance at least its, a cell at least its), so a branch
@@ -1515,7 +1516,7 @@ function spRulerPool(N, v) {
   return { games, legs, band: cnt.band, far: 0, noId: cnt.noId, vig: cnt.vig, filt: cnt.filt, pl, u, rule: 'fair' };
 }
 const SPR_TAU = 0.005, SPR_ETA = 0.001, SPR_NEAR = 9e-4, SPR_SIG = 1e-3, SPR_REL = 1e-12, SPR_PURE = 1e-7, SPR_TH = 1 / 16;
-const SPR_CELLS = 512, SPR_KCAP = 16, SPR_WORK = 1e6, SPR_DMAX = 2.9, SPR_STEP = 0.01;
+const SPR_CELLS = 512, SPR_KCAP = 16, SPR_WORK = 1e6, SPR_WORK_SITE = 2e7, SPR_SLICE = 2e4, SPR_DMAX = 2.9, SPR_STEP = 0.01;
 const SPR_Z = [2, 2.5, 3, 3.5, 4, 5, 6];
 /* the work each step is counted at (about its microseconds in jsdom) */
 const SPR_COST = { prep: 2, cell: 0.004, node: 0.6, opt: 0.15, look: 0.5, pair: 4, est3: 60, est4: 790, est5: 11300, ghk3: 18000, ghk4: 22000, ghk5: 34000, ghk6: 50000, cap: 15, cand: 1, gv: 5 };
@@ -1544,7 +1545,7 @@ function sprPrep(legs) {
   for (const gid of [...by.keys()].sort(sprCmp)) {
     const xs = by.get(gid).sort((a, b) => sprCmp(a.sk, b.sk)), gn = xs.length;
     xs.forEach((x, i) => { x.i = i; });
-    const fr = xs.filter(y => !xs.some(x => x !== y && x.d >= y.d && x.p >= y.p && (x.d > y.d || x.p > y.p || x.sk < y.sk)))
+    const fr = xs.filter(y => !xs.some(x => x !== y && x.d >= y.d && x.p >= y.p && (x.p > y.p || x.sk < y.sk)))
       .sort((a, b) => (a.d - b.d) || (b.p - a.p) || sprCmp(a.sk, b.sk));
     const byP = [...xs].sort((a, b) => (b.p - a.p) || sprCmp(a.sk, b.sk));
     byP.forEach((x, q) => { x.q = q; });
@@ -1781,7 +1782,7 @@ function sprRet(C, K, low) {
 }
 
 /* ---------- one size: every parlay of exactly k legs whose bound reaches the cut ---------- */
-function sprQ(C, k, thr, near, any, hiK) {
+function* sprQ(C, k, thr, near, any, hiK) {
   const { X, A, Fe, dl, NC, B, R, R0 } = C, G = X.games, m = G.length, NEG = -Infinity, STOP = {}, DONE = {}, h0 = X.hold * (1 + SPR_SIG);
   let best = null;
   /* a parlay reaching a cut of TH or more has every group landing TH or more: the R10 tables; under it, HOLD's */
@@ -1801,8 +1802,9 @@ function sprQ(C, k, thr, near, any, hiK) {
     if (any) throw STOP;
     if (cutV() > hiK) throw DONE;
   };
-  const rec = (j, t, c, d) => {
+  const rec = function* (j, t, c, d) {
     sprWork(C, 'node');
+    if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
     if (t === 0) { found(c, d); return; }
     if (j >= m) return;
     const lc = Math.log(c), need = A - Math.log(d);
@@ -1817,23 +1819,23 @@ function sprQ(C, k, thr, near, any, hiK) {
     opts.sort((a, b) => (b.b - a.b) || (a.x ? a.x.q : -1) - (b.x ? b.x.q : -1));
     for (const o of opts) {
       if (!(o.b > NEG) || o.b < lnCut()) break;
-      if (!o.x) rec(j + 1, t, c, d);
-      else { units.push({ T: [o.x], n: 1, c: o.x.p, d: o.x.d }); rec(j + 1, t - 1, c * o.x.p, d * o.x.d); units.pop(); }
+      if (!o.x) yield* rec(j + 1, t, c, d);
+      else { units.push({ T: [o.x], n: 1, c: o.x.p, d: o.x.d }); yield* rec(j + 1, t - 1, c * o.x.p, d * o.x.d); units.pop(); }
     }
     if (C.gr) for (let s = 2; s <= Math.min(t, g.sm); s++) {
       if (c * d * (hiT() ? sprHg(C, g, s) * R[j + 1][t - s] : h0 * R0[j + 1][t - s]) < cutV() * Fe) continue;
-      sprGroupsAt(C, j, s, t, c, d, cutV, u => { units.push(u); rec(j + 1, t - s, c * u.c, d * u.d); units.pop(); });
+      yield* sprGroupsAt(C, j, s, t, c, d, cutV, function* (u) { units.push(u); yield* rec(j + 1, t - s, c * u.c, d * u.d); units.pop(); });
     }
   };
   let done = true;
-  try { rec(0, k, 1, 1); } catch (e) { if (e === STOP) done = false; else if (e !== DONE) throw e; }
+  try { yield* rec(0, k, 1, 1); } catch (e) { if (e === STOP) done = false; else if (e !== DONE) throw e; }
   return { best, done, hi: done ? Math.min(hiK, Math.max(thr, best ? best.c / (1 - Math.max(near, 0)) : 0)) : null };
 }
 
 /* the groups of exactly s legs of game j that may reach the cut with the branch: gathered on cheap bounds (R5, R9, R10),
    then each worked in the order of its pairwise estimate, held to the integral (R7) and worked by the builder's own sums
    where it may still reach the cut, and handed on. With no cut yet (a probe) they are worked a T at a time */
-function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
+function* sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
   const { X, A, dl, NC, B, R, R0, Fe } = C, g = X.games[j], rest = B[j + 1][t - s], NEG = -Infinity, TH = C.TH, h0 = X.hold * (1 + SPR_SIG);
   if (rest[0] === NEG) return;
   const lc = Math.log(c), need = A - Math.log(d), slk = s >= 3 ? 1 + SPR_SIG : 1 + SPR_PURE;
@@ -1851,10 +1853,11 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
   let cands = [], later = [];
   /* the gathered groups in the order of their estimate; a probe (no cut yet) leaves those its estimate says do not pay
      for last, and works them only where none of the others does */
-  const work = all => {
+  const work = function* (all) {
     const list = all ? later.concat(cands) : cands; cands = []; if (all) later = [];
     list.sort((a, b) => (b.sc - a.sc) || (b.b - a.b) || sprCmp(a.key, b.key));
     for (const k of list) {
+      if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
       if (low(k.b)) continue;
       if (!all && !(cutV() > 0) && !(k.sc > NEG)) { later.push(k); continue; }
       let u = k.u;
@@ -1864,7 +1867,7 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
         u = sprGhk(C, g, k.W);
       }
       if (!(u.c > 0) || low(lc + Math.log(u.c) + restAt(u.d)) || low(Math.log(c * d * u.c * u.d * Rr() / Fe))) continue;
-      emit(u);
+      yield* emit(u);
     }
   };
   /* (R9) T's own figures, for the last leg: its chance at most cT, its J at least JT */
@@ -1894,7 +1897,7 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
     return imp ? X.hold * (1 + SPR_SIG) * f : X.hold * (1 + SPR_PURE);
   };
   const hT = () => hB([], s - T.length);
-  const grow = (pos, cUb, mult) => {
+  const grow = function* (pos, cUb, mult) {
     const HT = hT();
     if (s - T.length - 1 === 0 && T.length >= 1) {
       if (retLow(HT)) return;
@@ -1906,6 +1909,7 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
           const x = L[q];
           if (x.q < pos) continue;
           sprWork(C, 'node');
+          if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
           if (low(lc + Math.log(Math.min(cUb, st.cT * x.p + st.eP) * slk) + rb)) break;
           leaf(x, mult, cUb);
         }
@@ -1916,6 +1920,7 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
     for (let q = pos; q < byP.length; q++) {
       const x = byP[q], left = s - T.length - 1;
       sprWork(C, 'node');
+      if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
       const dAll = mult * (g.sufD[q][left + 1] || 0);
       if (!(dAll > 0) || low(bound(Math.min(cUb, x.p) * slk, Math.max(dAll, 1), HT))) break;
       if (!sprFits(T, x)) continue;
@@ -1924,8 +1929,8 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
       if (left > 0) {
         let cu = Math.min(cUb, x.p); for (const y of T) cu = Math.min(cu, sprPairB(C, g, y, x).c);
         if (low(bound(cu * slk, dMax, hB([x], left)))) continue;
-        T.push(x); grow(q + 1, cu, mult * x.d); T.pop();
-        if (left === 1 && cands.length && (!(cutV() > 0) || cands.length >= SPR_BATCH)) work(false);
+        T.push(x); yield* grow(q + 1, cu, mult * x.d); T.pop();
+        if (left === 1 && cands.length && (!(cutV() > 0) || cands.length >= SPR_BATCH)) yield* work(false);
         continue;
       }
       leaf(x, mult, cUb);
@@ -1952,8 +1957,8 @@ function sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
       cands.push({ W, g, b, cu, mult: mx, H, sc, key: W.map(y => y.sk).join('~') });
     }
   };
-  grow(0, 1, 1);
-  if (cands.length || later.length) work(true);
+  yield* grow(0, 1, 1);
+  if (cands.length || later.length) yield* work(true);
 }
 /* (R9): T and one more leg x, first order in x's correlations with T (Plackett) */
 function sprPre(C, g, T, x, mult) {
@@ -1971,7 +1976,7 @@ function sprPre(C, g, T, x, mult) {
 }
 
 /* ---------- the level ---------- */
-function sprSolve(C) {
+function* sprSolve(C) {
   const { X } = C, G = X.games, log = C.log;
   const maxN = G.reduce((t, g) => t + g.maxLegs, 0);
   if (maxN < 2) return { none: true, why: 'legs' };
@@ -1997,6 +2002,7 @@ function sprSolve(C) {
   setup(false);
   const toGroups = () => { if (C.gr || !X.ok2) return false; setup(true); for (let k = 2; k <= C.K; k++) if (lo[k]) hi[k] = Math.max(hi[k], lo[k].c); return true; };
   for (let it = 0; it < 600; it++) {
+    if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
     const L0 = bestAll(), Lo = L0 ? L0.c : 0;
     let U = tail; for (let k = 2; k <= C.K; k++) U = Math.max(U, hi[k]);
     if (!(U > 0)) return { none: true, why: 'pays' };
@@ -2011,7 +2017,7 @@ function sprSolve(C) {
       /* settled: the tie pass makes the level the likeliest parlay of ks legs, ties (to SPR_REL) to the lower sorted slip
          keys, within SPR_TIEW more work; should that run out, b stands (it already meets the rule; tie false) */
       const keep = C.W.budget; C.W.budget = Math.min(keep, C.W.used + SPR_TIEW);
-      let r = null; try { r = sprQ(C, ks, b.c * (1 - SPR_REL), -1, false, hi[ks]); } catch (e) { if (e !== C.W) throw e; } finally { C.W.budget = keep; }
+      let r = null; try { r = yield* sprQ(C, ks, b.c * (1 - SPR_REL), -1, false, hi[ks]); } catch (e) { if (e !== C.W) throw e; } finally { C.W.budget = keep; }
       log.push(`t${ks}:${r ? (r.best ? r.best.c.toPrecision(7) : '-') : 'work'}:${Math.round(C.W.used / 1e3)}k`);
       const bb = r && r.best && (r.best.c > b.c * (1 + SPR_REL) || (r.best.c >= b.c * (1 - SPR_REL) && sprIdsLess(r.best.ids, b.ids))) ? r.best : b;
       return { b: bb, k: ks, U, hiK: hi[ks], Lo, tie: !!r };
@@ -2023,13 +2029,13 @@ function sprSolve(C) {
       if (!b && !pr[ks]) {
         /* a parlay of ks legs to start from, and to show should the work run out: the first the search meets, best first */
         pr[ks] = true;
-        const p = sprQ(C, ks, out, 0, true, hi[ks]);
+        const p = yield* sprQ(C, ks, out, 0, true, hi[ks]);
         log.push(`p${ks}:${p.best ? p.best.c.toPrecision(6) : '-'}:${Math.round(C.W.used / 1e3)}k`);
         if (p.best) lo[ks] = p.best; else if (p.done && out <= hi[ks]) { hi[ks] = out; hs[ks] = true; }
         continue;
       }
       const st = dsc[ks] || 0, th = Math.max(out, b ? b.c : 0, hi[ks] * (1 - SPR_STEP * 2 ** st));
-      const r = sprQ(C, ks, th, SPR_NEAR, false, hi[ks]);
+      const r = yield* sprQ(C, ks, th, SPR_NEAR, false, hi[ks]);
       log.push(`q${ks}@${th.toPrecision(5)}:${r.best ? r.best.c.toPrecision(6) : '-'}:${Math.round(C.W.used / 1e3)}k`);
       if (r.best && (!lo[ks] || r.best.c > lo[ks].c)) lo[ks] = r.best;
       if (r.best) { if (r.hi < hi[ks]) { hi[ks] = r.hi; hs[ks] = false; } }
@@ -2041,7 +2047,7 @@ function sprSolve(C) {
     if (j < 0 || tail > hi[j]) { if (toGroups()) continue; if (tail > need * (1 + SPR_REL)) return { unsettled: 'tail', b, k: ks, U }; }
     if (j < 0) return { unsettled: 'bound', b, k: ks, U };
     if (hi[j] > hiS[j] * (1 + SPR_REL) && toGroups()) continue;
-    const r = sprQ(C, j, need, 0, true, hi[j]);
+    const r = yield* sprQ(C, j, need, 0, true, hi[j]);
     log.push(`a${j}@${need.toPrecision(5)}:${r.best ? r.best.c.toPrecision(6) : '-'}:${Math.round(C.W.used / 1e3)}k`);
     if (r.best) { if (!lo[j] || r.best.c > lo[j].c) lo[j] = r.best; }
     else if (need <= hi[j]) { hi[j] = need; hs[j] = true; }
@@ -2061,18 +2067,24 @@ function sprTail(C, t) {
   return P[t];
 }
 
-/* one level of a ruler pool: { legs, p, d, n, k, settled, gap, bound, boundK, why, work } */
-function spRulerLevel(pool, F, o) {
+/* one level of a ruler pool: { legs, p, d, n, k, settled, gap, bound, boundK, why, work }, whole (the job, a check, a level
+   built again after the lock) */
+function spRulerLevel(pool, F, o) { const it = sprLevel(pool, F, o); for (;;) { const r = it.next(); if (r.done) return r.value; } }
+/* the same as a generator that yields after every o.slice units of counted work (a few tens of milliseconds: the tab's soft
+   build runs one slice a task, so no level holds the page however long its search). A yield is only a pause: the work is
+   counted the same and the search goes on where it stopped, so the level is the same whole or a slice a task */
+function* sprLevel(pool, F, o) {
   o = o || {};
   let X = SPR_PREP.get(pool.legs); if (!X) { X = sprPrep(pool.legs); SPR_PREP.set(pool.legs, X); }
   const Fe = F - SP_FLOOR_EPS, A = Math.log(Fe), NC = SPR_CELLS;
   const W = { used: 0, budget: o.work != null ? o.work : SPR_WORK };
-  const C = { X, F, Fe, A, NC, dl: A / NC, K: 0, gr: false, W, log: [], TH: SPR_TH,
+  const slice = o.slice > 0 ? +o.slice : Infinity;
+  const C = { X, F, Fe, A, NC, dl: A / NC, K: 0, gr: false, W, log: [], TH: SPR_TH, slice, yAt: slice,
     sp: new Set(), se: new Set(), sg: new Set(), cc: new Set(), gv: new Map(), hg: new Map(), qb: null, Ul: null, best: null };
   if (X.edge) return { legs: null, settled: false, why: 'edge', work: W };
   if (X.dear) return { legs: null, settled: false, why: 'dear', work: W };
   let r;
-  try { sprWork(C, 'prep', X.n); r = sprSolve(C); }
+  try { sprWork(C, 'prep', X.n); r = yield* sprSolve(C); }
   catch (e) {
     if (e !== W) throw e;
     /* the work ran out: the best parlay found, against the last bound proved (every bound only falls) */
@@ -2153,8 +2165,9 @@ function spRulerWhy(lv, pool, N, r) {
    price pbExact's: the builder's own sums), its fair chance the same chance (every leg at legFair), est. where legs share a
    game; a level the work ran out on (a custom filter: never at the default filters on a real night, research/sp_ruler)
    keeps the best found, settled false, its gap said in the rule's title */
-function spRulerTier(pool, lv, N, o) {
-  const head = spHead(lv), r = spRulerLevel(pool, lv[4], o);
+function spRulerTier(pool, lv, N, o) { return spRulerTierOf(pool, lv, N, spRulerLevel(pool, lv[4], o)); }
+function spRulerTierOf(pool, lv, N, r) {
+  const head = spHead(lv);
   /* nothing found, or nothing that pays: settled where the search proved there is none, else marked not settled (gap 1),
      which the job never takes and the guard refuses */
   if (!r.legs || r.why === 'floor') { const t = { ...head, why: spRulerWhy(lv, pool, N, r) }; if (!r.settled) t.gap = 1; return t; }
@@ -2173,11 +2186,22 @@ function spRB(N, u) {
   if (!b) { b = { key, N, u: v, pool: null, tiers: SP_RULER_LEVELS.map(() => null) }; SP_RB.set(key, b); if (SP_RB.size > 12) SP_RB.delete(SP_RB.keys().next().value); }
   return b;
 }
-/* the next piece of a build (its pool, then each level in turn); false once there is none left */
-function spRBStep(b) {
-  if (!b.pool) { b.pool = spRulerPool(b.N, b.u); return true; }
+/* the work a level of a build may use: the site's set (the default filters: the record's, and the page's live copy of it)
+   SPR_WORK_SITE, every other filters' SPR_WORK (a check's knob, SP_RB_WORK, over both) */
+const spRBWork = b => SP_RB_WORK != null ? SP_RB_WORK : spRulerAll(b.u) ? SPR_WORK_SITE : SPR_WORK;
+/* the next piece of a build (its pool, then each level in turn); false once there is none left. With slice, a level's
+   search runs slice units of counted work at a time (sprLevel), so one call never holds the page long: true once a piece
+   is done, 'part' where a level is still under way (the next call carries it on); without, a level whole */
+function spRBStep(b, slice) {
+  /* the pool, and the search's reading of it (sprPrep, kept for every level of it) */
+  if (!b.pool) { b.pool = spRulerPool(b.N, b.u); if (!SPR_PREP.has(b.pool.legs)) SPR_PREP.set(b.pool.legs, sprPrep(b.pool.legs)); return true; }
   const i = b.tiers.findIndex(t => !t); if (i < 0) return false;
-  b.tiers[i] = spRulerTier(b.pool, SP_RULER_LEVELS[i], b.N, SP_RB_WORK != null ? { work: SP_RB_WORK } : null); return true;
+  const lv = SP_RULER_LEVELS[i], o = { work: spRBWork(b) };
+  if (!(slice > 0)) { b.it = null; b.tiers[i] = spRulerTier(b.pool, lv, b.N, o); return true; }
+  if (!b.it || b.itI !== i || b.itW !== o.work) { b.it = sprLevel(b.pool, lv[4], { ...o, slice }); b.itI = i; b.itW = o.work; b.slices = 0; }
+  const r = b.it.next(); b.slices++;
+  if (!r.done) return 'part';
+  b.it = null; b.tiers[i] = spRulerTierOf(b.pool, lv, b.N, r.value); return true;
 }
 /* a check's knob, never the page's: the work a ruler level of this page's builds may use (null: SPR_WORK); every build
    kept is dropped. tools/smoke_suggested.js holds a level not settled with it, and tools/suggest_ledger.js reads it from
@@ -2199,7 +2223,9 @@ function spSoftTick() {
   SP_SOFT_T = null; const b = SP_SOFT_B; SP_SOFT_B = null;
   if (!b || spRBDone(b) || tabNow() !== 'suggest') return;
   const tab = $('#tab-suggest'); if (!tab || tab.hidden) return;
-  spRBStep(b); spSoftN++;
+  const r = spRBStep(b, SPR_SLICE); spSoftN++;
+  /* a slice of a level: no draw (nothing new to show), the next task carries it on */
+  if (r === 'part') { spSoft(b); return; }
   spKeepPlace(renderSp);
 }
 let spSoftN = 0;
@@ -2308,6 +2334,6 @@ function spFiltPress(t) {
 }
 /* what the job (tools/suggest_ledger.js), the checks and the parlay card stand on */
 Object.assign(window, { SP_RULER_FROM, SP_RULER_LEVELS, spRulerOn, spRulerTier, spRulerWorkSet, spRulerWhy, spRB, spRBStep, spRBDone, spRBAll, spSetRuler, spPoolOutRuler, spUi, spUiSave, spEff, spMine, spMineSet, spFiltHtml, spFiltSet, spFiltKey, spSoft, spSoftTick, spRuleFair, spRuleFairTitle, spGapPct, spSoftCount: () => spSoftN,
-  spRulerPool, spRulerLevel, spRulerClean, spRulerAll, spRulerAllows, spRulerLeg, SPR_TAU, SPR_ETA, SPR_WORK, spNight, spNightOf, spById, spOn, spTakes, spPhase, spState, spRecState, spLockAt, spLockOf, spNoLines, spOpen, spRecMine, spEtAt, spPool, spPrep, spWalk, spSearch, spBetter, spBuild, spSet, spEntry, spPoolOut, spOrth, spFig, spOutWhy, spRebuild, spRebuildOut,
+  spRulerPool, spRulerLevel, sprLevel, spRulerTierOf, spRBWork, spRulerClean, spRulerAll, spRulerAllows, spRulerLeg, SPR_TAU, SPR_ETA, SPR_WORK, SPR_WORK_SITE, SPR_SLICE, spNight, spNightOf, spById, spOn, spTakes, spPhase, spState, spRecState, spLockAt, spLockOf, spNoLines, spOpen, spRecMine, spEtAt, spPool, spPrep, spWalk, spSearch, spBetter, spBuild, spSet, spEntry, spPoolOut, spOrth, spFig, spOutWhy, spRebuild, spRebuildOut,
   spTierOut, spTierIn, spLegOut, spLegIn, spShown, spTier, spBy, spUpdLine, spLedgerOf, spRecSum, spRecLoad, spWhyAtLock, renderSp, spWatchTick, SP_LEVELS, SP_RULE, SP_LOCK_MS, SP_KEEP_KEY, SP_KEEP_V });
 </script>

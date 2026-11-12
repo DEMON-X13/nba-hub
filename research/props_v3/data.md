@@ -171,7 +171,7 @@ January 2023 that props_v2's coverage found answering on 5 November. curl wrote 
 status: **HTTP 200, still served**. No price, line, item count or outcome was read. The script refuses a second run.
 
 **What is known without reading them** (props_v2's committed results): its coverage asked one game in four on 5 November
-2026, and provider 40 answered for 303 of 309 sampled regular-season games and 20 of 21 playoff games; its data.md scales
+2026, and provider 40 answered for 303 of 309 sampled regular-season games and 20 of 21 sampled playoff games; its data.md scales
 that to about 1,210 regular-season games, which at 2023-24's rate (about 80 lines a game) is about 90,000 lines.
 
 **What has been seen of 2022-23, for the preregistration's list.** Its prices have been seen nowhere in bulk, but:
@@ -275,7 +275,7 @@ From props_v2's coverage (5 November 2026, one game in four but where said) and 
 | Season | Provider | What is served | Status here |
 |---|---|---|---|
 | 2021-22 | 40 | Nothing in the regular season (0 of 309 sampled; and 373 games asked by the stray fetch, all 404); the late playoffs, 2 of 22 sampled (May and June 2022) | fetchable, not fetched |
-| 2022-23 | 40 | 303 of 309 sampled regular-season games, 20 of 21 playoff games; still served on 12 November (the probe) | **the one-shot test**: not fetched |
+| 2022-23 | 40 | 303 of 309 sampled regular-season games, 20 of 21 sampled playoff games; still served on 12 November (the probe) | **the one-shot test**: not fetched |
 | 2023-24 | 40 | 1,116 of 1,226 regular-season games, all 6 play-in games, 20 playoff games to 26 April 2024, none after | fetched (section 1) |
 | 2024-25 | 58 (ESPN BET) | Alternate lines with no side field, several at one number, stamped after the start: `propParse` pairs 10 to 13 a game | not usable without a study of its own |
 | 2025-26 | 100 | 18 regular-season games with any items (12 in January 2026; props_v2 counted 11 complete, 14 and 15 January), 2 play-in and 81 playoff games (the archive) | the 11 never fetched or scored; too few to test anything |

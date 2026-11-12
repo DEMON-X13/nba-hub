@@ -1335,7 +1335,7 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
         cutoff after and before its last take); R4 the guard's breaks (a level under its bound by more than TAU_G, a team
         leg at the model's chance, a level not settled, a team leg left out of the pool, the heads of another rule, a leg not
         in the pool, ties among Unders at even prices passing as any of the tied); R5 a level built again after the lock
-        under each rule; R6 the pool as kept, holding every level from the lock; R7 a night of one game; R8 a level not settled within the search's work, never taken; R9 the fewest legs, the pair
+        under each rule (one the search does not settle within its work left as locked); R6 the pool as kept, holding every level from the lock; R7 a night of one game; R8 a level not settled within the search's work, never taken; R9 the fewest legs, the pair
         of Unders where three land likelier */
   { const RCUT = T(D0, '12:00:00'), TAU = 0.005, ETA = 0.001, SCR = scAt(RCUT), slR = [gG, gC, gA, gB, gP, gE, gD, gF];
     const isMap = x => !!x && typeof x === 'object' && !Array.isArray(x);
@@ -1480,7 +1480,14 @@ const entryOfLine = (line, key) => JSON.parse(line.slice(`  ${JSON.stringify(key
         fs.writeFileSync(path.join(U5, 'ledger.json'), fs.readFileSync(path.join(UR, 'ledger.json'), 'utf8'));
         const r5 = runR(U5, stR({ report: rep, generated: T(D1, '22:00') }), LR, tL), e5 = r5.code === 0 ? readU(U5).night[keyR(D1)] : null, hit = e5 ? e5.tiers.filter(t => t.updated) : [];
         chk(!!e5 && hit.length >= 1 && hit.every(t => t.chance === 'fair' && t.need === undefined && isMap(t.pool) && t.pool.rule === 'fair' && !(t.legs || []).some(l => String(l.pid) === String(pl.pid))) && e5.updates.length === hit.length,
-          `R5: ${pl.name} listed after the lock: each level holding him built again under the ruler, on a ruler's pool of its own, recorded (${hit.map(t => t.id).join(', ')}): ${r5.last}`); }
+          `R5: ${pl.name} listed after the lock: each level holding him built again under the ruler, on a ruler's pool of its own, recorded (${hit.map(t => t.id).join(', ')}): ${r5.last}`);
+        /* the same with the search's work cut to nothing (SUGGEST_RULER_WORK reaches the page's rebuild too): the level built
+           again is not settled, so the locked level stands, said, and the guard passes (the review of 12 November: the job
+           wrote it, and its own guard refused the whole ledger on every run to the first tip-off) */
+        const U5c = uniR('ruler5c'); fs.writeFileSync(path.join(U5c, 'ledger.json'), fs.readFileSync(path.join(UR, 'ledger.json'), 'utf8'));
+        const r5c = runR(U5c, stR({ report: rep, generated: T(D1, '22:00') }), LR, tL, null, { SUGGEST_RULER_WORK: '1' }), e5c = r5c.code === 0 ? readU(U5c).night[keyR(D1)] : null;
+        chk(r5c.code === 0 && /kept \S+ \w+ as locked: built again for /.test(r5c.out) && !!e5c && JSON.stringify(e5c.tiers) === JSON.stringify(eNow.tiers) && e5c.updates == null,
+          `R5: a level built again that the search does not settle within its work is not written: the locked level stands, said, the guard passing: ${r5c.code === 0 ? r5c.last : r5c.out.trim().split('\n').slice(-4).join(' | ')}`); }
       else chk(false, 'R5: (no level of R1 holds a player)');
       /* the rule with a player's set, taken before a cutoff that passes before its lock: built again under its own rule */
       const CL = T(D1, '18:00:00'), U6 = uniR('ruler5b', CL), a = runR(U6, stR(), LR, tR, CL), eA = a.code === 0 ? readU(U6).night[keyR(D1)] : null;

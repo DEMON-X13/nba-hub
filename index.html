@@ -7311,7 +7311,7 @@ function* sprQ(C, k, thr, near, any, hiK) {
   };
   const rec = function* (j, t, c, d) {
     sprWork(C, 'node');
-    if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
+    if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield C.W.used; }
     if (t === 0) { found(c, d); return; }
     if (j >= m) return;
     const lc = Math.log(c), need = A - Math.log(d);
@@ -7364,7 +7364,7 @@ function* sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
     const list = all ? later.concat(cands) : cands; cands = []; if (all) later = [];
     list.sort((a, b) => (b.sc - a.sc) || (b.b - a.b) || sprCmp(a.key, b.key));
     for (const k of list) {
-      if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
+      if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield C.W.used; }
       if (low(k.b)) continue;
       if (!all && !(cutV() > 0) && !(k.sc > NEG)) { later.push(k); continue; }
       let u = k.u;
@@ -7416,7 +7416,7 @@ function* sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
           const x = L[q];
           if (x.q < pos) continue;
           sprWork(C, 'node');
-          if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
+          if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield C.W.used; }
           if (low(lc + Math.log(Math.min(cUb, st.cT * x.p + st.eP) * slk) + rb)) break;
           leaf(x, mult, cUb);
         }
@@ -7427,7 +7427,7 @@ function* sprGroupsAt(C, j, s, t, c, d, cutV, emit) {
     for (let q = pos; q < byP.length; q++) {
       const x = byP[q], left = s - T.length - 1;
       sprWork(C, 'node');
-      if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
+      if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield C.W.used; }
       const dAll = mult * (g.sufD[q][left + 1] || 0);
       if (!(dAll > 0) || low(bound(Math.min(cUb, x.p) * slk, Math.max(dAll, 1), HT))) break;
       if (!sprFits(T, x)) continue;
@@ -7509,7 +7509,7 @@ function* sprSolve(C) {
   setup(false);
   const toGroups = () => { if (C.gr || !X.ok2) return false; setup(true); for (let k = 2; k <= C.K; k++) if (lo[k]) hi[k] = Math.max(hi[k], lo[k].c); return true; };
   for (let it = 0; it < 600; it++) {
-    if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield 0; }
+    if (C.W.used >= C.yAt) { C.yAt = C.W.used + C.slice; yield C.W.used; }
     const L0 = bestAll(), Lo = L0 ? L0.c : 0;
     let U = tail; for (let k = 2; k <= C.K; k++) U = Math.max(U, hi[k]);
     if (!(U > 0)) return { none: true, why: 'pays' };
@@ -7707,6 +7707,8 @@ function spRBStep(b, slice) {
   if (!(slice > 0)) { b.it = null; b.tiers[i] = spRulerTier(b.pool, lv, b.N, o); return true; }
   if (!b.it || b.itI !== i || b.itW !== o.work) { b.it = sprLevel(b.pool, lv[4], { ...o, slice }); b.itI = i; b.itW = o.work; b.slices = 0; }
   const r = b.it.next(); b.slices++;
+  /* the counted work so far (a check reads it: each call within a slice and one step of the search) */
+  b.wNow = r.done ? r.value.work.used : r.value;
   if (!r.done) return 'part';
   b.it = null; b.tiers[i] = spRulerTierOf(b.pool, lv, b.N, r.value); return true;
 }

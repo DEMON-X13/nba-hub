@@ -204,6 +204,10 @@ function replaceRuledOut(w, Nm, now, runAt, said) {
       /* under the rule its set was taken under (its head: a set taken before NOCAP_FROM keeps its leg limit, one taken
          before PLAYER_FROM asks no player leg of a level, and one taken since carries need: 'player') */
       const nt = rebuild(e.nid, t.id, upd, { max: t.max, price: t.price, need: t.need, chance: t.chance }); if (!nt) return;
+      /* a ruler level the search did not settle within its work (gap): never the record's (the guard refuses it), so the
+         locked level stands this run, as takeNights keeps a set it could not settle (the review of 12 November: written,
+         it refused the whole ledger on every run to the first tip-off) */
+      if (nt.gap != null) { said.push(`kept ${key} ${t.id} as locked: built again for ${l.name} (${upd.reason}), it was not settled within the search's work`); return; }
       e.tiers[i] = JSON.parse(JSON.stringify(nt));
       e.updates = [...(Array.isArray(e.updates) ? e.updates : []), { tier: t.id, ...upd }];
       said.push(`replaced ${key} ${t.id}: ${l.name} ${upd.reason}`);

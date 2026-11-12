@@ -114,3 +114,15 @@ Scratch harness: ../fix (the reviewers' scripts pointed at this clone; sites/ = 
 - F1 (real): the search is a generator now (sprLevel; spRulerLevel drains it): the soft build runs SPR_SLICE (2e4) units a
   task; identical levels and work on 1,533 timed levels and 132 real cuts, +1-5% time.
 Next: the guard (S-2 exact singles/pairs, S-4 witnesses), replaceRuledOut (S-3/F2), tests, F3, README, the final check.
+## 22:30 UTC: the guard (S-2, S-4), the rebuild (S-3/F2), the ruler test
+- S-2 (real): the guard's legs alone, and with pairs, now walked exactly (rbExact: the cells only cut, each parlay held to
+  its own price); 30 Oct's IND_MIA+DEN_PHX job run takes the night (was refused). Return bound + RB_TIE in the walk.
+- S-4 (real): rulerWitness: the exact walk's likeliest of each size j < k (singles; pairs too on 3 games or fewer) and k;
+  refuses (3) at (1 - TAU + ETA) of the bound and (4) over the level by ETA; the filler case refused, the pair passed.
+- guard_all.out: 1,203 real levels (14 nights, every cut, the site's work): 0 refusals, slowest bound 654 ms, witness
+  206 ms, never capped.
+- S-3/F2 (real): replaceRuledOut keeps the locked level where the rebuilt one has a gap (said); SP_RB_WORK reaches
+  spRebuild; test_suggest_ledger R5's new case.
+- test_suggest_ruler: nov9one/nov11one fixtures, the site's work at the default filters with half of it as headroom, a
+  slice part, the tie case; RULER_ONLY takes a list (the job: enum,site,slice).
+Next: R9's guard plant (fewest legs reversed), F3 workflow, README, smoke, full suite, planted breaks, the final check.

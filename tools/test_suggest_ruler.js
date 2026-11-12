@@ -2,9 +2,10 @@
  * timed on every real night.
  *
  *   node tools/test_suggest_ruler.js     ends "N checks passed"; exit 1 otherwise (a few minutes; needs jsdom;
- *                                        RULER_PAGE=<file> runs it on another built page, RULER_ONLY=enum or time one
- *                                        part, RULER_OUT=<file> writes the timing table as JSON, SL_VERBOSE=1 prints every
- *                                        check)
+ *                                        RULER_PAGE=<file> runs it on another built page, RULER_ONLY=enum, time, site,
+ *                                        slice or bound (or several, comma-separated) some parts, RULER_OUT=<file> writes
+ *                                        the timing table as JSON, SL_VERBOSE=1 prints every check)
+ *   RULER_ONLY=enum,site,slice node tools/test_suggest_ruler.js   the job's run of it (the suggestions record's step)
  *
  * (i) The rule, exactly. On small pools every valid parlay is enumerated (one leg a player, one side and one total a game,
  * two legs or more), each game's legs priced together by the builder's own sums (sgJoint and joint2 on the legs in
@@ -13,14 +14,22 @@
  * of its size, ties to the lower sorted slip keys; its bound at C* or more; the same answer and the same work a second
  * time. The pools: made-up nights of 6 to 24 legs over 1 to 4 games cut from 10 November's real legs (a game's groups of
  * three legs and more; even-return Unders tying; parlays paying their floor exactly; Unders off; Overs only; a table
- * that is not positive definite; a filter that leaves no leg), and real nights' team legs on every two-game cut and a
- * spread of three-game cuts (small enough to enumerate).
+ * that is not positive definite; a filter that leaves no leg; two legs of one game tied on the chance, the dearer of the
+ * higher slip key, which the tie pass must still meet), and real nights' team legs on every two-game cut and a spread of
+ * three-game cuts (small enough to enumerate).
  * (ii) The time. Every real night (tools/fixtures/sp_nights.json's 7 and 10 November, and 10 November at 21:57 UTC from
  * tools/fixtures/sp_ruler_nights.json), whole and cut to every game and every two games, at the filter cases default,
  * Players only, Teams only, Overs only, Player unders off, shortest -300 and shortest -200, every level: at the default
- * filters every level settled and a night's three levels within RULER_NIGHT_MS; any level within RULER_LEVEL_MS (both
- * runner-safe, several times the jsdom figures in research/sp_ruler/engine.md); a level that stops on its work shows a
- * parlay with its proven gap.
+ * filters (the site's set, at SPR_WORK_SITE) every level settled within half of that work, and a night's three levels
+ * within RULER_NIGHT_MS a million units of their work; any level within RULER_LEVEL_MS a million units of its work (both
+ * runner-safe, several times the jsdom figures in research/sp_ruler/engine.md); a level that stops on its work (another
+ * filters', at SPR_WORK) shows a parlay with its proven gap. The nights: tools/fixtures/sp_nights.json's 7 and 10
+ * November, and tools/fixtures/sp_ruler_nights.json's 10 November at 21:57 UTC and two nights of one game (9 November's
+ * NOP at GSW, whose $4 the search settles only past SPR_WORK, and 11 November's ORL at UTA, whose $8 the same: the review
+ * of 12 November); the part 'site' is the default filters' alone.
+ * (slice) A level a slice a task: the tab's soft build (spRBStep with SPR_SLICE) runs a level's search a slice of counted
+ * work at a time, each call within SPR_SLICE and one search step's most (a group's own sums), and ends on the very level
+ * the search gives whole (the review of 12 November: a filter's level held the page 0.5 to 1.1 s in one task).
  * (iii) The guard's bound (tools/suggest_check.js rulerBound, the record's guard's own upper bound on the likeliest parlay
  * paying a floor, on its own reading of the legs). On every pool of (i) it is at C* or more, C* worked out exactly; on
  * every real night's cut at the default filters (each night whole, each game and each two games) it is never under a
@@ -33,7 +42,7 @@ const ROOT = path.resolve(__dirname, '..');
 const { JSDOM, VirtualConsole } = require('./node_modules/jsdom');
 const FX = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'sp_nights.json'), 'utf8'));
 const FR = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures', 'sp_ruler_nights.json'), 'utf8'));
-const NIGHTS = { nov7: FX.nights.nov7, nov10: FX.nights.nov10, nov10b: FR.nights.nov10b };
+const NIGHTS = { nov7: FX.nights.nov7, nov10: FX.nights.nov10, nov10b: FR.nights.nov10b, nov9one: FR.nights.nov9one, nov11one: FR.nights.nov11one };
 const FILTERS = { default: {}, players: { k: { ml: false, ats: false, total: false } }, teams: { k: { over: false, under: false } },
   overs: { k: { ml: false, ats: false, total: false, under: false } }, nounders: { k: { under: false } }, s300: { short: -300 }, s200: { short: -200 } };
 const LIMIT = { level: +(process.env.RULER_LEVEL_MS || 4000), night: +(process.env.RULER_NIGHT_MS || 1500), bound: +(process.env.RULER_BOUND_MS || 5000) };
@@ -42,7 +51,7 @@ const decOf = a => a > 0 ? 1 + a / 100 : 1 + 100 / -a;
 /* a pool's legs as the guard reads them */
 const guardLegs = L => L.map(l => ({ sk: l.sk, gid: l.gid, kind: l.kind, pid: l.kind === 'prop' ? String(l.pid) : null, s: l.side, line: l.line, home: l.home, team: l.team, stat: l.stat || null, odds: l.odds, other: l.other, p: l.p,
   side: l.kind === 'ml' || l.kind === 'spread', tot: l.kind === 'total', d: decOf(l.odds) }));
-const ONLY = process.env.RULER_ONLY || '';
+const ONLY = process.env.RULER_ONLY || '', part = x => !ONLY || ONLY.split(',').includes(x);
 
 let n = 0; const fails = [], notes = [];
 const chk = (ok, msg) => { n++; if (!ok) fails.push(msg); if (process.env.SL_VERBOSE) console.log(`  ${ok ? 'ok  ' : 'FAIL'} ${msg}`); };
@@ -174,6 +183,14 @@ function madeUp() {
   P.push(['two games, Overs only', mix, { k: { ml: false, ats: false, total: false, under: false } }]);
   P.push(['two games, shortest -200', mix, { short: -200 }]);
   P.push(['a filter that leaves no leg', mix, { k: { ml: false, ats: false, total: false, over: false, under: false } }]);
+  /* two legs of one game tied on the chance: one player's Over at -125 (fair 50%: the Under's +100 is all the margin's
+     other side) and another's Under at +100 (fair 50%, dearer), the Over's slip key the lower; and another game's Under at
+     -150. Both pairs with that Under land 30% paying $2 or more, so the tie pass must meet the Over's (the lower keys)
+     though the Under beats it on price (the review of 12 November: the frontier dropped it) */
+  { const two = pl('BOS_PHI', 2, 'pts'), byP = new Map(); for (const l of two) { if (!byP.has(l.pid)) byP.set(l.pid, []); byP.get(l.pid).push(l); }
+    const [pa, pb] = [...byP.keys()].sort((a, b) => String(a) < String(b) ? -1 : 1), A = byP.get(pa).find(l => l.side === 'over'), B = byP.get(pb).find(l => l.side === 'under');
+    const C = pl('LAC_PHX', 1, 'reb').find(l => l.side === 'under');
+    P.push(['two legs of one game tied on the chance, the dearer of the higher key (and another game\'s Under)', [priced(A, -125, 100), priced(B, 100, -125), priced(C, -150, 120)], {}, { ties: true, F: [2] }]); }
   /* thirty legs: three games of both sides at their moneylines and spreads, the total and three players' lines */
   const one = (gid, st) => { const seen = new Set(), out = []; for (const l of pick(L, gid, x => x.kind === 'prop' && x.stat === st)) if (!seen.has(l.pid) && out.length < 3) { seen.add(l.pid); out.push(l); } return out; };
   const big = [];
@@ -199,10 +216,10 @@ function madeUp() {
     if (!r.tooBig && r.star > 0) { const corr = JSON.parse(w.eval('JSON.stringify(S.corr)')), b = SC.rulerBound(guardLegs(r.gl), corr, F); r.bound = b; r.boundOk = b >= r.star * (1 - 1e-9); }
     return r;
   };
-  if (!ONLY || ONLY === 'enum') {
+  if (part('enum')) {
     const t0 = Date.now(); let pools = 0, parlays = 0, boundsI = 0;
     const hold = (what, legs, filt, o) => {
-      for (const F of [2, 4, 8]) {
+      for (const F of (o && o.F) || [2, 4, 8]) {
         const r = run(legs, filt, F, 3e6);
         if (r.tooBig) { chk(false, `${what}: $${F}: too many parlays to enumerate (${r.tooBig})`); continue; }
         pools++; parlays += r.count;
@@ -233,28 +250,39 @@ function madeUp() {
     }
     notes.push(`the rule: ${pools} levels enumerated (${parlays} paying parlays) in ${Math.round((Date.now() - t0) / 1000)} s; the guard's bound at C* or more on ${boundsI} of them`);
   }
-  if (!ONLY || ONLY === 'time') {
-    const t0 = Date.now(), rows = [];
+  if (part('time') || part('site')) {
+    const t0 = Date.now(), rows = [], WS = w.eval('SPR_WORK_SITE'), WF = w.eval('SPR_WORK');
+    chk(WS === 2e7 && WF === 1e6, `the site's set's work SPR_WORK_SITE (${WS}) and another filters' SPR_WORK (${WF})`);
     for (const [nm, N] of Object.entries(NIGHTS)) {
       const all = legsOf(N), gs = Object.keys(N.games).sort(), cuts = [['night', gs]];
       for (const g of gs) cuts.push([g.slice(14), [g]]);
       for (let a = 0; a < gs.length; a++) for (let b = a + 1; b < gs.length; b++) cuts.push([gs[a].slice(14) + '+' + gs[b].slice(14), [gs[a], gs[b]]]);
       for (const [fn, filt] of Object.entries(FILTERS)) for (const [cn, keepG] of cuts) {
+        if (!part('time') && fn !== 'default') continue;
         w.__legs = all.filter(l => keepG.includes(l.gid));
         const r = JSON.parse(w.eval(`(() => { const pool = __rPool(__legs, ${JSON.stringify(filt)}), out = { legs: pool.legs.length, L: [] };
-          for (const F of [2, 4, 8]) { const t = performance.now(), L = spRulerLevel(pool, F), ms = performance.now() - t;
+          for (const F of [2, 4, 8]) { const t = performance.now(), L = spRulerLevel(pool, F, { work: ${fn === 'default' ? 'SPR_WORK_SITE' : 'SPR_WORK'} }), ms = performance.now() - t;
             out.L.push({ F, ms: +ms.toFixed(1), settled: L.settled, why: L.why, n: L.n || 0, p: L.p || null, d: L.d || null, gap: L.gap == null ? null : L.gap, work: Math.round(L.work.used), tie: !!L.tie,
               legs: L.legs ? L.legs.map(l => l.kind === 'prop' ? (l.name || l.pid) + ' ' + l.side + ' ' + l.line + ' ' + l.stat + ' ' + l.price : l.kind + ' ' + l.side + (l.line != null ? ' ' + l.line : '') + ' ' + l.price) : null }); }
           return JSON.stringify(out); })()`));
         rows.push({ night: nm, filter: fn, cut: cn, ...r });
         const tot = r.L.reduce((t, x) => t + x.ms, 0);
         for (const x of r.L) {
-          chk(x.ms <= LIMIT.level, `${nm} ${cn} at ${fn}: $${x.F} in ${x.ms} ms, within ${LIMIT.level} ms`);
-          if (fn === 'default') chk(x.settled, `${nm} ${cn} at the default filters: $${x.F} settled (${x.why || 'ok'}, ${x.n} legs, work ${x.work})`);
+          const lim = LIMIT.level * Math.max(1, x.work / 1e6);
+          chk(x.ms <= lim, `${nm} ${cn} at ${fn}: $${x.F} in ${x.ms} ms, within ${Math.round(lim)} ms (${LIMIT.level} ms a million units of its work, ${x.work})`);
+          if (fn === 'default') chk(x.settled && x.work <= WS / 2, `${nm} ${cn} at the default filters: $${x.F} settled within half the site's work (${x.why || 'ok'}, ${x.n} legs, work ${x.work} of ${WS})`);
           if (!x.settled && x.why === 'work') chk(x.n >= 2 && x.gap != null && x.gap >= 0, `${nm} ${cn} at ${fn}: $${x.F} stopped on its work shows a parlay with its proven gap (${x.n} legs, gap ${x.gap})`);
         }
-        if (fn === 'default' && cn === 'night') chk(tot <= LIMIT.night, `${nm}'s night at the default filters: three levels in ${tot.toFixed(1)} ms, within ${LIMIT.night} ms`);
+        const limN = LIMIT.night * Math.max(1, r.L.reduce((t, x) => t + x.work, 0) / 1e6);
+        if (fn === 'default' && cn === 'night') chk(tot <= limN, `${nm}'s night at the default filters: three levels in ${tot.toFixed(1)} ms, within ${Math.round(limN)} ms`);
       }
+    }
+    /* the two one-game nights stand on what they are for: a level the search settles only past another filters' work */
+    for (const [nm, F] of [['nov9one', 4], ['nov11one', 8]]) {
+      w.__legs = legsOf(NIGHTS[nm]);
+      const r = JSON.parse(w.eval(`(() => { const pool = __rPool(__legs, {}), a = spRulerLevel(pool, ${F}), b = spRulerLevel(pool, ${F}, { work: SPR_WORK_SITE });
+        return JSON.stringify({ a: [a.settled, a.why, Math.round(a.work.used)], b: [b.settled, b.why, Math.round(b.work.used)] }); })()`));
+      chk(!r.a[0] && r.a[1] === 'work' && r.b[0] && r.b[2] > WF, `${nm}: $${F} not settled within SPR_WORK (${r.a.join(', ')}), settled at the site's work (${r.b.join(', ')})`);
     }
     if (process.env.RULER_OUT) fs.writeFileSync(process.env.RULER_OUT, JSON.stringify(rows));
     const L = rows.flatMap(r => r.L.map(x => ({ ...x, r })));
@@ -262,7 +290,26 @@ function madeUp() {
     notes.push(`the time: ${L.length} levels in ${Math.round((Date.now() - t0) / 1000)} s; slowest ${Math.max(...L.map(x => x.ms))} ms; ${unset.length} not settled (${[...new Set(unset.map(x => x.r.filter))].join(', ') || 'none'}), worst gap ${unset.length ? (Math.max(...unset.map(x => x.gap || 0)) * 100).toFixed(1) + '%' : '-'}`);
     for (const r of rows.filter(r => r.cut === 'night' && r.filter === 'default')) notes.push(`${r.night}'s night at the default filters: ${r.L.map(x => `$${x.F} ${x.n} legs ${(x.p * 100).toFixed(2)}% at ${x.d && x.d.toFixed(3)} in ${x.ms} ms`).join('; ')}`);
   }
-  if (!ONLY || ONLY === 'bound') {
+  if (part('slice')) {
+    /* the soft build a slice a task: a filters' level that runs to its work (10 November's MIL at NYK with Player unders
+       off) and the site's level of 9 November's one game at $4 (5.4 million units): each call within SPR_SLICE and the
+       most one step of the search may count (a group's own sums, sprGhk: 2 x 50,000 units for six legs), more than one
+       call, the level the search gives whole */
+    const SL = w.eval('SPR_SLICE'), STEP = 1.1e5;
+    chk(SL > 0 && SL <= 5e4, `the soft build's slice, SPR_SLICE ${SL} units of counted work`);
+    for (const [nm, cut, filt, F] of [['nov10', 'MIL_NYK', { k: { under: false } }, 8], ['nov9one', null, {}, 4]]) {
+      w.__legs = legsOf(NIGHTS[nm]).filter(l => !cut || l.gid.endsWith(cut));
+      const r = JSON.parse(w.eval(`(() => { const N = spById(spOn() ? spOn().id : null) || { games: [] }, v = spRulerClean(${JSON.stringify(filt)}), pool = __rPool(__legs, ${JSON.stringify(filt)});
+        const b = { N, u: v, pool, tiers: SP_RULER_LEVELS.map(() => null) }, i = SP_RULER_LEVELS.findIndex(l => l[4] === ${F});
+        for (let j = 0; j < i; j++) b.tiers[j] = { skip: true };
+        const work = spRBWork(b), whole = spRulerLevel(pool, ${F}, { work }); let calls = 0, most = 0, last = 0, more = 0;
+        for (;;) { const s = spRBStep(b, SPR_SLICE); calls++; const now = b.tiers[i] ? b.tiers[i].work : b.wNow; most = Math.max(most, now - last); last = now; if (s !== 'part') break; more++; }
+        const t = b.tiers[i], same = !!t && JSON.stringify((t.legs || []).map(slipKey).sort()) === JSON.stringify((whole.legs || []).map(slipKey).sort()) && t.work === whole.work.used && (t.corr === whole.p || (!t.legs && !whole.legs));
+        return JSON.stringify({ calls, most, more, same, work, used: whole.work.used, settled: whole.settled }); })()`));
+      chk(r.more >= 2 && r.most <= SL + STEP && r.same, `${nm}${cut ? ' ' + cut : ''} $${F} (work ${r.work}): the soft build ran it in ${r.calls} calls, each within ${SL + STEP} counted units (most ${Math.round(r.most)}), and ended on the level the search gives whole (${r.same}; ${Math.round(r.used)} units, settled ${r.settled})`);
+    }
+  }
+  if (part('bound')) {
     const t0 = Date.now(), corr = JSON.parse(w.eval('JSON.stringify(S.corr)')); let worst = 0, over = 0, slow = 0, nB = 0, at = null;
     for (const [nm, N] of Object.entries(NIGHTS)) {
       const all = legsOf(N), gs = Object.keys(N.games).sort(), cuts = [['night', gs], ...gs.map(g => [g.slice(14), [g]])];

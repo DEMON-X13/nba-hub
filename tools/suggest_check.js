@@ -948,13 +948,17 @@ function nightPoolRuler(P) {
    RB_W; every unit's log price rounded UP to its cell, every cell from ln F on one, so the programme admits every parlay
    that pays F and some that fall short by under a cell a unit, which only raises the bound), keeping in each cell and count
    of legs (none, one, two or more) the most chance any choice of the games so far lands at.
-   First the legs alone (a game gives nothing or one leg, exactly: its fair chance and its price). A parlay holding two legs
-   or more of a game returns at most HOLD on $1 (RB_SIG more, for the builder's GHK sum against the copula): such a group
-   lands no oftener than its legs' implied joint chance J (each leg's fair chance is at most its implied chance, so its event
-   lies inside its event at the implied thresholds) and is priced at most HOLD / J, and every other unit returns at most $1.
-   So it lands at most HOLD / F, and where the legs alone already reach that (every night of three games or more at the
-   default filters: a short Under returns $1) the bound is theirs. Otherwise a game also gives:
-   - two legs that go together, exactly, by this file's own two-leg sums (pairOwn: the builder's own, line for line);
+   First the legs alone, EXACTLY (rbExact: a walk over the games, each giving nothing or one leg at its fair chance and
+   price, cut by the programme's cells and holding every parlay it ends on to its own price, so a parlay a cell short of
+   the floor never counts: the review of 12 November found a $1.9996 pair of two games' legs, 1% likelier than any paying
+   one, refusing the page's correct Safe). A parlay holding two legs or more of a game returns at most HOLD on $1 (RB_SIG
+   more, for the builder's GHK sum against the copula): such a group lands no oftener than its legs' implied joint chance J
+   (each leg's fair chance is at most its implied chance, so its event lies inside its event at the implied thresholds)
+   and is priced at most HOLD / J, and every other unit returns at most $1. So it lands at most HOLD / F, and where the
+   legs alone already reach that (every night of three games or more at the default filters: a short Under returns $1) the
+   bound is theirs, and is the likeliest paying parlay itself. Otherwise a game also gives:
+   - two legs that go together, exactly, by this file's own two-leg sums (pairOwn: the builder's own, line for line), the
+     legs alone and these pairs walked exactly as above;
    - three legs or more, by the HOLD envelope above, and at most the s likeliest legs of the game together in the one-factor
      copula at the game's largest correlation (Slepian's inequality: those correlations are at least every pair's, and the
      orthant rises in each chance), s = 3 for groups of three, 4 for more;
@@ -964,10 +968,13 @@ function nightPoolRuler(P) {
      legs; a triple left out is one whose one-factor bound is under that bound, so no parlay holding it can raise it (a
      parlay's chance is at most each of its units'); a game whose table is not positive definite (the builder may shrink
      its groups' correlations) or with more than RB_TRIPLES such triples keeps the envelope from three legs.
-   Every one of those is an upper bound, so the least of them is. No parlay's chance is ever over it. Its slack, against the
-   page's levels on every real night's cut (research/sp_ruler): within 0.06% on whole nights, and up to 0.6% on a night of
-   one game at $4, where the envelope stands over a game's many triples */
-const RB_W = 2e-4, RB_SIG = 1e-3, RB_TRIPLES = 3000, RB_TRY = 2e-3;
+   A parlay holding three legs or more of a game is bounded by the programme (its cells rounded up, so it admits every
+   such parlay that pays and some that fall short by under a cell a unit, which only raises the bound); the rest are worked
+   exactly. Every one of those is an upper bound, so the most of the exact best and the least of the groups' is. No
+   parlay's chance is ever over it. Its slack, against the page's levels on every real night's cut (research/sp_ruler):
+   none on a night the legs alone decide, and up to 0.6% on a night of one game at $4, where the envelope stands over a
+   game's many triples */
+const RB_W = 2e-4, RB_SIG = 1e-3, RB_TRIPLES = 3000, RB_TRY = 2e-3, RB_NODES = 2e6, RB_PAYS = 1e-9, RB_TIE = 1e-9, RB_WX = 1e-3;
 /* the one-factor copula's chance that legs at chances ps all land, every pair correlated m (0 <= m < 1): Simpson's rule
    over the factor, 160 pieces on [-8, 8] */
 function oneFactor(ps, m) {
@@ -977,6 +984,77 @@ function oneFactor(ps, m) {
     for (const ti of t) f *= 1 - normCdf((ti - sm * z) / sr); s += w * f; }
   return Math.min(1, s * h / 3);
 }
+/* THE EXACT WALK: the likeliest parlay paying F of units whose figures are exact (a leg alone; two legs of one game by the
+   builder's two-leg sums), at most one unit a game, with exactly k legs (k a number) or two or more (k null). A table
+   T[j][r][c] of the most chance the games from j on can add with r legs still to come (k null: at least r, r at most 2)
+   and their units' log prices, each rounded UP to its cell of RB_WX, reaching c cells (so every paying parlay is admitted),
+   cuts a walk over the games, likeliest first, with each branch's return (a parlay paying F lands at most its return over
+   F, and each unit returns at most its own most: a leg alone at most $1, two legs HOLD; without it a branch of short
+   Unders, which return exactly $1, stood a cell's rounding over the best and the walk met 331,103 of them on a night of
+   ten games), a branch within RB_TIE of the best found let go (the walk's best is then within RB_TIE of the true best,
+   and the bound carries RB_TIE over it); the parlay it ends on is held to its own price, the product of its units'
+   (D >= F - RB_PAYS, as the guard holds a level's floor). { p, units } of the best, null where none pays, { capped } where
+   the walk ran past RB_NODES */
+function rbExact(G, F, k, sizes) {
+  const NC = Math.ceil(Math.log(F) / RB_WX - 1e-9), R = k == null ? 2 : k, m = G.length, lnF = Math.log(F - RB_PAYS);
+  if (!(R >= 0)) return null;
+  const T = new Array(m + 1); T[m] = []; for (let r = 0; r <= R; r++) { const a = new Float64Array(NC + 1); if (r === 0) a[0] = 1; T[m].push(a); }
+  const next = (r, n) => k == null ? Math.max(0, r - n) : r - n;
+  for (let j = m - 1; j >= 0; j--) {
+    const U = G[j], row = [];
+    for (let r = 0; r <= R; r++) {
+      const a = Float64Array.from(T[j + 1][r]);
+      for (const u of U) { const r2 = next(r, u.n); if (r2 < 0) continue; const b = T[j + 1][r2];
+        for (let c = 0; c <= NC; c++) { const v = b[c > u.cell ? c - u.cell : 0] * u.p; if (v > a[c]) a[c] = v; } }
+      row.push(a);
+    }
+    T[j] = row;
+  }
+  /* E[j]: the most the games from j on can return on $1 (each a unit or none: at least 1) */
+  const E = new Float64Array(m + 1); E[m] = 1;
+  for (let j = m - 1; j >= 0; j--) { let e = 1; for (const u of G[j]) e = Math.max(e, u.p * u.d); E[j] = E[j + 1] * e; }
+  const Fp = F - RB_PAYS, CAP = {};
+  const walk = R0 => {
+    let best = 0, bestU = null, nodes = 0; const pick = [];
+    const go = (j, r, c, ld) => {
+      if (++nodes > RB_NODES) throw CAP;
+      if (j === m) { if (r === 0 && ld >= lnF && c > best) { best = c; bestU = pick.slice(); } return; }
+      const need = lnF - ld, cn = need <= 0 ? 0 : Math.min(NC, Math.ceil(need / RB_WX - 1e-9)), opts = [];
+      const dc = Math.exp(ld), v0 = T[j + 1][r][cn]; if (v0 > 0) opts.push([Math.min(c * v0, c * dc * E[j + 1] / Fp), null]);
+      for (const u of G[j]) { const r2 = next(r, u.n); if (r2 < 0) continue; const v = T[j + 1][r2][cn > u.cell ? cn - u.cell : 0]; if (v > 0) opts.push([Math.min(c * u.p * v, c * u.p * dc * u.d * E[j + 1] / Fp), u]); }
+      opts.sort((a, b) => b[0] - a[0]);
+      for (const [b, u] of opts) {
+        if (!(b > best * (1 + RB_TIE))) break;
+        if (!u) go(j + 1, r, c, ld);
+        else { pick.push(u); go(j + 1, next(r, u.n), c * u.p, ld + Math.log(u.d)); pick.pop(); }
+      }
+    };
+    try { go(0, R0, 1, 0); } catch (e) { if (e === CAP) return { capped: true, nodes }; throw e; }
+    return bestU ? { p: best, units: bestU, d: bestU.reduce((t, u) => t * u.d, 1), n: bestU.reduce((t, u) => t + u.n, 0), nodes } : null;
+  };
+  if (k == null) return walk(2);
+  /* each size asked (every one at most k), on the one table */
+  const out = {}; for (const t of sizes || [k]) { const r = walk(t); if (r && r.capped) return { capped: true }; out[t] = r; } return out;
+}
+/* each game's exact units for the walk: its legs alone and, with pairs, its two legs that go together (pairOwn), each
+   kept where no unit of as many legs of its game is as dear and as likely (the walk wants the most chance, never a tie) */
+const rbCell = d => Math.max(0, Math.ceil(Math.log(d) / RB_WX + 1e-9));
+const rbFront = us => { us.sort((a, b) => (b.d - a.d) || (b.p - a.p)); const out = []; let mx = -1; for (const u of us) if (u.p > mx) { out.push(u); mx = u.p; } return out; };
+/* a game's two legs that go together, each by the builder's two-leg sums (pairOwn) */
+function rbPairs(corr, L) {
+  const two = [];
+  for (let i = 0; i < L.length; i++) for (let k = i + 1; k < L.length; k++) { const a = L[i], b = L[k]; if (!fitsTwo(a, b)) continue;
+    const f = pairOwn(corr, a, b); if (f.p > 0 && f.d > 1) two.push({ n: 2, p: f.p, d: f.d, cell: rbCell(f.d), legs: [a, b] }); }
+  return two;
+}
+function rbUnits(legs, corr, F, pairs, worked) {
+  const byG = new Map(); for (const l of legs) { if (!byG.has(l.gid)) byG.set(l.gid, []); byG.get(l.gid).push(l); }
+  return [...byG.values()].map((L, i) => {
+    const one = rbFront(L.map(l => ({ n: 1, p: l.p, d: l.d, cell: rbCell(l.d), legs: [l] })));
+    if (!pairs) return one;
+    return [...one, ...rbFront([...(worked ? worked[i] : rbPairs(corr, L))])];
+  });
+}
 function rulerBound(legs, corr, F, info) {
   if (!(F > 1)) return null;
   const NC = Math.ceil(Math.log(F) / RB_W - 1e-9), H = corr.hold * (1 + RB_SIG), byG = new Map();
@@ -985,47 +1063,49 @@ function rulerBound(legs, corr, F, info) {
   const frontier = pts => { const best = new Map(); for (const [j, c] of pts) if (!(best.get(j) >= c)) best.set(j, c);
     const fr = []; let mx = -1; for (const j of [...best.keys()].sort((a, b) => b - a)) { const c = best.get(j); if (c > mx) { fr.push([j, c]); mx = c; } } return fr; };
   const G = [...byG.values()].map(L => ({ L, one: frontier(L.map(l => [cellOf(l.d), l.p])), two: [], three: null, cap3: 0, cap4: 0 }));
-  /* the programme over the games, each game's units as they stand */
-  const run = () => {
-    let A = [new Float64Array(NC + 1), new Float64Array(NC + 1), new Float64Array(NC + 1)]; A[0][0] = 1;
-    const merge = (B, src, fr, k) => { for (let s = 0; s < 3; s++) { const a = src[s], to = B[Math.min(2, s + k)];
+  /* the programme over the games, each game's units as they stand; g3: only the parlays holding a group of three legs or
+     more (an envelope's or a triple's: the state past A[2], the rest kept apart), the others being the exact walk's */
+  const run = g3 => {
+    let A = [new Float64Array(NC + 1), new Float64Array(NC + 1), new Float64Array(NC + 1), new Float64Array(NC + 1)]; A[0][0] = 1;
+    const merge = (B, src, fr, k, to3) => { for (let s = 0; s < 4; s++) { const a = src[s], to = B[s === 3 || to3 ? 3 : Math.min(2, s + k)];
       for (let i = 0; i <= NC; i++) { const v = a[i]; if (!(v > 0)) continue; for (const [j, c] of fr) { const t = Math.min(NC, i + j), x = v * c; if (x > to[t]) to[t] = x; } } } };
     for (const g of G) {
       const B = A.map(a => Float64Array.from(a));
-      merge(B, A, g.one, 1); if (g.two.length) merge(B, A, g.two, 2); if (g.three) merge(B, A, g.three, 3);
+      merge(B, A, g.one, 1, false); if (g.two.length) merge(B, A, g.two, 2, false); if (g.three) merge(B, A, g.three, 3, g3);
       const cap = g.three ? g.cap4 : g.cap3;
       if (cap > 0) {
         /* a group of the envelope in cell j (its price over e^((j-1)w)) lands at most min(cap, H e^-((j-1)w)): up to jc the
            cap binds, so jc alone matters there; past it H e^-((t-1)w) times the most of v_i e^(iw) over i <= t - jc - 1 */
         const jc = Math.max(1, Math.min(NC, Math.floor(Math.log(H / cap) / RB_W) + 1));
-        for (let s = 0; s < 3; s++) { const a = A[s], to = B[2]; let run = 0;
+        for (let s = 0; s < 4; s++) { const a = A[s], to = B[g3 ? 3 : 2]; let run = 0;
           for (let i = 0; i <= NC; i++) { const v = a[i]; if (!(v > 0)) continue; const t = Math.min(NC, i + jc), x = v * cap; if (x > to[t]) to[t] = x; }
           for (let t = 0; t <= NC; t++) { const i = t - jc - 1; if (i >= 0 && a[i] > 0) run = Math.max(run, a[i] * Math.exp(i * RB_W));
             if (run > 0) { const x = H * Math.exp(-(t - 1) * RB_W) * run; if (x > to[t]) to[t] = x; } } }
       }
       A = B;
     }
-    return A[2][NC];
+    return g3 ? A[3][NC] : Math.max(A[2][NC], A[3][NC]);
   };
-  const g1 = run(), roof = H / F;
-  if (info) Object.assign(info, { one: g1, roof, stage: 1, triples: 0 });
+  const roof = H / F;
+  /* the legs alone, exactly (a walk past its cap falls back on the programme, which only raises the bound) */
+  const ex1 = rbExact(rbUnits(legs, corr, F, false), F, null), g1 = ex1 && ex1.capped ? run(false) : ex1 ? ex1.p * (1 + RB_TIE) : 0;
+  if (info) Object.assign(info, { one: g1, roof, stage: 1, triples: 0, exact: !(ex1 && ex1.capped), best: ex1 && !ex1.capped ? ex1 : null });
   if (g1 >= roof) return g1;
-  /* groups can matter: the pairs exactly, the envelope's caps */
+  /* groups can matter: the pairs exactly (with the legs alone, walked), the envelope's caps */
+  const worked = [];
   for (const g of G) {
-    const L = g.L, pts = []; let m = 0;
+    const L = g.L; let m = 0;
     for (let i = 0; i < L.length; i++) for (let k = i + 1; k < L.length; k++) { const a = L[i], b = L[k]; if (!fitsTwo(a, b)) continue;
-      const [x, y] = a.sk < b.sk ? [a, b] : [b, a], rho = CJ.rhoFor(corr.rho, clOf(x), clOf(y)) || 0; m = Math.max(m, Math.abs(rho));
-      const J = CJ.joint2(impOf(x.odds), impOf(y.odds), rho), mult = x.d * y.d;
-      pts.push([cellOf(J > 0 && isFinite(J) ? Math.min(mult, corr.hold / J) : mult), CJ.joint2(x.p, y.p, rho)]); }
-    const ps = L.map(l => l.p).sort((a, b) => b - a); g.m = Math.min(0.999, m); g.two = frontier(pts);
+      const [x, y] = a.sk < b.sk ? [a, b] : [b, a]; m = Math.max(m, Math.abs(CJ.rhoFor(corr.rho, clOf(x), clOf(y)) || 0)); }
+    const two = rbPairs(corr, L); worked.push(two);
+    const ps = L.map(l => l.p).sort((a, b) => b - a); g.m = Math.min(0.999, m); g.two = frontier(two.map(u => [cellOf(u.d), u.p]));
     g.cap3 = ps.length >= 3 ? Math.min(H, oneFactor(ps.slice(0, 3), g.m) * (1 + RB_SIG)) : 0;
     g.cap4 = ps.length >= 4 ? Math.min(H, oneFactor(ps.slice(0, 4), g.m) * (1 + RB_SIG)) : 0;
   }
-  const b0 = Math.min(roof, run());
-  const keep = G.map(g => [g.cap3, g.cap4]); for (const g of G) { g.cap3 = 0; g.cap4 = 0; }
-  const g2 = run(); G.forEach((g, i) => { g.cap3 = keep[i][0]; g.cap4 = keep[i][1]; });
-  if (info) Object.assign(info, { stage: 2, env: b0, two: g2 });
-  if (!(b0 > g2 * (1 + RB_TRY))) return b0;
+  const ex2 = rbExact(rbUnits(legs, corr, F, true, worked), F, null), g2 = ex2 && ex2.capped ? (() => { const keep = G.map(g => [g.cap3, g.cap4]); for (const g of G) { g.cap3 = 0; g.cap4 = 0; } const v = run(false); G.forEach((g, i) => { g.cap3 = keep[i][0]; g.cap4 = keep[i][1]; }); return v; })() : ex2 ? ex2.p * (1 + RB_TIE) : 0;
+  const e3 = Math.min(roof, run(true)), b0 = Math.max(g2, e3);
+  if (info) Object.assign(info, { stage: 2, env: e3, two: g2, best: ex2 && !ex2.capped ? ex2 : null });
+  if (!(e3 > g2 * (1 + RB_TRY))) return b0;
   /* the triples that could raise it, counted on their one-factor bound first, then worked out exactly */
   let any = false;
   for (const g of G) {
@@ -1043,9 +1123,22 @@ function rulerBound(legs, corr, F, info) {
     g.three = frontier(out); any = true; if (info) info.triples += cand.length;
   }
   if (!any) return b0;
-  const b = run();
-  if (info) Object.assign(info, { stage: 3, exact: b });
-  return Math.min(b0, b);
+  const b = Math.min(e3, run(true));
+  if (info) Object.assign(info, { stage: 3, three: b });
+  return Math.max(g2, b);
+}
+/* THE FEWEST LEGS AND THE SIZE, on this file's own witnesses (the review of 12 November: a level padded with a short Under,
+   which returns $1 too, landed within a hair of the best and passed the bound alone). For a level of k legs: the exact
+   walk's likeliest parlay of each size j < k (the legs alone, and on a night of three games or fewer their pairs too) and
+   of k; a parlay of fewer legs landing (1 - TAU + ETA) of the bound or more breaks rule (3) (the bound is at C* or more),
+   one of k legs landing more than the level over (1 - ETA) breaks rule (4). null where a walk ran past its cap (nothing is
+   held then); the page's TAU and ETA are this file's own copies (the record refuses a page whose levels or cutoff differ) */
+const RULER_TAU = 0.005, RULER_ETA = 0.001;
+function rulerWitness(legs, corr, F, k) {
+  const games = new Set(legs.map(l => l.gid)).size, G = rbUnits(legs, corr, F, games <= 3), sizes = [];
+  for (let j = 2; j <= k; j++) sizes.push(j);
+  const out = sizes.length ? rbExact(G, F, k, sizes) : {};
+  return out && out.capped ? null : out;
 }
 /* whether some parlay the rule takes pays F, by its legs alone and its pairs (a level empty where one does is refused):
    each game's dearest leg, or its dearest pair by the builder's two-leg sums, multiplied across the games */
@@ -1100,6 +1193,14 @@ function rulerLevelBad(key, x, lv, pool, ids, bound, tag, F0, legsAll, corr) {
   if (Math.abs(pc - x.p) > 1e-4 || Math.abs(pc - (x.fair == null ? NaN : x.fair)) > 1e-4 || Math.abs(dc - x.dec) > 1e-3) bad.push(`${key} ${id}: its chance ${x.p}, fair chance ${x.fair} and price ${x.dec} are not its legs' as its pool${w} has them (${pc.toFixed(5)}, ${dc.toFixed(4)})`);
   if (!(dc >= F - 1e-6)) bad.push(`${key} ${id}: its legs pay ${dc.toFixed(4)} on $1 by its pool${w}, under its floor ${F}`);
   if (bound != null && !(pc >= (1 - TAU_G) * bound)) bad.push(`${key} ${id}: lands ${(pc * 100).toFixed(3)}%, under ${((1 - TAU_G) * 100).toFixed(0)}% of this file's own bound on the likeliest parlay paying $${F}${w} (${(bound * 100).toFixed(3)}%)`);
+  /* rules (3) and (4) on this file's own witnesses, where it worked the bound on its own reading */
+  if (bound != null && legsAll && corr) {
+    const Wt = rulerWitness(legsAll, corr, F, L.length), nm = r => r.units.flatMap(u => u.legs.map(l => l.sk)).join(' + ');
+    if (Wt) {
+      for (let j = 2; j < L.length; j++) { const r = Wt[j]; if (r && r.p >= (1 - RULER_TAU + RULER_ETA) * bound * (1 + 1e-12)) { bad.push(`${key} ${id}: ${L.length} legs, where a parlay of ${j} (${nm(r)}) lands ${(r.p * 100).toFixed(3)}% at ${r.d.toFixed(4)}, within half a percent of this file's own bound (${(bound * 100).toFixed(3)}%): the rule takes the fewest legs`); break; } }
+      const r = Wt[L.length]; if (r && r.p * (1 - RULER_ETA) > pc * (1 + 1e-12)) bad.push(`${key} ${id}: lands ${(pc * 100).toFixed(3)}%, where a parlay of its ${L.length} legs (${nm(r)}) lands ${(r.p * 100).toFixed(3)}% at ${r.d.toFixed(4)}: the rule takes the likeliest of its size, within 0.1%`);
+    }
+  }
   return bad;
 }
 /* a ruler pool (P as kept, kept: its reading) held to this file's own reading of the run's files at an instant, and the legs
@@ -1313,5 +1414,5 @@ function main() {
 module.exports = { ownGroups, ownFig, check, entryBad, lockedMoved, gradeBad, summarize, summarizeNight, dumps, canon, callOf, keyOf, nightKeyOf, nightIdOf, nightEntryBad, nightLevelBad, nightMoved, nightPool, nightBest, nightBetter, nightNoLines, nightHeld, featuredOf, etDateOf, minIso, plFair, plHeld, plListed, plOwn, pairOwn, nightFull, gamePosDef, legKey,
   PL_FROM, PL_STATS, PL_BAND, NOCAP_FROM, NIGHT_LEVELS_OLD, nightRule, oldOk, PLAYER_FROM, NIGHT_LEVELS_NOCAP, nocapOk, noPlOf, NOPL,
   TIERS, OLD_TIERS, THREE_FROM, LABELS, LEGS, LOCK_MS, FEATURED_TV, NIGHT_LEVELS, NIGHT_IDS, NIGHT_TIE, HOW, LEDGER_REL,
-  RULER_FROM, RULER_FROM_SET, NIGHT_LEVELS_RULER, TAU_G, RB_W, RB_SIG, oneFactor, rulerOk, rulerLateOk, teamFair, teamOwn, glOwn, nightPoolRuler, rulerBound, rulerPays, rulerLevelBad, rulerFull, rulerEntryBad, nightUpdatesBad };
+  RULER_FROM, RULER_FROM_SET, NIGHT_LEVELS_RULER, TAU_G, RULER_TAU, RULER_ETA, RB_W, RB_SIG, RB_NODES, oneFactor, rulerOk, rulerLateOk, teamFair, teamOwn, glOwn, nightPoolRuler, rbExact, rbUnits, rulerBound, rulerWitness, rulerPays, rulerLevelBad, rulerFull, rulerEntryBad, nightUpdatesBad };
 if (require.main === module) process.exit(main());

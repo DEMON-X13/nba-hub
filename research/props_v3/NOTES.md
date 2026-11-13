@@ -13,3 +13,10 @@
   test on DraftKings' 2022-23 lines with its validity checks, the bar T1/T2 with every rival sized, the forward
   shadow's pinned rules, every development choice, what stops early). Next step: build MA (the 2020-21 fetch, P23,
   the screening) and run the development bar on its own projections.
+- 13 Nov 2026 00:05 UTC: the critique of PLAN.md (C1 to C7) checked: all seven real (C1 and C4 reproduced with the
+  critic's scripts and C1, C2 with plan_sizing/power_rev.js -> results/plan_power_rev.json; C2's committed 2022-23
+  aggregates read again, disclosed in PLAN.md 3.3; C3, C5, C6, C7 read in the files they cite). PLAN.md revised
+  (section 8 says what changed): the shadow decided at 65,000 lines, D3 by lines and both T2 criteria at once, D5(b'),
+  matched shuffles and three more rivals in D6, the club rule, the shadow's grading order, planted in-game prices in D9,
+  V6. fetch_box2021.js (the 2020-21 box scores for P23's warm-up) is running into cache/box2021/. Next: P23's fit,
+  MA's rows, the development bar.

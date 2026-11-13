@@ -1,9 +1,10 @@
 # The plan for MA: DraftKings' price, nudged by the hub's read of the player
 
-Research only, 12 November 2026. The owner asked (11 November): "i also want to figure out why the model failed and if
-we can build a more reliable one." `why_it_failed.md` is the first half. This is the plan for the second: one candidate,
-MA, how it is built, the bar it must meet on development data before anything is spent, the one-shot test on
-DraftKings' 2022-23 lines and the bar written for it, and what a pass or a fail leads to. **Nothing here is the
+Research only, 12 November 2026, revised 13 November after an independent critique (section 8 lists what it found, how
+each point was checked and what changed). The owner asked (11 November): "i also want to figure out why the model
+failed and if we can build a more reliable one." `why_it_failed.md` is the first half. This is the plan for the second:
+one candidate, MA, how it is built, the bar it must meet on development data before anything is spent, the one-shot test
+on DraftKings' 2022-23 lines and the bar written for it, and what a pass or a fail leads to. **Nothing here is the
 candidate.** The numbers below come from small sizing checks on development data (`plan_sizing/`, their tables in
 `results/plan_tables.md`), made with a stand-in forecaster that no candidate may stand on (section 6). This plan is not
 the preregistration: that is written from sections 3 to 5 once MA is built and has met section 2 on its own
@@ -26,16 +27,21 @@ projections, with its files hashed, and is committed, pushed and audited before 
   each built so that no rival without player information can meet it. On development data 26 such rivals and 40
   shuffled copies of the candidate were tried, and none met either.
 - **The odds, honestly.** The stand-in meets the bar on every development split. At half its development effect it would
-  pass a test the size of 2022-23's about nine times in ten by the development bar's protocol, and five to eight times
-  in ten by the alternate-nights splits. But it was fitted on 2022-23 box scores, so it is no candidate. MA's own
-  projections are fitted on 2021-22 alone and will be weaker, and 2022-23 is a different season. The development bar
-  must be met again with them before the test is spent. A small, real edge on the small stats, or nothing, are the
-  likely answers. Beating DraftKings on points is not.
-- **What a pass starts.** Only a quiet forward shadow on 2026-27 games called after the freeze. Nothing on the page
-  changes.
-- **"More reliable."** MA would also be calibrated stat by stat, where the hub's fair chance (the whole margin on the
-  Over) under-says the Over by 1.7 to 2.3 points on four stats. But that correction needs no player information. It is a
-  question about the hub's devig rule, it is reported, and it decides nothing here (section 4.5).
+  pass a test the size of 2022-23's (1,100 games at 74 graded lines a game) about 0.87 of the time by the development
+  bar's protocol, about 0.74 if 2022-23's prices are as unlike 2023-24's as the 31 games of it already seen suggest (far
+  more lines priced away from even), and five to eight times in ten by the alternate-nights splits. But it was fitted
+  on 2022-23 box scores, so it is no candidate. MA's own projections are fitted on 2021-22 alone and will be weaker, and
+  2022-23 is a different season. The development bar must be met again with them before the test is spent. A small,
+  real edge on the small stats, or nothing, are the likely answers. Beating DraftKings on points is not.
+- **What a pass starts.** Only a quiet forward shadow on 2026-27 games (and 2027-28's, if it needs them to reach its
+  size) called after the freeze. Nothing on the page changes.
+- **"More reliable."** MA must also be not clearly too sure, and not clearly worse calibrated than DraftKings' own fair
+  chance, on any stat (D5). It is called calibrated only on a stat where that is shown, its slope measured close to 1;
+  on points neither MA's chance nor DraftKings' can be shown calibrated on 2023-24, where nearly every line sits close to
+  even. On 2023-24 the hub's fair chance (the whole margin on the Over) under-says the Over by 1.7 to 2.3 points on four
+  stats, which MA's information-free part corrects. That correction needs no player information, and on the 31 games of
+  2022-23 already seen the Over landed 1.9 points *under* DraftKings' fair chance, so it may well run the wrong way there.
+  It is a question about the hub's devig rule, reported and deciding nothing here (section 4.5).
 
 ## 1. The candidate
 
@@ -46,7 +52,8 @@ For each game, on DraftKings' main lines of the six base stats (points, rebounds
 1. **DraftKings' fair chance** q on each posted line, from its two prices by the hub's rule: the whole margin on the Over
    (fair Over = 1 − the Under's implied chance).
 2. **The projection layer, P23.** For every player DraftKings posted a line for, his mean on each of the six stats and its
-   negative-binomial spread, from his earlier games alone. These are `tools/props.js`'s own pieces and code: his rate per
+   negative-binomial spread, from his earlier games alone, for the club whose box last listed him (1.5). These are
+   `tools/props.js`'s own pieces and code: his rate per
    minute on each stat (weighted toward recent appearances, shrunk toward his position's league rate) times what the
    opponent has allowed on that stat. The constants are refitted on 2021-22 (section 1.4). Each mean is taken at a
    nominal 30 minutes and the game's expected pace. Minutes and pace multiply all six of his stats alike, so they cancel
@@ -68,7 +75,8 @@ For each game, on DraftKings' main lines of the six base stats (points, rebounds
    an offset.
 
 A player with a single posted line has d = 0 (his level is that line), so MA is E there. On 2023-24, 99.99% of graded
-lines are on player-games with two or more lines.
+lines are on player-games with two or more lines. A player with no game played on record has no projection: his lines
+stay in the sample with n = 0, MA being E there too.
 
 The weights w_s are fitted jointly with the information-free family F of section 4.1 as controls, so they carry only
 what F does not; E is then fitted with the frozen n as an offset.
@@ -81,6 +89,7 @@ what F does not; E is then fitted with the frozen n as an offset.
 | His other posted lines in the game (for κ) | the same feed | every line posted, whatever is graded later | which of them are graded, voided or pushed |
 | His rates, his position, the opponent's allowed rates, pace | box scores of games strictly before this game's date | earlier games: the replay takes a day's features before its results, as `tools/props.js` does | the game's own box (who dressed, who started, minutes, did-not-play reasons) and any later box |
 | Which players to project | DraftKings' posted lines | the lines name them | the game's box (the stand-in projected the box's list; MA may not) |
+| His club for the game, so his opponent, home and away, his club's spread and rest | the club whose box last listed him, dressed or not, on an earlier date; the game's two clubs from its id and `games.csv` | earlier boxes and the published schedule | the game's own box (the stand-in took his club from it: critique C5) |
 | P23's constants | `tools/props.js`'s fit on 2021-22, 2020-21 warming up | fitted once, frozen | nothing fitted on 2022-23 or later |
 | w_s, E, any secondary weight | DraftKings' 2023-24 lines (development) | fitted once, frozen | 2022-23's lines, 2026-27's |
 | Secondary inputs (section 1.3) | box scores of earlier games, the schedule | earlier games and a published schedule | as above |
@@ -129,7 +138,10 @@ level part added did a little worse than without it on every split of the first 
 Every piece is fitted only on what came before the lines it is scored on, with one exception that cannot be avoided: w_s
 and E are fitted on DraftKings' 2023-24 lines, the season after the test's. No DraftKings regular-season lines before
 2022-23 exist to fit them on: 2021-22's regular season has none on the feed (`data.md` section 4). Nothing of 2022-23
-enters them. A backward test can be hurt by drift between seasons, never helped by it. P23 is fitted on 2021-22 for both
+enters them. Drift between seasons can hurt a backward test or help it (were DraftKings weaker on steals in 2022-23,
+say, the nudge would look stronger there than it is now; the plan said until 13 November that drift could never help,
+which was wrong: critique C2). F, fitted on the test lines, takes out any shift in DraftKings' level or price mix, but not
+a change in what the nudge's information is worth. P23 is fitted on 2021-22 for both
 the development lines and the test's. The development projections then stand two seasons after their fit and the test's
 one, so the test's projections are, if anything, fresher than the ones MA's weights were fitted on. Nothing MA stands on
 was fitted on 2022-23: not `tools/props.js`'s live constants, its folds, props_v2's A or `data/corr.json` (`data.md`
@@ -143,8 +155,16 @@ section 6).
 - **L2, the lines' rebuild.** Which lines exist, their pairing and their prices come from the feed's pre-tip fields
   alone, by `propParse`'s rules, never from a box score, a grade or a stamp. MA projects every posted player from his
   earlier games, never from the game's box. Held by the **blindfold check** (D7): for 200 development games, every
-  input and chance is recomputed from a data folder holding only (a) the box scores of earlier dates and (b) the game's
-  six-column lines, and must be the same to the bit. Every graded outcome scrambled must change no input or chance.
+  input and chance is recomputed from a data folder holding only (a) the box scores of earlier dates, (b) the six-column
+  lines of the game's night, (c) `games.csv`'s rows to that night with that night's scores taken out (read by the replay
+  for the order of games, by MA for the game's two clubs, and by F for rest), and (d) `odds_hist.csv`'s rows of that
+  night's games (read by F alone, for the game's total and spread; never by MA), and must be the same to the bit. Every
+  graded outcome scrambled must change no input or chance.
+- **The club (critique C5).** A player's club for a game is the club whose box last listed him on an earlier date,
+  dressed or not. A line whose player has no box on record, or whose club on record is neither of the game's two clubs
+  (his first game after a trade or a summer move), is left out of the sample, development and test alike: on 2023-24
+  that is about 317 graded lines on 55 player-games by the replay's own count of first games for a new club, plus any
+  debut. The rule reads earlier boxes and the game's id alone; the game's own box never says who is in the sample.
 - **L4, pushes and voids in aggregates.** κ, and F's night, game and player-game aggregates, are built from every line
   posted: graded, void, no call or push alike. The blindfold check covers it.
 - **A new one, for a cross-line candidate.** κ reads a player's other lines. If a share of those prices had been moved
@@ -162,7 +182,8 @@ section 6).
 **The protocol.** On DraftKings' 2023-24 lines, with MA's own P23 projections:
 - w_s, E and the secondaries are fitted on the months before each month from December to April (October and November
   only train);
-- the months' out-of-fold lines (about 69,000 on 863 games) are scored together;
+- the months' out-of-fold lines (about 69,000 on 863 games: every graded line of the sample of 1.5, a line with no
+  projection at n = 0) are scored together;
 - F is cross-fitted on them, as the test fits it;
 - intervals resample games: 1,000 times for b, 10,000 for a mean difference, seed 0.
 
@@ -173,24 +194,46 @@ MA must meet every criterion; a miss stops the plan (section 7).
 - **D2, value at the frozen size (the test's T2).** n added to F, cross-fitted on the out-of-fold lines: the log-loss
   difference's 90% interval lies wholly below −0.0001 and Brier's below −0.00005. On no stat does the log-loss
   difference's interval lie wholly above 0.
-- **D3, power.** From D1's and D2's effects and standard errors, scaled from 863 games to 1,100, T1 and T2 are each met
-  with probability at least 0.8 at half the development effect. A candidate too weak to test with confidence does not
-  spend the one-shot season.
+- **D3, power.** From D1's and D2's effects and standard errors, scaled to 1,100 games at 74 graded lines a game (the
+  rate props_v2's committed 31 games of 2022-23 show, against about 80 on the development lines), each standard error by
+  the larger of the two scalings, games and lines (critique C1: a sample with fewer lines a game than the development
+  lines is noisier than its games alone say), T1 and T2 are each met with probability at least 0.8 at half the
+  development effect, T2's chance being that of both its criteria at once (log loss and Brier, drawn together with the
+  game sums' own correlation; until 13 November the lower of the two). A candidate too weak to test with confidence does
+  not spend the one-shot season. Reported beside, deciding nothing: the same at 900 games, and with the effect reweighted
+  to the price mix of 2022-23's 31 seen games (critique C2).
 - **D4, the references.** On the same out-of-fold lines, MA's chance beats DraftKings' fair chance, `tools/props.js`'s
   2024 fold and props_v2's A (its 2024 fold, as scored on 6 November 2026) on log loss and Brier, each paired interval
   wholly below 0. Necessary, not sufficient: against DraftKings this is partly E's information-free correction, which is
   why D1 and D2 exist.
-- **D5, calibrated per stat, in this sense.** On each stat's out-of-fold lines:
+- **D5, not clearly miscalibrated per stat, in this sense** (strengthened on 13 November: critique C3). On each stat's
+  out-of-fold lines:
   - (a) MA's mean chance is within 1.5 points of the Over rate;
   - (b) the slope of its recalibration (P(Over) = sigm(α + s·logit P)) has a 90% interval that reaches into
     [0.8, 1.25]. That is, MA is not clearly too sure by more than a fifth, nor too shy by more than a quarter, on any
     stat;
+  - (b') **and** MA's slope is not clearly further from 1 than DraftKings' own fair chance's on the same lines by more
+    than 5%: the 90% interval (1,000 resamples of games, seed 0, both slopes refitted in each) of |ln s_MA| − |ln s_DK|
+    does not lie wholly above ln 1.05. MA may not be shown calibrated where it is plainly worse calibrated than the
+    price it starts from;
   - (c) a ten-band reliability table is reported beside it, with DraftKings' own.
-  Points' chances sit close to 50%, so its slope is poorly measured (the stand-in's 0.64 [0.40, 0.88]).
+  (a), (b) and (b') decide. **What may be claimed** is narrower than what passes: MA is called *calibrated* on a stat
+  only where its slope's point estimate lies in [0.8, 1.25] and its 90% interval wholly inside [0.67, 1.5]; a stat that
+  passes but is not so measured is reported as *poorly measured*, with its slope, never as calibrated. Points' chances
+  sit close to 50%, so its slope is poorly measured (the stand-in's 0.64 [0.40, 0.88]; DraftKings' own 0.77 [0.50,
+  1.04]).
 - **D6, rivals fail on MA's own projections.** MA with its d values shuffled across players within stat and month, 20
-  shuffles, fails D1 and D2 every time. The held-out rivals of section 4.3, refitted in this protocol, fail them too.
+  shuffles, fails D1 and D2 every time; so does MA with its d values shuffled within matched cells (stat × month ×
+  position × price band × line), 20 shuffles (critique C4: such a shuffle keeps whatever the cells' own mean
+  disagreement carries, which is no read of the player, and on the stand-in kept a b of about 0.07, its highest lower
+  bound 0.07, so the margin against it is about 0.18 where the coarse shuffles' was 0.26). The named rivals (on top of
+  DraftKings' fair chance) and the held-out rivals of section 4.3, with the critique's three (DraftKings' own other lines
+  for the player, their sizes and prices; the same by position; the pairwise products of F's continuous features), all
+  refitted in this protocol, fail them too. The shuffles' and rivals' T1 intervals use the cluster-robust standard error
+  (`results/plan_bootcheck.json`: within 2% of the bootstrap's), and any whose lower bound comes within 0.05 of 0.25 is
+  taken again by the 1,000-resample bootstrap.
 - **D7, the leak checks** of 1.5, each as stated:
-  - the blindfold check, to the bit;
+  - the blindfold check, to the bit, its folder as 1.5 says;
   - the scrambled-outcome check;
   - the loader's refusal of a seventh column;
   - the early-exit shift (minutes projected by P23's own rule) within half a point of the shift elsewhere;
@@ -204,16 +247,27 @@ MA must meet every criterion; a miss stops the plan (section 7).
   - the 2020-21 fetch, P23's fit and MA's freeze;
   - the Test step's fetch, validity checks and scorer, which must give back D1 and D2 to the digit on the development
     lines;
-  - the shadow's runner.
+  - the shadow's runner;
+  - **planted in-game prices** (critique C7): on the development lines, at 10% and at 20% of player-games, one of the
+    player's posted stats repriced as a price read a quarter of the way into the game would be (props_v2's
+    `validity_calib.js` rule: DraftKings' own pre-game distribution, the stat so far a binomial share of the final, the
+    rest at the pre-game rate, his night known done where it ended before then), his other lines left as they were. V2
+    lets about a fifth of lines read so pass (its own calibration: −0.23 a line read at a quarter, against a floor of
+    −0.05), so V4 must react at those shares: where it does not, V4's threshold is tightened, or a check of the nudge's
+    gain on early exits against its gain elsewhere is added, its threshold set on the planting, before the
+    preregistration is written. How far the plants move the nudge's T2 is reported.
 
 **Where the stand-in stands** (`results/plan_tables.md` A and C; tools/props.js's 2024 fold in place of P23, so a size,
 not a result). Forward-chained:
 - D1: b 1.23 [1.08, 1.37], 84% of the nudge outside F;
 - D2: log loss −0.00109 [−0.00136, −0.00082], Brier −0.00050 [−0.00063, −0.00038];
-- D3: power at half the effect 1.00 for T1 and 0.90 for T2;
+- D3: power at half the effect 1.00 for T1 and 0.87 for T2 by the revised rule (0.90 as first written; 0.81 at 900
+  games, 0.74 at 2022-23's seen price mix: `results/plan_power_rev.json`);
 - D4: MA less DraftKings −0.00176 [−0.00219, −0.00134];
-- D5: met on every stat: slopes 0.64 to 1.08; mean chance within 1.04 points of the Over rate, where DraftKings' fair
-  chance is −1.68, −2.26, −2.05 and −1.93 points off on points, assists, threes and blocks;
+- D5 as first written: met on every stat: slopes 0.64 to 1.08; mean chance within 1.04 points of the Over rate, where
+  DraftKings' fair chance is −1.68, −2.26, −2.05 and −1.93 points off on points, assists, threes and blocks. Under (b')
+  the stand-in's points (0.64 against DraftKings' 0.77) may well fail; its other stats are level with DraftKings' or
+  closer to 1;
 - D6 and D7 as above;
 - D8: met.
 
@@ -231,9 +285,12 @@ not a result). Forward-chained:
 - **Left out.** The 31 regular-season games props_v2's `espn_validate40` read whole on 5 November 2026. Their
   DraftKings aggregates were seen (3.3). The scorer lists them from that file's game ids.
 - **The 2023 playoff lines stay unfetched and unseen.** This test does not use them.
+- **The club.** By 1.5's rule: a line whose player has no club on record that is one of the game's two clubs is left
+  out, so a player's first game after a trade or a summer move is not scored (on opening week of 2022-23, every player
+  who changed clubs over the summer).
 - **Expected.** About 1,200 games answer (props_v2's coverage found 303 of 309 sampled; lesson P3: review found part of
-  that probe's reading wrong, its count of games answering held). Less the 31, at about 80 lines a game, about 90,000
-  lines, about 87,000 graded.
+  that probe's reading wrong, its count of games answering held). Less the 31, at the 74 graded lines a game the 31
+  show (2023-24's development lines: about 80), about 86,000 graded.
 
 ### 3.2 Why it is clean
 
@@ -257,12 +314,27 @@ them as history, as the rules allow. But no outcome of a 2022-23 line has entere
   - its terminal showed `espn_validate40`'s and `espn_coverage`'s 2022-23 rows (props_v2's committed aggregates);
   - `data_inventory.js` read the 2022-23 box scores for their shape and counted `games.csv`'s and `odds_hist.csv`'s
     rows.
+- **What those committed aggregates show of 2022-23's prices** (critique C2; read again, those figures alone, by the
+  critique and by this revision): on the 31 games, 2,305 graded lines, DraftKings priced far more lines away from even
+  than in 2023-24. The share of lines with a fair chance of 40 to 60% was, 2022-23 against 2023-24's 29 sampled games:
+  points 0.92 against 1.00, rebounds 0.68 against 0.91, assists 0.45 against 0.83, threes 0.36 against 0.70, steals 0.25
+  against 0.58, blocks 0.12 against 0.31. And the Over landed 36.4% of the time where DraftKings' fair chance said 38.3%
+  (in 2023-24's sample 44.6% against 44.0%; on all of 2023-24 the fair chance under-says the Over by 1.7 to 2.3 points on
+  four stats). So E, which corrects 2023-24's under-said Over, may move 2022-23's chances the wrong way, and no level or
+  calibration claim is assumed to carry over (4.5). T1 and T2 do not depend on it: F is fitted on the test lines. The
+  points lines priced away from even, about 8% at the test, are all but untested on 2023-24 (21 lines).
 - **This plan:**
   - no 2022-23 prop line was read;
   - the terminal showed the first six rows of `data/odds_hist.csv`, which are 2022-23 consensus game lines (moneylines,
     spread and total of six opening-week games): game lines F may read at test, never fitted on;
   - `plan_sizing/rows.js` reads `odds_hist.csv` whole but parses only 2023-24's and 2025-26's rows;
   - the game ids of `espn_validate40.json` were listed to count the 31 games.
+- **This plan's critique and revision, 12 and 13 November:** the critique printed `espn_validate40.json`'s committed
+  2022-23 aggregates (over rates, mean fair Over, shares 40 to 60%, per-stat log losses on the 31 games) and
+  `espn_coverage.json`'s monthly 2022-23 item medians; the revision printed again the first of these (graded lines and
+  games, over rate and mean fair Over, and by stat the lines, over rate, mean fair Over and share 40 to 60%), and
+  `plan_sizing/power_rev.js` reads the graded lines, games and by-stat lines and shares to size the power. No 2022-23 prop
+  line, and nothing else of 2022-23, was read.
 - **2022-23's box scores and finals:**
   - read by `tools/props.js`'s live constants and folds, props_v2's A and its validity check, `data/corr.json` and the
     hub's game models;
@@ -288,9 +360,14 @@ is printed until all have.
   `data.md`'s figures with the 2024 fold) before the preregistration.
 - **V4, the nudge knows no early exits.** On early exits (projected 24+ minutes by P23's own minutes rule, as V2
   projects them; played his club's previous game; played under 12), MA's frozen nudge moves the chance by no more than
-  0.5 points more toward the Under than elsewhere, on 40 exits or more. On 2023-24: +0.06 against +0.02 points.
+  0.5 points more toward the Under than elsewhere, on 40 exits or more. On 2023-24: +0.06 against +0.02 points. Its
+  threshold, and whether a check of the nudge's gain on early exits joins it, are fixed by D9's planted in-game prices
+  before the preregistration (critique C7).
 - **V5, the level can be read.** At least 90% of graded lines are on player-games with two or more posted lines (2023-24:
   99.99%).
+- **V6, the price mix, reported (deciding nothing).** Each stat's share of test lines by price band (fair chance in the
+  six steps of F) beside 2023-24's, and the power at half the development effect reweighted to the test's own mix, so the
+  report says plainly how unlike the development lines the test lines were (critique C2).
 
 **What each outcome decides.**
 - **Any V fails: VOID.** No verdict is read, no shadow starts, and the 2022-23 lines are spent all the same: seen, they
@@ -418,12 +495,18 @@ cluster-robust standard error, which matched a 400-resample bootstrap (`results/
 
 ### 4.4 Power
 
-The stand-in's effects and standard errors, scaled to the test's 1,100 games:
+The stand-in's effects and standard errors, scaled to the test's 1,100 games at 74 graded lines a game, each standard
+error by the larger of the games' and the lines' scalings, and T2's chance that of both its criteria at once
+(`results/plan_power_rev.json`; revised 13 November, critiques C1 and C2):
 - **At the full effect:** T1 and T2 are each met with probability 0.99 or more on every split.
 - **At half the effect:**
-  - forward-chained: 1.00 for T1, 0.90 for T2 (log loss and Brier, the lower);
-  - at 900 games: 0.87;
-  - on the alternate splits: 0.99/0.80 and 0.90/0.51 (`results/plan_tables.md` A).
+  - forward-chained: 1.00 for T1, 0.87 for T2 (0.89 on log loss alone, 0.88 on Brier alone); as first written, by
+    games alone and the lower of the two, 0.90;
+  - at 900 games: 0.99 and 0.81;
+  - reweighted to the price mix of 2022-23's 31 seen games (each stat's lines priced 40 to 60% or not, each cell's
+    effect its development one: 0.88 of the log-loss effect and 0.86 of Brier's): 1.00 and 0.74 at 1,100 games, 0.99 and
+    0.67 at 900;
+  - on the alternate splits (games alone, as first sized): 0.99/0.80 and 0.90/0.51 (`results/plan_tables.md` A).
 
 The old model's raw disagreement, shrunk the same way, would have 0.16 at half its effect. So the mix is what makes the
 test worth running. D3 asks MA's own numbers for at least 0.8.
@@ -437,7 +520,9 @@ test worth running. D3 asks MA's own numbers for at least 0.8.
 - **E alone against DraftKings' fair chance.** This is information-free: whether a calibrated devig beats the whole
   margin on the Over. On 2023-24, E frozen on one half against the other gave −0.00031 [−0.00070, +0.00008], −0.00052
   [−0.00088, −0.00016] and −0.00049 [−0.00090, −0.00010]. It is a question about the hub's fair-chance rule, not about
-  the player, and this test does not settle it.
+  the player, and this test does not settle it. Said in advance: on the 31 games already seen, 2022-23's Over landed
+  under DraftKings' fair chance, where 2023-24's landed over it, so E may well do worse than DraftKings' fair chance on
+  the test; that would say E's correction does not carry across seasons, and nothing about the nudge.
 
 ## 5. What a PASS starts, and what a FAIL ends
 
@@ -454,8 +539,9 @@ registered.
 
 - **Registration.** `shadow/bar.json` (MA's frozen files and the runner, each with its SHA-256, and every number below)
   is committed and pushed before the first call. The runner's `--register` writes every rule of this section into it and
-  refuses to register with any left open (the lost run left one). Its commit time is the freeze. Only regular-season
-  games of 2026-27 whose scheduled tip (`games.csv`) is at least an hour after it are called.
+  refuses to register with any left open (the lost run left one), the grading order among them (below). Its commit time
+  is the freeze. Only regular-season games of 2026-27 and, if the shadow has not reached its size by 2026-27's last
+  regular-season game, of 2027-28, whose scheduled tip (`games.csv`) is at least an hour after it are called.
 - **The call.** For each such game, MA's chance on every DraftKings main line of the six base stats:
   - on the last `lines.json` committed to main before the tip whose read of the game (its `props.at`) is at least 10
     minutes before the tip (the job commits every read, so the read and its time are in git);
@@ -464,21 +550,30 @@ registered.
   The runner reads every input with `git show <that commit>:<path>`, never the working tree. So it may compute a call
   after the tip, but only from what was committed before it. It records the commit and its time. A game with no such
   read has no call, and is counted. A call once computed is never recomputed.
-- **The grade.** Once `data/box_2027.csv` holds the game: the Over lands when the stat is above the line; void if he did
-  not play; pushes drop out.
+- **The grade.** Once the season's box file holds the game: the Over lands when the stat is above the line; void if he
+  did not play; pushes drop out. **Grading order** (critique C6), which decides which lines are the first 15,000 and
+  the first 65,000: by the time of the first commit to main whose box file holds the game, then the game's scheduled
+  tip, then its game id, the player's id and the stat. `--register` refuses a bar file without it.
   - The criteria compare MA with q_call, the price the call was made on: the shadow asks whether the nudge adds to
     DraftKings' price as it stood at the call;
   - DraftKings' closing fair chance (`data/props_2027.csv`) is reported beside.
 - **The bar.**
-  - Decided once at **40,000** graded lines, in grading order, or at the regular season's last game if fewer. Below
-    20,000 it is UNDECIDED. About 56 graded lines a game, so 40,000 is about 700 games. At half the stand-in's effect,
-    T2's chance there is about 0.8.
+  - Decided once at **65,000** graded lines, in grading order, or at 2027-28's last regular-season game if fewer.
+    Below 20,000 then it is UNDECIDED. About 56 graded lines a game, so 65,000 is about 1,160 games: more than a season
+    leaves after a freeze in its autumn, so the shadow will most likely run into 2027-28. At half the stand-in's
+    effect, T2's chance (both criteria) is 0.80 there, sized by lines a game as well as games
+    (`results/plan_power_rev.json`; critique C1). The plan said until 13 November "40,000 ... about 0.8", which scaled by
+    games alone: at 40,000 lines it is 0.62 (0.65 on log loss alone).
+  - **Said in advance, against the shadow.** It is called on the job's read of DraftKings' lines (provider 100, the last
+    read at least 10 minutes before tip, which can be hours before), not the closing provider-40 lines MA was fitted on;
+    and P23's constants, fitted on 2021-22, will then be five and six seasons old. Both are expected to weaken the nudge
+    against its development size; the shadow is the frozen candidate as it is, not a refreshed one.
   - **PASS** only if T1 and T2 of section 4.2 hold on the shadow's lines, with F fitted on them, and the same numbers
     (0.25, 5%, −0.0001, −0.00005, no stat's interval wholly above 0). The game lines in F are the read's own total and
     spread.
   - Reported beside, deciding nothing: MA against q_call, D5's calibration per stat, and MA against the closing price.
-- **Futility stop.** At 15,000 graded lines, if T2's log-loss interval lies wholly above 0 (the frozen nudge clearly
-  hurts), the shadow stops as a FAIL. That is the only early verdict, and it can only fail.
+- **Futility stop.** At 15,000 graded lines in grading order, if T2's log-loss interval lies wholly above 0 (the frozen
+  nudge clearly hurts), the shadow stops as a FAIL. That is the only early verdict, and it can only fail.
 - **What its verdict does.**
   - A shadow PASS makes MA a candidate to be shown on the page as "DraftKings' price, nudged by the hub's read of the
     player", by a change of its own and the owner's call. Nothing moves by itself.
@@ -517,7 +612,14 @@ registered.
 - **The test's sample.** The window, the 31 games left out, the 2023 playoffs left unfetched.
 - **The validity checks.** props_v2's thresholds (set on the archive); V4's half point and V5's 90%, from 2023-24's
   figures.
-- **The shadow's rules** (section 5), including its 40,000, 20,000 and 15,000.
+- **The shadow's rules** (section 5), including its 65,000 (40,000 until 13 November), 20,000 and 15,000, and its
+  grading order.
+- **The revision of 13 November** (section 8): every change it made was chosen after the critique and after these
+  development numbers: D3's scaling by lines and both T2 criteria at once, with 74 lines a game taken from props_v2's
+  committed 31 games of 2022-23; D5(b') and its 5% (a tolerance chosen so that a calibration step too small to matter does
+  not decide, and so that a chance nearly a fixed transform of DraftKings', where the interval of the difference is very
+  narrow, is held to a difference that matters), and the claim's band [0.67, 1.5]; D6's matched shuffles and the
+  critique's three rivals; the club rule; D9's planted prices at 10% and 20% and a quarter of the game; V6.
 - **The sizing's stand-in.** `tools/props.js`'s 2024 fold, fitted on 2022-23 box scores and projected on each game's
   list of who dressed (hindsight, which the mix's level cancels but for the level's weights), used to size everything
   above. No candidate stands on it, but the choices it informed were made with it, and are listed here for that reason.
@@ -545,6 +647,63 @@ registered.
 - **During the shadow.** The futility stop, the owner's call, or the job's reads stopping. A gap is never filled in
   afterwards from later reads.
 
+## 8. The critique of 12 November, checked, and what changed
+
+An independent critic read the plan as committed (376c393) and raised seven points (C1 to C7), each with a script in a
+scratch folder outside the repository. Each was checked here before anything changed: its code read, and its numbers
+reproduced with code of this folder's own where they decide something (`plan_sizing/power_rev.js`) or by running the
+critic's own script and reading the files it cites. All seven are real. None was refuted outright; one fix was taken in
+part, said below. No criterion was loosened.
+
+- **C1 (should): the shadow's power was overstated. Real.** The plan scaled the development standard error by games
+  alone, but the shadow has about 56 graded lines a game where the development lines have 80. `power_rev.js` draws the
+  shadow's samples game by game with 56 of each game's lines: at 40,000 lines and half the stand-in's effect T2's chance
+  is 0.65 on log loss, 0.62 on Brier and 0.62 for both at once (the critic's 0.648, 0.624 and 0.617, within 0.001),
+  where the plan's games-only scaling gave 0.79 and 0.77. Changed: the shadow is decided at 65,000 graded lines (0.80 for
+  both criteria at half the effect), over 2026-27 and 2027-28 if needed; its two handicaps are said in advance (the read
+  hours before tip on provider 100; P23's constants five and six seasons old). D3 now scales the test's standard errors
+  by lines as well as games, at the 74 graded lines a game 2022-23's seen games show, and asks for both T2 criteria at
+  once: 0.87 for the stand-in at half its effect (0.90 as first written).
+- **C2 (should): already-seen aggregates show 2022-23 priced differently. Real.** props_v2's committed
+  `espn_validate40.json` (31 games, left out of the test, already in 3.3's list) shows far more lines priced away from even
+  in 2022-23 than in 2023-24, and an Over rate under DraftKings' fair chance where 2023-24's is over it (3.3 gives the
+  figures). Reweighting the stand-in's effect stat by stat to that price mix leaves 0.88 of its log-loss effect (the
+  critic's −9.56 against −10.89 × 0.0001, reproduced). Changed: 3.3 lists the evidence; 4.4 and D3 report the reweighted
+  power (0.74 at half the effect); 4.5 says in advance that E and any level or calibration claim may not carry over; the
+  sentence in 1.4 that drift could only hurt a backward test is corrected; V6 reports the test lines' price mix. The
+  points lines priced away from even are noted as all but untested in development.
+- **C3 (should): D5 passed a noisy stat and the claim was overstated. Real.** As written, D5(b) passes whenever the
+  slope's interval touches [0.8, 1.25], so an imprecise stat passes more easily, and the stand-in passed on points at 0.64
+  [0.40, 0.88], an interval excluding 1, worse than DraftKings' own 0.77; across the splits 0.59 to 1.41 all passed.
+  Changed: D5 adds (b'), that MA's slope be not clearly more than 5% further from 1 than DraftKings' own on the same
+  lines, which only strengthens it; and what may be claimed is narrowed: "calibrated" only where the slope's point lies in
+  [0.8, 1.25] and its interval inside [0.67, 1.5], else "poorly measured"; the plain-English text says so. Taken in part:
+  the critic's fix would also make that positive evidence a condition of the bar on every stat. It is not one, because
+  on points DraftKings' own fair chance fails it on these very lines (0.77 [0.50, 1.04]): there it would measure the
+  noise of near-even lines, not MA. The bar holds MA to not clearly too sure, and not clearly worse calibrated than the
+  price it starts from, on every stat; the claim holds it to positive evidence.
+- **C4 (nit): a matched shuffle keeps a little b. Real.** Shuffling the stand-in's d within stat × month × position ×
+  price band × line keeps a b of about 0.07 on average with no read of the player (26 seeds on the chronological split:
+  b −0.06 to +0.25, lower bounds up to +0.068, every one hurting on T2 by 0.0006 to 0.0012; reproduced with the critic's
+  script). The bar holds, with a margin of about 0.18 against that rival. Changed: D6 adds 20 matched shuffles, and the
+  critic's three further rivals, which by the critic's figures met neither criterion on the stand-in (DraftKings' own
+  other lines for the player: b −0.04 [−0.33, 0.25]; by position: −0.07 [−0.30, 0.17]; the pairwise products of F's
+  features: 0.04 [−0.11, 0.19]; not re-run here on the stand-in), are run against MA's own projections. The critic's
+  further check, that MA's own level weights keep the stand-in's effect (b 1.33 against 1.23), is the critic's figure;
+  MA's own numbers are in `dev_results.md`.
+- **C5 (nit): the club came from the game's own box. Real.** The stand-in's rows took a player's club, and so home and
+  away, his spread and rest, from the game's box; on 2023-24, 317 graded lines on 55 player-games are a player's first
+  game for a new club, where his last box names the wrong club (reproduced). Changed: the club rule of 1.5 (his last
+  club on an earlier box; a line where that is not one of the game's clubs left out), and the blindfold folder holds the
+  schedule and the game lines, each input that reads them named.
+- **C6 (nit): the shadow's grading order was open. Real.** Many games are graded in one commit of the box file. Changed:
+  the order is pinned (section 5) and `--register` refuses a bar file without it.
+- **C7 (nit): V4 was not tied to the contamination V2 lets through. Real.** By `validity.js`'s own calibration, about a
+  fifth of lines read a quarter of the way into their games would still pass V2's floor, and V4's half point had no
+  planted case. Changed: D9 plants in-game prices on 10% and 20% of player-games (one stat moved, the player's others
+  not) and V4 must react, or be tightened or joined by a check of the nudge's gain on early exits, before the
+  preregistration.
+
 ## Files and re-running
 
 From the repository's root, after `node research/props_v3/lines_clean.js` (`data.md`):
@@ -557,6 +716,7 @@ From the repository's root, after `node research/props_v3/lines_clean.js` (`data
 | `node research/props_v3/plan_sizing/size2.js` | round 2, the bar on F, every rival and the shuffles → `results/plan_sizing2.json` | about 3 minutes |
 | `node research/props_v3/plan_sizing/boot_check.js` | the robust interval against the bootstrap → `results/plan_bootcheck.json` | about 5 minutes |
 | `node research/props_v3/plan_sizing/tables.js` | every sizing table → `results/plan_tables.md` | a second |
+| `node research/props_v3/plan_sizing/power_rev.js` | the revision's power, by lines a game as well as games, for the test and the shadow (critiques C1, C2) → `results/plan_power_rev.json` | about 2 minutes |
 
 `plan_sizing/lib.js` holds the shared code: the features, F, the fits (Newton's method, sparse, a ridge where said), the
 cluster-robust standard error, the cross-fit, and T1 and T2. Every random draw is seeded. The result files hold

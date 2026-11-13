@@ -266,8 +266,8 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
     && JSON.stringify(pg2.filter(x => ['joker', 'elo'].includes(x[0]))) === JSON.stringify([['joker', null, null, false], ['elo', null, null, false]]) && nOf('p:alpha') === pc0(0.71) && !box().querySelector('.glance-trial'),
     "a spread: its club marked, no model ticked, a model with no call on the game says so, nothing marked on trial");
   nameFor('#parlayBody', L_TO).click(); await sleep(30);
-  check(txt(d.getElementById('glanceTitle')) === 'Celtics at Pistons' && !box().querySelector('th.glance-me') && !box().querySelector('.glance-chk') && nOf('label') === 'Over 226.5 points' && nOf('model') === '50%' && !box().querySelector('.glance-trial'),
-    "a game total: the game's bubble, no club marked, no tick, the total's chance the market's own, not marked on trial");
+  check(txt(d.getElementById('glanceTitle')) === 'Celtics at Pistons' && !box().querySelector('th.glance-me') && !box().querySelector('.glance-chk') && nOf('label') === 'Over 226.5 points' && nOf('model') === 'none' && nOf('fair') === pc0(fairOwn(L_TO)) && !box().querySelector('.glance-trial'),
+    `a game total: the game's bubble, no club marked, no tick, Model "none" (the hub has no model of a total: until 13 November 2026 the row repeated the market's own chance as the model's), Fair the market's own, not marked on trial (Model "${nOf('model')}", Fair "${nOf('fair')}")`);
   check(p.requests.filter(x => /pickem\.json/.test(x.url)).length === 1 && p.requests.length === reqs0 + 1, 'no other bubble reads anything: the one request is the Pick\'em Record\'s file');
   /* the same calls on game day, when the file's today is the game's and the game is among its games: the same picks */
   { const q = load(ST(), { lines: LINES, mine: MINE([L_ML]), pickem: PICKEM_DAY }); await sleep(450);

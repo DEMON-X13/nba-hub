@@ -823,6 +823,11 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
       check(res.every(x => x.ok), `${tag}: every level by this file's own enumeration of all ${R.E.count} parlays: it pays its floor, within 0.5% of the likeliest, the fewest legs any such parlay has, the likeliest of its size within 0.1% (a level not settled: within the gap it states), its chance and price the builder's sums (${res.map(x => x.say).join('; ')})`);
       return R;
     };
+    /* a ruler card's leg, found by its own key (its Add's data-pb-leg, else the first field of its name's bubble
+       signature), never by its chance: a spread and a total at -110 both ways share a fair chance of 50% (13 November
+       2026: a total's leg carries no model title, a spread's does, so a match by the chance read one for the other) */
+    const legOfEm = (em, legs) => { const li = em.closest('li'), b = li && (li.querySelector('[data-pb-leg]') || li.querySelector('[data-glance-leg]'));
+      const sk = b ? (b.dataset.pbLeg || String(b.dataset.glanceLeg || '').split('|')[0]) : null; return sk ? legs.find(x => x.sk === sk) || null : null; };
 
     /* DF: three games made for the filters */
     const DF = addDay(D0, 20), DF1 = addDay(DF, 1);
@@ -873,8 +878,8 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
         const g = t.gap != null ? (Math.ceil(Math.max(0, t.gap) * 1000) / 10).toFixed(1) + '%' : null;
         return r && txt(r) === (g ? `likeliest found paying $${F0[t.id]}+` : `likeliest paying $${F0[t.id]}+`) && r.title === (g ? `Not settled in the search’s work: within ${g} of the likeliest parlay paying $${F0[t.id]} or more on $1, every leg at DraftKings’ fair chance.` : titleF(F0[t.id])) && ch && txt(ch) === 'every leg at DraftKings’ chance' && /No model claim/.test(ch.title)
           && fair && txt(fair) === (t.corr * 100).toFixed(0) + '%' && !c.querySelector('.pb-valmark, .pb-trial, [data-pb-model], [data-pb-mix]') && ems.length === lis.length
-          && ems.every((em, k) => { const l = t.legs.find(x => Math.abs(x.p - +em.dataset.pbLegfair) < 1e-12); return l && txt(em) === `fair ${(l.p * 100).toFixed(0)}%` && (l.kind === 'prop' ? !em.title : /^The model’s chance: \d+% \(not what the level is ranked on\)$/.test(em.title)); }); };
-      check(cards.every((c, i) => okCard(c, i)), `each ruler card: its rule ("${txt(cards[0].querySelector('.pb-rule'))}") titled with the rule whole, "every leg at DraftKings’ chance", the fair chance, each leg's "fair N%" (a team leg's model chance in its title alone), no Value mark or model figure`);
+          && ems.every(em => { const l = legOfEm(em, t.legs); return l && Math.abs(l.p - +em.dataset.pbLegfair) < 1e-12 && txt(em) === `fair ${(l.p * 100).toFixed(0)}%` && (l.kind === 'prop' || l.kind === 'total' ? !em.title : /^The model’s chance: \d+% \(not what the level is ranked on\)$/.test(em.title)); }); };
+      check(cards.every((c, i) => okCard(c, i)), `each ruler card: its rule ("${txt(cards[0].querySelector('.pb-rule'))}") titled with the rule whole, "every leg at DraftKings’ chance", the fair chance, each leg's "fair N%" (a moneyline's or spread's model chance in its title alone, a total's none), no Value mark or model figure`);
       const words = [txt(q9.d.getElementById('spPanel')), ...[...q9.d.querySelectorAll('#spPanel [title]')].map(x => x.title)].join(' ');
       check(!/break(s)? even|even return/i.test(words), 'nothing on the tab, nor in a title, says an Under breaks even'); }
     /* Finish on a ruler level: the card's chance said as DraftKings' fair chance, no model figure */
@@ -896,6 +901,20 @@ module.exports = async function suggested({ check, pageFile, ROOT }) {
     check(q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-pending]`) && txt(q9.d.querySelector(`#spSets [data-sp-game="${NF}"] [data-sp-pending] .pb-why`)) === 'Building…', 'a filter pressed draws at once, each level "Building…" until it is built');
     await waitBuilt(q9, NF);
     rulerHold(q9, stF, LF, NF, 'DF, Teams only', { k: { over: false, under: false } });
+    /* game totals alone (13 November 2026): a total's leg on a ruler card carries no model clause in its title, the hub
+       having no model of a total (legModel's total is the market's own, the very fair chance the leg is ranked on), where
+       until then it read "The model’s chance: 50% (not what the level is ranked on)"; a moneyline's or spread's keeps it.
+       DF's three totals at -110 both ways make Safe two of them and Medium all three (two pay $3.64), Aggressive none */
+    for (const k of ['ml', 'ats']) await press(`[data-sp-kind="${k}"]`);
+    await waitBuilt(q9, NF);
+    { const Rt = rulerHold(q9, stF, LF, NF, 'DF, game totals alone', { k: { ml: false, ats: false, over: false, under: false } });
+      const emsOf = id => [...q9.d.querySelectorAll(`#spSets [data-sp-game="${NF}"] .pb-tier.${id} .pb-legs em[data-pb-legfair]`)];
+      const tl = Rt.lv.filter(t => t.ids), all = tl.flatMap(t => emsOf(t.id).map(em => ({ em, l: legOfEm(em, t.legs) })));
+      const titled = all.filter(x => x.em.title);
+      check(kindsOn() === 'total' && tl.length === 2 && all.length === 5 && all.every(({ em, l }) => l && l.kind === 'total' && txt(em) === `fair ${(l.p * 100).toFixed(0)}%` && !em.title),
+        `game totals alone: ${tl.length} levels holding ${all.length} total legs, each "fair N%" with no title, no model chance claimed for a total${titled.length ? `; ${titled.length} titled, "${titled[0].em.title}"` : ''}`); }
+    for (const k of ['ml', 'ats']) await press(`[data-sp-kind="${k}"]`);
+    await waitBuilt(q9, NF);
     await press('[data-sp-kind="over"]');
     check(kindsOn() === 'ml,ats,total,over' && mixLit() === '', `a box changed by hand lights the mix it makes, or none (${kindsOn()}: none)`);
     await press('[data-sp-mix="all"]'); await waitBuilt(q9, NF);

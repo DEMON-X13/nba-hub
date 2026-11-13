@@ -2817,9 +2817,10 @@ two change together, but for a line priced at exactly no margin, below):
   model’s chance: 62% (not what the list is ranked on)", as a ruler card's team leg carries it (no model clause where the
   model rates none, nor on a total: the hub has no model of a total, `legModel`'s total being the market's own, the very
   fair chance the row is ranked on; until the review of 13 November 2026 a total's title called that figure the model's
-  chance, "not what the list is ranked on"; its matchup bubble still shows it as Model, as the builder's and Suggested
-  Parlays' do). The row is the Player lines' own layout, and a list with no model figure in any row (every list once
-  the props model has failed) sits on four columns (`pb-cols4`), where until then the Player lines' four cells sat on the
+  chance, "not what the list is ranked on"; since the same day every matchup bubble says Model "none" for a total, and
+  a Suggested Parlays card's leg title has no model clause on one: README "The matchup bubble" and "Suggested
+  Parlays"). The row is the Player lines' own layout, and a list with no model figure in any row (every list once the
+  props model has failed) sits on four columns (`pb-cols4`), where until then the Player lines' four cells sat on the
   game rows' five with the model's left empty.
 - **The words**: the part's heading "Game bets" with its count and one line under it, "At DraftKings’ odds: no model
   claim.", the Player lines' own. The lead and the foot say what is true now in a few words, where they were paragraphs:
@@ -3197,9 +3198,11 @@ and the ELO Model (their calls as the Pick'em Record has them, "no call" where a
 the job's today or before, the call on its row of `pickem.json`'s games; on a game after it, which the record does not run
 to and the Parlay Builder lists all the same, the call in its `next`). The leg's club
 is marked "this leg" and, on a moneyline alone, each model picking it to win is ticked; then the leg and **Open game on
-Tonight**. The leg's Model is always the player model's chance, the one the builder prices the same leg on and the Picks
-list's Player Model, with no line of the ELO Model's chance under it: that line was for a leg opened from the Elo picks,
-which went on 5 November 2026 (README "Suggested Parlays", "What went"), and no leg comes from one now. **Open game on Tonight** opens the board on the game's day with its card in focus. It reads `pickem.json` through the Pick'em
+Tonight**. A moneyline's or spread's Model is the player model's chance, the one the builder prices the same leg on and
+the Picks list's Player Model; a game total's is "none" (since 13 November 2026: the hub has no model of a total, and the
+chance the builder prices it on, `legModel`'s, is the market's own, the very figure its Fair row gives, which the Model
+row repeated until then), with no line of the ELO Model's chance under it: that line was for a leg opened from the Elo
+picks, which went on 5 November 2026 (README "Suggested Parlays", "What went"), and no leg comes from one now. **Open game on Tonight** opens the board on the game's day with its card in focus. It reads `pickem.json` through the Pick'em
 Record's own loader (once a page load, no-store; asked for by the first team's bubble where the tab has not read it), and
 says in its own line while it is read or where it did not load, the rest drawn. Nothing else is fetched and nothing is
 stored; `build.js` stops if the part fetches or touches a browser store.
@@ -3222,7 +3225,8 @@ December, a neutral game six days after the last, a play-in game still to play).
 `SMOKE_ONLY=glance node tools/smoke.js` (`tools/smoke_glance.js`), blocking, on made-up games tomorrow, a made-up
 `lines.json`, rated players, a props block and a `pickem.json` of its own, and a builder of eight legs (a player's points, a
 steals line, a player the ladder does not rank, one the report has out, one the props model does not project, a moneyline,
-a spread, a total, and on a page of its own a player today's report lists Day-To-Day, whose bubble says so): every name its leg's button (kind and id, the leg it keeps, its words, its 44px target) in the builder
+a spread, a total, whose bubble says Model "none" and its Fair the market's own, and on a page of its own a player
+today's report lists Day-To-Day, whose bubble says so): every name its leg's button (kind and id, the leg it keeps, its words, its 44px target) in the builder
 and the Top 50, each leg drawn once in a place; every number in each bubble on this file's own reading (the rating, tier and
 rank at his position, the game, Faces against the Teams tab's own table sorted on its column, the projection, the leg's
 chances; the records, strength and ranks, the line, offence against defence, Vegas with the margin out and every model's
@@ -3648,10 +3652,13 @@ it. The search is a generator (`sprLevel`) that pauses every `SPR_SLICE` units o
 jsdom); `spRulerLevel` runs it whole, the tab's soft build a slice a task, the same level either way.
 
 **On the page.** A ruler card states the fair chance ("49% fair chance", "every leg at DraftKings’ chance", titled with
-what it is), each leg's price and "fair 70%", a team leg's model chance in its own title alone ("The model’s chance: 62%
-(not what the level is ranked on)"), no Value mark, its rule "likeliest paying $2+" titled with the rule whole ("Within
-half a percent of the likeliest parlay paying $2 or more on $1, every leg at DraftKings’ fair chance; the fewest legs any
-such parlay has; the likeliest of that many legs, within 0.1%."). The parlay card's chance line is DraftKings' fair chance
+what it is), each leg's price and "fair 70%", a moneyline's or spread's model chance in its own title alone ("The model’s
+chance: 62% (not what the level is ranked on)"), a total's title none (the hub has no model of a total: `legModel`'s
+total is the market's own, the very fair chance the leg is ranked on, which its title called the model's chance until 13
+November 2026, when the Top 50's game bets dropped the same clause), no Value mark, its rule "likeliest paying $2+"
+titled with the rule whole ("Within half a percent of the likeliest parlay paying $2 or more on $1, every leg at
+DraftKings’ fair chance; the fewest legs any such parlay has; the likeliest of that many legs, within 0.1%."). The parlay
+card's chance line is DraftKings' fair chance
 and its small print says so ("Every leg at DraftKings’ fair chance, its two prices with the margin taken out: the chance
 the level was ranked on, no model claim."). The words of the rule with a player that said what a player leg costs now say
 "DraftKings’ fair chance puts a player line’s whole margin on the Over" (never that an Under breaks even).
@@ -4067,7 +4074,8 @@ exactly one in it), and the smoke loads the page so for every section but 8 and 
   ("No player lines yet for the night’s games."); the folds on a phone and a wide screen (a matchMedia stub) across a
   redraw and a reload; the Your filters line whole and the site's lock line, Reset and its focus; the site's set the same
   (`spEntry`) whatever the filters; the filters in `M.sp` apart from `M.pb`, across a reload; the card's words, no Value
-  mark, no model figure but a team leg's title, nothing saying an Under breaks even, Finish's small print; with no work a
+  mark, no model figure but a moneyline's or spread's title (game totals alone, Safe two and Medium three, each leg's
+  title none), nothing saying an Under breaks even, Finish's small print; with no work a
   level saying it is not settled, and a level found and not settled said so in its rule and title; the soft build
   stopped on another tab and carried on (four pieces); at the lock this browser's own set, then the record's, and your
   filters' set live under the site's lock, on the games still to tip after the first tip-off. Section 8 holds the real

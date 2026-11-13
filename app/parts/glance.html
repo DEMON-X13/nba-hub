@@ -185,8 +185,10 @@ function legHtml(K) {
   const l = K.leg, out = [];
   out.push(`<div><dt>Price</dt><dd>${N('price', amTxt(K.price))}</dd></div>`);
   /* Model: the player model's chance, the one the builder prices the leg on; once the props model has failed its trial,
-     a player's leg leads with DraftKings' fair chance, the props model's after it, muted and marked failed */
-  const pm = l.p, failed = l.kind === 'prop' && propsFailed(), pf = failed ? pcL : pc0;
+     a player's leg leads with DraftKings' fair chance, the props model's after it, muted and marked failed. A game total
+     has none, said "none" (13 November 2026): the hub has no model of a total, and the chance the builder prices it on
+     (legModel) is the market's own, the very figure its Fair row gives, which the Model row repeated until then */
+  const pm = l.kind === 'total' ? null : l.p, failed = l.kind === 'prop' && propsFailed(), pf = failed ? pcL : pc0;
   const model = `<div><dt>Model</dt><dd${failed ? ' class="glance-q"' : ''}>${pm != null && isFinite(pm) ? (failed ? 'props model ' : '') + N('model', pf(pm)) + (l.kind === 'prop' ? ' ' + trialMark('chance') : '') : '<span class="glance-q" data-glance-n="model">none</span>'}</dd></div>`;
   let f = null; try { f = typeof legFair === 'function' ? legFair(Object.assign({}, l, { odds: K.price })) : null; } catch (e) { f = null; }
   const fairRow = `<div><dt>Fair</dt><dd>${f && f.p != null ? N('fair', pf(f.p) + (f.est ? ' est.' : '')) : '<span class="glance-q" data-glance-n="fair">none</span>'}</dd></div>`;

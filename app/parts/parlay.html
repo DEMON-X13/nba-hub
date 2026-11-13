@@ -804,11 +804,13 @@ function pbTierCard(t, o) {
     ${o.acts === false ? '' : `<div class="pb-acts"><button type="button" class="btn ${card ? 'ghost' : 'hot'}" ${o.add || `data-pb-add="${t.id}"`}${nm ? ` aria-label="${inB ? 'In the builder:' : 'Add'}${nm}${inB ? '' : ' to the builder'}"` : ''}>${inB ? 'In the builder' : 'Add to builder'}</button>${card ? `<button type="button" class="btn hot" data-pc-finish="${o.kind || 'pb'}|${o.fid || t.id}"${nm ? ` aria-label="Finish${nm}"` : ''}>Finish</button>` : ''}</div>`}</div>`;
 }
 /* a ruler level's leg (Suggested Parlays, sets taken from SP_RULER_FROM): its name, line and game, DraftKings' price and
-   its fair chance, the chance it was ranked on; no Value mark, no far-off flag; a team leg's model chance in its fair
-   figure's title alone (information, never a ranking), and its matchup bubble handed the model's chance (pm) as the
-   builder's are */
+   its fair chance, the chance it was ranked on; no Value mark, no far-off flag; a moneyline's or spread's model chance in
+   its fair figure's title alone (information, never a ranking), and its matchup bubble handed the model's chance (pm) as
+   the builder's are. A total's title has none: the hub has no model of a total (legModel's total is the market's own, the
+   very fair chance the leg is ranked on), as the Top 50's game bets have it; until 13 November 2026 its title called that
+   figure "The model’s chance" */
 function pbFairLegHtml(l, o, legAdd) {
-  const pm = l.pm != null && isFinite(l.pm) ? l.pm : null, mt = pm != null && l.kind !== 'prop' ? ` title="The model’s chance: ${pbPct(pm)} (not what the level is ranked on)"` : '';
+  const pm = l.pm != null && isFinite(l.pm) ? l.pm : null, mt = pm != null && l.kind !== 'prop' && l.kind !== 'total' ? ` title="The model’s chance: ${pbPct(pm)} (not what the level is ranked on)"` : '';
   return `<li><span class="nm">${glanceName({ ...l, p: pm })}<small>${esc(l.label)}${o.withGame && l.kind !== 'total' ? ` · ${esc(l.away)} at ${esc(l.home)}` : ''}</small></span><span class="pr">${fmtAm(l.price)}<em data-pb-legfair="${l.p}"${mt}>fair ${pbPct(l.p)}</em></span>${legAdd ? pbLegAddBtn(l) : ''}</li>`;
 }
 /* exactly these legs into the builder, in its own order, so it prices them as the level did */

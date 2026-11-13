@@ -2400,19 +2400,25 @@ went").
   half-minute look. Tonight's card has a **Parlay Builder** button for each of these games, which opens the tab with that
   game alone ticked.
 
-**The Top 50 lines** (`getPbTop`, `pbTopBuild`): every leg on the ticks that qualifies, in two parts, **Value picks**
-(each marked Value) then **Other lines** (the thin-edge legs, then the game totals), each part ranked by what $1 on it is
-expected to make at the model's chance (the chance times the decimal price, less the $1), best first, the totals set after
-every thin-edge line, 50 lines at most in all (`PB_TOP_N`); and since 10 November 2026, once the props model has failed,
-a third part after them, **Player lines**, DraftKings' main lines on players at DraftKings' own fair chance, a mix of
-stats, the room shared (each part 25 where it has that many: "After the FAIL", "Player lines in the Top 50", below). Each bet is listed once: a milestone k+ lands exactly when the
-player's main Over at k - 0.5 does (DraftKings' NBA rungs sit at the main line + 0.5), so where that main Over qualifies
-the rung is left out and its slot goes to the next line; a whole-number main line, an Under, a main Over that does not
-qualify and the same rung in another game never take a rung's place. Each row gives its rank, the player or team, the bet
-and its game, the Value mark, DraftKings' price, the model's chance (marked **on trial** on a player's line), DraftKings'
-fair chance (est. where it is), what $1 wins and what $1 is expected to make, and an **Add**. The notes say how many lines
-were left out far off the market and for want of a betslip id, and that the totals come last; an empty list says why (no
-box or game ticked, no player prices read yet, none the props model prices, or nothing qualifying).
+**The Top 50 lines** (`getPbTop`, `pbTopBuild`): since 13 November 2026 (the owner's call, "yes move to DK": "The game
+bets at DraftKings' odds", below) every line on the ticks that qualifies, at DraftKings' fair chance, in two parts: **Game
+bets**, the moneylines and spreads, then the totals, each by what $1 on it is expected to return at that chance, then the
+fair chance, then the line's key; then **Player lines**, DraftKings' main lines on players, a mix of stats (since 10
+November 2026, once the props model has failed: "After the FAIL", "Player lines in the Top 50", below); the room shared,
+each part 25 where it has that many, 50 lines at most (`PB_TOP_N`). Each row gives its rank, the team, game or player, the
+bet and its game, DraftKings' price, DraftKings' fair chance, what $1 wins and what $1 is expected to return at the fair
+chance, and an **Add**: no Value mark and no model column. The notes say how many lines were left out for want of a
+betslip id and for a player today's report holds out; an empty list says why (no box or game ticked, no DraftKings line or
+player line read yet, or nothing qualifying). Until 13 November 2026 the game bets were two parts, **Value picks** (each
+marked Value) then **Other lines** (the thin-edge legs, then the game totals), each ranked by what $1 on it was expected to
+make at the model's chance (the chance times the decimal price, less the $1), best first, the totals set after every
+thin-edge line, each row giving the model's chance beside DraftKings' fair chance (est. where it is); the notes said how
+many lines were left out far off the market and that the totals came last. On a props trial (the props model's chance,
+marked **on trial**: none since its FAIL of 5 November 2026) its player lines sat among the game bets in those two parts;
+they keep that rule, after the game bets ("The game bets at DraftKings' odds", below), and on a trial each bet is listed
+once: a milestone k+ lands exactly when the player's main Over at k - 0.5 does (DraftKings' NBA rungs sit at the main
+line + 0.5), so where that main Over qualifies the rung is left out and its slot goes to the next line; a whole-number main
+line, an Under, a main Over that does not qualify and the same rung in another game never take a rung's place.
 
 **No DraftKings line yet** (the owner's question of 7 November 2026: "why is there no available parlay legs being
 recommended for tomorrows games? i think something must have broke"). Nothing was broken: on the Friday evening DraftKings
@@ -2453,11 +2459,16 @@ counted as read (the review's case, 12 failures), "did not load" said "not read 
 alone taken for a read (1), "last read" for "as of" (14), the group dated by its newest read (1) and a game counted as
 having lines only with a moneyline (1).
 
-**A line qualifies** with DraftKings' real price, the model's chance from 45% to 97% and at or above the chance that price
-implies (the book's margin left in): 3 points above it or more is a **Value pick**, less a thin-edge line. Left out and
-counted: a line the model rates 15 points or more above DraftKings' fair chance (`legFarOff`, the NFL's `FAR_OFF`), and a
-game's moneyline, spread or total with no DraftKings betslip id at its number where its game's lines carry ids. A game
-total is at the book's own chance, so never a Value pick and always last.
+**A line qualifies**, since 13 November 2026, by its part: a game bet with DraftKings' real price, the other side's price
+on file with a margin, its fair chance from 45% to 97%, and DraftKings' betslip id at its number where its game's lines
+carry ids, the likelier side of each line ("The game bets at DraftKings' odds", below); a player line by the Player lines'
+rule ("Player lines in the Top 50", below). Until then a line qualified with DraftKings' real price, the model's chance
+from 45% to 97% and at or above the chance that price implies (the book's margin left in): 3 points above it or more a
+**Value pick**, less a thin-edge line; left out and counted, a line the model rated 15 points or more above DraftKings'
+fair chance (`legFarOff`, the NFL's `FAR_OFF`), and a game's moneyline, spread or total with no DraftKings betslip id at
+its number where its game's lines carry ids; a game total, at the book's own chance, never a Value pick and always last.
+That rule is still the pool of the four levels the tab draws nowhere (`pbLegs`, `getPbTiers`) and a props trial's player
+lines'.
 
 **Add** puts that one leg in the builder by the builder's own rules, reads **Added** while it is in, and a second press
 takes it out, the focus kept on it. **The builder** (`#parlayBody`) is the visitor's own parlay (`M.slip.legs`, the same
@@ -2626,23 +2637,27 @@ chance is used for nothing but the muted figure the matchup bubble already draws
 - **The order** (`pbPlayerMix`): a mix of stats, each stat's likeliest first, the NFL hub's rule of its app v141 (its
   CLAUDE.md, "The Top 50's player lines are a mix of bet types"): round 1 takes each stat's likeliest line, round 2
   each stat's second, a stat run out skipped, each round likeliest first, the part that order cut where the room ends.
-- **The room** (`PB_TOP_N` 50, `PB_TOP_MIN` 25): with G game bets qualifying (their two parts and order as before: the
-  Value picks, then the other lines, the totals last) and P player lines, the list takes g = min(G, max(25, 50 - P)) game
+- **The room** (`PB_TOP_N` 50, `PB_TOP_MIN` 25): with G game bets qualifying (their two parts and order as they were: the
+  Value picks, then the other lines, the totals last; since 13 November 2026 one part at DraftKings' fair chance, the
+  moneylines and spreads then the totals, below) and P player lines, the list takes g = min(G, max(25, 50 - P)) game
   bets and then min(P, 50 - g) player lines: each part 25 where it has that many, the one with more filling the rest. The
   game bets come first, the player lines after, the ranks running on.
 - **Each row**: its rank, the player (his name the matchup bubble's button, `glanceName`, handed the props model's chance
   as a night set's card hands it, which the bubble draws muted, "failed trial"), the bet and its game, DraftKings' price,
   "fair" (DraftKings' fair chance, titled so, labelled as a game row's and a night card's are), what $1 wins and what $1
   is expected to return at that chance (an Under +$0.00; an Over below it), and the Add. No Value mark, no model column,
-  no far-off flag. Its four cells sit on the game rows' five columns with the model's column left empty
-  (`.pb-tcs.pl>.pb-tc:nth-child(2)` starts at the third), so price, fair, wins and expected stand under the game rows'
-  own at every width (until the review of 10 November 2026 a grid of four put the price under the game rows' model).
+  no far-off flag. Its four cells sat on the game rows' five columns with the model's column left empty
+  (`.pb-tcs.pl>.pb-tc:nth-child(2)` starts at the third), so price, fair, wins and expected stood under the game rows'
+  own at every width (until the review of 10 November 2026 a grid of four put the price under the game rows' model);
+  since 13 November 2026 a game row has the same four cells, and a list with no model figure in any row sits on four
+  columns (`pb-cols4`: "The game bets at DraftKings' odds", below).
 - **Add** puts the leg in the builder exactly as a night set's player leg goes in (`slipToggle(pbSlipOf(l))`, the leg a
   game's Player props stores), so the builder draws it as every player leg after the FAIL ("After the FAIL", above:
   DraftKings' fair chance first with its band, the props model's muted beside it, marked failed trial) and prices it by
   the same sums (`parlayProb`, `parlayFair`, `slipDec`).
-- **The words**: the part's heading "Player lines" with its count, one line under it, "At DraftKings’ odds: no model
-  claim."; the lead adds "then the player lines at DraftKings’ odds, a mix of stats". The foot, on a FAIL (`pbFootFail`;
+- **The words** (until 13 November 2026, when the lead and the foot were cut to a few words: "The game bets at
+  DraftKings' odds", below): the part's heading "Player lines" with its count, one line under it, "At DraftKings’ odds: no
+  model claim." (kept); the lead adds "then the player lines at DraftKings’ odds, a mix of stats". The foot, on a FAIL (`pbFootFail`;
   on the trial `pbFootTrial`, the foot as it was), says the game bets' rules and the Player lines' apart, shorter than
   before: "Game bets: DraftKings’ price … and a model chance of 45% to 97%, at or above the price’s implied chance …
   Player lines: DraftKings’ main lines priced both ways, at DraftKings’ fair chance (the whole margin on the Over), 45% to
@@ -2749,17 +2764,178 @@ whose findings added the last fourteen):
 | review F6: the no-player-lines note with both player boxes off | 1 |
 | review F6: the old no-player-lines words ("of these 3 games …; the other game’s have not been read yet") | 9 |
 
+**The game bets at DraftKings' odds** (13 November 2026). Asked whether the Top 50, whose Value picks still ranked team
+legs on the team model's chance, should move to DraftKings' odds as Suggested Parlays did on 12 November (README
+"Suggested Parlays", "One ruler, and your own filters"), the owner said: "yes move to DK". The evidence is the one ruler's
+(`research/sp_ruler/`): the team model's chance loses to DraftKings' no-vig chance on log loss in every market and season
+(the moneyline pooled over the walk-forward folds +0.0162 [+0.0116, +0.0208], the spread +0.0233 [+0.0180, +0.0286], and
+this season on DraftKings' own lines +0.0221 and +0.0198), and a team Value pick has been one the model rates above the
+market, not one that beat it ("What the team picks have been worth", below). So the Top 50's game bets (moneylines,
+spreads and totals) are qualified, ranked and stated at DraftKings' fair chance, by Suggested Parlays' ruler leg for a
+team leg (`pbGameBets` in `app/parts/parlay.html`, the twin of `spRulerLeg`'s team half in `app/parts/suggested.html`: the
+two change together, but for a line priced at exactly no margin, below):
+
+- **Which** (`pbGameBets`): every moneyline and spread `pbPriced` reads on the ticked games (a game the model rates, as
+  before) and every total `pbTotals` reads (of any game, as the ruler and its guard read one: `tools/suggest_check.js`
+  `teamOwn`), on the boxes (`pbAllows`), with DraftKings' real price, the other side's price on file with a margin (their
+  implied chances summing to more than 1, to a billionth: `pbNoMargin`), DraftKings' fair chance (`legFair`: the two
+  prices with the margin taken out in proportion) from 45% to 97%, and DraftKings' betslip id at its number where its
+  game's lines carry ids. No model chance is compared: no 3-point edge, no Value pick, no far-off guard, no model band. A
+  total priced on one side only has no fair chance and is not listed (until then it was put at 50%). Nor is a line priced
+  at exactly no margin (-105 and +105, or +100 both ways): each side would return exactly what it costs at its fair
+  chance, its row reading +$0.00 expected on $1, first on the list (the review of 13 November 2026: the test was "under
+  1"). Suggested Parlays' ruler and its guard keep their own test, a sum under 1, as they were: no card of theirs states
+  a team leg's expected return, and DraftKings' NBA lines have shown neither case. Counted a line at a time (a game's
+  moneyline, its spread, its total): a line priced with no margin (`gVig`), and a line none of whose sides is listed where
+  a side was left out for want of a betslip id (`noId`, in the note as before); a side with no id beside its listed other
+  leaves no line out (the review of 13 November 2026 found sides counted: a spread with no id either way read "2 lines
+  are left out", and a less likely side with none beside its listed other "1 line is left out").
+- **One side a line** (a game's moneyline, its spread, its total; `pbSideBetter`): the builder takes one side bet and one
+  total a game (`slipWhy`), and both sides of an even line sit in the band (a spread at -110 both ways is 50% a side), so
+  the list offers the likelier by DraftKings' fair chance (to 1e-9, `pbEvKey`), a tie to the home side or the over: the
+  NFL hub's `pbSideBetter` (its app v138) with its tie-break on the model's lean left out, which the team model has not
+  earned. The NBA's Player lines break a tie by the key (`pbLikely`); a team line's tie is far more common (every spread
+  at -110 both ways) and the home side or the over is the rule a reader can see. A side left out for want of a betslip
+  id leaves the other, where it is in the band with its id, as the NFL's does: the side listed is the likelier with a
+  betslip id where its game has ids, as the foot says (until the review of 13 November 2026 it said "the likelier side
+  the boxes leave" of every line).
+- **The order**: the NFL hub's game bets of its app v138: the moneylines and spreads, then the totals, each by what $1 on
+  it is expected to return at the fair chance (to 1e-9), then the fair chance, then the line's key. With the margin taken
+  out in proportion both sides of a line return the same at their fair chance, 1 over the line's two implied chances less
+  1, so the order is the tightest market first, the likelier side where two lines' margins are level (a -152 favourite at
+  57.6% before a -110 line at 50%: their margins are the same to the ninth place). The NFL breaks a tie on the chance by
+  the model's lean too; here no model figure decides anything. No reason specific to the NBA was found to order them
+  otherwise, but one thing shows: DraftKings' NBA moneylines carry a smaller margin (about 4.1% on the published lines of
+  13 November 2026) than its spreads and totals (about 4.75%), so every moneyline comes before every spread, and the
+  heaviest favourites near the top (the Rockets at -1340 first, its margin the night's tightest, 4.04%: a dollar wins
+  seven cents). The game bets keep their place before the player part, and the room (`PB_TOP_N` 50, `PB_TOP_MIN` 25) is
+  as it was.
+- **Each row**: its rank, the team or the game (its matchup bubble handed the model's chance, as before), the bet and its
+  game, DraftKings' price, "fair", what $1 wins and what $1 is expected to return at the fair chance, and the Add (the
+  same builder leg, `pbSlipOf`): no Value mark, no model column, no far-off flag. The model's chance is quiet information
+  in the fair figure's title alone, "DraftKings’ fair chance: its two prices with the margin taken out in proportion. The
+  model’s chance: 62% (not what the list is ranked on)", as a ruler card's team leg carries it (no model clause where the
+  model rates none, nor on a total: the hub has no model of a total, `legModel`'s total being the market's own, the very
+  fair chance the row is ranked on; until the review of 13 November 2026 a total's title called that figure the model's
+  chance, "not what the list is ranked on"; its matchup bubble still shows it as Model, as the builder's and Suggested
+  Parlays' do). The row is the Player lines' own layout, and a list with no model figure in any row (every list once
+  the props model has failed) sits on four columns (`pb-cols4`), where until then the Player lines' four cells sat on the
+  game rows' five with the model's left empty.
+- **The words**: the part's heading "Game bets" with its count and one line under it, "At DraftKings’ odds: no model
+  claim.", the Player lines' own. The lead and the foot say what is true now in a few words, where they were paragraphs:
+  the lead "Every line on the bet types and games ticked here, at DraftKings’ odds: the game bets, then the player lines,
+  50 at most. Add any of them to the builder below."; the foot "Every line at DraftKings’ fair chance, its two prices with
+  the margin taken out (in proportion on a game bet, all on the Over on a player line), 45% to 97%, one side a line. Game
+  bets: the likelier side with a betslip id where its game has ids; moneylines and spreads, then totals, each by expected
+  on $1, then the fair chance. Player lines: the likelier side the boxes leave; a mix of stats, each stat’s likeliest
+  first. Each part gets 25 where it has that many. Players today’s injury report holds out are left out." (on a props
+  trial its game bets' half the same, "one side a line, the likelier with a betslip id where its game has ids"); the game
+  bets' list is named "The 25 game bets on your picks at DraftKings’ odds: moneylines and spreads, then totals, each by
+  expected return on $1" (until the review of 13 November 2026 "..., by expected return on $1", which the totals' place
+  after a better-returning spread belied). The note that game totals are never Value picks is gone, and the far-off note
+  names the props model, whose trial rule alone still has it. No word says a line returns or breaks even. The Player
+  lines' Unders do show "+$0.00" expected on $1, as they have since 10 November 2026: the rule puts a player line's whole
+  margin on its Over, so an Under's fair chance is its own price's implied chance, the rule's arithmetic and not a return
+  (`research/sp_ruler`: on this season's graded lines an Under lost about 1.65% a dollar at that chance). The Player lines
+  part is unchanged here, so whether that figure should show is the owner's to decide. No game bet reads +$0.00: a line
+  priced with no margin is not listed (above).
+- **A props trial** (none since the FAIL of 5 November 2026: a trial ledger, or a state with no props block): the game
+  bets are as above, and the player part is the props model's lines on the rule they kept (its Value picks, then its other
+  lines, each by expected on $1 at its chance, the far-off guard, each bet once, the on-trial mark; `pbLegs` on the player
+  boxes alone), after the game bets under "Value picks" and "Other lines", the room shared as the Player lines share it, so
+  only there does a Top 50 row wear a Value mark or a model figure. That rule was the owner's call of 25 October 2026 and
+  this change leaves it; whether a future props model on trial should be shown so is his to decide.
+- **Not changed**: the builder (its rows, What it pays, the model's chance beside the fair chance), Add, the parlay card,
+  Suggested Parlays, the matchup bubble, the Player lines part (its rule, order, rows and words), the levels the tab
+  draws nowhere (`getPbTiers`, on `pbLegs`, which the change leaves byte for byte, held by the checks' levels section on
+  its own rule) and nothing the job or the records read.
+
+On the published `state.json` and `lines.json` of 13 November 2026 (lines read at 15:26 UTC, the page's clock at 16:30
+UTC, 14 games over two dates, 9 with DraftKings' game lines), before: "Value picks 5", "Other lines 20", "Player lines
+25" (28 game bets and 782 player lines qualifying), led by the Pelicans to win at +114 (the model 59%, DraftKings' fair
+45%, +$0.26 expected on $1 at the model's chance), the Clippers +6.5 at -105 (63%, 49%), the Pelicans +2.5 at -112 (63%,
+50%), the Warriors +11.5 (56%, 49%) and the Kings +9.5 (55%, 49%), each marked Value, then the other lines (the Jazz
++15.5, the Bulls +6.5, the Bucks +8.5, the Heat to win, the Pacers +8.5) and the totals, both sides of a total twice
+(Hawks at Bulls, Jazz at Rockets). After: "Game bets 25", "Player lines 25" (27 game bets and 782 player lines): the
+Rockets to win -1340 (89% fair), the Hawks -264 (70%), the Trail Blazers -468 (79%), the Knicks -310 (73%), the Magic -359
+(75%), the Spurs -700 (84%), the Thunder -269 (70%), the Heat -135 (55%), the Grizzlies -135 (55%), then the spreads, the
+Pacers +8.5 -115 (51%), the Trail Blazers -9.5 -115 (51%), the Rockets -15.5 -114 (51%), the Spurs -11.5 -113 (51%), the
+Bulls +6.5 -112 (50%) and the Cavaliers +2.5 -112 (50%), each -$0.04 or -$0.05 expected on $1, then the totals, one side a
+game; the Player lines as before. In Chromium at 390 and 1280 wide on a copy served locally with those files: no sideways
+scroll, every one of the tab's 147 controls 44px or taller (an inline name 47px), and no page error (the one console line
+the harness's own block of Google Fonts); at 1280 a game row's and a player row's four cells end at 891, 969, 1047 and
+1149 px, and at 390 price, fair and wins share the first line and expected the second.
+
+`tools/smoke_parlay.js` holds it, blocking, on its own reading (`gbOwn`, `gbQualOwn`, `sideOwn`, `topOwn`, `gbWant`, never
+the page's functions) at any hour: on the made-up slate's trial the five game bets worked by hand (the Knicks to win at 58%
+fair, the Lakers to win, the Knicks -3.5 and the Magic -5.5 tied at 50% and ordered by the key, then the Over), the
+Celtics' and the Heat's moneylines out of the band, the Celtics +3.5 and the Under in it but their lines' other sides taken,
+the Lakers at the Warriors' one-sided total out (it was listed at 50%), the Magic to win left for want of an id, then the
+props model's lines on trial as they were; after the FAIL every row a game bet or a player line, no Value mark, model
+figure, far-off flag or trial mark anywhere on the panel, every row on four columns, the two parts' headings, lines and
+names, and the lead and the foot word for word with no word of a Value pick, a model chance, the far-off rule or a line
+breaking even, and on the trial its foot and the game bets' list name word for word; sixty games' room and cut on the new
+rule; a press's newer moneyline at its new fair chance; and fifteen made-up games of their own (3a), each a part of the
+rule worked by hand (a home side the model rates 30 points over its fair chance, one it rates under the old band, one
+under the price's implied chance, each listed; a spread's tie to the home side, never the side a key or the model's lean
+would take; an underdog side listed as the likelier though the model rates the other; a total after every moneyline and
+spread though its margin is the tightest, its title with no model chance; the tightest moneyline first; a -250 and a -152
+favourite before the -110 lines they tie on the expected return; a spread with no model chance, its title with none; a
+line priced under no margin; a side with no id leaving the other, no line counted; and since the review of 13 November
+2026 a moneyline at -105 and +105 and a total at +100 both ways, each at exactly no margin, left out and counted a line
+each, a spread with no id on either side counted once, a less likely side with no id beside its listed other counted not
+at all and tied with another spread on the expected return and the fair chance, after it by the key, and the total of a
+game the model does not rate listed without its moneyline or spread), each of fourteen broken copies of the rule
+(`gbOwn`'s `brk`) shown to give another list, and the counts a side at a time shown to give other counts. On the real
+files the counts are held a line at a time and no total's title may name a model chance. Until the review this file read
+a total only of a game the model rates, which the page never did: with that reading put back the correct page fails 3
+checks, and a page dropping such a game's total, which passed every check then, fails 2. `tools/smoke.js`'s Refresh odds section (7) holds it after a press
+on made-up games of its own: the Magic to win at DraftKings' fresh -175 a game bet at its fair chance, the model's 65% in
+its title alone, and the three moneylines the read priced both ways, the tightest market first (the Magic at -175/+150,
+the Knicks at -250/+205, the Lakers at -180/+150), the Warriors at +150 under the band and nothing left out as far off
+(until then it held the Magic among the other lines on the model's thin edge and the Warriors left out far off). Breaks
+planted one at a time in a copy of the built page
+(`NBA_HTML=<copy> SMOKE_ONLY=pb`), each turning it red:
+
+| Planted | Checks failed |
+|---|---|
+| a game bet ranked on the model's chance (its expected return at the model's chance) | 19 |
+| the Value mark back on a game bet the model rates 3 points over its price | 22 |
+| the far-off guard back (a game bet the model rates 15 points over its fair chance left out) | 2 |
+| the band on the model's chance (45% to 97%) back | 3 |
+| the order reversed | 24 |
+| one side a line ignored (both sides listed) | 33 |
+| a tie to the lower key, not the home side or the over | 24 |
+| the totals ranked with the moneylines and spreads | 18 |
+| the four columns dropped (`pb-cols4`) | 1 |
+| the old foot's model words back | 1 |
+| (the review of 13 November 2026, each fix taken back out) | |
+| a line with no betslip id counted a side at a time | 2 |
+| a line with no betslip id counted though a side of it is listed | 2 |
+| a sum of exactly 1 taken as a margin (the test "under 1") | 2 |
+| lines priced with no margin counted a side at a time | 1 |
+| a total's title naming the model's chance | 20 |
+| the game bets' list named "by expected return on $1" | 2 |
+| the foot's side rule "the likelier side the boxes leave" for every line | 1 |
+| the trial foot's side rule "the likelier side of each line" | 1 |
+| a total listed only for a game the model rates | 2 |
+
+Measured again on the page after the review, the breaks above it fail as many checks but two: the band on the model's
+chance 4, one side a line ignored 35.
+
 ### Where the NBA differs, and why
 
 | The NFL hub | Here | Why |
 |---|---|---|
 | A week's games | Every game still to tip on the lines feed's two Eastern dates, under their day; never preseason | The NBA has no weeks; the dates are the ones the job reads DraftKings' lines for |
 | The payload's prices, a Refresh odds press over them | `lines.json`, read once a page load, no-store, the first time the tab opens (never on load or a timer), and a press's read, the newer of the two for each game's lines and its props; every price DraftKings' real one, nothing estimated | The NBA's prices come from the lines feed, which carries both prices on every line |
-| A moneyline's or a cover's chance from the NFL's game model | A moneyline's the player model's win chance (the number Tonight shows); a spread's Phi((m + h) / sigma), m the side's expected margin (minus the model's spread for the home side) and h its line, sigma 14.5 points | The NBA's game model gives a margin; sigma is measured, below. Until this change the page put no chance on a spread |
-| A total at the market's own chance | The same: its two prices with the margin out in proportion (50% where one is missing), never a Value pick, last | The NBA's total has never been tested against the market |
+| A moneyline's or a cover's chance from the NFL's game model; since its app v138 every leg at DraftKings' fair chance, the model's beside it as information | The builder's and the levels': a moneyline's the player model's win chance (the number Tonight shows); a spread's Phi((m + h) / sigma), m the side's expected margin (minus the model's spread for the home side) and h its line, sigma 14.5 points. The Top 50's game bets: since 13 November 2026 DraftKings' fair chance, the model's chance in a row's title alone ("The game bets at DraftKings' odds", above) | The NBA's game model gives a margin; sigma is measured, below. Until 25 October 2026 the page put no chance on a spread. The team model loses to DraftKings' no-vig chance in every market (`research/sp_ruler`), the owner's call of 13 November 2026 |
+| A total at the market's own chance | The same: its two prices with the margin out in proportion, never a Value pick, after the moneylines and spreads; a total priced on one side only, which was put at 50%, has no fair chance and is not listed since 13 November 2026 | The NBA's total has never been tested against the market |
 | A player's chance from the props model, on a book price | The props model's (README "Player props"), which is **on trial**: marked so beside its chance on every Top 50 row, builder row and level card, the mark titled with the shadow ledger's count, and said once in the lead; never a player it does not project or today's report lists, Probable aside (the next row); none at all once its ledger fails its bar, or the trial is stopped early as a FAIL (5 November 2026, README "Player props"), which `tools/smoke.js`'s Parlay Builder and Suggested Parlays sections hold on a made-up early decision; and from then a leg added by hand drawn in the builder at DraftKings' fair chance, marked "failed trial", the model's muted ("After the FAIL", above), and from 10 November 2026 DraftKings' main lines on players listed again in a part of their own, Player lines, at DraftKings' fair chance with no model claim ("Player lines in the Top 50", above) | The owner's call of 25 October 2026: props in the Top 50, Value picks allowed, every one marked |
 | A questionable, doubtful or out player never listed (`pricedLegs` skips `!suggestable`), a Q on a leg on him added by hand | The game's out lists and every other listing on today's report, Day-To-Day included, a probable player playing (`pbHeldWhy`, read by `pbWho`: the one rule the Top 50 lines, the all-games levels and Suggested Parlays' sets keep, as the NFL's `pricedLegs` is theirs), the lines left out counted in a note; a leg on him added by hand wears his status (DAY-TO-DAY) in the builder and in his bubble, titled with why | ESPN's NBA feed has no Questionable or Doubtful: every status between playing and out is Day-To-Day |
-| Value: the 3-point edge with market + form agreeing on a player's line | The 3-point edge alone, which the panel says | The NBA has no market + form (no player Elo is fitted to the props) |
+| Value: the 3-point edge with market + form agreeing on a player's line; since its app v138 no Value mark until a model earns one (`setChanceHook`) | The 3-point edge alone, until 13 November 2026; since, no game bet is a Value pick, and only a props trial's player lines keep the mark (none since the FAIL of 5 November 2026) | The NBA has no market + form (no player Elo is fitted to the props); the team model has not earned a mark |
+| One side a line: the higher fair chance, a tie to the side the model's projection favours, else the over or the home side (`pbSideBetter`) | The higher fair chance, a tie to the home side or the over (`pbSideBetter`); a Player line's tie to the lower key (`pbLikely`) | The team model has not earned a tie-break |
+| The Top 50's player lines (up to 40) first, then the game bets to 50: moneylines and spreads, then totals, each by expected on $1 at the fair chance, then the chance, then the model's lean, then the key | The game bets first, by the same order without the lean, then the player lines, 25 each where there are that many (`PB_TOP_MIN`) | The NBA's room rule of 10 November 2026 ("Player lines in the Top 50", above), kept |
 | DraftKings' fair chance by `legFair` | The NBA's `legFair`: a main line's whole margin on the Over (measured on DraftKings' archived lines), a milestone's and a Yes price's by the rung rule, est., a team line's two prices in proportion | The NBA's measured rule |
 | Every suggested leg needs DraftKings' betslip id | Game legs only, where the game's lines carry ids; a player's leg carries none on ESPN's feed and goes on the slip by hand, which its builder row says ("Not on DraftKings' slip yet: no betslip id in ESPN's feed") | ESPN's feed has no outcome id for a player's line |
 | `parlayProb` and `parlayDec` by the NFL's copula draws and its hold | The NBA's same-game engine behind the NFL's names: legs of different games multiplied, one game's joined by the gaussian copula at `data/corr.json`'s rho (two legs exactly, more by the GHK sum), worked in one order a game (`sgOrder`), so the same legs price the same in the list, the builder, a card and the sheet; the price min(the prices multiplied, 0.896 / J) | The NBA's table and engine (README "Same-game parlays"), with the NFL's hold, untested here |
@@ -2781,7 +2957,8 @@ chance from a spread where no moneyline was posted.
 
 ### What the team picks have been worth
 
-Shown for the owner, not acted on: nothing on the page is chosen from these numbers. Every side the Value rule's 3-point
+Shown for the owner: nothing on the page is chosen from these numbers, and since 13 November 2026 nothing in the Top 50
+stands on the model's team chance either ("The game bets at DraftKings' odds", above). Every side the Value rule's 3-point
 edge would have listed on each fold, lineup known, at the closing price (a cover at -110, which `data/odds_hist.csv` keeps
 no spread price for; a push left out), the model's chance said on average, how often it won, and the profit on $1; and
 the same with the far-off guard as the page applies it:
@@ -2851,7 +3028,12 @@ taller (93), and every one of 984 and 978 texts at 4.5:1 or better on what is un
 is the NHL hub's #B3B9CB, not the page's `--muted`, which falls under 4.5:1 on `--panel-2`; the on-trial mark is the rose
 #FFA2B8 (5.7:1 on the panel) and the Value mark dark text on the gold (12.1:1).
 
-**What the owner may want to look at.** On that afternoon's lines 48 of the 50 were player lines and 44 of them Unders,
+Since 13 November 2026 it holds the game bets at DraftKings' fair chance on its own reading, with the breaks of their own
+("The game bets at DraftKings' odds", above); where this section says the list's Value picks, the model's chance on a game
+row, the far-off note or the one-sided total at 50%, that is the rule before, which a props trial's player lines alone
+keep.
+
+**What the owner may want to look at** (25 October 2026, on the rule of then). On that afternoon's lines 48 of the 50 were player lines and 44 of them Unders,
 every row a Value pick: the props model runs low on the Over against DraftKings (README "Player props": on the 2026
 play-in and playoffs its chance of a side beat the price's by 3 points on 4,271 Unders and 967 Overs), so its Unders clear
 the 3-point edge most often, and 232 lines were left out as far off the market. The levels over every game ticked, which no
@@ -3575,8 +3757,9 @@ never on the real nights measured at the default filters (every game and every t
 site's work), but a made-up night of three games of short Unders at -241, -384 and -385 leaves its Aggressive unsettled
 (the smoke's DF: 9.72% found where 10.20% pays). That is not its work (it stops at 77,572 units, the same at 100
 million): the search bounds every parlay longer than the most legs it searches (six on a night of three games) by its
-likeliest legs, and there that bound stands over the level. A real night like it would go unrecorded. The Parlay Builder's Top 50 still ranks its Value picks on the team model's chance,
-which the evidence above says loses to DraftKings' on every market: a follow-up, not this change.
+likeliest legs, and there that bound stands over the level. A real night like it would go unrecorded. The Parlay Builder's Top 50 still ranked its Value picks on the team model's
+chance, which the evidence above says loses to DraftKings' on every market: a follow-up, not this change, done on 13
+November 2026 (the owner's call, "yes move to DK": README "Parlay Builder", "The game bets at DraftKings' odds").
 
 ### On the page
 
@@ -4473,9 +4656,11 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
   the latest games and the props model's shadow ledger (in each game's props sheet) are no longer drawn here.
 - **Parlay Builder**: the NFL hub's (README "Parlay Builder"). Its choices (the Bet amount, Refresh odds, All, Teams
   only or Players only, five bet types and the games of the lines feed's two dates, under their day), the Top 50 lines
-  they make from DraftKings' prices (`lines.json`, or a press's newer read), Value picks first, then the other lines
-  with the game totals last, each ranked by what $1 is expected to make, every player's line marked on trial (none since
-  the props trial was stopped early as a FAIL, 5 November 2026, README "Player props"), each with its own Add; and the builder under them: the visitor's own parlay, from the list or a game's Player props, priced by
+  they make from DraftKings' prices (`lines.json`, or a press's newer read), every line at DraftKings' fair chance since
+  13 November 2026: the game bets (moneylines and spreads, then totals, each by what $1 is expected to return at that
+  chance) and then DraftKings' main lines on players, a mix of stats (until then Value picks first at the model's
+  chance; a player's line on the props model's trial marked so, none since its FAIL of 5 November 2026, README "Player
+  props"), each with its own Add; and the builder under them: the visitor's own parlay, from the list or a game's Player props, priced by
   the same-game engine, DraftKings' fair chance first and the model's beside it, what the Bet amount returns, Finish
   parlay (a card to download, place at DraftKings or share, README "The parlay card") and Clear ALL. Every name on a leg
   opens its matchup bubble (README "The matchup bubble").

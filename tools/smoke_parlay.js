@@ -6,18 +6,24 @@
  * make and the builder. Here the built page boots in jsdom on a made-up slate a day or two ahead (so every case holds at
  * any hour on any day, the off-season included), a made-up lines.json in the shape tools/lines.js writes, a props block
  * of its own and a stubbed ESPN, and every number it states is worked out here on this file's own copies of its rules,
- * never read from the page: which legs qualify (qualOwn: DraftKings' price, the model's chance from 45% to 97% at or above
- * the price's implied chance, 3 points above it a Value pick, 15 points above DraftKings' fair chance left out, a game leg
- * with no betslip id where its game's lines carry ids left out, a player today's injury report lists left out, Day-To-Day
- * among them, a probable one kept: the rule every suggested set keeps), each one's chance (the player model's win chance, the
- * cover chance on research/sigma.json's sigma, the market's own on a total, tools/props.js's distribution on a player)
- * and fair chance (tools/props_feed.js's rules), the order (pbTopOwn: the Value picks, then the thin-edge lines, then the
- * totals, each by what $1 is expected to make), each bet once (sameBetOwn: a milestone k+ is the main Over at k - 0.5),
- * the 50-line cut (PB_TOP_N_OWN) on sixty made-up games, no player line once the props trial is stopped early as a FAIL
- * (a made-up decision with early, tools/props_ledger.js EARLY_STOP: the notes, the lead, the foot and a player leg's mark
- * saying the trial was stopped early, word for word, and the bar's own FAIL said as that), the on-trial mark on every player leg and nowhere else, the
- * Value mark on every Value pick and nowhere else, the Bet amount, the builder's numbers by data/corr.json and
- * tools/corr.js (two legs of one game exactly), the same-game refusals with their reasons, Add, Added and Remove, a game
+ * never read from the page: the game bets (gbOwn, since the owner's call of 13 November 2026, "yes move to DK"): every
+ * moneyline and spread of a game the model rates and total of any game at DraftKings' fair chance, its two prices with the
+ * margin taken out in proportion, both on file with a margin (summing to more than 1), 45% to 97%, a betslip id at its
+ * number where its game's lines carry ids, one side a line (the likelier of the sides that qualify, a tie to the home side
+ * or the over), the moneylines and spreads then the totals, each by expected on $1 at the fair chance then the fair chance
+ * then the key, the lines left out counted a line at a time, no Value mark, no model column, the model's chance in a
+ * moneyline's or spread's title alone, each rule part shown to bite on made-up games of its own (3a); the player part
+ * after them, a props trial's lines by the
+ * rule they kept (qualOwn: the props model's chance from 45% to 97% at or above the price's implied chance, 3 points above
+ * it a Value pick, 15 points above DraftKings' fair chance left out, a player today's injury report lists left out,
+ * Day-To-Day among them, a probable one kept; each bet once, sameBetOwn: a milestone k+ is the main Over at k - 0.5) or,
+ * once the props trial is stopped early as a FAIL (a made-up decision with early, tools/props_ledger.js EARLY_STOP), the
+ * Player lines at DraftKings' fair chance (plOwn, mixOwn), the room shared (topOwn: 25 each where there are that many, 50
+ * in all, PB_TOP_N_OWN), each chance by tools/props.js's distribution, research/sigma.json's sigma and tools/props_feed.js's
+ * fair-chance rules; the notes, the lead and the foot word for word, the on-trial mark on every trial player line and
+ * nowhere else, the Value mark on a trial's Value pick and nowhere else, the levels the tab draws nowhere (getPbTiers) on
+ * their own rule as before, the Bet amount, the builder's numbers by data/corr.json and tools/corr.js (two legs of one game
+ * exactly), the same-game refusals with their reasons, Add, Added and Remove, a game
  * that tips while the page is open, nothing read before the tab opens and nothing stored by a press; then the real
  * state.json and lines.json, on what the day offers. Every request is recorded.
  */
@@ -55,7 +61,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     if (l.kind === 'total') return l.other == null ? 0.5 : imp(l.odds) / (imp(l.odds) + imp(l.other));
     const g = st.slate.find(x => x.id === l.id);
     if (l.kind === 'ml') return l.side === g.home ? g.model.pHome : 1 - g.model.pHome;
-    if (l.kind === 'spread') { const m = l.side === g.home ? -g.model.spread : g.model.spread; return SG.Phi((m + l.line) / SIGMA_OWN); }
+    if (l.kind === 'spread') { if (!Number.isFinite(g.model.spread)) return null; const m = l.side === g.home ? -g.model.spread : g.model.spread; return SG.Phi((m + l.line) / SIGMA_OWN); }
     const row = st.props.games[l.id].players[l.pid], V = st.props.dist.var;
     if (l.mk === 'yes') return row[LAY.indexOf(l.stat)];
     const mu = muOwn(row, l.stat), v = PJ.nbVar(mu, V[l.stat]);
@@ -83,8 +89,12 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
      line), or null where neither has read them */
   const prOwn = (e, p) => { const pub = e && e.props ? e.props : null, live = p && p.props ? p.props : null;
     return live && (!pub || Date.parse(live.at) > Date.parse(pub.at)) ? live : pub; };
-  /* every leg with DraftKings' price on the games, as this file reads the lines (the newer of lines.json and a press) */
-  function candidatesOwn(st, L, press) {
+  /* every leg with DraftKings' price on the games, as this file reads the lines (the newer of lines.json and a press): a
+     moneyline and a spread of a game the model rates, a total of any game (the page's pbPriced and pbTotals, as the
+     ruler's guard reads them, tools/suggest_check.js teamOwn; until the review of 13 November 2026 this file asked the
+     model of a total too, which the page never did, so a page dropping such a game's total passed and the right one would
+     have failed) */
+  function candidatesOwn(st, L, press, brk = {}) {
     const out = [];
     for (const g of gamesOwn(st)) {
       const e = L && L.games && L.games[g.id], p = press && press[g.id];
@@ -95,8 +105,8 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
       if (gl && g.model) {
         if (gl.ml) for (const s of ['away', 'home']) out.push({ ...base, at: glAt, kind: 'ml', side: g[s], line: null, odds: gl.ml[s], other: gl.ml[s === 'home' ? 'away' : 'home'], dk: id('ml', s), on });
         if (gl.spread) for (const s of ['away', 'home']) out.push({ ...base, at: glAt, kind: 'spread', side: g[s], line: s === 'home' ? gl.spread.line : -gl.spread.line, odds: gl.spread[s], other: gl.spread[s === 'home' ? 'away' : 'home'], dk: id('spread', s), on });
-        if (gl.total) for (const s of ['over', 'under']) out.push({ ...base, at: glAt, kind: 'total', side: s, line: gl.total.line, odds: gl.total[s], other: gl.total[s === 'over' ? 'under' : 'over'], dk: id('total', s), on });
       }
+      if (gl && gl.total && (g.model || !brk.tmodel)) for (const s of ['over', 'under']) out.push({ ...base, at: glAt, kind: 'total', side: s, line: gl.total.line, odds: gl.total[s], other: gl.total[s === 'over' ? 'under' : 'over'], dk: id('total', s), on });
       const pr = prOwn(e, p), pg = st.props && st.props.games && st.props.games[g.id];
       const failed = st.props && st.props.ledger && st.props.ledger.decision && st.props.ledger.decision.verdict === 'FAIL';
       if (!pr || !pg || failed) continue;
@@ -111,7 +121,9 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     }
     return out.filter(l => Number.isFinite(l.odds) && l.odds !== 0).map(l => ({ ...l, p: modelOwn(l, st), fc: fairOwn(l, st) }));
   }
-  /* the rule: 'value', 'thin', 'total', or why it is out ('band', 'edge', 'far', 'noId', 'held', 'box') */
+  /* the levels' rule (pbLegs, the pool of the four levels the tab draws nowhere: getPbTiers) and a props trial's player
+     lines: 'value', 'thin', 'total', or why it is out ('band', 'edge', 'far', 'noId', 'held', 'box'). Until 13 November 2026
+     it was the Top 50's game bets' rule too */
   function qualOwn(l, ticks) {
     if (!ticks.k[boxOwn(l)] || ticks.off.includes(l.id)) return 'box';
     if (!(l.p >= PMIN_OWN && l.p < PMAX_OWN)) return 'band';
@@ -128,12 +140,63 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     const mains = new Set(list.filter(l => l.kind === 'prop' && l.mk === 'main' && l.side === 'over' && Math.abs(l.line % 1) === 0.5).map(l => `${l.id}|${l.pid}|${l.stat}|${l.line + 0.5}`));
     return l => l.kind === 'prop' && l.mk === 'mile' && mains.has(`${l.id}|${l.pid}|${l.stat}|${l.k}`);
   }
-  function pbTopOwn(cands, ticks) {
-    const q = cands.map(l => ({ l, q: qualOwn(l, ticks) }));
-    const part = k => q.filter(x => x.q === k).map(x => x.l), V = part('value'), T = part('thin'), M = part('total'), same = sameBetOwn([...V, ...T]);
+  /* the game bets (the owner's call of 13 November 2026, "yes move to DK"), on this file's own reading, never the page's
+     pbGameBets: every moneyline, spread and total with DraftKings' price on the ticked games, at DraftKings' fair chance (its
+     two prices with the margin taken out in proportion), both prices on file ('price' where one is missing) with a margin
+     (their implied chances summing to more than 1: else 'vig'), the fair chance 45% to 97% ('band'), and DraftKings' betslip
+     id at its number where its game's lines carry ids ('noId'); no model chance compared (no edge, no Value pick, no far-off
+     guard, no model band). A margin is the two implied chances summing to more than 1, to a billionth: a sum of exactly 1
+     (-105 and +105, +100 both ways) is no margin, whose row would read +$0.00 expected on $1 (the review of 13 November
+     2026). One side a line (a game's moneyline, its spread, its total): the likelier by the fair chance to 1e-9 of the
+     sides that qualify, a tie to the home side or the over. The order: the moneylines and spreads, then the totals, each by
+     what $1 is expected to return at the fair chance (to 1e-9), then the fair chance (to 1e-9), then the key. Counted a line
+     at a time (its game and kind): a line priced with no margin (vig), and a line none of whose sides is listed where a side
+     was left out for want of an id (noId). brk plants a broken rule here, to show a case bites: 'model' (ranked at the
+     model's chance), 'far' (the old far-off guard back), 'mband' (the model's band back), 'both' (both sides of a line),
+     'key' (a tie to the lower key), 'lean' (a tie to the side the model favours), 'home' (the home side or the over always),
+     'edge' (the model's chance at or above the price's implied one), 'totals' (the totals ranked with the rest), 'nofair' (a
+     tie on the expected return to the key, the fair chance skipped), 'vig' (no margin needed), 'vig1' (a sum of exactly 1
+     let through: the test "under 1" as it was), 'sides' (each count a side at a time, as it was), 'tmodel' (a total only
+     of a game the model rates, this file's reading before the review), 'rev' (the order reversed) */
+  const ev9 = v => Math.round(v * 1e9), fairTOwn = l => imp(l.odds) / (imp(l.odds) + imp(l.other));
+  function gbQualOwn(l, ticks, brk = {}) {
+    if (!ticks.k[boxOwn(l)] || ticks.off.includes(l.id)) return 'box';
+    if (!Number.isFinite(l.odds) || !l.odds || !Number.isFinite(l.other) || !l.other) return 'price';
+    if (!brk.vig && imp(l.odds) + imp(l.other) < (brk.vig1 ? 1 : 1 + 1e-9)) return 'vig';
+    const f = fairTOwn(l); if (!(f >= PMIN_OWN && f < PMAX_OWN)) return 'band';
+    if (brk.mband && !(l.p >= PMIN_OWN && l.p < PMAX_OWN)) return 'mband';
+    if (brk.far && l.p != null && l.p - f >= FAR_OWN - 1e-9) return 'far';
+    if (brk.edge && !(l.p != null && l.p >= imp(l.odds))) return 'edge';
+    return l.on && !l.dk ? 'noId' : 'ok';
+  }
+  function sideOwn(x, y, brk = {}) {
+    if (brk.home) return x.kind === 'total' ? x.side === 'over' : x.side === x.home;
+    if (ev9(x.p) !== ev9(y.p)) return ev9(x.p) > ev9(y.p);
+    if (brk.key) return cmpKey(x, y) < 0;
+    if (brk.lean && x.pm != null && y.pm != null && ev9(x.pm) !== ev9(y.pm)) return x.pm > y.pm;
+    return x.kind === 'total' ? x.side === 'over' && y.side !== 'over' : x.side === x.home && y.side !== y.home;
+  }
+  function gbOwn(cands, ticks, brk = {}) {
+    const q = cands.filter(l => l.kind !== 'prop').map(l => ({ l, q: gbQualOwn(l, ticks, brk) })), keep = new Map();
+    for (const { l, q: w } of q) { if (w !== 'ok') continue;
+      const x = { ...l, pm: Number.isFinite(l.p) ? l.p : null, p: fairTOwn(l) }, k = brk.both ? keyOwn(l) : l.id + '|' + l.kind, y = keep.get(k);
+      if (!y || sideOwn(x, y, brk)) keep.set(k, x); }
+    const legs = [...keep.values()].map(l => ({ ...l, dec: decOf(l.odds), part: 'game' })).map(l => ({ ...l, ev: l.p * l.dec - 1 }));
+    const by = l => brk.model ? (l.pm != null ? l.pm * l.dec - 1 : -1) : l.ev;
+    const rank = list => [...list].sort((a, b) => (ev9(by(b)) - ev9(by(a))) || (brk.nofair ? 0 : ev9(b.p) - ev9(a.p)) || cmpKey(a, b));
+    let all = brk.totals ? rank(legs) : [...rank(legs.filter(l => l.kind !== 'total')), ...rank(legs.filter(l => l.kind === 'total'))];
+    if (brk.rev) all = all.reverse();
+    const lineOf = l => l.id + '|' + l.kind, listed = new Set(legs.map(lineOf)), lines = w => new Set(q.filter(x => x.q === w).map(x => lineOf(x.l)));
+    const noId = brk.sides ? q.filter(x => x.q === 'noId').length : [...lines('noId')].filter(k => !listed.has(k)).length;
+    return { q, legs, all, noId, vig: brk.sides ? q.filter(x => x.q === 'vig').length : lines('vig').size };
+  }
+  /* a props trial's player lines (decision null: the props model's chance, on trial), by the rule they kept: its Value
+     picks, then its thin-edge lines, each by what $1 is expected to make at that chance, each bet once */
+  function trialOwn(cands, ticks) {
+    const q = cands.filter(l => l.kind === 'prop').map(l => ({ l, q: qualOwn(l, ticks) }));
+    const part = k => q.filter(x => x.q === k).map(x => x.l), V = part('value'), T = part('thin'), same = sameBetOwn([...V, ...T]);
     const rank = list => list.filter(l => !same(l)).map(l => ({ ...l, dec: decOf(l.odds), ev: l.p * decOf(l.odds) - 1 })).sort((a, b) => (b.ev - a.ev) || cmpKey(a, b));
-    const all = [...rank(V).map(l => ({ ...l, part: 'value' })), ...rank(T).map(l => ({ ...l, part: 'other' })), ...rank(M).map(l => ({ ...l, part: 'other', total: true }))];
-    return { rows: all.slice(0, PB_TOP_N_OWN), all, over: all.length, q, same: [...V, ...T, ...M].filter(same).length };
+    return { q, all: [...rank(V).map(l => ({ ...l, part: 'value' })), ...rank(T).map(l => ({ ...l, part: 'other' }))], same: [...V, ...T].filter(same).length };
   }
   /* the Player lines once the props model has failed (the owner's ask of 10 November 2026), on this file's own reading of
      the night pool's player rule, never the page's pbPlayerLines: every player's main line on the ticked games (the newer of
@@ -178,13 +241,15 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     for (let r = 0; r < n; r++) out.push(...lists.map(x => x[r]).filter(Boolean).sort(likelyOwn));
     return out;
   }
-  /* the whole list: the game bets as pbTopOwn has them, then on a FAIL the Player lines; G game rows and P player rows
-     qualifying, g = min(G, max(25, 50 - P)) of the game bets and min(P, 50 - g) of the player lines */
-  function topOwn(st, L, ticks, press) {
-    const gm = pbTopOwn(candidatesOwn(st, L, press), ticks), pl = failedOwn(st) ? plOwn(st, L, ticks, press) : { legs: [], held: 0, vig: 0, posted: 0 };
-    const P = mixOwn(pl.legs).map(l => ({ ...l, dec: decOf(l.odds), ev: l.p * decOf(l.odds) - 1, part: 'player' }));
-    const g = Math.min(gm.all.length, Math.max(TOP_MIN_OWN, PB_TOP_N_OWN - P.length)), n = Math.min(P.length, PB_TOP_N_OWN - g);
-    return { ...gm, rows: [...gm.all.slice(0, g), ...P.slice(0, n)], g, n, G: gm.all.length, P: P.length, pl };
+  /* the whole list: the game bets (gbOwn), then the player part: on a FAIL the Player lines (plOwn, mixed), on a props trial
+     its player lines (trialOwn); G game rows and P player rows qualifying, g = min(G, max(25, 50 - P)) of the game bets and
+     min(P, 50 - g) of the player part */
+  function topOwn(st, L, ticks, press, brk) {
+    const cands = candidatesOwn(st, L, press, brk), gb = gbOwn(cands, ticks, brk), failed = failedOwn(st);
+    const tr = failed ? null : trialOwn(cands, ticks), pl = failed ? plOwn(st, L, ticks, press) : { legs: [], held: 0, vig: 0, posted: 0 };
+    const P = failed ? mixOwn(pl.legs).map(l => ({ ...l, dec: decOf(l.odds), ev: l.p * decOf(l.odds) - 1, part: 'player' })) : tr.all;
+    const g = Math.min(gb.all.length, Math.max(TOP_MIN_OWN, PB_TOP_N_OWN - P.length)), n = Math.min(P.length, PB_TOP_N_OWN - g);
+    return { rows: [...gb.all.slice(0, g), ...P.slice(0, n)], g, n, G: gb.all.length, P: P.length, over: gb.all.length + P.length, gb, tr, pl, same: tr ? tr.same : 0 };
   }
   const pbIsOwn = l => !!l && l.thin === false && !l.market;
   const TICKS_ALL = { k: { ml: true, ats: true, total: true, over: true, under: true }, off: [] };
@@ -196,20 +261,35 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
       value: !!li.querySelector('.pb-valmark'), trial: !!li.querySelector('.pb-trial'), label: li.querySelector('.nm small').childNodes[0].textContent }; };
   /* what the own list says each row shows */
   const rowWant = (l, i) => ({ key: keyOwn(l), part: l.part, rank: i + 1, rk: String(i + 1), price: am(l.odds), model: pct(l.p), fair: l.fc ? pct(l.fc.p) : '–', win: m1(l.dec - 1), ev: m1(l.ev), value: l.part === 'value', trial: l.kind === 'prop' });
-  /* a Player lines row, read: its price, DraftKings' fair chance, wins and expected on $1 under their four labels, and no
-     model figure, Value mark or trial mark anywhere in it */
-  const plRead = li => { const c = [...li.querySelectorAll('.pb-tc b')].map(b => b.textContent.trim());
+  /* a Player lines row or (since 13 November 2026) a game bet's, read: its price, DraftKings' fair chance, wins and expected
+     on $1 under their four labels, the fair figure's title, and no model figure, Value mark, trial mark or far-off flag
+     anywhere in it */
+  const plRead = li => { const c = [...li.querySelectorAll('.pb-tc b')].map(b => b.textContent.trim()), fb = li.querySelector('[data-pb-fair]');
     return { key: li.querySelector('[data-pb-leg]').dataset.pbLeg, part: li.dataset.pbGrp, rank: +li.dataset.pbRow, rk: li.querySelector('.pb-trk').textContent.trim(), price: c[0], fair: c[1], win: c[2], ev: c[3],
       cols: [...li.querySelectorAll('.pb-tc small')].map(x => x.textContent.trim()).join('|'), label: li.querySelector('.nm small').textContent.trim(),
-      marks: !!li.querySelector('.pb-valmark, .pb-trial, [data-pb-model], .faroff'), name: txt(li.querySelector('.glance-name') || li.querySelector('.nm')) }; };
+      marks: !!li.querySelector('.pb-valmark, .pb-trial, [data-pb-model], .faroff'), name: txt(li.querySelector('.glance-name') || li.querySelector('.nm')), title: fb ? fb.getAttribute('title') : null }; };
   const plWant = (l, i) => ({ key: keyOwn(l), part: 'player', rank: i + 1, rk: String(i + 1), price: am(l.odds), fair: pct(l.p), win: m1(l.dec - 1), ev: m1(l.ev),
-    cols: 'price|fair|wins on $1|expected on $1', label: `${l.side === 'under' ? 'Under' : 'Over'} ${l.line} ${STAT_OWN[l.stat]}`, marks: false, name: l.name });
+    cols: 'price|fair|wins on $1|expected on $1', label: `${l.side === 'under' ? 'Under' : 'Over'} ${l.line} ${STAT_OWN[l.stat]}`, marks: false, name: l.name,
+    title: 'DraftKings’ fair chance: its two prices with the margin taken out, the whole margin on the Over' });
+  /* a game bet's row, as this file says it: its team's nickname or the game ("Hawks at Bulls"), the bet ("To win", "To cover
+     -3.5", "Over 226.5 points"), DraftKings' price and fair chance, wins and expected on $1 at it, and the model's chance in
+     the fair figure's title alone, where the model rates the leg: a moneyline or a spread, never a total (the hub has no
+     model of a total: legModel's total is the market's own, the very fair chance; the review of 13 November 2026) */
+  const NICK_OWN = { ATL: 'Hawks', BOS: 'Celtics', BKN: 'Nets', CHA: 'Hornets', CHI: 'Bulls', CLE: 'Cavaliers', DAL: 'Mavericks', DEN: 'Nuggets', DET: 'Pistons', GSW: 'Warriors', HOU: 'Rockets', IND: 'Pacers', LAC: 'Clippers', LAL: 'Lakers', MEM: 'Grizzlies',
+    MIA: 'Heat', MIL: 'Bucks', MIN: 'Timberwolves', NOP: 'Pelicans', NYK: 'Knicks', OKC: 'Thunder', ORL: 'Magic', PHI: '76ers', PHX: 'Suns', POR: 'Trail Blazers', SAC: 'Kings', SAS: 'Spurs', TOR: 'Raptors', UTA: 'Jazz', WAS: 'Wizards' };
+  const spOwn = v => (v > 0 ? '+' : '') + v.toFixed(1).replace('.0', '');
+  const gbLabelOwn = l => l.kind === 'ml' ? 'To win' : l.kind === 'spread' ? `To cover ${spOwn(l.line)}` : `${l.side === 'under' ? 'Under' : 'Over'} ${l.line} points`;
+  const gbNameOwn = l => l.kind === 'total' ? `${NICK_OWN[l.away]} at ${NICK_OWN[l.home]}` : NICK_OWN[l.side];
+  const gbTitleOwn = l => `DraftKings’ fair chance: its two prices with the margin taken out in proportion${l.pm != null && l.kind !== 'total' ? `. The model’s chance: ${pct(l.pm)} (not what the list is ranked on)` : ''}`;
+  const gbWant = (l, i) => ({ key: keyOwn(l), part: 'game', rank: i + 1, rk: String(i + 1), price: am(l.odds), fair: pct(l.p), win: m1(l.dec - 1), ev: m1(l.ev),
+    cols: 'price|fair|wins on $1|expected on $1', label: gbLabelOwn(l), marks: false, name: gbNameOwn(l), title: gbTitleOwn(l) });
   /* the drawn list against this file's own, row for row (a game row by rowRead, a player row by plRead): the rows that differ */
   const listBad = (got, want) => want.map((l, i) => [l, got[i]]).filter(([l, li]) => { if (!li) return true;
     const i = want.indexOf(l);
     if (l.part === 'player') return JSON.stringify(plRead(li)) !== JSON.stringify(plWant(l, i));
+    if (l.part === 'game') return JSON.stringify(plRead(li)) !== JSON.stringify(gbWant(l, i));
     const g = rowRead(li); return JSON.stringify(rowWant(l, i)) !== JSON.stringify({ key: g.key, part: g.part, rank: g.rank, rk: g.rk, price: g.price, model: g.model, fair: g.fair, win: g.win, ev: g.ev, value: g.value, trial: g.trial }); })
-    .map(([l, li]) => `${keyOwn(l)} got ${li ? JSON.stringify(li.dataset.pbGrp === 'player' ? plRead(li) : rowRead(li)) : 'nothing'}`);
+    .map(([l, li]) => `${keyOwn(l)} got ${li ? JSON.stringify(li.dataset.pbGrp === 'player' || li.dataset.pbGrp === 'game' ? plRead(li) : rowRead(li)) : 'nothing'}`);
 
   /* ---------- the harness ---------- */
   function load(st, o = {}) {
@@ -325,16 +405,18 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   check(days.length === 2 && days[0][1].join() === [A1.id, A2.id].join() && days[1][1].join() === A3.id && /^\w{3} \w{3} \d{1,2}$/.test(days[0][0]), `listed under their day (${days.map(x => x[0]).join(' / ')})`);
   check([...p.d.querySelectorAll('#pbPanel [data-pb-game]')].every(c => c.checked) && p.d.querySelector('#pbPanel details.pb-games').open && /All 3/.test(txt(p.d.querySelector('#pbPanel .pb-games summary'))), 'all ticked to start, the list open on a wide screen');
 
-  /* ---------- 3. the list: which legs, their part, order and numbers, each bet once ---------- */
-  const st0 = ST(), cands = candidatesOwn(st0, LINES), own = pbTopOwn(cands, TICKS_ALL);
-  const q = (pid, stat, mk, x) => own.q.find(e => e.l.pid === pid && e.l.stat === stat && e.l.mk === mk && (x == null || e.l.line === x || e.l.k === x || e.l.side === x));
+  /* ---------- 3. the list: which legs, their part, order and numbers, each bet once ----------
+     On the trial (the fixture's ledger has no decision): the game bets at DraftKings' fair chance (gbOwn), then the props
+     model's player lines by the rule they kept (trialOwn: its Value picks, then its other lines, each bet once); q0 is every
+     leg on the rule the levels and a trial's player lines keep (qualOwn), which until 13 November 2026 the game bets kept */
+  const st0 = ST(), cands = candidatesOwn(st0, LINES), own = topOwn(st0, LINES, TICKS_ALL), q0 = cands.map(l => ({ l, q: qualOwn(l, TICKS_ALL) }));
   const want = (e, v) => e && e.q === v, inList = l => own.rows.some(r => keyOwn(r) === keyOwn(l));
-  const ace25 = own.q.find(e => e.l.id === A1.id && e.l.pid === '8100001' && e.l.mk === 'mile' && e.l.k === 25), ace25b = own.q.find(e => e.l.id === A2.id && e.l.pid === '8100001' && e.l.k === 25);
-  const aceO = own.q.find(e => e.l.pid === '8100001' && e.l.stat === 'pts' && e.l.mk === 'main' && e.l.side === 'over');
-  const bo8 = own.q.find(e => e.l.pid === '8100002' && e.l.mk === 'mile'), boO = own.q.find(e => e.l.pid === '8100002' && e.l.mk === 'main' && e.l.side === 'over');
-  const cyU = own.q.find(e => e.l.pid === '8100003' && e.l.stat === 'ast' && e.l.mk === 'main' && e.l.side === 'under'), cy3 = own.q.find(e => e.l.pid === '8100003' && e.l.stat === 'ast' && e.l.mk === 'mile');
-  const cy10 = own.q.find(e => e.l.pid === '8100003' && e.l.stat === 'reb' && e.l.mk === 'mile'), cyRO = own.q.find(e => e.l.pid === '8100003' && e.l.stat === 'reb' && e.l.mk === 'main' && e.l.side === 'over');
-  const eli16 = own.q.find(e => e.l.pid === '8100005' && e.l.mk === 'mile'), eliO = own.q.find(e => e.l.pid === '8100005' && e.l.mk === 'main' && e.l.side === 'over');
+  const ace25 = q0.find(e => e.l.id === A1.id && e.l.pid === '8100001' && e.l.mk === 'mile' && e.l.k === 25), ace25b = q0.find(e => e.l.id === A2.id && e.l.pid === '8100001' && e.l.k === 25);
+  const aceO = q0.find(e => e.l.pid === '8100001' && e.l.stat === 'pts' && e.l.mk === 'main' && e.l.side === 'over');
+  const bo8 = q0.find(e => e.l.pid === '8100002' && e.l.mk === 'mile'), boO = q0.find(e => e.l.pid === '8100002' && e.l.mk === 'main' && e.l.side === 'over');
+  const cyU = q0.find(e => e.l.pid === '8100003' && e.l.stat === 'ast' && e.l.mk === 'main' && e.l.side === 'under'), cy3 = q0.find(e => e.l.pid === '8100003' && e.l.stat === 'ast' && e.l.mk === 'mile');
+  const cy10 = q0.find(e => e.l.pid === '8100003' && e.l.stat === 'reb' && e.l.mk === 'mile'), cyRO = q0.find(e => e.l.pid === '8100003' && e.l.stat === 'reb' && e.l.mk === 'main' && e.l.side === 'over');
+  const eli16 = q0.find(e => e.l.pid === '8100005' && e.l.mk === 'mile'), eliO = q0.find(e => e.l.pid === '8100005' && e.l.mk === 'main' && e.l.side === 'over');
   /* the cases bite: each is what this file says it is before the page is held to it */
   check(want(aceO, 'value') && want(ace25, 'value') && !inList(ace25.l) && inList(aceO.l), "a milestone that is the same bet as a qualifying main Over (Ace Guard's 25+ points and Over 24.5) is left out, the main line kept");
   check(want(boO, 'value') && boO.l.line === 7 && want(bo8, 'value') && inList(bo8.l), "a whole-number main Over (Bo Wing's rebounds Over 7, a push at 7) leaves his 8+ in");
@@ -342,33 +424,49 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   check(cyRO.q === 'edge' && want(cy10, 'value') && inList(cy10.l), "a milestone whose main Over does not qualify (Cy Center's 10+ rebounds, Over 9.5 at -150) is kept");
   check(want(eliO, 'thin') && want(eli16, 'value') && !inList(eli16.l) && inList(eliO.l), "a Value-pick milestone is left out for its thin-edge main Over (Eli Forward's 16+ points, Over 15.5)");
   check(want(ace25b, 'value') && inList(ace25b.l), 'the same milestone in another game is kept');
-  check(own.q.some(e => e.l.pid === '8100006' && e.q === 'far') && !own.q.some(e => e.l.pid === '8100007' || e.l.pid === '8100099'), "a line far off DraftKings' fair chance is left out (Fay Blocker), and a player the report has out or the model does not project is never a leg");
-  const ivyO = own.q.find(e => e.l.pid === '8100008' && e.l.mk === 'main' && e.l.side === 'over'), nHeld = own.q.filter(e => e.q === 'held').length;
+  check(q0.some(e => e.l.pid === '8100006' && e.q === 'far') && !q0.some(e => e.l.pid === '8100007' || e.l.pid === '8100099'), "a line far off DraftKings' fair chance is left out (Fay Blocker), and a player the report has out or the model does not project is never a leg");
+  const ivyO = q0.find(e => e.l.pid === '8100008' && e.l.mk === 'main' && e.l.side === 'over'), nHeld = q0.filter(e => e.q === 'held').length;
   check(ivyO && ivyO.q === 'held' && qualOwn({ ...ivyO.l, held: false }, TICKS_ALL) === 'value' && !inList(ivyO.l) && nHeld === 1,
     "a player today's report lists Day-To-Day (Ivy Doubt, Over 15.5 points) has a line that would be a Value pick by its price and chance, and it is held out, as every suggested set holds him");
   check(want(eliO, 'thin') && inList(eliO.l), 'a player the report lists as Probable (Eli Forward) plays, and his line is listed');
-  const a3ml = own.q.find(e => e.l.id === A3.id && e.l.kind === 'ml' && e.l.side === 'ORL');
-  check(a3ml && a3ml.q === 'noId', "a game leg with no betslip id at its line, where its game's lines carry ids, is left out (the Magic to win)");
-  const got = rows(p).map(rowRead), wantRows = own.rows.map(rowWant);
-  const bad = wantRows.map((x, i) => [x, got[i]]).filter(([x, g]) => !g || JSON.stringify({ ...x }) !== JSON.stringify({ key: g.key, part: g.part, rank: g.rank, rk: g.rk, price: g.price, model: g.model, fair: g.fair, win: g.win, ev: g.ev, value: g.value, trial: g.trial }));
-  check(got.length === wantRows.length && !bad.length && wantRows.length > 10, `the list is exactly this file's: ${wantRows.length} lines, each its part, rank, price, model chance, fair chance, wins and expected on $1, Value and on-trial marks${bad.length ? ': ' + bad.slice(0, 2).map(([x, g]) => JSON.stringify(x) + ' got ' + JSON.stringify(g)).join(' | ') : ''}`);
-  const parts = got.map(g => g.part), firstOther = parts.indexOf('other');
-  check(firstOther > 0 && parts.slice(firstOther).every(x => x === 'other') && own.rows.slice(own.rows.findIndex(r => r.total)).every(r => r.total) && own.rows.some(r => r.total) && !own.rows.find(r => r.total).part.includes('value'),
-    'the Value picks come first, then the other lines, the game totals last of all, never a Value pick');
-  const tov = own.rows.find(r => r.id === A2.id && r.kind === 'total');
-  check(tov && tov.side === 'over' && tov.p === 0.5 && Math.abs(tov.ev - 0.1) < 1e-12 && own.rows.filter(r => r.part === 'other' && !r.total).every(r => r.ev < tov.ev) && own.rows.findIndex(r => r === tov) > own.rows.findIndex(r => r.part === 'other' && !r.total),
-    "the Lakers at the Warriors' total, priced on its Over alone at +120, is put at 50% and expected to make $0.10, more than any thin-edge line, and is still listed after every one of them");
-  check(got.filter(g => g.trial).length === own.rows.filter(r => r.kind === 'prop').length && got.every((g, i) => g.trial === (own.rows[i].kind === 'prop')) && got.every((g, i) => g.value === (own.rows[i].part === 'value')),
-    'every player line wears the on-trial mark and no other line does; every Value pick wears Value and no other line does');
+  /* the game bets (13 November 2026), worked by hand: the Knicks to win (-150 / +130: 58% fair, the Celtics' 42% out of the
+     band), the Lakers to win (-140 / +120: 56%), the Knicks to cover -3.5 and the Magic to cover -5.5 (-110 both ways: 50%
+     a side, a tie, the home side), then the Celtics at the Knicks' Over 226.5 (-110 both ways, the over); by expected on $1,
+     the moneylines' tighter margins first, the two spreads level on it and on the fair chance, the earlier key first. The
+     Magic to win (64% fair) has no betslip id where its game's lines carry ids, the Heat (36%) is out of the band, and the
+     Lakers at the Warriors' total is priced on its Over alone (+120), so it has no fair chance: until 13 November 2026 it
+     was listed at 50%, after every thin-edge line */
+  const GK = (g, kind, side, line) => keyOwn({ id: g.id, kind, side, line: line == null ? null : line }), gq = (g, kind, side) => own.gb.q.find(e => e.l.id === g.id && e.l.kind === kind && e.l.side === side);
+  const HAND_GB = [GK(A1, 'ml', 'NYK'), GK(A2, 'ml', 'LAL'), GK(A1, 'spread', 'NYK', -3.5), GK(A3, 'spread', 'ORL', -5.5), GK(A1, 'total', 'over', 226.5)];
+  check(JSON.stringify(own.gb.all.map(keyOwn)) === JSON.stringify(HAND_GB) && gq(A1, 'ml', 'BOS').q === 'band' && gq(A3, 'ml', 'MIA').q === 'band' && gq(A1, 'spread', 'BOS').q === 'ok' && gq(A1, 'total', 'under').q === 'ok' && gq(A2, 'total', 'over').q === 'price',
+    `the game bets on this file's own rule are the hand-worked five, in order (${own.gb.all.map(keyOwn).join(', ')}), the Celtics' and the Heat's moneylines out of the band, the Celtics +3.5 and the Under in it but the other side taken, the one-sided total out`);
+  const a3ml = gq(A3, 'ml', 'ORL');
+  check(a3ml && a3ml.q === 'noId' && imp(-200) / (imp(-200) + imp(170)) > PMIN_OWN && !inList(a3ml.l), "a game bet in the band with no betslip id at its line, where its game's lines carry ids, is left out (the Magic to win, 64% fair)");
+  const got = rows(p), badL = listBad(got, own.rows);
+  check(got.length === own.rows.length && !badL.length && own.g === 5 && own.n > 5, `the list is exactly this file's: ${own.rows.length} lines, the ${own.g} game bets at DraftKings' price and fair chance with what $1 wins and is expected to return at it, each with the model's chance in its title alone, then the props model's ${own.n} lines on trial, each its part, rank, price, model chance, fair chance, wins and expected on $1, Value and on-trial marks${badL.length ? ': ' + badL.slice(0, 2).join(' | ') : ''}`);
+  const parts = got.map(li => li.dataset.pbGrp);
+  check(parts.slice(0, own.g).every(x => x === 'game') && parts.slice(own.g).every(x => x === 'value' || x === 'other') && parts.indexOf('other') > parts.lastIndexOf('value') && parts.lastIndexOf('value') >= own.g,
+    "the game bets come first (the moneylines and spreads, then the total), then the props model's Value picks, then its other lines");
+  check(got.every((li, i) => !!li.querySelector('.pb-trial') === (own.rows[i].kind === 'prop')) && got.every((li, i) => !!li.querySelector('.pb-valmark') === (own.rows[i].part === 'value')) && got.slice(0, own.g).every(li => !li.querySelector('.pb-valmark, .pb-trial, [data-pb-model], .faroff')),
+    'every player line wears the on-trial mark and no game bet does; every Value pick (the props model\'s, on a player line) wears Value, and no game bet wears a Value mark, a model figure or a far-off flag');
   const trialMk = p.d.querySelector('#pbPanel .pb-trial');
   check(trialMk && /on trial/.test(trialMk.textContent) && /props model is on trial/.test(trialMk.title) && /4,321 of the 30,000/.test(trialMk.title), `the on-trial mark is titled with what it means ("${trialMk && trialMk.title.slice(0, 90)}")`);
-  const secs = [...p.d.querySelectorAll('#pbPanel h3.pb-topsec')].map(h => [h.dataset.pbSec, txt(h)]), olO = p.d.querySelector('#pbPanel ol.pb-top[data-pb-sec="other"]');
-  const nV = own.rows.filter(r => r.part === 'value').length;
-  check(secs.length === 2 && secs[0][0] === 'value' && secs[0][1] === `Value picks ${nV}` && secs[1][1] === `Other lines ${own.rows.length - nV}` && olO && olO.getAttribute('start') === String(nV + 1), `two parts under their headings, each counted, the ranks running on (${secs.map(x => x[1]).join(' / ')}, start ${olO && olO.getAttribute('start')})`);
+  const secs = [...p.d.querySelectorAll('#pbPanel h3.pb-topsec')].map(h => [h.dataset.pbSec, txt(h)]), olV = p.d.querySelector('#pbPanel ol.pb-top[data-pb-sec="value"]'), olO = p.d.querySelector('#pbPanel ol.pb-top[data-pb-sec="other"]');
+  const nV = own.rows.filter(r => r.part === 'value').length, nO = own.rows.filter(r => r.part === 'other').length;
+  check(JSON.stringify(secs) === JSON.stringify([['game', `Game bets ${own.g}`], ['value', `Value picks ${nV}`], ['other', `Other lines ${nO}`]]) && olV && olV.getAttribute('start') === String(own.g + 1) && olO && olO.getAttribute('start') === String(own.g + nV + 1)
+    && !p.d.querySelector('#pbPanel ol.pb-top[data-pb-sec="game"]').hasAttribute('start'),
+    `three parts under their headings, each counted, the ranks running on (${secs.map(x => x[1]).join(' / ')}, starts ${olV && olV.getAttribute('start')} and ${olO && olO.getAttribute('start')})`);
   const notes = [...p.d.querySelectorAll('#pbPanel .pb-note')].map(txt).join(' | ');
   check(new RegExp(`${nHeld} line is left out: it is on a player today’s injury report lists \\(Day-To-Day among them`).test(notes) && p.w.getPbTop().held === nHeld, `the notes count the line held out for the report (${p.w.getPbTop().held})`);
-  check(/1 line is left out: the model rates it 15 points or more above DraftKings’ fair chance/.test(notes) && /1 line is left out: the list takes a game’s moneyline, spread or total only with DraftKings’ betslip id/.test(notes) && /Game totals are never Value picks/.test(notes), `the notes say what was left out and why, and that the totals come last (${notes.slice(0, 160)})`);
+  check(/1 line is left out: the props model rates it 15 points or more above DraftKings’ fair chance/.test(notes) && /1 line is left out: the list takes a game’s moneyline, spread or total only with DraftKings’ betslip id/.test(notes) && !/Value pick|never Value|come last/.test(notes)
+    && p.w.getPbTop().far === 1 && p.w.getPbTop().noId === 1, `the notes say what was left out and why: a player line far off the market (the props model's), a game bet with no betslip id; none speaks of Value picks or the totals (${notes.slice(0, 160)})`);
   check(/the props model’s, which is on trial/.test(txt(p.d.querySelector('#pbPanel .pb-lead'))) && (txt(panel).match(/on trial, not yet shown to beat DraftKings/g) || []).length === 1, 'the lead says once that a player\'s chance is the props model\'s, on trial');
+  /* the trial's foot and its game list's name, word for word (the review of 13 November 2026: the side a game bet offers
+     is the likelier with a betslip id, and its order the moneylines and spreads, then the totals) */
+  { const FOOT_TRIAL_OWN = `Game bets at DraftKings’ fair chance, its two prices with the margin taken out in proportion, 45% to 97%, one side a line, the likelier with a betslip id where its game has ids: moneylines and spreads, then totals, each by expected on $1, then the fair chance. Player lines at the props model’s chance, on trial: 45% to 97% and at or above the price’s implied chance, 3 points above it a Value pick, ${Math.round(FAR_OWN * 100)} points above DraftKings’ fair chance left out, a milestone that is the same bet as a main line shown as the main line; the Value picks first, each part by expected on $1. Each part gets ${TOP_MIN_OWN} where it has that many. Players today’s injury report holds out are left out.`;
+    const footT = txt(p.d.querySelector('#pbPanel .pb-foot')), olGT = p.d.querySelector('#pbPanel ol.pb-top[data-pb-sec="game"]'), nameT = olGT && olGT.getAttribute('aria-label');
+    check(footT === FOOT_TRIAL_OWN && nameT === `The ${own.g} game bets on your picks at DraftKings’ odds: moneylines and spreads, then totals, each by expected return on $1`,
+      `on the trial the foot and the game bets' list name are this file's own, word for word (${footT === FOOT_TRIAL_OWN ? 'the same' : `got "${footT.slice(0, 160)}"`}${nameT && /then totals/.test(nameT) ? '' : ` | list "${nameT}"`})`); }
   check(own.same === 2 && p.w.getPbTop().same === 2, `two milestones are left out as the same bet as their main line (${p.w.getPbTop().same})`);
   /* the early stop (tools/props_ledger.js EARLY_STOP, the owner's call of 5 November 2026): its FAIL, in the shape
      publish.js writes, takes the props model's chance off the list; since 10 November 2026 (the owner's ask: "why is it
@@ -393,39 +491,45 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     check(ownF.g === ownF.G && ownF.n === ownF.P && ownF.rows.length === ownF.G + ownF.P && ownF.rows.slice(0, ownF.G).every(r => r.part !== 'player'), `with ${ownF.G} game rows and ${ownF.P} player rows both fit: the game bets first, then the player lines`);
     const badF = listBad(gotLi, ownF.rows);
     const topF = pf.w.getPbTop().rows.map(l => l.sk);
-    check(gotLi.length === ownF.rows.length && !badF.length && !pf.errors.length && JSON.stringify(topF) === JSON.stringify(ownF.rows.map(keyOwn)), `after the FAIL the list is exactly this file's own, line for line: ${ownF.G} game bets (Value picks, then the other lines), then ${ownF.P} player lines, each at DraftKings' price and fair chance with what $1 wins and is expected to return at it${badF.length ? ': ' + badF.slice(0, 2).join(' | ') : ''}${pf.errors.length ? ': ' + pf.errors.join(' | ') : ''}`);
+    check(gotLi.length === ownF.rows.length && !badF.length && !pf.errors.length && JSON.stringify(topF) === JSON.stringify(ownF.rows.map(keyOwn)), `after the FAIL the list is exactly this file's own, line for line: ${ownF.G} game bets at DraftKings' fair chance, then ${ownF.P} player lines, each at DraftKings' price and fair chance with what $1 wins and is expected to return at it${badF.length ? ': ' + badF.slice(0, 2).join(' | ') : ''}${pf.errors.length ? ': ' + pf.errors.join(' | ') : ''}`);
     const plLis = gotLi.filter(li => li.dataset.pbGrp === 'player');
-    check(plLis.length === ownF.P && plLis.every(li => !li.querySelector('.pb-valmark, .pb-trial, [data-pb-model], .faroff')) && gotLi.filter(li => li.dataset.pbGrp !== 'player').every(li => !li.querySelector('.pb-trial')) && !pf.d.querySelector('#pbPanel .pb-trial'),
-      'no player line wears a Value mark, a model figure, a far-off flag or a trial mark, and no game line a trial mark');
+    check(plLis.length === ownF.P && gotLi.length && gotLi.every(li => !li.querySelector('.pb-valmark, .pb-trial, [data-pb-model], .faroff')) && !pf.d.querySelector('#pbPanel .pb-valmark, #pbPanel [data-pb-model], #pbPanel .faroff, #pbPanel .pb-trial')
+      && gotLi.every(li => ['game', 'player'].includes(li.dataset.pbGrp)),
+      'no line on the list wears a Value mark, a model figure, a far-off flag or a trial mark, a game bet or a player line, and there is none anywhere on the panel');
     const fay = plRowsF.find(r => r.pid === '8100006'), ace = plRowsF.find(r => r.pid === '8100001' && r.stat === 'pts'), cyO = plRowsF.find(r => r.side === 'over');
     const fayLi = fay && gotLi.find(li => li.querySelector(`[data-pb-leg="${keyOwn(fay)}"]`));
     check(fayLi && plRead(fayLi).ev === '+$0.00' && cyO && plWant(cyO, 0).ev === m1((1 - imp(120)) * decOf(-150) - 1) && cyO.ev < -0.05 && cyO.ev > -0.2,
       `an Under is expected to return $0 on $1 at DraftKings' fair chance, an Over less (Cy Center's rebounds Over at -150: ${m1(cyO.ev)})`);
-    /* the columns (the review of 10 November 2026): a player row's four cells on the game rows' five-column grid, its
-       second (fair) starting at the third column, so price, fair, wins and expected stand under the game rows' own and the
-       model's column is left empty; jsdom computes the cascade (not the layout: the screenshots measure that) */
+    /* the columns: until 13 November 2026 a player row's four cells sat on the game rows' five-column grid, the model's
+       column left empty (the review of 10 November 2026); since the game bets have no model figure either, every row of a
+       list with no model figure (pb-cols4 on the card) has its four cells on four columns, none placed; jsdom computes the
+       cascade (not the layout: the screenshots measure that) */
     { const cs = li => pf.w.getComputedStyle(li.querySelector('.pb-tcs')), cells = li => [...li.querySelectorAll('.pb-tc')].map(c => pf.w.getComputedStyle(c).gridColumnStart || 'auto');
-      const gLi = gotLi.find(li => li.dataset.pbGrp !== 'player'), pLi = gotLi.find(li => li.dataset.pbGrp === 'player');
-      check(gLi && pLi && cs(pLi).gridTemplateColumns === cs(gLi).gridTemplateColumns && /repeat\(5,/.test(cs(gLi).gridTemplateColumns) && cells(pLi).join() === 'auto,3,auto,auto' && cells(gLi).join() === 'auto,auto,auto,auto,auto',
-        `a player row's cells sit on the game rows' five columns, its fair chance in the third, the model's column empty (${pLi ? cs(pLi).gridTemplateColumns + ' ' + cells(pLi).join() : 'none'})`); }
-    const secsF = [...pf.d.querySelectorAll('#pbPanel h3.pb-topsec')].map(h => [h.dataset.pbSec, txt(h)]), olP = pf.d.querySelector('#pbPanel ol.pb-top[data-pb-sec="player"]');
-    const subP = olP && olP.previousElementSibling;
-    check(secsF.length === 3 && secsF[2][0] === 'player' && secsF[2][1] === `Player lines ${ownF.P}` && subP && subP.classList.contains('pb-topsub') && txt(subP) === 'At DraftKings’ odds: no model claim.' && olP.getAttribute('start') === String(ownF.G + 1)
-      && olP.getAttribute('aria-label') === `Then ${ownF.P} player lines at DraftKings’ odds, a mix of stats, each stat’s likeliest first`,
-      `the third part is headed "Player lines" with its count, one short line under it, its ranks running on from the game bets (${secsF.map(x => x[1]).join(' / ')}, start ${olP && olP.getAttribute('start')})`);
+      const gLi = gotLi.find(li => li.dataset.pbGrp === 'game'), pLi = gotLi.find(li => li.dataset.pbGrp === 'player');
+      check(gLi && pLi && pf.d.getElementById('pbCard').classList.contains('pb-cols4') && gotLi.every(li => cs(li).gridTemplateColumns === cs(gLi).gridTemplateColumns && cells(li).join() === 'auto,auto,auto,auto') && /repeat\(4,/.test(cs(gLi).gridTemplateColumns),
+        `every row's four cells sit on four columns, the game bets' and the player lines' alike, with no empty model column (${gLi ? cs(gLi).gridTemplateColumns + ' ' + cells(gLi).join() : 'none'})`); }
+    const secsF = [...pf.d.querySelectorAll('#pbPanel h3.pb-topsec')].map(h => [h.dataset.pbSec, txt(h)]), olP = pf.d.querySelector('#pbPanel ol.pb-top[data-pb-sec="player"]'), olG = pf.d.querySelector('#pbPanel ol.pb-top[data-pb-sec="game"]');
+    const subP = olP && olP.previousElementSibling, subG = olG && olG.previousElementSibling;
+    check(JSON.stringify(secsF) === JSON.stringify([['game', `Game bets ${ownF.G}`], ['player', `Player lines ${ownF.P}`]]) && subG && subG.classList.contains('pb-topsub') && txt(subG) === 'At DraftKings’ odds: no model claim.' && !olG.hasAttribute('start')
+      && olG.getAttribute('aria-label') === `The ${ownF.G} game bets on your picks at DraftKings’ odds: moneylines and spreads, then totals, each by expected return on $1`
+      && subP && subP.classList.contains('pb-topsub') && txt(subP) === 'At DraftKings’ odds: no model claim.' && olP.getAttribute('start') === String(ownF.G + 1)
+      && olP.getAttribute('aria-label') === `Then ${ownF.P} player lines at DraftKings’ odds, a mix of stats, each stat’s likeliest first` && !pf.d.querySelector('#pbPanel [data-pb-sec="value"], #pbPanel [data-pb-sec="other"], #pbPanel [data-pb-novalue]'),
+      `two parts, "Game bets" and "Player lines", each counted, each with one short line under it, the ranks running on from the game bets; no Value picks or Other lines part (${secsF.map(x => x[1]).join(' / ')}, start ${olP && olP.getAttribute('start')})`);
     check(!/takes none|has no player lines|on trial/.test(txt(pf.d.getElementById('pbPanel'))) && !/failed its shadow ledger/.test(notesF),
       `nothing on the tab says the list takes no player line, or calls the model on trial (${notesF.slice(0, 120)})`);
     check(new RegExp(`^${ownF.pl.held} line is left out: it is on a player today’s injury report lists`).test(notesF.split(' | ').find(t => /injury report/.test(t)) || '') && pf.w.getPbTop().held === ownF.pl.held,
       `the note counts the player line held out for the report (${pf.w.getPbTop().held})`);
     const leadF = txt(pf.d.querySelector('#pbPanel .pb-lead')), footF = txt(pf.d.querySelector('#pbPanel .pb-foot'));
-    /* the foot after the FAIL, word for word: the game bets' rules and the Player lines' said apart (the review of 10
-       November 2026: "every line has ... a model chance ... at or above the chance that price implies" and "each line gives
-       DraftKings' fair chance beside the model's" were false of the Player lines; "the likelier side" false with a box off) */
+    /* the lead and the foot after the FAIL, word for word (13 November 2026: every line at DraftKings' fair chance, said in a
+       few words; until then the foot said the game bets' model chance, Value bar and far-off rule apart from the Player
+       lines' rules, the review of 10 November 2026); never that a line returns or breaks even */
     const OFF_OWN = 'the props model’s trial was stopped early as a FAIL on 5 November 2026';
-    const FOOT_OWN = `Game bets: DraftKings’ price (the job’s read or your Refresh odds press, the newer) and a model chance of 45% to 97%, at or above the price’s implied chance; 3 points above it is a Value pick, and a game total, at the book’s own chance, never is. A moneyline’s chance is the player model’s, a spread’s its margin against the line give or take ${SIGMA_OWN} points, a total’s the book’s own; one the model rates ${Math.round(FAR_OWN * 100)} points or more above DraftKings’ fair chance is left out. Player lines: DraftKings’ main lines priced both ways, at DraftKings’ fair chance (the whole margin on the Over), 45% to 97%, the likelier side the boxes leave, with no model claim (${OFF_OWN}). The game bets come first, each part by what $1 is expected to make, any totals last; then the player lines, a mix of stats, each stat’s likeliest first; each part gets ${TOP_MIN_OWN} where it has that many, ${PB_TOP_N_OWN} lines at most. Expected on $1 is the line’s chance times what $1 returns, less the $1. No line on a player today’s injury report lists, Day-To-Day among them, is listed.`;
-    check(leadF && !/on trial/.test(leadF) && leadF.endsWith('each part ranked by what $1 on it is expected to make at the model’s chance, best first, then the player lines at DraftKings’ odds, a mix of stats, 50 lines at most. Add any of them to the builder below.')
-      && footF === FOOT_OWN && !/Every line has|Each line gives/.test(footF),
-      `the lead says the player lines are at DraftKings' odds, after the game bets, and the foot is this file's own, word for word, the game bets' rules apart from the player lines' (${footF === FOOT_OWN ? 'the same' : `got "${footF.slice(0, 160)}"`})`);
+    const LEAD_OWN = 'Every line on the bet types and games ticked here, at DraftKings’ odds: the game bets, then the player lines, 50 at most. Add any of them to the builder below.';
+    /* (the review of 13 November 2026) the side a line offers said a part at a time: a game bet's likelier side with a
+       betslip id (the other is listed where the likelier has none), a player line's the likelier the boxes leave */
+    const FOOT_OWN = `Every line at DraftKings’ fair chance, its two prices with the margin taken out (in proportion on a game bet, all on the Over on a player line), 45% to 97%, one side a line. Game bets: the likelier side with a betslip id where its game has ids; moneylines and spreads, then totals, each by expected on $1, then the fair chance. Player lines: the likelier side the boxes leave; a mix of stats, each stat’s likeliest first. Each part gets ${TOP_MIN_OWN} where it has that many. Players today’s injury report holds out are left out.`;
+    check(leadF === LEAD_OWN && footF === FOOT_OWN && !/Value|model chance|far off|on trial|breaks? even|even money/i.test(leadF + ' ' + footF + ' ' + notesF),
+      `the lead and the foot are this file's own, word for word, every line at DraftKings' odds, and nothing on them or the notes speaks of Value picks, a model chance, the far-off rule or a line breaking even (${footF === FOOT_OWN ? 'the same' : `got "${footF.slice(0, 160)}"`}${leadF === LEAD_OWN ? '' : ` | lead "${leadF.slice(0, 120)}"`})`);
     /* a player's leg the reader adds by hand still shows the model's chance, muted, titled that the trial stopped and that
        no list or set takes it; its mark reads "failed trial", titled that its chance there is DraftKings' fair chance
        (section 8 holds the builder's rows); the bar's own FAIL (no early) is said as that */
@@ -491,7 +595,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
       const bites = what === 'Player overs off' ? pT.some(r => keyOwn(r) === KF('8100003', 'reb', 9.5, 'under')) && pT.every(r => r.side === 'under')
         : what === 'Player unders off' ? pT.length > 0 && pT.every(r => r.side === 'over') : what === 'Players only' ? ownT.G === 0 && pT.length === 7 : pT.length === 0 && ownT.G > 0;
       const noteOk = what !== 'the Celtics at the Knicks unticked' || [...qt.d.querySelectorAll('#pbPanel .pb-note')].map(txt).filter(t => t === noPlOwnF(LINES, [A2.id, A3.id])).length === 1;
-      check(bites && noteOk && gotT.length === ownT.rows.length && !badT.length && !qt.errors.length && (what !== 'Players only' || (!qt.d.querySelector('#pbPanel [data-pb-sec="value"], #pbPanel [data-pb-sec="other"]') && !qt.d.querySelector('#pbPanel ol[data-pb-sec="player"]').hasAttribute('start'))),
+      check(bites && noteOk && gotT.length === ownT.rows.length && !badT.length && !qt.errors.length && (what !== 'Players only' || (!qt.d.querySelector('#pbPanel [data-pb-sec="game"], #pbPanel [data-pb-sec="value"], #pbPanel [data-pb-sec="other"]') && !qt.d.querySelector('#pbPanel ol[data-pb-sec="player"]').hasAttribute('start'))),
         `${what}: the list is this file's own on those ticks (${ownT.G} game bets, ${pT.length} player lines${what === 'Player overs off' ? ", Cy Center's rebounds Under in his Over's place" : what === 'the Celtics at the Knicks unticked' ? ', and a note that the other games have no player line, counting the ticked games alone' : ''})${badT.length ? ': ' + badT.slice(0, 2).join(' | ') : ''}${qt.errors.length ? ': ' + qt.errors.join(' | ') : ''}`);
       /* the levels the tab draws nowhere (getPbTiers, kept for the checks and the card's 'pb' kicker): their pool takes no
          player leg after the FAIL, so an empty level says that, never that DraftKings has posted none, which on these ticks
@@ -628,29 +732,106 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
       check(noKey.length === 9, 'and the case has its nine lines');
     }
 
-    /* the room on sixty made-up games, Moneyline and the player boxes ticked: each home side at -110 qualifying (or, in one
-       state, only the first ten), each game one player's points line DraftKings prices -150 to -209 on the Under */
+    /* the room on sixty made-up games, Moneyline and the player boxes ticked: each moneyline at -110 both ways qualifying
+       (50% a side at DraftKings' fair chance, a tie, the home side), or, in one state, only the first ten (the rest at -10000
+       / +5000: 98% and 2%, outside the band), each game one player's points line DraftKings prices -150 to -209 on the Under */
     {
       const TM = ['ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'];
-      const mk60 = qual => { const G = [], pg = {};
+      const mk60 = () => { const G = [], pg = {};
         for (let i = 0; i < 60; i++) { const ms = (i < 30 ? T1 : T2) + (i % 30) * 60e3, a = TM[i % 30], h = TM[(i % 30 + (i < 30 ? 1 : 2)) % 30];
-          const pH = i < qual ? 0.600 - 0.001 * i : 0.5, g = game(ms, a, h, { pHome: +pH.toFixed(3), spread: -3 }); G.push(g);
+          const g = game(ms, a, h, { pHome: 0.5, spread: -3 }); G.push(g);
           pg[g.id] = { tip: g.tip, away: a, home: h, players: { [String(8300000 + i)]: P('Pl ' + i, h, 'G', 15, 4, 3) } }; }
         const s = STF({ slate: G }); s.props.games = pg; s.report = { date: etDate(now), players: {} }; return s; };
-      const L60 = (st, nPl) => { const L = { v: 1, at: RD, games: {} };
-        st.slate.forEach((g, i) => { L.games[g.id] = { at: RD, espn: g.espn, ml: { home: -110, away: -110 }, spread: null, total: null, ids: { event: '8' + i, ml: { home: `0ML8${i}_1`, away: `0ML8${i}_3` }, spread: null, total: null },
+      const L60 = (st, qual, nPl) => { const L = { v: 1, at: RD, games: {} };
+        st.slate.forEach((g, i) => { L.games[g.id] = { at: RD, espn: g.espn, ml: i < qual ? { home: -110, away: -110 } : { home: -10000, away: 5000 }, spread: null, total: null, ids: { event: '8' + i, ml: { home: `0ML8${i}_1`, away: `0ML8${i}_3` }, spread: null, total: null },
           props: { at: RD, mains: i < nPl ? [{ player: String(8300000 + i), stat: 'pts', line: 14.5, over: 120, under: -150 - i }] : [], ladders: [], yes: [] } }; }); return L; };
       const K60 = { ml: true, ats: false, total: false, over: true, under: true };
       for (const [qual, nPl, wG, wP] of [[60, 60, 25, 25], [60, 10, 40, 10], [10, 60, 10, 40], [60, 0, 50, 0]]) {
-        const s = mk60(qual), L = L60(s, nPl), T = { k: K60, off: [] }, own6 = topOwn(s, L, T);
+        const s = mk60(), L = L60(s, qual, nPl), T = { k: K60, off: [] }, own6 = topOwn(s, L, T);
         const q6 = load(s, { lines: L, tab: 'parlay', mine: mineT(K60) }); await sleep(400);
         const got6 = rows(q6), bad6 = listBad(got6, own6.rows), sec6 = [...q6.d.querySelectorAll('#pbPanel h3.pb-topsec')].map(txt).join('|');
-        const nV6 = own6.rows.filter(r => r.part === 'value').length, nO6 = own6.rows.filter(r => r.part === 'other').length;
-        check(own6.G === qual && own6.P === nPl && own6.g === wG && own6.n === wP && got6.length === wG + wP && !bad6.length && sec6 === ['Value picks' + (nV6 ? ' ' + nV6 : ''), nO6 ? 'Other lines ' + nO6 : '', wP ? 'Player lines ' + wP : ''].filter(Boolean).join('|') && q6.w.getPbTop().over === qual + nPl && !q6.errors.length,
+        check(own6.G === qual && own6.P === nPl && own6.g === wG && own6.n === wP && got6.length === wG + wP && !bad6.length && sec6 === [wG ? 'Game bets ' + wG : '', wP ? 'Player lines ' + wP : ''].filter(Boolean).join('|') && q6.w.getPbTop().over === qual + nPl && !q6.errors.length,
           `${qual} game bets and ${nPl} player lines qualifying: ${wG} game bets then ${wP} player lines (${sec6})${bad6.length ? ': ' + bad6.slice(0, 2).join(' | ') : ''}${q6.errors.length ? ': ' + q6.errors.join(' | ') : ''}`);
       }
     }
 
+    /* 3a. the game bets' rule, part by part (the owner's call of 13 November 2026, "yes move to DK"), on fifteen made-up games
+       of their own tomorrow, after the FAIL with no player line, at any hour; each case worked by hand, and each shown to
+       bite, that is, to give another list or count with its part of the rule broken on this file's own copy (gbOwn's brk):
+       B1 CLE at DEN, B2 DET at HOU, B3 IND at LAC: moneylines at -110 both ways (50% a side, a tie, the home side), the model
+         rating the home side 80% (30 points over its fair chance: the old far-off guard's), 44% (under the old model band)
+         and 50.5% (under the price's implied 52.4%: the old edge); each listed, the home side;
+       B4 ATL at WAS: the Wizards -2.5 and the Hawks +2.5 at -110 both ways, a tie: the home side, never the Hawks, whom a tie
+         by the key, or by the model's lean (57% to 43%), would list;
+       B5 MEM at MIL: the Bucks -1.5 at +100, the Grizzlies +1.5 at -120: 47.8% and 52.2%, both in the band: the Grizzlies,
+         though the model rates the Bucks 62%;
+       B6 MIN at NOP: the total 220.5 at -102 both ways: the Over, after every moneyline and spread though its margin is the
+         tightest of all, its title the fair chance alone (the hub has no model of a total);
+       B7 OKC at PHI: -105 both ways: the 76ers, first, the tightest margin of the moneylines and spreads;
+       B8 POR at SAC: the Kings -250 (68.2%), and B9 SAS at TOR: the Raptors -152 (57.6%): their margins the -110 lines' to
+         the ninth place, so the higher fair chance first, then the -110 lines by the key;
+       B10 BKN at CHA: the Hornets -4.5 at -115, the Nets +4.5 at -105, the game with no model spread: the Hornets, the title
+         with no model chance;
+       B11 GSW at LAL: +105 both ways, priced under no margin: neither side, one line counted;
+       B12 BOS at CHI: the Bulls -130 with no betslip id where the game's lines carry ids: the Celtics +110 (45.7%, in the band,
+         with their id), the likelier side with an id; no line counted left out, the moneyline being on the list;
+       (the review of 13 November 2026)
+       B13 DAL at MIA: the Heat -105 and the Mavericks +105, and the total 214.5 at +100 both ways, each priced at exactly no
+         margin (implied chances summing to 1: either side would be listed first, +$0.00 expected): neither listed, two lines
+         counted; its spread, -3.5 at -110 both ways, with no betslip id on either side where the game's lines carry ids: one
+         line left out, counted once (a count a side at a time said two);
+       B14 NYK at ORL: the Magic -6.5 at -115 (51.1%) with their id, the Knicks +6.5 at -105 (48.9%) with none: the Magic, and
+         no line counted left out (a count a side at a time said one); level with the Hornets on the expected return and the
+         fair chance, so after them by the key;
+       B15 PHX at UTA, a game the model does not rate (no model), its moneyline, spread and total priced with their ids: its
+         total alone (the Over, -110 both ways), after the Timberwolves at the Pelicans, as the page's pbTotals and the
+         ruler's guard read a total of any game; no moneyline or spread (pbPriced reads only a game the model rates) */
+    {
+      const B = (i, a, h, model) => game(T1 + i * 60e3, a, h, { pHome: 0.5, spread: 0, ...model });
+      const BG = [B(1, 'CLE', 'DEN', { pHome: 0.80 }), B(2, 'DET', 'HOU', { pHome: 0.44 }), B(3, 'IND', 'LAC', { pHome: 0.505 }), B(4, 'ATL', 'WAS', { spread: 0 }), B(5, 'MEM', 'MIL', { spread: -6 }), B(6, 'MIN', 'NOP', {}),
+        B(7, 'OKC', 'PHI', {}), B(8, 'POR', 'SAC', { pHome: 0.70 }), B(9, 'SAS', 'TOR', { pHome: 0.60 }), B(10, 'BKN', 'CHA', { spread: null }), B(11, 'GSW', 'LAL', {}), B(12, 'BOS', 'CHI', { pHome: 0.55 }),
+        B(13, 'DAL', 'MIA', { pHome: 0.60 }), B(14, 'NYK', 'ORL', { spread: -4 }), { ...B(15, 'PHX', 'UTA', {}), model: null }];
+      const ml = (h, a) => ({ home: h, away: a }), sp = (line, h, a) => ({ line, home: h, away: a });
+      const LB = { v: 1, at: RD, games: {} }, put = (g, o) => { LB.games[g.id] = { at: RD, espn: g.espn, ml: null, spread: null, total: null, ids: null, props: null, ...o }; };
+      put(BG[0], { ml: ml(-110, -110) }); put(BG[1], { ml: ml(-110, -110) }); put(BG[2], { ml: ml(-110, -110) }); put(BG[3], { spread: sp(-2.5, -110, -110) }); put(BG[4], { spread: sp(-1.5, 100, -120) });
+      put(BG[5], { total: { line: 220.5, over: -102, under: -102 } }); put(BG[6], { ml: ml(-105, -105) }); put(BG[7], { ml: ml(-250, 200) }); put(BG[8], { ml: ml(-152, 125) });
+      put(BG[9], { spread: sp(-4.5, -115, -105) }); put(BG[10], { ml: ml(105, 105) }); put(BG[11], { ml: ml(-130, 110), ids: { event: '9912', ml: { home: null, away: '0ML9912_3' }, spread: null, total: null } });
+      put(BG[12], { ml: ml(-105, 105), spread: sp(-3.5, -110, -110), total: { line: 214.5, over: 100, under: 100 },
+        ids: { event: '9913', ml: { home: '0ML9913_1', away: '0ML9913_3' }, spread: { home: null, away: null }, total: { over: '0OU9913O2145_1', under: '0OU9913U2145_3' } } });
+      put(BG[13], { spread: sp(-6.5, -115, -105), ids: { event: '9914', ml: null, spread: { home: '0HC9914N650_1', away: null }, total: null } });
+      put(BG[14], { ml: ml(-150, 130), spread: sp(-3.5, -110, -110), total: { line: 225.5, over: -110, under: -110 },
+        ids: { event: '9915', ml: { home: '0ML9915_1', away: '0ML9915_3' }, spread: { home: '0HC9915N350_1', away: '0HC9915P350_3' }, total: { over: '0OU9915O2255_1', under: '0OU9915U2255_3' } } });
+      const stB = STF({ slate: BG }); stB.props.games = {}; stB.report = { date: etDate(now), players: {} };
+      const [B1, B2, B3, B4, B5, B6, B7, B8, B9, B10, B11, B12, B13, B14, B15] = BG, GK = (g, kind, side, line) => keyOwn({ id: g.id, kind, side, line: line == null ? null : line });
+      const K = { phi: GK(B7, 'ml', 'PHI'), bos: GK(B12, 'ml', 'BOS'), mem: GK(B5, 'spread', 'MEM', 1.5), cha: GK(B10, 'spread', 'CHA', -4.5), orl: GK(B14, 'spread', 'ORL', -6.5), sac: GK(B8, 'ml', 'SAC'), tor: GK(B9, 'ml', 'TOR'),
+        was: GK(B4, 'spread', 'WAS', -2.5), den: GK(B1, 'ml', 'DEN'), hou: GK(B2, 'ml', 'HOU'), lac: GK(B3, 'ml', 'LAC'), nop: GK(B6, 'total', 'over', 220.5), uta: GK(B15, 'total', 'over', 225.5) };
+      const HANDB = [K.phi, K.bos, K.mem, K.cha, K.orl, K.sac, K.tor, K.was, K.den, K.hou, K.lac, K.nop, K.uta];
+      const ownB = topOwn(stB, LB, TICKS_ALL), keysOf = o => JSON.stringify(o.rows.map(keyOwn)), keysB = keysOf(ownB);
+      const ev = x => x.ev, eB = k => ownB.rows.find(r => keyOwn(r) === k);
+      check(keysB === JSON.stringify(HANDB) && ownB.gb.noId === 1 && ownB.gb.vig === 3 && ev9(ev(eB(K.sac))) === ev9(ev(eB(K.was))) && ev9(ev(eB(K.tor))) === ev9(ev(eB(K.den)))
+        && ev9(ev(eB(K.cha))) === ev9(ev(eB(K.orl))) && ev9(eB(K.cha).p) === ev9(eB(K.orl).p) && eB(K.cha).pm === null && eB(K.den).pm === 0.8 && Math.abs(eB(K.nop).pm - eB(K.nop).p) < 1e-15,
+        `the game bets' cases, on this file's own rule, are the hand-worked thirteen, in order (${ownB.rows.map(r => r.side).join(', ')}): the Celtics for the Bulls with no id, the Warriors at the Lakers and the Heat's and the Mavericks' moneyline and total priced with no margin (three lines), the Heat's spread with no id either way left out (one line), the Magic with their id listed, the Suns at the Jazz's total though the model rates the game not, the Kings, the Raptors and the -110 lines level on the expected return to the ninth place, the Hornets and the Magic level on it and on the fair chance`);
+      const BITES = [['far', 'the old far-off guard (the Cavaliers for the Nuggets)'], ['mband', "the model's band (the Pistons for the Rockets)"], ['edge', "the model's edge (no Pacers or Clippers)"], ['model', "ranked at the model's chance"], ['rev', 'the order reversed'],
+        ['both', 'both sides of a line'], ['key', 'a tie to the lower key (the Hawks)'], ['lean', "a tie to the model's lean (the Hawks)"], ['home', 'the home side always (the Bucks)'], ['totals', 'the totals ranked with the rest'], ['nofair', 'the fair chance skipped on a tie'], ['vig', 'no margin needed'],
+        ['vig1', 'a sum of exactly 1 let through (the Heat to win, then the Over at the Heat, each +$0.00)'], ['tmodel', 'a total only of a game the model rates (no Suns at the Jazz)']];
+      const bit = BITES.filter(([b]) => keysOf(topOwn(stB, LB, TICKS_ALL, null, { [b]: true })) !== keysB);
+      check(bit.length === BITES.length, `each part of the rule bites: with it broken this file's own list differs (${bit.length} of ${BITES.length}${bit.length < BITES.length ? ': not ' + BITES.filter(x => !bit.includes(x)).map(x => x[1]).join(', ') : ''})`);
+      const sidesB = topOwn(stB, LB, TICKS_ALL, null, { sides: true }).gb, vig1B = topOwn(stB, LB, TICKS_ALL, null, { vig1: true }).gb;
+      check(sidesB.noId === 4 && sidesB.vig === 6 && vig1B.vig === 1,
+        `the counts bite: a line at a time 1 left out for want of an id and 3 priced with no margin, where a side at a time says ${sidesB.noId} and ${sidesB.vig}, and the test "under 1" ${vig1B.vig}`);
+      const qb = load(stB, { lines: LB, tab: 'parlay' }); await sleep(300);
+      const gotB = rows(qb), badB = listBad(gotB, ownB.rows), topB = qb.w.getPbTop(), notesB = [...qb.d.querySelectorAll('#pbPanel .pb-note')].map(txt);
+      check(gotB.length === HANDB.length && !badB.length && JSON.stringify(topB.rows.map(l => l.sk)) === keysB && topB.noId === 1 && topB.gVig === 3 && topB.gb === HANDB.length && !qb.errors.length,
+        `the page's game bets are those thirteen, row for row: DraftKings' price and fair chance, what $1 wins and is expected to return at it, the bet, the team or game, and the model's chance in a moneyline's or spread's fair figure's title alone (none on the Hornets' line or a total), the counts a line at a time (${topB.noId} and ${topB.gVig})${badB.length ? ': ' + badB.slice(0, 2).join(' | ') : ''}${qb.errors.length ? ': ' + qb.errors.join(' | ') : ''}`);
+      const tt = k => { const li = gotB.find(x => x.querySelector('[data-pb-leg]').dataset.pbLeg === k); return li ? li.querySelector('[data-pb-fair]').getAttribute('title') : null; };
+      const FAIR_T = 'DraftKings’ fair chance: its two prices with the margin taken out in proportion';
+      check(tt(K.den) === FAIR_T + '. The model’s chance: 80% (not what the list is ranked on)' && tt(K.cha) === FAIR_T && tt(K.nop) === FAIR_T && tt(K.uta) === FAIR_T
+        && !qb.d.querySelector('#pbPanel .pb-valmark, #pbPanel [data-pb-model], #pbPanel .faroff, #pbPanel .pb-trial') && !/model/i.test(gotB.map(li => txt(li)).join(' ')),
+        `no model column, Value mark or far-off flag: the model's chance is quiet information in a moneyline's or spread's title ("${tt(K.den)}"), and none where the model rates none or on a total ("${tt(K.nop)}")`);
+      check(notesB.includes('1 line is left out: the list takes a game’s moneyline, spread or total only with DraftKings’ betslip id at its number, and ESPN’s feed carried none for it when it was read.') && !notesB.some(t => /15 points|far off|Value|model/.test(t)),
+        `the notes say the Heat's spread was left out for want of a betslip id, one line, and nothing of a model or a Value pick (${notesB.join(' | ').slice(0, 140)})`);
+      check(!gotB.some(li => /\+\$0\.00/.test(txt(li))), 'no game bet reads +$0.00 expected on $1: a line priced with no margin is never listed');
+    }
     /* on the trial there is no Player lines part: the props model's chance is the list's, as before */
     check(!p.d.querySelector('#pbPanel [data-pb-sec="player"], #pbPanel [data-pb-grp="player"]'), 'on the trial the list has no Player lines part');
   }
@@ -663,7 +844,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     const sums = built.map(t => { const r = JSON.parse(p.w.eval(`(() => { const t = getPbTiers().tiers.find(x => x.id === ${JSON.stringify(t.id)}); const L = t.legs; return JSON.stringify({ p: parlayProb(L).corr, d: parlayDec(L.map(l => ({ leg: l, ml: l.price }))), f: parlayFair(L) }); })()`)); return { t, r }; });
     check(built.length === 4 && sums.every(({ t, r }) => Math.abs(t.corr - r.p) < 1e-12 && Math.abs(t.dec - r.d) < 1e-12 && Math.abs(t.fair.p - r.f.p) < 1e-12 && t.legs.length === t.n),
       `the four levels (${built.map(t => t.id + ' ' + t.legs.length).join(', ')}) are priced by the builder's own parlayProb, parlayDec and parlayFair`);
-    check(built.every(t => t.legs.every(l => own.q.some(e => keyOwn(e.l) === l.sk && ['value', 'thin', 'total'].includes(e.q)) && (pbIsOwn(l) === (own.q.find(e => keyOwn(e.l) === l.sk).q === 'value')))),
+    check(built.every(t => t.legs.every(l => q0.some(e => keyOwn(e.l) === l.sk && ['value', 'thin', 'total'].includes(e.q)) && (pbIsOwn(l) === (q0.find(e => keyOwn(e.l) === l.sk).q === 'value')))),
       'every leg a level takes qualifies by this file\'s rule, and is a Value pick exactly where this file says');
     const box = p.d.createElement('div'); box.innerHTML = built.map(t => p.w.pbTierCard(t) + p.w.pbTierCard(t, { quiet: true })).join('');
     const lis = [...box.querySelectorAll('.pb-legs li')], legsOf = built.flatMap(t => [...t.legs, ...t.legs]);
@@ -687,7 +868,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   check(p.d.querySelector('#pbPanel [data-pb-mix="all"]').getAttribute('aria-pressed') === 'true' && p.d.querySelector('#pbPanel .pb-seg').getAttribute('role') === 'group', 'the mix All is lit to start');
   const mixTo = async k => { p.d.querySelector(`#pbPanel [data-pb-mix="${k}"]`).click(); await sleep(20); };
   await mixTo('teams');
-  check(rows(p).every(li => !li.querySelector('.pb-trial')) && rows(p).length === pbTopOwn(cands, { k: { ml: true, ats: true, total: true, over: false, under: false }, off: [] }).rows.length && p.d.activeElement === p.d.querySelector('#pbPanel [data-pb-mix="teams"]'),
+  check(rows(p).every(li => !li.querySelector('.pb-trial')) && rows(p).length === topOwn(st0, LINES, { k: { ml: true, ats: true, total: true, over: false, under: false }, off: [] }).rows.length && p.d.activeElement === p.d.querySelector('#pbPanel [data-pb-mix="teams"]'),
     'Teams only: no player line, the list this file makes on the team boxes, the focus kept on the button');
   check(JSON.stringify(mine(p.w).pb.k) === '{"ml":true,"ats":true,"total":true,"over":false,"under":false}', 'and the boxes are saved in the page\'s own key');
   await mixTo('players');
@@ -705,9 +886,9 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   check(p.errors.length === 0, 'no script errors: ' + p.errors.join(' | '));
 
   /* ---------- 5. Add, Added, Remove, and the same-game refusals ---------- */
-  const k = l => keyOwn(l), aceKey = k(aceO.l), mlH = own.q.find(e => e.l.id === A1.id && e.l.kind === 'ml' && e.l.side === 'NYK'), spH = own.q.find(e => e.l.id === A1.id && e.l.kind === 'spread' && e.l.side === 'NYK');
-  const praU = own.q.find(e => e.l.pid === '8100001' && e.l.stat === 'pra' && e.l.side === 'under'), totO = own.q.find(e => e.l.id === A1.id && e.l.kind === 'total' && e.l.side === 'over');
-  check(mlH.q === 'thin' && spH.q === 'value' && praU.q === 'value' && totO.q === 'total', "the cases: the Knicks to win (thin), to cover -3.5 (Value), Ace Guard's points + rebounds + assists Under (Value), the total Over");
+  const k = l => keyOwn(l), aceKey = k(aceO.l), onGb = (kind, side) => own.gb.all.find(r => r.id === A1.id && r.kind === kind && r.side === side);
+  const mlH = onGb('ml', 'NYK'), spH = onGb('spread', 'NYK'), totO = onGb('total', 'over'), praU = q0.find(e => e.l.pid === '8100001' && e.l.stat === 'pra' && e.l.side === 'under');
+  check(mlH && spH && totO && own.rows.some(r => r === mlH) && own.rows.some(r => r === spH) && own.rows.some(r => r === totO) && praU.q === 'value', "the cases: the Knicks to win, to cover -3.5 and the total's Over are game bets on the list, Ace Guard's points + rebounds + assists Under the props model's Value pick");
   let b = addBtn(p, aceKey); b.focus(); b.click(); await sleep(20);
   b = addBtn(p, aceKey);
   const sl = () => mine(p.w).slip.legs;
@@ -719,14 +900,14 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   const no = rows(p).find(li => rowRead(li).key === k(praU.l)).querySelector('.pb-no');
   check(sl().length === 1 && no && /^Not added: Ace Guard's points over 24\.5 and pts \+ reb \+ ast share a part/.test(no.textContent) && /share a part/.test(p.d.getElementById('pbSaid').textContent) && p.d.getElementById('pbSaid').getAttribute('aria-live') === 'polite',
     `a leg the NBA's same-game rules refuse is refused, and why is said at its row and in the builder's status line ("${no && no.textContent}")`);
-  addBtn(p, k(mlH.l)).click(); await sleep(20); addBtn(p, k(spH.l)).click(); await sleep(20);
-  check(sl().length === 2 && /^Not added: One side bet a game: your parlay already has Knicks to win/.test(txt(rows(p).find(li => rowRead(li).key === k(spH.l)).querySelector('.pb-no'))), 'the moneyline and the spread of one game are refused together, and said so');
-  addBtn(p, k(totO.l)).click(); await sleep(20);
-  const a3v = own.q.find(e => e.l.id === A2.id && e.l.mk === 'mile');
+  addBtn(p, k(mlH)).click(); await sleep(20); addBtn(p, k(spH)).click(); await sleep(20);
+  check(sl().length === 2 && /^Not added: One side bet a game: your parlay already has Knicks to win/.test(txt(rows(p).find(li => rowRead(li).key === k(spH)).querySelector('.pb-no'))), 'the moneyline and the spread of one game are refused together, and said so');
+  addBtn(p, k(totO)).click(); await sleep(20);
+  const a3v = q0.find(e => e.l.id === A2.id && e.l.mk === 'mile');
   addBtn(p, k(a3v.l)).click(); await sleep(20);
   check(sl().length === 4 && !p.d.querySelector('#pbPanel .pb-no'), 'the total and a leg of another game join, and the refusal line is gone once something else is done');
-  addBtn(p, k(mlH.l)).click(); await sleep(20);
-  check(sl().length === 3 && addBtn(p, k(mlH.l)).textContent === 'Add', 'a second press on an Added line takes it out');
+  addBtn(p, k(mlH)).click(); await sleep(20);
+  check(sl().length === 3 && addBtn(p, k(mlH)).textContent === 'Add', 'a second press on an Added line takes it out');
 
   /* a leg on a player the report holds out, added by hand (from a game's Player props, or kept from before he was listed):
      his builder row wears his status, titled with why the list and the sets hold him out; a probable player's wears none */
@@ -762,7 +943,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
   const rowAce = lr2.find(tr => tr.dataset.pbRow === aceKey);
   check(rowAce && txt(rowAce.querySelector('[data-pb-p]')) === pct(modelOwn(aceLeg, st0)) && txt(rowAce.querySelector('.legfair')) === `fair ${pct(1 - imp(-110))}` && /Not on DraftKings’ slip yet: no betslip id in ESPN’s feed/.test(txt(rowAce)) && /^-110 real/.test(txt(rowAce.querySelector('.pb-px'))),
     `a player's row: the model's chance, DraftKings' fair chance, the line that he goes on DraftKings' slip by hand, DraftKings' price (${txt(rowAce)})`);
-  const rowTot = lr2.find(tr => tr.dataset.pbRow === k(totO.l));
+  const rowTot = lr2.find(tr => tr.dataset.pbRow === k(totO));
   check(rowTot && !rowTot.querySelector('.dkslip') && txt(rowTot.querySelector('[data-pb-p]')) === '50%', "the total, with its betslip id, carries no slip line, its chance the market's own (50%)");
   check(bd.querySelector('[data-sl-why]') && /untested on the NBA/.test(txt(bd.querySelector('[data-sl-why]'))) && /\$\d/.test(txt(bd.querySelector('[data-sl-why]'))), 'the same-game note: what multiplying would say, and the hold said untested');
   check([...bd.querySelectorAll('[data-drop], #pFinish, #pClear, [data-stake-chip], #pStake, #pBook')].every(h44), 'every builder control is 44px');
@@ -823,12 +1004,13 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     const q = load(ST(), { lines: LINES, espn, tab: 'parlay' }); await sleep(300);
     const before = stored(q.w), mlKey = keyOwn({ id: A1.id, kind: 'ml', side: 'NYK', line: null });
     const rowOf = key => [...q.d.querySelectorAll('#pbPanel li.pb-trow')].find(li => rowRead(li).key === key);
-    check(rowOf(mlKey) && rowRead(rowOf(mlKey)).price === '-150' && rowRead(rowOf(mlKey)).part === 'other', "before a press the Knicks' moneyline is lines.json's, -150, a thin edge");
+    const fairPct = (a, b) => pct(imp(a) / (imp(a) + imp(b)));
+    check(rowOf(mlKey) && plRead(rowOf(mlKey)).price === '-150' && plRead(rowOf(mlKey)).fair === fairPct(-150, 130) && plRead(rowOf(mlKey)).part === 'game', `before a press the Knicks' moneyline is lines.json's, -150, a game bet at its fair chance (${rowOf(mlKey) && plRead(rowOf(mlKey)).fair})`);
     const bt = q.d.querySelector('#pbPanel [data-espn-refresh]'); bt.focus(); bt.click(); await sleep(30);
     for (let i = 0; i < 400 && q.d.getElementById('oddsBar').classList.contains('busy'); i++) await sleep(25);
     await sleep(60);
     const r1 = rowOf(mlKey);
-    check(r1 && rowRead(r1).price === '-125' && rowRead(r1).part === 'value' && rowRead(r1).model === '62%', `after a press the Knicks' moneyline is DraftKings' newer -125 and now a Value pick (${r1 && JSON.stringify(rowRead(r1))})`);
+    check(r1 && plRead(r1).price === '-125' && plRead(r1).fair === fairPct(-125, 105) && plRead(r1).part === 'game' && !plRead(r1).marks && !q.d.querySelector('#pbPanel .pb-valmark'), `after a press the Knicks' moneyline is DraftKings' newer -125, at its fair chance with the margin out (${r1 && plRead(r1).fair}), no Value mark anywhere (${r1 && JSON.stringify(plRead(r1))})`);
     check(!q.d.querySelector(`#pbPanel [data-pb-leg^="${A1.id}|prop"]`), "and the press's props read (none posted, a 404) is newer than lines.json's, so the game has no player lines");
     check(stored(q.w) === before, 'nothing is stored by the press');
     check(q.d.activeElement && q.d.activeElement.dataset.espnRefresh === 'pb' && /DraftKings' lines from ESPN, read/.test(txt(q.d.getElementById('espnSt-pb'))), `the focus is back on the pressed button, its status line saying what was read ("${txt(q.d.getElementById('espnSt-pb')).slice(0, 80)}")`);
@@ -847,11 +1029,12 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
      that reads the games and finds no line dates the sentence by the press */
   {
     const NOGL = g => ({ at: RD, espn: g.espn, ml: null, spread: null, total: null, ids: null, props: null });
-    /* lines no team leg takes on these games' numbers: each favourite under the chance its price implies, each other side
-       under 45% (the cases bite below, on this file's own rule) */
-    const COLD = { [A1.id]: { ml: { home: -400, away: 300 }, spread: { line: -3.5, home: -400, away: 300 } },
-      [A2.id]: { ml: { home: 100, away: -400 }, spread: { line: -3.5, home: 300, away: -400 } },
-      [A3.id]: { ml: { home: -400, away: 300 }, spread: { line: -3.5, home: -400, away: 300 } } };
+    /* lines no game bet takes on these games' numbers: each side's DraftKings fair chance outside 45% to 97% (98% and 2%;
+       until 13 November 2026 each favourite under the model's chance, which no rule reads now: the cases bite below, on this
+       file's own rule) */
+    const COLD = { [A1.id]: { ml: { home: -10000, away: 5000 }, spread: { line: -3.5, home: -10000, away: 5000 } },
+      [A2.id]: { ml: { home: 5000, away: -10000 }, spread: { line: -3.5, home: 5000, away: -10000 } },
+      [A3.id]: { ml: { home: -10000, away: 5000 }, spread: { line: -3.5, home: -10000, away: 5000 } } };
     const cold = g => ({ at: RD, espn: g.espn, ...COLD[g.id], total: null, ids: null, props: null });
     const Lof = (games, at = RD) => ({ v: 1, at, games: Object.fromEntries(games.filter(Boolean).map(x => [x[0], x[1]])) });
     const IDS3 = [A1.id, A2.id, A3.id];
@@ -887,7 +1070,7 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     };
     /* the cases bite: on this file's own rule, the cold lines leave nothing on the team boxes, and a game with no entry
        has no line */
-    const ownRows = L => pbTopOwn(candidatesOwn(ST(), L), TEAMS_OWN).rows.length;
+    const ownRows = L => topOwn(ST(), L, TEAMS_OWN).rows.length;
     const Lall = Lof(IDS3.map(id => [id, NOGL(SLATE.find(g => g.id === id))]));
     const Lsome = Lof([[A1.id, cold(A1)], [A2.id, NOGL(A2)], [A3.id, NOGL(A3)]]), Lsome2 = Lof([[A1.id, cold(A1)], [A2.id, cold(A2)], [A3.id, NOGL(A3)]]);
     const Lcold = Lof(IDS3.map(id => [id, cold(SLATE.find(g => g.id === id))])), Lhot = Lof([[A1.id, LINES.games[A1.id]], [A2.id, NOGL(A2)], [A3.id, NOGL(A3)]]);
@@ -972,25 +1155,28 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     }
   }
 
-  /* ---------- 10. the 50-line cut, on sixty made-up games ---------- */
+  /* ---------- 10. the 50-line cut, on sixty made-up games ----------
+     Moneyline only, on the trial with no player line: game i's home side at -(120 + i), its away side at +100, so each
+     game's home side is the likelier (52.2% at game 0 to 56.2% at game 59, DraftKings' fair chance) and its margin grows
+     with i: the order by expected on $1 is the games' own, and the list the first 50, games 50 to 59 left off (until 13
+     November 2026 the cut was held on the model's Value picks and thin-edge lines) */
   {
     const TM = ['ATL', 'BOS', 'BKN', 'CHA', 'CHI', 'CLE', 'DAL', 'DEN', 'DET', 'GSW', 'HOU', 'IND', 'LAC', 'LAL', 'MEM', 'MIA', 'MIL', 'MIN', 'NOP', 'NYK', 'OKC', 'ORL', 'PHI', 'PHX', 'POR', 'SAC', 'SAS', 'TOR', 'UTA', 'WAS'];
     const G60 = [], L60 = { v: 1, at: RD, games: {} };
     for (let i = 0; i < 60; i++) {
       const ms = (i < 30 ? T1 : T2) + (i % 30) * 60e3, a = TM[i % 30], h = TM[(i % 30 + (i < 30 ? 1 : 2)) % 30];
-      const pH = i < 40 ? 0.600 - 0.001 * i : 0.550 - 0.001 * (i - 40);
-      const g = game(ms, a, h, { pHome: +pH.toFixed(3), spread: -3 }); G60.push(g);
-      L60.games[g.id] = { at: RD, espn: g.espn, ml: { home: -110, away: -110 }, spread: null, total: null, ids: { event: '8' + i, ml: { home: `0ML8${i}_1`, away: `0ML8${i}_3` }, spread: null, total: null }, props: null };
+      const g = game(ms, a, h, { pHome: 0.5, spread: -3 }); G60.push(g);
+      L60.games[g.id] = { at: RD, espn: g.espn, ml: { home: -(120 + i), away: 100 }, spread: null, total: null, ids: { event: '8' + i, ml: { home: `0ML8${i}_1`, away: `0ML8${i}_3` }, spread: null, total: null }, props: null };
     }
-    const st60 = ST({ slate: G60, props: { ...clone(props), games: {} } });
-    const q = load(st60, { lines: L60, tab: 'parlay', mine: { picks: {}, build: [], slip: { legs: [], stake: 20 }, pb: { k: { ml: true, ats: false, total: false, over: false, under: false }, off: [] } } }); await sleep(400);
-    const r = [...q.d.querySelectorAll('#pbPanel li.pb-trow')].map(rowRead), byP = G60.map((g, i) => ({ g, i })).sort((x, y) => (y.g.model.pHome - x.g.model.pHome));
-    const wantK = byP.slice(0, 50).map(x => keyOwn({ id: x.g.id, kind: 'ml', side: x.g.home, line: null }));
-    const own60 = pbTopOwn(candidatesOwn(st60, L60), { k: { ml: true, ats: false, total: false, over: false, under: false }, off: [] });
-    check(r.length === 50 && JSON.stringify(r.map(x => x.key)) === JSON.stringify(wantK) && JSON.stringify(own60.rows.map(keyOwn)) === JSON.stringify(wantK), 'sixty games, Moneyline only, home sides at -110: the list is the first 50 of their order, the forty Value picks from 60.0% down to 56.1% and then the ten best thin-edge lines, 55.0% to 54.1%');
-    check(r.slice(0, 40).every(x => x.part === 'value' && x.value) && r.slice(40).every(x => x.part === 'other' && !x.value) && own60.over === 60 && q.w.getPbTop().over === 60, 'the parts count 40 and 10, and 60 qualified for the 50 the list holds');
+    const st60 = ST({ slate: G60, props: { ...clone(props), games: {} } }), T60 = { k: { ml: true, ats: false, total: false, over: false, under: false }, off: [] };
+    const q = load(st60, { lines: L60, tab: 'parlay', mine: { picks: {}, build: [], slip: { legs: [], stake: 20 }, pb: T60 } }); await sleep(400);
+    const lis = rows(q), wantK = G60.slice(0, 50).map(g => keyOwn({ id: g.id, kind: 'ml', side: g.home, line: null }));
+    const own60 = topOwn(st60, L60, T60), bad60 = listBad(lis, own60.rows);
+    check(lis.length === 50 && JSON.stringify(lis.map(li => li.querySelector('[data-pb-leg]').dataset.pbLeg)) === JSON.stringify(wantK) && JSON.stringify(own60.rows.map(keyOwn)) === JSON.stringify(wantK) && !bad60.length,
+      `sixty games, Moneyline only: the list is the first 50 of their order, each game's home side by its margin, the tightest first (-120 to -169), games 50 to 59 left off${bad60.length ? ': ' + bad60.slice(0, 2).join(' | ') : ''}`);
+    check(own60.over === 60 && q.w.getPbTop().over === 60 && own60.G === 60 && own60.g === 50, 'and 60 qualified for the 50 the list holds');
     const sec = [...q.d.querySelectorAll('#pbPanel h3.pb-topsec')].map(txt);
-    check(sec.join('|') === 'Value picks 40|Other lines 10' && q.d.querySelector('#pbPanel ol[data-pb-sec="other"]').getAttribute('start') === '41' && /^Top 50 lines/.test(txt(q.d.querySelector('#pbPanel h2'))) && r.every(x => !x.trial), 'under "Top 50 lines", the other lines ranked from 41, no on-trial mark on a team line');
+    check(sec.join('|') === 'Game bets 50' && /^Top 50 lines/.test(txt(q.d.querySelector('#pbPanel h2'))) && !q.d.querySelector('#pbPanel .pb-trial, #pbPanel .pb-valmark'), 'under "Top 50 lines", one part, "Game bets 50", no on-trial or Value mark on a game bet');
     check(q.errors.length === 0, 'no script errors: ' + q.errors.join(' | '));
   }
 
@@ -1016,6 +1202,9 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
       /* the game bets and, once the props model has failed, the Player lines at DraftKings' odds (topOwn) */
       const ownR = topOwn(st, realLines, TICKS_ALL), lis = [...q.d.querySelectorAll('#pbPanel li.pb-trow')], badR = listBad(lis, ownR.rows);
       check(r.length === ownR.rows.length && !badR.length, `on the real state and lines.json, the list is this file's own, line for line (${r.length} lines over ${games.length} games: ${ownR.g} game bets of ${ownR.G}, ${ownR.n} player lines of ${ownR.P})${badR.length ? ': ' + badR.slice(0, 2).join(' | ') : ''}`);
+      const topR = q.w.getPbTop(), totR = lis.filter(li => li.dataset.pbGrp === 'game' && /\|total\|/.test(li.querySelector('[data-pb-leg]').dataset.pbLeg)).map(li => li.querySelector('[data-pb-fair]').getAttribute('title'));
+      check(topR.noId === ownR.gb.noId && topR.gVig === ownR.gb.vig && totR.every(t => !/model/i.test(t)),
+        `on the real files the game bets left out are counted a line at a time, as this file counts them (${topR.noId} for want of an id, ${topR.gVig} priced with no margin), and no total's title names a model chance (${totR.length} totals)`);
     }
     check(!/\bNaN\b|\bundefined\b/.test(txt(q.d.getElementById('tab-parlay'))) && q.errors.length === 0, 'the real tab shows no NaN or undefined and throws nothing');
     check(SIGMA_OWN === +q.w.eval('SIGMA') && SIG_FILE.fold === 2026 && SIG_FILE.lineup === 'known', `the page prices a spread on research/sigma.json's sigma (${SIGMA_OWN}, the 2026 fold, lineup known)`);

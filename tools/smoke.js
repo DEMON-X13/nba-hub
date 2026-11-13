@@ -261,10 +261,13 @@ async function refreshOdds() {
   const topKey = (g, kind, s) => [g.id, kind, s, ''].join('|');
   const topBtn = key => d.querySelector(`#pbPanel li.pb-trow [data-pb-leg="${key}"]`), topRow = key => { const b = topBtn(key); return b && b.closest('li.pb-trow'); };
   let orl = topRow(topKey(r3, 'ml', 'ORL'));
-  check(orl && orl.dataset.pbGrp === 'other' && orl.querySelector('.pb-tc b').textContent === '-175' && orl.querySelector('[data-pb-model]').textContent === '65%' && Math.abs(+orl.querySelector('[data-pb-fair]').dataset.pbFair - mktP(-175, 150)) < 1e-12,
-    "the Top 50 lines list the Magic to win at DraftKings' fresh -175: the model's 65%, a thin edge over it, so among the other lines, DraftKings' fair chance its two prices' with the margin out");
-  check(!topBtn(topKey(r2, 'ml', 'GSW')) && /1 line is left out: the model rates it 15 points or more above DraftKings’ fair chance/.test(d.getElementById('pbPanel').textContent) && !topBtn(topKey(r1, 'ml', 'NYK')) && !topBtn(topKey(r5, 'ml', 'PHI')),
-    "the Warriors, now +150, which the model rates far above DraftKings' fair chance, are left out and counted; the Knicks at -250, over the model's chance, and the 76ers, with no line read, are not listed");
+  const fairOf7 = row => row && +row.querySelector('[data-pb-fair]').dataset.pbFair;
+  check(orl && orl.dataset.pbGrp === 'game' && orl.querySelector('.pb-tc b').textContent === '-175' && !orl.querySelector('[data-pb-model], .pb-valmark') && Math.abs(fairOf7(orl) - mktP(-175, 150)) < 1e-12
+    && /The model’s chance: 65% \(not what the list is ranked on\)/.test(orl.querySelector('[data-pb-fair]').title),
+    "the Top 50 lines list the Magic to win at DraftKings' fresh -175 as a game bet at DraftKings' fair chance (its two prices with the margin out), the model's 65% in its title alone, with no model column or Value mark");
+  const rows7 = [...d.querySelectorAll('#pbPanel li.pb-trow [data-pb-leg]')].map(b => b.dataset.pbLeg);
+  check(JSON.stringify(rows7) === JSON.stringify([topKey(r3, 'ml', 'ORL'), topKey(r1, 'ml', 'NYK'), topKey(r2, 'ml', 'LAL')]) && !/15 points or more|far off/.test(d.getElementById('pbPanel').textContent),
+    `the game bets are the three moneylines the read priced both ways, each the likelier side, the tightest market first (the Magic at -175/+150, the Knicks at -250/+205, the Lakers at -180/+150); the Warriors, 38% fair, are under the band, nothing is left out as far off, and the 76ers, with no line read, are not listed (${rows7.map(k => k.split('|')[2]).join(', ')})`);
   topBtn(topKey(r3, 'ml', 'ORL')).click(); await sleep(30);
   const legs7 = () => JSON.parse(w.localStorage.getItem('nba_hub_2027')).slip.legs;
   check(legs7().length === 1 && legs7()[0].side === 'ORL' && legs7()[0].odds === -175 && legs7()[0].other === 150 && d.activeElement === topBtn(topKey(r3, 'ml', 'ORL')) && topBtn(topKey(r3, 'ml', 'ORL')).textContent === 'Added',

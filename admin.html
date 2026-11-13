@@ -4368,6 +4368,11 @@ const addDays = (d, n) => { const x = new Date(d + 'T12:00:00Z'); x.setUTCDate(x
 /* a Player line has no model figure: its four cells sit on the game rows' five columns, the model's (the second) left
    empty, so price, fair, wins and expected stand under the game rows' own at every width */
 .pb-tcs.pl>.pb-tc:nth-child(2){grid-column-start:3}
+/* (13 November 2026) the game bets have no model figure either: on a list where no row has one (every list once the props
+   model has failed: the game bets and the Player lines at DraftKings' fair chance) the four cells sit on four columns,
+   with no empty one; on a props trial the props model's rows keep the five, and the game rows stand on them as above */
+.pb-cols4 .pb-tcs{grid-template-columns:repeat(4,minmax(68px,auto))}
+.pb-cols4 .pb-tcs.pl>.pb-tc:nth-child(2){grid-column-start:auto}
 .pb-tc{text-align:right;min-width:0}
 .pb-tc b{display:block;font-variant-numeric:tabular-nums;white-space:nowrap;color:var(--ink)}
 .pb-tc small{display:block;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--pb-q);white-space:nowrap}
@@ -4458,7 +4463,7 @@ small.faroff{display:block;font-size:11px;font-weight:600;margin-top:2px;white-s
   .pb-card{padding:16px 14px} .pb-ctl{padding:12px} .pb-lbl{min-width:0;flex-basis:100%} .pb-glist{grid-template-columns:repeat(2,minmax(0,1fr))}
   .pb-seg{display:flex;width:100%} .pb-seg button{flex:1 1 auto;padding:8px 10px}
   .pb-chips{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%} .pb-chip{border-radius:12px;padding:7px 10px;line-height:1.25} .pb-chip small{display:block} .pb-chip span{min-width:0}
-  .pb-tcs{grid-template-columns:repeat(3,minmax(0,1fr));width:100%} .pb-tiers{grid-template-columns:minmax(0,1fr)}
+  .pb-tcs{grid-template-columns:repeat(3,minmax(0,1fr));width:100%} .pb-cols4 .pb-tcs{grid-template-columns:repeat(3,minmax(0,1fr))} .pb-tiers{grid-template-columns:minmax(0,1fr)}
   /* the builder's table becomes a card a leg: the leg, then its numbers on one line, then Remove */
   .pb-btbl thead{display:none} .pb-btbl,.pb-btbl tbody{display:block} .pb-btbl tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px 8px;padding:9px 0;border-bottom:1px solid var(--line)}
   .pb-btbl td{display:block;padding:0;border:0} .pb-btbl td.plr,.pb-btbl td.bet{grid-column:1/-1} .pb-btbl td.num{text-align:left} .pb-btbl td.num::before{content:attr(data-h);display:block;font-size:10px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;color:var(--pb-q)}
@@ -4468,15 +4473,17 @@ small.faroff{display:block;font-size:11px;font-weight:600;margin-top:2px;white-s
 'use strict';
 /* ---------- the Parlay Builder (README "Parlay Builder") ----------
    The NFL hub's Parlay Builder tab (props/build/part3.js there, app v114), on this hub's lines: its choices at the top
-   (the Bet amount, Refresh odds, a mix, five bet types and the games), the Top 50 lines they make, Value picks first,
-   and the builder under them, which prices whatever legs the visitor puts in it. Exactly as the NFL's, adapted only
+   (the Bet amount, Refresh odds, a mix, five bet types and the games), the Top 50 lines they make (since 13 November
+   2026 the game bets at DraftKings' fair chance, then the player lines), and the builder under them, which prices whatever legs the visitor puts in it. Exactly as the NFL's, adapted only
    where basketball or the NBA's data forces it, each adaptation said where it is made:
    - the games are every game still to tip on the lines feed's two Eastern dates (lines.json, tools/lines.js: the NBA has
      no weeks), listed under their day, never a preseason game;
    - the prices are DraftKings', read by the job into lines.json (read here, no-store, when the tab first opens) or by a
      Refresh odds press (memory only), the newer of the two; every one a real price, so nothing is estimated;
-   - the chances: a moneyline's the player model's win chance; a spread's the player model's margin against the line,
-     spread SIGMA points (measured, tools/sigma.js); a total's the market's own; a player's the props model's, on trial,
+   - the chances (the builder's, and the levels' pool, pbLegs): a moneyline's the player model's win chance; a spread's
+     the player model's margin against the line, spread SIGMA points (measured, tools/sigma.js); a total's the market's
+     own; the Top 50's game bets at DraftKings' fair chance instead since 13 November 2026 (pbGameBets); a player's the
+     props model's, on trial,
      marked so wherever it shows (the owner's call of 25 October 2026), never for a player it does not project or the
      injury report has out, and none at all once its shadow ledger has failed its bar;
    - the fair chance is the NBA's measured rule (legFair: a main line's whole margin on the Over), the confidence the
@@ -5122,32 +5129,100 @@ function pbPut(legs, what) {
   return true;
 }
 
+/* ---------- the Top 50's game bets, at DraftKings' fair chance (the owner's call of 13 November 2026: "yes move to DK") ----------
+   Until then the list ranked, qualified and stated a moneyline or spread at the team model's chance (legModel: the
+   player model's win chance, raw, and a spread's margin over SIGMA points), a Value pick 3 points or more over the price's
+   implied chance and a line the model rated 15 points over DraftKings' fair chance left out; research/sp_ruler found that
+   chance losing to DraftKings' no-vig chance on log loss in every market and season, so a team Value pick has been one the
+   model rates above the market, not one that beat it (README "What the team picks have been worth"). Now every moneyline,
+   spread and total pbPriced and pbTotals read on the ticked games stands on DraftKings' fair chance (legFair: its two
+   prices with the margin taken out in proportion), by Suggested Parlays' ruler leg for a team leg (spRulerLeg in
+   app/parts/suggested.html, from its cutoff of 13 November 2026: the two change together, but for a line priced at
+   exactly no margin, below): a game bet qualifies with DraftKings' real price, the other side's price on file with a
+   margin (their implied chances summing to more than 1: pbNoMargin; counted, vig), its fair chance 45% to 97%, and
+   DraftKings' betslip id at its number where its game's lines carry ids (counted, noId). A moneyline and a spread are
+   pbPriced's, of a game the model rates, and a total pbTotals', of any game, as the ruler and its guard read them
+   (tools/suggest_check.js teamOwn). No model chance is compared: no edge, no Value pick, no far-off guard, no model band.
+   One side a line (a game's moneyline, its spread, its total): the builder takes one side bet and one total a game
+   (slipWhy), and both sides of an even line sit in the band, so the list offers the likelier by DraftKings' fair chance
+   (to 1e-9, pbEvKey) of the sides that qualify, a tie to the home side or the over: the NFL hub's pbSideBetter (its app
+   v138) with its model lean left out, which the team model has not earned. A side with no betslip id where its game's
+   lines carry ids does not qualify, so the other is listed where it does, as the NFL's pbLegs leaves it. Each leg
+   carries the fair chance as p and the model's chance as pm (legModel: null where the model rates none, and a total's the
+   market's own), which only the matchup bubble and a moneyline's or spread's title show. pbLegs, the pool of the levels
+   the tab draws nowhere (getPbTiers), is untouched */
+const pbEvKey = v => Math.round(v * 1e9);
+function pbSideBetter(a, b) {
+  const ka = pbEvKey(a.p), kb = pbEvKey(b.p); if (ka !== kb) return ka > kb;
+  return a.kind === 'total' ? a.side === 'over' && b.side !== 'over' : a.side === a.home && b.side !== b.home;
+}
+/* a line priced with no margin: its two implied chances summing to 1 or less, to a billionth (-105 and +105 sum to 1
+   exactly). With the margin taken out in proportion each side of such a line returns exactly what it costs at its fair
+   chance, so its row would read +$0.00 expected on $1, and it is not DraftKings' price: never listed (the review of 13
+   November 2026; until then a sum of exactly 1 passed, "under 1" being the test). Suggested Parlays' ruler (spRulerLeg)
+   and its guard (tools/suggest_check.js) keep their own test, a sum under 1, as they were: no card states a team leg's
+   expected return, and DraftKings' NBA lines have shown neither */
+const pbNoMargin = (a, b) => propImplied(a) + propImplied(b) < 1 + 1e-9;
+function pbGameBets(games, u) {
+  u = u || pbUi();
+  const keep = new Map(), noId = new Set(), vig = new Set();
+  const take = c => {
+    if (!pbAllows(c, u) || !Number.isFinite(c.price) || !c.price || !Number.isFinite(c.other) || !c.other) return;
+    const key = `${c.gid}|${c.kind}`;
+    if (pbNoMargin(c.price, c.other)) { vig.add(key); return; }
+    const f = legFair(c); if (!f || f.est || !(f.p > 0 && f.p < 1) || !(f.p >= PB_PMIN && f.p < PB_PMAX)) return;
+    if (c.dkOn && !c.dk) { noId.add(key); return; }
+    const x = { ...c, pm: c.p != null && Number.isFinite(c.p) ? c.p : null, p: f.p, gb: true }, y = keep.get(key);
+    if (!y || pbSideBetter(x, y)) keep.set(key, x);
+  };
+  for (const c of pbPriced(games)) if (c.kind === 'ml' || c.kind === 'spread') take(c);
+  for (const g of games) for (const c of pbTotals(g)) take(c);
+  /* counted a line at a time (its game and kind), the unit the list offers: a line priced with no margin (vig), and a
+     line none of whose sides is listed where a side was left out for want of a betslip id (noId); a side with none beside
+     a listed other leaves no line out (the review of 13 November 2026 found sides counted: one spread with no id either
+     way said "2 lines are left out", and a less likely side with none beside its listed other "1 line") */
+  return { legs: [...keep.values()], noId: [...noId].filter(k => !keep.has(k)).length, vig: vig.size };
+}
+
 /* ---------- the Top 50 lines ----------
-   Every leg on the reader's ticks that qualifies (pbLegs), in two parts: the Value picks first, then the other lines,
-   the thin-edge legs and then the totals, each part ranked by what $1 on it is expected to make at the model's chance
-   (the chance times the decimal price, less the $1), best first, the totals set after every thin-edge leg, 50 at most in
-   all. Each bet once: a milestone k+ lands exactly when the player's main Over at k - 0.5 does (the NBA's rungs are at
-   the main line + 0.5, which tools/props_feed.js already reads as the same bet), so where that main Over qualifies the
-   rung is left out of the list and its slot goes to the next line. Cached on everything it stands on (pbSig) */
+   Since 13 November 2026 (the owner's call, above) the game bets first, at DraftKings' fair chance (pbGameBets): the
+   moneylines and spreads, then the totals, each by what $1 on it is expected to make at that chance (to 1e-9), then the
+   fair chance, then the line's key: the NFL hub's game bets (its app v138), with its model lean left out. Then the player
+   part: once the props model has failed (pbPropsOn false, since 5 November 2026) the Player lines at DraftKings' fair
+   chance (pbPlayerLines, a mix of stats); on a props trial the props model's lines as they stood (pbLegs on the player
+   boxes alone: the Value picks, then the thin-edge lines, each by expected on $1 at the props model's chance, the far-off
+   guard and each bet once: a milestone k+ lands exactly when the player's main Over at k - 0.5 does, so where that main
+   Over qualifies the rung is left out). The room: g = min(G, max(25, 50 - P)) game bets, then min(P, 50 - g) player
+   lines. Until 13 November 2026 the game bets were the Value picks, then the thin-edge lines, then the totals, at the
+   team model's chance, and on a props trial the player lines sat among them. Cached on everything it stands on (pbSig) */
 function pbTopBuild() {
   const u = pbUi(), all = pbGames(), games = all.filter(g => !u.off.includes(g.id)), kinds = PB_KINDS.map(([k]) => k).filter(k => u.k[k]);
-  const out = { games: all.length, ticked: games.length, kinds: kinds.length, rows: [], pref: 0, thin: 0, mkt: 0, far: 0, noId: 0, held: 0, same: 0, noPlayerPrices: false, plWhy: '', loading: !LINES && !LINES_ERR };
+  const out = { games: all.length, ticked: games.length, kinds: kinds.length, rows: [], gb: 0, pref: 0, thin: 0, far: 0, noId: 0, held: 0, same: 0, vig: 0, gVig: 0, noPlayerPrices: false, plWhy: '', loading: !LINES && !LINES_ERR };
   if (!all.length || !kinds.length || !games.length) return out;
-  const r = pbLegs(games, u), pl = pbPropsOn() ? { legs: [], held: 0, vig: 0, posted: 0 } : pbPlayerLines(games, u);
-  out.pref = r.pref.length; out.thin = r.thin.length; out.mkt = r.mkt.length; out.far = r.far; out.noId = r.noId; out.held = r.held + pl.held; out.vig = pl.vig;
+  const gb = pbGameBets(games, u), on = pbPropsOn();
+  /* the player part: on the trial the props model's legs (pbLegs with the team boxes off, so its counts are the players'),
+     once it has failed the Player lines */
+  const tr = on ? pbLegs(games, { ...u, k: { ...u.k, ml: false, ats: false, total: false } }) : null, pl = on ? null : pbPlayerLines(games, u);
+  out.gb = gb.legs.length; out.noId = gb.noId; out.gVig = gb.vig;
+  if (tr) { out.pref = tr.pref.length; out.thin = tr.thin.length; out.far = tr.far; out.held = tr.held; } else { out.held = pl.held; out.vig = pl.vig; }
   /* no player prices: on the trial, no player leg priced on the ticked games; once the props model has failed, no
      DraftKings player line posted for them (pbPlayerLines' posted) */
-  out.noPlayerPrices = !!(u.k.over || u.k.under) && (pbPropsOn() ? !r.plGames : !pl.posted); out.plWhy = out.noPlayerPrices ? pbNoPl(games) : '';
+  out.noPlayerPrices = !!(u.k.over || u.k.under) && (tr ? !tr.plGames : !pl.posted); out.plWhy = out.noPlayerPrices ? pbNoPl(games) : '';
   out.noGl = games.filter(g => !pbHasGl(g.id)).map(g => g.id);   // ticked games with no DraftKings game line (read and none, or not read)
   const money = l => { const dec = amToDec(l.price); return dec > 1 ? { ...l, dec, win: dec - 1, ev: l.p * dec - 1, fc: legFair(l) } : null; };
-  const rank = list => list.map(money).filter(Boolean).sort((a, b) => (b.ev - a.ev) || pbOrd(a, b));
-  const rungOf = l => l.kind === 'prop' && l.mk === 'mile', mainOver = new Set([...r.pref, ...r.thin]
-    .filter(l => l.kind === 'prop' && l.mk === 'main' && l.side === 'over' && Math.abs(l.line % 1) === 0.5).map(l => `${l.gid}|${l.pid}|${l.stat}|${l.line + 0.5}`));
-  const once = list => list.filter(l => !(rungOf(l) && mainOver.has(`${l.gid}|${l.pid}|${l.stat}|${l.k}`)));
-  const P1 = once(r.pref), P2 = once(r.thin), P3 = once(r.mkt); out.same = r.pref.length + r.thin.length + r.mkt.length - P1.length - P2.length - P3.length;
-  /* the room: the game bets (Value picks, then the other lines, the totals last) first, then the Player lines, 50 in all;
-     each part has at least 25 where it has that many, and the one with more fills the rest */
-  const G = [...rank(P1), ...rank(P2), ...rank(P3)], PL = pbPlayerMix(pl.legs).map(money).filter(Boolean);
+  const rankG = list => list.map(money).filter(Boolean).sort((a, b) => (pbEvKey(b.ev) - pbEvKey(a.ev)) || (pbEvKey(b.p) - pbEvKey(a.p)) || pbOrd(a, b));
+  const G = [...rankG(gb.legs.filter(l => l.kind !== 'total')), ...rankG(gb.legs.filter(l => l.kind === 'total'))];
+  let PL;
+  if (tr) {
+    const rank = list => list.map(money).filter(Boolean).sort((a, b) => (b.ev - a.ev) || pbOrd(a, b));
+    const rungOf = l => l.kind === 'prop' && l.mk === 'mile', mainOver = new Set([...tr.pref, ...tr.thin]
+      .filter(l => l.kind === 'prop' && l.mk === 'main' && l.side === 'over' && Math.abs(l.line % 1) === 0.5).map(l => `${l.gid}|${l.pid}|${l.stat}|${l.line + 0.5}`));
+    const once = list => list.filter(l => !(rungOf(l) && mainOver.has(`${l.gid}|${l.pid}|${l.stat}|${l.k}`)));
+    const P1 = once(tr.pref), P2 = once(tr.thin); out.same = tr.pref.length + tr.thin.length - P1.length - P2.length;
+    PL = [...rank(P1), ...rank(P2)];
+  } else PL = pbPlayerMix(pl.legs).map(money).filter(Boolean);
+  /* the room: the game bets first, then the player part, 50 in all; each part has at least 25 where it has that many, and
+     the one with more fills the rest */
   const nG = Math.min(G.length, Math.max(PB_TOP_MIN, PB_TOP_N - PL.length)), nP = Math.min(PL.length, PB_TOP_N - nG);
   out.over = G.length + PL.length; out.gOver = G.length; out.plOver = PL.length;   // how many qualified, in all and each part
   out.rows = [...G.slice(0, nG), ...PL.slice(0, nP)];
@@ -5205,13 +5280,20 @@ function pbTopWhy(r, u) {
 }
 function pbTopRow(l, i) {
   const no = PB_SAID && PB_SAID.sk === l.sk ? `<small class="pb-no">Not added: ${esc(PB_SAID.why)}</small>` : '';
-  /* a Player line (pbPlayerLines): DraftKings' price and fair chance, what $1 wins and is expected to return at that
-     chance, no Value mark and no model figure; his name's matchup bubble is handed the props model's chance (pm), which
-     it draws muted, as a night set's player leg hands it */
-  if (l.pl) return `<li class="pb-trow" data-pb-row="${i + 1}" data-pb-grp="player"><span class="pb-trk">${i + 1}</span>
+  /* a Player line (pbPlayerLines) or, since 13 November 2026, a game bet (pbGameBets): DraftKings' price and fair chance,
+     what $1 wins and is expected to return at that chance, no Value mark and no model figure; the name's matchup bubble is
+     handed the model's chance (pm), as a night set's leg hands it (a player's drawn muted there); a moneyline's or a
+     spread's model chance is in its fair figure's title alone, as a ruler card's team leg carries it: information, never a
+     ranking. A total's title has none: the hub has no model of a total (legModel's total is the market's own, the very
+     fair chance the row is ranked on; the review of 13 November 2026) */
+  if (l.pl || l.gb) {
+    const tt = l.pl ? 'DraftKings’ fair chance: its two prices with the margin taken out, the whole margin on the Over'
+      : `DraftKings’ fair chance: its two prices with the margin taken out in proportion${l.pm != null && l.kind !== 'total' ? `. The model’s chance: ${pbPct(l.pm)} (not what the list is ranked on)` : ''}`;
+    return `<li class="pb-trow" data-pb-row="${i + 1}" data-pb-grp="${l.pl ? 'player' : 'game'}"><span class="pb-trk">${i + 1}</span>
     <span class="nm">${glanceName({ ...l, p: l.pm != null ? l.pm : null })}<small>${esc(l.label)}</small><small class="pb-tg">${esc(l.away)} @ ${esc(l.home)} · ${esc(dayName(l.date))}</small>${no}</span>
-    <span class="pb-tcs pl"><span class="pb-tc"><b>${fmtAm(l.price)}</b><small>price</small></span><span class="pb-tc"><b data-pb-fair="${l.p}" title="DraftKings’ fair chance: its two prices with the margin taken out, the whole margin on the Over">${pbPct(l.p)}</b><small>fair</small></span><span class="pb-tc"><b data-pb-win="${l.win}">${pbMoney1(l.win)}</b><small>wins on $1</small></span><span class="pb-tc"><b data-pb-ev="${l.ev}">${pbMoney1(l.ev)}</b><small>expected on $1</small></span></span>
-    ${pbLegAddBtn(l)}</li>`;
+    <span class="pb-tcs pl"><span class="pb-tc"><b>${fmtAm(l.price)}</b><small>price</small></span><span class="pb-tc"><b data-pb-fair="${l.p}" title="${esc(tt)}">${pbPct(l.p)}</b><small>fair</small></span><span class="pb-tc"><b data-pb-win="${l.win}">${pbMoney1(l.win)}</b><small>wins on $1</small></span><span class="pb-tc"><b data-pb-ev="${l.ev}">${pbMoney1(l.ev)}</b><small>expected on $1</small></span></span>
+    ${pbLegAddBtn(l)}</li>`; }
+  /* a props trial's player line (pbLegs: the props model's chance, on trial), as it stood */
   const mark = pbValMark(l);
   return `<li class="pb-trow" data-pb-row="${i + 1}" data-pb-grp="${pbIsValue(l) ? 'value' : 'other'}"><span class="pb-trk">${i + 1}</span>
     <span class="nm">${glanceName(l)}<small>${esc(l.label)}${mark}</small><small class="pb-tg">${esc(l.away)} @ ${esc(l.home)} · ${esc(dayName(l.date))}</small>${no}</span>
@@ -5235,11 +5317,16 @@ window.pbOddsSync = function () {
   document.querySelectorAll('[data-espn-status]').forEach(x => { const t = pbOddsText(); if (x.textContent !== t) x.textContent = t; });
   document.querySelectorAll('[data-espn-refresh]').forEach(b => { if (oddsBusy) { b.setAttribute('aria-busy', 'true'); b.setAttribute('aria-disabled', 'true'); } else { b.removeAttribute('aria-busy'); b.removeAttribute('aria-disabled'); } });
 };
-/* the list's foot. On the trial (pbPropsOn) as it stood before 10 November 2026; once the props model has failed it says
-   the game bets' rules and the Player lines' apart, short (the review of 10 November 2026: a sentence on "every line"
-   was false of the Player lines, which carry no model chance, no far-off rule, and an Over below its implied chance) */
-const pbFootTrial = () => `Every line has DraftKings’ real price, as the job read it from ESPN’s free feed or as your Refresh odds press read it, the newer of the two, and a model chance between 45% and 97%, at or above the chance that price implies: 3 points above it or more is a Value pick (the 3-point edge alone: the NBA has no market + form), and a game total, priced at the book’s own chance, is never one. A moneyline’s chance is the player model’s, the number Tonight shows; a spread’s is the player model’s margin against the line, give or take ${SIGMA} points (the spread of its walk-forward margins about its own number); a total’s is the book’s own; a player’s is the props model’s, on trial. The Value picks come first, marked Value, then the other lines (the ones a suggested parlay takes only where the Value picks cannot fill it), each part ranked by what $1 on it is expected to make, any game totals last, ${PB_TOP_N} lines at most in all. Each bet is listed once: a milestone that is the same bet as the player’s main line (25+ points and Over 24.5) is shown as the main line. Wins on $1 is what $1 wins if the line lands; expected on $1 is the model’s chance times what $1 returns, less the $1, so it is only as good as the model’s chance. Each line gives DraftKings’ fair chance beside the model’s, its prices with the margin taken out (est. where it is priced on one side only), and a line the model rates ${Math.round(PB_FAR * 100)} points or more above it is left out, as is a line on a player today’s injury report lists, Day-To-Day among them (a probable player plays), as every suggested parlay leaves him out.`;
-const pbFootFail = () => `Game bets: DraftKings’ price (the job’s read or your Refresh odds press, the newer) and a model chance of 45% to 97%, at or above the price’s implied chance; 3 points above it is a Value pick, and a game total, at the book’s own chance, never is. A moneyline’s chance is the player model’s, a spread’s its margin against the line give or take ${SIGMA} points, a total’s the book’s own; one the model rates ${Math.round(PB_FAR * 100)} points or more above DraftKings’ fair chance is left out. Player lines: DraftKings’ main lines priced both ways, at DraftKings’ fair chance (the whole margin on the Over), 45% to 97%, the likelier side the boxes leave, with no model claim (${pbPropsOffWhy()}). The game bets come first, each part by what $1 is expected to make, any totals last; then the player lines, a mix of stats, each stat’s likeliest first; each part gets ${PB_TOP_MIN} where it has that many, ${PB_TOP_N} lines at most. Expected on $1 is the line’s chance times what $1 returns, less the $1. No line on a player today’s injury report lists, Day-To-Day among them, is listed.`;
+/* the list's foot, in a few words (13 November 2026, the owner's call: the game bets at DraftKings' fair chance; until then
+   the foot said the model's chance, the 3-point Value bar and the far-off rule, and before 10 November 2026 said them of
+   every line). Once the props model has failed every line is at DraftKings' fair chance; on a props trial the player lines
+   are the props model's, on its own rules. The side a line offers is said a part at a time (the review of 13 November
+   2026: "the likelier side the boxes leave" was false of a game bet whose likelier side has no betslip id, where the
+   other is listed). Neither says a line returns or breaks even: a player Under's expected +$0.00 is the rule putting a
+   player line's whole margin on the Over, not a return (research/sp_ruler), and no game bet's row reads +$0.00, a line
+   priced with no margin never being listed (pbNoMargin) */
+const pbFootTrial = () => `Game bets at DraftKings’ fair chance, its two prices with the margin taken out in proportion, 45% to 97%, one side a line, the likelier with a betslip id where its game has ids: moneylines and spreads, then totals, each by expected on $1, then the fair chance. Player lines at the props model’s chance, on trial: 45% to 97% and at or above the price’s implied chance, 3 points above it a Value pick, ${Math.round(PB_FAR * 100)} points above DraftKings’ fair chance left out, a milestone that is the same bet as a main line shown as the main line; the Value picks first, each part by expected on $1. Each part gets ${PB_TOP_MIN} where it has that many. Players today’s injury report holds out are left out.`;
+const pbFootFail = () => `Every line at DraftKings’ fair chance, its two prices with the margin taken out (in proportion on a game bet, all on the Over on a player line), 45% to 97%, one side a line. Game bets: the likelier side with a betslip id where its game has ids; moneylines and spreads, then totals, each by expected on $1, then the fair chance. Player lines: the likelier side the boxes leave; a mix of stats, each stat’s likeliest first. Each part gets ${PB_TOP_MIN} where it has that many. Players today’s injury report holds out are left out.`;
 function pbPanel() {
   const u = pbUi(), games = pbGames(), ds = pbDates(), mix = pbMix(u), sp = !!document.getElementById('tab-suggest');
   const head = `<div class="pb-hd"><h2>Top ${PB_TOP_N} lines</h2>${ds.length ? `<span class="pb-pill">${esc(ds.map(pbDayText).join(' & '))}</span>` : ''}</div>`;
@@ -5254,23 +5341,26 @@ function pbPanel() {
   const notes = [];
   if (LINES_ERR && !Object.keys(SG_LINES).length && !Object.keys(PP_LIVE).length) notes.push('DraftKings’ published lines did not load: the list has what Refresh odds reads, once it is pressed.');
   if (r.rows.length && (u.k.ml || u.k.ats || u.k.total) && r.noGl && r.noGl.length) notes.push(esc(pbNoGlSay(r)));
-  if (u.k.total) notes.push(`Game totals are never Value picks: each is priced at the book’s own chance, so the totals come last among the other lines, and on a long list the ${PB_TOP_N} lines can end before them.`);
   if (r.noPlayerPrices && r.rows.length) notes.push(pbPropsOn() ? `The list has no player lines: ${r.plWhy.replace(/^no player (prices yet|lines the props model prices|lines): /, '')}` : esc(r.plWhy[0].toUpperCase() + r.plWhy.slice(1)));
-  if (r.far) notes.push(`${r.far} line${r.far === 1 ? ' is' : 's are'} left out: the model rates ${r.far === 1 ? 'it' : 'each'} ${Math.round(PB_FAR * 100)} points or more above DraftKings’ fair chance (its prices with the margin taken out), a gap too wide to list. ${r.far === 1 ? 'It is' : 'They are'} still in ${r.far === 1 ? 'its' : 'their'} game’s Player props after a Refresh odds press, to add yourself.`);
+  if (r.far) notes.push(`${r.far} line${r.far === 1 ? ' is' : 's are'} left out: the props model rates ${r.far === 1 ? 'it' : 'each'} ${Math.round(PB_FAR * 100)} points or more above DraftKings’ fair chance (its prices with the margin taken out), a gap too wide to list. ${r.far === 1 ? 'It is' : 'They are'} still in ${r.far === 1 ? 'its' : 'their'} game’s Player props after a Refresh odds press, to add yourself.`);
   if (r.held) notes.push(`${r.held} line${r.held === 1 ? ' is' : 's are'} left out: ${r.held === 1 ? 'it is on a player' : 'they are on players'} today’s injury report lists (Day-To-Day among them: ESPN’s NBA feed writes every status between playing and out so), whom no suggested parlay takes either.`);
   if (r.noId) notes.push(`${r.noId} line${r.noId === 1 ? ' is' : 's are'} left out: the list takes a game’s moneyline, spread or total only with DraftKings’ betslip id at its number, and ESPN’s feed carried none for ${r.noId === 1 ? 'it' : 'them'} when ${r.noId === 1 ? 'it was' : 'they were'} read.`);
-  const gRows = r.rows.filter(l => !l.pl), plRows = r.rows.filter(l => l.pl), nV = gRows.filter(pbIsValue).length, V = gRows.slice(0, nV), O = gRows.slice(nV), nG = gRows.length;
+  /* the parts (13 November 2026): the game bets at DraftKings' fair chance, then the player part, the Player lines once the
+     props model has failed or on a props trial its Value picks and other lines; a part with no rows is not drawn, and the
+     ranks run on across them. With no row carrying a model figure (every list once the props model has failed) the rows'
+     cells sit on four columns (pb-cols4) */
+  const gRows = r.rows.filter(l => l.gb), plRows = r.rows.filter(l => l.pl), trRows = r.rows.filter(l => !l.gb && !l.pl), nG = gRows.length;
+  const V = trRows.filter(pbIsValue), O = trRows.filter(l => !pbIsValue(l)), nV = V.length;
   const secHd = (id, title, n) => `<h3 class="pb-topsec" data-pb-sec="${id}">${title}${n ? ` <span class="pb-pill">${n}</span>` : ''}</h3>`;
+  const gList = nG ? secHd('game', 'Game bets', nG) + `<p class="pb-topsub">At DraftKings’ odds: no model claim.</p><ol class="pb-top" data-pb-sec="game" aria-label="The ${nG} game bet${nG === 1 ? '' : 's'} on your picks at DraftKings’ odds: moneylines and spreads, then totals, each by expected return on $1">${gRows.map((l, i) => pbTopRow(l, i)).join('')}</ol>` : '';
   /* the Player lines (pbPlayerLines, once the props model has failed): after the game bets, the ranks running on */
   const plList = plRows.length ? secHd('player', 'Player lines', plRows.length) + `<p class="pb-topsub">At DraftKings’ odds: no model claim.</p><ol class="pb-top" data-pb-sec="player"${nG ? ` start="${nG + 1}"` : ''} aria-label="${nG ? 'Then ' : ''}${plRows.length} player line${plRows.length === 1 ? '' : 's'} at DraftKings’ odds, a mix of stats, each stat’s likeliest first">${plRows.map((l, i) => pbTopRow(l, nG + i)).join('')}</ol>` : '';
-  const teams = !!(u.k.ml || u.k.ats || u.k.total);
-  const list = !r.rows.length ? `<p class="pb-none pb-top-none">${esc(pbTopWhy(r, u))}</p>` : !nG && !teams ? plList : secHd('value', 'Value picks', nV)
-      + (nV ? `<p class="pb-topsub">The model rates each at least 3 points above the chance its price implies (the 3-point edge alone: the NBA has no market + form). Each is marked Value.</p><ol class="pb-top" data-pb-sec="value" aria-label="The ${nV} Value pick${nV === 1 ? '' : 's'} on your picks, by expected profit on $1">${V.map((l, i) => pbTopRow(l, i)).join('')}</ol>`
-        : `<p class="pb-topsub" data-pb-novalue>No line on your picks is a Value pick right now.</p>`)
-      + (O.length ? secHd('other', 'Other lines', O.length) + `<p class="pb-topsub">These miss a Value pick’s bar (3 points above the chance the price implies; the NBA has no market + form), though the model still rates each at or above the book’s price${u.k.total ? '; the game totals, at the book’s own chance, come last' : ''}. A suggested parlay takes them only where its Value picks run out.</p><ol class="pb-top" data-pb-sec="other"${nV ? ` start="${nV + 1}"` : ''} aria-label="${nV ? 'Then ' : ''}${O.length} other line${O.length === 1 ? '' : 's'} on your picks, by expected profit on $1">${O.map((l, i) => pbTopRow(l, nV + i)).join('')}</ol>` : '')
-      + plList;
-  return `<div class="pb-card" id="pbCard">${head}
-    <p class="pb-lead">Choose what to build from: the list below takes only the bet types and games ticked here, every line that qualifies as a suggested leg does: first the Value picks, marked Value, then the other lines${u.k.total ? ', the game totals last' : ''}, each part ranked by what $1 on it is expected to make at the model’s chance, best first${pbPropsOn() ? '' : ', then the player lines at DraftKings’ odds, a mix of stats'}, ${PB_TOP_N} lines at most.${pbPropsOn() ? ' A player’s chance is the props model’s, which is on trial, not yet shown to beat DraftKings, and every player’s line says so.' : ''} Add any of them to the builder below.</p>
+  /* a props trial's player lines (pbLegs), at the props model's chance: its Value picks, then its other lines */
+  const trList = (nV ? secHd('value', 'Value picks', nV) + `<p class="pb-topsub">The props model, on trial, rates each at least 3 points above the chance its price implies. Each is marked Value.</p><ol class="pb-top" data-pb-sec="value"${nG ? ` start="${nG + 1}"` : ''} aria-label="${nG ? 'Then ' : 'The '}${nV} Value pick${nV === 1 ? '' : 's'} on your picks, at the props model’s chance, by expected profit on $1">${V.map((l, i) => pbTopRow(l, nG + i)).join('')}</ol>` : '')
+    + (O.length ? secHd('other', 'Other lines', O.length) + `<p class="pb-topsub">The props model rates each at or above the chance its price implies, by less than 3 points.</p><ol class="pb-top" data-pb-sec="other"${nG + nV ? ` start="${nG + nV + 1}"` : ''} aria-label="${nG + nV ? 'Then ' : ''}${O.length} other line${O.length === 1 ? '' : 's'} on your picks, at the props model’s chance, by expected profit on $1">${O.map((l, i) => pbTopRow(l, nG + nV + i)).join('')}</ol>` : '');
+  const list = !r.rows.length ? `<p class="pb-none pb-top-none">${esc(pbTopWhy(r, u))}</p>` : gList + plList + trList;
+  return `<div class="pb-card${trRows.length ? '' : ' pb-cols4'}" id="pbCard">${head}
+    <p class="pb-lead">${pbPropsOn() ? `Every line on the bet types and games ticked here: the game bets at DraftKings’ odds, then the player lines at the props model’s chance, ${PB_TOP_N} at most. A player’s chance is the props model’s, which is on trial, not yet shown to beat DraftKings, and every player’s line says so.` : `Every line on the bet types and games ticked here, at DraftKings’ odds: the game bets, then the player lines, ${PB_TOP_N} at most.`} Add any of them to the builder below.</p>
     <div class="pb-ctl">
       <div class="pb-row pb-amt-row"><label class="pb-lbl" for="pbStake">Bet amount</label><span class="pb-amt"><span aria-hidden="true">$</span><input type="number" id="pbStake" inputmode="decimal" min="${STAKE_MIN}" max="${STAKE_MAX}" step="1" value="${stakeText(pbStake())}" autocomplete="off" aria-describedby="pbStakeHint"></span><span class="pb-amt-hint" id="pbStakeHint">The builder below uses this amount${sp ? ', and every parlay on Suggested Parlays pays on it' : ''}.</span></div>
       <div class="pb-row pb-odds-row"><span class="pb-lbl">Odds</span>${espnCtl('pb')}</div>
@@ -5500,7 +5590,7 @@ render.parlay = function () {
   renderParlay();
 };
 /* what Suggested Parlays, the checks and the next pieces stand on */
-Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, pbChanceCell, pbFailedSay, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
+Object.assign(window, { pbPropsOn, pbPropsOffWhy, pbTrialTitle, pbFailLegTitle, pbChanceCell, pbFailedSay, pbGames, pbDates, pbListed, pbUi, pbClean, pbMix, pbKind, pbAllows, pbHeldWhy, pbWho, pbPriced, pbTotals, pbLegs, pbPool, pbGameBets, pbSideBetter, pbEvKey, pbCap, pbFits, pbMaxLegs, pbBestReturn, pbLikeliest, pbTierOn, pbTierOf, pbTier,
   PB_TIERS, PB_KINDS, PB_MIXES, PB_TOP_N, PB_SEARCH, getPbTiers, getPbTop, pbTopBuild, pbTierCard, pbValMark, pbIsValue, pbTrialMark, pbOrder, pbOrd, parlayProb, parlayDec, parlayFair, legFair, legFarOff, legModel,
   pbView, pbSlipOf, pbLegAddBtn, pbPut, pbStale, pbWatchTick, stakeRead, pbStake, renderParlay, renderPb, pbLinesLoad, linesGl, pbGl, pbPr, pbCarries, pbQuote, dkSlipRows, dkSlipLine, glanceName,
   toggleLeg: l => slipToggle(pbSlipOf(l)), pbLines: () => LINES });

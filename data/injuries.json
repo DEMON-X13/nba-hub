@@ -488,16 +488,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Soreness",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "3032977",
-    "name": "Giannis Antetokounmpo",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist",
-    "date": "2026-11-12",
+    "date": "2026-11-13",
     "returns": "2026-11-13"
    },
    {
@@ -506,7 +497,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-12",
+    "date": "2026-11-13",
     "returns": "2026-11-13"
    }
   ],

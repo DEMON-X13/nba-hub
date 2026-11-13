@@ -3,9 +3,12 @@
  *
  *   node research/props_v3/ma/p23_fit.js   -> research/props_v3/results/ma_p23.json (about 3 minutes)
  *
- * The replay is given the games of 2020-21 and 2021-22 alone (data/games.csv's finals, the 2020-21 boxes from
- * cache/box2021/, the 2021-22 boxes from data/), so nothing of 2022-23 or later is in memory while the constants are
- * chosen. The training rows are tools/props.js's own: every player the 2021-22 boxes list with a game on record, read
+ * ma_lib.js's loadData reads every season MA uses (2020-21 to 2025-26) into memory first; the replay and the fit are
+ * then handed a copy holding only the games, boxes and team boxes of 2020-21 and 2021-22 (data/games.csv's finals, the
+ * 2020-21 boxes from cache/box2021/, the 2021-22 boxes from data/), and the script throws on any game or box after
+ * 2021-22 in that copy, so nothing of 2022-23 or later reaches the constants. (Until the review of 13 November 2026,
+ * finding F7, this said nothing of 2022-23 or later was in memory, which loadData's full read made untrue.) The
+ * training rows are tools/props.js's own: every player the 2021-22 boxes list with a game on record, read
  * before the game (the box's list of who dressed is the fit's, as tools/props.js fits: hindsight inside the training
  * season, never an input of a projection). tools/props.js fit() then chooses every constant (minutes, rates, pace,
  * opponent, playoffs, spreads, the doubles' correlation) on them. ma_lib.js's copy of the replay is checked against

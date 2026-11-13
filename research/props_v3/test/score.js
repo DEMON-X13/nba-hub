@@ -5,18 +5,28 @@
  *       rows, dev_lib.js's F fields, the sample), with the forward-chained nudge of ma_dev_bar.json: T1 and T2 must give
  *       back ma_dev_bar.json's D1 and D2 to the digit, or it throws; V4, V5 and V6 are run on the development lines.
  *       Writes research/props_v3/results/ma_score_devcheck.json.
- *   node research/props_v3/test/score.js --test
+ *   PROPS_V3_PREREG=<sha> node research/props_v3/test/score.js --test
  *       THE TEST STEP ONLY, after the preregistration is committed, pushed and audited sound, and the 2022-23 lines fetched
- *       and cleaned (test/fetch_dk40_2023_logged.sh, test/lines_clean_2023.js): V-fetch, V-hash, V0 to V3
- *       (test/validity_ma.js), V4, V5, V6 reported, each printed as it passes, no score printed until all have; then the
- *       bar of PLAN.md 4.2, once, and the reports of 4.5. Writes research/props_v3/results/ma_test_2023.json.
+ *       and cleaned (test/fetch_dk40_2023_logged.sh, which finishes the fetch's record on origin): V-hash, the left-out
+ *       games, V-fetch, V0 to V3 (test/validity_ma.js), V4, V5, V6 reported, each printed as it passes, no score printed
+ *       until all have; then the bar of PLAN.md 4.2, once, and the reports of 4.5. Writes
+ *       research/props_v3/results/ma_test_2023.json. NEVER RUN: D8 stopped the plan (dev_results.md).
  *
  * The bar (PLAN.md 4.2): n is the frozen nudge (frozen/ma_frozen.json) on each graded test line of the sample. T1: in
  * logit P(Over) = F + b n on all of them (a ridge of 0.001 on F alone), b's 90% interval by 1,000 resamples of games
- * (seed 0, warm-started) wholly above 0.25, and at least 5% of n's variance outside F's span. T2: F cross-fitted (5
- * folds by game, a ridge of 5 but on the per-stat intercepts), the paired log-loss difference's 90% interval (10,000
- * resamples of games, seed 0) wholly below -0.0001, Brier's below -0.00005, and on no stat the log-loss interval wholly
- * above 0. PASS if both; FAIL otherwise ("information shown" where T1 alone holds).
+ * (seed 0, warm-started) wholly above 0.25, z = b / SE (SE = the interval's width / 3.29) at least 4 (since the review of
+ * 13 November 2026, finding F2: the 0.25 alone moves with the nudge's scale), and at least 5% of n's variance outside F's
+ * span. T2: F cross-fitted (5 folds by game, a ridge of 5 but on the per-stat intercepts), the paired log-loss
+ * difference's 90% interval (10,000 resamples of games, seed 0) wholly below -0.0001, Brier's below -0.00005, and on no
+ * stat the log-loss interval wholly above 0. PASS if both; FAIL otherwise ("information shown" where T1 alone holds).
+ *
+ * Since the review of 13 November 2026 (findings F1 and F4): the 31 left-out games are read from espn_validate40.json's
+ * games[].gid (they were read as Object.keys of that array, which gave none) and must be exactly test/seen_2023.json's 31,
+ * or nothing is scored; V-hash reads PREREG_HASHES.json from the preregistration commit (git show), never the working
+ * tree, refuses a list that does not name every input test/inputs.js requires (data among them) or any input whose
+ * bytes moved, and holds the clean lines and starts to the SHA-256 the fetch's finished record on origin carries, and
+ * the fetched csv, cut by the cleaner's own rule, to the clean lines byte for byte (until the review the lines were held
+ * to a sibling file the cleaner wrote in the same gitignored cache).
  */
 'use strict';
 const fs = require('fs');
@@ -25,7 +35,7 @@ const crypto = require('crypto');
 const V = require('../ma/dev_lib.js');
 const M = require('../ma/ma_lib.js');
 const VM = require('./validity_ma.js');
-const { S, T, STATS, mean, ll, br, sigm, logit, PM, B_MIN, ORTH_MIN, M_LL, M_BR } = V;
+const { S, T, STATS, mean, ll, br, sigm, logit, PM, B_MIN, ORTH_MIN, M_LL, M_BR, Z_MIN, zOf } = V;
 const ROOT = M.ROOT;
 const r6 = v => (typeof v === 'number' ? +v.toPrecision(6) : v);
 const sha = f => crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
@@ -37,9 +47,9 @@ function bar(Lev, nArr) {
   const Rfam = Lev.map(S.bigSparse), zcf = S.crossFitBig(Lev);
   const tb = V.t1Boot(Lev, nArr, 1000, 0, Rfam), t1r = S.T1big(Lev, nArr, Rfam), t2 = S.T2(Lev, nArr, zcf, 10000, 0);
   const byStat = {}; for (const s of STATS) { const ix = Lev.map((x, i) => (x.stat === s ? i : -1)).filter(i => i >= 0); const z = S.T2(ix.map(i => Lev[i]), Float64Array.from(ix, i => nArr[i]), Float64Array.from(ix, i => zcf[i]), 10000, 0); byStat[s] = { lines: ix.length, ll: z.ll, llCi: z.llCi, br: z.br }; }
-  const T1met = !t1r.collinear && t1r.orth >= ORTH_MIN && tb.lo > B_MIN;
+  const z = zOf(tb.b, tb.lo, tb.hi), T1met = !t1r.collinear && t1r.orth >= ORTH_MIN && tb.lo > B_MIN && z >= Z_MIN;
   const T2met = t2.llCi[1] < -M_LL && t2.brCi[1] < -M_BR && Math.max(...Object.values(byStat).map(v => v.llCi[0])) <= 0;
-  return { T1: { b: tb.b, lo: tb.lo, hi: tb.hi, resamples: tb.resamples, orth: t1r.orth, robust: { lo: t1r.lo, hi: t1r.hi } }, T2: { ll: t2.ll, llCi: t2.llCi, br: t2.br, brCi: t2.brCi, games: t2.games, lines: t2.lines }, byStat, T1met, T2met, zcf };
+  return { T1: { b: tb.b, lo: tb.lo, hi: tb.hi, resamples: tb.resamples, z, orth: t1r.orth, robust: { lo: t1r.lo, hi: t1r.hi } }, T2: { ll: t2.ll, llCi: t2.llCi, br: t2.br, brCi: t2.brCi, games: t2.games, lines: t2.lines }, byStat, T1met, T2met, zcf };
 }
 /* V4 (and V4b, reported): the nudge on early exits, by validity.js's early-exit lines (P23's projected minutes on the
    box's list 24+, played his side's previous game, played under 12) */
@@ -89,28 +99,66 @@ function devCheck() {
   fs.writeFileSync(path.join(ROOT, 'research', 'props_v3', 'results', 'ma_score_devcheck.json'), JSON.stringify(out, (k, v) => r6(v), 1) + '\n');
 }
 
+/* the 31 left-out games (PLAN.md 3.1): espn_validate40.json's games[].gid of 2022-23's regular season in the window */
+const WINDOW = ['2022-10-18', '2023-04-09'];
+function seenFromValidate(gamesById, file = path.join(ROOT, 'research', 'props_v2', 'results', 'espn_validate40.json')) {
+  const J = JSON.parse(fs.readFileSync(file, 'utf8'));
+  if (!Array.isArray(J.games) || J.games.some(g => !g || typeof g.gid !== 'string')) throw new Error(`${path.relative(ROOT, file)}: games is not a list of games with a gid`);
+  return new Set(J.games.map(g => g.gid).filter(k => { const g = gamesById.get(k); return g && g.season === 2023 && g.type === 'REG' && g.date >= WINDOW[0] && g.date <= WINDOW[1]; }));
+}
+const SEEN_FILE = path.join(ROOT, 'research', 'props_v3', 'test', 'seen_2023.json');
+function leftOut(gamesById) {
+  const built = seenFromValidate(gamesById), listed = JSON.parse(fs.readFileSync(SEEN_FILE, 'utf8')).ids;
+  if (listed.length !== 31 || new Set(listed).size !== 31) throw new Error(`refused: test/seen_2023.json does not list 31 games (${listed.length})`);
+  if (built.size !== 31 || listed.some(k => !built.has(k))) throw new Error(`refused: the left-out games read from espn_validate40.json (${built.size}) are not test/seen_2023.json's 31`);
+  return built;
+}
+/* the test's lines of the sample's window, the 31 left out, both prices present (PLAN.md 3.1) */
+function testLines(raw, gamesById, seen) {
+  const PF = require(path.join(ROOT, 'tools', 'props_feed.js')), lines = []; let droppedSeen = 0; const seenIn = new Set();
+  for (const v of raw) { const g = gamesById.get(v[0]); if (!g || g.season !== 2023 || g.type !== 'REG' || g.date < WINDOW[0] || g.date > WINDOW[1] || !STATS.includes(v[2])) continue;
+    if (seen.has(v[0])) { droppedSeen++; seenIn.add(v[0]); continue; }
+    const over = PF.propAmerican(v[4]), under = PF.propAmerican(v[5]);
+    if (over == null || under == null || !Number.isFinite(+v[3])) continue; lines.push({ game: v[0], player: v[1], stat: v[2], line: +v[3], over, under, start: null }); }
+  return { lines, leftOut: { games: seen.size, gamesInFetch: seenIn.size, lines: droppedSeen } };
+}
+/* V-hash (PLAN.md 3.4, revised): every input test/inputs.js requires, held to the preregistration commit's
+   PREREG_HASHES.json; the clean lines and starts to the fetch's finished record on origin; the fetched csv, cut by the
+   cleaner's rule, to the clean lines */
+function vHash({ root = ROOT, prereg, required, cache = M.CACHE, csv = path.join(ROOT, 'research', 'props_v2', 'cache', 'props40_2023.csv') }) {
+  const { execFileSync } = require('child_process'), FR = require('./fetch_record.js'), C = require('./lines_clean_2023.js');
+  const full = (() => { try { return execFileSync('git', ['rev-parse', '--verify', `${prereg}^{commit}`], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'] }).trim(); } catch (e) { return ''; } })();
+  if (!full) throw new Error('refused: no preregistration commit (PROPS_V3_PREREG)');
+  let H; try { H = JSON.parse(execFileSync('git', ['show', `${full}:research/props_v3/PREREG_HASHES.json`], { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], maxBuffer: 1 << 26 })); } catch (e) { throw new Error(`refused: the preregistration commit ${full.slice(0, 12)} holds no readable research/props_v3/PREREG_HASHES.json`); }
+  const want = required(), named = H && H.files && typeof H.files === 'object' ? H.files : {};
+  const missing = Object.keys(want).filter(k => !(k in named));
+  if (missing.length) throw new Error(`V-hash: stop, nothing is scored: the preregistration's PREREG_HASHES.json does not name ${missing.length} required input(s): ${missing.slice(0, 6).join(', ')}`);
+  const moved = Object.keys(want).filter(k => named[k] !== want[k]);
+  if (moved.length) throw new Error(`V-hash: stop, nothing is scored: ${moved.length} input(s) are not as the preregistration recorded them: ${moved.slice(0, 6).join(', ')}`);
+  const R = FR.finishedRecord(root, full), lf = path.join(cache, 'dk40_2023_lines.csv'), sf = path.join(cache, 'dk40_2023_starts.csv');
+  const recLines = R.rec.sha256 && R.rec.sha256['research/props_v3/cache/dk40_2023_lines.csv'], recStarts = R.rec.sha256 && R.rec.sha256['research/props_v3/cache/dk40_2023_starts.csv'];
+  if (!fs.existsSync(lf) || FR.sha256(fs.readFileSync(lf)) !== recLines) throw new Error('V-hash: stop, nothing is scored: the clean lines are not the ones the fetch\'s record on origin holds');
+  if (!fs.existsSync(sf) || FR.sha256(fs.readFileSync(sf)) !== recStarts) throw new Error('V-hash: stop, nothing is scored: the clean starts are not the ones the fetch\'s record on origin holds');
+  if (!fs.existsSync(csv) || C.cleanBody(fs.readFileSync(csv, 'utf8')) !== fs.readFileSync(lf, 'utf8')) throw new Error('V-hash: stop, nothing is scored: the fetched csv, cut to its six columns, is not the clean lines');
+  return { prereg: full, inputs: Object.keys(want).length, record: R.commit, recovered: (R.rec.recovered || []).length };
+}
+
 function test() {
-  const HASHES = path.join(ROOT, 'research', 'props_v3', 'PREREG_HASHES.json');
-  if (!fs.existsSync(HASHES)) throw new Error('refused: no research/props_v3/PREREG_HASHES.json (the preregistration records the frozen files\' hashes)');
-  const cleanSums = path.join(M.CACHE, 'dk40_2023_lines.sha256');
-  if (!fs.existsSync(cleanSums)) throw new Error('refused: the 2022-23 lines are not fetched and cleaned');
+  const prereg = process.env.PROPS_V3_PREREG || '';
   /* V-hash */
-  const H = JSON.parse(fs.readFileSync(HASHES, 'utf8')), bad = Object.entries(H.files).filter(([f, h]) => sha(path.join(ROOT, f)) !== h).map(([f]) => f);
-  const CS = JSON.parse(fs.readFileSync(cleanSums, 'utf8')), linesF = path.join(M.CACHE, 'dk40_2023_lines.csv');
-  if (sha(linesF) !== CS['dk40_2023_lines.csv']) bad.push('cache/dk40_2023_lines.csv');
-  if (bad.length) throw new Error(`V-hash: stop, nothing is scored: ${bad.join(', ')}`);
-  say('V-hash: the frozen files, the scorer and the clean lines are the ones recorded');
+  const vh = vHash({ prereg, required: require('./inputs.js').required });
+  say(`V-hash: ${vh.inputs} inputs as the preregistration ${vh.prereg.slice(0, 12)} recorded them; the clean lines as the fetch's record ${vh.record.slice(0, 12)} on origin holds them`);
+  const linesF = path.join(M.CACHE, 'dk40_2023_lines.csv');
   const FZ = JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'props_v3', 'frozen', 'ma_frozen.json'), 'utf8')), P = FZ.P23;
   const D = M.loadData(), gamesById = new Map(D.games.map(g => [g.game_id, g]));
-  const seen = new Set(Object.keys(JSON.parse(fs.readFileSync(path.join(ROOT, 'research', 'props_v2', 'results', 'espn_validate40.json'), 'utf8')).games).filter(k => /^2023_/.test(k)).filter(k => (gamesById.get(k) || {}).type === 'REG'));
-  const raw = M.readLines6(linesF), lines = [];
-  for (const v of raw) { const g = gamesById.get(v[0]); if (!g || g.season !== 2023 || g.type !== 'REG' || g.date < '2022-10-18' || g.date > '2023-04-09' || seen.has(v[0]) || !STATS.includes(v[2])) continue;
-    const over = require(path.join(ROOT, 'tools', 'props_feed.js')).propAmerican(v[4]), under = require(path.join(ROOT, 'tools', 'props_feed.js')).propAmerican(v[5]);
-    if (over == null || under == null || !Number.isFinite(+v[3])) continue; lines.push({ game: v[0], player: v[1], stat: v[2], line: +v[3], over, under, start: null }); }
+  /* the left-out games, printed first */
+  const seen = leftOut(gamesById);
+  const tl = testLines(M.readLines6(linesF), gamesById, seen), lines = tl.lines;
+  say(`the left-out games: ${tl.leftOut.games} (test/seen_2023.json), ${tl.leftOut.gamesInFetch} of them in the fetch, ${tl.leftOut.lines} of their lines dropped`);
   const L = M.buildRows(lines, D, P); M.attachOutcomes(L, D.boxes); V.derive(L, 2023);
   const Lev = V.sample(L);
   /* V-fetch */
-  const vf = { games: new Set(Lev.map(x => x.game)).size, graded: Lev.length, leftOut31: seen.size }; vf.holds = vf.games >= 900 && vf.graded >= 60000;
+  const vf = { games: new Set(Lev.map(x => x.game)).size, graded: Lev.length, leftOut: tl.leftOut }; vf.holds = vf.games >= 900 && vf.graded >= 60000;
   if (!vf.holds) { say(`V-fetch: ${JSON.stringify(vf)}: VOID`); return finish({ verdict: 'VOID (V-fetch)', vf }); }
   say(`V-fetch: ${vf.games} games, ${vf.graded} graded lines: holds`);
   /* V0 to V3: validity_ma.js on the fetched lines with P23, the naive spread on 2021-22 and MA's data */
@@ -134,6 +182,7 @@ function test() {
   /* the bar, once */
   const b = bar(Lev, nArr);
   const verdict = b.T1met && b.T2met ? 'PASS' : b.T1met ? 'FAIL (information shown, but the frozen nudge does not help at its size)' : 'FAIL';
+  say(`T1 b ${b.T1.b.toFixed(3)} [${b.T1.lo.toFixed(3)}, ${b.T1.hi.toFixed(3)}] z ${b.T1.z.toFixed(2)}: ${b.T1met ? 'met' : 'not met'}; T2 ${b.T2.ll.toExponential(3)} [${b.T2.llCi.map(v => v.toExponential(2))}]: ${b.T2met ? 'met' : 'not met'}`);
   /* reported beside, deciding nothing */
   const eOf = x => { const r = S.eSparse(x); let s = x.zq; for (let q = 0; q < 3; q++) s += FZ.E.eb[r.idx[q]] * r.val[q]; return s; };
   const zMA = Float64Array.from(Lev, (x, i) => eOf(x) + nArr[i]), zE = Float64Array.from(Lev, eOf), zq = Float64Array.from(Lev, x => x.zq);
@@ -147,7 +196,7 @@ function finish(o) {
   fs.writeFileSync(file, JSON.stringify({ what: "the one-shot test's result (PLAN.md sections 3 and 4)", ...o }, (k, v) => r6(v), 1) + '\n');
   say(`verdict: ${o.verdict}`);
 }
-module.exports = { bar, v4, v5, mixOfBands, minutesAndPrev };
+module.exports = { bar, v4, v5, mixOfBands, minutesAndPrev, seenFromValidate, leftOut, testLines, vHash, WINDOW };
 if (require.main === module) {
   if (process.argv.includes('--dev-check')) devCheck();
   else if (process.argv.includes('--test')) test();

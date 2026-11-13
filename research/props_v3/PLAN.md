@@ -1,7 +1,9 @@
 # The plan for MA: DraftKings' price, nudged by the hub's read of the player
 
 Research only, 12 November 2026, revised 13 November after an independent critique (section 8 lists what it found, how
-each point was checked and what changed). The owner asked (11 November): "i also want to figure out why the model
+each point was checked and what changed), and revised again on 13 November after a review of MA's development results
+(section 9: T1 made independent of the nudge's scale, and the test's machinery fixed; no criterion loosened, D8 kept as
+written). The owner asked (11 November): "i also want to figure out why the model
 failed and if we can build a more reliable one." `why_it_failed.md` is the first half. This is the plan for the second:
 one candidate, MA, how it is built, the bar it must meet on development data before anything is spent, the one-shot test
 on DraftKings' 2022-23 lines and the bar written for it, and what a pass or a fail leads to. **Nothing here is the
@@ -25,7 +27,10 @@ projections, with its files hashed, and is committed, pushed and audited before 
   threes, assists and rebounds, and not on points.
 - **What would count.** The test asks one thing: does the nudge add information beyond DraftKings' price? Two criteria,
   each built so that no rival without player information can meet it. On development data 26 such rivals and 40
-  shuffled copies of the candidate were tried, and none met either.
+  shuffled copies of the candidate were tried, and none met either. That held only at each rival's own fitted size:
+  T1's weight bar moves with the nudge's scale, so a rival shrunk far enough clears it with no information in it. Since
+  13 November T1 also asks the weight to stand four standard errors clear of zero, which no rescaling changes
+  (section 9).
 - **The odds, honestly.** The stand-in meets the bar on every development split. At half its development effect it would
   pass a test the size of 2022-23's (1,100 games at 74 graded lines a game) about 0.87 of the time by the development
   bar's protocol, about 0.74 if 2022-23's prices are as unlike 2023-24's as the 31 games of it already seen suggest (far
@@ -190,7 +195,10 @@ section 6).
 MA must meet every criterion; a miss stops the plan (section 7).
 
 - **D1, information (the test's T1).** On the out-of-fold lines, in logit P(Over) = F + b·n, b's 90% interval lies wholly
-  above 0.25. At least 5% of n's variance lies outside F's span.
+  above 0.25, **and z = b / SE is at least 4**, SE being the standard error that interval implies ((hi − lo) / 3.29).
+  At least 5% of n's variance lies outside F's span. (The z part was added on 13 November, section 9: b and its
+  interval scale as 1/c when n is multiplied by c, so the 0.25 alone checks the frozen nudge's size, and a rival shrunk
+  far enough meets it; z does not move with c.)
 - **D2, value at the frozen size (the test's T2).** n added to F, cross-fitted on the out-of-fold lines: the log-loss
   difference's 90% interval lies wholly below −0.0001 and Brier's below −0.00005. On no stat does the log-loss
   difference's interval lie wholly above 0.
@@ -229,9 +237,11 @@ MA must meet every criterion; a miss stops the plan (section 7).
   bound 0.07, so the margin against it is about 0.18 where the coarse shuffles' was 0.26). The named rivals (on top of
   DraftKings' fair chance) and the held-out rivals of section 4.3, with the critique's three (DraftKings' own other lines
   for the player, their sizes and prices; the same by position; the pairwise products of F's continuous features), all
-  refitted in this protocol, fail them too. The shuffles' and rivals' T1 intervals use the cluster-robust standard error
-  (`results/plan_bootcheck.json`: within 2% of the bootstrap's), and any whose lower bound comes within 0.05 of 0.25 is
-  taken again by the 1,000-resample bootstrap.
+  refitted in this protocol, fail them too, and so do (since 13 November, section 9) two of them shrunk to as little as
+  0.3 of their fitted size and four sets of rivals fitted with a ridge on their own columns (`ma/dev_scale.js`). The
+  shuffles' and rivals' T1 intervals use the cluster-robust standard error (`results/plan_bootcheck.json`: within 2%
+  of the bootstrap's), and any whose lower bound comes within 0.05 of 0.25, or whose z comes within 0.5 of 4, the
+  other part met or near, is taken again by the 1,000-resample bootstrap.
 - **D7, the leak checks** of 1.5, each as stated:
   - the blindfold check, to the bit, its folder as 1.5 says;
   - the scrambled-outcome check;
@@ -246,7 +256,9 @@ MA must meet every criterion; a miss stops the plan (section 7).
   before the preregistration is committed:
   - the 2020-21 fetch, P23's fit and MA's freeze;
   - the Test step's fetch, validity checks and scorer, which must give back D1 and D2 to the digit on the development
-    lines;
+    lines; and (since 13 November, section 9) the fetch's gate and public record, the left-out games and V-hash, each
+    held to planted cases in sandbox repositories (`test/machinery_check.js`), since a scorer that gives back D1 and D2
+    on the development lines never runs the test's own path;
   - the shadow's runner;
   - **planted in-game prices** (critique C7): on the development lines, at 10% and at 20% of player-games, one of the
     player's posted stats repriced as a price read a quarter of the way into the game would be (props_v2's
@@ -279,11 +291,22 @@ not a result). Forward-chained:
   to 9 April 2023. games.csv types the play-in (11 to 14 April 2023) REG; it is left out. Six base stats, both prices
   present. Fetched by `research/props_v2/fetch_dk40.js`, unchanged, through a test-only copy of `fetch_dk40_logged.sh`
   that allows this range alone (written and reviewed with the scorer), into the gitignored cache. The stamp is stripped
-  (L1) and both files hashed.
+  (L1) and both files hashed. Since 13 November (section 9, F3) the fetch's gate and record are public: the wrapper
+  (`test/fetch_dk40_2023_logged.sh`, through `test/fetch_record.js`) refuses a preregistration whose audit does not name
+  the SHA-256 of the PREREG.md and PREREG_HASHES.json it audited, or names others than the commit holds; it commits and
+  pushes the fetch's start (`test/fetch_2023.json`) to origin before the first request, refuses to fetch again once
+  origin holds a record (any branch, any commit: a wiped cache cannot hide one), lets an interrupted fetch be run again
+  only under the same preregistration, and lets a cache lost after the fetch be fetched again only with
+  `PROPS_V3_RECOVER=1`, its clean lines then required to come out byte for byte as recorded. When the fetch ends the
+  cleaner runs and the record is finished, with the SHA-256 of the fetched csv, its reads, the request log, the clean
+  lines and their starts, and pushed.
 - **Grading.** By the hub's rule: the Over lands when the stat is above the line; a player who did not play (minutes 0
   or flagged) is void, as DraftKings voids him; a push drops out. Every line is a half point, so none is expected.
 - **Left out.** The 31 regular-season games props_v2's `espn_validate40` read whole on 5 November 2026. Their
-  DraftKings aggregates were seen (3.3). The scorer lists them from that file's game ids.
+  DraftKings aggregates were seen (3.3). The scorer reads them from that file's `games[].gid` and refuses to score
+  unless they are exactly the 31 game ids committed in `test/seen_2023.json`; it prints how many were left out, and how
+  many of their lines dropped, before any other number. (Until 13 November it read `Object.keys` of that array, which
+  gives its indices: it would have left out none. Section 9, F1.)
 - **The 2023 playoff lines stay unfetched and unseen.** This test does not use them.
 - **The club.** By 1.5's rule: a line whose player has no club on record that is one of the game's two clubs is left
   out, so a player's first game after a trade or a summer move is not scored (on opening week of 2022-23, every player
@@ -346,10 +369,24 @@ them as history, as the rules allow. But no outcome of a 2022-23 line has entere
 These run in order on the fetched lines, before any of MA's chances is computed. Each is printed as it passes; no score
 is printed until all have.
 
+- **V-hash** (revised 13 November, section 9, F4). Two sources of hashes, each read from git, never from a file in the
+  working tree or the cache:
+  - **from the preregistration commit** (`git show <prereg>:research/props_v3/PREREG_HASHES.json`, written by
+    `test/inputs.js --write`): every input `test/inputs.js` requires, as it stood when the preregistration was written:
+    the frozen candidate; every module of this repository the scorer loads (read off Node's module cache) and the
+    fetch's machinery; and the data the replay and F read, the 2020-21 boxes (gitignored: a re-fetch must give back these
+    very bytes), `data/box_*` and `teambox_*` of 2021-22 to 2025-26, `games.csv`'s rows of those seasons,
+    `odds_hist.csv`'s rows of 2022-23, the left-out list and its source, and V0 to V3's thresholds. A list that does not
+    name every required input, or any input whose bytes moved, stops the scorer;
+  - **from the fetch's finished record on origin** (`test/fetch_2023.json`, pushed after the fetch, since the
+    preregistration is committed before the lines exist): the clean lines' and starts' SHA-256; and the fetched csv, cut
+    by the cleaner's own rule, must give back the clean lines byte for byte.
+  Otherwise stop: nothing is scored until they do. (Until 13 November V-hash read PREREG_HASHES.json from the working
+  tree, passed an empty list, held the clean lines to a sibling file the cleaner wrote in the same gitignored cache, and
+  hashed no data.)
+- **The left-out games** (3.1), printed with V-fetch before any number.
 - **V-fetch.** At least 900 games with lines and at least 60,000 graded lines. Below either, the test cannot reach the
   power D3 promised: VOID.
-- **V-hash.** MA's frozen files, the scorer and the clean lines match the SHA-256s the preregistration records.
-  Otherwise stop: nothing is scored until they do.
 - **V0, V1, V2, V3.** props_v2's `validity.js`, its thresholds unchanged:
   - V0: the first item is the Over, on every stat;
   - V1: the stamps, read by this check alone, say only whether pre-game is shown (expected: not shown, inferred);
@@ -411,7 +448,11 @@ n is MA's frozen nudge on each graded test line (logit P_MA − E). Both criteri
 
 - **T1, information beyond DraftKings' price.** In logit P(Over) = F + b·n, fitted on all graded test lines (unpenalised
   but for a ridge of 0.001 on F alone, never on b, to settle F's exact collinearities):
-  - b's 90% interval (1,000 resamples of games, seed 0, the fit warm-started) lies wholly above **0.25**;
+  - b's 90% interval (1,000 resamples of games, seed 0, the fit warm-started) lies wholly above **0.25**: a check of
+    the frozen nudge's size, which means what it says only for a nudge fitted unpenalised at its own scale, as MA's is
+    (b and its interval scale as 1/c when n is multiplied by c);
+  - **z = b / SE is at least 4**, SE the standard error b's own 90% interval implies, (hi − lo) / 3.29: the check of
+    information, which no rescaling of n moves (added 13 November, section 9);
   - at least **5%** of n's variance lies outside F's span (least squares of n on F). A nudge inside F has no b, and
     cannot meet T1.
 - **T2, value at the frozen size.** F is cross-fitted on the test lines: 5 folds by game (the game id's FNV-1a hash mod
@@ -422,7 +463,8 @@ n is MA's frozen nudge on each graded test line (logit P_MA − E). Both criteri
   - on no stat does the log-loss interval lie wholly above 0.
 
 **PASS** if both are met; **FAIL** otherwise. A FAIL with T1 met is reported as "information shown, but the frozen nudge
-does not help at its size". It starts nothing: a re-sized nudge would be fitted on the test season.
+does not help at its size". It starts nothing: a re-sized nudge would be fitted on the test season. (Since 13 November
+"information shown" asks T1's z as well: as first written a rival shrunk far enough could have earned the label.)
 
 Nothing of MA is fitted, re-scaled or chosen on 2022-23. Only F, the bar's information-free benchmark, is fitted there,
 in both criteria. That is what makes the criteria about information: whatever an information-free model could learn
@@ -569,7 +611,7 @@ registered.
     and P23's constants, fitted on 2021-22, will then be five and six seasons old. Both are expected to weaken the nudge
     against its development size; the shadow is the frozen candidate as it is, not a refreshed one.
   - **PASS** only if T1 and T2 of section 4.2 hold on the shadow's lines, with F fitted on them, and the same numbers
-    (0.25, 5%, −0.0001, −0.00005, no stat's interval wholly above 0). The game lines in F are the read's own total and
+    (0.25, z 4, 5%, −0.0001, −0.00005, no stat's interval wholly above 0). The game lines in F are the read's own total and
     spread.
   - Reported beside, deciding nothing: MA against q_call, D5's calibration per stat, and MA against the closing price.
 - **Futility stop.** At 15,000 graded lines in grading order, if T2's log-loss interval lies wholly above 0 (the frozen
@@ -599,7 +641,9 @@ registered.
 - **F's composition.** The union of the named rivals' features, plus the posting indicator and rest. Chosen after round
   1 showed three rivals meeting T1 with a smaller family. The held-out rivals were then chosen to size the margin.
 - **The bar's numbers.** b above 0.25 with 5% outside F; −0.0001 and −0.00005; 90% intervals; 5 folds and a ridge of 5
-  for the cross-fit; 1,000 and 10,000 resamples. All sized on 2023-24 (section 4.3).
+  for the cross-fit; 1,000 and 10,000 resamples. All sized on 2023-24 (section 4.3). T1's z of at least 4, and the
+  bootstrap taken again where a rival's z comes within 0.5 of it, were chosen on 13 November (section 9) on development
+  data, after MA's development figures (its z 13.7) and D6's rivals' (the highest 2.85) had been seen.
 - **The sizing's splits and the development bar's protocol.** Chronological at 1 February, alternate nights, months
   December to April.
 - **The power standard.** D3's 0.8 at half the effect, with the 1,100 and 900 games of 3.1.
@@ -636,6 +680,10 @@ registered.
   - A reason, after the freeze, to change any of MA's files or the bar: the test is not run on that preregistration. A
     new one is written and audited.
 - **At the test.**
+  - The fetch stopped part way, by a usage limit or a lost container: run again under the same preregistration, which
+    the public record allows (3.1); never under another. A cache lost after the fetch finished: fetched again only with
+    `PROPS_V3_RECOVER=1`, and scored only if its clean lines come out byte for byte as the record holds them; if they do
+    not, nothing can be scored on that preregistration.
   - V-fetch or a validity check failing: VOID (3.4).
   - The scorer stopped part way, by a usage limit or a lost container: it is run again, unchanged, on the same
     hash-checked files. A test is scored once by one preregistered scorer on one fixed set of lines, and running that

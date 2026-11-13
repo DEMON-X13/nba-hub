@@ -11,8 +11,8 @@
  *      his return, early season), each with a weight per stat, admitted only if the nudge with it beats the nudge
  *      without it on log loss (the paired 90% interval wholly below 0, 10,000 resamples of games) and still meets D1
  *      and D2;
- *   3. D1 (T1's b by the 1,000-resample game bootstrap), D2, D3 (power, revised: lines and games, both T2 criteria at
- *      once), D4 (MA's chance against DraftKings' fair chance, tools/props.js's 2024 fold and props_v2's A on the same
+ *   3. D1 (T1's b by the 1,000-resample game bootstrap; since the review of 13 November also its z = b / SE at least
+ *      4, dev_lib.js Z_MIN), D2, D3 (power, revised: lines and games, both T2 criteria at once, and T1 both its parts), D4 (MA's chance against DraftKings' fair chance, tools/props.js's 2024 fold and props_v2's A on the same
  *      lines), D5 (revised: (a), (b), (b'), the claim and the reliability table), and the reports beside them.
  * Every number written is an aggregate: no line, price or player id.
  */
@@ -74,9 +74,9 @@ out.final = { stats: cur.stats, secondaries: cur.extra.map(e => e.name), weights
 
 /* 3. D1 by the bootstrap, D2, D3, D4, D5 */
 const fin = V.crit(oof, Pc.n, zcf, Rfam, { boot: true, nBootStat: 10000 });
-out.D1 = { b: fin.t1boot.b, lo: fin.t1boot.lo, hi: fin.t1boot.hi, resamples: fin.t1boot.resamples, robust: fin.t1, orth: fin.t1.orth, met: fin.D1 };
+out.D1 = { b: fin.t1boot.b, lo: fin.t1boot.lo, hi: fin.t1boot.hi, resamples: fin.t1boot.resamples, z: fin.t1boot.z, zMin: V.Z_MIN, robust: fin.t1, orth: fin.t1.orth, metAsFirstWritten: fin.D1b, met: fin.D1 };
 out.D2 = { ll: fin.t2.ll, llCi: fin.t2.llCi, br: fin.t2.br, brCi: fin.t2.brCi, byStat: fin.byStat, met: fin.D2 };
-log(`D1: b ${fin.t1boot.b.toFixed(3)} [${fin.t1boot.lo.toFixed(3)}, ${fin.t1boot.hi.toFixed(3)}] (bootstrap, ${fin.t1boot.resamples}); orth ${fin.t1.orth.toFixed(3)}: ${fin.D1 ? 'met' : 'NOT met'}`);
+log(`D1: b ${fin.t1boot.b.toFixed(3)} [${fin.t1boot.lo.toFixed(3)}, ${fin.t1boot.hi.toFixed(3)}] (bootstrap, ${fin.t1boot.resamples}); z ${fin.t1boot.z.toFixed(2)} (bar ${V.Z_MIN}); orth ${fin.t1.orth.toFixed(3)}: ${fin.D1 ? 'met' : 'NOT met'}`);
 log(`D2: ll ${fin.t2.ll.toExponential(3)} [${fin.t2.llCi.map(v => v.toExponential(2))}] br ${fin.t2.br.toExponential(3)} [${fin.t2.brCi.map(v => v.toExponential(2))}]; by stat ${STATS.map(s => `${s} ${(fin.byStat[s].ll * 1e4).toFixed(1)} [${fin.byStat[s].llCi.map(v => (v * 1e4).toFixed(1))}]`).join(', ')}: ${fin.D2 ? 'met' : 'NOT met'}`);
 const t1i = { b: fin.t1boot.b, lo: fin.t1boot.lo, hi: fin.t1boot.hi };
 out.D3 = { at1100: V.power(oof, Pc.n, zcf, t1i, 0.5, 1100, 74.4), at1100full: V.power(oof, Pc.n, zcf, t1i, 1, 1100, 74.4), at900: V.power(oof, Pc.n, zcf, t1i, 0.5, 900, 74.4) };
@@ -89,7 +89,7 @@ out.D3 = { at1100: V.power(oof, Pc.n, zcf, t1i, 0.5, 1100, 74.4), at1100full: V.
     const w = Vj.byStatScores[s].n * p; wl += w * mean(ix.map(i => dLL[i])); wb += w * mean(ix.map(i => dBR[i])); ws += w; }
   out.D3.reweighted2023 = { ll: wl / ws, br: wb / ws, fractionLL: wl / ws / mean(dLL), at1100: V.power(oof, Pc.n, zcf, t1i, 0.5, 1100, 74.4, wl / ws, wb / ws), at900: V.power(oof, Pc.n, zcf, t1i, 0.5, 900, 74.4, wl / ws, wb / ws) }; }
 out.D3.met = out.D3.at1100.T1 >= 0.8 && out.D3.at1100.T2joint >= 0.8;
-log(`D3 (half the effect, 1,100 x 74.4): T1 ${out.D3.at1100.T1.toFixed(3)} T2 both ${out.D3.at1100.T2joint.toFixed(3)} (ll ${out.D3.at1100.T2ll.toFixed(3)}, br ${out.D3.at1100.T2br.toFixed(3)}); 900: ${out.D3.at900.T2joint.toFixed(3)}; reweighted to 2022-23: ${out.D3.reweighted2023.at1100.T2joint.toFixed(3)}: ${out.D3.met ? 'met' : 'NOT met'}`);
+log(`D3 (half the effect, 1,100 x 74.4): T1 ${out.D3.at1100.T1.toFixed(3)} (b bar ${out.D3.at1100.T1b.toFixed(3)}, z ${out.D3.at1100.T1z.toFixed(3)}) T2 both ${out.D3.at1100.T2joint.toFixed(3)} (ll ${out.D3.at1100.T2ll.toFixed(3)}, br ${out.D3.at1100.T2br.toFixed(3)}); 900: ${out.D3.at900.T2joint.toFixed(3)}; reweighted to 2022-23: ${out.D3.reweighted2023.at1100.T2joint.toFixed(3)}: ${out.D3.met ? 'met' : 'NOT met'}`);
 /* D4: MA's chance (E + n, forward-chained) against the three references, on the lines each has */
 const refs = JSON.parse(fs.readFileSync(path.join(V.M.CACHE, 'ma', 'refs_2024.json'), 'utf8'));
 const zMA = Float64Array.from(oof, (x, i) => Pc.e[i] + Pc.n[i]);

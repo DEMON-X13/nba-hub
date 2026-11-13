@@ -5,7 +5,9 @@
  *
  * On the same out-of-fold lines as ma_dev_bar.json (December to April 2023-24, each month's fits on the months before),
  * F cross-fitted on them, each rival is held to D1 and D2 as MA is (T1 by the cluster-robust standard error, taken again
- * by the 1,000-resample bootstrap where its lower bound comes within 0.05 of 0.25):
+ * by the 1,000-resample bootstrap where its lower bound comes within 0.05 of 0.25 or, since the review of 13 November,
+ * its z within 0.5 of 4, the other part met or near; D1 asks both b's lower bound above 0.25 and z = b / SE at least 4,
+ * and D1 as first written, the b bar alone, is reported beside: dev_lib.js crit):
  *   - MA's own nudge, its d values shuffled across players within stat and month (20 seeds), and within matched cells,
  *     stat x month x position x price band x line (20 seeds; critique C4), each month's frozen weights applied to them;
  *   - the named information-free rivals (plan_sizing/size2.js's, R1 to R9 and all at once), each fitted on the training
@@ -40,8 +42,8 @@ if (oof.length !== DB.oof.lines) throw new Error('not the out-of-fold lines of m
 const ma = V.crit(oof, P.n, zcf, Rfam);
 log(`MA (as ma_dev_bar.json): T1 b ${ma.t1.b.toFixed(3)} [${ma.t1.lo.toFixed(3)}, ${ma.t1.hi.toFixed(3)}], T2 ${ma.t2.ll.toExponential(3)}`);
 const out = { what: "D6: rivals on MA's own projections, forward-chained (development data)", ma: { t1: ma.t1, t2: { ll: ma.t2.ll, llCi: ma.t2.llCi } }, shuffles: { coarse: [], matched: [] }, named: {}, held: {}, critique: {} };
-const brief = c => ({ b: c.t1.b, lo: c.t1boot ? c.t1boot.lo : c.t1.lo, hi: c.t1boot ? c.t1boot.hi : c.t1.hi, orth: c.t1.orth, collinear: c.t1.collinear, ll: c.t2.ll, llCi: c.t2.llCi, brCi: c.t2.brCi, worstStatLo: Math.max(...Object.values(c.byStat).map(v => v.llCi[0])), D1: c.D1, D2: c.D2, marginT1: c.marginT1, marginT2: c.marginT2 });
-const say = (k, c) => log(`  ${k}: T1 ${c.collinear ? `no b (orth ${c.orth == null ? '-' : c.orth.toExponential(1)})` : `b ${c.b.toFixed(3)} [${c.lo.toFixed(3)}, ${c.hi.toFixed(3)}] orth ${c.orth.toFixed(3)}`} D1 ${c.D1} | T2 ${c.ll.toExponential(2)} [${c.llCi.map(v => v.toExponential(2))}] D2 ${c.D2}`);
+const brief = c => ({ b: c.t1.b, lo: c.t1boot ? c.t1boot.lo : c.t1.lo, hi: c.t1boot ? c.t1boot.hi : c.t1.hi, z: c.z, boot: !!c.t1boot, orth: c.t1.orth, collinear: c.t1.collinear, ll: c.t2.ll, llCi: c.t2.llCi, brCi: c.t2.brCi, worstStatLo: Math.max(...Object.values(c.byStat).map(v => v.llCi[0])), D1: c.D1, D1asFirstWritten: c.D1b, D2: c.D2, marginT1: c.marginT1, marginZ: c.marginZ, marginT2: c.marginT2 });
+const say = (k, c) => log(`  ${k}: T1 ${c.collinear ? `no b (orth ${c.orth == null ? '-' : c.orth.toExponential(1)})` : `b ${c.b.toFixed(3)} [${c.lo.toFixed(3)}, ${c.hi.toFixed(3)}] z ${c.z.toFixed(2)} orth ${c.orth.toFixed(3)}`} D1 ${c.D1} | T2 ${c.ll.toExponential(2)} [${c.llCi.map(v => v.toExponential(2))}] D2 ${c.D2}`);
 /* 1. the shuffles: each line's own month's frozen weights, applied to a d (and secondaries) shuffled within the cell */
 const feat = V.featFinal(DB.final), wOf = new Map(P.w.map(z => [z.month, z.w]));
 const band = q => [0.35, 0.4, 0.45, 0.5, 0.55, 0.6].filter(b => q > b).length;
@@ -111,10 +113,12 @@ for (const [grp, set] of [['held', { ...HELD, U5_line_size_bands: null }], ['cri
   const c = brief(V.crit(oof, n, zcf, Rfam, { nBoot: 2000, nBootStat: 2000 })); out[grp][k] = c; say(`${grp} ${k}`, c);
 }
 const all = [...out.shuffles.coarse, ...out.shuffles.matched, ...Object.values(out.named), ...Object.values(out.held), ...Object.values(out.critique)].filter(c => !c.singular);
-out.anyMeetsD1 = all.some(c => c.D1); out.anyMeetsD2 = all.some(c => c.D2);
+out.anyMeetsD1 = all.some(c => c.D1); out.anyMeetsD1asFirstWritten = all.some(c => c.D1asFirstWritten); out.anyMeetsD2 = all.some(c => c.D2);
 out.closestT1 = Math.max(...all.filter(c => !c.collinear && c.orth >= V.ORTH_MIN).map(c => c.lo));
+out.closestZ = Math.max(...all.filter(c => !c.collinear && c.orth >= V.ORTH_MIN).map(c => c.z));
+out.positiveLowerBounds = all.filter(c => !c.collinear && c.orth >= V.ORTH_MIN && c.lo > 0).length;
 out.closestT2 = Math.min(...all.map(c => c.llCi[1]));
 out.met = !out.anyMeetsD1 && !out.anyMeetsD2;
 out.seconds = Math.round((Date.now() - t0) / 1000);
 fs.writeFileSync(path.join(S.ROOT, 'research', 'props_v3', 'results', 'ma_dev_rivals.json'), JSON.stringify(out, (k, v) => r6(v), 1) + '\n');
-log(`D6: ${all.length} rivals; any meets D1 ${out.anyMeetsD1}, D2 ${out.anyMeetsD2}; closest T1 lower bound ${out.closestT1.toFixed(3)} (bar 0.25), closest T2 upper bound ${out.closestT2.toExponential(2)} (bar -1e-4): ${out.met ? 'met' : 'NOT met'}`);
+log(`D6: ${all.length} rivals; any meets D1 ${out.anyMeetsD1} (as first written ${out.anyMeetsD1asFirstWritten}), D2 ${out.anyMeetsD2}; closest T1 lower bound ${out.closestT1.toFixed(3)} (bar 0.25), highest z ${out.closestZ.toFixed(2)} (bar 4), ${out.positiveLowerBounds} with a lower bound above 0; closest T2 upper bound ${out.closestT2.toExponential(2)} (bar -1e-4): ${out.met ? 'met' : 'NOT met'}`);

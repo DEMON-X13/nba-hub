@@ -1,0 +1,130 @@
+{
+ "what": "the one-shot test's machinery held to planted cases (made-up lines; sandbox repositories)",
+ "A": {
+  "cases": [
+   {
+    "case": "A1 the left-out games read by gid are the committed 31 (as first written: Object.keys gave 0)",
+    "asExpected": true
+   },
+   {
+    "case": "A2 testLines keeps the three other games' made-up rows alone and counts the 31 left out",
+    "asExpected": true
+   },
+   {
+    "case": "A3 with the set as first written the 31 games' rows would have been scored",
+    "asExpected": true
+   }
+  ],
+  "asFirstWritten": 0,
+  "leftOut": 31,
+  "planted": {
+   "rows": 36,
+   "kept": 3,
+   "leftOut": {
+    "games": 31,
+    "gamesInFetch": 31,
+    "lines": 31
+   }
+  }
+ },
+ "B": [
+  {
+   "case": "B1 no preregistration commit: refused",
+   "asExpected": true,
+   "detail": "refused: no preregistration commit (PROPS_V3_PREREG)"
+  },
+  {
+   "case": "B2 a preregistration not pushed: refused",
+   "asExpected": true,
+   "detail": "refused: <commit> is not on origin's wip/test (pushed)"
+  },
+  {
+   "case": "B3 an audit naming no hashes: refused",
+   "asExpected": true,
+   "detail": "refused: <commit>'s audit does not name the SHA-256 of the PREREG.md it audited"
+  },
+  {
+   "case": "B4 PREREG.md edited after its audit (the review's case): refused",
+   "asExpected": true,
+   "detail": "refused: PREREG.md at <commit> is not the one its audit audited (audited <commit>, held <commit>): edited after the audit"
+  },
+  {
+   "case": "B5 a sound preregistration: the start pushed before the stand-in ran, then the record finished on origin with the clean lines' SHA-256",
+   "asExpected": true,
+   "detail": "exit 0; runs 1, records on origin when the stand-in ran 1; versions 2"
+  },
+  {
+   "case": "B6 a second run (the review's case): refused by origin's record",
+   "asExpected": true,
+   "detail": "refused: the 2022-23 fetch has run already under <commit> (finished <time>, <commit>); a lost cache is fetched again only with PROPS_V3_RECOVER=1"
+  },
+  {
+   "case": "B7 the cache wiped, then run again (the review's case): still refused",
+   "asExpected": true,
+   "detail": "refused: the 2022-23 fetch has run already under <commit> (finished <time>, <commit>); a lost cache is fetched again only with PROPS_V3_RECOVER=1"
+  },
+  {
+   "case": "B8 the lost cache recovered with PROPS_V3_RECOVER=1, its clean lines byte for byte: the recovery appended to the record",
+   "asExpected": true,
+   "detail": "exit 0"
+  },
+  {
+   "case": "B9 a recovery whose lines differ from the record's: refused at the finish, the record unchanged",
+   "asExpected": true,
+   "detail": "refused: the recovered dk40_2023_lines.csv is not the one the fetch recorded: nothing can be scored on it"
+  },
+  {
+   "case": "B10 another preregistration, origin holding this one's record: refused",
+   "asExpected": true,
+   "detail": "refused: origin holds the fetch's record under another preregistration (<commit>, <commit>)"
+  },
+  {
+   "case": "B11 the cleaner with no record on origin: refused",
+   "asExpected": true,
+   "detail": "Error: refused: origin holds no record of the 2022-23 fetch started under this preregistration (test/fetch_dk40_2023_logged.sh)"
+  },
+  {
+   "case": "B12 a fetch interrupted after its start: the start on origin, not finished",
+   "asExpected": true,
+   "detail": "exit 1"
+  },
+  {
+   "case": "B13 run again under the same preregistration: resumed, then finished",
+   "asExpected": true,
+   "detail": "exit 0"
+  }
+ ],
+ "C": [
+  {
+   "case": "C1 the sound case: V-hash passes (and so did the rule as first written)",
+   "asExpected": true,
+   "detail": "2 inputs, record <commit>"
+  },
+  {
+   "case": "C2 the frozen file edited, the working tree's PREREG_HASHES.json rewritten to match (the review's case): refused; the old rule passed it",
+   "asExpected": true,
+   "detail": "V-hash: stop, nothing is scored: 1 input(s) are not as the preregistration recorded them: research/props_v3/frozen/ma_frozen.json"
+  },
+  {
+   "case": "C3 the clean lines replaced, a sibling .sha256 written to match (the review's case): refused; the old rule passed it",
+   "asExpected": true,
+   "detail": "V-hash: stop, nothing is scored: the clean lines are not the ones the fetch's record on origin holds"
+  },
+  {
+   "case": "C4 a PREREG_HASHES.json naming nothing (the review's case): refused; the old rule passed it",
+   "asExpected": true,
+   "detail": "V-hash: stop, nothing is scored: the preregistration's PREREG_HASHES.json does not name 2 required input(s): research/props_v3/frozen/ma_frozen.json, research/props_v3/ma/code.js"
+  },
+  {
+   "case": "C5 the fetched csv moved under clean lines left as they were: refused",
+   "asExpected": true,
+   "detail": "V-hash: stop, nothing is scored: the fetched csv, cut to its six columns, is not the clean lines"
+  },
+  {
+   "case": "C6 V-hash with the record not finished: refused",
+   "asExpected": true,
+   "detail": "refused: the 2022-23 fetch is not finished on origin"
+  }
+ ],
+ "met": true
+}

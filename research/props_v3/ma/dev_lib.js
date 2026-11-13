@@ -12,6 +12,13 @@
  * months before each month from December to April, E with the frozen nudge as an offset; the out-of-fold lines scored
  * together; F cross-fitted on them (5 folds by game, a ridge of 5). T1's b by the game bootstrap (1,000 resamples, seed
  * 0, warm-started from the full fit), T2's mean differences by the game bootstrap (10,000, seed 0).
+ *
+ * T1 (and D1) since the review of 13 November 2026 (finding F2): b and its interval scale as 1/c when the nudge is
+ * multiplied by c, so the 0.25 bar on b's lower bound is a check of the frozen nudge's SIZE, meaningful only for a nudge
+ * fitted unpenalised at its own scale (as MA's is), and a rival shrunk far enough clears it with no information. T1's
+ * INFORMATION check is now also z = b / SE >= Z_MIN (4), SE the standard error b's own 90% interval implies, (hi - lo) /
+ * 3.29, which no rescaling of the nudge moves. A rival whose robust reading comes near either bar is read again by the
+ * 1,000-resample bootstrap.
  */
 'use strict';
 const fs = require('fs');
@@ -20,7 +27,9 @@ const S = require('../plan_sizing/lib.js');
 const M = require('./ma_lib.js');
 const { STATS, mean, ll, br, sigm, logit, PM } = S;
 const T = S.T;
-const B_MIN = 0.25, ORTH_MIN = 0.05, M_LL = 1e-4, M_BR = 5e-5;
+const B_MIN = 0.25, ORTH_MIN = 0.05, M_LL = 1e-4, M_BR = 5e-5, Z_MIN = 4;
+/* T1's scale-free part: b over the standard error its own 90% interval implies (the review of 13 November, F2) */
+const zOf = (b, lo, hi) => b / ((hi - lo) / (2 * 1.645));
 const MONTHS = ['2023-12', '2024-01', '2024-02', '2024-03', '2024-04'];
 
 function loadMA(set) {
@@ -90,11 +99,16 @@ function crit(Lev, nArr, zcf, Rfam, opts = {}) {
   for (const s of STATS) { const ix = Lev.map((x, i) => (x.stat === s ? i : -1)).filter(i => i >= 0);
     const z = S.T2(ix.map(i => Lev[i]), Float64Array.from(ix, i => nArr[i]), Float64Array.from(ix, i => zcf[i]), opts.nBootStat || 2000); byStat[s] = { lines: ix.length, ll: z.ll, llCi: z.llCi, br: z.br }; }
   let boot = null;
-  if (opts.boot || (!t1.collinear && Math.abs(t1.lo - B_MIN) < 0.05)) boot = t1Boot(Lev, nArr, 1000, 0, Rfam);
-  const lo = boot ? boot.lo : t1.lo;
+  /* the bootstrap where the robust reading comes near either part of D1 with the other met or near (as first written:
+     the lower bound within 0.05 of 0.25; since the review of 13 November also z within 0.5 of Z_MIN) */
+  const zRob = t1.collinear ? NaN : zOf(t1.b, t1.lo, t1.hi);
+  const nearB = Math.abs(t1.lo - B_MIN) < 0.05 && zRob > Z_MIN - 0.5, nearZ = Math.abs(zRob - Z_MIN) < 0.5 && t1.lo > B_MIN - 0.05;
+  if (opts.boot || (!t1.collinear && (nearB || nearZ))) boot = t1Boot(Lev, nArr, 1000, 0, Rfam);
+  const lo = boot ? boot.lo : t1.lo, z = boot ? zOf(boot.b, boot.lo, boot.hi) : zRob;
   const worstStatLo = Math.max(...Object.values(byStat).map(v => v.llCi[0]));
-  const D1 = !t1.collinear && t1.orth >= ORTH_MIN && lo > B_MIN, D2 = t2.llCi[1] < -M_LL && t2.brCi[1] < -M_BR && worstStatLo <= 0;
-  return { t1: { b: t1.b, se: t1.se, lo: t1.lo, hi: t1.hi, orth: t1.orth, collinear: !!t1.collinear }, t1boot: boot, t2: { ll: t2.ll, llCi: t2.llCi, llSE: t2.llSE, br: t2.br, brCi: t2.brCi, brSE: t2.brSE, games: t2.games, lines: t2.lines }, byStat, D1, D2, marginT1: (boot ? boot.lo : t1.lo) - B_MIN, marginT2: -M_LL - t2.llCi[1] };
+  /* D1 as first written (the b bar alone), reported; D1 itself also asks z >= Z_MIN */
+  const D1b = !t1.collinear && t1.orth >= ORTH_MIN && lo > B_MIN, D1 = D1b && z >= Z_MIN, D2 = t2.llCi[1] < -M_LL && t2.brCi[1] < -M_BR && worstStatLo <= 0;
+  return { t1: { b: t1.b, se: t1.se, lo: t1.lo, hi: t1.hi, z: zRob, orth: t1.orth, collinear: !!t1.collinear }, t1boot: boot ? { ...boot, z: zOf(boot.b, boot.lo, boot.hi) } : null, t2: { ll: t2.ll, llCi: t2.llCi, llSE: t2.llSE, br: t2.br, brCi: t2.brCi, brSE: t2.brSE, games: t2.games, lines: t2.lines }, byStat, D1, D1b, D2, z, marginT1: (boot ? boot.lo : t1.lo) - B_MIN, marginZ: z - Z_MIN, marginT2: -M_LL - t2.llCi[1] };
 }
 /* a paired difference of two chances' scores on the same lines (a less b: negative, a better), game bootstrap */
 function paired(Lc, za, zb, nBoot = 10000, seed = 0) {
@@ -136,7 +150,9 @@ function calibStat(Ls, zMA, zDK, nBoot = 1000, seed = 0) {
   return { lines: n, ma: cMA, dk: cDK, saidLessHit: said - hit, dkSaidLessHit: mean(Array.from(zDK, sigm)) - hit, absLnSlopeDiff: { lo: dLo, hi: dHi, resamples: diffs.length }, a, b: bb, bPrime: bp, met: a && bb && bp, claim, bands };
 }
 /* power (PLAN.md D3, revised): standard errors scaled to G games of m lines a game by the larger of the games' and the
-   lines' scalings; T2 both criteria at once, drawn with the game sums' correlation (200,000 draws, seeded) */
+   lines' scalings; T2 both criteria at once, drawn with the game sums' correlation (200,000 draws, seeded). T1 is both
+   its parts at once since the review of 13 November (F2): b's lower bound above B_MIN and z = b / SE at least Z_MIN,
+   i.e. b drawn above max(B_MIN + 1.645 SE, Z_MIN SE); T1b (the b bar alone, as first written) and T1z reported */
 function power(oofLev, nArr, zcf, t1, frac, G, m, effLL, effBR) {
   const N0 = oofLev.length, groups = T.groupBy(oofLev, x => x.game), G0 = groups.length;
   const dLL = oofLev.map((x, i) => ll(sigm(zcf[i] + nArr[i]), x.o) - ll(sigm(zcf[i]), x.o)), dBR = oofLev.map((x, i) => br(sigm(zcf[i] + nArr[i]), x.o) - br(sigm(zcf[i]), x.o));
@@ -152,7 +168,7 @@ function power(oofLev, nArr, zcf, t1, frac, G, m, effLL, effBR) {
   let hit = 0; const nd = 200000;
   for (let j = 0; j < nd; j++) { const z1 = gauss(), z2 = rho * z1 + Math.sqrt(1 - rho * rho) * gauss(); if (frac * muLL + seLL * z1 + 1.645 * seLL < -M_LL && frac * muBR + seBR * z2 + 1.645 * seBR < -M_BR) hit++; }
   const t1se = (t1.hi - t1.lo) / (2 * 1.645) * Math.max(Math.sqrt(N0 / lines), Math.sqrt(G0 / G));
-  return { games: G, linesPerGame: m, frac, T1: PM.normCdf((frac * t1.b - B_MIN) / t1se - 1.645), T2ll: PM.normCdf((-M_LL - frac * muLL) / seLL - 1.645), T2br: PM.normCdf((-M_BR - frac * muBR) / seBR - 1.645), T2joint: hit / nd, rho };
+  return { games: G, linesPerGame: m, frac, T1: PM.normCdf((frac * t1.b - Math.max(B_MIN + 1.645 * t1se, Z_MIN * t1se)) / t1se), T1b: PM.normCdf((frac * t1.b - B_MIN) / t1se - 1.645), T1z: PM.normCdf(frac * t1.b / t1se - Z_MIN), T2ll: PM.normCdf((-M_LL - frac * muLL) / seLL - 1.645), T2br: PM.normCdf((-M_BR - frac * muBR) / seBR - 1.645), T2joint: hit / nd, rho };
 }
 /* the nudge's features: d on each kept stat, then each secondary admitted, a weight per stat (PLAN.md 1.3's order) */
 const per = f => x => STATS.map(s => (x.stat === s ? f(x) : 0));
@@ -165,4 +181,4 @@ const SEC = [
 ];
 const featOf = (stats, extra) => x => { const c = stats.map(s => (x.stat === s ? dOf(x) : 0)); for (const e of extra) c.push(...per(e.f)(x)); return c; };
 const featFinal = fin => featOf(fin.stats, fin.secondaries.map(n => { const e = SEC.find(z => z.name === n); if (!e) throw new Error(`no secondary ${n}`); return e; }));
-module.exports = { per, SEC, featOf, featFinal, S, M, T, STATS, B_MIN, ORTH_MIN, M_LL, M_BR, MONTHS, loadMA, derive, sample, dOf, forward, t1Boot, crit, paired, slopeOf, calibStat, power, mean, ll, br, sigm, logit, PM };
+module.exports = { per, SEC, featOf, featFinal, S, M, T, STATS, B_MIN, ORTH_MIN, M_LL, M_BR, Z_MIN, zOf, MONTHS, loadMA, derive, sample, dOf, forward, t1Boot, crit, paired, slopeOf, calibStat, power, mean, ll, br, sigm, logit, PM };

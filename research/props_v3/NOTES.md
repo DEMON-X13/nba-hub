@@ -49,3 +49,14 @@
   through the scorer's own path, V4 and V5 hold on the development lines (results/ma_score_devcheck.json).
   dev_results.md finished and README.md written for the folder. The step's verdict: MA does not meet the development
   bar as written (D8 missed), so the 2022-23 test is not spent. Nothing outside research/props_v3/ changed.
+- 13 Nov 2026 02:40 UTC (the review's fix step; a fresh start, nothing of it on wip/props-v3 before): the review's
+  findings checked. F1 real (score.js read Object.keys of espn_validate40.json's games array: 0 games left out, where
+  31 must be), F3 and F4 real (the gate took an audit untied to PREREG.md, a cache marker as the only once-guard, and
+  V-hash a working-tree hash list, an empty list, a sibling .sha256 and no data), F7 real (p23_fit.js's header). Fixed:
+  score.js (by gid, test/seen_2023.json's 31, vHash), test/fetch_record.js (the public start and finish on origin),
+  the wrapper, the cleaner, test/inputs.js (every input hashed, data too), freeze.js; test/machinery_check.js holds them
+  to 22 planted cases in sandbox repositories: all as expected. F2 real: T1 now also asks z = b / SE >= 4
+  (dev_lib.js); dev_rivals.js re-run (every earlier figure the same; highest z 2.85, 9 rivals with a lower bound above
+  0); dev_bar.js re-running, dev_scale.js (scaled and ridge rivals) running; dev_review.js (S1, S2, F5, N1, N2) next.
+  This step's terminal showed the first two rows of data/odds_hist.csv (2022-23 consensus game lines of two
+  opening-night games), as the plan's own step did; no 2022-23 prop line was read.

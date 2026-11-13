@@ -126,7 +126,7 @@ function replayMA(games, boxes, teamStats, posted, onRead, opts = {}) {
       const f = PM.features(p, lgPos);
       const oppF = PM.oppFactor(allowed[opp], lgAll);
       onRead({ game, player, date, season: g.season, type: g.type, club, opp, home: club === g.home ? 1 : 0, pos: p.pos, n: p.n, f, expPace, oppF,
-        clubLog: clubLog[club] || [], lastDate: p.last });
+        clubLog: (clubLog[club] || []).slice(), lastDate: p.last });   // a copy: the replay goes on pushing to its own
     }
     if (!day.length) continue;
     if (opts.collect) for (const g of day) {
@@ -269,9 +269,9 @@ function readLines6(file) {
   if (h !== 'game_id,player_id,stat,line,over,under') throw new Error(`${path.relative(ROOT, file)}: not the six clean columns (a seventh, last_updated, is refused)`);
   return t.map(l => { const v = l.split(','); if (v.length !== 6) throw new Error(`${path.relative(ROOT, file)}: a row with other than six fields`); return v; });
 }
-function lines2024(gamesById) {
-  const rr = readLines6(path.join(CACHE, 'dk40_2024_lines.csv'));
-  const starts = new Map(fs.readFileSync(path.join(CACHE, 'dk40_2024_starts.csv'), 'utf8').split('\n').filter(Boolean).slice(1).map(l => l.split(',')));
+function lines2024(gamesById, file) {
+  const rr = readLines6(file || path.join(CACHE, 'dk40_2024_lines.csv'));
+  const starts = file ? new Map() : new Map(fs.readFileSync(path.join(CACHE, 'dk40_2024_starts.csv'), 'utf8').split('\n').filter(Boolean).slice(1).map(l => l.split(',')));
   const out = [];
   for (const v of rr) {
     const g = gamesById.get(v[0]);

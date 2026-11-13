@@ -150,4 +150,15 @@ function power(oofLev, nArr, zcf, t1, frac, G, m, effLL, effBR) {
   const t1se = (t1.hi - t1.lo) / (2 * 1.645) * Math.max(Math.sqrt(N0 / lines), Math.sqrt(G0 / G));
   return { games: G, linesPerGame: m, frac, T1: PM.normCdf((frac * t1.b - B_MIN) / t1se - 1.645), T2ll: PM.normCdf((-M_LL - frac * muLL) / seLL - 1.645), T2br: PM.normCdf((-M_BR - frac * muBR) / seBR - 1.645), T2joint: hit / nd, rho };
 }
-module.exports = { S, M, T, STATS, B_MIN, ORTH_MIN, M_LL, M_BR, MONTHS, loadMA, sample, dOf, forward, t1Boot, crit, paired, slopeOf, calibStat, power, mean, ll, br, sigm, logit, PM };
+/* the nudge's features: d on each kept stat, then each secondary admitted, a weight per stat (PLAN.md 1.3's order) */
+const per = f => x => STATS.map(s => (x.stat === s ? f(x) : 0));
+const SEC = [
+  { name: 'level that is left (d_lvl)', f: x => (x.dLvl == null ? 0 : x.dLvl) },
+  { name: 'minutes trend', f: x => (x.trend == null ? 0 : x.trend) },
+  { name: 'teammates out', f: x => (x.outShare == null ? 0 : x.outShare) },
+  { name: 'his return', f: x => (x.ret == null ? 0 : x.ret) },
+  { name: 'early season (d x under 10 appearances)', f: x => dOf(x) * (x.early ? 1 : 0) },
+];
+const featOf = (stats, extra) => x => { const c = stats.map(s => (x.stat === s ? dOf(x) : 0)); for (const e of extra) c.push(...per(e.f)(x)); return c; };
+const featFinal = fin => featOf(fin.stats, fin.secondaries.map(n => { const e = SEC.find(z => z.name === n); if (!e) throw new Error(`no secondary ${n}`); return e; }));
+module.exports = { per, SEC, featOf, featFinal, S, M, T, STATS, B_MIN, ORTH_MIN, M_LL, M_BR, MONTHS, loadMA, sample, dOf, forward, t1Boot, crit, paired, slopeOf, calibStat, power, mean, ll, br, sigm, logit, PM };

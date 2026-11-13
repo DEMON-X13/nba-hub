@@ -25,3 +25,9 @@
   (ma/p23_fit.js -> results/ma_p23.json; ma_lib.js's replay checked row for row against tools/props.js's). MA's rows
   built (ma/ma_rows.js: 91,901 of 92,295 posted 2023-24 lines in the sample, 88,739 graded; the club rule leaves out
   394). D4's references cached (ma/refs.js). ma/dev_bar.js (D1 to D5) running. Next: D6 rivals, D7 leak checks, D8.
+- 13 Nov 2026 00:35 UTC: ma/dev_bar.js (D1 to D5) done -> results/ma_dev_bar.json: points' weight 0 by the rule, no
+  secondary admitted (teammates out clearly hurt), D1 b 1.218 [1.073, 1.365], D2 -0.00112 [-0.00140, -0.00083], D3
+  0.867 both T2 criteria at half the effect, D4 against all three references, D5 on every stat (points poorly
+  measured). D6 (dev_rivals.js) and D7 (dev_leaks.js) running; dev_archive.js (D8) and freeze.js written; the test
+  step's fetch wrapper written and its refusals tried (it fetched nothing). Next: D8, then D9's validity checks,
+  scorer, planted in-game prices and shadow runner.

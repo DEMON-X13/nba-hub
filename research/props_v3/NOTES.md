@@ -20,3 +20,8 @@
   matched shuffles and three more rivals in D6, the club rule, the shadow's grading order, planted in-game prices in D9,
   V6. fetch_box2021.js (the 2020-21 box scores for P23's warm-up) is running into cache/box2021/. Next: P23's fit,
   MA's rows, the development bar.
+- 13 Nov 2026 00:30 UTC: the 2020-21 boxes fetched (1,171 games, 1,341 requests all HTTP 200, logged in
+  cache/box2021/requests.tsv; the six play-in boxes carry no minutes and are left out). P23 fitted on 2021-22
+  (ma/p23_fit.js -> results/ma_p23.json; ma_lib.js's replay checked row for row against tools/props.js's). MA's rows
+  built (ma/ma_rows.js: 91,901 of 92,295 posted 2023-24 lines in the sample, 88,739 graded; the club rule leaves out
+  394). D4's references cached (ma/refs.js). ma/dev_bar.js (D1 to D5) running. Next: D6 rivals, D7 leak checks, D8.

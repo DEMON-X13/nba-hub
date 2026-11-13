@@ -31,3 +31,10 @@
   measured). D6 (dev_rivals.js) and D7 (dev_leaks.js) running; dev_archive.js (D8) and freeze.js written; the test
   step's fetch wrapper written and its refusals tried (it fetched nothing). Next: D8, then D9's validity checks,
   scorer, planted in-game prices and shadow runner.
+- 13 Nov 2026 00:45 UTC: D6 met (66 rivals, none meets D1 or D2: closest T1 lower bound 0.109, matched shuffles at
+  most 0.101), D7 met (blindfold and scramble to the bit on 210 games, early exits, minutes surprise 0.028, without
+  points 0.87 of the gain). D8 NOT MET: on the spent archive the frozen nudge's T2 point estimate is +0.000025
+  [-0.00096, +0.00102] where the bar asks for 0 or below (b 0.78 [0.24, 1.32]). So MA does not meet the development
+  bar as written and the 2022-23 test is not spent. Planted in-game prices: V2 and V4 do not react (the plants push the
+  nudge toward the Over and cost it: T2 -0.00042 at 10%, +0.00023 at 20%). validity_ma.js gives back validity.js's
+  2023-24 figures exactly. score.js --dev-check running. Next: dev_results.md.

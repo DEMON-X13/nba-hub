@@ -233,7 +233,11 @@ function buildRows(lines, D, P) {
     }
     out.push(x);
   }
-  /* the stat mix, per player-game, over every posted line with a projection (PLAN.md 1.1 steps 4 and 5) */
+  mixOf(out);
+  return out;
+}
+/* the stat mix, per player-game, over every posted line with a projection (PLAN.md 1.1 steps 4 and 5) */
+function mixOf(out) {
   const pg = new Map(); for (const x of out) { const k = x.game + '|' + x.player; if (!pg.has(k)) pg.set(k, []); pg.get(k).push(x); }
   for (const [, a] of pg) {
     for (const x of a) x.nPl = a.length;
@@ -288,4 +292,4 @@ function linesArchive() {
   return out;
 }
 
-module.exports = { ROOT, CACHE, PM, STATS, NOMINAL_MIN, loadData, gamesOf, readGamesCsv, replayMA, verifyReplay, meansAt, impliedMean, secondaries, buildRows, attachOutcomes, readLines6, lines2024, linesArchive, logit, implied };
+module.exports = { ROOT, CACHE, PM, STATS, NOMINAL_MIN, loadData, gamesOf, readGamesCsv, replayMA, verifyReplay, meansAt, impliedMean, secondaries, buildRows, mixOf, attachOutcomes, readLines6, lines2024, linesArchive, logit, implied };

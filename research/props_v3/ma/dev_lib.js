@@ -25,7 +25,11 @@ const MONTHS = ['2023-12', '2024-01', '2024-02', '2024-03', '2024-04'];
 
 function loadMA(set) {
   const J = JSON.parse(fs.readFileSync(path.join(M.CACHE, 'ma', `rows_${set}.json`), 'utf8'));
-  const L = J.lines, season = set === '2024' ? 2024 : 2026;
+  derive(J.lines, set === '2024' ? 2024 : set === 'archive' ? 2026 : +set);
+  return { J, L: J.lines };
+}
+/* F's per-line fields over every posted line of a set (the season's own game lines) */
+function derive(L, season, oddsFile) {
   for (const x of L) { x.team = x.club; }
   const by = key => { const m = new Map(); for (const x of L) { const k = key(x); if (!m.has(k)) m.set(k, []); m.get(k).push(x); } return m; };
   const gameL = by(x => x.game), nightL = by(x => x.date), pgL = by(x => x.game + '|' + x.player);
@@ -41,13 +45,13 @@ function loadMA(set) {
   }
   /* the game lines, the set's own season only */
   const oh = new Map();
-  { const t = fs.readFileSync(path.join(S.ROOT, 'data', 'odds_hist.csv'), 'utf8').split('\n').filter(Boolean), h = t.shift().split(','), ix = k => h.indexOf(k);
+  { const t = fs.readFileSync(oddsFile || path.join(S.ROOT, 'data', 'odds_hist.csv'), 'utf8').split('\n').filter(Boolean), h = t.shift().split(','), ix = k => h.indexOf(k);
     for (const l of t) { const v = l.split(','); if (+v[ix('season')] !== season) continue; oh.set(v[ix('game_id')], { homeLine: v[ix('home_line')] === '' ? null : +v[ix('home_line')], total: v[ix('total')] === '' ? null : +v[ix('total')] }); } }
   for (const x of L) { const gl = oh.get(x.game); x.homeLine = gl ? gl.homeLine : null; x.total = gl ? gl.total : null; }
   const mt = mean(L.filter(x => x.total != null).map(x => x.total));
   for (const x of L) { x.spr = x.homeLine == null || x.home == null ? 0 : (x.home ? x.homeLine : -x.homeLine); x.totC = x.total == null ? 0 : x.total - mt; x.fav = x.q > 0.5 ? 1 : 0; if (x.d == null && x.club) x.d0 = true; }
   S.prepBig(L);
-  return { J, L };
+  return L;
 }
 /* the scoring sample: graded lines of players with a club on record in the game */
 const sample = L => L.filter(x => x.club && x.status === 'graded');
@@ -161,4 +165,4 @@ const SEC = [
 ];
 const featOf = (stats, extra) => x => { const c = stats.map(s => (x.stat === s ? dOf(x) : 0)); for (const e of extra) c.push(...per(e.f)(x)); return c; };
 const featFinal = fin => featOf(fin.stats, fin.secondaries.map(n => { const e = SEC.find(z => z.name === n); if (!e) throw new Error(`no secondary ${n}`); return e; }));
-module.exports = { per, SEC, featOf, featFinal, S, M, T, STATS, B_MIN, ORTH_MIN, M_LL, M_BR, MONTHS, loadMA, sample, dOf, forward, t1Boot, crit, paired, slopeOf, calibStat, power, mean, ll, br, sigm, logit, PM };
+module.exports = { per, SEC, featOf, featFinal, S, M, T, STATS, B_MIN, ORTH_MIN, M_LL, M_BR, MONTHS, loadMA, derive, sample, dOf, forward, t1Boot, crit, paired, slopeOf, calibStat, power, mean, ll, br, sigm, logit, PM };

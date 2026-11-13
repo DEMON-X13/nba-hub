@@ -3,13 +3,13 @@
  "teams": {
   "ATL": [
    {
-    "id": "4873201",
-    "name": "Asa Newell",
+    "id": "4712863",
+    "name": "Mouhamed Gueye",
     "pos": "F",
     "status": "Out",
-    "detail": "Toe",
-    "date": "2026-11-08",
-    "returns": "2026-11-13"
+    "detail": "Foot Fracture",
+    "date": "2026-11-13",
+    "returns": "2026-12-12"
    },
    {
     "id": "4585618",
@@ -17,17 +17,26 @@
     "pos": "G",
     "status": "Out",
     "detail": "Knee Inflammation",
-    "date": "2026-11-08",
-    "returns": "2026-11-13"
+    "date": "2026-11-12",
+    "returns": "2026-11-20"
    },
    {
-    "id": "4712863",
-    "name": "Mouhamed Gueye",
+    "id": "4873201",
+    "name": "Asa Newell",
     "pos": "F",
     "status": "Out",
-    "detail": "Foot Fracture",
-    "date": "2026-10-19",
+    "detail": "Toe",
+    "date": "2026-11-12",
     "returns": "2026-11-20"
+   },
+   {
+    "id": "5149077",
+    "name": "Kingston Flemings",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
    },
    {
     "id": "5105571",
@@ -184,15 +193,6 @@
     "detail": "Knee Strain",
     "date": "2026-11-11",
     "returns": "2026-11-18"
-   },
-   {
-    "id": "4873153",
-    "name": "Morez Johnson Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Lower Leg Bruise",
-    "date": "2026-11-11",
-    "returns": "2026-11-12"
    }
   ],
   "DEN": [
@@ -237,6 +237,15 @@
   ],
   "GSW": [
    {
+    "id": "4397886",
+    "name": "Charles Bassey",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Toe Soreness",
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
+   },
+   {
     "id": "3975",
     "name": "Stephen Curry",
     "pos": "G",
@@ -244,15 +253,6 @@
     "detail": "Abdomen",
     "date": "2026-11-12",
     "returns": "2026-12-12"
-   },
-   {
-    "id": "3134903",
-    "name": "Gary Payton II",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Payton (knee) is out for Wednesday's game against Houston.",
-    "date": "2026-11-12",
-    "returns": ""
    },
    {
     "id": "4397040",
@@ -293,6 +293,15 @@
   ],
   "HOU": [
    {
+    "id": "2990992",
+    "name": "Marcus Smart",
+    "pos": "G",
+    "status": "Suspension",
+    "detail": "Suspension",
+    "date": "2026-11-12",
+    "returns": "2026-11-18"
+   },
+   {
     "id": "3102529",
     "name": "Clint Capela",
     "pos": "C",
@@ -312,6 +321,15 @@
    }
   ],
   "IND": [
+   {
+    "id": "2530530",
+    "name": "T.J. McConnell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
+   },
    {
     "id": "4396909",
     "name": "Aaron Nesmith",
@@ -439,10 +457,19 @@
     "id": "4593016",
     "name": "Quinten Post",
     "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Head",
+    "status": "Out",
+    "detail": "Concussion",
     "date": "2026-11-12",
-    "returns": "2026-11-13"
+    "returns": "2026-11-14"
+   },
+   {
+    "id": "4600663",
+    "name": "Zach Edey",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-12",
+    "returns": "2026-11-14"
    },
    {
     "id": "4431785",
@@ -682,6 +709,15 @@
   ],
   "PHI": [
    {
+    "id": "3059318",
+    "name": "Joel Embiid",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee Not Specified",
+    "date": "2026-11-13",
+    "returns": "2026-11-12"
+   },
+   {
     "id": "1966",
     "name": "LeBron James",
     "pos": "F",
@@ -707,15 +743,6 @@
     "detail": "Back Sprain",
     "date": "2026-11-12",
     "returns": "2026-11-18"
-   },
-   {
-    "id": "3059318",
-    "name": "Joel Embiid",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-11-12",
-    "returns": "2026-11-12"
    },
    {
     "id": "4871141",
@@ -812,6 +839,15 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Groin",
+    "date": "2026-11-12",
+    "returns": "2026-11-13"
+   },
+   {
+    "id": "4066259",
+    "name": "De'Aaron Fox",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip Soreness",
     "date": "2026-11-12",
     "returns": "2026-11-13"
    },

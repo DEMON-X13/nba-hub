@@ -4838,9 +4838,9 @@ date,team,player_id,name,status
 2026-11-13,LAC,6580,Bradley Beal,Out
 2026-11-13,LAC,4396818,Jordan Miller,Out
 2026-11-13,LAL,4397014,Quentin Grimes,Day-To-Day
-2026-11-13,LAL,4277811,Collin Sexton,Day-To-Day
 2026-11-13,LAL,4066457,Austin Reaves,Day-To-Day
 2026-11-13,LAL,3945274,Luka Doncic,Day-To-Day
+2026-11-13,LAL,4277811,Collin Sexton,Day-To-Day
 2026-11-13,MEM,4593016,Quinten Post,Out
 2026-11-13,MEM,4600663,Zach Edey,Out
 2026-11-13,MEM,4431785,Scotty Pippen Jr.,Out
@@ -4878,7 +4878,7 @@ date,team,player_id,name,status
 2026-11-13,POR,4578893,Vit Krejci,Out
 2026-11-13,POR,4279888,Ja Morant,Out
 2026-11-13,POR,4914336,Shaedon Sharpe,Out
-2026-11-13,SAC,4431679,Precious Achiuwa,Day-To-Day
+2026-11-13,SAC,4431679,Precious Achiuwa,Out
 2026-11-13,SAC,4898371,Maxime Raynaud,Out
 2026-11-13,SAC,3907387,Ben Simmons,Out
 2026-11-13,SAS,4395630,Devin Vassell,Day-To-Day

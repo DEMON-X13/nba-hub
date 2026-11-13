@@ -328,8 +328,11 @@ function madeUp() {
     for (const [nm, N] of Object.entries(NIGHTS)) {
       const all = legsOf(N), gs = Object.keys(N.games).sort(), cuts = [['night', gs], ...gs.map(g => [g.slice(14), [g]])];
       for (let a = 0; a < gs.length; a++) for (let b = a + 1; b < gs.length; b++) cuts.push([gs[a].slice(14) + '+' + gs[b].slice(14), [gs[a], gs[b]]]);
-      for (const [cn, keepG] of cuts) {
-        w.__legs = all.filter(l => keepG.includes(l.gid));
+      /* each cut also with team legs alone, as a night stands before DraftKings posts its player lines (the review of 13
+         November 2026: a game of team legs holds two at most, and the guard's group envelope stood over the correct level) */
+      for (const [cn0, keepG] of cuts) for (const teams of [false, true]) {
+        const cn = cn0 + (teams ? ' (team legs alone)' : '');
+        w.__legs = all.filter(l => keepG.includes(l.gid) && (!teams || l.kind !== 'prop'));
         const R = JSON.parse(w.eval(`(() => { const pool = __rPool(__legs, {}); return JSON.stringify({ gl: pool.legs.map(l => ({ sk: l.sk, gid: l.gid, kind: l.kind, pid: l.pid || null, side: l.side, line: l.line, home: l.home, team: l.team, stat: l.stat || null, odds: l.price, other: l.other, p: l.p })),
           L: [2, 4, 8].map(F => { const L = spRulerLevel(pool, F, { work: SPR_WORK_SITE }); return { F, p: L.p || null, n: L.n || 0, settled: L.settled }; }) }); })()`));
         const gl = guardLegs(R.gl);

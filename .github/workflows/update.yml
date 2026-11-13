@@ -200,6 +200,12 @@ jobs:
         if: steps.publish.outcome == 'success'
         continue-on-error: true
         timeout-minutes: 20
+        # The smoke boots the page in jsdom many times and peaks at about 3.1 GB of heap on 13 November's data, near
+        # Node's default limit on the runner (about 4.1 GB): three scheduled runs of 8 November 2026 died of out-of-memory
+        # in tools/smoke.js and held state.json, pickem.json and the pages back for six hours. 6 GB, as the NFL hub's gate
+        # gives its page smokes; the runner has 16 GB.
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
         run: |
           (cd tools && npm ci)
           node tools/test_fetch.js
@@ -231,6 +237,9 @@ jobs:
         if: steps.tests.outcome == 'success'
         continue-on-error: true
         timeout-minutes: 12
+        # It boots the page in jsdom too (the record's tests and the take): the same room as the tests' step.
+        env:
+          NODE_OPTIONS: --max-old-space-size=6144
         run: |
           if node tools/test_suggest_ledger.js > /tmp/test_suggest_ledger.log 2>&1 && node tools/test_suggest_speed.js >> /tmp/test_suggest_ledger.log 2>&1 && RULER_ONLY=enum,site,slice,bound node tools/test_suggest_ruler.js >> /tmp/test_suggest_ledger.log 2>&1 && now=$(date -u +%Y-%m-%dT%H:%M:%SZ) && SUGGEST_NOW=$now node tools/suggest_ledger.js && SUGGEST_NOW=$now node tools/suggest_check.js; then exit 0; fi
           tail -20 /tmp/test_suggest_ledger.log

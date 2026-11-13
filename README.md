@@ -3535,6 +3535,11 @@ review of 12 November found a $1.9996 pair of 30 October's IND at MIA and DEN at
 parlay, refusing the page's correct Safe and with it the record step); every larger group by a dynamic programme on that
 grid (its cells rounded up, which only raises the bound) under the hold's envelope capped by the one-factor copula at the
 game's largest correlation (Slepian's inequality), then its triples exactly where few enough; every term an upper bound.
+The envelope stands only on a game that can hold a group of three legs or more (one leg a player, one side and one total:
+a game of team legs alone holds two at most). The review of 13 November 2026 found it standing on every game of that
+night before DraftKings had posted its player lines: the night's correct Aggressive, four team legs at 10.54%, sat under
+a bound of 11.21% (the hold over $8), and the guard refused the record step on every run from the cutoff; the ruler
+test's bound part now holds every cut of every fixture night with its team legs alone too.
 Rules (3) and (4) are held on the guard's own witnesses (`rulerWitness`): the exact walk's likeliest parlay of each size
 up to the level's (the legs alone, and on a night of three games or fewer their pairs too); a parlay of fewer legs
 landing (1 - 0.005 + 0.001) of the bound or more refuses the level ("the rule takes the fewest legs"), and so does one of

@@ -1102,8 +1102,13 @@ function rulerBound(legs, corr, F, info) {
       const [x, y] = a.sk < b.sk ? [a, b] : [b, a]; m = Math.max(m, Math.abs(CJ.rhoFor(corr.rho, clOf(x), clOf(y)) || 0)); }
     const two = rbPairs(corr, L); worked.push(two);
     const ps = L.map(l => l.p).sort((a, b) => b - a); g.m = Math.min(0.999, m); g.two = frontier(two.map(u => [cellOf(u.d), u.p]));
-    g.cap3 = ps.length >= 3 ? Math.min(H, oneFactor(ps.slice(0, 3), g.m) * (1 + RB_SIG)) : 0;
-    g.cap4 = ps.length >= 4 ? Math.min(H, oneFactor(ps.slice(0, 4), g.m) * (1 + RB_SIG)) : 0;
+    /* the most legs a parlay can hold of this game: one a player, one side and one total. A game of team legs alone holds
+       two at most, so it has no group of three legs or more and no envelope (the review of 13 November 2026: before
+       DraftKings posted that night's player lines, every game held team legs alone, the envelope's HOLD / F stood over the
+       night's correct Aggressive, four team legs at 10.54% against a bound of 11.21%, and the guard refused the record) */
+    const most = new Set(L.filter(l => l.pid).map(l => l.pid)).size + (L.some(l => l.side) ? 1 : 0) + (L.some(l => l.tot) ? 1 : 0);
+    g.cap3 = most >= 3 && ps.length >= 3 ? Math.min(H, oneFactor(ps.slice(0, 3), g.m) * (1 + RB_SIG)) : 0;
+    g.cap4 = most >= 4 && ps.length >= 4 ? Math.min(H, oneFactor(ps.slice(0, 4), g.m) * (1 + RB_SIG)) : 0;
   }
   const ex2 = rbExact(rbUnits(legs, corr, F, true, worked), F, null), g2 = ex2 && ex2.capped ? (() => { const keep = G.map(g => [g.cap3, g.cap4]); for (const g of G) { g.cap3 = 0; g.cap4 = 0; } const v = run(false); G.forEach((g, i) => { g.cap3 = keep[i][0]; g.cap4 = keep[i][1]; }); return v; })() : ex2 ? ex2.p * (1 + RB_TIE) : 0;
   const e3 = Math.min(roof, run(true)), b0 = Math.max(g2, e3);

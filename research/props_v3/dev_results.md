@@ -238,9 +238,9 @@ How to read it, without moving the bar:
   by how much the archive's 83 games cannot say.
 - The archive differs from the test in ways that may count against MA: playoff games, which no development line is;
   another feed (provider 100's closing lines, where the development and test lines are provider 40's); P23's constants
-  fitted on 2021-22, four seasons before the archive against one season before 2022-23. The plan's
-  stand-in met D8 (−0.00046 [−0.00142, +0.00051]) on projections fitted on 2022-23 to 2024-25 and on each game's list of
-  who dressed (hindsight MA never has), so stale constants are one possible reason, untested.
+  fitted on 2021-22, four seasons before the archive against one season before 2022-23. The plan's stand-in met D8
+  (−0.00046 [−0.00142, +0.00051]) on projections fitted on 2022-23 to 2024-25 and on each game's list of who dressed
+  (hindsight MA never has), so stale constants are one possible reason, untested.
 - None of that turns the miss into a pass. D8 was written into the bar before any of MA's scores, knowing the archive
   was the archive and that P23 is fitted on 2021-22. It was put there to stop a candidate whose development gain does
   not show on another season's lines at its frozen size, and on its own terms it does stop MA.

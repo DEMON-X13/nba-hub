@@ -2318,7 +2318,7 @@
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4703115",
@@ -2965,7 +2965,7 @@
     "name": "Drew Timme",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4701232",
@@ -3414,7 +3414,7 @@
     "name": "Kevin McCullar Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5093267",

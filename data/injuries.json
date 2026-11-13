@@ -535,10 +535,46 @@
     "id": "4576086",
     "name": "Bryce McGowens",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Elbow Infection",
-    "date": "2026-11-12",
+    "date": "2026-11-13",
+    "returns": "2026-11-14"
+   },
+   {
+    "id": "5061589",
+    "name": "Yves Missi",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee Bruise",
+    "date": "2026-11-13",
+    "returns": "2026-11-14"
+   },
+   {
+    "id": "4683634",
+    "name": "Bennedict Mathurin",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Thumb Sprain",
+    "date": "2026-11-13",
     "returns": "2026-11-13"
+   },
+   {
+    "id": "3907497",
+    "name": "Dejounte Murray",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-11-13",
+    "returns": "2026-11-13"
+   },
+   {
+    "id": "4397688",
+    "name": "Trey Murphy III",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Tendinitis",
+    "date": "2026-11-13",
+    "returns": "2026-11-14"
    },
    {
     "id": "4431675",
@@ -548,33 +584,6 @@
     "detail": "Ankle Sprain",
     "date": "2026-11-12",
     "returns": "2026-11-14"
-   },
-   {
-    "id": "4683634",
-    "name": "Bennedict Mathurin",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Thumb Sprain",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "5061589",
-    "name": "Yves Missi",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Bruise",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "4397688",
-    "name": "Trey Murphy III",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Tendinitis",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
    }
   ],
   "OKC": [
@@ -635,21 +644,21 @@
   ],
   "ORL": [
    {
-    "id": "4702382",
-    "name": "Tristan da Silva",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
     "id": "4278572",
     "name": "Jamal Cain",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Shoulder Bruise",
-    "date": "2026-11-12",
+    "date": "2026-11-13",
+    "returns": "2026-11-13"
+   },
+   {
+    "id": "4702382",
+    "name": "Tristan da Silva",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Calf Strain",
+    "date": "2026-11-13",
     "returns": "2026-11-13"
    },
    {
@@ -658,7 +667,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Knee",
-    "date": "2026-11-12",
+    "date": "2026-11-13",
     "returns": "2026-11-13"
    },
    {
@@ -737,6 +746,15 @@
    }
   ],
   "PHX": [
+   {
+    "id": "4431695",
+    "name": "Drew Timme",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hand",
+    "date": "2026-11-13",
+    "returns": "2026-11-15"
+   },
    {
     "id": "4701232",
     "name": "Mark Williams",
@@ -853,6 +871,15 @@
    }
   ],
   "TOR": [
+   {
+    "id": "4411057",
+    "name": "Kevin McCullar Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-13",
+    "returns": "2026-11-14"
+   },
    {
     "id": "4431684",
     "name": "Trayce Jackson-Davis",

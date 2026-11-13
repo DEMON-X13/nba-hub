@@ -1,0 +1,325 @@
+{
+ "what": "the review of 13 November 2026's statistical findings, checked (development data and the spent archive; context, deciding nothing)",
+ "S1": {
+  "archive": {
+   "lines": 6418,
+   "games": 83,
+   "barPartition": {
+    "K": 5,
+    "rule": "the game id's FNV-1a hash mod 5",
+    "t2": 0.000025233
+   },
+   "random5": {
+    "partitions": 40,
+    "mean": -0.00000624779,
+    "sd": 0.0000499322,
+    "min": -0.00012453,
+    "max": 0.0000928756,
+    "shareAbove0": 0.4
+   },
+   "K10": {
+    "rule": "the hash mod 10",
+    "t2": -0.0000621947
+   },
+   "leaveOneGameOut": {
+    "K": 83,
+    "t2": -0.0000125312
+   },
+   "logLoss": {
+    "crossFittedF": 0.677614,
+    "draftKingsFair": 0.671777,
+    "maFrozen": 0.67216,
+    "eAloneFrozen": 0.672376,
+    "fLessDraftKings": 0.00583688
+   },
+   "maLessDraftKings": {
+    "lines": 6418,
+    "games": 83,
+    "ll": 0.000382485,
+    "llCi": [
+     -0.00074857,
+     0.00155109
+    ],
+    "br": 0.000210059,
+    "brCi": [
+     -0.000329897,
+     0.000768573
+    ]
+   },
+   "eAloneLessDraftKings": {
+    "lines": 6418,
+    "games": 83,
+    "ll": 0.000598385,
+    "llCi": [
+     -0.0000656159,
+     0.00126852
+    ],
+    "br": 0.000294876,
+    "brCi": [
+     -0.0000254882,
+     0.000618813
+    ]
+   }
+  },
+  "development": {
+   "lines": 68850,
+   "games": 863,
+   "barPartition": {
+    "t2": -0.00112107
+   },
+   "random5": {
+    "partitions": 10,
+    "mean": -0.00111491,
+    "sd": 0.00000353482,
+    "min": -0.00111884,
+    "max": -0.00110861,
+    "shareAbove0": 0
+   }
+  }
+ },
+ "S2": {
+  "what": "D2 by stat, the nudge's paired log-loss difference a line: 90% intervals by seed 0 (ma_dev_bar.json's) and seed 1; Bonferroni intervals for five stats (98%) and six (98.33%)",
+  "byStat": {
+   "pts": {
+    "lines": 11550,
+    "ll": 0,
+    "ci90seed0": [
+     0,
+     0
+    ],
+    "ci90seed1": [
+     0,
+     0
+    ],
+    "ci98seed0": [
+     0,
+     0
+    ],
+    "ci9833seed0": [
+     0,
+     0
+    ],
+    "ci98seed1": [
+     0,
+     0
+    ]
+   },
+   "reb": {
+    "lines": 12331,
+    "ll": -0.000659701,
+    "ci90seed0": [
+     -0.00130935,
+     -0.0000165709
+    ],
+    "ci90seed1": [
+     -0.00131152,
+     0.00000433843
+    ],
+    "ci98seed0": [
+     -0.0015762,
+     0.000260979
+    ],
+    "ci9833seed0": [
+     -0.00161202,
+     0.0002963
+    ],
+    "ci98seed1": [
+     -0.0015835,
+     0.000275778
+    ]
+   },
+   "ast": {
+    "lines": 7463,
+    "ll": -0.000504407,
+    "ci90seed0": [
+     -0.000996907,
+     -0.0000208379
+    ],
+    "ci90seed1": [
+     -0.000989323,
+     -0.0000176889
+    ],
+    "ci98seed0": [
+     -0.00118246,
+     0.000194425
+    ],
+    "ci9833seed0": [
+     -0.00120587,
+     0.000207295
+    ],
+    "ci98seed1": [
+     -0.00119813,
+     0.000187129
+    ]
+   },
+   "tpm": {
+    "lines": 11724,
+    "ll": -0.000867924,
+    "ci90seed0": [
+     -0.00139572,
+     -0.000337786
+    ],
+    "ci90seed1": [
+     -0.00139696,
+     -0.000337503
+    ],
+    "ci98seed0": [
+     -0.0016101,
+     -0.000125914
+    ],
+    "ci9833seed0": [
+     -0.00163113,
+     -0.000100025
+    ],
+    "ci98seed1": [
+     -0.00160025,
+     -0.000116446
+    ]
+   },
+   "stl": {
+    "lines": 12964,
+    "ll": -0.00286138,
+    "ci90seed0": [
+     -0.00394796,
+     -0.00180815
+    ],
+    "ci90seed1": [
+     -0.00393732,
+     -0.0018006
+    ],
+    "ci98seed0": [
+     -0.00439791,
+     -0.0013656
+    ],
+    "ci9833seed0": [
+     -0.00443687,
+     -0.00133657
+    ],
+    "ci98seed1": [
+     -0.0043721,
+     -0.00133871
+    ]
+   },
+   "blk": {
+    "lines": 12818,
+    "ll": -0.00140551,
+    "ci90seed0": [
+     -0.00218489,
+     -0.000614559
+    ],
+    "ci90seed1": [
+     -0.00219089,
+     -0.000632367
+    ],
+    "ci98seed0": [
+     -0.00252123,
+     -0.000278544
+    ],
+    "ci9833seed0": [
+     -0.00256133,
+     -0.000243814
+    ],
+    "ci98seed1": [
+     -0.0024875,
+     -0.000322526
+    ]
+   }
+  },
+  "clearAfterCorrection": [
+   "tpm",
+   "stl",
+   "blk"
+  ]
+ },
+ "N1": {
+  "what": "D5's ten-band tables: each stat's worst band of 100 lines or more, MA's mean chance less its Over rate (points), and that over the band's binomial standard error",
+  "byStat": {
+   "pts": {
+    "band": [
+     0.5,
+     0.6
+    ],
+    "lines": 3289,
+    "saidLessHit": 0.8142,
+    "seUnits": 0.934598
+   },
+   "reb": {
+    "band": [
+     0.5,
+     0.6
+    ],
+    "lines": 3975,
+    "saidLessHit": 1.9306,
+    "seUnits": 2.44147
+   },
+   "ast": {
+    "band": [
+     0.3,
+     0.4
+    ],
+    "lines": 416,
+    "saidLessHit": 5.2171,
+    "seUnits": 2.18542
+   },
+   "tpm": {
+    "band": [
+     0.3,
+     0.4
+    ],
+    "lines": 2767,
+    "saidLessHit": -1.6981,
+    "seUnits": -1.86385
+   },
+   "stl": {
+    "band": [
+     0.2,
+     0.3
+    ],
+    "lines": 832,
+    "saidLessHit": 2.0695,
+    "seUnits": 1.34348
+   },
+   "blk": {
+    "band": [
+     0.1,
+     0.2
+    ],
+    "lines": 1744,
+    "saidLessHit": 2.0608,
+    "seUnits": 2.34446
+   }
+  }
+ },
+ "N2": {
+  "eAloneLessDraftKings": {
+   "lines": 68850,
+   "games": 863,
+   "ll": -0.000323074,
+   "llCi": [
+    -0.000648696,
+    -0.00000530846
+   ],
+   "br": -0.000121278,
+   "brCi": [
+    -0.000262746,
+    0.0000152726
+   ]
+  }
+ },
+ "F5": {
+  "playerGames": 13067,
+  "games": 863,
+  "corrNudge": 0.0280755,
+  "corrNudgeCi90": [
+   0.0118856,
+   0.0437634
+  ],
+  "corrLevel": 0.04162,
+  "corrLevelCi90": [
+   0.0224326,
+   0.0605045
+  ],
+  "resamples": 2000
+ },
+ "seconds": 68
+}

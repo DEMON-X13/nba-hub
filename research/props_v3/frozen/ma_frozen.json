@@ -147,16 +147,49 @@
  "fittedOn": {
   "lines": 88739,
   "games": 1116,
-  "set": "DraftKings 2023-24 provider 40, the regular-season window, the six base stats"
+  "set": "DraftKings 2023-24 provider 40, the regular-season window, the six base stats",
+  "inputs": {
+   "research/props_v3/cache/dk40_2024_lines.csv": "0082ede70dc60184a2cefe96a43633a592b19a9f9ae42319fa0ab7fe54d08b0c",
+   "research/props_v3/cache/dk40_2024_starts.csv": "86dfd6e2cfa5f26788c0f8ae7a727abfd83673963c6d0c2de0daf0a7ca5b9703",
+   "data/odds_hist.csv#season 2024": "c2feb24721cb684fa86d89d9df4254b5ac56cdbd57d2afc978e44564034de718"
+  }
  },
  "files": {
+  "data/box_2022.csv": "67fe1e6c346ca7c9f397d562d5a86c5453fb47d2952c6c21508b5b14e7022d63",
+  "data/box_2023.csv": "ef25e30a5770abd0677bfbf9c2728226c577a64384fe0688328dcd4a4ee93b15",
+  "data/box_2024.csv": "6d1ac2cad9301cf8126c681485b45294794fde2cc36cb59a5fad98d0c59d3d75",
+  "data/box_2025.csv": "b2a2167f479d62379880a726beced9a01f04da33c075e48c8b469bedefe021eb",
+  "data/box_2026.csv": "85f345aea583ddde9e957814b9ec01a97ef021a9f3cc69bf3fbfcb58640c299d",
+  "data/games.csv#seasons 2021 to 2026": "0fb257e34b56e9add60228efaa7d93fec1c6c1675400ead9c5d4ded381929628",
+  "data/odds_hist.csv#season 2023": "ad319990c8219fb26bdaf58b79e18b738991c31fbe7f53007d0878ec1b9f9eea",
+  "data/teambox_2022.jsonl": "99cf7526aa11b1d492063b8f5804cdd9302f7f19d9d99dd49d2535c3f6c5af0c",
+  "data/teambox_2023.jsonl": "090688cf3616b5c613bccd896cdb8a14e5d5552acdc8c4b2fd58be68f7cd54a9",
+  "data/teambox_2024.jsonl": "576a264fd736f5bc65a83a3c2f92c1cd495e4d7dbef56a4bbf62653c9103551e",
+  "data/teambox_2025.jsonl": "c93deb3221b83c5073bd5eaaa333e6ffe95fca713ae2622f81e35403abbe4e3f",
+  "data/teambox_2026.jsonl": "defedc79faad2711da19289da9568359967d47fb0cd50e9e82c706a85f3f1242",
+  "research/props_v2/cand_select_lib.js": "982d5ae7617eddc13ee0f9bc7731bb57aa4914705a297bf99bc6385e5367e24f",
+  "research/props_v2/fetch_dk40.js": "2f04ef3e268c543dd621c31d3a72bfd986c4af145f80734dbe7949134cdba471",
+  "research/props_v2/results/espn_validate40.json": "c1bdfb10742b9deeef50c8ee49c6d54d5c244f9a5af2ac366616f9c1568bb96e",
+  "research/props_v2/results/validity_ref.json": "31ffc5ea59e167489120692c12813a28988f9914bd9e7354d4ad1f5c07724ea6",
+  "research/props_v2/validity_lib.js": "f4ac005194d0358d7928b272e9be5f07f50b8f9005fad7fea2c4ac2f6ec04bd5",
+  "research/props_v3/cache/box2021/box_2021.csv": "1ed3cc96f8f98f208e30ef0018369c5034cdbe6910450a01ac154608e921337b",
+  "research/props_v3/cache/box2021/teambox_2021.jsonl": "f4d38444cbde1e9d5f0068f51804ad92a6e7f41592a13b7bcc6224b84511011e",
+  "research/props_v3/ma/dev_lib.js": "7357340d5ba5d7e28246c48fa6e993be4e870a51d216af34ae558cb87223c320",
+  "research/props_v3/ma/freeze.js": "037a6add7f386baf1c6d6fdf0fd10a6f3982bec427439e2640f565fb6caeed0c",
   "research/props_v3/ma/ma_lib.js": "5878d3243ca361bc788ac953f9b053853f03a6be5adcec7e72b8c5faaadd3169",
-  "research/props_v3/ma/dev_lib.js": "de53190d2296b84dd033e5ccaf7427495781165a1e7c3ef8244b8fe29a2ac316",
   "research/props_v3/plan_sizing/lib.js": "f9370df99ae827eda8ff3ec7aee682589b3e99fe923d4d76481e38f8d81ee7b9",
+  "research/props_v3/results/ma_p23.json": "f0f36c69bf348dce5352f22a222f45a4ad85b7ad5e947e131714403fa389a888",
+  "research/props_v3/test/fetch_dk40_2023_logged.sh": "82dcf2c9d79c8eb2f0d2db2db4850376acffd738ebca61addd77d62a1531e524",
+  "research/props_v3/test/fetch_record.js": "1659c3cd9fc01bd997e8a3c77155f408bc7aa5386d46b27260521690ae757ff0",
+  "research/props_v3/test/inputs.js": "215183386fab9673c1e6b6956e986f1525cfc16cc22f69a4850e4d843f9d509a",
+  "research/props_v3/test/lines_clean_2023.js": "825c056b4403d99eade6c344c0300e65f632701042ea8cdc318f3738061b0490",
+  "research/props_v3/test/score.js": "8d7c073aed9ab1a8d5277ed7aab572c37e888345cbe4fd9c581d36e8353d2c68",
+  "research/props_v3/test/seen_2023.json": "b58c26ae46f9259bc5d825fe27734911ce50a20f4c525b601f25168c106ae880",
+  "research/props_v3/test/validity_ma.js": "d8eb370af7bb183aff3f0d02fac512c07b6ecbf557ab24b99cf8ce63c40f68d5",
   "research/props_v3/why_lib.js": "32005eaab4f53cfba18de665a0ace6c62d1fba2a85398b2aa54fa6eecadeb884",
+  "tools/lib.js": "192aceb42f8f7286b385ed700cb1d167beafb7c6681c43c8f05cca8148001900",
   "tools/props.js": "c18897fbba31559a3b602a9d6178c71c9330aebd8fad08eb2dcc4b1e1f230a61",
   "tools/props_feed.js": "da1bf4e70f439016511407441917424303712cf8d5a1eea69730c177c5dda816",
-  "tools/lib.js": "192aceb42f8f7286b385ed700cb1d167beafb7c6681c43c8f05cca8148001900",
-  "research/props_v3/results/ma_p23.json": "f0f36c69bf348dce5352f22a222f45a4ad85b7ad5e947e131714403fa389a888"
+  "tools/props_record.js": "76dfaf201ac366f1eebcc31ceced272ec543b87601e3a03577745910ba8cb7ca"
  }
 }

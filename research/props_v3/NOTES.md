@@ -60,3 +60,14 @@
   0); dev_bar.js re-running, dev_scale.js (scaled and ridge rivals) running; dev_review.js (S1, S2, F5, N1, N2) next.
   This step's terminal showed the first two rows of data/odds_hist.csv (2022-23 consensus game lines of two
   opening-night games), as the plan's own step did; no 2022-23 prop line was read.
+- 13 Nov 2026 02:55 UTC: the review's fix step done. dev_bar.js re-run with the strengthened T1 (every earlier figure
+  the same, dev_oof.json byte for byte; D1 z 13.74; D3 T1 0.997 both parts, the weight bar binding), dev_rivals.js and
+  dev_archive.js too (the archive's z 2.40; D8 still +0.000025, not met). dev_scale.js (F2): U9 at 0.3 gives b [0.258,
+  2.941] by the bar's own bootstrap; 5 of 24 scaled or regularised rivals meet D1 as first written, none as strengthened
+  (highest z 2.85), none D2. dev_review.js: S1 (40 random splits: T2 above 0 on 40%, sd 0.000050; F's archive log loss
+  0.6776 against DraftKings' 0.6718; E alone 0.0006 worse than DraftKings there), S2 (rebounds and assists reach 0 under
+  a five-stat correction), N1 (assists' 0.3-0.4 band 5.2 points), F5 (0.028 [0.012, 0.044]). The machinery check now has
+  26 cases (B0: the gate as first written shows each of F3's gaps), all as expected. score.js --dev-check re-run after
+  the edits: D1 and D2 to the digit. freeze.js re-run (36 inputs hashed, data too; weights equal D8's). PLAN.md section
+  9 and dev_results.md section 9 say what changed. Verdict unchanged: MA does not meet its development bar (D8 missed,
+  D9 unfinished); 2022-23 unfetched.

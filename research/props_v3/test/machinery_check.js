@@ -8,6 +8,9 @@
  *      games[].gid (as first written, Object.keys of that array, which gave 0, is shown beside); testLines, fed made-up
  *      rows (one for each of the 31, three for other regular-season games of the window, one for a play-in game and one
  *      for a game of 2023-24), keeps the three alone and counts the 31 left out.
+ *   B0. The gate as first written (the wrapper of c3e9a5c, line for line), for the bite: it took a PREREG.md edited
+ *      after its audit, refused a second run by the marker in the cache alone, ran again once the cache was wiped, and
+ *      refused to run again an interrupted fetch.
  *   B. The fetch's gate and record (F3), the real wrapper, record tool and cleaner copied into the sandbox, with a
  *      stand-in for fetch_dk40.js that requests nothing and writes made-up rows: refused with no preregistration, with one
  *      not pushed, with an audit naming no hashes, and with a PREREG.md edited after its audit; run once with a sound one
@@ -33,7 +36,8 @@ const M = require('../ma/ma_lib.js');
 const sha256 = b => crypto.createHash('sha256').update(b).digest('hex');
 const out = { what: "the one-shot test's machinery held to planted cases (made-up lines; sandbox repositories)", A: { cases: [] }, B: [], C: [] };
 /* a case's words, its commit ids and times masked, so the result file is the same on every run */
-const mask = t => (t == null ? t : String(t).replace(/\b[0-9a-f]{7,40}\b/g, '<commit>').replace(/\d{4}-\d\d-\d\dT[\d:.]+Z/g, '<time>'));
+let SANDBOX = null;
+const mask = t => (t == null ? t : (SANDBOX ? String(t).split(SANDBOX).join('<sandbox>') : String(t)).replace(/\b[0-9a-f]{7,40}\b/g, '<commit>').replace(/\d{4}-\d\d-\d\dT[\d:.]+Z/g, '<time>'));
 const expect = (arr, name, ok, detail) => { arr.push({ case: name, asExpected: !!ok, detail: mask(detail) }); console.log(`${ok ? 'ok  ' : 'FAIL'} ${name}${detail ? `: ${detail}` : ''}`); };
 
 /* ---------- A. the left-out games ---------- */
@@ -72,7 +76,54 @@ fs.writeFileSync(path.join(C, 'props40_2023.csv'), rows.join('\\n') + '\\n');
 fs.writeFileSync(path.join(C, 'props40_reads.json'), JSON.stringify({ '2023_20221018_PHI_BOS': { start: '2022-10-18T23:30Z' }, '2023_20221018_LAL_GSW': { start: '2022-10-19T02:00Z' } }));
 console.log('stand-in: 2 rows');
 `;
+/* the wrapper as first written (c3e9a5c), line for line, for the bite: its gate and its marker in the cache */
+const OLD_WRAPPER = [
+  "#!/usr/bin/env bash",
+  "# THE TEST STEP'S FETCH (PLAN.md 3.1): DraftKings' 2022-23 regular-season provider-40 lines, fetched by",
+  "# research/props_v2/fetch_dk40.js RUN UNCHANGED into its gitignored cache, every request logged, exactly as",
+  "# research/props_v3/fetch_dk40_logged.sh fetched 2023-24 (the same stand-in for curl, which passes output and exit code",
+  "# through and logs the time, curl's exit code, the HTTP status and the address, never an answer).",
+  "#",
+  "# WRITTEN AND REVIEWED, NOT RUN. It runs only for the one window PLAN.md 3.1 names (18 October 2022 to 9 April 2023), and",
+  "# only once the preregistration is committed, pushed and audited sound: it is handed the commit (PROPS_V3_PREREG=<sha>),",
+  "# which must be on a branch of origin and hold research/props_v3/PREREG.md and research/props_v3/PREREG_AUDIT.md, the",
+  "# audit's file with a line reading exactly \"verdict: sound\". It refuses a second run (a marker in the cache).",
+  "#",
+  "#   PROPS_V3_PREREG=<sha> bash research/props_v3/test/fetch_dk40_2023_logged.sh",
+  "set -euo pipefail",
+  "HERE=\"$(cd \"$(dirname \"$0\")\" && pwd)\"",
+  "ROOT=\"$(cd \"$HERE/../../..\" && pwd)\"",
+  "FROM=\"2022-10-18\"; TO=\"2023-04-09\"",
+  "SHA=\"${PROPS_V3_PREREG:-}\"",
+  "if [[ -z \"$SHA\" ]]; then echo \"refused: no preregistration commit (PROPS_V3_PREREG)\" >&2; exit 1; fi",
+  "cd \"$ROOT\"",
+  "git cat-file -e \"$SHA:research/props_v3/PREREG.md\" 2>/dev/null || { echo \"refused: $SHA holds no research/props_v3/PREREG.md\" >&2; exit 1; }",
+  "git show \"$SHA:research/props_v3/PREREG_AUDIT.md\" 2>/dev/null | grep -qx 'verdict: sound' || { echo \"refused: $SHA holds no audit reading 'verdict: sound'\" >&2; exit 1; }",
+  "[[ -n \"$(git branch -r --contains \"$SHA\" 2>/dev/null)\" ]] || { echo \"refused: $SHA is not on a branch of origin (pushed)\" >&2; exit 1; }",
+  "LOGDIR=\"$HERE/../cache\"; mkdir -p \"$LOGDIR\"",
+  "MARK=\"$LOGDIR/fetch_dk40_2023.ran\"",
+  "if [[ -e \"$MARK\" ]]; then echo \"refused: the 2022-23 fetch has run already ($MARK)\" >&2; exit 1; fi",
+  "printf '%s\\t%s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" \"$SHA\" > \"$MARK\"",
+  "REAL_CURL=\"$(command -v curl)\"",
+  "REQLOG=\"$LOGDIR/fetch_dk40_${FROM}_${TO}.requests.tsv\"",
+  "OUTLOG=\"$LOGDIR/fetch_dk40_${FROM}_${TO}.stdout.log\"",
+  "SHIM=\"$(mktemp -d)\"; trap 'rm -rf \"$SHIM\"' EXIT",
+  "cat > \"$SHIM/curl\" <<'EOS'",
+  "#!/usr/bin/env bash",
+  "t=\"$(mktemp)\"",
+  "\"$REAL_CURL\" \"$@\" > \"$t\"; rc=$?",
+  "code=\"$(tail -n 1 \"$t\" 2>/dev/null | tr -dc '0-9')\"",
+  "printf '%s\\t%s\\t%s\\t%s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" \"$rc\" \"${code}\" \"${@: -1}\" >> \"$DK40_REQLOG\"",
+  "cat \"$t\"; rm -f \"$t\"",
+  "exit $rc",
+  "EOS",
+  "chmod +x \"$SHIM/curl\"",
+  "printf 'started\\t%s\\t%s\\t%s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" \"$FROM\" \"$TO\" >> \"$REQLOG\"",
+  "PATH=\"$SHIM:$PATH\" REAL_CURL=\"$REAL_CURL\" DK40_REQLOG=\"$REQLOG\" node research/props_v2/fetch_dk40.js \"$FROM\" \"$TO\" | tee -a \"$OUTLOG\"",
+  "printf 'finished\\t%s\\t%s\\t%s\\n' \"$(date -u +%Y-%m-%dT%H:%M:%SZ)\" \"$FROM\" \"$TO\" >> \"$REQLOG\"",
+].join('\n') + '\n';
 const TMP = fs.mkdtempSync(path.join(os.tmpdir(), 'props_v3-machinery-'));
+SANDBOX = TMP;
 function sandbox(name) {
   const base = path.join(TMP, name), origin = path.join(base, 'origin.git'), work = path.join(base, 'work');
   fs.mkdirSync(base, { recursive: true });
@@ -109,6 +160,20 @@ function wrapper(sb, sha, extra = {}) {
 const runs = sb => { const f = path.join(sb.work, 'stub_runs.log'); return fs.existsSync(f) ? fs.readFileSync(f, 'utf8').split('\n').filter(Boolean).map(l => JSON.parse(l)) : []; };
 const versions = sb => require(path.join(sb.work, 'research', 'props_v3', 'test', 'fetch_record.js')).recordVersions(sb.work);
 const wipe = sb => { for (const d of ['research/props_v3/cache', 'research/props_v2/cache']) fs.rmSync(path.join(sb.work, d), { recursive: true, force: true }); };
+
+/* ---------- B0. the gate as first written: the review's three gaps, on its own sandbox ---------- */
+out.B0 = [];
+{ const s0 = sandbox('s0'), oldW = path.join(s0.work, 'research', 'props_v3', 'test', 'fetch_old.sh'); fs.writeFileSync(oldW, OLD_WRAPPER);
+  const runOld = (sha, extra = {}) => { const r = spawnSync('bash', [oldW], { cwd: s0.work, env: { ...process.env, PROPS_V3_PREREG: sha, STUB_MODE: 'ok', ...extra }, encoding: 'utf8' }); return { code: r.status, err: (r.stderr || '').trim().split('\n').filter(Boolean).pop() || '' }; };
+  prereg(s0, 'v1\n'); fs.writeFileSync(path.join(s0.work, 'research', 'props_v3', 'PREREG.md'), 'v1, edited after the audit\n'); s0.g('add', '-A'); s0.g('commit', '--quiet', '-m', 'edited'); s0.g('push', '--quiet', 'origin', `HEAD:refs/heads/${BRANCH}`);
+  const edited = s0.g('rev-parse', 'HEAD').trim();
+  const r1 = runOld(edited); expect(out.B0, 'B0.1 as first written: a PREREG.md edited after its audit was taken, and the fetch ran', r1.code === 0 && runs(s0).length === 1, `exit ${r1.code}`);
+  const r2 = runOld(edited); expect(out.B0, 'B0.2 as first written: a second run was refused, by the marker in the cache alone', r2.code !== 0 && /has run already/.test(r2.err) && runs(s0).length === 1, r2.err);
+  wipe(s0); const r3 = runOld(edited); expect(out.B0, 'B0.3 as first written: with the cache wiped the fetch ran again', r3.code === 0 && runs(s0).length === 2, `exit ${r3.code}`);
+  const s0b = sandbox('s0b'), oldWb = path.join(s0b.work, 'research', 'props_v3', 'test', 'fetch_old.sh'); fs.writeFileSync(oldWb, OLD_WRAPPER);
+  const good0 = prereg(s0b, 'v1\n'), runOldB = extra => spawnSync('bash', [oldWb], { cwd: s0b.work, env: { ...process.env, PROPS_V3_PREREG: good0, STUB_MODE: 'ok', ...extra }, encoding: 'utf8' });
+  const f1 = runOldB({ STUB_MODE: 'fail' }), f2 = runOldB({});
+  expect(out.B0, 'B0.4 as first written: a fetch interrupted after the marker was written could not be run again but by deleting it', f1.status !== 0 && f2.status !== 0 && /has run already/.test(f2.stderr) && runs(s0b).length === 1, (f2.stderr || '').trim().split('\n').pop()); }
 
 /* ---------- B. the gate and the record ---------- */
 const B = out.B;
@@ -167,6 +232,7 @@ const s2 = sandbox('s2');
   const r2 = wrapper(s2, sha), v2 = versions(s2);
   expect(B, 'B13 run again under the same preregistration: resumed, then finished', r2.code === 0 && /resuming/.test(r2.outText) && runs(s2).length === 2 && v2.length === 2 && !!v2[1].rec.finished, `exit ${r2.code}`); }
 fs.rmSync(TMP, { recursive: true, force: true });
-out.met = [...out.A.cases, ...out.B, ...out.C].every(c => c.asExpected);
+out.met = [...out.A.cases, ...out.B0, ...out.B, ...out.C].every(c => c.asExpected);
 fs.writeFileSync(path.join(ROOT, 'research', 'props_v3', 'results', 'ma_machinery_check.json'), JSON.stringify(out, null, 1) + '\n');
-console.log(`machinery: ${[...out.A.cases, ...out.B, ...out.C].filter(c => c.asExpected).length} of ${[...out.A.cases, ...out.B, ...out.C].length} cases as expected: ${out.met ? 'met' : 'NOT met'}`);
+const allCases = [...out.A.cases, ...out.B0, ...out.B, ...out.C];
+console.log(`machinery: ${allCases.filter(c => c.asExpected).length} of ${allCases.length} cases as expected: ${out.met ? 'met' : 'NOT met'}`);

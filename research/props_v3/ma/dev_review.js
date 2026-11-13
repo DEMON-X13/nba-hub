@@ -7,7 +7,8 @@
  *   S1  D8's T2 on the archive's 83 games, F cross-fitted on 40 other random game partitions into 5 folds (each game's
  *       fold drawn uniformly, seeded), on 10 folds (the bar's hash mod 10) and one game at a time (83 folds); the bar's
  *       own partition (the game id's FNV-1a hash mod 5) given back first, to the digit, as a check of the code; F's
- *       cross-fitted log loss on the archive against DraftKings' fair chance and MA's frozen chance; and the same
+ *       cross-fitted log loss on the archive against DraftKings' fair chance, MA's frozen chance and its E alone (with
+ *       the paired intervals of the last two against DraftKings', 10,000 game resamples); and the same
  *       partition spread of T2 on the 68,850 development lines (10 random partitions).
  *   S2  D2 by stat: the 90% intervals (10,000 game resamples) by seed 0, which must give back ma_dev_bar.json's, and by
  *       seed 1, and the intervals corrected for testing five stats (Bonferroni: 98%, the 1st and 99th percentiles) and
@@ -62,13 +63,14 @@ const spread = a => { const mu = mean(a); return { partitions: a.length, mean: m
   const rnd = []; for (let p = 0; p < 40; p++) rnd.push(t2Point(A, nArr, crossFitWith(A, randomFolds(A, 5, 1000 + p), 5)));
   const ids = [...new Set(A.map(x => x.game))].sort(), pos = new Map(ids.map((g, i) => [g, i]));
   const t2K10 = t2Point(A, nArr, crossFitWith(A, g => S.foldOf(g, 10), 10)), t2LOGO = t2Point(A, nArr, crossFitWith(A, g => pos.get(g), ids.length));
-  const eMA = Float64Array.from(A, (x, i) => fz.eOf(x) + nArr[i]);
+  const eMA = Float64Array.from(A, (x, i) => fz.eOf(x) + nArr[i]), eE = Float64Array.from(A, x => fz.eOf(x)), zq = Float64Array.from(A, x => x.zq);
   const llOf = z => mean(A.map((x, i) => ll(sigm(z[i]), x.o)));
   out.S1 = { archive: { lines: A.length, games: ids.length, barPartition: { K: 5, rule: "the game id's FNV-1a hash mod 5", t2: t2bar },
     random5: spread(rnd), K10: { rule: 'the hash mod 10', t2: t2K10 }, leaveOneGameOut: { K: ids.length, t2: t2LOGO },
-    logLoss: { crossFittedF: llOf(zBar), draftKingsFair: llOf(Float64Array.from(A, x => x.zq)), maFrozen: llOf(eMA), fLessDraftKings: llOf(zBar) - llOf(Float64Array.from(A, x => x.zq)) } } };
+    logLoss: { crossFittedF: llOf(zBar), draftKingsFair: llOf(zq), maFrozen: llOf(eMA), eAloneFrozen: llOf(eE), fLessDraftKings: llOf(zBar) - llOf(zq) },
+    maLessDraftKings: V.paired(A, eMA, zq), eAloneLessDraftKings: V.paired(A, eE, zq) } };
   log(`S1 archive: 40 random 5-fold partitions: T2 mean ${out.S1.archive.random5.mean.toExponential(3)} sd ${out.S1.archive.random5.sd.toExponential(3)}, range ${out.S1.archive.random5.min.toExponential(2)} to ${out.S1.archive.random5.max.toExponential(2)}, above 0 on ${(out.S1.archive.random5.shareAbove0 * 100).toFixed(1)}%; K=10 ${t2K10.toExponential(3)}; one game at a time ${t2LOGO.toExponential(3)}`);
-  log(`S1 archive log loss: F cross-fitted ${out.S1.archive.logLoss.crossFittedF.toFixed(4)}, DraftKings' fair chance ${out.S1.archive.logLoss.draftKingsFair.toFixed(4)}, MA frozen ${out.S1.archive.logLoss.maFrozen.toFixed(4)}`);
+  log(`S1 archive log loss: F cross-fitted ${out.S1.archive.logLoss.crossFittedF.toFixed(4)}, DraftKings' fair chance ${out.S1.archive.logLoss.draftKingsFair.toFixed(4)}, MA frozen ${out.S1.archive.logLoss.maFrozen.toFixed(4)}, E alone ${out.S1.archive.logLoss.eAloneFrozen.toFixed(4)}; MA less DraftKings ${out.S1.archive.maLessDraftKings.ll.toExponential(3)} [${out.S1.archive.maLessDraftKings.llCi.map(v => v.toExponential(2))}], E alone less DraftKings ${out.S1.archive.eAloneLessDraftKings.ll.toExponential(3)} [${out.S1.archive.eAloneLessDraftKings.llCi.map(v => v.toExponential(2))}]`);
 }
 /* the development lines, in dev_oof.json's order */
 const { L } = V.loadMA('2024');

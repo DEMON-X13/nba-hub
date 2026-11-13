@@ -358,6 +358,12 @@ them as history, as the rules allow. But no outcome of a 2022-23 line has entere
   games, over rate and mean fair Over, and by stat the lines, over rate, mean fair Over and share 40 to 60%), and
   `plan_sizing/power_rev.js` reads the graded lines, games and by-stat lines and shares to size the power. No 2022-23 prop
   line, and nothing else of 2022-23, was read.
+- **MA's development step and its review, 13 November** (`dev_results.md`): no 2022-23 prop line was read. The
+  development step's replay walked 2022-23's box scores as history. The review counted `espn_validate40.json`'s game
+  ids by season and type (51 of 2022-23, 31 of them regular-season in the window); its fix wrote those 31 ids into
+  `test/seen_2023.json` (game ids alone); `test/machinery_check.js` feeds the scorer's pieces made-up rows only; and the
+  fix step's terminal showed the first two rows of `data/odds_hist.csv` (2022-23 consensus game lines of two
+  opening-night games, as this plan's own step had shown six).
 - **2022-23's box scores and finals:**
   - read by `tools/props.js`'s live constants and folds, props_v2's A and its validity check, `data/corr.json` and the
     hub's game models;
@@ -369,8 +375,8 @@ them as history, as the rules allow. But no outcome of a 2022-23 line has entere
 These run in order on the fetched lines, before any of MA's chances is computed. Each is printed as it passes; no score
 is printed until all have.
 
-- **V-hash** (revised 13 November, section 9, F4). Two sources of hashes, each read from git, never from a file in the
-  working tree or the cache:
+- **V-hash** (revised 13 November, section 9, F4). Every input is hashed as it stands on disk and must equal a recorded
+  SHA-256, the records coming from two places, each read from git, never from a file in the working tree or the cache:
   - **from the preregistration commit** (`git show <prereg>:research/props_v3/PREREG_HASHES.json`, written by
     `test/inputs.js --write`): every input `test/inputs.js` requires, as it stood when the preregistration was written:
     the frozen candidate; every module of this repository the scorer loads (read off Node's module cache) and the
@@ -456,8 +462,9 @@ n is MA's frozen nudge on each graded test line (logit P_MA − E). Both criteri
   - at least **5%** of n's variance lies outside F's span (least squares of n on F). A nudge inside F has no b, and
     cannot meet T1.
 - **T2, value at the frozen size.** F is cross-fitted on the test lines: 5 folds by game (the game id's FNV-1a hash mod
-  5), a ridge of 5 on all but the per-stat intercepts. Each line's z is from the folds that do not hold its game. On the
-  paired differences ll(sigm(z + n)) − ll(sigm(z)) and the same in Brier:
+  5), a ridge of 5 on all but the per-stat intercepts. Each line's f is from the folds that do not hold its game (f
+  was written z until 13 November, when T1's z took the letter). On the paired differences ll(sigm(f + n)) −
+  ll(sigm(f)) and the same in Brier:
   - the log loss's 90% interval (10,000 resamples of games, seed 0) lies wholly below **−0.0001**;
   - Brier's lies wholly below **−0.00005**;
   - on no stat does the log-loss interval lie wholly above 0.
@@ -470,7 +477,7 @@ Nothing of MA is fitted, re-scaled or chosen on 2022-23. Only F, the bar's infor
 in both criteria. That is what makes the criteria about information: whatever an information-free model could learn
 from these very lines, F has learned it before n is credited with anything.
 
-### 4.3 Why no information-free rival can meet either criterion, sized on development data
+### 4.3 Why no information-free rival can meet either criterion, sized on development data (revised: section 9)
 
 **The rivals.** Each named rival was fitted on training lines of 2023-24 as a rival would be built, on top of DraftKings'
 fair chance, or fixed by its rule. Each was then held to T1 and T2 on lines it was not fitted on, in three splits:
@@ -515,9 +522,13 @@ Two further sets:
 
 **The margins.**
 - T1's 0.25 sits 0.22 above the closest information-free rival's lower bound and 0.26 above the closest shuffle's. The
-  stand-in's lowest lower bound is 0.73. The 5% rule shuts out what sits nearly in F's span, where b's interval is
-  enormous and could stray above 0.25 by chance: R2's power devig, on the alternate split B|A, has b = 23.6 [0.07, 47.1]
-  with 0.03% of its variance outside F.
+  stand-in's lowest lower bound is 0.73. **These margins hold at each rival's fitted, unpenalised size only** (the
+  review of 13 November, section 9): b and its interval scale as 1/c when a nudge is multiplied by c, so a rival whose
+  lower bound is above 0 clears 0.25 once shrunk enough, and on MA's development lines five of 24 scaled and regularised
+  rivals did. The margin no rescaling moves is T1's z: the highest information-free z there is 2.85 against the bar's 4
+  (`results/ma_dev_scale.json`, `ma_dev_rivals.json`); MA's own is 13.7. The 5% rule shuts out what sits nearly in F's
+  span, where b's interval is enormous and could stray above 0.25 by chance: R2's power devig, on the alternate split
+  B|A, has b = 23.6 [0.07, 47.1] with 0.03% of its variance outside F.
 - T2's −0.0001 sits 0.00019 beyond the closest nonzero information-free rival. A rival whose nudge comes out zero fails
   it by exactly 0.0001, and the margin is there for that: no nudge, no pass. The stand-in's weakest split clears it by
   0.0003.
@@ -543,7 +554,8 @@ error by the larger of the games' and the lines' scalings, and T2's chance that 
 - **At the full effect:** T1 and T2 are each met with probability 0.99 or more on every split.
 - **At half the effect:**
   - forward-chained: 1.00 for T1, 0.87 for T2 (0.89 on log loss alone, 0.88 on Brier alone); as first written, by
-    games alone and the lower of the two, 0.90;
+    games alone and the lower of the two, 0.90 (T1 here is its weight bar; with the z part added on 13 November, MA's
+    own figures give 0.997 both parts at once, the weight bar alone binding: `dev_results.md` D3);
   - at 900 games: 0.99 and 0.81;
   - reweighted to the price mix of 2022-23's 31 seen games (each stat's lines priced 40 to 60% or not, each cell's
     effect its development one: 0.88 of the log-loss effect and 0.86 of Brier's): 1.00 and 0.74 at 1,100 games, 0.99 and
@@ -752,6 +764,96 @@ part, said below. No criterion was loosened.
   not) and V4 must react, or be tightened or joined by a check of the nudge's gain on early exits, before the
   preregistration.
 
+## 9. The review of 13 November, checked, and what changed
+
+Two reviewers read MA's development results as committed (c3e9a5c), one for leakage and the protocol, one for the
+statistics, and raised eleven findings, F1 to F7, S1, S2, N1 and N2, each with a probe in a scratch folder outside the
+repository. Each was checked here before anything changed, by reading the code it cites and by reproducing its numbers
+with this folder's own code (`ma/dev_scale.js`, `ma/dev_review.js`, `test/machinery_check.js`; their results in
+`results/`). All eleven are real; none was refuted. No criterion was loosened, and D8 is kept as written, so MA's
+verdict is unchanged: it does not meet the development bar (`dev_results.md`), and the 2022-23 lines stay unfetched.
+
+- **F1 (blocking): the scorer would have left none of the 31 seen games out. Real.** `score.js --test` built its
+  left-out set from `Object.keys` of `espn_validate40.json`'s `games`, which is an array: the keys are its indices, none
+  matches a game id, and the set was empty, so the one-shot test would have scored the 31 games whose DraftKings
+  aggregates had been seen, V0 to V3 included. `--dev-check` never runs that path. Changed (3.1, 3.4): the set is read
+  from `games[].gid` (51 of 2022-23, 31 of them regular-season games in the window), the 31 ids are committed in
+  `test/seen_2023.json`, the scorer refuses unless the two agree exactly, and it prints the left-out count before any
+  number. `test/machinery_check.js` holds it: the set read by `gid` is the committed 31 (`Object.keys` gave 0), and fed
+  made-up rows of the 31, of three other games, a play-in game and a game of 2023-24, the scorer's line filter keeps the
+  three alone.
+- **F2 (should): T1's 0.25 moves with the nudge's scale. Real.** Multiplying n by c divides b and its interval by c and
+  leaves its share outside F as it was, so any rival whose lower bound is above 0 at its fitted size clears 0.25 once
+  shrunk, with no player information. Nine of D6's 66 rivals have a lower bound above 0. On MA's development lines
+  (`results/ma_dev_scale.json`): DraftKings' own move of the line since his last game (U9) at 0.4 and 0.3 of its fitted
+  size has b 1.23 [0.27, 2.20] and 1.65 [0.36, 2.93] by the robust error, and [0.258, 2.941] by the bar's own
+  1,000-resample bootstrap at 0.3 (z 2.02, under 4); MA's d shuffled within matched cells (seed 13) at 0.4 and 0.3, 0.60
+  [0.25, 0.94] and 0.80 [0.34, 1.26]; and a rival fitted with a ridge of 1,500 on its own columns (a dummy for each line
+  value by price band cell, with U9 and home by favourite), 1.42 [0.26, 2.58] robust (its bootstrap, the reviewer's,
+  [0.20, 2.57]). Five of the review's 24 scaled and regularised rivals meet D1 as first written; none meets D2. So 4.3's
+  "no information-free rival can meet either criterion" held only at each rival's fitted size, and "information shown"
+  could have been earned with none. Changed (2, 4.2, 4.3, 4.4, 5, 6): T1 and D1 also ask **z = b / SE at least 4**, SE =
+  (hi − lo) / 3.29 from b's own interval, which no rescaling moves; the 0.25 stays, as the check of the frozen nudge's
+  size, said to mean what it says only for a nudge fitted unpenalised at its own scale, as MA's is; a rival near either
+  part is bootstrapped; D3's T1 is both parts at once. Why 4: with no information z reaches 4 about three times in
+  100,000; the highest z of an information-free rival on development data is 2.85 (the matched shuffle, seed 13, whose
+  cells' mean disagreement carries some signal with no read of the player), which a steady information-free effect would
+  carry to about 3.1 at the test's size (the square root of the ratio of lines); the regularised rivals reach 2.08; and
+  at half MA's development effect on a test the size of 2022-23's, T1's weight part binds, not z (power 0.997 both
+  parts, 0.997 the weight alone, 1.000 z alone), so the power D3 promised is unchanged. MA's own z is 13.7. Not taken:
+  the likelihood-ratio form the reviewer offered, which for one weight is z squared and would add nothing.
+- **F3 (should): the test fetch's gate had three gaps. Real**, each reproduced in a sandbox on the wrapper as first
+  written (the machinery check's B0.1 to B0.4): an audit not tied to the PREREG.md it audited (one edited after its
+  audit passed); a once-only guard that was a marker in the gitignored cache, which a lost container, the first run's
+  fate, wipes (with the cache wiped the fetch ran again); and that marker written before the fetch began, so an
+  interrupted fetch could be finished only by deleting the very marker that guards against a second one. Changed (3.1,
+  7): `test/fetch_record.js` and the wrapper. The audit must name the SHA-256 of the PREREG.md and PREREG_HASHES.json it
+  audited, held to the commit's; the fetch's start is committed and pushed to origin before any request, and origin's
+  record (every commit that ever held it, any branch) refuses a second fetch; an interrupted fetch is run again only
+  under the same preregistration, fetch_dk40.js keeping what an earlier read found by its own rule; a cache lost after
+  the fetch is fetched again only with `PROPS_V3_RECOVER=1`, its clean lines then held byte for byte to the record; and
+  the record is finished with every file's SHA-256, then pushed. Held by the machinery check's cases B1 to B13 (no
+  preregistration, one not pushed, an audit naming no hashes, a PREREG.md edited after its audit, the sound run with its
+  start on origin before the stand-in fetched, a second run, a run after the cache was wiped, a recovery byte for byte
+  and one that is not, an interrupted fetch resumed, another preregistration, the cleaner with no record). A force-push
+  that rewrote origin's history could still hide a record; this research never force-pushes.
+- **F4 (should): V-hash pinned little. Real**, reproduced in a sandbox: it read PREREG_HASHES.json from the working tree,
+  so a frozen file edited with that file rewritten to match passed; an empty list passed; the clean lines were held to
+  a sibling .sha256 the cleaner wrote into the same gitignored cache, so both replaced together passed; and no data
+  input was hashed, nor could the plan's version have been built, since the preregistration is committed before the
+  lines exist. Changed (3.4): `test/inputs.js` lists every input (every module the scorer loads, read off Node's module
+  cache; the fetch's machinery; the 2020-21 boxes, the boxes of 2021-22 to 2025-26, the rows of `games.csv` and
+  `odds_hist.csv` the test reads, the left-out list and its source, V0 to V3's thresholds), `--write` puts them in
+  PREREG_HASHES.json for the preregistration commit, and V-hash reads that file by `git show <prereg>:`, refusing a list
+  that misses any required input or any input whose bytes moved; the clean lines and starts are held to the SHA-256 in
+  the fetch's finished record on origin, and the fetched csv, cut by the cleaner's rule, to the clean lines;
+  `ma/freeze.js` records the same inputs. Held by the machinery check's cases C1 to C6, each of the review's three
+  passing the old rule and refused by the new.
+- **F5 (nit): "it does not know how many minutes anyone played" overstated. Real.** The minutes surprise's correlation,
+  0.028, has a 90% interval of [0.012, 0.044] by 2,000 game resamples: under D7's 0.05, not zero. No leak (the blindfold
+  check holds every input pre-game); `dev_results.md` says the link is small.
+- **F6 (nit): "its information shows" on the archive. Real.** D8 asks only b's point above 0. By T1's own standard the
+  archive's b, 0.78 [0.244, 1.316], does not clear 0.25, and its z, 2.40, does not reach 4. `dev_results.md` says so.
+- **F7 (nit): P23's fit said nothing of 2022-23 was in memory. Real.** `loadData` reads every season first and the fit is
+  handed a copy of 2020-21 and 2021-22 alone, refusing any later game. Its header says that now.
+- **S1 (should): D8's sign turns on the cross-fit's split. Real**, reproduced in this folder's code: on 40 other random
+  splits of the archive's 83 games into five folds T2 averages −0.0000062 with a spread of 0.000050, twice the miss, and
+  is above 0 on 40% of them (the reviewer's 40 in numpy: 42.5%); on ten folds −0.000062, one game at a time −0.000013;
+  on development data the spread is 0.0000035. And F, cross-fitted on 83 games, is a poor reference: log loss 0.6776 a
+  line against DraftKings' 0.6718. **D8 is kept as written** (the reviewer's advice too): its split was fixed before any
+  score, and choosing another, or averaging over many, after seeing this one miss would turn a FAIL into a PASS on a
+  rule chosen after the score. `dev_results.md` section 5 reports it as context. For a later plan, not this one: a sign
+  check on a set this small should be read over many splits, or against DraftKings' price, chosen before it is scored.
+  On a test of about 1,100 games the split's spread is as small as on the development lines.
+- **S2 (should): the per-stat claims ignored multiplicity. Real.** Rebounds' and assists' 90% intervals cleared 0 by 0.2
+  × 10⁻⁴; with another seed rebounds' reaches 0, and corrected for five stats (98%) both span it, while threes, steals
+  and blocks stay below 0. `dev_results.md` says the gain is clear on those three and not established on rebounds and
+  assists. D2's rule (no stat's interval wholly above 0) is unaffected.
+- **N1 (nit): "within 2 points in every band" was pooled only. Real.** Stat by stat MA's worst band of 100 lines or more is
+  assists' 0.3-0.4 (416 lines, 5.2 points, about 2.2 standard errors). Said in `dev_results.md` section 3.
+- **N2 (nit): E alone's intervals. Real.** Log loss −0.00032 [−0.00065, −0.000005], only just clear of 0; Brier
+  −0.00012 [−0.00026, +0.00002], spanning 0. Both now given wherever the 0.0003 is.
+
 ## Files and re-running
 
 From the repository's root, after `node research/props_v3/lines_clean.js` (`data.md`):
@@ -765,6 +867,9 @@ From the repository's root, after `node research/props_v3/lines_clean.js` (`data
 | `node research/props_v3/plan_sizing/boot_check.js` | the robust interval against the bootstrap → `results/plan_bootcheck.json` | about 5 minutes |
 | `node research/props_v3/plan_sizing/tables.js` | every sizing table → `results/plan_tables.md` | a second |
 | `node research/props_v3/plan_sizing/power_rev.js` | the revision's power, by lines a game as well as games, for the test and the shadow (critiques C1, C2) → `results/plan_power_rev.json` | about 2 minutes |
+| `node research/props_v3/ma/dev_scale.js` | the review's F2: scaled and regularised information-free rivals on MA's development lines, D1 as first written and as strengthened → `results/ma_dev_scale.json` | about 20 minutes |
+| `node research/props_v3/ma/dev_review.js` | the review's S1, S2, N1, N2 and F5 checked → `results/ma_dev_review.json` | about a minute |
+| `node research/props_v3/test/machinery_check.js` | the review's F1, F3 and F4: the test's machinery on planted cases in sandbox repositories → `results/ma_machinery_check.json` | seconds |
 
 `plan_sizing/lib.js` holds the shared code: the features, F, the fits (Newton's method, sparse, a ridge where said), the
 cluster-robust standard error, the cross-fit, and T1 and T2. Every random draw is seeded. The result files hold

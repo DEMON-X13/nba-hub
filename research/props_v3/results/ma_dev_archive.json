@@ -36,6 +36,7 @@
   "b": 0.779957,
   "lo": 0.244363,
   "hi": 1.31555,
+  "z": 2.39553,
   "orth": 0.618346
  },
  "t2": {
@@ -99,6 +100,10 @@
     0.00285938
    ]
   }
+ },
+ "reportTestT1": {
+  "what": "the test's T1 read on the archive by the robust interval: reported, deciding nothing",
+  "met": false
  },
  "met": false
 }

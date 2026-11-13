@@ -126,5 +126,27 @@
    "detail": "refused: the 2022-23 fetch is not finished on origin"
   }
  ],
+ "B0": [
+  {
+   "case": "B0.1 as first written: a PREREG.md edited after its audit was taken, and the fetch ran",
+   "asExpected": true,
+   "detail": "exit 0"
+  },
+  {
+   "case": "B0.2 as first written: a second run was refused, by the marker in the cache alone",
+   "asExpected": true,
+   "detail": "refused: the 2022-23 fetch has run already (<sandbox>/s0/work/research/props_v3/test/../cache/fetch_dk40_2023.ran)"
+  },
+  {
+   "case": "B0.3 as first written: with the cache wiped the fetch ran again",
+   "asExpected": true,
+   "detail": "exit 0"
+  },
+  {
+   "case": "B0.4 as first written: a fetch interrupted after the marker was written could not be run again but by deleting it",
+   "asExpected": true,
+   "detail": "refused: the 2022-23 fetch has run already (<sandbox>/s0b/work/research/props_v3/test/../cache/fetch_dk40_2023.ran)"
+  }
+ ],
  "met": true
 }

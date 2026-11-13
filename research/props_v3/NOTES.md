@@ -45,3 +45,7 @@
   not 1,341. freeze.js run: frozen/ma_frozen.json, a record of MA as D8 scored it (its weights equal D8's), its files
   hashed; no test follows from it. score.js --dev-check re-run (the earlier run was cut off). Next: its result, then
   commit and push.
+- 13 Nov 2026 01:02 UTC: score.js --dev-check done (16 minutes): it gives back ma_dev_bar.json's D1 and D2 to the digit
+  through the scorer's own path, V4 and V5 hold on the development lines (results/ma_score_devcheck.json).
+  dev_results.md finished and README.md written for the folder. The step's verdict: MA does not meet the development
+  bar as written (D8 missed), so the 2022-23 test is not spent. Nothing outside research/props_v3/ changed.

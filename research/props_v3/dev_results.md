@@ -237,7 +237,8 @@ How to read it, without moving the bar:
   out the development effect of −0.00112, and contains half of it: the nudge paid less there than on development data,
   by how much the archive's 83 games cannot say.
 - The archive differs from the test in ways that may count against MA: playoff games, which no development line is;
-  P23's constants fitted on 2021-22, four seasons before the archive against one season before 2022-23. The plan's
+  another feed (provider 100's closing lines, where the development and test lines are provider 40's); P23's constants
+  fitted on 2021-22, four seasons before the archive against one season before 2022-23. The plan's
   stand-in met D8 (−0.00046 [−0.00142, +0.00051]) on projections fitted on 2022-23 to 2024-25 and on each game's list of
   who dressed (hindsight MA never has), so stale constants are one possible reason, untested.
 - None of that turns the miss into a pass. D8 was written into the bar before any of MA's scores, knowing the archive
@@ -254,7 +255,7 @@ How to read it, without moving the bar:
 | the test step's fetch (`test/fetch_dk40_2023_logged.sh`) | written, **never run**: it refuses without a pushed preregistration commit holding `PREREG.md` and an audit reading "verdict: sound", and refuses a second run. Its refusals were tried; nothing was fetched |
 | the cleaner (`test/lines_clean_2023.js`) | written, never run: it refuses before the fetch's marker exists |
 | the validity checks (`test/validity_ma.js`) | `--reproduce` gives back `validity.js`'s 2023-24 figures exactly (89,032 graded lines on 1,116 games; V0 holds; V2 +0.0016; V3 holds) |
-| the scorer (`test/score.js`) | its development check running at this commit (its earlier run was cut off) |
+| the scorer (`test/score.js`) | `--dev-check`, through the scorer's own path (the clean six-column lines, MA's rows rebuilt, F's fields, the sample), gives back D1 and D2 to the digit (`results/ma_score_devcheck.json`: b 1.21844 [1.07345, 1.36529], log loss −0.00112107 [−0.0014043, −0.000831875], Brier −0.000517197); on the development lines V4 holds (58 exits) and so does V5 (99.98% of graded lines on player-games with two or more posted lines). Its `--test` path is written and was never run: it refuses without the preregistration's hashes and the cleaned 2022-23 lines |
 | the shadow's runner | **not written**: with D8 missed no shadow can follow this plan |
 | planted in-game prices | run: V2 and V4 **do not react** (below); the tightening D9 then asks for was not made |
 
@@ -262,13 +263,15 @@ How to read it, without moving the bar:
 player-games, one of the player's posted stats was repriced as a price read a quarter of the way into the game would be
 (props_v2's `validity_calib.js` rule), his other lines left as they were:
 
-| share planted | player-games | V2 (floor −0.05) | V4: the nudge toward the Under on exits more than elsewhere (limit +0.5 points) | the nudge's gain on exits less elsewhere (V4b) | the nudge's T2 |
+| share planted | player-games | V2 (floor −0.05) | V4: the nudge toward the Under on exits more than elsewhere (limit +0.5 points) | V4b: the nudge's log-loss change a line on exits less elsewhere (+ is worse on exits) | the nudge's T2 |
 |---|---|---|---|---|---|
 | none | 0 | +0.0034 | −0.01 points | +0.0043 | −0.00112 [−0.00139, −0.00083] |
 | 10% | 1,308 | −0.0044 | −0.08 points | +0.0061 | −0.00042 [−0.00070, −0.00013] |
 | 20% | 2,641 | +0.0020 | −0.10 points | +0.0059 | +0.00023 [−0.00006, +0.00053] |
 
-Neither check reacts at these shares, so by D9 V4 would have had to be tightened, or joined by a check of the nudge's
+V2 here is read on the out-of-fold lines with P23's projected minutes; `validity.js`'s own figure, on all of 2023-24
+with the 2024 fold's minutes, is the +0.0016 above. Neither check reacts at these shares, so by D9 V4 would have had to
+be tightened, or joined by a check of the nudge's
 gain on early exits with a threshold set on the planting, before any preregistration. That was not done, since D8 had
 already stopped the plan. What the planting does show: a price moved during the game makes the nudge disagree with that
 one line, pushes it the wrong way on the very players who left early, and costs it, so in-game prices among the test's
@@ -303,9 +306,11 @@ before stands as it was, and the 2022-23 lines remain unfetched and unseen.
    little information about a player's stat mix that DraftKings' price does not, on development data; whether it holds
    on a season the model has never seen is untested.
 2. **A quiet forward shadow of MA on 2026-27**, research only, frozen first, with a bar of its own registered before its
-   first call (PLAN.md section 5's rules could be taken over). It would need its own decision on P23's constants (fitted
-   on 2021-22, five seasons old by then; a refit on 2025-26 would be a change to MA needing its own development check)
-   and about 65,000 graded lines, roughly two seasons, to reach 0.8 power at half the development effect.
+   first call (PLAN.md section 5's rules could be taken over). The plan starts a shadow only after a test's PASS, so this
+   would be the owner's choice to try MA forward despite D8, said so in its bar. It would need its own decision on P23's
+   constants (fitted on 2021-22, five seasons old by then; a refit on 2025-26 would be a change to MA needing its own
+   development check), and about 65,000 graded lines (about 1,160 games, so well into 2027-28) to reach 0.8 power at
+   half the development effect.
 3. **Another candidate**, built and sized on development data, keeping 2022-23 unspent for whichever earns it.
 4. **The devig rule, apart from all of these.** E alone is 0.0003 a line better than the hub's fair chance on 2023-24.
    That is a question about putting the whole margin on the Over, needs no player information, and may run the other
@@ -332,5 +337,5 @@ place. Every random draw is seeded; the result files hold aggregates only, no li
 | `node research/props_v3/ma/dev_report.js` | section 3 → `results/ma_dev_report.json` | about a minute |
 | `node research/props_v3/test/plant_ingame.js` | the planted in-game prices → `results/ma_plant_ingame.json` | about a minute |
 | `node research/props_v3/test/validity_ma.js --reproduce` | the validity checks' copy against `validity.js` on 2023-24 | about a minute |
-| `node research/props_v3/test/score.js --dev-check` | the scorer's path against D1 and D2 → `results/ma_score_devcheck.json` | about 20 minutes |
+| `node research/props_v3/test/score.js --dev-check` | the scorer's path against D1 and D2 → `results/ma_score_devcheck.json` | about 16 minutes |
 | `node research/props_v3/ma/freeze.js` | MA as D8 scored it, its files hashed → `frozen/ma_frozen.json` | about a minute |

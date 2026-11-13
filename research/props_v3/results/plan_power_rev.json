@@ -1,0 +1,313 @@
+{
+ "generated": "PLAN.md revision of 13 November 2026, critiques C1 and C2 (development data; the stand-in is tools/props.js's 2024 fold, a size, never a candidate)",
+ "oof": {
+  "lines": 68926,
+  "games": 863,
+  "linesPerGame": 79.8679,
+  "ll": -0.00108894,
+  "br": -0.000501581,
+  "llSE": 0.000164845,
+  "brSE": 0.0000768323,
+  "corrGameSums": 0.994146,
+  "t1": {
+   "b": 1.22664,
+   "se": 0.0901035
+  }
+ },
+ "cellsStatEven": {
+  "pts1": {
+   "n": 11543,
+   "ll": 0.000234235,
+   "br": 0.000115484
+  },
+  "pts0": {
+   "n": 21,
+   "ll": 0.00385845,
+   "br": 0.00155075
+  },
+  "reb1": {
+   "n": 11329,
+   "ll": -0.000610192,
+   "br": -0.000303593
+  },
+  "reb0": {
+   "n": 1015,
+   "ll": -0.000873945,
+   "br": -0.000416467
+  },
+  "ast1": {
+   "n": 6343,
+   "ll": -0.000508438,
+   "br": -0.000257221
+  },
+  "ast0": {
+   "n": 1128,
+   "ll": -0.00180537,
+   "br": -0.00085023
+  },
+  "tpm1": {
+   "n": 7880,
+   "ll": -0.001583,
+   "br": -0.000772098
+  },
+  "tpm0": {
+   "n": 3857,
+   "ll": 0.000218176,
+   "br": 0.0000950478
+  },
+  "stl1": {
+   "n": 8049,
+   "ll": -0.00259755,
+   "br": -0.00126831
+  },
+  "stl0": {
+   "n": 4929,
+   "ll": -0.00279058,
+   "br": -0.00120135
+  },
+  "blk1": {
+   "n": 4072,
+   "ll": -0.00109613,
+   "br": -0.000543302
+  },
+  "blk0": {
+   "n": 8760,
+   "ll": -0.00160059,
+   "br": -0.000619287
+  }
+ },
+ "reweighted2023": {
+  "linesPerGame2023": 74.3548,
+  "ll": -0.000956063,
+  "br": -0.000430242,
+  "fractionLL": 0.877977,
+  "fractionBR": 0.857771
+ },
+ "test": [
+  {
+   "linesPerGame": 74.3548,
+   "games": 1100,
+   "lines": 81790,
+   "effectFraction": 1,
+   "seLL": 0.000153854,
+   "seBR": 0.0000717098,
+   "T2ll": 0.999999,
+   "T2br": 0.999998,
+   "T2joint": 1,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 74.3548,
+   "games": 1100,
+   "lines": 81790,
+   "effectFraction": 0.5,
+   "seLL": 0.000153854,
+   "seBR": 0.0000717098,
+   "T2ll": 0.893231,
+   "T2br": 0.875965,
+   "T2joint": 0.87399,
+   "T1": 0.996997
+  },
+  {
+   "linesPerGame": 74.3548,
+   "games": 900,
+   "lines": 66919,
+   "effectFraction": 1,
+   "seLL": 0.000170092,
+   "seBR": 0.0000792781,
+   "T2ll": 0.999985,
+   "T2br": 0.999975,
+   "T2joint": 0.999985,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 74.3548,
+   "games": 900,
+   "lines": 66919,
+   "effectFraction": 0.5,
+   "seLL": 0.000170092,
+   "seBR": 0.0000792781,
+   "T2ll": 0.833504,
+   "T2br": 0.812659,
+   "T2joint": 0.80895,
+   "T1": 0.990047
+  }
+ ],
+ "testReweighted": [
+  {
+   "linesPerGame": 74.3548,
+   "games": 1100,
+   "lines": 81790,
+   "effectFraction": 1,
+   "seLL": 0.000153854,
+   "seBR": 0.0000717098,
+   "T2ll": 0.999956,
+   "T2br": 0.999873,
+   "T2joint": 0.99987,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 74.3548,
+   "games": 1100,
+   "lines": 81790,
+   "effectFraction": 0.5,
+   "seLL": 0.000153854,
+   "seBR": 0.0000717098,
+   "T2ll": 0.791626,
+   "T2br": 0.744612,
+   "T2joint": 0.743775,
+   "T1": 0.996997
+  },
+  {
+   "linesPerGame": 74.3548,
+   "games": 900,
+   "lines": 66919,
+   "effectFraction": 1,
+   "seLL": 0.000170092,
+   "seBR": 0.0000792781,
+   "T2ll": 0.999648,
+   "T2br": 0.999187,
+   "T2joint": 0.99924,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 74.3548,
+   "games": 900,
+   "lines": 66919,
+   "effectFraction": 0.5,
+   "seLL": 0.000170092,
+   "seBR": 0.0000792781,
+   "T2ll": 0.718202,
+   "T2br": 0.669236,
+   "T2joint": 0.666625,
+   "T1": 0.990047
+  }
+ ],
+ "shadow": [
+  {
+   "linesPerGame": 56,
+   "games": 714,
+   "lines": 39984,
+   "effectFraction": 1,
+   "seLL": 0.000219298,
+   "seBR": 0.000102311,
+   "T2ll": 0.997912,
+   "T2br": 0.997187,
+   "T2joint": 0.99714,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 56,
+   "games": 714,
+   "lines": 39984,
+   "effectFraction": 0.5,
+   "seLL": 0.000219298,
+   "seBR": 0.000102311,
+   "T2ll": 0.64869,
+   "T2br": 0.62459,
+   "T2joint": 0.61678,
+   "T1": 0.923083
+  },
+  {
+   "linesPerGame": 56,
+   "games": 893,
+   "lines": 50008,
+   "effectFraction": 1,
+   "seLL": 0.000196091,
+   "seBR": 0.0000914838,
+   "T2ll": 0.999661,
+   "T2br": 0.999501,
+   "T2joint": 0.99951,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 56,
+   "games": 893,
+   "lines": 50008,
+   "effectFraction": 0.5,
+   "seLL": 0.000196091,
+   "seBR": 0.0000914838,
+   "T2ll": 0.732914,
+   "T2br": 0.708779,
+   "T2joint": 0.7028,
+   "T1": 0.963239
+  },
+  {
+   "linesPerGame": 56,
+   "games": 1071,
+   "lines": 59976,
+   "effectFraction": 1,
+   "seLL": 0.000179056,
+   "seBR": 0.0000835363,
+   "T2ll": 0.999947,
+   "T2br": 0.999915,
+   "T2joint": 0.999915,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 56,
+   "games": 1071,
+   "lines": 59976,
+   "effectFraction": 0.5,
+   "seLL": 0.000179056,
+   "seBR": 0.0000835363,
+   "T2ll": 0.798787,
+   "T2br": 0.775964,
+   "T2joint": 0.77199,
+   "T1": 0.982842
+  },
+  {
+   "linesPerGame": 56,
+   "games": 1161,
+   "lines": 65016,
+   "effectFraction": 1,
+   "seLL": 0.000171976,
+   "seBR": 0.0000802332,
+   "T2ll": 0.99998,
+   "T2br": 0.999966,
+   "T2joint": 0.99997,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 56,
+   "games": 1161,
+   "lines": 65016,
+   "effectFraction": 0.5,
+   "seLL": 0.000171976,
+   "seBR": 0.0000802332,
+   "T2ll": 0.82626,
+   "T2br": 0.804441,
+   "T2joint": 0.80077,
+   "T1": 0.988432
+  },
+  {
+   "linesPerGame": 56,
+   "games": 1250,
+   "lines": 70000,
+   "effectFraction": 1,
+   "seLL": 0.00016574,
+   "seBR": 0.0000773241,
+   "T2ll": 0.999992,
+   "T2br": 0.999986,
+   "T2joint": 0.99999,
+   "T1": 1
+  },
+  {
+   "linesPerGame": 56,
+   "games": 1250,
+   "lines": 70000,
+   "effectFraction": 0.5,
+   "seLL": 0.00016574,
+   "seBR": 0.0000773241,
+   "T2ll": 0.850067,
+   "T2br": 0.829386,
+   "T2joint": 0.82617,
+   "T1": 0.992208
+  }
+ ],
+ "shadowGamesOnlyAsPlanned": {
+  "games": 714,
+  "T2ll": 0.79031,
+  "T2br": 0.767939
+ }
+}

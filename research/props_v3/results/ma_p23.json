@@ -1,0 +1,122 @@
+{
+ "what": "P23: tools/props.js's fit (its structure and grids unchanged) on 2021-22 alone, 2020-21 warming up (PLAN.md 1.4)",
+ "P": {
+  "min": {
+   "h": 2,
+   "w0": 0.25,
+   "minN": 5,
+   "alpha": 0.5,
+   "T": 250,
+   "floor": 4,
+   "post": 0.2
+  },
+  "rate": {
+   "pts": {
+    "h": 8,
+    "m": 25
+   },
+   "reb": {
+    "h": 25,
+    "m": 50
+   },
+   "ast": {
+    "h": 8,
+    "m": 25
+   },
+   "tpm": {
+    "h": 15,
+    "m": 100
+   },
+   "stl": {
+    "h": 120,
+    "m": 400
+   },
+   "blk": {
+    "h": 25,
+    "m": 100
+   }
+  },
+  "gamma": 1,
+  "opp": {
+   "pts": 1,
+   "reb": 1,
+   "ast": 1,
+   "tpm": 1,
+   "stl": 0.75,
+   "blk": 1
+  },
+  "post": {
+   "pts": 0.9054,
+   "reb": 0.949,
+   "ast": 0.8879,
+   "tpm": 0.9078,
+   "stl": 0.905,
+   "blk": 0.9793
+  },
+  "var": {
+   "pts": [
+    8.2687,
+    0.6752
+   ],
+   "reb": [
+    1.6683,
+    0.9181
+   ],
+   "ast": [
+    1.3025,
+    1.022
+   ],
+   "tpm": [
+    1.3007,
+    0.8928
+   ],
+   "stl": [
+    1.0152,
+    0.8062
+   ],
+   "blk": [
+    1.1548,
+    1.0686
+   ],
+   "pra": [
+    11.5664,
+    0.6159
+   ],
+   "pr": [
+    9.9656,
+    0.6487
+   ],
+   "pa": [
+    7.4457,
+    0.7291
+   ],
+   "ar": [
+    2.3689,
+    0.837
+   ],
+   "sb": [
+    1.1729,
+    0.953
+   ]
+  },
+  "rho": 0.35
+ },
+ "trainingRows": 33536,
+ "gamesInReplay": 2494,
+ "boxesInReplay": 2488,
+ "droppedNoMinutes": [
+  "2021_20210518_CHA_IND",
+  "2021_20210518_WAS_BOS",
+  "2021_20210519_GSW_LAL",
+  "2021_20210519_SAS_MEM",
+  "2021_20210520_IND_WAS",
+  "2021_20210521_MEM_GSW"
+ ],
+ "files": {
+  "research/props_v3/cache/box2021/box_2021.csv": "1ed3cc96f8f98f208e30ef0018369c5034cdbe6910450a01ac154608e921337b",
+  "research/props_v3/cache/box2021/teambox_2021.jsonl": "f4d38444cbde1e9d5f0068f51804ad92a6e7f41592a13b7bcc6224b84511011e",
+  "data/box_2022.csv": "67fe1e6c346ca7c9f397d562d5a86c5453fb47d2952c6c21508b5b14e7022d63",
+  "data/teambox_2022.jsonl": "99cf7526aa11b1d492063b8f5804cdd9302f7f19d9d99dd49d2535c3f6c5af0c"
+ },
+ "toolsPropsSha256": "c18897fbba31559a3b602a9d6178c71c9330aebd8fad08eb2dcc4b1e1f230a61"
+}

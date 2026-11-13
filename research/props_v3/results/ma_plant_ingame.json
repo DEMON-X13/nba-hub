@@ -1,0 +1,64 @@
+{
+ "what": "Planted in-game prices on the 2023-24 development lines (critique C7)",
+ "tau": 0.25,
+ "shares": {
+  "0": {
+   "plantedPlayerGames": 0,
+   "plantedLines": 0,
+   "exits": 58,
+   "exitLines": 313,
+   "v2": 0.00337865,
+   "v4UnderwardMore": -0.000086047,
+   "v4bGainExitLessRest": 0.0043421,
+   "t2": {
+    "ll": -0.00112107,
+    "llCi": [
+     -0.00138956,
+     -0.000831371
+    ],
+    "br": -0.000517197
+   },
+   "v2Flags": false,
+   "v4Flags": false
+  },
+  "0.1": {
+   "plantedPlayerGames": 1308,
+   "plantedLines": 1308,
+   "exits": 58,
+   "exitLines": 313,
+   "v2": -0.00442071,
+   "v4UnderwardMore": -0.000764981,
+   "v4bGainExitLessRest": 0.00613935,
+   "t2": {
+    "ll": -0.000421688,
+    "llCi": [
+     -0.00070341,
+     -0.000127216
+    ],
+    "br": -0.000206469
+   },
+   "v2Flags": false,
+   "v4Flags": false
+  },
+  "0.2": {
+   "plantedPlayerGames": 2641,
+   "plantedLines": 2641,
+   "exits": 58,
+   "exitLines": 313,
+   "v2": 0.00201963,
+   "v4UnderwardMore": -0.00102513,
+   "v4bGainExitLessRest": 0.00592297,
+   "t2": {
+    "ll": 0.000229965,
+    "llCi": [
+     -0.0000630095,
+     0.000525293
+    ],
+    "br": 0.000080589
+   },
+   "v2Flags": false,
+   "v4Flags": false
+  }
+ },
+ "seconds": 32
+}

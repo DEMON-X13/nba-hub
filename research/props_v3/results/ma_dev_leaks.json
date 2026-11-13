@@ -1,0 +1,66 @@
+{
+ "what": "D7: the leak checks on MA's own projections (development data)",
+ "loader": {
+  "seventh": true,
+  "header": true,
+  "short": true,
+  "sixAccepted": true,
+  "met": true
+ },
+ "blindfold": {
+  "nights": 29,
+  "games": 210,
+  "lines": 17497,
+  "missing": 0,
+  "diff": 0,
+  "chances": 16881,
+  "examples": [],
+  "met": true,
+  "totalCentring": "F's game total is centred on the set's own mean: a constant of the set, not compared"
+ },
+ "scrambled": {
+  "lines": 17497,
+  "missing": 0,
+  "diff": 0,
+  "chances": 16881,
+  "examples": [],
+  "met": true
+ },
+ "earlyExits": {
+  "lines": 313,
+  "playerGames": 58,
+  "shiftExit": 0.00269829,
+  "shiftRest": 0.00261224,
+  "dkExit": 0.452261,
+  "dkRest": 0.448868,
+  "underwardMore": -0.000086047,
+  "met": true
+ },
+ "minutesSurprise": {
+  "playerGames": 13067,
+  "corrNudge": 0.0280755,
+  "corrLevel": 0.04162,
+  "met": true
+ },
+ "withoutPoints": {
+  "lines": 57300,
+  "asBuilt": {
+   "ll": -0.00134704,
+   "llCi": [
+    -0.00168745,
+    -0.000999643
+   ]
+  },
+  "levelWithoutPoints": {
+   "ll": -0.00117423,
+   "llCi": [
+    -0.00149234,
+    -0.000854114
+   ]
+  },
+  "ratio": 0.871711,
+  "met": true
+ },
+ "met": true,
+ "seconds": 63
+}

@@ -1,0 +1,128 @@
+{
+ "lines": 89032,
+ "weights": [
+  [
+   0.115994,
+   0.47157,
+   0.446715,
+   0.431059,
+   0.820744,
+   0.428095
+  ],
+  [
+   0.202666,
+   0.366255,
+   0.258152,
+   0.594625,
+   0.631438,
+   0.572784
+  ]
+ ],
+ "earlyExits": {
+  "lines": 414,
+  "playerGames": 77,
+  "nudgeShiftExit": 0.000636402,
+  "nudgeShiftRest": 0.000162641,
+  "dkExit": 0.44997,
+  "dkRest": 0.448517,
+  "byStat": {
+   "pts": {
+    "exit": -0.00169242,
+    "rest": -0.00183866,
+    "n": 73
+   },
+   "reb": {
+    "exit": 0.00230953,
+    "rest": 0.000946525,
+    "n": 74
+   },
+   "ast": {
+    "exit": -0.00481381,
+    "rest": 0.00194314,
+    "n": 45
+   },
+   "tpm": {
+    "exit": 0.000999986,
+    "rest": -0.00275262,
+    "n": 71
+   },
+   "stl": {
+    "exit": -0.00270839,
+    "rest": -0.00292915,
+    "n": 76
+   },
+   "blk": {
+    "exit": 0.00756763,
+    "rest": 0.00590005,
+    "n": 75
+   }
+  }
+ },
+ "anchors": {
+  "asBuilt_nonPoints": {
+   "lines": 74076,
+   "ll": -0.00118585,
+   "llCi": [
+    -0.00153192,
+    -0.000866285
+   ]
+  },
+  "levelWithoutPoints_nonPoints": {
+   "lines": 74076,
+   "ll": -0.00106842,
+   "llCi": [
+    -0.00140409,
+    -0.000754428
+   ]
+  },
+  "levelFromPointsAlone_nonPoints": {
+   "lines": 67000,
+   "ll": -0.000867031,
+   "llCi": [
+    -0.00129044,
+    -0.0004364
+   ]
+  },
+  "asBuilt_points": {
+   "lines": 14956,
+   "ll": -0.0000637909,
+   "llCi": [
+    -0.000246137,
+    0.000129824
+   ]
+  }
+ },
+ "minutesSurprise": {
+  "playerGames": 16853,
+  "corrMeanNudgeWithSurprise": 0.00244419,
+  "meanNudge": -0.000331928,
+  "corrRawDisagreementWithSurprise": -0.395744,
+  "corrDKLevelWithSurprise": 0.392611
+ },
+ "pointsPosted": {
+  "with": {
+   "lines": 67000,
+   "ll": -0.00115186,
+   "llCi": [
+    -0.00152055,
+    -0.000809612
+   ]
+  },
+  "without": {
+   "lines": 7076,
+   "ll": -0.00150766,
+   "llCi": [
+    -0.00252264,
+    -0.000471828
+   ]
+  }
+ },
+ "whole": {
+  "lines": 89032,
+  "ll": -0.00099736,
+  "llCi": [
+   -0.00128775,
+   -0.000731574
+  ]
+ }
+}

@@ -1,0 +1,14 @@
+{
+ "what": "research/props_v3/probe_dk40_2023.js: one request to the 2022-23 provider-40 propBets feed, body discarded unread (curl -o /dev/null), the HTTP status kept; no price or outcome is read",
+ "asked": "2026-11-12T00:24:35Z",
+ "game_id": "2023_20230115_GSW_CHI",
+ "espn_id": "401468805",
+ "url": "https://sports.core.api.espn.com/v2/sports/basketball/leagues/nba/events/401468805/competitions/401468805/odds/40/propBets?lang=en&region=us&limit=1&page=1",
+ "http": "200",
+ "error": null,
+ "then": {
+  "source": "research/props_v2/results/espn_coverage.tsv (props_v2, 5 November 2026)",
+  "http": "200"
+ },
+ "reading": "served: the feed answers 200 for this game, as on 5 November 2026"
+}

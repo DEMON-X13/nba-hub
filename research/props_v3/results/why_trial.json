@@ -1,0 +1,2266 @@
+{
+ "generated": "2026-11-12T00:38Z",
+ "what": "research/props_v3/why_trial.js: why the props trial lost to DraftKings, on its own graded lines (diagnosis only; nothing fitted here is a candidate or carried anywhere)",
+ "boot": {
+  "gap": 10000,
+  "regressions": 1000,
+  "seed": 0
+ },
+ "reproduce": {
+  "lines": 12298,
+  "games": 121,
+  "modelChanceRecomputed": {
+   "linesDifferingOver1e4": 0,
+   "maxAbsDiff": 0.00004999922
+  },
+  "marketChanceRecomputed": {
+   "linesDifferingOver1e4": 0
+  },
+  "ledger": {
+   "lines": 12298,
+   "games": 121,
+   "over_rate": 0.475199,
+   "model_said": 0.488007,
+   "market_said": 0.460895,
+   "model": {
+    "logloss": 0.70439,
+    "brier": 0.254732
+   },
+   "market": {
+    "logloss": 0.685951,
+    "brier": 0.246454
+   },
+   "logloss_diff": 0.018439,
+   "logloss_diff_ci90": [
+    0.013592,
+    0.023297
+   ],
+   "brier_diff": 0.008278,
+   "brier_diff_ci90": [
+    0.006012,
+    0.010541
+   ]
+  },
+  "here": {
+   "llModel": 0.7043902,
+   "llMarket": 0.6859513,
+   "llDiff": 0.01843895,
+   "brModel": 0.2547318,
+   "brMarket": 0.2464537,
+   "brDiff": 0.00827811,
+   "overRate": 0.4751992,
+   "modelSaid": 0.4880072,
+   "marketSaid": 0.4608953
+  },
+  "llDiffCi_toolsPropsBootCI": [
+   0.013592,
+   0.023297
+  ],
+  "brDiffCi_toolsPropsBootCI": [
+   0.006012,
+   0.010541
+  ],
+  "llDiffCi_ownBootstrap": [
+   0.013533,
+   0.02336624
+  ],
+  "brDiffCi_ownBootstrap": [
+   0.005993523,
+   0.01057781
+  ],
+  "sameAsLedger": true
+ },
+ "baseStats": {
+  "lines": 6776,
+  "games": 121,
+  "overRate": 0.475059,
+  "modelSaid": 0.4841913,
+  "marketSaid": 0.4576384,
+  "llModel": 0.6951641,
+  "llMarket": 0.6815977,
+  "llDiff": 0.01356644,
+  "llDiffCi": [
+   0.009439743,
+   0.0177409
+  ],
+  "brModel": 0.2503234,
+  "brMarket": 0.2443224,
+  "brDiff": 0.006000956,
+  "brDiffCi": [
+   0.004058744,
+   0.007948115
+  ],
+  "modelFrom50": 0.09170267,
+  "marketFrom50": 0.06489272
+ },
+ "byStat": {
+  "pts": {
+   "lines": 1703,
+   "games": 121,
+   "overRate": 0.4797416,
+   "modelSaid": 0.4965245,
+   "marketSaid": 0.4692223,
+   "llModel": 0.7094882,
+   "llMarket": 0.6920133,
+   "llDiff": 0.0174749,
+   "llDiffCi": [
+    0.009151758,
+    0.02586441
+   ],
+   "brModel": 0.2575091,
+   "brMarket": 0.2494314,
+   "brDiff": 0.008077752,
+   "brDiffCi": [
+    0.00410462,
+    0.01198684
+   ],
+   "modelFrom50": 0.08395807,
+   "marketFrom50": 0.03147616
+  },
+  "reb": {
+   "lines": 1583,
+   "games": 121,
+   "overRate": 0.4958939,
+   "modelSaid": 0.4927342,
+   "marketSaid": 0.4589802,
+   "llModel": 0.7002903,
+   "llMarket": 0.687673,
+   "llDiff": 0.01261731,
+   "llDiffCi": [
+    0.004154823,
+    0.02130203
+   ],
+   "brModel": 0.2527781,
+   "brMarket": 0.2472573,
+   "brDiff": 0.005520787,
+   "brDiffCi": [
+    0.001595998,
+    0.00952645
+   ],
+   "modelFrom50": 0.08053481,
+   "marketFrom50": 0.05479033
+  },
+  "ast": {
+   "lines": 1207,
+   "games": 121,
+   "overRate": 0.4664457,
+   "modelSaid": 0.4810679,
+   "marketSaid": 0.4608466,
+   "llModel": 0.7064863,
+   "llMarket": 0.6842159,
+   "llDiff": 0.02227046,
+   "llDiffCi": [
+    0.01017534,
+    0.03454248
+   ],
+   "brModel": 0.2550189,
+   "brMarket": 0.2455575,
+   "brDiff": 0.009461407,
+   "brDiffCi": [
+    0.003923611,
+    0.01510979
+   ],
+   "modelFrom50": 0.0991652,
+   "marketFrom50": 0.06216147
+  },
+  "tpm": {
+   "lines": 1381,
+   "games": 121,
+   "overRate": 0.4619841,
+   "modelSaid": 0.4734498,
+   "marketSaid": 0.4438655,
+   "llModel": 0.6884139,
+   "llMarket": 0.6812881,
+   "llDiff": 0.007125817,
+   "llDiffCi": [
+    -0.0001133178,
+    0.01427082
+   ],
+   "brModel": 0.2471498,
+   "brMarket": 0.2441129,
+   "brDiff": 0.003036937,
+   "brDiffCi": [
+    -0.0003716671,
+    0.006422566
+   ],
+   "modelFrom50": 0.09251238,
+   "marketFrom50": 0.08973324
+  },
+  "stl": {
+   "lines": 582,
+   "games": 109,
+   "overRate": 0.4742268,
+   "modelSaid": 0.4645966,
+   "marketSaid": 0.4570144,
+   "llModel": 0.6573758,
+   "llMarket": 0.6547785,
+   "llDiff": 0.002597337,
+   "llDiffCi": [
+    -0.004755793,
+    0.009855395
+   ],
+   "brModel": 0.2325049,
+   "brMarket": 0.2312658,
+   "brDiff": 0.001239068,
+   "brDiffCi": [
+    -0.002207934,
+    0.004623067
+   ],
+   "modelFrom50": 0.1159027,
+   "marketFrom50": 0.1147753
+  },
+  "blk": {
+   "lines": 320,
+   "games": 99,
+   "overRate": 0.4375,
+   "modelSaid": 0.4700709,
+   "marketSaid": 0.4378256,
+   "llModel": 0.6487264,
+   "llMarket": 0.6363503,
+   "llDiff": 0.01237614,
+   "llDiffCi": [
+    -0.002087456,
+    0.02775469
+   ],
+   "brModel": 0.2283307,
+   "brMarket": 0.2226069,
+   "brDiff": 0.005723735,
+   "brDiffCi": [
+    -0.001112809,
+    0.01297901
+   ],
+   "modelFrom50": 0.1125084,
+   "marketFrom50": 0.1050825
+  },
+  "pra": {
+   "lines": 1308,
+   "games": 121,
+   "overRate": 0.4671254,
+   "modelSaid": 0.490709,
+   "marketSaid": 0.4651621,
+   "llModel": 0.7184651,
+   "llMarket": 0.6901857,
+   "llDiff": 0.0282794,
+   "llDiffCi": [
+    0.01955576,
+    0.03695383
+   ],
+   "brModel": 0.2614399,
+   "brMarket": 0.2485218,
+   "brDiff": 0.01291817,
+   "brDiffCi": [
+    0.008832722,
+    0.01701034
+   ],
+   "modelFrom50": 0.09093593,
+   "marketFrom50": 0.03483792
+  },
+  "pr": {
+   "lines": 1593,
+   "games": 121,
+   "overRate": 0.4814815,
+   "modelSaid": 0.5002059,
+   "marketSaid": 0.4657553,
+   "llModel": 0.7102823,
+   "llMarket": 0.6920923,
+   "llDiff": 0.01819003,
+   "llDiffCi": [
+    0.008650889,
+    0.02793033
+   ],
+   "brModel": 0.257902,
+   "brMarket": 0.2494727,
+   "brDiff": 0.008429306,
+   "brDiffCi": [
+    0.003865862,
+    0.0130897
+   ],
+   "modelFrom50": 0.08741293,
+   "marketFrom50": 0.03425411
+  },
+  "pa": {
+   "lines": 1234,
+   "games": 121,
+   "overRate": 0.465154,
+   "modelSaid": 0.4901481,
+   "marketSaid": 0.4648649,
+   "llModel": 0.7204453,
+   "llMarket": 0.6904609,
+   "llDiff": 0.02998444,
+   "llDiffCi": [
+    0.01978224,
+    0.04040532
+   ],
+   "brModel": 0.2620979,
+   "brMarket": 0.2486593,
+   "brDiff": 0.01343855,
+   "brDiffCi": [
+    0.008726383,
+    0.01818306
+   ],
+   "modelFrom50": 0.08948493,
+   "marketFrom50": 0.03516734
+  },
+  "ar": {
+   "lines": 1212,
+   "games": 121,
+   "overRate": 0.4892739,
+   "modelSaid": 0.4930512,
+   "marketSaid": 0.4659903,
+   "llModel": 0.7140353,
+   "llMarket": 0.6917009,
+   "llDiff": 0.02233444,
+   "llDiffCi": [
+    0.01153058,
+    0.03316565
+   ],
+   "brModel": 0.2592264,
+   "brMarket": 0.2492807,
+   "brDiff": 0.009945681,
+   "brDiffCi": [
+    0.004943706,
+    0.01494944
+   ],
+   "modelFrom50": 0.08539084,
+   "marketFrom50": 0.04015314
+  },
+  "sb": {
+   "lines": 175,
+   "games": 61,
+   "overRate": 0.4571429,
+   "modelSaid": 0.4544874,
+   "marketSaid": 0.4475949,
+   "llModel": 0.7227794,
+   "llMarket": 0.6953527,
+   "llDiff": 0.0274267,
+   "llDiffCi": [
+    0.01304091,
+    0.04181197
+   ],
+   "brModel": 0.2633629,
+   "brMarket": 0.2509085,
+   "brDiff": 0.01245444,
+   "brDiffCi": [
+    0.00582898,
+    0.01907987
+   ],
+   "modelFrom50": 0.08532857,
+   "marketFrom50": 0.07335257
+  }
+ },
+ "byWeek": {
+  "first": {
+   "lines": 5668,
+   "games": 56,
+   "overRate": 0.4878264,
+   "modelSaid": 0.4905888,
+   "marketSaid": 0.4611918,
+   "llModel": 0.7057119,
+   "llMarket": 0.6864294,
+   "llDiff": 0.0192825,
+   "llDiffCi": [
+    0.0111497,
+    0.0272798
+   ],
+   "brModel": 0.2550117,
+   "brMarket": 0.2467027,
+   "brDiff": 0.008309055,
+   "brDiffCi": [
+    0.004564504,
+    0.01196823
+   ],
+   "modelFrom50": 0.09700363,
+   "marketFrom50": 0.05291747
+  },
+  "second": {
+   "lines": 6630,
+   "games": 65,
+   "overRate": 0.4644042,
+   "modelSaid": 0.4858001,
+   "marketSaid": 0.4606419,
+   "llModel": 0.7032603,
+   "llMarket": 0.6855425,
+   "llDiff": 0.01771779,
+   "llDiffCi": [
+    0.01198523,
+    0.02358882
+   ],
+   "brModel": 0.2544926,
+   "brMarket": 0.2462409,
+   "brDiff": 0.008251656,
+   "brDiffCi": [
+    0.005495497,
+    0.01102796
+   ],
+   "modelFrom50": 0.08425404,
+   "marketFrom50": 0.05200762
+  }
+ },
+ "roles": [
+  {
+   "label": "his first game of the season",
+   "lines": 1653,
+   "llDiff": 0.04356941,
+   "llDiffCi": [
+    0.02839944,
+    0.05849592
+   ],
+   "modelSaid": 0.5017488,
+   "overHit": 0.445856,
+   "marketSaid": 0.4606589,
+   "minutesSaid": 28.47828,
+   "minutesPlayed": 27.31276
+  },
+  {
+   "label": "his 2nd to 6th game",
+   "lines": 7919,
+   "llDiff": 0.01478069,
+   "llDiffCi": [
+    0.008937857,
+    0.02102626
+   ],
+   "modelSaid": 0.4843382,
+   "overHit": 0.4861725,
+   "marketSaid": 0.4608075,
+   "minutesSaid": 28.75873,
+   "minutesPlayed": 28.67382
+  },
+  {
+   "label": "a new club (another club last season)",
+   "lines": 2389,
+   "llDiff": 0.02815358,
+   "llDiffCi": [
+    0.01288364,
+    0.04351386
+   ],
+   "modelSaid": 0.5005575,
+   "overHit": 0.4675596,
+   "marketSaid": 0.4582577,
+   "minutesSaid": 27.41925,
+   "minutesPlayed": 26.93638
+  },
+  {
+   "label": "no game last season",
+   "lines": 798,
+   "llDiff": 0.02443081,
+   "llDiffCi": [
+    0.005278661,
+    0.04376558
+   ],
+   "modelSaid": 0.4753159,
+   "overHit": 0.5877193,
+   "marketSaid": 0.4619341,
+   "minutesSaid": 29.21278,
+   "minutesPlayed": 28.75188
+  },
+  {
+   "label": "started",
+   "lines": 9482,
+   "llDiff": 0.01508207,
+   "llDiffCi": [
+    0.01010943,
+    0.02052548
+   ],
+   "modelSaid": 0.47405,
+   "overHit": 0.4777473,
+   "marketSaid": 0.4610004,
+   "minutesSaid": 30.27522,
+   "minutesPlayed": 30.49926
+  },
+  {
+   "label": "off the bench",
+   "lines": 2816,
+   "llDiff": 0.02974217,
+   "llDiffCi": [
+    0.01540337,
+    0.04413358
+   ],
+   "modelSaid": 0.5350034,
+   "overHit": 0.4666193,
+   "marketSaid": 0.4605415,
+   "minutesSaid": 23.7054,
+   "minutesPlayed": 21.9897
+  },
+  {
+   "label": "projected under 20 minutes",
+   "lines": 834,
+   "llDiff": 0.02395406,
+   "llDiffCi": [
+    -0.00652866,
+    0.05394518
+   ],
+   "modelSaid": 0.4196904,
+   "overHit": 0.4952038,
+   "marketSaid": 0.4630108,
+   "minutesSaid": 17.65923,
+   "minutesPlayed": 20.77818
+  },
+  {
+   "label": "projected 20 to 30",
+   "lines": 5743,
+   "llDiff": 0.02152497,
+   "llDiffCi": [
+    0.01341474,
+    0.02928899
+   ],
+   "modelSaid": 0.4909266,
+   "overHit": 0.4683963,
+   "marketSaid": 0.4606452,
+   "minutesSaid": 25.94283,
+   "minutesPlayed": 25.87324
+  },
+  {
+   "label": "projected 30 to 34",
+   "lines": 3649,
+   "llDiff": 0.01467573,
+   "llDiffCi": [
+    0.005897656,
+    0.02319145
+   ],
+   "modelSaid": 0.488629,
+   "overHit": 0.4845163,
+   "marketSaid": 0.4598863,
+   "minutesSaid": 31.91074,
+   "minutesPlayed": 31.5322
+  },
+  {
+   "label": "projected 34+",
+   "lines": 2072,
+   "llDiff": 0.01429286,
+   "llDiffCi": [
+    0.001848083,
+    0.02697746
+   ],
+   "modelSaid": 0.5063183,
+   "overHit": 0.4695946,
+   "marketSaid": 0.4625141,
+   "minutesSaid": 35.55222,
+   "minutesPlayed": 33.8499
+  },
+  {
+   "label": "a late scratch or an uncalled teammate on his side",
+   "lines": 4684,
+   "llDiff": 0.02708313,
+   "llDiffCi": [
+    0.01896057,
+    0.03564147
+   ],
+   "modelSaid": 0.482458,
+   "overHit": 0.4846285,
+   "marketSaid": 0.4605718,
+   "minutesSaid": 28.57649,
+   "minutesPlayed": 27.97588
+  },
+  {
+   "label": "neither",
+   "lines": 7614,
+   "llDiff": 0.0131212,
+   "llDiffCi": [
+    0.007072721,
+    0.01922984
+   ],
+   "modelSaid": 0.4914209,
+   "overHit": 0.4693985,
+   "marketSaid": 0.4610944,
+   "minutesSaid": 28.89043,
+   "minutesPlayed": 28.90439
+  }
+ ],
+ "sureness": {
+  "pooled": {
+   "lines": 12298,
+   "modelFrom50": 0.09013018,
+   "marketFrom50": 0.05242696,
+   "model": {
+    "intercept": -0.08569759,
+    "slope": 0.2720055,
+    "slopeCi": [
+     0.180321,
+     0.3701758
+    ],
+    "n": 12298
+   },
+   "market": {
+    "intercept": 0.06004999,
+    "slope": 1.012092,
+    "slopeCi": [
+     0.8599711,
+     1.168238
+    ],
+    "n": 12298
+   }
+  },
+  "baseStats": {
+   "lines": 6776,
+   "modelFrom50": 0.09170267,
+   "marketFrom50": 0.06489272,
+   "model": {
+    "intercept": -0.07142629,
+    "slope": 0.4361477,
+    "slopeCi": [
+     0.3393908,
+     0.5348759
+    ],
+    "n": 6776
+   },
+   "market": {
+    "intercept": 0.07758377,
+    "slope": 1.036436,
+    "slopeCi": [
+     0.8787108,
+     1.197365
+    ],
+    "n": 6776
+   }
+  },
+  "combos": {
+   "lines": 5522,
+   "modelFrom50": 0.08820058,
+   "marketFrom50": 0.03713032,
+   "model": {
+    "intercept": -0.09640333,
+    "slope": 0.07039932,
+    "slopeCi": [
+     -0.04250172,
+     0.1880005
+    ],
+    "n": 5522
+   },
+   "market": {
+    "intercept": 0.01816249,
+    "slope": 0.8290635,
+    "slopeCi": [
+     0.3943413,
+     1.245327
+    ],
+    "n": 5522
+   }
+  },
+  "byStat": {
+   "pts": {
+    "lines": 1703,
+    "modelFrom50": 0.08395807,
+    "marketFrom50": 0.03147616,
+    "model": {
+     "intercept": -0.07897307,
+     "slope": 0.1487135,
+     "slopeCi": [
+      -0.01597077,
+      0.3263368
+     ],
+     "n": 1703
+    },
+    "market": {
+     "intercept": 0.02274531,
+     "slope": 0.8416776,
+     "slopeCi": [
+      0.003370669,
+      1.771161
+     ],
+     "n": 1703
+    }
+   },
+   "reb": {
+    "lines": 1583,
+    "modelFrom50": 0.08053481,
+    "marketFrom50": 0.05479033,
+    "model": {
+     "intercept": -0.005448869,
+     "slope": 0.3374528,
+     "slopeCi": [
+      0.1568168,
+      0.511992
+     ],
+     "n": 1583
+    },
+    "market": {
+     "intercept": 0.1940456,
+     "slope": 1.26768,
+     "slopeCi": [
+      0.8672564,
+      1.695043
+     ],
+     "n": 1583
+    }
+   },
+   "ast": {
+    "lines": 1207,
+    "modelFrom50": 0.0991652,
+    "marketFrom50": 0.06216147,
+    "model": {
+     "intercept": -0.1138738,
+     "slope": 0.2626301,
+     "slopeCi": [
+      0.07874126,
+      0.4806704
+     ],
+     "n": 1207
+    },
+    "market": {
+     "intercept": 0.007266647,
+     "slope": 0.8992015,
+     "slopeCi": [
+      0.538806,
+      1.268349
+     ],
+     "n": 1207
+    }
+   },
+   "tpm": {
+    "lines": 1381,
+    "modelFrom50": 0.09251238,
+    "marketFrom50": 0.08973324,
+    "model": {
+     "intercept": -0.09480425,
+     "slope": 0.5324111,
+     "slopeCi": [
+      0.3495093,
+      0.7307118
+     ],
+     "n": 1381
+    },
+    "market": {
+     "intercept": 0.02718764,
+     "slope": 0.7843613,
+     "slopeCi": [
+      0.5652557,
+      1.036753
+     ],
+     "n": 1381
+    }
+   },
+   "stl": {
+    "lines": 582,
+    "modelFrom50": 0.1159027,
+    "marketFrom50": 0.1147753,
+    "model": {
+     "intercept": 0.04430057,
+     "slope": 1.021153,
+     "slopeCi": [
+      0.7517851,
+      1.323346
+     ],
+     "n": 582
+    },
+    "market": {
+     "intercept": 0.09948454,
+     "slope": 1.150576,
+     "slopeCi": [
+      0.8640307,
+      1.462101
+     ],
+     "n": 582
+    }
+   },
+   "blk": {
+    "lines": 320,
+    "modelFrom50": 0.1125084,
+    "marketFrom50": 0.1050825,
+    "model": {
+     "intercept": -0.1351424,
+     "slope": 1.064545,
+     "slopeCi": [
+      0.7253333,
+      1.428191
+     ],
+     "n": 320
+    },
+    "market": {
+     "intercept": 0.1317065,
+     "slope": 1.57643,
+     "slopeCi": [
+      1.179318,
+      2.009848
+     ],
+     "n": 320
+    }
+   },
+   "pra": {
+    "lines": 1308,
+    "modelFrom50": 0.09093593,
+    "marketFrom50": 0.03483792,
+    "model": {
+     "intercept": -0.1301912,
+     "slope": 0.03829947,
+     "slopeCi": [
+      -0.107039,
+      0.1848408
+     ],
+     "n": 1308
+    },
+    "market": {
+     "intercept": 0.06789987,
+     "slope": 1.430374,
+     "slopeCi": [
+      -0.1818258,
+      3.22261
+     ],
+     "n": 1308
+    }
+   },
+   "pr": {
+    "lines": 1593,
+    "modelFrom50": 0.08741293,
+    "marketFrom50": 0.03425411,
+    "model": {
+     "intercept": -0.07415288,
+     "slope": 0.1733093,
+     "slopeCi": [
+      0.004766409,
+      0.3427763
+     ],
+     "n": 1593
+    },
+    "market": {
+     "intercept": 0.1070736,
+     "slope": 1.320232,
+     "slopeCi": [
+      -0.0008710218,
+      2.728478
+     ],
+     "n": 1593
+    }
+   },
+   "pa": {
+    "lines": 1234,
+    "modelFrom50": 0.08948493,
+    "marketFrom50": 0.03516734,
+    "model": {
+     "intercept": -0.1401685,
+     "slope": -0.01347243,
+     "slopeCi": [
+      -0.1690541,
+      0.1650919
+     ],
+     "n": 1234
+    },
+    "market": {
+     "intercept": -0.03899748,
+     "slope": 0.7144747,
+     "slopeCi": [
+      -0.5513087,
+      1.964344
+     ],
+     "n": 1234
+    }
+   },
+   "ar": {
+    "lines": 1212,
+    "modelFrom50": 0.08539084,
+    "marketFrom50": 0.04015314,
+    "model": {
+     "intercept": -0.04021767,
+     "slope": 0.08825766,
+     "slopeCi": [
+      -0.09896125,
+      0.2815622
+     ],
+     "n": 1212
+    },
+    "market": {
+     "intercept": 0.08753817,
+     "slope": 0.9540291,
+     "slopeCi": [
+      0.2190267,
+      1.657253
+     ],
+     "n": 1212
+    }
+   },
+   "sb": {
+    "lines": 175,
+    "modelFrom50": 0.08532857,
+    "marketFrom50": 0.07335257,
+    "model": {
+     "intercept": -0.2279702,
+     "slope": -0.2899578,
+     "slopeCi": [
+      -0.8910269,
+      0.3014988
+     ],
+     "n": 175
+    },
+    "market": {
+     "intercept": -0.1215537,
+     "slope": 0.2349929,
+     "slopeCi": [
+      -0.7093854,
+      1.153495
+     ],
+     "n": 175
+    }
+   }
+  },
+  "table": [
+   {
+    "band": "0-30%",
+    "model": {
+     "lines": 588,
+     "said": 0.2520243,
+     "hit": 0.4455782
+    },
+    "market": {
+     "lines": 94,
+     "said": 0.2764489,
+     "hit": 0.2765957
+    }
+   },
+   {
+    "band": "30-40%",
+    "model": {
+     "lines": 2149,
+     "said": 0.3583757,
+     "hit": 0.4080968
+    },
+    "market": {
+     "lines": 1316,
+     "said": 0.3618564,
+     "hit": 0.381459
+    }
+   },
+   {
+    "band": "40-45%",
+    "model": {
+     "lines": 1726,
+     "said": 0.4261626,
+     "hit": 0.4611819
+    },
+    "market": {
+     "lines": 2789,
+     "said": 0.4321058,
+     "hit": 0.4463966
+    }
+   },
+   {
+    "band": "45-50%",
+    "model": {
+     "lines": 2079,
+     "said": 0.4757813,
+     "hit": 0.4752285
+    },
+    "market": {
+     "lines": 6057,
+     "said": 0.4718243,
+     "hit": 0.4847284
+    }
+   },
+   {
+    "band": "50-55%",
+    "model": {
+     "lines": 2125,
+     "said": 0.5249359,
+     "hit": 0.4941176
+    },
+    "market": {
+     "lines": 1437,
+     "said": 0.519953,
+     "hit": 0.5372303
+    }
+   },
+   {
+    "band": "55-60%",
+    "model": {
+     "lines": 1676,
+     "said": 0.5736786,
+     "hit": 0.5119332
+    },
+    "market": {
+     "lines": 408,
+     "said": 0.5706444,
+     "hit": 0.5735294
+    }
+   },
+   {
+    "band": "60-70%",
+    "model": {
+     "lines": 1631,
+     "said": 0.6382167,
+     "hit": 0.5187002
+    },
+    "market": {
+     "lines": 197,
+     "said": 0.6239766,
+     "hit": 0.6548223
+    }
+   },
+   {
+    "band": "70-100%",
+    "model": {
+     "lines": 324,
+     "said": 0.7424716,
+     "hit": 0.5154321
+    },
+    "market": {
+     "lines": 0,
+     "said": null,
+     "hit": null
+    }
+   }
+  ]
+ },
+ "where": [
+  {
+   "label": "DraftKings 10+ points above the model",
+   "lines": 1186,
+   "share": 0.09643845,
+   "gapShare": 0.4056259,
+   "llDiff": 0.07755532,
+   "overHit": 0.4822934,
+   "modelSaid": 0.3083161,
+   "marketSaid": 0.4644879
+  },
+  {
+   "label": "DraftKings 5 to 10 above",
+   "lines": 1334,
+   "share": 0.1084729,
+   "gapShare": 0.02519255,
+   "llDiff": 0.004282396,
+   "overHit": 0.4415292,
+   "modelSaid": 0.3898674,
+   "marketSaid": 0.4627521
+  },
+  {
+   "label": "within 5",
+   "lines": 4729,
+   "share": 0.3845341,
+   "gapShare": 0.03536483,
+   "llDiff": 0.001695793,
+   "overHit": 0.4726158,
+   "modelSaid": 0.4648369,
+   "marketSaid": 0.4611667
+  },
+  {
+   "label": "model 5 to 10 above",
+   "lines": 2369,
+   "share": 0.1926329,
+   "gapShare": 0.0199572,
+   "llDiff": 0.001910316,
+   "overHit": 0.4888138,
+   "modelSaid": 0.534026,
+   "marketSaid": 0.4605839
+  },
+  {
+   "label": "model 10+ above",
+   "lines": 2680,
+   "share": 0.2179216,
+   "gapShare": 0.5138595,
+   "llDiff": 0.04347907,
+   "overHit": 0.4813433,
+   "modelSaid": 0.6165839,
+   "marketSaid": 0.4581778
+  },
+  {
+   "label": "apart by 10 points or more, either way",
+   "lines": 3866,
+   "share": 0.3143601,
+   "gapShare": 0.9194854,
+   "llDiff": 0.05393288,
+   "overHit": 0.4816348,
+   "modelSaid": 0.5220144,
+   "marketSaid": 0.4601136
+  }
+ ],
+ "gapParts": {
+  "pooled": {
+   "lines": 12298,
+   "gap": 0.01843895,
+   "model": {
+    "raw": 0.7043902,
+    "shiftOnly": 0.7040443,
+    "shift": -0.05402268,
+    "slopeOnly": 0.6907309,
+    "slope": 0.2906206,
+    "both": 0.6898277,
+    "bothCoef": [
+     -0.08569759,
+     0.2720055
+    ]
+   },
+   "market": {
+    "raw": 0.6859513,
+    "shiftOnly": 0.685535,
+    "shift": 0.05816897,
+    "slopeOnly": 0.6858317,
+    "slope": 0.8847627,
+    "both": 0.6855341,
+    "bothCoef": [
+     0.06004999,
+     1.012092
+    ]
+   },
+   "leanPart": 0.0006244853,
+   "overSurePart": 0.01393797,
+   "calibrationPart": 0.01456246,
+   "informationPart": 0.00429364,
+   "marketOwnRecal": 0.0004171508,
+   "shares": {
+    "lean": 0.03386773,
+    "overSure": 0.7558985,
+    "information": 0.2102337
+   }
+  },
+  "baseStats": {
+   "lines": 6776,
+   "gap": 0.01356644,
+   "model": {
+    "raw": 0.6951641,
+    "shiftOnly": 0.6949881,
+    "shift": -0.03855647,
+    "slopeOnly": 0.6871641,
+    "slope": 0.4561596,
+    "both": 0.6865455,
+    "bothCoef": [
+     -0.07142629,
+     0.4361477
+    ]
+   },
+   "market": {
+    "raw": 0.6815977,
+    "shiftOnly": 0.6809749,
+    "shift": 0.07144383,
+    "slopeOnly": 0.6815061,
+    "slope": 0.916893,
+    "both": 0.6809619,
+    "bothCoef": [
+     0.07758377,
+     1.036436
+    ]
+   },
+   "leanPart": 0.000397343,
+   "overSurePart": 0.00822129,
+   "calibrationPart": 0.008618633,
+   "informationPart": 0.005583601,
+   "marketOwnRecal": 0.0006357961,
+   "shares": {
+    "lean": 0.02928867,
+    "overSure": 0.6060021,
+    "information": 0.3647092
+   }
+  },
+  "combos": {
+   "lines": 5522,
+   "gap": 0.02441796,
+   "model": {
+    "raw": 0.7157115,
+    "shiftOnly": 0.71508,
+    "shift": -0.07295347,
+    "slopeOnly": 0.6929496,
+    "slope": 0.0836754,
+    "both": 0.6917946,
+    "bothCoef": [
+     -0.09640333,
+     0.07039932
+    ]
+   },
+   "market": {
+    "raw": 0.6912935,
+    "shiftOnly": 0.6910724,
+    "shift": 0.04217867,
+    "slopeOnly": 0.6910487,
+    "slope": 0.744547,
+    "both": 0.6910345,
+    "bothCoef": [
+     0.01816249,
+     0.8290635
+    ]
+   },
+   "leanPart": 0.0008932363,
+   "overSurePart": 0.02302367,
+   "calibrationPart": 0.02391691,
+   "informationPart": 0.000760042,
+   "marketOwnRecal": 0.0002589847,
+   "shares": {
+    "lean": 0.03658111,
+    "overSure": 0.9428989,
+    "information": 0.02052003
+   }
+  },
+  "byStat": {
+   "pts": {
+    "lines": 1703,
+    "gap": 0.0174749,
+    "model": {
+     "raw": 0.7094882,
+     "shiftOnly": 0.7088987,
+     "shift": -0.07027735,
+     "slopeOnly": 0.6925613,
+     "slope": 0.1543906,
+     "both": 0.691784,
+     "bothCoef": [
+      -0.07897307,
+      0.1487135
+     ]
+    },
+    "market": {
+     "raw": 0.6920133,
+     "shiftOnly": 0.691791,
+     "shift": 0.04225501,
+     "slopeOnly": 0.6917903,
+     "slope": 0.7110813,
+     "both": 0.6917714,
+     "bothCoef": [
+      0.02274531,
+      0.8416776
+     ]
+    },
+    "leanPart": 0.0006834422,
+    "overSurePart": 0.01702079,
+    "calibrationPart": 0.01770423,
+    "informationPart": 0.00001259614,
+    "marketOwnRecal": 0.0002419231,
+    "shares": {
+     "lean": 0.03910992,
+     "overSure": 0.9740133,
+     "information": -0.01312322
+    }
+   },
+   "reb": {
+    "lines": 1583,
+    "gap": 0.01261731,
+    "model": {
+     "raw": 0.7002903,
+     "shiftOnly": 0.7002695,
+     "shift": 0.01320044,
+     "slopeOnly": 0.6904075,
+     "slope": 0.3383587,
+     "both": 0.6904038,
+     "bothCoef": [
+      -0.005448869,
+      0.3374528
+     ]
+    },
+    "market": {
+     "raw": 0.687673,
+     "shiftOnly": 0.6849084,
+     "shift": 0.1496238,
+     "slopeOnly": 0.6873673,
+     "slope": 0.8116905,
+     "both": 0.6845307,
+     "bothCoef": [
+      0.1940456,
+      1.26768
+     ]
+    },
+    "leanPart": 0.00001226335,
+    "overSurePart": 0.009874252,
+    "calibrationPart": 0.009886515,
+    "informationPart": 0.005873085,
+    "marketOwnRecal": 0.003142291,
+    "shares": {
+     "lean": 0.0009719466,
+     "overSure": 0.7825957,
+     "information": 0.2164324
+    }
+   },
+   "ast": {
+    "lines": 1207,
+    "gap": 0.02227046,
+    "model": {
+     "raw": 0.7064863,
+     "shiftOnly": 0.7060305,
+     "shift": -0.06238034,
+     "slopeOnly": 0.6901202,
+     "slope": 0.2944444,
+     "both": 0.688546,
+     "bothCoef": [
+      -0.1138738,
+      0.2626301
+     ]
+    },
+    "market": {
+     "raw": 0.6842159,
+     "shiftOnly": 0.6841518,
+     "shift": 0.0228981,
+     "slopeOnly": 0.6840722,
+     "slope": 0.8869192,
+     "both": 0.6840675,
+     "bothCoef": [
+      0.007266647,
+      0.8992015
+     ]
+    },
+    "leanPart": 0.001015042,
+    "overSurePart": 0.0169253,
+    "calibrationPart": 0.01794034,
+    "informationPart": 0.004478539,
+    "marketOwnRecal": 0.0001484175,
+    "shares": {
+     "lean": 0.04557796,
+     "overSure": 0.7599887,
+     "information": 0.1944334
+    }
+   },
+   "tpm": {
+    "lines": 1381,
+    "gap": 0.007125817,
+    "model": {
+     "raw": 0.6884139,
+     "shiftOnly": 0.6881363,
+     "shift": -0.04844837,
+     "slopeOnly": 0.6836481,
+     "slope": 0.5768144,
+     "both": 0.6826005,
+     "bothCoef": [
+      -0.09480425,
+      0.5324111
+     ]
+    },
+    "market": {
+     "raw": 0.6812881,
+     "shiftOnly": 0.6806024,
+     "shift": 0.07561145,
+     "slopeOnly": 0.6799092,
+     "slope": 0.7515083,
+     "both": 0.6798438,
+     "bothCoef": [
+      0.02718764,
+      0.7843613
+     ]
+    },
+    "leanPart": 0.0006626367,
+    "overSurePart": 0.005150844,
+    "calibrationPart": 0.005813481,
+    "informationPart": 0.002756697,
+    "marketOwnRecal": 0.001444361,
+    "shares": {
+     "lean": 0.09299097,
+     "overSure": 0.7228426,
+     "information": 0.1841664
+    }
+   },
+   "stl": {
+    "lines": 582,
+    "gap": 0.002597337,
+    "model": {
+     "raw": 0.6573758,
+     "shiftOnly": 0.6571765,
+     "shift": 0.04136806,
+     "slopeOnly": 0.6573758,
+     "slope": 1.000176,
+     "both": 0.6571626,
+     "bothCoef": [
+      0.04430057,
+      1.021153
+     ]
+    },
+    "market": {
+     "raw": 0.6547785,
+     "shiftOnly": 0.654146,
+     "shift": 0.07342954,
+     "slopeOnly": 0.6545403,
+     "slope": 1.087948,
+     "both": 0.6535208,
+     "bothCoef": [
+      0.09948454,
+      1.150576
+     ]
+    },
+    "leanPart": 0.0002062522,
+    "overSurePart": 0.000006986635,
+    "calibrationPart": 0.0002132388,
+    "informationPart": 0.003641718,
+    "marketOwnRecal": 0.00125762,
+    "shares": {
+     "lean": 0.07940909,
+     "overSure": 0.002689922,
+     "information": 0.917901
+    }
+   },
+   "blk": {
+    "lines": 320,
+    "gap": 0.01237614,
+    "model": {
+     "raw": 0.6487264,
+     "shiftOnly": 0.6464332,
+     "shift": -0.1410849,
+     "slopeOnly": 0.6483139,
+     "slope": 1.111797,
+     "both": 0.6463015,
+     "bothCoef": [
+      -0.1351424,
+      1.064545
+     ]
+    },
+    "market": {
+     "raw": 0.6363503,
+     "shiftOnly": 0.6363501,
+     "shift": -0.001389057,
+     "slopeOnly": 0.6308611,
+     "slope": 1.451985,
+     "both": 0.6293555,
+     "bothCoef": [
+      0.1317065,
+      1.57643
+     ]
+    },
+    "leanPart": 0.002152864,
+    "overSurePart": 0.0002720782,
+    "calibrationPart": 0.002424942,
+    "informationPart": 0.01694595,
+    "marketOwnRecal": 0.006994753,
+    "shares": {
+     "lean": 0.1739528,
+     "overSure": 0.02198409,
+     "information": 0.8040631
+    }
+   },
+   "pra": {
+    "lines": 1308,
+    "gap": 0.0282794,
+    "model": {
+     "raw": 0.7184651,
+     "shiftOnly": 0.7172901,
+     "shift": -0.09970897,
+     "slopeOnly": 0.6930412,
+     "slope": 0.05954637,
+     "both": 0.6909407,
+     "bothCoef": [
+      -0.1301912,
+      0.03829947
+     ]
+    },
+    "market": {
+     "raw": 0.6901857,
+     "shiftOnly": 0.690178,
+     "shift": 0.007896238,
+     "slopeOnly": 0.6901848,
+     "slope": 1.017331,
+     "both": 0.6900978,
+     "bothCoef": [
+      0.06789987,
+      1.430374
+     ]
+    },
+    "leanPart": 0.001637716,
+    "overSurePart": 0.02588665,
+    "calibrationPart": 0.02752436,
+    "informationPart": 0.0008429435,
+    "marketOwnRecal": 0.00008790395,
+    "shares": {
+     "lean": 0.05791197,
+     "overSure": 0.9153888,
+     "information": 0.02669927
+    }
+   },
+   "pr": {
+    "lines": 1593,
+    "gap": 0.01819003,
+    "model": {
+     "raw": 0.7102823,
+     "shiftOnly": 0.7095453,
+     "shift": -0.07873873,
+     "slopeOnly": 0.6923198,
+     "slope": 0.1731892,
+     "both": 0.6916341,
+     "bothCoef": [
+      -0.07415288,
+      0.1733093
+     ]
+    },
+    "market": {
+     "raw": 0.6920923,
+     "shiftOnly": 0.6915955,
+     "shift": 0.06315217,
+     "slopeOnly": 0.6918037,
+     "slope": 0.6828972,
+     "both": 0.6915414,
+     "bothCoef": [
+      0.1070736,
+      1.320232
+     ]
+    },
+    "leanPart": 0.0007113722,
+    "overSurePart": 0.01793691,
+    "calibrationPart": 0.01864828,
+    "informationPart": 0.00009263202,
+    "marketOwnRecal": 0.0005508844,
+    "shares": {
+     "lean": 0.03910782,
+     "overSure": 0.9860847,
+     "information": -0.02519251
+    }
+   },
+   "pa": {
+    "lines": 1234,
+    "gap": 0.02998444,
+    "model": {
+     "raw": 0.7204453,
+     "shiftOnly": 0.7191274,
+     "shift": -0.1055318,
+     "slopeOnly": 0.6931433,
+     "slope": 0.01157766,
+     "both": 0.6907115,
+     "bothCoef": [
+      -0.1401685,
+      -0.01347243
+     ]
+    },
+    "market": {
+     "raw": 0.6904609,
+     "shiftOnly": 0.6904607,
+     "shift": 0.001163317,
+     "slopeOnly": 0.690449,
+     "slope": 0.9376156,
+     "both": 0.6904121,
+     "bothCoef": [
+      -0.03899748,
+      0.7144747
+     ]
+    },
+    "leanPart": 0.001874832,
+    "overSurePart": 0.02785897,
+    "calibrationPart": 0.02973381,
+    "informationPart": 0.0002994038,
+    "marketOwnRecal": 0.00004876719,
+    "shares": {
+     "lean": 0.06252682,
+     "overSure": 0.9291143,
+     "information": 0.008358887
+    }
+   },
+   "ar": {
+    "lines": 1212,
+    "gap": 0.02233444,
+    "model": {
+     "raw": 0.7140353,
+     "shiftOnly": 0.7140053,
+     "shift": -0.01586104,
+     "slopeOnly": 0.6929107,
+     "slope": 0.09398169,
+     "both": 0.6927095,
+     "bothCoef": [
+      -0.04021767,
+      0.08825766
+     ]
+    },
+    "market": {
+     "raw": 0.6917009,
+     "shiftOnly": 0.6906079,
+     "shift": 0.09381368,
+     "slopeOnly": 0.6911008,
+     "slope": 0.6477345,
+     "both": 0.6906026,
+     "bothCoef": [
+      0.08753817,
+      0.9540291
+     ]
+    },
+    "leanPart": 0.0001155643,
+    "overSurePart": 0.02121019,
+    "calibrationPart": 0.02132575,
+    "informationPart": 0.002106956,
+    "marketOwnRecal": 0.001098266,
+    "shares": {
+     "lean": 0.005174266,
+     "overSure": 0.9496628,
+     "information": 0.04516298
+    }
+   },
+   "sb": {
+    "lines": 175,
+    "gap": 0.0274267,
+    "model": {
+     "raw": 0.7227794,
+     "shiftOnly": 0.7227646,
+     "shift": 0.01113896,
+     "slopeOnly": 0.692979,
+     "slope": -0.08015097,
+     "both": 0.6876732,
+     "bothCoef": [
+      -0.2279702,
+      -0.2899578
+     ]
+    },
+    "market": {
+     "raw": 0.6953527,
+     "shiftOnly": 0.6951646,
+     "shift": 0.03937541,
+     "slopeOnly": 0.6900764,
+     "slope": 0.4299159,
+     "both": 0.6888692,
+     "bothCoef": [
+      -0.1215537,
+      0.2349929
+     ]
+    },
+    "leanPart": 0.002660272,
+    "overSurePart": 0.03244589,
+    "calibrationPart": 0.03510616,
+    "informationPart": -0.001195953,
+    "marketOwnRecal": 0.006483504,
+    "shares": {
+     "lean": 0.09699567,
+     "overSure": 1.183004,
+     "information": -0.2799993
+    }
+   }
+  }
+ },
+ "beyond": {
+  "pooled": {
+   "w": 0.09931334,
+   "wCi": [
+    0.002166339,
+    0.1987454
+   ],
+   "llGainInSample": 0.0002338801,
+   "wFree": 0.07117995,
+   "wFreeCi": [
+    -0.0228816,
+    0.1658806
+   ],
+   "freeIntercept": 0.05288614,
+   "freeSlopeOnDK": 1.015303
+  },
+  "baseStats": {
+   "w": 0.1512802,
+   "wCi": [
+    0.05216474,
+    0.2471131
+   ],
+   "llGainInSample": 0.0004580965,
+   "wFree": 0.1136877,
+   "wFreeCi": [
+    0.01727183,
+    0.2103029
+   ],
+   "freeIntercept": 0.06641576,
+   "freeSlopeOnDK": 1.041672
+  },
+  "byStat": {
+   "pts": {
+    "w": 0.1461366,
+    "wCi": [
+     -0.01754279,
+     0.3154849
+    ],
+    "llGainInSample": 0.000544331,
+    "wFree": 0.1302012,
+    "wFreeCi": [
+     -0.02919785,
+     0.2976658
+    ],
+    "freeIntercept": 0.01200231,
+    "freeSlopeOnDK": 0.8698271
+   },
+   "reb": {
+    "w": 0.1906504,
+    "wCi": [
+     -0.01528576,
+     0.378471
+    ],
+    "llGainInSample": 0.0007684036,
+    "wFree": 0.08765496,
+    "wFreeCi": [
+     -0.1059858,
+     0.2986628
+    ],
+    "freeIntercept": 0.1833056,
+    "freeSlopeOnDK": 1.273235
+   },
+   "ast": {
+    "w": 0.07455499,
+    "wCi": [
+     -0.1335052,
+     0.2898018
+    ],
+    "llGainInSample": 0.0001504513,
+    "wFree": 0.06650167,
+    "wFreeCi": [
+     -0.1472431,
+     0.3042347
+    ],
+    "freeIntercept": 0.00259551,
+    "freeSlopeOnDK": 0.9028982
+   },
+   "tpm": {
+    "w": 0.2342578,
+    "wCi": [
+     -0.04465495,
+     0.4872638
+    ],
+    "llGainInSample": 0.0007412595,
+    "wFree": 0.1575055,
+    "wFreeCi": [
+     -0.1189133,
+     0.4422141
+    ],
+    "freeIntercept": 0.01048268,
+    "freeSlopeOnDK": 0.7938929
+   },
+   "stl": {
+    "w": 0.2873205,
+    "wCi": [
+     -0.299974,
+     0.8935761
+    ],
+    "llGainInSample": 0.0005055786,
+    "wFree": 0.2709334,
+    "wFreeCi": [
+     -0.3091246,
+     0.8827069
+    ],
+    "freeIntercept": 0.09258467,
+    "freeSlopeOnDK": 1.158269
+   },
+   "blk": {
+    "w": -0.008487042,
+    "wCi": [
+     -0.6066211,
+     0.5528917
+    ],
+    "llGainInSample": 8.763162e-7,
+    "wFree": -0.05960152,
+    "wFreeCi": [
+     -0.7667165,
+     0.6715217
+    ],
+    "freeIntercept": 0.140225,
+    "freeSlopeOnDK": 1.578808
+   },
+   "pra": {
+    "w": 0.02162649,
+    "wCi": [
+     -0.1221097,
+     0.1571593
+    ],
+    "llGainInSample": 0.00001424822,
+    "wFree": 0.01988049,
+    "wFreeCi": [
+     -0.1199308,
+     0.1631661
+    ],
+    "freeIntercept": 0.0662038,
+    "freeSlopeOnDK": 1.432519
+   },
+   "pr": {
+    "w": 0.1738988,
+    "wCi": [
+     0.005389153,
+     0.3313654
+    ],
+    "llGainInSample": 0.0008798982,
+    "wFree": 0.1476339,
+    "wFreeCi": [
+     -0.02773201,
+     0.3166748
+    ],
+    "freeIntercept": 0.08338575,
+    "freeSlopeOnDK": 1.295445
+   },
+   "pa": {
+    "w": -0.02379388,
+    "wCi": [
+     -0.1759737,
+     0.1451385
+    ],
+    "llGainInSample": 0.00001661238,
+    "wFree": -0.02632861,
+    "wFreeCi": [
+     -0.1955089,
+     0.1442841
+    ],
+    "freeIntercept": -0.03698724,
+    "freeSlopeOnDK": 0.7101702
+   },
+   "ar": {
+    "w": 0.06016162,
+    "wCi": [
+     -0.1368437,
+     0.2605335
+    ],
+    "llGainInSample": 0.00009442154,
+    "wFree": 0.01284476,
+    "wFreeCi": [
+     -0.1813234,
+     0.2219587
+    ],
+    "freeIntercept": 0.08646218,
+    "freeSlopeOnDK": 0.9561209
+   },
+   "sb": {
+    "w": -0.875753,
+    "wCi": [
+     -1.750726,
+     -0.171944
+    ],
+    "llGainInSample": 0.00752535,
+    "wFree": -0.8692923,
+    "wFreeCi": [
+     -1.788891,
+     -0.1547594
+    ],
+    "freeIntercept": -0.1003887,
+    "freeSlopeOnDK": 0.2450919
+   }
+  }
+ },
+ "minutes": {
+  "pooled": {
+   "lines": 12298,
+   "slopeTotal": 1.016524,
+   "slopeTotalCi": [
+    0.9190204,
+    1.116758
+   ],
+   "slopeMinutes": 0.5947126,
+   "slopeRate": 0.4218115,
+   "minutesShare": 0.5850452,
+   "minutesShareCi": [
+    0.5234255,
+    0.6487205
+   ],
+   "sdDelta": 0.2504341
+  },
+  "baseStats": {
+   "lines": 6776,
+   "slopeTotal": 0.977407,
+   "slopeTotalCi": [
+    0.8779311,
+    1.081782
+   ],
+   "slopeMinutes": 0.5320988,
+   "slopeRate": 0.4453082,
+   "minutesShare": 0.5443984,
+   "minutesShareCi": [
+    0.4809299,
+    0.6113787
+   ],
+   "sdDelta": 0.2291701
+  },
+  "byStat": {
+   "pts": {
+    "lines": 1703,
+    "slopeTotal": 0.9544374,
+    "slopeTotalCi": [
+     0.8376266,
+     1.075279
+    ],
+    "slopeMinutes": 0.604993,
+    "slopeRate": 0.3494444,
+    "minutesShare": 0.633874,
+    "minutesShareCi": [
+     0.5503306,
+     0.7292565
+    ],
+    "sdDelta": 0.2525016
+   },
+   "reb": {
+    "lines": 1583,
+    "slopeTotal": 1.108846,
+    "slopeTotalCi": [
+     0.9226913,
+     1.289098
+    ],
+    "slopeMinutes": 0.726201,
+    "slopeRate": 0.3826451,
+    "minutesShare": 0.6549159,
+    "minutesShareCi": [
+     0.5463586,
+     0.7849705
+    ],
+    "sdDelta": 0.2364344
+   },
+   "ast": {
+    "lines": 1207,
+    "slopeTotal": 1.011249,
+    "slopeTotalCi": [
+     0.8267975,
+     1.212735
+    ],
+    "slopeMinutes": 0.3350263,
+    "slopeRate": 0.6762226,
+    "minutesShare": 0.3312996,
+    "minutesShareCi": [
+     0.2592401,
+     0.4219574
+    ],
+    "sdDelta": 0.2767935
+   },
+   "tpm": {
+    "lines": 1381,
+    "slopeTotal": 0.8451168,
+    "slopeTotalCi": [
+     0.6057525,
+     1.097355
+    ],
+    "slopeMinutes": 0.4740197,
+    "slopeRate": 0.3710971,
+    "minutesShare": 0.5608925,
+    "minutesShareCi": [
+     0.402351,
+     0.8142247
+    ],
+    "sdDelta": 0.1810375
+   },
+   "stl": {
+    "lines": 582,
+    "slopeTotal": 0.8203045,
+    "slopeTotalCi": [
+     0.3167672,
+     1.402022
+    ],
+    "slopeMinutes": 0.4065775,
+    "slopeRate": 0.413727,
+    "minutesShare": 0.4956422,
+    "minutesShareCi": [
+     0.2664364,
+     1.304635
+    ],
+    "sdDelta": 0.1308086
+   },
+   "blk": {
+    "lines": 320,
+    "slopeTotal": 0.5794958,
+    "slopeTotalCi": [
+     0.1435115,
+     1.032958
+    ],
+    "slopeMinutes": 0.3070207,
+    "slopeRate": 0.2724751,
+    "minutesShare": 0.5298066,
+    "minutesShareCi": [
+     0.2579344,
+     1.655042
+    ],
+    "sdDelta": 0.1683263
+   },
+   "pra": {
+    "lines": 1308,
+    "slopeTotal": 1.049512,
+    "slopeTotalCi": [
+     0.9358639,
+     1.166379
+    ],
+    "slopeMinutes": 0.6722191,
+    "slopeRate": 0.3772925,
+    "minutesShare": 0.6405066,
+    "minutesShareCi": [
+     0.5622538,
+     0.7184336
+    ],
+    "sdDelta": 0.2866096
+   },
+   "pr": {
+    "lines": 1593,
+    "slopeTotal": 1.028324,
+    "slopeTotalCi": [
+     0.9186439,
+     1.141762
+    ],
+    "slopeMinutes": 0.7245083,
+    "slopeRate": 0.3038155,
+    "minutesShare": 0.7045527,
+    "minutesShareCi": [
+     0.623034,
+     0.788138
+    ],
+    "sdDelta": 0.2730365
+   },
+   "pa": {
+    "lines": 1234,
+    "slopeTotal": 1.075095,
+    "slopeTotalCi": [
+     0.94311,
+     1.20227
+    ],
+    "slopeMinutes": 0.5803599,
+    "slopeRate": 0.4947352,
+    "minutesShare": 0.5398219,
+    "minutesShareCi": [
+     0.4639054,
+     0.6169203
+    ],
+    "sdDelta": 0.2796676
+   },
+   "ar": {
+    "lines": 1212,
+    "slopeTotal": 1.014149,
+    "slopeTotalCi": [
+     0.8363928,
+     1.177506
+    ],
+    "slopeMinutes": 0.5951394,
+    "slopeRate": 0.4190093,
+    "minutesShare": 0.5868364,
+    "minutesShareCi": [
+     0.490103,
+     0.7125125
+    ],
+    "sdDelta": 0.267345
+   },
+   "sb": {
+    "lines": 175,
+    "slopeTotal": 1.53595,
+    "slopeTotalCi": [
+     0.9148505,
+     2.407757
+    ],
+    "slopeMinutes": 0.5979624,
+    "slopeRate": 0.9379874,
+    "minutesShare": 0.3893112,
+    "minutesShareCi": [
+     0.2501907,
+     0.7094356
+    ],
+    "sdDelta": 0.173521
+   }
+  },
+  "noLateNews": {
+   "lines": 7499,
+   "slopeTotal": 0.9391177,
+   "slopeTotalCi": [
+    0.7971537,
+    1.074851
+   ],
+   "slopeMinutes": 0.5927404,
+   "slopeRate": 0.3463773,
+   "minutesShare": 0.6311673,
+   "minutesShareCi": [
+    0.5439487,
+    0.7209763
+   ],
+   "sdDelta": 0.2364205
+  },
+  "lateNews": {
+   "lines": 4684,
+   "slopeTotal": 1.11159,
+   "slopeTotalCi": [
+    0.9817141,
+    1.2342
+   ],
+   "slopeMinutes": 0.6201723,
+   "slopeRate": 0.4914174,
+   "minutesShare": 0.5579148,
+   "minutesShareCi": [
+    0.4732769,
+    0.6465989
+   ],
+   "sdDelta": 0.2711764
+  },
+  "ownReport": {
+   "lines": 241,
+   "slopeTotal": 1.067132,
+   "slopeTotalCi": [
+    0.3500107,
+    1.744727
+   ],
+   "slopeMinutes": 0.8317305,
+   "slopeRate": 0.2354014,
+   "minutesShare": 0.7794074,
+   "minutesShareCi": [
+    0.4403565,
+    1.579975
+   ],
+   "sdDelta": 0.2402522
+  },
+  "starters": {
+   "lines": 9482,
+   "slopeTotal": 1.023641,
+   "slopeTotalCi": [
+    0.9077369,
+    1.143383
+   ],
+   "slopeMinutes": 0.5418892,
+   "slopeRate": 0.4817522,
+   "minutesShare": 0.529374,
+   "minutesShareCi": [
+    0.4557315,
+    0.6020156
+   ],
+   "sdDelta": 0.2392908
+  },
+  "bench": {
+   "lines": 2816,
+   "slopeTotal": 0.9646267,
+   "slopeTotalCi": [
+    0.750154,
+    1.155737
+   ],
+   "slopeMinutes": 0.6627443,
+   "slopeRate": 0.3018824,
+   "minutesShare": 0.6870474,
+   "minutesShareCi": [
+    0.5446285,
+    0.8391916
+   ],
+   "sdDelta": 0.254974
+  },
+  "contributions": {
+   "lateNews": {
+    "ofMinutesCov": 0.4622031,
+    "ofTotalCov": 0.4904108,
+    "ofLines": 0.3808749
+   },
+   "ownReport": {
+    "ofMinutesCov": -0.001055432,
+    "ofTotalCov": 0.006469427,
+    "ofLines": 0.009351114
+   },
+   "neither": {
+    "ofMinutesCov": 0.5388523,
+    "ofTotalCov": 0.5031198,
+    "ofLines": 0.6097739
+   }
+  },
+  "lateNewsExcess": {
+   "share": 0.125627,
+   "ci": [
+    -0.005568692,
+    0.2522114
+   ],
+   "rule": "of the minutes part of DraftKings' information (the centred covariance of its disagreement with the minutes part of what happened), the share the late-news lines carry beyond the no-news lines' rate per line"
+  },
+  "disagreementGroups": {
+   "modelHigher10": {
+    "lines": 2680,
+    "minutesSaid": 29.04713,
+    "minutesPlayed": 26.59776,
+    "meanSaidSd": 0.4049676,
+    "dkImpliedSd": 0.03470207,
+    "happenedSd": 0.01641751,
+    "points": {
+     "lines": 408,
+     "modelMean": 15.13527,
+     "dkImpliedMean": 12.46402,
+     "line": 11.90931,
+     "scored": 11.91176,
+     "minutesSaid": 27.98333,
+     "minutesPlayed": 25.46814
+    }
+   },
+   "dkHigher10": {
+    "lines": 1186,
+    "minutesSaid": 25.81728,
+    "minutesPlayed": 29.43929,
+    "meanSaidSd": -0.3916797,
+    "dkImpliedSd": 0.03825556,
+    "happenedSd": 0.05648581,
+    "points": {
+     "lines": 184,
+     "modelMean": 13.01473,
+     "dkImpliedMean": 15.67553,
+     "line": 15.19565,
+     "scored": 15.55435,
+     "minutesSaid": 25.05217,
+     "minutesPlayed": 29.28261
+    }
+   },
+   "within5": {
+    "lines": 4729,
+    "minutesSaid": 29.17192,
+    "minutesPlayed": 29.25629,
+    "meanSaidSd": 0.05256563,
+    "dkImpliedSd": 0.04442894,
+    "happenedSd": 0.01661435,
+    "points": {
+     "lines": 587,
+     "modelMean": 14.5348,
+     "dkImpliedMean": 14.49861,
+     "line": 13.95826,
+     "scored": 13.69336,
+     "minutesSaid": 27.83595,
+     "minutesPlayed": 27.6184
+    }
+   }
+  },
+  "callAgeHours": {
+   "median": 9.4,
+   "p10": 0.75,
+   "p90": 13.75,
+   "over3h": 0.7761425
+  },
+  "byCallAge": {
+   "under2h": {
+    "lines": 2450,
+    "slopeTotal": 1.036648,
+    "slopeTotalCi": [
+     0.7372719,
+     1.346995
+    ],
+    "slopeMinutes": 0.503844,
+    "slopeRate": 0.5328035,
+    "minutesShare": 0.4860321,
+    "minutesShareCi": [
+     0.3690688,
+     0.6363414
+    ],
+    "sdDelta": 0.2183244
+   },
+   "from2to4h": {
+    "lines": 701,
+    "slopeTotal": 1.055159,
+    "slopeTotalCi": [
+     0.6317628,
+     1.294599
+    ],
+    "slopeMinutes": 0.8361948,
+    "slopeRate": 0.2189646,
+    "minutesShare": 0.792482,
+    "minutesShareCi": [
+     0.5338304,
+     1.115853
+    ],
+    "sdDelta": 0.2629582
+   },
+   "over4h": {
+    "lines": 9147,
+    "slopeTotal": 1.009184,
+    "slopeTotalCi": [
+     0.9064421,
+     1.114401
+    ],
+    "slopeMinutes": 0.5913112,
+    "slopeRate": 0.4178725,
+    "minutesShare": 0.5859302,
+    "minutesShareCi": [
+     0.5188944,
+     0.6566239
+    ],
+    "sdDelta": 0.2570848
+   }
+  },
+  "lineCounts": {
+   "lateScratch": 3037,
+   "uncalled": 3185,
+   "eitherLateNews": 4684,
+   "ownReport": 241
+  },
+  "minutesSaidPlayed": {
+   "said": 28.77086,
+   "played": 28.55074,
+   "mae": 4.291755
+  }
+ },
+ "lean": {
+  "overSaid": 0.4880072,
+  "overHit": 0.4751992,
+  "overDK": 0.4608953,
+  "meanMinusStat": 0.5558847,
+  "meanMinusStatByStat": {
+   "pts": 1.011691,
+   "reb": 0.1279343,
+   "ast": 0.09947804,
+   "tpm": 0.09041274,
+   "stl": 0.00005154639,
+   "blk": 0.0755,
+   "pra": 1.118119,
+   "pr": 1.115173,
+   "pa": 0.9175203,
+   "ar": 0.2293317,
+   "sb": -0.0424
+  },
+  "meanShift": {
+   "llBefore": 0.7043902,
+   "llAfter": 0.7056527,
+   "gain": -0.001262512,
+   "shareOfGap": -0.06846985
+  },
+  "shiftInLogit": {
+   "gain": 0.0003458592,
+   "shareOfGap": 0.01875699
+  },
+  "sharedOrderShare": 0.03386773
+ },
+ "seconds": 27
+}

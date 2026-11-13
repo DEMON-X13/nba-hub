@@ -1,0 +1,2007 @@
+{
+ "generated": "2026-11-12T00:36Z",
+ "what": "research/props_v3/data_inventory.js: every source on disk, its shape, its completeness and consistency, and what the rules allow it for; files only, no network",
+ "rules": {
+  "dev": "development: may be read to fit, tune and choose a candidate",
+  "devHistory": "development history: may be read to fit, tune and choose a candidate (seasons before the hub's box scores)",
+  "testSeason": "the test season (2022-23): its DraftKings lines are the one-shot test, fetched and read only by the Test step after the preregistration is committed, pushed and audited; its box scores, team boxes and game lines are the history a frozen candidate reads before each test game and the outcomes the Test step grades, and nothing is fitted, re-scaled or chosen on them; they were read by earlier fits (tools/props.js's live constants, fitted on 2023-2026; its 2024 fold, fitted on 2023; props_v2 candidate A's folds; the game models), which the preregistration lists",
+  "testLines": "the one-shot test: never fetched, read or printed before the preregistration is committed, pushed and audited sound; the Test step alone fetches them",
+  "devScored": "development data for a new candidate: DraftKings' 2023-24 lines were scored once, against props_v2 candidate A on 6 November 2026 (FAIL), so they are no test for anything",
+  "spent": "spent: development only, never a test (scored against tools/props.js and props_v2's A, B and C)",
+  "forward": "the season in play (2026-27): a forward shadow only, from a frozen candidate's freeze time on; never used to fit, tune, choose or score a candidate",
+  "forwardToday": "today's state (2026-27): a forward shadow's live input only; never used to fit, tune, choose or score a candidate",
+  "none": "not a props modelling source"
+ },
+ "shapeOnly": {
+  "test": 2023,
+  "inPlay": 2027,
+  "rule": "read for header, counts, dates and completeness only; no value a game produced enters a figure"
+ },
+ "games": {
+  "file": "data/games.csv",
+  "bytes": 2325182,
+  "sha256": "67ab982a3696445a0184a810af68b3bc1494bfa5dae787be3038874c424180d1",
+  "columns": [
+   "game_id",
+   "season",
+   "date",
+   "type",
+   "away",
+   "home",
+   "away_score",
+   "home_score",
+   "neutral",
+   "status",
+   "home_line",
+   "total",
+   "source",
+   "espn_id",
+   "tip",
+   "home_ml",
+   "away_ml",
+   "tv"
+  ],
+  "rows": 28773,
+  "badLines": 0,
+  "seasons": {
+   "2005": {
+    "use": "dev",
+    "games": 1314,
+    "byType": {
+     "REG": 1230,
+     "POST": 84
+    },
+    "byStatus": {
+     "final": 1314
+    },
+    "bySource": {
+     "paine": 1314
+    },
+    "regDates": [
+     "2004-11-02",
+     "2005-04-20"
+    ],
+    "postDates": [
+     "2005-04-23",
+     "2005-06-23"
+    ],
+    "neutral": 0,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2006": {
+    "use": "dev",
+    "games": 1319,
+    "byType": {
+     "REG": 1230,
+     "POST": 89
+    },
+    "byStatus": {
+     "final": 1319
+    },
+    "bySource": {
+     "paine": 1319
+    },
+    "regDates": [
+     "2005-11-01",
+     "2006-04-19"
+    ],
+    "postDates": [
+     "2006-04-22",
+     "2006-06-20"
+    ],
+    "neutral": 0,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2007": {
+    "use": "dev",
+    "games": 1309,
+    "byType": {
+     "REG": 1230,
+     "POST": 79
+    },
+    "byStatus": {
+     "final": 1309
+    },
+    "bySource": {
+     "paine": 1309
+    },
+    "regDates": [
+     "2006-10-31",
+     "2007-04-18"
+    ],
+    "postDates": [
+     "2007-04-21",
+     "2007-06-14"
+    ],
+    "neutral": 0,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2008": {
+    "use": "dev",
+    "games": 1316,
+    "byType": {
+     "REG": 1230,
+     "POST": 86
+    },
+    "byStatus": {
+     "final": 1316
+    },
+    "bySource": {
+     "paine": 1316
+    },
+    "regDates": [
+     "2007-10-30",
+     "2008-04-16"
+    ],
+    "postDates": [
+     "2008-04-19",
+     "2008-06-17"
+    ],
+    "neutral": 0,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2009": {
+    "use": "dev",
+    "games": 1315,
+    "byType": {
+     "REG": 1230,
+     "POST": 85
+    },
+    "byStatus": {
+     "final": 1315
+    },
+    "bySource": {
+     "paine": 1315
+    },
+    "regDates": [
+     "2008-10-28",
+     "2009-04-15"
+    ],
+    "postDates": [
+     "2009-04-18",
+     "2009-06-14"
+    ],
+    "neutral": 0,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2010": {
+    "use": "dev",
+    "games": 1312,
+    "byType": {
+     "REG": 1230,
+     "POST": 82
+    },
+    "byStatus": {
+     "final": 1312
+    },
+    "bySource": {
+     "paine": 1312
+    },
+    "regDates": [
+     "2009-10-27",
+     "2010-04-14"
+    ],
+    "postDates": [
+     "2010-04-17",
+     "2010-06-17"
+    ],
+    "neutral": 0,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2011": {
+    "use": "dev",
+    "games": 1311,
+    "byType": {
+     "REG": 1230,
+     "POST": 81
+    },
+    "byStatus": {
+     "final": 1311
+    },
+    "bySource": {
+     "paine": 1311
+    },
+    "regDates": [
+     "2010-10-26",
+     "2011-04-13"
+    ],
+    "postDates": [
+     "2011-04-16",
+     "2011-06-12"
+    ],
+    "neutral": 2,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2012": {
+    "use": "dev",
+    "games": 1074,
+    "byType": {
+     "REG": 990,
+     "POST": 84
+    },
+    "byStatus": {
+     "final": 1074
+    },
+    "bySource": {
+     "paine": 1074
+    },
+    "regDates": [
+     "2011-12-25",
+     "2012-04-26"
+    ],
+    "postDates": [
+     "2012-04-28",
+     "2012-06-21"
+    ],
+    "neutral": 0,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2013": {
+    "use": "dev",
+    "games": 1314,
+    "byType": {
+     "REG": 1229,
+     "POST": 85
+    },
+    "byStatus": {
+     "final": 1314
+    },
+    "bySource": {
+     "paine": 1314
+    },
+    "regDates": [
+     "2012-10-30",
+     "2013-04-17"
+    ],
+    "postDates": [
+     "2013-04-20",
+     "2013-06-20"
+    ],
+    "neutral": 1,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2014": {
+    "use": "dev",
+    "games": 1319,
+    "byType": {
+     "REG": 1230,
+     "POST": 89
+    },
+    "byStatus": {
+     "final": 1319
+    },
+    "bySource": {
+     "paine": 1319
+    },
+    "regDates": [
+     "2013-10-29",
+     "2014-04-16"
+    ],
+    "postDates": [
+     "2014-04-19",
+     "2014-06-15"
+    ],
+    "neutral": 1,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2015": {
+    "use": "dev",
+    "games": 1311,
+    "byType": {
+     "REG": 1230,
+     "POST": 81
+    },
+    "byStatus": {
+     "final": 1311
+    },
+    "bySource": {
+     "paine": 1311
+    },
+    "regDates": [
+     "2014-10-28",
+     "2015-04-15"
+    ],
+    "postDates": [
+     "2015-04-18",
+     "2015-06-16"
+    ],
+    "neutral": 2,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2016": {
+    "use": "dev",
+    "games": 1316,
+    "byType": {
+     "REG": 1230,
+     "POST": 86
+    },
+    "byStatus": {
+     "final": 1316
+    },
+    "bySource": {
+     "paine": 1316
+    },
+    "regDates": [
+     "2015-10-27",
+     "2016-04-13"
+    ],
+    "postDates": [
+     "2016-04-16",
+     "2016-06-19"
+    ],
+    "neutral": 2,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2017": {
+    "use": "dev",
+    "games": 1309,
+    "byType": {
+     "REG": 1230,
+     "POST": 79
+    },
+    "byStatus": {
+     "final": 1309
+    },
+    "bySource": {
+     "paine": 1309
+    },
+    "regDates": [
+     "2016-10-25",
+     "2017-04-12"
+    ],
+    "postDates": [
+     "2017-04-15",
+     "2017-06-12"
+    ],
+    "neutral": 3,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2018": {
+    "use": "dev",
+    "games": 1312,
+    "byType": {
+     "REG": 1230,
+     "POST": 82
+    },
+    "byStatus": {
+     "final": 1312
+    },
+    "bySource": {
+     "paine": 1312
+    },
+    "regDates": [
+     "2017-10-17",
+     "2018-04-11"
+    ],
+    "postDates": [
+     "2018-04-14",
+     "2018-06-08"
+    ],
+    "neutral": 3,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2019": {
+    "use": "dev",
+    "games": 1312,
+    "byType": {
+     "REG": 1230,
+     "POST": 82
+    },
+    "byStatus": {
+     "final": 1312
+    },
+    "bySource": {
+     "paine": 1312
+    },
+    "regDates": [
+     "2018-10-16",
+     "2019-04-10"
+    ],
+    "postDates": [
+     "2019-04-13",
+     "2019-06-13"
+    ],
+    "neutral": 3,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2020": {
+    "use": "dev",
+    "games": 1143,
+    "byType": {
+     "REG": 1060,
+     "POST": 83
+    },
+    "byStatus": {
+     "final": 1143
+    },
+    "bySource": {
+     "paine": 1143
+    },
+    "regDates": [
+     "2019-10-22",
+     "2020-08-15"
+    ],
+    "postDates": [
+     "2020-08-17",
+     "2020-10-11"
+    ],
+    "neutral": 175,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2021": {
+    "use": "dev",
+    "games": 1171,
+    "byType": {
+     "REG": 1086,
+     "POST": 85
+    },
+    "byStatus": {
+     "final": 1171
+    },
+    "bySource": {
+     "paine": 1171
+    },
+    "regDates": [
+     "2020-12-22",
+     "2021-05-21"
+    ],
+    "postDates": [
+     "2021-05-22",
+     "2021-07-20"
+    ],
+    "neutral": 0,
+    "withEspnId": 0,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2022": {
+    "use": "dev",
+    "games": 1323,
+    "byType": {
+     "REG": 1236,
+     "POST": 87
+    },
+    "byStatus": {
+     "final": 1323
+    },
+    "bySource": {
+     "paine": 1323
+    },
+    "regDates": [
+     "2021-10-19",
+     "2022-04-15"
+    ],
+    "postDates": [
+     "2022-04-16",
+     "2022-06-16"
+    ],
+    "neutral": 0,
+    "withEspnId": 1323,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2023": {
+    "use": "testSeason",
+    "games": 1320,
+    "byType": {
+     "REG": 1236,
+     "POST": 84
+    },
+    "byStatus": {
+     "final": 1320
+    },
+    "bySource": {
+     "paine": 1320
+    },
+    "regDates": [
+     "2022-10-18",
+     "2023-04-14"
+    ],
+    "postDates": [
+     "2023-04-15",
+     "2023-06-12"
+    ],
+    "neutral": 2,
+    "withEspnId": 1320,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2024": {
+    "use": "dev",
+    "games": 1319,
+    "byType": {
+     "REG": 1237,
+     "POST": 82
+    },
+    "byStatus": {
+     "final": 1319
+    },
+    "bySource": {
+     "paine": 1319
+    },
+    "regDates": [
+     "2023-10-24",
+     "2024-04-19"
+    ],
+    "postDates": [
+     "2024-04-20",
+     "2024-06-17"
+    ],
+    "neutral": 6,
+    "withEspnId": 1314,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2025": {
+    "use": "dev",
+    "games": 1321,
+    "byType": {
+     "REG": 1237,
+     "POST": 84
+    },
+    "byStatus": {
+     "final": 1321
+    },
+    "bySource": {
+     "paine": 1023,
+     "espn": 298
+    },
+    "regDates": [
+     "2024-10-22",
+     "2025-04-18"
+    ],
+    "postDates": [
+     "2025-04-19",
+     "2025-06-22"
+    ],
+    "neutral": 10,
+    "withEspnId": 1320,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2026": {
+    "use": "dev",
+    "games": 1322,
+    "byType": {
+     "REG": 1237,
+     "POST": 85
+    },
+    "byStatus": {
+     "final": 1322
+    },
+    "bySource": {
+     "espn": 1322
+    },
+    "regDates": [
+     "2025-10-21",
+     "2026-04-17"
+    ],
+    "postDates": [
+     "2026-04-18",
+     "2026-06-13"
+    ],
+    "neutral": 6,
+    "withEspnId": 1322,
+    "withTip": 0,
+    "withLine": 0,
+    "withTotal": 0,
+    "withMoneylines": 0,
+    "withTv": 0
+   },
+   "2027": {
+    "use": "forward",
+    "games": 391,
+    "byType": {
+     "PRE": 66,
+     "REG": 325
+    },
+    "byStatus": {
+     "final": 226,
+     "scheduled": 165
+    },
+    "bySource": {
+     "espn": 391
+    },
+    "regDates": [
+     "2026-10-20",
+     "2026-12-03"
+    ],
+    "postDates": null,
+    "neutral": 7,
+    "withEspnId": 391,
+    "withTip": 391,
+    "withLine": 236,
+    "withTotal": 236,
+    "withMoneylines": 200,
+    "withTv": 58
+   }
+  },
+  "note": "Every game since 2004-05 (2005 to 2021 from Neil Paine's continuation of FiveThirtyEight's game file, ESPN's scoreboard since). ESPN ids from 2021-22 on only, so a fetch of an older season's box scores finds each game's id on ESPN's scoreboard for its date (tools/fetch_box.js does). Game lines, totals, moneylines and tip times are the job's, from 2026-27 on only; for 2022-23 to 2025-26 the game lines are data/odds_hist.csv's, and the scheduled start of a 2023-24 game is the provider-40 fetch's (props40_reads.json `start`). games.csv lists the play-in (from 14 to 19 April) as REG, and the in-season tournament final as REG."
+ },
+ "box": {
+  "2022": {
+   "use": "dev",
+   "file": "data/box_2022.csv",
+   "bytes": 3472420,
+   "sha256": "67fe1e6c346ca7c9f397d562d5a86c5453fb47d2952c6c21508b5b14e7022d63",
+   "columns": [
+    "game_id",
+    "date",
+    "team",
+    "opp",
+    "home",
+    "player_id",
+    "name",
+    "pos",
+    "starter",
+    "min",
+    "fgm",
+    "fga",
+    "tpm",
+    "tpa",
+    "ftm",
+    "fta",
+    "orb",
+    "drb",
+    "ast",
+    "stl",
+    "blk",
+    "tov",
+    "pf",
+    "pm",
+    "pts",
+    "dnp"
+   ],
+   "rows": 33857,
+   "badLines": 0,
+   "games": 1323,
+   "players": 623,
+   "dates": [
+    "2021-10-19",
+    "2022-06-16"
+   ],
+   "byType": {
+    "REG": 1236,
+    "POST": 87
+   },
+   "finals": 1323,
+   "finalsWithBox": 1323,
+   "finalsWithoutBox": 0,
+   "finalsWithoutBoxIds": [],
+   "boxNotInGames": 0,
+   "gamesWithTwoSides": 1323,
+   "sides": 2646,
+   "sidesWithFiveStarters": 2646,
+   "rowsPerSideMedian": 13,
+   "rowsPerSideRange": [
+    10,
+    17
+   ],
+   "duplicateRows": 0,
+   "emptyPlayerId": 0,
+   "shapeOnly": false,
+   "dev": {
+    "playedRows": 28051,
+    "dnpRows": 5806,
+    "dnpWithMinutes": 0,
+    "playedWithNoMinutes": 109,
+    "minutesNotWhole": 0,
+    "sideMinutes": {
+     "median": 240,
+     "p01": 238,
+     "p99": 266
+    },
+    "gamesPastRegulation": 59,
+    "gamesChecked": 1323,
+    "pointsEqualFinal": 1,
+    "pointsNotEqualFinal": 0,
+    "plusMinusEmptyOnPlayedRows": 0,
+    "plusMinusBalances": 1,
+    "plusMinusChecked": 1323
+   }
+  },
+  "2023": {
+   "use": "testSeason",
+   "file": "data/box_2023.csv",
+   "bytes": 3484567,
+   "sha256": "ef25e30a5770abd0677bfbf9c2728226c577a64384fe0688328dcd4a4ee93b15",
+   "columns": [
+    "game_id",
+    "date",
+    "team",
+    "opp",
+    "home",
+    "player_id",
+    "name",
+    "pos",
+    "starter",
+    "min",
+    "fgm",
+    "fga",
+    "tpm",
+    "tpa",
+    "ftm",
+    "fta",
+    "orb",
+    "drb",
+    "ast",
+    "stl",
+    "blk",
+    "tov",
+    "pf",
+    "pm",
+    "pts",
+    "dnp"
+   ],
+   "rows": 34033,
+   "badLines": 0,
+   "games": 1320,
+   "players": 549,
+   "dates": [
+    "2022-10-18",
+    "2023-06-12"
+   ],
+   "byType": {
+    "REG": 1236,
+    "POST": 84
+   },
+   "finals": 1320,
+   "finalsWithBox": 1320,
+   "finalsWithoutBox": 0,
+   "finalsWithoutBoxIds": [],
+   "boxNotInGames": 0,
+   "gamesWithTwoSides": 1320,
+   "sides": 2640,
+   "sidesWithFiveStarters": 2640,
+   "rowsPerSideMedian": 13,
+   "rowsPerSideRange": [
+    11,
+    16
+   ],
+   "duplicateRows": 0,
+   "emptyPlayerId": 0,
+   "shapeOnly": true,
+   "note": "the test season: shape only (no minutes, stat, plus-minus or did-not-play figure is computed)"
+  },
+  "2024": {
+   "use": "dev",
+   "file": "data/box_2024.csv",
+   "bytes": 3571012,
+   "sha256": "6d1ac2cad9301cf8126c681485b45294794fde2cc36cb59a5fad98d0c59d3d75",
+   "columns": [
+    "game_id",
+    "date",
+    "team",
+    "opp",
+    "home",
+    "player_id",
+    "name",
+    "pos",
+    "starter",
+    "min",
+    "fgm",
+    "fga",
+    "tpm",
+    "tpa",
+    "ftm",
+    "fta",
+    "orb",
+    "drb",
+    "ast",
+    "stl",
+    "blk",
+    "tov",
+    "pf",
+    "pm",
+    "pts",
+    "dnp"
+   ],
+   "rows": 34871,
+   "badLines": 0,
+   "games": 1314,
+   "players": 589,
+   "dates": [
+    "2023-10-24",
+    "2024-06-17"
+   ],
+   "byType": {
+    "REG": 1232,
+    "POST": 82
+   },
+   "finals": 1319,
+   "finalsWithBox": 1314,
+   "finalsWithoutBox": 5,
+   "finalsWithoutBoxIds": [
+    "2024_20231109_ORL_ATL",
+    "2024_20231207_LAL_NOP",
+    "2024_20231207_MIL_IND",
+    "2024_20240111_CLE_BKN",
+    "2024_20240317_SAS_BKN"
+   ],
+   "boxNotInGames": 0,
+   "gamesWithTwoSides": 1314,
+   "sides": 2628,
+   "sidesWithFiveStarters": 2628,
+   "rowsPerSideMedian": 13,
+   "rowsPerSideRange": [
+    11,
+    18
+   ],
+   "duplicateRows": 0,
+   "emptyPlayerId": 0,
+   "shapeOnly": false,
+   "dev": {
+    "playedRows": 28260,
+    "dnpRows": 6611,
+    "dnpWithMinutes": 0,
+    "playedWithNoMinutes": 268,
+    "minutesNotWhole": 0,
+    "sideMinutes": {
+     "median": 240,
+     "p01": 238,
+     "p99": 266
+    },
+    "gamesPastRegulation": 61,
+    "gamesChecked": 1314,
+    "pointsEqualFinal": 1,
+    "pointsNotEqualFinal": 0,
+    "plusMinusEmptyOnPlayedRows": 0,
+    "plusMinusBalances": 1,
+    "plusMinusChecked": 1314
+   }
+  },
+  "2025": {
+   "use": "dev",
+   "file": "data/box_2025.csv",
+   "bytes": 3596673,
+   "sha256": "b2a2167f479d62379880a726beced9a01f04da33c075e48c8b469bedefe021eb",
+   "columns": [
+    "game_id",
+    "date",
+    "team",
+    "opp",
+    "home",
+    "player_id",
+    "name",
+    "pos",
+    "starter",
+    "min",
+    "fgm",
+    "fga",
+    "tpm",
+    "tpa",
+    "ftm",
+    "fta",
+    "orb",
+    "drb",
+    "ast",
+    "stl",
+    "blk",
+    "tov",
+    "pf",
+    "pm",
+    "pts",
+    "dnp"
+   ],
+   "rows": 35170,
+   "badLines": 0,
+   "games": 1320,
+   "players": 580,
+   "dates": [
+    "2024-10-22",
+    "2025-06-22"
+   ],
+   "byType": {
+    "REG": 1236,
+    "POST": 84
+   },
+   "finals": 1321,
+   "finalsWithBox": 1320,
+   "finalsWithoutBox": 1,
+   "finalsWithoutBoxIds": [
+    "2025_20241217_OKC_MIL"
+   ],
+   "boxNotInGames": 0,
+   "gamesWithTwoSides": 1320,
+   "sides": 2640,
+   "sidesWithFiveStarters": 2640,
+   "rowsPerSideMedian": 13,
+   "rowsPerSideRange": [
+    11,
+    18
+   ],
+   "duplicateRows": 0,
+   "emptyPlayerId": 0,
+   "shapeOnly": false,
+   "dev": {
+    "playedRows": 28322,
+    "dnpRows": 6848,
+    "dnpWithMinutes": 0,
+    "playedWithNoMinutes": 193,
+    "minutesNotWhole": 0,
+    "sideMinutes": {
+     "median": 240,
+     "p01": 238,
+     "p99": 266
+    },
+    "gamesPastRegulation": 66,
+    "gamesChecked": 1320,
+    "pointsEqualFinal": 1,
+    "pointsNotEqualFinal": 0,
+    "plusMinusEmptyOnPlayedRows": 0,
+    "plusMinusBalances": 1,
+    "plusMinusChecked": 1320
+   }
+  },
+  "2026": {
+   "use": "dev",
+   "file": "data/box_2026.csv",
+   "bytes": 3573591,
+   "sha256": "85f345aea583ddde9e957814b9ec01a97ef021a9f3cc69bf3fbfcb58640c299d",
+   "columns": [
+    "game_id",
+    "date",
+    "team",
+    "opp",
+    "home",
+    "player_id",
+    "name",
+    "pos",
+    "starter",
+    "min",
+    "fgm",
+    "fga",
+    "tpm",
+    "tpa",
+    "ftm",
+    "fta",
+    "orb",
+    "drb",
+    "ast",
+    "stl",
+    "blk",
+    "tov",
+    "pf",
+    "pm",
+    "pts",
+    "dnp"
+   ],
+   "rows": 34810,
+   "badLines": 0,
+   "games": 1322,
+   "players": 592,
+   "dates": [
+    "2025-10-21",
+    "2026-06-13"
+   ],
+   "byType": {
+    "REG": 1237,
+    "POST": 85
+   },
+   "finals": 1322,
+   "finalsWithBox": 1322,
+   "finalsWithoutBox": 0,
+   "finalsWithoutBoxIds": [],
+   "boxNotInGames": 0,
+   "gamesWithTwoSides": 1322,
+   "sides": 2644,
+   "sidesWithFiveStarters": 2644,
+   "rowsPerSideMedian": 13,
+   "rowsPerSideRange": [
+    10,
+    18
+   ],
+   "duplicateRows": 0,
+   "emptyPlayerId": 43,
+   "shapeOnly": false,
+   "dev": {
+    "playedRows": 28738,
+    "dnpRows": 6072,
+    "dnpWithMinutes": 0,
+    "playedWithNoMinutes": 157,
+    "minutesNotWhole": 0,
+    "sideMinutes": {
+     "median": 240,
+     "p01": 237,
+     "p99": 266
+    },
+    "gamesPastRegulation": 60,
+    "gamesChecked": 1322,
+    "pointsEqualFinal": 0.9909,
+    "pointsNotEqualFinal": 12,
+    "plusMinusEmptyOnPlayedRows": 0,
+    "plusMinusBalances": 0.9834,
+    "plusMinusChecked": 1322
+   }
+  },
+  "2027": {
+   "use": "forward",
+   "file": "data/box_2027.csv",
+   "bytes": 442891,
+   "sha256": "8a3235f8402df8b0372093accfe3b85414417e9fa754ba82dc8177b2abe2a356",
+   "columns": [
+    "game_id",
+    "date",
+    "team",
+    "opp",
+    "home",
+    "player_id",
+    "name",
+    "pos",
+    "starter",
+    "min",
+    "fgm",
+    "fga",
+    "tpm",
+    "tpa",
+    "ftm",
+    "fta",
+    "orb",
+    "drb",
+    "ast",
+    "stl",
+    "blk",
+    "tov",
+    "pf",
+    "pm",
+    "pts",
+    "dnp"
+   ],
+   "rows": 4304,
+   "badLines": 0,
+   "games": 160,
+   "players": 483,
+   "dates": [
+    "2026-10-20",
+    "2026-11-10"
+   ],
+   "byType": {
+    "REG": 160
+   },
+   "finals": 160,
+   "finalsWithBox": 160,
+   "finalsWithoutBox": 0,
+   "finalsWithoutBoxIds": [],
+   "boxNotInGames": 0,
+   "gamesWithTwoSides": 160,
+   "sides": 320,
+   "sidesWithFiveStarters": 320,
+   "rowsPerSideMedian": 13,
+   "rowsPerSideRange": [
+    11,
+    17
+   ],
+   "duplicateRows": 0,
+   "emptyPlayerId": 0,
+   "shapeOnly": true,
+   "note": "the season in play: shape only"
+  }
+ },
+ "teambox": {
+  "2022": {
+   "use": "dev",
+   "file": "data/teambox_2022.jsonl",
+   "bytes": 1744658,
+   "sha256": "99cf7526aa11b1d492063b8f5804cdd9302f7f19d9d99dd49d2535c3f6c5af0c",
+   "lines": 2646,
+   "games": 1323,
+   "dates": [
+    "2021-10-19",
+    "2022-06-16"
+   ],
+   "finalsWithTeambox": 1323,
+   "finals": 1323,
+   "keys": [
+    "assists",
+    "blocks",
+    "defensiveRebounds",
+    "fastBreakPoints",
+    "fieldGoalPct",
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "flagrantFouls",
+    "fouls",
+    "freeThrowPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "largestLead",
+    "offensiveRebounds",
+    "pointsInPaint",
+    "steals",
+    "teamTurnovers",
+    "technicalFouls",
+    "threePointFieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "totalRebounds",
+    "totalTechnicalFouls",
+    "totalTurnovers",
+    "turnoverPoints",
+    "turnovers"
+   ],
+   "keysInEveryLine": 23,
+   "shapeOnly": false
+  },
+  "2023": {
+   "use": "testSeason",
+   "file": "data/teambox_2023.jsonl",
+   "bytes": 1741086,
+   "sha256": "090688cf3616b5c613bccd896cdb8a14e5d5552acdc8c4b2fd58be68f7cd54a9",
+   "lines": 2640,
+   "games": 1320,
+   "dates": [
+    "2022-10-18",
+    "2023-06-12"
+   ],
+   "finalsWithTeambox": 1320,
+   "finals": 1320,
+   "keys": [
+    "assists",
+    "blocks",
+    "defensiveRebounds",
+    "fastBreakPoints",
+    "fieldGoalPct",
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "flagrantFouls",
+    "fouls",
+    "freeThrowPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "largestLead",
+    "offensiveRebounds",
+    "pointsInPaint",
+    "steals",
+    "teamTurnovers",
+    "technicalFouls",
+    "threePointFieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "totalRebounds",
+    "totalTechnicalFouls",
+    "totalTurnovers",
+    "turnoverPoints",
+    "turnovers"
+   ],
+   "keysInEveryLine": 23,
+   "shapeOnly": true
+  },
+  "2024": {
+   "use": "dev",
+   "file": "data/teambox_2024.jsonl",
+   "bytes": 1733078,
+   "sha256": "576a264fd736f5bc65a83a3c2f92c1cd495e4d7dbef56a4bbf62653c9103551e",
+   "lines": 2628,
+   "games": 1314,
+   "dates": [
+    "2023-10-24",
+    "2024-06-17"
+   ],
+   "finalsWithTeambox": 1314,
+   "finals": 1319,
+   "keys": [
+    "assists",
+    "blocks",
+    "defensiveRebounds",
+    "fastBreakPoints",
+    "fieldGoalPct",
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "flagrantFouls",
+    "fouls",
+    "freeThrowPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "largestLead",
+    "offensiveRebounds",
+    "pointsInPaint",
+    "steals",
+    "teamTurnovers",
+    "technicalFouls",
+    "threePointFieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "totalRebounds",
+    "totalTechnicalFouls",
+    "totalTurnovers",
+    "turnoverPoints",
+    "turnovers"
+   ],
+   "keysInEveryLine": 23,
+   "shapeOnly": false
+  },
+  "2025": {
+   "use": "dev",
+   "file": "data/teambox_2025.jsonl",
+   "bytes": 1741939,
+   "sha256": "c93deb3221b83c5073bd5eaaa333e6ffe95fca713ae2622f81e35403abbe4e3f",
+   "lines": 2640,
+   "games": 1320,
+   "dates": [
+    "2024-10-22",
+    "2025-06-22"
+   ],
+   "finalsWithTeambox": 1320,
+   "finals": 1321,
+   "keys": [
+    "assists",
+    "blocks",
+    "defensiveRebounds",
+    "fastBreakPoints",
+    "fieldGoalPct",
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "flagrantFouls",
+    "fouls",
+    "freeThrowPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "largestLead",
+    "offensiveRebounds",
+    "pointsInPaint",
+    "steals",
+    "teamTurnovers",
+    "technicalFouls",
+    "threePointFieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "totalRebounds",
+    "totalTechnicalFouls",
+    "totalTurnovers",
+    "turnoverPoints",
+    "turnovers"
+   ],
+   "keysInEveryLine": 22,
+   "shapeOnly": false
+  },
+  "2026": {
+   "use": "dev",
+   "file": "data/teambox_2026.jsonl",
+   "bytes": 1825953,
+   "sha256": "defedc79faad2711da19289da9568359967d47fb0cd50e9e82c706a85f3f1242",
+   "lines": 2644,
+   "games": 1322,
+   "dates": [
+    "2025-10-21",
+    "2026-06-13"
+   ],
+   "finalsWithTeambox": 1322,
+   "finals": 1322,
+   "keys": [
+    "assists",
+    "blocks",
+    "defensiveRebounds",
+    "fastBreakPoints",
+    "fieldGoalPct",
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "flagrantFouls",
+    "fouls",
+    "freeThrowPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "largestLead",
+    "leadChanges",
+    "leadPercentage",
+    "offensiveRebounds",
+    "pointsInPaint",
+    "steals",
+    "teamTurnovers",
+    "technicalFouls",
+    "threePointFieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "totalRebounds",
+    "totalTechnicalFouls",
+    "totalTurnovers",
+    "turnoverPoints",
+    "turnovers"
+   ],
+   "keysInEveryLine": 23,
+   "shapeOnly": false
+  },
+  "2027": {
+   "use": "forward",
+   "file": "data/teambox_2027.jsonl",
+   "bytes": 224040,
+   "sha256": "e6a060ac800dc3eda4b812f51b3bb5d59fc2a9ce59703cab35eb85e7ab5bdf17",
+   "lines": 320,
+   "games": 160,
+   "dates": [
+    "2026-10-20",
+    "2026-11-10"
+   ],
+   "finalsWithTeambox": 160,
+   "finals": 160,
+   "keys": [
+    "assists",
+    "blocks",
+    "defensiveRebounds",
+    "fastBreakPoints",
+    "fieldGoalPct",
+    "fieldGoalsMade-fieldGoalsAttempted",
+    "flagrantFouls",
+    "fouls",
+    "freeThrowPct",
+    "freeThrowsMade-freeThrowsAttempted",
+    "largestLead",
+    "leadChanges",
+    "leadPercentage",
+    "offensiveRebounds",
+    "pointsInPaint",
+    "steals",
+    "teamTurnovers",
+    "technicalFouls",
+    "threePointFieldGoalPct",
+    "threePointFieldGoalsMade-threePointFieldGoalsAttempted",
+    "totalRebounds",
+    "totalTechnicalFouls",
+    "totalTurnovers",
+    "turnoverPoints",
+    "turnovers"
+   ],
+   "keysInEveryLine": 25,
+   "shapeOnly": true
+  }
+ },
+ "oddsHist": {
+  "file": "data/odds_hist.csv",
+  "bytes": 468691,
+  "sha256": "4390038bb53507232fee691fea56e715706194cde56d6f92df1de2017c0359db",
+  "columns": [
+   "game_id",
+   "season",
+   "date",
+   "type",
+   "provider",
+   "home_ml",
+   "away_ml",
+   "home_line",
+   "total",
+   "home_ml_open",
+   "away_ml_open",
+   "home_line_open",
+   "total_open",
+   "n_providers"
+  ],
+  "rows": 5272,
+  "badLines": 0,
+  "seasons": {
+   "2023": {
+    "use": "testSeason",
+    "rows": 1320,
+    "byType": {
+     "REG": 1236,
+     "POST": 84
+    },
+    "byProvider": {
+     "consensus": 1320
+    },
+    "finals": 1320,
+    "finalsCovered": 1320,
+    "filled": {
+     "home_ml": 1320,
+     "away_ml": 1320,
+     "home_line": 1320,
+     "total": 1320,
+     "home_ml_open": 0,
+     "away_ml_open": 0,
+     "home_line_open": 0,
+     "total_open": 0
+    },
+    "nProviders": {
+     "2": 1320
+    }
+   },
+   "2024": {
+    "use": "dev",
+    "rows": 1314,
+    "byType": {
+     "REG": 1232,
+     "POST": 82
+    },
+    "byProvider": {
+     "DraftKings": 1250,
+     "ESPN BET": 64
+    },
+    "finals": 1319,
+    "finalsCovered": 1314,
+    "filled": {
+     "home_ml": 1314,
+     "away_ml": 1314,
+     "home_line": 1309,
+     "total": 1313,
+     "home_ml_open": 1221,
+     "away_ml_open": 1221,
+     "home_line_open": 1221,
+     "total_open": 1312
+    },
+    "nProviders": {
+     "1": 30,
+     "2": 33,
+     "8": 5,
+     "9": 10,
+     "10": 17,
+     "11": 131,
+     "12": 1088
+    }
+   },
+   "2025": {
+    "use": "dev",
+    "rows": 1320,
+    "byType": {
+     "REG": 1230,
+     "POST": 90
+    },
+    "byProvider": {
+     "ESPN BET": 1320
+    },
+    "finals": 1321,
+    "finalsCovered": 1320,
+    "filled": {
+     "home_ml": 1320,
+     "away_ml": 1320,
+     "home_line": 1319,
+     "total": 1320,
+     "home_ml_open": 1320,
+     "away_ml_open": 1320,
+     "home_line_open": 1319,
+     "total_open": 1320
+    },
+    "nProviders": {
+     "2": 1320
+    }
+   },
+   "2026": {
+    "use": "dev",
+    "rows": 1318,
+    "byType": {
+     "REG": 1231,
+     "POST": 87
+    },
+    "byProvider": {
+     "ESPN BET": 257,
+     "DraftKings": 1060,
+     "Draft Kings": 1
+    },
+    "finals": 1322,
+    "finalsCovered": 1318,
+    "filled": {
+     "home_ml": 1318,
+     "away_ml": 1318,
+     "home_line": 1318,
+     "total": 1317,
+     "home_ml_open": 1318,
+     "away_ml_open": 1318,
+     "home_line_open": 1318,
+     "total_open": 1317
+    },
+    "nProviders": {
+     "1": 1062,
+     "2": 249,
+     "3": 5,
+     "4": 2
+    }
+   }
+  },
+  "note": "Closing game lines (moneylines, the home line, the total, and from 2023-24 the openers) on the 2022-23 to 2025-26 finals, from ESPN's game summaries (tools/fetch_odds_hist.js, a finished backfill). The provider is whatever the summary's pickcenter named first: \"consensus\" for every 2022-23 game, DraftKings for most of 2023-24 and 2025-26, ESPN BET for 2024-25. From 2026-27 on the job keeps each game's lines in games.csv itself."
+ },
+ "props": {
+  "archive2026": {
+   "use": "spent",
+   "file": "data/props_2026.csv",
+   "bytes": 553945,
+   "sha256": "9c5879ec25b0abb9541b0bbb6d41578868cc9b081e81a6180f5a0a756ea5006d",
+   "columns": [
+    "game_id",
+    "player_id",
+    "stat",
+    "line",
+    "over",
+    "under"
+   ],
+   "rows": 11697,
+   "badLines": 0,
+   "games": 83,
+   "dates": [
+    "2026-04-17",
+    "2026-06-13"
+   ],
+   "byType": {
+    "REG": 2,
+    "POST": 81
+   },
+   "byStat": {
+    "pts": 1369,
+    "reb": 1270,
+    "tpm": 1112,
+    "pra": 1142,
+    "pr": 1237,
+    "ast": 1122,
+    "stl": 907,
+    "blk": 810,
+    "pa": 1058,
+    "ar": 1070,
+    "sb": 600
+   },
+   "players": 173
+  },
+  "season2027": {
+   "use": "forward",
+   "file": "data/props_2027.csv",
+   "bytes": 811380,
+   "sha256": "2aa2fee058a2e19894b84aa7469abf57a2f296672c4af3a67916bbddad5908c7",
+   "columns": [
+    "game_id",
+    "player_id",
+    "stat",
+    "line",
+    "over",
+    "under"
+   ],
+   "rows": 17073,
+   "badLines": 0,
+   "games": 160,
+   "dates": [
+    "2026-10-20",
+    "2026-11-10"
+   ],
+   "byType": {
+    "REG": 160
+   }
+  },
+  "reads": {
+   "file": "data/props_reads.json",
+   "bytes": 22536,
+   "sha256": "49bff89b98f39a5788915f0b71d7c35e2bde0c9137f91a6fbb92aeb9944a0377",
+   "games": 251,
+   "bySeasonStatus": {
+    "2026": {
+     "none": 8,
+     "ok": 83
+    },
+    "2027": {
+     "ok": 160
+    }
+   }
+  },
+  "shadow": {
+   "use": "forward",
+   "ledger": {
+    "file": "data/props_shadow.json",
+    "bytes": 268585,
+    "sha256": "6c446cb0661fd39bb6e77e826f11ece9305f057f370782f5f50a252adecc6b38",
+    "barRegistered": "2026-10-15T11:35Z",
+    "runAt": "2026-11-05T19:16Z",
+    "verdict": "FAIL",
+    "decidedAt": "2026-11-05T19:16Z",
+    "decisionLines": 12298,
+    "decisionGames": 121,
+    "early": true,
+    "calls": 121
+   },
+   "lines": {
+    "file": "data/props_shadow_lines.csv",
+    "bytes": 613649,
+    "sha256": "cf334e7d521ee488b7dbb3a762b685f5a555945133e970c88d7614c7a5ae7b99",
+    "columns": [
+     "game_id",
+     "player_id",
+     "stat",
+     "p_model",
+     "p_market",
+     "y"
+    ],
+    "rows": 12298,
+    "games": 121
+   }
+  }
+ },
+ "injuries": {
+  "use": "forwardToday",
+  "log": {
+   "file": "data/injuries_log.csv",
+   "bytes": 211960,
+   "sha256": "eae8fcc0e0cd5031cf22af0f05949c177147c21cb118fa44e057016b20182dc5",
+   "columns": [
+    "date",
+    "team",
+    "player_id",
+    "name",
+    "status"
+   ],
+   "rows": 4700,
+   "firstDate": "2026-09-20",
+   "lastDate": "2026-11-11",
+   "dates": 52,
+   "teams": 30,
+   "players": 370,
+   "byStatus": {
+    "Day-To-Day": 2641,
+    "Out": 2058,
+    "Suspension": 1
+   }
+  },
+  "today": {
+   "file": "data/injuries.json",
+   "bytes": 18270,
+   "sha256": "41c642d90237c8d56dbb5ebdb36a77ce5caddea67c0841168c96fdeedb6c220c",
+   "date": "2026-11-11",
+   "teams": 28,
+   "players": 97,
+   "fields": [
+    "date",
+    "detail",
+    "id",
+    "name",
+    "pos",
+    "returns",
+    "status"
+   ]
+  },
+  "note": "The only pre-game availability on disk is the job's daily log of ESPN's injury report, from 2026-09-20 (the 2026-27 preseason) on. No past season has a pre-game injury report: for 2021-22 to 2025-26 who was out is known only from the box score after the game (who is listed, who did not play). ESPN's game summary carries an injuries block, but it is the list as of the read, not as of the game (data/sample_summary.json, a 2021-22 game read in 2026, lists entries dated June 2026), so it is no historical report and must never be read as one."
+ },
+ "rosters": {
+  "use": "forwardToday",
+  "file": "data/rosters_espn.json",
+  "bytes": 64544,
+  "sha256": "96e16fff0aa67fe7c7d82b0c0e973811b480ac456293be35f99b43580b125ca8",
+  "date": "2026-11-11",
+  "asOf": {
+   "ATL": "2026-11-11",
+   "BOS": "2026-11-11",
+   "BKN": "2026-11-11",
+   "CHA": "2026-11-11",
+   "CHI": "2026-11-11",
+   "CLE": "2026-11-11",
+   "DAL": "2026-11-11",
+   "DEN": "2026-11-11",
+   "DET": "2026-11-11",
+   "GSW": "2026-11-11",
+   "HOU": "2026-11-11",
+   "IND": "2026-11-11",
+   "LAC": "2026-11-11",
+   "LAL": "2026-11-11",
+   "MEM": "2026-11-11",
+   "MIA": "2026-11-11",
+   "MIL": "2026-11-11",
+   "MIN": "2026-11-11",
+   "NOP": "2026-11-11",
+   "NYK": "2026-11-11",
+   "OKC": "2026-11-11",
+   "ORL": "2026-11-11",
+   "PHI": "2026-11-11",
+   "PHX": "2026-11-11",
+   "POR": "2026-11-11",
+   "SAC": "2026-11-11",
+   "SAS": "2026-11-11",
+   "TOR": "2026-11-11",
+   "UTA": "2026-11-11",
+   "WAS": "2026-11-11"
+  },
+  "teams": 30,
+  "players": 520,
+  "fields": [
+   "id",
+   "injured",
+   "name",
+   "pos",
+   "status"
+  ],
+  "note": "Each team's roster as ESPN lists it on the day the job ran: no past season's roster is kept (who was on a team then is read from its box scores)."
+ },
+ "coaches": {
+  "use": "dev for 2021-22 and 2023-24 to 2025-26; testSeason for 2022-23; forward for 2026-27",
+  "file": "data/coaches.csv",
+  "bytes": 4619,
+  "sha256": "f11e096211bba6e1c4e65ac4a477b213f7dc2c38c4bb4c51ce2a3661db463be2",
+  "columns": [
+   "season",
+   "team",
+   "coach",
+   "from"
+  ],
+  "rows": 192,
+  "seasons": {
+   "2022": {
+    "rows": 31,
+    "changes": 1
+   },
+   "2023": {
+    "rows": 32,
+    "changes": 2
+   },
+   "2024": {
+    "rows": 33,
+    "changes": 3
+   },
+   "2025": {
+    "rows": 34,
+    "changes": 4
+   },
+   "2026": {
+    "rows": 32,
+    "changes": 2
+   },
+   "2027": {
+    "rows": 30,
+    "changes": 0
+   }
+  },
+  "note": "Head coach by team and season, hand-kept, a mid-season change dated in `from`."
+ },
+ "coachesToday": {
+  "use": "forwardToday",
+  "file": "data/coaches_espn.json",
+  "bytes": 2467,
+  "sha256": "93e5160ac2c45a9067a6e8e9d9fe5c69e0cfa1a2e4cd30f18b2a3a9768af2ebc",
+  "date": "2026-11-11",
+  "teams": 30
+ },
+ "raptor": {
+  "use": "dev",
+  "file": "data/raptor.csv",
+  "bytes": 59650,
+  "sha256": "19b0654ecb0bbb154af4a1785a0b33c7b814925e2e00dc38a599cd51785ef011",
+  "columns": [
+   "player_name",
+   "season",
+   "mp",
+   "raptor_offense",
+   "raptor_defense"
+  ],
+  "rows": 1676,
+  "bySeason": {
+   "2020": 530,
+   "2021": 540,
+   "2022": 606
+  },
+  "note": "FiveThirtyEight's RAPTOR, offence and defence a player, for 2019-20 to 2021-22: the player model's priors."
+ },
+ "predictions": {
+  "use": "forward",
+  "file": "data/predictions.csv",
+  "bytes": 29309,
+  "sha256": "a1bc1556fb3fe6ac6114099ac36ea75b39f02bfe61cb32493a1c5b86ec57a4cf",
+  "columns": [
+   "game_id",
+   "date",
+   "away",
+   "home",
+   "pHome",
+   "spread",
+   "total",
+   "team_pHome",
+   "home_line",
+   "total_line",
+   "logged"
+  ],
+  "rows": 325,
+  "dates": [
+   "2026-10-20",
+   "2026-12-03"
+  ],
+  "note": "The game numbers the site published before each 2026-27 game: the season in play."
+ },
+ "research": {
+  "propsJson": {
+   "file": "research/props.json",
+   "bytes": 26569,
+   "sha256": "eba3626208864ec9ebecf4208b1449dae7fa8168613f5edd39968fd9ab5c31e8",
+   "folds": [
+    2024,
+    2025,
+    2026
+   ],
+   "generated": "2026-10-15T11:35Z",
+   "note": "tools/props.js's walk-forward: each fold's constants fitted on the seasons before it (2024 on 2023; 2025 on 2023-2024; 2026 on 2023-2025), and its market test on the 2026 archive"
+  },
+  "propsV2Results": [
+   "cand_blend.json",
+   "cand_blend_tables.md",
+   "cand_fix_rule.json",
+   "cand_fix_score.json",
+   "cand_fix_score.log",
+   "cand_fix_score_units.log",
+   "cand_fix_select.json",
+   "cand_fix_select.log",
+   "cand_fix_verify.json",
+   "cand_select.json",
+   "cand_select_explore.json",
+   "cand_select_explore.md",
+   "cand_select_tables.md",
+   "cut2026_check.json",
+   "data_describe.json",
+   "diag_history.json",
+   "diag_history_tables.md",
+   "diag_trial.json",
+   "espn_coverage.json",
+   "espn_coverage.tsv",
+   "espn_coverage_early.json",
+   "espn_coverage_early.tsv",
+   "espn_probe.tsv",
+   "espn_shape.json",
+   "espn_validate40.json",
+   "fetch_dk40_test.json",
+   "fold_params.json",
+   "test2024.json",
+   "test2024_check.json",
+   "test2024_test.json",
+   "validity_calib.json",
+   "validity_calib.md",
+   "validity_ref.json"
+  ]
+ },
+ "others": {
+  "data": [
+   {
+    "file": "data/calls.json",
+    "bytes": 84209,
+    "sha256": "b3e0284bf9660fdc2e69c873e4ab19a3eeb2b602c2b8ad4e4c497612a80c812e",
+    "use": "none",
+    "what": "the calls ledger: each game model's call on 2026-27 games (Pick'em Record); the season in play"
+   },
+   {
+    "file": "data/corr.json",
+    "bytes": 11313,
+    "sha256": "30b28188ca086fa1104c17675aca0ab5ea4960ae4e7f16cc993c29ce47b71065",
+    "use": "none",
+    "what": "the same-game correlation table, measured on the 2022-23 to 2025-26 box scores (tools/corr.js): it carries the test season's outcomes, so a candidate tested on 2022-23 may not stand on it as it stands"
+   },
+   {
+    "file": "data/sample_summary.json",
+    "bytes": 601516,
+    "sha256": "bdff5f21c248db0347dcf1704113970445e0aeda15e68bf319bdeee13ee67c02",
+    "use": "none",
+    "what": "one ESPN game summary payload as tools/fetch_box.js first read it (a 2021-22 game): kept for its shape"
+   },
+   {
+    "file": "data/suggest_ledger.json",
+    "bytes": 148717,
+    "sha256": "5b8dbcd46dc52082efab8d0d9c7a75941a4b51c84a4e901e386b80c962b14848",
+    "use": "none",
+    "what": "the Suggested Parlays record (2026-27); the season in play"
+   }
+  ],
+  "root": [
+   {
+    "file": "state.json",
+    "bytes": 562262,
+    "sha256": "521aabf89c1f822d4152ea296768919199e675b508322b3c7843a45b068d56e5",
+    "stamp": "2026-11-11T22:46Z",
+    "use": "forwardToday"
+   },
+   {
+    "file": "lines.json",
+    "bytes": 396858,
+    "sha256": "afd26c800b014fa3b104d8a2327dc46879995ed7b5be226ad2c12a983d8606fe",
+    "stamp": "2026-11-11T22:46:29Z",
+    "use": "forwardToday"
+   },
+   {
+    "file": "props.json",
+    "bytes": 222147,
+    "sha256": "2ee78dbb13cf30e9628cccccd6ca06d063f0066c577872b50a2e3f90887edbd0",
+    "stamp": "2026-11-11T22:46Z",
+    "use": "forwardToday"
+   },
+   {
+    "file": "players.json",
+    "bytes": 1401450,
+    "sha256": "116598dfdcebad68bd1bc85632466733da0de4d15ed82522af4c0f7f311c9264",
+    "stamp": "2026-11-11T22:45Z",
+    "use": "forwardToday"
+   },
+   {
+    "file": "model.json",
+    "bytes": 21835,
+    "sha256": "65236b1ff82f6720c8f08dd63b9ed5e006b0019583c390b34b7033190a1eb1ba",
+    "stamp": "2026-11-11T15:16Z",
+    "use": "forwardToday"
+   },
+   {
+    "file": "history.json",
+    "bytes": 369279,
+    "sha256": "df1a0ac9248bd817f48a45413615edb83180d7b26e7b13cc1d00e21ad2724b2e",
+    "stamp": "2026-11-11",
+    "use": "forwardToday"
+   },
+   {
+    "file": "pickem.json",
+    "bytes": 47848,
+    "sha256": "ea64eb7ecf090f42fa75e52c182877d4fb00f599ddf6f1b9a69587c6a945345d",
+    "stamp": null,
+    "use": "forwardToday"
+   },
+   {
+    "file": "research.json",
+    "bytes": 3860,
+    "sha256": "5e2d1e6d03b2c6da25978bdfe52cfbb5c38a9ef23cc1aa54650502f7ae178fea",
+    "stamp": null,
+    "use": "none",
+    "what": "the player model's walk-forward (tools/players.js research, run by hand)"
+   }
+  ],
+  "note": "The job's root files are today's state of the site (2026-27), written by the job and never edited: lines.json carries DraftKings' game lines and every player prop for the next two dates with a game, props.json the props model's projections. A forward shadow can read them as the job writes them; nothing in them is history."
+ }
+}

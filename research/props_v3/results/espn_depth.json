@@ -1,0 +1,4869 @@
+{
+ "generated": "2026-11-12T00:25Z",
+ "what": "research/props_v3/espn_depth.js: four games a season (two finals on each of two regular-season dates), the shape of each ESPN game summary (fields, flags, the forms values take, counts, did-not-play reasons); no stat, score or line is kept",
+ "requests": 183,
+ "skipped": [
+  2023,
+  2027
+ ],
+ "seasons": {
+  "1993": {
+   "dates": [
+    "1992-12-03",
+    "1993-03-04"
+   ],
+   "games": [
+    {
+     "event": "121203025",
+     "date": "1992-12-03",
+     "box": false,
+     "source": "none",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 0,
+       "starters": 0,
+       "played": 0,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 0,
+       "starters": 0,
+       "played": 0,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 1,
+   "withBox": 0,
+   "sides": 2,
+   "sidesFiveStarters": 0,
+   "played": 0,
+   "minForm": {},
+   "pmForm": {},
+   "didNotPlay": 0,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [],
+   "withPlays": 0,
+   "withOfficials": 0,
+   "withPickcenter": 0,
+   "withTeamStatistics": 0,
+   "injuriesDated": [
+    "2026-10-31",
+    "2026-11-11"
+   ],
+   "sources": {
+    "none": 1
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "1994": {
+   "dates": [
+    "1993-12-03",
+    "1994-03-04"
+   ],
+   "games": [
+    {
+     "event": "131203001",
+     "date": "1993-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "131203002",
+     "date": "1993-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "140304007",
+     "date": "1994-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "140304021",
+     "date": "1994-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 83,
+   "minForm": {
+    "whole": 83
+   },
+   "pmForm": {
+    "zero": 83
+   },
+   "didNotPlay": 13,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 0,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-24",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "1995": {
+   "dates": [
+    "1994-12-03",
+    "1995-03-04"
+   ],
+   "games": [
+    {
+     "event": "141203007",
+     "date": "1994-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 4,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "141203025",
+     "date": "1994-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "150304026",
+     "date": "1995-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "150304005",
+     "date": "1995-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 4,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 75,
+   "minForm": {
+    "whole": 75
+   },
+   "pmForm": {
+    "zero": 75
+   },
+   "didNotPlay": 21,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 0,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-24",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "1996": {
+   "dates": [
+    "1995-12-03",
+    "1996-03-04"
+   ],
+   "games": [
+    {
+     "event": "151203029",
+     "date": "1995-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "151203028",
+     "date": "1995-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "160304007",
+     "date": "1996-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "160304029",
+     "date": "1996-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 80,
+   "minForm": {
+    "whole": 80
+   },
+   "pmForm": {
+    "zero": 80
+   },
+   "didNotPlay": 14,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 0,
+   "withOfficials": 3,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "1997": {
+   "dates": [
+    "1996-12-03",
+    "1997-03-04"
+   ],
+   "games": [
+    {
+     "event": "161203016",
+     "date": "1996-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "161203022",
+     "date": "1996-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "170304025",
+     "date": "1997-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 4,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "170304022",
+     "date": "1997-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 78,
+   "minForm": {
+    "whole": 78
+   },
+   "pmForm": {
+    "zero": 78
+   },
+   "didNotPlay": 17,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 0,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-24",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "1998": {
+   "dates": [
+    "1997-12-03",
+    "1998-03-04"
+   ],
+   "games": [
+    {
+     "event": "171203007",
+     "date": "1997-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "171203002",
+     "date": "1997-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "180304003",
+     "date": "1998-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "180304005",
+     "date": "1998-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 87,
+   "minForm": {
+    "whole": 87
+   },
+   "pmForm": {
+    "zero": 87
+   },
+   "didNotPlay": 9,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 0,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-10-05",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "1999": {
+   "dates": [
+    "1999-02-24",
+    "1999-04-07"
+   ],
+   "games": [
+    {
+     "event": "190224002",
+     "date": "1999-02-24",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "190224007",
+     "date": "1999-02-24",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "400217188",
+     "date": "1999-04-07",
+     "box": false,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 0,
+       "starters": 0,
+       "played": 0,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 0,
+       "starters": 0,
+       "played": 0,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "190407002",
+     "date": "1999-04-07",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 3,
+   "sides": 8,
+   "sidesFiveStarters": 6,
+   "played": 66,
+   "minForm": {
+    "whole": 66
+   },
+   "pmForm": {
+    "zero": 66
+   },
+   "didNotPlay": 6,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 0,
+   "withOfficials": 3,
+   "withPickcenter": 0,
+   "withTeamStatistics": 3,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2000": {
+   "dates": [
+    "1999-12-03",
+    "2000-03-04"
+   ],
+   "games": [
+    {
+     "event": "191203026",
+     "date": "1999-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "191203002",
+     "date": "1999-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "400218536",
+     "date": "2000-03-04",
+     "box": false,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 0,
+       "starters": 0,
+       "played": 0,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 0,
+       "starters": 0,
+       "played": 0,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "200304012",
+     "date": "2000-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 3,
+   "sides": 8,
+   "sidesFiveStarters": 6,
+   "played": 64,
+   "minForm": {
+    "whole": 64
+   },
+   "pmForm": {
+    "zero": 64
+   },
+   "didNotPlay": 8,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 0,
+   "withOfficials": 3,
+   "withPickcenter": 0,
+   "withTeamStatistics": 3,
+   "injuriesDated": [
+    "2026-08-26",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2001": {
+   "dates": [
+    "2000-12-03",
+    "2001-03-04"
+   ],
+   "games": [
+    {
+     "event": "201203002",
+     "date": "2000-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "201203029",
+     "date": "2000-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "210304028",
+     "date": "2001-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 4,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "210304016",
+     "date": "2001-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 4,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 80,
+   "minForm": {
+    "whole": 80
+   },
+   "pmForm": {
+    "zero": 80
+   },
+   "didNotPlay": 16,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 0,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-26",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2002": {
+   "dates": [
+    "2001-12-03",
+    "2002-03-04"
+   ],
+   "games": [
+    {
+     "event": "211203021",
+     "date": "2001-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "211203018",
+     "date": "2001-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 0,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "220304020",
+     "date": "2002-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 465,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "220304022",
+     "date": "2002-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 358,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 82,
+   "minForm": {
+    "whole": 82
+   },
+   "pmForm": {
+    "zero": 82
+   },
+   "didNotPlay": 14,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 2,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-24",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2003": {
+   "dates": [
+    "2002-12-03",
+    "2003-03-04"
+   ],
+   "games": [
+    {
+     "event": "221203023",
+     "date": "2002-12-03",
+     "box": true,
+     "source": "basic",
+     "plays": 1,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 4,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "221203027",
+     "date": "2002-12-03",
+     "box": true,
+     "source": "basic",
+     "plays": 1,
+     "sides": [
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "230304025",
+     "date": "2003-03-04",
+     "box": true,
+     "source": "basic",
+     "plays": 399,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "230304027",
+     "date": "2003-03-04",
+     "box": true,
+     "source": "basic",
+     "plays": 441,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 5,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 80,
+   "minForm": {
+    "whole": 80
+   },
+   "pmForm": {
+    "zero": 80
+   },
+   "didNotPlay": 16,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-11"
+   ],
+   "sources": {
+    "basic": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2004": {
+   "dates": [
+    "2003-12-03",
+    "2004-03-04"
+   ],
+   "games": [
+    {
+     "event": "231203003",
+     "date": "2003-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 473,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "231203021",
+     "date": "2003-12-03",
+     "box": true,
+     "source": "full",
+     "plays": 414,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "240304022",
+     "date": "2004-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 409,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "240304014",
+     "date": "2004-03-04",
+     "box": true,
+     "source": "full",
+     "plays": 443,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 4,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 81,
+   "minForm": {
+    "whole": 81
+   },
+   "pmForm": {
+    "zero": 81
+   },
+   "didNotPlay": 15,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-24",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2005": {
+   "dates": [
+    "2004-12-01",
+    "2005-03-01"
+   ],
+   "games": [
+    {
+     "event": "241201002",
+     "date": "2004-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 515,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "241201003",
+     "date": "2004-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 410,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "250301029",
+     "date": "2005-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 440,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "250301007",
+     "date": "2005-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 459,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 13,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 86,
+   "minForm": {
+    "whole": 83,
+    "dash": 3
+   },
+   "pmForm": {
+    "zero": 86
+   },
+   "didNotPlay": 11,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-09-21",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2006": {
+   "dates": [
+    "2005-11-30",
+    "2006-03-01"
+   ],
+   "games": [
+    {
+     "event": "251130001",
+     "date": "2005-11-30",
+     "box": true,
+     "source": "full",
+     "plays": 399,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 14,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "251130005",
+     "date": "2005-11-30",
+     "box": true,
+     "source": "full",
+     "plays": 539,
+     "sides": [
+      {
+       "athletes": 16,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 13,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 13,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "260301005",
+     "date": "2006-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 406,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 7,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 5,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "260301007",
+     "date": "2006-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 429,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 4,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 96,
+   "minForm": {
+    "whole": 73,
+    "dash": 23
+   },
+   "pmForm": {
+    "zero": 96
+   },
+   "didNotPlay": 23,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-26",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2007": {
+   "dates": [
+    "2006-12-01",
+    "2007-02-28"
+   ],
+   "games": [
+    {
+     "event": "261201003",
+     "date": "2006-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 487,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 13,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "261201016",
+     "date": "2006-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 438,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 3,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 14,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "270228003",
+     "date": "2007-02-28",
+     "box": true,
+     "source": "full",
+     "plays": 434,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 13,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 14,
+       "dnp": 1,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "270228007",
+     "date": "2007-02-28",
+     "box": true,
+     "source": "full",
+     "plays": 461,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 14,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 4,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 101,
+   "minForm": {
+    "whole": 79,
+    "dash": 22
+   },
+   "pmForm": {
+    "zero": 101
+   },
+   "didNotPlay": 15,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-09-21",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2008": {
+   "dates": [
+    "2007-12-01",
+    "2008-03-01"
+   ],
+   "games": [
+    {
+     "event": "271201003",
+     "date": "2007-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 492,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 14,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 2,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "271201023",
+     "date": "2007-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 450,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 10,
+       "pmSigned": 0,
+       "pmZero": 13,
+       "dnp": 2,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 9,
+       "pmSigned": 0,
+       "pmZero": 11,
+       "dnp": 3,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "280301019",
+     "date": "2008-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 461,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 0,
+       "pmZero": 14,
+       "dnp": 1,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 12,
+       "pmSigned": 0,
+       "pmZero": 15,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "280301021",
+     "date": "2008-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 441,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 4,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 8,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 4,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 98,
+   "minForm": {
+    "whole": 79,
+    "dash": 19
+   },
+   "pmForm": {
+    "zero": 98
+   },
+   "didNotPlay": 17,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-09-11",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2009": {
+   "dates": [
+    "2008-11-30",
+    "2009-03-01"
+   ],
+   "games": [
+    {
+     "event": "281130008",
+     "date": "2008-11-30",
+     "box": true,
+     "source": "full",
+     "plays": 401,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 3,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "281130020",
+     "date": "2008-11-30",
+     "box": true,
+     "source": "full",
+     "plays": 425,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 4,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "290301002",
+     "date": "2009-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 431,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 3,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 6,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "290301021",
+     "date": "2009-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 488,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 3,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 110,
+   "minForm": {
+    "whole": 79,
+    "dash": 31
+   },
+   "pmForm": {
+    "signed": 76,
+    "zero": 34
+   },
+   "didNotPlay": 0,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-24",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2010": {
+   "dates": [
+    "2009-12-01",
+    "2010-03-01"
+   ],
+   "games": [
+    {
+     "event": "291201028",
+     "date": "2009-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 481,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 6,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 9,
+       "pmSigned": 8,
+       "pmZero": 7,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "291201030",
+     "date": "2009-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 450,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 12,
+       "pmSigned": 9,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 2,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "300301005",
+     "date": "2010-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 447,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 12,
+       "pmSigned": 12,
+       "pmZero": 3,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "300301020",
+     "date": "2010-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 390,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 3,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 113,
+   "minForm": {
+    "whole": 83,
+    "dash": 30
+   },
+   "pmForm": {
+    "signed": 77,
+    "zero": 36
+   },
+   "didNotPlay": 0,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-12"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2011": {
+   "dates": [
+    "2010-12-01",
+    "2011-03-01"
+   ],
+   "games": [
+    {
+     "event": "301201001",
+     "date": "2010-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 439,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 4,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 9,
+       "pmSigned": 8,
+       "pmZero": 6,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "301201017",
+     "date": "2010-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 591,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 10,
+       "pmSigned": 8,
+       "pmZero": 6,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 3,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "310301011",
+     "date": "2011-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 488,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 2,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "310301019",
+     "date": "2011-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 513,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 3,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 111,
+   "minForm": {
+    "whole": 83,
+    "dash": 28
+   },
+   "pmForm": {
+    "signed": 77,
+    "zero": 34
+   },
+   "didNotPlay": 0,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-09-21",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2012": {
+   "dates": [
+    "2011-12-25",
+    "2012-02-29"
+   ],
+   "games": [
+    {
+     "event": "311225018",
+     "date": "2011-12-25",
+     "box": true,
+     "source": "full",
+     "plays": 479,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 4,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "311225006",
+     "date": "2011-12-25",
+     "box": true,
+     "source": "full",
+     "plays": 515,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 13,
+       "pmSigned": 13,
+       "pmZero": 2,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 13,
+       "pmSigned": 12,
+       "pmZero": 2,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "320229020",
+     "date": "2012-02-29",
+     "box": true,
+     "source": "full",
+     "plays": 458,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 5,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "320229027",
+     "date": "2012-02-29",
+     "box": true,
+     "source": "full",
+     "plays": 452,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 15,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 6,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 14,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 3,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 116,
+   "minForm": {
+    "whole": 85,
+    "dash": 31
+   },
+   "pmForm": {
+    "signed": 84,
+    "zero": 32
+   },
+   "didNotPlay": 0,
+   "dnpWithReason": 0,
+   "reasons": [],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 0
+  },
+  "2013": {
+   "dates": [
+    "2012-12-01",
+    "2013-03-01"
+   ],
+   "games": [
+    {
+     "event": "400277953",
+     "date": "2012-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 446,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 11,
+       "pmZero": 1,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 9,
+       "pmZero": 4,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "400277954",
+     "date": "2012-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 504,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 1,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 8,
+       "pmZero": 1,
+       "dnp": 4,
+       "dnpWithReason": 4
+      }
+     ]
+    },
+    {
+     "event": "400278584",
+     "date": "2013-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 418,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 13,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 11,
+       "pmZero": 1,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    },
+    {
+     "event": "400278585",
+     "date": "2013-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 427,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 4,
+       "dnpWithReason": 4
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 4,
+       "dnpWithReason": 4
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 88,
+   "minForm": {
+    "whole": 88
+   },
+   "pmForm": {
+    "signed": 80,
+    "zero": 8
+   },
+   "didNotPlay": 16,
+   "dnpWithReason": 16,
+   "reasons": [
+    "COACH'S DECISION"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 1
+  },
+  "2014": {
+   "dates": [
+    "2013-12-01",
+    "2014-03-01"
+   ],
+   "games": [
+    {
+     "event": "400489121",
+     "date": "2013-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 451,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 8,
+       "pmZero": 1,
+       "dnp": 4,
+       "dnpWithReason": 4
+      }
+     ]
+    },
+    {
+     "event": "400489122",
+     "date": "2013-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 473,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    },
+    {
+     "event": "400489747",
+     "date": "2014-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 423,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 1,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 13,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "400489748",
+     "date": "2014-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 499,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 10,
+       "pmZero": 2,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 11,
+       "pmZero": 1,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 88,
+   "minForm": {
+    "whole": 88
+   },
+   "pmForm": {
+    "signed": 83,
+    "zero": 5
+   },
+   "didNotPlay": 15,
+   "dnpWithReason": 15,
+   "reasons": [
+    "COACH'S DECISION",
+    "FRACTURED RIGHT HAND",
+    "LEFT EYE CONTUSION",
+    "SORE RIGHT KNEE"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 4
+  },
+  "2015": {
+   "dates": [
+    "2014-11-30",
+    "2015-03-01"
+   ],
+   "games": [
+    {
+     "event": "400578533",
+     "date": "2014-11-30",
+     "box": true,
+     "source": "full",
+     "plays": 435,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 13,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 12,
+       "pmZero": 0,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    },
+    {
+     "event": "400578534",
+     "date": "2014-11-30",
+     "box": true,
+     "source": "full",
+     "plays": 464,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 13,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "400579169",
+     "date": "2015-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 475,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 10,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 9,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    },
+    {
+     "event": "400579175",
+     "date": "2015-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 505,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 8,
+       "pmSigned": 8,
+       "pmZero": 1,
+       "dnp": 4,
+       "dnpWithReason": 4
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 87,
+   "minForm": {
+    "whole": 42,
+    "dash": 45
+   },
+   "pmForm": {
+    "signed": 42,
+    "zero": 45
+   },
+   "didNotPlay": 15,
+   "dnpWithReason": 15,
+   "reasons": [
+    "COACH'S DECISION",
+    "LEFT SHOULDER"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 2,
+   "injuriesDated": [
+    "2026-08-26",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 2
+  },
+  "2016": {
+   "dates": [
+    "2015-12-01",
+    "2016-03-01"
+   ],
+   "games": [
+    {
+     "event": "400828149",
+     "date": "2015-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 456,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 7,
+       "pmZero": 2,
+       "dnp": 4,
+       "dnpWithReason": 4
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 9,
+       "pmZero": 2,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    },
+    {
+     "event": "400828150",
+     "date": "2015-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 454,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 1,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    },
+    {
+     "event": "400828778",
+     "date": "2016-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 476,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 1,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 12,
+       "pmZero": 1,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "400828779",
+     "date": "2016-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 444,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 12,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 0,
+       "pmSigned": 0,
+       "pmZero": 8,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 84,
+   "minForm": {
+    "whole": 63,
+    "dash": 21
+   },
+   "pmForm": {
+    "signed": 57,
+    "zero": 27
+   },
+   "didNotPlay": 17,
+   "dnpWithReason": 17,
+   "reasons": [
+    "COACH'S DECISION",
+    "LEFT KNEE INJURY",
+    "RIGHT WRIST INJURY",
+    "STRAINED LEFT GROIN"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 3,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-12"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 4
+  },
+  "2017": {
+   "dates": [
+    "2016-12-01",
+    "2017-03-01"
+   ],
+   "games": [
+    {
+     "event": "400899365",
+     "date": "2016-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 448,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 7,
+       "pmZero": 2,
+       "dnp": 4,
+       "dnpWithReason": 4
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    },
+    {
+     "event": "400899367",
+     "date": "2016-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 458,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 13,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 13,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "400899364",
+     "date": "2017-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 455,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    },
+    {
+     "event": "400899393",
+     "date": "2017-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 447,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 12,
+       "pmZero": 1,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 11,
+       "pmZero": 1,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 90,
+   "minForm": {
+    "whole": 90
+   },
+   "pmForm": {
+    "signed": 86,
+    "zero": 4
+   },
+   "didNotPlay": 12,
+   "dnpWithReason": 12,
+   "reasons": [
+    "COACH'S DECISION",
+    "KNEE INJURY",
+    "REST"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-12"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 3
+  },
+  "2018": {
+   "dates": [
+    "2017-12-01",
+    "2018-02-28"
+   ],
+   "games": [
+    {
+     "event": "400975069",
+     "date": "2017-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 453,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 13,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 12,
+       "pmZero": 0,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    },
+    {
+     "event": "400975071",
+     "date": "2017-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 448,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 11,
+       "pmZero": 1,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 1,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    },
+    {
+     "event": "400975659",
+     "date": "2018-02-28",
+     "box": true,
+     "source": "full",
+     "plays": 450,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 10,
+       "pmZero": 2,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 12,
+       "pmZero": 0,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    },
+    {
+     "event": "400975660",
+     "date": "2018-02-28",
+     "box": true,
+     "source": "full",
+     "plays": 445,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 10,
+       "pmZero": 2,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 95,
+   "minForm": {
+    "whole": 94,
+    "zero": 1
+   },
+   "pmForm": {
+    "signed": 89,
+    "zero": 6
+   },
+   "didNotPlay": 8,
+   "dnpWithReason": 8,
+   "reasons": [
+    "COACH'S DECISION",
+    "RIGHT THIGH CONTUSION"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 2
+  },
+  "2019": {
+   "dates": [
+    "2018-12-01",
+    "2019-03-01"
+   ],
+   "games": [
+    {
+     "event": "401071011",
+     "date": "2018-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 527,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 1,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    },
+    {
+     "event": "401071012",
+     "date": "2018-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 493,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 11,
+       "pmZero": 1,
+       "dnp": 0,
+       "dnpWithReason": 0
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    },
+    {
+     "event": "401071601",
+     "date": "2019-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 700,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    },
+    {
+     "event": "401071602",
+     "date": "2019-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 463,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 4,
+       "dnpWithReason": 4
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 12,
+       "pmZero": 0,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 86,
+   "minForm": {
+    "whole": 85,
+    "zero": 1
+   },
+   "pmForm": {
+    "signed": 84,
+    "zero": 2
+   },
+   "didNotPlay": 15,
+   "dnpWithReason": 15,
+   "reasons": [
+    "COACH'S DECISION"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-09-21",
+    "2026-11-12"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 1
+  },
+  "2020": {
+   "dates": [
+    "2019-12-01",
+    "2020-03-01"
+   ],
+   "games": [
+    {
+     "event": "401160926",
+     "date": "2019-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 485,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 9,
+       "pmZero": 2,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 1,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    },
+    {
+     "event": "401160927",
+     "date": "2019-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 486,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 12,
+       "pmZero": 0,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    },
+    {
+     "event": "401161530",
+     "date": "2020-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 477,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 1,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    },
+    {
+     "event": "401161536",
+     "date": "2020-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 490,
+     "sides": [
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 8,
+       "minWhole": 8,
+       "pmSigned": 8,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 83,
+   "minForm": {
+    "whole": 82,
+    "zero": 1
+   },
+   "pmForm": {
+    "signed": 79,
+    "zero": 4
+   },
+   "didNotPlay": 12,
+   "dnpWithReason": 12,
+   "reasons": [
+    "COACH'S DECISION",
+    "LEFT KNEE SORENESS",
+    "LEFT LEG FRACTURE",
+    "NECK INJURY",
+    "RIGHT ANKLE SORENESS",
+    "RIGHT ANKLE SPRAIN",
+    "RIGHT GROIN STRAIN"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-08-24",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 7
+  },
+  "2021": {
+   "dates": [
+    "2020-12-23",
+    "2021-03-01"
+   ],
+   "games": [
+    {
+     "event": "401267150",
+     "date": "2020-12-23",
+     "box": true,
+     "source": "full",
+     "plays": 470,
+     "sides": [
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 1,
+       "dnp": 4,
+       "dnpWithReason": 4
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 1,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    },
+    {
+     "event": "401267151",
+     "date": "2020-12-23",
+     "box": true,
+     "source": "full",
+     "plays": 485,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 12,
+       "minWhole": 12,
+       "pmSigned": 11,
+       "pmZero": 1,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 8,
+       "pmZero": 1,
+       "dnp": 5,
+       "dnpWithReason": 5
+      }
+     ]
+    },
+    {
+     "event": "401267689",
+     "date": "2021-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 447,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    },
+    {
+     "event": "401267690",
+     "date": "2021-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 442,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 1,
+       "dnpWithReason": 1
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 13,
+       "minWhole": 13,
+       "pmSigned": 13,
+       "pmZero": 0,
+       "dnp": 0,
+       "dnpWithReason": 0
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 86,
+   "minForm": {
+    "whole": 85,
+    "zero": 1
+   },
+   "pmForm": {
+    "signed": 82,
+    "zero": 4
+   },
+   "didNotPlay": 20,
+   "dnpWithReason": 20,
+   "reasons": [
+    "COACH'S DECISION",
+    "SORE LEFT CALF",
+    "SORE LEFT KNEE"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-10-06",
+    "2026-11-12"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 3
+  },
+  "2022": {
+   "dates": [
+    "2021-12-01",
+    "2022-03-01"
+   ],
+   "games": [
+    {
+     "event": "401360143",
+     "date": "2021-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 428,
+     "sides": [
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    },
+    {
+     "event": "401360144",
+     "date": "2021-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 413,
+     "sides": [
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 8,
+       "pmZero": 1,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    },
+    {
+     "event": "401360745",
+     "date": "2022-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 467,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 11,
+       "pmZero": 0,
+       "dnp": 4,
+       "dnpWithReason": 4
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 11,
+       "minWhole": 11,
+       "pmSigned": 10,
+       "pmZero": 1,
+       "dnp": 1,
+       "dnpWithReason": 1
+      }
+     ]
+    },
+    {
+     "event": "401360746",
+     "date": "2022-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 431,
+     "sides": [
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 4,
+       "dnpWithReason": 4
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 5,
+       "dnpWithReason": 5
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 79,
+   "minForm": {
+    "whole": 79
+   },
+   "pmForm": {
+    "signed": 77,
+    "zero": 2
+   },
+   "didNotPlay": 23,
+   "dnpWithReason": 23,
+   "reasons": [
+    "COACH'S DECISION"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 4,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-11"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 1
+  },
+  "2024": {
+   "dates": [
+    "2023-12-01",
+    "2024-03-01"
+   ],
+   "games": [
+    {
+     "event": "401584902",
+     "date": "2023-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 503,
+     "sides": [
+      {
+       "athletes": 15,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 5,
+       "dnpWithReason": 5
+      },
+      {
+       "athletes": 14,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 9,
+       "pmZero": 1,
+       "dnp": 4,
+       "dnpWithReason": 4
+      }
+     ]
+    },
+    {
+     "event": "401584903",
+     "date": "2023-12-01",
+     "box": true,
+     "source": "full",
+     "plays": 489,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 8,
+       "pmZero": 1,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 13,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      }
+     ]
+    },
+    {
+     "event": "401585485",
+     "date": "2024-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 487,
+     "sides": [
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 3,
+       "dnpWithReason": 3
+      },
+      {
+       "athletes": 12,
+       "starters": 5,
+       "played": 10,
+       "minWhole": 10,
+       "pmSigned": 10,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    },
+    {
+     "event": "401585486",
+     "date": "2024-03-01",
+     "box": true,
+     "source": "full",
+     "plays": 423,
+     "sides": [
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 9,
+       "pmZero": 0,
+       "dnp": 2,
+       "dnpWithReason": 2
+      },
+      {
+       "athletes": 11,
+       "starters": 5,
+       "played": 9,
+       "minWhole": 9,
+       "pmSigned": 8,
+       "pmZero": 1,
+       "dnp": 2,
+       "dnpWithReason": 2
+      }
+     ]
+    }
+   ],
+   "summaries": 4,
+   "withBox": 4,
+   "sides": 8,
+   "sidesFiveStarters": 8,
+   "played": 76,
+   "minForm": {
+    "whole": 76
+   },
+   "pmForm": {
+    "signed": 73,
+    "zero": 3
+   },
+   "didNotPlay": 24,
+   "dnpWithReason": 24,
+   "reasons": [
+    "COACH'S DECISION",
+    "ILLNESS",
+    "LOW BACK CONTUSION",
+    "RIGHT ANKLE INJURY",
+    "RIGHT FINGER",
+    "RIGHT SHOULDER SORENESS",
+    "SORE LEFT KNEE",
+    "SPRAINED RIGHT ELBOW"
+   ],
+   "flags": [
+    "active",
+    "didNotPlay",
+    "ejected",
+    "reason",
+    "starter"
+   ],
+   "withPlays": 4,
+   "withOfficials": 4,
+   "withPickcenter": 0,
+   "withTeamStatistics": 4,
+   "injuriesDated": [
+    "2026-07-30",
+    "2026-11-12"
+   ],
+   "sources": {
+    "full": 4
+   },
+   "errors": [],
+   "reasonsDistinct": 8
+  }
+ }
+}

@@ -523,6 +523,15 @@
   ],
   "NOP": [
    {
+    "id": "3907497",
+    "name": "Dejounte Murray",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-13",
+    "returns": "2026-11-14"
+   },
+   {
     "id": "4576086",
     "name": "Bryce McGowens",
     "pos": "G",
@@ -546,15 +555,6 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Thumb Sprain",
-    "date": "2026-11-13",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "3907497",
-    "name": "Dejounte Murray",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
     "date": "2026-11-13",
     "returns": "2026-11-13"
    },

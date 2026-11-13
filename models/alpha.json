@@ -1442,8 +1442,8 @@
    "spread": -8.2
   },
   "2027_20261113_MEM_NOP": {
-   "pHome": 0.3562,
-   "spread": 4.5
+   "pHome": 0.3513,
+   "spread": 4.7
   },
   "2027_20261113_MIL_ORL": {
    "pHome": 0.7618,
@@ -2093,5 +2093,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-13T18:15Z"
+ "generated": "2026-11-13T20:29Z"
 }

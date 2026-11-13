@@ -1,0 +1,162 @@
+{
+ "what": "MA, frozen: P23's constants, the nudge's weights and E fitted on all of the 2023-24 development lines (PLAN.md D9)",
+ "form": {
+  "stats": [
+   "reb",
+   "ast",
+   "tpm",
+   "stl",
+   "blk"
+  ],
+  "secondaries": [],
+  "nominalMinutes": 30,
+  "chance": "logit P = E + n; n = sum over the kept stats of w_s x d (a line with no projection: n = 0)"
+ },
+ "P23": {
+  "min": {
+   "h": 2,
+   "w0": 0.25,
+   "minN": 5,
+   "alpha": 0.5,
+   "T": 250,
+   "floor": 4,
+   "post": 0.2
+  },
+  "rate": {
+   "pts": {
+    "h": 8,
+    "m": 25
+   },
+   "reb": {
+    "h": 25,
+    "m": 50
+   },
+   "ast": {
+    "h": 8,
+    "m": 25
+   },
+   "tpm": {
+    "h": 15,
+    "m": 100
+   },
+   "stl": {
+    "h": 120,
+    "m": 400
+   },
+   "blk": {
+    "h": 25,
+    "m": 100
+   }
+  },
+  "gamma": 1,
+  "opp": {
+   "pts": 1,
+   "reb": 1,
+   "ast": 1,
+   "tpm": 1,
+   "stl": 0.75,
+   "blk": 1
+  },
+  "post": {
+   "pts": 0.9054,
+   "reb": 0.949,
+   "ast": 0.8879,
+   "tpm": 0.9078,
+   "stl": 0.905,
+   "blk": 0.9793
+  },
+  "var": {
+   "pts": [
+    8.2687,
+    0.6752
+   ],
+   "reb": [
+    1.6683,
+    0.9181
+   ],
+   "ast": [
+    1.3025,
+    1.022
+   ],
+   "tpm": [
+    1.3007,
+    0.8928
+   ],
+   "stl": [
+    1.0152,
+    0.8062
+   ],
+   "blk": [
+    1.1548,
+    1.0686
+   ],
+   "pra": [
+    11.5664,
+    0.6159
+   ],
+   "pr": [
+    9.9656,
+    0.6487
+   ],
+   "pa": [
+    7.4457,
+    0.7291
+   ],
+   "ar": [
+    2.3689,
+    0.837
+   ],
+   "sb": [
+    1.1729,
+    0.953
+   ]
+  },
+  "rho": 0.35
+ },
+ "nudge": {
+  "w": [
+   0.47735698901614737,
+   0.3016685897477692,
+   0.49526918337297177,
+   0.7190521420768933,
+   0.5298962838624839
+  ]
+ },
+ "E": {
+  "eb": [
+   0.06644090141377094,
+   -0.05652290887860043,
+   -0.04772034846671833,
+   0.007359193417083985,
+   0.04933196965092121,
+   0.05575626871717107,
+   0.0778417686831072,
+   -0.07836882966496715,
+   0.060497706941897454,
+   0.039392313142641355,
+   -0.05877582971388657,
+   0.160606881453939,
+   0.0465389213004311,
+   0.11817179307135386,
+   -0.09875251571180321,
+   0.06415667982080692,
+   0.1206885440196514,
+   -0.2189150099050031
+  ]
+ },
+ "fittedOn": {
+  "lines": 88739,
+  "games": 1116,
+  "set": "DraftKings 2023-24 provider 40, the regular-season window, the six base stats"
+ },
+ "files": {
+  "research/props_v3/ma/ma_lib.js": "5878d3243ca361bc788ac953f9b053853f03a6be5adcec7e72b8c5faaadd3169",
+  "research/props_v3/ma/dev_lib.js": "de53190d2296b84dd033e5ccaf7427495781165a1e7c3ef8244b8fe29a2ac316",
+  "research/props_v3/plan_sizing/lib.js": "f9370df99ae827eda8ff3ec7aee682589b3e99fe923d4d76481e38f8d81ee7b9",
+  "research/props_v3/why_lib.js": "32005eaab4f53cfba18de665a0ace6c62d1fba2a85398b2aa54fa6eecadeb884",
+  "tools/props.js": "c18897fbba31559a3b602a9d6178c71c9330aebd8fad08eb2dcc4b1e1f230a61",
+  "tools/props_feed.js": "da1bf4e70f439016511407441917424303712cf8d5a1eea69730c177c5dda816",
+  "tools/lib.js": "192aceb42f8f7286b385ed700cb1d167beafb7c6681c43c8f05cca8148001900",
+  "research/props_v3/results/ma_p23.json": "f0f36c69bf348dce5352f22a222f45a4ad85b7ad5e947e131714403fa389a888"
+ }
+}

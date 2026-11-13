@@ -38,3 +38,10 @@
   bar as written and the 2022-23 test is not spent. Planted in-game prices: V2 and V4 do not react (the plants push the
   nudge toward the Over and cost it: T2 -0.00042 at 10%, +0.00023 at 20%). validity_ma.js gives back validity.js's
   2023-24 figures exactly. score.js --dev-check running. Next: dev_results.md.
+- 13 Nov 2026 00:57 UTC (a retry of this step, continuing from the notes above, which the earlier attempt timed ahead
+  of its commits): the earlier results checked against their scripts; dev_results.md drafted (the verdict: MA meets D1
+  to D7 and misses D8, so it does not meet the development bar as written; D9 left part built; no 2022-23 line
+  fetched). A correction: the 2020-21 fetch made 1,362 requests (191 scoreboard days, 1,171 summaries), all HTTP 200,
+  not 1,341. freeze.js run: frozen/ma_frozen.json, a record of MA as D8 scored it (its weights equal D8's), its files
+  hashed; no test follows from it. score.js --dev-check re-run (the earlier run was cut off). Next: its result, then
+  commit and push.

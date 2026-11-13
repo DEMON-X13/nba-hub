@@ -271,11 +271,10 @@ player-games, one of the player's posted stats was repriced as a price read a qu
 
 V2 here is read on the out-of-fold lines with P23's projected minutes; `validity.js`'s own figure, on all of 2023-24
 with the 2024 fold's minutes, is the +0.0016 above. Neither check reacts at these shares, so by D9 V4 would have had to
-be tightened, or joined by a check of the nudge's
-gain on early exits with a threshold set on the planting, before any preregistration. That was not done, since D8 had
-already stopped the plan. What the planting does show: a price moved during the game makes the nudge disagree with that
-one line, pushes it the wrong way on the very players who left early, and costs it, so in-game prices among the test's
-lines would have counted against MA, not for it.
+be tightened, or joined by a check of the nudge's gain on early exits with a threshold set on the planting, before any
+preregistration. That was not done, since D8 had already stopped the plan. What the planting does show: a price moved
+during the game makes the nudge disagree with that one line, pushes it the wrong way on the very players who left
+early, and costs it, so in-game prices among the test's lines would have counted against MA, not for it.
 
 ## 7. Every choice made in this step, on development data
 

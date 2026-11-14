@@ -48,17 +48,6 @@
     "returns": "2027-07-01"
    }
   ],
-  "BOS": [
-   {
-    "id": "4251",
-    "name": "Paul George",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-12",
-    "returns": "2026-11-15"
-   }
-  ],
   "BKN": [
    {
     "id": "5101761",
@@ -157,6 +146,15 @@
   ],
   "CLE": [
    {
+    "id": "4066328",
+    "name": "Jarrett Allen",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
+   },
+   {
     "id": "4576087",
     "name": "Peyton Watson",
     "pos": "G",
@@ -173,15 +171,6 @@
     "detail": "Toe Sprain",
     "date": "2026-11-14",
     "returns": "2026-11-16"
-   },
-   {
-    "id": "4066328",
-    "name": "Jarrett Allen",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
    },
    {
     "id": "3908809",
@@ -356,22 +345,13 @@
   ],
   "HOU": [
    {
-    "id": "2990992",
-    "name": "Marcus Smart",
-    "pos": "G",
-    "status": "Suspension",
-    "detail": "Suspension",
-    "date": "2026-11-12",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "3102529",
     "name": "Clint Capela",
     "pos": "C",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-09",
-    "returns": "2026-11-15"
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
    },
    {
     "id": "2991235",
@@ -379,17 +359,44 @@
     "pos": "C",
     "status": "Out",
     "detail": "Calf Strain",
-    "date": "2026-11-09",
+    "date": "2026-11-14",
     "returns": "2026-11-15"
+   },
+   {
+    "id": "2991230",
+    "name": "Fred VanVleet",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
+   },
+   {
+    "id": "2990992",
+    "name": "Marcus Smart",
+    "pos": "G",
+    "status": "Suspension",
+    "detail": "Suspension",
+    "date": "2026-11-12",
+    "returns": "2026-11-18"
    }
   ],
   "IND": [
+   {
+    "id": "2530530",
+    "name": "T.J. McConnell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-11-14",
+    "returns": "2026-11-15"
+   },
    {
     "id": "4396909",
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Hand",
+    "detail": "Hand Sprain",
     "date": "2026-11-14",
     "returns": "2026-11-15"
    },
@@ -573,6 +580,17 @@
     "returns": "2026-11-14"
    }
   ],
+  "MIL": [
+   {
+    "id": "4997526",
+    "name": "Ousmane Dieng",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Finger Sprain",
+    "date": "2026-11-14",
+    "returns": "2026-11-18"
+   }
+  ],
   "MIN": [
    {
     "id": "4594268",
@@ -594,15 +612,6 @@
    }
   ],
   "NOP": [
-   {
-    "id": "5061589",
-    "name": "Yves Missi",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Bruise",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
    {
     "id": "4431675",
     "name": "Trendon Watford",
@@ -736,13 +745,13 @@
   ],
   "PHI": [
    {
-    "id": "1966",
-    "name": "LeBron James",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-13",
-    "returns": "2026-11-15"
+    "id": "3059318",
+    "name": "Joel Embiid",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
    },
    {
     "id": "4870562",
@@ -832,6 +841,15 @@
   ],
   "SAC": [
    {
+    "id": "4594327",
+    "name": "Keegan Murray",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-14",
+    "returns": "2026-11-15"
+   },
+   {
     "id": "4431679",
     "name": "Precious Achiuwa",
     "pos": "F",
@@ -881,6 +899,15 @@
   ],
   "TOR": [
    {
+    "id": "4432586",
+    "name": "Nate Bittle",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot Fracture",
+    "date": "2026-11-14",
+    "returns": "2026-11-23"
+   },
+   {
     "id": "4433134",
     "name": "Scottie Barnes",
     "pos": "F",
@@ -899,15 +926,6 @@
     "returns": "2026-11-14"
    },
    {
-    "id": "4431684",
-    "name": "Trayce Jackson-Davis",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-13",
-    "returns": "2026-11-15"
-   },
-   {
     "id": "6450",
     "name": "Kawhi Leonard",
     "pos": "F",
@@ -915,15 +933,6 @@
     "detail": "Knee Inflammation",
     "date": "2026-11-11",
     "returns": "2026-11-23"
-   },
-   {
-    "id": "4432586",
-    "name": "Nate Bittle",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Foot Fracture",
-    "date": "2026-11-08",
-    "returns": "2026-11-15"
    }
   ],
   "UTA": [
@@ -975,12 +984,30 @@
   ],
   "WAS": [
    {
+    "id": "5160992",
+    "name": "Alex Sarr",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-14",
+    "returns": "2026-11-15"
+   },
+   {
+    "id": "5238230",
+    "name": "Tre Johnson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-14",
+    "returns": "2026-11-15"
+   },
+   {
     "id": "4845374",
     "name": "Bub Carrington",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Chest",
-    "date": "2026-11-13",
+    "date": "2026-11-14",
     "returns": "2026-11-15"
    },
    {

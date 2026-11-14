@@ -30,15 +30,6 @@
     "returns": "2026-11-20"
    },
    {
-    "id": "5149077",
-    "name": "Kingston Flemings",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
     "id": "5105571",
     "name": "Henri Veesaar",
     "pos": "C",
@@ -61,21 +52,21 @@
   ],
   "BKN": [
    {
-    "id": "5279130",
-    "name": "Nolan Traore",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf Soreness",
-    "date": "2026-11-12",
-    "returns": "2026-11-14"
-   },
-   {
     "id": "5101761",
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Illness Not Specified",
-    "date": "2026-11-12",
+    "date": "2026-11-13",
+    "returns": "2026-11-14"
+   },
+   {
+    "id": "5279130",
+    "name": "Nolan Traore",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Calf Soreness",
+    "date": "2026-11-13",
     "returns": "2026-11-14"
    }
   ],
@@ -128,15 +119,6 @@
     "returns": "2026-11-13"
    },
    {
-    "id": "2595516",
-    "name": "Norman Powell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Shoulder Inflammation",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
     "id": "5095151",
     "name": "Caleb Wilson",
     "pos": "F",
@@ -164,9 +146,36 @@
     "detail": "Elbow",
     "date": "2026-11-10",
     "returns": "2026-11-16"
+   },
+   {
+    "id": "5106268",
+    "name": "Nae'Qwan Tomlin",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-10-20",
+    "returns": "2026-11-16"
    }
   ],
   "DAL": [
+   {
+    "id": "4432582",
+    "name": "Max Christie",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-11-13",
+    "returns": "2026-11-14"
+   },
+   {
+    "id": "4873153",
+    "name": "Morez Johnson Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg",
+    "date": "2026-11-13",
+    "returns": "2026-11-14"
+   },
    {
     "id": "4683688",
     "name": "Dereck Lively II",
@@ -214,7 +223,7 @@
     "status": "Day-To-Day",
     "detail": "Foot",
     "date": "2026-11-11",
-    "returns": "2026-11-13"
+    "returns": "2026-11-14"
    },
    {
     "id": "4395702",
@@ -321,24 +330,6 @@
    }
   ],
   "IND": [
-   {
-    "id": "2530530",
-    "name": "T.J. McConnell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "4396909",
-    "name": "Aaron Nesmith",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
    {
     "id": "4396993",
     "name": "Tyrese Haliburton",
@@ -486,19 +477,19 @@
     "id": "6475",
     "name": "Klay Thompson",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Soreness",
     "date": "2026-11-13",
-    "returns": "2026-11-13"
+    "returns": "2026-11-14"
    },
    {
     "id": "4601025",
     "name": "Pelle Larsson",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Illness",
     "date": "2026-11-13",
-    "returns": "2026-11-13"
+    "returns": "2026-11-14"
    }
   ],
   "MIN": [
@@ -548,15 +539,6 @@
     "detail": "Knee Bruise",
     "date": "2026-11-13",
     "returns": "2026-11-14"
-   },
-   {
-    "id": "4683634",
-    "name": "Bennedict Mathurin",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Thumb Sprain",
-    "date": "2026-11-13",
-    "returns": "2026-11-13"
    },
    {
     "id": "4397688",
@@ -634,33 +616,6 @@
    }
   ],
   "ORL": [
-   {
-    "id": "4278572",
-    "name": "Jamal Cain",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Shoulder Bruise",
-    "date": "2026-11-13",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "4702382",
-    "name": "Tristan da Silva",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Calf Strain",
-    "date": "2026-11-13",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "4432165",
-    "name": "Jalen Suggs",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Knee",
-    "date": "2026-11-13",
-    "returns": "2026-11-13"
-   },
    {
     "id": "4065654",
     "name": "Jonathan Isaac",

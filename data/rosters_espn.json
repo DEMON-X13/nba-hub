@@ -49,7 +49,7 @@
     "name": "Kingston Flemings",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4585618",
@@ -589,7 +589,14 @@
     "name": "Norman Powell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
+   },
+   {
+    "id": "4593049",
+    "name": "Orlando Robinson",
+    "pos": "C",
+    "status": "active",
+    "injured": false
    },
    {
     "id": "4898010",
@@ -638,6 +645,13 @@
    {
     "id": "3934723",
     "name": "Thomas Bryant",
+    "pos": "C",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4997530",
+    "name": "Khalifa Diop",
     "pos": "C",
     "status": "active",
     "injured": false
@@ -713,6 +727,13 @@
     "injured": false
    },
    {
+    "id": "5106268",
+    "name": "Nae'Qwan Tomlin",
+    "pos": "F",
+    "status": "active",
+    "injured": true
+   },
+   {
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
@@ -754,7 +775,7 @@
     "name": "Max Christie",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4701208",
@@ -810,7 +831,7 @@
     "name": "Morez Johnson Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5106040",
@@ -1394,7 +1415,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2580365",
@@ -1415,7 +1436,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133603",
@@ -2290,7 +2311,7 @@
     "name": "Bennedict Mathurin",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4997538",
@@ -2653,7 +2674,7 @@
     "name": "Jamal Cain",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133635",
@@ -2681,7 +2702,7 @@
     "name": "Tristan da Silva",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4065654",
@@ -2723,7 +2744,7 @@
     "name": "Jalen Suggs",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6478",

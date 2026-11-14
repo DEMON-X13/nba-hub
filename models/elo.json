@@ -1485,8 +1485,8 @@
    "spread": -13
   },
   "2027_20261114_DAL_CLE": {
-   "pHome": 0.583,
-   "spread": -2.6
+   "pHome": 0.5396,
+   "spread": -1.2
   },
   "2027_20261114_DEN_NOP": {
    "pHome": 0.1904,
@@ -2148,5 +2148,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-14T17:11Z"
+ "generated": "2026-11-14T18:44Z"
 }

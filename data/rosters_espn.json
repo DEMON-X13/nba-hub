@@ -526,7 +526,7 @@
     "name": "Nic Claxton",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4066650",
@@ -589,7 +589,7 @@
     "name": "Norman Powell",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4593049",
@@ -617,7 +617,7 @@
     "name": "Dailyn Swain",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431687",
@@ -640,7 +640,7 @@
     "name": "Jarrett Allen",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3934723",
@@ -661,7 +661,7 @@
     "name": "James Harden",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2995706",
@@ -689,7 +689,7 @@
     "name": "Donovan Mitchell",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432158",
@@ -752,7 +752,7 @@
     "name": "Peyton Watson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "DAL": [
@@ -1906,7 +1906,7 @@
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107157",

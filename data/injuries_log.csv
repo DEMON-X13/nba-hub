@@ -4905,11 +4905,16 @@ date,team,player_id,name,status
 2026-11-14,CHA,4433287,Brandon Miller,Day-To-Day
 2026-11-14,CHA,5061575,Kon Knueppel,Out
 2026-11-14,CHA,3032979,Dennis Schroder,Out
-2026-11-14,CHI,4848625,Dailyn Swain,Day-To-Day
-2026-11-14,CHI,5105555,Tobe Awaka,Day-To-Day
+2026-11-14,CHI,5105555,Tobe Awaka,Out
+2026-11-14,CHI,4278067,Nic Claxton,Day-To-Day
 2026-11-14,CHI,4397189,Jalen Smith,Day-To-Day
+2026-11-14,CHI,2595516,Norman Powell,Day-To-Day
 2026-11-14,CHI,5095151,Caleb Wilson,Out
-2026-11-14,CLE,4432158,Evan Mobley,Day-To-Day
+2026-11-14,CLE,4576087,Peyton Watson,Day-To-Day
+2026-11-14,CLE,4432158,Evan Mobley,Out
+2026-11-14,CLE,4066328,Jarrett Allen,Day-To-Day
+2026-11-14,CLE,3908809,Donovan Mitchell,Day-To-Day
+2026-11-14,CLE,3992,James Harden,Day-To-Day
 2026-11-14,CLE,4066757,Sam Merrill,Out
 2026-11-14,CLE,5106268,Nae'Qwan Tomlin,Out
 2026-11-14,DAL,4432582,Max Christie,Day-To-Day
@@ -4947,22 +4952,23 @@ date,team,player_id,name,status
 2026-11-14,MEM,5105462,Richie Saunders,Out
 2026-11-14,MIA,4601025,Pelle Larsson,Day-To-Day
 2026-11-14,MIA,6475,Klay Thompson,Day-To-Day
+2026-11-14,MIA,3032977,Giannis Antetokounmpo,Day-To-Day
 2026-11-14,MIN,4594268,Anthony Edwards,Out
 2026-11-14,MIN,3934673,Donte DiVincenzo,Out
-2026-11-14,NOP,4576086,Bryce McGowens,Day-To-Day
-2026-11-14,NOP,3907497,Dejounte Murray,Out
 2026-11-14,NOP,5061589,Yves Missi,Out
-2026-11-14,NOP,4397688,Trey Murphy III,Out
 2026-11-14,NOP,4431675,Trendon Watford,Out
+2026-11-14,NOP,4576086,Bryce McGowens,Out
+2026-11-14,NOP,4397688,Trey Murphy III,Out
+2026-11-14,NOP,3907497,Dejounte Murray,Out
 2026-11-14,OKC,4900671,Ajay Mitchell,Day-To-Day
 2026-11-14,OKC,5061603,Thomas Sorber,Out
 2026-11-14,OKC,4432823,Jaylin Williams,Out
 2026-11-14,OKC,4683692,Cason Wallace,Out
 2026-11-14,OKC,4433255,Chet Holmgren,Out
 2026-11-14,OKC,4593803,Jalen Williams,Out
+2026-11-14,ORL,5214637,Noah Penda,Out
 2026-11-14,ORL,4065654,Jonathan Isaac,Out
 2026-11-14,ORL,4432573,Paolo Banchero,Out
-2026-11-14,ORL,5214637,Noah Penda,Out
 2026-11-14,ORL,5107251,Izaiyah Nelson,Out
 2026-11-14,PHI,1966,LeBron James,Day-To-Day
 2026-11-14,PHI,4870562,Dominick Barlow,Out
@@ -4979,9 +4985,9 @@ date,team,player_id,name,status
 2026-11-14,SAC,3907387,Ben Simmons,Out
 2026-11-14,SAS,6440,Tobias Harris,Out
 2026-11-14,SAS,5101845,Jayden Quaintance,Out
+2026-11-14,TOR,4433134,Scottie Barnes,Out
 2026-11-14,TOR,4411057,Kevin McCullar Jr.,Day-To-Day
 2026-11-14,TOR,4431684,Trayce Jackson-Davis,Day-To-Day
-2026-11-14,TOR,4433134,Scottie Barnes,Out
 2026-11-14,TOR,6450,Kawhi Leonard,Out
 2026-11-14,TOR,4432586,Nate Bittle,Out
 2026-11-14,UTA,4397077,Jaxson Hayes,Day-To-Day

@@ -110,19 +110,10 @@
   ],
   "CHI": [
    {
-    "id": "4397189",
-    "name": "Jalen Smith",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hand",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
     "id": "4848625",
     "name": "Dailyn Swain",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back",
     "date": "2026-11-14",
     "returns": "2026-11-14"
@@ -131,9 +122,18 @@
     "id": "5105555",
     "name": "Tobe Awaka",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back",
-    "date": "2026-11-12",
+    "date": "2026-11-14",
+    "returns": "2026-11-14"
+   },
+   {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hand",
+    "date": "2026-11-14",
     "returns": "2026-11-14"
    },
    {
@@ -151,9 +151,9 @@
     "id": "4432158",
     "name": "Evan Mobley",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Toe",
-    "date": "2026-11-12",
+    "date": "2026-11-14",
     "returns": "2026-11-14"
    },
    {
@@ -457,18 +457,18 @@
     "id": "4593016",
     "name": "Quinten Post",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Concussion",
-    "date": "2026-11-12",
+    "date": "2026-11-14",
     "returns": "2026-11-14"
    },
    {
     "id": "4600663",
     "name": "Zach Edey",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-11-12",
+    "date": "2026-11-14",
     "returns": "2026-11-14"
    },
    {
@@ -492,21 +492,21 @@
   ],
   "MIA": [
    {
-    "id": "6475",
-    "name": "Klay Thompson",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle Soreness",
-    "date": "2026-11-13",
-    "returns": "2026-11-14"
-   },
-   {
     "id": "4601025",
     "name": "Pelle Larsson",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-13",
+    "date": "2026-11-14",
+    "returns": "2026-11-14"
+   },
+   {
+    "id": "6475",
+    "name": "Klay Thompson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle Soreness",
+    "date": "2026-11-14",
     "returns": "2026-11-14"
    }
   ],
@@ -532,6 +532,15 @@
   ],
   "NOP": [
    {
+    "id": "4576086",
+    "name": "Bryce McGowens",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Elbow Infection",
+    "date": "2026-11-14",
+    "returns": "2026-11-14"
+   },
+   {
     "id": "3907497",
     "name": "Dejounte Murray",
     "pos": "G",
@@ -539,15 +548,6 @@
     "detail": "Ankle",
     "date": "2026-11-13",
     "returns": "2026-11-20"
-   },
-   {
-    "id": "4576086",
-    "name": "Bryce McGowens",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Elbow Infection",
-    "date": "2026-11-13",
-    "returns": "2026-11-14"
    },
    {
     "id": "5061589",
@@ -582,7 +582,7 @@
     "id": "4900671",
     "name": "Ajay Mitchell",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Sprain",
     "date": "2026-11-14",
     "returns": "2026-11-15"
@@ -734,9 +734,9 @@
     "id": "4706557",
     "name": "Chris Youngblood",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Foot Bruise",
-    "date": "2026-11-13",
+    "date": "2026-11-14",
     "returns": "2026-11-16"
    },
    {
@@ -772,9 +772,9 @@
     "id": "4431679",
     "name": "Precious Achiuwa",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle Soreness",
-    "date": "2026-11-13",
+    "date": "2026-11-14",
     "returns": "2026-11-15"
    },
    {

@@ -1,7 +1,16 @@
 {
- "date": "2026-11-13",
+ "date": "2026-11-14",
  "teams": {
   "ATL": [
+   {
+    "id": "5149077",
+    "name": "Kingston Flemings",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-14",
+    "returns": "2026-11-15"
+   },
    {
     "id": "4712863",
     "name": "Mouhamed Gueye",
@@ -101,6 +110,24 @@
   ],
   "CHI": [
    {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hand",
+    "date": "2026-11-14",
+    "returns": "2026-11-14"
+   },
+   {
+    "id": "4848625",
+    "name": "Dailyn Swain",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-11-14",
+    "returns": "2026-11-14"
+   },
+   {
     "id": "5105555",
     "name": "Tobe Awaka",
     "pos": "F",
@@ -108,15 +135,6 @@
     "detail": "Back",
     "date": "2026-11-12",
     "returns": "2026-11-14"
-   },
-   {
-    "id": "4848625",
-    "name": "Dailyn Swain",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
    },
    {
     "id": "5095151",
@@ -246,15 +264,6 @@
   ],
   "GSW": [
    {
-    "id": "4397886",
-    "name": "Charles Bassey",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Toe Soreness",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
     "id": "3975",
     "name": "Stephen Curry",
     "pos": "G",
@@ -330,6 +339,15 @@
    }
   ],
   "IND": [
+   {
+    "id": "4396909",
+    "name": "Aaron Nesmith",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hand",
+    "date": "2026-11-14",
+    "returns": "2026-11-15"
+   },
    {
     "id": "4396993",
     "name": "Tyrese Haliburton",
@@ -561,6 +579,15 @@
   ],
   "OKC": [
    {
+    "id": "4900671",
+    "name": "Ajay Mitchell",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-14",
+    "returns": "2026-11-15"
+   },
+   {
     "id": "5061603",
     "name": "Thomas Sorber",
     "pos": "C",
@@ -568,15 +595,6 @@
     "detail": "Knee",
     "date": "2026-11-13",
     "returns": "2026-11-20"
-   },
-   {
-    "id": "4900671",
-    "name": "Ajay Mitchell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-13",
-    "returns": "2026-11-13"
    },
    {
     "id": "4432823",
@@ -780,24 +798,6 @@
   ],
   "SAS": [
    {
-    "id": "4395630",
-    "name": "Devin Vassell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Groin",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
-    "id": "4066259",
-    "name": "De'Aaron Fox",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hip Soreness",
-    "date": "2026-11-12",
-    "returns": "2026-11-13"
-   },
-   {
     "id": "6440",
     "name": "Tobias Harris",
     "pos": "F",
@@ -864,6 +864,15 @@
    }
   ],
   "UTA": [
+   {
+    "id": "4397077",
+    "name": "Jaxson Hayes",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-14",
+    "returns": "2026-11-15"
+   },
    {
     "id": "4433268",
     "name": "Trey Alexander",

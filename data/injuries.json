@@ -461,12 +461,12 @@
   ],
   "LAL": [
    {
-    "id": "4397014",
-    "name": "Quentin Grimes",
+    "id": "4277811",
+    "name": "Collin Sexton",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Finger",
-    "date": "2026-11-13",
+    "detail": "Head",
+    "date": "2026-11-14",
     "returns": "2026-11-15"
    },
    {
@@ -475,25 +475,16 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Heel",
-    "date": "2026-11-13",
+    "date": "2026-11-14",
     "returns": "2026-11-15"
    },
    {
-    "id": "3945274",
-    "name": "Luka Doncic",
+    "id": "4397014",
+    "name": "Quentin Grimes",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Ankle",
+    "detail": "Finger",
     "date": "2026-11-13",
-    "returns": "2026-11-15"
-   },
-   {
-    "id": "4277811",
-    "name": "Collin Sexton",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Head",
-    "date": "2026-11-12",
     "returns": "2026-11-15"
    }
   ],
@@ -502,8 +493,17 @@
     "id": "4593016",
     "name": "Quinten Post",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Concussion",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
+   },
+   {
+    "id": "2991070",
+    "name": "Jerami Grant",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Head",
     "date": "2026-11-14",
     "returns": "2026-11-14"
    },
@@ -515,6 +515,15 @@
     "detail": "Ankle",
     "date": "2026-11-14",
     "returns": "2026-11-14"
+   },
+   {
+    "id": "4065733",
+    "name": "Ty Jerome",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hip Soreness",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
    },
    {
     "id": "4431785",

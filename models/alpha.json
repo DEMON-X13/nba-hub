@@ -1474,8 +1474,8 @@
  },
  "upcoming": {
   "2027_20261114_BKN_MEM": {
-   "pHome": 0.6691,
-   "spread": -5.4
+   "pHome": 0.6152,
+   "spread": -3.6
   },
   "2027_20261114_CHI_MIN": {
    "pHome": 0.8556,
@@ -2145,5 +2145,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-14T18:44Z"
+ "generated": "2026-11-14T20:46Z"
 }

@@ -5004,6 +5004,7 @@ date,team,player_id,name,status
 2026-11-14,WAS,4432187,Reece Beekman,Out
 2026-11-14,WAS,4432907,Justin Champagnie,Out
 2026-11-14,WAS,4606840,Jamir Watkins,Out
+2026-11-15,ATL,3146557,Jock Landale,Day-To-Day
 2026-11-15,ATL,5149077,Kingston Flemings,Out
 2026-11-15,ATL,4712863,Mouhamed Gueye,Out
 2026-11-15,ATL,4585618,Keshon Gilbert,Out
@@ -5023,8 +5024,10 @@ date,team,player_id,name,status
 2026-11-15,CLE,3992,James Harden,Day-To-Day
 2026-11-15,CLE,4066757,Sam Merrill,Out
 2026-11-15,CLE,5106268,Nae'Qwan Tomlin,Out
-2026-11-15,DAL,4278049,Daniel Gafford,Day-To-Day
+2026-11-15,DAL,4593125,Santi Aldama,Day-To-Day
 2026-11-15,DAL,4432582,Max Christie,Day-To-Day
+2026-11-15,DAL,6442,Kyrie Irving,Day-To-Day
+2026-11-15,DAL,4278049,Daniel Gafford,Day-To-Day
 2026-11-15,DAL,4683688,Dereck Lively II,Out
 2026-11-15,DAL,5148538,Tarik Biberovic,Out
 2026-11-15,DAL,5279129,Sergio de Larrea,Out
@@ -5076,8 +5079,8 @@ date,team,player_id,name,status
 2026-11-15,OKC,4683692,Cason Wallace,Out
 2026-11-15,OKC,4433255,Chet Holmgren,Out
 2026-11-15,OKC,4593803,Jalen Williams,Out
-2026-11-15,ORL,5214637,Noah Penda,Out
 2026-11-15,ORL,4065654,Jonathan Isaac,Out
+2026-11-15,ORL,5214637,Noah Penda,Out
 2026-11-15,ORL,4432573,Paolo Banchero,Out
 2026-11-15,ORL,5107251,Izaiyah Nelson,Out
 2026-11-15,PHI,3059318,Joel Embiid,Out
@@ -5094,6 +5097,7 @@ date,team,player_id,name,status
 2026-11-15,SAC,4594327,Keegan Murray,Day-To-Day
 2026-11-15,SAC,4431679,Precious Achiuwa,Day-To-Day
 2026-11-15,SAC,3907387,Ben Simmons,Out
+2026-11-15,SAS,4066259,De'Aaron Fox,Day-To-Day
 2026-11-15,SAS,6440,Tobias Harris,Out
 2026-11-15,SAS,5101845,Jayden Quaintance,Out
 2026-11-15,TOR,4432586,Nate Bittle,Out

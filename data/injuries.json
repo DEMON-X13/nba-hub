@@ -3,6 +3,15 @@
  "teams": {
   "ATL": [
    {
+    "id": "3146557",
+    "name": "Jock Landale",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip Inflammation",
+    "date": "2026-11-15",
+    "returns": "2026-11-15"
+   },
+   {
     "id": "5149077",
     "name": "Kingston Flemings",
     "pos": "G",
@@ -184,11 +193,11 @@
   ],
   "DAL": [
    {
-    "id": "4278049",
-    "name": "Daniel Gafford",
+    "id": "4593125",
+    "name": "Santi Aldama",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Face",
+    "detail": "Ankle Sprain",
     "date": "2026-11-15",
     "returns": "2026-11-15"
    },
@@ -198,6 +207,24 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
+    "date": "2026-11-15",
+    "returns": "2026-11-15"
+   },
+   {
+    "id": "6442",
+    "name": "Kyrie Irving",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-15",
+    "returns": "2026-11-15"
+   },
+   {
+    "id": "4278049",
+    "name": "Daniel Gafford",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Shoulder Stinger",
     "date": "2026-11-15",
     "returns": "2026-11-15"
    },
@@ -689,6 +716,15 @@
   ],
   "ORL": [
    {
+    "id": "4065654",
+    "name": "Jonathan Isaac",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Not Specified",
+    "date": "2026-11-15",
+    "returns": "2026-11-18"
+   },
+   {
     "id": "5214637",
     "name": "Noah Penda",
     "pos": "F",
@@ -696,15 +732,6 @@
     "detail": "Hamstring Strain",
     "date": "2026-11-14",
     "returns": "2026-11-22"
-   },
-   {
-    "id": "4065654",
-    "name": "Jonathan Isaac",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Not Specified",
-    "date": "2026-11-09",
-    "returns": "2026-11-16"
    },
    {
     "id": "4432573",
@@ -860,6 +887,15 @@
    }
   ],
   "SAS": [
+   {
+    "id": "4066259",
+    "name": "De'Aaron Fox",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip",
+    "date": "2026-11-15",
+    "returns": "2026-11-15"
+   },
    {
     "id": "6440",
     "name": "Tobias Harris",

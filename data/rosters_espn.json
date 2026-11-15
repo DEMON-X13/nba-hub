@@ -84,7 +84,7 @@
     "name": "Jock Landale",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2490149",
@@ -761,7 +761,7 @@
     "name": "Santi Aldama",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5148538",
@@ -824,7 +824,7 @@
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4873153",
@@ -3286,7 +3286,7 @@
     "name": "De'Aaron Fox",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107968",

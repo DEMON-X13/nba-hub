@@ -326,7 +326,7 @@
     "name": "Michael Porter Jr.",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5037873",
@@ -526,7 +526,7 @@
     "name": "Nic Claxton",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4066650",
@@ -640,7 +640,7 @@
     "name": "Jarrett Allen",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3934723",
@@ -661,7 +661,7 @@
     "name": "James Harden",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2995706",
@@ -689,7 +689,7 @@
     "name": "Donovan Mitchell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432158",
@@ -738,7 +738,7 @@
     "name": "Jaylon Tyson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5106261",
@@ -810,7 +810,7 @@
     "name": "Daniel Gafford",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5105806",
@@ -1243,7 +1243,7 @@
     "name": "Gui Santos",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397040",
@@ -1792,7 +1792,7 @@
     "name": "Jerami Grant",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4684806",
@@ -1883,7 +1883,7 @@
     "name": "Isaiah Stewart",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5112087",
@@ -3379,7 +3379,7 @@
     "name": "Scottie Barnes",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4395625",

@@ -5009,22 +5009,22 @@ date,team,player_id,name,status
 2026-11-15,ATL,4585618,Keshon Gilbert,Out
 2026-11-15,ATL,4873201,Asa Newell,Out
 2026-11-15,ATL,5105571,Henri Veesaar,Out
-2026-11-15,BKN,4278104,Michael Porter Jr.,Out
+2026-11-15,BKN,4278104,Michael Porter Jr.,Day-To-Day
 2026-11-15,CHA,5061575,Kon Knueppel,Out
 2026-11-15,CHA,3032979,Dennis Schroder,Out
-2026-11-15,CHI,4397189,Jalen Smith,Out
-2026-11-15,CHI,4278067,Nic Claxton,Out
-2026-11-15,CHI,5105555,Tobe Awaka,Out
+2026-11-15,CHI,4397189,Jalen Smith,Day-To-Day
+2026-11-15,CHI,4278067,Nic Claxton,Day-To-Day
+2026-11-15,CHI,5105555,Tobe Awaka,Day-To-Day
 2026-11-15,CHI,5095151,Caleb Wilson,Out
-2026-11-15,CLE,4576087,Peyton Watson,Out
-2026-11-15,CLE,3992,James Harden,Out
-2026-11-15,CLE,3908809,Donovan Mitchell,Out
-2026-11-15,CLE,4066328,Jarrett Allen,Out
-2026-11-15,CLE,4432158,Evan Mobley,Out
+2026-11-15,CLE,4066328,Jarrett Allen,Day-To-Day
+2026-11-15,CLE,4576087,Peyton Watson,Day-To-Day
+2026-11-15,CLE,4432158,Evan Mobley,Day-To-Day
+2026-11-15,CLE,3908809,Donovan Mitchell,Day-To-Day
+2026-11-15,CLE,3992,James Harden,Day-To-Day
 2026-11-15,CLE,4066757,Sam Merrill,Out
 2026-11-15,CLE,5106268,Nae'Qwan Tomlin,Out
-2026-11-15,DAL,4278049,Daniel Gafford,Out
-2026-11-15,DAL,4432582,Max Christie,Out
+2026-11-15,DAL,4278049,Daniel Gafford,Day-To-Day
+2026-11-15,DAL,4432582,Max Christie,Day-To-Day
 2026-11-15,DAL,4683688,Dereck Lively II,Out
 2026-11-15,DAL,5148538,Tarik Biberovic,Out
 2026-11-15,DAL,5279129,Sergio de Larrea,Out
@@ -5039,12 +5039,9 @@ date,team,player_id,name,status
 2026-11-15,GSW,4432171,Moses Moody,Out
 2026-11-15,GSW,6430,Jimmy Butler III,Out
 2026-11-15,HOU,3102529,Clint Capela,Out
-2026-11-15,HOU,2991235,Steven Adams,Out
 2026-11-15,HOU,2991230,Fred VanVleet,Out
 2026-11-15,HOU,2990992,Marcus Smart,Suspension
-2026-11-15,IND,4395712,Andrew Nembhard,Day-To-Day
-2026-11-15,IND,2530530,T.J. McConnell,Day-To-Day
-2026-11-15,IND,4396909,Aaron Nesmith,Day-To-Day
+2026-11-15,IND,4395712,Andrew Nembhard,Out
 2026-11-15,IND,4396993,Tyrese Haliburton,Out
 2026-11-15,IND,5157066,Johnny Furphy,Out
 2026-11-15,IND,4433076,Ben Sheppard,Out
@@ -5055,21 +5052,22 @@ date,team,player_id,name,status
 2026-11-15,LAL,5060631,Adou Thiero,Day-To-Day
 2026-11-15,LAL,4277811,Collin Sexton,Day-To-Day
 2026-11-15,LAL,4066457,Austin Reaves,Out
-2026-11-15,MEM,5105550,GG Jackson,Out
-2026-11-15,MEM,4600663,Zach Edey,Out
-2026-11-15,MEM,2991070,Jerami Grant,Out
+2026-11-15,MEM,4600663,Zach Edey,Day-To-Day
+2026-11-15,MEM,4065733,Ty Jerome,Day-To-Day
+2026-11-15,MEM,5105550,GG Jackson,Day-To-Day
+2026-11-15,MEM,2991070,Jerami Grant,Day-To-Day
 2026-11-15,MEM,4593016,Quinten Post,Out
-2026-11-15,MEM,4065733,Ty Jerome,Out
 2026-11-15,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-15,MEM,5105462,Richie Saunders,Out
-2026-11-15,MIA,4601025,Pelle Larsson,Out
+2026-11-15,MIA,4601025,Pelle Larsson,Day-To-Day
+2026-11-15,MIL,4591725,Ryan Rollins,Day-To-Day
 2026-11-15,MIL,4997526,Ousmane Dieng,Out
-2026-11-15,MIN,4432247,Jaylen Clark,Out
+2026-11-15,MIN,4432247,Jaylen Clark,Day-To-Day
 2026-11-15,MIN,4594268,Anthony Edwards,Out
 2026-11-15,MIN,3934673,Donte DiVincenzo,Out
-2026-11-15,NOP,4683634,Bennedict Mathurin,Out
+2026-11-15,NOP,4576086,Bryce McGowens,Day-To-Day
+2026-11-15,NOP,4683634,Bennedict Mathurin,Day-To-Day
 2026-11-15,NOP,4431675,Trendon Watford,Out
-2026-11-15,NOP,4576086,Bryce McGowens,Out
 2026-11-15,NOP,4397688,Trey Murphy III,Out
 2026-11-15,NOP,3907497,Dejounte Murray,Out
 2026-11-15,OKC,4432823,Jaylin Williams,Out

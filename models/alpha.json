@@ -1490,16 +1490,16 @@
    "spread": -3.1
   },
   "2027_20261115_DAL_BOS": {
-   "pHome": 0.8329,
-   "spread": -12.3
+   "pHome": 0.8358,
+   "spread": -12.4
   },
   "2027_20261115_HOU_WAS": {
-   "pHome": 0.2772,
-   "spread": 7.3
+   "pHome": 0.2228,
+   "spread": 9.6
   },
   "2027_20261115_IND_PHI": {
-   "pHome": 0.7235,
-   "spread": -7.4
+   "pHome": 0.7224,
+   "spread": -7.3
   },
   "2027_20261115_LAL_PHX": {
    "pHome": 0.4343,
@@ -2141,5 +2141,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-15T14:47Z"
+ "generated": "2026-11-15T17:46Z"
 }

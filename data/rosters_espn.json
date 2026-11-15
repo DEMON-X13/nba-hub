@@ -1259,7 +1259,7 @@
     "name": "Steven Adams",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3037789",
@@ -1415,7 +1415,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2580365",
@@ -1436,7 +1436,7 @@
     "name": "Aaron Nesmith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133603",
@@ -2104,7 +2104,7 @@
     "name": "Ryan Rollins",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397114",

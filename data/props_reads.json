@@ -277,5 +277,6 @@
  "2027_20261114_CHI_MIN": {"at":"2026-11-15T14:47Z","status":"ok","lines":108,"tries":1},
  "2027_20261114_DAL_CLE": {"at":"2026-11-15T14:47Z","status":"ok","lines":126,"tries":1},
  "2027_20261114_DEN_NOP": {"at":"2026-11-15T14:47Z","status":"ok","lines":94,"tries":1},
- "2027_20261114_DET_MIA": {"at":"2026-11-15T14:47Z","status":"ok","lines":155,"tries":1}
+ "2027_20261114_DET_MIA": {"at":"2026-11-15T14:47Z","status":"ok","lines":155,"tries":1},
+ "2027_20261115_IND_PHI": {"at":"2026-11-15T21:06Z","status":"ok","lines":105,"tries":1}
 }

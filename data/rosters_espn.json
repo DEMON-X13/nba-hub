@@ -1734,14 +1734,14 @@
     "name": "Collin Sexton",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5060631",
     "name": "Adou Thiero",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3907498",
@@ -3193,7 +3193,7 @@
     "name": "Keegan Murray",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4709131",
@@ -3635,7 +3635,7 @@
     "name": "Bub Carrington",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432907",
@@ -3719,7 +3719,7 @@
     "name": "Alex Sarr",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4997537",

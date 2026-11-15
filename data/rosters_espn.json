@@ -1,5 +1,5 @@
 {
- "date": "2026-11-14",
+ "date": "2026-11-15",
  "teams": {
   "ATL": [
    {
@@ -263,7 +263,7 @@
     "name": "Mikel Brown Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4712896",
@@ -326,7 +326,7 @@
     "name": "Michael Porter Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5037873",
@@ -361,7 +361,7 @@
     "name": "Nolan Traore",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3150844",
@@ -454,7 +454,7 @@
     "name": "Brandon Miller",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2583632",
@@ -589,7 +589,7 @@
     "name": "Norman Powell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4593049",
@@ -810,7 +810,7 @@
     "name": "Daniel Gafford",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5105806",
@@ -831,7 +831,7 @@
     "name": "Morez Johnson Jr.",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5106040",
@@ -1108,7 +1108,7 @@
     "name": "Duncan Robinson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4397882",
@@ -1429,7 +1429,7 @@
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4396909",
@@ -1657,7 +1657,7 @@
     "name": "Quentin Grimes",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4868423",
@@ -1741,7 +1741,7 @@
     "name": "Adou Thiero",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3907498",
@@ -1806,7 +1806,7 @@
     "name": "GG Jackson",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4065733",
@@ -1906,7 +1906,7 @@
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107157",
@@ -2004,7 +2004,7 @@
     "name": "Klay Thompson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3059319",
@@ -2169,7 +2169,7 @@
     "name": "Jaylen Clark",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3934673",
@@ -2311,7 +2311,7 @@
     "name": "Bennedict Mathurin",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4997538",
@@ -3745,35 +3745,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-11-14",
-  "BOS": "2026-11-14",
-  "BKN": "2026-11-14",
-  "CHA": "2026-11-14",
-  "CHI": "2026-11-14",
-  "CLE": "2026-11-14",
-  "DAL": "2026-11-14",
-  "DEN": "2026-11-14",
-  "DET": "2026-11-14",
-  "GSW": "2026-11-14",
-  "HOU": "2026-11-14",
-  "IND": "2026-11-14",
-  "LAC": "2026-11-14",
-  "LAL": "2026-11-14",
-  "MEM": "2026-11-14",
-  "MIA": "2026-11-14",
-  "MIL": "2026-11-14",
-  "MIN": "2026-11-14",
-  "NOP": "2026-11-14",
-  "NYK": "2026-11-14",
-  "OKC": "2026-11-14",
-  "ORL": "2026-11-14",
-  "PHI": "2026-11-14",
-  "PHX": "2026-11-14",
-  "POR": "2026-11-14",
-  "SAC": "2026-11-14",
-  "SAS": "2026-11-14",
-  "TOR": "2026-11-14",
-  "UTA": "2026-11-14",
-  "WAS": "2026-11-14"
+  "ATL": "2026-11-15",
+  "BOS": "2026-11-15",
+  "BKN": "2026-11-15",
+  "CHA": "2026-11-15",
+  "CHI": "2026-11-15",
+  "CLE": "2026-11-15",
+  "DAL": "2026-11-15",
+  "DEN": "2026-11-15",
+  "DET": "2026-11-15",
+  "GSW": "2026-11-15",
+  "HOU": "2026-11-15",
+  "IND": "2026-11-15",
+  "LAC": "2026-11-15",
+  "LAL": "2026-11-15",
+  "MEM": "2026-11-15",
+  "MIA": "2026-11-15",
+  "MIL": "2026-11-15",
+  "MIN": "2026-11-15",
+  "NOP": "2026-11-15",
+  "NYK": "2026-11-15",
+  "OKC": "2026-11-15",
+  "ORL": "2026-11-15",
+  "PHI": "2026-11-15",
+  "PHX": "2026-11-15",
+  "POR": "2026-11-15",
+  "SAC": "2026-11-15",
+  "SAS": "2026-11-15",
+  "TOR": "2026-11-15",
+  "UTA": "2026-11-15",
+  "WAS": "2026-11-15"
  }
 }

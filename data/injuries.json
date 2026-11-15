@@ -1,15 +1,15 @@
 {
- "date": "2026-11-14",
+ "date": "2026-11-15",
  "teams": {
   "ATL": [
    {
     "id": "5149077",
     "name": "Kingston Flemings",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back",
+    "status": "Out",
+    "detail": "Back Strain",
     "date": "2026-11-14",
-    "returns": "2026-11-15"
+    "returns": "2026-11-18"
    },
    {
     "id": "4712863",
@@ -50,34 +50,16 @@
   ],
   "BKN": [
    {
-    "id": "5101761",
-    "name": "Mikel Brown Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness Not Specified",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
-    "id": "5279130",
-    "name": "Nolan Traore",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf Soreness",
-    "date": "2026-11-13",
-    "returns": "2026-11-14"
+    "id": "4278104",
+    "name": "Michael Porter Jr.",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Personal",
+    "date": "2026-11-15",
+    "returns": "2026-11-16"
    }
   ],
   "CHA": [
-   {
-    "id": "4433287",
-    "name": "Brandon Miller",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin Soreness",
-    "date": "2026-11-13",
-    "returns": "2026-11-15"
-   },
    {
     "id": "5061575",
     "name": "Kon Knueppel",
@@ -99,11 +81,11 @@
   ],
   "CHI": [
    {
-    "id": "5105555",
-    "name": "Tobe Awaka",
+    "id": "4397189",
+    "name": "Jalen Smith",
     "pos": "F",
     "status": "Out",
-    "detail": "Back",
+    "detail": "Finger Sprain",
     "date": "2026-11-14",
     "returns": "2026-11-16"
    },
@@ -111,28 +93,19 @@
     "id": "4278067",
     "name": "Nic Claxton",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hamstring",
     "date": "2026-11-14",
-    "returns": "2026-11-14"
+    "returns": "2026-11-16"
    },
    {
-    "id": "4397189",
-    "name": "Jalen Smith",
+    "id": "5105555",
+    "name": "Tobe Awaka",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger Sprain",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
-    "id": "2595516",
-    "name": "Norman Powell",
-    "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Back",
     "date": "2026-11-14",
-    "returns": "2026-11-14"
+    "returns": "2026-11-16"
    },
    {
     "id": "5095151",
@@ -146,6 +119,33 @@
   ],
   "CLE": [
    {
+    "id": "4576087",
+    "name": "Peyton Watson",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
+   },
+   {
+    "id": "3992",
+    "name": "James Harden",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Calf",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
+   },
+   {
+    "id": "3908809",
+    "name": "Donovan Mitchell",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee Bruise",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
+   },
+   {
     "id": "4066328",
     "name": "Jarrett Allen",
     "pos": "C",
@@ -155,15 +155,6 @@
     "returns": "2026-11-16"
    },
    {
-    "id": "4576087",
-    "name": "Peyton Watson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
     "id": "4432158",
     "name": "Evan Mobley",
     "pos": "C",
@@ -171,24 +162,6 @@
     "detail": "Toe Sprain",
     "date": "2026-11-14",
     "returns": "2026-11-16"
-   },
-   {
-    "id": "3908809",
-    "name": "Donovan Mitchell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Bruise",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
-    "id": "3992",
-    "name": "James Harden",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Calf",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
    },
    {
     "id": "4066757",
@@ -211,22 +184,22 @@
   ],
   "DAL": [
    {
+    "id": "4278049",
+    "name": "Daniel Gafford",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Face",
+    "date": "2026-11-15",
+    "returns": "2026-11-15"
+   },
+   {
     "id": "4432582",
     "name": "Max Christie",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle Sprain",
     "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
-    "id": "4873153",
-    "name": "Morez Johnson Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Lower Leg",
-    "date": "2026-11-13",
-    "returns": "2026-11-14"
+    "returns": "2026-11-15"
    },
    {
     "id": "4683688",
@@ -268,6 +241,15 @@
    }
   ],
   "DET": [
+   {
+    "id": "3157465",
+    "name": "Duncan Robinson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Thigh Soreness",
+    "date": "2026-11-15",
+    "returns": "2026-11-14"
+   },
    {
     "id": "5037878",
     "name": "Ugonna Onyenso",
@@ -383,6 +365,15 @@
   ],
   "IND": [
    {
+    "id": "4395712",
+    "name": "Andrew Nembhard",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip Soreness",
+    "date": "2026-11-15",
+    "returns": "2026-11-15"
+   },
+   {
     "id": "2530530",
     "name": "T.J. McConnell",
     "pos": "G",
@@ -468,34 +459,61 @@
   ],
   "LAL": [
    {
+    "id": "5060631",
+    "name": "Adou Thiero",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-15",
+    "returns": "2026-11-15"
+   },
+   {
     "id": "4277811",
     "name": "Collin Sexton",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Head",
-    "date": "2026-11-14",
+    "date": "2026-11-15",
     "returns": "2026-11-15"
    },
    {
     "id": "4066457",
     "name": "Austin Reaves",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Heel",
-    "date": "2026-11-14",
-    "returns": "2026-11-15"
-   },
-   {
-    "id": "4397014",
-    "name": "Quentin Grimes",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Finger",
-    "date": "2026-11-13",
-    "returns": "2026-11-15"
+    "status": "Out",
+    "detail": "Heel Bruise",
+    "date": "2026-11-15",
+    "returns": "2026-11-17"
    }
   ],
   "MEM": [
+   {
+    "id": "5105550",
+    "name": "GG Jackson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Foot",
+    "date": "2026-11-15",
+    "returns": "2026-11-16"
+   },
+   {
+    "id": "4600663",
+    "name": "Zach Edey",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-15",
+    "returns": "2026-11-16"
+   },
+   {
+    "id": "2991070",
+    "name": "Jerami Grant",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Head",
+    "date": "2026-11-15",
+    "returns": "2026-11-16"
+   },
    {
     "id": "4593016",
     "name": "Quinten Post",
@@ -504,24 +522,6 @@
     "detail": "Concussion",
     "date": "2026-11-14",
     "returns": "2026-11-16"
-   },
-   {
-    "id": "2991070",
-    "name": "Jerami Grant",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Head",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
-    "id": "4600663",
-    "name": "Zach Edey",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
    },
    {
     "id": "4065733",
@@ -556,28 +556,10 @@
     "id": "4601025",
     "name": "Pelle Larsson",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Illness",
     "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
-    "id": "6475",
-    "name": "Klay Thompson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
-   },
-   {
-    "id": "3032977",
-    "name": "Giannis Antetokounmpo",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist Sprain",
-    "date": "2026-11-14",
-    "returns": "2026-11-14"
+    "returns": "2026-11-16"
    }
   ],
   "MIL": [
@@ -592,6 +574,15 @@
    }
   ],
   "MIN": [
+   {
+    "id": "4432247",
+    "name": "Jaylen Clark",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-11-15",
+    "returns": "2026-11-16"
+   },
    {
     "id": "4594268",
     "name": "Anthony Edwards",
@@ -612,6 +603,15 @@
    }
   ],
   "NOP": [
+   {
+    "id": "4683634",
+    "name": "Bennedict Mathurin",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Foot Plantar Fasciitis",
+    "date": "2026-11-14",
+    "returns": "2026-11-16"
+   },
    {
     "id": "4431675",
     "name": "Trendon Watford",
@@ -651,12 +651,21 @@
   ],
   "OKC": [
    {
+    "id": "4432823",
+    "name": "Jaylin Williams",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back Spasms",
+    "date": "2026-11-15",
+    "returns": "2026-11-18"
+   },
+   {
     "id": "4900671",
     "name": "Ajay Mitchell",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-14",
+    "date": "2026-11-15",
     "returns": "2026-11-15"
    },
    {
@@ -667,15 +676,6 @@
     "detail": "Knee",
     "date": "2026-11-13",
     "returns": "2026-11-20"
-   },
-   {
-    "id": "4432823",
-    "name": "Jaylin Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back Spasms",
-    "date": "2026-11-11",
-    "returns": "2026-11-15"
    },
    {
     "id": "4683692",
@@ -841,12 +841,21 @@
   ],
   "SAC": [
    {
+    "id": "4898371",
+    "name": "Maxime Raynaud",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee Dislocated",
+    "date": "2026-11-15",
+    "returns": "2026-11-18"
+   },
+   {
     "id": "4594327",
     "name": "Keegan Murray",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-14",
+    "date": "2026-11-15",
     "returns": "2026-11-15"
    },
    {
@@ -855,16 +864,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Soreness",
-    "date": "2026-11-14",
-    "returns": "2026-11-15"
-   },
-   {
-    "id": "4898371",
-    "name": "Maxime Raynaud",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Knee Dislocated",
-    "date": "2026-11-10",
+    "date": "2026-11-15",
     "returns": "2026-11-15"
    },
    {
@@ -923,7 +923,7 @@
     "status": "Day-To-Day",
     "detail": "Illness",
     "date": "2026-11-13",
-    "returns": "2026-11-14"
+    "returns": "2026-11-16"
    },
    {
     "id": "6450",
@@ -940,10 +940,10 @@
     "id": "4397077",
     "name": "Jaxson Hayes",
     "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee",
-    "date": "2026-11-14",
-    "returns": "2026-11-15"
+    "status": "Out",
+    "detail": "Knee Strain",
+    "date": "2026-11-15",
+    "returns": "2026-11-17"
    },
    {
     "id": "4433268",

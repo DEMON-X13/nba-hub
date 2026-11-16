@@ -53,10 +53,10 @@
     "id": "4397424",
     "name": "Neemias Queta",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Rest",
     "date": "2026-11-16",
-    "returns": "2026-11-16"
+    "returns": "2026-11-18"
    }
   ],
   "CHA": [
@@ -90,15 +90,6 @@
     "returns": "2026-11-18"
    },
    {
-    "id": "4397189",
-    "name": "Jalen Smith",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger Sprain",
-    "date": "2026-11-15",
-    "returns": "2026-11-16"
-   },
-   {
     "id": "5095151",
     "name": "Caleb Wilson",
     "pos": "F",
@@ -113,19 +104,10 @@
     "id": "4683747",
     "name": "Jaylon Tyson",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle",
     "date": "2026-11-16",
-    "returns": "2026-11-16"
-   },
-   {
-    "id": "4576087",
-    "name": "Peyton Watson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Abdomen Soreness",
-    "date": "2026-11-15",
-    "returns": "2026-11-16"
+    "returns": "2026-11-18"
    },
    {
     "id": "4432158",
@@ -133,8 +115,8 @@
     "pos": "C",
     "status": "Out",
     "detail": "Toe Sprain",
-    "date": "2026-11-15",
-    "returns": "2026-11-18"
+    "date": "2026-11-16",
+    "returns": "2026-11-29"
    },
    {
     "id": "4066757",
@@ -227,10 +209,10 @@
     "id": "3157465",
     "name": "Duncan Robinson",
     "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Thigh Soreness",
-    "date": "2026-11-15",
-    "returns": "2026-11-17"
+    "status": "Out",
+    "detail": "Quadriceps Strain",
+    "date": "2026-11-16",
+    "returns": "2026-11-18"
    },
    {
     "id": "4395702",
@@ -870,15 +852,6 @@
     "returns": "2026-12-03"
    },
    {
-    "id": "4066259",
-    "name": "De'Aaron Fox",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hip",
-    "date": "2026-11-16",
-    "returns": "2026-11-17"
-   },
-   {
     "id": "5101845",
     "name": "Jayden Quaintance",
     "pos": "F",
@@ -965,15 +938,6 @@
    }
   ],
   "WAS": [
-   {
-    "id": "5238230",
-    "name": "Tre Johnson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Soreness",
-    "date": "2026-11-16",
-    "returns": "2026-11-16"
-   },
    {
     "id": "4997537",
     "name": "Tristan Vukcevic",

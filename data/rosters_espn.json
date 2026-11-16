@@ -610,7 +610,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4848625",
@@ -752,7 +752,7 @@
     "name": "Peyton Watson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "DAL": [
@@ -3286,7 +3286,7 @@
     "name": "De'Aaron Fox",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107968",
@@ -3684,7 +3684,7 @@
     "name": "Tre Johnson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432819",

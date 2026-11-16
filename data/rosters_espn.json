@@ -1,11 +1,18 @@
 {
- "date": "2026-11-15",
+ "date": "2026-11-16",
  "teams": {
   "ATL": [
    {
     "id": "4278039",
     "name": "Nickeil Alexander-Walker",
     "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4684443",
+    "name": "Rafael Castro",
+    "pos": "F",
     "status": "active",
     "injured": false
    },
@@ -47,13 +54,6 @@
    {
     "id": "5149077",
     "name": "Kingston Flemings",
-    "pos": "G",
-    "status": "active",
-    "injured": true
-   },
-   {
-    "id": "4585618",
-    "name": "Keshon Gilbert",
     "pos": "G",
     "status": "active",
     "injured": true
@@ -1308,7 +1308,7 @@
     "name": "Julian Phillips",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4871144",
@@ -2581,7 +2581,7 @@
     "name": "Ajay Mitchell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432185",
@@ -2993,7 +2993,7 @@
     "name": "Drew Timme",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4701232",
@@ -3158,7 +3158,7 @@
     "name": "De'Andre Hunter",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4917149",
@@ -3172,7 +3172,7 @@
     "name": "Zach LaVine",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107897",
@@ -3745,35 +3745,35 @@
   ]
  },
  "asOf": {
-  "ATL": "2026-11-15",
-  "BOS": "2026-11-15",
-  "BKN": "2026-11-15",
-  "CHA": "2026-11-15",
-  "CHI": "2026-11-15",
-  "CLE": "2026-11-15",
-  "DAL": "2026-11-15",
-  "DEN": "2026-11-15",
-  "DET": "2026-11-15",
-  "GSW": "2026-11-15",
-  "HOU": "2026-11-15",
-  "IND": "2026-11-15",
-  "LAC": "2026-11-15",
-  "LAL": "2026-11-15",
-  "MEM": "2026-11-15",
-  "MIA": "2026-11-15",
-  "MIL": "2026-11-15",
-  "MIN": "2026-11-15",
-  "NOP": "2026-11-15",
-  "NYK": "2026-11-15",
-  "OKC": "2026-11-15",
-  "ORL": "2026-11-15",
-  "PHI": "2026-11-15",
-  "PHX": "2026-11-15",
-  "POR": "2026-11-15",
-  "SAC": "2026-11-15",
-  "SAS": "2026-11-15",
-  "TOR": "2026-11-15",
-  "UTA": "2026-11-15",
-  "WAS": "2026-11-15"
+  "ATL": "2026-11-16",
+  "BOS": "2026-11-16",
+  "BKN": "2026-11-16",
+  "CHA": "2026-11-16",
+  "CHI": "2026-11-16",
+  "CLE": "2026-11-16",
+  "DAL": "2026-11-16",
+  "DEN": "2026-11-16",
+  "DET": "2026-11-16",
+  "GSW": "2026-11-16",
+  "HOU": "2026-11-16",
+  "IND": "2026-11-16",
+  "LAC": "2026-11-16",
+  "LAL": "2026-11-16",
+  "MEM": "2026-11-16",
+  "MIA": "2026-11-16",
+  "MIL": "2026-11-16",
+  "MIN": "2026-11-16",
+  "NOP": "2026-11-16",
+  "NYK": "2026-11-16",
+  "OKC": "2026-11-16",
+  "ORL": "2026-11-16",
+  "PHI": "2026-11-16",
+  "PHX": "2026-11-16",
+  "POR": "2026-11-16",
+  "SAC": "2026-11-16",
+  "SAS": "2026-11-16",
+  "TOR": "2026-11-16",
+  "UTA": "2026-11-16",
+  "WAS": "2026-11-16"
  }
 }

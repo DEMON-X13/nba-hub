@@ -48,6 +48,17 @@
     "returns": "2027-07-01"
    }
   ],
+  "BOS": [
+   {
+    "id": "4397424",
+    "name": "Neemias Queta",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-11-16",
+    "returns": "2026-11-16"
+   }
+  ],
   "CHA": [
    {
     "id": "5061575",
@@ -104,7 +115,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-11-15",
+    "date": "2026-11-16",
     "returns": "2026-11-16"
    },
    {
@@ -222,15 +233,6 @@
     "returns": "2026-11-17"
    },
    {
-    "id": "5037878",
-    "name": "Ugonna Onyenso",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-11-11",
-    "returns": "2026-11-14"
-   },
-   {
     "id": "4395702",
     "name": "Isaiah Joe",
     "pos": "G",
@@ -307,20 +309,11 @@
   ],
   "HOU": [
    {
-    "id": "5105553",
-    "name": "Julian Phillips",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Wrist",
-    "date": "2026-11-16",
-    "returns": "2026-11-16"
-   },
-   {
-    "id": "2991230",
-    "name": "Fred VanVleet",
+    "id": "4684740",
+    "name": "Amen Thompson",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Knee",
+    "detail": "Knee Soreness",
     "date": "2026-11-16",
     "returns": "2026-11-16"
    },
@@ -330,7 +323,25 @@
     "pos": "C",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-14",
+    "date": "2026-11-16",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "2991235",
+    "name": "Steven Adams",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Calf",
+    "date": "2026-11-16",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "5105553",
+    "name": "Julian Phillips",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Wrist",
+    "date": "2026-11-16",
     "returns": "2026-11-16"
    },
    {
@@ -432,22 +443,31 @@
   ],
   "MEM": [
    {
+    "id": "4432810",
+    "name": "Isaiah Stewart",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Illness",
+    "date": "2026-11-16",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "4431785",
+    "name": "Scotty Pippen Jr.",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Back Soreness",
+    "date": "2026-11-16",
+    "returns": "2026-11-25"
+   },
+   {
     "id": "5105550",
     "name": "GG Jackson",
     "pos": "F",
     "status": "Out",
-    "detail": "Foot",
-    "date": "2026-11-15",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4432810",
-    "name": "Isaiah Stewart",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-15",
-    "returns": "2026-11-16"
+    "detail": "Foot Surgery",
+    "date": "2026-11-16",
+    "returns": "2027-01-18"
    },
    {
     "id": "4065733",
@@ -477,15 +497,6 @@
     "returns": "2026-11-16"
    },
    {
-    "id": "4431785",
-    "name": "Scotty Pippen Jr.",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Back Soreness",
-    "date": "2026-11-10",
-    "returns": "2026-11-21"
-   },
-   {
     "id": "5105462",
     "name": "Richie Saunders",
     "pos": "G",
@@ -497,12 +508,21 @@
   ],
   "MIA": [
    {
+    "id": "4997528",
+    "name": "Nikola Jovic",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-16",
+    "returns": "2026-11-16"
+   },
+   {
     "id": "4601025",
     "name": "Pelle Larsson",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-15",
+    "date": "2026-11-16",
     "returns": "2026-11-16"
    }
   ],
@@ -694,8 +714,17 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Foot",
-    "date": "2026-11-15",
+    "date": "2026-11-16",
     "returns": "2026-11-16"
+   },
+   {
+    "id": "1966",
+    "name": "LeBron James",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-11-16",
+    "returns": "2026-11-18"
    },
    {
     "id": "4870562",
@@ -727,13 +756,13 @@
   ],
   "PHX": [
    {
-    "id": "4431695",
-    "name": "Drew Timme",
+    "id": "4888725",
+    "name": "Ryan Dunn",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "The Suns claimed Timme off waivers Monday  per Michael Scotto of HoopsHype.com.",
-    "date": "2026-11-13",
-    "returns": ""
+    "detail": "Thumb Soreness",
+    "date": "2026-11-16",
+    "returns": "2026-11-16"
    },
    {
     "id": "4701232",
@@ -832,6 +861,15 @@
   ],
   "SAS": [
    {
+    "id": "6440",
+    "name": "Tobias Harris",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Calf Strain",
+    "date": "2026-11-16",
+    "returns": "2026-12-03"
+   },
+   {
     "id": "4066259",
     "name": "De'Aaron Fox",
     "pos": "G",
@@ -839,15 +877,6 @@
     "detail": "Hip",
     "date": "2026-11-16",
     "returns": "2026-11-17"
-   },
-   {
-    "id": "6440",
-    "name": "Tobias Harris",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Calf Strain",
-    "date": "2026-11-10",
-    "returns": "2026-11-19"
    },
    {
     "id": "5101845",
@@ -941,7 +970,7 @@
     "name": "Tre Johnson",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Back",
+    "detail": "Back Soreness",
     "date": "2026-11-16",
     "returns": "2026-11-16"
    },
@@ -951,8 +980,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Hip Pinched Nerve",
-    "date": "2026-11-08",
-    "returns": "2026-11-16"
+    "date": "2026-11-16",
+    "returns": "2026-11-24"
    },
    {
     "id": "4432187",

@@ -1,5 +1,5 @@
 {
- "date": "2026-11-16",
+ "date": "2026-11-17",
  "teams": {
   "ATL": [
    {
@@ -53,9 +53,9 @@
     "id": "4397424",
     "name": "Neemias Queta",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-11-16",
+    "date": "2026-11-17",
     "returns": "2026-11-18"
    }
   ],
@@ -85,9 +85,9 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Undisclosed",
+    "detail": "Head",
     "date": "2026-11-17",
-    "returns": "2026-11-16"
+    "returns": "2026-11-18"
    },
    {
     "id": "4431687",
@@ -119,21 +119,21 @@
   ],
   "CLE": [
    {
+    "id": "4683747",
+    "name": "Jaylon Tyson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
     "id": "4576087",
     "name": "Peyton Watson",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Head Not Specified",
     "date": "2026-11-17",
-    "returns": "2026-11-16"
-   },
-   {
-    "id": "4683747",
-    "name": "Jaylon Tyson",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Ankle",
-    "date": "2026-11-16",
     "returns": "2026-11-18"
    },
    {
@@ -233,6 +233,15 @@
   ],
   "DET": [
    {
+    "id": "3157465",
+    "name": "Duncan Robinson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Quadriceps Strain",
+    "date": "2026-11-17",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "2990962",
     "name": "Taurean Prince",
     "pos": "F",
@@ -258,15 +267,6 @@
     "detail": "Hip Bruise",
     "date": "2026-11-16",
     "returns": "2026-11-17"
-   },
-   {
-    "id": "3157465",
-    "name": "Duncan Robinson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Quadriceps Strain",
-    "date": "2026-11-16",
-    "returns": "2026-11-18"
    },
    {
     "id": "4433621",
@@ -330,9 +330,27 @@
     "id": "4684740",
     "name": "Amen Thompson",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Soreness",
-    "date": "2026-11-16",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "2990992",
+    "name": "Marcus Smart",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Suspension",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "2991235",
+    "name": "Steven Adams",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Calf",
+    "date": "2026-11-17",
     "returns": "2026-11-18"
    },
    {
@@ -345,31 +363,13 @@
     "returns": "2026-11-18"
    },
    {
-    "id": "2991235",
-    "name": "Steven Adams",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Calf",
-    "date": "2026-11-16",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "5105553",
     "name": "Julian Phillips",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Wrist",
     "date": "2026-11-16",
-    "returns": "2026-11-16"
-   },
-   {
-    "id": "2990992",
-    "name": "Marcus Smart",
-    "pos": "G",
-    "status": "Suspension",
-    "detail": "Suspension",
-    "date": "2026-11-12",
-    "returns": "2026-11-18"
+    "returns": "2026-11-17"
    }
   ],
   "IND": [
@@ -473,9 +473,18 @@
     "id": "4432810",
     "name": "Isaiah Stewart",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-16",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "4065733",
+    "name": "Ty Jerome",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hip Soreness",
+    "date": "2026-11-17",
     "returns": "2026-11-18"
    },
    {
@@ -497,15 +506,6 @@
     "returns": "2027-01-18"
    },
    {
-    "id": "4065733",
-    "name": "Ty Jerome",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hip Soreness",
-    "date": "2026-11-15",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "5105462",
     "name": "Richie Saunders",
     "pos": "G",
@@ -517,21 +517,21 @@
   ],
   "MIA": [
    {
+    "id": "4997528",
+    "name": "Nikola Jovic",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
     "id": "4066261",
     "name": "Bam Adebayo",
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Hip",
     "date": "2026-11-17",
-    "returns": "2026-11-16"
-   },
-   {
-    "id": "4997528",
-    "name": "Nikola Jovic",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Illness",
-    "date": "2026-11-16",
     "returns": "2026-11-18"
    },
    {
@@ -566,6 +566,15 @@
   ],
   "MIN": [
    {
+    "id": "4433247",
+    "name": "Jonathan Kuminga",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Shoulder",
+    "date": "2026-11-17",
+    "returns": "2026-11-17"
+   },
+   {
     "id": "4432247",
     "name": "Jaylen Clark",
     "pos": "G",
@@ -595,20 +604,20 @@
   ],
   "NOP": [
    {
+    "id": "4683634",
+    "name": "Bennedict Mathurin",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Foot Plantar Fasciitis",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
     "id": "4576086",
     "name": "Bryce McGowens",
     "pos": "G",
     "status": "Out",
     "detail": "Elbow Infection",
-    "date": "2026-11-15",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4683634",
-    "name": "Bennedict Mathurin",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Foot Plantar Fasciitis",
     "date": "2026-11-15",
     "returns": "2026-11-18"
    },
@@ -695,7 +704,7 @@
     "status": "Out",
     "detail": "Knee Not Specified",
     "date": "2026-11-15",
-    "returns": "2026-11-18"
+    "returns": "2026-11-22"
    },
    {
     "id": "5214637",
@@ -727,20 +736,29 @@
   ],
   "PHI": [
    {
-    "id": "4870562",
-    "name": "Dominick Barlow",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back Fracture",
-    "date": "2026-11-16",
+    "id": "3917376",
+    "name": "Jaylen Brown",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-11-17",
     "returns": "2026-11-18"
    },
    {
     "id": "1966",
     "name": "LeBron James",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "4870562",
+    "name": "Dominick Barlow",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back Fracture",
     "date": "2026-11-16",
     "returns": "2026-11-18"
    },
@@ -751,7 +769,7 @@
     "status": "Out",
     "detail": "Back Sprain",
     "date": "2026-11-12",
-    "returns": "2026-11-18"
+    "returns": "2026-11-21"
    },
    {
     "id": "4871141",
@@ -896,7 +914,7 @@
     "status": "Day-To-Day",
     "detail": "Illness",
     "date": "2026-11-13",
-    "returns": "2026-11-16"
+    "returns": "2026-11-20"
    },
    {
     "id": "6450",
@@ -947,6 +965,15 @@
    }
   ],
   "WAS": [
+   {
+    "id": "5105841",
+    "name": "Felix Okpara",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back Strain",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
    {
     "id": "4997537",
     "name": "Tristan Vukcevic",

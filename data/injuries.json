@@ -3,6 +3,24 @@
  "teams": {
   "ATL": [
    {
+    "id": "4873201",
+    "name": "Asa Newell",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Toe",
+    "date": "2026-11-17",
+    "returns": "2027-03-17"
+   },
+   {
+    "id": "2490149",
+    "name": "CJ McCollum",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Calf Strain",
+    "date": "2026-11-17",
+    "returns": "2026-12-19"
+   },
+   {
     "id": "5149077",
     "name": "Kingston Flemings",
     "pos": "G",
@@ -28,15 +46,6 @@
     "detail": "Foot Fracture",
     "date": "2026-11-13",
     "returns": "2026-12-12"
-   },
-   {
-    "id": "4873201",
-    "name": "Asa Newell",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Toe",
-    "date": "2026-11-12",
-    "returns": "2026-11-20"
    },
    {
     "id": "5105571",
@@ -81,20 +90,11 @@
   ],
   "CHI": [
    {
-    "id": "4397189",
-    "name": "Jalen Smith",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Head",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "4431687",
     "name": "Patrick Williams",
     "pos": "F",
     "status": "Day-To-Day",
-    "detail": "Finger",
+    "detail": "Finger Dislocated",
     "date": "2026-11-17",
     "returns": "2026-11-18"
    },
@@ -104,8 +104,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Back",
-    "date": "2026-11-15",
-    "returns": "2026-11-18"
+    "date": "2026-11-17",
+    "returns": "2026-11-25"
    },
    {
     "id": "5095151",
@@ -327,39 +327,21 @@
   ],
   "HOU": [
    {
+    "id": "3102529",
+    "name": "Clint Capela",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-17",
+    "returns": "2026-11-20"
+   },
+   {
     "id": "4684740",
     "name": "Amen Thompson",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Knee Soreness",
     "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "2990992",
-    "name": "Marcus Smart",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Suspension",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "2991235",
-    "name": "Steven Adams",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Calf",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "3102529",
-    "name": "Clint Capela",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-16",
     "returns": "2026-11-18"
    },
    {
@@ -533,15 +515,6 @@
     "detail": "Hip",
     "date": "2026-11-17",
     "returns": "2026-11-18"
-   },
-   {
-    "id": "4601025",
-    "name": "Pelle Larsson",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Illness",
-    "date": "2026-11-16",
-    "returns": "2026-11-18"
    }
   ],
   "MIL": [
@@ -616,10 +589,10 @@
     "id": "4683634",
     "name": "Bennedict Mathurin",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Foot Plantar Fasciitis",
     "date": "2026-11-17",
-    "returns": "2026-11-18"
+    "returns": "2026-11-20"
    },
    {
     "id": "4576086",
@@ -627,17 +600,8 @@
     "pos": "G",
     "status": "Out",
     "detail": "Elbow Infection",
-    "date": "2026-11-15",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4397688",
-    "name": "Trey Murphy III",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Tendinitis",
-    "date": "2026-11-15",
-    "returns": "2026-11-18"
+    "date": "2026-11-17",
+    "returns": "2026-11-20"
    },
    {
     "id": "4431675",
@@ -645,8 +609,17 @@
     "pos": "F",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-15",
-    "returns": "2026-11-18"
+    "date": "2026-11-17",
+    "returns": "2026-11-20"
+   },
+   {
+    "id": "4397688",
+    "name": "Trey Murphy III",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Tendinitis",
+    "date": "2026-11-17",
+    "returns": "2026-11-20"
    },
    {
     "id": "3907497",
@@ -707,6 +680,15 @@
   ],
   "ORL": [
    {
+    "id": "5107251",
+    "name": "Izaiyah Nelson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle Surgery",
+    "date": "2026-11-17",
+    "returns": "2026-11-28"
+   },
+   {
     "id": "4065654",
     "name": "Jonathan Isaac",
     "pos": "F",
@@ -732,15 +714,6 @@
     "detail": "Ankle Sprain",
     "date": "2026-10-24",
     "returns": "2026-11-22"
-   },
-   {
-    "id": "5107251",
-    "name": "Izaiyah Nelson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle Surgery",
-    "date": "2026-09-28",
-    "returns": "2026-11-18"
    }
   ],
   "PHI": [

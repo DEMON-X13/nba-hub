@@ -5209,15 +5209,15 @@ date,team,player_id,name,status
 2026-11-16,WAS,4432187,Reece Beekman,Out
 2026-11-16,WAS,4432907,Justin Champagnie,Out
 2026-11-16,WAS,4606840,Jamir Watkins,Out
+2026-11-17,ATL,4873201,Asa Newell,Out
+2026-11-17,ATL,2490149,CJ McCollum,Out
 2026-11-17,ATL,5149077,Kingston Flemings,Day-To-Day
 2026-11-17,ATL,3146557,Jock Landale,Day-To-Day
 2026-11-17,ATL,4712863,Mouhamed Gueye,Out
-2026-11-17,ATL,4873201,Asa Newell,Out
 2026-11-17,ATL,5105571,Henri Veesaar,Out
 2026-11-17,BOS,4397424,Neemias Queta,Day-To-Day
 2026-11-17,CHA,5061575,Kon Knueppel,Out
 2026-11-17,CHA,3032979,Dennis Schroder,Out
-2026-11-17,CHI,4397189,Jalen Smith,Day-To-Day
 2026-11-17,CHI,4431687,Patrick Williams,Day-To-Day
 2026-11-17,CHI,5105555,Tobe Awaka,Out
 2026-11-17,CHI,5095151,Caleb Wilson,Out
@@ -5243,10 +5243,8 @@ date,team,player_id,name,status
 2026-11-17,GSW,3102531,Kristaps Porzingis,Out
 2026-11-17,GSW,4432171,Moses Moody,Out
 2026-11-17,GSW,6430,Jimmy Butler III,Out
-2026-11-17,HOU,4684740,Amen Thompson,Day-To-Day
-2026-11-17,HOU,2990992,Marcus Smart,Day-To-Day
-2026-11-17,HOU,2991235,Steven Adams,Day-To-Day
 2026-11-17,HOU,3102529,Clint Capela,Out
+2026-11-17,HOU,4684740,Amen Thompson,Day-To-Day
 2026-11-17,HOU,5105553,Julian Phillips,Day-To-Day
 2026-11-17,IND,4396993,Tyrese Haliburton,Out
 2026-11-17,IND,4395712,Andrew Nembhard,Day-To-Day
@@ -5265,7 +5263,6 @@ date,team,player_id,name,status
 2026-11-17,MEM,5105462,Richie Saunders,Out
 2026-11-17,MIA,4997528,Nikola Jovic,Day-To-Day
 2026-11-17,MIA,4066261,Bam Adebayo,Day-To-Day
-2026-11-17,MIA,4601025,Pelle Larsson,Out
 2026-11-17,MIL,4591725,Ryan Rollins,Day-To-Day
 2026-11-17,MIL,4997526,Ousmane Dieng,Out
 2026-11-17,MIN,4592979,Zyon Pullin,Out
@@ -5273,20 +5270,20 @@ date,team,player_id,name,status
 2026-11-17,MIN,4432247,Jaylen Clark,Out
 2026-11-17,MIN,4594268,Anthony Edwards,Out
 2026-11-17,MIN,3934673,Donte DiVincenzo,Out
-2026-11-17,NOP,4683634,Bennedict Mathurin,Day-To-Day
+2026-11-17,NOP,4683634,Bennedict Mathurin,Out
 2026-11-17,NOP,4576086,Bryce McGowens,Out
-2026-11-17,NOP,4397688,Trey Murphy III,Out
 2026-11-17,NOP,4431675,Trendon Watford,Out
+2026-11-17,NOP,4397688,Trey Murphy III,Out
 2026-11-17,NOP,3907497,Dejounte Murray,Out
 2026-11-17,OKC,4432823,Jaylin Williams,Out
 2026-11-17,OKC,5061603,Thomas Sorber,Out
 2026-11-17,OKC,4683692,Cason Wallace,Out
 2026-11-17,OKC,4433255,Chet Holmgren,Out
 2026-11-17,OKC,4593803,Jalen Williams,Out
+2026-11-17,ORL,5107251,Izaiyah Nelson,Out
 2026-11-17,ORL,4065654,Jonathan Isaac,Out
 2026-11-17,ORL,5214637,Noah Penda,Out
 2026-11-17,ORL,4432573,Paolo Banchero,Out
-2026-11-17,ORL,5107251,Izaiyah Nelson,Out
 2026-11-17,PHI,3917376,Jaylen Brown,Day-To-Day
 2026-11-17,PHI,1966,LeBron James,Day-To-Day
 2026-11-17,PHI,4870562,Dominick Barlow,Out

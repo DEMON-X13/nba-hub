@@ -91,7 +91,7 @@
     "name": "CJ McCollum",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4873201",
@@ -610,7 +610,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4848625",
@@ -1259,7 +1259,7 @@
     "name": "Steven Adams",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3037789",
@@ -1329,7 +1329,7 @@
     "name": "Marcus Smart",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432639",
@@ -1934,7 +1934,7 @@
     "name": "Myron Gardner",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4700818",
@@ -1969,7 +1969,7 @@
     "name": "Pelle Larsson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278053",

@@ -205,7 +205,7 @@
     "name": "Neemias Queta",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4351852",
@@ -789,7 +789,7 @@
     "name": "Walter Clayton Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5279129",
@@ -824,7 +824,7 @@
     "name": "Kyrie Irving",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4873153",
@@ -838,7 +838,7 @@
     "name": "Tobi Lawal",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683688",
@@ -1166,7 +1166,7 @@
     "name": "Al Horford",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4703396",
@@ -1415,7 +1415,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2580365",
@@ -2104,7 +2104,7 @@
     "name": "Ryan Rollins",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397114",
@@ -2830,7 +2830,7 @@
     "name": "LeBron James",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433144",
@@ -3379,7 +3379,7 @@
     "name": "Scottie Barnes",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4395625",

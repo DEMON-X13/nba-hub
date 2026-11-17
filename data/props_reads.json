@@ -286,5 +286,6 @@
  "2027_20261115_LAL_PHX": {"at":"2026-11-16T17:04Z","status":"ok","lines":99,"tries":1},
  "2027_20261115_NYK_TOR": {"at":"2026-11-16T17:04Z","status":"ok","lines":92,"tries":1},
  "2027_20261115_OKC_SAC": {"at":"2026-11-16T17:04Z","status":"ok","lines":98,"tries":1},
- "2027_20261115_SAS_UTA": {"at":"2026-11-16T17:04Z","status":"ok","lines":79,"tries":1}
+ "2027_20261115_SAS_UTA": {"at":"2026-11-16T17:04Z","status":"ok","lines":79,"tries":1},
+ "2027_20261116_MEM_WAS": {"at":"2026-11-17T02:29Z","status":"ok","lines":111,"tries":1}
 }

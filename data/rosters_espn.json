@@ -610,7 +610,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4848625",
@@ -624,7 +624,7 @@
     "name": "Patrick Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5095151",
@@ -752,7 +752,7 @@
     "name": "Peyton Watson",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "DAL": [
@@ -1243,7 +1243,7 @@
     "name": "Gui Santos",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397040",
@@ -1685,7 +1685,7 @@
     "name": "Walker Kessler",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4592691",
@@ -1899,7 +1899,7 @@
     "name": "Bam Adebayo",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3032977",
@@ -2916,7 +2916,7 @@
     "name": "Ryan Dunn",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5105977",

@@ -1045,7 +1045,7 @@
     "name": "Ronald Holland II",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4066372",
@@ -1094,7 +1094,7 @@
     "name": "Taurean Prince",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278562",
@@ -1785,7 +1785,7 @@
     "name": "Zach Edey",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2991070",
@@ -1848,7 +1848,7 @@
     "name": "Quinten Post",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4595400",
@@ -2809,7 +2809,7 @@
     "name": "Joel Embiid",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3904625",

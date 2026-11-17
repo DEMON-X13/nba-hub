@@ -5209,8 +5209,8 @@ date,team,player_id,name,status
 2026-11-16,WAS,4432187,Reece Beekman,Out
 2026-11-16,WAS,4432907,Justin Champagnie,Out
 2026-11-16,WAS,4606840,Jamir Watkins,Out
-2026-11-17,ATL,3146557,Jock Landale,Day-To-Day
 2026-11-17,ATL,5149077,Kingston Flemings,Day-To-Day
+2026-11-17,ATL,3146557,Jock Landale,Day-To-Day
 2026-11-17,ATL,4712863,Mouhamed Gueye,Out
 2026-11-17,ATL,4873201,Asa Newell,Out
 2026-11-17,ATL,5105571,Henri Veesaar,Out
@@ -5233,10 +5233,10 @@ date,team,player_id,name,status
 2026-11-17,DAL,5148538,Tarik Biberovic,Out
 2026-11-17,DAL,5279129,Sergio de Larrea,Out
 2026-11-17,DEN,4432181,Julian Strawther,Out
+2026-11-17,DET,4395702,Isaiah Joe,Out
 2026-11-17,DET,3157465,Duncan Robinson,Out
 2026-11-17,DET,2990962,Taurean Prince,Out
 2026-11-17,DET,4683771,Ronald Holland II,Out
-2026-11-17,DET,4395702,Isaiah Joe,Out
 2026-11-17,DET,4433621,Jalen Duren,Out
 2026-11-17,GSW,3975,Stephen Curry,Out
 2026-11-17,GSW,4397040,Brandon Williams,Out
@@ -5248,8 +5248,8 @@ date,team,player_id,name,status
 2026-11-17,HOU,2991235,Steven Adams,Day-To-Day
 2026-11-17,HOU,3102529,Clint Capela,Out
 2026-11-17,HOU,5105553,Julian Phillips,Day-To-Day
-2026-11-17,IND,4395712,Andrew Nembhard,Day-To-Day
 2026-11-17,IND,4396993,Tyrese Haliburton,Out
+2026-11-17,IND,4395712,Andrew Nembhard,Day-To-Day
 2026-11-17,IND,5157066,Johnny Furphy,Out
 2026-11-17,IND,4433076,Ben Sheppard,Out
 2026-11-17,LAC,5108024,Yanic Konan Niederhauser,Out
@@ -5268,7 +5268,8 @@ date,team,player_id,name,status
 2026-11-17,MIA,4601025,Pelle Larsson,Out
 2026-11-17,MIL,4591725,Ryan Rollins,Day-To-Day
 2026-11-17,MIL,4997526,Ousmane Dieng,Out
-2026-11-17,MIN,4433247,Jonathan Kuminga,Day-To-Day
+2026-11-17,MIN,4592979,Zyon Pullin,Out
+2026-11-17,MIN,4433247,Jonathan Kuminga,Out
 2026-11-17,MIN,4432247,Jaylen Clark,Out
 2026-11-17,MIN,4594268,Anthony Edwards,Out
 2026-11-17,MIN,3934673,Donte DiVincenzo,Out
@@ -5292,6 +5293,7 @@ date,team,player_id,name,status
 2026-11-17,PHI,5105637,Adem Bona,Out
 2026-11-17,PHI,4871141,Ariel Hukporti,Out
 2026-11-17,PHX,4701232,Mark Williams,Out
+2026-11-17,POR,4683021,Deni Avdija,Day-To-Day
 2026-11-17,POR,4706557,Chris Youngblood,Out
 2026-11-17,POR,4578893,Vit Krejci,Out
 2026-11-17,POR,4279888,Ja Morant,Out
@@ -5303,6 +5305,7 @@ date,team,player_id,name,status
 2026-11-17,SAC,3907387,Ben Simmons,Out
 2026-11-17,SAS,6440,Tobias Harris,Out
 2026-11-17,SAS,5101845,Jayden Quaintance,Out
+2026-11-17,TOR,4433134,Scottie Barnes,Day-To-Day
 2026-11-17,TOR,4432586,Nate Bittle,Out
 2026-11-17,TOR,4411057,Kevin McCullar Jr.,Day-To-Day
 2026-11-17,TOR,6450,Kawhi Leonard,Out

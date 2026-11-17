@@ -2239,7 +2239,7 @@
     "name": "Zyon Pullin",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432847",
@@ -3009,7 +3009,7 @@
     "name": "Deni Avdija",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4431736",
@@ -3379,7 +3379,7 @@
     "name": "Scottie Barnes",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395625",

@@ -3,20 +3,20 @@
  "teams": {
   "ATL": [
    {
-    "id": "3146557",
-    "name": "Jock Landale",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Hip Inflammation",
-    "date": "2026-11-16",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "5149077",
     "name": "Kingston Flemings",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Back Strain",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "3146557",
+    "name": "Jock Landale",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip Inflammation",
     "date": "2026-11-16",
     "returns": "2026-11-18"
    },
@@ -171,7 +171,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-16",
+    "date": "2026-11-17",
     "returns": "2026-11-18"
    },
    {
@@ -180,7 +180,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Sprain",
-    "date": "2026-11-16",
+    "date": "2026-11-17",
     "returns": "2026-11-18"
    },
    {
@@ -233,6 +233,15 @@
   ],
   "DET": [
    {
+    "id": "4395702",
+    "name": "Isaiah Joe",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hip Bruise",
+    "date": "2026-11-17",
+    "returns": "2026-11-18"
+   },
+   {
     "id": "3157465",
     "name": "Duncan Robinson",
     "pos": "F",
@@ -258,15 +267,6 @@
     "detail": "Knee Bruise",
     "date": "2026-11-16",
     "returns": "2026-11-18"
-   },
-   {
-    "id": "4395702",
-    "name": "Isaiah Joe",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hip Bruise",
-    "date": "2026-11-16",
-    "returns": "2026-11-17"
    },
    {
     "id": "4433621",
@@ -374,6 +374,15 @@
   ],
   "IND": [
    {
+    "id": "4396993",
+    "name": "Tyrese Haliburton",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-17",
+    "returns": "2026-11-28"
+   },
+   {
     "id": "4395712",
     "name": "Andrew Nembhard",
     "pos": "G",
@@ -381,15 +390,6 @@
     "detail": "Hip Soreness",
     "date": "2026-11-15",
     "returns": "2026-11-18"
-   },
-   {
-    "id": "4396993",
-    "name": "Tyrese Haliburton",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-11",
-    "returns": "2026-11-22"
    },
    {
     "id": "5157066",
@@ -566,13 +566,22 @@
   ],
   "MIN": [
    {
+    "id": "4592979",
+    "name": "Zyon Pullin",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Quadriceps Bruise",
+    "date": "2026-11-17",
+    "returns": "2026-11-19"
+   },
+   {
     "id": "4433247",
     "name": "Jonathan Kuminga",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Shoulder",
     "date": "2026-11-17",
-    "returns": "2026-11-17"
+    "returns": "2026-11-19"
    },
    {
     "id": "4432247",
@@ -794,13 +803,22 @@
   ],
   "POR": [
    {
+    "id": "4683021",
+    "name": "Deni Avdija",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-11-17",
+    "returns": "2026-11-17"
+   },
+   {
     "id": "4706557",
     "name": "Chris Youngblood",
     "pos": "G",
     "status": "Out",
-    "detail": "Foot Bruise",
-    "date": "2026-11-15",
-    "returns": "2026-11-17"
+    "detail": "Heel Bruise",
+    "date": "2026-11-17",
+    "returns": "2026-11-19"
    },
    {
     "id": "4578893",
@@ -898,6 +916,15 @@
    }
   ],
   "TOR": [
+   {
+    "id": "4433134",
+    "name": "Scottie Barnes",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-17",
+    "returns": "2026-11-17"
+   },
    {
     "id": "4432586",
     "name": "Nate Bittle",

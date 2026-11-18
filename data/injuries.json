@@ -469,19 +469,10 @@
     "id": "4066457",
     "name": "Austin Reaves",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Heel Bruise",
     "date": "2026-11-18",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4433136",
-    "name": "Walker Kessler",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Lower Leg Soreness",
-    "date": "2026-11-18",
-    "returns": "2026-11-18"
+    "returns": "2026-11-20"
    }
   ],
   "MEM": [
@@ -857,24 +848,6 @@
     "returns": "2026-11-25"
    },
    {
-    "id": "4065732",
-    "name": "De'Andre Hunter",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hip Soreness",
-    "date": "2026-11-18",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4431679",
-    "name": "Precious Achiuwa",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Soreness",
-    "date": "2026-11-18",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "3907387",
     "name": "Ben Simmons",
     "pos": "G",
@@ -949,15 +922,6 @@
     "detail": "Foot Fracture",
     "date": "2026-11-14",
     "returns": "2026-11-23"
-   },
-   {
-    "id": "4411057",
-    "name": "Kevin McCullar Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-13",
-    "returns": "2026-11-20"
    }
   ],
   "UTA": [

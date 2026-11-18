@@ -1699,7 +1699,7 @@
     "name": "Walker Kessler",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4592691",
@@ -3144,7 +3144,7 @@
     "name": "Precious Achiuwa",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5142620",
@@ -3172,7 +3172,7 @@
     "name": "De'Andre Hunter",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4917149",
@@ -3456,7 +3456,7 @@
     "name": "Kevin McCullar Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5093267",

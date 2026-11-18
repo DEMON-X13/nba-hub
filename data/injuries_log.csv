@@ -5363,8 +5363,7 @@ date,team,player_id,name,status
 2026-11-18,LAC,3913176,Brandon Ingram,Out
 2026-11-18,LAC,6580,Bradley Beal,Out
 2026-11-18,LAC,4396818,Jordan Miller,Out
-2026-11-18,LAL,4066457,Austin Reaves,Day-To-Day
-2026-11-18,LAL,4433136,Walker Kessler,Day-To-Day
+2026-11-18,LAL,4066457,Austin Reaves,Out
 2026-11-18,MEM,5105550,GG Jackson,Out
 2026-11-18,MEM,4432810,Isaiah Stewart,Out
 2026-11-18,MEM,4065733,Ty Jerome,Out
@@ -5404,8 +5403,6 @@ date,team,player_id,name,status
 2026-11-18,POR,4279888,Ja Morant,Out
 2026-11-18,POR,4914336,Shaedon Sharpe,Out
 2026-11-18,SAC,4898371,Maxime Raynaud,Out
-2026-11-18,SAC,4065732,De'Andre Hunter,Day-To-Day
-2026-11-18,SAC,4431679,Precious Achiuwa,Day-To-Day
 2026-11-18,SAC,3907387,Ben Simmons,Out
 2026-11-18,SAS,5037871,Dylan Harper,Day-To-Day
 2026-11-18,SAS,6440,Tobias Harris,Out
@@ -5414,7 +5411,6 @@ date,team,player_id,name,status
 2026-11-18,TOR,4433134,Scottie Barnes,Out
 2026-11-18,TOR,6450,Kawhi Leonard,Out
 2026-11-18,TOR,4432586,Nate Bittle,Out
-2026-11-18,TOR,4411057,Kevin McCullar Jr.,Day-To-Day
 2026-11-18,UTA,4397077,Jaxson Hayes,Day-To-Day
 2026-11-18,UTA,4066336,Lauri Markkanen,Out
 2026-11-18,UTA,3102530,Jusuf Nurkic,Out

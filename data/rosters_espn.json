@@ -1076,6 +1076,13 @@
     "injured": false
    },
    {
+    "id": "4700852",
+    "name": "Chaz Lanier",
+    "pos": "G",
+    "status": "active",
+    "injured": false
+   },
+   {
     "id": "5258459",
     "name": "Ebuka Okorie",
     "pos": "G",
@@ -3172,7 +3179,7 @@
     "name": "Zach LaVine",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107897",

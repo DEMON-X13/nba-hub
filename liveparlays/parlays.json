@@ -1,13 +1,17 @@
 {
  "how": "X's placed parlays: what X Parlays shows, on every device, read only. Claude keeps this file from the slips the owner sends in chat; the page only reads it, when the X Parlays tab is first opened in a visit and on Refresh now, so a change here is what every device sees the next time it looks. A parlay is id (any name not used before), date (optional: the Eastern date of its first game, YYYY-MM-DD; without it the page takes its first game's), stake, price (the American odds it was placed at), payout (what it pays, stake included), note (optional: 'same game', a boost) and legs. games below lists each game once, by the site's game id as data/games.csv writes it (season_YYYYMMDD_AWAY_HOME: the season is the year it ends and the date is Eastern, so Brooklyn at Cleveland on 24 October 2026 is 2027_20261024_BKN_CLE), and a leg points at one by its place in that list, from 0. A leg needs: game (that place), player (as ESPN spells him), pid (his ESPN athlete id: optional, but the page finds him by it first and by his name only without it), team (his club's code: ATL BOS BKN CHA CHI CLE DAL DEN DET GSW HOU IND LAC LAL MEM MIA MIL MIN NOP NYK OKC ORL PHI PHX POR SAC SAS TOR UTA WAS), stat, line, side (over or under) and main (true for a book main line like 24.5, false for an 'N+' milestone, written with line N). Stats: pts, reb, ast, tpm (threes made), stl, blk, pra (points + rebounds + assists), pr (points + rebounds), pa (points + assists), ar (assists + rebounds), sb (steals + blocks), dd and td (a double-double or a triple-double, a Yes bet: line 1, side over, main false), and ml or spread for a whole-game bet (ats is read as spread), total for the game's points. A leg on no game, with a stat not in that list or with no line is dropped by the page, and a parlay left with no leg is not drawn, so check a new parlay on the page once it is in. A whole-game bet takes team set to the side you are on and player set to whatever it should be called ('Celtics', 'Celtics at Pistons'), line 0 for ml and the spread from that team's side for spread (-4.5, +3.5); a total takes its line, side over or under, and either club as team. A line the book moved before X placed the bet is written as the line X took. A parlay X has cleared (settled, and no longer wanted on the page) stays here as history with cleared true and is not drawn. A finished one clears itself: the job marks it cleared (cleared_by auto, cleared_on the Eastern date) two Eastern days after its last game, once every game is final in data/games.csv or, for a game games.csv no longer lists (ESPN drops a postponed one), two days after its date, when the page grades it void (tools/autoclear.js); so it shows in full on its game day and the next day. updated is when this file last changed what X Parlays shows. Write the file as JSON.stringify(doc, null, 1) writes it (one-space indent), so the job's edits to it stay small.",
- "updated": "2026-11-16T23:32:08.277Z",
+ "updated": "2026-11-18T00:07:26.483Z",
  "games": [
   "2027_20261116_ORL_BOS",
   "2027_20261116_PHI_BKN",
   "2027_20261116_GSW_NOP",
   "2027_20261116_PHX_DEN",
   "2027_20261116_CHI_CLE",
-  "2027_20261116_MEM_WAS"
+  "2027_20261116_MEM_WAS",
+  "2027_20261117_DET_SAS",
+  "2027_20261117_POR_MIN",
+  "2027_20261117_UTA_LAC",
+  "2027_20261117_NYK_TOR"
  ],
  "parlays": [
   {
@@ -66,6 +70,69 @@
      "game": 5,
      "player": "Grizzlies",
      "team": "MEM",
+     "stat": "ml",
+     "line": 0,
+     "side": "over",
+     "main": false
+    }
+   ]
+  },
+  {
+   "id": "dk-20261117-2ml",
+   "date": "2026-11-17",
+   "stake": 1,
+   "price": 113,
+   "payout": 2.13,
+   "legs": [
+    {
+     "game": 6,
+     "player": "Spurs",
+     "team": "SAS",
+     "stat": "ml",
+     "line": 0,
+     "side": "over",
+     "main": false
+    },
+    {
+     "game": 7,
+     "player": "Timberwolves",
+     "team": "MIN",
+     "stat": "ml",
+     "line": 0,
+     "side": "over",
+     "main": false
+    }
+   ]
+  },
+  {
+   "id": "dk-20261117-3ml",
+   "date": "2026-11-17",
+   "stake": 1,
+   "price": 326,
+   "payout": 4.26,
+   "legs": [
+    {
+     "game": 8,
+     "player": "Clippers",
+     "team": "LAC",
+     "stat": "ml",
+     "line": 0,
+     "side": "over",
+     "main": false
+    },
+    {
+     "game": 9,
+     "player": "Knicks",
+     "team": "NYK",
+     "stat": "ml",
+     "line": 0,
+     "side": "over",
+     "main": false
+    },
+    {
+     "game": 7,
+     "player": "Timberwolves",
+     "team": "MIN",
      "stat": "ml",
      "line": 0,
      "side": "over",

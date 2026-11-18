@@ -117,6 +117,24 @@
   ],
   "CLE": [
    {
+    "id": "4576087",
+    "name": "Peyton Watson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Back Bruise",
+    "date": "2026-11-18",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "4683747",
+    "name": "Jaylon Tyson",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-18",
+    "returns": "2026-11-20"
+   },
+   {
     "id": "5106268",
     "name": "Nae'Qwan Tomlin",
     "pos": "F",
@@ -126,29 +144,11 @@
     "returns": "2026-11-29"
    },
    {
-    "id": "4683747",
-    "name": "Jaylon Tyson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "4066757",
     "name": "Sam Merrill",
     "pos": "G",
     "status": "Out",
     "detail": "Elbow",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4576087",
-    "name": "Peyton Watson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back Bruise",
     "date": "2026-11-17",
     "returns": "2026-11-18"
    },
@@ -240,20 +240,11 @@
   ],
   "DET": [
    {
-    "id": "2990962",
-    "name": "Taurean Prince",
-    "pos": "F",
+    "id": "4432166",
+    "name": "Cade Cunningham",
+    "pos": "G",
     "status": "Day-To-Day",
     "detail": "Knee Soreness",
-    "date": "2026-11-18",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4683771",
-    "name": "Ronald Holland II",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Knee Bruise",
     "date": "2026-11-18",
     "returns": "2026-11-18"
    },
@@ -263,8 +254,26 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip Bruise",
-    "date": "2026-11-17",
+    "date": "2026-11-18",
     "returns": "2026-11-18"
+   },
+   {
+    "id": "2990962",
+    "name": "Taurean Prince",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Soreness",
+    "date": "2026-11-18",
+    "returns": "2026-11-20"
+   },
+   {
+    "id": "4683771",
+    "name": "Ronald Holland II",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Bruise",
+    "date": "2026-11-18",
+    "returns": "2026-11-20"
    },
    {
     "id": "3157465",
@@ -286,6 +295,15 @@
    }
   ],
   "GSW": [
+   {
+    "id": "4397040",
+    "name": "Brandon Williams",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-18",
+    "returns": "2026-11-22"
+   },
    {
     "id": "6589",
     "name": "Draymond Green",
@@ -312,15 +330,6 @@
     "detail": "Abdomen",
     "date": "2026-11-12",
     "returns": "2026-12-12"
-   },
-   {
-    "id": "4397040",
-    "name": "Brandon Williams",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Not Specified",
-    "date": "2026-11-10",
-    "returns": "2026-11-22"
    },
    {
     "id": "3102531",
@@ -527,31 +536,22 @@
     "id": "4431772",
     "name": "Myron Gardner",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hamstring",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4997528",
-    "name": "Nikola Jovic",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4066261",
-    "name": "Bam Adebayo",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Hip",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
+    "date": "2026-11-18",
+    "returns": "2026-11-22"
    }
   ],
   "MIL": [
+   {
+    "id": "4591725",
+    "name": "Ryan Rollins",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Illness",
+    "date": "2026-11-18",
+    "returns": "2026-11-19"
+   },
    {
     "id": "4997526",
     "name": "Ousmane Dieng",
@@ -710,7 +710,7 @@
     "pos": "F",
     "status": "Out",
     "detail": "Ankle Surgery",
-    "date": "2026-11-17",
+    "date": "2026-11-18",
     "returns": "2026-11-28"
    },
    {
@@ -742,6 +742,15 @@
    }
   ],
   "PHI": [
+   {
+    "id": "3912848",
+    "name": "Dean Wade",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Soreness",
+    "date": "2026-11-18",
+    "returns": "2026-11-18"
+   },
    {
     "id": "4870562",
     "name": "Dominick Barlow",
@@ -905,6 +914,24 @@
    }
   ],
   "TOR": [
+   {
+    "id": "4395625",
+    "name": "RJ Barrett",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Soreness",
+    "date": "2026-11-18",
+    "returns": "2026-11-18"
+   },
+   {
+    "id": "4433134",
+    "name": "Scottie Barnes",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Groin",
+    "date": "2026-11-18",
+    "returns": "2026-11-20"
+   },
    {
     "id": "6450",
     "name": "Kawhi Leonard",

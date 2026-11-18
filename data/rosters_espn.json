@@ -624,7 +624,7 @@
     "name": "Patrick Williams",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5095151",
@@ -1364,7 +1364,7 @@
     "name": "Amen Thompson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5105837",
@@ -1429,7 +1429,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2580365",
@@ -3030,7 +3030,7 @@
     "name": "Toumani Camara",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4592435",

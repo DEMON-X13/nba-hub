@@ -88,15 +88,6 @@
   ],
   "CHI": [
    {
-    "id": "4431687",
-    "name": "Patrick Williams",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Finger Dislocated",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "5105555",
     "name": "Tobe Awaka",
     "pos": "F",
@@ -368,35 +359,26 @@
     "detail": "Ankle Sprain",
     "date": "2026-11-17",
     "returns": "2026-11-20"
-   },
-   {
-    "id": "4684740",
-    "name": "Amen Thompson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
    }
   ],
   "IND": [
+   {
+    "id": "4395712",
+    "name": "Andrew Nembhard",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hip Soreness",
+    "date": "2026-11-18",
+    "returns": "2026-11-20"
+   },
    {
     "id": "2530530",
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "Day-To-Day",
-    "detail": "Hamstring",
+    "detail": "McConnell (hamstring) is probable to play Wednesday against the Rockets.",
     "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4395712",
-    "name": "Andrew Nembhard",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hip Soreness",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
+    "returns": ""
    },
    {
     "id": "4396993",
@@ -734,6 +716,15 @@
   ],
   "PHI": [
    {
+    "id": "3917376",
+    "name": "Jaylen Brown",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-11-18",
+    "returns": "2026-11-21"
+   },
+   {
     "id": "3912848",
     "name": "Dean Wade",
     "pos": "F",
@@ -748,15 +739,6 @@
     "pos": "F",
     "status": "Out",
     "detail": "Back Fracture",
-    "date": "2026-11-17",
-    "returns": "2026-11-21"
-   },
-   {
-    "id": "3917376",
-    "name": "Jaylen Brown",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Not Specified",
     "date": "2026-11-17",
     "returns": "2026-11-21"
    },
@@ -891,10 +873,10 @@
     "id": "4395625",
     "name": "RJ Barrett",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hamstring Soreness",
     "date": "2026-11-18",
-    "returns": "2026-11-18"
+    "returns": "2026-11-20"
    },
    {
     "id": "4433134",

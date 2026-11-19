@@ -682,7 +682,7 @@
     "name": "Sam Merrill",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5177362",
@@ -768,7 +768,7 @@
     "name": "Santi Aldama",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5148538",
@@ -782,7 +782,7 @@
     "name": "Max Christie",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4701208",
@@ -796,7 +796,7 @@
     "name": "Walter Clayton Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5279129",
@@ -1173,7 +1173,7 @@
     "name": "Draymond Green",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3213",
@@ -1606,7 +1606,7 @@
     "name": "Yanic Konan Niederhauser",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4398390",
@@ -2644,7 +2644,7 @@
     "name": "Jaylin Williams",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3133626",
@@ -2858,7 +2858,7 @@
     "name": "Tyrese Maxey",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4873090",
@@ -3128,7 +3128,7 @@
     "name": "Robert Williams III",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4706557",

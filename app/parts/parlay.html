@@ -714,9 +714,9 @@ const PB_FAILED = 'failed trial';
 /* what the builder's summary and the parlay card say of the model's chance once a player leg in it is the failed props
    model's (a parlay of team legs alone keeps the board model's chance as it was), counted: "its player leg" for one,
    "its player legs" for more (the review of 6 November 2026: a parlay of one player leg said "legs") */
-const pbFailedSay = n => `its player leg${n === 1 ? '' : 's'} the props model’s, which failed its trial`;
+const pbFailedSay = n => `its player leg${n === 1 ? '' : 's'} the props model’s, for reference`;
 const pbTrialMark = l => !(l && l.kind === 'prop') ? '' : pbPropsOn() ? `<i class="pb-trial" title="${esc(pbTrialTitle())}">on trial</i>`
-  : `<i class="pb-trial" data-pb-failed title="${esc(pbFailLegTitle())}">${PB_FAILED}</i>`;
+  : '';   // once it has failed, no mark: the owner's call of 19 November 2026, "i don't want to see failed everywhere"
 /* a leg on the builder: the same line exactly */
 const pbOn = l => M.slip.legs.some(x => slipKey(x) === (l.sk || slipKey(l)));
 const pbInBuilder = legs => M.slip.legs.length === legs.length && legs.every(pbOn);
@@ -1174,7 +1174,7 @@ function pbChanceCell(l, f, c, lbl) {
   if (l.kind === 'prop' && !pbPropsOn()) {
     const fp = f && f.p != null && Number.isFinite(f.p) ? f.p : null, [fc, fl] = fp != null ? ppConf(fp) : ['', ''];
     return (fp != null ? `<span class="pb-fairlbl" aria-hidden="true">fair</span> <span class="sr">DraftKings' fair chance${f.est ? ', est.' : ''}: </span><span data-pb-fp="${fp}" title="${esc(ppFairTitle(l, f))}">${ppPct(fp)}</span>${f.est ? '<em class="pb-fest" aria-hidden="true">est.</em>' : ''} <span class="pb-conf ${fc}">${fl.toUpperCase()}</span>` : '<span class="pb-q" data-pb-nodk>no DraftKings chance</span>')
-      + (l.p != null ? ` <small class="pb-mdl" data-pb-p="${l.p}" title="${esc(pbTrialTitle())}"><span data-pb-mv>props model ${ppPct(l.p)}</span> ${pbTrialMark(l)}</small>` : ' ' + pbTrialMark(l));
+      + (l.p != null ? ` <small class="pb-mdl" data-pb-p="${l.p}" title="${esc(pbTrialTitle())}"><span data-pb-mv>props model ${ppPct(l.p)}</span>${pbTrialMark(l) ? ' ' + pbTrialMark(l) : ''}</small>` : (pbTrialMark(l) ? ' ' + pbTrialMark(l) : ''));
   }
   return `${l.p != null ? `<span data-pb-p="${l.p}">${pbPct(l.p)}</span><span class="pb-conf ${c}">${lbl}</span>${pbTrialMark(l)}` : '<span class="pb-q">no model chance</span>'}${f ? `<small class="legfair" data-legfair="${f.p}" title="DraftKings' fair chance on this leg: its price with the margin taken out${f.est ? ', estimated since only this side is priced' : ''}">fair ${pbPct(f.p)}${f.est ? ' est.' : ''}</small>` : ''}`;
 }

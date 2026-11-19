@@ -244,7 +244,7 @@ window.PARLAY_CARD = (function () {
   function chanceLines(m) {
     const n = m.legs.length, all = n === 1 ? 'it lands ' : 'all ' + n + ' land ', tr = m.trial && !m.failed ? ' (on trial)' : '';
     /* the failed model's words, counted as the builder counts them (pbFailedSay: "its player leg" for one) */
-    const k = m.props != null ? m.props : 2, say = typeof pbFailedSay === 'function' ? pbFailedSay(k) : `its player leg${k === 1 ? '' : 's'} the props model’s, which failed its trial`;
+    const k = m.props != null ? m.props : 2, say = typeof pbFailedSay === 'function' ? pbFailedSay(k) : `its player leg${k === 1 ? '' : 's'} the props model’s, for reference`;
     const by = m.by && m.by !== 'dk' ? m.by : 'model' + tr, price = [[' · the price says '], [m.implied, 1]], fx = m.failed ? [[', ' + say]] : [];
     /* a Suggested Parlays night level mixing team and player legs states the chance it was ranked on, which is no one's
        alone: never "model + DraftKings says", which read as DraftKings saying it under DraftKings' own fair chance (the

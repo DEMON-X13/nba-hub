@@ -536,8 +536,8 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
     const T_EARLY = 'The props model’s trial was stopped early as a FAIL on 5 November 2026, the owner’s call: it was not shown to beat DraftKings’ closing lines, so this chance is the model’s, for reference only, and no list or set takes it';
     const M_EARLY = 'The props model’s trial was stopped early as a FAIL on 5 November 2026, the owner’s call: it was not shown to beat DraftKings’ closing lines, so this leg’s chance is DraftKings’ fair chance, and the props model’s own, beside it, is for reference only';
     const markF = pf.d.createElement('div'); markF.innerHTML = pf.w.pbTrialMark({ kind: 'prop' });
-    check(pf.w.pbTrialTitle() === T_EARLY && markF.querySelector('.pb-trial') && markF.querySelector('.pb-trial').textContent === 'failed trial' && markF.querySelector('.pb-trial').title === M_EARLY,
-      `a player leg's mark reads "failed trial", titled with the stop, and the muted chance's title says it is the model's for reference ("${pf.w.pbTrialTitle().slice(0, 100)}")`);
+    check(pf.w.pbTrialTitle() === T_EARLY && !markF.querySelector('.pb-trial') && markF.innerHTML === '' && pf.w.pbFailLegTitle() === M_EARLY,
+      `a player leg wears no mark once the props model has failed (the owner's call of 19 November 2026), its chance's title says why, and the muted chance's title says it is the model's for reference ("${pf.w.pbTrialTitle().slice(0, 100)}")`);
     const titleBar = pf.w.eval('(() => { const d = S.props.ledger.decision, e = d.early; delete d.early; try { return pbTrialTitle(); } finally { d.early = e; } })()');
     check(titleBar === 'The props model failed its shadow ledger’s bar against DraftKings’ closing lines, so this chance is the model’s, for reference only, and no list or set takes it', `the bar's own FAIL is said as a failed bar ("${titleBar.slice(0, 80)}")`);
 
@@ -554,8 +554,8 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
         const gb = pf.d.getElementById('glanceBox'), gN = k => txt(gb && gb.querySelector(`[data-glance-legbox] [data-glance-n="${k}"]`)), mdl = gb && gb.querySelector('[data-glance-legbox] [data-glance-n="model"]');
         const dts = gb ? [...gb.querySelectorAll('[data-glance-legbox] dt')].map(txt).join('|') : '';
         check(nb.dataset.glance === 'p:8100006' && gb && !gb.hidden && gN('label') === 'Under 0.5 blocks' && gN('price') === '−250' && gN('fair') === ppPctOwn(imp(-250)) && gN('model') === ppPctOwn(modelOwn({ ...fay, odds: -250 }, stF))
-          && dts === 'Price|Fair|Model' && mdl.closest('dd').classList.contains('glance-q') && mdl.closest('dd').querySelector('[data-glance-failed]'),
-          `a player line's name opens his matchup bubble on that leg: price, DraftKings' fair chance, then the props model's muted, marked failed trial (${gb ? txt(gb.querySelector('[data-glance-legbox]')) : 'none'})`);
+          && dts === 'Price|Fair|Model' && mdl.closest('dd').classList.contains('glance-q') && !mdl.closest('dd').querySelector('.glance-trial'),
+          `a player line's name opens his matchup bubble on that leg: price, DraftKings' fair chance, then the props model's muted, with no failed mark (${gb ? txt(gb.querySelector('[data-glance-legbox]')) : 'none'})`);
         nb.click(); await sleep(20); }
       let b = addBtn(pf, fayKey); b.focus(); b.click(); await sleep(20); b = addBtn(pf, fayKey);
       const fayLeg = { id: A1.id, away: 'BOS', home: 'NYK', date: A1.date, tip: A1.tip, kind: 'prop', pid: '8100006', name: 'Fay Blocker', team: 'BOS', at: RD, stat: 'blk', mk: 'main', line: 0.5, side: 'under', odds: -250, other: 200 };
@@ -564,14 +564,14 @@ module.exports = async function parlayBuilder({ check, pageFile, ROOT }) {
         `Add puts Fay Blocker's Under 0.5 blocks in the builder exactly as a night set's player leg goes in, the button reading Added, the focus kept (${JSON.stringify(slF()[0])})`);
       const trF = () => pf.d.querySelector(`#pbBuild tr.legrow[data-pb-row="${fayKey}"]`), fFair = imp(-250), fMod = modelOwn(fayLeg, stF);
       const cell = trF() && trF().querySelector('[data-h="Chance"]');
-      check(cell && txt(cell.querySelector('[data-pb-fp]')) === ppPctOwn(fFair) && txt(cell.querySelector('.pb-conf')) === confOwn(fFair) && txt(cell.querySelector('[data-pb-mv]')) === `props model ${ppPctOwn(fMod)}` && txt(cell.querySelector('.pb-trial[data-pb-failed]')) === 'failed trial' && !trF().querySelector('.faroff'),
-        `its builder row is a player leg's after the FAIL: DraftKings' fair chance first with its band, the props model's muted and marked failed trial (${txt(cell)})`);
+      check(cell && txt(cell.querySelector('[data-pb-fp]')) === ppPctOwn(fFair) && txt(cell.querySelector('.pb-conf')) === confOwn(fFair) && txt(cell.querySelector('[data-pb-mv]')) === `props model ${ppPctOwn(fMod)}` && !cell.querySelector('.pb-trial') && !trF().querySelector('.faroff'),
+        `its builder row is a player leg's after the FAIL: DraftKings' fair chance first with its band, the props model's muted, with no failed mark (${txt(cell)})`);
       addBtn(pf, mlKey).click(); await sleep(20);
       const L2 = slF(), rhoF = CJ.rhoFor(CT, { game: A1.id, kind: 'blk', player: '8100006', team: 'BOS', side: 'under', home: 'NYK' }, { game: A1.id, kind: 'win', team: 'NYK', side: 'NYK', home: 'NYK' }) || 0;
       const fML = imp(-150) / (imp(-150) + imp(130)), fairW = CJ.joint2(fFair, fML, rhoF), modW = CJ.joint2(fMod, 0.62, rhoF), mult = decOf(-250) * decOf(-150), decW = Math.min(mult, HOLD / CJ.joint2(imp(-250), imp(-150), rhoF));
       const heroF = pf.d.querySelector('#pbBuild .pb-box.hero'), payF = pf.d.querySelector('#pbBuild [data-payout]');
       check(L2.length === 2 && heroF && Math.abs(+heroF.querySelector('[data-fair]').dataset.fair - fairW) < 1e-9 && Math.abs(+heroF.querySelector('[data-model]').dataset.model - modW) < 1e-9 && payF && Math.abs(+payF.dataset.payout - 20 * decW) < 1e-9
-        && txt(heroF.querySelector('[data-model]')).endsWith('its player leg the props model’s, which failed its trial'),
+        && txt(heroF.querySelector('[data-model]')).endsWith('its player leg the props model’s, for reference'),
         `with the Knicks to win beside it, the builder prices the two as this file's copula does: DraftKings' fair chance ${(fairW * 100).toFixed(2)}%, the model's ${(modW * 100).toFixed(2)}% (rho ${rhoF}), $20 paying ${(20 * decW).toFixed(2)} at the same-game price`);
       addBtn(pf, fayKey).click(); await sleep(20);
       check(slF().length === 1 && slF()[0].kind === 'ml' && addBtn(pf, fayKey).textContent === 'Add', 'a second press on the player line takes it out');

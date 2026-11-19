@@ -1687,7 +1687,6 @@ function ppLedger() {
    then draws every player line at DraftKings' fair chance (legFair, the Parlay Builder's), and the props model's own
    chance only small and muted beside it, for reference; its projections stay. Before a FAIL the view is as it was */
 const ppFail = () => typeof pbPropsOn === 'function' && !pbPropsOn();
-const PP_FAIL_TAG = 'Props model: failed trial';
 function ppFailTitle() {
   const w = pbPropsOffWhy(), dec = S.props && S.props.ledger && S.props.ledger.decision;
   return `${w[0].toUpperCase()}${w.slice(1)}${dec && dec.early ? ', the owner’s call' : ''}: it was not shown to beat DraftKings’ closing lines, so the chances in this view are DraftKings’ fair chances, and its projections and its own chances are shown for reference only`;
@@ -1697,7 +1696,7 @@ function ppTrial() {
   const lost = mk && mk.logloss ? ` On DraftKings' closing lines for the 2026 play-in and playoffs (${Number(mk.lines).toLocaleString('en-US')} lines) it lost: log loss ${mk.logloss.model.toFixed(4)} against DraftKings' ${mk.logloss.market.toFixed(4)}, lower being better.` : '';
   const est = `<p>Milestone (k+) fair chances are estimates (est.): DraftKings gives one price there, and the margin taken out is the one measured on the archive's milestones. Double- and triple-doubles take out the same margin, never measured on those markets: on the 2026 playoff prices they came in well below what that leaves, so their DraftKings figure is a high estimate.</p>`;
   if (ppFail()) { const lg = ppLedger();
-    return `<details class="pp-trial" data-pp-trial data-pp-fail><summary data-pp-key="trial">The props model failed its trial against DraftKings: the chances here are DraftKings' own, its projections for reference</summary>
+    return `<details class="pp-trial" data-pp-trial data-pp-fail><summary data-pp-key="trial">The chances here are DraftKings' own; the props model's projections are for reference</summary>
     ${lg ? `<p data-pp-failnote>${lg}</p>` : ''}
     <p>Under each player, each DraftKings line's bar, percentage and band are DraftKings' fair chance of it, its prices with the book's margin taken out (all of it on the Over, the way that scored best on DraftKings' archived closing lines), est. where DraftKings gives one price. Each stat's heading keeps the props model's projection, and its own chance of each line is shown small beside DraftKings', for reference only. Ticking a line's box here puts that leg in your own parlay in the Parlay Builder, at DraftKings' price.</p>
     <p>Walk-forward on 2024 to 2026 it beat each player's own average on every stat.${lost}</p>
@@ -1784,7 +1783,7 @@ function ppHead(g) {
   return `<div class="pp-card pp-ghcard" data-pp-head><div class="pp-gh">
     <div class="when">${lab('Tip-off')}<b>${esc(dayName(g.date))}, ${esc(dayNum(g.date))}</b>${esc(tipTime(g.tip))}</div>
     <div class="match">${lab('Matchup')}<div class="pp-mt">${pill(g.away)} <span class="at">at</span> ${pill(g.home)}</div></div>
-    <div class="lead-c">${lab(`Biggest projections ${ppFail() ? `<span class="pp-trialtag" data-pp-failtag title="${esc(ppFailTitle())}">${PP_FAIL_TAG}</span>` : '<span class="pp-trialtag" title="Not yet shown to beat DraftKings: its chances are marked on trial wherever they show">Model on trial</span>'}`)}<div class="lead">${lead || '<span class="pp-q">No projections for this game yet</span>'}</div></div>
+    <div class="lead-c">${lab(`Biggest projections ${ppFail() ? '' : '<span class="pp-trialtag" title="Not yet shown to beat DraftKings: its chances are marked on trial wherever they show">Model on trial</span>'}`)}<div class="lead">${lead || '<span class="pp-q">No projections for this game yet</span>'}</div></div>
     <div class="tot" data-pp-score>${lab('Expected score')}${sc ? `<b>${sc.a} – ${sc.h}</b><small>${esc(g.away)} / ${esc(g.home)}</small>` : '<b>–</b>'}</div>
     <div class="totpts" data-pp-totpts>${lab('Total pt')}${m && Number.isFinite(m.total) ? `<b>${Math.round(m.total)}</b><small title="The board model's points for the two sides">points</small>` : '<b>–</b>'}</div>
     <div class="winner" data-pp-vegas>${lab('Vegas pick')}${fav ? `${pill(fav)}<small>by ${Math.abs(vg.line)}</small>` : `<span class="none">–</span>${vg && vg.line === 0 ? '<small>even</small>' : ''}`}${vg && vg.board ? `<small data-pp-vegas-src="board">the board's line</small>` : ''}</div>
@@ -1865,7 +1864,7 @@ function ppBody(g, x, pr) {
   const base = { id: g.id, away: g.away, home: g.home, date: g.date, tip: g.tip, kind: 'prop', pid, name: x.who.name, team: x.who.team || '', at: pr ? pr.at : null };
   let h = `<div class="pp-plrbody" id="ppPb-${esc(pid)}" data-pp-body="${esc(pid)}">`;
   const fail = ppFail();
-  if (row && fail) h += `<p class="pp-trialln" data-pp-trialln data-pp-failln><i class="pb-trial" data-pp-trialmark title="${esc(ppFailTitle())}">${PP_FAIL_TAG}</i><span>His chances here are DraftKings' fair chances; the props model's own, small beside them, are for reference.</span></p>`;
+  if (row && fail) h += `<p class="pp-trialln" data-pp-trialln data-pp-failln title="${esc(ppFailTitle())}"><span>His chances here are DraftKings' fair chances; the props model's own, small beside them, are for reference.</span></p>`;
   else if (row) h += `<p class="pp-trialln" data-pp-trialln><i class="pb-trial" data-pp-trialmark title="${esc(typeof pbTrialTitle === 'function' ? pbTrialTitle() : 'On trial')}">on trial</i><span>His chances here are the props model's.</span></p>`;
   else h += `<p class="pp-noproj" data-pp-noproj>No projection: ${esc(ppWhyNone(g, out))}. DraftKings' fair chance alone.</p>`;
   for (const s of PP_ORDER) {

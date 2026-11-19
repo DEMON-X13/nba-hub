@@ -136,7 +136,7 @@ console.log("the job's commit step: the frozen ledgers are committed from main a
     /* a remote and a clone of it with every path the step adds, the ledgers committed (or the calls ledger not yet), then a
        run's changes to the ledgers, the data and the state, committed by the step on the ref the case names */
     const FILES = ['data/calls.json', 'data/suggest_ledger.json', 'data/games.csv', 'models/alpha.json', 'model.json', 'players.json', 'props.json', 'liveparlays/parlays.json',
-      'state.json', 'history.json', 'pickem.json', 'index.html', 'admin.html'];
+      'state.json', 'history.json', 'pickem.json', 'gamelog.json', 'index.html', 'admin.html'];
     const put = (dir, f, v) => { fs.mkdirSync(path.dirname(path.join(dir, f)), { recursive: true }); fs.writeFileSync(path.join(dir, f), v + '\n'); };
     const run = (branch, ref, o = {}) => {
       const base = path.join(TMP, 'commit-' + branch.replace(/\W/g, '_') + (o.newLedger ? '-new' : '') + (o.tag ? '-' + o.tag : '')), origin = path.join(base, 'origin.git'), seed = path.join(base, 'seed'), work = path.join(base, 'work');

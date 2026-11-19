@@ -1626,8 +1626,8 @@
    "spread": 9.9
   },
   "2027_20261120_CHA_ATL": {
-   "pHome": 0.7007,
-   "spread": -6.5
+   "pHome": 0.733,
+   "spread": -7.7
   },
   "2027_20261120_HOU_DEN": {
    "pHome": 0.4236,
@@ -2261,5 +2261,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-19T22:14Z"
+ "generated": "2026-11-19T23:05Z"
 }

@@ -1159,7 +1159,7 @@
     "name": "LJ Cryer",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3975",
@@ -1180,7 +1180,7 @@
     "name": "Al Horford",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4703396",
@@ -1799,7 +1799,7 @@
     "name": "Zach Edey",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2991070",
@@ -2090,7 +2090,7 @@
     "name": "Kyle Kuzma",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2991043",
@@ -2118,7 +2118,7 @@
     "name": "Ryan Rollins",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4397114",
@@ -2146,7 +2146,7 @@
     "name": "Myles Turner",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5105623",
@@ -2253,7 +2253,7 @@
     "name": "Zyon Pullin",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432847",

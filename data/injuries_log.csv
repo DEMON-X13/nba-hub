@@ -5440,8 +5440,8 @@ date,team,player_id,name,status
 2026-11-19,DET,4432166,Cade Cunningham,Day-To-Day
 2026-11-19,DET,3157465,Duncan Robinson,Out
 2026-11-19,DET,4433621,Jalen Duren,Out
-2026-11-19,GSW,6589,Draymond Green,Day-To-Day
-2026-11-19,GSW,3213,Al Horford,Day-To-Day
+2026-11-19,GSW,6589,Draymond Green,Out
+2026-11-19,GSW,4433149,LJ Cryer,Day-To-Day
 2026-11-19,GSW,4397040,Brandon Williams,Out
 2026-11-19,GSW,3975,Stephen Curry,Out
 2026-11-19,GSW,3102531,Kristaps Porzingis,Out
@@ -5459,14 +5459,15 @@ date,team,player_id,name,status
 2026-11-19,LAC,4396818,Jordan Miller,Out
 2026-11-19,LAL,4066457,Austin Reaves,Out
 2026-11-19,MEM,4432810,Isaiah Stewart,Day-To-Day
-2026-11-19,MEM,5105550,GG Jackson,Out
+2026-11-19,MEM,4600663,Zach Edey,Out
 2026-11-19,MEM,4065733,Ty Jerome,Out
+2026-11-19,MEM,5105550,GG Jackson,Out
 2026-11-19,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-19,MEM,5105462,Richie Saunders,Out
 2026-11-19,MIA,4431772,Myron Gardner,Day-To-Day
-2026-11-19,MIL,4591725,Ryan Rollins,Day-To-Day
+2026-11-19,MIL,3133628,Myles Turner,Out
+2026-11-19,MIL,3134907,Kyle Kuzma,Out
 2026-11-19,MIL,4997526,Ousmane Dieng,Out
-2026-11-19,MIN,4592979,Zyon Pullin,Day-To-Day
 2026-11-19,MIN,4433247,Jonathan Kuminga,Day-To-Day
 2026-11-19,MIN,4432247,Jaylen Clark,Out
 2026-11-19,MIN,4594268,Anthony Edwards,Out

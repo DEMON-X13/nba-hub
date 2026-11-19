@@ -265,15 +265,15 @@
     "id": "6589",
     "name": "Draymond Green",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Rest",
     "date": "2026-11-19",
-    "returns": "2026-11-19"
+    "returns": "2026-11-22"
    },
    {
-    "id": "3213",
-    "name": "Al Horford",
-    "pos": "C",
+    "id": "4433149",
+    "name": "LJ Cryer",
+    "pos": "G",
     "status": "Day-To-Day",
     "detail": "Back",
     "date": "2026-11-19",
@@ -443,13 +443,13 @@
     "returns": "2026-11-19"
    },
    {
-    "id": "5105550",
-    "name": "GG Jackson",
-    "pos": "F",
+    "id": "4600663",
+    "name": "Zach Edey",
+    "pos": "C",
     "status": "Out",
-    "detail": "Foot Surgery",
-    "date": "2026-11-17",
-    "returns": "2027-01-18"
+    "detail": "Ankle",
+    "date": "2026-11-19",
+    "returns": "2026-11-21"
    },
    {
     "id": "4065733",
@@ -457,8 +457,17 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip",
+    "date": "2026-11-19",
+    "returns": "2026-11-21"
+   },
+   {
+    "id": "5105550",
+    "name": "GG Jackson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Foot Surgery",
     "date": "2026-11-17",
-    "returns": "2026-11-19"
+    "returns": "2027-01-18"
    },
    {
     "id": "4431785",
@@ -492,13 +501,22 @@
   ],
   "MIL": [
    {
-    "id": "4591725",
-    "name": "Ryan Rollins",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
+    "id": "3133628",
+    "name": "Myles Turner",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Shoulder Bruise",
     "date": "2026-11-19",
-    "returns": "2026-11-19"
+    "returns": "2026-11-21"
+   },
+   {
+    "id": "3134907",
+    "name": "Kyle Kuzma",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Shoulder Bruise",
+    "date": "2026-11-19",
+    "returns": "2026-11-21"
    },
    {
     "id": "4997526",
@@ -511,15 +529,6 @@
    }
   ],
   "MIN": [
-   {
-    "id": "4592979",
-    "name": "Zyon Pullin",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Quadriceps Bruise",
-    "date": "2026-11-18",
-    "returns": "2026-11-19"
-   },
    {
     "id": "4433247",
     "name": "Jonathan Kuminga",
@@ -601,7 +610,7 @@
     "status": "Out",
     "detail": "Ankle",
     "date": "2026-11-13",
-    "returns": "2026-11-20"
+    "returns": "2026-11-27"
    }
   ],
   "OKC": [
@@ -848,7 +857,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip Soreness",
-    "date": "2026-11-18",
+    "date": "2026-11-19",
     "returns": "2026-11-21"
    },
    {

@@ -60,6 +60,7 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
           if (/espn\.com/.test(url)) return { ok: false, status: 404, json: async () => ({}) };
           if (/lines\.json/.test(url)) return o.lines ? { ok: true, status: 200, json: async () => clone(o.lines) } : { ok: false, status: 404, json: async () => ({}) };
           if (/pickem\.json/.test(url)) { if (o.pkWait) await o.pkWait; return o.pickem ? { ok: true, status: 200, json: async () => clone(o.pickem) } : { ok: false, status: 404, json: async () => ({}) }; }
+          if (/gamelog\.json/.test(url)) { if (o.glWait) await o.glWait; return o.gamelog ? { ok: true, status: 200, json: async () => clone(o.gamelog) } : { ok: false, status: 404, json: async () => ({}) }; }
           if (/state\.json/.test(url)) return { ok: true, status: 200, json: async () => clone(st) };
           return { ok: false, status: 404, json: async () => ({}), text: async () => '' }; };
         w.scrollTo = () => {}; w.confirm = () => true;
@@ -146,7 +147,11 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
   const fairOwn = l => l.kind === 'prop' ? 1 - imp(l.other) : imp(l.odds) / (imp(l.odds) + imp(l.other));
 
   /* ---------- 1. every name is its leg's button ---------- */
-  let p = load(ST(), { lines: LINES, mine: MINE(ALL), pickem: PICKEM });
+  /* his games this season (gamelog.json): twelve for Ace Guard, the rest none; points 18 to 29 a game and 3 to 1 steals */
+  const GL_GAMES = Array.from({ length: 12 }, (_, i) => `${SEASON}_202611${String(i + 1).padStart(2, '0')}_BOS_DET`);
+  const GL_ACE = GL_GAMES.map((_, i) => [i, 30 + (i % 4), 18 + i, 4 + (i % 3), 5, 1 + (i % 2), i % 3, 0, 2, 1, 0]);
+  const GAMELOG = { v: 1, season: SEASON, line: ['min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'tov', 'start', 'atHome'], games: GL_GAMES, players: { '9100001': GL_ACE } };
+  let p = load(ST(), { lines: LINES, mine: MINE(ALL), pickem: PICKEM, gamelog: GAMELOG });
   await sleep(450);
   let { w, d } = p;
   const box = () => d.getElementById('glanceBox'), open = () => !!box() && !box().hidden, nOf = k => { const e = box() && box().querySelector(`[data-glance-n="${k}"]`); return e ? txt(e) : null; };
@@ -225,6 +230,44 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
     check(c && txt(c) === 'DAY-TO-DAY' && c.title === "On today's injury report: listed day-to-day (ankle sprain), so held out of the Top 50 lines and every suggested parlay" && p3.errors.length === 0,
       `a Day-To-Day player's bubble wears DAY-TO-DAY, titled with why the list and the sets hold him out (${c ? txt(c) + ': ' + c.title : 'no chip'})`); }
 
+  /* ---------- 2b. his last games (gamelog.json) ---------- */
+  {
+    nameFor('#parlayBody', L_ACE).click(); await sleep(40);
+    const lg = box().querySelector('table.glance-log'), rows = lg ? [...lg.querySelectorAll('tbody tr[data-glance-game-row]')] : [];
+    const avgTr = lg && lg.querySelector('tr.glance-avg'), cells = avgTr ? [...avgTr.querySelectorAll('td')].map(txt) : [];
+    const own = k => (GL_ACE.reduce((t, r) => t + r[k], 0) / GL_ACE.length).toFixed(1);
+    const hitsLast = GL_ACE.slice(-10).filter(r => r[2] > 24.5).length, hitsAll = GL_ACE.filter(r => r[2] > 24.5).length;
+    check(lg && rows.length === 10 && rows[0].dataset.glanceGameRow === GL_GAMES[11] && rows[9].dataset.glanceGameRow === GL_GAMES[2]
+      && JSON.stringify(cells) === JSON.stringify([own(1), own(2), own(3), own(4), own(5)]) && txt(avgTr.querySelector('th')) === 'Avg · 12 gm',
+      `his last games: the last ten, newest first, under his season average over all twelve on this file's own sums (${cells.join(' ')})`);
+    check(nOf('log:hits') === `Over 24.5 points: ${hitsLast} of his last 10, ${hitsAll} of 12 this season` && rows.filter(r => r.querySelector('[data-glance-hit]')).length === hitsLast && txt(rows[0].children[1]) === '@DET',
+      `the leg counted on his games and each game that cashed it marked (${nOf('log:hits')}), the opponent from his side`);
+    box().querySelector('[data-glance-logall]').click(); await sleep(20);
+    const all = box().querySelectorAll('table.glance-log tbody tr[data-glance-game-row]').length;
+    check(all === 12 && d.activeElement && d.activeElement.hasAttribute('data-glance-logall') && box().querySelector('[data-glance-logall]').getAttribute('aria-expanded') === 'true' && w.getComputedStyle(box().querySelector('[data-glance-logall]')).minHeight === '44px',
+      `Show all draws every game (${all}), the focus kept on it, 44px`);
+    nameFor('#parlayBody', L_STL).click(); await sleep(30);
+    check(nOf('log:none') === 'No games played this season.' && !box().querySelector('table.glance-log'), 'a player with no game this season says so');
+    nameFor('#parlayBody', L_ACE).click(); await sleep(30);
+    check(box().querySelectorAll('table.glance-log tbody tr[data-glance-game-row]').length === 10, 'a new bubble starts on his last ten');
+    box().querySelector('[data-glance-close]').click(); await sleep(10);
+  }
+  { let release; const wait = new Promise(r => { release = r; });
+    const q = load(ST(), { lines: LINES, mine: MINE([L_ACE]), pickem: PICKEM, gamelog: GAMELOG, glWait: wait }); await sleep(450);
+    q.d.querySelector('#parlayBody [data-glance]').click(); await sleep(20);
+    const nq = k => { const e = q.d.querySelector(`#glanceBox [data-glance-n="${k}"]`); return e ? txt(e) : null; };
+    check(nq('log:loading') === 'Loading his games…' && nq('proj:pts'), 'while his games are read the bubble says so and draws the rest');
+    release(); await sleep(60);
+    check(!nq('log:loading') && q.d.querySelectorAll('#glanceBox table.glance-log tbody tr[data-glance-game-row]').length === 10, 'and draws them once they answer');
+    const q2 = load(ST(), { lines: LINES, mine: MINE([L_ACE]), pickem: PICKEM, gamelog: null }); await sleep(450);
+    q2.d.querySelector('#parlayBody [data-glance]').click(); await sleep(60);
+    const n2 = k => { const e = q2.d.querySelector(`#glanceBox [data-glance-n="${k}"]`); return e ? txt(e) : null; };
+    check(n2('log:failed') === 'His games did not load: close and open his bubble again to try again.' && n2('proj:pts'), 'where his games did not load it says so, and the rest draws');
+    q2.d.dispatchEvent(new q2.w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true })); await sleep(10);
+    q2.d.querySelector('#parlayBody [data-glance]').click(); await sleep(60);
+    check(q2.requests.filter(x => /gamelog\.json/.test(x.url)).length === 2, 'a read that failed is made again by the next player bubble');
+    check(q.errors.length === 0 && q2.errors.length === 0, 'no script errors: ' + q.errors.concat(q2.errors).join(' | ')); }
+
   /* ---------- 3. a team's bubble and a game's ---------- */
   const recOwn = t => { let wn = 0, ls = 0; for (const x of PICKEM.games) { if (!x.score || x.type !== 'REG' || x.off || (x.away !== t && x.home !== t)) continue; const m = x.home === t ? x.score[1] - x.score[0] : x.score[0] - x.score[1]; if (m > 0) wn++; else if (m < 0) ls++; } return wn + '-' + ls; };
   const vh = imp(-130) / (imp(-130) + imp(110)), clock = w.eval(`oddsClock(${JSON.stringify(RD)})`);
@@ -268,7 +311,9 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
   nameFor('#parlayBody', L_TO).click(); await sleep(30);
   check(txt(d.getElementById('glanceTitle')) === 'Celtics at Pistons' && !box().querySelector('th.glance-me') && !box().querySelector('.glance-chk') && nOf('label') === 'Over 226.5 points' && nOf('model') === 'none' && nOf('fair') === pc0(fairOwn(L_TO)) && !box().querySelector('.glance-trial'),
     `a game total: the game's bubble, no club marked, no tick, Model "none" (the hub has no model of a total: until 13 November 2026 the row repeated the market's own chance as the model's), Fair the market's own, not marked on trial (Model "${nOf('model')}", Fair "${nOf('fair')}")`);
-  check(p.requests.filter(x => /pickem\.json/.test(x.url)).length === 1 && p.requests.length === reqs0 + 1, 'no other bubble reads anything: the one request is the Pick\'em Record\'s file');
+  const glReq = p.requests.filter(x => /gamelog\.json/.test(x.url));
+  check(p.requests.filter(x => /pickem\.json/.test(x.url)).length === 1 && glReq.length === 1 && glReq[0].opt && glReq[0].opt.cache === 'no-store' && p.requests.length === reqs0 + 2,
+    "no other bubble reads anything: the one request is the Pick'em Record's file, and a player's games (gamelog.json, once, no-store)");
   /* the same calls on game day, when the file's today is the game's and the game is among its games: the same picks */
   { const q = load(ST(), { lines: LINES, mine: MINE([L_ML]), pickem: PICKEM_DAY }); await sleep(450);
     q.d.querySelector('#parlayBody [data-glance]').click(); await sleep(20);
@@ -372,12 +417,12 @@ module.exports = async function matchupBubble({ check, pageFile, ROOT }) {
 
   /* ---------- 8. nothing written by any bubble ---------- */
   {
-    const q = load(ST(), { lines: LINES, mine: MINE(ALL), pickem: PICKEM }); await sleep(450);
+    const q = load(ST(), { lines: LINES, mine: MINE(ALL), pickem: PICKEM, gamelog: GAMELOG }); await sleep(450);
     const s0 = stored(q.w), r0 = q.requests.length;
     for (const sel of ['#parlayBody [data-glance]', '#pbPanel [data-glance]']) for (const b of [...q.d.querySelectorAll(sel)].slice(0, 6)) { b.click(); await sleep(15); }
     for (let i = 0; i < 40 && q.d.querySelector('[data-glance-n="pkwait"]'); i++) await sleep(20);
     q.d.dispatchEvent(new q.w.KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
-    check(stored(q.w) === s0 && q.requests.slice(r0).every(x => /pickem\.json/.test(x.url)) && q.requests.length - r0 <= 1, 'opening a dozen bubbles writes nothing to any store and reads nothing but the Pick\'em Record\'s file, at most once');
+    check(stored(q.w) === s0 && q.requests.slice(r0).every(x => /pickem\.json|gamelog\.json/.test(x.url)) && q.requests.slice(r0).filter(x => /pickem\.json/.test(x.url)).length <= 1 && q.requests.slice(r0).filter(x => /gamelog\.json/.test(x.url)).length <= 1, 'opening a dozen bubbles writes nothing to any store and reads nothing but the Pick\'em Record\'s file and the players\' games, each at most once');
     check(q.errors.length === 0, 'no script errors: ' + q.errors.join(' | '));
   }
 

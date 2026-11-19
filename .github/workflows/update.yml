@@ -265,8 +265,8 @@ jobs:
           fi
           git add data models model.json players.json props.json liveparlays/parlays.json
           if [ -e lines.json ]; then git add lines.json; fi    # absent until the lines feed's first read: a missing path would stop git add
-          if [ "${{ steps.publish.outcome }}" = "success" ] && [ "${{ steps.tests.outcome }}" = "success" ]; then git add state.json history.json pickem.json index.html admin.html
-          else echo "::warning::publishing or the tests failed: the data is committed, state.json, history.json and the pages are left as they were"; for f in state.json history.json pickem.json index.html admin.html; do if git cat-file -e "HEAD:$f" 2>/dev/null; then git checkout HEAD -- "$f"; else rm -f "$f"; fi; done; fi
+          if [ "${{ steps.publish.outcome }}" = "success" ] && [ "${{ steps.tests.outcome }}" = "success" ]; then git add state.json history.json pickem.json gamelog.json index.html admin.html
+          else echo "::warning::publishing or the tests failed: the data is committed, state.json, history.json and the pages are left as they were"; for f in state.json history.json pickem.json gamelog.json index.html admin.html; do if git cat-file -e "HEAD:$f" 2>/dev/null; then git checkout HEAD -- "$f"; else rm -f "$f"; fi; done; fi
           if git diff --cached --quiet; then echo "nothing changed"; else
             git commit -m "update $(date -u +'%Y-%m-%d %H:%M UTC')"
             ok=0

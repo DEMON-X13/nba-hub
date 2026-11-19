@@ -19,6 +19,7 @@ final, the job runs every morning, and the page shows the games from yesterday t
 | `data/raptor.csv` | FiveThirtyEight RAPTOR 2020-2022, offence and defence per player: the priors |
 | `model.json` | The team model: fitted parameters, the fit and holdout report, every team's rating after the last final, and its number on each game not yet final |
 | `players.json` | The player model: parameters, the report against the team model, every current player's offence and defence, every coach, each team's strength and pace, tonight's numbers with lineups and absentees, and the rating history (`history`: every listed player's, coach's and club's rating after each final since the season before the one the ratings are carried into, each centred as its day ended, with the day-by-day centring) |
+| `gamelog.json` | Every game each player took the floor in this season, his box line in it, by `publish.js` (THE GAME LOG): a player's matchup bubble reads it the first time one opens (README "The matchup bubble", "His last games") |
 | `history.json` | The rating over time the page draws, from `players.json`'s history by `publish.js` (THE HISTORY): each series on the ladder its table shows, its change over 7 and 30 days and this season. The page reads it only when a window opens |
 | `tools/lib.js` | The games table, team codes, dates, ESPN access |
 | `tools/history.js` | One-time import of the history the team model is fitted on |
@@ -3187,6 +3188,18 @@ trial; and the leg: its line, the price its row shows, the model's chance (on tr
 NFL hub shows a season Elo by position, the ELO Ratings tab's units and the Mismatches, the NBA has the ladder's rating,
 the Teams tab's columns and the props model; it has no market + form or Elo matchup chance to show.
 
+**His last games** (the owner's ask of 19 November 2026: "when i click the plyaer i want to be able to see their stats like
+i can in the player page for nfl"): under the leg, his box line in each game he took the floor in this season, newest first,
+the last ten and all of them on **Show all** (44px), each game's date, opponent (vs or @) and result, his minutes, points,
+rebounds, assists and threes, and the leg's own stat where it is none of those (steals, blocks, a sum, a double- or
+triple-double); his season average over every game on a row of its own; and on a player's line each game that would have
+cashed it marked, counted over his last ten and the season ("Over 24.5 points: 6 of his last 10, 8 of 12 this season").
+From `gamelog.json` (`publish.js`'s THE GAME LOG: the season in play's finals with a box score, his rows that are no
+did-not-play), read by the page's own loader (`gameLogLoad`, `gameLogOf` in `app/nba_hub.html`, as `history.json` is), the
+first time a player's bubble opens, once a load, no-store, kept in memory alone; the bubble says "Loading his games…" while it
+is read and that they did not load where they did not, the rest drawn, and the next player bubble reads it again. The part
+itself still fetches nothing.
+
 **A team's or a game total's bubble**: the game and its tip-off; both clubs' records this season as the standings count
 them (the Pick'em Record's regular-season finals less the NBA Cup final and the play-in, which ESPN types as regular-season
 games and the standings leave out, the playoffs beside them once there are any); each club's strength with its tier shield and its rank
@@ -4686,7 +4699,7 @@ node tools/backtest.js     # by hand: the walk-forward against data/odds_hist.cs
 Nothing a visitor does reaches the published files, and the one thing the page keeps of its own making is a locked
 Suggested Parlays set it built where the record had none (`nba_sp_lock_v1`, to the night's last tip-off, outside `M` and never sent
 anywhere), which the record's set replaces as soon as a load reads one. The job runs `publish.js`, `build.js` and the
-smoke test after the models, and commits `state.json`, `pickem.json`, `history.json` and both pages (`index.html`,
+smoke test after the models, and commits `state.json`, `pickem.json`, `history.json`, `gamelog.json` and both pages (`index.html`,
 `admin.html`) when publishing and the tests pass. Whenever the pull succeeded it also commits the data folder
 (`data/calls.json` and `data/suggest_ledger.json` among it, from `main` alone), the model files and `lines.json` (put
 back when the feed's test fails), and `liveparlays/parlays.json` when a finished parlay of X's cleared itself (README

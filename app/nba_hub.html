@@ -820,6 +820,30 @@ function hxLoad() {
   })().then(() => { if (!HX) HX_LOADING = null; });   // a read that failed is made again by the next window
   return HX_LOADING;
 }
+/* a player's games this season (gamelog.json, publish.js THE GAME LOG): read only when a player's matchup bubble first
+   opens, once a load (a read that failed is made again by the next bubble), kept in memory alone. gameLogOf(pid) is
+   null while it is read, false where it did not load, else his games, oldest first: { id, date, team, opp, atHome,
+   res, min, pts, reb, ast, tpm, stl, blk, tov, start } */
+let GLOG = null, GLOG_ERR = false, GLOG_LOADING = null;
+function glLoad() {
+  if (!GLOG_LOADING) { GLOG_ERR = false; GLOG_LOADING = (async () => {
+    try { const r = await fetch('gamelog.json', { cache: 'no-store' }); if (!r.ok) throw new Error(r.status);
+      const j = await r.json(); if (!j || j.v !== 1 || !Array.isArray(j.games) || !Array.isArray(j.line) || !j.players) throw new Error('shape'); GLOG = j; GLOG_ERR = false; }
+    catch (e) { GLOG_ERR = true; }
+  })().then(() => { if (!GLOG) GLOG_LOADING = null; }); }
+  return GLOG_LOADING;
+}
+window.gameLogLoad = glLoad;
+window.gameLogOf = pid => {
+  if (!GLOG) return GLOG_ERR ? false : null;
+  const rows = GLOG.players[pid] || [];
+  return rows.map(r => { const id = GLOG.games[r[0]]; if (!id) return null;
+    const [, ymd, away, home] = id.split('_'), o = { id, date: `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`, away, home };
+    GLOG.line.forEach((k, i) => { o[k] = r[i + 1]; });
+    o.team = o.atHome ? home : away; o.opp = o.atHome ? away : home;
+    const sc = S.finals && S.finals[id]; if (sc) { const me = sc[o.atHome ? 1 : 0], th = sc[o.atHome ? 0 : 1]; o.res = `${me > th ? 'W' : me < th ? 'L' : 'T'} ${me}-${th}`; }
+    return o; }).filter(Boolean);
+};
 const HX_KIND = { p: 'players', c: 'coaches', t: 'teams' };
 /* a series with its games added back up: [{ day, r, ref }] */
 function hxSeries(kind, id) {

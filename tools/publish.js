@@ -29,6 +29,8 @@
  * And history.json, which the page reads only when a rating-over-time window opens: every listed player's, coach's
  * and club's rating game by game since the season before the one in play (THE HISTORY below), with the change over
  * 7 and 30 days and this season, the 7 days of which state.json carries too, for the tables.
+ * And gamelog.json, which the page reads only when a player's matchup bubble first opens: every game each player
+ * took the floor in this season, his box line in it (THE GAME LOG below).
  */
 'use strict';
 const fs = require('fs');
@@ -39,6 +41,7 @@ const DATA = path.join(L.ROOT, 'data');
 const OUT = path.join(L.ROOT, 'state.json');
 const HIST_OUT = path.join(L.ROOT, 'history.json');
 const PICKEM_OUT = path.join(L.ROOT, 'pickem.json');
+const GAMELOG_OUT = path.join(L.ROOT, 'gamelog.json');
 const read = f => JSON.parse(fs.readFileSync(path.join(L.ROOT, f), 'utf8'));
 const csv = (f, dir = DATA) => { const p = path.join(dir, f); if (!fs.existsSync(p)) return []; const lines = fs.readFileSync(p, 'utf8').trim().split('\n'); const h = lines.shift().split(','); return lines.filter(Boolean).map(l => { const v = l.split(','); const o = {}; h.forEach((k, i) => { o[k] = v[i] === undefined ? '' : v[i]; }); return o; }); };
 const num = v => v === '' || v === undefined ? null : +v;
@@ -190,6 +193,9 @@ function main() {
   if (hist) { const hb = JSON.stringify(hist), hbefore = fs.existsSync(HIST_OUT) ? fs.readFileSync(HIST_OUT, 'utf8') : '';
     if (hb !== hbefore) fs.writeFileSync(HIST_OUT, hb);
     L.log(`history.json: ${Object.keys(hist.players).length} players, ${Object.keys(hist.coaches).length} coaches, ${Object.keys(hist.teams).length} clubs, ${(hb.length / 1024).toFixed(0)} KB, ${hb !== hbefore ? 'written' : 'unchanged'}`); }
+  { const gl = gamelogState(games, season), gb = JSON.stringify(gl), gbefore = fs.existsSync(GAMELOG_OUT) ? fs.readFileSync(GAMELOG_OUT, 'utf8') : '';
+    if (gb !== gbefore) fs.writeFileSync(GAMELOG_OUT, gb);
+    L.log(`gamelog.json: ${gl.games.length} games, ${Object.keys(gl.players).length} players, ${(gb.length / 1024).toFixed(0)} KB, ${gb !== gbefore ? 'written' : 'unchanged'}`); }
   L.log(`state.json: ${slate.length} games on the slate ${from}..${to}, ${record.length} graded this season, ${plist.length} players, ${coaches.length} coaches, ${(body.length / 1024).toFixed(0)} KB, ${strip(body) !== strip(before) ? 'written' : 'unchanged'}`);
 }
 /* THE HISTORY, for the page's rating-over-time windows (players.js records it, players.json's history). Every rating is
@@ -396,6 +402,24 @@ function boxesState(games, today) {
   }
   return { from, days: BOX_DAYS, line: BOX_LINE, games: out };
 }
+/* THE GAME LOG, for a player's matchup bubble (README "The matchup bubble", "His last games"; the owner's ask of 19
+   November 2026: "when i click the player i want to be able to see their stats like i can in the player page for nfl").
+   Every final of the season in play that has a box score (the preseason has none), in tip order, and each player's line
+   in every one he took the floor in (a did-not-play row is no game of his): the game's index in games, his minutes,
+   points, rebounds, assists, threes, steals, blocks and turnovers, whether he started and whether his club was at home. The page reads it only when
+   a player's bubble first opens, once a load, no-store, and keeps it in memory alone */
+const GAMELOG_LINE = ['min', 'pts', 'reb', 'ast', 'tpm', 'stl', 'blk', 'tov', 'start', 'atHome'];
+function gamelogState(games, season) {
+  const fin = games.filter(g => +g.season === season && g.status === 'final' && g.type !== 'PRE');
+  const idx = new Map(fin.map((g, i) => [g.game_id, i]));
+  const players = {};
+  for (const r of csv(`box_${season}.csv`)) {
+    const i = idx.get(r.game_id); if (i === undefined || +r.dnp === 1 || !r.player_id) continue;
+    (players[r.player_id] = players[r.player_id] || []).push([i, +r.min || 0, +r.pts || 0, (+r.orb || 0) + (+r.drb || 0), +r.ast || 0, +r.tpm || 0, +r.stl || 0, +r.blk || 0, +r.tov || 0, +r.starter === 1 ? 1 : 0, +r.home === 1 ? 1 : 0]);
+  }
+  for (const k of Object.keys(players)) players[k].sort((a, b) => a[0] - b[0]);
+  return { v: 1, season, line: GAMELOG_LINE, games: fin.map(g => g.game_id), players };
+}
 /* The same-game table the builder prices two legs of one game with (tools/corr.js writes data/corr.json, measured on
    the finished seasons; README "Same-game parlays"): the rho between two legs' hits, the pairs never joined, and the
    same-game hold, the NFL hub's, untested here */
@@ -484,5 +508,5 @@ function teamStatsState(games, season, dir = DATA) {
   }
   return { v: 1, season, through, games: n, clubs };
 }
-module.exports = { decisionState, oppLeagueZ, propsState, boxesState, corrState, pickemState, offFinals, reportState, teamStatsState, TS_STATS, PK_MODELS };
+module.exports = { gamelogState, GAMELOG_LINE, decisionState, oppLeagueZ, propsState, boxesState, corrState, pickemState, offFinals, reportState, teamStatsState, TS_STATS, PK_MODELS };
 if (require.main === module) main();

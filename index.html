@@ -1788,7 +1788,8 @@ window.pcClose = () => window.PARLAY_CARD.close();
      with pbTierCard is a button (glanceName in app/parts/parlay.html, drawn only where this part is on the page,
      window.hubGlance); a click opens a small window anchored to it with that leg's matchup at a glance. It fetches nothing
      of its own and keeps nothing: every number is read from what the page already has (state.json, the lines the Parlay
-     Builder prices from, and pickem.json, the Pick'em Record's own read, once a page load). -->
+     Builder prices from, pickem.json, the Pick'em Record's own read, once a page load, and gamelog.json, a player's games
+     this season, read by the page's own loader, window.gameLogLoad, the first time a player's bubble opens). -->
 <style>
 /* ---------- the matchup bubble (app/parts/glance.html) ----------
    On the page's tokens; quiet text is --ink-2, which holds 4.5:1 on --panel and --panel-2. A name is a button with no
@@ -1840,6 +1841,14 @@ window.pcClose = () => window.PARLAY_CARD.close();
 .glance-picks li.glance-with{font-weight:700}
 .glance-chk{color:var(--ink);font-weight:800}
 .glance-none{margin:0 0 8px}
+.glance-pop table.glance-log{margin:0 0 6px;font-size:12px}
+.glance-pop .glance-log th,.glance-pop .glance-log td{padding:3px 4px;font-size:12px}
+.glance-pop .glance-log thead th{font-size:10.5px;letter-spacing:.03em}
+.glance-pop .glance-log td.glance-hit{color:var(--ink);font-weight:800;box-shadow:inset 0 -2px 0 var(--hot)}
+.glance-pop .glance-log tr.glance-avg th,.glance-pop .glance-log tr.glance-avg td{font-weight:700;background:var(--panel-2)}
+.glance-pop .glance-log .glance-col{background:var(--hot-soft)}
+.glance-hitline{margin:0 0 6px;color:var(--ink-2);font-size:12px}
+.glance-more{display:block;width:100%;min-height:44px;margin:0 0 8px;font-size:12.5px}
 .glance-leg{margin:4px 0 0;padding:8px 10px;border-radius:10px;background:var(--panel-2);border:1px solid var(--line)}
 .glance-lt{margin:0 0 4px;color:var(--ink)}
 .glance-nums{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0}
@@ -2031,7 +2040,63 @@ function playerHtml() {
     table = `<table class="glance-t" aria-label="${propsFailed() ? 'The props model’s projection for him in this game, for reference: the model failed its trial' : 'The props model\'s projection for him in this game, on trial'}"><thead><tr><th scope="col">Projected ${trialMark('proj')}</th><th scope="col" class="glance-n"><span class="sr">for this game</span></th></tr></thead><tbody>${want.map(([k, lab]) =>
       `<tr data-glance-stat="${H(k)}"${st === k ? ' class="glance-on"' : ''}><th scope="row">${H(lab)}</th><td class="glance-n" data-glance-n="proj:${H(k)}">${H(val(k))}</td></tr>`).join('')}</tbody></table>`;
   } else table = `<p class="glance-q glance-none" data-glance-n="noproj">No projection: ${out ? 'he is on the injury report' : gameProj ? 'the props model does not project him for this game' : 'the props model has no projections for this game yet'}.</p>`;
-  return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${tonightBtn(gid)}` };
+  return { title: H(name), body: `${sub}<dl class="glance-kv">${lines.join('')}</dl>${table}${legHtml(K)}${logHtml(pid, L)}${tonightBtn(gid)}` };
+}
+
+/* ---- his last games (gamelog.json, publish.js THE GAME LOG; README "The matchup bubble", "His last games") ----
+   His box line in each game he took the floor in this season, newest first: the last ten, all of them on Show all, his
+   season average over them on its own row; the leg's own stat as a column where it is none of the six shown (steals,
+   blocks, a sum, a double- or triple-double), and wherever the leg is a player's line, each game that would have cashed
+   it marked and counted ("Over 1.5 blocks: 4 of his last 10, 9 of 14 this season"). Read through the page's loader the
+   first time a player's bubble opens; the bubble says so while it is read and where it did not load */
+const LOG_COLS = [['min', 'MIN', 'Minutes'], ['pts', 'PTS', 'Points'], ['reb', 'REB', 'Rebounds'], ['ast', 'AST', 'Assists'], ['tpm', '3PM', 'Threes made']];
+const LOG_SHORT = { stl: 'STL', blk: 'BLK', sb: 'S+B', pra: 'PRA', pr: 'P+R', pa: 'P+A', ar: 'A+R', dd: 'DD', td: 'TD' };
+const LOG_N = 10;
+const logParts = k => { const s = St(); return (s && s.props && s.props.combos && s.props.combos[k]) || { pra: ['pts', 'reb', 'ast'], pr: ['pts', 'reb'], pa: ['pts', 'ast'], ar: ['ast', 'reb'], sb: ['stl', 'blk'] }[k] || null; };
+const tens = r => ['pts', 'reb', 'ast', 'stl', 'blk'].filter(k => r[k] >= 10).length;
+function logVal(r, k) {
+  if (k === 'dd') return tens(r) >= 2 ? 1 : 0;
+  if (k === 'td') return tens(r) >= 3 ? 1 : 0;
+  const parts = logParts(k); return parts ? parts.reduce((t, x) => t + (+r[x] || 0), 0) : (+r[k] || 0);
+}
+/* would this game have cashed the leg: a main line's over or under, a milestone k+, a double- or triple-double's yes */
+function logHit(L, v) {
+  if (!L || L.kind !== 'prop' || !L.stat) return null;
+  if (L.mk === 'main' && isFinite(L.line)) return L.side === 'under' ? v < +L.line : v > +L.line;
+  if (L.mk === 'mile' && isFinite(L.k)) return v >= +L.k;
+  if (L.mk === 'yes') return v >= 1;
+  return null;
+}
+const mdOf = d => `${+d.slice(5, 7)}/${+d.slice(8, 10)}`;
+function logHtml(pid, L) {
+  const load = typeof window.gameLogLoad === 'function' ? window.gameLogLoad : null, of = typeof window.gameLogOf === 'function' ? window.gameLogOf : null;
+  if (!load || !of) return '';
+  /* asked for once a bubble: a read that failed is made again by the next player bubble */
+  if (!cur.logAsked && of(pid) !== null && of(pid) !== false) cur.logAsked = true;
+  if (!cur.logAsked) { cur.logAsked = true; const me = cur; load().then(() => { if (cur === me && box && !box.hidden) draw(); }); }
+  const rows = of(pid);
+  const head = '<h4 class="glance-h4" data-glance-log>His last games</h4>';
+  if (rows === null) {
+    return `${head}<p class="glance-q glance-none" data-glance-n="log:loading">Loading his games…</p>`;
+  }
+  if (rows === false) return `${head}<p class="glance-q glance-none" data-glance-n="log:failed">His games did not load: close and open his bubble again to try again.</p>`;
+  if (!rows.length) return `${head}<p class="glance-q glance-none" data-glance-n="log:none">No games played this season.</p>`;
+  const st = L && L.kind === 'prop' && L.stat ? L.stat : null, onCol = st && LOG_COLS.some(c => c[0] === st);
+  const cols = st && !onCol ? [...LOG_COLS, [st, LOG_SHORT[st] || st.toUpperCase(), (typeof PP_NAMES === 'object' && PP_NAMES[st]) || st]] : LOG_COLS;
+  const all = !!cur.logAll, shown = [...rows].reverse().slice(0, all ? rows.length : LOG_N);
+  const avg = k => { const v = rows.reduce((t, r) => t + logVal(r, k), 0) / rows.length; return k === 'dd' || k === 'td' ? pcL(v) : v.toFixed(1); };
+  const cell = (r, k) => { const v = logVal(r, k), hit = k === st ? logHit(L, v) : null;
+    const txt = k === 'dd' || k === 'td' ? (v ? 'yes' : '–') : String(v);
+    return `<td class="glance-n${k === st ? ' glance-col' : ''}${hit ? ' glance-hit' : ''}"${hit ? ' data-glance-hit' : ''}>${H(txt)}</td>`; };
+  let hitLine = '';
+  if (st) { const h = r => logHit(L, logVal(r, st));
+    if (rows.some(r => h(r) !== null)) { const last = [...rows].reverse().slice(0, LOG_N), nl = last.filter(h).length, ns = rows.filter(h).length;
+      hitLine = `<p class="glance-hitline" data-glance-n="log:hits"><b>${H(L.label || '')}</b>: ${nl} of his last ${last.length}${rows.length > last.length ? `, ${ns} of ${rows.length} this season` : ''}</p>`; } }
+  const th = cols.map(([k, ab, nm]) => `<th scope="col" class="glance-n${k === st ? ' glance-col' : ''}"><abbr title="${H(nm)}">${H(ab)}</abbr></th>`).join('');
+  const body = shown.map(r => `<tr data-glance-game-row="${H(r.id)}"><th scope="row" title="${H(r.date)}${r.res ? ' · ' + H(r.res) : ''}">${H(mdOf(r.date))}</th><td>${r.atHome ? 'vs ' : '@'}${H(r.opp)}${r.res ? ` <span class="glance-q">${H(r.res[0])}</span>` : ''}</td>${cols.map(([k]) => cell(r, k)).join('')}</tr>`).join('');
+  const avgRow = `<tr class="glance-avg"><th scope="row" colspan="2">Avg · ${rows.length} gm</th>${cols.map(([k]) => `<td class="glance-n${k === st ? ' glance-col' : ''}">${H(avg(k))}</td>`).join('')}</tr>`;
+  const more = rows.length > LOG_N ? `<button type="button" class="btn ghost glance-more" data-glance-logall aria-expanded="${all}">${all ? `Show the last ${LOG_N}` : `Show all ${rows.length} games`}</button>` : '';
+  return `${head}${hitLine}<table class="glance-t glance-log" aria-label="His box line in each game this season, newest first, and his season average"><thead><tr><th scope="col">Date</th><th scope="col">Opp</th>${th}</tr></thead><tbody>${avgRow}${body}</tbody></table>${more}`;
 }
 
 /* ---- a team, or a game ---- */
@@ -2116,6 +2181,8 @@ function make() {
     if (t.closest('[data-glance-close]')) { close(true); return; }
     const tn = t.closest('[data-glance-tonight]');
     if (tn) tonight(tn.dataset.glanceTonight);
+    const la = t.closest('[data-glance-logall]');
+    if (la && cur) { try { la.focus({ preventScroll: true }); } catch (e) {} cur.logAll = !cur.logAll; draw(); }
   });
   box.addEventListener('keydown', e => {
     if (e.key !== 'Tab') return;
@@ -2170,7 +2237,7 @@ function place(keep) {
 }
 function draw() {
   if (!cur || !box) return;
-  const scrolled = box.scrollTop || 0, at = document.activeElement, inBox = box.contains(at), key = inBox && at !== box ? ['glanceClose', 'glanceTonight'].find(k => at.dataset && at.dataset[k] != null) : null;
+  const scrolled = box.scrollTop || 0, at = document.activeElement, inBox = box.contains(at), key = inBox && at !== box ? ['glanceClose', 'glanceTonight', 'glanceLogall'].find(k => at.dataset && at.dataset[k] != null) : null;
   let v; try { v = cur.of.startsWith('p:') ? playerHtml() : teamHtml(); } catch (e) { v = { title: 'Matchup', body: `<p class="glance-q">This could not be drawn: ${H(e && e.message || e)}.</p>` }; }
   box.dataset.glanceOf = cur.of; box.dataset.glanceGame = cur.gid;
   box.innerHTML = `<div class="glance-hd"><h3 class="glance-title" id="glanceTitle">${v.title}</h3><button type="button" class="btn ghost glance-x" data-glance-close>Close</button></div><div class="glance-body">${v.body}</div>`;
@@ -2603,6 +2670,30 @@ function hxLoad() {
   })().then(() => { if (!HX) HX_LOADING = null; });   // a read that failed is made again by the next window
   return HX_LOADING;
 }
+/* a player's games this season (gamelog.json, publish.js THE GAME LOG): read only when a player's matchup bubble first
+   opens, once a load (a read that failed is made again by the next bubble), kept in memory alone. gameLogOf(pid) is
+   null while it is read, false where it did not load, else his games, oldest first: { id, date, team, opp, atHome,
+   res, min, pts, reb, ast, tpm, stl, blk, tov, start } */
+let GLOG = null, GLOG_ERR = false, GLOG_LOADING = null;
+function glLoad() {
+  if (!GLOG_LOADING) { GLOG_ERR = false; GLOG_LOADING = (async () => {
+    try { const r = await fetch('gamelog.json', { cache: 'no-store' }); if (!r.ok) throw new Error(r.status);
+      const j = await r.json(); if (!j || j.v !== 1 || !Array.isArray(j.games) || !Array.isArray(j.line) || !j.players) throw new Error('shape'); GLOG = j; GLOG_ERR = false; }
+    catch (e) { GLOG_ERR = true; }
+  })().then(() => { if (!GLOG) GLOG_LOADING = null; }); }
+  return GLOG_LOADING;
+}
+window.gameLogLoad = glLoad;
+window.gameLogOf = pid => {
+  if (!GLOG) return GLOG_ERR ? false : null;
+  const rows = GLOG.players[pid] || [];
+  return rows.map(r => { const id = GLOG.games[r[0]]; if (!id) return null;
+    const [, ymd, away, home] = id.split('_'), o = { id, date: `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}`, away, home };
+    GLOG.line.forEach((k, i) => { o[k] = r[i + 1]; });
+    o.team = o.atHome ? home : away; o.opp = o.atHome ? away : home;
+    const sc = S.finals && S.finals[id]; if (sc) { const me = sc[o.atHome ? 1 : 0], th = sc[o.atHome ? 0 : 1]; o.res = `${me > th ? 'W' : me < th ? 'L' : 'T'} ${me}-${th}`; }
+    return o; }).filter(Boolean);
+};
 const HX_KIND = { p: 'players', c: 'coaches', t: 'teams' };
 /* a series with its games added back up: [{ day, r, ref }] */
 function hxSeries(kind, id) {

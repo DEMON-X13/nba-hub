@@ -111,10 +111,10 @@
     "id": "4576087",
     "name": "Peyton Watson",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Back Bruise",
     "date": "2026-11-18",
-    "returns": "2026-11-18"
+    "returns": "2026-11-20"
    },
    {
     "id": "4683747",
@@ -135,15 +135,6 @@
     "returns": "2026-11-29"
    },
    {
-    "id": "4066757",
-    "name": "Sam Merrill",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Elbow",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "4432158",
     "name": "Evan Mobley",
     "pos": "C",
@@ -155,6 +146,15 @@
   ],
   "DAL": [
    {
+    "id": "5106040",
+    "name": "Tobi Lawal",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Groin",
+    "date": "2026-11-18",
+    "returns": "2026-11-21"
+   },
+   {
     "id": "5279129",
     "name": "Sergio de Larrea",
     "pos": "F",
@@ -162,15 +162,6 @@
     "detail": "Knee Strain",
     "date": "2026-11-17",
     "returns": "2026-11-27"
-   },
-   {
-    "id": "4896372",
-    "name": "Walter Clayton Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
    },
    {
     "id": "4683688",
@@ -182,15 +173,6 @@
     "returns": "2026-11-27"
    },
    {
-    "id": "5106040",
-    "name": "Tobi Lawal",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "5148538",
     "name": "Tarik Biberovic",
     "pos": "F",
@@ -198,24 +180,6 @@
     "detail": "Heel Inflammation",
     "date": "2026-11-17",
     "returns": "2026-11-27"
-   },
-   {
-    "id": "4432582",
-    "name": "Max Christie",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "4593125",
-    "name": "Santi Aldama",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
    }
   ],
   "DEN": [
@@ -287,6 +251,15 @@
   ],
   "GSW": [
    {
+    "id": "3213",
+    "name": "Al Horford",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-11-18",
+    "returns": "2026-11-19"
+   },
+   {
     "id": "4397040",
     "name": "Brandon Williams",
     "pos": "G",
@@ -294,24 +267,6 @@
     "detail": "Hamstring Strain",
     "date": "2026-11-18",
     "returns": "2026-11-22"
-   },
-   {
-    "id": "6589",
-    "name": "Draymond Green",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Elbow Inflammation",
-    "date": "2026-11-18",
-    "returns": "2026-11-18"
-   },
-   {
-    "id": "3213",
-    "name": "Al Horford",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
    },
    {
     "id": "3975",
@@ -372,15 +327,6 @@
     "returns": "2026-11-20"
    },
    {
-    "id": "2530530",
-    "name": "T.J. McConnell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "McConnell (hamstring) is probable to play Wednesday against the Rockets.",
-    "date": "2026-11-17",
-    "returns": ""
-   },
-   {
     "id": "4396993",
     "name": "Tyrese Haliburton",
     "pos": "G",
@@ -410,21 +356,12 @@
   ],
   "LAC": [
    {
-    "id": "5108024",
-    "name": "Yanic Konan Niederhauser",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Foot Surgery",
-    "date": "2026-11-17",
-    "returns": "2026-11-23"
-   },
-   {
     "id": "3913176",
     "name": "Brandon Ingram",
     "pos": "F",
     "status": "Out",
     "detail": "Achilles Surgery",
-    "date": "2026-11-12",
+    "date": "2026-11-18",
     "returns": "2026-11-19"
    },
    {
@@ -640,15 +577,6 @@
     "returns": "2027-01-31"
    },
    {
-    "id": "4432823",
-    "name": "Jaylin Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back Spasms",
-    "date": "2026-11-17",
-    "returns": "2026-11-18"
-   },
-   {
     "id": "4683692",
     "name": "Cason Wallace",
     "pos": "G",
@@ -716,11 +644,11 @@
   ],
   "PHI": [
    {
-    "id": "3917376",
-    "name": "Jaylen Brown",
+    "id": "4431678",
+    "name": "Tyrese Maxey",
     "pos": "G",
     "status": "Out",
-    "detail": "Hamstring Not Specified",
+    "detail": "Foot Soreness",
     "date": "2026-11-18",
     "returns": "2026-11-21"
    },
@@ -728,10 +656,19 @@
     "id": "3912848",
     "name": "Dean Wade",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hamstring Soreness",
     "date": "2026-11-18",
-    "returns": "2026-11-18"
+    "returns": "2026-11-21"
+   },
+   {
+    "id": "3917376",
+    "name": "Jaylen Brown",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-11-18",
+    "returns": "2026-11-21"
    },
    {
     "id": "4870562",
@@ -774,11 +711,29 @@
   ],
   "POR": [
    {
+    "id": "4066211",
+    "name": "Robert Williams III",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-11-18",
+    "returns": "2026-11-21"
+   },
+   {
     "id": "4683021",
     "name": "Deni Avdija",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Foot",
+    "date": "2026-11-18",
+    "returns": "2026-11-19"
+   },
+   {
+    "id": "4431736",
+    "name": "Toumani Camara",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Rest",
     "date": "2026-11-18",
     "returns": "2026-11-19"
    },
@@ -844,10 +799,10 @@
     "id": "5037871",
     "name": "Dylan Harper",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed",
+    "status": "Out",
+    "detail": "Hip Soreness",
     "date": "2026-11-18",
-    "returns": "2026-11-19"
+    "returns": "2026-11-21"
    },
    {
     "id": "6440",

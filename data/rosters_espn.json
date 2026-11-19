@@ -503,7 +503,7 @@
     "name": "Grant Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    }
   ],
   "CHI": [
@@ -540,7 +540,7 @@
     "name": "Noa Essengue",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4871145",
@@ -1429,7 +1429,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2580365",

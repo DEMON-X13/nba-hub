@@ -6,7 +6,7 @@
     "id": "3146557",
     "name": "Jock Landale",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hip Inflammation",
     "date": "2026-11-19",
     "returns": "2026-11-22"
@@ -364,6 +364,15 @@
    }
   ],
   "IND": [
+   {
+    "id": "2530530",
+    "name": "T.J. McConnell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-19",
+    "returns": "2026-11-20"
+   },
    {
     "id": "4395712",
     "name": "Andrew Nembhard",

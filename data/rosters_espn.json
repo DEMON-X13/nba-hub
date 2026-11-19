@@ -1094,7 +1094,7 @@
     "name": "Ebuka Okorie",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5037878",
@@ -3393,7 +3393,7 @@
     "name": "Scottie Barnes",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4395625",

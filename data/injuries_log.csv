@@ -5420,12 +5420,13 @@ date,team,player_id,name,status
 2026-11-19,ATL,4712863,Mouhamed Gueye,Out
 2026-11-19,ATL,5105571,Henri Veesaar,Out
 2026-11-19,BKN,4702670,Grant Nelson,Out
-2026-11-19,CHA,3135045,Grayson Allen,Day-To-Day
+2026-11-19,CHA,3135045,Grayson Allen,Out
 2026-11-19,CHA,5061575,Kon Knueppel,Out
 2026-11-19,CHA,3032979,Dennis Schroder,Out
+2026-11-19,CHI,5242496,Noa Essengue,Day-To-Day
 2026-11-19,CHI,5105555,Tobe Awaka,Out
 2026-11-19,CHI,5095151,Caleb Wilson,Out
-2026-11-19,CLE,4683747,Jaylon Tyson,Day-To-Day
+2026-11-19,CLE,4683747,Jaylon Tyson,Out
 2026-11-19,CLE,4576087,Peyton Watson,Day-To-Day
 2026-11-19,CLE,5106268,Nae'Qwan Tomlin,Out
 2026-11-19,CLE,4432158,Evan Mobley,Out
@@ -5434,10 +5435,11 @@ date,team,player_id,name,status
 2026-11-19,DAL,4683688,Dereck Lively II,Out
 2026-11-19,DAL,5148538,Tarik Biberovic,Out
 2026-11-19,DEN,4432181,Julian Strawther,Out
-2026-11-19,DET,5037878,Ugonna Onyenso,Day-To-Day
-2026-11-19,DET,2990962,Taurean Prince,Day-To-Day
-2026-11-19,DET,4683771,Ronald Holland II,Day-To-Day
+2026-11-19,DET,2990962,Taurean Prince,Out
+2026-11-19,DET,5258459,Ebuka Okorie,Out
+2026-11-19,DET,4683771,Ronald Holland II,Out
 2026-11-19,DET,4432166,Cade Cunningham,Day-To-Day
+2026-11-19,DET,5037878,Ugonna Onyenso,Day-To-Day
 2026-11-19,DET,3157465,Duncan Robinson,Out
 2026-11-19,DET,4433621,Jalen Duren,Out
 2026-11-19,GSW,6589,Draymond Green,Out
@@ -5505,9 +5507,8 @@ date,team,player_id,name,status
 2026-11-19,SAS,5037871,Dylan Harper,Out
 2026-11-19,SAS,6440,Tobias Harris,Out
 2026-11-19,SAS,5101845,Jayden Quaintance,Out
+2026-11-19,TOR,5093267,Collin Murray-Boyles,Out
 2026-11-19,TOR,4395625,RJ Barrett,Out
-2026-11-19,TOR,4433134,Scottie Barnes,Day-To-Day
-2026-11-19,TOR,5093267,Collin Murray-Boyles,Day-To-Day
 2026-11-19,TOR,6450,Kawhi Leonard,Out
 2026-11-19,TOR,4432586,Nate Bittle,Out
 2026-11-19,UTA,4066336,Lauri Markkanen,Out

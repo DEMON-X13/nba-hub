@@ -1606,8 +1606,8 @@
    "spread": -1.3
   },
   "2027_20261118_DET_NOP": {
-   "pHome": 0.3678,
-   "spread": 4.1
+   "pHome": 0.4048,
+   "spread": 2.9
   },
   "2027_20261118_GSW_DAL": {
    "pHome": 0.5361,
@@ -2277,5 +2277,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-19T00:36Z"
+ "generated": "2026-11-19T01:15Z"
 }

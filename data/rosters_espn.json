@@ -1073,7 +1073,7 @@
     "name": "Isaiah Joe",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107818",
@@ -1329,7 +1329,7 @@
     "name": "Alperen Sengun",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4711272",

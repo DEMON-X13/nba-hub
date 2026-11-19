@@ -1068,10 +1068,12 @@ November 2026, so the sets take none." (the bar's own FAIL, never reached now, w
 bar"), and those words are what the suggestions record keeps for a level it locks empty (the Top 50's note no longer
 says it since 10 November 2026, when the list took DraftKings' player lines). The Parlay Builder's lead no
 longer calls the model on trial, and a player's leg a visitor adds by hand from the Player props view is drawn in the
-builder as its row in the view is, at DraftKings' fair chance, marked "failed trial", the model's chance small and muted
+builder as its row in the view is, at DraftKings' fair chance, the model's chance small and muted
 for reference only, which no list or set takes (README "Parlay Builder", "After the FAIL", 6 November 2026). The Player
-props view says it too: on a FAIL its header's tag reads "Props model: failed trial" and its folded note's summary "The
-props model failed its trial against DraftKings: the chances here are DraftKings' own, its projections for reference",
+props view says it too: on a FAIL its header wears no trial tag and its folded note's summary reads "The chances here
+are DraftKings' own; the props model's projections are for reference" (since 19 November 2026 the page never says "failed
+trial" anywhere a visitor reads it, the owner's call: "i don't want to see failed everywhere that looks goofy"; the
+reasons stay in the titles),
 every player line drawn at DraftKings' fair chance (README "Player props", "What a FAIL changes"). Run end to end on a scratch copy of 5 November's data at 18:05 UTC
 (`NBA_DATA_DIR`, `NBA_PROPS_LEDGER`, `NBA_PROPS_LINES`, `NBA_PROPS_OUT` and `NBA_NOW`, the real files untouched), the run
 wrote that decision on 12,298 lines and 121 games, dropped the 33 open calls, and the check passed; a run at 17:59 UTC

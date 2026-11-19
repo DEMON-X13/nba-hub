@@ -743,9 +743,9 @@ function sfOwn(k, mu, v) {
   console.log('7. the README beside the view');
   { const RM = fs.readFileSync(path.resolve(__dirname, '..', 'README.md'), 'utf8'), HUB = fs.readFileSync(path.resolve(__dirname, '..', 'app', 'nba_hub.html'), 'utf8');
     const sec = (RM.split('### The shadow ledger')[1] || '').split('\n### ')[0].replace(/\s+/g, ' ');
-    const tag = (/const PP_FAIL_TAG = '([^']+)'/.exec(HUB) || [])[1], sum = (/data-pp-fail><summary data-pp-key="trial">([^<]+)<\/summary>/.exec(HUB) || [])[1];
-    check(tag && sum && sec.includes(`"${tag}"`) && sec.includes(`"${sum}"`) && !/"Model on trial" tag are unchanged/.test(sec),
-      `README's shadow ledger says the view's FAIL tag ("${tag}") and summary ("${(sum || '').slice(0, 50)}…") as the page writes them, and no longer that its "Model on trial" tag is unchanged`); }
+    const sum = (/data-pp-fail><summary data-pp-key="trial">([^<]+)<\/summary>/.exec(HUB) || [])[1];
+    check(sum && !/PP_FAIL_TAG/.test(HUB) && sec.includes('header wears no trial tag') && sec.replace(/\s+/g, ' ').includes(`"${sum}"`) && !/"Model on trial" tag are unchanged/.test(sec),
+      `README's shadow ledger says the view's FAIL wears no tag and its summary ("${(sum || '').slice(0, 50)}…") as the page writes them, and no longer that its "Model on trial" tag is unchanged`); }
 
   fs.rmSync(tmp, { recursive: true, force: true });
   console.log(fails ? `${fails} failed` : 'all good');

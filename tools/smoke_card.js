@@ -530,7 +530,7 @@ module.exports = async function parlayCard({ check, pageFile, ROOT }) {
       const bold = W6.PARLAY_CARD.chanceLines(m).flat().filter(x => x[1]).map(x => x[0]);
       if (ys.length > 2) wrapped++;
       check(m.failed && !out.length && rows.join(' ') === lines.join(' ') && ys.every((y, i) => !i || y - ys[i - 1] === 18) && cv && cv.height === 2 * H
-        && bold.every(b => ch.some(x => /^700 /.test(x.font) && x.t.includes(b))) && lines.some(t => t.includes(`, its player ${word} the props model’s, which failed its trial`)) && lines.some(t => / · the price says [\d.]+%$/.test(t) || /^the price says/.test(t)),
+        && bold.every(b => ch.some(x => /^700 /.test(x.font) && x.t.includes(b))) && lines.some(t => t.includes(`, its player ${word} the props model’s, for reference`)) && lines.some(t => / · the price says [\d.]+%$/.test(t) || /^the price says/.test(t)),
         `after the FAIL, ${name}: the image keeps every chance piece inside the card (${L} to ${R}), on ${ys.length} rows of 18px, the card ${H}px tall, the rows the window's lines word for word ("${rows.join(' | ')}")${out.length ? `: past the edge ${out.map(x => `"${x.t}" ${Math.round(x.x)} to ${Math.round(x.x + r6.em(x.t, x.font))}`).join(', ')}` : ''}`);
       W6.PARLAY_CARD.close();
     }

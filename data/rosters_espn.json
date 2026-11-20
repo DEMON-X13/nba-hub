@@ -610,7 +610,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4848625",
@@ -2623,7 +2623,7 @@
     "name": "Nikola Topic",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683692",
@@ -2886,7 +2886,7 @@
     "name": "Dean Wade",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432446",

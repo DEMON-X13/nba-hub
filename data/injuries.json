@@ -108,6 +108,15 @@
   ],
   "CHI": [
    {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-20",
+    "returns": "2026-11-20"
+   },
+   {
     "id": "5242496",
     "name": "Noa Essengue",
     "pos": "F",
@@ -224,6 +233,15 @@
   ],
   "DET": [
    {
+    "id": "4683771",
+    "name": "Ronald Holland II",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee Bruise",
+    "date": "2026-11-20",
+    "returns": "2026-11-20"
+   },
+   {
     "id": "2990962",
     "name": "Taurean Prince",
     "pos": "F",
@@ -238,15 +256,6 @@
     "pos": "G",
     "status": "Out",
     "detail": "Oblique Strain",
-    "date": "2026-11-19",
-    "returns": "2026-11-22"
-   },
-   {
-    "id": "4683771",
-    "name": "Ronald Holland II",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Bruise",
     "date": "2026-11-19",
     "returns": "2026-11-22"
    },
@@ -642,6 +651,15 @@
   ],
   "OKC": [
    {
+    "id": "5159925",
+    "name": "Nikola Topic",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hip Soreness",
+    "date": "2026-11-20",
+    "returns": "2026-11-22"
+   },
+   {
     "id": "2991350",
     "name": "Alex Caruso",
     "pos": "G",
@@ -727,13 +745,13 @@
   ],
   "PHI": [
    {
-    "id": "3912848",
-    "name": "Dean Wade",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hamstring Soreness",
-    "date": "2026-11-19",
-    "returns": "2026-11-21"
+    "id": "5105637",
+    "name": "Adem Bona",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Back Sprain",
+    "date": "2026-11-20",
+    "returns": "2026-11-23"
    },
    {
     "id": "4431678",
@@ -741,7 +759,7 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Foot Soreness",
-    "date": "2026-11-19",
+    "date": "2026-11-20",
     "returns": "2026-11-21"
    },
    {
@@ -750,7 +768,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring Not Specified",
-    "date": "2026-11-18",
+    "date": "2026-11-20",
     "returns": "2026-11-23"
    },
    {
@@ -759,16 +777,7 @@
     "pos": "F",
     "status": "Out",
     "detail": "Back Fracture",
-    "date": "2026-11-17",
-    "returns": "2026-11-21"
-   },
-   {
-    "id": "5105637",
-    "name": "Adem Bona",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Back Sprain",
-    "date": "2026-11-12",
+    "date": "2026-11-20",
     "returns": "2026-11-21"
    },
    {

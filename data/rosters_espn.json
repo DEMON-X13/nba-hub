@@ -1159,7 +1159,7 @@
     "name": "LJ Cryer",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3975",
@@ -1273,7 +1273,7 @@
     "name": "Steven Adams",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3037789",
@@ -1897,7 +1897,7 @@
     "name": "Isaiah Stewart",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5112087",
@@ -2232,7 +2232,7 @@
     "name": "Jonathan Kuminga",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3136196",
@@ -3030,7 +3030,7 @@
     "name": "Toumani Camara",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4592435",

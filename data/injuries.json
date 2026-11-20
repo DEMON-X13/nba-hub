@@ -298,15 +298,6 @@
     "returns": "2026-11-22"
    },
    {
-    "id": "4433149",
-    "name": "LJ Cryer",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-19",
-    "returns": "2026-11-19"
-   },
-   {
     "id": "4397040",
     "name": "Brandon Williams",
     "pos": "G",
@@ -354,11 +345,11 @@
   ],
   "HOU": [
    {
-    "id": "4871144",
-    "name": "Alperen Sengun",
+    "id": "2991235",
+    "name": "Steven Adams",
     "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Eye",
+    "detail": "Quadriceps Bruise",
     "date": "2026-11-19",
     "returns": "2026-11-20"
    },
@@ -368,7 +359,16 @@
     "pos": "C",
     "status": "Out",
     "detail": "Ankle Sprain",
-    "date": "2026-11-17",
+    "date": "2026-11-19",
+    "returns": "2026-11-23"
+   },
+   {
+    "id": "4871144",
+    "name": "Alperen Sengun",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Eye",
+    "date": "2026-11-19",
     "returns": "2026-11-20"
    }
   ],
@@ -464,20 +464,11 @@
     "pos": "G",
     "status": "Out",
     "detail": "Heel Bruise",
-    "date": "2026-11-19",
-    "returns": "2026-11-20"
+    "date": "2026-11-20",
+    "returns": "2026-11-23"
    }
   ],
   "MEM": [
-   {
-    "id": "4432810",
-    "name": "Isaiah Stewart",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-19",
-    "returns": "2026-11-19"
-   },
    {
     "id": "4600663",
     "name": "Zach Edey",
@@ -565,15 +556,6 @@
    }
   ],
   "MIN": [
-   {
-    "id": "4433247",
-    "name": "Jonathan Kuminga",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Shoulder",
-    "date": "2026-11-18",
-    "returns": "2026-11-19"
-   },
    {
     "id": "4432247",
     "name": "Jaylen Clark",
@@ -803,6 +785,15 @@
   ],
   "POR": [
    {
+    "id": "4683021",
+    "name": "Deni Avdija",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Foot",
+    "date": "2026-11-20",
+    "returns": "2026-11-21"
+   },
+   {
     "id": "4706557",
     "name": "Chris Youngblood",
     "pos": "G",
@@ -819,24 +810,6 @@
     "detail": "Rest",
     "date": "2026-11-18",
     "returns": "2026-11-21"
-   },
-   {
-    "id": "4683021",
-    "name": "Deni Avdija",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Foot",
-    "date": "2026-11-18",
-    "returns": "2026-11-19"
-   },
-   {
-    "id": "4431736",
-    "name": "Toumani Camara",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-11-18",
-    "returns": "2026-11-19"
    },
    {
     "id": "4578893",
@@ -955,6 +928,15 @@
   ],
   "UTA": [
    {
+    "id": "3102530",
+    "name": "Jusuf Nurkic",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot Strain",
+    "date": "2026-11-20",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "4066336",
     "name": "Lauri Markkanen",
     "pos": "F",
@@ -962,15 +944,6 @@
     "detail": "Hand Fracture",
     "date": "2026-11-11",
     "returns": "2027-01-04"
-   },
-   {
-    "id": "3102530",
-    "name": "Jusuf Nurkic",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Foot Strain",
-    "date": "2026-11-06",
-    "returns": "2026-11-20"
    },
    {
     "id": "4277961",

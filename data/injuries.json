@@ -184,6 +184,15 @@
   ],
   "DAL": [
    {
+    "id": "4683688",
+    "name": "Dereck Lively II",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Foot Surgery",
+    "date": "2026-11-20",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "5106040",
     "name": "Tobi Lawal",
     "pos": "F",
@@ -198,15 +207,6 @@
     "pos": "F",
     "status": "Out",
     "detail": "Knee Strain",
-    "date": "2026-11-17",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "4683688",
-    "name": "Dereck Lively II",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Foot Surgery",
     "date": "2026-11-17",
     "returns": "2026-11-27"
    },
@@ -383,6 +383,15 @@
   ],
   "IND": [
    {
+    "id": "4396993",
+    "name": "Tyrese Haliburton",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-20",
+    "returns": "2026-12-13"
+   },
+   {
     "id": "2530530",
     "name": "T.J. McConnell",
     "pos": "G",
@@ -410,15 +419,6 @@
     "returns": "2026-11-20"
    },
    {
-    "id": "4396993",
-    "name": "Tyrese Haliburton",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-17",
-    "returns": "2026-11-28"
-   },
-   {
     "id": "5157066",
     "name": "Johnny Furphy",
     "pos": "G",
@@ -444,8 +444,8 @@
     "pos": "F",
     "status": "Out",
     "detail": "Achilles Surgery",
-    "date": "2026-11-18",
-    "returns": "2026-11-21"
+    "date": "2026-11-20",
+    "returns": "2026-11-23"
    },
    {
     "id": "6580",
@@ -926,6 +926,15 @@
   ],
   "TOR": [
    {
+    "id": "6450",
+    "name": "Kawhi Leonard",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Inflammation",
+    "date": "2026-11-20",
+    "returns": "2026-12-03"
+   },
+   {
     "id": "5093267",
     "name": "Collin Murray-Boyles",
     "pos": "F",
@@ -942,15 +951,6 @@
     "detail": "Hamstring Strain",
     "date": "2026-11-19",
     "returns": "2026-12-13"
-   },
-   {
-    "id": "6450",
-    "name": "Kawhi Leonard",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Inflammation",
-    "date": "2026-11-17",
-    "returns": "2026-11-27"
    },
    {
     "id": "4432586",

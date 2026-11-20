@@ -5518,8 +5518,8 @@ date,team,player_id,name,status
 2026-11-19,WAS,4432187,Reece Beekman,Out
 2026-11-19,WAS,4432907,Justin Champagnie,Out
 2026-11-19,WAS,4606840,Jamir Watkins,Out
+2026-11-20,ATL,5149077,Kingston Flemings,Out
 2026-11-20,ATL,3146557,Jock Landale,Out
-2026-11-20,ATL,5149077,Kingston Flemings,Day-To-Day
 2026-11-20,ATL,4873201,Asa Newell,Out
 2026-11-20,ATL,2490149,CJ McCollum,Out
 2026-11-20,ATL,4712863,Mouhamed Gueye,Out
@@ -5537,6 +5537,8 @@ date,team,player_id,name,status
 2026-11-20,CLE,4576087,Peyton Watson,Day-To-Day
 2026-11-20,CLE,5106268,Nae'Qwan Tomlin,Out
 2026-11-20,CLE,4432158,Evan Mobley,Out
+2026-11-20,DAL,4278078,P.J. Washington,Day-To-Day
+2026-11-20,DAL,4896372,Walter Clayton Jr.,Day-To-Day
 2026-11-20,DAL,4683688,Dereck Lively II,Out
 2026-11-20,DAL,5106040,Tobi Lawal,Day-To-Day
 2026-11-20,DAL,5279129,Sergio de Larrea,Out
@@ -5575,8 +5577,6 @@ date,team,player_id,name,status
 2026-11-20,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-20,MEM,5105462,Richie Saunders,Out
 2026-11-20,MIA,4431772,Myron Gardner,Day-To-Day
-2026-11-20,MIL,3133628,Myles Turner,Day-To-Day
-2026-11-20,MIL,3134907,Kyle Kuzma,Day-To-Day
 2026-11-20,MIL,4997526,Ousmane Dieng,Out
 2026-11-20,MIN,4432247,Jaylen Clark,Out
 2026-11-20,MIN,4594268,Anthony Edwards,Out
@@ -5586,6 +5586,8 @@ date,team,player_id,name,status
 2026-11-20,NOP,4683634,Bennedict Mathurin,Out
 2026-11-20,NOP,4397688,Trey Murphy III,Out
 2026-11-20,NOP,3907497,Dejounte Murray,Out
+2026-11-20,NYK,2528426,Jordan Clarkson,Out
+2026-11-20,NYK,3934719,OG Anunoby,Day-To-Day
 2026-11-20,OKC,5159925,Nikola Topic,Out
 2026-11-20,OKC,2991350,Alex Caruso,Day-To-Day
 2026-11-20,OKC,5061603,Thomas Sorber,Out
@@ -5596,19 +5598,19 @@ date,team,player_id,name,status
 2026-11-20,ORL,4065654,Jonathan Isaac,Out
 2026-11-20,ORL,5214637,Noah Penda,Out
 2026-11-20,ORL,4432573,Paolo Banchero,Out
-2026-11-20,PHI,5105637,Adem Bona,Out
-2026-11-20,PHI,4431678,Tyrese Maxey,Day-To-Day
-2026-11-20,PHI,3917376,Jaylen Brown,Out
 2026-11-20,PHI,4870562,Dominick Barlow,Out
+2026-11-20,PHI,3912848,Dean Wade,Out
+2026-11-20,PHI,4431678,Tyrese Maxey,Day-To-Day
+2026-11-20,PHI,5105637,Adem Bona,Out
+2026-11-20,PHI,3917376,Jaylen Brown,Out
 2026-11-20,PHI,4871141,Ariel Hukporti,Out
 2026-11-20,PHX,4701232,Mark Williams,Out
-2026-11-20,POR,4066211,Robert Williams III,Day-To-Day
-2026-11-20,POR,4683021,Deni Avdija,Day-To-Day
 2026-11-20,POR,4706557,Chris Youngblood,Out
+2026-11-20,POR,4683021,Deni Avdija,Day-To-Day
 2026-11-20,POR,4578893,Vit Krejci,Out
 2026-11-20,POR,4279888,Ja Morant,Out
 2026-11-20,POR,4914336,Shaedon Sharpe,Out
-2026-11-20,SAC,4431679,Precious Achiuwa,Day-To-Day
+2026-11-20,SAC,4431679,Precious Achiuwa,Out
 2026-11-20,SAC,4065732,De'Andre Hunter,Day-To-Day
 2026-11-20,SAC,4898371,Maxime Raynaud,Out
 2026-11-20,SAC,3907387,Ben Simmons,Out

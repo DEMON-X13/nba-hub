@@ -1,5 +1,5 @@
 {
- "date": "2026-11-19",
+ "date": "2026-11-20",
  "teams": {
   "ATL": [
    {
@@ -292,9 +292,9 @@
     "id": "6589",
     "name": "Draymond Green",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-11-19",
+    "date": "2026-11-20",
     "returns": "2026-11-22"
    },
    {
@@ -473,9 +473,18 @@
     "id": "4600663",
     "name": "Zach Edey",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-11-19",
+    "date": "2026-11-20",
+    "returns": "2026-11-21"
+   },
+   {
+    "id": "2991070",
+    "name": "Jerami Grant",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Calf Not Specified",
+    "date": "2026-11-20",
     "returns": "2026-11-21"
    },
    {
@@ -528,21 +537,21 @@
   ],
   "MIL": [
    {
-    "id": "3134907",
-    "name": "Kyle Kuzma",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Shoulder Bruise",
-    "date": "2026-11-19",
-    "returns": "2026-11-21"
-   },
-   {
     "id": "3133628",
     "name": "Myles Turner",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Shoulder Bruise",
-    "date": "2026-11-19",
+    "date": "2026-11-20",
+    "returns": "2026-11-21"
+   },
+   {
+    "id": "3134907",
+    "name": "Kyle Kuzma",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Shoulder Bruise",
+    "date": "2026-11-20",
     "returns": "2026-11-21"
    },
    {
@@ -785,10 +794,19 @@
   ],
   "POR": [
    {
+    "id": "4066211",
+    "name": "Robert Williams III",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Rest",
+    "date": "2026-11-20",
+    "returns": "2026-11-21"
+   },
+   {
     "id": "4683021",
     "name": "Deni Avdija",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Foot",
     "date": "2026-11-20",
     "returns": "2026-11-21"
@@ -800,15 +818,6 @@
     "status": "Out",
     "detail": "Heel Bruise",
     "date": "2026-11-19",
-    "returns": "2026-11-21"
-   },
-   {
-    "id": "4066211",
-    "name": "Robert Williams III",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Rest",
-    "date": "2026-11-18",
     "returns": "2026-11-21"
    },
    {
@@ -840,6 +849,24 @@
    }
   ],
   "SAC": [
+   {
+    "id": "4431679",
+    "name": "Precious Achiuwa",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg Bruise",
+    "date": "2026-11-20",
+    "returns": "2026-11-20"
+   },
+   {
+    "id": "4065732",
+    "name": "De'Andre Hunter",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hip Soreness",
+    "date": "2026-11-20",
+    "returns": "2026-11-20"
+   },
    {
     "id": "4898371",
     "name": "Maxime Raynaud",

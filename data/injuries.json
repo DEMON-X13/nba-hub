@@ -59,22 +59,31 @@
   ],
   "BOS": [
    {
-    "id": "4065648",
-    "name": "Jayson Tatum",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
+    "id": "4351852",
+    "name": "Mitchell Robinson",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Illness",
     "date": "2026-11-21",
-    "returns": "2026-11-21"
+    "returns": "2026-11-22"
    },
    {
     "id": "3078576",
     "name": "Derrick White",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Shoulder",
     "date": "2026-11-21",
-    "returns": "2026-11-21"
+    "returns": "2026-11-22"
+   },
+   {
+    "id": "4065648",
+    "name": "Jayson Tatum",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Rest",
+    "date": "2026-11-21",
+    "returns": "2026-11-22"
    }
   ],
   "BKN": [
@@ -524,7 +533,16 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-11-19",
+    "date": "2026-11-21",
+    "returns": "2026-11-22"
+   },
+   {
+    "id": "3032977",
+    "name": "Giannis Antetokounmpo",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin",
+    "date": "2026-11-21",
     "returns": "2026-11-22"
    }
   ],
@@ -702,6 +720,15 @@
   ],
   "ORL": [
    {
+    "id": "4065654",
+    "name": "Jonathan Isaac",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Not Specified",
+    "date": "2026-11-21",
+    "returns": "2026-11-29"
+   },
+   {
     "id": "5107251",
     "name": "Izaiyah Nelson",
     "pos": "F",
@@ -711,22 +738,13 @@
     "returns": "2026-11-29"
    },
    {
-    "id": "4065654",
-    "name": "Jonathan Isaac",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Not Specified",
-    "date": "2026-11-15",
-    "returns": "2026-11-22"
-   },
-   {
     "id": "5214637",
     "name": "Noah Penda",
     "pos": "F",
     "status": "Out",
     "detail": "Hamstring Strain",
     "date": "2026-11-14",
-    "returns": "2026-11-22"
+    "returns": "2026-11-29"
    },
    {
     "id": "4432573",

@@ -324,5 +324,6 @@
  "2027_20261120_PHX_UTA": {"at":"2026-11-21T15:24Z","status":"ok","lines":92,"tries":1},
  "2027_20261120_SAC_LAL": {"at":"2026-11-21T15:24Z","status":"ok","lines":87,"tries":1},
  "2027_20261120_TOR_DET": {"at":"2026-11-21T15:24Z","status":"ok","lines":118,"tries":1},
- "2027_20261120_WAS_CHI": {"at":"2026-11-21T15:24Z","status":"ok","lines":112,"tries":1}
+ "2027_20261120_WAS_CHI": {"at":"2026-11-21T15:24Z","status":"ok","lines":112,"tries":1},
+ "2027_20261121_MIL_PHI": {"at":"2026-11-21T21:42Z","status":"ok","lines":101,"tries":1}
 }

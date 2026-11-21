@@ -212,7 +212,7 @@
     "name": "Mitchell Robinson",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4593841",
@@ -1920,7 +1920,7 @@
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107157",

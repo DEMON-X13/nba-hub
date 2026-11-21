@@ -5644,15 +5644,15 @@ date,team,player_id,name,status
 2026-11-21,CLE,4683747,Jaylon Tyson,Out
 2026-11-21,CLE,5106268,Nae'Qwan Tomlin,Out
 2026-11-21,CLE,4432158,Evan Mobley,Out
-2026-11-21,DAL,4278078,P.J. Washington,Day-To-Day
+2026-11-21,DAL,4278078,P.J. Washington,Out
 2026-11-21,DAL,5106040,Tobi Lawal,Out
-2026-11-21,DAL,4896372,Walter Clayton Jr.,Day-To-Day
 2026-11-21,DAL,4683688,Dereck Lively II,Out
 2026-11-21,DAL,5279129,Sergio de Larrea,Out
 2026-11-21,DAL,5148538,Tarik Biberovic,Out
 2026-11-21,DEN,4432181,Julian Strawther,Out
-2026-11-21,DET,5258459,Ebuka Okorie,Day-To-Day
 2026-11-21,DET,4683771,Ronald Holland II,Out
+2026-11-21,DET,5258459,Ebuka Okorie,Out
+2026-11-21,DET,4432166,Cade Cunningham,Day-To-Day
 2026-11-21,DET,2990962,Taurean Prince,Out
 2026-11-21,DET,5037878,Ugonna Onyenso,Day-To-Day
 2026-11-21,DET,3157465,Duncan Robinson,Out
@@ -5664,7 +5664,8 @@ date,team,player_id,name,status
 2026-11-21,GSW,4432171,Moses Moody,Out
 2026-11-21,GSW,6430,Jimmy Butler III,Out
 2026-11-21,HOU,3102529,Clint Capela,Out
-2026-11-21,IND,2530530,T.J. McConnell,Day-To-Day
+2026-11-21,IND,2530530,T.J. McConnell,Out
+2026-11-21,IND,3149673,Pascal Siakam,Day-To-Day
 2026-11-21,IND,4396993,Tyrese Haliburton,Out
 2026-11-21,IND,5157066,Johnny Furphy,Out
 2026-11-21,IND,4433076,Ben Sheppard,Out
@@ -5689,11 +5690,13 @@ date,team,player_id,name,status
 2026-11-21,NOP,4576086,Bryce McGowens,Out
 2026-11-21,NOP,4683634,Bennedict Mathurin,Out
 2026-11-21,NOP,3907497,Dejounte Murray,Out
-2026-11-21,NYK,3934719,OG Anunoby,Day-To-Day
-2026-11-21,NYK,3136195,Karl-Anthony Towns,Day-To-Day
+2026-11-21,NYK,3136195,Karl-Anthony Towns,Out
+2026-11-21,NYK,3934719,OG Anunoby,Out
 2026-11-21,NYK,2528426,Jordan Clarkson,Out
-2026-11-21,OKC,5159925,Nikola Topic,Day-To-Day
-2026-11-21,OKC,2991350,Alex Caruso,Day-To-Day
+2026-11-21,OKC,4278073,Shai Gilgeous-Alexander,Day-To-Day
+2026-11-21,OKC,5159925,Nikola Topic,Out
+2026-11-21,OKC,4432823,Jaylin Williams,Out
+2026-11-21,OKC,2991350,Alex Caruso,Out
 2026-11-21,OKC,5061603,Thomas Sorber,Out
 2026-11-21,OKC,4683692,Cason Wallace,Out
 2026-11-21,OKC,4433255,Chet Holmgren,Out
@@ -5709,7 +5712,6 @@ date,team,player_id,name,status
 2026-11-21,PHX,4888725,Ryan Dunn,Day-To-Day
 2026-11-21,PHX,4701232,Mark Williams,Out
 2026-11-21,POR,4706557,Chris Youngblood,Out
-2026-11-21,POR,4683021,Deni Avdija,Day-To-Day
 2026-11-21,POR,4578893,Vit Krejci,Out
 2026-11-21,POR,4279888,Ja Morant,Out
 2026-11-21,POR,4914336,Shaedon Sharpe,Out

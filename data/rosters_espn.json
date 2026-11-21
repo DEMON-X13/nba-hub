@@ -796,7 +796,7 @@
     "name": "Walter Clayton Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5279129",
@@ -1024,7 +1024,7 @@
     "name": "Cade Cunningham",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433621",
@@ -1471,7 +1471,7 @@
     "name": "Pascal Siakam",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4398207",
@@ -2560,7 +2560,7 @@
     "name": "Shai Gilgeous-Alexander",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4222252",
@@ -2644,7 +2644,7 @@
     "name": "Jaylin Williams",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3133626",
@@ -3023,7 +3023,7 @@
     "name": "Deni Avdija",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4431736",

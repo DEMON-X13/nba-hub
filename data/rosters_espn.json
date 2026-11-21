@@ -454,7 +454,7 @@
     "name": "Brandon Miller",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2583632",
@@ -540,7 +540,7 @@
     "name": "Noa Essengue",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4871145",
@@ -759,7 +759,7 @@
     "name": "Peyton Watson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    }
   ],
   "DAL": [
@@ -1024,7 +1024,7 @@
     "name": "Cade Cunningham",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433621",
@@ -1429,7 +1429,7 @@
     "name": "T.J. McConnell",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2580365",
@@ -1443,7 +1443,7 @@
     "name": "Andrew Nembhard",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4396909",
@@ -1485,7 +1485,7 @@
     "name": "Braden Smith",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4278355",
@@ -1785,7 +1785,7 @@
     "name": "Cameron Boozer",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4903027",
@@ -1799,7 +1799,7 @@
     "name": "Zach Edey",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2991070",
@@ -1883,7 +1883,7 @@
     "name": "Javon Small",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4433083",
@@ -2353,7 +2353,7 @@
     "name": "Trey Murphy III",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3907497",

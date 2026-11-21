@@ -315,5 +315,14 @@
  "2027_20261119_GSW_MEM": {"at":"2026-11-20T16:11Z","status":"ok","lines":102,"tries":1},
  "2027_20261119_LAC_SAS": {"at":"2026-11-20T16:11Z","status":"ok","lines":111,"tries":1},
  "2027_20261119_NYK_MIN": {"at":"2026-11-20T16:11Z","status":"ok","lines":149,"tries":1},
- "2027_20261119_POR_MIL": {"at":"2026-11-20T16:11Z","status":"ok","lines":112,"tries":1}
+ "2027_20261119_POR_MIL": {"at":"2026-11-20T16:11Z","status":"ok","lines":112,"tries":1},
+ "2027_20261120_CHA_ATL": {"at":"2026-11-21T15:24Z","status":"ok","lines":112,"tries":1},
+ "2027_20261120_HOU_DEN": {"at":"2026-11-21T15:24Z","status":"ok","lines":123,"tries":1},
+ "2027_20261120_IND_CLE": {"at":"2026-11-21T15:24Z","status":"ok","lines":124,"tries":1},
+ "2027_20261120_NOP_OKC": {"at":"2026-11-21T15:24Z","status":"ok","lines":114,"tries":1},
+ "2027_20261120_ORL_BKN": {"at":"2026-11-21T15:24Z","status":"ok","lines":113,"tries":1},
+ "2027_20261120_PHX_UTA": {"at":"2026-11-21T15:24Z","status":"ok","lines":92,"tries":1},
+ "2027_20261120_SAC_LAL": {"at":"2026-11-21T15:24Z","status":"ok","lines":87,"tries":1},
+ "2027_20261120_TOR_DET": {"at":"2026-11-21T15:24Z","status":"ok","lines":118,"tries":1},
+ "2027_20261120_WAS_CHI": {"at":"2026-11-21T15:24Z","status":"ok","lines":112,"tries":1}
 }

@@ -649,7 +649,7 @@
    "2027_20261121_MEM_MIN": {"pick":"MIN","pHome":0.6843,"at":"2026-11-21T15:24Z","src":"published"},
    "2027_20261121_MIL_PHI": {"pick":"PHI","pHome":0.7818,"at":"2026-11-21T15:24Z","src":"published"},
    "2027_20261121_NOP_SAS": {"pick":"SAS","pHome":0.9056,"at":"2026-11-21T15:24Z","src":"published"},
-   "2027_20261121_POR_NYK": {"pick":"NYK","pHome":0.5995,"at":"2026-11-21T15:24Z","src":"published"}
+   "2027_20261121_POR_NYK": {"pick":"NYK","pHome":0.5902,"at":"2026-11-21T18:01Z","src":"published"}
   },
   "elo": {
    "2027_20261020_BOS_DET": {"pick":"DET","pHome":0.5831,"at":"2026-10-26T05:38Z","src":"backtest"},

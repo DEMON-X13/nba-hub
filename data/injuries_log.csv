@@ -5687,8 +5687,9 @@ date,team,player_id,name,status
 2026-11-21,NOP,4431675,Trendon Watford,Out
 2026-11-21,NOP,4683634,Bennedict Mathurin,Out
 2026-11-21,NOP,3907497,Dejounte Murray,Out
-2026-11-21,NYK,2528426,Jordan Clarkson,Out
 2026-11-21,NYK,3934719,OG Anunoby,Day-To-Day
+2026-11-21,NYK,3136195,Karl-Anthony Towns,Day-To-Day
+2026-11-21,NYK,2528426,Jordan Clarkson,Out
 2026-11-21,OKC,5159925,Nikola Topic,Day-To-Day
 2026-11-21,OKC,2991350,Alex Caruso,Day-To-Day
 2026-11-21,OKC,5061603,Thomas Sorber,Out
@@ -5699,9 +5700,7 @@ date,team,player_id,name,status
 2026-11-21,ORL,4065654,Jonathan Isaac,Out
 2026-11-21,ORL,5214637,Noah Penda,Out
 2026-11-21,ORL,4432573,Paolo Banchero,Out
-2026-11-21,PHI,4870562,Dominick Barlow,Out
 2026-11-21,PHI,3912848,Dean Wade,Out
-2026-11-21,PHI,4431678,Tyrese Maxey,Day-To-Day
 2026-11-21,PHI,5105637,Adem Bona,Out
 2026-11-21,PHI,3917376,Jaylen Brown,Out
 2026-11-21,PHI,4871141,Ariel Hukporti,Out
@@ -5725,7 +5724,6 @@ date,team,player_id,name,status
 2026-11-21,UTA,3102530,Jusuf Nurkic,Out
 2026-11-21,UTA,4066336,Lauri Markkanen,Out
 2026-11-21,UTA,4277961,Jaren Jackson Jr.,Out
-2026-11-21,WAS,5105841,Felix Okpara,Day-To-Day
 2026-11-21,WAS,4997537,Tristan Vukcevic,Out
 2026-11-21,WAS,4432187,Reece Beekman,Out
 2026-11-21,WAS,4432907,Justin Champagnie,Out

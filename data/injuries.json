@@ -617,6 +617,24 @@
   ],
   "NYK": [
    {
+    "id": "3934719",
+    "name": "OG Anunoby",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Calf",
+    "date": "2026-11-21",
+    "returns": "2026-11-21"
+   },
+   {
+    "id": "3136195",
+    "name": "Karl-Anthony Towns",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-21",
+    "returns": "2026-11-21"
+   },
+   {
     "id": "2528426",
     "name": "Jordan Clarkson",
     "pos": "G",
@@ -624,15 +642,6 @@
     "detail": "Foot Plantar Fasciitis",
     "date": "2026-11-20",
     "returns": "2026-11-22"
-   },
-   {
-    "id": "3934719",
-    "name": "OG Anunoby",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Calf",
-    "date": "2026-11-20",
-    "returns": "2026-11-21"
    }
   ],
   "OKC": [
@@ -731,15 +740,6 @@
   ],
   "PHI": [
    {
-    "id": "4870562",
-    "name": "Dominick Barlow",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back Fracture",
-    "date": "2026-11-20",
-    "returns": "2026-11-21"
-   },
-   {
     "id": "3912848",
     "name": "Dean Wade",
     "pos": "F",
@@ -747,15 +747,6 @@
     "detail": "Hamstring Soreness",
     "date": "2026-11-20",
     "returns": "2026-11-23"
-   },
-   {
-    "id": "4431678",
-    "name": "Tyrese Maxey",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Foot Soreness",
-    "date": "2026-11-20",
-    "returns": "2026-11-21"
    },
    {
     "id": "5105637",
@@ -978,15 +969,6 @@
    }
   ],
   "WAS": [
-   {
-    "id": "5105841",
-    "name": "Felix Okpara",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back Strain",
-    "date": "2026-11-21",
-    "returns": "2026-11-22"
-   },
    {
     "id": "4997537",
     "name": "Tristan Vukcevic",

@@ -1702,8 +1702,8 @@
    "spread": -4
   },
   "2027_20261121_MIL_PHI": {
-   "pHome": 0.8209,
-   "spread": -11.6
+   "pHome": 0.8272,
+   "spread": -12
   },
   "2027_20261121_NOP_SAS": {
    "pHome": 0.8724,
@@ -2369,5 +2369,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-21T15:24Z"
+ "generated": "2026-11-21T18:00Z"
 }

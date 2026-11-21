@@ -1698,16 +1698,16 @@
    "spread": -2.2
   },
   "2027_20261121_MEM_MIN": {
-   "pHome": 0.6283,
-   "spread": -4
+   "pHome": 0.5619,
+   "spread": -1.9
   },
   "2027_20261121_MIL_PHI": {
    "pHome": 0.8272,
    "spread": -12
   },
   "2027_20261121_NOP_SAS": {
-   "pHome": 0.8724,
-   "spread": -14.7
+   "pHome": 0.8843,
+   "spread": -15.5
   },
   "2027_20261121_POR_NYK": {
    "pHome": 0.6912,
@@ -2369,5 +2369,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-21T18:00Z"
+ "generated": "2026-11-21T20:05Z"
 }

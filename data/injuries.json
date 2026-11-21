@@ -195,6 +195,15 @@
   ],
   "DAL": [
    {
+    "id": "4278078",
+    "name": "P.J. Washington",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-21",
+    "returns": "2026-11-21"
+   },
+   {
     "id": "5106040",
     "name": "Tobi Lawal",
     "pos": "F",
@@ -202,15 +211,6 @@
     "detail": "Groin",
     "date": "2026-11-21",
     "returns": "2026-11-22"
-   },
-   {
-    "id": "4278078",
-    "name": "P.J. Washington",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Shoulder",
-    "date": "2026-11-20",
-    "returns": "2026-11-21"
    },
    {
     "id": "4896372",
@@ -490,15 +490,6 @@
     "returns": "2026-11-23"
    },
    {
-    "id": "4065733",
-    "name": "Ty Jerome",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hip",
-    "date": "2026-11-20",
-    "returns": "2026-11-21"
-   },
-   {
     "id": "5105550",
     "name": "GG Jackson",
     "pos": "F",
@@ -579,13 +570,13 @@
   ],
   "NOP": [
    {
-    "id": "4576086",
-    "name": "Bryce McGowens",
-    "pos": "G",
+    "id": "4397688",
+    "name": "Trey Murphy III",
+    "pos": "F",
     "status": "Out",
-    "detail": "Elbow Infection",
-    "date": "2026-11-19",
-    "returns": "2026-11-27"
+    "detail": "Knee",
+    "date": "2026-11-21",
+    "returns": "2026-11-23"
    },
    {
     "id": "4431675",
@@ -593,6 +584,15 @@
     "pos": "F",
     "status": "Out",
     "detail": "Ankle Sprain",
+    "date": "2026-11-21",
+    "returns": "2026-11-27"
+   },
+   {
+    "id": "4576086",
+    "name": "Bryce McGowens",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Elbow Infection",
     "date": "2026-11-19",
     "returns": "2026-11-27"
    },

@@ -1827,7 +1827,7 @@
     "name": "Ty Jerome",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5231919",
@@ -2353,7 +2353,7 @@
     "name": "Trey Murphy III",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "3907497",

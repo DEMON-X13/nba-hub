@@ -3,15 +3,6 @@
  "teams": {
   "ATL": [
    {
-    "id": "5149077",
-    "name": "Kingston Flemings",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Back Strain",
-    "date": "2026-11-21",
-    "returns": "2026-11-22"
-   },
-   {
     "id": "3146557",
     "name": "Jock Landale",
     "pos": "C",
@@ -231,13 +222,22 @@
     "returns": "2026-11-22"
    },
    {
+    "id": "4896372",
+    "name": "Walter Clayton Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee Tendinitis",
+    "date": "2026-11-22",
+    "returns": "2026-11-22"
+   },
+   {
     "id": "5106040",
     "name": "Tobi Lawal",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Groin",
     "date": "2026-11-22",
-    "returns": "2026-11-22"
+    "returns": "2026-11-24"
    },
    {
     "id": "4683688",
@@ -280,15 +280,6 @@
   ],
   "DET": [
    {
-    "id": "4683771",
-    "name": "Ronald Holland II",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Bruise",
-    "date": "2026-11-21",
-    "returns": "2026-11-22"
-   },
-   {
     "id": "5258459",
     "name": "Ebuka Okorie",
     "pos": "G",
@@ -296,15 +287,6 @@
     "detail": "Oblique Strain",
     "date": "2026-11-21",
     "returns": "2026-11-24"
-   },
-   {
-    "id": "4432166",
-    "name": "Cade Cunningham",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-11-21",
-    "returns": "2026-11-22"
    },
    {
     "id": "2990962",
@@ -837,7 +819,7 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Quadriceps",
-    "date": "2026-11-21",
+    "date": "2026-11-22",
     "returns": "2026-11-23"
    },
    {

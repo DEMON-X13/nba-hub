@@ -56,7 +56,7 @@
     "name": "Kingston Flemings",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4712863",
@@ -796,7 +796,7 @@
     "name": "Walter Clayton Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5279129",
@@ -1024,7 +1024,7 @@
     "name": "Cade Cunningham",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433621",
@@ -1052,7 +1052,7 @@
     "name": "Ronald Holland II",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4066372",

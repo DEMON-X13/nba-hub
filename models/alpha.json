@@ -1714,8 +1714,8 @@
    "spread": 7
   },
   "2027_20261122_DET_ATL": {
-   "pHome": 0.4632,
-   "spread": 1.1
+   "pHome": 0.4915,
+   "spread": 0.3
   },
   "2027_20261122_IND_NYK": {
    "pHome": 0.7265,
@@ -2369,5 +2369,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-22T18:33Z"
+ "generated": "2026-11-22T20:21Z"
 }

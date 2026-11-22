@@ -163,7 +163,7 @@
     "name": "Paul George",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5175647",
@@ -226,7 +226,7 @@
     "name": "Jayson Tatum",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683689",
@@ -240,7 +240,7 @@
     "name": "Derrick White",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4702745",
@@ -1287,7 +1287,7 @@
     "name": "Clint Capela",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4683860",
@@ -1948,7 +1948,7 @@
     "name": "Myron Gardner",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4700818",

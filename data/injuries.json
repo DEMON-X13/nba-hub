@@ -1,5 +1,5 @@
 {
- "date": "2026-11-21",
+ "date": "2026-11-22",
  "teams": {
   "ATL": [
    {
@@ -59,30 +59,30 @@
   ],
   "BOS": [
    {
-    "id": "4351852",
-    "name": "Mitchell Robinson",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Illness",
-    "date": "2026-11-21",
-    "returns": "2026-11-22"
-   },
-   {
     "id": "3078576",
     "name": "Derrick White",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Shoulder",
-    "date": "2026-11-21",
+    "date": "2026-11-22",
+    "returns": "2026-11-22"
+   },
+   {
+    "id": "4351852",
+    "name": "Mitchell Robinson",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-22",
     "returns": "2026-11-22"
    },
    {
     "id": "4065648",
     "name": "Jayson Tatum",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Rest",
-    "date": "2026-11-21",
+    "date": "2026-11-22",
     "returns": "2026-11-22"
    }
   ],
@@ -146,6 +146,24 @@
   ],
   "CHI": [
    {
+    "id": "4431687",
+    "name": "Patrick Williams",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Thumb",
+    "date": "2026-11-22",
+    "returns": "2026-11-22"
+   },
+   {
+    "id": "2595516",
+    "name": "Norman Powell",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-11-22",
+    "returns": "2026-11-22"
+   },
+   {
     "id": "4397189",
     "name": "Jalen Smith",
     "pos": "F",
@@ -207,18 +225,18 @@
     "id": "4278078",
     "name": "P.J. Washington",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-21",
+    "date": "2026-11-22",
     "returns": "2026-11-22"
    },
    {
     "id": "5106040",
     "name": "Tobi Lawal",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Groin",
-    "date": "2026-11-21",
+    "date": "2026-11-22",
     "returns": "2026-11-22"
    },
    {
@@ -327,22 +345,13 @@
   ],
   "GSW": [
    {
-    "id": "6589",
-    "name": "Draymond Green",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Rest",
-    "date": "2026-11-20",
-    "returns": "2026-11-22"
-   },
-   {
     "id": "4397040",
     "name": "Brandon Williams",
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring Strain",
-    "date": "2026-11-18",
-    "returns": "2026-11-22"
+    "date": "2026-11-22",
+    "returns": "2026-11-25"
    },
    {
     "id": "3975",
@@ -481,30 +490,30 @@
   ],
   "MEM": [
    {
-    "id": "2991070",
-    "name": "Jerami Grant",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Calf Not Specified",
-    "date": "2026-11-21",
-    "returns": "2026-11-23"
-   },
-   {
     "id": "4781746",
     "name": "Javon Small",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Personal",
-    "date": "2026-11-20",
+    "date": "2026-11-22",
     "returns": "2026-11-23"
    },
    {
     "id": "5041935",
     "name": "Cameron Boozer",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Ankle",
-    "date": "2026-11-20",
+    "date": "2026-11-22",
+    "returns": "2026-11-23"
+   },
+   {
+    "id": "2991070",
+    "name": "Jerami Grant",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Calf Not Specified",
+    "date": "2026-11-22",
     "returns": "2026-11-23"
    },
    {
@@ -597,12 +606,21 @@
   ],
   "NOP": [
    {
+    "id": "4395628",
+    "name": "Zion Williamson",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Thigh Bruise",
+    "date": "2026-11-22",
+    "returns": "2026-11-23"
+   },
+   {
     "id": "4397688",
     "name": "Trey Murphy III",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee",
-    "date": "2026-11-21",
+    "date": "2026-11-22",
     "returns": "2026-11-23"
    },
    {
@@ -647,27 +665,27 @@
     "id": "3136195",
     "name": "Karl-Anthony Towns",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-21",
-    "returns": "2026-11-22"
-   },
-   {
-    "id": "3934719",
-    "name": "OG Anunoby",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Calf",
-    "date": "2026-11-21",
+    "date": "2026-11-22",
     "returns": "2026-11-22"
    },
    {
     "id": "2528426",
     "name": "Jordan Clarkson",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Foot Plantar Fasciitis",
-    "date": "2026-11-20",
+    "date": "2026-11-22",
+    "returns": "2026-11-22"
+   },
+   {
+    "id": "3934719",
+    "name": "OG Anunoby",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Calf",
+    "date": "2026-11-22",
     "returns": "2026-11-22"
    }
   ],
@@ -753,7 +771,7 @@
     "status": "Out",
     "detail": "Knee Not Specified",
     "date": "2026-11-21",
-    "returns": "2026-11-29"
+    "returns": "2026-11-28"
    },
    {
     "id": "5107251",
@@ -788,9 +806,18 @@
     "id": "3912848",
     "name": "Dean Wade",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Hamstring Soreness",
-    "date": "2026-11-20",
+    "date": "2026-11-22",
+    "returns": "2026-11-23"
+   },
+   {
+    "id": "3917376",
+    "name": "Jaylen Brown",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring Not Specified",
+    "date": "2026-11-22",
     "returns": "2026-11-23"
    },
    {
@@ -799,15 +826,6 @@
     "pos": "C",
     "status": "Out",
     "detail": "Back Sprain",
-    "date": "2026-11-20",
-    "returns": "2026-11-23"
-   },
-   {
-    "id": "3917376",
-    "name": "Jaylen Brown",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Not Specified",
     "date": "2026-11-20",
     "returns": "2026-11-23"
    },
@@ -880,15 +898,6 @@
    }
   ],
   "SAC": [
-   {
-    "id": "4431679",
-    "name": "Precious Achiuwa",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Lower Leg Bruise",
-    "date": "2026-11-21",
-    "returns": "2026-11-21"
-   },
    {
     "id": "4898371",
     "name": "Maxime Raynaud",

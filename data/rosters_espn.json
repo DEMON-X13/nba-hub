@@ -512,7 +512,7 @@
     "name": "Tobe Awaka",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4711294",
@@ -526,7 +526,7 @@
     "name": "Nic Claxton",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4066650",
@@ -1101,7 +1101,7 @@
     "name": "Ugonna Onyenso",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2990962",
@@ -3635,7 +3635,7 @@
     "name": "Deandre Ayton",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432187",
@@ -3649,7 +3649,7 @@
     "name": "Bub Carrington",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4432907",

@@ -330,5 +330,6 @@
  "2027_20261121_MEM_MIN": {"at":"2026-11-22T15:22Z","status":"ok","lines":103,"tries":1},
  "2027_20261121_MIL_PHI": {"at":"2026-11-21T21:42Z","status":"ok","lines":101,"tries":1},
  "2027_20261121_NOP_SAS": {"at":"2026-11-22T15:22Z","status":"ok","lines":91,"tries":1},
- "2027_20261121_POR_NYK": {"at":"2026-11-22T15:22Z","status":"ok","lines":135,"tries":1}
+ "2027_20261121_POR_NYK": {"at":"2026-11-22T15:22Z","status":"ok","lines":135,"tries":1},
+ "2027_20261122_DET_ATL": {"at":"2026-11-23T00:20Z","status":"ok","lines":100,"tries":1}
 }

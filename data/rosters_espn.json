@@ -454,7 +454,7 @@
     "name": "Brandon Miller",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2583632",
@@ -610,7 +610,7 @@
     "name": "Jalen Smith",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4848625",
@@ -624,7 +624,7 @@
     "name": "Patrick Williams",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5095151",
@@ -796,7 +796,7 @@
     "name": "Walter Clayton Jr.",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5279129",
@@ -1557,7 +1557,7 @@
     "name": "Brandon Ingram",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432170",
@@ -1883,7 +1883,7 @@
     "name": "Javon Small",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433083",
@@ -2495,7 +2495,7 @@
     "name": "Miles McBride",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4838721",
@@ -2581,7 +2581,7 @@
     "name": "Aday Mara",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4683778",
@@ -3635,7 +3635,7 @@
     "name": "Deandre Ayton",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432187",
@@ -3649,7 +3649,7 @@
     "name": "Bub Carrington",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432907",

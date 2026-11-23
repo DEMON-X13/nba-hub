@@ -5839,11 +5839,9 @@ date,team,player_id,name,status
 2026-11-23,ATL,2490149,CJ McCollum,Out
 2026-11-23,ATL,4712863,Mouhamed Gueye,Out
 2026-11-23,ATL,5105571,Henri Veesaar,Out
-2026-11-23,BOS,4251,Paul George,Day-To-Day
 2026-11-23,BOS,4351852,Mitchell Robinson,Out
 2026-11-23,BKN,5279130,Nolan Traore,Out
 2026-11-23,CHA,3135045,Grayson Allen,Out
-2026-11-23,CHA,4433287,Brandon Miller,Day-To-Day
 2026-11-23,CHA,4066218,Grant Williams,Out
 2026-11-23,CHA,5061575,Kon Knueppel,Out
 2026-11-23,CHA,3032979,Dennis Schroder,Out
@@ -5860,10 +5858,11 @@ date,team,player_id,name,status
 2026-11-23,DAL,5279129,Sergio de Larrea,Out
 2026-11-23,DAL,5148538,Tarik Biberovic,Out
 2026-11-23,DEN,4432181,Julian Strawther,Out
-2026-11-23,DET,5258459,Ebuka Okorie,Day-To-Day
+2026-11-23,DET,5258459,Ebuka Okorie,Out
+2026-11-23,DET,4433621,Jalen Duren,Out
+2026-11-23,DET,4432166,Cade Cunningham,Day-To-Day
 2026-11-23,DET,2990962,Taurean Prince,Out
 2026-11-23,DET,3157465,Duncan Robinson,Out
-2026-11-23,DET,4433621,Jalen Duren,Out
 2026-11-23,GSW,4397040,Brandon Williams,Out
 2026-11-23,GSW,3975,Stephen Curry,Out
 2026-11-23,GSW,3102531,Kristaps Porzingis,Out
@@ -5929,7 +5928,7 @@ date,team,player_id,name,status
 2026-11-23,TOR,4432586,Nate Bittle,Out
 2026-11-23,TOR,6450,Kawhi Leonard,Out
 2026-11-23,TOR,4395625,RJ Barrett,Out
-2026-11-23,UTA,4397077,Jaxson Hayes,Day-To-Day
+2026-11-23,UTA,4397077,Jaxson Hayes,Out
 2026-11-23,UTA,3102530,Jusuf Nurkic,Out
 2026-11-23,UTA,4066336,Lauri Markkanen,Out
 2026-11-23,UTA,4277961,Jaren Jackson Jr.,Out

@@ -72,6 +72,15 @@
   ],
   "CHA": [
    {
+    "id": "4576060",
+    "name": "Ryan Kalkbrenner",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip Soreness",
+    "date": "2026-11-24",
+    "returns": "2026-11-25"
+   },
+   {
     "id": "3135045",
     "name": "Grayson Allen",
     "pos": "G",
@@ -291,6 +300,15 @@
   ],
   "IND": [
    {
+    "id": "2580365",
+    "name": "Larry Nance Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Soreness",
+    "date": "2026-11-24",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "2530530",
     "name": "T.J. McConnell",
     "pos": "G",
@@ -363,7 +381,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Heel Bruise",
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "returns": "2026-11-27"
    }
   ],
@@ -646,6 +664,15 @@
   ],
   "PHX": [
    {
+    "id": "4278585",
+    "name": "Collin Gillespie",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed Not Specified",
+    "date": "2026-11-24",
+    "returns": "2026-11-23"
+   },
+   {
     "id": "4701232",
     "name": "Mark Williams",
     "pos": "C",
@@ -715,31 +742,22 @@
   ],
   "SAS": [
    {
-    "id": "5104157",
-    "name": "Victor Wembanyama",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-23",
-    "returns": "2026-11-23"
-   },
-   {
     "id": "4066259",
     "name": "De'Aaron Fox",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Lower Leg Bruise",
-    "date": "2026-11-23",
-    "returns": "2026-11-23"
+    "date": "2026-11-24",
+    "returns": "2026-11-25"
    },
    {
-    "id": "3134916",
-    "name": "Jordan McLaughlin",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Shoulder Bruise",
-    "date": "2026-11-23",
-    "returns": "2026-11-23"
+    "id": "5104157",
+    "name": "Victor Wembanyama",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back",
+    "date": "2026-11-24",
+    "returns": "2026-11-25"
    },
    {
     "id": "5037871",

@@ -433,7 +433,7 @@
     "name": "Ryan Kalkbrenner",
     "pos": "C",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5061575",
@@ -1436,7 +1436,7 @@
     "name": "Larry Nance Jr.",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4395712",
@@ -2944,7 +2944,7 @@
     "name": "Collin Gillespie",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278402",
@@ -3356,7 +3356,7 @@
     "name": "Jordan McLaughlin",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5101845",

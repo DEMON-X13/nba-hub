@@ -1,5 +1,5 @@
 {
- "date": "2026-11-23",
+ "date": "2026-11-24",
  "teams": {
   "ATL": [
    {
@@ -72,6 +72,15 @@
   ],
   "CHA": [
    {
+    "id": "4066218",
+    "name": "Grant Williams",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-11-24",
+    "returns": "2026-11-25"
+   },
+   {
     "id": "4576060",
     "name": "Ryan Kalkbrenner",
     "pos": "C",
@@ -86,15 +95,6 @@
     "pos": "G",
     "status": "Out",
     "detail": "Concussion",
-    "date": "2026-11-22",
-    "returns": "2026-11-25"
-   },
-   {
-    "id": "4066218",
-    "name": "Grant Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Hamstring",
     "date": "2026-11-22",
     "returns": "2026-11-25"
    },
@@ -118,6 +118,15 @@
    }
   ],
   "CHI": [
+   {
+    "id": "4397189",
+    "name": "Jalen Smith",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-24",
+    "returns": "2026-11-25"
+   },
    {
     "id": "2595516",
     "name": "Norman Powell",
@@ -211,8 +220,26 @@
     "pos": "G",
     "status": "Out",
     "detail": "Oblique Strain",
-    "date": "2026-11-23",
-    "returns": "2026-11-30"
+    "date": "2026-11-24",
+    "returns": "2026-12-13"
+   },
+   {
+    "id": "2990962",
+    "name": "Taurean Prince",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Surgery",
+    "date": "2026-11-24",
+    "returns": "2026-12-26"
+   },
+   {
+    "id": "3157465",
+    "name": "Duncan Robinson",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Quadriceps Strain",
+    "date": "2026-11-24",
+    "returns": "2026-11-27"
    },
    {
     "id": "4433621",
@@ -220,7 +247,7 @@
     "pos": "C",
     "status": "Out",
     "detail": "Hamstring Strain",
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "returns": "2026-11-30"
    },
    {
@@ -231,24 +258,6 @@
     "detail": "Knee",
     "date": "2026-11-23",
     "returns": "2026-11-24"
-   },
-   {
-    "id": "2990962",
-    "name": "Taurean Prince",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-11-20",
-    "returns": "2026-12-13"
-   },
-   {
-    "id": "3157465",
-    "name": "Duncan Robinson",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Quadriceps Strain",
-    "date": "2026-11-17",
-    "returns": "2026-11-27"
    }
   ],
   "GSW": [
@@ -300,30 +309,12 @@
   ],
   "IND": [
    {
-    "id": "2580365",
-    "name": "Larry Nance Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Soreness",
-    "date": "2026-11-24",
-    "returns": "2026-11-27"
-   },
-   {
     "id": "2530530",
     "name": "T.J. McConnell",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Hamstring",
-    "date": "2026-11-23",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "4396909",
-    "name": "Aaron Nesmith",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Foot",
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "returns": "2026-11-27"
    },
    {
@@ -332,17 +323,26 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring Strain",
-    "date": "2026-11-20",
+    "date": "2026-11-24",
     "returns": "2026-12-13"
    },
    {
-    "id": "5157066",
-    "name": "Johnny Furphy",
+    "id": "4396909",
+    "name": "Aaron Nesmith",
     "pos": "G",
-    "status": "Out",
-    "detail": "Knee Surgery",
-    "date": "2026-10-30",
-    "returns": "2027-01-02"
+    "status": "Day-To-Day",
+    "detail": "Foot",
+    "date": "2026-11-24",
+    "returns": "2026-11-27"
+   },
+   {
+    "id": "2580365",
+    "name": "Larry Nance Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Soreness",
+    "date": "2026-11-24",
+    "returns": "2026-11-27"
    },
    {
     "id": "4433076",
@@ -445,6 +445,15 @@
   ],
   "MIN": [
    {
+    "id": "3934673",
+    "name": "Donte DiVincenzo",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Achilles Surgery",
+    "date": "2026-11-24",
+    "returns": "2027-01-03"
+   },
+   {
     "id": "4432247",
     "name": "Jaylen Clark",
     "pos": "G",
@@ -461,15 +470,6 @@
     "detail": "Knee Surgery",
     "date": "2026-10-29",
     "returns": "2026-12-21"
-   },
-   {
-    "id": "3934673",
-    "name": "Donte DiVincenzo",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Achilles Surgery",
-    "date": "2026-10-05",
-    "returns": "2027-04-02"
    }
   ],
   "NOP": [
@@ -503,12 +503,12 @@
   ],
   "NYK": [
    {
-    "id": "4431823",
-    "name": "Miles McBride",
+    "id": "2528426",
+    "name": "Jordan Clarkson",
     "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Abdomen",
-    "date": "2026-11-23",
+    "status": "Out",
+    "detail": "Foot Plantar Fasciitis",
+    "date": "2026-11-24",
     "returns": "2026-11-25"
    },
    {
@@ -517,16 +517,16 @@
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Calf Soreness",
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "returns": "2026-11-25"
    },
    {
-    "id": "2528426",
-    "name": "Jordan Clarkson",
+    "id": "4431823",
+    "name": "Miles McBride",
     "pos": "G",
-    "status": "Out",
-    "detail": "Foot Plantar Fasciitis",
-    "date": "2026-11-22",
+    "status": "Day-To-Day",
+    "detail": "Abdomen",
+    "date": "2026-11-24",
     "returns": "2026-11-25"
    }
   ],
@@ -535,9 +535,18 @@
     "id": "4432823",
     "name": "Jaylin Williams",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Back Spasms",
-    "date": "2026-11-23",
+    "date": "2026-11-24",
+    "returns": "2026-11-25"
+   },
+   {
+    "id": "5174983",
+    "name": "Aday Mara",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg Bruise",
+    "date": "2026-11-24",
     "returns": "2026-11-25"
    },
    {
@@ -546,15 +555,6 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip Strain",
-    "date": "2026-11-23",
-    "returns": "2026-11-25"
-   },
-   {
-    "id": "5174983",
-    "name": "Aday Mara",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Lower Leg Bruise",
     "date": "2026-11-23",
     "returns": "2026-11-25"
    },
@@ -647,9 +647,9 @@
     "id": "3059318",
     "name": "Joel Embiid",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "returns": "2026-11-25"
    },
    {
@@ -663,15 +663,6 @@
    }
   ],
   "PHX": [
-   {
-    "id": "4278585",
-    "name": "Collin Gillespie",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed Not Specified",
-    "date": "2026-11-24",
-    "returns": "2026-11-23"
-   },
    {
     "id": "4701232",
     "name": "Mark Williams",
@@ -742,20 +733,20 @@
   ],
   "SAS": [
    {
-    "id": "4066259",
-    "name": "De'Aaron Fox",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Lower Leg Bruise",
+    "id": "5104157",
+    "name": "Victor Wembanyama",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
     "date": "2026-11-24",
     "returns": "2026-11-25"
    },
    {
-    "id": "5104157",
-    "name": "Victor Wembanyama",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back",
+    "id": "4066259",
+    "name": "De'Aaron Fox",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Lower Leg Bruise",
     "date": "2026-11-24",
     "returns": "2026-11-25"
    },
@@ -821,9 +812,9 @@
     "id": "4397077",
     "name": "Jaxson Hayes",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Not Specified",
-    "date": "2026-11-23",
+    "date": "2026-11-24",
     "returns": "2026-11-27"
    },
    {
@@ -855,6 +846,15 @@
    }
   ],
   "WAS": [
+   {
+    "id": "4432819",
+    "name": "Tre Mann",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-24",
+    "returns": "2026-11-24"
+   },
    {
     "id": "4997537",
     "name": "Tristan Vukcevic",

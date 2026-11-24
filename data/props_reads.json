@@ -345,5 +345,7 @@
  "2027_20261123_MIL_TOR": {"at":"2026-11-24T04:18Z","status":"ok","lines":95,"tries":1},
  "2027_20261123_OKC_IND": {"at":"2026-11-24T02:56Z","status":"ok","lines":93,"tries":1},
  "2027_20261123_PHX_NOP": {"at":"2026-11-24T04:18Z","status":"ok","lines":111,"tries":1},
- "2027_20261123_POR_PHI": {"at":"2026-11-24T02:56Z","status":"ok","lines":128,"tries":1}
+ "2027_20261123_POR_PHI": {"at":"2026-11-24T02:56Z","status":"ok","lines":128,"tries":1},
+ "2027_20261123_SAS_SAC": {"at":"2026-11-24T18:55Z","status":"ok","lines":102,"tries":1},
+ "2027_20261123_UTA_LAL": {"at":"2026-11-24T18:55Z","status":"ok","lines":84,"tries":1}
 }

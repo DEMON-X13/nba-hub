@@ -688,9 +688,9 @@
    "2027_20261124_BOS_WAS": {"pick":"BOS","pHome":0.2451,"at":"2026-11-24T00:50Z","src":"published"},
    "2027_20261124_DAL_DEN": {"pick":"DEN","pHome":0.7234,"at":"2026-11-24T00:50Z","src":"published"},
    "2027_20261124_DET_ORL": {"pick":"DET","pHome":0.4425,"at":"2026-11-24T00:50Z","src":"published"},
-   "2027_20261125_CLE_NYK": {"pick":"NYK","pHome":0.6447,"at":"2026-11-24T18:55Z","src":"published"},
+   "2027_20261125_CLE_NYK": {"pick":"NYK","pHome":0.6327,"at":"2026-11-24T21:17Z","src":"published"},
    "2027_20261125_MIA_PHI": {"pick":"PHI","pHome":0.6216,"at":"2026-11-24T18:55Z","src":"published"},
-   "2027_20261125_MIN_OKC": {"pick":"OKC","pHome":0.6145,"at":"2026-11-24T18:55Z","src":"published"},
+   "2027_20261125_MIN_OKC": {"pick":"OKC","pHome":0.5361,"at":"2026-11-24T21:17Z","src":"published"},
    "2027_20261125_PHX_HOU": {"pick":"HOU","pHome":0.748,"at":"2026-11-24T18:55Z","src":"published"}
   },
   "elo": {

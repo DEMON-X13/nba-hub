@@ -72,15 +72,6 @@
   ],
   "CHA": [
    {
-    "id": "4066218",
-    "name": "Grant Williams",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-11-24",
-    "returns": "2026-11-25"
-   },
-   {
     "id": "4576060",
     "name": "Ryan Kalkbrenner",
     "pos": "C",
@@ -90,12 +81,30 @@
     "returns": "2026-11-25"
    },
    {
+    "id": "3032979",
+    "name": "Dennis Schroder",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-24",
+    "returns": "2026-12-12"
+   },
+   {
+    "id": "4602025",
+    "name": "Sion James",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Undisclosed",
+    "date": "2026-11-24",
+    "returns": "2026-11-25"
+   },
+   {
     "id": "3135045",
     "name": "Grayson Allen",
     "pos": "G",
     "status": "Out",
     "detail": "Concussion",
-    "date": "2026-11-22",
+    "date": "2026-11-24",
     "returns": "2026-11-25"
    },
    {
@@ -106,15 +115,6 @@
     "detail": "Hamstring Strain",
     "date": "2026-11-08",
     "returns": "2026-12-12"
-   },
-   {
-    "id": "3032979",
-    "name": "Dennis Schroder",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-08",
-    "returns": "2026-11-25"
    }
   ],
   "CHI": [
@@ -503,11 +503,29 @@
   ],
   "NYK": [
    {
+    "id": "4431823",
+    "name": "Miles McBride",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Groin Soreness",
+    "date": "2026-11-24",
+    "returns": "2026-11-25"
+   },
+   {
     "id": "2528426",
     "name": "Jordan Clarkson",
     "pos": "G",
     "status": "Out",
     "detail": "Foot Plantar Fasciitis",
+    "date": "2026-11-24",
+    "returns": "2026-11-27"
+   },
+   {
+    "id": "3062679",
+    "name": "Josh Hart",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Shoulder Sprain",
     "date": "2026-11-24",
     "returns": "2026-11-25"
    },
@@ -515,17 +533,17 @@
     "id": "3934719",
     "name": "OG Anunoby",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Calf Soreness",
     "date": "2026-11-24",
-    "returns": "2026-11-25"
+    "returns": "2026-11-27"
    },
    {
-    "id": "4431823",
-    "name": "Miles McBride",
-    "pos": "G",
+    "id": "3136195",
+    "name": "Karl-Anthony Towns",
+    "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Abdomen",
+    "detail": "Knee",
     "date": "2026-11-24",
     "returns": "2026-11-25"
    }
@@ -650,7 +668,7 @@
     "status": "Day-To-Day",
     "detail": "Illness",
     "date": "2026-11-24",
-    "returns": "2026-11-25"
+    "returns": "2026-11-27"
    },
    {
     "id": "4871141",
@@ -780,6 +798,15 @@
   ],
   "TOR": [
    {
+    "id": "6450",
+    "name": "Kawhi Leonard",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Knee Inflammation",
+    "date": "2026-11-24",
+    "returns": "2026-12-03"
+   },
+   {
     "id": "4432586",
     "name": "Nate Bittle",
     "pos": "C",
@@ -787,15 +814,6 @@
     "detail": "Foot Fracture",
     "date": "2026-11-22",
     "returns": "2026-11-27"
-   },
-   {
-    "id": "6450",
-    "name": "Kawhi Leonard",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Knee Inflammation",
-    "date": "2026-11-20",
-    "returns": "2026-12-03"
    },
    {
     "id": "4395625",

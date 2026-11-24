@@ -5934,11 +5934,11 @@ date,team,player_id,name,status
 2026-11-24,ATL,5105571,Henri Veesaar,Out
 2026-11-24,BOS,4351852,Mitchell Robinson,Out
 2026-11-24,BKN,5279130,Nolan Traore,Out
-2026-11-24,CHA,4066218,Grant Williams,Day-To-Day
 2026-11-24,CHA,4576060,Ryan Kalkbrenner,Day-To-Day
+2026-11-24,CHA,3032979,Dennis Schroder,Out
+2026-11-24,CHA,4602025,Sion James,Day-To-Day
 2026-11-24,CHA,3135045,Grayson Allen,Out
 2026-11-24,CHA,5061575,Kon Knueppel,Out
-2026-11-24,CHA,3032979,Dennis Schroder,Out
 2026-11-24,CHI,4397189,Jalen Smith,Day-To-Day
 2026-11-24,CHI,2595516,Norman Powell,Out
 2026-11-24,CHI,5095151,Caleb Wilson,Out
@@ -5979,9 +5979,11 @@ date,team,player_id,name,status
 2026-11-24,NOP,4431675,Trendon Watford,Out
 2026-11-24,NOP,4683634,Bennedict Mathurin,Out
 2026-11-24,NOP,3907497,Dejounte Murray,Out
-2026-11-24,NYK,2528426,Jordan Clarkson,Out
-2026-11-24,NYK,3934719,OG Anunoby,Day-To-Day
 2026-11-24,NYK,4431823,Miles McBride,Day-To-Day
+2026-11-24,NYK,2528426,Jordan Clarkson,Out
+2026-11-24,NYK,3062679,Josh Hart,Day-To-Day
+2026-11-24,NYK,3934719,OG Anunoby,Out
+2026-11-24,NYK,3136195,Karl-Anthony Towns,Day-To-Day
 2026-11-24,OKC,4432823,Jaylin Williams,Day-To-Day
 2026-11-24,OKC,5174983,Aday Mara,Day-To-Day
 2026-11-24,OKC,5159925,Nikola Topic,Out
@@ -6008,8 +6010,8 @@ date,team,player_id,name,status
 2026-11-24,SAS,5037871,Dylan Harper,Out
 2026-11-24,SAS,6440,Tobias Harris,Out
 2026-11-24,SAS,5101845,Jayden Quaintance,Out
-2026-11-24,TOR,4432586,Nate Bittle,Out
 2026-11-24,TOR,6450,Kawhi Leonard,Out
+2026-11-24,TOR,4432586,Nate Bittle,Out
 2026-11-24,TOR,4395625,RJ Barrett,Out
 2026-11-24,UTA,4397077,Jaxson Hayes,Day-To-Day
 2026-11-24,UTA,3102530,Jusuf Nurkic,Out

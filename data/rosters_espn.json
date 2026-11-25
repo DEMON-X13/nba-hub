@@ -1194,7 +1194,7 @@
     "name": "Yaxel Lendeborg",
     "pos": "F",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4897449",
@@ -2539,7 +2539,7 @@
     "name": "Alex Caruso",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4702384",
@@ -3712,7 +3712,7 @@
     "name": "Tre Mann",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6609",

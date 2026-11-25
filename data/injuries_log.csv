@@ -5949,11 +5949,12 @@ date,team,player_id,name,status
 2026-11-24,DAL,4683688,Dereck Lively II,Out
 2026-11-24,DAL,5279129,Sergio de Larrea,Out
 2026-11-24,DAL,5148538,Tarik Biberovic,Out
+2026-11-24,DET,4432166,Cade Cunningham,Out
 2026-11-24,DET,5258459,Ebuka Okorie,Out
 2026-11-24,DET,2990962,Taurean Prince,Out
 2026-11-24,DET,3157465,Duncan Robinson,Out
 2026-11-24,DET,4433621,Jalen Duren,Out
-2026-11-24,DET,4432166,Cade Cunningham,Day-To-Day
+2026-11-24,GSW,5175737,Yaxel Lendeborg,Day-To-Day
 2026-11-24,GSW,4397040,Brandon Williams,Out
 2026-11-24,GSW,3975,Stephen Curry,Out
 2026-11-24,GSW,3102531,Kristaps Porzingis,Out
@@ -5967,10 +5968,10 @@ date,team,player_id,name,status
 2026-11-24,LAC,6580,Bradley Beal,Out
 2026-11-24,LAC,4396818,Jordan Miller,Out
 2026-11-24,LAL,4066457,Austin Reaves,Out
+2026-11-24,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-24,MEM,5041935,Cameron Boozer,Out
 2026-11-24,MEM,2991070,Jerami Grant,Out
 2026-11-24,MEM,5105550,GG Jackson,Out
-2026-11-24,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-24,MEM,5105462,Richie Saunders,Out
 2026-11-24,MIA,3032977,Giannis Antetokounmpo,Day-To-Day
 2026-11-24,MIN,3934673,Donte DiVincenzo,Out
@@ -5984,11 +5985,10 @@ date,team,player_id,name,status
 2026-11-24,NYK,3062679,Josh Hart,Day-To-Day
 2026-11-24,NYK,3934719,OG Anunoby,Out
 2026-11-24,NYK,3136195,Karl-Anthony Towns,Day-To-Day
-2026-11-24,OKC,4432823,Jaylin Williams,Day-To-Day
-2026-11-24,OKC,5174983,Aday Mara,Day-To-Day
 2026-11-24,OKC,5159925,Nikola Topic,Out
+2026-11-24,OKC,4432823,Jaylin Williams,Out
+2026-11-24,OKC,5174983,Aday Mara,Out
 2026-11-24,OKC,4593803,Jalen Williams,Out
-2026-11-24,OKC,2991350,Alex Caruso,Out
 2026-11-24,OKC,5061603,Thomas Sorber,Out
 2026-11-24,OKC,4683692,Cason Wallace,Out
 2026-11-24,OKC,4433255,Chet Holmgren,Out
@@ -6017,7 +6017,6 @@ date,team,player_id,name,status
 2026-11-24,UTA,3102530,Jusuf Nurkic,Out
 2026-11-24,UTA,4066336,Lauri Markkanen,Out
 2026-11-24,UTA,4277961,Jaren Jackson Jr.,Out
-2026-11-24,WAS,4432819,Tre Mann,Day-To-Day
 2026-11-24,WAS,4997537,Tristan Vukcevic,Out
 2026-11-24,WAS,4432187,Reece Beekman,Out
 2026-11-24,WAS,4432907,Justin Champagnie,Out

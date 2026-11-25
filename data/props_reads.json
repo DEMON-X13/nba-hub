@@ -348,5 +348,7 @@
  "2027_20261123_POR_PHI": {"at":"2026-11-24T02:56Z","status":"ok","lines":128,"tries":1},
  "2027_20261123_SAS_SAC": {"at":"2026-11-24T18:55Z","status":"ok","lines":102,"tries":1},
  "2027_20261123_UTA_LAL": {"at":"2026-11-24T18:55Z","status":"ok","lines":84,"tries":1},
+ "2027_20261124_BOS_WAS": {"at":"2026-11-25T17:59Z","status":"ok","lines":105,"tries":1},
+ "2027_20261124_DAL_DEN": {"at":"2026-11-25T17:59Z","status":"ok","lines":84,"tries":1},
  "2027_20261124_DET_ORL": {"at":"2026-11-25T03:03Z","status":"ok","lines":91,"tries":1}
 }

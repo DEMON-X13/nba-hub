@@ -1,5 +1,5 @@
 {
- "date": "2026-11-24",
+ "date": "2026-11-25",
  "teams": {
   "ATL": [
    {
@@ -75,10 +75,19 @@
     "id": "4576060",
     "name": "Ryan Kalkbrenner",
     "pos": "C",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Hip Soreness",
-    "date": "2026-11-24",
-    "returns": "2026-11-25"
+    "date": "2026-11-25",
+    "returns": "2026-11-28"
+   },
+   {
+    "id": "3135045",
+    "name": "Grayson Allen",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Concussion",
+    "date": "2026-11-25",
+    "returns": "2026-11-28"
    },
    {
     "id": "3032979",
@@ -95,15 +104,6 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Undisclosed",
-    "date": "2026-11-24",
-    "returns": "2026-11-25"
-   },
-   {
-    "id": "3135045",
-    "name": "Grayson Allen",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Concussion",
     "date": "2026-11-24",
     "returns": "2026-11-25"
    },
@@ -474,6 +474,15 @@
   ],
   "NOP": [
    {
+    "id": "4683742",
+    "name": "Julian Reese",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-25",
+    "returns": "2026-11-25"
+   },
+   {
     "id": "4431675",
     "name": "Trendon Watford",
     "pos": "F",
@@ -543,7 +552,7 @@
     "name": "Karl-Anthony Towns",
     "pos": "C",
     "status": "Day-To-Day",
-    "detail": "Knee",
+    "detail": "Knee Inflammation",
     "date": "2026-11-24",
     "returns": "2026-11-25"
    }
@@ -727,8 +736,8 @@
     "pos": "C",
     "status": "Out",
     "detail": "Knee Dislocated",
-    "date": "2026-11-18",
-    "returns": "2026-11-25"
+    "date": "2026-11-25",
+    "returns": "2026-12-02"
    },
    {
     "id": "3907387",

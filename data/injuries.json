@@ -177,15 +177,6 @@
     "returns": "2026-11-27"
    },
    {
-    "id": "4278078",
-    "name": "P.J. Washington",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-23",
-    "returns": "2026-11-24"
-   },
-   {
     "id": "4683688",
     "name": "Dereck Lively II",
     "pos": "C",
@@ -751,21 +742,21 @@
   ],
   "SAS": [
    {
-    "id": "5104157",
-    "name": "Victor Wembanyama",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-24",
-    "returns": "2026-11-25"
-   },
-   {
     "id": "4066259",
     "name": "De'Aaron Fox",
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Lower Leg Bruise",
-    "date": "2026-11-24",
+    "date": "2026-11-25",
+    "returns": "2026-11-25"
+   },
+   {
+    "id": "5104157",
+    "name": "Victor Wembanyama",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Back",
+    "date": "2026-11-25",
     "returns": "2026-11-25"
    },
    {

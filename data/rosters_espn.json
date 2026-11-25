@@ -426,7 +426,7 @@
     "name": "Sion James",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4576060",
@@ -1920,7 +1920,7 @@
     "name": "Giannis Antetokounmpo",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107157",
@@ -3186,7 +3186,7 @@
     "name": "Zach LaVine",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5107897",

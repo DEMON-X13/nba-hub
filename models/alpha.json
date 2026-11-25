@@ -1786,8 +1786,8 @@
    "spread": 0
   },
   "2027_20261125_CHI_CHA": {
-   "pHome": 0.54,
-   "spread": -1.2
+   "pHome": 0.5665,
+   "spread": -2
   },
   "2027_20261125_CLE_NYK": {
    "pHome": 0.6438,
@@ -2449,5 +2449,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-25T20:29Z"
+ "generated": "2026-11-25T22:31Z"
 }

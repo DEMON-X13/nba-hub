@@ -99,15 +99,6 @@
     "returns": "2026-12-12"
    },
    {
-    "id": "4602025",
-    "name": "Sion James",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Undisclosed",
-    "date": "2026-11-24",
-    "returns": "2026-11-25"
-   },
-   {
     "id": "5061575",
     "name": "Kon Knueppel",
     "pos": "G",
@@ -122,10 +113,10 @@
     "id": "4397189",
     "name": "Jalen Smith",
     "pos": "F",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Illness",
-    "date": "2026-11-24",
-    "returns": "2026-11-25"
+    "date": "2026-11-25",
+    "returns": "2026-11-28"
    },
    {
     "id": "2595516",
@@ -381,7 +372,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Heel Bruise",
-    "date": "2026-11-24",
+    "date": "2026-11-25",
     "returns": "2026-11-27"
    }
   ],
@@ -430,17 +421,6 @@
     "detail": "Knee Surgery",
     "date": "2026-11-07",
     "returns": "2026-12-01"
-   }
-  ],
-  "MIA": [
-   {
-    "id": "3032977",
-    "name": "Giannis Antetokounmpo",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin",
-    "date": "2026-11-25",
-    "returns": "2026-11-25"
    }
   ],
   "MIN": [
@@ -512,6 +492,15 @@
   ],
   "NYK": [
    {
+    "id": "3934672",
+    "name": "Jalen Brunson",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-25",
+    "returns": "2026-11-25"
+   },
+   {
     "id": "3062679",
     "name": "Josh Hart",
     "pos": "G",
@@ -535,15 +524,6 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Knee Inflammation",
-    "date": "2026-11-25",
-    "returns": "2026-11-25"
-   },
-   {
-    "id": "3934672",
-    "name": "Jalen Brunson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
     "date": "2026-11-25",
     "returns": "2026-11-25"
    },
@@ -747,6 +727,15 @@
     "detail": "Knee Dislocated",
     "date": "2026-11-25",
     "returns": "2026-12-02"
+   },
+   {
+    "id": "3064440",
+    "name": "Zach LaVine",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee Soreness",
+    "date": "2026-11-25",
+    "returns": "2026-11-25"
    },
    {
     "id": "3907387",

@@ -1,5 +1,5 @@
 {
- "date": "2026-11-25",
+ "date": "2026-11-26",
  "teams": {
   "ATL": [
    {
@@ -61,6 +61,15 @@
   ],
   "BKN": [
    {
+    "id": "3150844",
+    "name": "Moritz Wagner",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Knee Soreness",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "5279130",
     "name": "Nolan Traore",
     "pos": "G",
@@ -75,9 +84,9 @@
     "id": "4576060",
     "name": "Ryan Kalkbrenner",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Hip Soreness",
-    "date": "2026-11-25",
+    "date": "2026-11-26",
     "returns": "2026-11-28"
    },
    {
@@ -113,9 +122,9 @@
     "id": "4397189",
     "name": "Jalen Smith",
     "pos": "F",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-25",
+    "date": "2026-11-26",
     "returns": "2026-11-28"
    },
    {
@@ -197,6 +206,15 @@
   ],
   "DET": [
    {
+    "id": "4433621",
+    "name": "Jalen Duren",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-26",
+    "returns": "2026-11-30"
+   },
+   {
     "id": "4432166",
     "name": "Cade Cunningham",
     "pos": "G",
@@ -231,15 +249,6 @@
     "detail": "Quadriceps Strain",
     "date": "2026-11-24",
     "returns": "2026-11-27"
-   },
-   {
-    "id": "4433621",
-    "name": "Jalen Duren",
-    "pos": "C",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-24",
-    "returns": "2026-11-30"
    }
   ],
   "GSW": [
@@ -251,15 +260,6 @@
     "detail": "Abdomen",
     "date": "2026-11-26",
     "returns": "2026-12-12"
-   },
-   {
-    "id": "4397040",
-    "name": "Brandon Williams",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring",
-    "date": "2026-11-26",
-    "returns": "2026-11-25"
    },
    {
     "id": "3102531",
@@ -369,6 +369,15 @@
   ],
   "MEM": [
    {
+    "id": "4600663",
+    "name": "Zach Edey",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Ankle Soreness",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "4431785",
     "name": "Scotty Pippen Jr.",
     "pos": "G",
@@ -416,6 +425,15 @@
   ],
   "MIN": [
    {
+    "id": "4432816",
+    "name": "LaMelo Ball",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Ankle",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "3934673",
     "name": "Donte DiVincenzo",
     "pos": "G",
@@ -451,7 +469,7 @@
     "status": "Day-To-Day",
     "detail": "Knee",
     "date": "2026-11-25",
-    "returns": "2026-11-25"
+    "returns": "2026-12-01"
    },
    {
     "id": "4431675",
@@ -483,20 +501,29 @@
   ],
   "NYK": [
    {
+    "id": "4431823",
+    "name": "Miles McBride",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Groin Soreness",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
+    "id": "6585",
+    "name": "Andre Drummond",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Head Not Specified",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "3934719",
     "name": "OG Anunoby",
     "pos": "F",
     "status": "Out",
     "detail": "Calf Soreness",
-    "date": "2026-11-25",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "4431823",
-    "name": "Miles McBride",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Groin Soreness",
     "date": "2026-11-25",
     "returns": "2026-11-27"
    },
@@ -576,6 +603,15 @@
    }
   ],
   "ORL": [
+   {
+    "id": "4397204",
+    "name": "Colin Castleton",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Calf Soreness",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
    {
     "id": "4065654",
     "name": "Jonathan Isaac",
@@ -696,9 +732,9 @@
     "id": "3064440",
     "name": "Zach LaVine",
     "pos": "G",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Knee Soreness",
-    "date": "2026-11-25",
+    "date": "2026-11-26",
     "returns": "2026-11-29"
    },
    {
@@ -727,17 +763,8 @@
     "pos": "G",
     "status": "Day-To-Day",
     "detail": "Lower Leg Bruise",
-    "date": "2026-11-25",
-    "returns": "2026-11-25"
-   },
-   {
-    "id": "5104157",
-    "name": "Victor Wembanyama",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Back",
-    "date": "2026-11-25",
-    "returns": "2026-11-25"
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
    },
    {
     "id": "5037871",

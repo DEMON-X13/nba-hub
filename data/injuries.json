@@ -244,31 +244,22 @@
   ],
   "GSW": [
    {
-    "id": "5175737",
-    "name": "Yaxel Lendeborg",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Illness",
-    "date": "2026-11-24",
-    "returns": "2026-11-25"
+    "id": "3975",
+    "name": "Stephen Curry",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Abdomen",
+    "date": "2026-11-26",
+    "returns": "2026-12-12"
    },
    {
     "id": "4397040",
     "name": "Brandon Williams",
     "pos": "G",
     "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-24",
+    "detail": "Hamstring",
+    "date": "2026-11-26",
     "returns": "2026-11-25"
-   },
-   {
-    "id": "3975",
-    "name": "Stephen Curry",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Abdomen",
-    "date": "2026-11-12",
-    "returns": "2026-12-12"
    },
    {
     "id": "3102531",
@@ -624,21 +615,21 @@
   ],
   "PHI": [
    {
-    "id": "3917376",
-    "name": "Jaylen Brown",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring",
-    "date": "2026-11-25",
-    "returns": "2026-11-27"
-   },
-   {
     "id": "3059318",
     "name": "Joel Embiid",
     "pos": "C",
-    "status": "Out",
+    "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-25",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
+    "id": "3917376",
+    "name": "Jaylen Brown",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hamstring",
+    "date": "2026-11-26",
     "returns": "2026-11-27"
    },
    {

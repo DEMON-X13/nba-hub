@@ -6045,9 +6045,8 @@ date,team,player_id,name,status
 2026-11-25,DET,2990962,Taurean Prince,Out
 2026-11-25,DET,3157465,Duncan Robinson,Out
 2026-11-25,DET,4433621,Jalen Duren,Out
-2026-11-25,GSW,5175737,Yaxel Lendeborg,Day-To-Day
-2026-11-25,GSW,4397040,Brandon Williams,Out
 2026-11-25,GSW,3975,Stephen Curry,Out
+2026-11-25,GSW,4397040,Brandon Williams,Out
 2026-11-25,GSW,3102531,Kristaps Porzingis,Out
 2026-11-25,GSW,4432171,Moses Moody,Out
 2026-11-25,GSW,6430,Jimmy Butler III,Out
@@ -6085,8 +6084,8 @@ date,team,player_id,name,status
 2026-11-25,ORL,5107251,Izaiyah Nelson,Out
 2026-11-25,ORL,5214637,Noah Penda,Out
 2026-11-25,ORL,4432573,Paolo Banchero,Out
-2026-11-25,PHI,3917376,Jaylen Brown,Out
-2026-11-25,PHI,3059318,Joel Embiid,Out
+2026-11-25,PHI,3059318,Joel Embiid,Day-To-Day
+2026-11-25,PHI,3917376,Jaylen Brown,Day-To-Day
 2026-11-25,PHI,4871141,Ariel Hukporti,Out
 2026-11-25,PHX,4701232,Mark Williams,Out
 2026-11-25,POR,4706557,Chris Youngblood,Out

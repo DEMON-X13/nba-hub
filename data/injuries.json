@@ -492,22 +492,13 @@
   ],
   "NYK": [
    {
-    "id": "3934672",
-    "name": "Jalen Brunson",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Illness",
+    "id": "3934719",
+    "name": "OG Anunoby",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Calf Soreness",
     "date": "2026-11-25",
-    "returns": "2026-11-25"
-   },
-   {
-    "id": "3062679",
-    "name": "Josh Hart",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Shoulder Sprain",
-    "date": "2026-11-25",
-    "returns": "2026-11-25"
+    "returns": "2026-11-27"
    },
    {
     "id": "4431823",
@@ -519,29 +510,11 @@
     "returns": "2026-11-27"
    },
    {
-    "id": "3136195",
-    "name": "Karl-Anthony Towns",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Knee Inflammation",
-    "date": "2026-11-25",
-    "returns": "2026-11-25"
-   },
-   {
     "id": "2528426",
     "name": "Jordan Clarkson",
     "pos": "G",
     "status": "Out",
     "detail": "Foot Plantar Fasciitis",
-    "date": "2026-11-24",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "3934719",
-    "name": "OG Anunoby",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Calf Soreness",
     "date": "2026-11-24",
     "returns": "2026-11-27"
    }
@@ -651,6 +624,15 @@
   ],
   "PHI": [
    {
+    "id": "3917376",
+    "name": "Jaylen Brown",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring",
+    "date": "2026-11-25",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "3059318",
     "name": "Joel Embiid",
     "pos": "C",
@@ -720,6 +702,15 @@
   ],
   "SAC": [
    {
+    "id": "3064440",
+    "name": "Zach LaVine",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Knee Soreness",
+    "date": "2026-11-25",
+    "returns": "2026-11-29"
+   },
+   {
     "id": "4898371",
     "name": "Maxime Raynaud",
     "pos": "C",
@@ -727,15 +718,6 @@
     "detail": "Knee Dislocated",
     "date": "2026-11-25",
     "returns": "2026-12-02"
-   },
-   {
-    "id": "3064440",
-    "name": "Zach LaVine",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-11-25",
-    "returns": "2026-11-25"
    },
    {
     "id": "3907387",

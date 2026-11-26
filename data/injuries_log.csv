@@ -6071,12 +6071,9 @@ date,team,player_id,name,status
 2026-11-25,NOP,4431675,Trendon Watford,Out
 2026-11-25,NOP,4683634,Bennedict Mathurin,Out
 2026-11-25,NOP,3907497,Dejounte Murray,Out
-2026-11-25,NYK,3934672,Jalen Brunson,Day-To-Day
-2026-11-25,NYK,3062679,Josh Hart,Day-To-Day
-2026-11-25,NYK,4431823,Miles McBride,Out
-2026-11-25,NYK,3136195,Karl-Anthony Towns,Day-To-Day
-2026-11-25,NYK,2528426,Jordan Clarkson,Out
 2026-11-25,NYK,3934719,OG Anunoby,Out
+2026-11-25,NYK,4431823,Miles McBride,Out
+2026-11-25,NYK,2528426,Jordan Clarkson,Out
 2026-11-25,OKC,5159925,Nikola Topic,Out
 2026-11-25,OKC,4432823,Jaylin Williams,Out
 2026-11-25,OKC,5174983,Aday Mara,Out
@@ -6088,6 +6085,7 @@ date,team,player_id,name,status
 2026-11-25,ORL,5107251,Izaiyah Nelson,Out
 2026-11-25,ORL,5214637,Noah Penda,Out
 2026-11-25,ORL,4432573,Paolo Banchero,Out
+2026-11-25,PHI,3917376,Jaylen Brown,Out
 2026-11-25,PHI,3059318,Joel Embiid,Out
 2026-11-25,PHI,4871141,Ariel Hukporti,Out
 2026-11-25,PHX,4701232,Mark Williams,Out
@@ -6095,8 +6093,8 @@ date,team,player_id,name,status
 2026-11-25,POR,4578893,Vit Krejci,Out
 2026-11-25,POR,4279888,Ja Morant,Out
 2026-11-25,POR,4914336,Shaedon Sharpe,Out
+2026-11-25,SAC,3064440,Zach LaVine,Out
 2026-11-25,SAC,4898371,Maxime Raynaud,Out
-2026-11-25,SAC,3064440,Zach LaVine,Day-To-Day
 2026-11-25,SAC,3907387,Ben Simmons,Out
 2026-11-25,SAS,4066259,De'Aaron Fox,Day-To-Day
 2026-11-25,SAS,5104157,Victor Wembanyama,Day-To-Day

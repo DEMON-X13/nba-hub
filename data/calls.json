@@ -271,7 +271,7 @@
    "2027_20261125_MIA_PHI": {"pick":"PHI","pHome":0.5008,"at":"2026-11-25T17:59Z","src":"published"},
    "2027_20261125_MIN_OKC": {"pick":"MIN","pHome":0.4884,"at":"2026-11-25T03:03Z","src":"published"},
    "2027_20261125_PHX_HOU": {"pick":"HOU","pHome":0.7434,"at":"2026-11-24T18:55Z","src":"published"},
-   "2027_20261125_SAC_GSW": {"pick":"GSW","pHome":0.729,"at":"2026-11-25T17:59Z","src":"published"},
+   "2027_20261125_SAC_GSW": {"pick":"GSW","pHome":0.7181,"at":"2026-11-26T00:30Z","src":"published"},
    "2027_20261125_SAS_POR": {"pick":"SAS","pHome":0.4685,"at":"2026-11-24T18:55Z","src":"published"},
    "2027_20261127_ATL_BOS": {"pick":"BOS","pHome":0.7012,"at":"2026-11-25T17:59Z","src":"published"},
    "2027_20261127_BKN_TOR": {"pick":"TOR","pHome":0.7223,"at":"2026-11-24T18:55Z","src":"published"},
@@ -701,7 +701,7 @@
    "2027_20261125_MIN_OKC": {"pick":"OKC","pHome":0.5855,"at":"2026-11-25T22:31Z","src":"published"},
    "2027_20261125_PHX_HOU": {"pick":"HOU","pHome":0.748,"at":"2026-11-24T18:55Z","src":"published"},
    "2027_20261125_SAC_GSW": {"pick":"GSW","pHome":0.759,"at":"2026-11-25T22:31Z","src":"published"},
-   "2027_20261125_SAS_POR": {"pick":"SAS","pHome":0.3699,"at":"2026-11-25T20:30Z","src":"published"}
+   "2027_20261125_SAS_POR": {"pick":"SAS","pHome":0.404,"at":"2026-11-26T00:30Z","src":"published"}
   },
   "elo": {
    "2027_20261020_BOS_DET": {"pick":"DET","pHome":0.5831,"at":"2026-10-26T05:38Z","src":"backtest"},
@@ -972,7 +972,7 @@
    "2027_20261125_MIA_PHI": {"pick":"PHI","pHome":0.5417,"at":"2026-11-24T23:02Z","src":"published"},
    "2027_20261125_MIN_OKC": {"pick":"OKC","pHome":0.5674,"at":"2026-11-25T00:50Z","src":"published"},
    "2027_20261125_PHX_HOU": {"pick":"HOU","pHome":0.7488,"at":"2026-11-24T04:18Z","src":"published"},
-   "2027_20261125_SAC_GSW": {"pick":"GSW","pHome":0.597,"at":"2026-11-25T17:59Z","src":"published"},
+   "2027_20261125_SAC_GSW": {"pick":"GSW","pHome":0.6069,"at":"2026-11-26T00:30Z","src":"published"},
    "2027_20261125_SAS_POR": {"pick":"SAS","pHome":0.4021,"at":"2026-11-24T18:55Z","src":"published"},
    "2027_20261127_ATL_BOS": {"pick":"BOS","pHome":0.6965,"at":"2026-11-25T17:59Z","src":"published"},
    "2027_20261127_BKN_TOR": {"pick":"TOR","pHome":0.6926,"at":"2026-11-24T04:18Z","src":"published"},

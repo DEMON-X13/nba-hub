@@ -2439,7 +2439,7 @@
     "name": "Jalen Brunson",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2528426",
@@ -2474,7 +2474,7 @@
     "name": "Josh Hart",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4897943",
@@ -2516,7 +2516,7 @@
     "name": "Karl-Anthony Towns",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4432808",
@@ -2795,7 +2795,7 @@
     "name": "Jaylen Brown",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "2581018",

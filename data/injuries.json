@@ -67,7 +67,7 @@
     "status": "Out",
     "detail": "Knee Soreness",
     "date": "2026-11-26",
-    "returns": "2026-11-27"
+    "returns": "2026-11-28"
    },
    {
     "id": "5279130",
@@ -423,6 +423,26 @@
     "returns": "2026-12-01"
    }
   ],
+  "MIA": [
+   {
+    "id": "3032977",
+    "name": "Giannis Antetokounmpo",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Groin",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
+    "id": "3059319",
+    "name": "Andrew Wiggins",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   }
+  ],
   "MIN": [
    {
     "id": "4432816",
@@ -463,6 +483,24 @@
   ],
   "NOP": [
    {
+    "id": "4431675",
+    "name": "Trendon Watford",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Ankle Sprain",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
+    "id": "4683634",
+    "name": "Bennedict Mathurin",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Foot Plantar Fasciitis",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "4683742",
     "name": "Julian Reese",
     "pos": "F",
@@ -472,40 +510,22 @@
     "returns": "2026-12-01"
    },
    {
-    "id": "4431675",
-    "name": "Trendon Watford",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-21",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "4683634",
-    "name": "Bennedict Mathurin",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Foot Plantar Fasciitis",
-    "date": "2026-11-19",
-    "returns": "2026-11-27"
-   },
-   {
     "id": "3907497",
     "name": "Dejounte Murray",
     "pos": "G",
     "status": "Out",
     "detail": "Ankle",
     "date": "2026-11-13",
-    "returns": "2026-11-27"
+    "returns": "2026-11-29"
    }
   ],
   "NYK": [
    {
-    "id": "4431823",
-    "name": "Miles McBride",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Groin Soreness",
+    "id": "3934719",
+    "name": "OG Anunoby",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Calf Soreness",
     "date": "2026-11-26",
     "returns": "2026-11-27"
    },
@@ -519,12 +539,12 @@
     "returns": "2026-11-27"
    },
    {
-    "id": "3934719",
-    "name": "OG Anunoby",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Calf Soreness",
-    "date": "2026-11-25",
+    "id": "4431823",
+    "name": "Miles McBride",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Groin Soreness",
+    "date": "2026-11-26",
     "returns": "2026-11-27"
    },
    {
@@ -795,6 +815,15 @@
    }
   ],
   "TOR": [
+   {
+    "id": "4702656",
+    "name": "Alijah Martin",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee Soreness",
+    "date": "2026-11-26",
+    "returns": "2026-11-27"
+   },
    {
     "id": "6450",
     "name": "Kawhi Leonard",

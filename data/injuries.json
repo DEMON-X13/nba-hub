@@ -1,5 +1,5 @@
 {
- "date": "2026-11-26",
+ "date": "2026-11-27",
  "teams": {
   "ATL": [
    {
@@ -56,7 +56,7 @@
     "status": "Out",
     "detail": "Illness",
     "date": "2026-11-26",
-    "returns": "2026-11-27"
+    "returns": "2026-11-29"
    }
   ],
   "BKN": [
@@ -291,6 +291,15 @@
   ],
   "IND": [
    {
+    "id": "4396993",
+    "name": "Tyrese Haliburton",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring Strain",
+    "date": "2026-11-27",
+    "returns": "2026-12-13"
+   },
+   {
     "id": "3133603",
     "name": "Kelly Oubre Jr.",
     "pos": "G",
@@ -316,15 +325,6 @@
     "detail": "Hamstring",
     "date": "2026-11-26",
     "returns": "2026-11-27"
-   },
-   {
-    "id": "4396993",
-    "name": "Tyrese Haliburton",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Hamstring Strain",
-    "date": "2026-11-24",
-    "returns": "2026-12-13"
    },
    {
     "id": "4433076",
@@ -441,15 +441,6 @@
     "detail": "Groin",
     "date": "2026-11-26",
     "returns": "2026-11-27"
-   },
-   {
-    "id": "3059319",
-    "name": "Andrew Wiggins",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Sprain",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
    }
   ],
   "MIN": [
@@ -530,6 +521,24 @@
   ],
   "NYK": [
    {
+    "id": "3136195",
+    "name": "Karl-Anthony Towns",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Abdomen Bruise",
+    "date": "2026-11-27",
+    "returns": "2026-11-27"
+   },
+   {
+    "id": "6585",
+    "name": "Andre Drummond",
+    "pos": "C",
+    "status": "Out",
+    "detail": "Concussion Not Specified",
+    "date": "2026-11-27",
+    "returns": "2026-11-29"
+   },
+   {
     "id": "4431823",
     "name": "Miles McBride",
     "pos": "G",
@@ -553,15 +562,6 @@
     "pos": "F",
     "status": "Out",
     "detail": "Calf Soreness",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "6585",
-    "name": "Andre Drummond",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Head Not Specified",
     "date": "2026-11-26",
     "returns": "2026-11-27"
    }
@@ -685,7 +685,7 @@
     "pos": "C",
     "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-26",
+    "date": "2026-11-27",
     "returns": "2026-11-27"
    },
    {
@@ -862,6 +862,15 @@
    }
   ],
   "UTA": [
+   {
+    "id": "4277919",
+    "name": "Mo Bamba",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-27",
+    "returns": "2026-11-29"
+   },
    {
     "id": "4397077",
     "name": "Jaxson Hayes",

@@ -55,7 +55,7 @@
     "pos": "C",
     "status": "Out",
     "detail": "Illness",
-    "date": "2026-11-26",
+    "date": "2026-11-27",
     "returns": "2026-11-29"
    }
   ],
@@ -119,12 +119,21 @@
   ],
   "CHI": [
    {
+    "id": "5242496",
+    "name": "Noa Essengue",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Thumb",
+    "date": "2026-11-27",
+    "returns": "2026-11-28"
+   },
+   {
     "id": "4397189",
     "name": "Jalen Smith",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Illness",
-    "date": "2026-11-26",
+    "date": "2026-11-27",
     "returns": "2026-11-28"
    },
    {
@@ -167,6 +176,15 @@
    }
   ],
   "DAL": [
+   {
+    "id": "6442",
+    "name": "Kyrie Irving",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Knee Not Specified",
+    "date": "2026-11-27",
+    "returns": "2026-11-30"
+   },
    {
     "id": "5106040",
     "name": "Tobi Lawal",
@@ -291,6 +309,15 @@
   ],
   "IND": [
    {
+    "id": "2580365",
+    "name": "Larry Nance Jr.",
+    "pos": "F",
+    "status": "Day-To-Day",
+    "detail": "Ankle Soreness",
+    "date": "2026-11-27",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "4396993",
     "name": "Tyrese Haliburton",
     "pos": "G",
@@ -306,15 +333,6 @@
     "status": "Day-To-Day",
     "detail": "Hand",
     "date": "2026-11-27",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "2580365",
-    "name": "Larry Nance Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Soreness",
-    "date": "2026-11-26",
     "returns": "2026-11-27"
    },
    {
@@ -354,17 +372,6 @@
     "detail": "Shoulder Surgery",
     "date": "2026-08-26",
     "returns": "2027-03-02"
-   }
-  ],
-  "LAL": [
-   {
-    "id": "4066457",
-    "name": "Austin Reaves",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Heel Bruise",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
    }
   ],
   "MEM": [
@@ -443,15 +450,26 @@
     "returns": "2026-11-27"
    }
   ],
+  "MIL": [
+   {
+    "id": "5214640",
+    "name": "Kasparas Jakucionis",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Ankle",
+    "date": "2026-11-27",
+    "returns": "2026-11-28"
+   }
+  ],
   "MIN": [
    {
     "id": "4432816",
     "name": "LaMelo Ball",
     "pos": "G",
-    "status": "Day-To-Day",
+    "status": "Out",
     "detail": "Ankle",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
+    "date": "2026-11-27",
+    "returns": "2026-11-29"
    },
    {
     "id": "3934673",
@@ -521,6 +539,33 @@
   ],
   "NYK": [
    {
+    "id": "4431823",
+    "name": "Miles McBride",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Groin Soreness",
+    "date": "2026-11-27",
+    "returns": "2026-11-29"
+   },
+   {
+    "id": "3934719",
+    "name": "OG Anunoby",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Calf Soreness",
+    "date": "2026-11-27",
+    "returns": "2026-11-29"
+   },
+   {
+    "id": "2528426",
+    "name": "Jordan Clarkson",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Foot Plantar Fasciitis",
+    "date": "2026-11-27",
+    "returns": "2026-11-29"
+   },
+   {
     "id": "3136195",
     "name": "Karl-Anthony Towns",
     "pos": "C",
@@ -537,33 +582,6 @@
     "detail": "Concussion Not Specified",
     "date": "2026-11-27",
     "returns": "2026-11-29"
-   },
-   {
-    "id": "4431823",
-    "name": "Miles McBride",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Groin Soreness",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "2528426",
-    "name": "Jordan Clarkson",
-    "pos": "G",
-    "status": "Out",
-    "detail": "Foot Plantar Fasciitis",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "3934719",
-    "name": "OG Anunoby",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Calf Soreness",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
    }
   ],
   "OKC": [
@@ -720,6 +738,15 @@
   ],
   "POR": [
    {
+    "id": "6606",
+    "name": "Damian Lillard",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Calf Soreness",
+    "date": "2026-11-27",
+    "returns": "2026-11-29"
+   },
+   {
     "id": "4706557",
     "name": "Chris Youngblood",
     "pos": "G",
@@ -792,7 +819,7 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip Strain",
-    "date": "2026-11-26",
+    "date": "2026-11-27",
     "returns": "2026-11-27"
    },
    {

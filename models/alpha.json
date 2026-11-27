@@ -1870,28 +1870,28 @@
    "spread": -6.7
   },
   "2027_20261127_DAL_PHX": {
-   "pHome": 0.6009,
-   "spread": -3.1
+   "pHome": 0.6579,
+   "spread": -5
   },
   "2027_20261127_DEN_UTA": {
    "pHome": 0.2419,
    "spread": 8.7
   },
   "2027_20261127_GSW_POR": {
-   "pHome": 0.7044,
-   "spread": -6.6
+   "pHome": 0.6372,
+   "spread": -4.3
   },
   "2027_20261127_LAL_SAS": {
-   "pHome": 0.5859,
-   "spread": -2.7
+   "pHome": 0.5375,
+   "spread": -1.1
   },
   "2027_20261127_MEM_MIN": {
-   "pHome": 0.5783,
-   "spread": -2.4
+   "pHome": 0.499,
+   "spread": 0
   },
   "2027_20261127_MIA_NYK": {
-   "pHome": 0.6437,
-   "spread": -4.5
+   "pHome": 0.601,
+   "spread": -3.1
   },
   "2027_20261127_MIL_DET": {
    "pHome": 0.8507,
@@ -2573,5 +2573,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-27T17:29Z"
+ "generated": "2026-11-27T20:00Z"
 }

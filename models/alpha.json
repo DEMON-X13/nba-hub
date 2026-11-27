@@ -1870,12 +1870,12 @@
    "spread": -6.7
   },
   "2027_20261127_DAL_PHX": {
-   "pHome": 0.6579,
-   "spread": -5
+   "pHome": 0.6009,
+   "spread": -3.1
   },
   "2027_20261127_DEN_UTA": {
-   "pHome": 0.2419,
-   "spread": 8.7
+   "pHome": 0.246,
+   "spread": 8.6
   },
   "2027_20261127_GSW_POR": {
    "pHome": 0.6372,
@@ -1918,8 +1918,8 @@
    "spread": 10.9
   },
   "2027_20261128_ORL_WAS": {
-   "pHome": 0.4371,
-   "spread": 1.9
+   "pHome": 0.418,
+   "spread": 2.5
   },
   "2027_20261128_PHI_HOU": {
    "pHome": 0.7762,
@@ -2573,5 +2573,5 @@
  "status": {
   "ok": true
  },
- "generated": "2026-11-27T20:00Z"
+ "generated": "2026-11-27T21:58Z"
 }

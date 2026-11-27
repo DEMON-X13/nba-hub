@@ -2681,7 +2681,7 @@
     "name": "Anthony Black",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "4278572",
@@ -2751,7 +2751,7 @@
     "name": "Kevin Porter Jr.",
     "pos": "G",
     "status": "active",
-    "injured": false
+    "injured": true
    },
    {
     "id": "5239561",

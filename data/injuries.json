@@ -291,20 +291,20 @@
   ],
   "IND": [
    {
+    "id": "3133603",
+    "name": "Kelly Oubre Jr.",
+    "pos": "G",
+    "status": "Day-To-Day",
+    "detail": "Hand",
+    "date": "2026-11-27",
+    "returns": "2026-11-27"
+   },
+   {
     "id": "2580365",
     "name": "Larry Nance Jr.",
     "pos": "F",
     "status": "Day-To-Day",
     "detail": "Ankle Soreness",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "4396909",
-    "name": "Aaron Nesmith",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Foot",
     "date": "2026-11-26",
     "returns": "2026-11-27"
    },
@@ -725,8 +725,8 @@
     "pos": "G",
     "status": "Out",
     "detail": "Heel Bruise",
-    "date": "2026-11-20",
-    "returns": "2026-11-27"
+    "date": "2026-11-27",
+    "returns": "2026-11-29"
    },
    {
     "id": "4578893",

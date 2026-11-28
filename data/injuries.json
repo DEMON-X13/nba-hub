@@ -81,21 +81,21 @@
   ],
   "CHA": [
    {
-    "id": "4576060",
-    "name": "Ryan Kalkbrenner",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Hip Soreness",
-    "date": "2026-11-26",
-    "returns": "2026-11-28"
-   },
-   {
     "id": "3135045",
     "name": "Grayson Allen",
     "pos": "G",
     "status": "Out",
     "detail": "Concussion",
-    "date": "2026-11-25",
+    "date": "2026-11-27",
+    "returns": "2026-11-28"
+   },
+   {
+    "id": "4576060",
+    "name": "Ryan Kalkbrenner",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Hip Soreness",
+    "date": "2026-11-27",
     "returns": "2026-11-28"
    },
    {
@@ -307,15 +307,26 @@
     "returns": "2027-01-02"
    }
   ],
+  "HOU": [
+   {
+    "id": "2991235",
+    "name": "Steven Adams",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Knee",
+    "date": "2026-11-27",
+    "returns": "2026-11-28"
+   }
+  ],
   "IND": [
    {
-    "id": "2580365",
-    "name": "Larry Nance Jr.",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Ankle Soreness",
+    "id": "2530530",
+    "name": "T.J. McConnell",
+    "pos": "G",
+    "status": "Out",
+    "detail": "Hamstring",
     "date": "2026-11-27",
-    "returns": "2026-11-27"
+    "returns": "2026-11-28"
    },
    {
     "id": "4396993",
@@ -325,24 +336,6 @@
     "detail": "Hamstring Strain",
     "date": "2026-11-27",
     "returns": "2026-12-13"
-   },
-   {
-    "id": "3133603",
-    "name": "Kelly Oubre Jr.",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hand",
-    "date": "2026-11-27",
-    "returns": "2026-11-27"
-   },
-   {
-    "id": "2530530",
-    "name": "T.J. McConnell",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Hamstring",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
    },
    {
     "id": "4433076",
@@ -437,17 +430,6 @@
     "detail": "Knee Surgery",
     "date": "2026-11-07",
     "returns": "2026-12-01"
-   }
-  ],
-  "MIA": [
-   {
-    "id": "3032977",
-    "name": "Giannis Antetokounmpo",
-    "pos": "F",
-    "status": "Day-To-Day",
-    "detail": "Groin",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
    }
   ],
   "MIL": [
@@ -566,15 +548,6 @@
     "returns": "2026-11-29"
    },
    {
-    "id": "3136195",
-    "name": "Karl-Anthony Towns",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Abdomen Bruise",
-    "date": "2026-11-27",
-    "returns": "2026-11-27"
-   },
-   {
     "id": "6585",
     "name": "Andre Drummond",
     "pos": "C",
@@ -591,17 +564,8 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hip Strain",
-    "date": "2026-11-24",
-    "returns": "2026-11-28"
-   },
-   {
-    "id": "4432823",
-    "name": "Jaylin Williams",
-    "pos": "F",
-    "status": "Out",
-    "detail": "Back Spasms",
-    "date": "2026-11-24",
-    "returns": "2026-11-28"
+    "date": "2026-11-27",
+    "returns": "2026-12-13"
    },
    {
     "id": "5174983",
@@ -609,6 +573,15 @@
     "pos": "C",
     "status": "Out",
     "detail": "Lower Leg Bruise",
+    "date": "2026-11-27",
+    "returns": "2026-11-30"
+   },
+   {
+    "id": "4432823",
+    "name": "Jaylin Williams",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Back Spasms",
     "date": "2026-11-24",
     "returns": "2026-11-28"
    },
@@ -716,13 +689,13 @@
   ],
   "PHI": [
    {
-    "id": "3059318",
-    "name": "Joel Embiid",
-    "pos": "C",
-    "status": "Day-To-Day",
-    "detail": "Illness",
+    "id": "3912848",
+    "name": "Dean Wade",
+    "pos": "F",
+    "status": "Out",
+    "detail": "Hamstring",
     "date": "2026-11-27",
-    "returns": "2026-11-27"
+    "returns": "2026-11-28"
    },
    {
     "id": "3917376",
@@ -730,8 +703,17 @@
     "pos": "G",
     "status": "Out",
     "detail": "Hamstring",
-    "date": "2026-11-26",
-    "returns": "2026-11-28"
+    "date": "2026-11-27",
+    "returns": "2026-12-01"
+   },
+   {
+    "id": "3059318",
+    "name": "Joel Embiid",
+    "pos": "C",
+    "status": "Day-To-Day",
+    "detail": "Illness",
+    "date": "2026-11-27",
+    "returns": "2026-11-27"
    },
    {
     "id": "4871141",
@@ -869,15 +851,6 @@
    }
   ],
   "TOR": [
-   {
-    "id": "4702656",
-    "name": "Alijah Martin",
-    "pos": "G",
-    "status": "Day-To-Day",
-    "detail": "Knee Soreness",
-    "date": "2026-11-26",
-    "returns": "2026-11-27"
-   },
    {
     "id": "6450",
     "name": "Kawhi Leonard",

@@ -6221,13 +6221,13 @@ date,team,player_id,name,status
 2026-11-27,CHA,4576060,Ryan Kalkbrenner,Day-To-Day
 2026-11-27,CHA,3032979,Dennis Schroder,Out
 2026-11-27,CHA,5061575,Kon Knueppel,Out
+2026-11-27,CHI,2595516,Norman Powell,Out
 2026-11-27,CHI,5242496,Noa Essengue,Day-To-Day
 2026-11-27,CHI,4397189,Jalen Smith,Day-To-Day
-2026-11-27,CHI,2595516,Norman Powell,Out
 2026-11-27,CHI,5095151,Caleb Wilson,Out
 2026-11-27,CLE,5106268,Nae'Qwan Tomlin,Out
 2026-11-27,CLE,4432158,Evan Mobley,Out
-2026-11-27,DAL,6442,Kyrie Irving,Day-To-Day
+2026-11-27,DAL,6442,Kyrie Irving,Out
 2026-11-27,DAL,5106040,Tobi Lawal,Out
 2026-11-27,DAL,5279129,Sergio de Larrea,Out
 2026-11-27,DAL,4683688,Dereck Lively II,Out
@@ -6247,8 +6247,7 @@ date,team,player_id,name,status
 2026-11-27,IND,4433076,Ben Sheppard,Out
 2026-11-27,LAC,6580,Bradley Beal,Out
 2026-11-27,LAC,4396818,Jordan Miller,Out
-2026-11-27,MEM,4432810,Isaiah Stewart,Day-To-Day
-2026-11-27,MEM,4600663,Zach Edey,Day-To-Day
+2026-11-27,MEM,4432810,Isaiah Stewart,Out
 2026-11-27,MEM,4431785,Scotty Pippen Jr.,Out
 2026-11-27,MEM,5041935,Cameron Boozer,Out
 2026-11-27,MEM,2991070,Jerami Grant,Out
@@ -6259,7 +6258,6 @@ date,team,player_id,name,status
 2026-11-27,MIN,3934673,Donte DiVincenzo,Out
 2026-11-27,MIN,4432247,Jaylen Clark,Out
 2026-11-27,MIN,4594268,Anthony Edwards,Out
-2026-11-27,NOP,4431675,Trendon Watford,Out
 2026-11-27,NOP,4683634,Bennedict Mathurin,Out
 2026-11-27,NOP,4683742,Julian Reese,Day-To-Day
 2026-11-27,NOP,3907497,Dejounte Murray,Out
@@ -6283,7 +6281,6 @@ date,team,player_id,name,status
 2026-11-27,ORL,4432573,Paolo Banchero,Out
 2026-11-27,PHI,3912848,Dean Wade,Out
 2026-11-27,PHI,3917376,Jaylen Brown,Out
-2026-11-27,PHI,3059318,Joel Embiid,Day-To-Day
 2026-11-27,PHI,4871141,Ariel Hukporti,Out
 2026-11-27,PHX,4701232,Mark Williams,Out
 2026-11-27,POR,6606,Damian Lillard,Out
@@ -6301,9 +6298,7 @@ date,team,player_id,name,status
 2026-11-27,TOR,6450,Kawhi Leonard,Out
 2026-11-27,TOR,4432586,Nate Bittle,Out
 2026-11-27,TOR,4395625,RJ Barrett,Out
-2026-11-27,UTA,4277919,Mo Bamba,Day-To-Day
-2026-11-27,UTA,4397077,Jaxson Hayes,Day-To-Day
-2026-11-27,UTA,3102530,Jusuf Nurkic,Out
+2026-11-27,UTA,4277919,Mo Bamba,Out
 2026-11-27,UTA,4066336,Lauri Markkanen,Out
 2026-11-27,UTA,4277961,Jaren Jackson Jr.,Out
 2026-11-27,WAS,4997537,Tristan Vukcevic,Out

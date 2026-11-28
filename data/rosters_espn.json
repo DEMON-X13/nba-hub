@@ -1799,7 +1799,7 @@
     "name": "Zach Edey",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "2991070",
@@ -1833,6 +1833,13 @@
     "id": "5231919",
     "name": "Karim Lopez",
     "pos": "F",
+    "status": "active",
+    "injured": false
+   },
+   {
+    "id": "4596528",
+    "name": "Lawson Lovering",
+    "pos": "C",
     "status": "active",
     "injured": false
    },
@@ -2395,7 +2402,7 @@
     "name": "Trendon Watford",
     "pos": "F",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4395628",
@@ -2830,7 +2837,7 @@
     "name": "Joel Embiid",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "3904625",
@@ -3314,7 +3321,7 @@
     "name": "De'Aaron Fox",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "5107968",
@@ -3328,7 +3335,7 @@
     "name": "Dylan Harper",
     "pos": "G",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "6440",
@@ -3584,7 +3591,7 @@
     "name": "Jaxson Hayes",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4433618",
@@ -3619,7 +3626,7 @@
     "name": "Jusuf Nurkic",
     "pos": "C",
     "status": "active",
-    "injured": true
+    "injured": false
    },
    {
     "id": "4065663",
